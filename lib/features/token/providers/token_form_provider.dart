@@ -238,6 +238,30 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
       minterName: keypair.address,
     );
 
+    if (supplyController.text == '0' || state.mintable) {
+      final premintAmount = await PromptModal.show(
+        title: "Pre Mint Initial Issuance?",
+        validator: (v) {
+          return null;
+        },
+        labelText: "Supply",
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(
+            RegExp("[0-9.]"),
+          ),
+        ],
+      );
+      final parsedPremintAmount = premintAmount != null ? double.tryParse(premintAmount) : null;
+
+      if (parsedPremintAmount != null) {
+        ref.read(autoMintProvider.notifier).add(
+              sc.id,
+              ref.read(webSessionProvider.select((value) => value.currentWallet?.address ?? "")),
+              parsedPremintAmount,
+            );
+      }
+    }
+
     final timezoneName = ref.read(webSessionProvider).timezoneName;
     final payload = sc.serializeForCompiler(timezoneName);
 
