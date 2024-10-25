@@ -8,13 +8,16 @@ import '../providers/btc_web_transaction_list_provider.dart';
 import 'web_btc_transaction_list_tile.dart';
 
 class WebBtcTransactionList extends BaseComponent {
-  final String address;
+  final String? address;
   const WebBtcTransactionList({super.key, required this.address});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.read(btcWebTransactionListProvider(address).notifier);
-    final transactions = ref.watch(btcWebTransactionListProvider(address));
+    if (address == null) {
+      return Center(child: Text("No BTC Address"));
+    }
+    final provider = ref.read(btcWebTransactionListProvider(address!).notifier);
+    final transactions = ref.watch(btcWebTransactionListProvider(address!));
 
     if (transactions.isEmpty) {
       return Center(
@@ -36,7 +39,7 @@ class WebBtcTransactionList extends BaseComponent {
               padding: const EdgeInsets.only(bottom: 16.0),
               child: WebBtcTransactionListTile(
                 transaction: transaction,
-                address: address,
+                address: address!,
               ),
             );
           },

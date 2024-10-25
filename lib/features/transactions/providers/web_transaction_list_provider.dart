@@ -130,3 +130,69 @@ class WebTransactionListProvider extends StateNotifier<WebTransactionListModel> 
 final webTransactionListProvider = StateNotifierProvider.family<WebTransactionListProvider, WebTransactionListModel, String>((ref, address) {
   return WebTransactionListProvider(ref, address);
 });
+
+final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, String>((ref, String identifier) async {
+  final parts = identifier.split(':');
+  final vfxAddress = parts[0];
+  final raAddress = parts[1];
+  final btcAddress = parts[2];
+
+  List<WebTransaction> vfxTransactions = [];
+  List<WebTransaction> raTransactions = [];
+
+  int page = 1;
+  while (true) {
+    try {
+      final data = await ExplorerService().getTransactions(
+        address: vfxAddress,
+        page: page,
+      );
+      vfxTransactions.addAll(data.results);
+
+      if (data.num_pages == data.page || data.results.isEmpty) {
+        break;
+      }
+      page += 1;
+    } catch (e) {
+      print("Error getting combined transactions $e");
+      break;
+    }
+  }
+  page = 1;
+  while (true) {
+    try {
+      final data = await ExplorerService().getTransactions(
+        address: raAddress,
+        page: page,
+      );
+      raTransactions.addAll(data.results);
+
+      if (data.num_pages == data.page || data.results.isEmpty) {
+        break;
+      }
+      page += 1;
+    } catch (e) {
+      print("Error getting combined transactions $e");
+      break;
+    }
+  }
+
+  final combined = [...vfxTransactions, ...raTransactions];
+
+  combined.sort((a, b) {
+    late final int timestampA;
+    late final int timestampB;
+
+    if (a is WebTransaction) {
+      timestampA = a.date.millisecondsSinceEpoch;
+    }
+
+    if (b is WebTransaction) {
+      timestampB = b.date.millisecondsSinceEpoch;
+    }
+
+    return timestampA > timestampB ? -1 : 1;
+  });
+
+  return combined;
+});

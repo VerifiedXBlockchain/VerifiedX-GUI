@@ -280,7 +280,7 @@ class _ContentWrapper extends BaseComponent {
                             ),
                             Container(
                               height: expandedHeight,
-                              width: 520,
+                              width: 580,
                               decoration: BoxDecoration(
                                 color: AppColors.getGray(ColorShade.s300),
                                 border: Border(
@@ -1036,8 +1036,9 @@ class _TopLeft extends BaseComponent {
     return Align(
       alignment: Alignment.topLeft,
       child: Padding(
-        padding: const EdgeInsets.only(left: 5, top: 7),
+        padding: const EdgeInsets.only(left: 5, top: 4, bottom: 2),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             // RootContainerRotatingCube(),
@@ -1057,39 +1058,69 @@ class _TopLeft extends BaseComponent {
             SizedBox(
               width: 6,
             ),
-            AnimatedOpacity(
-              duration: ROOT_CONTAINER_TRANSITION_DURATION,
-              opacity: sideNavExpanded ? 1 : 0,
-              child: Text(
-                "Verified",
-                style: TextStyle(
-                  color: AppColors.getWhite(ColorShade.s400),
-                  fontSize: 26,
-                  fontWeight: FontWeight.w300,
-                  fontFamily: 'Mukta',
-                  letterSpacing: 0,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 1,
-            ),
-            AnimatedOpacity(
-              duration: ROOT_CONTAINER_TRANSITION_DURATION * 2,
-              opacity: sideNavExpanded ? 1 : 0,
-              child: Consumer(builder: (context, ref, _) {
-                return AnimatedDefaultTextStyle(
-                  duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                  style: TextStyle(
-                    color: ref.watch(sessionProvider.select((v) => v.btcSelected)) ? AppColors.getBtc() : AppColors.getBlue(ColorShade.s100),
-                    fontSize: 26,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Mukta',
-                    letterSpacing: 0,
+            Transform.translate(
+              offset: Offset(0, 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedOpacity(
+                        duration: ROOT_CONTAINER_TRANSITION_DURATION,
+                        opacity: sideNavExpanded ? 1 : 0,
+                        child: Text(
+                          "Verified",
+                          style: TextStyle(
+                            color: AppColors.getWhite(ColorShade.s400),
+                            fontSize: 26,
+                            fontWeight: FontWeight.w300,
+                            fontFamily: 'Mukta',
+                            letterSpacing: 0,
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 1,
+                      ),
+                      AnimatedOpacity(
+                        duration: ROOT_CONTAINER_TRANSITION_DURATION * 2,
+                        opacity: sideNavExpanded ? 1 : 0,
+                        child: Consumer(builder: (context, ref, _) {
+                          return AnimatedDefaultTextStyle(
+                            duration: ROOT_CONTAINER_TRANSITION_DURATION,
+                            style: TextStyle(
+                              color:
+                                  ref.watch(sessionProvider.select((v) => v.btcSelected)) ? AppColors.getBtc() : AppColors.getBlue(ColorShade.s100),
+                              fontSize: 26,
+                              fontWeight: FontWeight.w700,
+                              fontFamily: 'Mukta',
+                              letterSpacing: 0,
+                              height: 1,
+                            ),
+                            child: Text("X"),
+                          );
+                        }),
+                      ),
+                    ],
                   ),
-                  child: Text("X"),
-                );
-              }),
+                  Transform.translate(
+                    offset: Offset(0, -1),
+                    child: Text(
+                      "Switchblade",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: AppColors.getBlue(ColorShade.s50).withOpacity(0.7),
+                        letterSpacing: 1,
+                        fontWeight: FontWeight.w600,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -12,6 +12,7 @@ import '../../web/components/web_mobile_drawer_button.dart';
 import '../components/token_list.dart';
 
 import '../components/web_token_list.dart';
+import '../providers/web_token_list_provider.dart';
 
 class TokenListScreen extends BaseScreen {
   const TokenListScreen({super.key})
@@ -24,6 +25,7 @@ class TokenListScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final isMobile = BreakPoints.useMobileLayout(context);
+    final accounts = ref.watch(webTokenListProvider);
 
     return AppBar(
       leading: isMobile ? WebMobileDrawerButton() : null,
@@ -31,20 +33,21 @@ class TokenListScreen extends BaseScreen {
       centerTitle: !isMobile,
       title: Text("Fungible Tokens"),
       actions: [
-        Padding(
-          padding: const EdgeInsets.only(right: 20.0),
-          child: AppButton(
-            label: "Create Token",
-            variant: AppColorVariant.Success,
-            onPressed: () {
-              if (kIsWeb) {
-                AutoRouter.of(context).push(WebTokenCreateScreenRoute());
-              } else {
-                AutoRouter.of(context).push(TokenCreateScreenRoute());
-              }
-            },
-          ),
-        )
+        if (accounts.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(right: 20.0),
+            child: AppButton(
+              label: "Create New Token",
+              variant: AppColorVariant.Success,
+              onPressed: () {
+                if (kIsWeb) {
+                  AutoRouter.of(context).push(WebTokenCreateScreenRoute());
+                } else {
+                  AutoRouter.of(context).push(TokenCreateScreenRoute());
+                }
+              },
+            ),
+          )
       ],
     );
   }

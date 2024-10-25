@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/base_component.dart';
+import 'package:rbx_wallet/features/btc/components/btc_transaction_list_tile.dart';
+import 'package:rbx_wallet/features/transactions/components/transaction_list_tile.dart';
 import '../../../core/breakpoints.dart';
 import '../../../core/models/web_session_model.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
+import '../../../core/theme/colors.dart';
 import '../../btc_web/providers/btc_web_transaction_list_provider.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
@@ -40,30 +44,30 @@ class WebTransactionScreen extends BaseScreen {
       shadowColor: Colors.transparent,
       leading: isMobile ? WebMobileDrawerButton() : null,
       actions: [
-        if (session.selectedWalletType == WalletType.rbx) VfxTransactionFilterButton(),
-        WebWalletTypeSwitcher(),
-        Padding(
-          padding: const EdgeInsets.only(right: 6.0),
-          child: IconButton(
-              onPressed: () {
-                if (ref.read(webSessionProvider).selectedWalletType == WalletType.btc) {
-                  final address = ref.read(webSessionProvider).btcKeypair?.address;
-                  if (address != null) {
-                    ref.read(btcWebTransactionListProvider(address).notifier).reload();
-                  }
-                  return;
-                }
+        // if (session.selectedWalletType == WalletType.rbx) VfxTransactionFilterButton(),
+        // WebWalletTypeSwitcher(),
+        // Padding(
+        //   padding: const EdgeInsets.only(right: 6.0),
+        //   child: IconButton(
+        //       onPressed: () {
+        //         if (ref.read(webSessionProvider).selectedWalletType == WalletType.btc) {
+        //           final address = ref.read(webSessionProvider).btcKeypair?.address;
+        //           if (address != null) {
+        //             ref.read(btcWebTransactionListProvider(address).notifier).reload();
+        //           }
+        //           return;
+        //         }
 
-                final address = ref.read(webSessionProvider).currentWallet?.address;
-                if (address != null) {
-                  ref.read(webTransactionListProvider(address).notifier).refresh();
-                }
-              },
-              icon: const Icon(
-                Icons.refresh,
-                size: 16,
-              )),
-        )
+        //         final address = ref.read(webSessionProvider).currentWallet?.address;
+        //         if (address != null) {
+        //           ref.read(webTransactionListProvider(address).notifier).refresh();
+        //         }
+        //       },
+        //       icon: const Icon(
+        //         Icons.refresh,
+        //         size: 16,
+        //       )),
+        // )
       ],
     );
   }
@@ -74,50 +78,122 @@ class WebTransactionScreen extends BaseScreen {
 
     final filters = ref.watch(vfxTransactionFilterProvider);
 
-    if (session.selectedWalletType == WalletType.btc) {
-      if (session.btcKeypair == null) {
-        return const WebNotWallet();
-      }
+    return DefaultTabController(
+      length: 4,
+      child: Column(
+        children: [
+          TabBar(
+            indicatorColor: AppColors.getBlue(),
+            tabs: [
+              Tab(
+                child: Text("All"),
+              ),
+              Tab(
+                child: Text("VFX"),
+              ),
+              Tab(
+                child: Text("Vault"),
+              ),
+              Tab(
+                child: Text("BTC"),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Expanded(
+            child: TabBarView(
+              children: [
+                WebTransactionsCombinedList(),
+                WebTransactionsVfxList(address: session.keypair?.address),
+                WebTransactionsVfxList(address: session.raKeypair?.address),
+                WebBtcTransactionList(address: session.btcKeypair?.address),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
 
-      return WebBtcTransactionList(address: session.btcKeypair!.address);
-    }
+class WebTransactionsVfxList extends BaseComponent {
+  final String? address;
+  const WebTransactionsVfxList({
+    super.key,
+    required this.address,
+  });
 
-    final address = session.currentWallet?.address;
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(webSessionProvider);
 
     if (address == null) {
       return const WebNotWallet();
     }
 
-    final model = ref.watch(webTransactionListProvider(address));
-    List<WebTransaction> transactions = model.transactions;
-    if (filters.txTypes.isNotEmpty) {
-      transactions = transactions.where((t) => filters.txTypes.contains(t.type)).toList();
-    }
-
-    if (transactions.isEmpty) {
+    final model = ref.watch(webTransactionListProvider(address!));
+    if (model.transactions.isEmpty) {
       return Center(
         child: Text("No Transactions found for $address."),
       );
     }
 
     return ListView.builder(
-        itemCount: transactions.length,
-        itemBuilder: (context, index) {
-          final tx = transactions[index];
+      itemCount: model.transactions.length,
+      itemBuilder: (context, index) {
+        final tx = model.transactions[index];
+        final isLast = index + 1 == model.transactions.length;
 
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              WebTransactionCard(tx),
-              if (index + 1 == transactions.length)
-                _NextPageRequester(
-                    isLoading: model.isLoading,
-                    pageRequestFunction: () {
-                      ref.read(webTransactionListProvider(address).notifier).fetchNextPage();
-                    })
-            ],
-          );
-        });
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            WebTransactionCard(tx),
+            if (isLast)
+              _NextPageRequester(
+                isLoading: model.isLoading,
+                pageRequestFunction: () {
+                  ref.read(webTransactionListProvider(address!).notifier).fetchNextPage();
+                },
+              )
+          ],
+        );
+      },
+    );
+  }
+}
+
+class WebTransactionsCombinedList extends BaseComponent {
+  const WebTransactionsCombinedList({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(webSessionProvider);
+
+    final combinedIdentifier = "${session.keypair?.address}:${session.raKeypair?.address}:${session.btcKeypair?.address}";
+
+    final data = ref.watch(combinedWebTransactionListProvider(combinedIdentifier));
+
+    return data.when(
+      loading: () => CenteredLoader(),
+      error: (e, _) => Text("Error"),
+      data: (transactions) {
+        return ListView.builder(
+          itemCount: transactions.length,
+          itemBuilder: (context, index) {
+            final tx = transactions[index];
+            if (tx is WebTransaction) {
+              return WebTransactionCard(tx);
+            }
+
+            return Text("TODO");
+          },
+        );
+      },
+    );
   }
 }
 

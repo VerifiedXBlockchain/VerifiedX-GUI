@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,7 +54,11 @@ class WebTokenList extends BaseComponent {
               label: "Create Token",
               variant: AppColorVariant.Success,
               onPressed: () {
-                AutoRouter.of(context).push(TokenCreateScreenRoute());
+                if (kIsWeb) {
+                  AutoRouter.of(context).push(WebTokenCreateScreenRoute());
+                } else {
+                  AutoRouter.of(context).push(TokenCreateScreenRoute());
+                }
               },
             ),
           ],
