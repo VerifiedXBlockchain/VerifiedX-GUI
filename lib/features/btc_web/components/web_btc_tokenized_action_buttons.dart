@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../../../app.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../../core/app_constants.dart';
@@ -55,7 +57,45 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
           AppButton(
             label: "Fund",
             icon: Icons.outbox,
-            onPressed: () {},
+            onPressed: () {
+              showModalBottomSheet(
+                  context: rootNavigatorKey.currentContext!,
+                  backgroundColor: Colors.black87,
+                  builder: (context) {
+                    return ModalContainer(
+                      color: Colors.black,
+                      withDecor: false,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.max,
+                          children: [Text('Fund vBTC Token')],
+                        ),
+                        ListTile(
+                          title: Text(token.depositAddress),
+                          subtitle: Text(myBalance.toString()),
+                          trailing: Icon(Icons.chevron_right),
+                          onTap: () async {
+                            final amount = await PromptModal.show(
+                                title: "Amount", validator: (val) => formValidatorNumber(val, "Amount"), labelText: 'Deposit amount');
+                            Navigator.of(context).pop();
+                            //TODO COMPLETE THIS FUNCTION
+                          },
+                        ),
+                        ListTile(
+                          title: Text("Manual Send"),
+                          subtitle: Text("Send coin manually to this token’s BTC deposit address"),
+                          trailing: Icon(Icons.chevron_right),
+                          onTap: () async {
+                            await Clipboard.setData(ClipboardData(text: token.depositAddress));
+                            Toast.message("Deposit address copied to clipboard");
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  });
+            },
             variant: AppColorVariant.Primary,
           ),
         AppButton(

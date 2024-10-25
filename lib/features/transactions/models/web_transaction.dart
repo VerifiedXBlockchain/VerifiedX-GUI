@@ -98,7 +98,12 @@ class WebTransaction with _$WebTransaction {
       case 1:
         return "Node";
       case 2:
+        if (nftDataValue('Function') == "TokenDeploy()") {
+          return "NFT Mint (Tokenized)";
+        }
+
         return "NFT Mint";
+
       case 3:
         if (nftDataValue('Function') == "Transfer()") {
           return "NFT Transfer";
@@ -112,7 +117,11 @@ class WebTransaction with _$WebTransaction {
         return "NFT Burn";
       case 5:
         if (nftDataValue('Function') == "Sale_Start()") {
-          return "NFT Sale (Start)";
+          return "NFT Sale Start";
+        } else if (nftDataValue('Function') == "M_Sale_start()()") {
+          return "NFT Sale Start (Manual)";
+        } else if (nftDataValue('Function') == "M_Sale_Complete()") {
+          return "NFT Sale Complete (Manual)";
         } else if (nftDataValue('Function') == "Sale_Complete()") {
           return "NFT Sale (Complete)";
         }
@@ -121,14 +130,20 @@ class WebTransaction with _$WebTransaction {
 
       case 6:
         if (nftDataValue('Function') == "AdnrCreate()") {
-          return "VFX Domain (Create)";
+          return "ADNR Create";
         } else if (nftDataValue('Function') == "AdnrTransfer()") {
-          return "VFX Domain (Transfer)";
+          return "ADNR Transfer";
         } else if (nftDataValue('Function') == "AdnrDelete()") {
-          return "VFX Domain (Delete)";
+          return "ADNR Delete";
+        } else if (nftDataValue('Function') == "BTCAdnrCreate()") {
+          return "BTC ADNR Create";
+        } else if (nftDataValue('Function') == "BTCAdnrTransfer()") {
+          return "BTC ADNR Transfer";
+        } else if (nftDataValue('Function') == "BTCAdnrDelete()") {
+          return "BTC ADNR Delete";
         }
 
-        return "Address";
+        return "ADNR";
       case 7:
         if (nftDataValue('Function') == "DecShopCreate()") {
           return "P2P Auction House (Create)";
@@ -161,8 +176,49 @@ class WebTransaction with _$WebTransaction {
       case 14:
         return "Fungible Token Mint";
       case 15:
+        final amount = nftDataValue('Amount');
+        final ticker = nftDataValue('TokenTicker');
+        if (nftDataValue('Function') == "TokenMint()") {
+          return "Fungible Token Mint${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+        }
+        if (nftDataValue('Function') == "TokenBurn()") {
+          return "Fungible Token Burn${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+        }
+
+        if (nftDataValue('Function') == "TokenTransfer()") {
+          return "Fungible Token Transfer${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+        }
+
+        if (nftDataValue('Function') == "TokenBurn()") {
+          return "Fungible Token Burn${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+        }
+
+        if (nftDataValue('Function') == "TokenContractOwnerChange()") {
+          return "Fungible Token Ownership Change${ticker != null ? ' ($ticker)' : ''}";
+        }
+        if (nftDataValue('Function') == "TokenPause()") {
+          final isPause = nftDataValue('Pause') == "true";
+          return "Fungible Token ${isPause ? 'Pause' : 'Resume'}${ticker != null ? ' ($ticker)' : ''}";
+        }
+
+        if (nftDataValue('Function') == "TokenBanAddress()") {
+          return "Fungible Token Ban Address${ticker != null ? ' ($ticker)' : ''}";
+        }
+
+        if (nftDataValue('Function') == "TokenVoteTopicCast()") {
+          return "Fungible Token Vote Cast${ticker != null ? ' ($ticker)' : ''}";
+        }
+        if (nftDataValue('Function') == "TokenVoteTopicCreate()") {
+          return "Fungible Token Topic Created${ticker != null ? ' ($ticker)' : ''}";
+        }
+
         return "Fungible Token TX";
       case 16:
+        final amount = nftDataValue('Amount');
+        final ticker = nftDataValue('TokenTicker');
+        if (nftDataValue('Function') == "TokenBurn()") {
+          return "Fungible Token Burn${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+        }
         return "Fungible Token Burn";
       case 17:
         if (data != null) {
@@ -173,6 +229,15 @@ class WebTransaction with _$WebTransaction {
 
         return "Tokenization Mint";
       case 18:
+        final function = nftDataValue('Function');
+        final amount = nftDataValue('Amount');
+        if (function == "TransferCoin()") {
+          return "vBTC Transfer Coin ($amount vBTC)";
+        }
+
+        if (function == "Transfer()") {
+          return "vBTC Token Ownership Transfer";
+        }
         return "Tokenization TX";
       case 19:
         return "Tokenization Burn";
@@ -181,7 +246,7 @@ class WebTransaction with _$WebTransaction {
       case 21:
         return "Tokenization Withdrawl";
       default:
-        return "-";
+        return type.toString();
     }
   }
 
