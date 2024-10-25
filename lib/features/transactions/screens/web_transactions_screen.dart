@@ -140,26 +140,32 @@ class WebTransactionsVfxList extends BaseComponent {
       );
     }
 
-    return ListView.builder(
-      itemCount: model.transactions.length,
-      itemBuilder: (context, index) {
-        final tx = model.transactions[index];
-        final isLast = index + 1 == model.transactions.length;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ListView.builder(
+        itemCount: model.transactions.length,
+        itemBuilder: (context, index) {
+          final tx = model.transactions[index];
+          final isLast = index + 1 == model.transactions.length;
 
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            WebTransactionCard(tx),
-            if (isLast)
-              _NextPageRequester(
-                isLoading: model.isLoading,
-                pageRequestFunction: () {
-                  ref.read(webTransactionListProvider(address!).notifier).fetchNextPage();
-                },
-              )
-          ],
-        );
-      },
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                WebTransactionCard(tx),
+                if (isLast)
+                  _NextPageRequester(
+                    isLoading: model.isLoading,
+                    pageRequestFunction: () {
+                      ref.read(webTransactionListProvider(address!).notifier).fetchNextPage();
+                    },
+                  )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

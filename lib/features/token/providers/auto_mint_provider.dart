@@ -10,6 +10,9 @@ class AutoMintProvider extends StateNotifier<Map<String, dynamic>> {
     };
 
     state = {...state, smartContractId: data};
+    print("***********");
+    print(data);
+    print("***********");
   }
 
   remove(String smartContractId) {

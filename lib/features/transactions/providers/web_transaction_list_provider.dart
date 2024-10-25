@@ -141,6 +141,11 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
 
   List<WebTransaction> vfxTransactions = [];
 
+  final pendingVfxTxs = ref.watch(webTransactionListProvider(vfxAddress).select((v) => v.transactions)).where((t) => t.isPending).toList();
+  final pendingRaTxs = ref.watch(webTransactionListProvider(raAddress).select((v) => v.transactions)).where((t) => t.isPending).toList();
+
+  vfxTransactions.addAll([...pendingVfxTxs, ...pendingRaTxs]);
+
   int page = 1;
   while (true) {
     try {
@@ -159,6 +164,9 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
       break;
     }
   }
+
+  final groups = groupBy(vfxTransactions, (WebTransaction tx) => tx.hash);
+  vfxTransactions = groups.values.map((list) => list.first).toList();
 
   final btcTransactions = ref.watch(btcWebCombinedTransactionListProvider);
 

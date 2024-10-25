@@ -184,7 +184,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
       );
       final parsedPremintAmount = premintAmount != null ? double.tryParse(premintAmount) : null;
 
-      if (parsedPremintAmount != null) {
+      if (parsedPremintAmount != null && parsedPremintAmount > 0) {
         ref.read(autoMintProvider.notifier).add(id, currentWallet.address, parsedPremintAmount);
       }
     }
@@ -238,36 +238,41 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
       minterName: keypair.address,
     );
 
+    double? parsedPremintAmount;
+
     if (supplyController.text == '0' || state.mintable) {
       final premintAmount = await PromptModal.show(
-        title: "Pre Mint Initial Issuance?",
+        title: "Pre Mint Initial Issuance? (Opotonal)",
         validator: (v) {
           return null;
         },
         labelText: "Supply",
+        initialValue: "0",
         inputFormatters: [
           FilteringTextInputFormatter.allow(
             RegExp("[0-9.]"),
           ),
         ],
       );
-      final parsedPremintAmount = premintAmount != null ? double.tryParse(premintAmount) : null;
-
-      if (parsedPremintAmount != null) {
-        ref.read(autoMintProvider.notifier).add(
-              sc.id,
-              ref.read(webSessionProvider.select((value) => value.currentWallet?.address ?? "")),
-              parsedPremintAmount,
-            );
-      }
+      parsedPremintAmount = premintAmount != null ? double.tryParse(premintAmount) : null;
     }
 
     final timezoneName = ref.read(webSessionProvider).timezoneName;
     final payload = sc.serializeForCompiler(timezoneName);
 
-    final success = await RawService().compileAndMintSmartContract(payload, keypair, ref, TxType.tokenDeploy);
+    ref.read(globalLoadingProvider.notifier).start();
 
-    if (success == true) {
+    final hash = await RawService().compileAndMintSmartContractAndGetHash(payload, keypair, ref, TxType.tokenDeploy);
+    ref.read(globalLoadingProvider.notifier).complete();
+
+    if (hash != null) {
+      if (parsedPremintAmount != null && parsedPremintAmount > 0) {
+        ref.read(autoMintProvider.notifier).add(
+              hash,
+              ref.read(webSessionProvider.select((value) => value.keypair?.address ?? "")),
+              parsedPremintAmount,
+            );
+      }
       ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address);
       return true;
     }

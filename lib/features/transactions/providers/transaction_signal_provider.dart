@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/services/explorer_service.dart';
+import 'package:rbx_wallet/features/token/providers/web_token_actions_manager.dart';
 import '../../nft/providers/nft_detail_watcher.dart';
 import '../../nft/providers/sale_provider.dart';
 import '../../reserve/providers/ra_auto_activate_provider.dart';
@@ -155,7 +157,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
     }
   }
 
-  void _handleNftMint(Transaction transaction) {
+  Future<void> _handleNftMint(Transaction transaction) async {
     String? body;
     final nftData = _parseNftData(transaction);
     if (nftData != null) {
@@ -173,22 +175,36 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         ref.read(tokenListProvider.notifier).reloadCurrentPage();
 
         final scId = _nftDataValue(nftData, 'ContractUID');
+        final hash = transaction.hash;
+
         if (scId != null) {
           final autoMintData = ref.read(autoMintProvider);
 
-          if (autoMintData.containsKey(scId)) {
-            final Map<String, dynamic>? data = autoMintData[scId];
+          if ((!kIsWeb && autoMintData.containsKey(scId)) || (kIsWeb && autoMintData.containsKey(hash))) {
+            final Map<String, dynamic>? data = autoMintData[kIsWeb ? hash : scId];
             if (data != null) {
               if (data.containsKey('amount') && data.containsKey('fromAddress')) {
                 final double? amount = data['amount'];
                 final String? fromAddress = data['fromAddress'];
 
                 if (amount != null && fromAddress != null) {
-                  TokenService().mint(scId: scId, fromAddress: fromAddress, amount: amount).then((success) {
-                    if (success == true) {
-                      Toast.message("Token Auto Mint initiated. ($scId: $amount)");
+                  if (kIsWeb) {
+                    final token = await ExplorerService().retrieveToken(scId);
+
+                    if (token != null) {
+                      final success = await ref.read(webTokenActionsManager).mintTokens(token.token, fromAddress, amount, true);
+
+                      if (success == true) {
+                        Toast.message("Token Auto Mint initiated. ($scId: $amount)");
+                      }
                     }
-                  });
+                  } else {
+                    TokenService().mint(scId: scId, fromAddress: fromAddress, amount: amount).then((success) {
+                      if (success == true) {
+                        Toast.message("Token Auto Mint initiated. ($scId: $amount)");
+                      }
+                    });
+                  }
                 }
               }
             }

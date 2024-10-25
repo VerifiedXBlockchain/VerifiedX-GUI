@@ -30,6 +30,8 @@ class WebTokenActionsManager {
     double amount = 0,
     int? unlockHours,
     bool showConfirmation = true,
+    bool showLoader = true,
+    bool showToasts = true,
   }) async {
     final keypair = keypairOverride ?? ref.read(webSessionProvider).keypair;
     if (keypair == null) {
@@ -37,7 +39,9 @@ class WebTokenActionsManager {
       return false;
     }
 
-    ref.read(globalLoadingProvider.notifier).start();
+    if (showLoader) {
+      ref.read(globalLoadingProvider.notifier).start();
+    }
 
     final txData = await RawTransaction.generate(
       keypair: keypair,
@@ -47,11 +51,13 @@ class WebTokenActionsManager {
       data: data,
       unlockHours: unlockHours,
     );
-
-    ref.read(globalLoadingProvider.notifier).complete();
-
+    if (showLoader) {
+      ref.read(globalLoadingProvider.notifier).complete();
+    }
     if (txData == null) {
-      Toast.error("Invalid transaction data.");
+      if (showToasts) {
+        Toast.error("Invalid transaction data.");
+      }
       return false;
     }
 
@@ -69,22 +75,28 @@ class WebTokenActionsManager {
         return null;
       }
     }
-
-    ref.read(globalLoadingProvider.notifier).start();
-
-    final tx = await RawService().sendTransaction(transactionData: txData, execute: true, ref: ref);
-    ref.read(globalLoadingProvider.notifier).complete();
-
-    if (tx != null && tx['Result'] == "Success") {
-      Toast.message("Transaction broadcasted!");
-      return true;
+    if (showLoader) {
+      ref.read(globalLoadingProvider.notifier).start();
     }
 
-    Toast.error(tx?['Message']);
+    final tx = await RawService().sendTransaction(transactionData: txData, execute: true, ref: ref);
+
+    if (showLoader) {
+      ref.read(globalLoadingProvider.notifier).complete();
+    }
+    if (tx != null && tx['Result'] == "Success") {
+      if (showToasts) {
+        Toast.message("Transaction broadcasted!");
+      }
+      return true;
+    }
+    if (showToasts) {
+      Toast.error(tx?['Message']);
+    }
     return false;
   }
 
-  Future<bool?> mintTokens(WebFungibleToken token, String address, double amount) async {
+  Future<bool?> mintTokens(WebFungibleToken token, String address, double amount, [bool silent = false]) async {
     final data = {
       "Function": "TokenMint()",
       "ContractUID": token.smartContractId,
@@ -94,10 +106,7 @@ class WebTokenActionsManager {
       "TokenName": token.name,
     };
 
-    return await _verifyConfirmAndSendTx(
-      toAddress: "Token_Base",
-      data: data,
-    );
+    return await _verifyConfirmAndSendTx(toAddress: "Token_Base", data: data, showConfirmation: !silent, showLoader: !silent, showToasts: !silent);
   }
 
   Future<bool?> transferAmount(WebFungibleToken token, String toAddress, String fromAddress, double amount) async {

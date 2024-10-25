@@ -149,10 +149,6 @@ class RawService extends BaseService {
       }
       final data = response['data'];
 
-      print('-------------');
-      print(data);
-      print('-------------');
-
       final txData = await RawTransaction.generate(
         keypair: keypair,
         amount: 0.0,
@@ -180,6 +176,51 @@ class RawService extends BaseService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<String?> compileAndMintSmartContractAndGetHash(Map<String, dynamic> payload, Keypair keypair, Ref ref, [int type = TxType.nftMint]) async {
+    try {
+      final updatedPayload = {...payload, 'SCVersion': 1};
+
+      print(jsonEncode(updatedPayload));
+      Map<String, dynamic> response = {};
+      try {
+        response = await postJson('/smart-contract-data/', params: updatedPayload, responseIsJson: true);
+      } catch (e) {
+        print(e);
+        Toast.error("Error generating smart contract data");
+        return null;
+      }
+      final data = response['data'];
+
+      final txData = await RawTransaction.generate(
+        keypair: keypair,
+        amount: 0.0,
+        toAddress: keypair.address,
+        data: data,
+        txType: type,
+      );
+
+      if (txData == null) {
+        Toast.error("Invalid transaction data.");
+        return null;
+      }
+
+      final tx = await RawService().sendTransaction(
+        transactionData: txData,
+        execute: true,
+        ref: ref,
+      );
+
+      if (tx != null && tx['Result'] == "Success") {
+        return tx['Hash'].toString();
+      }
+
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 
