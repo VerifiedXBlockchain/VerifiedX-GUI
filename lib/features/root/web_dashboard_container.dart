@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/features/btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../../app.dart';
 import '../../core/app_constants.dart';
 import '../../core/components/buttons.dart';
@@ -702,6 +703,15 @@ class WebAccountInfoVbtc extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final forceExpand = ref.watch(globalBalancesExpandedProvider);
 
+    final txs = ref.watch(vbtcWebCombinedTransactionListProvider);
+    final BtcWebTransaction? latestVbtcTx = txs.isEmpty ? null : txs.first;
+
+    final vbtcTokens = ref.watch(btcWebVbtcTokenListProvider);
+    final sum = vbtcTokens.fold<double>(
+        0.0,
+        (previousValue, element) =>
+            previousValue + element.balanceForAddress(ref.watch(webSessionProvider.select((value) => value.keypair?.address))));
+
     return RootContainerBalanceItem(
       topIndicator: Container(
         decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(32)),
@@ -715,13 +725,72 @@ class WebAccountInfoVbtc extends BaseComponent {
         ),
       ),
       forceExpand: forceExpand,
-      heading: "0 vBTC",
+      heading: "${sum.toStringAsFixed(8)} vBTC",
       headingColor: AppColors.getWhite(),
-      accountCount: "",
-      handleViewAllTxs: () {},
+      accountCount: "${vbtcTokens.length} Tokens",
+      handleViewAllTxs: () {
+        AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+      },
+      latestTx: latestVbtcTx != null
+          ? MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () {
+                  ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
+                  AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+                },
+                child: AppCard(
+                  padding: 12,
+                  fullWidth: true,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "${latestVbtcTx.amountBtc(ref.watch(allBtcAddressesProvider))} vBTC",
+                        style: TextStyle(
+                          color: latestVbtcTx.amountBtc(ref.watch(allBtcAddressesProvider)) >= 0
+                              ? Theme.of(context).colorScheme.success
+                              : Colors.red.shade500,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        "From: ${latestVbtcTx.fromAddress()}\nTo: ${latestVbtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: Colors.white.withOpacity(0.9),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      latestVbtcTx.status.confirmed
+                          ? Text(
+                              "Confirmed",
+                              style: TextStyle(
+                                color: AppColors.getSpringGreen(),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            )
+                          : Text(
+                              "Pending",
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.warning,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+              ),
+            )
+          : null,
       actions: [
         AppVerticalIconButton(
-          onPressed: () {},
+          onPressed: () {
+            AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.vbtc);
+          },
           icon: FontAwesomeIcons.bitcoin,
           prettyIconType: PrettyIconType.topCards,
           label: "vBTC\nTokens",

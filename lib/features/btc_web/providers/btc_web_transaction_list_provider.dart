@@ -48,3 +48,22 @@ final btcWebCombinedTransactionListProvider = Provider((ref) {
 
   return allTxs;
 });
+
+final vbtcWebCombinedTransactionListProvider = Provider((ref) {
+  final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
+
+  final List<BtcWebTransaction> allTxs = [];
+
+  for (final a in vbtcTokenAddresses) {
+    allTxs.addAll(ref.watch(btcWebTransactionListProvider(a)));
+  }
+
+  allTxs.sort((a, b) {
+    final timestampA = a.status.blockTime == null ? DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch : a.status.blockTime! * 1000;
+    final timestampB = b.status.blockTime == null ? DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch : b.status.blockTime! * 1000;
+
+    return timestampA > timestampB ? -1 : 1;
+  });
+
+  return allTxs;
+});
