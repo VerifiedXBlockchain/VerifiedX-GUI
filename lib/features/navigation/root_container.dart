@@ -28,7 +28,7 @@ import 'components/root_container_wallet_selector_list.dart';
 const ROOT_CONTAINER_TRANSITION_DURATION = Duration(milliseconds: 250);
 const ROOT_CONTAINER_TRANSITION_CURVE = Curves.ease;
 const SIDE_NAV_WIDTH_EXPANDED = 180.0;
-const SIDE_NAV_WIDTH_CONTRACTED = 50.0;
+const SIDE_NAV_WIDTH_CONTRACTED = 60.0;
 
 class RootContainer extends BaseComponent {
   const RootContainer({super.key});
@@ -180,45 +180,79 @@ class _LayoutState extends State<_Layout> {
                     padding: const EdgeInsets.only(left: 5, top: 7),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        RootContainerRotatingCube(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 3.0),
+                          child: RootContainerRotatingCube(),
+                        ),
                         SizedBox(
                           width: 6,
                         ),
-                        AnimatedOpacity(
-                          duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                          opacity: sideNavExpanded ? 1 : 0,
-                          child: Text(
-                            "Verified",
-                            style: TextStyle(
-                              color: AppColors.getWhite(ColorShade.s400),
-                              fontSize: 26,
-                              fontWeight: FontWeight.w300,
-                              fontFamily: 'Mukta',
-                              letterSpacing: 0,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 6,
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 1,
-                        ),
-                        AnimatedOpacity(
-                          duration: ROOT_CONTAINER_TRANSITION_DURATION * 2,
-                          opacity: sideNavExpanded ? 1 : 0,
-                          child: Consumer(builder: (context, ref, _) {
-                            return AnimatedDefaultTextStyle(
+                            AnimatedOpacity(
                               duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                              style: TextStyle(
-                                color:
-                                    ref.watch(sessionProvider.select((v) => v.btcSelected)) ? AppColors.getBtc() : AppColors.getBlue(ColorShade.s100),
-                                fontSize: 26,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Mukta',
-                                letterSpacing: 0,
+                              opacity: sideNavExpanded ? 1 : 0,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "Verified",
+                                    style: TextStyle(
+                                      color: AppColors.getWhite(ColorShade.s300),
+                                      fontSize: 26,
+                                      fontWeight: FontWeight.w300,
+                                      fontFamily: 'Mukta',
+                                      letterSpacing: 0.25,
+                                      height: 1,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 1,
+                                  ),
+                                  Consumer(builder: (context, ref, _) {
+                                    return AnimatedDefaultTextStyle(
+                                      duration: ROOT_CONTAINER_TRANSITION_DURATION,
+                                      style: TextStyle(
+                                        color: ref.watch(sessionProvider.select((v) => v.btcSelected))
+                                            ? AppColors.getBtc()
+                                            : AppColors.getBlue(ColorShade.s100),
+                                        fontSize: 26,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'Mukta',
+                                        letterSpacing: 0,
+                                        height: 1,
+                                      ),
+                                      child: Text("X"),
+                                    );
+                                  }),
+                                ],
                               ),
-                              child: Text("X"),
-                            );
-                          }),
+                            ),
+                            AnimatedOpacity(
+                              duration: ROOT_CONTAINER_TRANSITION_DURATION,
+                              opacity: sideNavExpanded ? 1 : 0,
+                              child: Transform.translate(
+                                offset: Offset(0, -1),
+                                child: Text(
+                                  "Switchblade",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.getBlue(ColorShade.s50).withOpacity(0.7),
+                                    letterSpacing: 1,
+                                    fontWeight: FontWeight.w600,
+                                    height: 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),

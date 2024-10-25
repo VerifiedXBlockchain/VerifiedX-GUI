@@ -1139,14 +1139,14 @@ class _TopLeft extends BaseComponent {
                 ? Image.asset(
                     Assets.images.animatedCubeBtc.path,
                     scale: 1,
-                    width: 42,
-                    height: 42,
+                    width: 48,
+                    height: 48,
                   )
                 : Image.asset(
                     Assets.images.animatedCube.path,
                     scale: 1,
-                    width: 42,
-                    height: 42,
+                    width: 48,
+                    height: 48,
                   ),
             SizedBox(
               width: 6,
@@ -1166,7 +1166,7 @@ class _TopLeft extends BaseComponent {
                         child: Text(
                           "Verified",
                           style: TextStyle(
-                            color: AppColors.getWhite(ColorShade.s400),
+                            color: AppColors.getWhite(ColorShade.s300),
                             fontSize: 26,
                             fontWeight: FontWeight.w300,
                             fontFamily: 'Mukta',
@@ -1199,16 +1199,20 @@ class _TopLeft extends BaseComponent {
                       ),
                     ],
                   ),
-                  Transform.translate(
-                    offset: Offset(0, -1),
-                    child: Text(
-                      "Switchblade",
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: AppColors.getBlue(ColorShade.s50).withOpacity(0.7),
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.w600,
-                        height: 1,
+                  AnimatedOpacity(
+                    duration: ROOT_CONTAINER_TRANSITION_DURATION * 2,
+                    opacity: sideNavExpanded ? 1 : 0,
+                    child: Transform.translate(
+                      offset: Offset(0, -1),
+                      child: Text(
+                        "Switchblade",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.getBlue(ColorShade.s50).withOpacity(0.7),
+                          letterSpacing: 1,
+                          fontWeight: FontWeight.w600,
+                          height: 1,
+                        ),
                       ),
                     ),
                   ),

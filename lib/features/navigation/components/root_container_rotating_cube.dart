@@ -16,14 +16,14 @@ class RootContainerRotatingCube extends BaseComponent {
         ? Image.asset(
             Assets.images.animatedCubeBtc.path,
             scale: 1,
-            width: 42,
-            height: 42,
+            width: 48,
+            height: 48,
           )
         : Image.asset(
             Assets.images.animatedCube.path,
             scale: 1,
-            width: 42,
-            height: 42,
+            width: 48,
+            height: 48,
           );
   }
 }

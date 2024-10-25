@@ -66,7 +66,7 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                     ),
                   )),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
+                padding: const EdgeInsets.symmetric(vertical: 0),
                 child: Row(
                   children: [
                     AnimatedContainer(
