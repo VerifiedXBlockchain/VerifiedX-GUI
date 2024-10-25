@@ -152,6 +152,28 @@ class ExplorerService extends BaseService {
     }
   }
 
+  Future<PaginatedResponse<WebTransaction>> getTransactionsFromMultipleAddresses({
+    required int page,
+    required List<String> addresses,
+    int limit = 10,
+  }) async {
+    try {
+      final params = {
+        'page': page,
+        'limit': limit,
+      };
+
+      final response = await getJson('/transaction/addresses/${addresses.join(',')}', params: params);
+
+      final List<WebTransaction> results = response['results'].map<WebTransaction>((json) => WebTransaction.fromJson(json)).toList();
+      return PaginatedResponse(count: response['count'], page: response['page'], num_pages: response['num_pages'], results: results);
+    } catch (e) {
+      print("ERRR");
+      print(e);
+      return PaginatedResponse.empty();
+    }
+  }
+
   Future<WebBlock?> getLatestBlock() async {
     try {
       final response = await getJson('/blocks', params: {'limit': 1});

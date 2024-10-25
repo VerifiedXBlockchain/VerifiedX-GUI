@@ -7,6 +7,8 @@ import '../../../core/breakpoints.dart';
 import '../../../core/models/web_session_model.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/colors.dart';
+import '../../btc_web/components/web_btc_transaction_list_tile.dart';
+import '../../btc_web/models/btc_web_transaction.dart';
 import '../../btc_web/providers/btc_web_transaction_list_provider.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
@@ -127,8 +129,6 @@ class WebTransactionsVfxList extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(webSessionProvider);
-
     if (address == null) {
       return const WebNotWallet();
     }
@@ -187,6 +187,21 @@ class WebTransactionsCombinedList extends BaseComponent {
             final tx = transactions[index];
             if (tx is WebTransaction) {
               return WebTransactionCard(tx);
+            }
+
+            if (tx is BtcWebTransaction) {
+              if (session.btcKeypair == null) {
+                return SizedBox();
+              }
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
+                child: WebBtcTransactionListTile(
+                  transaction: tx,
+                  address: session.btcKeypair!.address,
+                  compact: true,
+                ),
+              );
             }
 
             return Text("TODO");

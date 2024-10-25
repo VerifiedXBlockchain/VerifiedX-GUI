@@ -15,11 +15,13 @@ import 'package:url_launcher/url_launcher_string.dart';
 class WebBtcTransactionListTile extends StatelessWidget {
   final BtcWebTransaction transaction;
   final String address;
+  final bool compact;
 
   const WebBtcTransactionListTile({
     super.key,
     required this.transaction,
     required this.address,
+    this.compact = false,
   });
 
   @override
@@ -160,129 +162,131 @@ class WebBtcTransactionListTile extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: 4,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Inputs:",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
+          if (!compact) ...[
+            SizedBox(
+              height: 4,
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Inputs:",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    ...tx.vin.map((input) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black26,
-                            border: Border.all(color: Colors.white10, width: 1),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            title: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(input.prevout.scriptpubkeyAddress),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      await Clipboard.setData(ClipboardData(text: input.prevout.scriptpubkeyAddress));
-                                      Toast.message("Address copied to clipboard");
-                                    },
-                                    child: Icon(
-                                      Icons.copy,
-                                      size: 12,
-                                      color: Colors.white70,
+                      ...tx.vin.map((input) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black26,
+                              border: Border.all(color: Colors.white10, width: 1),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              title: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(input.prevout.scriptpubkeyAddress),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 4.0),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await Clipboard.setData(ClipboardData(text: input.prevout.scriptpubkeyAddress));
+                                        Toast.message("Address copied to clipboard");
+                                      },
+                                      child: Icon(
+                                        Icons.copy,
+                                        size: 12,
+                                        color: Colors.white70,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                              trailing: Text("${input.prevout.value * BTC_SATOSHI_MULTIPLIER} BTC"),
                             ),
-                            trailing: Text("${input.prevout.value * BTC_SATOSHI_MULTIPLIER} BTC"),
                           ),
-                        ),
-                      );
-                    })
-                  ],
+                        );
+                      })
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Outputs:",
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Outputs:",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    ...tx.vout.map((output) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.black26,
-                            border: Border.all(color: Colors.white10, width: 1),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            title: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(output.scriptpubkeyAddress),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: InkWell(
-                                    onTap: () async {
-                                      await Clipboard.setData(ClipboardData(text: output.scriptpubkeyAddress));
-                                      Toast.message("Address copied to clipboard");
-                                    },
-                                    child: Icon(
-                                      Icons.copy,
-                                      size: 12,
-                                      color: Colors.white70,
+                      ...tx.vout.map((output) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black26,
+                              border: Border.all(color: Colors.white10, width: 1),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              title: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(output.scriptpubkeyAddress),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 4.0),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        await Clipboard.setData(ClipboardData(text: output.scriptpubkeyAddress));
+                                        Toast.message("Address copied to clipboard");
+                                      },
+                                      child: Icon(
+                                        Icons.copy,
+                                        size: 12,
+                                        color: Colors.white70,
+                                      ),
                                     ),
                                   ),
+                                ],
+                              ),
+                              trailing: Text(
+                                "${output.value * BTC_SATOSHI_MULTIPLIER} BTC",
+                                style: TextStyle(
+                                  // color: isToMe ? Theme.of(context).colorScheme.success : Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
                                 ),
-                              ],
-                            ),
-                            trailing: Text(
-                              "${output.value * BTC_SATOSHI_MULTIPLIER} BTC",
-                              style: TextStyle(
-                                // color: isToMe ? Theme.of(context).colorScheme.success : Colors.white,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    })
-                  ],
+                        );
+                      })
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ],
       ),
     );

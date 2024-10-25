@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/env.dart';
+import '../../btc_web/models/btc_web_transaction.dart';
+import '../../btc_web/services/btc_web_service.dart';
 import 'transaction_signal_provider.dart';
 
 import '../../../core/services/explorer_service.dart';
@@ -138,13 +140,12 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
   final btcAddress = parts[2];
 
   List<WebTransaction> vfxTransactions = [];
-  List<WebTransaction> raTransactions = [];
 
   int page = 1;
   while (true) {
     try {
-      final data = await ExplorerService().getTransactions(
-        address: vfxAddress,
+      final data = await ExplorerService().getTransactionsFromMultipleAddresses(
+        addresses: [vfxAddress, raAddress],
         page: page,
       );
       vfxTransactions.addAll(data.results);
@@ -158,26 +159,10 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
       break;
     }
   }
-  page = 1;
-  while (true) {
-    try {
-      final data = await ExplorerService().getTransactions(
-        address: raAddress,
-        page: page,
-      );
-      raTransactions.addAll(data.results);
 
-      if (data.num_pages == data.page || data.results.isEmpty) {
-        break;
-      }
-      page += 1;
-    } catch (e) {
-      print("Error getting combined transactions $e");
-      break;
-    }
-  }
+  final btcTransactions = await BtcWebService().listTransactions(btcAddress);
 
-  final combined = [...vfxTransactions, ...raTransactions];
+  final combined = [...vfxTransactions, ...btcTransactions];
 
   combined.sort((a, b) {
     late final int timestampA;
@@ -185,10 +170,26 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
 
     if (a is WebTransaction) {
       timestampA = a.date.millisecondsSinceEpoch;
+    } else if (a is BtcWebTransaction) {
+      if (a.status.blockTime != null) {
+        timestampA = a.status.blockTime! * 1000;
+      } else {
+        timestampA = DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch;
+      }
+    } else {
+      timestampA = 0;
     }
 
     if (b is WebTransaction) {
       timestampB = b.date.millisecondsSinceEpoch;
+    } else if (b is BtcWebTransaction) {
+      if (b.status.blockTime != null) {
+        timestampB = b.status.blockTime! * 1000;
+      } else {
+        timestampB = DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch;
+      }
+    } else {
+      timestampB = 0;
     }
 
     return timestampA > timestampB ? -1 : 1;
