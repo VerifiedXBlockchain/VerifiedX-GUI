@@ -3,6 +3,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../models/btc_web_transaction.dart';
 import '../services/btc_web_service.dart';
 import 'btc_web_vbtc_token_list_provider.dart';
+import 'package:collection/collection.dart';
 
 class BtcWebTransactionListProvider extends StateNotifier<List<BtcWebTransaction>> {
   final Ref ref;
@@ -31,7 +32,7 @@ final btcWebCombinedTransactionListProvider = Provider((ref) {
 
   final List<BtcWebTransaction> mainTxs = mainAddress != null ? ref.watch(btcWebTransactionListProvider(mainAddress)) : [];
 
-  final List<BtcWebTransaction> allTxs = [...mainTxs];
+  List<BtcWebTransaction> allTxs = [...mainTxs];
 
   final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
@@ -39,14 +40,18 @@ final btcWebCombinedTransactionListProvider = Provider((ref) {
     allTxs.addAll(ref.watch(btcWebTransactionListProvider(a)));
   }
 
-  allTxs.sort((a, b) {
+  final groups = groupBy(allTxs, (BtcWebTransaction tx) => tx.txid);
+
+  List<BtcWebTransaction> uniqueTxs = groups.values.map((list) => list.first).toList();
+
+  uniqueTxs.sort((a, b) {
     final timestampA = a.status.blockTime == null ? DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch : a.status.blockTime! * 1000;
     final timestampB = b.status.blockTime == null ? DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch : b.status.blockTime! * 1000;
 
     return timestampA > timestampB ? -1 : 1;
   });
 
-  return allTxs;
+  return uniqueTxs;
 });
 
 final vbtcWebCombinedTransactionListProvider = Provider((ref) {

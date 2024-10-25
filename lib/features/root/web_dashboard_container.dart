@@ -640,6 +640,8 @@ class WebAccountInfoBtc extends BaseComponent {
                         ),
                         Text(
                           "From: ${latestBtcTx.fromAddress()}\nTo: ${latestBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                          maxLines: 2,
+                          overflow: TextOverflow.fade,
                           style: TextStyle(
                             fontSize: 11,
                             color: Colors.white.withOpacity(0.9),
@@ -756,6 +758,8 @@ class WebAccountInfoVbtc extends BaseComponent {
                       ),
                       Text(
                         "From: ${latestVbtcTx.fromAddress()}\nTo: ${latestVbtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                        maxLines: 2,
+                        overflow: TextOverflow.fade,
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.white.withOpacity(0.9),
