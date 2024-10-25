@@ -648,8 +648,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
     if (kIsWeb) {
       int? unlockHours;
-      if (ref.read(webSessionProvider).usingRa) {
-        print("GOT HERE");
+      if (senderAddress.startsWith("xRBX")) {
         final hoursString = await PromptModal.show(
           title: "Timelock Duration",
           validator: (_) => null,
@@ -666,7 +665,8 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
       final amountDouble = double.parse(amount);
       final txData = await RawTransaction.generate(
-        keypair: ref.read(webSessionProvider).usingRa ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
+        // keypair: ref.read(webSessionProvider).usingRa ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
+        keypair: senderAddress.startsWith("xRBX") ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         amount: amountDouble,
         toAddress: address,
         unlockHours: unlockHours,

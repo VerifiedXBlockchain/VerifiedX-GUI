@@ -165,7 +165,7 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
     }
   }
 
-  final groups = groupBy(vfxTransactions, (WebTransaction tx) => tx.hash);
+  final groups = groupBy(vfxTransactions, (WebTransaction tx) => "${tx.hash}_${tx.fromAddress}_${tx.toAddress}");
   vfxTransactions = groups.values.map((list) => list.first).toList();
 
   final btcTransactions = ref.watch(btcWebCombinedTransactionListProvider);
