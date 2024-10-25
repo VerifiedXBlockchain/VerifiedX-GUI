@@ -39,6 +39,7 @@ class WebReceiveScreen extends BaseScreen {
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       leading: isMobile ? WebMobileDrawerButton() : null,
+      actions: [WebWalletTypeSwitcher()],
     );
   }
 
@@ -74,10 +75,45 @@ class WebReceiveScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
     final usingRa = ref.watch(webSessionProvider.select((v) => v.usingRa));
+    final usingBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
     final adnr = ref.watch(webSessionProvider.select((v) => v.adnr));
 
     if (address == null) {
       return const WebNotWallet();
+    }
+
+    if (usingBtc) {
+      return Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 600),
+          child: AppCard(
+            padding: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppCard(
+                  padding: 0,
+                  color: AppColors.getGray(ColorShade.s300),
+                  child: ListTile(
+                    title: SelectableText(
+                      address,
+                      style: TextStyle(color: AppColors.getBtc()),
+                    ),
+                    subtitle: Text("Your Address"),
+                    leading: Icon(Icons.wallet),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.copy),
+                      onPressed: () {
+                        copyToClipboard(address);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
     return Center(
       child: Column(

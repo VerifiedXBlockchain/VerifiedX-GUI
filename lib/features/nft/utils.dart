@@ -134,7 +134,7 @@ Future<dynamic> initTransferNftProcess(
     }
   }
 
-  if (kIsWeb && ref.read(webSessionProvider).usingRa) {
+  if (kIsWeb && nft.currentOwner.startsWith("xRBX")) {
     final hoursString = await PromptModal.show(
       title: "Timelock Duration",
       validator: (_) => null,

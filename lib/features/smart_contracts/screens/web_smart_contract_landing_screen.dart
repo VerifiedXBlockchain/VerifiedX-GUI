@@ -76,10 +76,6 @@ class WebSmartContractLandingScreen extends BaseScreen {
                     iconData: Icons.create,
                     body: "Start with a baseline smart contract and add customized features",
                     onPressed: () {
-                      if (ref.read(webSessionProvider).usingRa) {
-                        Toast.error("Vault Accounts cannot mint smart contracts.");
-                        return;
-                      }
                       AutoRouter.of(context).push(const WebCreateSmartContractScreenRoute());
                     },
                   ),
@@ -88,11 +84,6 @@ class WebSmartContractLandingScreen extends BaseScreen {
                     iconData: Icons.auto_awesome,
                     body: "Mint multiple Smart Contracts into a collection",
                     onPressed: () {
-                      if (ref.read(webSessionProvider).usingRa) {
-                        Toast.error("Vault Accounts cannot mint smart contracts.");
-                        return;
-                      }
-
                       AutoRouter.of(context).push(const WebBulkCreateScreenRoute());
 
                       // AutoRouter.of(context).push(WebSmartContractWizardScreenRoute());

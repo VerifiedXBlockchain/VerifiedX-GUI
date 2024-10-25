@@ -174,11 +174,6 @@ class WebMenu extends BaseComponent {
           leading: const Icon(Icons.link),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            if (ref.read(webSessionProvider).usingRa) {
-              Toast.error("Vault Accounts can not create domains.");
-              return;
-            }
-
             tabsRouter.setActiveIndex(WebRouteIndex.adnrs);
             if (inDrawer) {
               Navigator.of(context).pop();
@@ -235,11 +230,6 @@ class WebMenu extends BaseComponent {
           leading: const Icon(Icons.leak_add),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            if (ref.read(webSessionProvider).usingRa) {
-              Toast.error("Vault Accounts can not create auction houses.");
-              return;
-            }
-
             if (tabsRouter.activeIndex == WebRouteIndex.shop) {
               tabsRouter.stackRouterOfIndex(tabsRouter.activeIndex)!.popUntilRoot();
             } else {

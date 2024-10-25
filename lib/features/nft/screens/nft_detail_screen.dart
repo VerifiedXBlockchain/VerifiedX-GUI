@@ -807,12 +807,12 @@ class NftDetailScreen extends BaseScreen {
                               if (!await passwordRequiredGuard(context, ref)) return;
 
                               if (kIsWeb) {
-                                if (ref.read(webSessionProvider).usingRa) {
+                                if (nft.currentOwner.startsWith("xRBX")) {
                                   Toast.error("Vault Accounts cannot burn NFTs");
                                   return;
                                 }
                               } else {
-                                if (ref.read(sessionProvider).currentWallet?.isReserved == true) {
+                                if (nft.currentOwner.startsWith("xRBX")) {
                                   Toast.error("Vault Accounts cannot burn NFTs");
                                   return;
                                 }

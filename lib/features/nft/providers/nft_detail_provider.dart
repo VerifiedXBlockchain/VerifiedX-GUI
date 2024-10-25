@@ -170,7 +170,9 @@ class NftDetailProvider extends StateNotifier<Nft?> {
   Future<bool?> transferWebOut(String toAddress, int? unlockHours) async {
     final keyPair = ref.read(webSessionProvider).keypair;
     final raKeypair = ref.read(webSessionProvider).raKeypair;
-    final usingRa = ref.read(webSessionProvider).usingRa;
+    // final usingRa = ref.read(webSessionProvider).usingRa;
+    final usingRa = state?.currentOwner.startsWith("xRBX") == true;
+
     final address = !usingRa ? keyPair?.address : raKeypair?.address;
     final private = !usingRa ? keyPair?.private : raKeypair?.private;
     final public = !usingRa ? keyPair?.public : raKeypair?.public;

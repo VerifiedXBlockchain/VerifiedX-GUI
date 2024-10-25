@@ -104,7 +104,7 @@ class _VfxDomain extends BaseComponent {
     final address = keypair?.address;
     final adnr = session.adnr;
 
-    final btcKeypair = session.usingBtc ? session.btcKeypair : null;
+    final btcKeypair = session.btcKeypair;
 
     if (btcKeypair != null) {
       return WebBtcAdnrContent(account: btcKeypair);
