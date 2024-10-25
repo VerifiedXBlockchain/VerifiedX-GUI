@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/reserve/screens/reserve_account_overview_screen.dart';
 import '../../../core/breakpoints.dart';
+import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
@@ -37,7 +39,46 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
     return AppBar(
       title: Text("Your Vault Account"),
       backgroundColor: Colors.black,
-      actions: [],
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: TextButton.icon(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: VaultAccountInfoContent(),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "Close",
+                          style: TextStyle(color: AppColors.getReserve()),
+                        ),
+                      )
+                    ],
+                  );
+                },
+              );
+            },
+            icon: Icon(
+              Icons.help,
+              size: 16,
+              color: AppColors.getReserve(),
+            ),
+            label: Text(
+              "What are Vault Accounts?",
+              style: TextStyle(
+                color: AppColors.getReserve(),
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ),
+        ),
+      ],
       leading: isMobile ? WebMobileDrawerButton() : null,
     );
   }
@@ -53,7 +94,6 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
         constraints: BoxConstraints(maxWidth: 800),
         child: ListView(
           children: [
-            _Top(),
             if (keypair != null)
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -209,67 +249,67 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
   }
 }
 
-class _Top extends BaseComponent {
-  const _Top({Key? key}) : super(key: key);
+// class _Top extends BaseComponent {
+//   const _Top({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-      children: [
-        SizedBox(
-          width: 120,
-          height: 120,
-          child: Image.asset(
-            Assets.images.animatedCube.path,
-            scale: 1,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 800),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: "Vault Accounts [",
-                    ),
-                    TextSpan(
-                        text: "xRBX",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.secondary,
-                        )),
-                    TextSpan(
-                      text: "] is a Cold Storage and On-Chain Escrow Feature to keep your VFX Funds and your Digital Assets Safe.\n\n",
-                    ),
-                    TextSpan(
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
-                      text:
-                          "This feature is separate from your VFX instant settlement address and enables both recovery and call-back on-chain escrow features that allows you to be able to recover funds and assets back to your Vault Account in the event of theft, misplacement, or from a recipient that requires trustless escrow within 24 hours of occurrence or within a user pre-set defined time.\n\n",
-                    ),
-                    TextSpan(
-                      text: "These features are all on-chain and all peers are aware of their current state.\n",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(
-                      text: "Note: Activating this feature requires a 5 VFX deposit, 4 of which will be burned upon activation.",
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
+//     return Column(
+//       children: [
+//         SizedBox(
+//           width: 120,
+//           height: 120,
+//           child: Image.asset(
+//             Assets.images.animatedCube.path,
+//             scale: 1,
+//           ),
+//         ),
+//         Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Center(
+//             child: ConstrainedBox(
+//               constraints: BoxConstraints(maxWidth: 800),
+//               child: RichText(
+//                 textAlign: TextAlign.center,
+//                 text: TextSpan(
+//                   style: TextStyle(
+//                     fontSize: 17,
+//                     fontWeight: FontWeight.w500,
+//                     color: Colors.white,
+//                   ),
+//                   children: [
+//                     TextSpan(
+//                       text: "Vault Accounts [",
+//                     ),
+//                     TextSpan(
+//                         text: "xRBX",
+//                         style: TextStyle(
+//                           fontWeight: FontWeight.bold,
+//                           color: Theme.of(context).colorScheme.secondary,
+//                         )),
+//                     TextSpan(
+//                       text: "] is a Cold Storage and On-Chain Escrow Feature to keep your VFX Funds and your Digital Assets Safe.\n\n",
+//                     ),
+//                     TextSpan(
+//                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
+//                       text:
+//                           "This feature is separate from your VFX instant settlement address and enables both recovery and call-back on-chain escrow features that allows you to be able to recover funds and assets back to your Vault Account in the event of theft, misplacement, or from a recipient that requires trustless escrow within 24 hours of occurrence or within a user pre-set defined time.\n\n",
+//                     ),
+//                     TextSpan(
+//                       text: "These features are all on-chain and all peers are aware of their current state.\n",
+//                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+//                     ),
+//                     TextSpan(
+//                       text: "Note: Activating this feature requires a 5 VFX deposit, 4 of which will be burned upon activation.",
+//                       style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

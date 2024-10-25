@@ -47,7 +47,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
                 context: context,
                 builder: (context) {
                   return AlertDialog(
-                    content: _RaInfo(),
+                    content: VaultAccountInfoContent(),
                     actions: [
                       TextButton(
                         onPressed: () {
@@ -361,8 +361,8 @@ class _Top extends BaseComponent {
   }
 }
 
-class _RaInfo extends StatelessWidget {
-  const _RaInfo();
+class VaultAccountInfoContent extends StatelessWidget {
+  const VaultAccountInfoContent();
 
   @override
   Widget build(BuildContext context) {
