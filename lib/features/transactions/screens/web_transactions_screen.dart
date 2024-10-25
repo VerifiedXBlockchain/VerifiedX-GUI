@@ -186,7 +186,25 @@ class WebTransactionsCombinedList extends BaseComponent {
           itemBuilder: (context, index) {
             final tx = transactions[index];
             if (tx is WebTransaction) {
-              return WebTransactionCard(tx);
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 8),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: tx.toAddress.startsWith("xRBX") || tx.fromAddress.startsWith("xRBX") ? AppColors.getReserve() : AppColors.getBlue(),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          topRight: Radius.circular(4),
+                        ),
+                      ),
+                    ),
+                    Expanded(child: WebTransactionCard(tx)),
+                  ],
+                ),
+              );
             }
 
             if (tx is BtcWebTransaction) {
@@ -196,10 +214,27 @@ class WebTransactionsCombinedList extends BaseComponent {
 
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(bottom: 16),
-                child: WebBtcTransactionListTile(
-                  transaction: tx,
-                  address: session.btcKeypair!.address,
-                  compact: true,
+                child: Row(
+                  children: [
+                    Container(
+                      width: 4,
+                      height: 110,
+                      decoration: BoxDecoration(
+                        color: AppColors.getBtc(),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          topRight: Radius.circular(4),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: WebBtcTransactionListTile(
+                        transaction: tx,
+                        address: session.btcKeypair!.address,
+                        compact: true,
+                      ),
+                    ),
+                  ],
                 ),
               );
             }
