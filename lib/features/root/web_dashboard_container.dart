@@ -749,10 +749,19 @@ class WebAccountInfoVfx extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionModel = ref.watch(webSessionProvider);
-    final List<WebTransaction>? vfxTransactions = sessionModel.keypair != null
+    final List<WebTransaction> vfxTransactions = sessionModel.keypair != null
         ? ref.watch(webTransactionListProvider(sessionModel.keypair!.address).select((value) => value.transactions))
-        : null;
-    final latestVfxTx = vfxTransactions != null && vfxTransactions.isNotEmpty ? vfxTransactions.first : null;
+        : [];
+
+    final List<WebTransaction> raTransactions = sessionModel.raKeypair != null
+        ? ref.watch(webTransactionListProvider(sessionModel.raKeypair!.address).select((value) => value.transactions))
+        : [];
+
+    final allTransactions = [...vfxTransactions, ...raTransactions];
+    allTransactions.sort((a, b) => a.date.millisecondsSinceEpoch > b.date.millisecondsSinceEpoch ? -1 : 1);
+
+    final latestVfxTx = allTransactions.isNotEmpty ? allTransactions.first : null;
+
     final forceExpand = ref.watch(globalBalancesExpandedProvider);
 
     return RootContainerBalanceItem(
@@ -793,10 +802,18 @@ class WebAccountInfoVfx extends BaseComponent {
                           ),
                         ),
                       Text(
-                        "From: ${latestVfxTx.fromAddress}\nTo: ${latestVfxTx.toAddress}",
+                        "From: ${latestVfxTx.fromAddress}",
                         style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white.withOpacity(0.9),
+                          color: latestVfxTx.fromAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        "To: ${latestVfxTx.toAddress}",
+                        style: TextStyle(
+                          fontSize: 11,
+                          color: latestVfxTx.toAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -804,9 +821,9 @@ class WebAccountInfoVfx extends BaseComponent {
                         height: 2,
                       ),
                       Text(
-                        "Success",
+                        latestVfxTx.isPending ? "Pending" : "Success",
                         style: TextStyle(
-                          color: AppColors.getSpringGreen(),
+                          color: latestVfxTx.isPending ? Theme.of(context).colorScheme.warning : AppColors.getSpringGreen(),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
