@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rbx_wallet/features/btc/providers/btc_balance_provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../app.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,6 +13,7 @@ import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
+import '../../../core/env.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/validation.dart';
@@ -23,6 +26,8 @@ import '../../../utils/toast.dart';
 
 import '../../token/providers/web_token_actions_manager.dart';
 import '../models/btc_web_vbtc_token.dart';
+import '../providers/btc_web_transaction_list_provider.dart';
+import '../services/btc_web_service.dart';
 
 class WebTokenizedBtcActionButtons extends BaseComponent {
   final BtcWebVbtcToken token;
@@ -37,6 +42,8 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final myAddress = ref.watch(webSessionProvider.select((value) => value.keypair?.address));
     final myBalance = myAddress != null ? token.balanceForAddress(myAddress) : 0.0;
+
+    final btcKeypair = ref.watch(webSessionProvider.select((value) => value.btcKeypair));
 
     return Wrap(
       alignment: WrapAlignment.center,
@@ -71,17 +78,125 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                           mainAxisSize: MainAxisSize.max,
                           children: [Text('Fund vBTC Token')],
                         ),
-                        ListTile(
-                          title: Text(token.depositAddress),
-                          subtitle: Text(myBalance.toString()),
-                          trailing: Icon(Icons.chevron_right),
-                          onTap: () async {
-                            final amount = await PromptModal.show(
-                                title: "Amount", validator: (val) => formValidatorNumber(val, "Amount"), labelText: 'Deposit amount');
-                            Navigator.of(context).pop();
-                            //TODO COMPLETE THIS FUNCTION
-                          },
-                        ),
+                        if (btcKeypair != null)
+                          Consumer(builder: (context, ref, _) {
+                            final balance = ref.watch(webSessionProvider.select((value) => value.btcBalanceInfo?.btcBalance));
+
+                            return ListTile(
+                              title: Text(btcKeypair.address),
+                              subtitle: Text("${balance?.toStringAsFixed(8) ?? 0} BTC"),
+                              trailing: Icon(Icons.chevron_right),
+                              onTap: () async {
+                                if (balance == null || balance <= 0) {
+                                  Toast.error("This BTC account doesn't have a balance");
+                                  return;
+                                }
+
+                                Navigator.of(context).pop();
+                                final amount = await PromptModal.show(
+                                    title: "Amount (Balance: $balance BTC)",
+                                    validator: (val) => formValidatorNumber(val, "Amount"),
+                                    labelText: 'Deposit amount');
+                                if (amount == null) {
+                                  return;
+                                }
+                                final parsedAmount = double.tryParse(amount);
+                                if (parsedAmount == null) {
+                                  return;
+                                }
+
+                                if (parsedAmount <= 0) {
+                                  Toast.error("Amount must be greater than 0.0 BTC");
+                                  return;
+                                }
+
+                                if (balance <= parsedAmount) {
+                                  Toast.error("Not enough BTC to cover this transaction + fee");
+                                  return;
+                                }
+
+                                final feeRate = await promptForFeeRate(context);
+
+                                if (feeRate == null) {
+                                  return;
+                                }
+
+                                final confirmed = await ConfirmDialog.show(
+                                  title: "Please Confirm",
+                                  body:
+                                      "Sending:\n$amount BTC\n\nTo:\n${token.depositAddress} (Token Deposit Address)\n\nFrom:\n${btcKeypair.address}\n\nFeeRate:\n$feeRate SATS",
+                                  confirmText: "Send",
+                                  cancelText: "Cancel",
+                                );
+
+                                if (confirmed != true) {
+                                  return;
+                                }
+
+                                final txHash = await BtcWebService().sendTransaction(btcKeypair.wif, token.depositAddress, parsedAmount, feeRate);
+
+                                if (txHash == null) {
+                                  Toast.error();
+                                  return;
+                                }
+
+                                Toast.message("$amount BTC has been sent to ${token.depositAddress}.");
+
+                                ref.invalidate(btcWebTransactionListProvider(btcKeypair.address));
+
+                                Future.delayed(Duration(seconds: 2), () {
+                                  ref.read(webSessionProvider.notifier).refreshBtcBalanceInfo();
+                                });
+
+                                InfoDialog.show(
+                                    title: "Transaction Broadcasted",
+                                    buttonColorOverride: Color(0xfff7931a),
+                                    content: ConstrainedBox(
+                                      constraints: BoxConstraints(maxWidth: 600),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          TextFormField(
+                                            initialValue: txHash,
+                                            readOnly: true,
+                                            decoration: InputDecoration(
+                                              label: Text(
+                                                "Transaction Hash",
+                                                style: TextStyle(
+                                                  color: Color(0xfff7931a),
+                                                ),
+                                              ),
+                                              suffix: IconButton(
+                                                icon: Icon(Icons.copy),
+                                                onPressed: () async {
+                                                  await Clipboard.setData(ClipboardData(text: txHash));
+                                                  Toast.message("Transaction Hash copied to clipboard");
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 12,
+                                          ),
+                                          AppButton(
+                                            label: "Open in BTC Explorer",
+                                            variant: AppColorVariant.Btc,
+                                            type: AppButtonType.Text,
+                                            onPressed: () {
+                                              if (Env.isTestNet) {
+                                                launchUrlString("https://mempool.space/testnet4/tx/$txHash");
+                                              } else {
+                                                launchUrlString("https://mempool.space/tx/$txHash");
+                                              }
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ));
+                              },
+                            );
+                          }),
                         ListTile(
                           title: Text("Manual Send"),
                           subtitle: Text("Send coin manually to this token’s BTC deposit address"),

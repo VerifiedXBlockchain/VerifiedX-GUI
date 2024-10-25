@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/app.dart';
 import '../../../core/components/buttons.dart';
 import '../../btc/models/btc_fee_rate_preset.dart';
 import '../../btc/models/btc_recommended_fees.dart';
@@ -311,9 +312,15 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         final senderWif = account.wif;
         senderAddress = account.address;
 
+        final feeRate = await promptForFeeRate(rootNavigatorKey.currentContext!);
+
+        if (feeRate == null) {
+          return;
+        }
+
         final confirmed = await ConfirmDialog.show(
           title: "Please Confirm",
-          body: "Sending:\n$amount BTC\n\nTo:\n$address\n\nFrom:\n$senderAddress",
+          body: "Sending:\n$amount BTC\n\nTo:\n$address\n\nFrom:\n$senderAddress\n\nFeeRate:\n$feeRate SATS",
           confirmText: "Send",
           cancelText: "Cancel",
         );
@@ -322,7 +329,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
           return;
         }
 
-        final txHash = await BtcWebService().sendTransaction(senderWif, address, amountDouble, 0);
+        final txHash = await BtcWebService().sendTransaction(senderWif, address, amountDouble, feeRate);
 
         if (txHash == null) {
           Toast.error();
