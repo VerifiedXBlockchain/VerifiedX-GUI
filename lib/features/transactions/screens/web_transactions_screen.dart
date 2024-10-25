@@ -173,11 +173,13 @@ class WebTransactionsCombinedList extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(webSessionProvider);
 
-    final combinedIdentifier = "${session.keypair?.address}:${session.raKeypair?.address}:${session.btcKeypair?.address}";
+    final combinedIdentifier = "${session.keypair?.address}:${session.raKeypair?.address}";
 
     final data = ref.watch(combinedWebTransactionListProvider(combinedIdentifier));
 
     return data.when(
+      skipLoadingOnReload: true,
+      skipLoadingOnRefresh: true,
       loading: () => CenteredLoader(),
       error: (e, _) => Text("Error"),
       data: (transactions) {
@@ -230,7 +232,6 @@ class WebTransactionsCombinedList extends BaseComponent {
                     Expanded(
                       child: WebBtcTransactionListTile(
                         transaction: tx,
-                        address: session.btcKeypair!.address,
                         compact: true,
                       ),
                     ),

@@ -21,6 +21,7 @@ import '../navigation/components/root_container_side_nav.dart';
 import '../navigation/root_container.dart';
 import '../transactions/models/web_transaction.dart';
 import '../wallet/utils.dart';
+import '../web/providers/all_btc_addresses_provider.dart';
 import '../web/providers/web_latest_block_provider.dart';
 import '../../generated/assets.gen.dart';
 import '../../utils/toast.dart';
@@ -628,14 +629,16 @@ class WebAccountInfoBtc extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "${latestBtcTx.amountBtc(myBtcAddress!)} BTC",
+                          "${latestBtcTx.amountBtc(ref.watch(allBtcAddressesProvider))} BTC",
                           style: TextStyle(
-                            color: latestBtcTx.amountBtc(myBtcAddress) >= 0 ? Theme.of(context).colorScheme.success : Colors.red.shade500,
+                            color: latestBtcTx.amountBtc(ref.watch(allBtcAddressesProvider)) >= 0
+                                ? Theme.of(context).colorScheme.success
+                                : Colors.red.shade500,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Text(
-                          "From: ${latestBtcTx.fromAddress(myBtcAddress)}\nTo: ${latestBtcTx.toAddress(myBtcAddress)}",
+                          "From: ${latestBtcTx.fromAddress()}\nTo: ${latestBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
                           style: TextStyle(
                             fontSize: 11,
                             color: Colors.white.withOpacity(0.9),

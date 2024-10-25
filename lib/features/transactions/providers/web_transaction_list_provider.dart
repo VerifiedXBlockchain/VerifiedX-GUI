@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/env.dart';
 import '../../btc_web/models/btc_web_transaction.dart';
+import '../../btc_web/providers/btc_web_transaction_list_provider.dart';
 import '../../btc_web/services/btc_web_service.dart';
 import 'transaction_signal_provider.dart';
 
@@ -137,7 +138,6 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
   final parts = identifier.split(':');
   final vfxAddress = parts[0];
   final raAddress = parts[1];
-  final btcAddress = parts[2];
 
   List<WebTransaction> vfxTransactions = [];
 
@@ -160,7 +160,7 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
     }
   }
 
-  final btcTransactions = await BtcWebService().listTransactions(btcAddress);
+  final btcTransactions = ref.watch(btcWebCombinedTransactionListProvider);
 
   final combined = [...vfxTransactions, ...btcTransactions];
 

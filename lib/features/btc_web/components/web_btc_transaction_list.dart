@@ -16,8 +16,9 @@ class WebBtcTransactionList extends BaseComponent {
     if (address == null) {
       return Center(child: Text("No BTC Address"));
     }
-    final provider = ref.read(btcWebTransactionListProvider(address!).notifier);
-    final transactions = ref.watch(btcWebTransactionListProvider(address!));
+    // final provider = ref.read(btcWebTransactionListProvider(address!).notifier);
+    // final transactions = ref.watch(btcWebTransactionListProvider(address!));
+    final transactions = ref.watch(btcWebCombinedTransactionListProvider);
 
     if (transactions.isEmpty) {
       return Center(
@@ -27,23 +28,17 @@ class WebBtcTransactionList extends BaseComponent {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: RefreshIndicator(
-        onRefresh: () async {
-          await provider.reload();
+      child: ListView.builder(
+        itemCount: transactions.length,
+        itemBuilder: (context, index) {
+          final transaction = transactions[index];
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16.0),
+            child: WebBtcTransactionListTile(
+              transaction: transaction,
+            ),
+          );
         },
-        child: ListView.builder(
-          itemCount: transactions.length,
-          itemBuilder: (context, index) {
-            final transaction = transactions[index];
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-              child: WebBtcTransactionListTile(
-                transaction: transaction,
-                address: address!,
-              ),
-            );
-          },
-        ),
       ),
     );
   }

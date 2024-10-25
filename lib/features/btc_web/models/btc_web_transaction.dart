@@ -82,15 +82,15 @@ class BtcWebTransaction with _$BtcWebTransaction {
     return totalSent - totalValueToOthers(myAddress) - fee;
   }
 
-  int amount(String myAddress) {
+  int amount(List<String> myAddresses) {
     int amount = 0;
 
-    final inputs = vin.where((element) => element.prevout.scriptpubkeyAddress == myAddress).toList();
+    final inputs = vin.where((element) => myAddresses.contains(element.prevout.scriptpubkeyAddress)).toList();
     for (final input in inputs) {
       amount -= input.prevout.value;
     }
 
-    final outputs = vout.where((element) => element.scriptpubkeyAddress == myAddress).toList();
+    final outputs = vout.where((element) => myAddresses.contains(element.scriptpubkeyAddress)).toList();
 
     for (final output in outputs) {
       amount += output.value;
@@ -132,16 +132,16 @@ class BtcWebTransaction with _$BtcWebTransaction {
     // return netAmount;
   }
 
-  double amountBtc(String myAddress) {
-    return amount(myAddress) * BTC_SATOSHI_MULTIPLIER;
+  double amountBtc(List<String> myAddresses) {
+    return amount(myAddresses) * BTC_SATOSHI_MULTIPLIER;
   }
 
-  String fromAddress(String myAddress) {
+  String fromAddress() {
     return vin.first.prevout.scriptpubkeyAddress;
   }
 
-  String toAddress(String myAddress) {
-    return toAddresses.where((element) => element != myAddress).join(',');
+  String toAddress(List<String> myAddresses) {
+    return toAddresses.where((element) => myAddresses.contains(element)).join(',');
   }
 
   // bool isIncoming(String myAddress) {
