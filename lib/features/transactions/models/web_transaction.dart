@@ -250,6 +250,34 @@ class WebTransaction with _$WebTransaction {
     }
   }
 
+  bool get isVbtcTx {
+    if (type == 17) {
+      final data = parseNftData();
+      if (data != null) {
+        if (nftDataValue('Function') == "TokenDeploy()") {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    if (type == 18) {
+      final data = parseNftData();
+      if (data != null) {
+        final function = nftDataValue('Function');
+
+        if (function == "TransferCoin()") {
+          return true;
+        }
+
+        if (function == "Transfer()") {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   Map<String, dynamic>? parseNftData() {
     try {
       if (data == null) {

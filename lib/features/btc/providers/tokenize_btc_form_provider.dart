@@ -260,7 +260,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
       ]
     };
 
-    final success = await RawService().compileAndMintSmartContract(updatedPayload, keypair, ref);
+    final success = await RawService().compileAndMintSmartContract(updatedPayload, keypair, ref, 17);
 
     state = state.copyWith(isProcessing: false);
     if (success == true) {

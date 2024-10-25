@@ -46,6 +46,7 @@ import '../navigation/constants.dart';
 import '../transactions/providers/web_transaction_list_provider.dart';
 import '../web/components/web_latest_block.dart';
 import 'navigation/components/web_drawer.dart';
+import 'package:collection/collection.dart';
 
 GlobalKey<ScaffoldState> webDashboardScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -706,9 +707,33 @@ class WebAccountInfoVbtc extends BaseComponent {
     final forceExpand = ref.watch(globalBalancesExpandedProvider);
 
     final txs = ref.watch(vbtcWebCombinedTransactionListProvider);
-    final BtcWebTransaction? latestVbtcTx = txs.isEmpty ? null : txs.first;
+    BtcWebTransaction? latestVbtcBtcTx = txs.isEmpty ? null : txs.first;
+
+    WebTransaction? latestVbtcVfxTx = ref
+        .watch(webTransactionListProvider(ref.watch(webSessionProvider).keypair?.address ?? '').select((v) => v.transactions))
+        .firstWhereOrNull((tx) => tx.isVbtcTx);
+
+    if (latestVbtcBtcTx != null && latestVbtcVfxTx != null) {
+      final btcTimestamp = latestVbtcBtcTx.status.blockTime != null
+          ? latestVbtcBtcTx.status.blockTime! * 1000
+          : DateTime.now().add(Duration(minutes: 5)).millisecondsSinceEpoch;
+
+      final vfxTimestamp = latestVbtcVfxTx.date.millisecondsSinceEpoch;
+      print("----");
+
+      print(btcTimestamp);
+      print(vfxTimestamp);
+      print("----");
+
+      if (btcTimestamp > vfxTimestamp) {
+        latestVbtcVfxTx = null;
+      } else {
+        latestVbtcBtcTx = null;
+      }
+    }
 
     final vbtcTokens = ref.watch(btcWebVbtcTokenListProvider);
+
     final sum = vbtcTokens.fold<double>(
         0.0,
         (previousValue, element) =>
@@ -733,13 +758,19 @@ class WebAccountInfoVbtc extends BaseComponent {
       handleViewAllTxs: () {
         AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
       },
-      latestTx: latestVbtcTx != null
+      latestTx: latestVbtcBtcTx != null
           ? MouseRegion(
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
-                  AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+                  if (Env.isTestNet) {
+                    launchUrlString("https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
+                  } else {
+                    launchUrlString("https://mempool.space/tx/${latestVbtcBtcTx!.txid}");
+                  }
+
+                  // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
+                  // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
                 },
                 child: AppCard(
                   padding: 12,
@@ -748,16 +779,16 @@ class WebAccountInfoVbtc extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "${latestVbtcTx.amountBtc(ref.watch(allBtcAddressesProvider))} vBTC",
+                        "${latestVbtcBtcTx.amountBtc(ref.watch(allBtcAddressesProvider))} vBTC",
                         style: TextStyle(
-                          color: latestVbtcTx.amountBtc(ref.watch(allBtcAddressesProvider)) >= 0
+                          color: latestVbtcBtcTx.amountBtc(ref.watch(allBtcAddressesProvider)) >= 0
                               ? Theme.of(context).colorScheme.success
                               : Colors.red.shade500,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
-                        "From: ${latestVbtcTx.fromAddress()}\nTo: ${latestVbtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                        "From: ${latestVbtcBtcTx.fromAddress()}\nTo: ${latestVbtcBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
                         maxLines: 2,
                         overflow: TextOverflow.fade,
                         style: TextStyle(
@@ -769,7 +800,7 @@ class WebAccountInfoVbtc extends BaseComponent {
                       SizedBox(
                         height: 2,
                       ),
-                      latestVbtcTx.status.confirmed
+                      latestVbtcBtcTx.status.confirmed
                           ? Text(
                               "Confirmed",
                               style: TextStyle(
@@ -789,7 +820,9 @@ class WebAccountInfoVbtc extends BaseComponent {
                 ),
               ),
             )
-          : null,
+          : latestVbtcVfxTx != null
+              ? _LatestVfxTx(latestVfxTx: latestVbtcVfxTx)
+              : null,
       actions: [
         AppVerticalIconButton(
           onPressed: () {
@@ -845,70 +878,7 @@ class WebAccountInfoVfx extends BaseComponent {
       headingColor: AppColors.getBlue(),
       accountCount: '',
       forceExpand: forceExpand,
-      latestTx: latestVfxTx != null
-          ? MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
-
-                  AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
-                },
-                child: AppCard(
-                  padding: 12,
-                  fullWidth: true,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (latestVfxTx.type == TxType.rbxTransfer)
-                        Text(
-                          "${latestVfxTx.amount} VFX",
-                          style: TextStyle(
-                            color:
-                                latestVfxTx.amount != null && latestVfxTx.amount! < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      else
-                        Text(
-                          latestVfxTx.typeLabel,
-                          style: TextStyle(
-                            color: AppColors.getBlue(),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      Text(
-                        "From: ${latestVfxTx.fromAddress}",
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: latestVfxTx.fromAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        "To: ${latestVfxTx.toAddress}",
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: latestVfxTx.toAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 2,
-                      ),
-                      Text(
-                        latestVfxTx.isPending ? "Pending" : "Success",
-                        style: TextStyle(
-                          color: latestVfxTx.isPending ? Theme.of(context).colorScheme.warning : AppColors.getSpringGreen(),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            )
-          : null,
+      latestTx: latestVfxTx != null ? _LatestVfxTx(latestVfxTx: latestVfxTx) : null,
       handleViewAllTxs: () {
         ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
 
@@ -950,6 +920,80 @@ class WebAccountInfoVfx extends BaseComponent {
           iconScale: 0.75,
         ),
       ],
+    );
+  }
+}
+
+class _LatestVfxTx extends BaseComponent {
+  const _LatestVfxTx({
+    super.key,
+    required this.latestVfxTx,
+  });
+
+  final WebTransaction latestVfxTx;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: () {
+          ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
+
+          AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+        },
+        child: AppCard(
+          padding: 12,
+          fullWidth: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (latestVfxTx.type == TxType.rbxTransfer)
+                Text(
+                  "${latestVfxTx.amount} VFX",
+                  style: TextStyle(
+                    color: latestVfxTx.amount != null && latestVfxTx.amount! < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
+                    fontWeight: FontWeight.w600,
+                  ),
+                )
+              else
+                Text(
+                  latestVfxTx.typeLabel,
+                  style: TextStyle(
+                    color: AppColors.getBlue(),
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              Text(
+                "From: ${latestVfxTx.fromAddress}",
+                style: TextStyle(
+                  fontSize: 11,
+                  color: latestVfxTx.fromAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                "To: ${latestVfxTx.toAddress}",
+                style: TextStyle(
+                  fontSize: 11,
+                  color: latestVfxTx.toAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Text(
+                latestVfxTx.isPending ? "Pending" : "Success",
+                style: TextStyle(
+                  color: latestVfxTx.isPending ? Theme.of(context).colorScheme.warning : AppColors.getSpringGreen(),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
