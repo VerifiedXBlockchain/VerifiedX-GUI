@@ -421,7 +421,9 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
 
     final success = await RawService().compileAndMintSmartContract(payload, ref.read(webSessionProvider).keypair!, ref);
     if (success == true) {
-      ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address);
+      ref
+          .read(nftListProvider.notifier)
+          .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address]);
       return true;
     }
     return false;
@@ -496,7 +498,9 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
 
     ref.read(mySmartContractsProvider.notifier).load();
     kIsWeb
-        ? ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address)
+        ? ref
+            .read(nftListProvider.notifier)
+            .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address])
         : ref.read(nftListProvider.notifier).reloadCurrentPage();
 
     if (details != null) {

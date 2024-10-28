@@ -106,8 +106,6 @@ class NftListTile extends BaseComponent {
                           );
                         },
                       ),
-                      if (isTransferred && !manageOnPress && onPressedOverride == null) TransferingOverlay(nft, small: true)
-                      // TransferingOverlay(nft, small: true)
                     ],
                   )
                 : Stack(

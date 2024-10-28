@@ -11,7 +11,7 @@ class WebCurrencySegementedButton extends BaseComponent {
   const WebCurrencySegementedButton({
     super.key,
     this.withAny = true,
-    this.withVault = false,
+    this.withVault = true,
   });
 
   @override

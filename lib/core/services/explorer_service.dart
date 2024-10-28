@@ -214,6 +214,32 @@ class ExplorerService extends BaseService {
     }
   }
 
+  Future<List<Nft>> listNftsFromMultipleOwners(
+    List<String?> ownerAddress, {
+    int page = 1,
+    String? search,
+  }) async {
+    try {
+      final params = {
+        'owner_addresses': ownerAddress.where((element) => element != null).join(','),
+        'page': page,
+        'search': search ?? '',
+      };
+
+      final response = await getJson('/nft/', params: params);
+
+      // final items = response['results'] as List<dynamic>;
+
+      final List<Nft> results = response['results'].map<Nft>((json) => WebNft.fromJson(json).smartContract).toList();
+      return results;
+      // return items.map((n) => Nft.fromJson(n['data'])).toList();
+    } catch (e) {
+      print("listNfts Error");
+      print(e);
+      return [];
+    }
+  }
+
   Future<List<Nft>> listMintedNfts(
     String minterAddress, {
     int page = 1,

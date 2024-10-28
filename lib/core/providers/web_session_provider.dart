@@ -131,7 +131,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
     if (type != WalletType.btc) {
       ref.read(mintedNftListProvider.notifier).load(1, state.keypair?.address);
-      ref.read(nftListProvider.notifier).load(1, state.keypair?.address);
+      ref.read(nftListProvider.notifier).load(1, [state.keypair?.address, state.raKeypair?.address]);
     }
 
     if (save) {
@@ -231,7 +231,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (state.keypair == null) {
       return;
     }
-    ref.read(nftListProvider.notifier).reloadCurrentPage(address: state.keypair!.address);
+    ref.read(nftListProvider.notifier).reloadCurrentPage(address: [state.keypair?.address, state.raKeypair?.address]);
     ref.read(webListedNftsProvider.notifier).refresh(state.keypair!.address);
   }
 

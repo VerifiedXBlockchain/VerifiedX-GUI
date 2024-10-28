@@ -271,15 +271,14 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
       ]
     };
 
-    print("--------");
-    print(jsonEncode(updatedPayload));
-    print("--------");
-
     final success = await RawService().compileAndMintSmartContract(updatedPayload, keypair, ref, 17);
 
     state = state.copyWith(isProcessing: false);
     if (success == true) {
-      ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address);
+      ref.read(nftListProvider.notifier).reloadCurrentPage(address: [
+        ref.read(webSessionProvider).keypair?.address,
+        ref.read(webSessionProvider).raKeypair?.address,
+      ]);
       clear();
       return true;
     }

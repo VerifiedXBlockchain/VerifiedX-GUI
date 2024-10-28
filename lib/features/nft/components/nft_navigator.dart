@@ -30,7 +30,9 @@ class NftNavigator extends BaseComponent {
       if (minted) {
         ref.read(mintedNftListProvider.notifier).load(1, kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
       } else {
-        ref.read(nftListProvider.notifier).load(1, kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
+        ref
+            .read(nftListProvider.notifier)
+            .load(1, kIsWeb ? [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address] : null);
       }
     }
 
@@ -104,7 +106,8 @@ class NftNavigator extends BaseComponent {
                             .read(mintedNftListProvider.notifier)
                             .load(_model.data.page - 1, kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
                       } else {
-                        ref.read(nftListProvider.notifier).load(_model.data.page - 1, kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
+                        ref.read(nftListProvider.notifier).load(_model.data.page - 1,
+                            kIsWeb ? [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address] : null);
                       }
                     }
                   : null,
@@ -121,7 +124,8 @@ class NftNavigator extends BaseComponent {
                             .read(mintedNftListProvider.notifier)
                             .load(_model.data.page + 1, kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
                       } else {
-                        ref.read(nftListProvider.notifier).load(_model.data.page + 1, kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
+                        ref.read(nftListProvider.notifier).load(_model.data.page + 1,
+                            kIsWeb ? [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address] : null);
                       }
                     }
                   : null,
@@ -131,7 +135,8 @@ class NftNavigator extends BaseComponent {
                   if (minted) {
                     ref.read(mintedNftListProvider.notifier).reloadCurrentPage(kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
                   } else {
-                    ref.read(nftListProvider.notifier).reloadCurrentPage(address: kIsWeb ? ref.read(webSessionProvider).keypair?.address : null);
+                    ref.read(nftListProvider.notifier).reloadCurrentPage(
+                        address: kIsWeb ? [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address] : null);
                   }
                 },
                 icon: const Icon(Icons.refresh))

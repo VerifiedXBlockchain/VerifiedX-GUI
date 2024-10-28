@@ -28,8 +28,7 @@ class WebRecoverRaButton extends BaseComponent {
     return AppButton(
       label: "Recover",
       disabled: hasRecovered,
-      icon: Icons.warning,
-      type: AppButtonType.Text,
+      type: AppButtonType.Outlined,
       variant: AppColorVariant.Warning,
       onPressed: () async {
         final raKeypair = ref.read(webSessionProvider).raKeypair;

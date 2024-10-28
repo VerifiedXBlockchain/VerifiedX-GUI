@@ -273,7 +273,9 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
               parsedPremintAmount,
             );
       }
-      ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address);
+      ref
+          .read(nftListProvider.notifier)
+          .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address]);
       return true;
     }
     return false;

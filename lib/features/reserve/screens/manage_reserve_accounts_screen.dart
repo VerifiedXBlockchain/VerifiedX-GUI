@@ -277,8 +277,6 @@ class ReserveAccountManageCard extends BaseComponent {
                               return;
                             }
 
-                            print(option);
-
                             if (option == 'nfts' || option == 'tokens') {
                               final List<Nft> ownedNfts = [];
 

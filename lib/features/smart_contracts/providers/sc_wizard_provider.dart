@@ -833,7 +833,9 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     ref.read(mySmartContractsProvider.notifier).load();
 
     kIsWeb
-        ? ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address)
+        ? ref
+            .read(nftListProvider.notifier)
+            .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address])
         : ref.read(nftListProvider.notifier).reloadCurrentPage();
   }
 }

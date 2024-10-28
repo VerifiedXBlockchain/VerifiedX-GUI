@@ -43,7 +43,7 @@ class NftListProvider extends StateNotifier<NftListModel> {
     NftListModel model,
   ) : super(model);
 
-  Future<void> load(int page, [String? address]) async {
+  Future<void> load(int page, [List<String?>? address]) async {
     // email ??= ref.read(webSessionProvider).keypair?.email;
     // address ??= ref.read(webSessionProvider).keypair?.address;
 
@@ -52,7 +52,7 @@ class NftListProvider extends StateNotifier<NftListModel> {
         return;
       }
 
-      final nfts = await ExplorerService().listNfts(address, page: page, search: state.search.isNotEmpty ? state.search : null);
+      final nfts = await ExplorerService().listNftsFromMultipleOwners(address, page: page, search: state.search.isNotEmpty ? state.search : null);
       final d = CliPaginatedResponse(count: nfts.length, results: nfts, page: page);
       state = state.copyWith(data: d, page: page, currentSearch: state.search);
       return;
@@ -62,7 +62,7 @@ class NftListProvider extends StateNotifier<NftListModel> {
     state = state.copyWith(data: data, page: page, currentSearch: state.search);
   }
 
-  Future<void> reloadCurrentPage({String? address}) async {
+  Future<void> reloadCurrentPage({List<String?>? address}) async {
     load(state.page, address);
   }
 
