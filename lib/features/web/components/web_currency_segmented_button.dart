@@ -7,7 +7,12 @@ import '../providers/web_currency_segmented_button_provider.dart';
 
 class WebCurrencySegementedButton extends BaseComponent {
   final bool withAny;
-  const WebCurrencySegementedButton({super.key, this.withAny = true});
+  final bool withVault;
+  const WebCurrencySegementedButton({
+    super.key,
+    this.withAny = true,
+    this.withVault = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,10 +69,11 @@ class WebCurrencySegementedButton extends BaseComponent {
           value: WebCurrencyType.vfx,
           label: Text("VFX"),
         ),
-        ButtonSegment(
-          value: WebCurrencyType.vault,
-          label: Text("Vault"),
-        ),
+        if (withVault)
+          ButtonSegment(
+            value: WebCurrencyType.vault,
+            label: Text("Vault"),
+          ),
         ButtonSegment(
           value: WebCurrencyType.btc,
           label: Text("BTC"),

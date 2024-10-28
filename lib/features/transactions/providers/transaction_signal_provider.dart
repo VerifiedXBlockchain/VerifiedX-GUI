@@ -478,7 +478,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       function = _nftDataValue(nftData, 'Function');
     }
     if (function != null) {
-      if (function.contains('AdnrCreate')) {
+      if (function == 'AdnrCreate') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
 
@@ -494,7 +494,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function.contains('AdnrDelete')) {
+
+      if (function == 'AdnrDelete') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = "VFX Domain deleted for $name";
@@ -509,7 +510,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function.contains('AdnrTransfer')) {
+      if (function == 'AdnrTransfer') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = "VFX Domain transfer for $name";
@@ -528,7 +529,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
 
       //BTC
 
-      if (function.contains('BtcAdnrCreate')) {
+      if (function == 'BtcAdnrCreate') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = "BTC Domain created for $name.btc";
@@ -543,7 +544,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function.contains('BtcAdnrDelete')) {
+      if (function == 'BtcAdnrDelete') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = "BTC Domain deleted for $name";
@@ -558,7 +559,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function.contains('BtcAdnrTransfer')) {
+      if (function == 'BtcAdnrTransfer') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = "VFX Domain transfer for $name";

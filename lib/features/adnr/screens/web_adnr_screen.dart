@@ -13,7 +13,9 @@ import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../web/components/web_currency_segmented_button.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
+import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../components/create_adnr_dialog.dart';
 import '../providers/adnr_pending_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -49,6 +51,8 @@ class WebAdnrScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     final session = ref.watch(webSessionProvider);
 
+    final currencyType = ref.watch(webCurrencySegementedButtonProvider);
+
     final btcKeypair = session.btcKeypair;
 
     return Center(
@@ -56,22 +60,29 @@ class WebAdnrScreen extends BaseScreen {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "VFX Domain",
-              style: TextStyle(
-                color: AppColors.getBlue(),
-                fontSize: 18,
-                decoration: TextDecoration.underline,
+            WebCurrencySegementedButton(withVault: false),
+            SizedBox(
+              height: 32,
+            ),
+            if ([WebCurrencyType.any, WebCurrencyType.vfx, WebCurrencyType.vault].contains(currencyType)) ...[
+              Text(
+                "VFX Domain",
+                style: TextStyle(
+                  color: AppColors.getBlue(),
+                  fontSize: 18,
+                  decoration: TextDecoration.underline,
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _VfxDomain(),
-            ),
-            if (btcKeypair != null) ...[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _VfxDomain(),
+              ),
+            ],
+            if (currencyType == WebCurrencyType.any)
               SizedBox(
                 height: 16,
               ),
+            if ([WebCurrencyType.any, WebCurrencyType.btc].contains(currencyType) && btcKeypair != null) ...[
               Text(
                 "BTC Domain",
                 style: TextStyle(
@@ -84,7 +95,10 @@ class WebAdnrScreen extends BaseScreen {
                 padding: const EdgeInsets.all(8.0),
                 child: WebBtcAdnrContent(account: btcKeypair),
               )
-            ]
+            ],
+            SizedBox(
+              height: 32,
+            ),
           ],
         ),
       ),
