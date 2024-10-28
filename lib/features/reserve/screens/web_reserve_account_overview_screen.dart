@@ -18,6 +18,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../core/web_router.gr.dart';
 import '../../auth/auth_utils.dart';
+import '../../btc_web/screens/web_tokenized_btc_detail_screen.dart';
 import '../../nft/screens/nft_detail_screen.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../token/providers/web_token_detail_provider.dart';
@@ -393,8 +394,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                             }
 
                             if (option == 'tokens') {
-                              final tokens = await ExplorerService().getTokenBalances("xMjrfrzkrNC2g3KJidbwF21gB7R3m46B9w");
-                              // final tokens = await ExplorerService().getTokenBalances(keypair.address);
+                              // final tokens = await ExplorerService().getTokenBalances("xMjrfrzkrNC2g3KJidbwF21gB7R3m46B9w");
+                              final tokens = await ExplorerService().getTokenBalances(keypair.address);
 
                               if (tokens.isEmpty) {
                                 Toast.error("Your Vault Account has no Fungible Tokens.");
@@ -448,13 +449,57 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                             }
 
                             if (option == 'btc') {
-                              final tokens = [];
+                              final tokens = await ExplorerService().getWebVbtcTokens(keypair.address);
 
                               if (tokens.isEmpty) {
                                 Toast.error("Your Vault Account has no vBTC Tokens.");
 
                                 return;
                               }
+
+                              showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  builder: (context) {
+                                    return ModalContainer(
+                                      withClose: true,
+                                      children: tokens.map((item) {
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          child: AppCard(
+                                            padding: 0,
+                                            child: ListTile(
+                                              title: Text(item.name),
+                                              subtitle: Text(
+                                                "${item.balanceForAddress(keypair.address)} vBTC",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              trailing: Icon(Icons.chevron_right),
+                                              leading: CachedNetworkImage(
+                                                imageUrl: item.imageUrl,
+                                                height: 32,
+                                                width: 32,
+                                                errorWidget: (context, _, __) {
+                                                  return Image.asset(
+                                                    Assets.images.vbtcPng.path,
+                                                    width: 32,
+                                                    height: 32,
+                                                  );
+                                                },
+                                              ),
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(builder: (_) => WebTokenizedBtcDetailScreen(scIdentifier: item.scIdentifier)));
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    );
+                                  });
                             }
                           },
                         ),
