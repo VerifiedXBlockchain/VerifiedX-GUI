@@ -5,6 +5,8 @@ import '../../../core/breakpoints.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
+import '../../web/components/new_web_wallet_selector.dart';
+import '../../web/components/web_currency_segmented_button.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
 
@@ -18,6 +20,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../nft/components/nft_qr_code.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../../web/providers/web_selected_account_provider.dart';
 
 class WebReceiveScreen extends BaseScreen {
   const WebReceiveScreen({Key? key})
@@ -39,7 +42,6 @@ class WebReceiveScreen extends BaseScreen {
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       leading: isMobile ? WebMobileDrawerButton() : null,
-      actions: [WebWalletTypeSwitcher()],
     );
   }
 
@@ -73,164 +75,177 @@ class WebReceiveScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
-    final usingRa = ref.watch(webSessionProvider.select((v) => v.usingRa));
-    final usingBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
-    final adnr = ref.watch(webSessionProvider.select((v) => v.adnr));
+    // final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
+    // final usingRa = ref.watch(webSessionProvider.select((v) => v.usingRa));
+    // final usingBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
+    // final adnr = ref.watch(webSessionProvider.select((v) => v.adnr));
 
-    if (address == null) {
+    final selectedAccount = ref.watch(webSelectedAccountProvider);
+
+    if (selectedAccount == null) {
       return const WebNotWallet();
     }
 
-    if (usingBtc) {
-      return Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600),
-          child: AppCard(
-            padding: 16,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AppCard(
-                  padding: 0,
-                  color: AppColors.getGray(ColorShade.s300),
-                  child: ListTile(
-                    title: SelectableText(
-                      address,
-                      style: TextStyle(color: AppColors.getBtc()),
-                    ),
-                    subtitle: Text("Your Address"),
-                    leading: Icon(Icons.wallet),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.copy),
-                      onPressed: () {
-                        copyToClipboard(address);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
+    // if (usingBtc) {
+    //   return Center(
+    //     child: ConstrainedBox(
+    //       constraints: BoxConstraints(maxWidth: 600),
+    //       child: AppCard(
+    //         padding: 16,
+    //         child: Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             AppCard(
+    //               padding: 0,
+    //               color: AppColors.getGray(ColorShade.s300),
+    //               child: ListTile(
+    //                 title: SelectableText(
+    //                   address,
+    //                   style: TextStyle(color: AppColors.getBtc()),
+    //                 ),
+    //                 subtitle: Text("Your Address"),
+    //                 leading: Icon(Icons.wallet),
+    //                 trailing: IconButton(
+    //                   icon: const Icon(Icons.copy),
+    //                   onPressed: () {
+    //                     copyToClipboard(address);
+    //                   },
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 600),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: AppCard(
-                padding: 16,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppCard(
-                      padding: 0,
-                      color: AppColors.getGray(ColorShade.s300),
-                      child: ListTile(
-                        title: SelectableText(
-                          address,
-                          style: TextStyle(color: usingRa ? Colors.deepPurple.shade200 : Colors.white),
-                        ),
-                        subtitle: Text("Your Address"),
-                        leading: Icon(Icons.wallet),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.copy),
-                          onPressed: () {
-                            copyToClipboard(address);
-                          },
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    if (adnr != null && adnr.isNotEmpty && !usingRa) ...[
+          WebCurrencySegementedButton(withAny: false),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: AppCard(
+                  padding: 16,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                       AppCard(
                         padding: 0,
                         color: AppColors.getGray(ColorShade.s300),
                         child: ListTile(
                           title: SelectableText(
-                            adnr,
-                            style: TextStyle(color: Colors.white),
+                            selectedAccount.address,
+                            style: TextStyle(color: selectedAccount.color),
                           ),
-                          subtitle: Text("Your Domain"),
-                          leading: Icon(Icons.link),
+                          subtitle: Text("Your Address"),
+                          leading: Icon(Icons.wallet),
                           trailing: IconButton(
                             icon: const Icon(Icons.copy),
                             onPressed: () {
-                              copyToClipboard(adnr);
+                              copyToClipboard(selectedAccount.address);
                             },
                           ),
                         ),
                       ),
                       const SizedBox(height: 8),
-                    ],
-                    Divider(),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AppVerticalIconButton(
-                          label: "Copy\nLink",
-                          icon: Icons.link,
-                          prettyIconType: PrettyIconType.custom,
-                          onPressed: () async {
-                            showRequestPrompt(
-                                context: context,
-                                address: address,
-                                onValidSubmission: (amount) async {
-                                  if (double.tryParse(amount) != null) {
-                                    final value = adnr != null && adnr.isNotEmpty && !usingRa ? adnr : address;
-                                    final url = generateLink(value, double.parse(amount));
-
-                                    await copyToClipboard(url, "Request funds link copied to clipboard");
-                                  } else {
-                                    Toast.error("Invalid amount");
-                                  }
-                                });
-                          },
+                      if (selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty) ...[
+                        AppCard(
+                          padding: 0,
+                          color: AppColors.getGray(ColorShade.s300),
+                          child: ListTile(
+                            title: SelectableText(
+                              selectedAccount.domain!,
+                              style: TextStyle(color: selectedAccount.color),
+                            ),
+                            subtitle: Text("Your Domain"),
+                            leading: Icon(Icons.link),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.copy),
+                              onPressed: () {
+                                copyToClipboard(selectedAccount.domain!);
+                              },
+                            ),
+                          ),
                         ),
-                        const SizedBox(width: 6),
-                        AppVerticalIconButton(
-                          label: "QR\nCode",
-                          icon: Icons.qr_code_rounded,
-                          prettyIconType: PrettyIconType.custom,
-                          onPressed: () async {
-                            showRequestPrompt(
-                                context: context,
-                                address: address,
-                                onValidSubmission: (amount) async {
-                                  if (double.tryParse(amount) != null) {
-                                    final value = adnr != null && adnr.isNotEmpty & !usingRa ? adnr : address;
-                                    final url = generateLink(value, double.parse(amount));
-
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return Center(
-                                            child: NftQrCode(
-                                              data: url,
-                                              withClose: true,
-                                            ),
-                                          );
-                                        });
-                                  } else {
-                                    Toast.error("Invalid amount");
-                                  }
-                                });
-                          },
-                        ),
+                        const SizedBox(height: 8),
                       ],
-                    )
-                  ],
+                      Divider(),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppVerticalIconButton(
+                            label: "Copy\nLink",
+                            icon: Icons.link,
+                            prettyIconType: PrettyIconType.custom,
+                            onPressed: () async {
+                              showRequestPrompt(
+                                  context: context,
+                                  address: selectedAccount.address,
+                                  onValidSubmission: (amount) async {
+                                    if (double.tryParse(amount) != null) {
+                                      final value = selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty
+                                          ? selectedAccount.domain!
+                                          : selectedAccount.address;
+                                      final url = generateLink(value, double.parse(amount));
+
+                                      await copyToClipboard(url, "Request funds link copied to clipboard");
+                                    } else {
+                                      Toast.error("Invalid amount");
+                                    }
+                                  });
+                            },
+                          ),
+                          const SizedBox(width: 6),
+                          AppVerticalIconButton(
+                            label: "QR\nCode",
+                            icon: Icons.qr_code_rounded,
+                            prettyIconType: PrettyIconType.custom,
+                            onPressed: () async {
+                              showRequestPrompt(
+                                  context: context,
+                                  address: selectedAccount.address,
+                                  onValidSubmission: (amount) async {
+                                    if (double.tryParse(amount) != null) {
+                                      final value = selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty
+                                          ? selectedAccount.domain!
+                                          : selectedAccount.address;
+                                      final url = generateLink(value, double.parse(amount));
+
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return Center(
+                                              child: NftQrCode(
+                                                data: url,
+                                                withClose: true,
+                                              ),
+                                            );
+                                          });
+                                    } else {
+                                      Toast.error("Invalid amount");
+                                    }
+                                  });
+                            },
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
+          ),
+          SizedBox(
+            height: 20,
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/theme/colors.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/app_constants.dart';
@@ -31,7 +32,10 @@ import '../../encrypt/utils.dart';
 import '../../keygen/models/keypair.dart';
 import '../../wallet/models/wallet.dart';
 import '../../reserve/components/balance_indicator.dart';
+import '../../web/components/new_web_wallet_selector.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
+import '../../web/providers/web_currency_segmented_button_provider.dart';
+import '../../web/providers/web_selected_account_provider.dart';
 import '../providers/send_form_provider.dart';
 
 class SendForm extends BaseComponent {
@@ -40,6 +44,7 @@ class SendForm extends BaseComponent {
   final Keypair? keypair;
   final RaKeypair? raKeypair;
   final BtcWebAccount? btcWebAccount;
+
   const SendForm({
     this.wallet,
     this.keypair,
@@ -111,8 +116,10 @@ class SendForm extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final webAccountType = kIsWeb ? ref.watch(webSelectedAccountProvider) : null;
+
     bool isWeb = kIsWeb;
-    bool isBtc = kIsWeb ? ref.watch(webSessionProvider.select((v) => v.usingBtc)) : ref.watch(sessionProvider.select((v) => v.btcSelected));
+    bool isBtc = kIsWeb ? webAccountType?.type == WebCurrencyType.btc : ref.watch(sessionProvider.select((v) => v.btcSelected));
 
     const leadingWidth = 70.0;
 
@@ -131,21 +138,28 @@ class SendForm extends BaseComponent {
     double? balance;
     Color color = Colors.white;
 
-    if (isBtc) {
-      balance = kIsWeb ? ((ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance))) ?? 0.0) : btcAccount!.balance;
-      color = btcColor;
-    } else {
-      balance = isWeb
-          ? ref.watch(webSessionProvider.select((v) => v.usingRa))
-              ? ref.watch(webSessionProvider.select((v) => v.raBalance))
-              : ref.watch(webSessionProvider.select((v) => v.balance))
-          : wallet?.balance ?? 0;
+    if (isWeb) {
+      switch (webAccountType?.type) {
+        case WebCurrencyType.btc:
+          balance = ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance)) ?? 0.0;
+          color = AppColors.getBtc();
 
-      color = wallet!.isReserved ? Colors.deepPurple.shade200 : Colors.white;
-
-      if (kIsWeb) {
-        color = ref.watch(webSessionProvider.select((v) => v.usingRa)) ? Colors.deepPurple.shade200 : Colors.white;
+          break;
+        case WebCurrencyType.vault:
+          balance = ref.watch(webSessionProvider.select((v) => v.raBalance)) ?? 0.0;
+          color = AppColors.getReserve();
+          break;
+        default:
+          balance = ref.watch(webSessionProvider.select((v) => v.balance));
+          color = AppColors.getBlue();
       }
+    } else {
+      if (isBtc) {
+        balance = btcAccount!.balance;
+        color = AppColors.getBtc();
+      }
+      balance = wallet?.balance ?? 0;
+      color = wallet!.isReserved ? Colors.deepPurple.shade200 : Colors.white;
     }
 
     return Form(
@@ -178,7 +192,7 @@ class SendForm extends BaseComponent {
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (isWeb) WebWalletTypeSwitcher(),
+                              if (isWeb) NewWebWalletSelector(),
                               if (!isWeb)
                                 PopupMenuButton(
                                   color: Color(0xFF080808),

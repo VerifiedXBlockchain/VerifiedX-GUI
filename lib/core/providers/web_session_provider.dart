@@ -11,6 +11,7 @@ import '../../features/btc_web/services/btc_web_service.dart';
 import '../../features/keygen/models/ra_keypair.dart';
 import '../../features/nft/providers/minted_nft_list_provider.dart';
 import 'package:collection/collection.dart';
+import '../../features/web/providers/web_selected_account_provider.dart';
 import '../models/web_session_model.dart';
 import '../../features/transactions/providers/web_transaction_list_provider.dart';
 import '../../features/web_shop/providers/web_listed_nfts_provider.dart';
@@ -89,7 +90,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     singleton<Storage>().setBool(Storage.REMEMBER_ME, val);
   }
 
-  void login(Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeyPair, {bool andSave = true}) {
+  void login(Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeyPair, {bool andSave = true}) async {
     final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
     if (rememberMe) {
       singleton<Storage>().setMap(Storage.WEB_KEYPAIR, keypair.toJson());
@@ -107,6 +108,10 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       btcKeypair: btcKeyPair,
       isAuthenticated: true,
     );
+
+    final webAddress = await ExplorerService().getWebAddress(keypair.address);
+
+    ref.read(webSelectedAccountProvider.notifier).setVfx(keypair, webAddress.balance, webAddress.adnr);
 
     refreshBtcBalanceInfo();
 

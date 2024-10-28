@@ -27,6 +27,8 @@ import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../bridge/services/bridge_service.dart';
+import '../../web/providers/web_currency_segmented_button_provider.dart';
+import '../../web/providers/web_selected_account_provider.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../../raw/raw_service.dart';
 // import 'package:rbx_wallet/features/wallet/models/wallet.dart';
@@ -108,7 +110,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       return "The amount has to be a positive value";
     }
 
-    final isBtc = kIsWeb ? ref.read(webSessionProvider).usingBtc : ref.read(sessionProvider).btcSelected;
+    final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
     if (isBtc) {
       if (kIsWeb) {
@@ -149,12 +151,13 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     }
 
     if (kIsWeb) {
-      if (ref.read(webSessionProvider).currentWallet == null) {
+      final account = ref.read(webSelectedAccountProvider);
+
+      if (account == null) {
         return "No account selected";
       }
-      final balance = ref.read(webSessionProvider).currentWallet!.balance;
 
-      if (balance < parsed) {
+      if (account.balance < parsed) {
         return "Not enough balance in account.";
       }
     } else {
@@ -171,7 +174,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
   }
 
   String? addressValidator(String? value) {
-    final isBtc = kIsWeb ? ref.read(webSessionProvider).usingBtc : ref.read(sessionProvider).btcSelected;
+    final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
     if (isBtc) {
       if (value == null || value.isEmpty) {
@@ -287,7 +290,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     String senderAddress = "";
     Wallet? currentWallet;
 
-    final isBtc = kIsWeb ? ref.read(webSessionProvider).usingBtc : ref.read(sessionProvider).btcSelected;
+    final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
     if (isBtc) {
       if (kIsWeb) {
@@ -557,7 +560,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
       }
     } else {
-      if (ref.read(webSessionProvider).currentWallet == null) {
+      final selectedAccount = ref.read(webSelectedAccountProvider);
+
+      if (selectedAccount == null) {
         Toast.error("No account selected");
         return;
       }
@@ -568,12 +573,12 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         return;
       }
 
-      if (ref.read(webSessionProvider).currentWallet!.balance < amountDouble) {
+      if (selectedAccount.balance < amountDouble) {
         Toast.error("Insufficent balance to send");
         return;
       }
 
-      senderAddress = ref.read(webSessionProvider).currentWallet!.address;
+      senderAddress = selectedAccount.address;
     }
 
     final confirmed = await ConfirmDialog.show(
@@ -685,7 +690,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         final confirmed = await ConfirmDialog.show(
           title: "Valid Transaction",
           body:
-              "This transaction is valid and is ready to send.\nAre you sure you want to proceed?\n\nTo:$address\n\nAmount:$amountDouble VFX${txFee != null ? '\nTX Fee: $txFee VFX\nTotal:${amountDouble + txFee} RBX' : ''}",
+              "This transaction is valid and is ready to send.\nAre you sure you want to proceed?\n\nTo: $address\n\nAmount: $amountDouble VFX${txFee != null ? '\nTX Fee: $txFee VFX\nTotal: ${amountDouble + txFee} RBX' : ''}",
           confirmText: "Send",
           cancelText: "Cancel",
         );

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/breakpoints.dart';
+import '../../web/components/web_currency_segmented_button.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../components/send_form.dart';
 
 class WebSendScreen extends BaseScreen {
@@ -47,11 +49,23 @@ class WebSendScreen extends BaseScreen {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 720),
-          child: SendForm(
-            keypair: keypair,
-            wallet: wallet,
-            raKeypair: raKeypair,
-            btcWebAccount: btcWebAccount,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              WebCurrencySegementedButton(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 32),
+                child: SendForm(
+                  keypair: keypair,
+                  wallet: wallet,
+                  raKeypair: raKeypair,
+                  btcWebAccount: btcWebAccount,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
           ),
         ),
       ),

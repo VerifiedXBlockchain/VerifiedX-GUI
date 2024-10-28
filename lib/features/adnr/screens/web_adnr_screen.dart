@@ -104,12 +104,6 @@ class _VfxDomain extends BaseComponent {
     final address = keypair?.address;
     final adnr = session.adnr;
 
-    final btcKeypair = session.btcKeypair;
-
-    if (btcKeypair != null) {
-      return WebBtcAdnrContent(account: btcKeypair);
-    }
-
     if (keypair == null || address == null) {
       return const WebNotWallet();
     }
