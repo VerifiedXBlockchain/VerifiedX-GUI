@@ -37,7 +37,7 @@ class WebBtcTransactionListTile extends BaseComponent {
     final myAddresses = ref.watch(allBtcAddressesProvider);
     final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
-    final amount = tx.amountBtc(myAddresses);
+    final amount = tx.amountBtc();
 
     final toAddress = tx.toAddress(myAddresses);
     final fromAddress = tx.fromAddress();
@@ -104,7 +104,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                     Text(
                       "${widget.amount} ${widget.isVbtc ? 'v' : ''}BTC",
                       style: TextStyle(
-                        color: widget.amount >= 0 ? Theme.of(context).colorScheme.success : Colors.red.shade600,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),

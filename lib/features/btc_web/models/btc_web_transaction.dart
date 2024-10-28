@@ -11,8 +11,6 @@ class BtcWebTransaction with _$BtcWebTransaction {
 
   factory BtcWebTransaction({
     required String txid,
-    // required int version,
-    // required int locktime,
     required List<BtcWebVin> vin,
     required List<BtcWebVout> vout,
     required int size,
@@ -22,10 +20,6 @@ class BtcWebTransaction with _$BtcWebTransaction {
   }) = _BtcWebTransaction;
 
   factory BtcWebTransaction.fromJson(Map<String, dynamic> json) => _$BtcWebTransactionFromJson(json);
-
-  // double get totalBtc {
-  //   return total * BTC_SATOSHI_MULTIPLIER;
-  // }
 
   double get feeBtc {
     return fee * BTC_SATOSHI_MULTIPLIER;
@@ -82,58 +76,18 @@ class BtcWebTransaction with _$BtcWebTransaction {
     return totalSent - totalValueToOthers(myAddress) - fee;
   }
 
-  int amount(List<String> myAddresses) {
-    int amount = 0;
+  int amount() {
+    final inputAddresses = vin.map((e) => e.prevout.scriptpubkeyAddress);
 
-    final inputs = vin.where((element) => myAddresses.contains(element.prevout.scriptpubkeyAddress)).toList();
-    for (final input in inputs) {
-      amount -= input.prevout.value;
-    }
+    final nonChangeOutputs = vout.where((element) => !inputAddresses.contains(element.scriptpubkeyAddress)).toList();
+    final nonChangeOutputTotal = nonChangeOutputs.fold<int>(0, (previousValue, element) => previousValue + element.value);
 
-    final outputs = vout.where((element) => myAddresses.contains(element.scriptpubkeyAddress)).toList();
-
-    for (final output in outputs) {
-      amount += output.value;
-    }
-
-    if (amount < 0) {
-      amount += fee;
-    }
-
+    final amount = nonChangeOutputTotal;
     return amount;
-
-    // final senderAddresses = vin.map((e) => e.prevout.scriptpubkeyAddress);
-
-    // int totalInputAmount = 0;
-    // int totalOutputAmount = 0;
-    // int changeAmount = 0;
-
-    // // Calculate total input from user's address
-    // for (var input in vin) {
-    //   if (input.prevout.scriptpubkeyAddress == myAddress) {
-    //     totalInputAmount += input.prevout.value; // Add input value from user's address
-    //   }
-    // }
-
-    // // Calculate outputs
-    // for (var output in vout) {
-    //   // Check if the output is to the user's address (i.e., change)
-    //   if (output.scriptpubkeyAddress == myAddress) {
-    //     changeAmount += output.value; // Treat as change (goes back to user)
-    //   } else {
-    //     totalOutputAmount += output.value; // Going to other recipients
-    //   }
-    // }
-
-    // // Net amount: If the user is sending, subtract change and inputs.
-    // // If the user is receiving, totalInputAmount will be 0, and only totalOutputAmount matters.
-    // final netAmount = totalOutputAmount - (totalInputAmount - changeAmount);
-
-    // return netAmount;
   }
 
-  double amountBtc(List<String> myAddresses) {
-    return amount(myAddresses) * BTC_SATOSHI_MULTIPLIER;
+  double amountBtc() {
+    return amount() * BTC_SATOSHI_MULTIPLIER;
   }
 
   String fromAddress() {
