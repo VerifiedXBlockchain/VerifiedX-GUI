@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
+import 'package:rbx_wallet/features/btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import 'package:rbx_wallet/features/token/providers/web_token_actions_manager.dart';
 import '../../nft/providers/nft_detail_watcher.dart';
 import '../../nft/providers/sale_provider.dart';
@@ -225,6 +226,9 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
               icon: Icons.lightbulb_outline,
             ),
           );
+          if (kIsWeb) {
+            ref.read(btcWebVbtcTokenListProvider.notifier).load(transaction.fromAddress);
+          }
         } else {
           body = _nftDataValue(nftData, 'ContractUID');
           _broadcastNotification(

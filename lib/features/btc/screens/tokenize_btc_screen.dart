@@ -120,43 +120,41 @@ class TokenizeBtcForm extends BaseComponent {
                 }
               },
             ),
-            if (!kIsWeb) ...[
-              SizedBox(
-                height: 12,
+            SizedBox(
+              height: 12,
+            ),
+            Text(
+              "Media (Optional)",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
               ),
-              Text(
-                "Media (Optional)",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: formState.additionalAssets.length,
-                  itemBuilder: (context, index) {
-                    final asset = formState.additionalAssets[index];
-                    return FileSelector(
-                      key: Key("${index}_${asset.fileName}"),
-                      asset: asset,
-                      onChange: (a) {
-                        if (a != null) {
-                          formProvider.replaceAdditionalAsset(index, a);
-                        } else {
-                          formProvider.removeAdditionalAsset(index);
-                        }
-                      },
-                    );
-                  }),
-              FileSelector(
-                transparentBackground: true,
-                onChange: (a) {
-                  if (a != null) {
-                    formProvider.addAdditonalAsset(a);
-                  }
-                },
-              ),
-            ],
+            ),
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: formState.additionalAssets.length,
+                itemBuilder: (context, index) {
+                  final asset = formState.additionalAssets[index];
+                  return FileSelector(
+                    key: Key("${index}_${asset.location}"),
+                    asset: asset,
+                    onChange: (a) {
+                      if (a != null) {
+                        formProvider.replaceAdditionalAsset(index, a);
+                      } else {
+                        formProvider.removeAdditionalAsset(index);
+                      }
+                    },
+                  );
+                }),
+            FileSelector(
+              transparentBackground: true,
+              onChange: (a) {
+                if (a != null) {
+                  formProvider.addAdditonalAsset(a);
+                }
+              },
+            ),
             SizedBox(
               height: 22,
             ),

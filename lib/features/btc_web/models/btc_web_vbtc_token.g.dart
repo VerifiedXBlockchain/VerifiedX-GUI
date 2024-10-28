@@ -18,6 +18,7 @@ _$_BtcWebVbtcToken _$$_BtcWebVbtcTokenFromJson(Map<String, dynamic> json) =>
       publicKeyProofs: json['public_key_proofs'] as String,
       globalBalance: (json['global_balance'] as num).toDouble(),
       createdAt: DateTime.parse(json['created_at'] as String),
+      nft: WebNft.fromJson(json['nft'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
@@ -32,4 +33,5 @@ Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
       'public_key_proofs': instance.publicKeyProofs,
       'global_balance': instance.globalBalance,
       'created_at': instance.createdAt.toIso8601String(),
+      'nft': instance.nft,
     };

@@ -309,6 +309,14 @@ class _IconPreview extends StatelessWidget {
     return Builder(
       builder: (context) {
         if (asset != null && asset!.isImage) {
+          if (kIsWeb && asset!.location != null) {
+            return Image.network(
+              asset!.location!,
+              width: size,
+              height: size,
+            );
+          }
+
           if (kIsWeb && asset!.bytes != null) {
             return Image(
               image: CacheMemoryImageProvider(

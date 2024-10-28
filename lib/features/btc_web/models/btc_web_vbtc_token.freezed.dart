@@ -37,6 +37,7 @@ mixin _$BtcWebVbtcToken {
   double get globalBalance => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
+  WebNft get nft => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -60,7 +61,10 @@ abstract class $BtcWebVbtcTokenCopyWith<$Res> {
       @JsonKey(name: 'deposit_address') String depositAddress,
       @JsonKey(name: 'public_key_proofs') String publicKeyProofs,
       @JsonKey(name: 'global_balance') double globalBalance,
-      @JsonKey(name: 'created_at') DateTime createdAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      WebNft nft});
+
+  $WebNftCopyWith<$Res> get nft;
 }
 
 /// @nodoc
@@ -86,6 +90,7 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
     Object? publicKeyProofs = null,
     Object? globalBalance = null,
     Object? createdAt = null,
+    Object? nft = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -128,7 +133,19 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      nft: null == nft
+          ? _value.nft
+          : nft // ignore: cast_nullable_to_non_nullable
+              as WebNft,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $WebNftCopyWith<$Res> get nft {
+    return $WebNftCopyWith<$Res>(_value.nft, (value) {
+      return _then(_value.copyWith(nft: value) as $Val);
+    });
   }
 }
 
@@ -150,7 +167,11 @@ abstract class _$$_BtcWebVbtcTokenCopyWith<$Res>
       @JsonKey(name: 'deposit_address') String depositAddress,
       @JsonKey(name: 'public_key_proofs') String publicKeyProofs,
       @JsonKey(name: 'global_balance') double globalBalance,
-      @JsonKey(name: 'created_at') DateTime createdAt});
+      @JsonKey(name: 'created_at') DateTime createdAt,
+      WebNft nft});
+
+  @override
+  $WebNftCopyWith<$Res> get nft;
 }
 
 /// @nodoc
@@ -174,6 +195,7 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
     Object? publicKeyProofs = null,
     Object? globalBalance = null,
     Object? createdAt = null,
+    Object? nft = null,
   }) {
     return _then(_$_BtcWebVbtcToken(
       name: null == name
@@ -216,6 +238,10 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      nft: null == nft
+          ? _value.nft
+          : nft // ignore: cast_nullable_to_non_nullable
+              as WebNft,
     ));
   }
 }
@@ -233,7 +259,8 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       @JsonKey(name: 'deposit_address') required this.depositAddress,
       @JsonKey(name: 'public_key_proofs') required this.publicKeyProofs,
       @JsonKey(name: 'global_balance') required this.globalBalance,
-      @JsonKey(name: 'created_at') required this.createdAt})
+      @JsonKey(name: 'created_at') required this.createdAt,
+      required this.nft})
       : _addresses = addresses,
         super._();
 
@@ -273,10 +300,12 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
   @override
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
+  @override
+  final WebNft nft;
 
   @override
   String toString() {
-    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt)';
+    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt, nft: $nft)';
   }
 
   @override
@@ -302,7 +331,8 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
             (identical(other.globalBalance, globalBalance) ||
                 other.globalBalance == globalBalance) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.nft, nft) || other.nft == nft));
   }
 
   @JsonKey(ignore: true)
@@ -318,7 +348,8 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       depositAddress,
       publicKeyProofs,
       globalBalance,
-      createdAt);
+      createdAt,
+      nft);
 
   @JsonKey(ignore: true)
   @override
@@ -339,20 +370,14 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
       {required final String name,
       required final String description,
       required final Map<String, dynamic> addresses,
-      @JsonKey(name: 'sc_identifier')
-          required final String scIdentifier,
-      @JsonKey(name: 'owner_address')
-          required final String ownerAddress,
-      @JsonKey(name: 'image_url')
-          required final String imageUrl,
-      @JsonKey(name: 'deposit_address')
-          required final String depositAddress,
-      @JsonKey(name: 'public_key_proofs')
-          required final String publicKeyProofs,
-      @JsonKey(name: 'global_balance')
-          required final double globalBalance,
-      @JsonKey(name: 'created_at')
-          required final DateTime createdAt}) = _$_BtcWebVbtcToken;
+      @JsonKey(name: 'sc_identifier') required final String scIdentifier,
+      @JsonKey(name: 'owner_address') required final String ownerAddress,
+      @JsonKey(name: 'image_url') required final String imageUrl,
+      @JsonKey(name: 'deposit_address') required final String depositAddress,
+      @JsonKey(name: 'public_key_proofs') required final String publicKeyProofs,
+      @JsonKey(name: 'global_balance') required final double globalBalance,
+      @JsonKey(name: 'created_at') required final DateTime createdAt,
+      required final WebNft nft}) = _$_BtcWebVbtcToken;
   _BtcWebVbtcToken._() : super._();
 
   factory _BtcWebVbtcToken.fromJson(Map<String, dynamic> json) =
@@ -385,6 +410,8 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
   @override
   @JsonKey(name: 'created_at')
   DateTime get createdAt;
+  @override
+  WebNft get nft;
   @override
   @JsonKey(ignore: true)
   _$$_BtcWebVbtcTokenCopyWith<_$_BtcWebVbtcToken> get copyWith =>

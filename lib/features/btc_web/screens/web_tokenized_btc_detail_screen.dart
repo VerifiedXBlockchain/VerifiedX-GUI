@@ -10,6 +10,8 @@ import '../../../core/components/centered_loader.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../nft/components/web_asset_thumbnail.dart';
+import '../../nft/providers/nft_detail_provider.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import '../../transactions/providers/web_transaction_list_provider.dart';
 import '../../../utils/toast.dart';
@@ -243,6 +245,31 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                 //         ),
                 //       );
                 //     }),
+                if (token.nft.smartContract.additionalAssetsWeb != null && token.nft.smartContract.additionalAssetsWeb!.isNotEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Media:",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  Wrap(
+                    children: (token.nft.smartContract.additionalAssetsWeb ?? [])
+                        .map(
+                          (a) => Padding(
+                            padding: const EdgeInsets.only(right: 6.0),
+                            child: WebAssetThumbnail(
+                              a,
+                              nft: token.nft.smartContract,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  )
+                ],
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(

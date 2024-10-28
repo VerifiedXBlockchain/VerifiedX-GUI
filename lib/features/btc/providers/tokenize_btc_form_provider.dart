@@ -187,11 +187,15 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
       return null;
     }
 
-    //TODO: handle multiasset
-
-    // if (multiAsset != null) {
+    // if (state.additionalAssets.isNotEmpty) {
+    //   final multiAsset = MultiAsset(
+    //     assets: state.additionalAssets,
+    //   );
     //   final List<Map<String, dynamic>> features = [];
-    //   final f = {'FeatureName': MultiAsset.compilerEnum, 'FeatureFeatures': multiAsset.serializeForCompiler(rbxAddress)};
+    //   final f = {
+    //     'FeatureName': MultiAsset.compilerEnum,
+    //     'FeatureFeatures': multiAsset.serializeForCompiler(keypair.address),
+    //   };
     //   features.add(f);
 
     //   params['Features'] = features;
@@ -238,6 +242,13 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
             fileSize: 6778,
             name: "vBTC Token",
           ),
+      multiAssets: state.additionalAssets.isNotEmpty
+          ? [
+              MultiAsset(
+                assets: state.additionalAssets,
+              )
+            ]
+          : [],
     );
 
     final timezoneName = ref.read(webSessionProvider).timezoneName;
@@ -260,11 +271,16 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
       ]
     };
 
+    print("--------");
+    print(jsonEncode(updatedPayload));
+    print("--------");
+
     final success = await RawService().compileAndMintSmartContract(updatedPayload, keypair, ref, 17);
 
     state = state.copyWith(isProcessing: false);
     if (success == true) {
       ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address);
+      clear();
       return true;
     }
     return false;

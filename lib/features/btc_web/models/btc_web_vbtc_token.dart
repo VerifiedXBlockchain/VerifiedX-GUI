@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../nft/models/web_nft.dart';
+
 part 'btc_web_vbtc_token.freezed.dart';
 part 'btc_web_vbtc_token.g.dart';
 
@@ -18,6 +20,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     @JsonKey(name: 'public_key_proofs') required String publicKeyProofs,
     @JsonKey(name: 'global_balance') required double globalBalance,
     @JsonKey(name: 'created_at') required DateTime createdAt,
+    required WebNft nft,
   }) = _BtcWebVbtcToken;
 
   factory BtcWebVbtcToken.fromJson(Map<String, dynamic> json) => _$BtcWebVbtcTokenFromJson(json);

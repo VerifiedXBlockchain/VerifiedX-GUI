@@ -40,6 +40,8 @@ class WebSendScreen extends BaseScreen {
     final wallet = ref.watch(webSessionProvider.select((v) => v.currentWallet));
     final btcWebAccount = ref.watch(webSessionProvider.select((v) => v.btcKeypair));
 
+    final shouldScale = MediaQuery.of(context).size.width > 1200;
+
     if (keypair == null && raKeypair == null && btcWebAccount == null) {
       return const Center(child: WebNotWallet());
     }
@@ -54,12 +56,15 @@ class WebSendScreen extends BaseScreen {
             children: [
               WebCurrencySegementedButton(),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 32),
-                child: SendForm(
-                  keypair: keypair,
-                  wallet: wallet,
-                  raKeypair: raKeypair,
-                  btcWebAccount: btcWebAccount,
+                padding: EdgeInsets.symmetric(vertical: shouldScale ? 64 : 32),
+                child: Transform.scale(
+                  scale: shouldScale ? 1.3 : 1,
+                  child: SendForm(
+                    keypair: keypair,
+                    wallet: wallet,
+                    raKeypair: raKeypair,
+                    btcWebAccount: btcWebAccount,
+                  ),
                 ),
               ),
               SizedBox(
