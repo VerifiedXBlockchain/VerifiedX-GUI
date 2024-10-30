@@ -258,7 +258,7 @@ class ReserveAccountRecoverButton extends BaseComponent {
       child: AppButton(
         label: "Recover",
         icon: FontAwesomeIcons.triangleExclamation,
-        type: AppButtonType.Outlined,
+        type: AppButtonType.Elevated,
         variant: AppColorVariant.Warning,
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(

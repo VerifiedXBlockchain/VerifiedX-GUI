@@ -265,6 +265,10 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
           variant: AppColorVariant.Primary,
           onPressed: () async {
             final manager = ref.read(webTokenActionsManager);
+            if (token.globalBalance <= 0) {
+              Toast.error("vBTC tokens with no balance can not be transferred");
+              return;
+            }
             if (!manager.verifyBalance()) {
               return;
             }
