@@ -173,6 +173,46 @@ class NftDetailScreen extends BaseScreen {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.getBlue(ColorShade.s300),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Tooltip(
+                                  message: "Smart Contract ID",
+                                  child: Text(
+                                    nft.id,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 6,
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await Clipboard.setData(ClipboardData(text: nft.id));
+                                    Toast.message("Smart Contract Identifier copied to clipboard");
+                                  },
+                                  child: Icon(
+                                    Icons.copy,
+                                    size: 14,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -184,43 +224,6 @@ class NftDetailScreen extends BaseScreen {
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                                 height: 1,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.getBlue(ColorShade.s300),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Tooltip(
-                                    message: "Smart Contract ID",
-                                    child: Text(
-                                      nft.id,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      await Clipboard.setData(ClipboardData(text: nft.id));
-                                      Toast.message("Smart Contract Identifier copied to clipboard");
-                                    },
-                                    child: Icon(
-                                      Icons.copy,
-                                      size: 14,
-                                    ),
-                                  )
-                                ],
                               ),
                             ),
                           ),

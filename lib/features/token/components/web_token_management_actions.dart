@@ -48,6 +48,7 @@ class WebTokenManagementActions extends BaseComponent {
         AppCard(
           fullWidth: true,
           child: Wrap(
+            runSpacing: 8,
             alignment: WrapAlignment.center,
             runAlignment: WrapAlignment.center,
             spacing: 16,

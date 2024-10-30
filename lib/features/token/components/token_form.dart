@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/breakpoints.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
@@ -129,74 +130,83 @@ class TokenForm extends BaseComponent {
               ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
+              child: Flex(
+                direction: BreakPoints.useMobileLayout(context) ? Axis.vertical : Axis.horizontal,
                 children: [
-                  Text(
-                    "Decimal Places:",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.arrow_drop_down),
-                    onPressed: model.decimalPlaces <= TOKEN_MIN_DECIMAL_PLACES
-                        ? null
-                        : () {
-                            provider.setDecimalPlaces(model.decimalPlaces - 1);
-                          },
-                  ),
-                  SizedBox(
-                    width: 28,
-                    child: Center(
-                      child: Text(
-                        model.decimalPlaces.toString(),
+                  Row(
+                    children: [
+                      Text(
+                        "Decimal Places:",
                         style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                          fontSize: 12,
                         ),
                       ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.arrow_drop_up),
-                    onPressed: model.decimalPlaces >= TOKEN_MAX_DECIMAL_PLACES
-                        ? null
-                        : () {
-                            provider.setDecimalPlaces(model.decimalPlaces + 1);
-                          },
+                      IconButton(
+                        icon: Icon(Icons.arrow_drop_down),
+                        onPressed: model.decimalPlaces <= TOKEN_MIN_DECIMAL_PLACES
+                            ? null
+                            : () {
+                                provider.setDecimalPlaces(model.decimalPlaces - 1);
+                              },
+                      ),
+                      SizedBox(
+                        width: 28,
+                        child: Center(
+                          child: Text(
+                            model.decimalPlaces.toString(),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.arrow_drop_up),
+                        onPressed: model.decimalPlaces >= TOKEN_MAX_DECIMAL_PLACES
+                            ? null
+                            : () {
+                                provider.setDecimalPlaces(model.decimalPlaces + 1);
+                              },
+                      ),
+                    ],
                   ),
                   SizedBox(width: 16),
-                  Text(
-                    "Is Burnable:",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Checkbox(
-                    value: model.burnable,
-                    onChanged: (val) {
-                      if (val != null) {
-                        provider.setBurnable(val);
-                      }
-                    },
-                  ),
-                  SizedBox(width: 16),
-                  Text(
-                    "Allow Voting:",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                    ),
-                  ),
-                  Checkbox(
-                    value: model.voting,
-                    onChanged: (val) {
-                      if (val != null) {
-                        provider.setVoting(val);
-                      }
-                    },
+                  Row(
+                    children: [
+                      Text(
+                        "Is Burnable:",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Checkbox(
+                        value: model.burnable,
+                        onChanged: (val) {
+                          if (val != null) {
+                            provider.setBurnable(val);
+                          }
+                        },
+                      ),
+                      SizedBox(width: 16),
+                      Text(
+                        "Allow Voting:",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                      Checkbox(
+                        value: model.voting,
+                        onChanged: (val) {
+                          if (val != null) {
+                            provider.setVoting(val);
+                          }
+                        },
+                      ),
+                    ],
                   )
                 ],
               ),
