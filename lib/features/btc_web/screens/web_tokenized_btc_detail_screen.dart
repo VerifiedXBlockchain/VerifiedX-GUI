@@ -260,8 +260,9 @@ class WebVBTCDetailsCard extends BaseComponent {
             borderRadius: BorderRadius.circular(100),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _VBTCImage(token: token),
+              _VBTCImage(token: token, isSmall: true),
               SizedBox(
                 height: 6,
               ),
@@ -304,10 +305,13 @@ class _VBTCDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isRa = token.ownerAddress.startsWith("xRBX");
+
     return Expanded(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _TokenDetailRefresher(
             scId: token.scIdentifier,
@@ -325,6 +329,7 @@ class _VBTCDetails extends StatelessWidget {
           _DetailRow(
             label: "Owner",
             value: token.ownerAddress,
+            isReserve: isRa,
             withCopy: true,
           ),
           _DetailRow(
@@ -357,9 +362,10 @@ class _VBTCDetails extends StatelessWidget {
 
 class _VBTCImage extends StatelessWidget {
   const _VBTCImage({
+    this.isSmall = false,
     required this.token,
   });
-
+  final bool isSmall;
   final BtcWebVbtcToken token;
 
   @override
@@ -371,13 +377,13 @@ class _VBTCImage extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: CachedNetworkImage(
         imageUrl: token.imageUrl,
-        height: 200,
-        width: 200,
+        height: isSmall ? 120 : 200,
+        width: isSmall ? 120 : 200,
         errorWidget: (context, _, __) {
           return Image.asset(
             Assets.images.vbtcPng.path,
-            width: 200,
-            height: 200,
+            height: isSmall ? 120 : 200,
+            width: isSmall ? 120 : 200,
           );
         },
       ),
@@ -491,12 +497,14 @@ class _DetailRow extends StatelessWidget {
   final bool withCopy;
   final bool inExpanded;
   final bool withMaxLines;
+  final bool isReserve;
   const _DetailRow({
     required this.label,
     required this.value,
     this.withCopy = false,
     this.inExpanded = false,
     this.withMaxLines = false,
+    this.isReserve = false,
   });
 
   @override
@@ -519,10 +527,14 @@ class _DetailRow extends StatelessWidget {
               ? Expanded(
                   child: Text(
                   value,
-                  maxLines: withMaxLines ? 3 : null,
-                  overflow: TextOverflow.ellipsis,
+                  maxLines: withMaxLines ? 2 : null,
+                  overflow: withMaxLines ? TextOverflow.ellipsis : null,
+                  style: TextStyle(color: isReserve ? AppColors.getReserve() : null),
                 ))
-              : Text(value),
+              : Text(
+                  value,
+                  style: TextStyle(color: isReserve ? AppColors.getReserve() : null),
+                ),
           SizedBox(
             width: 6,
           ),
@@ -537,6 +549,7 @@ class _DetailRow extends StatelessWidget {
                 child: Icon(
                   Icons.copy,
                   size: 12,
+                  color: isReserve ? AppColors.getReserve() : null,
                 ),
               ),
             )

@@ -215,7 +215,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       return;
     }
 
-    ref.read(btcWebVbtcTokenListProvider.notifier).load(state.keypair!.address);
+    ref.read(btcWebVbtcTokenListProvider.notifier).load(state.keypair!.address, raAddress: state.raKeypair?.address);
   }
 
   // Future<void> getBalance() async {

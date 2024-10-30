@@ -283,7 +283,7 @@ class _ContentWrapper extends BaseComponent {
                             ),
                             Container(
                               height: expandedHeight,
-                              width: 580,
+                              width: 600,
                               decoration: BoxDecoration(
                                 color: AppColors.getGray(ColorShade.s300),
                                 border: Border(
@@ -300,14 +300,16 @@ class _ContentWrapper extends BaseComponent {
 
                                   final raKeypair = ref.watch(webSessionProvider.select((value) => value.raKeypair));
                                   final raBalance = ref.watch(webSessionProvider.select((value) => value.raBalance));
+                                  final adnr = ref.watch(webSessionProvider.select((value) => value.adnr));
 
+                                  final vfxIdString = adnr != null ? "${vfxKeypair?.address ?? ""} | @$adnr" : vfxKeypair?.address ?? "";
                                   final btcKeypair = ref.watch(webSessionProvider.select((value) => value.btcKeypair));
                                   final btcBalance = ref.watch(webSessionProvider.select((value) => value.btcBalanceInfo?.btcBalance));
                                   return Column(
                                     children: [
                                       if (vfxKeypair != null)
                                         _WalletListItem(
-                                          address: vfxKeypair.address,
+                                          address: vfxIdString,
                                           keypair: vfxKeypair,
                                           label: "VFX",
                                           balance: "${vfxBalance ?? 0} VFX",
