@@ -86,7 +86,7 @@ class NftCard extends BaseComponent {
                     )
                   : nft.currentEvolveAssetWeb != null
                       ? const Icon(Icons.file_present_outlined)
-                      : const Text("NFT assets have not been transfered to the VFX Web Wallet."),
+                      : SizedBox.shrink(),
             if (!kIsWeb)
               nft.currentEvolveAsset.isImage
                   ? AspectRatio(

@@ -299,7 +299,7 @@ class _ContentWrapper extends BaseComponent {
                                   final vfxBalance = ref.watch(webSessionProvider.select((value) => value.balance));
 
                                   final raKeypair = ref.watch(webSessionProvider.select((value) => value.raKeypair));
-                                  final raBalance = ref.watch(webSessionProvider.select((value) => value.balance));
+                                  final raBalance = ref.watch(webSessionProvider.select((value) => value.raBalance));
 
                                   final btcKeypair = ref.watch(webSessionProvider.select((value) => value.btcKeypair));
                                   final btcBalance = ref.watch(webSessionProvider.select((value) => value.btcBalanceInfo?.btcBalance));
