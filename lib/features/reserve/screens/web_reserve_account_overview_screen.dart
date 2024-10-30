@@ -253,8 +253,10 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    child: Wrap(
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      alignment: WrapAlignment.spaceEvenly,
+                      runSpacing: 12,
                       children: [
                         AppButton(
                           label: "Send Funds",

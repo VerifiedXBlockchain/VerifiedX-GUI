@@ -176,10 +176,11 @@ class SendForm extends BaseComponent {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 72,
-                      child: Text("From:"),
-                    ),
+                    if (!BreakPoints.useMobileLayout(context))
+                      SizedBox(
+                        width: 72,
+                        child: Text("From:"),
+                      ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

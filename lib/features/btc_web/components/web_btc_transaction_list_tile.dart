@@ -31,7 +31,7 @@ class WebBtcTransactionListTile extends BaseComponent {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget desktopBody(BuildContext context, WidgetRef ref) {
     final tx = transaction;
 
     final myAddresses = ref.watch(allBtcAddressesProvider);
@@ -45,6 +45,49 @@ class WebBtcTransactionListTile extends BaseComponent {
     final isVbtc = vbtcTokenAddresses.contains(toAddress) || vbtcTokenAddresses.contains(fromAddress);
 
     return _WebBtcTransactionListTileContent(amount: amount, tx: tx, compact: compact, isVbtc: isVbtc);
+  }
+
+  @override
+  Widget body(BuildContext context, WidgetRef ref) {
+    final tx = transaction;
+
+    final myAddresses = ref.watch(allBtcAddressesProvider);
+    final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
+
+    final amount = tx.amountBtc();
+
+    final toAddress = tx.toAddress(myAddresses);
+    final fromAddress = tx.fromAddress();
+
+    final isVbtc = vbtcTokenAddresses.contains(toAddress) || vbtcTokenAddresses.contains(fromAddress);
+    return AppCard(
+      padding: 0,
+      color: AppColors.getGray(ColorShade.s100),
+      // glowOpacity: 0,
+      child: ListTile(
+        onTap: () {
+          openTxOnExplorer(tx);
+        },
+        title: Text(
+          "${amount.toString()} ${isVbtc ? 'vBTC' : 'BTC'}",
+        ),
+        subtitle: Text("Date: ${tx.blockTimeLabel} \nFee: ${tx.fee} SATS | ${tx.feeBtc} BTC"),
+        leading: tx.status.confirmed
+            ? Text(
+                "Confirmed",
+                style: TextStyle(color: Theme.of(context).colorScheme.success, fontWeight: FontWeight.bold),
+              )
+            : Text(
+                "Pending",
+                style: TextStyle(color: Theme.of(context).colorScheme.warning, fontWeight: FontWeight.bold),
+              ),
+        trailing: Icon(
+          Icons.open_in_new,
+          size: 12,
+          color: Colors.white70,
+        ),
+      ),
+    );
   }
 }
 
@@ -113,11 +156,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                 ),
                 InkWell(
                   onTap: () {
-                    if (Env.isTestNet) {
-                      launchUrlString("https://mempool.space/testnet4/tx/${widget.tx.txid}");
-                    } else {
-                      launchUrlString("https://mempool.space/tx/${widget.tx.txid}");
-                    }
+                    openTxOnExplorer(widget.tx);
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -358,5 +397,13 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
         ],
       ),
     );
+  }
+}
+
+openTxOnExplorer(BtcWebTransaction tx) {
+  if (Env.isTestNet) {
+    launchUrlString("https://mempool.space/testnet4/tx/${tx.txid}");
+  } else {
+    launchUrlString("https://mempool.space/tx/${tx.txid}");
   }
 }

@@ -5,6 +5,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/base_component.dart';
+import 'package:rbx_wallet/core/breakpoints.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/providers/web_session_provider.dart';
@@ -132,79 +134,10 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                AppCard(
-                  padding: 8,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        clipBehavior: Clip.antiAlias,
-                        child: CachedNetworkImage(
-                          imageUrl: token.imageUrl,
-                          height: 200,
-                          width: 200,
-                          errorWidget: (context, _, __) {
-                            return Image.asset(
-                              Assets.images.vbtcPng.path,
-                              width: 200,
-                              height: 200,
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _TokenDetailRefresher(
-                              scId: token.scIdentifier,
-                            ),
-                            _DetailRow(
-                              label: "Name",
-                              value: token.name,
-                            ),
-                            _DetailRow(
-                              label: "Description",
-                              value: token.description,
-                              inExpanded: true,
-                            ),
-                            _DetailRow(
-                              label: "Owner",
-                              value: token.ownerAddress,
-                              withCopy: true,
-                            ),
-                            _DetailRow(
-                              label: "BTC Deposit Address",
-                              value: token.depositAddress,
-                              withCopy: true,
-                            ),
-                            _DetailRow(
-                              label: "Smart Contract ID",
-                              value: token.scIdentifier,
-                              withCopy: true,
-                            ),
-                            if (myAddress != null)
-                              _DetailRow(
-                                label: "My Balance",
-                                value: "${token.balanceForAddress(myAddress)} vBTC",
-                              ),
-                            if (isOwner)
-                              _DetailRow(
-                                label: "Token Total Balance",
-                                value: "${token.globalBalance} vBTC",
-                              ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                WebVBTCDetailsCard(
+                  token: token,
+                  myAddress: myAddress,
+                  isOwner: isOwner,
                 ),
                 SizedBox(
                   height: 16,
@@ -300,6 +233,155 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         },
         error: (_, __) => const Text("Error"),
         loading: () => const CenteredLoader());
+  }
+}
+
+class WebVBTCDetailsCard extends BaseComponent {
+  const WebVBTCDetailsCard({
+    super.key,
+    required this.token,
+    required this.myAddress,
+    required this.isOwner,
+  });
+
+  final BtcWebVbtcToken token;
+  final String? myAddress;
+  final bool isOwner;
+
+  @override
+  Widget body(BuildContext context, WidgetRef ref) {
+    return AppCard(
+      padding: 8,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxHeight: 450),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Column(
+            children: [
+              _VBTCImage(token: token),
+              SizedBox(
+                height: 6,
+              ),
+              _VBTCDetails(token: token, myAddress: myAddress, isOwner: isOwner),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget desktopBody(BuildContext context, WidgetRef ref) {
+    return AppCard(
+      padding: 8,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _VBTCImage(token: token),
+          SizedBox(
+            width: 16,
+          ),
+          _VBTCDetails(token: token, myAddress: myAddress, isOwner: isOwner),
+        ],
+      ),
+    );
+  }
+}
+
+class _VBTCDetails extends StatelessWidget {
+  const _VBTCDetails({
+    required this.token,
+    required this.myAddress,
+    required this.isOwner,
+  });
+
+  final BtcWebVbtcToken token;
+  final String? myAddress;
+  final bool isOwner;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _TokenDetailRefresher(
+            scId: token.scIdentifier,
+          ),
+          _DetailRow(
+            label: "Name",
+            value: token.name,
+          ),
+          _DetailRow(
+            label: "Description",
+            value: token.description,
+            inExpanded: true,
+            withMaxLines: BreakPoints.useMobileLayout(context),
+          ),
+          _DetailRow(
+            label: "Owner",
+            value: token.ownerAddress,
+            withCopy: true,
+          ),
+          _DetailRow(
+            label: "BTC Deposit Address",
+            value: token.depositAddress,
+            inExpanded: true,
+            withCopy: true,
+          ),
+          _DetailRow(
+            label: "Smart Contract ID",
+            value: token.scIdentifier,
+            inExpanded: true,
+            withCopy: true,
+          ),
+          if (myAddress != null)
+            _DetailRow(
+              label: "My Balance",
+              value: "${token.balanceForAddress(myAddress)} vBTC",
+            ),
+          if (isOwner)
+            _DetailRow(
+              label: "Token Total Balance",
+              value: "${token.globalBalance} vBTC",
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _VBTCImage extends StatelessWidget {
+  const _VBTCImage({
+    required this.token,
+  });
+
+  final BtcWebVbtcToken token;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: CachedNetworkImage(
+        imageUrl: token.imageUrl,
+        height: 200,
+        width: 200,
+        errorWidget: (context, _, __) {
+          return Image.asset(
+            Assets.images.vbtcPng.path,
+            width: 200,
+            height: 200,
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -408,11 +490,13 @@ class _DetailRow extends StatelessWidget {
   final String value;
   final bool withCopy;
   final bool inExpanded;
+  final bool withMaxLines;
   const _DetailRow({
     required this.label,
     required this.value,
     this.withCopy = false,
     this.inExpanded = false,
+    this.withMaxLines = false,
   });
 
   @override
@@ -431,7 +515,14 @@ class _DetailRow extends StatelessWidget {
           SizedBox(
             width: 6,
           ),
-          inExpanded ? Expanded(child: Text(value)) : Text(value),
+          inExpanded
+              ? Expanded(
+                  child: Text(
+                  value,
+                  maxLines: withMaxLines ? 3 : null,
+                  overflow: TextOverflow.ellipsis,
+                ))
+              : Text(value),
           SizedBox(
             width: 6,
           ),

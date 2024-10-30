@@ -226,7 +226,7 @@ class WebTransactionsCombinedList extends BaseComponent {
                   children: [
                     Container(
                       width: 4,
-                      height: 110,
+                      height: 42,
                       decoration: BoxDecoration(
                         color: AppColors.getBtc(),
                         borderRadius: BorderRadius.only(
