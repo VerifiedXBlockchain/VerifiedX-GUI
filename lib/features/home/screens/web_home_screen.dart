@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
+import '../../../core/components/open_explorer_modal.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
@@ -339,7 +340,11 @@ class _Actions extends BaseComponent {
                 icon: Icons.open_in_browser,
                 prettyIconType: PrettyIconType.custom,
                 onPressed: () {
-                  launchUrl(Uri.parse(Env.baseExplorerUrl));
+                  showModalBottomSheet(
+                    context: rootNavigatorKey.currentContext!,
+                    backgroundColor: Colors.black,
+                    builder: (context) => OpenExplorerModal(),
+                  );
                 },
               ),
 

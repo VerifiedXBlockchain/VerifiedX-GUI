@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../app.dart';
 import '../../../core/base_component.dart';
+import '../../../core/components/open_explorer_modal.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
@@ -97,7 +98,11 @@ class CommonActions extends BaseComponent {
                 icon: Icons.open_in_browser,
                 prettyIconType: PrettyIconType.custom,
                 onPressed: () {
-                  launchUrl(Uri.parse(Env.baseExplorerUrl));
+                  showModalBottomSheet(
+                    context: rootNavigatorKey.currentContext!,
+                    backgroundColor: Colors.black,
+                    builder: (context) => OpenExplorerModal(),
+                  );
                 },
               ),
             ],
