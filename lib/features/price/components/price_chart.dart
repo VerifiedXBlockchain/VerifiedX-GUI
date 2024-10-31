@@ -59,16 +59,30 @@ class WebPriceChartScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final mode = ref.watch(currencySegementedButtonProvider);
+
     return AppBar(
-      title: Text(isBtc ? "BTC Price History" : "VFX Price History"),
+      title: Text(mode == CurrencyType.btc ? "BTC Price History" : "VFX Price History"),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: CurrencySegementedButton(
+              includeAny: false,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    if (isBtc) {
+    final mode = ref.watch(currencySegementedButtonProvider);
+    if (mode == CurrencyType.btc) {
       return PriceChart(
         key: Key("btc_chart"),
         isBtc: true,

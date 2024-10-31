@@ -290,23 +290,22 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             if (!manager.verifyBalance()) {
               return;
             }
+            if (myAddress != null) {
+              final result = await showModalBottomSheet(
+                context: rootNavigatorKey.currentContext!,
+                builder: (context) {
+                  return _TransferSharesModal(
+                    forWithdrawl: false,
+                    token: token,
+                    thisAddress: myAddress,
+                  );
+                },
+              );
 
-            final toAddress = await manager.promptForAddress(title: "Transfer to");
-            if (toAddress == null) {
-              return;
+              if (result is _TransferShareModalResponse) {
+                final success = await manager.transferVbtcAmount(token, result.toAddress, result.amount);
+              }
             }
-
-            final amount = await manager.promptForAmount(title: "Amount to Transfer");
-            if (amount == null) {
-              return;
-            }
-
-            if (amount > myBalance) {
-              Toast.error("Your balance is insufficent.");
-              return;
-            }
-
-            final success = await manager.transferVbtcAmount(token, toAddress, amount);
           },
         ),
         AppButton(
@@ -334,11 +333,13 @@ class _TransferShareModalResponse {
 }
 
 class _TransferSharesModal extends BaseComponent {
-  final TokenizedBitcoin token;
+  final BtcWebVbtcToken token;
   final bool forWithdrawl;
+  final String thisAddress;
   _TransferSharesModal({
     required this.token,
     required this.forWithdrawl,
+    required this.thisAddress,
   });
 
   final TextEditingController toAddressController = TextEditingController();
@@ -377,17 +378,6 @@ class _TransferSharesModal extends BaseComponent {
                   ),
                 ),
               ),
-              // if (forWithdrawl)
-              //   TextFormField(
-              //     controller: fromAddressController,
-              //     readOnly: true,
-              //     decoration: InputDecoration(
-              //       label: Text(
-              //         "From VFX Address",
-              //         style: TextStyle(color: color),
-              //       ),
-              //     ),
-              //   ),
               TextFormField(
                 controller: amountControlller,
                 decoration: InputDecoration(
@@ -406,89 +396,6 @@ class _TransferSharesModal extends BaseComponent {
                 "This is a Multi-signature. The fee rate has been calculated for you.",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
-              // if (forWithdrawl)
-              //   Builder(
-              //     builder: (context) {
-              //       final state = ref.watch(vBtcOnboardProvider);
-
-              //       final recommendedFees = ref.watch(sessionProvider).btcRecommendedFees ?? BtcRecommendedFees.fallback();
-
-              //       switch (state.btcFeeRatePreset) {
-              //         case BtcFeeRatePreset.custom:
-              //           fee = 1;
-              //           break;
-              //         case BtcFeeRatePreset.minimum:
-              //           fee = recommendedFees.minimumFee;
-              //           break;
-              //         case BtcFeeRatePreset.economy:
-              //           fee = recommendedFees.economyFee;
-              //           break;
-              //         case BtcFeeRatePreset.hour:
-              //           fee = recommendedFees.hourFee;
-              //           break;
-              //         case BtcFeeRatePreset.halfHour:
-              //           fee = recommendedFees.halfHourFee;
-              //           break;
-              //         case BtcFeeRatePreset.fastest:
-              //           fee = recommendedFees.fastestFee;
-              //           break;
-              //       }
-
-              //       final feeBtc = satashiToBtcLabel(fee);
-              //       final feeEstimate = satashiTxFeeEstimate(fee);
-              //       final feeEstimateBtc = btcTxFeeEstimateLabel(fee);
-
-              //       return Column(
-              //         mainAxisSize: MainAxisSize.min,
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           ListTile(
-              //             contentPadding: EdgeInsets.zero,
-              //             leading: const SizedBox(width: 100, child: Text("Fee Rate:")),
-              //             title: Row(
-              //               children: [
-              //                 PopupMenuButton<BtcFeeRatePreset>(
-              //                   color: Color(0xFF080808),
-              //                   onSelected: (value) {
-              //                     ref.read(vBtcOnboardProvider.notifier).setBtcFeeRatePreset(value);
-              //                   },
-              //                   itemBuilder: (context) {
-              //                     return BtcFeeRatePreset.values.where((type) => type != BtcFeeRatePreset.custom).map((preset) {
-              //                       return PopupMenuItem(
-              //                         value: preset,
-              //                         child: Text(preset.label),
-              //                       );
-              //                     }).toList();
-              //                   },
-              //                   child: Row(
-              //                     mainAxisSize: MainAxisSize.min,
-              //                     children: [
-              //                       Text(
-              //                         state.btcFeeRatePreset.label,
-              //                         style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.btcOrange),
-              //                       ),
-              //                       Icon(
-              //                         Icons.arrow_drop_down,
-              //                         size: 24,
-              //                         color: Theme.of(context).colorScheme.btcOrange,
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //           SizedBox(
-              //             height: 8,
-              //           ),
-              //           Text(
-              //             "Fee Estimate: ~$feeEstimate SATS | ~$feeEstimateBtc BTC    ($fee SATS /byte | $feeBtc BTC /byte)",
-              //             style: Theme.of(context).textTheme.caption,
-              //           ),
-              //         ],
-              //       );
-              //     },
-              //   ),
               Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -510,13 +417,6 @@ class _TransferSharesModal extends BaseComponent {
                         print("Invalid To Address");
                         return;
                       }
-
-                      // final fromAddress = forWithdrawl ? fromAddressController.text.trim() : null;
-                      // if (forWithdrawl && fromAddress!.isEmpty) {
-                      //   print("Invalid From Address");
-                      //   return;
-                      // }
-
                       final amount = double.tryParse(amountControlller.text);
 
                       if (amount == null || amount <= 0) {
@@ -525,7 +425,7 @@ class _TransferSharesModal extends BaseComponent {
                       }
                       print("-----");
 
-                      if (amount > token.myBalance) {
+                      if (amount > token.balanceForAddress(thisAddress)) {
                         Toast.error("Not enough balance");
                         return;
                       }

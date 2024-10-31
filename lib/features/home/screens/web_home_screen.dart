@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
+import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/theme/pretty_icons.dart';
@@ -159,6 +160,7 @@ class WebHomeScreen extends BaseScreen {
                       actions: [
                         AppButton(
                           onPressed: () {
+                            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
                             Navigator.of(webDashboardScaffoldKey.currentContext!).push(
                               MaterialPageRoute(
                                 fullscreenDialog: true,
@@ -192,6 +194,7 @@ class WebHomeScreen extends BaseScreen {
                       actions: [
                         AppButton(
                           onPressed: () {
+                            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
                             Navigator.of(webDashboardScaffoldKey.currentContext!).push(
                               MaterialPageRoute(
                                 fullscreenDialog: true,
