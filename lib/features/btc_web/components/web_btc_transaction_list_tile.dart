@@ -286,7 +286,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                         child: Text(
                           "Inputs:",
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -340,7 +340,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                         child: Text(
                           "Outputs:",
                           style: TextStyle(
-                            color: Colors.white70,
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
