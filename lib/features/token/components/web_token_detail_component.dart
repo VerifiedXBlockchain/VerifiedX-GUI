@@ -166,10 +166,10 @@ class _TokenInfo extends StatelessWidget {
                   value: token.name,
                   copyable: true,
                 ),
-                if (token.initialSupply > 0)
+                if (!token.canMint)
                   TokenDetailRow(
-                    label: token.canMint ? 'Initial Issuance' : 'Fixed Supply',
-                    value: token.canMint ? "0.0" : "${token.initialSupply}",
+                    label: 'Fixed Supply',
+                    value: "${token.initialSupply}",
                   ),
                 // if (token.currentSupply > 0)
 

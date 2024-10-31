@@ -426,10 +426,10 @@ class TokenDetailsContent extends StatelessWidget {
                 value: token.name,
                 copyable: true,
               ),
-              if (token.startingSupply > 0)
+              if (!token.mintable)
                 TokenDetailRow(
-                  label: token.mintable ? 'Initial Issuance' : 'Fixed Supply',
-                  value: token.mintable ? "${token.startingSupply.toString()} " : "${(min(token.currentSupply, token.startingSupply))}",
+                  label: 'Fixed Supply',
+                  value: "${(min(token.currentSupply, token.startingSupply))}",
                 ),
               // if (token.currentSupply > 0)
 
