@@ -11,6 +11,8 @@ import '../../features/btc_web/services/btc_web_service.dart';
 import '../../features/keygen/models/ra_keypair.dart';
 import '../../features/nft/providers/minted_nft_list_provider.dart';
 import 'package:collection/collection.dart';
+import '../../features/web/models/multi_account_instance.dart';
+import '../../features/web/providers/multi_account_provider.dart';
 import '../../features/web/providers/web_selected_account_provider.dart';
 import '../models/web_session_model.dart';
 import '../../features/transactions/providers/web_transaction_list_provider.dart';
@@ -115,6 +117,13 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
     refreshBtcBalanceInfo();
 
+    ref.read(multiAccountProvider.notifier).add(
+          keypair: keypair,
+          raKeypair: raKeypair,
+          btcKeypair: btcKeyPair,
+          setAsCurrent: true,
+        );
+
     loop();
 
     // ref.read(webTransactionListProvider(keypair.address).notifier).init();
@@ -125,6 +134,30 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   //   ref.read(mintedNftListProvider.notifier).load(1);
   //   ref.read(nftListProvider.notifier).load(1);
   // }
+
+  void setMultiAccountInstance(MultiAccountInstance account) {
+    state = state.copyWith(
+      keypair: account.keypair,
+      raKeypair: account.raKeypair,
+      btcKeypair: account.btcKeypair,
+    );
+
+    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
+
+    if (rememberMe) {
+      if (account.keypair != null) {
+        singleton<Storage>().setMap(Storage.WEB_KEYPAIR, account.keypair!.toJson());
+      }
+      if (account.raKeypair != null) {
+        singleton<Storage>().setMap(Storage.WEB_RA_KEYPAIR, account.raKeypair!.toJson());
+      }
+      if (account.btcKeypair != null) {
+        singleton<Storage>().setMap(Storage.WEB_BTC_KEYPAIR, account.btcKeypair!.toJson());
+      }
+    }
+
+    loop();
+  }
 
   void setSelectedWalletType(WalletType type, [bool save = true]) {
     state = state.copyWith(selectedWalletType: type);

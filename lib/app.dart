@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/breakpoints.dart';
 import 'core/theme/colors.dart';
 import 'features/root/navigation/components/web_drawer.dart';
+import 'features/web/providers/multi_account_provider.dart';
 import 'main.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 import 'core/base_component.dart';
@@ -47,6 +48,8 @@ class App extends ConsumerWidget {
     // print("App Build");
 
     if (kIsWeb) {
+      ref.read(multiAccountProvider.notifier);
+      ref.read(selectedMultiAccountProvider.notifier);
       ref.read(webSessionProvider.notifier);
 
       return const AppContainer();

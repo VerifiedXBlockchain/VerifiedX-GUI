@@ -6,6 +6,7 @@ class ModalContainer extends StatelessWidget {
   final bool withClose;
   final bool withDecor;
   final double padding;
+  final String? title;
   const ModalContainer({
     Key? key,
     this.color = const Color(0xFF0b0d0f),
@@ -13,6 +14,7 @@ class ModalContainer extends StatelessWidget {
     this.withClose = false,
     this.withDecor = true,
     this.padding = 32.0,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -27,20 +29,33 @@ class ModalContainer extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (withClose)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          "Close",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ],
+                if (withClose || title != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6.0),
+                    child: Row(
+                      mainAxisAlignment: withClose && title != null
+                          ? MainAxisAlignment.spaceBetween
+                          : title != null
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
+                      children: [
+                        if (title != null)
+                          Text(
+                            title!,
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                        if (withClose)
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              "Close",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ...children,
                 SizedBox(

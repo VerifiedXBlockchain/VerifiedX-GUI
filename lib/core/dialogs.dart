@@ -579,7 +579,7 @@ class AuthModal {
               onPressed: () {
                 submit(context);
               },
-              child: Text(forCreate ? "Create" : "Login", style: TextStyle(color: Theme.of(context).colorScheme.info)),
+              child: Text("Login", style: TextStyle(color: Theme.of(context).colorScheme.info)),
             )
           ],
         );

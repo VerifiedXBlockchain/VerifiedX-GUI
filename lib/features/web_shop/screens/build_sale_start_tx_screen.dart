@@ -92,7 +92,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                               context: context,
                               forCreate: false,
                               onValidSubmission: (auth) async {
-                                await handleCreateWithEmail(context, ref, auth.email, auth.password, false);
+                                await handleCreateWithEmail(context, ref, auth.email, auth.password, forCreate: false);
 
                                 if (ref.read(webSessionProvider).isAuthenticated) {
                                   // redirectToDashboard();
