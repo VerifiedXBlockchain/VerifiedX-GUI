@@ -242,7 +242,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
 
     if (supplyController.text == '0' || state.mintable) {
       final premintAmount = await PromptModal.show(
-        title: "Pre Mint Initial Issuance? (Opotonal)",
+        title: "Pre Mint Initial Issuance? (Optional)",
         validator: (v) {
           return null;
         },
