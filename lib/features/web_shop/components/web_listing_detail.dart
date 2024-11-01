@@ -707,10 +707,11 @@ class _Properties extends StatelessWidget {
                 .map((p) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 2),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 2),
+                            padding: const EdgeInsets.only(top: 4),
                             child: Builder(builder: (context) {
                               switch (p.type) {
                                 case ScPropertyType.color:
@@ -726,7 +727,7 @@ class _Properties extends StatelessWidget {
                               }
                             }),
                           ),
-                          Text(" ${p.name}: ${p.value}"),
+                          Expanded(child: Text(" ${p.name}: ${p.value}")),
                         ],
                       ),
                     ))

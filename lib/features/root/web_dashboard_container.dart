@@ -312,17 +312,20 @@ class _ContentWrapper extends BaseComponent {
                                   final raBalance = ref.watch(webSessionProvider.select((value) => value.raBalance));
                                   final adnr = ref.watch(webSessionProvider.select((value) => value.adnr));
 
-                                  final vfxIdString = adnr != null ? "${vfxKeypair?.address ?? ""} | @$adnr" : vfxKeypair?.address ?? "";
+                                  final vfxBalanceString = adnr != null ? "${vfxBalance ?? ""} VFX | @$adnr" : "${(vfxBalance ?? 0).toString()} VFX";
                                   final btcKeypair = ref.watch(webSessionProvider.select((value) => value.btcKeypair));
                                   final btcBalance = ref.watch(webSessionProvider.select((value) => value.btcBalanceInfo?.btcBalance));
+                                  final btcBalanceString = btcKeypair?.adnr != null
+                                      ? "${btcBalance ?? ""} BTC | @${btcKeypair!.adnr!}"
+                                      : "${(btcBalance ?? 0).toString()} BTC";
                                   return Column(
                                     children: [
                                       if (vfxKeypair != null)
                                         _WalletListItem(
-                                          address: vfxIdString,
+                                          address: vfxKeypair.address,
                                           keypair: vfxKeypair,
                                           label: "VFX",
-                                          balance: "${vfxBalance ?? 0} VFX",
+                                          balance: vfxBalanceString,
                                           color: AppColors.getBlue(),
                                           onMenuOpen: () {
                                             setState(() {
@@ -363,7 +366,7 @@ class _ContentWrapper extends BaseComponent {
                                             address: btcKeypair.address,
                                             btcKeypair: btcKeypair,
                                             label: "BTC",
-                                            balance: "${btcBalance ?? 0} BTC",
+                                            balance: btcBalanceString,
                                             color: AppColors.getBtc(),
                                             onMenuOpen: () {
                                               setState(() {
