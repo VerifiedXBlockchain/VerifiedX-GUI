@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/features/btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import 'package:rbx_wallet/features/home/components/home_buttons/backup_button.dart';
 import '../../app.dart';
 import '../../core/app_constants.dart';
 import '../../core/components/buttons.dart';
@@ -385,23 +386,31 @@ class _ContentWrapper extends BaseComponent {
                                       ),
                                       Opacity(
                                         opacity: 0.7,
-                                        child: AppButton(
-                                          label: "Sign Out",
-                                          icon: Icons.logout,
-                                          onPressed: () async {
-                                            final confirmed = await ConfirmDialog.show(
-                                              title: "Sign Out",
-                                              body: "Are you sure you want to logout of the VFX Web Wallet?",
-                                              destructive: true,
-                                              confirmText: "Logout",
-                                              cancelText: "Cancel",
-                                            );
-                                            if (confirmed == true) {
-                                              await ref.read(webSessionProvider.notifier).logout();
+                                        child: Row(
+                                          children: [
+                                            BackupButton(),
+                                            SizedBox(
+                                              width: 8,
+                                            ),
+                                            AppButton(
+                                              label: "Sign Out",
+                                              icon: Icons.logout,
+                                              onPressed: () async {
+                                                final confirmed = await ConfirmDialog.show(
+                                                  title: "Sign Out",
+                                                  body: "Are you sure you want to logout of the VFX Web Wallet?",
+                                                  destructive: true,
+                                                  confirmText: "Logout",
+                                                  cancelText: "Cancel",
+                                                );
+                                                if (confirmed == true) {
+                                                  await ref.read(webSessionProvider.notifier).logout();
 
-                                              AutoRouter.of(context).replace(const WebAuthRouter());
-                                            }
-                                          },
+                                                  AutoRouter.of(context).replace(const WebAuthRouter());
+                                                }
+                                              },
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
