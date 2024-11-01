@@ -119,121 +119,15 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
           WebWalletWordWordmark(),
 
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppButton(
-                label: "Create account",
-                icon: Icons.add,
-                onPressed: () {
-                  // AuthModal.show(
-                  //     context: context,
-                  //     onValidSubmission: (auth) async {
-                  //       await handleCreateWithEmail(
-                  //         context,
-                  //         ref,
-                  //         auth.email,
-                  //         auth.password,
-                  //       );
-                  //       if (ref.read(webSessionProvider).isAuthenticated) {
-                  //         redirectToDashboard();
-                  //       }
-                  //     });
-
-                  showModalBottomSheet(
-                    backgroundColor: Colors.transparent,
-                    context: context,
-                    builder: (context) {
-                      return AuthTypeModal(
-                        handleMneumonic: () async {
-                          final success = await ConfirmDialog.show(title: 'Mneumonic', body: 'Are you sure you want to create a Mneumonic account?');
-                          if (success == true) {
-                            await handleCreateWithMnemonic(context, ref);
-                            if (ref.read(webSessionProvider).isAuthenticated) {
-                              redirectToDashboard();
-                            }
-                          }
-                        },
-                        handleUsername: () {
-                          AuthModal.show(
-                              context: context,
-                              onValidSubmission: (auth) async {
-                                await handleCreateWithEmail(
-                                  context,
-                                  ref,
-                                  auth.email,
-                                  auth.password,
-                                );
-                                if (ref.read(webSessionProvider).isAuthenticated) {
-                                  redirectToDashboard();
-                                }
-                              });
-                        },
-                      );
-                    },
-                  );
-                },
-                variant: AppColorVariant.Light,
-              ),
-              const SizedBox(width: 8),
-              AppButton(
-                label: "Login",
-                icon: Icons.upload,
-                onPressed: () {
-                  // AuthModal.show(
-                  //   context: context,
-                  //   forCreate: false,
-                  //   onValidSubmission: (auth) async {
-                  //     await handleCreateWithEmail(context, ref, auth.email, auth.password, false);
-
-                  //     if (ref.read(webSessionProvider).isAuthenticated) {
-                  //       redirectToDashboard();
-                  //     }
-                  //   },
-                  // );
-
-                  showModalBottomSheet(
-                    backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-                    context: context,
-                    builder: (context) {
-                      return AuthTypeModal(
-                        handleMneumonic: () async {
-                          await handleRecoverFromMnemonic(context, ref);
-
-                          if (ref.read(webSessionProvider).isAuthenticated) {
-                            redirectToDashboard();
-                          }
-
-                          //do stuff
-                        },
-                        handleUsername: () {
-                          AuthModal.show(
-                            context: context,
-                            forCreate: false,
-                            onValidSubmission: (auth) async {
-                              await handleCreateWithEmail(context, ref, auth.email, auth.password, false);
-
-                              if (ref.read(webSessionProvider).isAuthenticated) {
-                                redirectToDashboard();
-                              }
-                            },
-                          );
-                        },
-                        handlePrivateKey: (context) async {
-                          await handleImportWithPrivateKey(context, ref).then((value) {
-                            if (ref.read(webSessionProvider).isAuthenticated) {
-                              redirectToDashboard();
-                            }
-                          });
-                          // await Future.delayed(const Duration(milliseconds: 300));
-                        },
-                      );
-                    },
-                  );
-                },
-                variant: AppColorVariant.Light,
-              ),
-            ],
+          AppButton(
+            label: "Login",
+            icon: Icons.upload,
+            onPressed: () {
+              showWebLoginModal(context, ref, allowPrivateKey: true, showRememberMe: true, onSuccess: () {
+                redirectToDashboard();
+              });
+            },
+            variant: AppColorVariant.Light,
           ),
           if (keypair != null)
             Padding(

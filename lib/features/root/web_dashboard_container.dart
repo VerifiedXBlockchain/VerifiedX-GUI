@@ -22,6 +22,7 @@ import '../navigation/components/root_container_side_nav.dart';
 import '../navigation/root_container.dart';
 import '../transactions/models/web_transaction.dart';
 import '../wallet/utils.dart';
+import '../web/components/web_multi_account_selector.dart';
 import '../web/providers/all_btc_addresses_provider.dart';
 import '../web/providers/web_latest_block_provider.dart';
 import '../../generated/assets.gen.dart';
@@ -162,13 +163,22 @@ class _ContentWrapper extends BaseComponent {
                       duration: ROOT_CONTAINER_TRANSITION_DURATION,
                       width: sideNavExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED,
                       curve: ROOT_CONTAINER_TRANSITION_CURVE,
-                      child: RootContainerSideNav(
-                          isExpanded: sideNavExpanded,
-                          onToggleExpanded: () {
-                            setState(() {
-                              sideNavExpanded = !sideNavExpanded;
-                            });
-                          }),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 15),
+                            child: WebMultiAccountSelector(expanded: sideNavExpanded),
+                          ),
+                          RootContainerSideNav(
+                              isExpanded: sideNavExpanded,
+                              onToggleExpanded: () {
+                                setState(() {
+                                  sideNavExpanded = !sideNavExpanded;
+                                });
+                              }),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -1126,7 +1136,6 @@ class _WalletListItem extends StatelessWidget {
                     private: btcKeypair!.privateKey,
                     address: btcKeypair!.address,
                     public: btcKeypair!.publicKey,
-                    mneumonic: btcKeypair!.mnemonic,
                     btcWif: btcKeypair!.wif,
                   );
                   showKeys(context, kp, true);

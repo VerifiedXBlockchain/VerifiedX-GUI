@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/theme/components.dart';
 import '../../core/env.dart';
 import '../btc_web/models/btc_web_account.dart';
 import '../btc_web/services/btc_web_service.dart';
@@ -26,15 +27,24 @@ import '../../core/providers/web_session_provider.dart';
 import '../../core/web_router.gr.dart';
 import '../global_loader/global_loading_provider.dart';
 import '../keygen/models/keypair.dart';
+import '../smart_contracts/components/sc_creator/common/modal_container.dart';
+import 'components/auth_type_modal.dart';
 
-Future<void> login(BuildContext context, WidgetRef ref, Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeypair) async {
+Future<void> login(
+  BuildContext context,
+  WidgetRef ref,
+  Keypair keypair,
+  RaKeypair? raKeypair,
+  BtcWebAccount? btcKeypair,
+) async {
   ref.read(webSessionProvider.notifier).login(keypair, raKeypair, btcKeypair);
 }
 
 Future<void> handleImportWithPrivateKey(
   BuildContext context,
-  WidgetRef ref,
-) async {
+  WidgetRef ref, {
+  bool showRememberMe = true,
+}) async {
   final privateKey = await PromptModal.show(
     contextOverride: context,
     tightPadding: true,
@@ -44,7 +54,9 @@ Future<void> handleImportWithPrivateKey(
   );
 
   if (privateKey != null) {
-    await handleRememberMe(context, ref);
+    if (showRememberMe) {
+      await handleRememberMe(context, ref);
+    }
     final keypair = await KeygenService.importPrivateKey(privateKey);
 
     RaKeypair? reserveKeyPair;
@@ -78,9 +90,10 @@ Future<void> handleCreateWithEmail(
   BuildContext context,
   WidgetRef ref,
   String emailValue,
-  String passwordValue, [
+  String passwordValue, {
   bool forCreate = true,
-]) async {
+  bool showRememberMe = true,
+}) async {
   String email = emailValue.toLowerCase();
   String password = passwordValue;
 
@@ -150,7 +163,9 @@ Future<void> handleCreateWithEmail(
   }
 
   // await TransactionService().createWallet(email, keypair.address);
-  await handleRememberMe(context, ref);
+  if (showRememberMe) {
+    await handleRememberMe(context, ref);
+  }
 
   await login(context, ref, keypair.copyWith(email: email), reserveKeyPair, btcKeypair);
 
@@ -165,8 +180,9 @@ Future<void> handleCreateWithEmail(
 
 Future<void> handleCreateWithMnemonic(
   BuildContext context,
-  WidgetRef ref,
-) async {
+  WidgetRef ref, {
+  bool showRememberMe = true,
+}) async {
   ref.read(globalLoadingProvider.notifier).start();
 
   await Future.delayed(const Duration(milliseconds: 300));
@@ -206,7 +222,9 @@ Future<void> handleCreateWithMnemonic(
   ref.read(globalLoadingProvider.notifier).complete();
 
   // await TransactionService().createWallet(null, keypair.address);
-
+  if (showRememberMe) {
+    await handleRememberMe(context, ref);
+  }
   login(context, ref, keypair, reserveKeyPair, btcKeypair);
   await showKeys(context, keypair);
 }
@@ -257,7 +275,7 @@ Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
       });
 }
 
-Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref) async {
+Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref, {bool showRememberMe = true}) async {
   final value = await PromptModal.show(
     contextOverride: context,
     title: "Input Recovery Mnemonic",
@@ -268,7 +286,9 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref) a
   );
 
   if (value != null) {
-    await handleRememberMe(context, ref);
+    if (showRememberMe) {
+      await handleRememberMe(context, ref);
+    }
     RaKeypair? reserveKeyPair;
     ref.read(globalLoadingProvider.notifier).start();
 
@@ -590,6 +610,101 @@ Future<void> showRaKeys(
             ],
           ),
         ),
+      );
+    },
+  );
+}
+
+showWebLoginModal(
+  BuildContext context,
+  WidgetRef ref, {
+  required bool allowPrivateKey,
+  required VoidCallback onSuccess,
+  bool showRememberMe = true,
+}) {
+  showModalBottomSheet(
+    backgroundColor: Colors.transparent,
+    context: context,
+    builder: (context) {
+      return AuthTypeModal(
+        handleMneumonic: () async {
+          final kind = await showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return ModalContainer(
+                withClose: true,
+                children: [
+                  AppCard(
+                    padding: 0,
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop("new");
+                      },
+                      title: Text("Create New Mnumonic"),
+                      trailing: Icon(Icons.chevron_right),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  AppCard(
+                    padding: 0,
+                    child: ListTile(
+                      title: Text("Recover From  Mnumonic"),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.of(context).pop("recover");
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+
+          if (kind == 'new') {
+            final success = await ConfirmDialog.show(title: 'Mneumonic', body: 'Are you sure you want to create a Mneumonic account?');
+            if (success == true) {
+              await handleCreateWithMnemonic(context, ref, showRememberMe: showRememberMe);
+              if (ref.read(webSessionProvider).isAuthenticated) {
+                onSuccess();
+              }
+            }
+          }
+
+          if (kind == 'recover') {
+            await handleRecoverFromMnemonic(context, ref);
+            if (ref.read(webSessionProvider).isAuthenticated) {
+              onSuccess();
+            }
+          }
+        },
+        handleUsername: () {
+          AuthModal.show(
+              context: context,
+              onValidSubmission: (auth) async {
+                await handleCreateWithEmail(
+                  context,
+                  ref,
+                  auth.email,
+                  auth.password,
+                  showRememberMe: showRememberMe,
+                );
+                if (ref.read(webSessionProvider).isAuthenticated) {
+                  onSuccess();
+                }
+              });
+        },
+        handlePrivateKey: allowPrivateKey
+            ? (context) async {
+                await handleImportWithPrivateKey(context, ref, showRememberMe: showRememberMe).then((value) {
+                  if (ref.read(webSessionProvider).isAuthenticated) {
+                    onSuccess();
+                  }
+                });
+                // await Future.delayed(const Duration(milliseconds: 300));
+              }
+            : null,
       );
     },
   );

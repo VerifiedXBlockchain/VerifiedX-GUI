@@ -20,7 +20,7 @@ class AuthTypeModal extends StatelessWidget {
       withDecor: false,
       withClose: false,
       padding: 16.0,
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      // color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
       children: [
         ListTile(
           leading: const Icon(Icons.email),
