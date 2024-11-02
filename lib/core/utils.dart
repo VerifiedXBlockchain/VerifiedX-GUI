@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html' as html;
 import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
@@ -11,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
+import 'package:rbx_wallet/utils/html_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../features/btc/services/btc_service.dart';
 import '../features/transactions/models/transaction.dart';
@@ -106,33 +106,7 @@ Future<bool> backupWebKeys(BuildContext context, WidgetRef ref) async {
 
     List<int> bytes = utf8.encode(output);
 
-    final _base64 = base64Encode(bytes);
-    // Create the link with the file
-    final anchor = html.AnchorElement(href: 'data:application/octet-stream;base64,$_base64')..target = 'blank';
-    // add the name
-    final date = DateTime.now();
-    final d = "${date.year}-${date.month}-${date.day}";
-    final name = "vfx-keys-backup-$d.txt";
-
-    anchor.download = name;
-
-    // trigger download
-    html.document.body!.append(anchor);
-    anchor.click();
-    anchor.remove();
-
-    // launchUrl(Uri.parse("data:application/octet-stream;base64,${base64Encode(bytes)}"));
-
-    // final date = DateTime.now();
-    // final d = "${date.year}-${date.month}-${date.day}";
-    // if (Platform.isMacOS) {
-    //   await FileSaver.instance.saveAs(name: "vfx-keys-backup-$d", bytes: Uint8List.fromList(bytes), ext: 'txt', mimeType: MimeType.text);
-    // } else {
-    //   final data =
-    //       await FileSaver.instance.saveFile(name: "vfx-keys-backup-$d", bytes: Uint8List.fromList(bytes), ext: 'txt', mimeType: MimeType.text);
-    //   Toast.message("Saved to $data");
-    // }
-
+    HtmlHelpers().downloadKeysWeb(bytes);
     return true;
   } catch (e) {
     print("Error on backupKeys");
