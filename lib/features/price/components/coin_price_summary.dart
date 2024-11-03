@@ -69,9 +69,9 @@ class _CoinPriceSummaryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isUp = data.percentChange1h > 0 && data.percentChange1h != 0;
-    final isDown = data.percentChange1h < 0 && data.percentChange1h != 0;
-    final noChange = data.percentChange1h == 0;
+    final isUp = data.percentChange24h > 0 && data.percentChange24h != 0;
+    final isDown = data.percentChange24h < 0 && data.percentChange24h != 0;
+    final noChange = data.percentChange24h == 0;
 
     late final IconData changeIconData;
     late final Color changeColor;
@@ -79,15 +79,15 @@ class _CoinPriceSummaryContent extends StatelessWidget {
     if (isUp) {
       changeIconData = Icons.arrow_drop_up;
       changeColor = AppColors.getSpringGreen();
-      changeTooltip = "${data.percentChange1h.toStringAsFixed(2)}% (1h)";
+      changeTooltip = "${data.percentChange24h.toStringAsFixed(2)}% (24h)";
     } else if (isDown) {
       changeIconData = Icons.arrow_drop_down;
       changeColor = Colors.red.shade700;
-      changeTooltip = "${(-data.percentChange1h).toStringAsFixed(2)}% (1h)";
+      changeTooltip = "${(-data.percentChange24h).toStringAsFixed(2)}% (24h)";
     } else {
       changeIconData = Icons.refresh;
       changeColor = Theme.of(context).colorScheme.warning;
-      changeTooltip = "0% (1h)";
+      changeTooltip = "0% (24h)";
     }
 
     return SingleChildScrollView(

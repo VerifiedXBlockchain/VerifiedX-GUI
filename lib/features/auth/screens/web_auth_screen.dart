@@ -120,7 +120,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
 
           const SizedBox(height: 16),
           AppButton(
-            label: "Login",
+            label: "Login / Create Account",
             icon: Icons.upload,
             onPressed: () {
               showWebLoginModal(context, ref, allowPrivateKey: true, showRememberMe: true, onSuccess: () {

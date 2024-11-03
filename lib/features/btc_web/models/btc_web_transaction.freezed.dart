@@ -20,9 +20,7 @@ BtcWebTransaction _$BtcWebTransactionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$BtcWebTransaction {
-  String get txid =>
-      throw _privateConstructorUsedError; // required int version,
-// required int locktime,
+  String get txid => throw _privateConstructorUsedError;
   List<BtcWebVin> get vin => throw _privateConstructorUsedError;
   List<BtcWebVout> get vout => throw _privateConstructorUsedError;
   int get size => throw _privateConstructorUsedError;
@@ -209,11 +207,7 @@ class _$_BtcWebTransaction extends _BtcWebTransaction {
 
   @override
   final String txid;
-// required int version,
-// required int locktime,
   final List<BtcWebVin> _vin;
-// required int version,
-// required int locktime,
   @override
   List<BtcWebVin> get vin {
     if (_vin is EqualUnmodifiableListView) return _vin;
@@ -300,8 +294,7 @@ abstract class _BtcWebTransaction extends BtcWebTransaction {
 
   @override
   String get txid;
-  @override // required int version,
-// required int locktime,
+  @override
   List<BtcWebVin> get vin;
   @override
   List<BtcWebVout> get vout;
