@@ -25,8 +25,9 @@ mixin _$PriceData {
   @JsonKey(name: 'usdt_price')
   double get usdtPrice => throw _privateConstructorUsedError;
   @JsonKey(name: 'volume_24h')
-  double get volume24h =>
-      throw _privateConstructorUsedError; // @JsonKey(name: 'percent_change_1h') required double percentChange1h,
+  double get volume24h => throw _privateConstructorUsedError;
+  @JsonKey(name: 'percent_change_1h')
+  double? get percentChange1h => throw _privateConstructorUsedError;
   @JsonKey(name: 'percent_change_24h')
   double get percentChange24h =>
       throw _privateConstructorUsedError; // @JsonKey(name: 'percent_change_7d') required double percentChange7d,
@@ -51,6 +52,7 @@ abstract class $PriceDataCopyWith<$Res> {
       {@JsonKey(name: 'coin_type') String coinType,
       @JsonKey(name: 'usdt_price') double usdtPrice,
       @JsonKey(name: 'volume_24h') double volume24h,
+      @JsonKey(name: 'percent_change_1h') double? percentChange1h,
       @JsonKey(name: 'percent_change_24h') double percentChange24h,
       @JsonKey(name: 'last_updated') DateTime lastUpdated});
 }
@@ -71,6 +73,7 @@ class _$PriceDataCopyWithImpl<$Res, $Val extends PriceData>
     Object? coinType = null,
     Object? usdtPrice = null,
     Object? volume24h = null,
+    Object? percentChange1h = freezed,
     Object? percentChange24h = null,
     Object? lastUpdated = null,
   }) {
@@ -87,6 +90,10 @@ class _$PriceDataCopyWithImpl<$Res, $Val extends PriceData>
           ? _value.volume24h
           : volume24h // ignore: cast_nullable_to_non_nullable
               as double,
+      percentChange1h: freezed == percentChange1h
+          ? _value.percentChange1h
+          : percentChange1h // ignore: cast_nullable_to_non_nullable
+              as double?,
       percentChange24h: null == percentChange24h
           ? _value.percentChange24h
           : percentChange24h // ignore: cast_nullable_to_non_nullable
@@ -110,6 +117,7 @@ abstract class _$$_PriceDataCopyWith<$Res> implements $PriceDataCopyWith<$Res> {
       {@JsonKey(name: 'coin_type') String coinType,
       @JsonKey(name: 'usdt_price') double usdtPrice,
       @JsonKey(name: 'volume_24h') double volume24h,
+      @JsonKey(name: 'percent_change_1h') double? percentChange1h,
       @JsonKey(name: 'percent_change_24h') double percentChange24h,
       @JsonKey(name: 'last_updated') DateTime lastUpdated});
 }
@@ -128,6 +136,7 @@ class __$$_PriceDataCopyWithImpl<$Res>
     Object? coinType = null,
     Object? usdtPrice = null,
     Object? volume24h = null,
+    Object? percentChange1h = freezed,
     Object? percentChange24h = null,
     Object? lastUpdated = null,
   }) {
@@ -144,6 +153,10 @@ class __$$_PriceDataCopyWithImpl<$Res>
           ? _value.volume24h
           : volume24h // ignore: cast_nullable_to_non_nullable
               as double,
+      percentChange1h: freezed == percentChange1h
+          ? _value.percentChange1h
+          : percentChange1h // ignore: cast_nullable_to_non_nullable
+              as double?,
       percentChange24h: null == percentChange24h
           ? _value.percentChange24h
           : percentChange24h // ignore: cast_nullable_to_non_nullable
@@ -163,6 +176,7 @@ class _$_PriceData extends _PriceData {
       {@JsonKey(name: 'coin_type') required this.coinType,
       @JsonKey(name: 'usdt_price') required this.usdtPrice,
       @JsonKey(name: 'volume_24h') required this.volume24h,
+      @JsonKey(name: 'percent_change_1h') this.percentChange1h,
       @JsonKey(name: 'percent_change_24h') required this.percentChange24h,
       @JsonKey(name: 'last_updated') required this.lastUpdated})
       : super._();
@@ -179,7 +193,9 @@ class _$_PriceData extends _PriceData {
   @override
   @JsonKey(name: 'volume_24h')
   final double volume24h;
-// @JsonKey(name: 'percent_change_1h') required double percentChange1h,
+  @override
+  @JsonKey(name: 'percent_change_1h')
+  final double? percentChange1h;
   @override
   @JsonKey(name: 'percent_change_24h')
   final double percentChange24h;
@@ -193,7 +209,7 @@ class _$_PriceData extends _PriceData {
 
   @override
   String toString() {
-    return 'PriceData(coinType: $coinType, usdtPrice: $usdtPrice, volume24h: $volume24h, percentChange24h: $percentChange24h, lastUpdated: $lastUpdated)';
+    return 'PriceData(coinType: $coinType, usdtPrice: $usdtPrice, volume24h: $volume24h, percentChange1h: $percentChange1h, percentChange24h: $percentChange24h, lastUpdated: $lastUpdated)';
   }
 
   @override
@@ -207,6 +223,8 @@ class _$_PriceData extends _PriceData {
                 other.usdtPrice == usdtPrice) &&
             (identical(other.volume24h, volume24h) ||
                 other.volume24h == volume24h) &&
+            (identical(other.percentChange1h, percentChange1h) ||
+                other.percentChange1h == percentChange1h) &&
             (identical(other.percentChange24h, percentChange24h) ||
                 other.percentChange24h == percentChange24h) &&
             (identical(other.lastUpdated, lastUpdated) ||
@@ -216,7 +234,7 @@ class _$_PriceData extends _PriceData {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, coinType, usdtPrice, volume24h,
-      percentChange24h, lastUpdated);
+      percentChange1h, percentChange24h, lastUpdated);
 
   @JsonKey(ignore: true)
   @override
@@ -240,6 +258,8 @@ abstract class _PriceData extends PriceData {
           required final double usdtPrice,
       @JsonKey(name: 'volume_24h')
           required final double volume24h,
+      @JsonKey(name: 'percent_change_1h')
+          final double? percentChange1h,
       @JsonKey(name: 'percent_change_24h')
           required final double percentChange24h,
       @JsonKey(name: 'last_updated')
@@ -258,7 +278,10 @@ abstract class _PriceData extends PriceData {
   @override
   @JsonKey(name: 'volume_24h')
   double get volume24h;
-  @override // @JsonKey(name: 'percent_change_1h') required double percentChange1h,
+  @override
+  @JsonKey(name: 'percent_change_1h')
+  double? get percentChange1h;
+  @override
   @JsonKey(name: 'percent_change_24h')
   double get percentChange24h;
   @override // @JsonKey(name: 'percent_change_7d') required double percentChange7d,

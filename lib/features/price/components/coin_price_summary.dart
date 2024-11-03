@@ -69,25 +69,29 @@ class _CoinPriceSummaryContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isUp = data.percentChange24h > 0 && data.percentChange24h != 0;
-    final isDown = data.percentChange24h < 0 && data.percentChange24h != 0;
-    final noChange = data.percentChange24h == 0;
+    final percentChange = data.percentChange1h ?? data.percentChange24h;
 
-    late final IconData changeIconData;
+    final is24Hour = data.percentChange1h == null;
+
+    final isUp = percentChange > 0 && percentChange != 0;
+    final isDown = percentChange < 0 && percentChange != 0;
+    final noChange = percentChange == 0;
+
+    late final IconData? changeIconData;
     late final Color changeColor;
     late final String changeTooltip;
     if (isUp) {
       changeIconData = Icons.arrow_drop_up;
       changeColor = AppColors.getSpringGreen();
-      changeTooltip = "${data.percentChange24h.toStringAsFixed(2)}% (24h)";
+      changeTooltip = "${percentChange.toStringAsFixed(2)}% (${is24Hour ? 24 : 1}h)";
     } else if (isDown) {
       changeIconData = Icons.arrow_drop_down;
       changeColor = Colors.red.shade700;
-      changeTooltip = "${(-data.percentChange24h).toStringAsFixed(2)}% (24h)";
+      changeTooltip = "${(-percentChange).toStringAsFixed(2)}% (${is24Hour ? 24 : 1}h)";
     } else {
-      changeIconData = Icons.refresh;
-      changeColor = Theme.of(context).colorScheme.warning;
-      changeTooltip = "0% (24h)";
+      changeIconData = null;
+      changeColor = Colors.white.withOpacity(0.9);
+      changeTooltip = "0% (${is24Hour ? 24 : 1}h)";
     }
 
     return SingleChildScrollView(
@@ -143,17 +147,22 @@ class _CoinPriceSummaryContent extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(
-                  changeIconData,
-                  color: changeColor,
-                  size: 48,
-                  shadows: [
-                    Shadow(
-                      color: Colors.white38,
-                      blurRadius: 32,
-                    )
-                  ],
-                ),
+                if (changeIconData != null)
+                  Icon(
+                    changeIconData,
+                    color: changeColor,
+                    size: 48,
+                    shadows: [
+                      Shadow(
+                        color: Colors.white38,
+                        blurRadius: 32,
+                      )
+                    ],
+                  ),
+                if (changeIconData == null)
+                  SizedBox(
+                    width: 48,
+                  ),
                 Transform.translate(
                   offset: Offset(-6, 0),
                   child: Text(

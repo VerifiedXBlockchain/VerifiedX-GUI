@@ -11,7 +11,7 @@ class PriceData with _$PriceData {
     @JsonKey(name: 'coin_type') required String coinType,
     @JsonKey(name: 'usdt_price') required double usdtPrice,
     @JsonKey(name: 'volume_24h') required double volume24h,
-    // @JsonKey(name: 'percent_change_1h') required double percentChange1h,
+    @JsonKey(name: 'percent_change_1h') double? percentChange1h,
     @JsonKey(name: 'percent_change_24h') required double percentChange24h,
     // @JsonKey(name: 'percent_change_7d') required double percentChange7d,
     // @JsonKey(name: 'percent_change_30d') required double percentChange30d,
