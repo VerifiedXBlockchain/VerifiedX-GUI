@@ -24,7 +24,8 @@ class WebSendScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final isMobile = BreakPoints.useMobileLayout(context);
-    final isBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
+    final isBtc = ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
+
     return AppBar(
       leading: isMobile ? WebMobileDrawerButton() : null,
       title: isBtc ? Text("Send BTC") : Text("Send VFX"),

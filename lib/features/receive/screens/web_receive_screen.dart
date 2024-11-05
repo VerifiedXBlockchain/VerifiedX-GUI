@@ -20,6 +20,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../nft/components/nft_qr_code.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 
 class WebReceiveScreen extends BaseScreen {
@@ -36,7 +37,8 @@ class WebReceiveScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final isMobile = BreakPoints.useMobileLayout(context);
 
-    final isBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
+    final isBtc = ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
+
     return AppBar(
       title: isBtc ? Text("Receive BTC") : Text("Receive VFX"),
       backgroundColor: Colors.black,

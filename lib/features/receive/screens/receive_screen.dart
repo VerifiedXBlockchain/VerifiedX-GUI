@@ -24,8 +24,10 @@ class ReceiveScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final isBtc = ref.watch(sessionProvider.select((v) => v.btcSelected));
+
     return AppBar(
-      title: const Text("Receive VFX"),
+      title: isBtc ? Text("Receive BTC") : Text("Receive VFX"),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // leading: BackToHomeButton(),

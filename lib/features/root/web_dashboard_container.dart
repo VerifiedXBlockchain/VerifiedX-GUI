@@ -10,6 +10,7 @@ import '../../app.dart';
 import '../../core/app_constants.dart';
 import '../../core/components/buttons.dart';
 import '../../core/models/web_session_model.dart';
+import '../../core/providers/currency_segmented_button_provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/components.dart';
@@ -25,6 +26,7 @@ import '../transactions/models/web_transaction.dart';
 import '../wallet/utils.dart';
 import '../web/components/web_multi_account_selector.dart';
 import '../web/providers/all_btc_addresses_provider.dart';
+import '../web/providers/web_currency_segmented_button_provider.dart';
 import '../web/providers/web_latest_block_provider.dart';
 import '../../generated/assets.gen.dart';
 import '../../utils/toast.dart';
@@ -1198,7 +1200,7 @@ class _TopLeft extends BaseComponent {
           mainAxisSize: MainAxisSize.min,
           children: [
             // RootContainerRotatingCube(),
-            ref.watch(webSessionProvider.select((v) => v.selectedWalletType)) == WalletType.btc
+            ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc
                 ? Image.asset(
                     Assets.images.animatedCubeBtc.path,
                     scale: 1,
@@ -1248,8 +1250,9 @@ class _TopLeft extends BaseComponent {
                           return AnimatedDefaultTextStyle(
                             duration: ROOT_CONTAINER_TRANSITION_DURATION,
                             style: TextStyle(
-                              color:
-                                  ref.watch(sessionProvider.select((v) => v.btcSelected)) ? AppColors.getBtc() : AppColors.getBlue(ColorShade.s100),
+                              color: ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc
+                                  ? AppColors.getBtc()
+                                  : AppColors.getBlue(ColorShade.s100),
                               fontSize: 26,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'Mukta',
