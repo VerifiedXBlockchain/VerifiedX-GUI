@@ -155,11 +155,11 @@ class SendForm extends BaseComponent {
       }
     } else {
       if (isBtc) {
-        balance = btcAccount!.balance;
+        balance = btcAccount?.balance ?? 0.0;
         color = AppColors.getBtc();
       }
       balance = wallet?.balance ?? 0;
-      color = wallet!.isReserved ? Colors.deepPurple.shade200 : Colors.white;
+      color = wallet?.isReserved == true ? Colors.deepPurple.shade200 : Colors.white;
     }
 
     return Form(
@@ -270,8 +270,8 @@ class SendForm extends BaseComponent {
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        isBtc ? btcAccount!.address : wallet!.address,
-                                        style: TextStyle(color: color, fontSize: 16),
+                                        isBtc ? btcAccount?.address ?? '' : wallet!.address,
+                                        style: TextStyle(color: isBtc ? btcColor : color, fontSize: 16),
                                       ),
                                       Icon(
                                         Icons.arrow_drop_down,
