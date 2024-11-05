@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/services/explorer_service.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/open_explorer_modal.dart';
@@ -9,6 +10,8 @@ import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/theme/pretty_icons.dart';
+import '../../../utils/toast.dart';
+import '../../../utils/validation.dart';
 import '../../auth/screens/web_auth_screen.dart';
 import '../../btc_web/services/btc_web_service.dart';
 import '../../navigation/constants.dart';
@@ -38,6 +41,7 @@ import '../../root/web_dashboard_container.dart';
 import '../../web/components/web_latest_block.dart';
 import '../../web/components/web_wallet_details.dart';
 import '../../web/providers/account_info_visible_provider.dart';
+import '../components/home_buttons/verify_nft_ownership_button.dart';
 
 class WebHomeScreen extends BaseScreen {
   const WebHomeScreen({Key? key})
@@ -347,6 +351,50 @@ class _Actions extends BaseComponent {
                   );
                 },
               ),
+              AppVerticalIconButton(
+                label: "Verify\nOwner",
+                prettyIconType: PrettyIconType.validator,
+                icon: Icons.check,
+                onPressed: () async {
+                  final sig = await PromptModal.show(
+                    title: "Validate Ownership",
+                    body: "Paste in the signature provided by the owner to validate its ownership.",
+                    validator: (val) => formValidatorNotEmpty(val, "Signature"),
+                    labelText: "Signature",
+                  );
+                  if (sig != null && sig.isNotEmpty) {
+                    final components = sig.split("<>");
+                    if (components.length != 4) {
+                      Toast.error("Invalid ownership verification signature");
+                      return;
+                    }
+
+                    final address = components.first;
+                    final scId = components.last;
+
+                    var verified = await ExplorerService().verifyNftOwnership(sig);
+                    if (verified == null) {
+                      return;
+                    }
+
+                    final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
+                    final iconData = verified ? Icons.check : Icons.close;
+                    final title = verified ? "Verified" : "Not Verified";
+                    final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
+                    final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
+
+                    InfoDialog.show(
+                      title: title,
+                      content: NftVerificationSuccessDialog(
+                        iconData: iconData,
+                        color: color,
+                        subtitle: subtitle,
+                        body: body,
+                      ),
+                    );
+                  }
+                },
+              ),
 
               if (ref.read(webSessionProvider).keypair != null)
                 AppVerticalIconButton(
@@ -366,13 +414,6 @@ class _Actions extends BaseComponent {
 
                       AutoRouter.of(context).replace(const WebAuthRouter());
                     }
-                  },
-                ),
-              if (ref.read(webSessionProvider).keypair == null)
-                AppButton(
-                  label: "Setup Wallet",
-                  onPressed: () async {
-                    AutoRouter.of(context).replace(const WebAuthRouter());
                   },
                 ),
             ],

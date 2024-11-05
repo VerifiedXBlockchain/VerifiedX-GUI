@@ -220,13 +220,14 @@ class ExplorerService extends BaseService {
     String? search,
   }) async {
     try {
+      final addresses = ownerAddress.where((element) => element != null).join(',');
+
       final params = {
-        'owner_addresses': ownerAddress.where((element) => element != null).join(','),
         'page': page,
         'search': search ?? '',
       };
 
-      final response = await getJson('/nft/', params: params);
+      final response = await getJson('/nft/addresses/$addresses', params: params);
 
       // final items = response['results'] as List<dynamic>;
 
@@ -498,6 +499,23 @@ class ExplorerService extends BaseService {
       print("vbtcDefaultImageData error");
 
       print(e);
+      return null;
+    }
+  }
+
+  Future<bool?> verifyNftOwnership(String signature) async {
+    try {
+      final result = await postJson("/nft/verify-ownership/", params: {'signature': signature});
+
+      final Map<String, dynamic> data = result['data'];
+
+      if (data.containsKey("verified")) {
+        return data['verified'] == true;
+      }
+      Toast.error();
+      return null;
+    } catch (e) {
+      Toast.error(e.toString());
       return null;
     }
   }

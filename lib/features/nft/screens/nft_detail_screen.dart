@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/utils.dart';
+import 'package:rbx_wallet/features/raw/raw_service.dart';
+import 'package:rbx_wallet/features/web/utils/raw_transaction.dart';
 import '../../../core/theme/colors.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/providers/session_provider.dart';
@@ -561,7 +564,44 @@ class NftDetailScreen extends BaseScreen {
                       icon: Icons.security,
                       variant: AppColorVariant.Primary,
                       onPressed: () async {
-                        final str = await NftService().proveOwnership(id);
+                        String? str;
+
+                        if (kIsWeb) {
+                          final privateKey = nft.currentOwner.startsWith("xRBX")
+                              ? ref.read(webSessionProvider).raKeypair?.private
+                              : ref.read(webSessionProvider).keypair?.private;
+                          final publicKey = nft.currentOwner.startsWith("xRBX")
+                              ? ref.read(webSessionProvider).raKeypair?.public
+                              : ref.read(webSessionProvider).keypair?.public;
+
+                          final address = nft.currentOwner.startsWith("xRBX")
+                              ? ref.read(webSessionProvider).raKeypair?.address
+                              : ref.read(webSessionProvider).keypair?.address;
+                          if (privateKey == null) {
+                            Toast.error("Can't find private key");
+                            return;
+                          }
+                          if (publicKey == null) {
+                            Toast.error("Can't find public key");
+                            return;
+                          }
+
+                          final randomKey = generateRandomString(8, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
+                          final timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+                          final message = "$randomKey.$timestamp";
+
+                          final sigScript = await RawTransaction.getSignature(message: message, privateKey: privateKey, publicKey: publicKey);
+
+                          if (sigScript == null) {
+                            Toast.error("Could not generate signature");
+                            return;
+                          }
+
+                          str = "$address<>$message<>$sigScript<>${nft.id}";
+                        } else {
+                          str = await NftService().proveOwnership(id);
+                        }
+
                         if (str == null) {
                           return;
                         }
