@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/providers/web_session_provider.dart';
+
 import '../../../core/base_screen.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../components/faucet_form.dart';
-import '../../wallet/components/wallet_selector.dart';
 
 class FaucetScreen extends BaseScreen {
   const FaucetScreen({super.key});
@@ -16,17 +18,19 @@ class FaucetScreen extends BaseScreen {
       title: Text("VFX Faucet"),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
-      actions: const [WalletSelector()],
+      // actions: const [WalletSelector()],
     );
   }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final isBtc = ref.watch(sessionProvider.select((v) => v.btcSelected));
+    // final isBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
 
-    final wallet = ref.watch(sessionProvider.select((v) => v.currentWallet));
+    final wallet = kIsWeb ? ref.watch(webSessionProvider.select((v) => v.keypair)) : ref.watch(sessionProvider.select((v) => v.currentWallet));
 
-    if (isBtc || wallet == null) {
+    final showFaucet = wallet != null && (kIsWeb || !ref.watch(sessionProvider.select((v) => v.btcSelected)));
+
+    if (!showFaucet) {
       return Center(
         child: Text("Please choose a VFX account to continue"),
       );

@@ -8,6 +8,7 @@ import '../../../core/components/open_explorer_modal.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
+import '../../faucet/screens/faucet_screen.dart';
 import '../../navigation/utils.dart';
 import '../../wallet/utils.dart';
 
@@ -84,6 +85,16 @@ class CommonActions extends BaseComponent {
                 icon: Icons.toll,
                 onPressed: () {},
                 color: AppColors.getWhite(ColorShade.s200),
+              ),
+              AppVerticalIconButton(
+                label: "Faucet",
+                icon: FontAwesomeIcons.faucet,
+                prettyIconType: PrettyIconType.custom,
+                onPressed: () {
+                  Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
+                    builder: (context) => FaucetScreen(),
+                  ));
+                },
               ),
               AppVerticalIconButton(
                 label: "Tutorials",

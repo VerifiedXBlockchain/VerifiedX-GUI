@@ -14,6 +14,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../auth/screens/web_auth_screen.dart';
 import '../../btc_web/services/btc_web_service.dart';
+import '../../faucet/screens/faucet_screen.dart';
 import '../../navigation/constants.dart';
 import '../../navigation/root_container.dart';
 import '../../payment/components/web_buy_rbx_button.dart';
@@ -352,47 +353,56 @@ class _Actions extends BaseComponent {
                 },
               ),
               AppVerticalIconButton(
-                label: "Verify\nOwner",
-                prettyIconType: PrettyIconType.validator,
-                icon: Icons.check,
-                onPressed: () async {
-                  final sig = await PromptModal.show(
-                    title: "Validate Ownership",
-                    body: "Paste in the signature provided by the owner to validate its ownership.",
-                    validator: (val) => formValidatorNotEmpty(val, "Signature"),
-                    labelText: "Signature",
-                  );
-                  if (sig != null && sig.isNotEmpty) {
-                    final components = sig.split("<>");
-                    if (components.length != 4) {
-                      Toast.error("Invalid ownership verification signature");
-                      return;
-                    }
-
-                    final address = components.first;
-                    final scId = components.last;
-
-                    var verified = await ExplorerService().verifyNftOwnership(sig);
-                    if (verified == null) {
-                      return;
-                    }
-
-                    final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
-                    final iconData = verified ? Icons.check : Icons.close;
-                    final title = verified ? "Verified" : "Not Verified";
-                    final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
-                    final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
-
-                    InfoDialog.show(
-                      title: title,
-                      content: NftVerificationSuccessDialog(
-                        iconData: iconData,
-                        color: color,
-                        subtitle: subtitle,
-                        body: body,
-                      ),
+                  label: "Verify\nOwner",
+                  prettyIconType: PrettyIconType.validator,
+                  icon: Icons.check,
+                  onPressed: () async {
+                    final sig = await PromptModal.show(
+                      title: "Validate Ownership",
+                      body: "Paste in the signature provided by the owner to validate its ownership.",
+                      validator: (val) => formValidatorNotEmpty(val, "Signature"),
+                      labelText: "Signature",
                     );
-                  }
+                    if (sig != null && sig.isNotEmpty) {
+                      final components = sig.split("<>");
+                      if (components.length != 4) {
+                        Toast.error("Invalid ownership verification signature");
+                        return;
+                      }
+
+                      final address = components.first;
+                      final scId = components.last;
+
+                      var verified = await ExplorerService().verifyNftOwnership(sig);
+                      if (verified == null) {
+                        return;
+                      }
+
+                      final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
+                      final iconData = verified ? Icons.check : Icons.close;
+                      final title = verified ? "Verified" : "Not Verified";
+                      final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
+                      final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
+
+                      InfoDialog.show(
+                        title: title,
+                        content: NftVerificationSuccessDialog(
+                          iconData: iconData,
+                          color: color,
+                          subtitle: subtitle,
+                          body: body,
+                        ),
+                      );
+                    }
+                  }),
+              AppVerticalIconButton(
+                label: "Faucet",
+                icon: FontAwesomeIcons.faucet,
+                prettyIconType: PrettyIconType.custom,
+                onPressed: () {
+                  Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
+                    builder: (context) => FaucetScreen(),
+                  ));
                 },
               ),
 

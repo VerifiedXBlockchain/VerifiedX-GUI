@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/utils.dart';
 
@@ -66,9 +68,10 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
       return null;
     }
 
-    final currentWallet = ref.read(sessionProvider).currentWallet;
+    final address =
+        kIsWeb ? ref.watch(webSessionProvider.select((v) => v.keypair?.address)) : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
-    if (currentWallet == null) {
+    if (address == null) {
       Toast.error("No Account Selected");
       return null;
     }
@@ -87,7 +90,7 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
     }
 
     try {
-      final result = await ExplorerService().faucetRequest(cleanPhone, parsedAmount, currentWallet.address);
+      final result = await ExplorerService().faucetRequest(cleanPhone, parsedAmount, address);
 
       state = state.requestCompleted(result);
       return true;

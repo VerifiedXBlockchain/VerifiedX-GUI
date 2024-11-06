@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
@@ -14,7 +16,9 @@ class FaucetForm extends BaseComponent {
     final provider = ref.read(faucetFormProvider.notifier);
     final model = ref.watch(faucetFormProvider);
 
-    final address = ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
+    final address =
+        kIsWeb ? ref.watch(webSessionProvider.select((v) => v.keypair?.address)) : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
+
     if (address == null) {
       return Center(
         child: Text("Please choose a VFX account to continue"),
