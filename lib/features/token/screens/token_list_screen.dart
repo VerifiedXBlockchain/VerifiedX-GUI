@@ -6,6 +6,7 @@ import '../../../core/app_router.gr.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/breakpoints.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
@@ -25,7 +26,9 @@ class TokenListScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final isMobile = BreakPoints.useMobileLayout(context);
-    final accounts = ref.watch(webTokenListProvider);
+    final hasAccounts = kIsWeb
+        ? ref.watch(webTokenListProvider).isNotEmpty
+        : ref.watch(sessionProvider.select((v) => v.balances)).where((b) => b.tokens.isNotEmpty).toList().isNotEmpty;
 
     return AppBar(
       leading: isMobile ? WebMobileDrawerButton() : null,
@@ -33,7 +36,7 @@ class TokenListScreen extends BaseScreen {
       centerTitle: !isMobile,
       title: Text("Fungible Tokens"),
       actions: [
-        if (accounts.isNotEmpty)
+        if (hasAccounts)
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: AppButton(
