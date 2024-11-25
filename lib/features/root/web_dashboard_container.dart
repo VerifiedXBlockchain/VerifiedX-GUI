@@ -15,6 +15,7 @@ import '../../core/theme/app_theme.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/components.dart';
 import '../../core/theme/pretty_icons.dart';
+import '../../utils/html_helpers.dart';
 import '../block/latest_block.dart';
 import '../btc/screens/tokenized_btc_list_screen.dart';
 import '../btc_web/components/web_btc_transaction_list.dart';
@@ -119,15 +120,22 @@ class _ContentWrapper extends BaseComponent {
     final tabsRouter = AutoTabsRouter.of(context);
 
     tabsRouter.addListener(() {
-      if (tabsRouter.current.name == "WebHomeTabRouter") {
-        if (!globalBalancesExpanded) {
-          ref.read(globalBalancesExpandedProvider.notifier).expand();
+      Future.delayed(Duration(milliseconds: 10), () {
+        if (tabsRouter.current.name == "WebHomeTabRouter") {
+          if (!globalBalancesExpanded) {
+            final url = HtmlHelpers().getUrl();
+            print("URL: $url");
+
+            if (url.contains('/#dashboard/home') && !url.contains("all-tokens")) {
+              ref.read(globalBalancesExpandedProvider.notifier).expand();
+            }
+          }
+        } else {
+          if (globalBalancesExpanded) {
+            ref.read(globalBalancesExpandedProvider.notifier).detract();
+          }
         }
-      } else {
-        if (globalBalancesExpanded) {
-          ref.read(globalBalancesExpandedProvider.notifier).detract();
-        }
-      }
+      });
     });
 
     return StatefulBuilder(builder: (context, setState) {
@@ -170,16 +178,18 @@ class _ContentWrapper extends BaseComponent {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 15),
+                            padding: const EdgeInsets.only(top: 6, bottom: 12),
                             child: WebMultiAccountSelector(expanded: sideNavExpanded),
                           ),
-                          RootContainerSideNav(
-                              isExpanded: sideNavExpanded,
-                              onToggleExpanded: () {
-                                setState(() {
-                                  sideNavExpanded = !sideNavExpanded;
-                                });
-                              }),
+                          Expanded(
+                            child: RootContainerSideNav(
+                                isExpanded: sideNavExpanded,
+                                onToggleExpanded: () {
+                                  setState(() {
+                                    sideNavExpanded = !sideNavExpanded;
+                                  });
+                                }),
+                          ),
                         ],
                       ),
                     ),

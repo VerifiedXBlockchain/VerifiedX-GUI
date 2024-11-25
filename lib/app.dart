@@ -107,7 +107,8 @@ class AppContainer extends ConsumerWidget {
             child: child,
           ),
           breakpoints: [
-            ResponsiveBreakpoint.autoScale(1600, name: '4K'),
+            ResponsiveBreakpoint.autoScale(1260),
+            // ResponsiveBreakpoint.autoScale(1600, name: '4K'),
           ],
         );
 

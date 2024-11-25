@@ -7,6 +7,7 @@ import '../features/btc_web/screens/web_tokenized_btc_detail_screen.dart';
 import '../features/chat/screens/web_seller_chat_thread_list_screen.dart';
 import '../features/chat/screens/web_seller_chat_screen.dart';
 import '../features/chat/screens/web_shop_chat_screen.dart';
+import '../features/home/screens/all_tokens_screen.dart';
 import '../features/token/screens/token_create_screen.dart';
 import '../features/token/screens/token_list_screen.dart';
 import '../features/token/screens/token_topic_create_screen.dart';
@@ -59,6 +60,14 @@ const List<AutoRoute> webRoutes = [
   RedirectRoute(path: '*', redirectTo: '/'),
 ];
 
+const List<AutoRoute> sharedWebRoutes = [
+  AutoRoute(path: "token/create", page: WebTokenCreateScreen),
+  AutoRoute(path: "token/detail/:scId", page: WebTokenDetailScreen),
+  AutoRoute(path: "token/detail/new-topic/:scId/:address", page: CreateTokenTopicScreen),
+  AutoRoute(path: "vbtc/create", page: TokenizeBtcScreen),
+  AutoRoute(path: "vbtc/detail/:scId", page: WebTokenizedBtcDetailScreen),
+];
+
 @AdaptiveAutoRouter(replaceInRouteName: 'Page,Route,Screen', routes: webRoutes)
 class $WebRouter {}
 
@@ -79,6 +88,10 @@ const webDashboardTabRouter = AutoRoute(
         //   page: ReserveAccountOverviewScreen,
         //   name: "WebReserveAccountOverviewScreenRoute",
         // ),
+        AutoRoute(path: "all-tokens", page: AllTokensScreen),
+        // AutoRoute(name: "WebTokenDetailScreenFromHomeRoute", path: "fungible/detail/:scId", page: WebTokenDetailScreen),
+        // AutoRoute(name: "CreateTokenTopicScreenFromHomeRoute", path: "fungible/detail/new-topic/:scId/:address", page: CreateTokenTopicScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -88,6 +101,7 @@ const webDashboardTabRouter = AutoRoute(
       children: [
         AutoRoute(path: "", page: WebSendScreen),
         AutoRoute(path: ":toAddress/:amount", page: WebPrefilledSendScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -96,6 +110,7 @@ const webDashboardTabRouter = AutoRoute(
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: "", page: WebReserveAccountOverviewScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -104,6 +119,7 @@ const webDashboardTabRouter = AutoRoute(
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: "", page: WebReceiveScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -113,6 +129,7 @@ const webDashboardTabRouter = AutoRoute(
       children: [
         AutoRoute(path: "", page: WebTransactionScreen),
         AutoRoute(path: "detail/:hash", page: WebTransactionDetailScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -122,6 +139,7 @@ const webDashboardTabRouter = AutoRoute(
       children: [
         AutoRoute(path: "", page: NftListScreen),
         AutoRoute(path: "detail/:id", page: NftDetailScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -130,6 +148,7 @@ const webDashboardTabRouter = AutoRoute(
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: "", page: WebAdnrScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -142,6 +161,7 @@ const webDashboardTabRouter = AutoRoute(
         AutoRoute(path: "bulk", name: 'WebBulkCreateScreenRoute', page: BulkCreateScreen),
         AutoRoute(path: "create", name: "WebSmartContractWizardScreenRoute", page: SmartContractWizardScreen),
         // AutoRoute(path: "wizard", name: "WebBuldCreateScreen", page: BulkCreateScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -150,9 +170,7 @@ const webDashboardTabRouter = AutoRoute(
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: "", page: TokenListScreen),
-        AutoRoute(path: "create", page: WebTokenCreateScreen),
-        AutoRoute(path: "detail/:scId", page: WebTokenDetailScreen),
-        AutoRoute(path: "detail/new-topic/:scId/:address", page: CreateTokenTopicScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(
@@ -161,8 +179,7 @@ const webDashboardTabRouter = AutoRoute(
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: "", page: TokenizeBtcListScreen),
-        AutoRoute(path: "create", page: TokenizeBtcScreen),
-        AutoRoute(path: "detail/:scId", page: WebTokenizedBtcDetailScreen),
+        ...sharedWebRoutes,
       ],
     ),
     AutoRoute(

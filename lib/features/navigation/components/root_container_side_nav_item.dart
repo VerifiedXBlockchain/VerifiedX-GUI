@@ -65,51 +65,48 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                       color: widget.isActive ? AppColors.getBlue().withOpacity(0.05) : Colors.transparent,
                     ),
                   )),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 0),
-                child: Row(
-                  children: [
-                    AnimatedContainer(
+              child: Row(
+                children: [
+                  AnimatedContainer(
+                    duration: ROOT_CONTAINER_TRANSITION_DURATION,
+                    decoration: BoxDecoration(
+                      color: AppColors.getIndigo(),
+                    ),
+                    width: 3,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+                    child: Tooltip(
+                        message: widget.isExpanded ? "" : widget.title,
+                        child: PrettyIcon(
+                          customIcon: widget.icon,
+                          type: widget.iconType,
+                          glow: isHovering || widget.isActive,
+                        )),
+                  ),
+                  Flexible(
+                    child: AnimatedOpacity(
                       duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                      decoration: BoxDecoration(
-                        color: AppColors.getIndigo(),
-                      ),
-                      width: 3,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Tooltip(
-                          message: widget.isExpanded ? "" : widget.title,
-                          child: PrettyIcon(
-                            customIcon: widget.icon,
-                            type: widget.iconType,
-                            glow: isHovering || widget.isActive,
-                          )),
-                    ),
-                    Flexible(
-                      child: AnimatedOpacity(
-                        duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                        opacity: widget.isExpanded ? 1 : 0,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 6.0),
-                          child: Text(
-                            widget.title,
-                            overflow: TextOverflow.visible,
-                            softWrap: false,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: widget.isActive
-                                  ? AppColors.getBlue(ColorShade.s100)
-                                  : isHovering
-                                      ? AppColors.getWhite(ColorShade.s200)
-                                      : AppColors.getWhite(ColorShade.s400).withOpacity(0.9),
-                            ),
+                      opacity: widget.isExpanded ? 1 : 0,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: Text(
+                          widget.title,
+                          overflow: TextOverflow.visible,
+                          softWrap: false,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: widget.isActive
+                                ? AppColors.getBlue(ColorShade.s100)
+                                : isHovering
+                                    ? AppColors.getWhite(ColorShade.s200)
+                                    : AppColors.getWhite(ColorShade.s400).withOpacity(0.9),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

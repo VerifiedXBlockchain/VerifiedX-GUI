@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
+import 'package:rbx_wallet/core/theme/components.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/components/centered_loader.dart';
@@ -39,29 +40,33 @@ class FaucetScreen extends BaseScreen {
         future: _getInfo(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Padding(
-              padding: const EdgeInsets.all(32.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    "The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.",
-                    textAlign: TextAlign.center,
-                  ),
-                  Divider(),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
+            return Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.all(32.0),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 600),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.",
+                        textAlign: TextAlign.center,
+                      ),
+                      Divider(),
+                      Text(
                         "Max Amount: ${snapshot.data} VFX",
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),
-                      )),
-                  SizedBox(
-                    height: 4,
+                      ),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      AppCard(child: FaucetForm()),
+                    ],
                   ),
-                  const FaucetForm(),
-                ],
+                ),
               ),
             );
           }

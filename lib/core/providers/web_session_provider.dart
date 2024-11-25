@@ -31,12 +31,20 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   final Ref ref;
 
   late final Timer loopTimer;
+  late final Timer btcLoopTimer;
 
   WebSessionProvider(this.ref, WebSessionModel model) : super(model) {
     if (!kIsWeb) {
       return;
     }
-    loopTimer = Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS), (_) => loop());
+    loopTimer = Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS), (_) {
+      loop();
+    });
+
+    btcLoopTimer = Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS_WEB_BTC), (_) {
+      btcLoop();
+    });
+
     init();
   }
 
@@ -79,8 +87,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     state = state.copyWith(timezoneName: timezoneName, ready: true);
     Future.delayed(const Duration(milliseconds: 500), () {
       final url = HtmlHelpers().getUrl();
-      print(url);
-      if (url.contains('/#dashboard/home')) {
+      print("URL: $url");
+      if (url.contains('/#dashboard/home') && !url.contains("all-tokens")) {
         ref.read(globalBalancesExpandedProvider.notifier).expand();
       } else {
         ref.read(globalBalancesExpandedProvider.notifier).detract();
@@ -125,6 +133,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         );
 
     loop();
+    btcLoop();
 
     // ref.read(webTransactionListProvider(keypair.address).notifier).init();
   }
@@ -157,6 +166,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     }
 
     loop();
+    btcLoop();
   }
 
   void setSelectedWalletType(WalletType type, [bool save = true]) {
@@ -183,6 +193,9 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     getFungibleTokens();
     getVbtcTokens();
     getNfts();
+  }
+
+  void btcLoop() async {
     getBtcBalances();
   }
 

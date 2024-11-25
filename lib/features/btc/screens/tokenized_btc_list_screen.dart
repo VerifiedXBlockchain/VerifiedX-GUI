@@ -37,36 +37,45 @@ class TokenizeBtcListScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final isMobile = BreakPoints.useMobileLayout(context);
 
-    return AppBar(
-      leading: isMobile ? WebMobileDrawerButton() : null,
-      backgroundColor: Colors.black,
-      title: Text("Tokenized Bitcoin (vBTC)"),
-      // leading: BackToHomeButton(),
+    if (isMobile) {
+      return AppBar(
+        leading: WebMobileDrawerButton(),
+        backgroundColor: Colors.black,
+        title: Text("Tokenized Bitcoin (vBTC)"),
+      );
+    }
 
-      // Padding(
-      //   padding: const EdgeInsets.only(right: 8.0),
-      //   child: AppButton(
-      //     label: "Tokenize BTC",
-      //     variant: AppColorVariant.Btc,
-      //     icon: FontAwesomeIcons.bitcoin,
-      //     onPressed: () {
-      //       Navigator.of(context).push(
-      //         MaterialPageRoute(
-      //           builder: (context) => TokenizeBtcScreen(),
-      //         ),
-      //       );
-      //     },
-      //   ),
-      // )
-    );
+    return null;
   }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final pendingIds = ref.watch(btcPendingTokenizedAddressListProvider);
+    final isMobile = BreakPoints.useMobileLayout(context);
 
     return Column(
       children: [
+        if (!isMobile)
+          Text(
+            "Tokenized Bitcoin (vBTC)",
+            style: TextStyle(
+              fontFamily: "Mukta",
+              fontSize: 20,
+              fontWeight: FontWeight.w300,
+              color: Colors.white,
+              letterSpacing: 1,
+            ),
+          ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            "1 vBTC = 1 BTC",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white.withOpacity(0.9),
+              letterSpacing: 1,
+            ),
+          ),
+        ),
         AppCard(
           fullWidth: true,
           child: Column(

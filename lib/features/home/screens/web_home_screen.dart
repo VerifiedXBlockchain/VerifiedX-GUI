@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
+import 'package:rbx_wallet/features/misc/providers/global_balances_expanded_provider.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/open_explorer_modal.dart';
@@ -43,6 +44,7 @@ import '../../web/components/web_latest_block.dart';
 import '../../web/components/web_wallet_details.dart';
 import '../../web/providers/account_info_visible_provider.dart';
 import '../components/home_buttons/verify_nft_ownership_button.dart';
+import 'all_tokens_screen.dart';
 
 class WebHomeScreen extends BaseScreen {
   const WebHomeScreen({Key? key})
@@ -157,7 +159,7 @@ class WebHomeScreen extends BaseScreen {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox(
-              height: 186,
+              height: 160,
               child: Row(
                 children: [
                   Expanded(
@@ -325,13 +327,18 @@ class _Actions extends BaseComponent {
                 onPressed: () {},
                 color: AppColors.getWhite(ColorShade.s200),
               ),
-              AppVerticalIconButton(
-                label: "Tokens",
-                prettyIconType: PrettyIconType.fungibleToken,
-                icon: Icons.toll,
-                onPressed: () {},
-                color: AppColors.getWhite(ColorShade.s200),
-              ),
+              Builder(builder: (context) {
+                return AppVerticalIconButton(
+                  label: "Tokens",
+                  prettyIconType: PrettyIconType.fungibleToken,
+                  icon: Icons.toll,
+                  onPressed: () {
+                    ref.read(globalBalancesExpandedProvider.notifier).detract();
+                    AutoRouter.of(context).push(AllTokensScreenRoute());
+                  },
+                  color: AppColors.getWhite(ColorShade.s200),
+                );
+              }),
               AppVerticalIconButton(
                 label: "Tutorials",
                 prettyIconType: PrettyIconType.custom,

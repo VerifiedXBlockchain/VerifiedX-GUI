@@ -38,19 +38,6 @@
             ]
         },
         {
-            "name": "Web [Local]",
-            "request": "launch",
-            "type": "dart",
-            "args": [
-                "-d",
-                "chrome",
-                "--web-port",
-                "42069",
-                "--dart-define",
-                "ENV=web_local"
-            ],
-        },
-        {
             "name": "Web [Mainnet]",
             "request": "launch",
             "type": "dart",
@@ -60,7 +47,7 @@
                 "--web-port",
                 "42069",
                 "--dart-define",
-                "ENV=web"
+                "ENV=web_mainnet"
             ],
         },
         {
