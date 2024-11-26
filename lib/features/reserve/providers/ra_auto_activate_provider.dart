@@ -8,7 +8,7 @@ class ReserveAccountAutoActivateProvider extends StateNotifier<Map<String, dynam
       'address': address,
       'password': password,
     };
-
+    print(data);
     state = {...state, txHash: data};
   }
 

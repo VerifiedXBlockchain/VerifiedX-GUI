@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/reserve/providers/ra_auto_activate_provider.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
@@ -18,10 +19,11 @@ class WebFundRaAccountButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final keypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
-    final hasFunded = ref.watch(webRaPendingFundingProvider).contains(keypair?.address);
+    final raKeypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
+    final vfxKeypair = ref.watch(webSessionProvider.select((v) => v.keypair));
+    final hasFunded = ref.watch(webRaPendingFundingProvider).contains(raKeypair?.address);
 
-    if (keypair == null) {
+    if (raKeypair == null || vfxKeypair == null) {
       return SizedBox();
     }
 
@@ -32,9 +34,16 @@ class WebFundRaAccountButton extends BaseComponent {
       onPressed: () async {
         final confirmed = await ConfirmDialog.show(
           title: "Fund Your Vault Account",
-          body: "Would you like to send 5 VFX from ${ref.watch(webSessionProvider.select((v) => v.keypair!.address))}?",
+          body: "Would you like to send 5 VFX from ${vfxKeypair.address}?",
           confirmText: "Send",
           cancelText: "Cancel",
+        );
+
+        final shouldActivate = await ConfirmDialog.show(
+          title: "Automatically Activate?",
+          body: "Would you like to activate the account automatically once the funding is complete?",
+          confirmText: "Yes",
+          cancelText: "No",
         );
 
         if (confirmed == true) {
@@ -58,7 +67,16 @@ class WebFundRaAccountButton extends BaseComponent {
             if (tx['Result'] == "Success") {
               Toast.message("5 VFX sent to ${ref.read(webSessionProvider).raKeypair!.address}");
               ref.read(globalLoadingProvider.notifier).complete();
-              ref.read(webRaPendingFundingProvider.notifier).addAddress(keypair.address);
+              ref.read(webRaPendingFundingProvider.notifier).addAddress(raKeypair.address);
+              print("SUCCESS TX:");
+              print(tx);
+
+              if (shouldActivate == true) {
+                final hash = tx["Hash"];
+                print("HASH: ---$hash---");
+                ref.read(reserveAccountAutoActivateProvider.notifier).add(hash, raKeypair.address, "");
+              }
+
               return;
             }
           }

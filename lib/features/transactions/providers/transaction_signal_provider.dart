@@ -9,10 +9,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
 import 'package:rbx_wallet/features/btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import 'package:rbx_wallet/features/token/providers/web_token_actions_manager.dart';
+import '../../global_loader/global_loading_provider.dart';
 import '../../nft/providers/nft_detail_watcher.dart';
 import '../../nft/providers/sale_provider.dart';
 import '../../reserve/providers/ra_auto_activate_provider.dart';
 import '../../reserve/services/reserve_account_service.dart';
+import '../../reserve/vault_web_utils.dart';
 import '../../token/providers/auto_mint_provider.dart';
 import '../../token/providers/pending_token_pause_provider.dart';
 import '../../token/services/token_service.dart';
@@ -40,7 +42,9 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
   TransactionSignalProvider(this.ref) : super([]);
 
   List<String> get _addresses {
-    return kIsWeb ? ["${ref.read(webSessionProvider).keypair?.address}"] : ref.read(walletListProvider).map((w) => w.address).toList();
+    return kIsWeb
+        ? ["${ref.read(webSessionProvider).keypair?.address}", "${ref.read(webSessionProvider).raKeypair?.address}"]
+        : ref.read(walletListProvider).map((w) => w.address).toList();
   }
 
   bool _hasAddress(String address) {
@@ -123,17 +127,30 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       );
 
       final autoActivateData = ref.read(reserveAccountAutoActivateProvider);
+
+      print(autoActivateData);
+
       if (autoActivateData.containsKey(transaction.hash)) {
         final data = autoActivateData[transaction.hash];
         final String? address = data['address'];
         final String? password = data['password'];
 
-        if (address != null && password != null) {
-          ReserveAccountService().publish(address: address, password: password).then((success) {
-            if (success) {
-              Toast.message("Vault Account Auto Activation process initiated");
+        if (kIsWeb) {
+          if (address != null) {
+            final keypair = ref.read(webSessionProvider).raKeypair;
+            print(keypair);
+            if (keypair != null && keypair.address == address) {
+              activateVaultAccountWeb(ref: ref, keypair: keypair, promptForConfirmation: false, silent: true);
             }
-          });
+          }
+        } else {
+          if (address != null && password != null) {
+            ReserveAccountService().publish(address: address, password: password).then((success) {
+              if (success) {
+                Toast.message("Vault Account Auto Activation process initiated");
+              }
+            });
+          }
         }
         ref.read(reserveAccountAutoActivateProvider.notifier).remove(transaction.hash);
       }

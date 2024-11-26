@@ -52,7 +52,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Vault Accounts",
+            title: "Vault Account${kIsWeb ? '' : 's'}",
             iconType: PrettyIconType.lock,
             onPressed: () {
               tabsRouter.setActiveIndex(kIsWeb ? WebRouteIndex.reserve : 14);

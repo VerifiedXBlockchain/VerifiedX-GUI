@@ -192,7 +192,7 @@ class AllTokensScreen extends BaseScreen {
                             AutoRouter.of(context).push(WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier));
                           },
                           title: Text(token.name),
-                          subtitle: Text("vBTC Token"),
+                          subtitle: Text("vBTC Token (${token.balanceForAddress(address)} vBTC)"),
                           trailing: Icon(Icons.chevron_right),
                           leading: Container(
                             width: 32,

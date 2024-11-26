@@ -229,7 +229,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                             );
                           }
 
-                          if (balance == 0) {
+                          if (balance < 5) {
                             return Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
