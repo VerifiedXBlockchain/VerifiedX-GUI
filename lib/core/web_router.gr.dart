@@ -33,13 +33,13 @@ import 'package:rbx_wallet/features/home/screens/web_home_screen.dart' as _i5;
 import 'package:rbx_wallet/features/nft/screens/nft_detail_screen.dart' as _i19;
 import 'package:rbx_wallet/features/nft/screens/nft_list_screen.dart' as _i18;
 import 'package:rbx_wallet/features/receive/screens/web_receive_screen.dart'
-    as _i15;
+    as _i16;
 import 'package:rbx_wallet/features/reserve/screens/web_reserve_account_overview_screen.dart'
-    as _i14;
+    as _i15;
 import 'package:rbx_wallet/features/root/web_dashboard_container.dart' as _i2;
 import 'package:rbx_wallet/features/send/screens/web_prefilled_send_screen.dart'
-    as _i13;
-import 'package:rbx_wallet/features/send/screens/web_send_screen.dart' as _i12;
+    as _i14;
+import 'package:rbx_wallet/features/send/screens/web_send_screen.dart' as _i13;
 import 'package:rbx_wallet/features/smart_contracts/screens/bulk_create_screen.dart'
     as _i23;
 import 'package:rbx_wallet/features/smart_contracts/screens/smart_contract_wizard_screen.dart'
@@ -57,9 +57,9 @@ import 'package:rbx_wallet/features/token/screens/web_token_create_screen.dart'
 import 'package:rbx_wallet/features/token/screens/web_token_detail_screen.dart'
     as _i8;
 import 'package:rbx_wallet/features/transactions/screens/web_transaction_detail_screen.dart'
-    as _i17;
+    as _i12;
 import 'package:rbx_wallet/features/transactions/screens/web_transactions_screen.dart'
-    as _i16;
+    as _i17;
 import 'package:rbx_wallet/features/web_shop/screens/build_sale_start_tx_screen.dart'
     as _i38;
 import 'package:rbx_wallet/features/web_shop/screens/create_web_listing_screen.dart'
@@ -245,10 +245,23 @@ class WebRouter extends _i39.RootStackRouter {
         ),
       );
     },
+    WebTransactionDetailScreenRoute.name: (routeData) {
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<WebTransactionDetailScreenRouteArgs>(
+          orElse: () => WebTransactionDetailScreenRouteArgs(
+              hash: pathParams.getString('hash')));
+      return _i39.AdaptivePage<dynamic>(
+        routeData: routeData,
+        child: _i12.WebTransactionDetailScreen(
+          key: args.key,
+          hash: args.hash,
+        ),
+      );
+    },
     WebSendScreenRoute.name: (routeData) {
       return _i39.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i12.WebSendScreen(),
+        child: const _i13.WebSendScreen(),
       );
     },
     WebPrefilledSendScreenRoute.name: (routeData) {
@@ -260,7 +273,7 @@ class WebRouter extends _i39.RootStackRouter {
               ));
       return _i39.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: _i13.WebPrefilledSendScreen(
+        child: _i14.WebPrefilledSendScreen(
           key: args.key,
           toAddress: args.toAddress,
           amount: args.amount,
@@ -270,32 +283,19 @@ class WebRouter extends _i39.RootStackRouter {
     WebReserveAccountOverviewScreenRoute.name: (routeData) {
       return _i39.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i14.WebReserveAccountOverviewScreen(),
+        child: const _i15.WebReserveAccountOverviewScreen(),
       );
     },
     WebReceiveScreenRoute.name: (routeData) {
       return _i39.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i15.WebReceiveScreen(),
+        child: const _i16.WebReceiveScreen(),
       );
     },
     WebTransactionScreenRoute.name: (routeData) {
       return _i39.AdaptivePage<dynamic>(
         routeData: routeData,
-        child: const _i16.WebTransactionScreen(),
-      );
-    },
-    WebTransactionDetailScreenRoute.name: (routeData) {
-      final pathParams = routeData.inheritedPathParams;
-      final args = routeData.argsAs<WebTransactionDetailScreenRouteArgs>(
-          orElse: () => WebTransactionDetailScreenRouteArgs(
-              hash: pathParams.getString('hash')));
-      return _i39.AdaptivePage<dynamic>(
-        routeData: routeData,
-        child: _i17.WebTransactionDetailScreen(
-          key: args.key,
-          hash: args.hash,
-        ),
+        child: const _i17.WebTransactionScreen(),
       );
     },
     NftListScreenRoute.name: (routeData) {
@@ -572,6 +572,11 @@ class WebRouter extends _i39.RootStackRouter {
                   path: 'vbtc/detail/:scId',
                   parent: WebHomeTabRouter.name,
                 ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
+                  parent: WebHomeTabRouter.name,
+                ),
               ],
             ),
             _i39.RouteConfig(
@@ -614,6 +619,11 @@ class WebRouter extends _i39.RootStackRouter {
                   path: 'vbtc/detail/:scId',
                   parent: WebSendTabRouter.name,
                 ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
+                  parent: WebSendTabRouter.name,
+                ),
               ],
             ),
             _i39.RouteConfig(
@@ -649,6 +659,11 @@ class WebRouter extends _i39.RootStackRouter {
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
                   path: 'vbtc/detail/:scId',
+                  parent: WebReserveAccountsTabRouter.name,
+                ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
                   parent: WebReserveAccountsTabRouter.name,
                 ),
               ],
@@ -688,6 +703,11 @@ class WebRouter extends _i39.RootStackRouter {
                   path: 'vbtc/detail/:scId',
                   parent: WebReceiveTabRouter.name,
                 ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
+                  parent: WebReceiveTabRouter.name,
+                ),
               ],
             ),
             _i39.RouteConfig(
@@ -698,11 +718,6 @@ class WebRouter extends _i39.RootStackRouter {
                 _i39.RouteConfig(
                   WebTransactionScreenRoute.name,
                   path: '',
-                  parent: WebTransactionsTabRouter.name,
-                ),
-                _i39.RouteConfig(
-                  WebTransactionDetailScreenRoute.name,
-                  path: 'detail/:hash',
                   parent: WebTransactionsTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -728,6 +743,11 @@ class WebRouter extends _i39.RootStackRouter {
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
                   path: 'vbtc/detail/:scId',
+                  parent: WebTransactionsTabRouter.name,
+                ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
                   parent: WebTransactionsTabRouter.name,
                 ),
               ],
@@ -772,6 +792,11 @@ class WebRouter extends _i39.RootStackRouter {
                   path: 'vbtc/detail/:scId',
                   parent: WebNftTabRouter.name,
                 ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
+                  parent: WebNftTabRouter.name,
+                ),
               ],
             ),
             _i39.RouteConfig(
@@ -807,6 +832,11 @@ class WebRouter extends _i39.RootStackRouter {
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
                   path: 'vbtc/detail/:scId',
+                  parent: WebAdnrTabRouter.name,
+                ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
                   parent: WebAdnrTabRouter.name,
                 ),
               ],
@@ -861,6 +891,11 @@ class WebRouter extends _i39.RootStackRouter {
                   path: 'vbtc/detail/:scId',
                   parent: WebSmartContractTabRouter.name,
                 ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
+                  parent: WebSmartContractTabRouter.name,
+                ),
               ],
             ),
             _i39.RouteConfig(
@@ -898,6 +933,11 @@ class WebRouter extends _i39.RootStackRouter {
                   path: 'vbtc/detail/:scId',
                   parent: WebTokenTabRouter.name,
                 ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
+                  parent: WebTokenTabRouter.name,
+                ),
               ],
             ),
             _i39.RouteConfig(
@@ -933,6 +973,11 @@ class WebRouter extends _i39.RootStackRouter {
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
                   path: 'vbtc/detail/:scId',
+                  parent: WebTokenizeBitcoinRouter.name,
+                ),
+                _i39.RouteConfig(
+                  WebTransactionDetailScreenRoute.name,
+                  path: 'detail/:hash',
                   parent: WebTokenizeBitcoinRouter.name,
                 ),
               ],
@@ -1404,7 +1449,43 @@ class WebTokenizedBtcDetailScreenRouteArgs {
 }
 
 /// generated route for
-/// [_i12.WebSendScreen]
+/// [_i12.WebTransactionDetailScreen]
+class WebTransactionDetailScreenRoute
+    extends _i39.PageRouteInfo<WebTransactionDetailScreenRouteArgs> {
+  WebTransactionDetailScreenRoute({
+    _i40.Key? key,
+    required String hash,
+  }) : super(
+          WebTransactionDetailScreenRoute.name,
+          path: 'detail/:hash',
+          args: WebTransactionDetailScreenRouteArgs(
+            key: key,
+            hash: hash,
+          ),
+          rawPathParams: {'hash': hash},
+        );
+
+  static const String name = 'WebTransactionDetailScreenRoute';
+}
+
+class WebTransactionDetailScreenRouteArgs {
+  const WebTransactionDetailScreenRouteArgs({
+    this.key,
+    required this.hash,
+  });
+
+  final _i40.Key? key;
+
+  final String hash;
+
+  @override
+  String toString() {
+    return 'WebTransactionDetailScreenRouteArgs{key: $key, hash: $hash}';
+  }
+}
+
+/// generated route for
+/// [_i13.WebSendScreen]
 class WebSendScreenRoute extends _i39.PageRouteInfo<void> {
   const WebSendScreenRoute()
       : super(
@@ -1416,7 +1497,7 @@ class WebSendScreenRoute extends _i39.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i13.WebPrefilledSendScreen]
+/// [_i14.WebPrefilledSendScreen]
 class WebPrefilledSendScreenRoute
     extends _i39.PageRouteInfo<WebPrefilledSendScreenRouteArgs> {
   WebPrefilledSendScreenRoute({
@@ -1460,7 +1541,7 @@ class WebPrefilledSendScreenRouteArgs {
 }
 
 /// generated route for
-/// [_i14.WebReserveAccountOverviewScreen]
+/// [_i15.WebReserveAccountOverviewScreen]
 class WebReserveAccountOverviewScreenRoute extends _i39.PageRouteInfo<void> {
   const WebReserveAccountOverviewScreenRoute()
       : super(
@@ -1472,7 +1553,7 @@ class WebReserveAccountOverviewScreenRoute extends _i39.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i15.WebReceiveScreen]
+/// [_i16.WebReceiveScreen]
 class WebReceiveScreenRoute extends _i39.PageRouteInfo<void> {
   const WebReceiveScreenRoute()
       : super(
@@ -1484,7 +1565,7 @@ class WebReceiveScreenRoute extends _i39.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i16.WebTransactionScreen]
+/// [_i17.WebTransactionScreen]
 class WebTransactionScreenRoute extends _i39.PageRouteInfo<void> {
   const WebTransactionScreenRoute()
       : super(
@@ -1493,42 +1574,6 @@ class WebTransactionScreenRoute extends _i39.PageRouteInfo<void> {
         );
 
   static const String name = 'WebTransactionScreenRoute';
-}
-
-/// generated route for
-/// [_i17.WebTransactionDetailScreen]
-class WebTransactionDetailScreenRoute
-    extends _i39.PageRouteInfo<WebTransactionDetailScreenRouteArgs> {
-  WebTransactionDetailScreenRoute({
-    _i40.Key? key,
-    required String hash,
-  }) : super(
-          WebTransactionDetailScreenRoute.name,
-          path: 'detail/:hash',
-          args: WebTransactionDetailScreenRouteArgs(
-            key: key,
-            hash: hash,
-          ),
-          rawPathParams: {'hash': hash},
-        );
-
-  static const String name = 'WebTransactionDetailScreenRoute';
-}
-
-class WebTransactionDetailScreenRouteArgs {
-  const WebTransactionDetailScreenRouteArgs({
-    this.key,
-    required this.hash,
-  });
-
-  final _i40.Key? key;
-
-  final String hash;
-
-  @override
-  String toString() {
-    return 'WebTransactionDetailScreenRouteArgs{key: $key, hash: $hash}';
-  }
 }
 
 /// generated route for

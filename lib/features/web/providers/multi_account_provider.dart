@@ -60,6 +60,26 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
     syncWithStorage();
   }
 
+  rename(int id, String name) {
+    final index = state.indexWhere((element) => element.id == id);
+    if (index < 0) {
+      return;
+    }
+
+    final item = state.firstWhereOrNull((element) => element.id == id);
+    if (item == null) {
+      return;
+    }
+
+    final newItem = item.rename(name);
+
+    state = [...state]
+      ..removeAt(index)
+      ..insert(index, newItem);
+
+    syncWithStorage();
+  }
+
   clear() {
     state = [];
     syncWithStorage();

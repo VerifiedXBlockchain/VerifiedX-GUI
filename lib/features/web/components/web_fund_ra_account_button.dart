@@ -68,12 +68,9 @@ class WebFundRaAccountButton extends BaseComponent {
               Toast.message("5 VFX sent to ${ref.read(webSessionProvider).raKeypair!.address}");
               ref.read(globalLoadingProvider.notifier).complete();
               ref.read(webRaPendingFundingProvider.notifier).addAddress(raKeypair.address);
-              print("SUCCESS TX:");
-              print(tx);
 
               if (shouldActivate == true) {
                 final hash = tx["Hash"];
-                print("HASH: ---$hash---");
                 ref.read(reserveAccountAutoActivateProvider.notifier).add(hash, raKeypair.address, "");
               }
 

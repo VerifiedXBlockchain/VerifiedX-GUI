@@ -128,8 +128,6 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
 
       final autoActivateData = ref.read(reserveAccountAutoActivateProvider);
 
-      print(autoActivateData);
-
       if (autoActivateData.containsKey(transaction.hash)) {
         final data = autoActivateData[transaction.hash];
         final String? address = data['address'];
@@ -138,7 +136,6 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         if (kIsWeb) {
           if (address != null) {
             final keypair = ref.read(webSessionProvider).raKeypair;
-            print(keypair);
             if (keypair != null && keypair.address == address) {
               activateVaultAccountWeb(ref: ref, keypair: keypair, promptForConfirmation: false, silent: true);
             }

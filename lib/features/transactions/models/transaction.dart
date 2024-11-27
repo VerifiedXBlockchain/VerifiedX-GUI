@@ -232,7 +232,15 @@ class Transaction with _$Transaction {
     if (type == 17) {
       final data = parseNftData(this);
       if (data != null) {
+        if (nftDataValue(data, 'MD5List') != null) {
+          return true;
+        }
+
         if (nftDataValue(data, 'Function') == "TokenDeploy()") {
+          return false;
+        }
+
+        if (nftDataValue(data, 'Function') == "Mint()") {
           return false;
         }
       }

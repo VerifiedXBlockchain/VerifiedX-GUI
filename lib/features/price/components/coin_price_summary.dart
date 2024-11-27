@@ -31,7 +31,7 @@ class CoinPriceSummary extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = type == CoinPriceSummaryType.vfx ? ref.watch(vfxPriceDataDetailProvider) : ref.watch(btcPriceDataDetailProvider);
-
+    print("INVALIDATE");
     return AppCard(
       fullHeight: true,
       padding: 4,

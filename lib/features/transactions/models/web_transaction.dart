@@ -254,7 +254,15 @@ class WebTransaction with _$WebTransaction {
     if (type == 17) {
       final data = parseNftData();
       if (data != null) {
+        if (nftDataValue('MD5List') != null) {
+          return true;
+        }
+
         if (nftDataValue('Function') == "TokenDeploy()") {
+          return false;
+        }
+
+        if (nftDataValue('Function') == "Mint()") {
           return false;
         }
       }

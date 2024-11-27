@@ -12,6 +12,7 @@ import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common
 import 'package:rbx_wallet/features/web/models/multi_account_instance.dart';
 import 'package:rbx_wallet/features/web/providers/multi_account_provider.dart';
 import 'package:collection/collection.dart';
+import 'package:rbx_wallet/utils/validation.dart';
 
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/web_router.gr.dart';
@@ -125,10 +126,32 @@ class WebMultiAccountSelector extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(selected ? Icons.check_box : Icons.check_box_outline_blank),
-                  SizedBox(
-                    width: 6,
-                  ),
-                  Text(accounts.length == 1 ? "Default Account" : "Account ${account.id}"),
+                  SizedBox(width: 6),
+                  Text(account.name ?? (accounts.length == 1 ? "Default Account" : "Account ${account.id}")),
+                  if (accounts.length > 1) ...[
+                    SizedBox(width: 6),
+                    InkWell(
+                      onTap: () async {
+                        final newName = await PromptModal.show(
+                          title: "Rename Account",
+                          validator: (v) => formValidatorNotEmpty(v, "Account Name"),
+                          labelText: "Account Name",
+                          body: "What would you like to name this account?",
+                          initialValue: account.name ?? "",
+                        );
+
+                        if (newName != null && newName.isNotEmpty) {
+                          ref.read(multiAccountProvider.notifier).rename(account.id, newName);
+                        }
+
+                        Navigator.of(context).pop();
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        size: 12,
+                      ),
+                    ),
+                  ]
                 ],
               ),
             ));

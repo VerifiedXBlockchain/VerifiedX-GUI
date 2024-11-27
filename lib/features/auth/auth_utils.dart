@@ -82,8 +82,84 @@ Future<void> handleImportWithPrivateKey(
       append += 1;
     }
 
-    await login(context, ref, keypair, reserveKeyPair, null);
+    final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+    final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+
+    await login(context, ref, keypair, reserveKeyPair, btcKeypair);
   }
+}
+
+String btcGeneratedEmailFromPrivateKey(String privateKey) {
+  return "${privateKey.substring(0, 8)}@${privateKey.substring(privateKey.length - 8)}.com";
+}
+
+String btcGeneratedPasswordFromPrivateKey(String privateKey) {
+  return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
+}
+
+Future<void> handleImportWithBtcWifKey(
+  BuildContext context,
+  WidgetRef ref, {
+  bool showRememberMe = true,
+}) async {
+  await InfoDialog.show(
+    title: "Warning",
+    body:
+        "Although if you login with a BTC WIF key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.",
+  );
+
+  final wifKey = await PromptModal.show(
+    title: "Your BTC WIF Key",
+    validator: (v) => formValidatorNotEmpty(v, "WIF Key"),
+    labelText: "WIF Key",
+  );
+
+  if (wifKey == null) return;
+  if (showRememberMe) {
+    await handleRememberMe(context, ref);
+  }
+
+  final btcKeypair = await BtcWebService().keypairFromWif(wifKey);
+  final firstSixteen = wifKey.substring(0, 16);
+  final lastSixteen = wifKey.substring(wifKey.length - 16);
+
+  final seed = "$firstSixteen$lastSixteen";
+
+  final keypair = await KeygenService.seedToKeypair(seed);
+
+  if (keypair == null) {
+    Toast.error("Could not generate keypair");
+    return;
+  }
+
+  RaKeypair? reserveKeyPair;
+
+  int append = 0;
+
+  while (true) {
+    String input = keypair.private;
+    if (input.startsWith("00")) {
+      input = input.substring(2);
+    }
+    String raSeed = "${input.substring(0, 32)}$append";
+
+    final kp = await KeygenService.seedToKeypair(raSeed);
+    if (kp == null) {
+      continue;
+    }
+
+    reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+
+    if (reserveKeyPair.address.startsWith("xRBX")) {
+      break;
+    }
+
+    append += 1;
+  }
+
+  await login(context, ref, keypair, reserveKeyPair, btcKeypair);
 }
 
 Future<void> handleCreateWithEmail(
@@ -154,9 +230,10 @@ Future<void> handleCreateWithEmail(
 
   // BTC
 
-  final btcKeypair = await BtcWebService().keypairFromEmailPassword(email, password);
-  print(btcKeypair);
-  print("-----------");
+  final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+  final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
 
   if (forCreate) {
     await showKeys(context, keypair);
@@ -705,6 +782,12 @@ showWebLoginModal(
                 // await Future.delayed(const Duration(milliseconds: 300));
               }
             : null,
+        handleBtc: (context) async {
+          await handleImportWithBtcWifKey(context, ref, showRememberMe: showRememberMe);
+          if (ref.read(webSessionProvider).isAuthenticated) {
+            onSuccess();
+          }
+        },
       );
     },
   );

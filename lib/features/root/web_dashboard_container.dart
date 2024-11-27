@@ -753,11 +753,6 @@ class WebAccountInfoVbtc extends BaseComponent {
           : DateTime.now().add(Duration(minutes: 5)).millisecondsSinceEpoch;
 
       final vfxTimestamp = latestVbtcVfxTx.date.millisecondsSinceEpoch;
-      print("----");
-
-      print(btcTimestamp);
-      print(vfxTimestamp);
-      print("----");
 
       if (btcTimestamp > vfxTimestamp) {
         latestVbtcVfxTx = null;
@@ -970,9 +965,11 @@ class _LatestVfxTx extends BaseComponent {
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: () {
-          ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
+          // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
 
-          AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+          // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+
+          AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: latestVfxTx.hash));
         },
         child: AppCard(
           padding: 12,

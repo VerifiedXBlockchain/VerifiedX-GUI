@@ -23,8 +23,6 @@ Future<bool?> activateVaultAccountWeb({
     return false;
   }
 
-  print("activateVaultAccountWeb");
-
   if (promptForConfirmation) {
     final confirmed = await ConfirmDialog.show(
       title: "Activate Vault Account?",

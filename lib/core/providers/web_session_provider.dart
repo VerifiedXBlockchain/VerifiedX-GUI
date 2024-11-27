@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/btc_web/providers/btc_web_transaction_list_provider.dart';
 import '../../features/btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../../features/misc/providers/global_balances_expanded_provider.dart';
+import '../../features/price/providers/price_detail_providers.dart';
 import '../../features/token/providers/web_token_list_provider.dart';
 import '../../features/btc_web/models/btc_web_account.dart';
 import '../../features/btc_web/services/btc_web_service.dart';
@@ -193,6 +194,9 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     getFungibleTokens();
     getVbtcTokens();
     getNfts();
+
+    ref.invalidate(vfxPriceDataDetailProvider);
+    ref.invalidate(btcPriceDataDetailProvider);
   }
 
   void btcLoop() async {
@@ -311,6 +315,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     singleton<Storage>().remove(Storage.WEB_KEYPAIR);
     singleton<Storage>().remove(Storage.WEB_RA_KEYPAIR);
     singleton<Storage>().remove(Storage.WEB_BTC_KEYPAIR);
+    singleton<Storage>().remove(Storage.MULTIPLE_ACCOUNTS);
+    singleton<Storage>().remove(Storage.MULTIPLE_ACCOUNT_SELECTED);
     // state = WebSessionModel();
 
     await Future.delayed(const Duration(milliseconds: 150));

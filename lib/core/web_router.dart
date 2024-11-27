@@ -66,6 +66,7 @@ const List<AutoRoute> sharedWebRoutes = [
   AutoRoute(path: "token/detail/new-topic/:scId/:address", page: CreateTokenTopicScreen),
   AutoRoute(path: "vbtc/create", page: TokenizeBtcScreen),
   AutoRoute(path: "vbtc/detail/:scId", page: WebTokenizedBtcDetailScreen),
+  AutoRoute(path: "detail/:hash", page: WebTransactionDetailScreen),
 ];
 
 @AdaptiveAutoRouter(replaceInRouteName: 'Page,Route,Screen', routes: webRoutes)
@@ -128,7 +129,6 @@ const webDashboardTabRouter = AutoRoute(
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: "", page: WebTransactionScreen),
-        AutoRoute(path: "detail/:hash", page: WebTransactionDetailScreen),
         ...sharedWebRoutes,
       ],
     ),
