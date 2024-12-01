@@ -180,7 +180,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             label: "Login / Create Account",
             icon: Icons.upload,
             onPressed: () {
-              showWebLoginModal(context, ref, allowPrivateKey: false, allowBtcPrivateKey: false, showRememberMe: true, onSuccess: () {
+              showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: false, showRememberMe: true, onSuccess: () {
                 redirectToDashboard(true);
               });
             },

@@ -92,10 +92,16 @@ Future<void> handleImportWithPrivateKey(
 }
 
 String btcGeneratedEmailFromPrivateKey(String privateKey) {
+  if (privateKey.startsWith("00")) {
+    privateKey = privateKey.replaceFirst("00", "");
+  }
   return "${privateKey.substring(0, 8)}@${privateKey.substring(privateKey.length - 8)}.com";
 }
 
 String btcGeneratedPasswordFromPrivateKey(String privateKey) {
+  if (privateKey.startsWith("00")) {
+    privateKey = privateKey.replaceFirst("00", "");
+  }
   return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
 }
 
@@ -293,10 +299,16 @@ Future<void> handleCreateWithMnemonic(
     append += 1;
   }
 
-  final btcKeypair =
-      keypair.mneumonic != null && keypair.mneumonic!.isNotEmpty ? await BtcWebService().keypairFromMnemonic(keypair.mneumonic!) : null;
+  final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
 
+  final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
   ref.read(globalLoadingProvider.notifier).complete();
+
+  // final btcKeypair =
+  //     keypair.mneumonic != null && keypair.mneumonic!.isNotEmpty ? await BtcWebService().keypairFromMnemonic(keypair.mneumonic!) : null;
+
+  // ref.read(globalLoadingProvider.notifier).complete();
 
   // await TransactionService().createWallet(null, keypair.address);
   if (showRememberMe) {
@@ -401,7 +413,10 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref, {
       append += 1;
     }
 
-    final btcKeypair = await BtcWebService().keypairFromMnemonic(value);
+    final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+    final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
 
     ref.read(globalLoadingProvider.notifier).complete();
 
