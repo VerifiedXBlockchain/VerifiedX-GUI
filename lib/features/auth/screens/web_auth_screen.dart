@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/colors.dart';
+import '../../../core/utils.dart';
+import '../../../utils/toast.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../../core/models/web_session_model.dart';
 import '../../web/components/web_wordmark.dart';
@@ -40,6 +42,57 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
     super.initState();
   }
 
+  Future<void> _showWelcomeMessage() async {
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              "Welcome to the VerifiedX Web Wallet!",
+              style: TextStyle(color: AppColors.getBlue(), fontWeight: FontWeight.w400),
+            ),
+            content: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 500),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("The network does NOT store your email/password or mnemonic. They are used as seeds to generate your accounts' keypairs."),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text("This includes your VFX account, Vault account, and Bitcoin account."),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  Text(
+                      "We recommend backing up all private keys however, when generating with an email/password or mnemonic, your VFX private key will restore all three accounts."),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () async {
+                    final success = await backupWebKeys(context, ref);
+                  },
+                  child: Text(
+                    "Backup Keys",
+                    style: TextStyle(color: Colors.white),
+                  )),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "Continue",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          );
+        });
+  }
+
   void _handleSession(WebSessionModel session) {
     final currentPath = singleton<AppRouter>().current.path;
     final bool rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
@@ -70,14 +123,18 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
     }
   }
 
-  @override
-  Widget body(BuildContext context) {
-    void redirectToDashboard() {
-      ref.read(globalBalancesExpandedProvider.notifier).expand();
-
-      AutoRouter.of(context).push(WebDashboardContainerRoute());
+  Future<void> redirectToDashboard(bool showWelcomeMessage) async {
+    if (showWelcomeMessage) {
+      await _showWelcomeMessage();
     }
 
+    ref.read(globalBalancesExpandedProvider.notifier).expand();
+
+    AutoRouter.of(context).push(WebDashboardContainerRoute());
+  }
+
+  @override
+  Widget body(BuildContext context) {
     // ref.listen<WebSessionModel>(webSessionProvider, (prev, next) {
     //   _handleSession(next);
     // });
@@ -123,8 +180,8 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             label: "Login / Create Account",
             icon: Icons.upload,
             onPressed: () {
-              showWebLoginModal(context, ref, allowPrivateKey: true, showRememberMe: true, onSuccess: () {
-                redirectToDashboard();
+              showWebLoginModal(context, ref, allowPrivateKey: false, allowBtcPrivateKey: false, showRememberMe: true, onSuccess: () {
+                redirectToDashboard(true);
               });
             },
             variant: AppColorVariant.Light,
@@ -138,7 +195,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                 type: AppButtonType.Text,
                 underlined: true,
                 onPressed: () {
-                  redirectToDashboard();
+                  redirectToDashboard(false);
                 },
               ),
             ),

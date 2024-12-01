@@ -85,14 +85,17 @@ Future<bool> backupWebKeys(BuildContext context, WidgetRef ref) async {
       output += "VFX Account:\n\n";
       output += "Address:\n${session.keypair!.address}\n\n";
       output += "Public Key:\n${session.keypair!.public}\n\n";
-      output += "Private Key:\n${session.keypair!.private}\n\n";
+      output += "Private Key:\n${session.keypair!.privateCorrected}\n\n";
       output += "===================================\n\n";
     }
     if (session.raKeypair != null) {
       output += "VFX Vault Account:\n\n";
       output += "Address:\n${session.raKeypair!.address}\n\n";
       output += "Public Key:\n${session.raKeypair!.public}\n\n";
-      output += "Private Key:\n${session.raKeypair!.private}\n\n";
+      output += "Private Key:\n${session.raKeypair!.privateCorrected}\n\n\n";
+      output += "Recovery Private Key:\n${session.raKeypair!.recoveryPrivateCorrected}\n\n";
+      output += "Recovery Address:\n${session.raKeypair!.recoveryAddress}\n\n";
+      output += "Restore Code:\n${session.raKeypair!.restoreCode}\n\n";
       output += "===================================\n\n";
     }
 

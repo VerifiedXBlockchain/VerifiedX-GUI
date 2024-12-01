@@ -101,7 +101,7 @@ class CommonActions extends BaseComponent {
                 prettyIconType: PrettyIconType.custom,
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
-                onPressed: () {},
+                onPressed: () async {},
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(

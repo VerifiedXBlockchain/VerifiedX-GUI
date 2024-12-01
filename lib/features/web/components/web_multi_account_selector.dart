@@ -15,6 +15,7 @@ import 'package:collection/collection.dart';
 import 'package:rbx_wallet/utils/validation.dart';
 
 import '../../../core/providers/web_session_provider.dart';
+import '../../../core/utils.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../utils/toast.dart';
 import '../../auth/auth_utils.dart';
@@ -91,7 +92,7 @@ class WebMultiAccountSelector extends BaseComponent {
         ),
         onSelected: (value) {
           if (value == 0) {
-            showWebLoginModal(context, ref, allowPrivateKey: true, showRememberMe: false, onSuccess: () {
+            showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: false, onSuccess: () {
               Navigator.of(context).pop();
             });
 
@@ -142,9 +143,8 @@ class WebMultiAccountSelector extends BaseComponent {
 
                         if (newName != null && newName.isNotEmpty) {
                           ref.read(multiAccountProvider.notifier).rename(account.id, newName);
+                          Navigator.of(context).pop();
                         }
-
-                        Navigator.of(context).pop();
                       },
                       child: Icon(
                         Icons.edit,
@@ -381,16 +381,28 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
+                            if (!selected)
+                              AppButton(
+                                label: "Set Active",
+                                variant: AppColorVariant.Light,
+                                type: AppButtonType.Outlined,
+                                onPressed: () {
+                                  ref.read(selectedMultiAccountProvider.notifier).setFromId(account.id);
+                                },
+                              ),
+                            SizedBox(
+                              width: 8,
+                            ),
                             AppButton(
-                              label: "Set Active",
-                              variant: AppColorVariant.Light,
+                              label: "Backup Keys",
+                              variant: AppColorVariant.Secondary,
                               type: AppButtonType.Outlined,
-                              onPressed: () {
-                                ref.read(selectedMultiAccountProvider.notifier).setFromId(account.id);
+                              onPressed: () async {
+                                await backupWebKeys(context, ref);
                               },
                             ),
                             SizedBox(
-                              width: 12,
+                              width: 8,
                             ),
                             AppButton(
                               label: "Forget",
@@ -448,7 +460,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
               label: "Add Account",
               variant: AppColorVariant.Light,
               onPressed: () {
-                showWebLoginModal(context, ref, allowPrivateKey: true, showRememberMe: false, onSuccess: () {
+                showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: false, onSuccess: () {
                   Navigator.of(context).pop();
                 });
               },

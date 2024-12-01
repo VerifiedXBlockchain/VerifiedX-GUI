@@ -235,9 +235,9 @@ Future<void> handleCreateWithEmail(
 
   final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
 
-  if (forCreate) {
-    await showKeys(context, keypair);
-  }
+  // if (forCreate) {
+  //   await showKeys(context, keypair);
+  // }
 
   // await TransactionService().createWallet(email, keypair.address);
   if (showRememberMe) {
@@ -303,7 +303,7 @@ Future<void> handleCreateWithMnemonic(
     await handleRememberMe(context, ref);
   }
   login(context, ref, keypair, reserveKeyPair, btcKeypair);
-  await showKeys(context, keypair);
+  // await showKeys(context, keypair);
 }
 
 Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
@@ -311,9 +311,9 @@ Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Store Private Key?'),
+          title: const Text('Store Private Keys?'),
           content: const Text(
-              'Would you like your browser to remember your private key locally?\nEither way, your key will never be transmitted accross the internet. \n\nChoose "No" if this is a shared computer.'),
+              'Would you like your browser to remember your private keys locally?\nEither way, your key will never be transmitted accross the internet. \n\nChoose "No" if this is a shared computer.'),
           actions: [
             TextButton(
               style: TextButton.styleFrom(
@@ -696,6 +696,7 @@ showWebLoginModal(
   BuildContext context,
   WidgetRef ref, {
   required bool allowPrivateKey,
+  required bool allowBtcPrivateKey,
   required VoidCallback onSuccess,
   bool showRememberMe = true,
 }) {
@@ -782,12 +783,14 @@ showWebLoginModal(
                 // await Future.delayed(const Duration(milliseconds: 300));
               }
             : null,
-        handleBtc: (context) async {
-          await handleImportWithBtcWifKey(context, ref, showRememberMe: showRememberMe);
-          if (ref.read(webSessionProvider).isAuthenticated) {
-            onSuccess();
-          }
-        },
+        handleBtc: allowBtcPrivateKey
+            ? (context) async {
+                await handleImportWithBtcWifKey(context, ref, showRememberMe: showRememberMe);
+                if (ref.read(webSessionProvider).isAuthenticated) {
+                  onSuccess();
+                }
+              }
+            : null,
       );
     },
   );

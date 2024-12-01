@@ -11,6 +11,7 @@ import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/theme/pretty_icons.dart';
+import '../../../core/utils.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../auth/screens/web_auth_screen.dart';
