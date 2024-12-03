@@ -23,7 +23,16 @@ class WebTokenizedBtcListTile extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final address = ref.watch(webSessionProvider.select((v) => v.keypair?.address));
-    final isOwner = address == token.ownerAddress;
+    final vaultAddress = ref.watch(webSessionProvider.select((v) => v.raKeypair?.address));
+    final isOwner = address == token.ownerAddress || vaultAddress == token.ownerAddress;
+
+    final vfxBalance = token.balanceForAddress(address);
+    final vaultBalance = token.balanceForAddress(vaultAddress);
+    String balanceMessage = "$address: $vfxBalance vBTC\n$vaultAddress: $vaultBalance vBTC";
+
+    if (isOwner) {
+      balanceMessage = "$balanceMessage\nGlobal Balance: ${token.globalBalance} vBTC";
+    }
 
     return Row(
       children: [
@@ -55,10 +64,13 @@ class WebTokenizedBtcListTile extends BaseComponent {
                 color: token.ownerAddress.startsWith("xRBX") ? AppColors.getReserve() : Colors.white,
               ),
             ),
-            subtitle: Text(
-              "${address != null ? token.balanceForAddress(address) : token.globalBalance} vBTC",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.btcOrange,
+            subtitle: Tooltip(
+              message: balanceMessage,
+              child: Text(
+                "${vfxBalance + vaultBalance} vBTC",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.btcOrange,
+                ),
               ),
             ),
             trailing: Icon(Icons.chevron_right),

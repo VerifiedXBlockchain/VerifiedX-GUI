@@ -46,6 +46,7 @@ class WebSendScreen extends BaseScreen {
     }
 
     return Center(
+      key: Key(keypair!.address),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: ConstrainedBox(

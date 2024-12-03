@@ -38,6 +38,9 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (!kIsWeb) {
       return;
     }
+
+    init();
+
     loopTimer = Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS), (_) {
       loop();
     });
@@ -45,8 +48,6 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     btcLoopTimer = Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS_WEB_BTC), (_) {
       btcLoop();
     });
-
-    init();
   }
 
   void init() {
@@ -145,7 +146,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   //   ref.read(nftListProvider.notifier).load(1);
   // }
 
-  void setMultiAccountInstance(MultiAccountInstance account) {
+  void setMultiAccountInstance(MultiAccountInstance account) async {
     state = state.copyWith(
       keypair: account.keypair,
       raKeypair: account.raKeypair,
@@ -166,8 +167,17 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       }
     }
 
-    loop();
-    btcLoop();
+    if (account.keypair != null) {
+      final webAddress = await ExplorerService().getWebAddress(account.keypair!.address);
+
+      ref.read(webSelectedAccountProvider.notifier).setVfx(account.keypair!, webAddress.balance, webAddress.adnr);
+    }
+
+    Future.delayed(Duration(milliseconds: 100), () {
+      refreshBtcBalanceInfo();
+      loop();
+      btcLoop();
+    });
   }
 
   void setSelectedWalletType(WalletType type, [bool save = true]) {
@@ -305,6 +315,10 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   void refreshBtcBalanceInfo() async {
     if (state.btcKeypair != null) {
       final btcBalanceInfo = await BtcWebService().addressInfo(state.btcKeypair!.address);
+
+      print("${state.btcKeypair!.address}: ");
+      print(btcBalanceInfo?.balance);
+
       state = state.copyWith(
         btcBalanceInfo: btcBalanceInfo,
       );

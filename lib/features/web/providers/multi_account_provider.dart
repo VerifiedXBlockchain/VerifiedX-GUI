@@ -102,10 +102,6 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
 final multiAccountProvider = StateNotifierProvider<MultiAccountProvider, List<MultiAccountInstance>>((ref) {
   final savedData = singleton<Storage>().getList(Storage.MULTIPLE_ACCOUNTS);
   if (savedData != null) {
-    print("*********");
-    print("SAVED DATA $savedData");
-
-    print("----------");
     final initialState = savedData.map((e) => MultiAccountInstance.fromJson(jsonDecode(e) as Map<String, dynamic>)).toList();
 
     return MultiAccountProvider(ref, initialState);
@@ -121,7 +117,7 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
   set(MultiAccountInstance account) {
     state = account.id;
     ref.read(webSessionProvider.notifier).setMultiAccountInstance(account);
-    print(account);
+    syncWithStorage();
   }
 
   setFromId(int id) {
@@ -149,7 +145,7 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
 
     final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
     if (rememberMe) {
-      singleton<Storage>().setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, state!);
+      singleton<Storage>().setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, state);
     }
   }
 }

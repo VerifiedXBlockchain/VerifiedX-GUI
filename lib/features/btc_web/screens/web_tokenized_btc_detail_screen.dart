@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -34,6 +35,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
     final data = ref.watch(btcWebVbtcTokenDetailProvider(scIdentifier));
 
     final myAddress = ref.watch(webSessionProvider.select((value) => value.keypair?.address));
+    final myVaultAddress = ref.watch(webSessionProvider.select((value) => value.raKeypair?.address));
 
     return data.when(
       loading: () => AppBar(
@@ -81,9 +83,14 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Builder(builder: (context) {
+                  final vfxBalance = token.balanceForAddress(myAddress);
+                  final raBalance = token.balanceForAddress(myVaultAddress);
+
+                  final balance = vfxBalance + raBalance;
+
                   if (myAddress != null) {
                     return Text(
-                      "My Balance: ${token.balanceForAddress(myAddress)} vBTC",
+                      "My Balance: $balance vBTC",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
@@ -116,6 +123,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
     final data = ref.watch(btcWebVbtcTokenDetailProvider(scIdentifier));
 
     final myAddress = ref.watch(webSessionProvider.select((value) => value.keypair?.address));
+    final myVaultAddress = ref.watch(webSessionProvider.select((value) => value.raKeypair?.address));
 
     return data.when(
         data: (token) {
@@ -125,7 +133,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
             );
           }
 
-          final isOwner = myAddress == token.ownerAddress;
+          final isOwner = myAddress == token.ownerAddress || myVaultAddress == token.ownerAddress;
 
           final btcTxs = ref.watch(btcWebTransactionListProvider(token.depositAddress));
 
@@ -137,6 +145,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                 WebVBTCDetailsCard(
                   token: token,
                   myAddress: myAddress,
+                  myVaultAddress: myVaultAddress,
                   isOwner: isOwner,
                 ),
                 SizedBox(
@@ -241,11 +250,13 @@ class WebVBTCDetailsCard extends BaseComponent {
     super.key,
     required this.token,
     required this.myAddress,
+    required this.myVaultAddress,
     required this.isOwner,
   });
 
   final BtcWebVbtcToken token;
   final String? myAddress;
+  final String? myVaultAddress;
   final bool isOwner;
 
   @override
@@ -266,7 +277,7 @@ class WebVBTCDetailsCard extends BaseComponent {
               SizedBox(
                 height: 6,
               ),
-              _VBTCDetails(token: token, myAddress: myAddress, isOwner: isOwner),
+              _VBTCDetails(token: token, myAddress: myAddress, myVaultAddress: myVaultAddress, isOwner: isOwner),
             ],
           ),
         ),
@@ -285,7 +296,7 @@ class WebVBTCDetailsCard extends BaseComponent {
           SizedBox(
             width: 16,
           ),
-          _VBTCDetails(token: token, myAddress: myAddress, isOwner: isOwner),
+          _VBTCDetails(token: token, myAddress: myAddress, myVaultAddress: myVaultAddress, isOwner: isOwner),
         ],
       ),
     );
@@ -296,16 +307,26 @@ class _VBTCDetails extends StatelessWidget {
   const _VBTCDetails({
     required this.token,
     required this.myAddress,
+    required this.myVaultAddress,
     required this.isOwner,
   });
 
   final BtcWebVbtcToken token;
   final String? myAddress;
+  final String? myVaultAddress;
   final bool isOwner;
 
   @override
   Widget build(BuildContext context) {
     final isRa = token.ownerAddress.startsWith("xRBX");
+
+    final vfxBalance = token.balanceForAddress(myAddress);
+    final vaultBalance = token.balanceForAddress(myVaultAddress);
+
+    String balanceMessage = "$myAddress: $vfxBalance vBTC\n$myVaultAddress: $vaultBalance vBTC";
+    if (isOwner) {
+      balanceMessage = "$balanceMessage\nGlobal Balance: ${token.globalBalance} vBTC";
+    }
 
     return Expanded(
       child: Column(
@@ -344,11 +365,13 @@ class _VBTCDetails extends StatelessWidget {
             inExpanded: true,
             withCopy: true,
           ),
-          if (myAddress != null)
-            _DetailRow(
+          Tooltip(
+            message: balanceMessage,
+            child: _DetailRow(
               label: "My Balance",
-              value: "${token.balanceForAddress(myAddress)} vBTC",
+              value: "${vfxBalance + vaultBalance} vBTC",
             ),
+          ),
           if (isOwner)
             _DetailRow(
               label: "Token Total Balance",
