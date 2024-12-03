@@ -745,14 +745,16 @@ class _TransferSharesModal extends BaseComponent {
                 ),
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text("Fee Rate: $BTC_WITHDRAWL_FEE_RATE SATS per byte (${satashiToBtcLabel(BTC_WITHDRAWL_FEE_RATE)} BTC per byte)"),
-              ),
-              Text(
-                "This is a Multi-signature. The fee rate has been calculated for you.",
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              if (forWithdrawl) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text("Fee Rate: $BTC_WITHDRAWL_FEE_RATE SATS per byte (${satashiToBtcLabel(BTC_WITHDRAWL_FEE_RATE)} BTC per byte)"),
+                ),
+                Text(
+                  "This is a Multi-signature. The fee rate has been calculated for you.",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
               // if (forWithdrawl)
               //   Builder(
               //     builder: (context) {

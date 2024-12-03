@@ -11,13 +11,23 @@ class BtcWebVbtcTokenListProvider extends StateNotifier<List<BtcWebVbtcToken>> {
   }
 
   Future<void> load(String vfxAddress, {String? raAddress}) async {
-    final transactions = await ExplorerService().getWebVbtcTokens(vfxAddress);
+    List<BtcWebVbtcToken> results = [];
+
+    final tokens = await ExplorerService().getWebVbtcTokens(vfxAddress);
+    results = [...tokens];
+
     if (raAddress != null) {
-      final raTransactions = await ExplorerService().getWebVbtcTokens(raAddress);
-      state = [...transactions, ...raTransactions];
-    } else {
-      state = transactions;
+      final raTokens = await ExplorerService().getWebVbtcTokens(raAddress);
+
+      for (final t in raTokens) {
+        final exists = results.indexWhere((a) => a.scIdentifier == t.scIdentifier) > -1;
+        if (!exists) {
+          results = [...results, t];
+        }
+      }
     }
+
+    state = results;
   }
 
   Future<void> reload(String vfxAddress) async {
