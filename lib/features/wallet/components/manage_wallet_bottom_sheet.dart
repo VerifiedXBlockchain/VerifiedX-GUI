@@ -2,6 +2,7 @@ import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/dialogs.dart';
 import '../../../core/theme/colors.dart';
 import '../../btc/models/btc_account.dart';
 import '../../btc/providers/btc_account_list_provider.dart';
@@ -17,6 +18,7 @@ import '../../../core/storage.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../../encrypt/utils.dart';
+import '../providers/wallet_detail_provider.dart';
 import '../providers/wallet_list_provider.dart';
 
 class ManageWalletBottomSheet extends BaseComponent {
@@ -336,11 +338,9 @@ class ManageWalletListTile extends BaseComponent {
           //       await ref.read(reserveAccountProvider.notifier).activate(wallet);
           //     },
           //   ),
+
           if (!wallet.isReserved)
-            AppButton(
-                type: AppButtonType.Text,
-                label: "Reveal Private Key",
-                variant: AppColorVariant.Info,
+            IconButton(
                 onPressed: () async {
                   if (!await passwordRequiredGuard(context, ref)) return;
 
@@ -389,7 +389,31 @@ class ManageWalletListTile extends BaseComponent {
                       );
                     },
                   );
-                }),
+                },
+                iconSize: 16,
+                icon: Icon(
+                  Icons.remove_red_eye,
+                )),
+          IconButton(
+              onPressed: () async {
+                final confirmed = await ConfirmDialog.show(
+                  title: "Hide Account",
+                  body: "Are you sure you want to hide this account?",
+                  confirmText: "Hide",
+                  cancelText: "Cancel",
+                  destructive: true,
+                );
+
+                if (confirmed != true) {
+                  return;
+                }
+
+                ref.read(walletDetailProvider(wallet).notifier).delete();
+              },
+              iconSize: 16,
+              icon: Icon(
+                Icons.delete,
+              )),
           // AppButton(
           //   label: "Rescan",
           //   type: AppButtonType.Text,
@@ -505,11 +529,11 @@ class _WalletRestorerState extends State<WalletRestorer> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Select Account(s) to restore",
+                    "Select Account(s) to Restore",
                     style: const TextStyle(color: Colors.white),
                   ),
                   AppButton(
-                    label: 'Restore all',
+                    label: 'Restore All',
                     onPressed: () {
                       restoreWallets([], context, ref);
                     },

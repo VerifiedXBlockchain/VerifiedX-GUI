@@ -14,6 +14,7 @@ import '../bridge/providers/status_provider.dart';
 import '../bridge/providers/wallet_info_provider.dart';
 import '../btc/providers/electrum_connected_provider.dart';
 import '../validator/providers/validating_status_provider.dart';
+import '../wallet/components/manage_wallet_bottom_sheet.dart';
 import '../wallet/utils.dart';
 
 import '../../core/components/currency_segmented_button.dart';
@@ -692,13 +693,33 @@ class AccountManagementContainer extends BaseComponent {
               Builder(builder: (context) {
                 switch (mode) {
                   case CurrencyType.vfx:
-                    return AppButton(
-                      label: "Add Account",
-                      onPressed: () {
-                        AccountUtils.promptVfxNewOrImport(context, ref);
-                      },
-                      icon: Icons.add,
-                      variant: AppColorVariant.Secondary,
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Opacity(
+                          opacity: 0.7,
+                          child: AppButton(
+                            label: "[Restore Hidden]",
+                            type: AppButtonType.Text,
+                            variant: AppColorVariant.Light,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: ((context) {
+                                    return WalletRestorer();
+                                  }));
+                            },
+                          ),
+                        ),
+                        AppButton(
+                          label: "Add Account",
+                          onPressed: () {
+                            AccountUtils.promptVfxNewOrImport(context, ref);
+                          },
+                          icon: Icons.add,
+                          variant: AppColorVariant.Secondary,
+                        ),
+                      ],
                     );
 
                   case CurrencyType.btc:
@@ -712,13 +733,33 @@ class AccountManagementContainer extends BaseComponent {
                     );
 
                   case CurrencyType.any:
-                    return AppButton(
-                      label: "Add Account",
-                      onPressed: () {
-                        AccountUtils.promptVfxOrBtc(context, ref);
-                      },
-                      icon: Icons.add,
-                      variant: AppColorVariant.Light,
+                    return Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Opacity(
+                          opacity: 0.7,
+                          child: AppButton(
+                            label: "[Restore Hidden]",
+                            type: AppButtonType.Text,
+                            variant: AppColorVariant.Light,
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: ((context) {
+                                    return WalletRestorer();
+                                  }));
+                            },
+                          ),
+                        ),
+                        AppButton(
+                          label: "Add Account",
+                          onPressed: () {
+                            AccountUtils.promptVfxOrBtc(context, ref);
+                          },
+                          icon: Icons.add,
+                          variant: AppColorVariant.Light,
+                        ),
+                      ],
                     );
                 }
               }),
