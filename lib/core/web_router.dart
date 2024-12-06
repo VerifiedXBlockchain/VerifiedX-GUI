@@ -65,7 +65,7 @@ const List<AutoRoute> sharedWebRoutes = [
   AutoRoute(path: "token/detail/:scId", page: WebTokenDetailScreen),
   AutoRoute(path: "token/detail/new-topic/:scId/:address", page: CreateTokenTopicScreen),
   AutoRoute(path: "vbtc/create", page: TokenizeBtcScreen),
-  AutoRoute(path: "vbtc/detail/:scId", page: WebTokenizedBtcDetailScreen),
+  AutoRoute(path: "vbtc/detail/:scId/:address", page: WebTokenizedBtcDetailScreen),
   AutoRoute(path: "detail/:hash", page: WebTransactionDetailScreen),
 ];
 

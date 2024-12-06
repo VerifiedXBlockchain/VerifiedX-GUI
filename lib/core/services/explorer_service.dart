@@ -50,6 +50,7 @@ class ExplorerService extends BaseService {
       final results = response['results'];
       final List<BtcWebVbtcToken> tokens = [];
       for (final result in results) {
+        result['address'] = address;
         tokens.add(BtcWebVbtcToken.fromJson(result));
       }
 
@@ -60,9 +61,10 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<BtcWebVbtcToken> getWebVbtcTokenDetail(String scIdentifier) async {
+  Future<BtcWebVbtcToken> getWebVbtcTokenDetail(String scIdentifier, String address) async {
     try {
       final response = await getJson('/btc/vbtc/detail/$scIdentifier/');
+      response['address'] = address;
       return BtcWebVbtcToken.fromJson(response);
     } catch (e) {
       print(e);

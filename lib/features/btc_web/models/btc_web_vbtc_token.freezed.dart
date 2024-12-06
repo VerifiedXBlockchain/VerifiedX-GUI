@@ -23,6 +23,7 @@ mixin _$BtcWebVbtcToken {
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   Map<String, dynamic> get addresses => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
   @JsonKey(name: 'sc_identifier')
   String get scIdentifier => throw _privateConstructorUsedError;
   @JsonKey(name: 'owner_address')
@@ -55,6 +56,7 @@ abstract class $BtcWebVbtcTokenCopyWith<$Res> {
       {String name,
       String description,
       Map<String, dynamic> addresses,
+      String address,
       @JsonKey(name: 'sc_identifier') String scIdentifier,
       @JsonKey(name: 'owner_address') String ownerAddress,
       @JsonKey(name: 'image_url') String imageUrl,
@@ -83,6 +85,7 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
     Object? name = null,
     Object? description = null,
     Object? addresses = null,
+    Object? address = null,
     Object? scIdentifier = null,
     Object? ownerAddress = null,
     Object? imageUrl = null,
@@ -105,6 +108,10 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
           ? _value.addresses
           : addresses // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
       scIdentifier: null == scIdentifier
           ? _value.scIdentifier
           : scIdentifier // ignore: cast_nullable_to_non_nullable
@@ -161,6 +168,7 @@ abstract class _$$_BtcWebVbtcTokenCopyWith<$Res>
       {String name,
       String description,
       Map<String, dynamic> addresses,
+      String address,
       @JsonKey(name: 'sc_identifier') String scIdentifier,
       @JsonKey(name: 'owner_address') String ownerAddress,
       @JsonKey(name: 'image_url') String imageUrl,
@@ -188,6 +196,7 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
     Object? name = null,
     Object? description = null,
     Object? addresses = null,
+    Object? address = null,
     Object? scIdentifier = null,
     Object? ownerAddress = null,
     Object? imageUrl = null,
@@ -210,6 +219,10 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
           ? _value._addresses
           : addresses // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
       scIdentifier: null == scIdentifier
           ? _value.scIdentifier
           : scIdentifier // ignore: cast_nullable_to_non_nullable
@@ -253,6 +266,7 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       {required this.name,
       required this.description,
       required final Map<String, dynamic> addresses,
+      required this.address,
       @JsonKey(name: 'sc_identifier') required this.scIdentifier,
       @JsonKey(name: 'owner_address') required this.ownerAddress,
       @JsonKey(name: 'image_url') required this.imageUrl,
@@ -280,6 +294,8 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
   }
 
   @override
+  final String address;
+  @override
   @JsonKey(name: 'sc_identifier')
   final String scIdentifier;
   @override
@@ -305,7 +321,7 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
 
   @override
   String toString() {
-    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt, nft: $nft)';
+    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, address: $address, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt, nft: $nft)';
   }
 
   @override
@@ -318,6 +334,7 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
                 other.description == description) &&
             const DeepCollectionEquality()
                 .equals(other._addresses, _addresses) &&
+            (identical(other.address, address) || other.address == address) &&
             (identical(other.scIdentifier, scIdentifier) ||
                 other.scIdentifier == scIdentifier) &&
             (identical(other.ownerAddress, ownerAddress) ||
@@ -342,6 +359,7 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       name,
       description,
       const DeepCollectionEquality().hash(_addresses),
+      address,
       scIdentifier,
       ownerAddress,
       imageUrl,
@@ -370,6 +388,7 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
       {required final String name,
       required final String description,
       required final Map<String, dynamic> addresses,
+      required final String address,
       @JsonKey(name: 'sc_identifier') required final String scIdentifier,
       @JsonKey(name: 'owner_address') required final String ownerAddress,
       @JsonKey(name: 'image_url') required final String imageUrl,
@@ -389,6 +408,8 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
   String get description;
   @override
   Map<String, dynamic> get addresses;
+  @override
+  String get address;
   @override
   @JsonKey(name: 'sc_identifier')
   String get scIdentifier;

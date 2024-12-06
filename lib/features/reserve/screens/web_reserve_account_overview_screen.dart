@@ -493,8 +493,10 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               onTap: () {
                                                 Navigator.of(context).pop();
 
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(builder: (_) => WebTokenizedBtcDetailScreen(scIdentifier: item.scIdentifier)));
+                                                Navigator.of(context).push(MaterialPageRoute(
+                                                    builder: (_) => WebTokenizedBtcDetailScreen(
+                                                        scIdentifier: item.scIdentifier,
+                                                        address: ref.read(webSessionProvider).raKeypair?.address ?? '')));
                                               },
                                             ),
                                           ),

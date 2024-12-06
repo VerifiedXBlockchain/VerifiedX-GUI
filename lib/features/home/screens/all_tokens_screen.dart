@@ -189,7 +189,7 @@ class AllTokensScreen extends BaseScreen {
                         return ListTile(
                           dense: true,
                           onTap: () {
-                            AutoRouter.of(context).push(WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier));
+                            AutoRouter.of(context).push(WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address));
                           },
                           title: Text(token.name),
                           subtitle: Text("vBTC Token (${token.balanceForAddress(address)} vBTC)"),

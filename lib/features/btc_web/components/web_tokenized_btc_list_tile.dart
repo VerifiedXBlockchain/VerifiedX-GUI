@@ -22,17 +22,9 @@ class WebTokenizedBtcListTile extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final address = ref.watch(webSessionProvider.select((v) => v.keypair?.address));
-    final vaultAddress = ref.watch(webSessionProvider.select((v) => v.raKeypair?.address));
-    final isOwner = address == token.ownerAddress || vaultAddress == token.ownerAddress;
+    final isOwner = token.address == token.ownerAddress;
 
-    final vfxBalance = token.balanceForAddress(address);
-    final vaultBalance = token.balanceForAddress(vaultAddress);
-    String balanceMessage = "$address: $vfxBalance vBTC\n$vaultAddress: $vaultBalance vBTC";
-
-    if (isOwner) {
-      balanceMessage = "$balanceMessage\nGlobal Balance: ${token.globalBalance} vBTC";
-    }
+    final balance = token.balanceForAddress(token.address);
 
     return Row(
       children: [
@@ -61,22 +53,31 @@ class WebTokenizedBtcListTile extends BaseComponent {
               "${token.name}${isOwner ? ' (Owner)' : ''}",
               style: TextStyle(
                 fontSize: 22,
-                color: token.ownerAddress.startsWith("xRBX") ? AppColors.getReserve() : Colors.white,
               ),
             ),
-            subtitle: Tooltip(
-              message: balanceMessage,
-              child: Text(
-                "${vfxBalance + vaultBalance} vBTC",
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.btcOrange,
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "$balance vBTC",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.btcOrange,
+                  ),
                 ),
-              ),
+                Text(
+                  token.address,
+                  style: TextStyle(
+                    color: token.address.startsWith("xRBX") ? AppColors.getReserve() : Colors.white,
+                  ),
+                ),
+              ],
             ),
+            isThreeLine: true,
             trailing: Icon(Icons.chevron_right),
             onTap: () {
               AutoRouter.of(context).push(
-                WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier),
+                WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address),
               );
             },
           ),

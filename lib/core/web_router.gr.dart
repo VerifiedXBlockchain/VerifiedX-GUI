@@ -236,12 +236,15 @@ class WebRouter extends _i39.RootStackRouter {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<WebTokenizedBtcDetailScreenRouteArgs>(
           orElse: () => WebTokenizedBtcDetailScreenRouteArgs(
-              scIdentifier: pathParams.getString('scId')));
+                scIdentifier: pathParams.getString('scId'),
+                address: pathParams.getString('address'),
+              ));
       return _i39.AdaptivePage<dynamic>(
         routeData: routeData,
         child: _i11.WebTokenizedBtcDetailScreen(
           key: args.key,
           scIdentifier: args.scIdentifier,
+          address: args.address,
         ),
       );
     },
@@ -569,7 +572,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebHomeTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -616,7 +619,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebSendTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -658,7 +661,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebReserveAccountsTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -700,7 +703,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebReceiveTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -742,7 +745,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebTransactionsTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -789,7 +792,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebNftTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -831,7 +834,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebAdnrTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -888,7 +891,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebSmartContractTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -930,7 +933,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebTokenTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -972,7 +975,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebTokenizedBtcDetailScreenRoute.name,
-                  path: 'vbtc/detail/:scId',
+                  path: 'vbtc/detail/:scId/:address',
                   parent: WebTokenizeBitcoinRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -1419,14 +1422,19 @@ class WebTokenizedBtcDetailScreenRoute
   WebTokenizedBtcDetailScreenRoute({
     _i40.Key? key,
     required String scIdentifier,
+    required String address,
   }) : super(
           WebTokenizedBtcDetailScreenRoute.name,
-          path: 'vbtc/detail/:scId',
+          path: 'vbtc/detail/:scId/:address',
           args: WebTokenizedBtcDetailScreenRouteArgs(
             key: key,
             scIdentifier: scIdentifier,
+            address: address,
           ),
-          rawPathParams: {'scId': scIdentifier},
+          rawPathParams: {
+            'scId': scIdentifier,
+            'address': address,
+          },
         );
 
   static const String name = 'WebTokenizedBtcDetailScreenRoute';
@@ -1436,15 +1444,18 @@ class WebTokenizedBtcDetailScreenRouteArgs {
   const WebTokenizedBtcDetailScreenRouteArgs({
     this.key,
     required this.scIdentifier,
+    required this.address,
   });
 
   final _i40.Key? key;
 
   final String scIdentifier;
 
+  final String address;
+
   @override
   String toString() {
-    return 'WebTokenizedBtcDetailScreenRouteArgs{key: $key, scIdentifier: $scIdentifier}';
+    return 'WebTokenizedBtcDetailScreenRouteArgs{key: $key, scIdentifier: $scIdentifier, address: $address}';
   }
 }
 

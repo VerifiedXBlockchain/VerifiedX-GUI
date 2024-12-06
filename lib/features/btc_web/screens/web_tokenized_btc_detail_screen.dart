@@ -28,14 +28,18 @@ import '../providers/btc_web_vbtc_token_detail_provider.dart';
 
 class WebTokenizedBtcDetailScreen extends BaseScreen {
   final String scIdentifier;
-  const WebTokenizedBtcDetailScreen({super.key, @PathParam("scId") required this.scIdentifier});
+  final String address;
+  const WebTokenizedBtcDetailScreen({
+    super.key,
+    @PathParam("scId") required this.scIdentifier,
+    @PathParam("address") required this.address,
+  });
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(btcWebVbtcTokenDetailProvider(scIdentifier));
+    final family = "${scIdentifier}_$address";
 
-    final myAddress = ref.watch(webSessionProvider.select((value) => value.keypair?.address));
-    final myVaultAddress = ref.watch(webSessionProvider.select((value) => value.raKeypair?.address));
+    final data = ref.watch(btcWebVbtcTokenDetailProvider(family));
 
     return data.when(
       loading: () => AppBar(
@@ -83,22 +87,13 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Builder(builder: (context) {
-                  final vfxBalance = token.balanceForAddress(myAddress);
-                  final raBalance = token.balanceForAddress(myVaultAddress);
+                  final balance = token.balanceForAddress(address);
+                  // final raBalance = token.balanceForAddress(myVaultAddress);
 
-                  final balance = vfxBalance + raBalance;
+                  // final balance = vfxBalance + raBalance;
 
-                  if (myAddress != null) {
-                    return Text(
-                      "My Balance: $balance vBTC",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
-                    );
-                  }
                   return Text(
-                    "Global Balance: ${token.globalBalance} vBTC",
+                    "My Balance: $balance vBTC",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -120,10 +115,8 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final data = ref.watch(btcWebVbtcTokenDetailProvider(scIdentifier));
-
-    final myAddress = ref.watch(webSessionProvider.select((value) => value.keypair?.address));
-    final myVaultAddress = ref.watch(webSessionProvider.select((value) => value.raKeypair?.address));
+    final family = "${scIdentifier}_$address";
+    final data = ref.watch(btcWebVbtcTokenDetailProvider(family));
 
     return data.when(
         data: (token) {
@@ -133,7 +126,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
             );
           }
 
-          final isOwner = myAddress == token.ownerAddress || myVaultAddress == token.ownerAddress;
+          final isOwner = address == token.ownerAddress;
 
           final btcTxs = ref.watch(btcWebTransactionListProvider(token.depositAddress));
 
@@ -144,8 +137,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
               children: [
                 WebVBTCDetailsCard(
                   token: token,
-                  myAddress: myAddress,
-                  myVaultAddress: myVaultAddress,
+                  address: address,
                   isOwner: isOwner,
                 ),
                 SizedBox(
@@ -246,18 +238,16 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
 }
 
 class WebVBTCDetailsCard extends BaseComponent {
+  final BtcWebVbtcToken token;
+  final String address;
+  final bool isOwner;
+
   const WebVBTCDetailsCard({
     super.key,
     required this.token,
-    required this.myAddress,
-    required this.myVaultAddress,
+    required this.address,
     required this.isOwner,
   });
-
-  final BtcWebVbtcToken token;
-  final String? myAddress;
-  final String? myVaultAddress;
-  final bool isOwner;
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
@@ -277,7 +267,7 @@ class WebVBTCDetailsCard extends BaseComponent {
               SizedBox(
                 height: 6,
               ),
-              _VBTCDetails(token: token, myAddress: myAddress, myVaultAddress: myVaultAddress, isOwner: isOwner),
+              _VBTCDetails(token: token, address: address, isOwner: isOwner),
             ],
           ),
         ),
@@ -296,7 +286,7 @@ class WebVBTCDetailsCard extends BaseComponent {
           SizedBox(
             width: 16,
           ),
-          _VBTCDetails(token: token, myAddress: myAddress, myVaultAddress: myVaultAddress, isOwner: isOwner),
+          _VBTCDetails(token: token, address: address, isOwner: isOwner),
         ],
       ),
     );
@@ -306,27 +296,17 @@ class WebVBTCDetailsCard extends BaseComponent {
 class _VBTCDetails extends StatelessWidget {
   const _VBTCDetails({
     required this.token,
-    required this.myAddress,
-    required this.myVaultAddress,
+    required this.address,
     required this.isOwner,
   });
 
   final BtcWebVbtcToken token;
-  final String? myAddress;
-  final String? myVaultAddress;
+  final String address;
   final bool isOwner;
 
   @override
   Widget build(BuildContext context) {
-    final isRa = token.ownerAddress.startsWith("xRBX");
-
-    final vfxBalance = token.balanceForAddress(myAddress);
-    final vaultBalance = token.balanceForAddress(myVaultAddress);
-
-    String balanceMessage = "$myAddress: $vfxBalance vBTC\n$myVaultAddress: $vaultBalance vBTC";
-    if (isOwner) {
-      balanceMessage = "$balanceMessage\nGlobal Balance: ${token.globalBalance} vBTC";
-    }
+    final balance = token.balanceForAddress(address);
 
     return Expanded(
       child: Column(
@@ -336,10 +316,20 @@ class _VBTCDetails extends StatelessWidget {
         children: [
           _TokenDetailRefresher(
             scId: token.scIdentifier,
+            address: address,
           ),
           _DetailRow(
             label: "Name",
             value: token.name,
+          ),
+          _DetailRow(
+            label: "Owner",
+            value: address,
+            isReserve: address.startsWith("xRBX"),
+          ),
+          _DetailRow(
+            label: "My Balance",
+            value: "$balance vBTC",
           ),
           _DetailRow(
             label: "Description",
@@ -348,30 +338,24 @@ class _VBTCDetails extends StatelessWidget {
             withMaxLines: BreakPoints.useMobileLayout(context),
           ),
           _DetailRow(
-            label: "Owner",
-            value: token.ownerAddress,
-            isReserve: isRa,
-            withCopy: true,
-          ),
-          _DetailRow(
-            label: "BTC Deposit Address",
-            value: token.depositAddress,
-            inExpanded: true,
-            withCopy: true,
-          ),
-          _DetailRow(
             label: "Smart Contract ID",
             value: token.scIdentifier,
             inExpanded: true,
             withCopy: true,
           ),
-          Tooltip(
-            message: balanceMessage,
-            child: _DetailRow(
-              label: "My Balance",
-              value: "${vfxBalance + vaultBalance} vBTC",
-            ),
+          _DetailRow(
+            label: "SmartContract Owner Address",
+            value: token.ownerAddress,
+            isReserve: token.ownerAddress.startsWith("xRBX"),
+            withCopy: true,
           ),
+          if (isOwner)
+            _DetailRow(
+              label: "BTC Deposit Address",
+              value: token.depositAddress,
+              inExpanded: true,
+              withCopy: true,
+            ),
           if (isOwner)
             _DetailRow(
               label: "Token Total Balance",
@@ -485,7 +469,9 @@ class _VbtcActionButtonsContainerState extends State<_VbtcActionButtonsContainer
 
 class _TokenDetailRefresher extends ConsumerStatefulWidget {
   final String scId;
-  const _TokenDetailRefresher({super.key, required this.scId});
+  final String address;
+
+  const _TokenDetailRefresher({super.key, required this.scId, required this.address});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => __TokenDetailRefresherState();
@@ -497,7 +483,8 @@ class __TokenDetailRefresherState extends ConsumerState<_TokenDetailRefresher> {
   @override
   void initState() {
     timer = Timer.periodic(Duration(seconds: 10), (timer) {
-      ref.invalidate(btcWebVbtcTokenDetailProvider(widget.scId));
+      final family = "${widget.scId}_${widget.address}";
+      ref.invalidate(btcWebVbtcTokenDetailProvider(family));
     });
     super.initState();
   }

@@ -18,13 +18,7 @@ class BtcWebVbtcTokenListProvider extends StateNotifier<List<BtcWebVbtcToken>> {
 
     if (raAddress != null) {
       final raTokens = await ExplorerService().getWebVbtcTokens(raAddress);
-
-      for (final t in raTokens) {
-        final exists = results.indexWhere((a) => a.scIdentifier == t.scIdentifier) > -1;
-        if (!exists) {
-          results = [...results, t];
-        }
-      }
+      results = [...tokens, ...raTokens];
     }
 
     state = results;
