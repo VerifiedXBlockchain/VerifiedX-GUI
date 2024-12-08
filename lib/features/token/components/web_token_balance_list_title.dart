@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/token/components/web_token_management_actions.dart';
 import '../../../core/base_component.dart';
 import '../models/web_fungible_token.dart';
 import '../../../utils/toast.dart';
@@ -38,10 +39,25 @@ class WebTokenBalanceListTile extends BaseComponent {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            WebTransferTokenAmountButton(
-              balance: balance,
-              address: address,
-              tokenDetail: tokenDetail,
+            AppButton(
+              label: "Voting",
+              variant: AppColorVariant.Dark,
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) {
+                      return WebTokenTopicBottomSheet(tokenDetail: tokenDetail, isOwner: tokenDetail.token.ownerAddress == address);
+                    });
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 12.0),
+              child: WebTransferTokenAmountButton(
+                balance: balance,
+                address: address,
+                tokenDetail: tokenDetail,
+              ),
             ),
             if (tokenDetail.token.canBurn)
               Padding(

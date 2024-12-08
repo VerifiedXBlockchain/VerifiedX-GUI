@@ -209,7 +209,7 @@ class _TopicVotingActions extends BaseComponent {
 
     final pendingVoteKey = "$address|${topic.topicUid}";
 
-    if (ref.watch(pendingVotesProvider).contains(pendingVoteKey)) {
+    if (!kIsWeb && ref.watch(pendingVotesProvider).contains(pendingVoteKey)) {
       return const _ErrorMessage("Vote transaction pending.");
     }
 
