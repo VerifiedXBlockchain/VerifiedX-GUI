@@ -303,11 +303,9 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                             child: ListTile(
                               dense: true,
                               title: Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(input.prevout.scriptpubkeyAddress),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 4.0),
+                                    padding: const EdgeInsets.only(right: 4.0),
                                     child: InkWell(
                                       onTap: () async {
                                         await Clipboard.setData(ClipboardData(text: input.prevout.scriptpubkeyAddress));
@@ -318,6 +316,13 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                         size: 12,
                                         color: Colors.white70,
                                       ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      input.prevout.scriptpubkeyAddress,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
@@ -357,9 +362,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                             child: ListTile(
                               dense: true,
                               title: Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(output.scriptpubkeyAddress),
                                   Padding(
                                     padding: const EdgeInsets.only(left: 4.0),
                                     child: InkWell(
@@ -372,6 +375,12 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                         size: 12,
                                         color: Colors.white70,
                                       ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      output.scriptpubkeyAddress,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],

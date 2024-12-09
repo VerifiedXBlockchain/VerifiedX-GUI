@@ -213,6 +213,10 @@ class _TopicVotingActions extends BaseComponent {
       return const _ErrorMessage("Vote transaction pending.");
     }
 
+    if (kIsWeb && ref.watch(pendingVotesProvider).contains(pendingVoteKey)) {
+      return const _ErrorMessage("You have voted.");
+    }
+
     if (!topic.isActive) {
       return _ErrorMessage("Voting Ended on ${topic.endsAtFormatted}.");
     }
