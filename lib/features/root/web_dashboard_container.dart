@@ -120,7 +120,7 @@ class _ContentWrapper extends BaseComponent {
     final tabsRouter = AutoTabsRouter.of(context);
 
     tabsRouter.addListener(() {
-      Future.delayed(Duration(milliseconds: 10), () {
+      Future.delayed(Duration(milliseconds: 100), () {
         if (tabsRouter.current.name == "WebHomeTabRouter") {
           if (!globalBalancesExpanded) {
             final url = HtmlHelpers().getUrl();

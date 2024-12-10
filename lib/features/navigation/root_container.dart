@@ -97,15 +97,17 @@ class _LayoutState extends State<_Layout> {
       final globalBalancesExpanded = ref.watch(globalBalancesExpandedProvider);
 
       tabsRouter.addListener(() {
-        if (tabsRouter.current.name == "HomeTabRouter") {
-          if (!globalBalancesExpanded) {
-            ref.read(globalBalancesExpandedProvider.notifier).expand();
+        Future.delayed(Duration(milliseconds: 100), () {
+          if (tabsRouter.current.name == "HomeTabRouter") {
+            if (!globalBalancesExpanded) {
+              ref.read(globalBalancesExpandedProvider.notifier).expand();
+            }
+          } else {
+            if (globalBalancesExpanded) {
+              ref.read(globalBalancesExpandedProvider.notifier).detract();
+            }
           }
-        } else {
-          if (globalBalancesExpanded) {
-            ref.read(globalBalancesExpandedProvider.notifier).detract();
-          }
-        }
+        });
       });
 
       final isValidating = ref.watch(validatingStatusProvider);

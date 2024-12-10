@@ -92,6 +92,18 @@ abstract class WebNft with _$WebNft {
                 webAsset = WebAsset(location: assetUrls![fileName]);
               }
 
+              print(phase['Properties']);
+
+              List<ScProperty> properties = [];
+              if (phase["Properties"] != null) {
+                for (final entry in phase['Properties'].entries) {
+                  properties.add(ScProperty(name: entry.key, value: entry.value));
+                }
+              }
+
+              print("***");
+              print(properties);
+
               updatedEvolutionPhases.add(EvolvePhase(
                 name: phase["Name"],
                 description: phase["Description"],
@@ -101,7 +113,7 @@ abstract class WebNft with _$WebNft {
                     ? DateTime.fromMillisecondsSinceEpoch(phase['EvolveDate'] * 1000)
                     : null,
                 blockHeight: phase['EvolveBlockHeight'],
-                properties: phase['Properties'] != null ? phase['Properties'].map((p) => ScProperty.fromJson(p)).toList() : [],
+                properties: properties,
                 webAsset: webAsset,
               ));
             }
