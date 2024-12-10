@@ -373,7 +373,7 @@ class ValidatorScreen extends BaseScreen {
           child: Text(
             "Blocks Validated (${ref.watch(validatedBlocksProvider).length})",
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 16,
               decoration: TextDecoration.underline,
             ),
           ),
@@ -394,11 +394,12 @@ class ValidatedBlocksList extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final blocks = ref.watch(validatedBlocksProvider);
+
     if (blocks.isEmpty) {
       return Text("No Validated Blocks");
     }
     return SizedBox(
-      height: 106,
+      height: 212,
       child: Scrollbar(
         controller: scrollController,
         child: Padding(
@@ -407,14 +408,14 @@ class ValidatedBlocksList extends BaseComponent {
               controller: scrollController,
               itemCount: blocks.length,
               scrollDirection: Axis.horizontal,
-              itemExtent: 106,
+              itemExtent: 212,
               itemBuilder: (context, index) {
                 final block = blocks[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: SizedBox(
-                    width: 90,
-                    height: 90,
+                    width: 180,
+                    height: 180,
                     child: _BlockPreview(block: block),
                   ),
                 );
@@ -443,7 +444,7 @@ class _BlockPreview extends StatelessWidget {
             SpecialDialog<void>().show(
               context,
               title: "Block ${block.height}",
-              maxWidth: 300,
+              maxWidth: 320,
               content: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: LatestBlockContent(
@@ -463,11 +464,12 @@ class _BlockPreview extends StatelessWidget {
                   formatIntWithCommas(block.height),
                   style: TextStyle(
                     color: AppColors.getBlue(),
+                    fontSize: 20,
                   ),
                 ),
                 Text(
                   block.parseTimeStamp,
-                  style: TextStyle(fontSize: 8, color: Colors.white54),
+                  style: TextStyle(fontSize: 14, color: Colors.white54),
                 )
               ],
             ),
