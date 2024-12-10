@@ -371,7 +371,7 @@ class ReserveAccountManageCard extends BaseComponent {
                                                           final n = await NftService().getNftData(nft.id);
 
                                                           // if (!ref.read(transferredProvider).contains(tokenAccount.smartContractId)) {
-                                                          if (n != null && nft.isToken) {
+                                                          if (n != null && n.isToken) {
                                                             // if (n.currentOwner == address) {
                                                             final tokenAccount = TokenAccount.fromNft(n, ref);
                                                             final tokenFeature = TokenScFeature.fromNft(n);
@@ -379,11 +379,11 @@ class ReserveAccountManageCard extends BaseComponent {
                                                               Navigator.of(context).push(MaterialPageRoute(
                                                                   builder: (_) => TokenManagementScreenContainer(
                                                                         address: ra.address,
-                                                                        nftId: nft.id,
+                                                                        nftId: n.id,
                                                                         tokenAccount: tokenAccount,
                                                                         tokenFeature: tokenFeature,
                                                                         ref: ref,
-                                                                        nft: nft,
+                                                                        nft: n,
                                                                       )));
                                                               return;
                                                             }

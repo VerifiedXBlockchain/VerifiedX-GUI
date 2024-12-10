@@ -21,4 +21,8 @@ class TokenizedBitcoin with _$TokenizedBitcoin {
   }) = _TokenizedBitcoin;
 
   factory TokenizedBitcoin.fromJson(Map<String, dynamic> json) => _$TokenizedBitcoinFromJson(json);
+
+  int get timestamp {
+    return int.tryParse(smartContractUid.split(":").last) ?? 0;
+  }
 }

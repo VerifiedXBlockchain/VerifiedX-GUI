@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/empty_router_widgets.dart';
+import 'package:rbx_wallet/features/home/screens/all_tokens_screen.dart';
 import '../features/btc/screens/tokenized_btc_list_screen.dart';
 import '../features/token/screens/token_create_screen.dart';
 import '../features/token/screens/token_list_screen.dart';
@@ -66,6 +67,7 @@ const List<AutoRoute> appRoutes = [
         page: EmptyRouterPage,
         children: [
           AutoRoute(path: "", page: NewHomeScreen),
+          AutoRoute(path: "all-tokens", page: AllTokensScreen)
           // AutoRoute(path: "reserve-accounts", page: ReserveAccountOverviewScreen),
         ],
       ),

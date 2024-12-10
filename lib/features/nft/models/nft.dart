@@ -372,4 +372,8 @@ abstract class Nft with _$Nft {
     }
     return false;
   }
+
+  int get timestamp {
+    return int.tryParse(id.split(":").last) ?? 0;
+  }
 }

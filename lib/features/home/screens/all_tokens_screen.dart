@@ -1,65 +1,90 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/base_screen.dart';
+import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
+import 'package:rbx_wallet/features/btc/providers/tokenized_bitcoin_list_provider.dart';
 import 'package:rbx_wallet/features/btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import 'package:rbx_wallet/features/nft/models/web_nft.dart';
 import 'package:rbx_wallet/features/nft/providers/nft_list_provider.dart';
 import 'package:rbx_wallet/features/token/models/web_fungible_token.dart';
+import 'package:rbx_wallet/features/token/providers/token_list_provider.dart';
 import 'package:rbx_wallet/features/token/providers/web_token_list_provider.dart';
 
-import '../../../core/components/badges.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../generated/assets.gen.dart';
-import '../../asset/polling_image_preview.dart';
+import '../../btc/models/tokenized_bitcoin.dart';
+import '../../btc/screens/tokenized_btc_list_screen.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
-import '../../navigation/constants.dart';
 import '../../nft/models/nft.dart';
 import '../../nft/providers/web_nft_list_provider.dart';
 import '../../nft/screens/nft_detail_screen.dart';
+import '../../nft/services/nft_service.dart';
+import '../../token/models/token_account.dart';
+import '../../token/models/token_sc_feature.dart';
 import '../../token/providers/web_token_detail_provider.dart';
+import '../../token/screens/token_management_screen.dart';
 
 class AllTokensScreen extends BaseScreen {
   const AllTokensScreen({super.key});
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final address = ref.watch(webSessionProvider.select((value) => value.keypair?.address));
+    final address = kIsWeb
+        ? ref.watch(webSessionProvider.select((value) => value.keypair?.address))
+        : ref.watch(sessionProvider.select((value) => value.currentWallet?.address));
+    final raAddress = ref.watch(webSessionProvider.select((value) => value.raKeypair?.address));
+    final allAddresses = kIsWeb ? [address, raAddress] : [address];
 
-    final vBtcTokens = ref.watch(btcWebVbtcTokenListProvider);
-    final fungibleTokens = ref.watch(webTokenListProvider).where((element) => element.address == address);
-    final nfts = address != null ? ref.watch(webNftListProvider(address)) : [];
+    final vBtcTokens = kIsWeb ? ref.watch(btcWebVbtcTokenListProvider) : ref.watch(tokenizedBitcoinListProvider);
+    final fungibleTokens = kIsWeb
+        ? ref.watch(webTokenListProvider).where((element) => allAddresses.contains(element.address)).toList()
+        : ref.watch(tokenListProvider).data.results;
+
+    final nfts = kIsWeb
+        ? address != null
+            ? ref.watch(webNftListProvider(address))
+            : []
+        : ref.watch(nftListProvider).data.results;
 
     final tokens = [...vBtcTokens, ...fungibleTokens, ...nfts]..sort((a, b) {
         late int timestampA;
         late int timestampB;
-
+        //A
         if (a is BtcWebVbtcToken) {
           timestampA = (a.createdAt.millisecondsSinceEpoch / 1000).round();
-        }
-        if (b is BtcWebVbtcToken) {
+        } else if (b is BtcWebVbtcToken) {
           timestampB = (b.createdAt.millisecondsSinceEpoch / 1000).round();
+        } else if (a is WebFungibleTokenBalance) {
+          timestampA = (a.token.createdAt.millisecondsSinceEpoch / 1000).round();
+        } else if (a is TokenizedBitcoin) {
+          timestampA = a.timestamp;
+        } else if (a is Nft) {
+          timestampA = a.timestamp;
+        } else {
+          timestampA = 0;
         }
 
-        if (a is WebFungibleTokenBalance) {
-          timestampA = (a.token.createdAt.millisecondsSinceEpoch / 1000).round();
-        }
+        //B
 
         if (b is WebFungibleTokenBalance) {
           timestampB = (b.token.createdAt.millisecondsSinceEpoch / 1000).round();
-        }
-
-        if (a is WebNft) {
+        } else if (a is WebNft) {
           timestampA = (a.mintedAt.millisecondsSinceEpoch / 1000).round();
-        }
-
-        if (b is WebNft) {
+        } else if (b is WebNft) {
           timestampB = (b.mintedAt.millisecondsSinceEpoch / 1000).round();
+        } else if (b is TokenizedBitcoin) {
+          timestampB = b.timestamp;
+        } else if (b is Nft) {
+          timestampB = b.timestamp;
+        } else {
+          timestampB = 0;
         }
 
         return timestampA > timestampB ? -1 : 1;
@@ -119,16 +144,45 @@ class AllTokensScreen extends BaseScreen {
                   child: AppCard(
                     padding: 0,
                     child: Builder(builder: (context) {
-                      if (token is WebNft) {
-                        final nft = token.smartContract;
+                      if (token is WebNft || token is Nft) {
+                        final nft = token is WebNft ? token.smartContract : token;
+                        final subtitle = token is Nft
+                            ? token.isToken
+                                ? "Fungible Token"
+                                : "Non-Fungible Token"
+                            : "Non-Fungible Token";
 
                         return ListTile(
                           dense: true,
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: nft.id)));
+                          onTap: () async {
+                            if (token is WebNft) {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: token.smartContract.id)));
+                            } else if (token is Nft) {
+                              if (token.isToken) {
+                                final n = await NftService().getNftData(nft.id);
+
+                                if (n != null && n.isToken) {
+                                  final tokenAccount = TokenAccount.fromNft(n, ref);
+                                  final tokenFeature = TokenScFeature.fromNft(n);
+                                  if (tokenAccount != null && tokenFeature != null) {
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (_) => TokenManagementScreenContainer(
+                                              address: n.currentOwner,
+                                              nftId: n.id,
+                                              tokenAccount: tokenAccount,
+                                              tokenFeature: tokenFeature,
+                                              ref: ref,
+                                              nft: n,
+                                            )));
+                                  }
+                                }
+                              } else {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: token.id)));
+                              }
+                            }
                           },
                           title: Text(token.name),
-                          subtitle: Text("Non-Fungible Token"),
+                          subtitle: Text(subtitle),
                           trailing: Icon(Icons.chevron_right),
                           leading: Builder(
                             builder: (context) {
@@ -213,6 +267,10 @@ class AllTokensScreen extends BaseScreen {
                             ),
                           ),
                         );
+                      }
+
+                      if (token is TokenizedBitcoin) {
+                        return TokenizedBtcListTile(token: token);
                       }
 
                       return SizedBox.shrink();
