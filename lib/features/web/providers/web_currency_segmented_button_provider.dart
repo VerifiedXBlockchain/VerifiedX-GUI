@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/features/web/providers/web_selected_account_provider.dart';
 
+import '../../send/providers/send_form_provider.dart';
+
 enum WebCurrencyType {
   any,
   vfx,
@@ -41,6 +43,7 @@ class CurrencySegementedButtonProvider extends StateNotifier<WebCurrencyType> {
 
         break;
     }
+    ref.read(sendFormProvider.notifier).clear();
   }
 }
 

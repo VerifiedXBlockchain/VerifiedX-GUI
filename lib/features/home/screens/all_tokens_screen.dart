@@ -18,6 +18,7 @@ import '../../../core/theme/components.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../generated/assets.gen.dart';
+import '../../asset/polling_image_preview.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../../btc/screens/tokenized_btc_list_screen.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
@@ -186,31 +187,53 @@ class AllTokensScreen extends BaseScreen {
                           trailing: Icon(Icons.chevron_right),
                           leading: Builder(
                             builder: (context) {
-                              if (nft.currentEvolveAssetWeb != null && nft.currentEvolveAssetWeb!.isImage) {
-                                return Container(
+                              if (kIsWeb) {
+                                if (nft.currentEvolveAssetWeb != null && nft.currentEvolveAssetWeb!.isImage) {
+                                  return Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: AspectRatio(
+                                      aspectRatio: 1,
+                                      child: CachedNetworkImage(
+                                        imageUrl: nft.currentEvolveAssetWeb!.location,
+                                        width: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  );
+                                }
+
+                                if (nft.primaryAssetWeb != null) {
+                                  return Icon(Icons.file_present_outlined);
+                                }
+
+                                return SizedBox(
                                   width: 32,
                                   height: 32,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: AspectRatio(
-                                    aspectRatio: 1,
-                                    child: CachedNetworkImage(
-                                      imageUrl: nft.currentEvolveAssetWeb!.location,
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
                                 );
                               }
 
-                              if (nft.primaryAssetWeb != null) {
-                                return Icon(Icons.file_present_outlined);
-                              }
+                              if (nft.currentEvolveAsset.isImage) {
+                                if (nft.currentEvolveAsset.localPath == null) {
+                                  return const SizedBox(
+                                    width: 32,
+                                    height: 32,
+                                  );
+                                }
 
-                              return SizedBox(
-                                width: 32,
-                                height: 32,
-                              );
+                                return SizedBox(
+                                  width: 32,
+                                  height: 32,
+                                  child: PollingImagePreview(
+                                    localPath: nft.currentEvolveAsset.localPath!,
+                                    expectedSize: nft.currentEvolveAsset.fileSize,
+                                    withProgress: false,
+                                  ),
+                                );
+                              }
+                              return const Icon(Icons.file_present_outlined);
                             },
                           ),
                         );

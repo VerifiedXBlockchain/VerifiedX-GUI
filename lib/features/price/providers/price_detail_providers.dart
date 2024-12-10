@@ -10,3 +10,21 @@ final vfxPriceDataDetailProvider = FutureProvider<PriceData?>((ref) async {
 final btcPriceDataDetailProvider = FutureProvider<PriceData?>((ref) async {
   return ExplorerService().retrievePriceData('btc');
 });
+
+final vfxCurrentPriceDataDetailProvider = Provider<double?>((ref) {
+  final value = ref.watch(vfxPriceDataDetailProvider);
+  return value.when(
+    data: (data) => data?.usdtPrice,
+    loading: () => null,
+    error: (_, __) => null,
+  );
+});
+
+final btcCurrentPriceDataDetailProvider = Provider<double?>((ref) {
+  final value = ref.watch(btcPriceDataDetailProvider);
+  return value.when(
+    data: (data) => data?.usdtPrice,
+    loading: () => null,
+    error: (_, __) => null,
+  );
+});

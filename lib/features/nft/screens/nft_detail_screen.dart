@@ -499,6 +499,8 @@ class NftDetailScreen extends BaseScreen {
                                             isScrollControlled: true,
                                             backgroundColor: Colors.black87,
                                             builder: (context) {
+                                              final address = kIsWeb ? ref.watch(webSessionProvider.select((value) => value.keypair?.address)) : null;
+
                                               return ModalContainer(color: Colors.black26, children: [
                                                 Column(
                                                   mainAxisSize: MainAxisSize.min,
@@ -507,7 +509,7 @@ class NftDetailScreen extends BaseScreen {
                                                       nft.baseEvolutionPhase,
                                                       nft: nft,
                                                       nftId: id,
-                                                      canManageEvolve: nft.canManageEvolve,
+                                                      canManageEvolve: nft.canManageEvolve(address),
                                                       index: 0,
                                                     ),
                                                     ...nft.updatedEvolutionPhases
@@ -518,7 +520,7 @@ class NftDetailScreen extends BaseScreen {
                                                             entry.value,
                                                             nft: nft,
                                                             nftId: id,
-                                                            canManageEvolve: nft.canManageEvolve,
+                                                            canManageEvolve: nft.canManageEvolve(address),
                                                             index: entry.key + 1,
                                                             onAssociate: () {
                                                               Navigator.of(context).pop();
@@ -780,27 +782,33 @@ class NftDetailScreen extends BaseScreen {
                         },
                       ),
                     ),
-                  if (nft.manageable && nft.isMinter)
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: AppButton(
-                        label: "Manage",
-                        icon: Icons.settings,
-                        onPressed: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            backgroundColor: Colors.black87,
-                            context: context,
-                            builder: (context) {
-                              return ModalContainer(
-                                color: Colors.black26,
-                                children: [NftMangementModal(nft.id, nft)],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
+
+                  Builder(builder: (context) {
+                    final address = kIsWeb ? ref.watch(webSessionProvider.select((value) => value.keypair?.address)) : null;
+                    if (nft.manageable && nft.canManage(address)) {
+                      return Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: AppButton(
+                          label: "Manage",
+                          icon: Icons.settings,
+                          onPressed: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              backgroundColor: Colors.black87,
+                              context: context,
+                              builder: (context) {
+                                return ModalContainer(
+                                  color: Colors.black26,
+                                  children: [NftMangementModal(nft.id, nft, showViewNft: false)],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    }
+                    return SizedBox.shrink();
+                  }),
                   // if (!kIsWeb)
                   //   Padding(
                   //     padding: const EdgeInsets.all(4.0),

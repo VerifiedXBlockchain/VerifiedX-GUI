@@ -147,8 +147,23 @@ abstract class Nft with _$Nft {
     return false;
   }
 
-  bool get canManageEvolve {
-    if (!isMinter) return false;
+  bool canManage(String? address) {
+    if (kIsWeb) {
+      if (address != currentOwner) return false;
+    } else {
+      if (!isMinter) return false;
+    }
+
+    return manageable;
+  }
+
+  bool canManageEvolve(String? address) {
+    if (kIsWeb) {
+      if (address != currentOwner) return false;
+    } else {
+      if (!isMinter) return false;
+    }
+
     // return true;
 
     // not using this for now

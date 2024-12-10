@@ -13,6 +13,7 @@ import '../../btc_web/services/btc_web_service.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/app_constants.dart';
 import '../../global_loader/global_loading_provider.dart';
+import '../../price/providers/price_detail_providers.dart';
 import '../../reserve/services/reserve_account_service.dart';
 import '../../wallet/models/wallet.dart';
 
@@ -39,6 +40,7 @@ class SendFormModel {
   final bool isProcessing;
   final BtcFeeRatePreset btcFeeRatePreset;
   final int btcCustomFeeRate;
+  final double usdValue;
 
   const SendFormModel({
     this.amount = "",
@@ -46,6 +48,7 @@ class SendFormModel {
     this.isProcessing = false,
     this.btcFeeRatePreset = BtcFeeRatePreset.economy,
     this.btcCustomFeeRate = 0,
+    this.usdValue = 0.0,
   });
 
   SendFormModel copyWith({
@@ -54,6 +57,7 @@ class SendFormModel {
     bool? isProcessing,
     BtcFeeRatePreset? btcFeeRatePreset,
     int? btcCustomFeeRate,
+    double? usdValue,
   }) {
     return SendFormModel(
       amount: amount ?? this.amount,
@@ -61,6 +65,7 @@ class SendFormModel {
       isProcessing: isProcessing ?? this.isProcessing,
       btcFeeRatePreset: btcFeeRatePreset ?? this.btcFeeRatePreset,
       btcCustomFeeRate: btcCustomFeeRate ?? this.btcCustomFeeRate,
+      usdValue: usdValue ?? this.usdValue,
     );
   }
 }
@@ -84,7 +89,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     addressController = TextEditingController(text: model.address);
     btcCustomFeeRateController = TextEditingController(text: '');
 
-    amountController.addListener(_updateState);
+    amountController.addListener(_updateAmountState);
     addressController.addListener(_updateState);
     btcCustomFeeRateController.addListener(_updateState);
 
@@ -207,6 +212,25 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       amount: amountController.value.text,
       address: addressController.value.text,
       btcCustomFeeRate: int.tryParse(btcCustomFeeRateController.text) ?? 0,
+    );
+  }
+
+  void _updateAmountState() {
+    final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
+
+    double usdValue = 0.0;
+
+    final parsedAmount = double.tryParse(amountController.value.text);
+
+    final usdPrice = isBtc ? ref.read(btcCurrentPriceDataDetailProvider) : ref.read(vfxCurrentPriceDataDetailProvider);
+
+    if (parsedAmount != null && usdPrice != null) {
+      usdValue = parsedAmount * usdPrice;
+    }
+
+    state = state.copyWith(
+      amount: amountController.value.text,
+      usdValue: usdValue,
     );
   }
 

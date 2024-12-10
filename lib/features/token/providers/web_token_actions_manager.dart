@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
+import '../../nft/models/nft.dart';
 import '../models/web_fungible_token.dart';
 import '../../web/utils/raw_transaction.dart';
 

@@ -424,7 +424,9 @@ class SendForm extends BaseComponent {
                   controller: formProvider.amountController,
                   validator: formProvider.amountValidator,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-                  decoration: InputDecoration(hintText: "Amount of ${isBtc ? 'BTC' : 'VFX'} to send"),
+                  decoration: InputDecoration(
+                      hintText: "Amount of ${isBtc ? 'BTC' : 'VFX'} to send",
+                      helperText: formState.usdValue > 0 ? "\$${formState.usdValue.toStringAsFixed(2)} USD" : null),
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 ),
               ),

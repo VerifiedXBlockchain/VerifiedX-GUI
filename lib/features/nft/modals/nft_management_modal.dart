@@ -28,7 +28,8 @@ import '../screens/nft_detail_screen.dart';
 class NftMangementModal extends BaseComponent {
   final String id;
   final Nft nft;
-  const NftMangementModal(this.id, this.nft, {Key? key}) : super(key: key);
+  final bool showViewNft;
+  const NftMangementModal(this.id, this.nft, {Key? key, this.showViewNft = true}) : super(key: key);
 
   void evolve(BuildContext context, WidgetRef ref) async {
     final confirmed = await ConfirmDialog.show(
@@ -125,14 +126,15 @@ class NftMangementModal extends BaseComponent {
                   Navigator.of(context).pop();
                 },
               ),
-              AppButton(
-                label: "View NFT",
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  // AutoRouter.of(context).push(NftDetailScreenRoute(id: nft.id));
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: nft.id)));
-                },
-              ),
+              if (showViewNft)
+                AppButton(
+                  label: "View NFT",
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // AutoRouter.of(context).push(NftDetailScreenRoute(id: nft.id));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: nft.id)));
+                  },
+                ),
             ],
           ),
           const Divider(),
@@ -186,40 +188,44 @@ class NftMangementModal extends BaseComponent {
           //     ],
           //   ),
 
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Divider(),
-              Text(
-                nft.evolveIsDynamic ? "Evolution" : "Manage Evolution",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              EvolutionStateRow(
-                nft.baseEvolutionPhase,
-                nft: nft,
-                nftId: id,
-                canManageEvolve: nft.manageable,
-                index: 0,
-              ),
-              ...nft.updatedEvolutionPhases
-                  .asMap()
-                  .entries
-                  .map(
-                    (entry) => EvolutionStateRow(
-                      entry.value,
-                      nft: nft,
-                      nftId: id,
-                      canManageEvolve: nft.manageable,
-                      index: entry.key + 1,
-                      onAssociate: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  )
-                  .toList(),
-            ],
-          ),
+          Builder(builder: (context) {
+            final address = kIsWeb ? ref.watch(webSessionProvider.select((value) => value.keypair?.address)) : null;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Divider(),
+                Text(
+                  nft.evolveIsDynamic ? "Evolution" : "Manage Evolution",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                EvolutionStateRow(
+                  nft.baseEvolutionPhase,
+                  nft: nft,
+                  nftId: id,
+                  canManageEvolve: nft.canManageEvolve(address),
+                  index: 0,
+                ),
+                ...nft.updatedEvolutionPhases
+                    .asMap()
+                    .entries
+                    .map(
+                      (entry) => EvolutionStateRow(
+                        entry.value,
+                        nft: nft,
+                        nftId: id,
+                        canManageEvolve: nft.canManageEvolve(address),
+                        index: entry.key + 1,
+                        onAssociate: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    )
+                    .toList(),
+              ],
+            );
+          }),
         ],
       ),
     );
