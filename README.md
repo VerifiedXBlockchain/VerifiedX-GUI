@@ -1,6 +1,6 @@
-# RBX Wallet GUI
+# VerifiedX GUI
 
-This is the new version of the RBXWallet GUI which supports both mac and windows.
+This is the new version of the VerifiedX GUI which supports Mac, Windows, and Web.
 
 ## Installing
 
