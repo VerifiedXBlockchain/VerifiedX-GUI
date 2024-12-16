@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/app.dart';
+import 'package:rbx_wallet/core/theme/colors.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/web_router.gr.dart';
@@ -114,6 +115,9 @@ class RootContainerSideNavList extends BaseComponent {
           RootContainerSideNavItem(
             title: "Tokenize BTC",
             iconType: PrettyIconType.bitcoin,
+            textColorOverrideIdle: AppColors.getBtc().withOpacity(0.8),
+            textColorOverrideHover: AppColors.getBtc().withOpacity(1),
+            textColorOverrideActive: AppColors.getBtc().withOpacity(1),
             onPressed: () {
               if (kIsWeb) {
                 tabsRouter.setActiveIndex(WebRouteIndex.vbtc);

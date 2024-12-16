@@ -11,6 +11,9 @@ class RootContainerSideNavItem extends StatefulWidget {
   final bool isExpanded;
   final PrettyIconType iconType;
   final IconData? icon;
+  final Color? textColorOverrideIdle;
+  final Color? textColorOverrideActive;
+  final Color? textColorOverrideHover;
   const RootContainerSideNavItem({
     super.key,
     required this.title,
@@ -19,6 +22,9 @@ class RootContainerSideNavItem extends StatefulWidget {
     required this.isExpanded,
     required this.iconType,
     this.icon,
+    this.textColorOverrideIdle,
+    this.textColorOverrideActive,
+    this.textColorOverrideHover,
   });
 
   @override
@@ -97,10 +103,10 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                           style: TextStyle(
                             fontSize: 15,
                             color: widget.isActive
-                                ? AppColors.getBlue(ColorShade.s100)
+                                ? widget.textColorOverrideActive ?? AppColors.getBlue(ColorShade.s100)
                                 : isHovering
-                                    ? AppColors.getWhite(ColorShade.s200)
-                                    : AppColors.getWhite(ColorShade.s400).withOpacity(0.9),
+                                    ? widget.textColorOverrideHover ?? AppColors.getWhite(ColorShade.s200)
+                                    : widget.textColorOverrideIdle ?? AppColors.getWhite(ColorShade.s400).withOpacity(0.9),
                           ),
                         ),
                       ),
