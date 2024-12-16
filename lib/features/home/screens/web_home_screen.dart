@@ -410,7 +410,9 @@ class _Actions extends BaseComponent {
                 label: "Transfer",
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
-                onPressed: () {},
+                onPressed: () {
+                  tabsRouter.setActiveIndex(WebRouteIndex.transactions);
+                },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               Builder(builder: (context) {

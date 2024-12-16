@@ -85,7 +85,9 @@ class CommonActions extends BaseComponent {
                 label: "Transfer",
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
-                onPressed: () {},
+                onPressed: () {
+                  RootContainerUtils.navigateToTab(context, RootTab.transactions);
+                },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
