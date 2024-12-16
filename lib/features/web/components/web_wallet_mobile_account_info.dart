@@ -49,33 +49,33 @@ class WebMobileAccountInfo extends BaseComponent {
             ),
           ),
         ),
-        InkWell(
-          onTap: () {
-            visibilityProvider.setVisible(1);
-          },
-          child: AppCard(
-            margin: EdgeInsets.symmetric(vertical: 8),
-            fullWidth: true,
-            padding: 8,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  "assets/images/vbtc_small.png",
-                  width: 32,
-                  height: 32,
-                ),
-                Text(
-                  '0 vBTC',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: AppColors.getWhite(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // InkWell(
+        //   onTap: () {
+        //     visibilityProvider.setVisible(1);
+        //   },
+        //   child: AppCard(
+        //     margin: EdgeInsets.symmetric(vertical: 8),
+        //     fullWidth: true,
+        //     padding: 8,
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         Image.asset(
+        //           "assets/images/vbtc_small.png",
+        //           width: 32,
+        //           height: 32,
+        //         ),
+        //         Text(
+        //           '0 vBTC',
+        //           style: TextStyle(
+        //             fontSize: 20,
+        //             color: AppColors.getWhite(),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         InkWell(
           onTap: () {
             visibilityProvider.setVisible(2);

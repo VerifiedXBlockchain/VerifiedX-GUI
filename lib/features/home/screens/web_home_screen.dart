@@ -96,11 +96,96 @@ class WebHomeScreen extends BaseScreen {
             const _Brand(),
 
             Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: WebMobileAccountInfo(),
-            )),
-            const _Actions(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: WebMobileAccountInfo(),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "Coin Prices",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  CoinPriceSummary(
+                    mini: true,
+                    type: CoinPriceSummaryType.vfx,
+                    actions: [
+                      // AppButton(
+                      //   onPressed: () {
+                      //     ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
+                      //     Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                      //       MaterialPageRoute(
+                      //         fullscreenDialog: true,
+                      //         builder: (_) => WebPriceChartScreen(
+                      //           isBtc: false,
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      //   label: "View Chart",
+                      //   variant: AppColorVariant.Light,
+                      //   type: AppButtonType.Outlined,
+                      // ),
+                      AppButton(
+                        onPressed: () async {
+                          AccountUtils.getCoin(context, ref, VfxOrBtcOption.vfx);
+                        },
+                        variant: AppColorVariant.Secondary,
+                        type: AppButtonType.Outlined,
+                        label: "Get VFX",
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  CoinPriceSummary(
+                    mini: true,
+                    type: CoinPriceSummaryType.btc,
+                    actions: [
+                      // AppButton(
+                      //   onPressed: () {
+                      //     ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
+                      //     Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                      //       MaterialPageRoute(
+                      //         fullscreenDialog: true,
+                      //         builder: (_) => WebPriceChartScreen(
+                      //           isBtc: true,
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      //   label: "View Chart",
+                      //   variant: AppColorVariant.Light,
+                      //   type: AppButtonType.Outlined,
+                      // ),
+                      AppButton(
+                        onPressed: () {
+                          AccountUtils.getCoin(context, ref, VfxOrBtcOption.btc);
+                        },
+                        label: "Get BTC",
+                        variant: AppColorVariant.Btc,
+                        type: AppButtonType.Outlined,
+                      ),
+                    ],
+                  ),
+                  const _Actions(),
+                ],
+              ),
+            ),
           ],
         ),
         if (visibilityState != null)
@@ -124,16 +209,16 @@ class WebHomeScreen extends BaseScreen {
             child: WebAccountInfoVfx(),
           ),
         ),
-        AnimatedPositioned(
-          duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          curve: ROOT_CONTAINER_TRANSITION_CURVE,
-          top: visibilityState == 1 ? 0 : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
-          left: 0,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: WebAccountInfoVbtc(),
-          ),
-        ),
+        // AnimatedPositioned(
+        //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
+        //   curve: ROOT_CONTAINER_TRANSITION_CURVE,
+        //   top: visibilityState == 1 ? 0 : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
+        //   left: 0,
+        //   child: SizedBox(
+        //     width: MediaQuery.of(context).size.width,
+        //     child: WebAccountInfoVbtc(),
+        //   ),
+        // ),
         AnimatedPositioned(
           duration: ROOT_CONTAINER_TRANSITION_DURATION,
           curve: ROOT_CONTAINER_TRANSITION_CURVE,
@@ -283,7 +368,7 @@ class _Actions extends BaseComponent {
     final isMobile = BreakPoints.useMobileLayout(context);
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: isMobile ? 0 : 16),
       child: AppCard(
         fullWidth: true,
         child: Center(

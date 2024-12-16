@@ -22,18 +22,19 @@ enum CoinPriceSummaryType {
 class CoinPriceSummary extends BaseComponent {
   final CoinPriceSummaryType type;
   final List<Widget> actions;
+  final bool mini;
   const CoinPriceSummary({
     super.key,
     required this.type,
     required this.actions,
+    this.mini = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = type == CoinPriceSummaryType.vfx ? ref.watch(vfxPriceDataDetailProvider) : ref.watch(btcPriceDataDetailProvider);
-    print("INVALIDATE");
     return AppCard(
-      fullHeight: true,
+      fullHeight: !mini,
       padding: 4,
       child: Center(
         // child: _CoinPriceSummaryContent(type: type),
@@ -46,6 +47,7 @@ class CoinPriceSummary extends BaseComponent {
               type: type,
               data: priceData,
               actions: actions,
+              mini: mini,
             );
           },
           error: (e, _) => Text("Error Loading Data"),
@@ -59,16 +61,62 @@ class CoinPriceSummary extends BaseComponent {
 class _CoinPriceSummaryContent extends StatelessWidget {
   final PriceData data;
   final List<Widget> actions;
+  final bool mini;
   const _CoinPriceSummaryContent({
     required this.type,
     required this.data,
     required this.actions,
+    required this.mini,
   });
 
   final CoinPriceSummaryType type;
 
   @override
   Widget build(BuildContext context) {
+    if (mini) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 4,
+            ),
+            SizedBox(
+              width: 80,
+              child: Text(
+                type.label,
+                style: TextStyle(
+                  fontSize: 22,
+                  color: type.color,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 2,
+                ),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  "\$${data.usdtPrice.toStringAsFixed(4)}",
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 80,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: actions,
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
     final percentChange = data.percentChange1h ?? data.percentChange24h;
 
     final is24Hour = data.percentChange1h == null;
