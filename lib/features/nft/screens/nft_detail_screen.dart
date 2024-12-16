@@ -656,132 +656,135 @@ class NftDetailScreen extends BaseScreen {
                           : null,
                     ),
                   ),
-                  if (!kIsWeb)
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: AppButton(
-                        label: "Sell",
-                        // helpType: HelpType.transfer,
-                        icon: Icons.attach_money,
-                        onPressed: () async {
-                          if (!await passwordRequiredGuard(context, ref)) {
-                            return;
-                          }
-                          Wallet? wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == nft.currentOwner);
-                          if (wallet == null) {
-                            Toast.error("No account selected");
-                            return;
-                          }
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: AppButton(
+                      label: "Sell",
+                      // helpType: HelpType.transfer,
+                      icon: Icons.attach_money,
+                      onPressed: () async {
+                        if (kIsWeb) {
+                          Toast.message("Activating soon!");
+                          return;
+                        }
+                        if (!await passwordRequiredGuard(context, ref)) {
+                          return;
+                        }
+                        Wallet? wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == nft.currentOwner);
+                        if (wallet == null) {
+                          Toast.error("No account selected");
+                          return;
+                        }
 
-                          if (wallet.isReserved) {
-                            Toast.error("Vault Accounts can not sell NFTs.");
-                            return;
-                          }
+                        if (wallet.isReserved) {
+                          Toast.error("Vault Accounts can not sell NFTs.");
+                          return;
+                        }
 
-                          if (wallet.balance < MIN_RBX_FOR_SC_ACTION) {
-                            Toast.error("Not enough balance for transaction");
-                            return;
-                          }
+                        if (wallet.balance < MIN_RBX_FOR_SC_ACTION) {
+                          Toast.error("Not enough balance for transaction");
+                          return;
+                        }
 
-                          final _nft = await setAssetPath(nft);
+                        final _nft = await setAssetPath(nft);
 
-                          final filesReady = await _nft.areFilesReady();
+                        final filesReady = await _nft.areFilesReady();
 
-                          if (!filesReady) {
-                            Toast.error("Media files not found on this machine.");
-                            return;
-                          }
-                          String? address = await PromptModal.show(
-                            contextOverride: context,
-                            title: "Sell NFT",
-                            validator: (value) => formValidatorRbxAddress(value, true),
-                            labelText: "VFX Address",
-                            confirmText: "Continue",
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
-                            ],
-                            lines: 1,
-                          );
+                        if (!filesReady) {
+                          Toast.error("Media files not found on this machine.");
+                          return;
+                        }
+                        String? address = await PromptModal.show(
+                          contextOverride: context,
+                          title: "Sell NFT",
+                          validator: (value) => formValidatorRbxAddress(value, true),
+                          labelText: "VFX Address",
+                          confirmText: "Continue",
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
+                          ],
+                          lines: 1,
+                        );
 
-                          if (address == null) {
-                            return;
-                          }
+                        if (address == null) {
+                          return;
+                        }
 
-                          address = address.trim().replaceAll("\n", "");
+                        address = address.trim().replaceAll("\n", "");
 
-                          final isValid = await BridgeService().validateSendToAddress(address);
-                          if (!isValid) {
-                            Toast.error("Invalid Address");
-                            return;
-                          }
+                        final isValid = await BridgeService().validateSendToAddress(address);
+                        if (!isValid) {
+                          Toast.error("Invalid Address");
+                          return;
+                        }
 
-                          final String? amountString = await PromptModal.show(
-                            contextOverride: context,
-                            title: "Sale Amount",
-                            body: "How much are you selling this NFT for?",
-                            labelText: "VFX Amount)",
-                            confirmText: "Continue",
-                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Amount required";
-                              }
-
-                              double parsed = 0;
-                              try {
-                                parsed = double.parse(value);
-                              } catch (e) {
-                                return "Not a valid amount";
-                              }
-
-                              if (parsed <= 0) {
-                                return "The amount has to be a positive value";
-                              }
-                              return null;
-                            },
-                          );
-
-                          if (amountString == null) {
-                            return;
-                          }
-
-                          final amount = double.tryParse(amountString);
-
-                          if (amount == null) {
-                            Toast.error("Invalid Amount");
-                            return;
-                          }
-
-                          final String? backupUrl = await PromptModal.show(
-                            contextOverride: context,
-                            title: "Backup URL (Optional)",
-                            body: "Paste in a public URL to a hosted zipfile containing the assets.",
-                            validator: (value) {
-                              return null;
-                            },
-                            labelText: "URL (Optional)",
-                            confirmText: "Continue",
-                          );
-
-                          final confirmed = await ConfirmDialog.show(
-                            title: "Confirm Sale Start",
-                            body: "Please confirm you want to sell the NFT to \"$address\" for $amount VFX.",
-                            confirmText: "Start Sale",
-                          );
-
-                          if (confirmed == true) {
-                            ref.read(globalLoadingProvider.notifier).start();
-                            final success = await SmartContractService().transferSale(id, address, amount, backupUrl);
-                            ref.read(globalLoadingProvider.notifier).complete();
-                            if (success) {
-                              // Toast.message("Sale Start transaction broadcasted");
-                              ref.read(saleProvider.notifier).addId(id);
-                              Navigator.of(context).pop();
+                        final String? amountString = await PromptModal.show(
+                          contextOverride: context,
+                          title: "Sale Amount",
+                          body: "How much are you selling this NFT for?",
+                          labelText: "VFX Amount)",
+                          confirmText: "Continue",
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Amount required";
                             }
+
+                            double parsed = 0;
+                            try {
+                              parsed = double.parse(value);
+                            } catch (e) {
+                              return "Not a valid amount";
+                            }
+
+                            if (parsed <= 0) {
+                              return "The amount has to be a positive value";
+                            }
+                            return null;
+                          },
+                        );
+
+                        if (amountString == null) {
+                          return;
+                        }
+
+                        final amount = double.tryParse(amountString);
+
+                        if (amount == null) {
+                          Toast.error("Invalid Amount");
+                          return;
+                        }
+
+                        final String? backupUrl = await PromptModal.show(
+                          contextOverride: context,
+                          title: "Backup URL (Optional)",
+                          body: "Paste in a public URL to a hosted zipfile containing the assets.",
+                          validator: (value) {
+                            return null;
+                          },
+                          labelText: "URL (Optional)",
+                          confirmText: "Continue",
+                        );
+
+                        final confirmed = await ConfirmDialog.show(
+                          title: "Confirm Sale Start",
+                          body: "Please confirm you want to sell the NFT to \"$address\" for $amount VFX.",
+                          confirmText: "Start Sale",
+                        );
+
+                        if (confirmed == true) {
+                          ref.read(globalLoadingProvider.notifier).start();
+                          final success = await SmartContractService().transferSale(id, address, amount, backupUrl);
+                          ref.read(globalLoadingProvider.notifier).complete();
+                          if (success) {
+                            // Toast.message("Sale Start transaction broadcasted");
+                            ref.read(saleProvider.notifier).addId(id);
+                            Navigator.of(context).pop();
                           }
-                        },
-                      ),
+                        }
+                      },
                     ),
+                  ),
 
                   Builder(builder: (context) {
                     final address = kIsWeb ? ref.watch(webSessionProvider.select((value) => value.keypair?.address)) : null;
