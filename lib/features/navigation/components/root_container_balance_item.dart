@@ -67,7 +67,7 @@ class RootContainerBalanceItemState extends State<RootContainerBalanceItem> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(
-                        width: 250,
+                        width: 360,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -112,7 +112,7 @@ class RootContainerBalanceItemState extends State<RootContainerBalanceItem> {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: SizedBox(
-                              width: 280,
+                              width: 360,
                               child: widget.latestTx ??
                                   SizedBox(
                                     height: 100,

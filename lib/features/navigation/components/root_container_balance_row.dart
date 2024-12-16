@@ -143,59 +143,59 @@ class RootContainerBalanceRow extends BaseComponent {
                   latestTx: latestVfxTx != null ? _LatestVfxTx(tx: latestVfxTx) : null,
                 ),
               ),
-              SizedBox(
-                width: 16,
-              ),
-              Expanded(
-                child: RootContainerBalanceItem(
-                  topIndicator: Container(
-                    decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(32)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Image.asset(
-                        "assets/images/vbtc_small.png",
-                        width: 32,
-                        height: 32,
-                      ),
-                    ),
-                  ),
-                  forceExpand: forceExpand,
-                  heading: "$vBtcBalance vBTC",
-                  headingColor: AppColors.getWhite(),
-                  accountCount: "${vbtcTokens.length} Token${vbtcTokens.length == 1 ? '' : 's'}",
-                  handleViewAllTxs: () {
-                    RootContainerUtils.navigateToTab(context, RootTab.vbtc);
-                  },
-                  latestTx: latestVbtcBtcTx != null
-                      ? _LatestBtcTx(tx: latestVbtcBtcTx)
-                      : latestVbtcVfxTx != null
-                          ? _LatestVfxTx(tx: latestVbtcVfxTx)
-                          : null,
-                  actions: [
-                    AppVerticalIconButton(
-                      onPressed: () {
-                        RootContainerUtils.navigateToTab(context, RootTab.vbtc);
-                      },
-                      icon: FontAwesomeIcons.bitcoin,
-                      prettyIconType: PrettyIconType.topCards,
-                      label: "vBTC\nTokens",
-                    ),
-                    AppVerticalIconButton(
-                      onPressed: () {
-                        SpecialDialog().show(
-                          context,
-                          content: VbtcInfo(),
-                          title: "vBTC",
-                          maxWidth: 800,
-                        );
-                      },
-                      prettyIconType: PrettyIconType.topCards,
-                      icon: Icons.help,
-                      label: "What's\nvBTC",
-                    ),
-                  ],
-                ),
-              ),
+              // SizedBox(
+              //   width: 16,
+              // ),
+              // Expanded(
+              //   child: RootContainerBalanceItem(
+              //     topIndicator: Container(
+              //       decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(32)),
+              //       child: Padding(
+              //         padding: const EdgeInsets.all(4.0),
+              //         child: Image.asset(
+              //           "assets/images/vbtc_small.png",
+              //           width: 32,
+              //           height: 32,
+              //         ),
+              //       ),
+              //     ),
+              //     forceExpand: forceExpand,
+              //     heading: "$vBtcBalance vBTC",
+              //     headingColor: AppColors.getWhite(),
+              //     accountCount: "${vbtcTokens.length} Token${vbtcTokens.length == 1 ? '' : 's'}",
+              //     handleViewAllTxs: () {
+              //       RootContainerUtils.navigateToTab(context, RootTab.vbtc);
+              //     },
+              //     latestTx: latestVbtcBtcTx != null
+              //         ? _LatestBtcTx(tx: latestVbtcBtcTx)
+              //         : latestVbtcVfxTx != null
+              //             ? _LatestVfxTx(tx: latestVbtcVfxTx)
+              //             : null,
+              //     actions: [
+              //       AppVerticalIconButton(
+              //         onPressed: () {
+              //           RootContainerUtils.navigateToTab(context, RootTab.vbtc);
+              //         },
+              //         icon: FontAwesomeIcons.bitcoin,
+              //         prettyIconType: PrettyIconType.topCards,
+              //         label: "vBTC\nTokens",
+              //       ),
+              //       AppVerticalIconButton(
+              //         onPressed: () {
+              //           SpecialDialog().show(
+              //             context,
+              //             content: VbtcInfo(),
+              //             title: "vBTC",
+              //             maxWidth: 800,
+              //           );
+              //         },
+              //         prettyIconType: PrettyIconType.topCards,
+              //         icon: Icons.help,
+              //         label: "What's\nvBTC",
+              //       ),
+              //     ],
+              //   ),
+              // ),
               SizedBox(
                 width: 16,
               ),
@@ -252,41 +252,41 @@ class RootContainerBalanceRow extends BaseComponent {
               ),
             ],
           ),
-          AnimatedPositioned(
-            duration: ROOT_CONTAINER_TRANSITION_DURATION,
-            curve: Curves.easeInOut,
-            top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-            child: IgnorePointer(
-              ignoring: true,
-              child: Padding(
-                padding: EdgeInsets.only(left: connector1Left),
-                // child: RootContainerBalanceRowConnector(),
-                child: Transform.translate(
-                  offset: Offset(-33, 4),
-                  child: ConnectorVisual(
-                    isBtc: false,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          AnimatedPositioned(
-            duration: ROOT_CONTAINER_TRANSITION_DURATION,
-            curve: Curves.easeInOut,
-            top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-            child: IgnorePointer(
-              ignoring: true,
-              child: Padding(
-                padding: EdgeInsets.only(left: connector2Left),
-                child: Transform.translate(
-                  offset: Offset(-6, 4),
-                  child: ConnectorVisual(
-                    isBtc: true,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // AnimatedPositioned(
+          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
+          //   curve: Curves.easeInOut,
+          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
+          //   child: IgnorePointer(
+          //     ignoring: true,
+          //     child: Padding(
+          //       padding: EdgeInsets.only(left: connector1Left),
+          //       // child: RootContainerBalanceRowConnector(),
+          //       child: Transform.translate(
+          //         offset: Offset(-33, 4),
+          //         child: ConnectorVisual(
+          //           isBtc: false,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // AnimatedPositioned(
+          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
+          //   curve: Curves.easeInOut,
+          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
+          //   child: IgnorePointer(
+          //     ignoring: true,
+          //     child: Padding(
+          //       padding: EdgeInsets.only(left: connector2Left),
+          //       child: Transform.translate(
+          //         offset: Offset(-6, 4),
+          //         child: ConnectorVisual(
+          //           isBtc: true,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       );
     });
