@@ -156,7 +156,7 @@ class _HomeButtonsState extends State<HomeButtons> {
                   HdWalletButton(),
                   if (widget.includeRestoreHd) RestoreHdWalletButton(),
                   BackupButton(),
-                  ReserveAccountsButton(),
+                  // ReserveAccountsButton(),
                 ],
               );
             case HomeButtonSection.nft:
@@ -167,7 +167,7 @@ class _HomeButtonsState extends State<HomeButtons> {
                 children: [
                   VerifyNftOwnershipButton(),
                   ImportMediaButton(),
-                  BackupButton(),
+                  // BackupButton(),
                   AppButton(
                     label: "Beacons",
                     icon: Icons.satellite_alt,
@@ -175,13 +175,13 @@ class _HomeButtonsState extends State<HomeButtons> {
                       tabsRouter.setActiveIndex(12);
                     },
                   ),
-                  AppButton(
-                    label: "Fungible Tokens",
-                    icon: Icons.toll,
-                    onPressed: () {
-                      tabsRouter.setActiveIndex(13);
-                    },
-                  ),
+                  // AppButton(
+                  //   label: "Fungible Tokens",
+                  //   icon: Icons.toll,
+                  //   onPressed: () {
+                  //     tabsRouter.setActiveIndex(13);
+                  //   },
+                  // ),
                   // AppButton(
                   //   label: "Token Voting",
                   //   icon: Icons.gavel_outlined,
@@ -198,7 +198,7 @@ class _HomeButtonsState extends State<HomeButtons> {
                 runSpacing: 12,
                 alignment: WrapAlignment.spaceEvenly,
                 children: [
-                  PrintValidatorsButton(),
+                  // PrintValidatorsButton(),
                   ValidatingCheckButton(),
                   AppButton(
                     label: "Validator Pool",

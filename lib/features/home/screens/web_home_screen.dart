@@ -484,16 +484,16 @@ class _Actions extends BaseComponent {
                       );
                     }
                   }),
-              AppVerticalIconButton(
-                label: "Faucet",
-                icon: FontAwesomeIcons.faucet,
-                prettyIconType: PrettyIconType.custom,
-                onPressed: () {
-                  Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
-                    builder: (context) => FaucetScreen(),
-                  ));
-                },
-              ),
+              // AppVerticalIconButton(
+              //   label: "Faucet",
+              //   icon: FontAwesomeIcons.faucet,
+              //   prettyIconType: PrettyIconType.custom,
+              //   onPressed: () {
+              //     Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
+              //       builder: (context) => FaucetScreen(),
+              //     ));
+              //   },
+              // ),
 
               if (ref.read(webSessionProvider).keypair != null)
                 AppVerticalIconButton(

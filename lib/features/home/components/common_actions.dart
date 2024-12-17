@@ -111,16 +111,16 @@ class CommonActions extends BaseComponent {
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
-              AppVerticalIconButton(
-                label: "Faucet",
-                icon: FontAwesomeIcons.faucet,
-                prettyIconType: PrettyIconType.custom,
-                onPressed: () {
-                  Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
-                    builder: (context) => FaucetScreen(),
-                  ));
-                },
-              ),
+              // AppVerticalIconButton(
+              //   label: "Faucet",
+              //   icon: FontAwesomeIcons.faucet,
+              //   prettyIconType: PrettyIconType.custom,
+              //   onPressed: () {
+              //     Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
+              //       builder: (context) => FaucetScreen(),
+              //     ));
+              //   },
+              // ),
               AppVerticalIconButton(
                 label: "Tutorials",
                 prettyIconType: PrettyIconType.custom,
