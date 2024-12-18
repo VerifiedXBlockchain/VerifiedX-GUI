@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/env.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/files.dart';
@@ -59,8 +60,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     final downloadDirectory = await getTemporaryDirectory();
     final path = "${downloadDirectory.path}/snapshot.zip";
 
-    Dio().download(widget.downloadUrl, path,
-        onReceiveProgress: (value1, value2) {
+    Dio().download(widget.downloadUrl, path, onReceiveProgress: (value1, value2) {
       setState(() {
         progress = value1;
         total = value2;
@@ -85,12 +85,11 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
     final date = DateTime.now();
     String backupDirName =
-        "${_dbPath.replaceAll('vfx', '').replaceAll('VFX', '')}\\RBX_BACKUP_${(date.microsecondsSinceEpoch / 1000).round()}";
+        "${_dbPath.replaceAll(Env.isTestNet ? 'rbxtest' : 'rbx', '').replaceAll(Env.isTestNet ? 'RBXTest' : 'RBX', '')}\\VFX_BACKUP_${(date.microsecondsSinceEpoch / 1000).round()}";
+    print(backupDirName);
+
     if (Platform.isMacOS) {
-      backupDirName = backupDirName
-          .toLowerCase()
-          .replaceAll("\\", '/')
-          .replaceAll('//', '/');
+      backupDirName = backupDirName.toLowerCase().replaceAll("\\", '/').replaceAll('//', '/');
     }
     setState(() {
       backupDir = backupDirName;
@@ -118,13 +117,13 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       if (file.isFile) {
         final data = file.content as List<int>;
 
-        final p = "$_dbPath/Databases/$filename";
+        final p = "$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename";
         installLogAdd("Extracting '$p'...");
         File(p)
           ..createSync(recursive: true)
           ..writeAsBytesSync(data);
       } else {
-        Directory("$_dbPath/Databases/$filename").create(recursive: true);
+        Directory("$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename").create(recursive: true);
       }
     }
 

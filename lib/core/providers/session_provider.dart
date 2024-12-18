@@ -333,13 +333,10 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> checkRemoteInfo([int attempt = 1]) async {
-    if (Env.isTestNet) {
-      return;
-    }
-
-    if (!Env.promptForUpdates) {
-      return;
-    }
+    print("CHECK REMOTE INFO");
+    // if (!Env.promptForUpdates) {
+    //   return;
+    // }
 
     final data = await BridgeService().walletInfo();
     final int? blockHeight = int.tryParse(data['BlockHeight']);

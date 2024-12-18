@@ -22,11 +22,6 @@ class ImportSnapshotButton extends BaseComponent {
       icon: Icons.settings_backup_restore,
       onPressed: cliStarted
           ? () async {
-              if (Env.isTestNet) {
-                Toast.error("Snapshots are not available on Testnet.");
-                return;
-              }
-
               final data = await BridgeService().walletInfo();
               final int? blockHeight = int.tryParse(data['BlockHeight']);
 
