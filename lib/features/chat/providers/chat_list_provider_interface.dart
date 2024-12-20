@@ -76,7 +76,7 @@ abstract class ChatListProviderInterface extends StateNotifier<List<ChatMessage>
   }
 
   Future<void> resendMessage(String messageId) async {
-    if (identifier.startsWith("rbx://")) {
+    if (identifier.startsWith("vfx://")) {
       await ChatService().resendMessage(messageId, identifier);
     } else {
       final shop = await DstService().retreiveShop();

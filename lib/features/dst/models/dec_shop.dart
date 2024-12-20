@@ -72,7 +72,7 @@ class DecShop with _$DecShop {
   }
 
   String get urlWithoutPrefix {
-    return url.replaceAll("rbx://", "");
+    return url.replaceAll("vfx://", "");
   }
 
   bool get isThirdParty {

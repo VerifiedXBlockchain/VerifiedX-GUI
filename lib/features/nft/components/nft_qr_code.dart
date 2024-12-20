@@ -22,6 +22,7 @@ class NftQrCode extends StatelessWidget {
   final double cardPadding;
   final bool withOpen;
   final bool iconButtons;
+  final bool center;
   const NftQrCode({
     Key? key,
     required this.data,
@@ -31,6 +32,7 @@ class NftQrCode extends StatelessWidget {
     this.cardPadding = 8.0,
     this.withOpen = false,
     this.iconButtons = true,
+    this.center = false,
   }) : super(key: key);
 
   Future<void> writeToFile(ByteData data, String path) async {
@@ -88,7 +90,7 @@ class NftQrCode extends StatelessWidget {
       padding: EdgeInsets.all(cardPadding),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: center ? CrossAxisAlignment.center : CrossAxisAlignment.start,
         children: [
           Container(
             decoration: BoxDecoration(

@@ -138,7 +138,7 @@ class _DecUrl extends BaseComponent {
           style: TextStyle(color: Colors.white),
         ),
         hintText: "MyNewShop",
-        prefixText: "rbx://",
+        prefixText: "vfx://",
       ),
     );
   }

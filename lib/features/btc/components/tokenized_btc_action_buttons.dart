@@ -704,7 +704,7 @@ class _TransferSharesModal extends BaseComponent {
       withDecor: false,
       children: [
         Text(
-          forWithdrawl ? "Withdraw BTC" : "Transfer BTC",
+          forWithdrawl ? "Withdraw BTC" : "Transfer vBTC",
           style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
         ),
         SizedBox(

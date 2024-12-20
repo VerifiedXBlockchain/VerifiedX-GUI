@@ -359,7 +359,7 @@ class DstService extends BaseService {
   Future<bool> saveDecShop(DecShop decShop) async {
     final payload = {
       'Name': decShop.name.trim(),
-      'DecShopURL': decShop.url.trim().replaceAll("rbx://", ""),
+      'DecShopURL': decShop.url.trim().replaceAll("vfx://", ""),
       'Description': decShop.description.trim(),
       'OwnerAddress': decShop.ownerAddress,
       'DecShopHostingType': decShop.type,

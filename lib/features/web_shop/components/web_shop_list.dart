@@ -45,7 +45,7 @@ class WebShopList extends BaseComponent {
     final filteredShops = searchQuery.isEmpty
         ? [...shops]
         : shops.where((s) {
-            if (s.url.replaceAll("rbx://", "").toLowerCase().contains(searchQuery)) {
+            if (s.url.replaceAll("vfx://", "").toLowerCase().contains(searchQuery)) {
               return true;
             }
 
