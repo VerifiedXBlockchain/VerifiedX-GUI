@@ -40,15 +40,15 @@ class WebImportShopButton extends BaseComponent {
           validator: (_) => null,
           labelText: "Shop URL",
           body: "What is the shop URL you'd like to import?",
-          prefixText: "rbx://",
+          prefixText: "vfx://",
         );
 
         if (shopUrl == null || shopUrl.isEmpty) {
           return;
         }
 
-        if (!shopUrl.contains("rbx://")) {
-          shopUrl = "rbx://$shopUrl";
+        if (!shopUrl.contains("vfx://")) {
+          shopUrl = "vfx://$shopUrl";
         }
 
         final shop = await WebShopService().lookupShop(shopUrl);

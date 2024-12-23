@@ -39,7 +39,7 @@ class WebShopFormProvider extends StateNotifier<WebShop> {
     state = decShop;
     nameController.text = decShop.name;
     descriptionController.text = decShop.description;
-    urlController.text = decShop.url.replaceAll("rbx://", "");
+    urlController.text = decShop.url.replaceAll("vfx://", "");
   }
 
   updateName(String name) {

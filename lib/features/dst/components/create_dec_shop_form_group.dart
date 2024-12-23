@@ -190,7 +190,7 @@ class _DecUrl extends BaseComponent {
           "Shop Identifier",
           style: TextStyle(color: Colors.white),
         ),
-        prefixText: "rbx://",
+        prefixText: "vfx://",
         hintText: "MyShop",
       ),
     );

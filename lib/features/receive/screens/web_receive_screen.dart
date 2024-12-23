@@ -229,6 +229,7 @@ class WebReceiveScreen extends BaseScreen {
                                               child: NftQrCode(
                                                 data: url,
                                                 withClose: true,
+                                                center: true,
                                               ),
                                             );
                                           });
