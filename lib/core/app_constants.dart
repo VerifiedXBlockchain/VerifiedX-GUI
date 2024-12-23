@@ -1,6 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
-const APP_V = "5.1.3";
+const APP_V = "5.1.5";
 const APP_VERSION = "beta$APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
