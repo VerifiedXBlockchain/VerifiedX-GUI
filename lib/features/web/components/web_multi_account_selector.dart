@@ -60,7 +60,7 @@ class WebMultiAccountSelector extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Switch Account",
+                          "Select Account",
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.8),
                             height: 1,
