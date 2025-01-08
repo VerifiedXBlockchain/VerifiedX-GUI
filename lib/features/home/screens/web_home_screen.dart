@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
 import 'package:rbx_wallet/features/misc/providers/global_balances_expanded_provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/open_explorer_modal.dart';
@@ -426,7 +427,9 @@ class _Actions extends BaseComponent {
                 prettyIconType: PrettyIconType.custom,
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
-                onPressed: () {},
+                onPressed: () {
+                  launchUrlString("https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
+                },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(

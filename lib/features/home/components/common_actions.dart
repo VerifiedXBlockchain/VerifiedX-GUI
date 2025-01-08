@@ -7,6 +7,7 @@ import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/utils/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../app.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/open_explorer_modal.dart';
@@ -126,7 +127,9 @@ class CommonActions extends BaseComponent {
                 prettyIconType: PrettyIconType.custom,
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
-                onPressed: () async {},
+                onPressed: () async {
+                  launchUrlString("https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
+                },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
