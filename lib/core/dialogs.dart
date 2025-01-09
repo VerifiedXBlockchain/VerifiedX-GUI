@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_window_close/flutter_window_close.dart';
+import '../features/wallet/providers/wallet_list_provider.dart';
+import '../features/web/providers/multi_account_provider.dart';
 import 'theme/components.dart';
 import 'utils.dart';
 import '../features/global_loader/global_loading_provider.dart';
@@ -286,13 +290,15 @@ class PromptModal {
     Widget? titleTrailing,
     String? prefixText,
     Color? labelColor,
+    Widget? sufixIcon,
+    TextEditingController? controller,
   }) async {
     // final context = rootNavigatorKey.currentContext!;
     final context = contextOverride ?? rootNavigatorKey.currentContext!;
 
     final GlobalKey<FormState> _formKey = GlobalKey();
 
-    final TextEditingController _controller = TextEditingController(text: initialValue);
+    final TextEditingController _controller = controller ?? TextEditingController(text: initialValue);
 
     bool _obscureText = obscureText;
 
@@ -341,6 +347,7 @@ class PromptModal {
                             maxLines: lines,
                             keyboardType: keyboardType,
                             decoration: InputDecoration(
+                              suffix: sufixIcon,
                               label: Text(
                                 labelText,
                                 style: TextStyle(color: labelColor ?? Theme.of(context).colorScheme.secondary),
@@ -650,6 +657,58 @@ class PaymentTermsDialog {
               ],
             );
           },
+        );
+      },
+    );
+  }
+}
+
+class SelectAddressDialog {
+  static Future<String?> show(BuildContext context, WidgetRef ref) async {
+    List<Map<String, dynamic>> wallets;
+    if (kIsWeb) {
+      wallets = [
+        ...ref.read(multiAccountProvider).map((e) => {'address': e.keypair?.address ?? '', 'vault': false}).toList(),
+        ...ref.read(multiAccountProvider).map((e) => {'address': e.raKeypair?.address ?? '', 'vault': true}).toList()
+      ];
+    } else {
+      wallets = ref.read(walletListProvider).map((e) => {'address': e.address, 'vault': e.isReserved}).toList();
+    }
+
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Choose an address"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+              child: const Text(
+                "Cancel",
+                style: TextStyle(color: Colors.white60),
+              ),
+            )
+          ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: wallets
+                .map(
+                  (w) => TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(w['address']);
+                    },
+                    child: Text(
+                      w['address'],
+                      style:
+                          TextStyle(color: !w['vault'] ? Colors.white : Theme.of(context).colorScheme.reserve, decoration: TextDecoration.underline),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
         );
       },
     );

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils.dart';
+import '../../../utils/toast.dart';
+import '../../../utils/validation.dart';
 import '../../encrypt/utils.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/models/nft.dart';
@@ -11,8 +15,6 @@ import '../../nft/providers/transferred_provider.dart';
 import '../models/token_account.dart';
 import '../models/token_sc_feature.dart';
 import '../services/token_service.dart';
-import '../../../utils/toast.dart';
-import '../../../utils/validation.dart';
 
 class ChangeTokenOwnershipButton extends BaseComponent {
   final Nft nft;
@@ -42,11 +44,13 @@ class ChangeTokenOwnershipButton extends BaseComponent {
             return;
           }
         }
-
+        final controller = TextEditingController();
         final toAddress = await PromptModal.show(
           title: "Transfer To Address",
           validator: (val) => formValidatorRbxAddress(val),
           labelText: "To Address",
+          controller: controller,
+          sufixIcon: AddressChoosingIconButton(controller: controller),
         );
         if (toAddress == null || toAddress.isEmpty) {
           return;
