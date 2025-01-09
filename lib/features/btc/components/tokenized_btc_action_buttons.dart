@@ -739,7 +739,7 @@ class _TransferSharesModal extends BaseComponent {
                 controller: amountControlller,
                 decoration: InputDecoration(
                   label: Text(
-                    "Amount of BTC to Send",
+                    "Amount of BTC to ${forWithdrawl ? 'Withdraw' : 'Send'}",
                     style: TextStyle(color: color),
                   ),
                 ),

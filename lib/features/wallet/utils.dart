@@ -490,7 +490,7 @@ class AccountUtils {
           return;
         }
 
-        final url = paymentUrl(amount: 5000, walletAddress: address!, currency: "VFX");
+        final url = paymentUrl(amount: 100, walletAddress: address!, currency: "VFX");
         if (url != null) {
           launchUrl(Uri.parse(url));
         }
@@ -519,7 +519,7 @@ class AccountUtils {
           return;
         }
 
-        final url = paymentUrl(amount: 5000, walletAddress: address!, currency: "BTC");
+        final url = paymentUrl(amount: 0.001, walletAddress: address!, currency: "BTC");
         if (url != null) {
           launchUrl(Uri.parse(url));
         }

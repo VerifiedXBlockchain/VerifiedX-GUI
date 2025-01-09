@@ -235,17 +235,19 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                 labelText: "Recieving Address",
               );
               if (address != null) {
-                final feeRate = await PromptModal.show(
-                  title: 'Fee Rate',
-                  validator: (val) => formValidatorInteger(val, "Fee Rate"),
-                  labelText: "Fee Rate",
-                );
-                if (feeRate != null && int.tryParse(feeRate) != null) {
+                // final feeRate = await PromptModal.show(
+                //   title: 'Fee Rate',
+                //   validator: (val) => formValidatorInteger(val, "Fee Rate"),
+                //   labelText: "Fee Rate",
+                // );
+                final feeRate = await promptForFeeRate(context);
+
+                if (feeRate != null) {
                   final result = await manager.withdrawVbtc(
                     scId: token.scIdentifier,
                     amount: double.parse(amount),
                     btcAddress: address,
-                    feeRate: int.parse(feeRate),
+                    feeRate: feeRate,
                   );
 
                   if (result == null) {
