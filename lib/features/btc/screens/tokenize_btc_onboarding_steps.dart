@@ -140,11 +140,17 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                       if (!provider.btcTransferFormKey.currentState!.validate()) {
                         return;
                       }
+
+                      provider.refreshBtcAccount();
+
                       final amountParsed = double.tryParse(provider.btcTransferAmountController.text.trim());
                       if (amountParsed == null) {
                         Toast.error("Invalid Amount");
                         return;
                       }
+
+                      print(amountParsed);
+                      print(state.btcAccount);
 
                       if (amountParsed > state.btcAccount!.balance) {
                         Toast.error("Not enough balance in BTC account to send $amountParsed BTC");

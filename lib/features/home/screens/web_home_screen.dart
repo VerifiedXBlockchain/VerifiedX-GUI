@@ -406,7 +406,7 @@ class _Actions extends BaseComponent {
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {
-                  tabsRouter.setActiveIndex(WebRouteIndex.transactions);
+                  tabsRouter.setActiveIndex(WebRouteIndex.send);
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),

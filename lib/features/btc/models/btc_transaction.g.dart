@@ -9,8 +9,8 @@ part of 'btc_transaction.dart';
 _$_BtcTransaction _$$_BtcTransactionFromJson(Map<String, dynamic> json) =>
     _$_BtcTransaction(
       hash: json['Hash'] as String,
-      toAddress: json['ToAddress'] as String,
-      fromAddress: json['FromAddress'] as String,
+      toAddress: json['ToAddress'] as String? ?? "",
+      fromAddress: json['FromAddress'] as String? ?? "",
       amount: (json['Amount'] as num).toDouble(),
       fee: (json['Fee'] as num).toDouble(),
       timestamp: json['Timestamp'] as int,

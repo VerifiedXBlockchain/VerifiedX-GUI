@@ -24,8 +24,8 @@ class BtcTransaction with _$BtcTransaction {
 
   factory BtcTransaction({
     @JsonKey(name: "Hash") required String hash,
-    @JsonKey(name: "ToAddress") required String toAddress,
-    @JsonKey(name: "FromAddress") required String fromAddress,
+    @JsonKey(name: "ToAddress") @Default("") String toAddress,
+    @JsonKey(name: "FromAddress") @Default("") String fromAddress,
     @JsonKey(name: "Amount") required double amount,
     @JsonKey(name: "Fee") required double fee,
     @JsonKey(name: "Timestamp") required int timestamp,

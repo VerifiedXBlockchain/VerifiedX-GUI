@@ -6,7 +6,7 @@ part of 'tokenized_btc_onboard_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$vBtcOnboardHash() => r'b90bcb96094efcbfa7fa322f247207f001bf7758';
+String _$vBtcOnboardHash() => r'64e8ef71c658547ee1ae60cd2a9fcd979d9ad6e9';
 
 /// See also [VBtcOnboard].
 @ProviderFor(VBtcOnboard)

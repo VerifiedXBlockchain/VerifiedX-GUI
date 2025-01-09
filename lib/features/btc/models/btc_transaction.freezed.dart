@@ -282,9 +282,9 @@ class _$_BtcTransaction extends _BtcTransaction {
       {@JsonKey(name: "Hash")
           required this.hash,
       @JsonKey(name: "ToAddress")
-          required this.toAddress,
+          this.toAddress = "",
       @JsonKey(name: "FromAddress")
-          required this.fromAddress,
+          this.fromAddress = "",
       @JsonKey(name: "Amount")
           required this.amount,
       @JsonKey(name: "Fee")
@@ -417,9 +417,9 @@ abstract class _BtcTransaction extends BtcTransaction {
       {@JsonKey(name: "Hash")
           required final String hash,
       @JsonKey(name: "ToAddress")
-          required final String toAddress,
+          final String toAddress,
       @JsonKey(name: "FromAddress")
-          required final String fromAddress,
+          final String fromAddress,
       @JsonKey(name: "Amount")
           required final double amount,
       @JsonKey(name: "Fee")

@@ -317,6 +317,18 @@ class VBtcOnboard extends _$VBtcOnboard {
     }
   }
 
+  void refreshBtcAccount() {
+    if (state.btcAccount == null) {
+      return;
+    }
+
+    final b = ref.read(btcAccountListProvider).firstWhereOrNull((a) => a.address == state.btcAccount!.address);
+    print(b);
+    if (b != null) {
+      state = state.copyWith(btcAccount: b);
+    }
+  }
+
   void setBtcFeeRatePreset(BtcFeeRatePreset value) {
     state = state.copyWith(btcFeeRatePreset: value);
   }

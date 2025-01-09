@@ -240,7 +240,7 @@ class BtcService extends BaseService {
       print(result["Message"]);
 
       return [];
-    } catch (e) {
+    } catch (e, st) {
       print("GetAddressTXList");
       print(e);
       return [];
@@ -259,9 +259,11 @@ class BtcService extends BaseService {
       print(result["Message"]);
 
       return [];
-    } catch (e) {
+    } catch (e, st) {
       print("GetAddressTXList");
       print(e);
+      print(st);
+
       return [];
     }
   }

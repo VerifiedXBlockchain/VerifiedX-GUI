@@ -87,7 +87,7 @@ class CommonActions extends BaseComponent {
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {
-                  RootContainerUtils.navigateToTab(context, RootTab.transactions);
+                  RootContainerUtils.navigateToTab(context, RootTab.send);
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
