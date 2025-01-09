@@ -1,26 +1,26 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../core/app_constants.dart';
-import '../../core/providers/web_session_provider.dart';
-import '../bridge/services/bridge_service.dart';
-import '../global_loader/global_loading_provider.dart';
-import 'providers/nft_detail_provider.dart';
-import 'providers/transferred_provider.dart';
-import '../wallet/models/wallet.dart';
-import '../wallet/providers/wallet_list_provider.dart';
+import '../../core/dialogs.dart';
+import '../../core/utils.dart';
 import '../../utils/toast.dart';
 import '../../utils/validation.dart';
-
-import '../../core/dialogs.dart';
 import '../asset/asset.dart';
+import '../bridge/services/bridge_service.dart';
 import '../encrypt/utils.dart';
+import '../global_loader/global_loading_provider.dart';
 import '../smart_contracts/features/evolve/evolve_phase.dart';
 import '../smart_contracts/models/feature.dart';
 import '../smart_contracts/services/smart_contract_service.dart';
+import '../wallet/models/wallet.dart';
+import '../wallet/providers/wallet_list_provider.dart';
 import 'models/nft.dart';
-import 'package:collection/collection.dart';
+import 'providers/nft_detail_provider.dart';
+import 'providers/transferred_provider.dart';
 
 Future<Nft> setAssetPath(Nft nft) async {
   final assetPath = await SmartContractService().getAssetPath(nft.id, nft.primaryAsset.fileName);
@@ -148,10 +148,11 @@ Future<dynamic> initTransferNftProcess(
       delayHours = 24;
     }
   }
-
+  final controller = TextEditingController(text: prefillAddress ?? '');
   PromptModal.show(
+    controller: controller,
     contextOverride: context,
-    initialValue: prefillAddress ?? '',
+    // initialValue: prefillAddress ?? '',
     title: titleOverride ?? "Transfer ${isToken ? 'Token' : 'NFT'}",
     validator: (value) => formValidatorRbxAddress(value, true),
     labelText: "VFX Address",
@@ -160,6 +161,7 @@ Future<dynamic> initTransferNftProcess(
       FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
     ],
     lines: 1,
+    sufixIcon: AddressChoosingIconButton(controller: controller),
     onValidSubmission: (address) async {
       bool? success;
 

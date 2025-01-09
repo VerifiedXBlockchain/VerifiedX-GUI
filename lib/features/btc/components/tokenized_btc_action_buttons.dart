@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../app.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
 import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/badges.dart';
@@ -10,16 +12,11 @@ import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
+import '../../../core/utils.dart';
+import '../../../utils/toast.dart';
+import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
-import '../models/btc_fee_rate_preset.dart';
-import '../models/tokenized_bitcoin.dart';
-import '../providers/btc_account_list_provider.dart';
-import '../providers/btc_pending_tokenized_address_list_provider.dart';
-import '../providers/tokenized_bitcoin_list_provider.dart';
-import '../services/btc_fee_rate_service.dart';
-import '../services/btc_service.dart';
-import '../utils.dart';
 import '../../encrypt/utils.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/services/nft_service.dart';
@@ -27,10 +24,12 @@ import '../../nft/utils.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
-import '../../../utils/toast.dart';
-import '../../../utils/validation.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import 'package:collection/collection.dart';
+import '../models/tokenized_bitcoin.dart';
+import '../providers/btc_account_list_provider.dart';
+import '../providers/btc_pending_tokenized_address_list_provider.dart';
+import '../providers/tokenized_bitcoin_list_provider.dart';
+import '../services/btc_service.dart';
+import '../utils.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -718,6 +717,7 @@ class _TransferSharesModal extends BaseComponent {
               TextFormField(
                 controller: toAddressController,
                 decoration: InputDecoration(
+                  suffix: !forWithdrawl ? AddressChoosingIconButton(controller: toAddressController) : null,
                   label: Text(
                     forWithdrawl ? "To BTC Address" : "To VFX Address",
                     style: TextStyle(color: color),

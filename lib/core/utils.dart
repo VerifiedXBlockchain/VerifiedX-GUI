@@ -7,6 +7,7 @@ import 'package:archive/archive_io.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
@@ -18,6 +19,8 @@ import '../features/transactions/models/transaction.dart';
 import '../features/wallet/providers/wallet_list_provider.dart';
 import '../utils/files.dart';
 import '../utils/toast.dart';
+import 'base_component.dart';
+import 'dialogs.dart';
 import 'env.dart';
 
 Future<bool> backupKeys(BuildContext context, WidgetRef ref) async {
@@ -72,6 +75,32 @@ Future<bool> backupKeys(BuildContext context, WidgetRef ref) async {
     print("Error on backupKeys");
     print(e);
     return false;
+  }
+}
+
+class AddressChoosingIconButton extends BaseComponent {
+  const AddressChoosingIconButton({
+    super.key,
+    required this.controller,
+  });
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context, ref) {
+    return IconButton(
+      icon: const Icon(
+        FontAwesomeIcons.folderOpen,
+        size: 16,
+        color: Colors.white,
+      ),
+      onPressed: () async {
+        final address = await SelectAddressDialog.show(context, ref);
+        if (address != null) {
+          controller.text = address;
+        }
+      },
+    );
   }
 }
 

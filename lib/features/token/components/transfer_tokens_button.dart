@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../global_loader/global_loading_provider.dart';
-import '../services/token_service.dart';
+import '../../../core/utils.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../global_loader/global_loading_provider.dart';
+import '../services/token_service.dart';
 
 class TransferTokensButton extends BaseComponent {
   final String scId;
@@ -49,11 +51,13 @@ class TransferTokensButton extends BaseComponent {
           Toast.error("Not enough balance to perform this transaction");
           return;
         }
-
+        final controller = TextEditingController();
         final toAddress = await PromptModal.show(
           title: "To Address",
           validator: (val) => formValidatorRbxAddress(val),
           labelText: "To Address",
+          controller: controller,
+          sufixIcon: AddressChoosingIconButton(controller: controller),
         );
         if (toAddress == null || toAddress.isEmpty) {
           return;
