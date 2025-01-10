@@ -133,19 +133,15 @@ class Env {
   }
 
   static String get explorerApiBaseUrl {
-    return DotEnv.dotenv.env['EXPLORER_API_BASE_URL'] ?? 'https://data.rbx.network/api';
+    return DotEnv.dotenv.env['EXPLORER_API_BASE_URL'] ?? 'https://data.verifiedx.io/api';
   }
 
   static String get explorerWebsiteBaseUrl {
-    return DotEnv.dotenv.env['EXPLORER_WEBSITE_BASE_URL'] ?? 'https://rbx.network';
+    return DotEnv.dotenv.env['EXPLORER_WEBSITE_BASE_URL'] ?? 'https://spyglass.verifiedx.io';
   }
 
   static bool get launchCli {
     return DotEnv.dotenv.env['LAUNCH_CLI'] == "true";
-  }
-
-  static bool get allowValidating {
-    return DotEnv.dotenv.env['ALLOW_VALIDATING'] == "true";
   }
 
   static String? get cliPathOverride {
@@ -189,15 +185,15 @@ class Env {
   }
 
   static String get shopBaseUrl {
-    return DotEnv.dotenv.env['SHOP_BASE_URL'] ?? "https://wallet.rbx.network";
+    return DotEnv.dotenv.env['SHOP_BASE_URL'] ?? "https://wallet.verifiedx.io";
   }
 
   static String get shopApiUrl {
-    return DotEnv.dotenv.env['SHOP_API_URL'] ?? "https://data.rbx.network/api";
+    return DotEnv.dotenv.env['SHOP_API_URL'] ?? "https://data.verifiedx.io/api";
   }
 
   static String get paymentEmbedUrl {
-    return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ?? "https://vfx-payment-integration.vercel.app/";
+    return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ?? "https://rbx-payment-integration.vercel.app/";
   }
 
   static String? get paymentDomain {
