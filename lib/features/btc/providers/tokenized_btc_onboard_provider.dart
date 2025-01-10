@@ -33,7 +33,7 @@ enum VBtcProcessingState {
   waitingForBtcToVbtcTransfer,
 }
 
-const VBTC_ONBOARD_VFX_AMOUNT = 1.0;
+const VBTC_ONBOARD_VFX_AMOUNT = 6.0;
 
 class VBtcOnboardState {
   final VBtcOnboardStep step;
