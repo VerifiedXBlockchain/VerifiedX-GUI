@@ -32,23 +32,10 @@
             "request": "launch",
             "args": [
                 "-d",
-                "win64",
+                "windows",
                 "--dart-define",
                 "ENV=testnet"
             ]
-        },
-        {
-            "name": "Web [Local]",
-            "request": "launch",
-            "type": "dart",
-            "args": [
-                "-d",
-                "chrome",
-                "--web-port",
-                "42069",
-                "--dart-define",
-                "ENV=web_local"
-            ],
         },
         {
             "name": "Web [Mainnet]",
@@ -60,7 +47,7 @@
                 "--web-port",
                 "42069",
                 "--dart-define",
-                "ENV=web"
+                "ENV=web_mainnet"
             ],
         },
         {

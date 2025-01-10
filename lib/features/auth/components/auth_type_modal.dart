@@ -6,12 +6,14 @@ class AuthTypeModal extends StatelessWidget {
   final Function() handleMneumonic;
   final Function() handleUsername;
   final Function(BuildContext context)? handlePrivateKey;
+  final Function(BuildContext context)? handleBtc;
 
   const AuthTypeModal({
     Key? key,
     required this.handleUsername,
     required this.handleMneumonic,
     this.handlePrivateKey,
+    this.handleBtc,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class AuthTypeModal extends StatelessWidget {
       withDecor: false,
       withClose: false,
       padding: 16.0,
-      color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+      // color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
       children: [
         ListTile(
           leading: const Icon(Icons.email),
@@ -37,7 +39,7 @@ class AuthTypeModal extends StatelessWidget {
         ListTile(
           leading: const Icon(FontAwesomeIcons.paragraph),
           title: const Text(
-            "Mneumonic (HD Wallet)",
+            "Mneumonic (HD account)",
           ),
           trailing: const Icon(
             Icons.chevron_right,
@@ -58,6 +60,20 @@ class AuthTypeModal extends StatelessWidget {
             ),
             onTap: () {
               handlePrivateKey!(context);
+            },
+          ),
+        if (handleBtc != null)
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.bitcoin),
+            title: const Text(
+              "Bitcoin WIF Key",
+            ),
+            trailing: const Icon(
+              Icons.chevron_right,
+              size: 32,
+            ),
+            onTap: () {
+              handleBtc!(context);
             },
           ),
       ],

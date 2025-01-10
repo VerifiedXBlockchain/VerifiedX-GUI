@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import '../api_token_manager.dart';
 import '../singletons.dart';
@@ -42,6 +42,7 @@ class BaseService {
     bool auth = true,
     bool json = false,
     int timeout = 30000,
+    bool Function(int?)? validateStatus,
   }) {
     String host = Env.apiBaseUrl;
     if (hostOverride != null) {
@@ -52,8 +53,9 @@ class BaseService {
     return BaseOptions(
       baseUrl: baseUrl,
       headers: _headers(auth, json),
-      connectTimeout: timeout,
-      receiveTimeout: timeout,
+      connectTimeout: Duration(milliseconds: timeout),
+      receiveTimeout: Duration(milliseconds: timeout),
+      validateStatus: validateStatus,
     );
   }
 
@@ -163,9 +165,10 @@ class BaseService {
     int timeout = 30000,
     bool inspect = false,
     bool cleanPath = true,
+    bool Function(int?)? validateStatus,
   }) async {
     try {
-      final dio = Dio(_options(auth: auth, json: true, timeout: timeout));
+      final dio = Dio(_options(auth: auth, json: true, timeout: timeout, validateStatus: validateStatus));
       if (!kIsWeb) {
         (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
           client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;

@@ -4,21 +4,28 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:rbx_wallet/generated/assets.gen.dart';
 
 enum _Environment {
-  Release,
-  ReleaseTestNet,
-  Dev,
-  MacDev,
-  WinDev,
-  MacTestNet,
-  WinTestNet,
-  Web,
-  WebTestNet,
-  BlockExplorerTestNet,
-  LocalTestNet,
-  WebLocalEnv,
+  Release("mainnet"),
+  ReleaseTestNet("testnet"),
+  Web("web_mainnet"),
+  WebTestNet("web_testnet"),
+
+  Dev("dev"),
+  MacDev("mac_dev"),
+  WinDev("win_dev"),
+  MacTestNet("mac_testnet"),
+  WinTestNet("win_testnet"),
+  BlockExplorerTestNet("block_explorer_testnet"),
+  LocalTestNet("local_testnet"),
+  WebLocalEnv("web_local"),
+  ;
+
+  final String flavor;
+  const _Environment(this.flavor);
 }
 
-_Environment _env = _Environment.Release;
+const flavorName = String.fromEnvironment("ENV");
+
+_Environment _env = flavorName.isEmpty ? _Environment.ReleaseTestNet : _Environment.values.firstWhere((env) => env.flavor == flavorName);
 
 class Env {
   static init() async {
@@ -149,12 +156,20 @@ class Env {
     return DotEnv.dotenv.env['IS_TEST_NET'] == "true";
   }
 
+  static bool get btcIsTestNet {
+    return DotEnv.dotenv.env['BTC_IS_TEST_NET'] == "true";
+  }
+
   static bool get promptForUpdates {
     return _env == _Environment.Release;
   }
 
   static String get validatorPort {
     return DotEnv.dotenv.env['VALIDATOR_PORT'] ?? '3338';
+  }
+
+  static String get validatorSecondaryPort {
+    return DotEnv.dotenv.env['VALIDATOR_SECONDARY_PORT'] ?? '3339';
   }
 
   static String get portCheckerUrl {
@@ -182,7 +197,7 @@ class Env {
   }
 
   static String get paymentEmbedUrl {
-    return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ?? "https://rbx-payment-integration.vercel.app/";
+    return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ?? "https://vfx-payment-integration.vercel.app/";
   }
 
   static String? get paymentDomain {

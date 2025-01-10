@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/services/explorer_service.dart';
+import '../../token/models/token_sc_feature.dart';
 import '../../raw/raw_service.dart';
 import '../../sc_property/models/sc_property.dart';
 
@@ -147,7 +147,6 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
   }
 
   void saveTokenization(Tokenization tokenization) {
-    print(tokenization);
     final exists = state.tokenizations.firstWhereOrNull((t) => t.id == tokenization.id);
 
     if (exists == null) {
@@ -300,6 +299,20 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
     state = state.copyWith(properties: [...state.properties]..removeAt(index));
   }
 
+  // BTC
+
+  void addBtcTokenization() {
+    final feature = TokenScFeature(
+      name: "bitcoin",
+      ticker: "btc",
+    );
+    state = state.copyWith(token: feature, includesBtcTokenization: true);
+  }
+
+  void removeBtcTokenization() {
+    state = state.copyWith(token: null, includesBtcTokenization: false);
+  }
+
   // Future<Asset> initAsset(String filePath) async {
   //   final name = filePath.split("/").last;
   //   final extension = name.split(".").last;
@@ -408,7 +421,9 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
 
     final success = await RawService().compileAndMintSmartContract(payload, ref.read(webSessionProvider).keypair!, ref);
     if (success == true) {
-      ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address);
+      ref
+          .read(nftListProvider.notifier)
+          .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address]);
       return true;
     }
     return false;
@@ -483,7 +498,9 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
 
     ref.read(mySmartContractsProvider.notifier).load();
     kIsWeb
-        ? ref.read(nftListProvider.notifier).reloadCurrentPage(address: ref.read(webSessionProvider).keypair?.address)
+        ? ref
+            .read(nftListProvider.notifier)
+            .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address])
         : ref.read(nftListProvider.notifier).reloadCurrentPage();
 
     if (details != null) {

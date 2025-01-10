@@ -1,17 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
-import '../../dst/services/dst_service.dart';
 
 class WebListedNftsProvider extends StateNotifier<List<String>> {
   final Ref ref;
 
-  WebListedNftsProvider(this.ref) : super([]) {
-    load();
-  }
+  WebListedNftsProvider(this.ref) : super([]);
 
-  Future<void> load() async {
-    final address = ref.read(webSessionProvider).keypair?.address;
+  Future<void> load(String? address) async {
     if (address == null) {
       state = [];
       return;
@@ -19,8 +16,8 @@ class WebListedNftsProvider extends StateNotifier<List<String>> {
     state = await ExplorerService().listedNftIds(address);
   }
 
-  Future<void> refresh() async {
-    await load();
+  Future<void> refresh(String? address) async {
+    await load(address);
   }
 }
 

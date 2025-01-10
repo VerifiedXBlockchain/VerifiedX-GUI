@@ -10,7 +10,6 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
-import '../../remote_shop/providers/connected_shop_provider.dart';
 import '../components/web_shop_list.dart';
 import '../components/web_shop_list_tile.dart';
 import '../models/web_shop.dart';
@@ -27,15 +26,12 @@ class WebShopListScreen extends BaseScreen {
   ) async {
     String? url = await PromptModal.show(
       title: "Shop URL",
-      initialValue: "rbx://",
+      initialValue: "vfx://",
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "Shop URL required";
         }
 
-        // if (!value.startsWith("rbx://")) {
-        //   return "Invalid URL. Must start with 'rbx://'";
-        // }
         return null;
       },
       labelText: "Input Shop Name Only",
@@ -45,8 +41,8 @@ class WebShopListScreen extends BaseScreen {
       return null;
     }
 
-    if (!url.startsWith("rbx://")) {
-      url = "rbx://$url";
+    if (!url.startsWith("vfx://")) {
+      url = "vfx://$url";
     }
 
     return url.trim();
@@ -106,7 +102,7 @@ class WebShopListScreen extends BaseScreen {
               ),
         IconButton(
             onPressed: () {
-              ref.watch(webShopListProvider(WebShopListType.public).notifier).refresh();
+              ref.read(webShopListProvider(WebShopListType.public).notifier).refresh();
             },
             icon: Icon(Icons.refresh)),
       ],

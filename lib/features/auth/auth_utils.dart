@@ -6,7 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:rbx_wallet/features/keygen/models/ra_keypair.dart';
+import 'package:rbx_wallet/core/theme/components.dart';
+import '../../core/env.dart';
+import '../btc_web/models/btc_web_account.dart';
+import '../btc_web/services/btc_web_service.dart';
+import '../keygen/models/ra_keypair.dart';
 import '../../core/theme/app_theme.dart';
 import 'package:rbx_wallet/features/keygen/services/keygen_service.dart'
     if (dart.library.io) 'package:rbx_wallet/features/keygen/services/keygen_service_mock.dart';
@@ -23,20 +27,24 @@ import '../../core/providers/web_session_provider.dart';
 import '../../core/web_router.gr.dart';
 import '../global_loader/global_loading_provider.dart';
 import '../keygen/models/keypair.dart';
+import '../smart_contracts/components/sc_creator/common/modal_container.dart';
+import 'components/auth_type_modal.dart';
 
 Future<void> login(
   BuildContext context,
   WidgetRef ref,
   Keypair keypair,
   RaKeypair? raKeypair,
+  BtcWebAccount? btcKeypair,
 ) async {
-  ref.read(webSessionProvider.notifier).login(keypair, raKeypair);
+  ref.read(webSessionProvider.notifier).login(keypair, raKeypair, btcKeypair);
 }
 
 Future<void> handleImportWithPrivateKey(
   BuildContext context,
-  WidgetRef ref,
-) async {
+  WidgetRef ref, {
+  bool showRememberMe = true,
+}) async {
   final privateKey = await PromptModal.show(
     contextOverride: context,
     tightPadding: true,
@@ -46,7 +54,9 @@ Future<void> handleImportWithPrivateKey(
   );
 
   if (privateKey != null) {
-    await handleRememberMe(context, ref);
+    if (showRememberMe) {
+      await handleRememberMe(context, ref);
+    }
     final keypair = await KeygenService.importPrivateKey(privateKey);
 
     RaKeypair? reserveKeyPair;
@@ -72,17 +82,100 @@ Future<void> handleImportWithPrivateKey(
       append += 1;
     }
 
-    await login(context, ref, keypair, reserveKeyPair);
+    final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+    final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+
+    await login(context, ref, keypair, reserveKeyPair, btcKeypair);
   }
+}
+
+String btcGeneratedEmailFromPrivateKey(String privateKey) {
+  if (privateKey.startsWith("00")) {
+    privateKey = privateKey.replaceFirst("00", "");
+  }
+  return "${privateKey.substring(0, 8)}@${privateKey.substring(privateKey.length - 8)}.com";
+}
+
+String btcGeneratedPasswordFromPrivateKey(String privateKey) {
+  if (privateKey.startsWith("00")) {
+    privateKey = privateKey.replaceFirst("00", "");
+  }
+  return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
+}
+
+Future<void> handleImportWithBtcWifKey(
+  BuildContext context,
+  WidgetRef ref, {
+  bool showRememberMe = true,
+}) async {
+  await InfoDialog.show(
+    title: "Warning",
+    body:
+        "Although if you login with a BTC WIF key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.",
+  );
+
+  final wifKey = await PromptModal.show(
+    title: "Your BTC WIF Key",
+    validator: (v) => formValidatorNotEmpty(v, "WIF Key"),
+    labelText: "WIF Key",
+  );
+
+  if (wifKey == null) return;
+  if (showRememberMe) {
+    await handleRememberMe(context, ref);
+  }
+
+  final btcKeypair = await BtcWebService().keypairFromWif(wifKey);
+  final firstSixteen = wifKey.substring(0, 16);
+  final lastSixteen = wifKey.substring(wifKey.length - 16);
+
+  final seed = "$firstSixteen$lastSixteen";
+
+  final keypair = await KeygenService.seedToKeypair(seed);
+
+  if (keypair == null) {
+    Toast.error("Could not generate keypair");
+    return;
+  }
+
+  RaKeypair? reserveKeyPair;
+
+  int append = 0;
+
+  while (true) {
+    String input = keypair.private;
+    if (input.startsWith("00")) {
+      input = input.substring(2);
+    }
+    String raSeed = "${input.substring(0, 32)}$append";
+
+    final kp = await KeygenService.seedToKeypair(raSeed);
+    if (kp == null) {
+      continue;
+    }
+
+    reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+
+    if (reserveKeyPair.address.startsWith("xRBX")) {
+      break;
+    }
+
+    append += 1;
+  }
+
+  await login(context, ref, keypair, reserveKeyPair, btcKeypair);
 }
 
 Future<void> handleCreateWithEmail(
   BuildContext context,
   WidgetRef ref,
   String emailValue,
-  String passwordValue, [
+  String passwordValue, {
   bool forCreate = true,
-]) async {
+  bool showRememberMe = true,
+}) async {
   String email = emailValue.toLowerCase();
   String password = passwordValue;
 
@@ -141,14 +234,23 @@ Future<void> handleCreateWithEmail(
     append += 1;
   }
 
-  if (forCreate) {
-    await showKeys(context, keypair);
-  }
+  // BTC
+
+  final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+  final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+
+  // if (forCreate) {
+  //   await showKeys(context, keypair);
+  // }
 
   // await TransactionService().createWallet(email, keypair.address);
-  await handleRememberMe(context, ref);
+  if (showRememberMe) {
+    await handleRememberMe(context, ref);
+  }
 
-  await login(context, ref, keypair.copyWith(email: email), reserveKeyPair);
+  await login(context, ref, keypair.copyWith(email: email), reserveKeyPair, btcKeypair);
 
   final authorized = await guardWebAuthorized(ref, keypair.address);
   if (authorized) {
@@ -161,8 +263,9 @@ Future<void> handleCreateWithEmail(
 
 Future<void> handleCreateWithMnemonic(
   BuildContext context,
-  WidgetRef ref,
-) async {
+  WidgetRef ref, {
+  bool showRememberMe = true,
+}) async {
   ref.read(globalLoadingProvider.notifier).start();
 
   await Future.delayed(const Duration(milliseconds: 300));
@@ -196,12 +299,23 @@ Future<void> handleCreateWithMnemonic(
     append += 1;
   }
 
+  final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+  final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
   ref.read(globalLoadingProvider.notifier).complete();
 
-  // await TransactionService().createWallet(null, keypair.address);
+  // final btcKeypair =
+  //     keypair.mneumonic != null && keypair.mneumonic!.isNotEmpty ? await BtcWebService().keypairFromMnemonic(keypair.mneumonic!) : null;
 
-  login(context, ref, keypair, reserveKeyPair);
-  await showKeys(context, keypair);
+  // ref.read(globalLoadingProvider.notifier).complete();
+
+  // await TransactionService().createWallet(null, keypair.address);
+  if (showRememberMe) {
+    await handleRememberMe(context, ref);
+  }
+  login(context, ref, keypair, reserveKeyPair, btcKeypair);
+  // await showKeys(context, keypair);
 }
 
 Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
@@ -209,13 +323,13 @@ Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Store Private Key?'),
+          title: const Text('Store Private Keys?'),
           content: const Text(
-              'Would you like your browser to remember your private key locally?\nEither way, your key will never be transmitted accross the internet. \n\nChoose "No" if this is a shared computer.'),
+              'Would you like your browser to remember your private keys locally?\nEither way, your key will never be transmitted accross the internet. \n\nChoose "No" if this is a shared computer.'),
           actions: [
             TextButton(
               style: TextButton.styleFrom(
-                primary: Theme.of(context).colorScheme.darkButtonBg,
+                foregroundColor: Theme.of(context).colorScheme.darkButtonBg,
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
               onPressed: () {
@@ -231,7 +345,7 @@ Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                primary: Theme.of(context).colorScheme.info,
+                foregroundColor: Theme.of(context).colorScheme.info,
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
               onPressed: () {
@@ -250,7 +364,7 @@ Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
       });
 }
 
-Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref) async {
+Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref, {bool showRememberMe = true}) async {
   final value = await PromptModal.show(
     contextOverride: context,
     title: "Input Recovery Mnemonic",
@@ -261,7 +375,9 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref) a
   );
 
   if (value != null) {
-    await handleRememberMe(context, ref);
+    if (showRememberMe) {
+      await handleRememberMe(context, ref);
+    }
     RaKeypair? reserveKeyPair;
     ref.read(globalLoadingProvider.notifier).start();
 
@@ -297,11 +413,16 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref) a
       append += 1;
     }
 
+    final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+    final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+
     ref.read(globalLoadingProvider.notifier).complete();
 
     // showKeys(context, keypair);
     // await TransactionService().createWallet(null, keypair.address);
-    await login(context, ref, keypair, reserveKeyPair);
+    await login(context, ref, keypair, reserveKeyPair, btcKeypair);
   }
 }
 
@@ -310,6 +431,7 @@ Future<void> showKeys(
   Keypair keypair, [
   bool forReveal = false,
 ]) async {
+  final isBtc = keypair.btcWif != null;
   final isMobile = BreakPoints.useMobileLayout(context);
 
   await showDialog(
@@ -321,9 +443,9 @@ Future<void> showKeys(
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Align(
+            Align(
               alignment: Alignment.centerLeft,
-              child: Text("Here are your wallet details. Please ensure to back up your private key in a safe place."),
+              child: Text("Here are your${isBtc ? ' BTC' : ''} account details. Please ensure to back up your private key in a safe place."),
             ),
             if (keypair.mneumonic != null)
               ListTile(
@@ -350,7 +472,13 @@ Future<void> showKeys(
               leading: isMobile ? null : const Icon(Icons.account_balance_wallet),
               title: TextFormField(
                 initialValue: keypair.address,
-                decoration: const InputDecoration(label: Text("Address")),
+                decoration: InputDecoration(
+                    label: Text(
+                  "Address",
+                  style: TextStyle(
+                    color: isBtc ? Theme.of(context).colorScheme.btcOrange : Theme.of(context).colorScheme.secondary,
+                  ),
+                )),
                 readOnly: true,
                 style: const TextStyle(fontSize: 13),
               ),
@@ -362,12 +490,42 @@ Future<void> showKeys(
                 },
               ),
             ),
+            if (keypair.btcWif != null)
+              ListTile(
+                leading: isMobile ? null : const Icon(Icons.security),
+                title: TextFormField(
+                  initialValue: keypair.btcWif,
+                  decoration: InputDecoration(
+                    label: Text(
+                      "WIF Private Key",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.btcOrange,
+                      ),
+                    ),
+                  ),
+                  style: const TextStyle(fontSize: 13),
+                  readOnly: true,
+                ),
+                trailing: IconButton(
+                  icon: const Icon(Icons.copy),
+                  onPressed: () async {
+                    await Clipboard.setData(ClipboardData(text: keypair.btcWif));
+                    Toast.message("WIF private key copied to clipboard");
+                  },
+                ),
+              ),
+
             ListTile(
               leading: isMobile ? null : const Icon(Icons.security),
               title: TextFormField(
                 initialValue: keypair.privateCorrected,
-                decoration: const InputDecoration(
-                  label: Text("Private Key"),
+                decoration: InputDecoration(
+                  label: Text(
+                    "Private Key",
+                    style: TextStyle(
+                      color: isBtc ? Theme.of(context).colorScheme.btcOrange : Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
                 ),
                 style: const TextStyle(fontSize: 13),
                 readOnly: true,
@@ -414,7 +572,7 @@ Future<void> showRaKeys(
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        title: Text("Reserve Account Details"),
+        title: Text("Vault Account Details"),
         content: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 700),
           child: Column(
@@ -422,7 +580,7 @@ Future<void> showRaKeys(
             children: [
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Here are your Reserve Account wallet details. Please ensure to back up your private key in a safe place."),
+                child: Text("Here are your Vault Account details. Please ensure to back up your private key in a safe place."),
               ),
 
               ListTile(
@@ -526,7 +684,7 @@ Future<void> showRaKeys(
                     icon: Icons.copy,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: keypair.backupContents));
-                      Toast.message("Reserve Account Data copied to clipboard");
+                      Toast.message("Vault Account Data copied to clipboard");
                     },
                   ),
                   SizedBox(
@@ -544,6 +702,110 @@ Future<void> showRaKeys(
             ],
           ),
         ),
+      );
+    },
+  );
+}
+
+showWebLoginModal(
+  BuildContext context,
+  WidgetRef ref, {
+  required bool allowPrivateKey,
+  required bool allowBtcPrivateKey,
+  required VoidCallback onSuccess,
+  bool showRememberMe = true,
+}) {
+  showModalBottomSheet(
+    backgroundColor: Colors.transparent,
+    context: context,
+    builder: (context) {
+      return AuthTypeModal(
+        handleMneumonic: () async {
+          final kind = await showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return ModalContainer(
+                withClose: true,
+                children: [
+                  AppCard(
+                    padding: 0,
+                    child: ListTile(
+                      onTap: () {
+                        Navigator.of(context).pop("new");
+                      },
+                      title: Text("Create New Mnumonic"),
+                      trailing: Icon(Icons.chevron_right),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  AppCard(
+                    padding: 0,
+                    child: ListTile(
+                      title: Text("Recover From  Mnumonic"),
+                      trailing: Icon(Icons.chevron_right),
+                      onTap: () {
+                        Navigator.of(context).pop("recover");
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+
+          if (kind == 'new') {
+            final success = await ConfirmDialog.show(title: 'Mneumonic', body: 'Are you sure you want to create a Mneumonic account?');
+            if (success == true) {
+              await handleCreateWithMnemonic(context, ref, showRememberMe: showRememberMe);
+              if (ref.read(webSessionProvider).isAuthenticated) {
+                onSuccess();
+              }
+            }
+          }
+
+          if (kind == 'recover') {
+            await handleRecoverFromMnemonic(context, ref);
+            if (ref.read(webSessionProvider).isAuthenticated) {
+              onSuccess();
+            }
+          }
+        },
+        handleUsername: () {
+          AuthModal.show(
+              context: context,
+              onValidSubmission: (auth) async {
+                await handleCreateWithEmail(
+                  context,
+                  ref,
+                  auth.email,
+                  auth.password,
+                  showRememberMe: showRememberMe,
+                );
+                if (ref.read(webSessionProvider).isAuthenticated) {
+                  onSuccess();
+                }
+              });
+        },
+        handlePrivateKey: allowPrivateKey
+            ? (context) async {
+                await handleImportWithPrivateKey(context, ref, showRememberMe: showRememberMe).then((value) {
+                  if (ref.read(webSessionProvider).isAuthenticated) {
+                    onSuccess();
+                  }
+                });
+                // await Future.delayed(const Duration(milliseconds: 300));
+              }
+            : null,
+        handleBtc: allowBtcPrivateKey
+            ? (context) async {
+                await handleImportWithBtcWifKey(context, ref, showRememberMe: showRememberMe);
+                if (ref.read(webSessionProvider).isAuthenticated) {
+                  onSuccess();
+                }
+              }
+            : null,
       );
     },
   );

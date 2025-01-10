@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,7 +24,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(evolvePhaseWizardFormProvider(phaseIndex).notifier);
     final model = ref.read(evolvePhaseWizardFormProvider(phaseIndex));
-    final type = ref.watch(scWizardProvider.notifier).getEvolveType(entryIndex);
+    final type = ref.read(scWizardProvider.notifier).getEvolveType(entryIndex);
     return StatefulBuilder(builder: (context, setState) {
       return Form(
         key: formKey,

@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/providers/session_provider.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/providers/web_session_provider.dart';
@@ -26,8 +27,9 @@ class WebPrefilledSendScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final isBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
     return AppBar(
-      title: const Text("Send RBX"),
+      title: isBtc ? Text("Send BTC") : Text("Send VFX"),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
     );
@@ -38,7 +40,7 @@ class WebPrefilledSendScreen extends BaseScreen {
     ref.read(sendFormProvider.notifier).addressController.text = toAddress;
     ref.read(sendFormProvider.notifier).amountController.text = amount.toString();
 
-    final keypair = ref.watch(webSessionProvider).keypair;
+    final keypair = ref.watch(webSessionProvider.select((v) => v.keypair));
     if (keypair == null) {
       return const Center(child: WebNotWallet());
     }

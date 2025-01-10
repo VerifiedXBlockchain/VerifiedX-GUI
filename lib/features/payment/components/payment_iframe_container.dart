@@ -3,7 +3,7 @@ import 'dart:html';
 import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:rbx_wallet/core/env.dart';
+import '../../../core/env.dart';
 
 class WebPaymentIFrameContainer extends StatefulWidget {
   final String fiatType;
@@ -11,6 +11,7 @@ class WebPaymentIFrameContainer extends StatefulWidget {
   final String walletAddress;
   final double width;
   final double height;
+  final String coinType;
 
   const WebPaymentIFrameContainer({
     super.key,
@@ -19,6 +20,7 @@ class WebPaymentIFrameContainer extends StatefulWidget {
     required this.walletAddress,
     this.width = 400,
     this.height = 400,
+    this.coinType = 'rbx',
   });
 
   @override
@@ -68,7 +70,7 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
         "width": widget.width,
         "height": widget.height,
         "fiatType": widget.fiatType,
-        "coinType": "RBX",
+        "coinType": widget.coinType,
         "coinAmount": widget.coinAmount,
         "walletAddress": widget.walletAddress,
       };

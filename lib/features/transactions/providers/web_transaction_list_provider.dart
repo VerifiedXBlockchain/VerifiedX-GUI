@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/env.dart';
+import '../../btc_web/models/btc_web_transaction.dart';
+import '../../btc_web/providers/btc_web_transaction_list_provider.dart';
+import '../../btc_web/services/btc_web_service.dart';
 import 'transaction_signal_provider.dart';
 
-import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../models/web_transaction.dart';
 import 'package:collection/collection.dart';
@@ -129,4 +132,76 @@ class WebTransactionListProvider extends StateNotifier<WebTransactionListModel> 
 
 final webTransactionListProvider = StateNotifierProvider.family<WebTransactionListProvider, WebTransactionListModel, String>((ref, address) {
   return WebTransactionListProvider(ref, address);
+});
+
+final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, String>((ref, String identifier) async {
+  final parts = identifier.split(':');
+  final vfxAddress = parts[0];
+  final raAddress = parts[1];
+
+  List<WebTransaction> vfxTransactions = [];
+
+  final pendingVfxTxs = ref.watch(webTransactionListProvider(vfxAddress).select((v) => v.transactions)).where((t) => t.isPending).toList();
+  final pendingRaTxs = ref.watch(webTransactionListProvider(raAddress).select((v) => v.transactions)).where((t) => t.isPending).toList();
+
+  vfxTransactions.addAll([...pendingVfxTxs, ...pendingRaTxs]);
+
+  int page = 1;
+  while (true) {
+    try {
+      final data = await ExplorerService().getTransactionsFromMultipleAddresses(
+        addresses: [vfxAddress, raAddress],
+        page: page,
+      );
+      vfxTransactions.addAll(data.results);
+
+      if (data.num_pages == data.page || data.results.isEmpty) {
+        break;
+      }
+      page += 1;
+    } catch (e) {
+      print("Error getting combined transactions $e");
+      break;
+    }
+  }
+
+  final groups = groupBy(vfxTransactions, (WebTransaction tx) => "${tx.hash}_${tx.fromAddress}_${tx.toAddress}");
+  vfxTransactions = groups.values.map((list) => list.first).toList();
+
+  final btcTransactions = ref.watch(btcWebCombinedTransactionListProvider);
+
+  final combined = [...vfxTransactions, ...btcTransactions];
+
+  combined.sort((a, b) {
+    late final int timestampA;
+    late final int timestampB;
+
+    if (a is WebTransaction) {
+      timestampA = a.date.millisecondsSinceEpoch;
+    } else if (a is BtcWebTransaction) {
+      if (a.status.blockTime != null) {
+        timestampA = a.status.blockTime! * 1000;
+      } else {
+        timestampA = DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch;
+      }
+    } else {
+      timestampA = 0;
+    }
+
+    if (b is WebTransaction) {
+      timestampB = b.date.millisecondsSinceEpoch;
+    } else if (b is BtcWebTransaction) {
+      if (b.status.blockTime != null) {
+        timestampB = b.status.blockTime! * 1000;
+      } else {
+        timestampB = DateTime.now().add(Duration(minutes: 20)).millisecondsSinceEpoch;
+      }
+    } else {
+      timestampB = 0;
+    }
+
+    return timestampA > timestampB ? -1 : 1;
+  });
+
+  return combined;
 });

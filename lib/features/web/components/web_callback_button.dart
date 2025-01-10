@@ -1,16 +1,16 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/app_constants.dart';
-import 'package:rbx_wallet/core/base_component.dart';
-import 'package:rbx_wallet/core/components/buttons.dart';
-import 'package:rbx_wallet/core/dialogs.dart';
-import 'package:rbx_wallet/core/providers/web_session_provider.dart';
-import 'package:rbx_wallet/core/theme/app_theme.dart';
-import 'package:rbx_wallet/features/raw/raw_service.dart';
-import 'package:rbx_wallet/features/reserve/providers/pending_callback_provider.dart';
-import 'package:rbx_wallet/features/transactions/models/web_transaction.dart';
-import 'package:rbx_wallet/features/web/utils/raw_transaction.dart';
-import 'package:rbx_wallet/utils/toast.dart';
+import '../../../core/app_constants.dart';
+import '../../../core/base_component.dart';
+import '../../../core/components/buttons.dart';
+import '../../../core/dialogs.dart';
+import '../../../core/providers/web_session_provider.dart';
+import '../../../core/theme/app_theme.dart';
+import '../../raw/raw_service.dart';
+import '../../reserve/providers/pending_callback_provider.dart';
+import '../../transactions/models/web_transaction.dart';
+import '../utils/raw_transaction.dart';
+import '../../../utils/toast.dart';
 
 class WebCallbackButton extends BaseComponent {
   final WebTransaction tx;
@@ -18,13 +18,13 @@ class WebCallbackButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final keypair = ref.watch(webSessionProvider).raKeypair;
+    final keypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
 
     if (keypair == null) {
       return SizedBox.shrink();
     }
 
-    final address = ref.watch(webSessionProvider).currentWallet?.address;
+    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
     final toMe = tx.toAddress == address;
 
     if (tx.isPending || toMe || tx.unlockTime == null) {

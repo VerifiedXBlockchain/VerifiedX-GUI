@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/env.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/files.dart';
@@ -83,7 +84,10 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     final dir = Directory(_dbPath);
 
     final date = DateTime.now();
-    String backupDirName = "${_dbPath.replaceAll('rbx', '').replaceAll('RBX', '')}\\RBX_BACKUP_${(date.microsecondsSinceEpoch / 1000).round()}";
+    String backupDirName =
+        "${_dbPath.replaceAll(Env.isTestNet ? 'rbxtest' : 'rbx', '').replaceAll(Env.isTestNet ? 'RBXTest' : 'RBX', '')}\\VFX_BACKUP_${(date.microsecondsSinceEpoch / 1000).round()}";
+    print(backupDirName);
+
     if (Platform.isMacOS) {
       backupDirName = backupDirName.toLowerCase().replaceAll("\\", '/').replaceAll('//', '/');
     }
@@ -91,7 +95,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       backupDir = backupDirName;
     });
 
-    installLogAdd("Backing up current RBX folder as '$backupDirName'...");
+    installLogAdd("Backing up current VFX folder as '$backupDirName'...");
 
     await dir.rename(backupDirName);
     installLogAdd("Backed up.");
@@ -113,13 +117,13 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       if (file.isFile) {
         final data = file.content as List<int>;
 
-        final p = "$_dbPath/Databases/$filename";
+        final p = "$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename";
         installLogAdd("Extracting '$p'...");
         File(p)
           ..createSync(recursive: true)
           ..writeAsBytesSync(data);
       } else {
-        Directory("$_dbPath/Databases/$filename").create(recursive: true);
+        Directory("$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename").create(recursive: true);
       }
     }
 
@@ -167,7 +171,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   itemBuilder: (context, index) {
                     return Text(
                       installLog[index],
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     );
                   },
                 ),
@@ -201,7 +205,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                 if (total != null)
                   Text(
                     "${readableFileSize(progress)} / ${readableFileSize(total!)}",
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
               ],
             );
@@ -228,7 +232,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                 if (backupDir != null) ...[
                   Text(
                     "Note: In case your mistakenly imported this snapshot, your previous database folder was backed up to\n$backupDir",
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(

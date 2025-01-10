@@ -16,8 +16,8 @@ Future<DecShop?> getNetworkShop({
   required String shopUrl,
   int attempt = 1,
 }) async {
-  if (!shopUrl.startsWith("rbx://")) {
-    shopUrl = "rbx://$shopUrl";
+  if (!shopUrl.startsWith("vfx://")) {
+    shopUrl = "vfx://$shopUrl";
   }
 
   print("Trying to get shop $shopUrl. Attempt # $attempt");
@@ -46,16 +46,19 @@ Future<bool> connectToShop({
   int attempt = 1,
 }) async {
   shopUrl = shopUrl.trim();
-  if (!shopUrl.startsWith("rbx://")) {
-    shopUrl = "rbx://$shopUrl";
+  if (!shopUrl.startsWith("vfx://")) {
+    shopUrl = "vfx://$shopUrl";
   }
 
   print("Trying to connect to shop $shopUrl. Attempt # $attempt");
-
+  final path = "/ConnectToDecShop/$myAddress/$shopUrl";
+  print("PATH: $path");
   final data = await service.getText(
-    "/ConnectToDecShop/$myAddress/$shopUrl",
+    path,
     cleanPath: false,
   );
+
+  print("DATA: $data");
 
   if (data == "true") {
     print("Connected");

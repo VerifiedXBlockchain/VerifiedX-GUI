@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../../../core/components/buttons.dart';
-import '../../../core/services/explorer_service.dart';
+import '../../../core/theme/components.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../web_shop/providers/web_shop_bid_provider.dart';
-import '../../web_shop/services/web_shop_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../web_shop/components/complete_sale_button.dart';
 
@@ -108,134 +105,102 @@ class _TransactionDetails extends BaseComponent {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: SelectableText(tx.hash),
-                  subtitle: const Text("Tx Hash"),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.copy),
-                    onPressed: () {
-                      copyToClipboard(tx.hash);
-                    },
-                  ),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: SelectableText(tx.hash),
+                subtitle: const Text("Tx Hash"),
+                trailing: IconButton(
+                  icon: const Icon(Icons.copy),
+                  onPressed: () {
+                    copyToClipboard(tx.hash);
+                  },
                 ),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: Text(formatter.format(tx.date)),
-                  subtitle: const Text("Date"),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: Text(formatter.format(tx.date)),
+                subtitle: const Text("Date"),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: Text("${tx.height}"),
+                subtitle: const Text("Block Height"),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: Text(tx.typeLabel),
+                subtitle: const Text("Tx Type"),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: SelectableText("${tx.toAddress} ${address == tx.toAddress ? '[ME]' : ''}"),
+                subtitle: const Text("To"),
+                trailing: IconButton(
+                  icon: const Icon(Icons.copy),
+                  onPressed: () {
+                    copyToClipboard(tx.toAddress);
+                  },
                 ),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: Text("${tx.height}"),
-                  subtitle: const Text("Block Height"),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: SelectableText("${tx.fromAddress} ${address == tx.fromAddress ? '[ME]' : ''}"),
+                subtitle: const Text("From"),
+                trailing: IconButton(
+                  icon: const Icon(Icons.copy),
+                  onPressed: () {
+                    copyToClipboard(tx.fromAddress);
+                  },
                 ),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: Text(tx.typeLabel),
-                  subtitle: const Text("Tx Type"),
-                ),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: Text("${tx.subTxAmount ?? tx.amount} VFX"),
+                subtitle: const Text("Amount"),
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: SelectableText("${tx.toAddress} ${address == tx.toAddress ? '[ME]' : ''}"),
-                  subtitle: const Text("To"),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.copy),
-                    onPressed: () {
-                      copyToClipboard(tx.toAddress);
-                    },
-                  ),
-                ),
+            child: AppCard(
+              padding: 0,
+              child: ListTile(
+                title: Text("${tx.fee} VFX"),
+                subtitle: const Text("Fee"),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: SelectableText("${tx.fromAddress} ${address == tx.fromAddress ? '[ME]' : ''}"),
-                  subtitle: const Text("From"),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.copy),
-                    onPressed: () {
-                      copyToClipboard(tx.fromAddress);
-                    },
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: Text("${tx.subTxAmount ?? tx.amount} RBX"),
-                  subtitle: const Text("Amount"),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: BoxDecoration(boxShadow: glowingBox),
-              child: Card(
-                color: Colors.black,
-                child: ListTile(
-                  title: Text("${tx.fee} RBX"),
-                  subtitle: const Text("Fee"),
-                ),
-              ),
-            ),
-          ),
-          // ListTile(
-          //   title: Text("${tx.nonce}"),
-          //   subtitle: const Text("Nonce"),
-          // ),
-          // ListTile(
-          //   title: Text(tx.signature),
-          //   subtitle: const Text("Signature"),
-          // ),
         ],
       ),
     );

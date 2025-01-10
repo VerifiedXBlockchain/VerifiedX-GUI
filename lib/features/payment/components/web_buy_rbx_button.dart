@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/base_component.dart';
-import 'package:rbx_wallet/core/breakpoints.dart';
-import 'package:rbx_wallet/core/components/buttons.dart';
-import 'package:rbx_wallet/core/dialogs.dart';
-import 'package:rbx_wallet/core/providers/web_session_provider.dart';
-import 'package:rbx_wallet/core/theme/app_theme.dart';
-import 'package:rbx_wallet/features/payment/components/payment_disclaimer.dart';
+import '../../../core/env.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import '../../../core/base_component.dart';
+import '../../../core/breakpoints.dart';
+import '../../../core/components/buttons.dart';
+import '../../../core/dialogs.dart';
+import '../../../core/providers/web_session_provider.dart';
+import '../../../core/theme/app_theme.dart';
+import 'payment_disclaimer.dart';
 import 'package:rbx_wallet/features/payment/components/payment_iframe_container.dart'
     if (dart.library.io) 'package:rbx_wallet/features/payment/components/payment_iframe_container_mock.dart';
 
@@ -22,9 +24,14 @@ class WebBuyRBXButton extends BaseComponent {
     }
 
     return AppButton(
-      label: "Get \$RBX Now",
+      label: "Get \$VFX/\$BTC Now",
       variant: AppColorVariant.Success,
       onPressed: () async {
+        if (Env.isTestNet) {
+          launchUrlString("https://testnet.rbx.network/faucet");
+          return;
+        }
+
         final maxWidth = BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
         final maxHeight = BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
         double width = MediaQuery.of(context).size.width - 32;

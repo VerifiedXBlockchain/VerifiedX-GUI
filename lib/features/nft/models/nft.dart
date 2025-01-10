@@ -4,6 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../core/app_constants.dart';
+import '../../token/models/token_details.dart';
+import '../../token/models/token_sc_feature.dart';
 import '../../../core/utils.dart';
 import '../../asset/web_asset.dart';
 import '../../dst/providers/listed_nfts_provider.dart';
@@ -32,15 +35,16 @@ propertiesFromJson(Map<String, dynamic>? properties) {
   final List<ScProperty> output = [];
   for (final kv in properties.entries) {
     final key = kv.key;
-    final String value = kv.value;
+    final String? value = kv.value;
+    if (value == null) continue;
 
     ScPropertyType type = ScPropertyType.text;
 
-    if (isNumeric(value)) {
+    if (key == BACKUP_URL_PROPERTY_NAME) {
+      type = ScPropertyType.url;
+    } else if (isNumeric(value)) {
       type = ScPropertyType.number;
-    }
-
-    if (value.length == 7 && value.startsWith("#")) {
+    } else if (value.length == 7 && value.startsWith("#")) {
       type = ScPropertyType.color;
     }
 
@@ -81,6 +85,7 @@ abstract class Nft with _$Nft {
     // @JsonKey(defaultValue: false) required bool assetsAvailable,
     // Map<String, dynamic>? assetUrls,
     @JsonKey(ignore: true) String? thumbsPath,
+    @JsonKey(ignore: true) TokenDetails? tokenStateDetails,
   }) = _Nft;
 
   factory Nft.fromJson(Map<String, dynamic> json) => _$NftFromJson(json);
@@ -94,6 +99,29 @@ abstract class Nft with _$Nft {
     if (values.isNotEmpty) {
       return values.join(', ');
     }
+    return null;
+  }
+
+  bool get isToken {
+    for (final feature in featureList) {
+      if (feature.type == FeatureType.token) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  TokenScFeature? get tokenDetails {
+    if (!isToken) {
+      return null;
+    }
+    for (final feature in featureList) {
+      if (feature.type == FeatureType.token) {
+        return TokenScFeature.fromJson(feature.data);
+      }
+    }
+
     return null;
   }
 
@@ -119,8 +147,23 @@ abstract class Nft with _$Nft {
     return false;
   }
 
-  bool get canManageEvolve {
-    if (!isMinter) return false;
+  bool canManage(String? address) {
+    if (kIsWeb) {
+      if (address != currentOwner) return false;
+    } else {
+      if (!isMinter) return false;
+    }
+
+    return manageable;
+  }
+
+  bool canManageEvolve(String? address) {
+    if (kIsWeb) {
+      if (address != currentOwner) return false;
+    } else {
+      if (!isMinter) return false;
+    }
+
     // return true;
 
     // not using this for now
@@ -343,5 +386,9 @@ abstract class Nft with _$Nft {
       }
     }
     return false;
+  }
+
+  int get timestamp {
+    return int.tryParse(id.split(":").last) ?? 0;
   }
 }

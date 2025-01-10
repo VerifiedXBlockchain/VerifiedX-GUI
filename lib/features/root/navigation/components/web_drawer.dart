@@ -1,13 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/providers/web_session_provider.dart';
-import 'package:rbx_wallet/utils/toast.dart';
+import 'package:rbx_wallet/core/theme/colors.dart';
+import '../../../../core/providers/web_session_provider.dart';
+import '../../../../utils/toast.dart';
 import '../../../../core/dialogs.dart';
 
 import '../../../../core/base_component.dart';
 import '../../../../generated/assets.gen.dart';
 import '../../../auth/auth_utils.dart';
+import '../../../auth/screens/web_auth_screen.dart';
+import '../../../navigation/components/root_container_side_nav.dart';
+import '../../../navigation/components/root_container_side_nav_list.dart';
 import '../../web_dashboard_container.dart';
 
 class WebDrawer extends BaseComponent {
@@ -16,9 +20,27 @@ class WebDrawer extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
-      backgroundColor: Colors.black87.withOpacity(.7),
-      child: WebMenu(
-        inDrawer: true,
+      backgroundColor: AppColors.getGray(ColorShade.s200),
+      // child: WebMenu(
+      //   inDrawer: true,
+      // ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: WebWalletWordWordmark(
+              withSubtitle: false,
+            ),
+          ),
+          Expanded(
+            child: RootContainerSideNavList(
+              isExpanded: true,
+              // tabsRouter: tabsRouter,
+              inDrawer: true,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -36,7 +58,7 @@ class WebMenu extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final tabsRouter = AutoTabsRouter.of(context);
 
-    final color = Theme.of(context).textTheme.bodyText1!.color;
+    final color = Theme.of(context).textTheme.bodyLarge!.color;
     final activeColor = Theme.of(context).colorScheme.secondary;
     return Column(
       children: [
@@ -44,33 +66,24 @@ class WebMenu extends BaseComponent {
           color: Colors.black,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: GestureDetector(
-              onTap: () {
-                // if (ref.read(webSessionProvider).keypair != null) {
-                //   AutoRouter.of(context).push(WebDashboardContainerRoute());
-                // } else {
-                //   AutoRouter.of(context).push(WebAuthRouter());
-                // }
-              },
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: Image.asset(
-                      Assets.images.animatedCube.path,
-                      scale: 1,
-                    ),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Image.asset(
+                    Assets.images.animatedCube.path,
+                    scale: 1,
                   ),
-                  const SizedBox(width: 8),
-                  Image.asset(
-                    Assets.images.rbxWallet.path,
-                    width: 120,
-                    height: 20,
-                    fit: BoxFit.contain,
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 8),
+                Image.asset(
+                  Assets.images.rbxWallet.path,
+                  width: 120,
+                  height: 20,
+                  fit: BoxFit.contain,
+                ),
+              ],
             ),
           ),
         ),
@@ -153,7 +166,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "RBX Domains",
+            "VFX Domains",
             style: TextStyle(
               color: tabsRouter.activeIndex == WebRouteIndex.adnrs ? activeColor : color,
             ),
@@ -161,11 +174,6 @@ class WebMenu extends BaseComponent {
           leading: const Icon(Icons.link),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            if (ref.read(webSessionProvider).usingRa) {
-              Toast.error("Reserve Accounts can not create domains.");
-              return;
-            }
-
             tabsRouter.setActiveIndex(WebRouteIndex.adnrs);
             if (inDrawer) {
               Navigator.of(context).pop();
@@ -222,11 +230,6 @@ class WebMenu extends BaseComponent {
           leading: const Icon(Icons.leak_add),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
-            if (ref.read(webSessionProvider).usingRa) {
-              Toast.error("Reserve Accounts can not create auction houses.");
-              return;
-            }
-
             if (tabsRouter.activeIndex == WebRouteIndex.shop) {
               tabsRouter.stackRouterOfIndex(tabsRouter.activeIndex)!.popUntilRoot();
             } else {
@@ -250,7 +253,7 @@ class WebMenu extends BaseComponent {
           onTap: () async {
             final confirmed = await ConfirmDialog.show(
               title: "Logout",
-              body: "Are you sure you want to logout of the RBX Web Wallet?",
+              body: "Are you sure you want to logout of the VFX Web Wallet?",
               destructive: true,
               confirmText: "Logout",
               cancelText: "Cancel",

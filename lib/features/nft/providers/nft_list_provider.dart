@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/providers/web_session_provider.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 
 import '../../../core/models/paginated_response.dart';
@@ -41,32 +41,29 @@ class NftListProvider extends StateNotifier<NftListModel> {
     this.ref,
     this.refresh,
     NftListModel model,
-  ) : super(model) {
-    load(1);
-  }
+  ) : super(model);
 
-  Future<void> load(int page) async {
+  Future<void> load(int page, [List<String?>? address]) async {
     // email ??= ref.read(webSessionProvider).keypair?.email;
     // address ??= ref.read(webSessionProvider).keypair?.address;
 
     if (kIsWeb) {
-      final address = ref.read(webSessionProvider).currentWallet?.address;
-
       if (address == null) {
         return;
       }
 
-      final nfts = await ExplorerService().listNfts(address, page: page, search: state.search.isNotEmpty ? state.search : null);
+      final nfts = await ExplorerService().listNftsFromMultipleOwners(address, page: page, search: state.search.isNotEmpty ? state.search : null);
       final d = CliPaginatedResponse(count: nfts.length, results: nfts, page: page);
       state = state.copyWith(data: d, page: page, currentSearch: state.search);
       return;
     }
     final data = await NftService().list(page, search: state.search);
+
     state = state.copyWith(data: data, page: page, currentSearch: state.search);
   }
 
-  Future<void> reloadCurrentPage({String? address}) async {
-    load(state.page);
+  Future<void> reloadCurrentPage({List<String?>? address}) async {
+    load(state.page, address);
   }
 
   void setSearch(String search) {

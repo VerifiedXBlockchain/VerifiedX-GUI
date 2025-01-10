@@ -36,16 +36,16 @@ class TopicDetail extends BaseComponent {
                     const SizedBox(height: 4),
                     SelectableText(
                       "UID: ${topic.uid}",
-                      style: Theme.of(context).textTheme.caption,
+                      style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
-              _DateCard(
+              DateCard(
                 label: "Topic Created",
                 value: topic.createdAtFormatted,
               ),
-              _DateCard(
+              DateCard(
                 label: "Voting Ends",
                 value: topic.endsAtFormatted,
               )
@@ -85,7 +85,7 @@ class AdjudicatorInVoteDetails extends BaseComponent {
     return Column(
       children: [
         _AdjudicatorDetailValue(
-          label: 'Adjudicator to be RBX Address: ',
+          label: 'Adjudicator to be VFX Address: ',
           value: details.rbxAddress,
         ),
         _AdjudicatorDetailValue(
@@ -213,10 +213,10 @@ class _AdjudicatorDetailValue extends StatelessWidget {
   }
 }
 
-class _DateCard extends StatelessWidget {
+class DateCard extends StatelessWidget {
   final String label;
   final String value;
-  const _DateCard({
+  const DateCard({
     Key? key,
     required this.label,
     required this.value,
@@ -240,7 +240,7 @@ class _DateCard extends StatelessWidget {
             ),
             Text(
               label,
-              style: Theme.of(context).textTheme.caption,
+              style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
         ),

@@ -1,12 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:rbx_wallet/core/components/buttons.dart';
-import 'package:rbx_wallet/features/web/components/web_callback_button.dart';
+import '../../../core/theme/components.dart';
+import '../../../core/components/buttons.dart';
+import '../../web/components/web_callback_button.dart';
 import '../../../core/components/badges.dart';
-import '../providers/transaction_signal_provider.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
@@ -35,7 +34,7 @@ class WebTransactionCard extends BaseComponent {
       date = "$date | Settlement Date: $settlementDate";
     }
 
-    final address = ref.watch(webSessionProvider).currentWallet?.address;
+    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
     final isMobile = BreakPoints.useMobileLayout(context);
     final toMe = tx.toAddress == address;
 
@@ -45,86 +44,80 @@ class WebTransactionCard extends BaseComponent {
             : Theme.of(context).colorScheme.danger
         : Colors.white;
 
-    String text = tx.type == TxType.rbxTransfer ? "${tx.amount} RBX" : tx.typeLabel;
+    String text = tx.type == TxType.rbxTransfer ? "${tx.amount} VFX" : tx.typeLabel;
 
     if (tx.callbackDetails != null) {
       final cb = tx.callbackDetails!;
-      text = "$text [${cb.amount} RBX from ${cb.toAddress}]";
+      text = "$text [${cb.amount} VFX from ${cb.toAddress}]";
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(6.0),
-      child: Container(
-        decoration: BoxDecoration(
-          boxShadow: glowingBox,
+    return AppCard(
+      padding: 0,
+      child: ListTile(
+        leading: isMobile
+            ? null
+            : toMe
+                ? const Icon(Icons.move_to_inbox)
+                : const Icon(Icons.outbox),
+        title: Text(
+          text,
+          style: TextStyle(color: color),
         ),
-        child: Card(
-          color: Colors.black87,
-          child: ListTile(
-            leading: isMobile
-                ? null
-                : toMe
-                    ? const Icon(Icons.move_to_inbox)
-                    : const Icon(Icons.outbox),
-            title: Text(
-              text,
-              style: TextStyle(color: color),
-            ),
-            subtitle: toMe
-                ? RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                      children: [
-                        TextSpan(text: "From: "),
-                        TextSpan(
-                            text: "${tx.fromAddress}\n",
-                            style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                        TextSpan(text: date)
-                      ],
-                    ),
-                  )
-                : RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                      children: [
-                        TextSpan(text: "To: "),
-                        TextSpan(
-                            text: "${tx.toAddress}\n",
-                            style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                        TextSpan(text: date)
-                      ],
-                    ),
-                  ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (tx.isPending)
-                  AppBadge(
-                    label: "Pending",
-                    variant: AppColorVariant.Warning,
-                  ),
-                if (tx.callbackHash != null)
-                  AppButton(
-                    label: "Original TX",
-                    onPressed: () {
-                      AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.callbackHash!));
-                    },
-                  ),
-                WebCallbackButton(tx),
-                CompleteSaleButton(
-                  tx: tx,
-                  fallbackWidget: Icon(Icons.chevron_right),
+        subtitle: toMe
+            ? RichText(
+                text: TextSpan(
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                  children: [
+                    TextSpan(text: "From: "),
+                    TextSpan(
+                        text: "${tx.fromAddress}\n",
+                        style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                    TextSpan(text: date)
+                  ],
                 ),
-              ],
+              )
+            : RichText(
+                text: TextSpan(
+                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                  children: [
+                    TextSpan(text: "To: "),
+                    TextSpan(
+                        text: "${tx.toAddress}\n",
+                        style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                    TextSpan(text: date)
+                  ],
+                ),
+              ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (tx.isPending)
+              AppBadge(
+                label: "Pending",
+                variant: AppColorVariant.Warning,
+              ),
+            if (tx.callbackHash != null)
+              AppButton(
+                label: "Original TX",
+                onPressed: () {
+                  AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.callbackHash!));
+                },
+              ),
+            WebCallbackButton(tx),
+            CompleteSaleButton(
+              tx: tx,
+              fallbackWidget: Icon(Icons.chevron_right),
             ),
-            onTap: () {
-              AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.hash));
-              // if (kDebugMode) {
-              //   ref.read(transactionSignalProvider.notifier).insert(tx.toNative());
-              // }
-            },
-          ),
+          ],
         ),
+        onTap: tx.isPending
+            ? null
+            : () {
+                AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.hash));
+                // if (kDebugMode) {
+                //   ref.read(transactionSignalProvider.notifier).insert(tx.toNative());
+                // }
+              },
       ),
     );
   }

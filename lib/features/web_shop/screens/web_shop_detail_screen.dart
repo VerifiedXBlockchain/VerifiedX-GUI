@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/features/bridge/providers/wallet_info_provider.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/app_router.gr.dart';
 import '../../../core/base_screen.dart';
@@ -14,8 +13,6 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/web_router.gr.dart' as web_router;
 import '../../chat/services/web_chat_service.dart';
 import '../../global_loader/global_loading_provider.dart';
-import '../../raw/raw_service.dart';
-import '../../web/utils/raw_transaction.dart';
 import '../components/web_collection_list.dart';
 import '../components/web_my_collection_list.dart';
 import '../providers/web_collection_form_provider.dart';
@@ -23,7 +20,6 @@ import '../providers/web_shop_form_provider.dart';
 import 'my_create_collection_container_screen.dart';
 import '../services/web_shop_service.dart';
 import '../utils/shop_publishing.dart';
-import '../../../core/components/poller.dart';
 
 import '../../../core/breakpoints.dart';
 import '../../../core/dialogs.dart';
@@ -44,7 +40,8 @@ class WebShopDetailScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final data = ref.watch(webShopDetailProvider(shopId));
-    final address = kIsWeb ? ref.watch(webSessionProvider).keypair?.address : ref.watch(sessionProvider).currentWallet?.address;
+    final address =
+        kIsWeb ? ref.watch(webSessionProvider.select((v) => v.keypair?.address)) : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
     return data.when(
       data: (shop) => shop != null
@@ -59,7 +56,7 @@ class WebShopDetailScreen extends BaseScreen {
                   size: 32,
                 ),
                 onPressed: () {
-                  ref.watch(webCollectionFullListProvider(shopId).notifier).pauseTimer();
+                  ref.read(webCollectionFullListProvider(shopId).notifier).pauseTimer();
                   AutoRouter.of(context).pop();
                 },
               ),
@@ -187,7 +184,7 @@ class WebShopDetailScreen extends BaseScreen {
                               onPressed: () async {
                                 final confirmed = await ConfirmDialog.show(
                                   title: "Publish Shop?",
-                                  body: "There is a cost of $SHOP_PUBLISH_COST RBX to publish your shop to the network (plus the transaction fee).",
+                                  body: "There is a cost of $SHOP_PUBLISH_COST VFX to publish your shop to the network (plus the transaction fee).",
                                   confirmText: "Publish",
                                   cancelText: "Cancel",
                                 );
@@ -221,7 +218,12 @@ class WebShopDetailScreen extends BaseScreen {
                   Container(
                     color: Colors.black,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        top: 16.0,
+                        right: 8.0,
+                        bottom: 48.0,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -231,7 +233,7 @@ class WebShopDetailScreen extends BaseScreen {
                             variant: AppColorVariant.Danger,
                             onPressed: () async {
                               final message = shop.isPublished
-                                  ? "Are you sure you want to delete this shop? There is a cost of $SHOP_DELETE_COST RBX to delete this from the network."
+                                  ? "Are you sure you want to delete this shop? There is a cost of $SHOP_DELETE_COST VFX to delete this from the network."
                                   : "Are you sure you want to delete this shop?";
 
                               final confirmed = await ConfirmDialog.show(

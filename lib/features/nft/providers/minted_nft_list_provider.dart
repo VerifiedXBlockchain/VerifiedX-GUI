@@ -1,8 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/services/explorer_service.dart';
-import '../../raw/raw_service.dart';
+import '../../../core/services/explorer_service.dart';
 
 import '../../../core/models/paginated_response.dart';
 import '../../../core/providers/web_session_provider.dart';
@@ -14,14 +13,18 @@ class MintedNftListProvider extends StateNotifier<NftListModel> {
 
   final TextEditingController searchController = TextEditingController();
 
-  MintedNftListProvider(this.ref, NftListModel model) : super(model) {
-    load(1);
-  }
+  MintedNftListProvider(this.ref, NftListModel model) : super(model);
 
-  Future<void> load(int page) async {
+  Future<void> load(int page, [String? address]) async {
     if (kIsWeb) {
-      final nfts = await ExplorerService()
-          .listMintedNfts(ref.read(webSessionProvider).currentWallet!.address, page: page, search: state.search.isNotEmpty ? state.search : null);
+      if (address == null) {
+        return;
+      }
+      final nfts = await ExplorerService().listMintedNfts(
+        address,
+        page: page,
+        search: state.search.isNotEmpty ? state.search : null,
+      );
 
       final filteredNfts = nfts.where((n) => n.canEvolve).toList();
 
@@ -35,8 +38,8 @@ class MintedNftListProvider extends StateNotifier<NftListModel> {
     state = state.copyWith(page: page, data: data, currentSearch: state.search);
   }
 
-  Future<void> reloadCurrentPage() async {
-    load(state.page);
+  Future<void> reloadCurrentPage([String? address]) async {
+    load(state.page, address);
   }
 
   void setSearch(String search) {

@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:archive/archive_io.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
-import 'package:rbx_wallet/features/sc_property/models/sc_property.dart';
-import 'package:rbx_wallet/features/smart_contracts/features/evolve/evolve_phase.dart';
+import '../../sc_property/models/sc_property.dart';
+import '../../smart_contracts/features/evolve/evolve_phase.dart';
 import '../../asset/web_asset.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -92,6 +92,18 @@ abstract class WebNft with _$WebNft {
                 webAsset = WebAsset(location: assetUrls![fileName]);
               }
 
+              print(phase['Properties']);
+
+              List<ScProperty> properties = [];
+              if (phase["Properties"] != null) {
+                for (final entry in phase['Properties'].entries) {
+                  properties.add(ScProperty(name: entry.key, value: entry.value));
+                }
+              }
+
+              print("***");
+              print(properties);
+
               updatedEvolutionPhases.add(EvolvePhase(
                 name: phase["Name"],
                 description: phase["Description"],
@@ -101,7 +113,7 @@ abstract class WebNft with _$WebNft {
                     ? DateTime.fromMillisecondsSinceEpoch(phase['EvolveDate'] * 1000)
                     : null,
                 blockHeight: phase['EvolveBlockHeight'],
-                properties: phase['Properties'] != null ? phase['Properties'].map((p) => ScProperty.fromJson(p)).toList() : [],
+                properties: properties,
                 webAsset: webAsset,
               ));
             }

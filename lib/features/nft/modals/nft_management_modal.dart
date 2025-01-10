@@ -4,8 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/providers/web_session_provider.dart';
-import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -29,7 +28,8 @@ import '../screens/nft_detail_screen.dart';
 class NftMangementModal extends BaseComponent {
   final String id;
   final Nft nft;
-  const NftMangementModal(this.id, this.nft, {Key? key}) : super(key: key);
+  final bool showViewNft;
+  const NftMangementModal(this.id, this.nft, {Key? key, this.showViewNft = true}) : super(key: key);
 
   void evolve(BuildContext context, WidgetRef ref) async {
     final confirmed = await ConfirmDialog.show(
@@ -126,14 +126,15 @@ class NftMangementModal extends BaseComponent {
                   Navigator.of(context).pop();
                 },
               ),
-              AppButton(
-                label: "View NFT",
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  // AutoRouter.of(context).push(NftDetailScreenRoute(id: nft.id));
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: nft.id)));
-                },
-              ),
+              if (showViewNft)
+                AppButton(
+                  label: "View NFT",
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // AutoRouter.of(context).push(NftDetailScreenRoute(id: nft.id));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: nft.id)));
+                  },
+                ),
             ],
           ),
           const Divider(),
@@ -142,7 +143,7 @@ class NftMangementModal extends BaseComponent {
             children: [
               Text(
                 "Managing ${nft.name}",
-                style: Theme.of(context).textTheme.headline4!.copyWith(color: Colors.white),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
               ),
               Builder(builder: (context) {
                 final nftIds = ref.watch(nftListProvider).data.results.map((n) => n.id).toList();
@@ -187,40 +188,44 @@ class NftMangementModal extends BaseComponent {
           //     ],
           //   ),
 
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Divider(),
-              Text(
-                nft.evolveIsDynamic ? "Evolution" : "Manage Evolution",
-                style: Theme.of(context).textTheme.headline5,
-              ),
-              EvolutionStateRow(
-                nft.baseEvolutionPhase,
-                nft: nft,
-                nftId: id,
-                canManageEvolve: nft.manageable,
-                index: 0,
-              ),
-              ...nft.updatedEvolutionPhases
-                  .asMap()
-                  .entries
-                  .map(
-                    (entry) => EvolutionStateRow(
-                      entry.value,
-                      nft: nft,
-                      nftId: id,
-                      canManageEvolve: nft.manageable,
-                      index: entry.key + 1,
-                      onAssociate: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  )
-                  .toList(),
-            ],
-          ),
+          Builder(builder: (context) {
+            final address = kIsWeb ? ref.watch(webSessionProvider.select((value) => value.keypair?.address)) : null;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Divider(),
+                Text(
+                  nft.evolveIsDynamic ? "Evolution" : "Manage Evolution",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                EvolutionStateRow(
+                  nft.baseEvolutionPhase,
+                  nft: nft,
+                  nftId: id,
+                  canManageEvolve: nft.canManageEvolve(address),
+                  index: 0,
+                ),
+                ...nft.updatedEvolutionPhases
+                    .asMap()
+                    .entries
+                    .map(
+                      (entry) => EvolutionStateRow(
+                        entry.value,
+                        nft: nft,
+                        nftId: id,
+                        canManageEvolve: nft.canManageEvolve(address),
+                        index: entry.key + 1,
+                        onAssociate: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    )
+                    .toList(),
+              ],
+            );
+          }),
         ],
       ),
     );
@@ -268,7 +273,7 @@ class EvolutionStateRow extends BaseComponent {
     final isCurrent = phase.isCurrentState;
 
     final isMinter = kIsWeb
-        ? ref.watch(webSessionProvider).keypair?.address == nft.minterAddress
+        ? ref.watch(webSessionProvider.select((v) => v.keypair?.address)) == nft.minterAddress
         : ref.watch(walletListProvider).firstWhereOrNull((w) => w.address == nft.minterAddress) != null;
 
     final showMedia = isMinter || index <= nft.currentEvolvePhaseIndex + 1;
@@ -292,7 +297,7 @@ class EvolutionStateRow extends BaseComponent {
                       child: Center(
                         child: Text(
                           "${phase.evolutionState}.",
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context).textTheme.headlineMedium,
                         ),
                       ),
                     ),
@@ -420,7 +425,7 @@ class EvolutionStateRow extends BaseComponent {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Name: ${phase.name}", style: Theme.of(context).textTheme.headline4),
+                            Text("Name: ${phase.name}", style: Theme.of(context).textTheme.headlineMedium),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4.0),
                               child: Text(

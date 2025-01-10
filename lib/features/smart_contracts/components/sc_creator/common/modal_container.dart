@@ -1,7 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../../generated/assets.gen.dart';
 
 class ModalContainer extends StatelessWidget {
   final List<Widget> children;
@@ -9,44 +6,45 @@ class ModalContainer extends StatelessWidget {
   final bool withClose;
   final bool withDecor;
   final double padding;
+  final String? title;
   const ModalContainer({
     Key? key,
-    this.color = Colors.black,
+    this.color = const Color(0xFF0b0d0f),
     this.children = const [],
     this.withClose = false,
     this.withDecor = true,
     this.padding = 32.0,
+    this.title,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: color,
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          if (withDecor && !kIsWeb)
-            Opacity(
-              opacity: kIsWeb ? 0.1 : 0.5,
-              child: Image.asset(
-                Assets.images.decorBottomRight.path,
-                width: 300,
-                height: 300,
-                fit: BoxFit.cover,
-              ),
-            ),
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.all(padding),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (withClose)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(padding),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (withClose || title != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 6.0),
+                    child: Row(
+                      mainAxisAlignment: withClose && title != null
+                          ? MainAxisAlignment.spaceBetween
+                          : title != null
+                              ? MainAxisAlignment.start
+                              : MainAxisAlignment.end,
+                      children: [
+                        if (title != null)
+                          Text(
+                            title!,
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                          ),
+                        if (withClose)
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -56,15 +54,17 @@ class ModalContainer extends StatelessWidget {
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
-                        ],
-                      ),
-                    ...children
-                  ],
+                      ],
+                    ),
+                  ),
+                ...children,
+                SizedBox(
+                  height: 40,
                 ),
-              ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }

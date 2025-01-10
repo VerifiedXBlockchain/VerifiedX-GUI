@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../bridge/services/bridge_service.dart';
-import '../../../remote_info/services/remote_info_service.dart';
-import '../../../../utils/toast.dart';
+import '../../../../core/env.dart';
 
 import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/providers/session_provider.dart';
+import '../../../../utils/toast.dart';
+import '../../../bridge/services/bridge_service.dart';
+import '../../../remote_info/services/remote_info_service.dart';
 
 class ImportSnapshotButton extends BaseComponent {
   const ImportSnapshotButton({
@@ -14,7 +15,7 @@ class ImportSnapshotButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
-    final cliStarted = ref.watch(sessionProvider).cliStarted;
+    final cliStarted = ref.watch(sessionProvider.select((v) => v.cliStarted));
 
     return AppButton(
       label: "Import Snapshot",
@@ -37,7 +38,7 @@ class ImportSnapshotButton extends BaseComponent {
               final snapshotHeight = remoteInfo.snapshot.height;
 
               if (blockHeight < snapshotHeight) {
-                ref.read(sessionProvider.notifier).promptForSnapshotImport();
+                ref.read(sessionProvider.notifier).promptForSnapshotImport(remoteInfo);
               } else {
                 Toast.message("Your local blockheight is further along than the snapshot.");
               }

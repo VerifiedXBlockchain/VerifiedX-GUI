@@ -1,13 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/base_component.dart';
-import 'package:rbx_wallet/core/components/buttons.dart';
-import 'package:rbx_wallet/core/dialogs.dart';
-import 'package:rbx_wallet/core/providers/session_provider.dart';
-import 'package:rbx_wallet/core/theme/app_theme.dart';
-import 'package:rbx_wallet/features/nft/services/nft_service.dart';
-import 'package:rbx_wallet/utils/toast.dart';
-import 'package:rbx_wallet/utils/validation.dart';
+import '../../../../core/base_component.dart';
+import '../../../../core/components/buttons.dart';
+import '../../../../core/dialogs.dart';
+import '../../../../core/providers/session_provider.dart';
+import '../../../../core/theme/app_theme.dart';
+import '../../../nft/services/nft_service.dart';
+import '../../../../utils/toast.dart';
+import '../../../../utils/validation.dart';
 
 class VerifyNftOwnershipButton extends BaseComponent {
   const VerifyNftOwnershipButton({
@@ -16,12 +17,12 @@ class VerifyNftOwnershipButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cliStarted = ref.watch(sessionProvider).cliStarted;
+    final cliStarted = kIsWeb ? null : ref.watch(sessionProvider.select((v) => v.cliStarted));
 
     return AppButton(
       label: "Verify NFT Ownership",
       icon: Icons.security,
-      onPressed: !cliStarted
+      onPressed: cliStarted == false
           ? null
           : () async {
               final sig = await PromptModal.show(
@@ -54,45 +55,65 @@ class VerifyNftOwnershipButton extends BaseComponent {
 
                 InfoDialog.show(
                   title: title,
-                  content: SizedBox(
-                    width: 420,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              iconData,
-                              color: color,
-                              size: 32,
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            Text(
-                              subtitle,
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: color,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 16,
-                        ),
-                        Text(
-                          body,
-                          textAlign: TextAlign.center,
-                        )
-                      ],
-                    ),
-                  ),
+                  content: NftVerificationSuccessDialog(iconData: iconData, color: color, subtitle: subtitle, body: body),
                 );
               }
             },
+    );
+  }
+}
+
+class NftVerificationSuccessDialog extends StatelessWidget {
+  const NftVerificationSuccessDialog({
+    super.key,
+    required this.iconData,
+    required this.color,
+    required this.subtitle,
+    required this.body,
+  });
+
+  final IconData iconData;
+  final Color color;
+  final String subtitle;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 420,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                iconData,
+                color: color,
+                size: 32,
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              Text(
+                subtitle,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: color,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          Text(
+            body,
+            textAlign: TextAlign.center,
+          )
+        ],
+      ),
     );
   }
 }

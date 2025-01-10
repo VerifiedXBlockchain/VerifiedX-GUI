@@ -35,13 +35,13 @@ class TopicVoteActions extends BaseComponent {
       return _ErrorMessage("Voting Ended on ${topic.endsAtFormatted}.");
     }
 
-    final myAddress = ref.watch(sessionProvider).currentWallet?.address;
+    final myAddress = ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
     if (myAddress == null) {
-      return const _ErrorMessage("Must have a wallet selected to vote.");
+      return const _ErrorMessage("Must have an account selected to vote.");
     }
 
-    final isValidating = ref.watch(sessionProvider).currentWallet?.isValidating == true;
+    final isValidating = ref.watch(sessionProvider.select((v) => v.currentWallet?.isValidating)) == true;
     if (!isValidating) {
       return const _ErrorMessage("You must be a validator to vote.");
     }
@@ -115,7 +115,7 @@ class TopicVoteActions extends BaseComponent {
         const SizedBox(height: 8),
         Text(
           "Voting ends ${topic.endsAtFormatted}.",
-          style: Theme.of(context).textTheme.caption,
+          style: Theme.of(context).textTheme.bodySmall,
         )
       ],
     );

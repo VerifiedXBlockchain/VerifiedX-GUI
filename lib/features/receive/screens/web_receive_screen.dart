@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/features/web/components/web_ra_mode_switcher.dart';
+import '../../../core/breakpoints.dart';
+import '../../../core/theme/pretty_icons.dart';
+import '../../../core/theme/colors.dart';
+import '../../../core/theme/components.dart';
+import '../../web/components/new_web_wallet_selector.dart';
+import '../../web/components/web_currency_segmented_button.dart';
+import '../../web/components/web_mobile_drawer_button.dart';
+import '../../web/components/web_wallet_type_switcher.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
@@ -13,6 +20,8 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../nft/components/nft_qr_code.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../../web/providers/web_currency_segmented_button_provider.dart';
+import '../../web/providers/web_selected_account_provider.dart';
 
 class WebReceiveScreen extends BaseScreen {
   const WebReceiveScreen({Key? key})
@@ -26,11 +35,15 @@ class WebReceiveScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final isMobile = BreakPoints.useMobileLayout(context);
+
+    final isBtc = ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
+
     return AppBar(
-      title: const Text("Receive"),
+      title: isBtc ? Text("Receive BTC") : Text("Receive VFX"),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
-      actions: [WebRaModeSwitcher()],
+      leading: isMobile ? WebMobileDrawerButton() : null,
     );
   }
 
@@ -64,140 +77,179 @@ class WebReceiveScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final address = ref.watch(webSessionProvider).currentWallet?.address;
-    final usingRa = ref.watch(webSessionProvider).usingRa;
-    final adnr = ref.watch(webSessionProvider).adnr;
+    // final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
+    // final usingRa = ref.watch(webSessionProvider.select((v) => v.usingRa));
+    // final usingBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
+    // final adnr = ref.watch(webSessionProvider.select((v) => v.adnr));
 
-    if (address == null) {
+    final selectedAccount = ref.watch(webSelectedAccountProvider);
+
+    if (selectedAccount == null) {
       return const WebNotWallet();
     }
+
+    // if (usingBtc) {
+    //   return Center(
+    //     child: ConstrainedBox(
+    //       constraints: BoxConstraints(maxWidth: 600),
+    //       child: AppCard(
+    //         padding: 16,
+    //         child: Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             AppCard(
+    //               padding: 0,
+    //               color: AppColors.getGray(ColorShade.s300),
+    //               child: ListTile(
+    //                 title: SelectableText(
+    //                   address,
+    //                   style: TextStyle(color: AppColors.getBtc()),
+    //                 ),
+    //                 subtitle: Text("Your Address"),
+    //                 leading: Icon(Icons.wallet),
+    //                 trailing: IconButton(
+    //                   icon: const Icon(Icons.copy),
+    //                   onPressed: () {
+    //                     copyToClipboard(address);
+    //                   },
+    //                 ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 650),
-            child: Container(
-              decoration: BoxDecoration(
-                boxShadow: glowingBox,
-              ),
-              child: Card(
-                color: Colors.black87,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+          WebCurrencySegementedButton(withAny: false),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 32),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 600),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: AppCard(
+                  padding: 16,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 500),
+                      AppCard(
+                        padding: 0,
+                        color: AppColors.getGray(ColorShade.s300),
                         child: ListTile(
                           title: SelectableText(
-                            address,
-                            style: TextStyle(color: usingRa ? Colors.deepPurple.shade200 : Colors.white),
+                            selectedAccount.address,
+                            style: TextStyle(color: selectedAccount.color),
                           ),
                           subtitle: Text("Your Address"),
                           leading: Icon(Icons.wallet),
                           trailing: IconButton(
                             icon: const Icon(Icons.copy),
                             onPressed: () {
-                              copyToClipboard(address);
+                              copyToClipboard(selectedAccount.address);
                             },
                           ),
                         ),
                       ),
                       const SizedBox(height: 8),
-                      if (adnr != null && adnr.isNotEmpty && !usingRa) ...[
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 500),
+                      if (selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty) ...[
+                        AppCard(
+                          padding: 0,
+                          color: AppColors.getGray(ColorShade.s300),
                           child: ListTile(
                             title: SelectableText(
-                              adnr,
-                              style: TextStyle(color: Colors.white),
+                              selectedAccount.domain!,
+                              style: TextStyle(color: selectedAccount.color),
                             ),
                             subtitle: Text("Your Domain"),
                             leading: Icon(Icons.link),
                             trailing: IconButton(
                               icon: const Icon(Icons.copy),
                               onPressed: () {
-                                copyToClipboard(adnr);
+                                copyToClipboard(selectedAccount.domain!);
                               },
                             ),
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          "Alternatively, you can receive funds to your RBX Domain.",
-                          style: Theme.of(context).textTheme.caption,
-                        ),
                       ],
+                      Divider(),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          AppVerticalIconButton(
+                            label: "Copy\nLink",
+                            icon: Icons.link,
+                            prettyIconType: PrettyIconType.custom,
+                            onPressed: () async {
+                              showRequestPrompt(
+                                  context: context,
+                                  address: selectedAccount.address,
+                                  onValidSubmission: (amount) async {
+                                    if (double.tryParse(amount) != null) {
+                                      final value = selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty
+                                          ? selectedAccount.domain!
+                                          : selectedAccount.address;
+                                      final url = generateLink(value, double.parse(amount));
+
+                                      await copyToClipboard(url, "Request funds link copied to clipboard");
+                                    } else {
+                                      Toast.error("Invalid amount");
+                                    }
+                                  });
+                            },
+                          ),
+                          const SizedBox(width: 6),
+                          AppVerticalIconButton(
+                            label: "QR\nCode",
+                            icon: Icons.qr_code_rounded,
+                            prettyIconType: PrettyIconType.custom,
+                            onPressed: () async {
+                              showRequestPrompt(
+                                  context: context,
+                                  address: selectedAccount.address,
+                                  onValidSubmission: (amount) async {
+                                    if (double.tryParse(amount) != null) {
+                                      final value = selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty
+                                          ? selectedAccount.domain!
+                                          : selectedAccount.address;
+                                      final url = generateLink(value, double.parse(amount));
+
+                                      showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return Center(
+                                              child: NftQrCode(
+                                                data: url,
+                                                withClose: true,
+                                                center: true,
+                                              ),
+                                            );
+                                          });
+                                    } else {
+                                      Toast.error("Invalid amount");
+                                    }
+                                  });
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ),
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Recieve Funds",
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
+          SizedBox(
+            height: 20,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AppButton(
-                label: "Copy Url",
-                icon: Icons.link,
-                onPressed: () async {
-                  showRequestPrompt(
-                      context: context,
-                      address: address,
-                      onValidSubmission: (amount) async {
-                        if (double.tryParse(amount) != null) {
-                          final value = adnr != null && adnr.isNotEmpty && !usingRa ? adnr : address;
-                          final url = generateLink(value, double.parse(amount));
-
-                          await copyToClipboard(url, "Request funds link copied to clipboard");
-                        } else {
-                          Toast.error("Invalid amount");
-                        }
-                      });
-                },
-                variant: AppColorVariant.Light,
-              ),
-              const SizedBox(width: 6),
-              AppButton(
-                label: "QR Code",
-                icon: Icons.qr_code_rounded,
-                onPressed: () async {
-                  showRequestPrompt(
-                      context: context,
-                      address: address,
-                      onValidSubmission: (amount) async {
-                        if (double.tryParse(amount) != null) {
-                          final value = adnr != null && adnr.isNotEmpty & !usingRa ? adnr : address;
-                          final url = generateLink(value, double.parse(amount));
-
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Center(
-                                  child: NftQrCode(
-                                    data: url,
-                                    withClose: true,
-                                  ),
-                                );
-                              });
-                        } else {
-                          Toast.error("Invalid amount");
-                        }
-                      });
-                },
-                variant: AppColorVariant.Light,
-              ),
-            ],
-          )
         ],
       ),
     );

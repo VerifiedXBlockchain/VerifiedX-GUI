@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/features/web/components/web_ra_mode_switcher.dart';
+import '../../../core/breakpoints.dart';
+import '../../web/components/web_currency_segmented_button.dart';
+import '../../web/components/web_mobile_drawer_button.dart';
+import '../../web/components/web_wallet_type_switcher.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../components/send_form.dart';
 
 class WebSendScreen extends BaseScreen {
@@ -19,33 +23,52 @@ class WebSendScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final isMobile = BreakPoints.useMobileLayout(context);
+    final isBtc = ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
+
     return AppBar(
-      title: const Text("Send RBX"),
+      leading: isMobile ? WebMobileDrawerButton() : null,
+      title: isBtc ? Text("Send BTC") : Text("Send VFX"),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
-      actions: [
-        WebRaModeSwitcher(),
-      ],
     );
   }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final keypair = ref.watch(webSessionProvider).keypair;
-    final raKeypair = ref.watch(webSessionProvider).raKeypair;
-    final wallet = ref.watch(webSessionProvider).currentWallet;
+    final keypair = ref.watch(webSessionProvider.select((v) => v.keypair));
+    final raKeypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
+    final wallet = ref.watch(webSessionProvider.select((v) => v.currentWallet));
+    final btcWebAccount = ref.watch(webSessionProvider.select((v) => v.btcKeypair));
 
-    if (keypair == null) {
+    if (keypair == null && raKeypair == null && btcWebAccount == null) {
       return const Center(child: WebNotWallet());
     }
 
     return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 720),
-        child: SendForm(
-          keypair: keypair,
-          wallet: wallet,
-          raKeypair: raKeypair,
+      key: Key(keypair!.address),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              WebCurrencySegementedButton(),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 32),
+                child: SendForm(
+                  keypair: keypair,
+                  wallet: wallet,
+                  raKeypair: raKeypair,
+                  btcWebAccount: btcWebAccount,
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

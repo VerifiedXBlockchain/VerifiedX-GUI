@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/components/buttons.dart';
-import '../../../core/components/empty_placeholder.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
@@ -27,7 +26,7 @@ class WebMyListingList extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final listProvider = ref.watch(webListingListProvider("$shopId,$collectionId").notifier);
+    final listProvider = ref.read(webListingListProvider("$shopId,$collectionId").notifier);
     final isExpanded = ref.watch(shopListViewProvider);
 
     return InfiniteList<WebListing>(
@@ -64,7 +63,6 @@ class _CreateListingButton extends BaseComponent {
   final int collectionId;
   final AppButtonType buttonType;
   const _CreateListingButton({
-    super.key,
     required this.shopId,
     required this.collectionId,
     this.buttonType = AppButtonType.Elevated,

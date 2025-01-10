@@ -1,17 +1,29 @@
 import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../core/app_constants.dart';
 import '../../core/env.dart';
 import '../../core/services/base_service.dart';
-import '../adnr/models/adnr_response.dart';
+import '../../utils/toast.dart';
 import '../keygen/models/keypair.dart';
 import '../nft/models/nft.dart';
 import '../nft/models/web_nft.dart';
 import '../transactions/models/web_transaction.dart';
 import '../transactions/providers/web_transaction_list_provider.dart';
 import '../web/utils/raw_transaction.dart';
-import '../../utils/toast.dart';
+
+class WebWithdrawlBtcResult {
+  final String txHash;
+  final String uniqueId;
+  final String scId;
+
+  const WebWithdrawlBtcResult({
+    required this.txHash,
+    required this.uniqueId,
+    required this.scId,
+  });
+}
 
 class RawService extends BaseService {
   RawService()
@@ -122,16 +134,27 @@ class RawService extends BaseService {
     }
   }
 
-  Future<bool> compileAndMintSmartContract(Map<String, dynamic> payload, Keypair keypair, Ref ref) async {
+  Future<bool> compileAndMintSmartContract(Map<String, dynamic> payload, Keypair keypair, Ref ref, [int type = TxType.nftMint]) async {
     try {
-      final response = await postJson('/smart-contract-data/', params: payload, responseIsJson: true);
+      final updatedPayload = {...payload, 'SCVersion': 1};
+
+      print(jsonEncode(updatedPayload));
+      Map<String, dynamic> response = {};
+      try {
+        response = await postJson('/smart-contract-data/', params: updatedPayload, responseIsJson: true);
+      } catch (e) {
+        print(e);
+        Toast.error("Error generating smart contract data");
+        return false;
+      }
+      final data = response['data'];
 
       final txData = await RawTransaction.generate(
         keypair: keypair,
         amount: 0.0,
         toAddress: keypair.address,
-        data: response['data'],
-        txType: TxType.nftMint,
+        data: data,
+        txType: type,
       );
 
       if (txData == null) {
@@ -153,6 +176,51 @@ class RawService extends BaseService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<String?> compileAndMintSmartContractAndGetHash(Map<String, dynamic> payload, Keypair keypair, Ref ref, [int type = TxType.nftMint]) async {
+    try {
+      final updatedPayload = {...payload, 'SCVersion': 1};
+
+      print(jsonEncode(updatedPayload));
+      Map<String, dynamic> response = {};
+      try {
+        response = await postJson('/smart-contract-data/', params: updatedPayload, responseIsJson: true);
+      } catch (e) {
+        print(e);
+        Toast.error("Error generating smart contract data");
+        return null;
+      }
+      final data = response['data'];
+
+      final txData = await RawTransaction.generate(
+        keypair: keypair,
+        amount: 0.0,
+        toAddress: keypair.address,
+        data: data,
+        txType: type,
+      );
+
+      if (txData == null) {
+        Toast.error("Invalid transaction data.");
+        return null;
+      }
+
+      final tx = await RawService().sendTransaction(
+        transactionData: txData,
+        execute: true,
+        ref: ref,
+      );
+
+      if (tx != null && tx['Result'] == "Success") {
+        return tx['Hash'].toString();
+      }
+
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 
@@ -250,6 +318,37 @@ class RawService extends BaseService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  Future<WebWithdrawlBtcResult?> withdrawVbtc(Map<String, dynamic> payload) async {
+    print(jsonEncode(payload));
+    print("----");
+    try {
+      final response = await postJson("/withdraw-vbtc/", params: payload, cleanPath: false);
+
+      final data = response['data'];
+      print(jsonEncode(data));
+
+      if (data.containsKey('result')) {
+        final Map<String, dynamic> result = data['result'];
+
+        if (result.containsKey('Success') && result['Success'] == true) {
+          final txHash = result['Hash'];
+          final uniqueId = result['UniqueId'];
+          final scId = result['SmartContractUID'];
+          return WebWithdrawlBtcResult(txHash: txHash, uniqueId: uniqueId, scId: scId);
+        }
+        Toast.error(result['Message']);
+        return null;
+      }
+
+      Toast.error();
+
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 

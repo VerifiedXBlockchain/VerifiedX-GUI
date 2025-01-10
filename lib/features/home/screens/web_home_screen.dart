@@ -1,9 +1,32 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:rbx_wallet/core/app_constants.dart';
-import 'package:rbx_wallet/features/payment/components/web_buy_rbx_button.dart';
-import 'package:rbx_wallet/features/web/components/web_ra_mode_switcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/services/explorer_service.dart';
+import 'package:rbx_wallet/features/misc/providers/global_balances_expanded_provider.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+import '../../../app.dart';
+import '../../../core/app_constants.dart';
+import '../../../core/components/open_explorer_modal.dart';
+import '../../../core/providers/currency_segmented_button_provider.dart';
+import '../../../core/theme/colors.dart';
+import '../../../core/theme/components.dart';
+import '../../../core/theme/pretty_icons.dart';
+import '../../../core/utils.dart';
+import '../../../utils/toast.dart';
+import '../../../utils/validation.dart';
+import '../../auth/screens/web_auth_screen.dart';
+import '../../btc_web/services/btc_web_service.dart';
+import '../../faucet/screens/faucet_screen.dart';
+import '../../navigation/constants.dart';
+import '../../navigation/root_container.dart';
+import '../../payment/components/web_buy_rbx_button.dart';
+import '../../price/components/coin_price_summary.dart';
+import '../../price/components/price_chart.dart';
+import '../../wallet/utils.dart';
+import '../../web/components/web_mobile_drawer_button.dart';
+import '../../web/components/web_wallet_mobile_account_info.dart';
+import '../../web/components/web_wallet_type_switcher.dart';
 
 import '../../../core/dialogs.dart';
 import '../../web/components/web_wordmark.dart';
@@ -21,9 +44,9 @@ import '../../../generated/assets.gen.dart';
 import '../../root/web_dashboard_container.dart';
 import '../../web/components/web_latest_block.dart';
 import '../../web/components/web_wallet_details.dart';
-import 'package:rbx_wallet/features/payment/payment_utils.dart';
-
-import '../../payment/components/payment_iframe_container.dart' if (dart.library.io) '../../payment/components/payment_iframe_container_mock.dart';
+import '../../web/providers/account_info_visible_provider.dart';
+import '../components/home_buttons/verify_nft_ownership_button.dart';
+import 'all_tokens_screen.dart';
 
 class WebHomeScreen extends BaseScreen {
   const WebHomeScreen({Key? key})
@@ -37,112 +60,261 @@ class WebHomeScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
-    final address = ref.watch(webSessionProvider).currentWallet?.address;
+    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
+    final isMobile = BreakPoints.useMobileLayout(context);
 
-    return AppBar(
-      title: const Text("Dashboard"),
-      backgroundColor: Colors.black,
-      shadowColor: Colors.transparent,
-      centerTitle: true,
-      leadingWidth: 140,
-      leading: address == null || !ALLOW_PAYMENT
-          ? SizedBox.shrink()
-          : Padding(
-              padding: const EdgeInsets.only(left: 6.0),
-              child: WebBuyRBXButton(),
-            ),
-      actions: [WebRaModeSwitcher()],
-    );
+    return isMobile
+        ? AppBar(
+            title: const Text("Dashboard"),
+            backgroundColor: Colors.black,
+            shadowColor: Colors.transparent,
+            actions: [WebWalletTypeSwitcher()],
+            leading: const WebMobileDrawerButton(),
+          )
+        : null;
   }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height - 60),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    final visibilityProvider = ref.read(webMobileAccountInfoVisibleProvider.notifier);
+    final visibilityState = ref.watch(webMobileAccountInfoVisibleProvider);
+
+    return Stack(
+      children: [
+        Column(
           children: [
+            // Padding(
+            //   padding: const EdgeInsets.all(0),
+            //   child: Column(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: const [
+            //       SizedBox(height: 4),
+            //       WebWalletDetails(),
+            //       SizedBox(height: 32),
+            //     ],
+            //   ),
+            // ),
+            const _Brand(),
+
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: WebMobileAccountInfo(),
+              ),
+            ),
+
             Padding(
-              padding: const EdgeInsets.all(0),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  SizedBox(height: 4),
-                  WebWalletDetails(),
-                  SizedBox(height: 32),
+                children: [
+                  Text(
+                    "Coin Prices",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
+                      Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                        MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (_) => WebPriceChartScreen(
+                            isBtc: false,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CoinPriceSummary(
+                      mini: true,
+                      type: CoinPriceSummaryType.vfx,
+                      actions: [
+                        AppButton(
+                          onPressed: () async {
+                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.vfx);
+                          },
+                          variant: AppColorVariant.Secondary,
+                          type: AppButtonType.Outlined,
+                          label: "Get VFX",
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
+                      Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                        MaterialPageRoute(
+                          fullscreenDialog: true,
+                          builder: (_) => WebPriceChartScreen(
+                            isBtc: true,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CoinPriceSummary(
+                      mini: true,
+                      type: CoinPriceSummaryType.btc,
+                      actions: [
+                        AppButton(
+                          onPressed: () {
+                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.btc);
+                          },
+                          label: "Get BTC",
+                          variant: AppColorVariant.Btc,
+                          type: AppButtonType.Outlined,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const _Actions(),
                 ],
               ),
             ),
-            const _Brand(),
-            const _Actions(),
-            const SizedBox(height: 16),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Opacity(
-                    opacity: 0.5,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 0),
-                      child: Image.asset(
-                        Assets.images.decorBottomRight.path,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ),
-                ),
-                const WebLatestBlock(),
-              ],
-            ),
           ],
         ),
-      ),
+        if (visibilityState != null)
+          GestureDetector(
+            onTap: () {
+              visibilityProvider.clear();
+            },
+            child: Container(
+              color: Colors.black12,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          ),
+        AnimatedPositioned(
+          duration: ROOT_CONTAINER_TRANSITION_DURATION,
+          curve: ROOT_CONTAINER_TRANSITION_CURVE,
+          top: visibilityState == 0 ? 0 : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
+          left: 0,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: WebAccountInfoVfx(),
+          ),
+        ),
+        // AnimatedPositioned(
+        //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
+        //   curve: ROOT_CONTAINER_TRANSITION_CURVE,
+        //   top: visibilityState == 1 ? 0 : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
+        //   left: 0,
+        //   child: SizedBox(
+        //     width: MediaQuery.of(context).size.width,
+        //     child: WebAccountInfoVbtc(),
+        //   ),
+        // ),
+        AnimatedPositioned(
+          duration: ROOT_CONTAINER_TRANSITION_DURATION,
+          curve: ROOT_CONTAINER_TRANSITION_CURVE,
+          top: visibilityState == 2 ? 0 : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
+          left: 0,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: WebAccountInfoBtc(),
+          ),
+        ),
+      ],
     );
   }
 
   @override
   Widget desktopBody(BuildContext context, WidgetRef ref) {
-    return Stack(
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  SizedBox(height: 4),
-                  WebWalletDetails(),
-                  SizedBox(height: 32),
+    return Padding(
+      padding: const EdgeInsets.only(top: ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 12,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              height: 160,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: CoinPriceSummary(
+                      type: CoinPriceSummaryType.vfx,
+                      actions: [
+                        AppButton(
+                          onPressed: () {
+                            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
+                            Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                              MaterialPageRoute(
+                                fullscreenDialog: true,
+                                builder: (_) => WebPriceChartScreen(
+                                  isBtc: false,
+                                ),
+                              ),
+                            );
+                          },
+                          label: "View Chart",
+                          variant: AppColorVariant.Light,
+                          type: AppButtonType.Outlined,
+                        ),
+                        AppButton(
+                          onPressed: () async {
+                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.vfx);
+                          },
+                          variant: AppColorVariant.Secondary,
+                          type: AppButtonType.Outlined,
+                          label: "Get VFX",
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: CoinPriceSummary(
+                      type: CoinPriceSummaryType.btc,
+                      actions: [
+                        AppButton(
+                          onPressed: () {
+                            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
+                            Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                              MaterialPageRoute(
+                                fullscreenDialog: true,
+                                builder: (_) => WebPriceChartScreen(
+                                  isBtc: true,
+                                ),
+                              ),
+                            );
+                          },
+                          label: "View Chart",
+                          variant: AppColorVariant.Light,
+                          type: AppButtonType.Outlined,
+                        ),
+                        AppButton(
+                          onPressed: () {
+                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.btc);
+                          },
+                          label: "Get BTC",
+                          variant: AppColorVariant.Btc,
+                          type: AppButtonType.Outlined,
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-            const _Brand(),
-            const _Actions(),
-            const WebLatestBlock(),
-          ],
-        ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Opacity(
-            opacity: 0.5,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 240.0),
-              child: Image.asset(
-                Assets.images.decorBottomRight.path,
-                width: 200,
-                height: 200,
-                fit: BoxFit.contain,
-              ),
-            ),
           ),
-        ),
-      ],
+          const _Actions(),
+        ],
+      ),
     );
   }
 }
@@ -167,16 +339,11 @@ class _Brand extends StatelessWidget {
               scale: 1,
             ),
           ),
-          // Center(
-          //   child: Image.asset(
-          //     Assets.images.rbxWallet.path,
-          //     width: 160,
-          //     height: 27,
-          //     fit: BoxFit.contain,
-          //   ),
-          // ),
-          Center(
-            child: WebWordmark(),
+          SizedBox(
+            height: 8,
+          ),
+          WebWalletWordWordmark(
+            withSubtitle: false,
           )
         ],
       ),
@@ -195,127 +362,163 @@ class _Actions extends BaseComponent {
 
     final isMobile = BreakPoints.useMobileLayout(context);
 
-    return Container(
-      color: Colors.black,
-      width: double.infinity,
-      child: Center(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(maxWidth: 600),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              runSpacing: isMobile ? 6 : 16,
-              spacing: isMobile ? 6 : 16,
-              alignment: WrapAlignment.center,
-              children: [
-                // AppButton(
-                //   label: "Test",
-                //   onPressed: () {
-                //     runTests();
-                //   },
-                // ),
-                // AppButton(
-                //   label: "Other Test",
-                //   onPressed: () {
-                //     otherTest();
-                //   },
-                // ),
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: isMobile ? 0 : 16),
+      child: AppCard(
+        fullWidth: true,
+        child: Center(
+          child: Wrap(
+            runSpacing: isMobile ? 6 : 16,
+            spacing: isMobile ? 6 : 16,
+            alignment: WrapAlignment.center,
+            children: [
+              // AppButton(
+              //   label: "Test",
+              //   onPressed: () {
+              //     runTests();
+              //   },
+              // ),
+              // AppButton(
+              //   label: "Other Test",
+              //   onPressed: () {
+              //     otherTest();
+              //   },
+              // ),
 
-                AppButton(
-                  label: "Send",
-                  icon: Icons.outbox,
+              AppVerticalIconButton(
+                label: "Send\nCoin",
+                icon: Icons.outbox,
+                prettyIconType: PrettyIconType.send,
+                onPressed: () {
+                  tabsRouter.setActiveIndex(WebRouteIndex.send);
+                },
+              ),
+              AppVerticalIconButton(
+                label: "Receive\nCoin",
+                icon: Icons.move_to_inbox,
+                prettyIconType: PrettyIconType.receive,
+                onPressed: () {
+                  tabsRouter.setActiveIndex(WebRouteIndex.recieve);
+                },
+              ),
+              AppVerticalIconButton(
+                label: "TXs",
+                icon: Icons.history,
+                prettyIconType: PrettyIconType.transactions,
+                onPressed: () {
+                  tabsRouter.setActiveIndex(WebRouteIndex.transactions);
+                },
+                color: AppColors.getWhite(ColorShade.s200),
+              ),
+              Builder(builder: (context) {
+                return AppVerticalIconButton(
+                  label: "Tokens",
+                  prettyIconType: PrettyIconType.fungibleToken,
+                  icon: Icons.toll,
                   onPressed: () {
-                    tabsRouter.setActiveIndex(WebRouteIndex.send);
+                    ref.read(globalBalancesExpandedProvider.notifier).detract();
+                    AutoRouter.of(context).push(AllTokensScreenRoute());
                   },
-                ),
-                AppButton(
-                  label: "Receive",
-                  icon: Icons.move_to_inbox,
-                  onPressed: () {
-                    tabsRouter.setActiveIndex(WebRouteIndex.recieve);
-                  },
-                ),
-                AppButton(
-                  label: "Transactions",
-                  icon: Icons.paid,
-                  onPressed: () {
-                    tabsRouter.setActiveIndex(WebRouteIndex.transactions);
-                  },
-                ),
-
-                AppButton(
-                  label: "RBX Domains",
-                  icon: Icons.link,
-                  onPressed: () {
-                    tabsRouter.setActiveIndex(WebRouteIndex.adnrs);
-                  },
-                ),
-
-                AppButton(
-                  label: "Smart Contracts",
-                  icon: Icons.receipt_long,
-                  onPressed: () {
-                    tabsRouter.setActiveIndex(WebRouteIndex.smartContracts);
-                  },
-                ),
-                AppButton(
-                  label: "NFTs",
-                  icon: Icons.lightbulb_outline,
-                  onPressed: () {
-                    tabsRouter.setActiveIndex(WebRouteIndex.nfts);
-                  },
-                ),
-                AppButton(
-                  label: "P2P Auctions",
-                  icon: Icons.leak_add,
-                  onPressed: () {
-                    tabsRouter.setActiveIndex(WebRouteIndex.shop);
-                  },
-                ),
-                AppButton(
-                  label: "Reserve Account",
-                  icon: Icons.security,
-                  onPressed: () {
-                    AutoRouter.of(context).push(WebReserveAccountOverviewScreenRoute());
-                  },
-                ),
-                AppButton(
-                  label: "Open Explorer",
-                  icon: Icons.explore,
-                  onPressed: () {
-                    launchUrl(Uri.parse(Env.baseExplorerUrl));
-                  },
-                ),
-
-                if (ref.read(webSessionProvider).keypair != null)
-                  AppButton(
-                    label: "Logout",
-                    icon: Icons.logout,
-                    onPressed: () async {
-                      final confirmed = await ConfirmDialog.show(
-                        title: "Logout",
-                        body: "Are you sure you want to logout of the RBX Web Wallet?",
-                        destructive: true,
-                        confirmText: "Logout",
-                        cancelText: "Cancel",
-                      );
-                      if (confirmed == true) {
-                        await ref.read(webSessionProvider.notifier).logout();
-
-                        AutoRouter.of(context).replace(const WebAuthRouter());
+                  color: AppColors.getWhite(ColorShade.s200),
+                );
+              }),
+              AppVerticalIconButton(
+                label: "Tutorials",
+                prettyIconType: PrettyIconType.custom,
+                icon: FontAwesomeIcons.video,
+                iconScale: 0.7,
+                onPressed: () {
+                  launchUrlString("https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
+                },
+                color: AppColors.getWhite(ColorShade.s200),
+              ),
+              AppVerticalIconButton(
+                label: "Open\nExplorer",
+                icon: Icons.open_in_browser,
+                prettyIconType: PrettyIconType.custom,
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: rootNavigatorKey.currentContext!,
+                    backgroundColor: Colors.black,
+                    builder: (context) => OpenExplorerModal(),
+                  );
+                },
+              ),
+              AppVerticalIconButton(
+                  label: "Verify\nOwner",
+                  prettyIconType: PrettyIconType.validator,
+                  icon: Icons.check,
+                  onPressed: () async {
+                    final sig = await PromptModal.show(
+                      title: "Validate Ownership",
+                      body: "Paste in the signature provided by the owner to validate its ownership.",
+                      validator: (val) => formValidatorNotEmpty(val, "Signature"),
+                      labelText: "Signature",
+                    );
+                    if (sig != null && sig.isNotEmpty) {
+                      final components = sig.split("<>");
+                      if (components.length != 4) {
+                        Toast.error("Invalid ownership verification signature");
+                        return;
                       }
-                    },
-                    variant: AppColorVariant.Danger,
-                  ),
-                if (ref.read(webSessionProvider).keypair == null)
-                  AppButton(
-                    label: "Setup Wallet",
-                    onPressed: () async {
+
+                      final address = components.first;
+                      final scId = components.last;
+
+                      var verified = await ExplorerService().verifyNftOwnership(sig);
+                      if (verified == null) {
+                        return;
+                      }
+
+                      final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
+                      final iconData = verified ? Icons.check : Icons.close;
+                      final title = verified ? "Verified" : "Not Verified";
+                      final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
+                      final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
+
+                      InfoDialog.show(
+                        title: title,
+                        content: NftVerificationSuccessDialog(
+                          iconData: iconData,
+                          color: color,
+                          subtitle: subtitle,
+                          body: body,
+                        ),
+                      );
+                    }
+                  }),
+              // AppVerticalIconButton(
+              //   label: "Faucet",
+              //   icon: FontAwesomeIcons.faucet,
+              //   prettyIconType: PrettyIconType.custom,
+              //   onPressed: () {
+              //     Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
+              //       builder: (context) => FaucetScreen(),
+              //     ));
+              //   },
+              // ),
+
+              if (ref.read(webSessionProvider).keypair != null)
+                AppVerticalIconButton(
+                  label: "Sign\nOut",
+                  icon: Icons.logout,
+                  prettyIconType: PrettyIconType.custom,
+                  onPressed: () async {
+                    final confirmed = await ConfirmDialog.show(
+                      title: "Sign Out",
+                      body: "Are you sure you want to logout of the VFX Web Wallet?",
+                      destructive: true,
+                      confirmText: "Logout",
+                      cancelText: "Cancel",
+                    );
+                    if (confirmed == true) {
+                      await ref.read(webSessionProvider.notifier).logout();
+
                       AutoRouter.of(context).replace(const WebAuthRouter());
-                    },
-                  ),
-              ],
-            ),
+                    }
+                  },
+                ),
+            ],
           ),
         ),
       ),

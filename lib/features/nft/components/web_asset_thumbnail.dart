@@ -26,6 +26,7 @@ class WebAssetThumbnail extends StatelessWidget {
           builder: (context) {
             return Center(
               child: Card(
+                color: Colors.black,
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: SizedBox(
@@ -54,7 +55,7 @@ class WebAssetThumbnail extends StatelessWidget {
       },
       child: SizedBox(
         width: size,
-        height: size + 12,
+        height: size + 24,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

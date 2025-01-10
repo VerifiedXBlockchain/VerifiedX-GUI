@@ -25,4 +25,9 @@ class HtmlHelpersImplementation extends HtmlHelpersInterface {
   void reload() {
     print("Not implemented for non web");
   }
+
+  @override
+  void downloadKeysWeb(List<int> bytes) {
+    print("Not implemented for non web");
+  }
 }

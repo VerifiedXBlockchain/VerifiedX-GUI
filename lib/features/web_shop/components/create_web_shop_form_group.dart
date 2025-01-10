@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../core/base_component.dart';
 import '../../../utils/validation.dart';
@@ -139,7 +138,7 @@ class _DecUrl extends BaseComponent {
           style: TextStyle(color: Colors.white),
         ),
         hintText: "MyNewShop",
-        prefixText: "rbx://",
+        prefixText: "vfx://",
       ),
     );
   }
