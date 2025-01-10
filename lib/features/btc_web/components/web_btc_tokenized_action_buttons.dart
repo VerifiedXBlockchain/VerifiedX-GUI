@@ -390,12 +390,12 @@ class _TransferSharesModal extends BaseComponent {
                 ),
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text("Fee Rate: $BTC_WITHDRAWL_FEE_RATE SATS per byte (${satashiToBtcLabel(BTC_WITHDRAWL_FEE_RATE)} BTC per byte)"),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(vertical: 8.0),
+              //   child: Text("Fee Rate: $BTC_WITHDRAWL_FEE_RATE SATS per byte (${satashiToBtcLabel(BTC_WITHDRAWL_FEE_RATE)} BTC per byte)"),
+              // ),
               Text(
-                "This is a Multi-signature. The fee rate has been calculated for you.",
+                "This is a Multi-signature transaction so a higher fee rate is recommended.",
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               Divider(),

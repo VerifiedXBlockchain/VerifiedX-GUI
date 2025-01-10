@@ -110,6 +110,28 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            if (!ref.watch(webSessionProvider.select((v) => v.raActivated)))
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.warning,
+                      color: Theme.of(context).colorScheme.warning,
+                    ),
+                    Text(
+                      "Warning",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text("Your vault account is not activated yet. To protect funds and assets securely, please activate first.")
+                  ],
+                ),
+              ),
+
             AppCard(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -206,7 +228,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                   height: 8,
                                 ),
                                 SelectableText(
-                                  "Your Reserve (Protected) Account is being recovered to your recovery address.\nAll non-settled transactions for funds and NFTs will be transferred as well as your current available balance.\nIt is recommended you import your recovery private key into a new machine.",
+                                  "Your Reserve (Protected) Account is being recovered to your recovery address.\nAll non-settled transactions for funds and assets will be transferred as well as your current available balance.\nIt is recommended you import your recovery private key into a new machine.",
                                   textAlign: TextAlign.center,
                                 ),
                                 SizedBox(
@@ -579,7 +601,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
             //               height: 8,
             //             ),
             //             SelectableText(
-            //               "Your Reserve (Protected) Account is being recovered to your recovery address.\nAll non-settled transactions for funds and NFTs will be transferred as well as your current available balance.\nIt is recommended you import your recovery private key into a new machine.",
+            //               "Your Reserve (Protected) Account is being recovered to your recovery address.\nAll non-settled transactions for funds and assets will be transferred as well as your current available balance.\nIt is recommended you import your recovery private key into a new machine.",
             //               textAlign: TextAlign.center,
             //             ),
             //             SizedBox(

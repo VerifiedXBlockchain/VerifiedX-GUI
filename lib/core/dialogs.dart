@@ -198,7 +198,7 @@ class RecoverDialog {
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 500),
           child: SelectableText(
-            "Your Reserve (Protected) Account is being recovered to your recovery address.\n\nTransaction Hash: $hash\n\nAll non-settled transactions for funds and NFTs will be transferred as well as your current available balance. \n\nIt is recommended you import your recovery private key into a new machine. NFT media will not be transferred over so please export them by clicking the button below and import them to your new environment.",
+            "Your Reserve (Protected) Account is being recovered to your recovery address.\n\nTransaction Hash: $hash\n\nAll non-settled transactions for funds and assets will be transferred as well as your current available balance. \n\nIt is recommended you import your recovery private key into a new machine. NFT media will not be transferred over so please export them by clicking the button below and import them to your new environment.",
           ),
         ),
         actions: [

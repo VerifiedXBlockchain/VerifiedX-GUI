@@ -402,11 +402,11 @@ class _Actions extends BaseComponent {
                 },
               ),
               AppVerticalIconButton(
-                label: "Transfer",
+                label: "TXs",
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {
-                  tabsRouter.setActiveIndex(WebRouteIndex.send);
+                  tabsRouter.setActiveIndex(WebRouteIndex.transactions);
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
