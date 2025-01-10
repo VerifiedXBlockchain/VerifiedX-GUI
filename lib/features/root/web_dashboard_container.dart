@@ -792,7 +792,7 @@ class WebAccountInfoVbtc extends BaseComponent {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  if (Env.isTestNet) {
+                  if (Env.btcIsTestNet) {
                     launchUrlString("https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
                   } else {
                     launchUrlString("https://mempool.space/tx/${latestVbtcBtcTx!.txid}");

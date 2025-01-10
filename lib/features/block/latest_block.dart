@@ -185,7 +185,7 @@ class LatestBlockContent extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                if (Env.isTestNet) {
+                if (Env.btcIsTestNet) {
                   launchUrlString("https://mempool.space/testnet4/");
                 } else {
                   launchUrlString("https://mempool.space/");

@@ -5,3 +5,4 @@ LAUNCH_CLI=true
 ALLOW_VALIDATING=true
 HIDE_CLI_OUTPUT=false
 PAYMENT_DOMAIN=https://rbx.banxa.com
+BTC_IS_TEST_NET=false

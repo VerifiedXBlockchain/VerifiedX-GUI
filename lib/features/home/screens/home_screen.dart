@@ -166,7 +166,7 @@ class GetVfxButton extends StatelessWidget {
             launchUrl(Uri.parse(url));
           }
         } else if (type == "btc") {
-          if (Env.isTestNet) {
+          if (Env.btcIsTestNet) {
             launchUrlString("https://mempool.space/testnet4/faucet");
             return;
           }

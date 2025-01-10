@@ -156,6 +156,10 @@ class Env {
     return DotEnv.dotenv.env['IS_TEST_NET'] == "true";
   }
 
+  static bool get btcIsTestNet {
+    return DotEnv.dotenv.env['BTC_IS_TEST_NET'] == "true";
+  }
+
   static bool get promptForUpdates {
     return _env == _Environment.Release;
   }

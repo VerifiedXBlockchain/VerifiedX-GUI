@@ -410,7 +410,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
 }
 
 openTxOnExplorer(BtcWebTransaction tx) {
-  if (Env.isTestNet) {
+  if (Env.btcIsTestNet) {
     launchUrlString("https://mempool.space/testnet4/tx/${tx.txid}");
   } else {
     launchUrlString("https://mempool.space/tx/${tx.txid}");

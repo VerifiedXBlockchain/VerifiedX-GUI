@@ -496,7 +496,7 @@ class AccountUtils {
         }
         break;
       case VfxOrBtcOption.btc:
-        if (Env.isTestNet) {
+        if (Env.btcIsTestNet) {
           launchUrlString("https://mempool.space/testnet4/faucet");
           return;
         }
