@@ -353,6 +353,12 @@ class _FaucetWithdrawlStep extends BaseComponent {
             }
           },
         ),
+        AppButton(
+          label: "Transfer Manually",
+          onPressed: () async {
+            provider.setProcessingState(VBtcProcessingState.waitingForVfxTransfer);
+          },
+        ),
         GetVfxButton(
           address: state.vfxWallet!.address,
           vfxOnly: true,
