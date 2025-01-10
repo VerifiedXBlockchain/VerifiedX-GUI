@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/env.dart';
 import '../../../utils/toast.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../wallet/models/wallet.dart';
@@ -16,11 +15,6 @@ class CurrentValidatorProvider extends StateNotifier<Wallet?> {
 
   Future<bool> startValidating(String name) async {
     if (state == null) {
-      return false;
-    }
-
-    if (!Env.allowValidating) {
-      Toast.error("Validating disabled in this environment.");
       return false;
     }
 
