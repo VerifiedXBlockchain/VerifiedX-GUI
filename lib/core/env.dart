@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names, library_prefixes
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:rbx_wallet/generated/assets.gen.dart';
 
@@ -25,9 +26,11 @@ enum _Environment {
 
 const flavorName = String.fromEnvironment("ENV");
 
-// _Environment _env = flavorName.isEmpty ? _Environment.Release : _Environment.values.firstWhere((env) => env.flavor == flavorName);
-
-_Environment _env = _Environment.Release;
+_Environment _env = kIsWeb
+    ? flavorName.isEmpty
+        ? _Environment.Release
+        : _Environment.values.firstWhere((env) => env.flavor == flavorName)
+    : _Environment.Release;
 
 class Env {
   static init() async {
