@@ -168,6 +168,10 @@ class Env {
     return DotEnv.dotenv.env['VALIDATOR_SECONDARY_PORT'] ?? '3339';
   }
 
+  static String get validatorTertiaryPort {
+    return DotEnv.dotenv.env['VALIDATOR_TERTIARY_PORT'] ?? '7294';
+  }
+
   static String get portCheckerUrl {
     return DotEnv.dotenv.env['PORT_CHECKER_URL'] ?? "https://us-central1-portpingr.cloudfunctions.net/pinger";
   }
