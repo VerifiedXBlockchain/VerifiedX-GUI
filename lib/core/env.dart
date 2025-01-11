@@ -97,16 +97,16 @@ class Env {
       case _Environment.BlockExplorerTestNet:
       case _Environment.WebTestNet:
       case _Environment.WebLocalEnv:
-        return 'https://testnet.rbx.network/';
+        return 'https://spyglass-testnet.verifiedx.io/';
       default:
-        return 'https://rbx.network/';
+        return 'https://spyglass.verifiedx.io/';
     }
   }
 
   static String get appBaseUrl {
     switch (_env) {
       case _Environment.Release:
-        return 'https://wallet.rbx.network/';
+        return 'https://wallet.verifiedx.io/';
       case _Environment.MacTestNet:
       case _Environment.WinTestNet:
       case _Environment.ReleaseTestNet:
@@ -114,9 +114,9 @@ class Env {
       case _Environment.WebLocalEnv:
         return 'http://localhost:42069/';
       case _Environment.WebTestNet:
-        return 'https://test-wallet.rbx.network/';
+        return 'https://wallet-test.verifiedx.io/';
       default:
-        return 'https://wallet.rbx.network/';
+        return 'https://wallet.verifiedx.io/';
     }
   }
 
