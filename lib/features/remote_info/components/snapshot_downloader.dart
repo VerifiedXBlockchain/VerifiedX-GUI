@@ -11,6 +11,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/files.dart';
 import '../../../utils/formatting.dart';
+import 'package:path/path.dart' as p;
 
 class SnapshotDownloader extends StatefulWidget {
   final String downloadUrl;
@@ -74,19 +75,32 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     setState(() {});
   }
 
+  installLogReplaceLatest(String string) {
+    if (installLog.isEmpty) {
+      installLogAdd(string);
+      return;
+    }
+
+    installLog[installLog.length - 1] = string;
+    setState(() {});
+  }
+
   Future<void> downloadReady(String zipPath) async {
     setState(() {
       isDownloading = false;
       isInstalling = true;
     });
 
+    await Future.delayed(Duration(milliseconds: 500));
+
     final _dbPath = await dbPath();
     final dir = Directory(_dbPath);
 
     final date = DateTime.now();
-    String backupDirName =
-        "${_dbPath.replaceAll(Env.isTestNet ? 'rbxtest' : 'rbx', '').replaceAll(Env.isTestNet ? 'RBXTest' : 'RBX', '')}\\VFX_BACKUP_${(date.microsecondsSinceEpoch / 1000).round()}";
-    print(backupDirName);
+    String backupDirName = "${_dbPath.replaceAll('rbx', '').replaceAll('RBX', '')}\\RBX_BACKUP_${(date.microsecondsSinceEpoch / 1000).round()}";
+    if (Platform.isMacOS) {
+      backupDirName = backupDirName.toLowerCase().replaceAll("\\", '/').replaceAll('//', '/');
+    }
 
     if (Platform.isMacOS) {
       backupDirName = backupDirName.toLowerCase().replaceAll("\\", '/').replaceAll('//', '/');
@@ -101,31 +115,37 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     installLogAdd("Backed up.");
     await Directory(_dbPath).create();
 
-    installLogAdd("Extracting Snapshot...");
+    installLogAdd("Extracting Snapshot (this may take some time)...");
+    await Future.delayed(Duration(milliseconds: 500));
 
-    final bytes = await File(zipPath).readAsBytes();
-    final archive = ZipDecoder().decodeBytes(bytes);
-    for (final file in archive) {
-      String filename = file.name;
-      print("filename before: $filename");
+    await extractZipFile(zipPath, _dbPath);
 
-      if (filename.contains('/')) {
-        filename = filename.split('/').last;
-      }
+    // final bytes = await File(zipPath).readAsBytes();
+    // final archive = ZipDecoder().decodeBytes(bytes);
+    // for (final file in archive) {
+    //   String filename = file.name;
+    //   print("filename before: $filename");
 
-      print("filename after: $filename");
-      if (file.isFile) {
-        final data = file.content as List<int>;
+    //   if (filename.contains('/')) {
+    //     filename = filename.split('/').last;
+    //   }
 
-        final p = "$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename";
-        installLogAdd("Extracting '$p'...");
-        File(p)
-          ..createSync(recursive: true)
-          ..writeAsBytesSync(data);
-      } else {
-        Directory("$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename").create(recursive: true);
-      }
-    }
+    //   print("filename after: $filename");
+
+    //   installLogReplaceLatest("Extracting Snapshot ($filename)...");
+
+    //   if (file.isFile) {
+    //     final data = file.content as List<int>;
+
+    //     final p = "$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename";
+    //     installLogAdd("Extracting '$p'...");
+    //     File(p)
+    //       ..createSync(recursive: true)
+    //       ..writeAsBytesSync(data);
+    //   } else {
+    //     Directory("$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename").create(recursive: true);
+    //   }
+    // }
 
     installLogAdd("Snapshot extracted");
     installLogAdd("Starting CLI");
@@ -136,6 +156,61 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
     await widget.ref.read(sessionProvider.notifier).init(false);
     await widget.ref.read(sessionProvider.notifier).fetchConfig();
+  }
+
+  // Future<void> extractZipFile(String zipPath, String outputPath) async {
+  //   final inputStream = InputFileStream(zipPath);
+  //   final archive = ZipDecoder().decodeBuffer(inputStream);
+
+  //   for (final file in archive.files) {
+  //     final filename = p.basename(file.name);
+  //     print("Extracting: $filename");
+  //     installLogAdd("Extracting $filename...");
+  //     await Future.delayed(Duration(milliseconds: 500));
+
+  //     final outputFilePath = p.join(outputPath, "Databases${Env.isTestNet ? 'TestNet' : ''}", filename);
+
+  //     if (file.isFile) {
+  //       final outputFile = File(outputFilePath);
+  //       outputFile.createSync(recursive: true);
+  //       outputFile.writeAsBytesSync(file.content as List<int>);
+  //     } else {
+  //       Directory(outputFilePath).createSync(recursive: true);
+  //     }
+  //   }
+
+  //   inputStream.close();
+  // }
+
+  Future<void> extractZipFile(String zipPath, String outputPath) async {
+    final inputStream = InputFileStream(zipPath);
+    final archive = ZipDecoder().decodeBuffer(inputStream);
+
+    for (final file in archive.files) {
+      String filename = file.name;
+      print("filename before: $filename");
+
+      if (filename.contains('/')) {
+        filename = filename.split('/').last;
+      }
+
+      print("filename after: $filename");
+
+      installLogAdd("Extracting $filename...");
+      await Future.delayed(Duration(milliseconds: 500));
+
+      final outputFilePath = "$outputPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename";
+
+      if (file.isFile) {
+        final outputFile = File(outputFilePath);
+        outputFile.createSync(recursive: true);
+        outputFile.writeAsBytesSync(file.content as List<int>);
+      } else {
+        Directory(outputFilePath).createSync(recursive: true);
+      }
+    }
+
+    inputStream.close();
   }
 
   @override

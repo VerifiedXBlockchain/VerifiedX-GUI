@@ -112,7 +112,7 @@ build_web:
 
 
 deploy_web_main:
-	fvm flutter build web --dart-define ENV=web
+	fvm flutter build web --dart-define ENV=web_mainnet
 	firebase use rbx-web-wallet && firebase deploy --only hosting
 
 

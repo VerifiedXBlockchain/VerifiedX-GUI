@@ -204,7 +204,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> init(bool inLoop) async {
-    final token = kDebugMode ? DEV_API_TOKEN : generateRandomString(32).toLowerCase();
+    final token = kDebugMode ? DEV_API_TOKEN : generateRandomString(8).toLowerCase();
 
     ref.read(logProvider.notifier).append(LogEntry(message: "Welcome to VerifiedX Wallet version $APP_VERSION"));
 
@@ -816,7 +816,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
       startupDataLoop();
 
       final cliPath = Env.cliPathOverride ?? getCliPath();
-      List<String> options = Env.isTestNet ? ['enableapi', 'gui', 'blockv2'] : ['enableapi', 'gui', 'blockv2', 'apitoken=$apiToken'];
+      // List<String> options = Env.isTestNet ? ['enableapi', 'gui'] : ['enableapi', 'gui', 'apitoken=$apiToken'];
+      List<String> options = ['enableapi', 'gui'];
 
       if (Env.isTestNet) {
         options.add("testnet");
