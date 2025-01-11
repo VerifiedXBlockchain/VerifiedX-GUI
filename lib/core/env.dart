@@ -25,7 +25,8 @@ enum _Environment {
 
 const flavorName = String.fromEnvironment("ENV");
 
-_Environment _env = flavorName.isEmpty ? _Environment.Release : _Environment.values.firstWhere((env) => env.flavor == flavorName);
+// _Environment _env = flavorName.isEmpty ? _Environment.Release : _Environment.values.firstWhere((env) => env.flavor == flavorName);
+_Environment _env = _Environment.Release;
 
 class Env {
   static init() async {
