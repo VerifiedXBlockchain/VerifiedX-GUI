@@ -225,12 +225,12 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             final amount = await PromptModal.show(
               title: 'Amount',
               validator: (val) => formValidatorNumber(val, "Amount"),
-              body: 'The amount you want to send',
-              labelText: "Sending amount",
+              body: 'How much BTC do you want to withdraw?',
+              labelText: "Withdrawl Amount",
             );
             if (amount != null && double.tryParse(amount) != null) {
               final address = await PromptModal.show(
-                title: 'Btc Address',
+                title: 'BTC Address',
                 validator: (val) => formValidatorNotEmpty(val, "Address"),
                 labelText: "Recieving Address",
               );

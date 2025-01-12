@@ -185,10 +185,14 @@ class RawTransaction {
     required String publicKey,
   }) async {
     final hashMessage = sha256.convert(utf8.encode(message));
+    print("HASH MESSAGE $hashMessage");
     final hashMessageString = hashMessage.toString();
+    print("HASH MESSAGE $hashMessageString");
 
     var pk = secp256k1.PrivateKey.fromHex(privateKey);
     final signature = pk.signature(hashMessageString);
+
+    print("SIGNATURE $signature");
 
     final r = signature.R;
     final s = signature.S;
@@ -200,15 +204,25 @@ class RawTransaction {
 
     final base64Signature = base64Encode(der);
 
+    print("BASE64 SIG $base64Signature");
+
     if (publicKey.startsWith("04")) {
       publicKey = publicKey.replaceFirst("04", "");
     }
 
+    print("PUBLIC KEY $publicKey");
+
     final hex = HEX.decode(publicKey);
+
+    print("PUB KEY HEX $hex");
 
     final base58PublicKey = base58Encode(hex);
 
+    print("base58PublicKey $base58PublicKey");
+
     final fullSignature = "$base64Signature.$base58PublicKey";
+
+    print("full sig: $fullSignature");
 
     return fullSignature;
   }
