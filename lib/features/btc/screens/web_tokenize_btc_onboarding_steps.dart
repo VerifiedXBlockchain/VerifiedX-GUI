@@ -184,7 +184,10 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                 initialValue: state.tokenizedBtc!.depositAddress,
                 readOnly: true,
                 decoration: InputDecoration(
-                  label: Text("BTC Address"),
+                  label: Text(
+                    "BTC Address",
+                    style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+                  ),
                   suffix: IconButton(
                     icon: Icon(Icons.copy),
                     onPressed: () async {

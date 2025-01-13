@@ -50,11 +50,11 @@ Future<String> dbPath() async {
   String appDocPath = appDocDir.path;
 
   if (Platform.isMacOS) {
-    appDocPath = appDocPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/vfx");
+    appDocPath = appDocPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/rbx");
   } else {
     final winDir = await getApplicationSupportDirectory();
     appDocPath = winDir.path;
-    appDocPath = appDocPath.replaceAll("\\Roaming\\com.example\\rbx_wallet_gui", "\\Local\\${Env.isTestNet ? 'RBXTest' : 'VFX'}");
+    appDocPath = appDocPath.replaceAll("\\Roaming\\com.example\\rbx_wallet_gui", "\\Local\\${Env.isTestNet ? 'RBXTest' : 'RBX'}");
   }
 
   return appDocPath;

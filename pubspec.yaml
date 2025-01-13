@@ -75,8 +75,6 @@ dependencies:
   syncfusion_flutter_charts: ^21.2.4
   flutter_spinkit: ^5.2.1
 
-
-
 dev_dependencies:
   auto_route_generator: ^5.0.3
   build_runner: ^2.3.2
@@ -87,7 +85,6 @@ dev_dependencies:
   freezed: ^2.3.2
   json_serializable: ^6.3.1
   msix: ^3.6.2
-  
 
 flutter:
   uses-material-design: true
@@ -116,11 +113,11 @@ flutter:
     - family: Mukta
       fonts:
         - asset: assets/fonts/Mukta-Medium.ttf
-          weight: 500 
+          weight: 500
         - asset: assets/fonts/Mukta-SemiBold.ttf
-          weight: 600 
+          weight: 600
         - asset: assets/fonts/Mukta-Bold.ttf
-          weight: 700 
+          weight: 700
 
 flutter_gen:
   output: lib/generated
@@ -139,8 +136,6 @@ flutter_icons:
   macos: true
   windows: true
   image_path: "assets/images/icon.png"
-
-
 # flutter_native_splash:
 #   background_image: 'resources/splash-bg.png'
 #   image: 'resources/splash-fg.png'

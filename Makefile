@@ -30,17 +30,18 @@ package_mac:
 	rm -rf ../Core-CLI/bin/Release
 	cd ../Core-CLI && git pull && cd /Users/tylersavery/Projects/rbx/rbx_wallet/
 	dotnet publish -c Release -r osx-x64 ../Core-Cli/ --self-contained true -f net6.0 -p:PublishSingleFile=true
-	rm -f ./installers/exports/RBX-OSX-Intel-Installer.dmg
-	rm -f ./installers/exports/VFX-OSX-ARM-Installer.dmg
+	rm -f ./installers/exports/RBX-OSX-INTEL-Installer.dmg
+	rm -f ./installers/exports/VFX-OSX-INTEL-Installer.dmg
 	rm -f ./installers/resources/Runner/VFXWallet.app
 	mv "./installers/resources/Runner/VFX Switchblade.app" "./installers/resources/Runner/VFXWallet.app"
-	rm -rf ./installers/resources/Runner/RBXWallet.app/Contents/Resources/RBXCore
-	mkdir ./installers/resources/Runner/RBXWallet.app/Contents/Resources/RBXCore
-	cp -r ../Core-CLI/ReserveBlockCore/bin/Release/net6.0/osx-x64/publish/ ./installers/resources/Runner/RBXWallet.app/Contents/Resources/RBXCore
-	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/RBXWallet.app/Contents/MacOS/BIP39
-	appdmg ./installers/dmg/config.json ./installers/exports/RBX-OSX-Intel-Installer.dmg
-	rm -f ./installers/exports/rbx-corecli-mac-intel.zip
-	cd ./installers/resources/Runner/RBXWallet.app/Contents/Resources/ && zip -r /Users/tylersavery/Projects/rbx/rbx_wallet/installers/exports/rbx-corecli-mac-intel.zip ./RBXCore/
+	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
+	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
+	cp -r ../Core-CLI/ReserveBlockCore/bin/Release/net6.0/osx-x64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
+	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39	
+	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-Intel-Installer.dmg
+	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
+	rm -f ./installers/exports/vfx-corecli-mac-arm.zip
+	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tylersavery/Projects/rbx/rbx_wallet/installers/exports/vfx-corecli-mac-intel.zip ./RBXCore/
 	cd /Users/tylersavery/Projects/rbx/rbx_wallet/
 	open ./installers/exports/
 
@@ -110,9 +111,9 @@ build_web:
 	fvm flutter build web
 
 
-# deploy_web_main:
-# 	fvm flutter build web --dart-define ENV=web
-# 	firebase use rbx-web-wallet && firebase deploy --only hosting
+deploy_web_main:
+	fvm flutter build web --dart-define ENV=web_mainnet
+	firebase use rbx-web-wallet && firebase deploy --only hosting
 
 
 deploy_web_testnet:

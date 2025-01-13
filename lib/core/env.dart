@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names, library_prefixes
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:rbx_wallet/generated/assets.gen.dart';
 
@@ -25,7 +26,11 @@ enum _Environment {
 
 const flavorName = String.fromEnvironment("ENV");
 
-_Environment _env = flavorName.isEmpty ? _Environment.ReleaseTestNet : _Environment.values.firstWhere((env) => env.flavor == flavorName);
+_Environment _env = kIsWeb
+    ? flavorName.isEmpty
+        ? _Environment.Release
+        : _Environment.values.firstWhere((env) => env.flavor == flavorName)
+    : _Environment.Release;
 
 class Env {
   static init() async {
@@ -97,16 +102,16 @@ class Env {
       case _Environment.BlockExplorerTestNet:
       case _Environment.WebTestNet:
       case _Environment.WebLocalEnv:
-        return 'https://testnet.rbx.network/';
+        return 'https://spyglass-testnet.verifiedx.io/';
       default:
-        return 'https://rbx.network/';
+        return 'https://spyglass.verifiedx.io/';
     }
   }
 
   static String get appBaseUrl {
     switch (_env) {
       case _Environment.Release:
-        return 'https://wallet.rbx.network/';
+        return 'https://wallet.verifiedx.io/';
       case _Environment.MacTestNet:
       case _Environment.WinTestNet:
       case _Environment.ReleaseTestNet:
@@ -114,9 +119,9 @@ class Env {
       case _Environment.WebLocalEnv:
         return 'http://localhost:42069/';
       case _Environment.WebTestNet:
-        return 'https://test-wallet.rbx.network/';
+        return 'https://wallet-test.verifiedx.io/';
       default:
-        return 'https://wallet.rbx.network/';
+        return 'https://wallet.verifiedx.io/';
     }
   }
 
@@ -166,6 +171,10 @@ class Env {
 
   static String get validatorSecondaryPort {
     return DotEnv.dotenv.env['VALIDATOR_SECONDARY_PORT'] ?? '3339';
+  }
+
+  static String get validatorTertiaryPort {
+    return DotEnv.dotenv.env['VALIDATOR_TERTIARY_PORT'] ?? '7294';
   }
 
   static String get portCheckerUrl {

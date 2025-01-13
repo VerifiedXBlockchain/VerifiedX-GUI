@@ -348,7 +348,10 @@ class WebTokenActionsManager {
     final uniqueId = generateRandomString(16, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
     final message = "${keypair.address}.$timestamp.$uniqueId";
 
+    print("MESSAGE: $message");
+
     final signature = await RawTransaction.getSignature(message: message, privateKey: keypair.private, publicKey: keypair.public);
+    print("MESSAGE: $signature");
 
     if (signature == null) {
       Toast.error("Signature generation failed.");

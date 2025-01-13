@@ -145,7 +145,7 @@ class ValidatorScreen extends BaseScreen {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                  "You must have port $port and port ${Env.validatorSecondaryPort} open to external networks with a balance of ${formatIntWithCommas(ASSURED_AMOUNT_TO_VALIDATE.round())} VFX in order to validate."),
+                  "You must have port $port, ${Env.validatorSecondaryPort}, and ${Env.validatorTertiaryPort} open to external networks with a balance of ${formatIntWithCommas(ASSURED_AMOUNT_TO_VALIDATE.round())} VFX in order to validate."),
               const SizedBox(
                 height: 16,
               ),

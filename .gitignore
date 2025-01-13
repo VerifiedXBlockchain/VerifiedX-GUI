@@ -1,6 +1,8 @@
 notes.md
 temp/
 
+macos/build
+
 # Miscellaneous
 *.class
 *.log

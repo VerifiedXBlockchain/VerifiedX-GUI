@@ -77,7 +77,7 @@ class AllTokensScreen extends BaseScreen {
         if (b is WebFungibleTokenBalance) {
           timestampB = (b.token.createdAt.millisecondsSinceEpoch / 1000).round();
         } else if (a is WebNft) {
-          timestampA = (a.mintedAt.millisecondsSinceEpoch / 1000).round();
+          timestampB = (a.mintedAt.millisecondsSinceEpoch / 1000).round();
         } else if (b is WebNft) {
           timestampB = (b.mintedAt.millisecondsSinceEpoch / 1000).round();
         } else if (b is TokenizedBitcoin) {

@@ -9,23 +9,17 @@ class PaymentDisclaimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = TextStyle(fontSize: 16, color: Colors.white);
+    final textStyle = TextStyle(fontSize: 14, color: Colors.white);
 
-    final boldStyle = TextStyle(
-        fontSize: 16, color: Colors.white, fontWeight: FontWeight.w700);
+    final boldStyle = TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.w700);
 
-    final linkStyle = TextStyle(
-        fontSize: 16,
-        color: Theme.of(context).colorScheme.secondary,
-        decoration: TextDecoration.underline);
+    final linkStyle = TextStyle(fontSize: 14, color: Theme.of(context).colorScheme.secondary, decoration: TextDecoration.underline);
 
     return RichText(
       text: TextSpan(
         style: textStyle,
         children: [
-          TextSpan(
-              text:
-                  "I understand that I will now be purchasing VFX native coin directly through Banxa ("),
+          TextSpan(text: "I understand that I will now be purchasing VFX or BTC native coin directly through Banxa ("),
           TextSpan(
             text: "www.banxa.com",
             style: linkStyle,
@@ -51,13 +45,12 @@ class PaymentDisclaimer extends StatelessWidget {
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launchUrl(
-                    Uri.parse("https://banxa.com/privacy-and-cookies-policy"));
+                launchUrl(Uri.parse("https://banxa.com/privacy-and-cookies-policy"));
               },
           ),
           TextSpan(
               text:
-                  ". You additionally understand that the ReserveBlock VFX Network is an autonomous and decentralized ecosystem and does not share in any fees whatsoever by you utilizing Banxa’s services and does not take any responsibility for any issues that may affect your transaction with any third-party service provider at anytime. For any questions related to Banxa’s services, please contact Banxa at "),
+                  ". You additionally understand that the VerifiedX VFX Network is an autonomous and decentralized ecosystem and does not share in any fees whatsoever by you utilizing Banxa’s services and does not take any responsibility for any issues that may affect your transaction with any third-party service provider at anytime. For any questions related to Banxa’s services, please contact Banxa at "),
           TextSpan(
             text: "support.banxa.com",
             style: linkStyle,
