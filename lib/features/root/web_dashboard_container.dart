@@ -968,8 +968,13 @@ class _LatestVfxTx extends BaseComponent {
           // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
 
           // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+          if (!latestVfxTx.isPending) {
+            AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
 
-          AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: latestVfxTx.hash));
+            Future.delayed(Duration(milliseconds: 100), () {
+              AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: latestVfxTx.hash));
+            });
+          }
         },
         child: AppCard(
           padding: 12,
