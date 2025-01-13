@@ -505,12 +505,10 @@ class AccountUtils {
         if (address == null) {
           if (ref.read(btcAccountListProvider).isNotEmpty) {
             address = ref.read(btcAccountListProvider).first.address;
+          } else {
+            Toast.error("Please create or import a BTC account before proceeding");
+            return;
           }
-        }
-
-        if (address != null) {
-          Toast.error("Please create or import a BTC account before proceeding");
-          return;
         }
 
         final agreed = await PaymentTermsDialog.show(context);
