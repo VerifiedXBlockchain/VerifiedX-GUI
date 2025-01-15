@@ -1,5 +1,6 @@
 #include <flutter/dart_project.h>
 #include <flutter/flutter_view_controller.h>
+#include <flutter/method_channel.h>
 #include <windows.h>
 
 #include "flutter_window.h"
@@ -24,17 +25,38 @@ bool ShouldQuitApp(flutter::FlutterEngine* engine) {
   return should_quit;
 }
 
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) {
+LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) {
   if (message == WM_CLOSE) {
-    // Hook into the close event
-    auto* engine = reinterpret_cast<flutter::FlutterViewController*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-    if (engine && !ShouldQuitApp(engine->engine())) {
-      return 0;  // Cancel the close event
+    auto controller = reinterpret_cast<flutter::FlutterViewController*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+    if (controller) {
+      auto* messenger = controller->engine()->messenger();
+
+      // Create a MethodChannel to communicate with Flutter
+      flutter::MethodChannel<> channel(
+          messenger, "com.example.app/quit",
+          &flutter::StandardMethodCodec::GetInstance());
+
+      bool should_quit = false;
+
+      // Call Flutter method 'shouldQuit' and wait for the result
+      channel.InvokeMethod("shouldQuit", nullptr,
+          [&should_quit](const flutter::EncodableValue* result) {
+            if (result && std::holds_alternative<bool>(*result)) {
+              should_quit = std::get<bool>(*result);
+            }
+          });
+
+      if (should_quit) {
+        DestroyWindow(hwnd);
+      } else {
+        return 0;  // Cancel the close event
+      }
     }
   }
 
   return DefWindowProc(hwnd, message, wparam, lparam);
 }
+
 
 int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
                       _In_ wchar_t *command_line, _In_ int show_command) {
