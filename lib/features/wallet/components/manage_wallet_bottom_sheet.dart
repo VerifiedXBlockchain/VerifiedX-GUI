@@ -515,13 +515,30 @@ class _WalletRestorerState extends State<WalletRestorer> {
   initState() {
     super.initState();
     hiddenWallets = singleton<Storage>().getList(Storage.DELETED_WALLETS_KEY) ?? [];
+
     values = hiddenWallets.map((e) => false).toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return hiddenWallets.isEmpty
-        ? Text('No accounts to restore.')
+        ? AlertDialog(
+            content: Text('You have no hidden accounts.'),
+            title: Text("No Accounts to Restore"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  "Okay",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              )
+            ],
+          )
         : Consumer(builder: (context, ref, child) {
             return AlertDialog(
               actionsAlignment: MainAxisAlignment.spaceBetween,

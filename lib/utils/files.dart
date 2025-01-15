@@ -77,12 +77,12 @@ Future<String> configPath() async {
   String path = appDocDir.path;
 
   if (Platform.isMacOS) {
-    path = path.replaceAll("/Documents", Env.isTestNet ? "/rbxtest/ConfigTestNet/config.txt" : "/vfx/Config/config.txt");
+    path = path.replaceAll("/Documents", Env.isTestNet ? "/RBXTest/ConfigTestNet/config.txt" : "/RBX/Config/config.txt");
   } else {
     final winDir = await getApplicationSupportDirectory();
     path = winDir.path;
     path = path.replaceAll(
-        "\\Roaming\\com.example\\rbx_wallet_gui", "\\Local\\${Env.isTestNet ? 'RBXTest\\ConfigTestNet\\config.txt' : 'VFX\\Config\\config.txt'}");
+        "\\Roaming\\com.example\\rbx_wallet_gui", "\\Local\\${Env.isTestNet ? 'RBXTest\\ConfigTestNet\\config.txt' : 'RBX\\Config\\config.txt'}");
   }
   return path;
 }
@@ -92,12 +92,12 @@ Future<String> startupProgressPath() async {
   String path = appDocDir.path;
 
   if (Platform.isMacOS) {
-    path = path.replaceAll("/Documents", Env.isTestNet ? "/rbxtest/DatabasesTestNet/statesynclog.txt" : "/vfx/Databases/statesynclog.txt");
+    path = path.replaceAll("/Documents", Env.isTestNet ? "/RBXTest/DatabasesTestNet/statesynclog.txt" : "/RBX/Databases/statesynclog.txt");
   } else {
     final winDir = await getApplicationSupportDirectory();
     path = winDir.path;
     path = path.replaceAll("\\Roaming\\com.example\\rbx_wallet_gui",
-        "\\Local\\${Env.isTestNet ? 'RBXTest\\DatabasesTestNet\\statesynclog.txt' : 'VFX\\Databases\\statesynclog.txt'}");
+        "\\Local\\${Env.isTestNet ? 'RBXTest\\DatabasesTestNet\\statesynclog.txt' : 'RBX\\Databases\\statesynclog.txt'}");
   }
   return path;
 }
