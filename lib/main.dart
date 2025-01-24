@@ -25,10 +25,12 @@ final rootAppWindow = appWindow;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  FlutterWindowClose.setWindowShouldCloseHandler(() async {
-    await BridgeService().killCli();
-    return true;
-  });
+  if (!kIsWeb) {
+    FlutterWindowClose.setWindowShouldCloseHandler(() async {
+      await BridgeService().killCli();
+      return true;
+    });
+  }
 
   await Env.init();
   if (kIsWeb) {

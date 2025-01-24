@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_window_close/flutter_window_close.dart';
@@ -27,10 +28,12 @@ class _AppSystemManagerState extends ConsumerState<AppSystemManager> with Widget
 
     // activityTick();
     // ref.read(isActiveProvider.notifier).init();
-    FlutterWindowClose.setWindowShouldCloseHandler(() async {
-      await BridgeService().killCli();
-      return true;
-    });
+    if (!kIsWeb) {
+      FlutterWindowClose.setWindowShouldCloseHandler(() async {
+        await BridgeService().killCli();
+        return true;
+      });
+    }
   }
 
   @override
