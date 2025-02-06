@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/breakpoints.dart';
+import 'package:rbx_wallet/core/dialogs.dart';
 import 'core/theme/colors.dart';
 import 'features/root/navigation/components/web_drawer.dart';
 import 'features/web/providers/multi_account_provider.dart';
@@ -29,7 +31,6 @@ import 'core/web_router.gr.dart';
 import 'features/encrypt/providers/password_required_provider.dart';
 import 'features/encrypt/providers/wallet_is_encrypted_provider.dart';
 import 'features/global_loader/global_loading_provider.dart';
-import 'features/root/components/system_manager.dart';
 import 'features/transactions/components/notification_overlay.dart';
 import 'package:context_menus/context_menus.dart';
 
@@ -40,12 +41,31 @@ final GlobalKey<ScaffoldState> rootScaffoldKey = GlobalKey<ScaffoldState>();
 GlobalKey<NavigatorState> rootNavigatorKey = Env.isWeb ? singleton<WebRouter>().navigatorKey : singleton<AppRouter>().navigatorKey;
 
 class App extends ConsumerWidget {
+  static const platform = MethodChannel('io.reserveblock.wallet/quit');
+
   const App({Key? key}) : super(key: key);
+
+  void _setMethodCallHandler() {
+    print("Adding method handler");
+    platform.setMethodCallHandler((call) async {
+      if (call.method == "shouldQuit") {
+        return await handleQuitRequest() ? true : false;
+      }
+      return false;
+    });
+  }
+
+  Future<bool> handleQuitRequest() async {
+    await BridgeService().killCli();
+    return true;
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // print("App Build");
+
+    _setMethodCallHandler();
 
     if (kIsWeb) {
       ref.read(multiAccountProvider.notifier);
@@ -63,7 +83,7 @@ class App extends ConsumerWidget {
     singleton<Storage>().setStringList(Storage.TRANSFERRED_NFT_IDS, []);
     singleton<Storage>().setStringList(Storage.PENDING_ADNRS, []);
 
-    return const AppSystemManager(child: AppContainer());
+    return const AppContainer();
   }
 }
 

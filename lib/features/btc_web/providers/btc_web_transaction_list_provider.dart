@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/utils/html_helpers.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../models/btc_web_transaction.dart';
 import '../services/btc_web_service.dart';
@@ -15,6 +17,25 @@ class BtcWebTransactionListProvider extends StateNotifier<List<BtcWebTransaction
 
   Future<void> load() async {
     final transactions = await BtcWebService().listTransactions(address);
+
+    if (transactions.isEmpty) {
+      print("TXS were empty!");
+      return;
+    }
+
+    transactions.sort((a, b) {
+      if (a.status.blockHeight == null && b.status.blockHeight != null) {
+        return -1; // Null first
+      }
+      if (a.status.blockHeight != null && b.status.blockHeight == null) {
+        return 1; // Non-null after null
+      }
+      if (a.status.blockHeight != null && b.status.blockHeight != null) {
+        return b.status.blockHeight!.compareTo(a.status.blockHeight!); // Sort highest first
+      }
+      return 0;
+    });
+
     state = transactions;
   }
 

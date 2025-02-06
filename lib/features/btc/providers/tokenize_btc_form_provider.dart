@@ -214,8 +214,6 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
       tokenDescription = null;
     }
 
-    //TODO: build verify and broadcast TX
-
     final vbtcExtraData = await ExplorerService().vbtcCompileData(keypair.address);
     if (vbtcExtraData == null) {
       Toast.error("Could not connect to arbiter. Try again later");
@@ -256,6 +254,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
 
     final updatedPayload = {
       ...payload,
+      'SmartContractUID': vbtcExtraData.smartContractUID,
       'Features': [
         ...payload['Features'],
         {

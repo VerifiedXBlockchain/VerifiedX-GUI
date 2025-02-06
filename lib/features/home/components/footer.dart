@@ -34,7 +34,7 @@ class Footer extends BaseComponent {
                       IconButton(
                         iconSize: 16,
                         onPressed: () {
-                          launchUrl(Uri.parse("https://discord.com/invite/PnS2HRETDh"));
+                          launchUrl(Uri.parse("https://discord.gg/7cd5ebDQCj"));
                         },
                         icon: FaIcon(
                           FontAwesomeIcons.discord,
@@ -44,7 +44,7 @@ class Footer extends BaseComponent {
                       IconButton(
                         iconSize: 16,
                         onPressed: () {
-                          launchUrl(Uri.parse("https://github.com/ReserveBlockIO"));
+                          launchUrl(Uri.parse("https://github.com/VerifiedXBlockchain"));
                         },
                         icon: FaIcon(
                           FontAwesomeIcons.github,
@@ -53,7 +53,7 @@ class Footer extends BaseComponent {
                       ),
                       InkWell(
                         onTap: () {
-                          launchUrlString("https://wiki.reserveblock.io/docs/introduction/what-is-rbx/");
+                          launchUrlString("https://docs.verifiedx.io");
                         },
                         child: Text(
                           "Wiki",

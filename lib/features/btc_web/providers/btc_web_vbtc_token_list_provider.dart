@@ -24,8 +24,8 @@ class BtcWebVbtcTokenListProvider extends StateNotifier<List<BtcWebVbtcToken>> {
     state = results;
   }
 
-  Future<void> reload(String vfxAddress) async {
-    await load(vfxAddress);
+  Future<void> reload(String vfxAddress, {String? raAddress}) async {
+    await load(vfxAddress, raAddress: raAddress);
   }
 }
 

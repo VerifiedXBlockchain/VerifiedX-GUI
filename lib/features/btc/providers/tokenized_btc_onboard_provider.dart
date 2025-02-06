@@ -237,11 +237,17 @@ class VBtcOnboard extends _$VBtcOnboard {
     btcTokenizationListener = ref.listen(tokenizedBitcoinListProvider, (previous, List<TokenizedBitcoin> tokens) {
       if (state.step == VBtcOnboardStep.tokenize) {
         final token = tokens.firstWhereOrNull((t) => t.rbxAddress == state.vfxWallet?.address);
-        if (token != null) {
-          Toast.message("Token Deployed!");
-          state = state.copyWith(step: VBtcOnboardStep.transferBtcToVbtc, processingState: VBtcProcessingState.ready, tokenizedBtc: token);
 
-          btcTokenizationListener?.close();
+        if (token != null) {
+          final tx = ref.read(transactionListProvider(TransactionListType.Success)).firstWhereOrNull((t) => t.timestamp == token.timestamp);
+          // check to make sure the tx has succeeeded
+
+          if (tx != null) {
+            Toast.message("Token Deployed!");
+            state = state.copyWith(step: VBtcOnboardStep.transferBtcToVbtc, processingState: VBtcProcessingState.ready, tokenizedBtc: token);
+
+            btcTokenizationListener?.close();
+          }
         }
       }
     });

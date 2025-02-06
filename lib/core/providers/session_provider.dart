@@ -100,6 +100,7 @@ class SessionModel {
   final bool btcSelected;
   final BtcAccountSyncInfo? btcAccountSyncInfo;
   final BtcRecommendedFees? btcRecommendedFees;
+  final bool snapshotRequested;
 
   const SessionModel({
     this.currentWallet,
@@ -123,6 +124,7 @@ class SessionModel {
     this.btcSelected = false,
     this.btcAccountSyncInfo,
     this.btcRecommendedFees,
+    this.snapshotRequested = false,
   });
 
   SessionModel copyWith({
@@ -147,6 +149,7 @@ class SessionModel {
     bool? btcSelected,
     BtcAccountSyncInfo? btcAccountSyncInfo,
     BtcRecommendedFees? btcRecommendedFees,
+    bool? snapshotRequested,
   }) {
     return SessionModel(
       startTime: startTime ?? this.startTime,
@@ -172,6 +175,7 @@ class SessionModel {
       btcSelected: btcSelected ?? this.btcSelected,
       btcAccountSyncInfo: btcAccountSyncInfo ?? this.btcAccountSyncInfo,
       btcRecommendedFees: btcRecommendedFees ?? this.btcRecommendedFees,
+      snapshotRequested: snapshotRequested ?? this.snapshotRequested,
     );
   }
 
@@ -333,6 +337,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> checkRemoteInfo([int attempt = 1]) async {
+    if (state.snapshotRequested) {
+      return;
+    }
     print("CHECK REMOTE INFO");
     // if (!Env.promptForUpdates) {
     //   return;
@@ -414,6 +421,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
       confirmText: "Import",
       cancelText: "No",
     );
+
+    state = state.copyWith(snapshotRequested: true);
 
     if (confirmed == true) {
       // importSnapshot();
@@ -816,8 +825,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
       startupDataLoop();
 
       final cliPath = Env.cliPathOverride ?? getCliPath();
-      // List<String> options = Env.isTestNet ? ['enableapi', 'gui'] : ['enableapi', 'gui', 'apitoken=$apiToken'];
-      List<String> options = ['enableapi', 'gui'];
+      List<String> options = Env.isTestNet ? ['enableapi', 'gui'] : ['enableapi', 'gui', 'apitoken=$apiToken'];
+      // List<String> options = ['enableapi', 'gui'];
 
       if (Env.isTestNet) {
         options.add("testnet");
@@ -839,7 +848,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
           // }
 
           ref.read(logProvider.notifier).append(LogEntry(message: "Launching CLI in the background."));
-          final List<String> params = Env.isTestNet ? [cliPath] : [cliPath, 'apitoken=$apiToken'];
+          final List<String> params = Env.isTestNet || kDebugMode ? [cliPath] : [cliPath, 'apitoken=$apiToken'];
           pm.run(params).then((result) {
             ref.read(logProvider.notifier).append(LogEntry(message: "Command ran successfully."));
           });

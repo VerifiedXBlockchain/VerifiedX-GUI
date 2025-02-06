@@ -144,33 +144,34 @@ class TokenizeBtcListScreen extends BaseScreen {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AppButton(
-                  label: "Use Wizard",
-                  type: AppButtonType.Text,
-                  onPressed: () async {
-                    ref.read(vBtcOnboardProvider.notifier).reset();
+              if ((kIsWeb && ref.watch(btcWebVbtcTokenListProvider).isEmpty) || (!kIsWeb && ref.watch(tokenizedBitcoinListProvider).isEmpty))
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: AppButton(
+                    label: "Use Wizard",
+                    type: AppButtonType.Text,
+                    onPressed: () async {
+                      ref.read(vBtcOnboardProvider.notifier).reset();
 
-                    final token = await Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => kIsWeb ? WebTokenizeBtcOnboardingScreen() : TokenizeBtcOnboardingScreen()));
-                    if (token == null) {
-                      return;
-                    }
+                      final token = await Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (_) => kIsWeb ? WebTokenizeBtcOnboardingScreen() : TokenizeBtcOnboardingScreen()));
+                      if (token == null) {
+                        return;
+                      }
 
-                    if (token is TokenizedBitcoin) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
-                        ),
-                      );
-                      return;
-                    }
-                  },
-                  variant: AppColorVariant.Light,
-                  underlined: true,
+                      if (token is TokenizedBitcoin) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                          ),
+                        );
+                        return;
+                      }
+                    },
+                    variant: AppColorVariant.Light,
+                    underlined: true,
+                  ),
                 ),
-              ),
               if (kIsWeb)
                 SizedBox(
                   height: 8,

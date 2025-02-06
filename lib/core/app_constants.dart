@@ -1,7 +1,9 @@
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
-const APP_V = "5.0.1";
-const APP_VERSION = "beta$APP_V";
+import 'package:rbx_wallet/core/env.dart';
+
+const APP_V = "5.0.2";
+final APP_VERSION = "${Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
 const ALLOW_PAYMENT = true;

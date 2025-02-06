@@ -7,8 +7,9 @@
 #include <memory>
 
 #include "win32_window.h"
+#include <flutter/method_channel.h>
 
-// A window that does nothing but host a Flutter view.
+// A window that does nothing but hosts a Flutter view.
 class FlutterWindow : public Win32Window {
  public:
   // Creates a new FlutterWindow hosting a Flutter view running |project|.
@@ -28,6 +29,9 @@ class FlutterWindow : public Win32Window {
 
   // The Flutter instance hosted by this window.
   std::unique_ptr<flutter::FlutterViewController> flutter_controller_;
+
+  // Method channel for handling quit confirmation.
+  std::unique_ptr<flutter::MethodChannel<flutter::EncodableValue>> quit_channel_;
 };
 
 #endif  // RUNNER_FLUTTER_WINDOW_H_

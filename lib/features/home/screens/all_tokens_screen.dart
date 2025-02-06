@@ -50,9 +50,13 @@ class AllTokensScreen extends BaseScreen {
 
     final nfts = kIsWeb
         ? address != null
-            ? ref.watch(webNftListProvider(address))
+            ? [...ref.watch(webNftListProvider(address)), ...raAddress != null ? ref.watch(webNftListProvider(raAddress)) : []]
             : []
         : ref.watch(nftListProvider).data.results;
+
+    print("NFTS");
+    print(nfts);
+    print("-----");
 
     final tokens = [...vBtcTokens, ...fungibleTokens, ...nfts]..sort((a, b) {
         late int timestampA;

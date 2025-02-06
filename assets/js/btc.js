@@ -45658,7 +45658,7 @@
             keypairFromEmailPassword(email, password, index = 0) {
               email = email.toLowerCase();
               let seed = `${email}|${password}|`;
-              seed = `$seed${seed.length}|!@${(password.length * 7 + email.length) * 7}`;
+              seed = `${seed}${seed.length}|!@${(password.length * 7 + email.length) * 7}`;
               const regChars = /[a-z]+/g;
               const regUpperChars = /[A-Z]+/g;
               const regNumbers = /[0-9]+/g;
