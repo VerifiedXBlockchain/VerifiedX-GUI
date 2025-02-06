@@ -20,6 +20,10 @@ abstract class Keypair with _$Keypair {
   factory Keypair.fromJson(Map<String, dynamic> json) => _$KeypairFromJson(json);
 
   String get privateCorrected {
+    if (private.startsWith("00")) {
+      return private;
+    }
+
     return "00$private";
   }
 }

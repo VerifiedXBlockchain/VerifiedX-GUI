@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
 import 'package:rbx_wallet/features/misc/providers/global_balances_expanded_provider.dart';
+import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
@@ -497,6 +498,67 @@ class _Actions extends BaseComponent {
               //     ));
               //   },
               // ),
+
+              AppVerticalIconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return ModalContainer(
+                          title: "Get Help",
+                          withClose: true,
+                          children: [
+                            AppCard(
+                              padding: 0,
+                              child: ListTile(
+                                  title: Text("Join Discord"),
+                                  leading: Icon(
+                                    FontAwesomeIcons.discord,
+                                    size: 18,
+                                  ),
+                                  onTap: () {
+                                    launchUrlString("https://discord.gg/7cd5ebDQCj");
+                                  },
+                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            AppCard(
+                              padding: 0,
+                              child: ListTile(
+                                  title: Text("Visit Website"),
+                                  leading: Icon(
+                                    Icons.link,
+                                  ),
+                                  onTap: () {
+                                    launchUrlString("https://verifiedx.io");
+                                  },
+                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            AppCard(
+                              padding: 0,
+                              child: ListTile(
+                                  title: Text("Read Docs"),
+                                  leading: Icon(
+                                    Icons.read_more,
+                                  ),
+                                  onTap: () {
+                                    launchUrlString("https://docs.verifiedx.io");
+                                  },
+                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                            )
+                          ],
+                        );
+                      });
+                },
+                icon: Icons.help,
+                label: "Get\nHelp",
+                prettyIconType: PrettyIconType.custom,
+              ),
 
               if (ref.read(webSessionProvider).keypair != null)
                 AppVerticalIconButton(
