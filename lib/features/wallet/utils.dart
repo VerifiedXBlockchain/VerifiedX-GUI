@@ -643,8 +643,7 @@ class AccountUtils {
           break;
         case PaymentGateway.moonpay:
           if (kIsWeb) {
-            MoonpayService().buy(
-                Env.isTestNet ? 'sandbox' : 'production', 'btc', '100', Env.isTestNet ? 'tb1qsft6s5l032fhjzs4egrcng3j7d6p0cy5h3df0y' : address, true);
+            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production', 'btc', '100', address, true);
           } else {
             Toast.error("Native Moonpay Integration Activating Soon.");
           }
