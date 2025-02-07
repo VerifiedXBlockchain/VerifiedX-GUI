@@ -1,12 +1,12 @@
 import '../../core/env.dart';
 
-String? paymentUrl({
+String? banxaPaymentUrl({
   String fiatType = "USD",
   required double amount,
   required String walletAddress,
   required String currency,
 }) {
-  final domain = Env.paymentDomain;
+  final domain = Env.banxaPaymentDomain;
 
   if (domain == null) {
     print("Payment not available in this environment");
