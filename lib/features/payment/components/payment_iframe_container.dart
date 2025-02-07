@@ -41,7 +41,7 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
   }
 
   load() {
-    if (Env.paymentDomain == null) {
+    if (Env.banxaPaymentDomain == null) {
       print("Payment not available in this environment");
       setState(() {
         error = "Payment not available in this environment";

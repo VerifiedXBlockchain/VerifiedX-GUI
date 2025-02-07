@@ -21,7 +21,6 @@ import '../../btc_web/services/btc_web_service.dart';
 import '../../faucet/screens/faucet_screen.dart';
 import '../../navigation/constants.dart';
 import '../../navigation/root_container.dart';
-import '../../payment/components/web_buy_rbx_button.dart';
 import '../../price/components/coin_price_summary.dart';
 import '../../price/components/price_chart.dart';
 import '../../wallet/utils.dart';

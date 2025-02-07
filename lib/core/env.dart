@@ -205,7 +205,7 @@ class Env {
     return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ?? "https://rbx-payment-integration.vercel.app/";
   }
 
-  static String? get paymentDomain {
+  static String? get banxaPaymentDomain {
     return DotEnv.dotenv.env['PAYMENT_DOMAIN'];
   }
 }

@@ -596,7 +596,7 @@ class AuthModal {
 }
 
 class PaymentTermsDialog {
-  static Future<bool?> show(BuildContext context) async {
+  static Future<bool?> show(BuildContext context, PaymentGateway paymentGateway) async {
     return await showDialog(
       context: context,
       builder: (context) {
@@ -611,7 +611,7 @@ class PaymentTermsDialog {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    PaymentDisclaimer(),
+                    PaymentDisclaimer(paymentGateway: paymentGateway),
                     SizedBox(height: 8),
                     CheckboxListTile(
                       value: hasAgreed,
