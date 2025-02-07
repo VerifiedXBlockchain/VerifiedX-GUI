@@ -434,6 +434,66 @@ class _Actions extends BaseComponent {
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return ModalContainer(
+                          title: "Get Help",
+                          withClose: true,
+                          children: [
+                            AppCard(
+                              padding: 0,
+                              child: ListTile(
+                                  title: Text("Join Discord"),
+                                  leading: Icon(
+                                    FontAwesomeIcons.discord,
+                                    size: 18,
+                                  ),
+                                  onTap: () {
+                                    launchUrlString("https://discord.gg/7cd5ebDQCj");
+                                  },
+                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            AppCard(
+                              padding: 0,
+                              child: ListTile(
+                                  title: Text("Visit Website"),
+                                  leading: Icon(
+                                    Icons.link,
+                                  ),
+                                  onTap: () {
+                                    launchUrlString("https://verifiedx.io");
+                                  },
+                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            AppCard(
+                              padding: 0,
+                              child: ListTile(
+                                  title: Text("Read Docs"),
+                                  leading: Icon(
+                                    Icons.read_more,
+                                  ),
+                                  onTap: () {
+                                    launchUrlString("https://docs.verifiedx.io");
+                                  },
+                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                            )
+                          ],
+                        );
+                      });
+                },
+                icon: Icons.help,
+                label: "Get\nHelp",
+                prettyIconType: PrettyIconType.custom,
+              ),
+              AppVerticalIconButton(
                 label: "Open\nExplorer",
                 icon: Icons.open_in_browser,
                 prettyIconType: PrettyIconType.custom,
@@ -499,68 +559,7 @@ class _Actions extends BaseComponent {
               //   },
               // ),
 
-              AppVerticalIconButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return ModalContainer(
-                          title: "Get Help",
-                          withClose: true,
-                          children: [
-                            AppCard(
-                              padding: 0,
-                              child: ListTile(
-                                  title: Text("Join Discord"),
-                                  leading: Icon(
-                                    FontAwesomeIcons.discord,
-                                    size: 18,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString("https://discord.gg/7cd5ebDQCj");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            AppCard(
-                              padding: 0,
-                              child: ListTile(
-                                  title: Text("Visit Website"),
-                                  leading: Icon(
-                                    Icons.link,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString("https://verifiedx.io");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
-                            ),
-                            SizedBox(
-                              height: 6,
-                            ),
-                            AppCard(
-                              padding: 0,
-                              child: ListTile(
-                                  title: Text("Read Docs"),
-                                  leading: Icon(
-                                    Icons.read_more,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString("https://docs.verifiedx.io");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
-                            )
-                          ],
-                        );
-                      });
-                },
-                icon: Icons.help,
-                label: "Get\nHelp",
-                prettyIconType: PrettyIconType.custom,
-              ),
-
-              if (ref.read(webSessionProvider).keypair != null)
+              if (ref.read(webSessionProvider).keypair != null && !isMobile)
                 AppVerticalIconButton(
                   label: "Sign\nOut",
                   icon: Icons.logout,
