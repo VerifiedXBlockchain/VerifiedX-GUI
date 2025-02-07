@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 enum PaymentGateway {
   banxa(
       "Banxa", "www.banxa.com", "https://banxa.com/terms-of-use", "https://banxa.com/privacy-and-cookies-policy", "https://support.banxa.com", true),
-  moonpay("Moonpay", "www.moonpay.com", "https://www.moonpay.com/legal", "https://www.moonpay.com/legal/privacy_policy",
+  moonpay("MoonPay", "www.moonpay.com", "https://www.moonpay.com/legal", "https://www.moonpay.com/legal/privacy_policy",
       "https://support.moonpay.com/", true),
   testnetFaucet("Testnet Faucet", "", "", "", "", false),
   ;
