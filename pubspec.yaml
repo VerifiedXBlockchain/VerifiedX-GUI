@@ -42,7 +42,7 @@ dependencies:
   bip39: ^1.0.6
   bip32: ^2.0.0
   hex: ^0.2.0
-  pointycastle: ^3.6.0
+  pointycastle: ^3.7.3
   base58check: ^2.0.0
   convert: ^3.0.2
   url_strategy: ^0.2.0

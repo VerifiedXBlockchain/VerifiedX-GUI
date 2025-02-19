@@ -1,10 +1,12 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 import 'dart:js' as js;
+import 'dart:typed_data';
 
 import 'package:bip39/bip39.dart' as bip39;
 import 'package:hex/hex.dart';
 import 'package:rbx_wallet/core/env.dart';
-import 'package:rbx_wallet/features/keygen/bip32/bip32.dart' as bip32;
+// import 'package:rbx_wallet/features/keygen/bip32/bip32.dart' as bip32;
+import 'package:bip32/bip32.dart' as bip32;
 import 'package:rbx_wallet/features/keygen/models/keypair.dart';
 import 'package:rbx_wallet/features/keygen/models/ra_keypair.dart';
 
@@ -70,15 +72,13 @@ class KeygenService {
       return null;
     }
 
-    final masterPrivateSeed = bip39.mnemonicToSeed(mnemonic);
+    final Uint8List seed = bip39.mnemonicToSeed(mnemonic);
 
-    final chain = bip32.Chain.seed(HEX.encode(masterPrivateSeed));
-    final key = chain.forPath("m/0'/0'/$index'") as bip32.ExtendedPrivateKey;
+    final bip32.BIP32 root = bip32.BIP32.fromSeed(seed);
 
-    String privateKey = key.privateKeyHex();
-    if (privateKey.length > 64 && privateKey.startsWith("00")) {
-      privateKey = privateKey.substring(2);
-    }
+    final bip32.BIP32 child = root.derivePath("m/0'/0'/$index'");
+
+    final String privateKey = child.privateKey!.toList().map((e) => e.toRadixString(16).padLeft(2, '0')).join();
 
     final keypair = await KeygenService.importPrivateKey(
       privateKey,
