@@ -208,4 +208,12 @@ class Env {
   static String? get banxaPaymentDomain {
     return DotEnv.dotenv.env['PAYMENT_DOMAIN'];
   }
+
+  static bool get moonpayEnabled {
+    return DotEnv.dotenv.env['MOONPAY_ENABLED'] == "true";
+  }
+
+  static bool get moonpayEnabledVFX {
+    return DotEnv.dotenv.env['MOONPAY_ENABLED_VFX'] == "true";
+  }
 }

@@ -453,7 +453,7 @@ class AccountUtils {
                     },
                     trailing: Icon(Icons.chevron_right, size: 16)),
               ),
-              if (kIsWeb) ...[
+              if (kIsWeb && (type == VfxOrBtcOption.vfx ? Env.moonpayEnabledVFX : Env.moonpayEnabled)) ...[
                 SizedBox(
                   height: 12,
                 ),
