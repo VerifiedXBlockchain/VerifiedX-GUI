@@ -45641,6 +45641,11 @@
               const keyPair = ECPair2.fromWIF(wif, this.network);
               return this.buildOutput(keyPair);
             }
+            keypairFromPrivateKey(privateKeyString) {
+              const privateKeyBuffer = Buffer.from(privateKeyString, "hex");
+              const keyPair = ECPair2.fromPrivateKey(privateKeyBuffer, { network: this.network });
+              return this.buildOutput(keyPair);
+            }
             keypairFromMnemonic(mnemonic, index = 0) {
               const seed = bip39.mnemonicToSeedSync(mnemonic);
               const root = bip322.fromSeed(seed, this.network);

@@ -105,6 +105,69 @@ String btcGeneratedPasswordFromPrivateKey(String privateKey) {
   return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
 }
 
+Future<void> handleImportWithBtcPrivateKey(
+  BuildContext context,
+  WidgetRef ref, {
+  bool showRememberMe = true,
+}) async {
+  await InfoDialog.show(
+    title: "Warning",
+    body:
+        "Although if you login with a BTC Private key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.",
+  );
+
+  final privateKey = await PromptModal.show(
+    title: "Your BTC Private Key",
+    validator: (v) => formValidatorNotEmpty(v, "Private Key"),
+    labelText: "Private Key",
+  );
+
+  if (privateKey == null) return;
+  if (showRememberMe) {
+    await handleRememberMe(context, ref);
+  }
+
+  final btcKeypair = await BtcWebService().keypairFromPrivateKey(privateKey);
+  final firstSixteen = privateKey.substring(0, 16);
+  final lastSixteen = privateKey.substring(privateKey.length - 16);
+
+  final seed = "$firstSixteen$lastSixteen";
+
+  final keypair = await KeygenService.seedToKeypair(seed);
+
+  if (keypair == null) {
+    Toast.error("Could not generate keypair");
+    return;
+  }
+
+  RaKeypair? reserveKeyPair;
+
+  int append = 0;
+
+  while (true) {
+    String input = keypair.private;
+    if (input.startsWith("00")) {
+      input = input.substring(2);
+    }
+    String raSeed = "${input.substring(0, 32)}$append";
+
+    final kp = await KeygenService.seedToKeypair(raSeed);
+    if (kp == null) {
+      continue;
+    }
+
+    reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+
+    if (reserveKeyPair.address.startsWith("xRBX")) {
+      break;
+    }
+
+    append += 1;
+  }
+
+  await login(context, ref, keypair, reserveKeyPair, btcKeypair);
+}
+
 Future<void> handleImportWithBtcWifKey(
   BuildContext context,
   WidgetRef ref, {
@@ -518,7 +581,7 @@ Future<void> showKeys(
             ListTile(
               leading: isMobile ? null : const Icon(Icons.security),
               title: TextFormField(
-                initialValue: keypair.privateCorrected,
+                initialValue: keypair.btcWif != null ? keypair.private : keypair.privateCorrected,
                 decoration: InputDecoration(
                   label: Text(
                     "Private Key",
@@ -533,7 +596,7 @@ Future<void> showKeys(
               trailing: IconButton(
                 icon: const Icon(Icons.copy),
                 onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: keypair.privateCorrected));
+                  await Clipboard.setData(ClipboardData(text: keypair.btcWif != null ? keypair.private : keypair.privateCorrected));
                   Toast.message("Private key copied to clipboard");
                 },
               ),
@@ -798,7 +861,15 @@ showWebLoginModal(
                 // await Future.delayed(const Duration(milliseconds: 300));
               }
             : null,
-        handleBtc: allowBtcPrivateKey
+        handleBtcPrivateKey: allowBtcPrivateKey
+            ? (context) async {
+                await handleImportWithBtcPrivateKey(context, ref, showRememberMe: showRememberMe);
+                if (ref.read(webSessionProvider).isAuthenticated) {
+                  onSuccess();
+                }
+              }
+            : null,
+        handleBtcWif: allowBtcPrivateKey
             ? (context) async {
                 await handleImportWithBtcWifKey(context, ref, showRememberMe: showRememberMe);
                 if (ref.read(webSessionProvider).isAuthenticated) {

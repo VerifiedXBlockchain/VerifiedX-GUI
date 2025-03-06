@@ -6,14 +6,16 @@ class AuthTypeModal extends StatelessWidget {
   final Function() handleMneumonic;
   final Function() handleUsername;
   final Function(BuildContext context)? handlePrivateKey;
-  final Function(BuildContext context)? handleBtc;
+  final Function(BuildContext context)? handleBtcWif;
+  final Function(BuildContext context)? handleBtcPrivateKey;
 
   const AuthTypeModal({
     Key? key,
     required this.handleUsername,
     required this.handleMneumonic,
     this.handlePrivateKey,
-    this.handleBtc,
+    this.handleBtcWif,
+    this.handleBtcPrivateKey,
   }) : super(key: key);
 
   @override
@@ -62,7 +64,23 @@ class AuthTypeModal extends StatelessWidget {
               handlePrivateKey!(context);
             },
           ),
-        if (handleBtc != null)
+        if (handleBtcPrivateKey != null) const Divider(height: 1),
+        if (handleBtcPrivateKey != null)
+          ListTile(
+            leading: const Icon(FontAwesomeIcons.bitcoin),
+            title: const Text(
+              "Bitcoin Private Key",
+            ),
+            trailing: const Icon(
+              Icons.chevron_right,
+              size: 32,
+            ),
+            onTap: () {
+              handleBtcPrivateKey!(context);
+            },
+          ),
+        if (handleBtcWif != null) const Divider(height: 1),
+        if (handleBtcWif != null)
           ListTile(
             leading: const Icon(FontAwesomeIcons.bitcoin),
             title: const Text(
@@ -73,7 +91,7 @@ class AuthTypeModal extends StatelessWidget {
               size: 32,
             ),
             onTap: () {
-              handleBtc!(context);
+              handleBtcWif!(context);
             },
           ),
       ],

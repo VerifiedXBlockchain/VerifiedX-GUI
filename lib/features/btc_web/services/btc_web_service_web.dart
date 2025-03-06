@@ -50,6 +50,19 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
   }
 
   @override
+  Future<BtcWebAccount?> keypairFromPrivateKey(String privateKeyString) async {
+    try {
+      final data = await js.context.callMethod('keypairFromPrivateKey', [privateKeyString]);
+      final account = BtcWebAccount.fromJson(jsonDecode(data));
+      print(account);
+      return account;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
+  @override
   Future<BtcWebAccount?> keypairFromRandomMnemonic() async {
     try {
       final data = await js.context.callMethod('btcKeypairFromRandomMnemonic', []);

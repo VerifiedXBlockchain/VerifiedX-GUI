@@ -22,6 +22,13 @@ function init() {
         return _responseOutput(result);
     }
 
+
+    window.keypairFromPrivateKey = function (privateKeyString) {
+        const result = keypairService.keypairFromPrivateKey(privateKeyString);
+        return _responseOutput(result);
+    }
+
+
     window.btcKeypairFromRandomMnemonic = function () {
         const result = keypairService.keypairFromRandomMnemonic();
         return _responseOutput(result);

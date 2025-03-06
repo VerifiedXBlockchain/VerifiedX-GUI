@@ -35,6 +35,11 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
   }
 
   @override
+  Future<BtcWebAccount?> keypairFromPrivateKey(String privateKey) {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<List<BtcWebTransaction>> listTransactions(String address, {int limit = 50, int? before}) {
     throw UnimplementedError();
   }

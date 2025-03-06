@@ -5,6 +5,7 @@ import '../models/btc_web_transaction.dart';
 abstract class BtcWebServiceInterface {
   Future<BtcWebAccount?> keypairFromRandom();
   Future<BtcWebAccount?> keypairFromWif(String wif);
+  Future<BtcWebAccount?> keypairFromPrivateKey(String privateKey);
   Future<BtcWebAccount?> keypairFromRandomMnemonic();
   Future<BtcWebAccount?> keypairFromMnemonic(String mnemonic);
   Future<BtcWebAccount?> keypairFromEmailPassword(String email, password);
