@@ -37,10 +37,14 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
   }
 
   @override
-  Future<BtcWebAccount?> keypairFromWif(String wif) async {
+  Future<BtcWebAccount?> keypairFromWif(String wif, String addressType) async {
     try {
       final data = await js.context.callMethod('btcKeypairFromWif', [wif]);
-      final account = BtcWebAccount.fromJson(jsonDecode(data));
+
+      final d = jsonDecode(data);
+      d['address'] = d['addresses'][addressType];
+
+      final account = BtcWebAccount.fromJson(d);
       print(account);
       return account;
     } catch (e) {
@@ -50,10 +54,12 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
   }
 
   @override
-  Future<BtcWebAccount?> keypairFromPrivateKey(String privateKeyString) async {
+  Future<BtcWebAccount?> keypairFromPrivateKey(String privateKey, String addressType) async {
     try {
-      final data = await js.context.callMethod('keypairFromPrivateKey', [privateKeyString]);
-      final account = BtcWebAccount.fromJson(jsonDecode(data));
+      final data = await js.context.callMethod('keypairFromPrivateKey', [privateKey]);
+      final d = jsonDecode(data);
+      d['address'] = d['addresses'][addressType];
+      final account = BtcWebAccount.fromJson(d);
       print(account);
       return account;
     } catch (e) {
