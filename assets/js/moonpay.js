@@ -115,6 +115,57 @@ const initMoonPay = async () => {
 
     }
 
+    window.moonPaySell = async (environment, baseCurrencyCode, baseCurrencyAmount, walletAddress, popup) => {
+
+        if (!['sandbox', 'production'].includes(environment)) {
+            console.log("Moonpay: invalid environment")
+            return;
+        }
+
+        const params = {
+            apiKey: PUBLIC_KEYS[environment],
+            theme: 'dark',
+            baseCurrencyCode: baseCurrencyCode,
+            baseCurrencyAmount: baseCurrencyAmount,
+            defaultCurrencyCode: baseCurrencyCode,
+            walletAddress: walletAddress
+        }
+
+        const moonPaySdk = moonPay({
+            flow: 'sell',
+            environment: environment,
+            variant: 'overlay',
+            params: params
+        });
+
+        const urlForSignature = moonPaySdk.generateUrlForSigning();
+
+
+        const signatureResponse = await fetch(`${SIGNATURE_SERVICE_BASE_URLS[environment]}/payment/sign-url-for-moonpay/`, {
+            method: 'POST',
+            body: JSON.stringify({ 'url_for_signature': urlForSignature })
+        });
+
+        const signatureResult = await signatureResponse.json();
+
+        if (!signatureResult.success) {
+            window.open(urlForSignature);
+            return;
+        }
+
+        moonPaySdk.updateSignature(signatureResult.signature);
+
+        if (popup) {
+            moonPaySdk.show();
+
+        } else {
+            window.open(signatureResult.url);
+
+        }
+
+
+    }
+
 }
 
 
