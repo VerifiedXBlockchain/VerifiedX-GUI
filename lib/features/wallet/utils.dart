@@ -654,4 +654,71 @@ class AccountUtils {
       }
     }
   }
+
+  static Future<void> sellCoin(BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
+    type ??= await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ModalContainer(
+            title: "Choose Coin Type",
+            withDecor: false,
+            withClose: true,
+            children: [
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Get \$VFX Now"),
+                    onTap: () {
+                      Navigator.of(context).pop(VfxOrBtcOption.vfx);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Get \$BTC Now"),
+                    onTap: () {
+                      Navigator.of(context).pop(VfxOrBtcOption.btc);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
+            ],
+          );
+        });
+
+    if (type == null) {
+      return;
+    }
+
+    final vfxAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+    final btcAddress = kIsWeb ? ref.read(webSessionProvider).btcKeypair?.address : ref.read(sessionProvider).currentBtcAccount?.address;
+
+    final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
+
+    if (address == null) {
+      Toast.error("No address selected");
+      return;
+    }
+
+    final agreed = await PaymentTermsDialog.show(context, PaymentGateway.moonpay);
+
+    if (agreed != true) {
+      return;
+    }
+
+    if (type == VfxOrBtcOption.vfx) {
+      Toast.message("VFX Off Ramp feature coming soon");
+    }
+
+    if (type == VfxOrBtcOption.btc) {
+      if (kIsWeb) {
+        MoonpayService().sell(Env.isTestNet ? 'sandbox' : 'production', 'btc', '100', address, true);
+      } else {
+        Toast.error("Native Moonpay Integration Activating Soon.");
+      }
+    }
+  }
 }

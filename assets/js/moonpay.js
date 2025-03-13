@@ -59,7 +59,7 @@ const initMoonPay = async () => {
     }
 
     const SIGNATURE_SERVICE_BASE_URLS = {
-        'sandbox': 'http://localhost:8000',
+        'sandbox': 'https://data-testnet.verifiedx.io',
         'production': 'https://data.verifiedx.io'
     }
 

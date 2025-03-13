@@ -16,4 +16,9 @@ class MoonpayServiceImpl extends MoonpayServiceInterface {
   Future<void> buy(String environment, String baseCurrencyCode, String baseCurrencyAmount, String walletAddress, bool popup) async {
     js.context.callMethod('moonPayBuy', [environment, baseCurrencyCode, baseCurrencyAmount, walletAddress, popup]);
   }
+
+  @override
+  Future<void> sell(String environment, String baseCurrencyCode, String baseCurrencyAmount, String walletAddress, bool popup) async {
+    js.context.callMethod('moonPaySell', [environment, baseCurrencyCode, baseCurrencyAmount, walletAddress, popup]);
+  }
 }
