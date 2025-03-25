@@ -48,6 +48,9 @@ import '../../web/providers/account_info_visible_provider.dart';
 import '../components/home_buttons/verify_nft_ownership_button.dart';
 import 'all_tokens_screen.dart';
 
+final smallPhoneHeight = 800;
+final smallPhoneWidth = 390;
+
 class WebHomeScreen extends BaseScreen {
   const WebHomeScreen({Key? key})
       : super(
@@ -327,19 +330,26 @@ class _Brand extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = BreakPoints.useMobileLayout(context);
+    final smallPhone = MediaQuery.of(context).size.width <= smallPhoneWidth && MediaQuery.of(context).size.height <= smallPhoneHeight;
 
     return Center(
-      child: Column(
+      child: Flex(
+        direction: smallPhone ? Axis.horizontal : Axis.vertical,
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: isMobile ? 75 : 150,
+            width: isMobile
+                ? smallPhone
+                    ? 35
+                    : 75
+                : 150,
             child: Image.asset(
               Assets.images.animatedCube.path,
               scale: 1,
             ),
           ),
           SizedBox(
+            width: 8,
             height: 8,
           ),
           WebWalletWordWordmark(
@@ -361,15 +371,16 @@ class _Actions extends BaseComponent {
     final tabsRouter = AutoTabsRouter.of(context);
 
     final isMobile = BreakPoints.useMobileLayout(context);
-
+    final smallPhone = MediaQuery.of(context).size.width <= smallPhoneWidth && MediaQuery.of(context).size.height <= smallPhoneHeight;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: isMobile ? 0 : 16),
       child: AppCard(
+        padding: smallPhone ? 6 : 20,
         fullWidth: true,
         child: Center(
           child: Wrap(
             runSpacing: isMobile ? 6 : 16,
-            spacing: isMobile ? 6 : 16,
+            spacing: isMobile ? 4 : 16,
             alignment: WrapAlignment.center,
             children: [
               // AppButton(
