@@ -341,9 +341,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
       return;
     }
     print("CHECK REMOTE INFO");
-    // if (!Env.promptForUpdates) {
-    //   return;
-    // }
+    if (!Env.promptForUpdates) {
+      return;
+    }
 
     final data = await BridgeService().walletInfo();
     final int? blockHeight = int.tryParse(data['BlockHeight']);

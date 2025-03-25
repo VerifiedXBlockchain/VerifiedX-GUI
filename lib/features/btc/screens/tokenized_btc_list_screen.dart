@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/features/btc/screens/web_tokenize_btc_onboarding_screen.dart';
+import 'package:rbx_wallet/utils/toast.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/breakpoints.dart';
@@ -15,6 +16,7 @@ import '../../web/components/web_mobile_drawer_button.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/tokenized_btc_onboard_provider.dart';
 
+import 'bulk_vbtc_transfer_screen.dart';
 import 'tokenize_btc_screen.dart';
 import 'tokenized_btc_detail_screen.dart';
 
@@ -56,27 +58,66 @@ class TokenizeBtcListScreen extends BaseScreen {
     return Column(
       children: [
         if (!isMobile)
-          Text(
-            "Tokenized Bitcoin (vBTC)",
-            style: TextStyle(
-              fontFamily: "Mukta",
-              fontSize: 20,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-              letterSpacing: 1,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Tokenized Bitcoin (vBTC)",
+                    style: TextStyle(
+                      fontFamily: "Mukta",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      "1 vBTC = 1 BTC",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.9),
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: AppButton(
+                  label: "Bulk vBTC Transfer",
+                  onPressed: () {
+                    if (kIsWeb) {
+                      Toast.message("Activating Soon");
+                      return;
+                    }
+
+                    final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
+
+                    // if (tokens.isEmpty) {
+                    //   Toast.error("No vBTC tokens with a balance");
+                    //   return;
+                    // }
+
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => BulkVbtcTransferScreen(),
+                      ),
+                    );
+                  },
+                  variant: AppColorVariant.Btc,
+                  type: AppButtonType.Elevated,
+                ),
+              )
+            ],
           ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            "1 vBTC = 1 BTC",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white.withOpacity(0.9),
-              letterSpacing: 1,
-            ),
-          ),
-        ),
         AppCard(
           fullWidth: true,
           child: Column(

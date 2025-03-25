@@ -13,6 +13,7 @@ import 'package:collection/collection.dart';
 import '../models/btc_send_tx_result.dart';
 import '../models/btc_transaction.dart';
 import '../models/btc_utxo.dart';
+import '../models/vbtc_input.dart';
 
 class BtcService extends BaseService {
   BtcService() : super(apiBasePathOverride: "/btcapi/BTCV2");
@@ -571,6 +572,33 @@ class BtcService extends BaseService {
     } catch (e) {
       print(e);
       return null;
+    }
+  }
+
+  Future<String?> transferCoinMulti(String vfxFromAddress, String vfxToAddress, List<VBtcInput> inputs) async {
+    final params = {
+      'fromAddress': vfxFromAddress,
+      'toAddress': vfxToAddress,
+      'vBTCInputs': inputs.map((input) => input.toJson()).toList(),
+    };
+
+    try {
+      final result = await postJson(
+        '/TransferCoinMulti',
+        params: params,
+        cleanPath: false,
+      );
+
+      if (result["success"] == true) {
+        return null;
+      }
+
+      print("Error ${result['message']}");
+
+      return result['message'] ?? "And error occurred";
+    } catch (e) {
+      print(e);
+      return e.toString();
     }
   }
 }

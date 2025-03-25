@@ -7,7 +7,6 @@ import 'package:rbx_wallet/features/wallet/utils.dart';
 import '../../../core/base_component.dart';
 import '../../../core/breakpoints.dart';
 import '../../../core/theme/components.dart';
-import '../../payment/components/payment_iframe_container.dart';
 import '../components/home_buttons.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:url_launcher/url_launcher_string.dart';
