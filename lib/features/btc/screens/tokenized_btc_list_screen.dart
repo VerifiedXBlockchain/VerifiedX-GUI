@@ -94,17 +94,17 @@ class TokenizeBtcListScreen extends BaseScreen {
                 child: AppButton(
                   label: "Bulk vBTC Transfer",
                   onPressed: () {
-                    if (kIsWeb) {
-                      Toast.message("Activating Soon");
+                    final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
+                    final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
+
+                    if (!kIsWeb && tokens.isEmpty) {
+                      Toast.error("No vBTC tokens with a balance");
                       return;
                     }
-
-                    final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
-
-                    // if (tokens.isEmpty) {
-                    //   Toast.error("No vBTC tokens with a balance");
-                    //   return;
-                    // }
+                    if (kIsWeb && webTokens.isEmpty) {
+                      Toast.error("No vBTC tokens with a balance");
+                      return;
+                    }
 
                     Navigator.of(context).push(
                       MaterialPageRoute(

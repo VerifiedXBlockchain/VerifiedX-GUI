@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,7 @@ import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common
 import 'package:rbx_wallet/utils/toast.dart';
 import '../../../core/base_component.dart';
 import '../../../utils/validation.dart';
+import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../providers/bulk_vbtc_transfer_provider.dart';
 
 class BulkVbtcTransferScreen extends BaseScreen {
@@ -29,6 +31,7 @@ class BulkVbtcTransferScreen extends BaseScreen {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final tokens = ref.watch(tokenizedBitcoinListProvider).where((element) => element.balance > 0).toList();
+    final webTokens = ref.watch(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0).toList();
 
     final provider = ref.read(bulkVbtcTransferProvider.notifier);
     final inputs = ref.watch(bulkVbtcTransferProvider);
@@ -43,40 +46,75 @@ class BulkVbtcTransferScreen extends BaseScreen {
             fontSize: 16,
           ),
         ),
-        Expanded(
-          child: ListView.builder(
-              itemCount: tokens.length,
-              itemBuilder: (context, index) {
-                final token = tokens[index];
+        kIsWeb
+            ? Expanded(
+                child: ListView.builder(
+                    itemCount: webTokens.length,
+                    itemBuilder: (context, index) {
+                      final token = webTokens[index];
 
-                final isSelected = inputs.firstWhereOrNull((input) => input.scId == token.smartContractUid) != null;
+                      final isSelected = inputs.firstWhereOrNull((input) => input.scId == token.scIdentifier) != null;
 
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: AppCard(
-                    padding: 0,
-                    child: ListTile(
-                      leading: Checkbox(
-                        value: isSelected,
-                        onChanged: (value) {
-                          if (!isSelected) {
-                            provider.add(scId: token.smartContractUid, amount: token.myBalance);
-                          } else {
-                            provider.remove(token.smartContractUid);
-                          }
-                        },
-                      ),
-                      title: Text(token.tokenName),
-                      subtitle: Text(token.rbxAddress),
-                      trailing: Text(
-                        "${token.myBalance} vBTC",
-                        style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-        ),
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: AppCard(
+                          padding: 0,
+                          child: ListTile(
+                            leading: Checkbox(
+                              value: isSelected,
+                              onChanged: (value) {
+                                if (!isSelected) {
+                                  provider.add(scId: token.scIdentifier, amount: token.globalBalance);
+                                } else {
+                                  provider.remove(token.scIdentifier);
+                                }
+                              },
+                            ),
+                            title: Text(token.name),
+                            subtitle: Text(token.ownerAddress),
+                            trailing: Text(
+                              "${token.globalBalance} vBTC",
+                              style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+              )
+            : Expanded(
+                child: ListView.builder(
+                    itemCount: tokens.length,
+                    itemBuilder: (context, index) {
+                      final token = tokens[index];
+
+                      final isSelected = inputs.firstWhereOrNull((input) => input.scId == token.smartContractUid) != null;
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: AppCard(
+                          padding: 0,
+                          child: ListTile(
+                            leading: Checkbox(
+                              value: isSelected,
+                              onChanged: (value) {
+                                if (!isSelected) {
+                                  provider.add(scId: token.smartContractUid, amount: token.myBalance);
+                                } else {
+                                  provider.remove(token.smartContractUid);
+                                }
+                              },
+                            ),
+                            title: Text(token.tokenName),
+                            subtitle: Text(token.rbxAddress),
+                            trailing: Text(
+                              "${token.myBalance} vBTC",
+                              style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+              ),
         AppCard(
           fullWidth: true,
           child: Row(
@@ -143,6 +181,7 @@ class _ConfirmBottomSheet extends BaseComponent {
 
     final inputScIds = inputs.map((e) => e.scId).toList();
     final tokens = ref.watch(tokenizedBitcoinListProvider).where((element) => inputScIds.contains(element.smartContractUid)).toList();
+    final webTokens = ref.watch(btcWebVbtcTokenListProvider).where((element) => inputScIds.contains(element.scIdentifier)).toList();
 
     return ModalContainer(
       children: [
@@ -158,76 +197,148 @@ class _ConfirmBottomSheet extends BaseComponent {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ...tokens.asMap().entries.map((entry) {
-                final index = entry.key;
-                final token = entry.value;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: AppCard(
-                    padding: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      child: ListTile(
-                        title: Text(token.tokenName),
-                        subtitle: Text(token.rbxAddress),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            SizedBox(
-                              width: 200,
-                              child: TextFormField(
-                                controller: provider.controllers[index],
-                                validator: (value) {
-                                  if (value == null) {
-                                    return "Amount required";
-                                  }
-                                  final d = double.tryParse(value);
-                                  if (d == null) {
-                                    return "Invalid Amount";
-                                  }
+              if (kIsWeb)
+                ...webTokens.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final token = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: AppCard(
+                      padding: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: ListTile(
+                          title: Text(token.name),
+                          subtitle: Text(token.ownerAddress),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: TextFormField(
+                                  controller: provider.controllers[index],
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Amount required";
+                                    }
+                                    final d = double.tryParse(value);
+                                    if (d == null) {
+                                      return "Invalid Amount";
+                                    }
 
-                                  if (d > token.myBalance) {
-                                    return "Maximum amount is ${token.myBalance} vBTC";
-                                  }
+                                    if (d > token.globalBalance) {
+                                      return "Maximum amount is ${token.globalBalance} vBTC";
+                                    }
 
-                                  return null;
-                                },
-                                decoration: InputDecoration(hintText: "Amount", suffixText: "vBTC"),
-                                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(
-                                    RegExp("[0-9.]"),
-                                  ),
-                                ],
-                                onChanged: (value) {
-                                  print(value);
-                                  final d = double.tryParse(value);
-                                  if (d != null) {
-                                    provider.updateAmount(index, d);
-                                  }
-                                },
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(hintText: "Amount", suffixText: "vBTC"),
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9.]"),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    print(value);
+                                    final d = double.tryParse(value);
+                                    if (d != null) {
+                                      provider.updateAmount(index, d);
+                                    }
+                                  },
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            AppButton(
-                              label: "(MAX: ${token.myBalance} vBTC)",
-                              type: AppButtonType.Text,
-                              underlined: true,
-                              onPressed: () {
-                                provider.controllers[index].text = "${token.myBalance}";
-                                provider.updateAmount(index, token.myBalance);
-                              },
-                              variant: AppColorVariant.Btc,
-                            )
-                          ],
+                              SizedBox(
+                                width: 8,
+                              ),
+                              AppButton(
+                                label: "(MAX: ${token.globalBalance} vBTC)",
+                                type: AppButtonType.Text,
+                                underlined: true,
+                                onPressed: () {
+                                  provider.controllers[index].text = "${token.globalBalance}";
+                                  provider.updateAmount(index, token.globalBalance);
+                                },
+                                variant: AppColorVariant.Btc,
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              if (!kIsWeb)
+                ...tokens.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final token = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: AppCard(
+                      padding: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        child: ListTile(
+                          title: Text(token.tokenName),
+                          subtitle: Text(token.rbxAddress),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: TextFormField(
+                                  controller: provider.controllers[index],
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Amount required";
+                                    }
+                                    final d = double.tryParse(value);
+                                    if (d == null) {
+                                      return "Invalid Amount";
+                                    }
+
+                                    if (d > token.myBalance) {
+                                      return "Maximum amount is ${token.myBalance} vBTC";
+                                    }
+
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(hintText: "Amount", suffixText: "vBTC"),
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9.]"),
+                                    ),
+                                  ],
+                                  onChanged: (value) {
+                                    print(value);
+                                    final d = double.tryParse(value);
+                                    if (d != null) {
+                                      provider.updateAmount(index, d);
+                                    }
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 8,
+                              ),
+                              AppButton(
+                                label: "(MAX: ${token.myBalance} vBTC)",
+                                type: AppButtonType.Text,
+                                underlined: true,
+                                onPressed: () {
+                                  provider.controllers[index].text = "${token.myBalance}";
+                                  provider.updateAmount(index, token.myBalance);
+                                },
+                                variant: AppColorVariant.Btc,
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Align(
