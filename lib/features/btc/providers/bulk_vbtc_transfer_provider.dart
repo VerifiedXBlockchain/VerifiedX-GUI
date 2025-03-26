@@ -13,7 +13,7 @@ class BulkVbtcTransferProvider extends StateNotifier<List<VBtcInput>> {
 
   BulkVbtcTransferProvider(this.ref) : super([]);
 
-  void add({required String scId, required double amount}) {
+  void add({required String scId, required double amount, required String ownerAddress}) {
     final exists = state.firstWhereOrNull((input) => input.scId == scId) != null;
     if (exists) {
       return;
@@ -23,7 +23,7 @@ class BulkVbtcTransferProvider extends StateNotifier<List<VBtcInput>> {
       ...state,
       VBtcInput(
         scId: scId,
-        vfxFromAddress: "",
+        vfxFromAddress: ownerAddress,
         vfxToAddress: "",
         amount: amount,
       ),

@@ -582,6 +582,10 @@ class BtcService extends BaseService {
       'vBTCInputs': inputs.map((input) => input.toJson()).toList(),
     };
 
+    print("------------");
+    print(jsonEncode(params));
+    print("------------");
+
     try {
       final result = await postJson(
         '/TransferCoinMulti',
@@ -589,16 +593,25 @@ class BtcService extends BaseService {
         cleanPath: false,
       );
 
-      if (result["success"] == true) {
+      final data = result['data'];
+      if (data == null) {
+        Toast.error("data was null");
         return null;
       }
+      print("------------");
+      print(jsonEncode(result));
+      print("------------");
 
-      print("Error ${result['message']}");
+      if (result["Success"] == true && result['Hash'] != null) {
+        return result['Hash'];
+      }
 
-      return result['message'] ?? "And error occurred";
+      Toast.error("Error: ${result['Message'] ?? "And error occurred"}");
+
+      return null;
     } catch (e) {
-      print(e);
-      return e.toString();
+      Toast.error(e.toString());
+      return null;
     }
   }
 }

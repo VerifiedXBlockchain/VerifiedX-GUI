@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
+import '../../btc/models/vbtc_input.dart';
 import '../../nft/models/nft.dart';
 import '../models/web_fungible_token.dart';
 import '../../web/utils/raw_transaction.dart';
@@ -401,6 +402,40 @@ class WebTokenActionsManager {
       data: data,
       txType: 21,
       showConfirmation: false,
+    );
+  }
+
+  Future<bool?> transferVbtcMulti(String toAddress, List<VBtcInput> inputs) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error("No VFX account found");
+      return null;
+    }
+
+    final signatureInput = generateRandomString(12);
+
+    final data = {
+      "Function": "TransferCoinMulti()",
+      "Inputs": inputs.map(
+        (input) async {
+          final message = "$toAddress${input.vfxFromAddress}";
+
+          final signature = await RawTransaction.getSignature(message: message, privateKey: keypair.private, publicKey: keypair.public);
+          if (signature == null) {
+            Toast.error("Could not generate signature");
+            return false;
+          }
+          return {"SCUID": input.scId, "FromAddress": input.vfxFromAddress, "Amount": input.amount, "Signature": signature};
+        },
+      ),
+      "Amount": inputs.fold<double>(0.0, (previousValue, element) => previousValue + element.amount),
+      "SignatureInput": signatureInput,
+    };
+
+    return await _verifyConfirmAndSendTx(
+      toAddress: toAddress,
+      data: data,
+      txType: TxType.tokenizeTx,
     );
   }
 

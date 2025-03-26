@@ -2,9 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/app_constants.dart';
 import 'package:rbx_wallet/core/base_screen.dart';
 import 'package:rbx_wallet/core/components/buttons.dart';
 import 'package:rbx_wallet/core/dialogs.dart';
+import 'package:rbx_wallet/core/providers/session_provider.dart';
+import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
 import 'package:rbx_wallet/features/btc/providers/tokenized_bitcoin_list_provider.dart';
@@ -13,8 +16,12 @@ import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common
 import 'package:rbx_wallet/utils/toast.dart';
 import '../../../core/base_component.dart';
 import '../../../utils/validation.dart';
+import '../../bridge/models/log_entry.dart';
+import '../../bridge/providers/log_provider.dart';
 import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import '../../token/providers/web_token_actions_manager.dart';
 import '../providers/bulk_vbtc_transfer_provider.dart';
+import '../services/btc_service.dart';
 
 class BulkVbtcTransferScreen extends BaseScreen {
   const BulkVbtcTransferScreen({super.key});
@@ -64,7 +71,7 @@ class BulkVbtcTransferScreen extends BaseScreen {
                               value: isSelected,
                               onChanged: (value) {
                                 if (!isSelected) {
-                                  provider.add(scId: token.scIdentifier, amount: token.globalBalance);
+                                  provider.add(scId: token.scIdentifier, amount: token.globalBalance, ownerAddress: token.ownerAddress);
                                 } else {
                                   provider.remove(token.scIdentifier);
                                 }
@@ -98,7 +105,7 @@ class BulkVbtcTransferScreen extends BaseScreen {
                               value: isSelected,
                               onChanged: (value) {
                                 if (!isSelected) {
-                                  provider.add(scId: token.smartContractUid, amount: token.myBalance);
+                                  provider.add(scId: token.smartContractUid, amount: token.myBalance, ownerAddress: token.rbxAddress);
                                 } else {
                                   provider.remove(token.smartContractUid);
                                 }
@@ -390,11 +397,81 @@ class _ConfirmBottomSheet extends BaseComponent {
                   return;
                 }
 
-                final message = "Would you like to send a total of $totalAmount vBTC to ${provider.addressController.text}";
+                final toAddress = provider.addressController.text.trim();
+
+                final message = "Would you like to send a total of $totalAmount vBTC to $toAddress";
 
                 final confirmed = await ConfirmDialog.show(title: "Confirm Bulk Tx", body: message, confirmText: "Send", cancelText: "Cancel");
                 if (confirmed != true) {
                   return;
+                }
+
+                if (kIsWeb) {
+                  print("WEB TODO");
+                  final currentWallet = ref.read(webSessionProvider).currentWallet;
+                  if (currentWallet == null) {
+                    Toast.error("No VFX account selected");
+                    return;
+                  }
+                  if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
+                    Toast.error("Selected VFX account doesn't have enough balance");
+                    return;
+                  }
+
+                  final manager = ref.read(webTokenActionsManager);
+
+                  final success = await manager.transferVbtcMulti(toAddress, validInputs);
+
+                  if (success == true) {
+                    Toast.message("vBTC Bulk Transfer TX broadcasted");
+                    for (var element in provider.controllers) {
+                      element.clear();
+                    }
+                    provider.addressController.clear();
+                    ref.invalidate(bulkVbtcTransferProvider);
+
+                    Toast.message("$totalAmount vBTC has been sent to $toAddress.");
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }
+                } else {
+                  final currentWallet = ref.read(sessionProvider).currentWallet;
+                  if (currentWallet == null) {
+                    Toast.error("No VFX account selected");
+                    return;
+                  }
+                  if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
+                    Toast.error("Selected VFX account doesn't have enough balance");
+                    return;
+                  }
+
+                  final hash = await BtcService().transferCoinMulti(
+                    currentWallet.address,
+                    toAddress,
+                    validInputs,
+                  );
+
+                  if (hash != null) {
+                    final message = "vBTC Bulk Transfer TX broadcasted with hash of $hash";
+
+                    ref.read(logProvider.notifier).append(
+                          LogEntry(
+                            message: message,
+                            textToCopy: hash,
+                            variant: AppColorVariant.Btc,
+                          ),
+                        );
+
+                    for (var element in provider.controllers) {
+                      element.clear();
+                    }
+                    provider.addressController.clear();
+                    ref.invalidate(bulkVbtcTransferProvider);
+
+                    Toast.message("$totalAmount vBTC has been sent to $toAddress.");
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  }
                 }
               },
               variant: AppColorVariant.Btc,
