@@ -412,25 +412,49 @@ class WebTokenActionsManager {
       return null;
     }
 
+    ref.read(globalLoadingProvider.notifier).start();
+
     final signatureInput = generateRandomString(12);
 
-    final data = {
-      "Function": "TransferCoinMulti()",
-      "Inputs": inputs.map(
+    final inputsMapped = await Future.wait(
+      inputs.map(
         (input) async {
           final message = "$toAddress${input.vfxFromAddress}";
 
-          final signature = await RawTransaction.getSignature(message: message, privateKey: keypair.private, publicKey: keypair.public);
+          final signature = await RawTransaction.getSignature(
+            message: message,
+            privateKey: keypair.private,
+            publicKey: keypair.public,
+          );
+
           if (signature == null) {
             Toast.error("Could not generate signature");
-            return false;
+            return null;
           }
-          return {"SCUID": input.scId, "FromAddress": input.vfxFromAddress, "Amount": input.amount, "Signature": signature};
+
+          return {
+            "SCUID": input.scId,
+            "FromAddress": input.vfxFromAddress,
+            "Amount": input.amount,
+            "Signature": signature,
+          };
         },
       ),
-      "Amount": inputs.fold<double>(0.0, (previousValue, element) => previousValue + element.amount),
+    );
+
+    final validInputs = inputsMapped.whereType<Map<String, dynamic>>().toList();
+
+    final data = {
+      "Function": "TransferCoinMulti()",
+      "Inputs": validInputs,
+      "Amount": inputs.fold<double>(
+        0.0,
+        (previousValue, element) => previousValue + element.amount,
+      ),
       "SignatureInput": signatureInput,
     };
+
+    ref.read(globalLoadingProvider.notifier).complete();
 
     return await _verifyConfirmAndSendTx(
       toAddress: toAddress,

@@ -100,6 +100,9 @@ class RawService extends BaseService {
   }) async {
     final data = transactionData;
 
+    print("tx payload:");
+    print(jsonEncode(data));
+
     try {
       final response = await postJson(
         execute ? '/send' : '/verify',

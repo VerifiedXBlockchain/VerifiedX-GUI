@@ -602,11 +602,11 @@ class BtcService extends BaseService {
       print(jsonEncode(result));
       print("------------");
 
-      if (result["Success"] == true && result['Hash'] != null) {
-        return result['Hash'];
+      if (data["Success"] == true && data['Hash'] != null) {
+        return data['Hash'];
       }
 
-      Toast.error("Error: ${result['Message'] ?? "And error occurred"}");
+      Toast.error("Error: ${data['Message'] ?? "And error occurred"}");
 
       return null;
     } catch (e) {

@@ -19,6 +19,7 @@ import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import '../../global_loader/global_loading_provider.dart';
 import '../../token/providers/web_token_actions_manager.dart';
 import '../providers/bulk_vbtc_transfer_provider.dart';
 import '../services/btc_service.dart';
@@ -407,13 +408,9 @@ class _ConfirmBottomSheet extends BaseComponent {
                 }
 
                 if (kIsWeb) {
-                  print("WEB TODO");
-                  final currentWallet = ref.read(webSessionProvider).currentWallet;
-                  if (currentWallet == null) {
-                    Toast.error("No VFX account selected");
-                    return;
-                  }
-                  if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
+                  final balance = ref.read(webSessionProvider).balance;
+
+                  if (balance == null || balance < MIN_RBX_FOR_SC_ACTION) {
                     Toast.error("Selected VFX account doesn't have enough balance");
                     return;
                   }
@@ -445,11 +442,15 @@ class _ConfirmBottomSheet extends BaseComponent {
                     return;
                   }
 
+                  ref.read(globalLoadingProvider.notifier).start();
+
                   final hash = await BtcService().transferCoinMulti(
                     currentWallet.address,
                     toAddress,
                     validInputs,
                   );
+
+                  ref.read(globalLoadingProvider.notifier).complete();
 
                   if (hash != null) {
                     final message = "vBTC Bulk Transfer TX broadcasted with hash of $hash";
