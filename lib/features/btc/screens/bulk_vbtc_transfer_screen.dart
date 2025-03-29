@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,9 +13,11 @@ import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
 import 'package:rbx_wallet/features/btc/providers/tokenized_bitcoin_list_provider.dart';
 import 'package:collection/collection.dart';
+import 'package:rbx_wallet/features/btc/screens/tokenized_btc_detail_screen.dart';
 import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:rbx_wallet/utils/toast.dart';
 import '../../../core/base_component.dart';
+import '../../../generated/assets.gen.dart';
 import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
@@ -68,15 +71,52 @@ class BulkVbtcTransferScreen extends BaseScreen {
                         child: AppCard(
                           padding: 0,
                           child: ListTile(
-                            leading: Checkbox(
-                              value: isSelected,
-                              onChanged: (value) {
-                                if (!isSelected) {
-                                  provider.add(scId: token.scIdentifier, amount: token.globalBalance, ownerAddress: token.ownerAddress);
-                                } else {
-                                  provider.remove(token.scIdentifier);
-                                }
-                              },
+                            leading: SizedBox(
+                              width: 48,
+                              height: 48,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(24)),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: CachedNetworkImage(
+                                      imageUrl: token.imageUrl,
+                                      height: 48,
+                                      width: 48,
+                                      errorWidget: (context, _, __) {
+                                        return Image.asset(
+                                          Assets.images.vbtcPng.path,
+                                          width: 48,
+                                          height: 48,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(color: Colors.black),
+                                      child: Checkbox(
+                                        value: isSelected,
+                                        fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                                          if (states.contains(MaterialState.selected)) {
+                                            return Theme.of(context).colorScheme.btcOrange;
+                                          }
+                                          return Colors.white;
+                                        }),
+                                        onChanged: (value) {
+                                          if (!isSelected) {
+                                            provider.add(scId: token.scIdentifier, amount: token.globalBalance, ownerAddress: token.ownerAddress);
+                                          } else {
+                                            provider.remove(token.scIdentifier);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             title: Text(token.name),
                             subtitle: Text(token.ownerAddress),
@@ -102,15 +142,44 @@ class BulkVbtcTransferScreen extends BaseScreen {
                         child: AppCard(
                           padding: 0,
                           child: ListTile(
-                            leading: Checkbox(
-                              value: isSelected,
-                              onChanged: (value) {
-                                if (!isSelected) {
-                                  provider.add(scId: token.smartContractUid, amount: token.myBalance, ownerAddress: token.rbxAddress);
-                                } else {
-                                  provider.remove(token.smartContractUid);
-                                }
-                              },
+                            leading: SizedBox(
+                              width: 48,
+                              height: 48,
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: BtcTokenImage(
+                                      nftId: token.smartContractUid,
+                                      size: 48,
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: BoxDecoration(color: Colors.black),
+                                      child: Checkbox(
+                                        value: isSelected,
+                                        fillColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                                          if (states.contains(MaterialState.selected)) {
+                                            return Theme.of(context).colorScheme.btcOrange;
+                                          }
+                                          return Colors.white;
+                                        }),
+                                        onChanged: (value) {
+                                          if (!isSelected) {
+                                            provider.add(scId: token.smartContractUid, amount: token.myBalance, ownerAddress: token.rbxAddress);
+                                          } else {
+                                            provider.remove(token.smartContractUid);
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             title: Text(token.tokenName),
                             subtitle: Text(token.rbxAddress),
