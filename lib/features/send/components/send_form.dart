@@ -141,25 +141,20 @@ class SendForm extends BaseComponent {
     Color color = Colors.white;
 
     if (isWeb) {
+      final selectedAccount = ref.watch(webSelectedAccountProvider);
+      print(selectedAccount?.balance);
+
+      balance = selectedAccount?.balance ?? 0.0;
+      lockedBalance = selectedAccount?.lockedBalance ?? 0.0;
+      totalBalance = selectedAccount?.totalBalance ?? 0.0;
       switch (webAccountType?.type) {
         case WebCurrencyType.btc:
-          balance = ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance)) ?? 0.0;
-          lockedBalance = 0.0;
-          totalBalance = balance;
           color = AppColors.getBtc();
-
           break;
         case WebCurrencyType.vault:
-          balance = ref.watch(webSessionProvider.select((v) => v.raBalance)) ?? 0.0;
-          lockedBalance = ref.watch(webSessionProvider.select((v) => v.raBalanceLocked)) ?? 0.0;
-          totalBalance = ref.watch(webSessionProvider.select((v) => v.raBalanceTotal)) ?? 0.0;
           color = AppColors.getReserve();
           break;
         default:
-          balance = ref.watch(webSessionProvider.select((v) => v.balance)) ?? 0.0;
-          lockedBalance = ref.watch(webSessionProvider.select((v) => v.balanceLocked)) ?? 0.0;
-          totalBalance = ref.watch(webSessionProvider.select((v) => v.balanceTotal)) ?? 0.0;
-
           color = AppColors.getBlue();
       }
     } else {
@@ -301,7 +296,7 @@ class SendForm extends BaseComponent {
                         ],
                       ),
                     ),
-                    !isBtc && (wallet!.lockedBalance == 0 || wallet!.isReserved)
+                    !isBtc
                         ? Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.end,
