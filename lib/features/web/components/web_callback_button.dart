@@ -18,19 +18,19 @@ class WebCallbackButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final keypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
+    final raKeypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
 
-    if (keypair == null) {
+    if (raKeypair == null) {
       return SizedBox.shrink();
     }
 
-    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
-    final toMe = tx.toAddress == address;
-
-    if (tx.isPending || toMe || tx.unlockTime == null) {
+    if (tx.fromAddress != raKeypair.address) {
       return SizedBox.shrink();
     }
 
+    if (tx.isPending || tx.unlockTime == null) {
+      return SizedBox.shrink();
+    }
     final canCallback = tx.unlockTime!.isAfter(DateTime.now());
 
     if (!canCallback) {
@@ -62,7 +62,7 @@ class WebCallbackButton extends BaseComponent {
           return false;
         }
 
-        final nonce = await txService.getNonce(keypair.address);
+        final nonce = await txService.getNonce(raKeypair.address);
         if (nonce == null) {
           Toast.error("Failed to retrieve nonce");
           return false;
@@ -77,7 +77,7 @@ class WebCallbackButton extends BaseComponent {
           amount: 0,
           type: TxType.reserve,
           toAddress: "Reserve_Base",
-          fromAddress: keypair.address,
+          fromAddress: raKeypair.address,
           timestamp: timestamp,
           nonce: nonce,
           data: data,
@@ -95,7 +95,7 @@ class WebCallbackButton extends BaseComponent {
           amount: 0,
           type: TxType.reserve,
           toAddress: "Reserve_Base",
-          fromAddress: keypair.address,
+          fromAddress: raKeypair.address,
           timestamp: timestamp,
           nonce: nonce,
           data: data,
@@ -109,7 +109,7 @@ class WebCallbackButton extends BaseComponent {
           return false;
         }
 
-        final signature = await RawTransaction.getSignature(message: hash, privateKey: keypair.private, publicKey: keypair.public);
+        final signature = await RawTransaction.getSignature(message: hash, privateKey: raKeypair.private, publicKey: raKeypair.public);
         if (signature == null) {
           Toast.error("Signature generation failed.");
           return false;
@@ -117,7 +117,7 @@ class WebCallbackButton extends BaseComponent {
 
         final isValid = await txService.validateSignature(
           hash,
-          keypair.address,
+          raKeypair.address,
           signature,
         );
 
@@ -130,7 +130,7 @@ class WebCallbackButton extends BaseComponent {
           amount: 0,
           type: TxType.reserve,
           toAddress: "Reserve_Base",
-          fromAddress: keypair.address,
+          fromAddress: raKeypair.address,
           timestamp: timestamp,
           nonce: nonce,
           data: data,
