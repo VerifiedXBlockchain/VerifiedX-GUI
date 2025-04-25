@@ -714,7 +714,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         final confirmed = await ConfirmDialog.show(
           title: "Valid Transaction",
           body:
-              "This transaction is valid and is ready to send.\nAre you sure you want to proceed?\n\nTo: $address\n\nAmount: $amountDouble VFX${txFee != null ? '\nTX Fee: $txFee VFX\nTotal: ${amountDouble + txFee} RBX' : ''}",
+              "This transaction is valid and is ready to send.\nAre you sure you want to proceed?\n\nTo: $address\n\nAmount: $amountDouble VFX${txFee != null ? '\nTX Fee: $txFee VFX\nTotal: ${amountDouble + txFee} VFX' : ''}",
           confirmText: "Send",
           cancelText: "Cancel",
         );

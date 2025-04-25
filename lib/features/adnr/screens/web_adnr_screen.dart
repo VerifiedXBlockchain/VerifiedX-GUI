@@ -268,7 +268,7 @@ class _VfxDomain extends BaseComponent {
                               final confirmed = await ConfirmDialog.show(
                                 title: "Valid Transaction",
                                 body:
-                                    "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} RBX",
+                                    "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
                                 confirmText: "Send",
                                 cancelText: "Cancel",
                               );
@@ -340,7 +340,7 @@ class _VfxDomain extends BaseComponent {
                           final confirmed = await ConfirmDialog.show(
                             title: "Valid Transaction",
                             body:
-                                "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} RBX",
+                                "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
                             confirmText: "Send",
                             cancelText: "Cancel",
                           );

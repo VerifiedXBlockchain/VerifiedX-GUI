@@ -1,12 +1,10 @@
-
-
 let moonPay;
-
 
 var scriptLoadingStatus = {
     isLoading: false,
     isLoaded: false
 };
+
 async function loadMoonPay(version = "v1") {
     return new Promise((resolve, reject) => {
         const scriptSrc = `https://static.moonpay.com/web-sdk/${version}/moonpay-web-sdk.min.js`;
@@ -50,12 +48,11 @@ async function loadMoonPay(version = "v1") {
 
 const initMoonPay = async () => {
 
-
     moonPay = await loadMoonPay();
 
     const PUBLIC_KEYS = {
         'sandbox': 'pk_test_jV5Sx41ah71d30jfIoXvWq3QLlPBilV',
-        'production': 'pk_live_w80iBmizF5yrhtqpwxyPNG6e4jhTw9BS'
+        'production': 'pk_live_ITSKGCf8pIJnaiQme4AAQ6NbqdRQt0c'
     }
 
     const SIGNATURE_SERVICE_BASE_URLS = {
@@ -89,7 +86,6 @@ const initMoonPay = async () => {
 
         const urlForSignature = moonPaySdk.generateUrlForSigning();
 
-
         const signatureResponse = await fetch(`${SIGNATURE_SERVICE_BASE_URLS[environment]}/payment/sign-url-for-moonpay/`, {
             method: 'POST',
             body: JSON.stringify({ 'url_for_signature': urlForSignature })
@@ -111,7 +107,6 @@ const initMoonPay = async () => {
             window.open(signatureResult.url);
 
         }
-
 
     }
 
@@ -140,7 +135,6 @@ const initMoonPay = async () => {
 
         const urlForSignature = moonPaySdk.generateUrlForSigning();
 
-
         const signatureResponse = await fetch(`${SIGNATURE_SERVICE_BASE_URLS[environment]}/payment/sign-url-for-moonpay/`, {
             method: 'POST',
             body: JSON.stringify({ 'url_for_signature': urlForSignature })
@@ -163,12 +157,9 @@ const initMoonPay = async () => {
 
         }
 
-
     }
 
 }
-
-
 
 
 initMoonPay();

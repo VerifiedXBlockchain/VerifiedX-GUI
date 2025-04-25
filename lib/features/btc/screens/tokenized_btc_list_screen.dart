@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/env.dart';
 import 'package:rbx_wallet/features/btc/screens/web_tokenize_btc_onboarding_screen.dart';
 import 'package:rbx_wallet/utils/toast.dart';
 import '../../../core/app_constants.dart';
@@ -89,33 +90,34 @@ class TokenizeBtcListScreen extends BaseScreen {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: AppButton(
-                  label: "Bulk vBTC Transfer",
-                  onPressed: () {
-                    final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
-                    final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
+              if (Env.isTestNet)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: AppButton(
+                    label: "Bulk vBTC Transfer",
+                    onPressed: () {
+                      final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
+                      final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
 
-                    if (!kIsWeb && tokens.isEmpty) {
-                      Toast.error("No vBTC tokens with a balance");
-                      return;
-                    }
-                    if (kIsWeb && webTokens.isEmpty) {
-                      Toast.error("No vBTC tokens with a balance");
-                      return;
-                    }
+                      if (!kIsWeb && tokens.isEmpty) {
+                        Toast.error("No vBTC tokens with a balance");
+                        return;
+                      }
+                      if (kIsWeb && webTokens.isEmpty) {
+                        Toast.error("No vBTC tokens with a balance");
+                        return;
+                      }
 
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => BulkVbtcTransferScreen(),
-                      ),
-                    );
-                  },
-                  variant: AppColorVariant.Btc,
-                  type: AppButtonType.Elevated,
-                ),
-              )
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BulkVbtcTransferScreen(),
+                        ),
+                      );
+                    },
+                    variant: AppColorVariant.Btc,
+                    type: AppButtonType.Elevated,
+                  ),
+                )
             ],
           ),
         AppCard(
