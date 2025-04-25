@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/transactions/providers/web_transaction_list_provider.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
@@ -11,6 +13,7 @@ import '../../reserve/providers/pending_callback_provider.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../utils/raw_transaction.dart';
 import '../../../utils/toast.dart';
+import 'package:collection/collection.dart';
 
 class WebCallbackButton extends BaseComponent {
   final WebTransaction tx;
@@ -35,6 +38,16 @@ class WebCallbackButton extends BaseComponent {
 
     if (!canCallback) {
       return SizedBox.shrink();
+    }
+
+    final alreadyCalledBack =
+        ref.watch(webTransactionListProvider(raKeypair.address)).transactions.firstWhereOrNull((t) => t.callbackDetails?.hash == tx.hash) != null;
+
+    if (alreadyCalledBack) {
+      return Text(
+        "Called Back".toUpperCase(),
+        style: TextStyle(color: Theme.of(context).colorScheme.warning),
+      );
     }
 
     return AppButton(
