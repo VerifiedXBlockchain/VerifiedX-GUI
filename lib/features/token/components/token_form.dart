@@ -83,6 +83,17 @@ class TokenForm extends BaseComponent {
               textCapitalization: TextCapitalization.characters,
               maxLength: TOKEN_TICKER_MAX_LENGTH,
             ),
+            TextFormField(
+              controller: provider.descriptionController,
+              decoration: InputDecoration(
+                label: Text(
+                  "Description (Optional):",
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+              minLines: 3,
+              maxLines: 6,
+            ),
             SizedBox(
               height: 16,
             ),

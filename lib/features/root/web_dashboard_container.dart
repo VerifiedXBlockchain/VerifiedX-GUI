@@ -727,6 +727,15 @@ class WebAccountInfoBtc extends BaseComponent {
             label: "Get\nBTC",
             prettyIconType: PrettyIconType.topCards,
           ),
+          AppVerticalIconButton(
+            onPressed: () {
+              AccountUtils.sellCoin(context, ref, VfxOrBtcOption.btc);
+            },
+            icon: FontAwesomeIcons.coins,
+            iconScale: 0.7,
+            label: "Off Ramp\nBTC",
+            prettyIconType: PrettyIconType.bitcoin,
+          ),
         ]);
   }
 }

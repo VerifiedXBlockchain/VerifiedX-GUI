@@ -13103,7 +13103,7 @@
               Object.defineProperty(exports, "__esModule", { value: true });
               exports.getEccLib = exports.initEccLib = void 0;
               var _ECCLIB_CACHE = {};
-              function initEccLib(eccLib) {
+              function initEccLib2(eccLib) {
                 if (!eccLib) {
                   _ECCLIB_CACHE.eccLib = eccLib;
                 } else if (eccLib !== _ECCLIB_CACHE.eccLib) {
@@ -13111,7 +13111,7 @@
                   _ECCLIB_CACHE.eccLib = eccLib;
                 }
               }
-              exports.initEccLib = initEccLib;
+              exports.initEccLib = initEccLib2;
               function getEccLib() {
                 if (!_ECCLIB_CACHE.eccLib)
                   throw new Error(
@@ -45595,8 +45595,21 @@
           var regtestUtils = new import_regtest_client.RegtestUtils({ APIPASS, APIURL });
           var ECPair = (0, import_ecpair.ECPairFactory)(import_secp256k1.default);
           var bip32 = (0, import_bip32.BIP32Factory)(import_secp256k1.default);
+          bitcoin.initEccLib(import_secp256k1.default);
           var publicKeyToAddress = (publicKey, network) => {
-            return bitcoin.payments.p2wpkh({ pubkey: publicKey, network }).address;
+            const p2pkh = bitcoin.payments.p2pkh({ pubkey: publicKey, network }).address;
+            const p2sh = bitcoin.payments.p2sh({
+              redeem: bitcoin.payments.p2wpkh({ pubkey: publicKey, network }),
+              network
+            }).address;
+            const bech32 = bitcoin.payments.p2wpkh({ pubkey: publicKey, network }).address;
+            const bech32m = bitcoin.payments.p2tr({ pubkey: publicKey.length === 33 ? publicKey.slice(1) : publicKey, network }).address;
+            return {
+              p2pkh,
+              p2sh,
+              bech32,
+              bech32m
+            };
           };
           var wifToPrivateKey = (wif, network) => {
             return ECPair.fromWIF(wif, network).privateKey;
@@ -45623,10 +45636,11 @@
               this.network = isTestnet ? TESTNET : MAINNET;
             }
             buildOutput(keyPair, mnemonic = null) {
-              const address2 = publicKeyToAddress(keyPair.publicKey, this.network);
+              const addresses = publicKeyToAddress(keyPair.publicKey, this.network);
               const privateKey = keyPair.privateKey?.toString("hex");
               return {
-                address: address2,
+                address: addresses.bech32,
+                addresses,
                 wif: keyPair.toWIF(),
                 privateKey,
                 publicKey: keyPair.publicKey.toString("hex"),
@@ -45639,6 +45653,11 @@
             }
             keypairFromWif(wif) {
               const keyPair = ECPair2.fromWIF(wif, this.network);
+              return this.buildOutput(keyPair);
+            }
+            keypairFromPrivateKey(privateKeyString) {
+              const privateKeyBuffer = Buffer.from(privateKeyString, "hex");
+              const keyPair = ECPair2.fromPrivateKey(privateKeyBuffer, { network: this.network });
               return this.buildOutput(keyPair);
             }
             keypairFromMnemonic(mnemonic, index = 0) {

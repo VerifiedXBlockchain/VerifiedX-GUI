@@ -214,6 +214,13 @@ class Transaction with _$Transaction {
           if (function == "Transfer()") {
             return "vBTC Token Ownership Transfer";
           }
+
+          if (function == "TransferCoinMulti()") {
+            if (amount != null) {
+              return "vBTC Bulk Transfer ($amount vBTC)";
+            }
+            return "vBTC Bulk Transfer";
+          }
         }
         return "Tokenization TX";
 

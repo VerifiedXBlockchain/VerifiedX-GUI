@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/env.dart';
 import 'package:rbx_wallet/features/btc/screens/web_tokenize_btc_onboarding_screen.dart';
+import 'package:rbx_wallet/utils/toast.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/breakpoints.dart';
@@ -15,6 +17,7 @@ import '../../web/components/web_mobile_drawer_button.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/tokenized_btc_onboard_provider.dart';
 
+import 'bulk_vbtc_transfer_screen.dart';
 import 'tokenize_btc_screen.dart';
 import 'tokenized_btc_detail_screen.dart';
 
@@ -56,27 +59,67 @@ class TokenizeBtcListScreen extends BaseScreen {
     return Column(
       children: [
         if (!isMobile)
-          Text(
-            "Tokenized Bitcoin (vBTC)",
-            style: TextStyle(
-              fontFamily: "Mukta",
-              fontSize: 20,
-              fontWeight: FontWeight.w300,
-              color: Colors.white,
-              letterSpacing: 1,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Tokenized Bitcoin (vBTC)",
+                    style: TextStyle(
+                      fontFamily: "Mukta",
+                      fontSize: 20,
+                      fontWeight: FontWeight.w300,
+                      color: Colors.white,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      "1 vBTC = 1 BTC",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.9),
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              if (Env.isTestNet)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: AppButton(
+                    label: "Bulk vBTC Transfer",
+                    onPressed: () {
+                      final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
+                      final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
+
+                      if (!kIsWeb && tokens.isEmpty) {
+                        Toast.error("No vBTC tokens with a balance");
+                        return;
+                      }
+                      if (kIsWeb && webTokens.isEmpty) {
+                        Toast.error("No vBTC tokens with a balance");
+                        return;
+                      }
+
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BulkVbtcTransferScreen(),
+                        ),
+                      );
+                    },
+                    variant: AppColorVariant.Btc,
+                    type: AppButtonType.Elevated,
+                  ),
+                )
+            ],
           ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            "1 vBTC = 1 BTC",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white.withOpacity(0.9),
-              letterSpacing: 1,
-            ),
-          ),
-        ),
         AppCard(
           fullWidth: true,
           child: Column(
@@ -226,22 +269,24 @@ class TokenizeBtcListScreen extends BaseScreen {
 
           final tokens = ref.watch(tokenizedBitcoinListProvider);
 
+          final groupedTokens = groupTokens(tokens);
+
           return Expanded(
-            child: tokens.isEmpty
+            child: groupedTokens.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text("No Tokenized Bitcoin found in account."),
                   )
                 : ListView.builder(
-                    itemCount: tokens.length,
+                    itemCount: groupedTokens.length,
                     itemBuilder: (context, index) {
-                      final token = tokens[index];
+                      final entry = groupedTokens[index];
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: AppCard(
                           padding: 0,
-                          child: TokenizedBtcListTile(token: token),
+                          child: GroupedTokenizedBtcListTile(entry: entry),
                         ),
                       );
                     },
@@ -342,4 +387,192 @@ class TokenizedBtcListTile extends StatelessWidget {
       ],
     );
   }
+}
+
+class GroupedTokenizedBtcListTile extends StatelessWidget {
+  final CombinedVbtcToken entry;
+
+  const GroupedTokenizedBtcListTile({
+    super.key,
+    required this.entry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final token = entry.token;
+
+    return InkWell(
+      onTap: entry.addresses.length == 1
+          ? () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                ),
+              );
+            }
+          : null,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+              clipBehavior: Clip.antiAlias,
+              child: BtcTokenImage(
+                nftId: token.smartContractUid,
+                size: 100,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            token.tokenName,
+                            style: TextStyle(
+                              fontSize: 22,
+                            ),
+                          ),
+                          if (entry.addresses.length == 1)
+                            Text(
+                              token.rbxAddress,
+                              style: TextStyle(
+                                color: token.rbxAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white70,
+                                fontSize: 16,
+                              ),
+                            ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (entry.addresses.length > 1)
+                            Text(
+                              "My Total Balance:  ",
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                          Text(
+                            "${entry.addresses.fold<double>(0.0, (previousValue, element) => previousValue + element.balance)} vBTC",
+                            style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  if (entry.addresses.length > 1) ...[
+                    Divider(),
+                    ...entry.addresses.map((item) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => TokenizedBtcDetailScreen(tokenId: item.token.id),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.02),
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${item.balance} vBTC  ",
+                                        style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+                                      ),
+                                      Text(
+                                        item.address,
+                                        style: TextStyle(color: Colors.white70),
+                                      ),
+                                    ],
+                                  ),
+                                  AppButton(
+                                    label: "Details",
+                                    variant: AppColorVariant.Btc,
+                                    icon: Icons.chevron_right,
+                                    type: AppButtonType.Text,
+                                    underlined: true,
+                                    iconTrails: true,
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (_) => TokenizedBtcDetailScreen(tokenId: item.token.id),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    })
+                  ]
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CombinedVbtcTokenAddress {
+  final String address;
+  final double balance;
+  final TokenizedBitcoin token;
+  CombinedVbtcTokenAddress({
+    required this.address,
+    required this.balance,
+    required this.token,
+  });
+}
+
+class CombinedVbtcToken {
+  final TokenizedBitcoin token;
+  final List<CombinedVbtcTokenAddress> addresses;
+
+  CombinedVbtcToken({required this.token, required this.addresses});
+}
+
+List<CombinedVbtcToken> groupTokens(List<TokenizedBitcoin> input) {
+  final Map<String, CombinedVbtcToken> grouped = {};
+
+  for (final item in input) {
+    final scId = item.smartContractUid;
+
+    final itemToAdd = CombinedVbtcTokenAddress(address: item.rbxAddress, balance: item.myBalance, token: item);
+    if (grouped.containsKey(scId)) {
+      grouped[scId]!.addresses.add(itemToAdd);
+    } else {
+      grouped[scId] = CombinedVbtcToken(
+        token: item,
+        addresses: [itemToAdd],
+      );
+    }
+  }
+
+  return grouped.values.toList();
 }

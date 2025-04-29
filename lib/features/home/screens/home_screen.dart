@@ -1,6 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/moonpay/services/moonpay_service.dart';
+import 'package:rbx_wallet/features/payment/components/payment_disclaimer.dart';
+import 'package:rbx_wallet/features/wallet/utils.dart';
+import '../../../core/base_component.dart';
+import '../../../core/breakpoints.dart';
+import '../../../core/theme/components.dart';
 import '../components/home_buttons.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -94,7 +100,7 @@ class HomeScreen extends BaseScreen {
   }
 }
 
-class GetVfxButton extends StatelessWidget {
+class GetVfxButton extends BaseComponent {
   final String address;
   final bool vfxOnly;
 
@@ -105,83 +111,10 @@ class GetVfxButton extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return AppButton(
       onPressed: () async {
-        String? type = vfxOnly ? 'vfx' : null;
-
-        if (!vfxOnly) {
-          type = await showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return ModalContainer(
-                  withDecor: false,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(boxShadow: glowingBox),
-                      child: Card(
-                        color: Colors.black,
-                        child: ListTile(
-                          title: Text("Get \$VFX Now"),
-                          onTap: () {
-                            Navigator.of(context).pop("vfx");
-                          },
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(boxShadow: glowingBoxBtc),
-                      child: Card(
-                        color: Colors.black,
-                        child: ListTile(
-                          title: Text("Get \$BTC Now"),
-                          onTap: () {
-                            Navigator.of(context).pop("btc");
-                          },
-                        ),
-                      ),
-                    )
-                  ],
-                );
-              });
-        }
-
-        if (type == "vfx") {
-          if (Env.isTestNet) {
-            launchUrlString("https://testnet.rbx.network/faucet");
-            return;
-          }
-
-          final agreed = await PaymentTermsDialog.show(context);
-
-          if (agreed != true) {
-            return;
-          }
-
-          final url = paymentUrl(amount: 5000, walletAddress: address, currency: "VFX");
-          if (url != null) {
-            launchUrl(Uri.parse(url));
-          }
-        } else if (type == "btc") {
-          if (Env.btcIsTestNet) {
-            launchUrlString("https://mempool.space/testnet4/faucet");
-            return;
-          }
-
-          final agreed = await PaymentTermsDialog.show(context);
-
-          if (agreed != true) {
-            return;
-          }
-
-          final url = paymentUrl(amount: 5000, walletAddress: address, currency: "BTC");
-          if (url != null) {
-            launchUrl(Uri.parse(url));
-          }
-        }
+        AccountUtils.getCoin(context, ref, vfxOnly ? VfxOrBtcOption.vfx : null);
       },
       label: vfxOnly ? "Get \$VFX" : "Get \$VFX/\$BTC Now",
       variant: AppColorVariant.Success,

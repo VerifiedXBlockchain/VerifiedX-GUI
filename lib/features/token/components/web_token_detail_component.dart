@@ -148,77 +148,103 @@ class _TokenInfo extends StatelessWidget {
     final isOwnedByRA = token.ownerAddress.startsWith("xRBX");
 
     return AppCard(
-      child: Row(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TokenDetailRow(
-                  label: "Smart Contract UID",
-                  value: token.smartContractId,
-                  copyable: true,
-                ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TokenDetailRow(
+                      label: "Smart Contract UID",
+                      value: token.smartContractId,
+                      copyable: true,
+                    ),
 
-                TokenDetailRow(
-                  label: "Token Name",
-                  value: token.name,
-                  copyable: true,
-                ),
-                if (!token.canMint)
-                  TokenDetailRow(
-                    label: 'Fixed Supply',
-                    value: "${token.initialSupply}",
-                  ),
-                // if (token.currentSupply > 0)
+                    TokenDetailRow(
+                      label: "Token Name",
+                      value: token.name,
+                      copyable: true,
+                    ),
+                    if (!token.canMint)
+                      TokenDetailRow(
+                        label: 'Fixed Supply',
+                        value: "${token.initialSupply}",
+                      ),
+                    // if (token.currentSupply > 0)
 
-                TokenDetailRow(
-                  label: "Lifetime Cap",
-                  value: token.canMint ? 'Infinite' : "${token.initialSupply}",
-                ),
+                    TokenDetailRow(
+                      label: "Lifetime Cap",
+                      value: token.canMint ? 'Infinite' : "${token.initialSupply}",
+                    ),
 
-                TokenDetailRow(
-                  label: "Mintable",
-                  value: token.canMint ? "YES" : "NO",
-                  dividerBelow: false,
+                    TokenDetailRow(
+                      label: "Mintable",
+                      value: token.canMint ? "YES" : "NO",
+                      dividerBelow: false,
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TokenDetailRow(
+                      label: "Owner",
+                      value: token.ownerAddress,
+                      copyable: true,
+                      showReserveColor: isOwnedByRA,
+                    ),
+                    TokenDetailRow(
+                      label: "Token Ticker",
+                      value: token.ticker,
+                      copyable: true,
+                    ),
+                    TokenDetailRow(label: "Circulating Supply", value: "${token.circulatingSupply}"),
+                    if (!token.canMint && token.circulatingSupply < token.initialSupply)
+                      TokenDetailRow(
+                        label: "Burned",
+                        value: "${token.initialSupply - token.circulatingSupply}",
+                      ),
+                    TokenDetailRow(
+                      label: "Burnable",
+                      value: token.canBurn ? "YES" : "NO",
+                    ),
+                    TokenDetailRow(
+                      label: "Voting",
+                      value: token.canVote ? "YES" : "NO",
+                      dividerBelow: false,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TokenDetailRow(
-                  label: "Owner",
-                  value: token.ownerAddress,
-                  copyable: true,
-                  showReserveColor: isOwnedByRA,
-                ),
-                TokenDetailRow(
-                  label: "Token Ticker",
-                  value: token.ticker,
-                  copyable: true,
-                ),
-                TokenDetailRow(label: "Circulating Supply", value: "${token.circulatingSupply}"),
-                if (!token.canMint && token.circulatingSupply < token.initialSupply)
-                  TokenDetailRow(
-                    label: "Burned",
-                    value: "${token.initialSupply - token.circulatingSupply}",
-                  ),
-                TokenDetailRow(
-                  label: "Burnable",
-                  value: token.canBurn ? "YES" : "NO",
-                ),
-                TokenDetailRow(
-                  label: "Voting",
-                  value: token.canVote ? "YES" : "NO",
-                  dividerBelow: false,
-                ),
-              ],
+          if (token.description != null && token.description != token.ticker) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Divider(),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                "Description:",
+                style: TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w100),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(token.description!),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+          ],
         ],
       ),
     );

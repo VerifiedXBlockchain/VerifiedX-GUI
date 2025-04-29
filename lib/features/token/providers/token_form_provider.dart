@@ -32,12 +32,14 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
 
   late final TextEditingController nameController;
   late final TextEditingController tickerController;
+  late final TextEditingController descriptionController;
   late final TextEditingController supplyController;
   late final TextEditingController imageUrlController;
 
   TokenFormProvider(this.ref, TokenScFeature model) : super(model) {
     nameController = TextEditingController(text: model.name);
     tickerController = TextEditingController(text: model.ticker);
+    descriptionController = TextEditingController(text: "");
     supplyController = TextEditingController(text: model.supply == 0 ? '0' : model.supply.toString());
     imageUrlController = TextEditingController(text: model.imageUrl ?? '');
   }
@@ -50,6 +52,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     state = model;
     nameController.text = model.name;
     tickerController.text = model.ticker;
+    descriptionController.text = "";
     supplyController.text = model.supply == 0 ? '0' : model.supply.toString();
     imageUrlController.text = model.imageUrl ?? '';
   }
@@ -111,6 +114,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
       ticker: tickerController.text.toUpperCase(),
       imageUrl: imageUrlController.text,
       supply: state.mintable || supply == 0 ? 0 : supply,
+      description: descriptionController.text.isNotEmpty ? descriptionController.text : nameController.text,
     );
 
     final bytes = base64.decode(state.imageBase64!);
@@ -132,7 +136,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     final sc = SmartContract(
       owner: currentWallet,
       name: token.name,
-      description: token.ticker,
+      description: token.description,
       token: token,
       primaryAsset: tempAsset,
       minterName: currentWallet.address,
@@ -176,6 +180,8 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
           return null;
         },
         labelText: "Supply",
+        initialValue: "0",
+        cancelText: "No Initial Issuance",
         inputFormatters: [
           FilteringTextInputFormatter.allow(
             RegExp("[0-9.]"),
@@ -224,6 +230,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
       ticker: tickerController.text.toUpperCase(),
       imageUrl: imageUrlController.text,
       supply: state.mintable || supply == 0 ? 0 : supply,
+      description: descriptionController.text.isNotEmpty ? descriptionController.text : tickerController.text,
     );
 
     final sc = SmartContract(
@@ -232,7 +239,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
         balance: ref.read(webSessionProvider.select((value) => value.balance ?? 0)),
       ),
       name: token.name,
-      description: token.ticker,
+      description: token.description,
       token: token,
       primaryAsset: token.webAsset,
       minterName: keypair.address,
@@ -247,6 +254,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
           return null;
         },
         labelText: "Supply",
+        cancelText: "No Initial Issuance",
         initialValue: "0",
         inputFormatters: [
           FilteringTextInputFormatter.allow(

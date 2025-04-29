@@ -31,6 +31,7 @@ class TokenScFeature with _$TokenScFeature {
     @JsonKey(name: "TokenVoting") @Default(false) bool voting,
     @JsonKey(name: "TokenImageURL") String? imageUrl,
     @JsonKey(name: "TokenImageBase") String? imageBase64,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Default("") String description,
     @JsonKey(includeFromJson: false, includeToJson: false) Asset? webAsset,
   }) = _TokenScFeature;
 
@@ -40,6 +41,7 @@ class TokenScFeature with _$TokenScFeature {
     return TokenScFeature(
       name: "",
       ticker: "",
+      description: "",
       decimalPlaces: TOKEN_DEFAULT_DECIMAL_PLACES,
       supply: 0,
       burnable: true,
@@ -62,6 +64,7 @@ class TokenScFeature with _$TokenScFeature {
     return TokenScFeature(
       name: details.name,
       ticker: details.ticker,
+      description: nft.description,
       decimalPlaces: details.decimalPlaces,
       supply: details.supply,
       burnable: details.burnable,

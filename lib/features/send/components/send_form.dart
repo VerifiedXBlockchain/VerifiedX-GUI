@@ -135,22 +135,26 @@ class SendForm extends BaseComponent {
     final isMobile = BreakPoints.useMobileLayout(context);
     final btcColor = Theme.of(context).colorScheme.btcOrange;
 
-    double? balance;
+    double balance = 0.0;
+    double lockedBalance = 0.0;
+    double totalBalance = 0.0;
     Color color = Colors.white;
 
     if (isWeb) {
+      final selectedAccount = ref.watch(webSelectedAccountProvider);
+      print(selectedAccount?.balance);
+
+      balance = selectedAccount?.balance ?? 0.0;
+      lockedBalance = selectedAccount?.lockedBalance ?? 0.0;
+      totalBalance = selectedAccount?.totalBalance ?? 0.0;
       switch (webAccountType?.type) {
         case WebCurrencyType.btc:
-          balance = ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance)) ?? 0.0;
           color = AppColors.getBtc();
-
           break;
         case WebCurrencyType.vault:
-          balance = ref.watch(webSessionProvider.select((v) => v.raBalance)) ?? 0.0;
           color = AppColors.getReserve();
           break;
         default:
-          balance = ref.watch(webSessionProvider.select((v) => v.balance));
           color = AppColors.getBlue();
       }
     } else {
@@ -159,6 +163,8 @@ class SendForm extends BaseComponent {
         color = AppColors.getBtc();
       }
       balance = wallet?.balance ?? 0;
+      totalBalance = wallet?.totalBalance ?? 0.0;
+      lockedBalance = wallet?.lockedBalance ?? 0.0;
       color = wallet?.isReserved == true ? Colors.deepPurple.shade200 : Colors.white;
     }
 
@@ -290,32 +296,32 @@ class SendForm extends BaseComponent {
                         ],
                       ),
                     ),
-                    !isBtc && (wallet!.lockedBalance == 0 || wallet!.isReserved)
+                    !isBtc
                         ? Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              if (wallet!.lockedBalance == 0.0)
+                              if (lockedBalance == 0.0)
                                 AppBadge(
                                   label: "$balance VFX",
                                   variant: AppColorVariant.Light,
                                 ),
-                              if (wallet!.lockedBalance > 0) ...[
+                              if (lockedBalance > 0) ...[
                                 BalanceIndicator(
                                   label: "Available",
-                                  value: wallet!.availableBalance,
+                                  value: balance,
                                   bgColor: wallet!.isReserved ? Colors.deepPurple.shade400 : Colors.white,
                                   fgColor: wallet!.isReserved ? Colors.white : Colors.black,
                                 ),
                                 BalanceIndicator(
                                   label: "Locked",
-                                  value: wallet!.lockedBalance,
+                                  value: lockedBalance,
                                   bgColor: Colors.red.shade700,
                                   fgColor: Colors.white,
                                 ),
                                 BalanceIndicator(
                                   label: "Total",
-                                  value: wallet!.balance,
+                                  value: totalBalance,
                                   bgColor: Colors.green.shade700,
                                   fgColor: Colors.white,
                                 ),

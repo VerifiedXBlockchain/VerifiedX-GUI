@@ -105,7 +105,7 @@ String btcGeneratedPasswordFromPrivateKey(String privateKey) {
   return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
 }
 
-Future<void> handleImportWithBtcWifKey(
+Future<void> handleImportWithBtcPrivateKey(
   BuildContext context,
   WidgetRef ref, {
   bool showRememberMe = true,
@@ -113,23 +113,40 @@ Future<void> handleImportWithBtcWifKey(
   await InfoDialog.show(
     title: "Warning",
     body:
-        "Although if you login with a BTC WIF key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.",
+        "Although if you login with a BTC Private key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.",
+    closeText: "Okay",
   );
 
-  final wifKey = await PromptModal.show(
-    title: "Your BTC WIF Key",
-    validator: (v) => formValidatorNotEmpty(v, "WIF Key"),
-    labelText: "WIF Key",
-  );
+  final BtcPrivateKeyImportModalResult? result = await showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return BtcPrivateKeyImportModal();
+      });
 
-  if (wifKey == null) return;
+  if (result == null) return;
+
+  final privateKey = result.privateKey;
+  final addressType = result.addressType;
+
   if (showRememberMe) {
     await handleRememberMe(context, ref);
   }
 
-  final btcKeypair = await BtcWebService().keypairFromWif(wifKey);
-  final firstSixteen = wifKey.substring(0, 16);
-  final lastSixteen = wifKey.substring(wifKey.length - 16);
+  late final BtcWebAccount? btcKeypair;
+
+  if (privateKey.length == 64) {
+    //Private Key
+    btcKeypair = await BtcWebService().keypairFromPrivateKey(privateKey, addressType);
+  } else if (privateKey.length == 52) {
+    //WIF
+    btcKeypair = await BtcWebService().keypairFromWif(privateKey, addressType);
+  } else {
+    Toast.error("Not a valid Private Key or WIF Key. Should be 64 or 52 characters");
+    return;
+  }
+
+  final firstSixteen = privateKey.substring(0, 16);
+  final lastSixteen = privateKey.substring(privateKey.length - 16);
 
   final seed = "$firstSixteen$lastSixteen";
 
@@ -166,6 +183,137 @@ Future<void> handleImportWithBtcWifKey(
   }
 
   await login(context, ref, keypair, reserveKeyPair, btcKeypair);
+}
+
+class BtcPrivateKeyImportModalResult {
+  final String privateKey;
+  final String addressType;
+
+  BtcPrivateKeyImportModalResult({
+    required this.privateKey,
+    required this.addressType,
+  });
+}
+
+enum WebBtcAddressType {
+  p2pkh("p2pkh", "P2PKH (Legacy)"),
+  p2sh("p2sh", "P2SH (Nested SegWit)"),
+  bech32("bech32", "Bech32 (Native SegWit - P2WPKH)"),
+  bech32m("bech32m", "Bech32m (Taproot - P2TR)"),
+  ;
+
+  final String value;
+  final String label;
+
+  const WebBtcAddressType(this.value, this.label);
+}
+
+class BtcPrivateKeyImportModal extends StatefulWidget {
+  const BtcPrivateKeyImportModal({
+    super.key,
+  });
+
+  @override
+  State<BtcPrivateKeyImportModal> createState() => _BtcPrivateKeyImportModalState();
+}
+
+class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
+  final TextEditingController _privateKeyController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  WebBtcAddressType? _selectedAddressType = WebBtcAddressType.bech32;
+
+  @override
+  Widget build(BuildContext context) {
+    return ModalContainer(
+      title: "Import BTC Private Key or WIF Key",
+      children: [
+        const Text('Enter your BTC Private Key or WIF Key:'),
+        TextField(
+          controller: _privateKeyController,
+          decoration: const InputDecoration(
+            hintText: 'Enter your private key',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        const SizedBox(height: 20),
+        const Text('Select your address type:'),
+        DropdownButtonFormField<WebBtcAddressType?>(
+          value: _selectedAddressType,
+          items: [
+            ...WebBtcAddressType.values.map((type) {
+              return DropdownMenuItem(
+                value: type,
+                child: Text(type.label),
+              );
+            }).toList(),
+            DropdownMenuItem(
+              value: null,
+              child: Text("I don't know"),
+            )
+          ],
+          onChanged: (value) {
+            setState(() {
+              _selectedAddressType = value;
+            });
+          },
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+          ),
+        ),
+        if (_selectedAddressType == null) ...[
+          const SizedBox(height: 20),
+          const Text('Paste your BTC address:'),
+          TextField(
+            controller: _addressController,
+            decoration: const InputDecoration(
+              hintText: 'Enter your BTC address',
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ],
+        Divider(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AppButton(
+              label: "Cancel",
+              variant: AppColorVariant.Light,
+              onPressed: () {
+                Navigator.of(context).pop(null);
+              },
+            ),
+            AppButton(
+              label: "Import",
+              variant: AppColorVariant.Btc,
+              onPressed: () {
+                if (_selectedAddressType == null) {
+                  final address = _addressController.text;
+                  if (address.startsWith("1")) {
+                    _selectedAddressType = WebBtcAddressType.p2pkh;
+                  } else if (address.startsWith('3')) {
+                    _selectedAddressType = WebBtcAddressType.p2sh;
+                  } else if (address.startsWith('bc1q')) {
+                    _selectedAddressType = WebBtcAddressType.bech32;
+                  } else if (address.startsWith('bc1p')) {
+                    _selectedAddressType = WebBtcAddressType.bech32m;
+                  } else {
+                    Toast.error("Invalid BTC Address");
+                    Navigator.of(context).pop(null);
+                    return;
+                  }
+                }
+                final result = BtcPrivateKeyImportModalResult(
+                  addressType: _selectedAddressType!.value,
+                  privateKey: _privateKeyController.text,
+                );
+                Navigator.of(context).pop(result);
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }
 
 Future<void> handleCreateWithEmail(
@@ -518,7 +666,7 @@ Future<void> showKeys(
             ListTile(
               leading: isMobile ? null : const Icon(Icons.security),
               title: TextFormField(
-                initialValue: keypair.privateCorrected,
+                initialValue: keypair.btcWif != null ? keypair.private : keypair.privateCorrected,
                 decoration: InputDecoration(
                   label: Text(
                     "Private Key",
@@ -533,7 +681,7 @@ Future<void> showKeys(
               trailing: IconButton(
                 icon: const Icon(Icons.copy),
                 onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: keypair.privateCorrected));
+                  await Clipboard.setData(ClipboardData(text: keypair.btcWif != null ? keypair.private : keypair.privateCorrected));
                   Toast.message("Private key copied to clipboard");
                 },
               ),
@@ -798,9 +946,9 @@ showWebLoginModal(
                 // await Future.delayed(const Duration(milliseconds: 300));
               }
             : null,
-        handleBtc: allowBtcPrivateKey
+        handleBtcPrivateKey: allowBtcPrivateKey
             ? (context) async {
-                await handleImportWithBtcWifKey(context, ref, showRememberMe: showRememberMe);
+                await handleImportWithBtcPrivateKey(context, ref, showRememberMe: showRememberMe);
                 if (ref.read(webSessionProvider).isAuthenticated) {
                   onSuccess();
                 }

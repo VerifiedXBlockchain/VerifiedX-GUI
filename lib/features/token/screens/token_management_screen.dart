@@ -95,9 +95,6 @@ class _TokenManagementScreenContainerState extends State<TokenManagementScreenCo
   @override
   Widget build(BuildContext context) {
     if (tokenAccount == null || tokenFeature == null || nft == null) {
-      print(tokenAccount);
-      print(tokenFeature);
-      print(nft);
       return CenteredLoader();
     }
 
@@ -408,83 +405,109 @@ class TokenDetailsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final isOwnedByRA = nft.currentOwner.startsWith("xRBX");
 
-    return Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TokenDetailRow(
-                label: "Smart Contract UID",
-                value: tokenAccount.smartContractId,
-                copyable: true,
-              ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TokenDetailRow(
+                    label: "Smart Contract UID",
+                    value: tokenAccount.smartContractId,
+                    copyable: true,
+                  ),
 
-              TokenDetailRow(
-                label: "Token Name",
-                value: token.name,
-                copyable: true,
-              ),
-              if (!token.mintable)
-                TokenDetailRow(
-                  label: 'Fixed Supply',
-                  value: "${(min(token.currentSupply, token.startingSupply))}",
-                ),
-              // if (token.currentSupply > 0)
+                  TokenDetailRow(
+                    label: "Token Name",
+                    value: token.name,
+                    copyable: true,
+                  ),
+                  if (!token.mintable)
+                    TokenDetailRow(
+                      label: 'Fixed Supply',
+                      value: "${(min(token.currentSupply, token.startingSupply))}",
+                    ),
+                  // if (token.currentSupply > 0)
 
-              TokenDetailRow(
-                label: "Lifetime Cap",
-                value: token.mintable ? 'Infinite' : (min(token.currentSupply, token.startingSupply)).toString(),
-              ),
+                  TokenDetailRow(
+                    label: "Lifetime Cap",
+                    value: token.mintable ? 'Infinite' : (min(token.currentSupply, token.startingSupply)).toString(),
+                  ),
 
-              if (nft.tokenDetails != null)
-                TokenDetailRow(
-                  label: "Mintable",
-                  value: nft.tokenDetails!.mintable ? "YES" : "NO",
-                  dividerBelow: false,
-                ),
-            ],
-          ),
+                  if (nft.tokenDetails != null)
+                    TokenDetailRow(
+                      label: "Mintable",
+                      value: nft.tokenDetails!.mintable ? "YES" : "NO",
+                      dividerBelow: false,
+                    ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TokenDetailRow(
+                    label: "Owner",
+                    value: owner,
+                    copyable: true,
+                    showReserveColor: isOwnedByRA,
+                  ),
+                  TokenDetailRow(
+                    label: "Token Ticker",
+                    value: token.ticker,
+                    copyable: true,
+                  ),
+                  TokenDetailRow(
+                    label: "Circulating Supply",
+                    value: token.currentSupply.toString(),
+                  ),
+                  if (!token.mintable && token.currentSupply < token.startingSupply)
+                    TokenDetailRow(
+                      label: "Burned",
+                      value: "${token.startingSupply - token.currentSupply}",
+                    ),
+                  if (nft.tokenDetails != null)
+                    TokenDetailRow(
+                      label: "Burnable",
+                      value: nft.tokenDetails!.burnable ? "YES" : "NO",
+                    ),
+                  if (nft.tokenDetails != null)
+                    TokenDetailRow(
+                      label: "Voting",
+                      value: nft.tokenDetails!.voting ? "YES" : "NO",
+                      dividerBelow: false,
+                    ),
+                ],
+              ),
+            ),
+          ],
         ),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TokenDetailRow(
-                label: "Owner",
-                value: owner,
-                copyable: true,
-                showReserveColor: isOwnedByRA,
-              ),
-              TokenDetailRow(
-                label: "Token Ticker",
-                value: token.ticker,
-                copyable: true,
-              ),
-              TokenDetailRow(
-                label: "Circulating Supply",
-                value: token.currentSupply.toString(),
-              ),
-              if (!token.mintable && token.currentSupply < token.startingSupply)
-                TokenDetailRow(
-                  label: "Burned",
-                  value: "${token.startingSupply - token.currentSupply}",
-                ),
-              if (nft.tokenDetails != null)
-                TokenDetailRow(
-                  label: "Burnable",
-                  value: nft.tokenDetails!.burnable ? "YES" : "NO",
-                ),
-              if (nft.tokenDetails != null)
-                TokenDetailRow(
-                  label: "Voting",
-                  value: nft.tokenDetails!.voting ? "YES" : "NO",
-                  dividerBelow: false,
-                ),
-            ],
+        if (nft.description != nft.tokenDetails?.ticker) ...[
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Divider(),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              "Description:",
+              style: TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w100),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(nft.description),
+          ),
+          SizedBox(
+            height: 8,
+          ),
+        ]
       ],
     );
   }

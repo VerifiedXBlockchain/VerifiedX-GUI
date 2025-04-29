@@ -30,7 +30,12 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
   }
 
   @override
-  Future<BtcWebAccount?> keypairFromWif(String wif) {
+  Future<BtcWebAccount?> keypairFromWif(String wif, String addressType) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<BtcWebAccount?> keypairFromPrivateKey(String privateKey, String addressType) {
     throw UnimplementedError();
   }
 

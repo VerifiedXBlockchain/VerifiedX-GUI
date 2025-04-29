@@ -24,6 +24,7 @@ mixin _$WebFungibleToken {
   String get smartContractId => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get ticker => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   @JsonKey(name: "owner_address")
   String get ownerAddress => throw _privateConstructorUsedError;
   @JsonKey(name: "image_url")
@@ -61,6 +62,7 @@ abstract class $WebFungibleTokenCopyWith<$Res> {
       {@JsonKey(name: "sc_identifier") String smartContractId,
       String name,
       String ticker,
+      String? description,
       @JsonKey(name: "owner_address") String ownerAddress,
       @JsonKey(name: "image_url") String? imageUrl,
       @JsonKey(name: "can_mint") bool canMint,
@@ -89,6 +91,7 @@ class _$WebFungibleTokenCopyWithImpl<$Res, $Val extends WebFungibleToken>
     Object? smartContractId = null,
     Object? name = null,
     Object? ticker = null,
+    Object? description = freezed,
     Object? ownerAddress = null,
     Object? imageUrl = freezed,
     Object? canMint = null,
@@ -113,6 +116,10 @@ class _$WebFungibleTokenCopyWithImpl<$Res, $Val extends WebFungibleToken>
           ? _value.ticker
           : ticker // ignore: cast_nullable_to_non_nullable
               as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       ownerAddress: null == ownerAddress
           ? _value.ownerAddress
           : ownerAddress // ignore: cast_nullable_to_non_nullable
@@ -169,6 +176,7 @@ abstract class _$$_WebFungibleTokenCopyWith<$Res>
       {@JsonKey(name: "sc_identifier") String smartContractId,
       String name,
       String ticker,
+      String? description,
       @JsonKey(name: "owner_address") String ownerAddress,
       @JsonKey(name: "image_url") String? imageUrl,
       @JsonKey(name: "can_mint") bool canMint,
@@ -195,6 +203,7 @@ class __$$_WebFungibleTokenCopyWithImpl<$Res>
     Object? smartContractId = null,
     Object? name = null,
     Object? ticker = null,
+    Object? description = freezed,
     Object? ownerAddress = null,
     Object? imageUrl = freezed,
     Object? canMint = null,
@@ -219,6 +228,10 @@ class __$$_WebFungibleTokenCopyWithImpl<$Res>
           ? _value.ticker
           : ticker // ignore: cast_nullable_to_non_nullable
               as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       ownerAddress: null == ownerAddress
           ? _value.ownerAddress
           : ownerAddress // ignore: cast_nullable_to_non_nullable
@@ -271,6 +284,7 @@ class _$_WebFungibleToken extends _WebFungibleToken {
           required this.smartContractId,
       required this.name,
       required this.ticker,
+      this.description,
       @JsonKey(name: "owner_address")
           required this.ownerAddress,
       @JsonKey(name: "image_url")
@@ -304,6 +318,8 @@ class _$_WebFungibleToken extends _WebFungibleToken {
   final String name;
   @override
   final String ticker;
+  @override
+  final String? description;
   @override
   @JsonKey(name: "owner_address")
   final String ownerAddress;
@@ -343,7 +359,7 @@ class _$_WebFungibleToken extends _WebFungibleToken {
 
   @override
   String toString() {
-    return 'WebFungibleToken(smartContractId: $smartContractId, name: $name, ticker: $ticker, ownerAddress: $ownerAddress, imageUrl: $imageUrl, canMint: $canMint, canBurn: $canBurn, canVote: $canVote, isPaused: $isPaused, circulatingSupply: $circulatingSupply, initialSupply: $initialSupply, bannedAddresses: $bannedAddresses, createdAt: $createdAt)';
+    return 'WebFungibleToken(smartContractId: $smartContractId, name: $name, ticker: $ticker, description: $description, ownerAddress: $ownerAddress, imageUrl: $imageUrl, canMint: $canMint, canBurn: $canBurn, canVote: $canVote, isPaused: $isPaused, circulatingSupply: $circulatingSupply, initialSupply: $initialSupply, bannedAddresses: $bannedAddresses, createdAt: $createdAt)';
   }
 
   @override
@@ -355,6 +371,8 @@ class _$_WebFungibleToken extends _WebFungibleToken {
                 other.smartContractId == smartContractId) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.ticker, ticker) || other.ticker == ticker) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.ownerAddress, ownerAddress) ||
                 other.ownerAddress == ownerAddress) &&
             (identical(other.imageUrl, imageUrl) ||
@@ -381,6 +399,7 @@ class _$_WebFungibleToken extends _WebFungibleToken {
       smartContractId,
       name,
       ticker,
+      description,
       ownerAddress,
       imageUrl,
       canMint,
@@ -412,6 +431,7 @@ abstract class _WebFungibleToken extends WebFungibleToken {
           required final String smartContractId,
       required final String name,
       required final String ticker,
+      final String? description,
       @JsonKey(name: "owner_address")
           required final String ownerAddress,
       @JsonKey(name: "image_url")
@@ -444,6 +464,8 @@ abstract class _WebFungibleToken extends WebFungibleToken {
   String get name;
   @override
   String get ticker;
+  @override
+  String? get description;
   @override
   @JsonKey(name: "owner_address")
   String get ownerAddress;

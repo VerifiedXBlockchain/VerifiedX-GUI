@@ -123,7 +123,9 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
     final webAddress = await ExplorerService().getWebAddress(keypair.address);
 
-    ref.read(webSelectedAccountProvider.notifier).setVfx(keypair, webAddress.balance, webAddress.adnr);
+    ref
+        .read(webSelectedAccountProvider.notifier)
+        .setVfx(keypair, webAddress.balance, webAddress.balanceLocked, webAddress.balanceTotal, webAddress.adnr);
 
     refreshBtcBalanceInfo();
 
@@ -170,7 +172,9 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (account.keypair != null) {
       final webAddress = await ExplorerService().getWebAddress(account.keypair!.address);
 
-      ref.read(webSelectedAccountProvider.notifier).setVfx(account.keypair!, webAddress.balance, webAddress.adnr);
+      ref
+          .read(webSelectedAccountProvider.notifier)
+          .setVfx(account.keypair!, webAddress.balance, webAddress.balanceLocked, webAddress.balanceTotal, webAddress.adnr);
     }
 
     Future.delayed(Duration(milliseconds: 100), () {

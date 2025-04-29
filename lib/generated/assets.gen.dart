@@ -379,9 +379,12 @@ class $AssetsJsGen {
   /// File path: assets/js/keygen.js
   String get keygen => 'assets/js/keygen.js';
 
+  /// File path: assets/js/moonpay.js
+  String get moonpay => 'assets/js/moonpay.js';
+
   /// List of all assets
   List<String> get values =>
-      [btcMainnet, btcTestnet, btc, keygenV2, keygenV3, keygen];
+      [btcMainnet, btcTestnet, btc, keygenV2, keygenV3, keygen, moonpay];
 }
 
 class $AssetsImagesConnectorGen {

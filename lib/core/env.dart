@@ -30,7 +30,7 @@ _Environment _env = kIsWeb
     ? flavorName.isEmpty
         ? _Environment.Release
         : _Environment.values.firstWhere((env) => env.flavor == flavorName)
-    : _Environment.Release;
+    : _Environment.ReleaseTestNet;
 
 class Env {
   static init() async {
@@ -205,7 +205,15 @@ class Env {
     return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ?? "https://rbx-payment-integration.vercel.app/";
   }
 
-  static String? get paymentDomain {
+  static String? get banxaPaymentDomain {
     return DotEnv.dotenv.env['PAYMENT_DOMAIN'];
+  }
+
+  static bool get moonpayEnabled {
+    return DotEnv.dotenv.env['MOONPAY_ENABLED'] == "true";
+  }
+
+  static bool get moonpayEnabledVFX {
+    return DotEnv.dotenv.env['MOONPAY_ENABLED_VFX'] == "true";
   }
 }

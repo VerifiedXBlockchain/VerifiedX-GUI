@@ -237,7 +237,7 @@ class WebWalletTypeSwitcher extends BaseComponent {
                       return;
                     }
 
-                    final account = await BtcWebService().keypairFromWif(wif);
+                    final account = await BtcWebService().keypairFromWif(wif, 'bech32');
 
                     if (account == null) {
                       Toast.error();

@@ -23,17 +23,23 @@ class CurrencySegementedButtonProvider extends StateNotifier<WebCurrencyType> {
     switch (type) {
       case WebCurrencyType.any:
         if (session.keypair != null) {
-          ref.read(webSelectedAccountProvider.notifier).setVfx(session.keypair!, session.balance ?? 0, session.adnr);
+          ref
+              .read(webSelectedAccountProvider.notifier)
+              .setVfx(session.keypair!, session.balance ?? 0, session.balanceLocked ?? 0.0, session.balanceTotal ?? 0.0, session.adnr);
         }
         break;
       case WebCurrencyType.vfx:
         if (session.keypair != null) {
-          ref.read(webSelectedAccountProvider.notifier).setVfx(session.keypair!, session.balance ?? 0, session.adnr);
+          ref
+              .read(webSelectedAccountProvider.notifier)
+              .setVfx(session.keypair!, session.balance ?? 0, session.balanceLocked ?? 0.0, session.balanceTotal ?? 0.0, session.adnr);
         }
         break;
       case WebCurrencyType.vault:
         if (session.raKeypair != null) {
-          ref.read(webSelectedAccountProvider.notifier).setVault(session.raKeypair!, session.raBalance ?? 0);
+          ref
+              .read(webSelectedAccountProvider.notifier)
+              .setVault(session.raKeypair!, session.raBalance ?? 0, session.raBalanceLocked ?? 0.0, session.raBalanceTotal ?? 0.0);
         }
         break;
       case WebCurrencyType.btc:

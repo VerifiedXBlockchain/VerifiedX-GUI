@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/transactions/providers/web_transaction_list_provider.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
@@ -11,6 +13,7 @@ import '../../reserve/providers/pending_callback_provider.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../utils/raw_transaction.dart';
 import '../../../utils/toast.dart';
+import 'package:collection/collection.dart';
 
 class WebCallbackButton extends BaseComponent {
   final WebTransaction tx;
@@ -18,23 +21,33 @@ class WebCallbackButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final keypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
+    final raKeypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
 
-    if (keypair == null) {
+    if (raKeypair == null) {
       return SizedBox.shrink();
     }
 
-    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
-    final toMe = tx.toAddress == address;
-
-    if (tx.isPending || toMe || tx.unlockTime == null) {
+    if (tx.fromAddress != raKeypair.address) {
       return SizedBox.shrink();
     }
 
+    if (tx.isPending || tx.unlockTime == null) {
+      return SizedBox.shrink();
+    }
     final canCallback = tx.unlockTime!.isAfter(DateTime.now());
 
     if (!canCallback) {
       return SizedBox.shrink();
+    }
+
+    final alreadyCalledBack =
+        ref.watch(webTransactionListProvider(raKeypair.address)).transactions.firstWhereOrNull((t) => t.callbackDetails?.hash == tx.hash) != null;
+
+    if (alreadyCalledBack) {
+      return Text(
+        "Called Back".toUpperCase(),
+        style: TextStyle(color: Theme.of(context).colorScheme.warning),
+      );
     }
 
     return AppButton(
@@ -62,7 +75,7 @@ class WebCallbackButton extends BaseComponent {
           return false;
         }
 
-        final nonce = await txService.getNonce(keypair.address);
+        final nonce = await txService.getNonce(raKeypair.address);
         if (nonce == null) {
           Toast.error("Failed to retrieve nonce");
           return false;
@@ -77,7 +90,7 @@ class WebCallbackButton extends BaseComponent {
           amount: 0,
           type: TxType.reserve,
           toAddress: "Reserve_Base",
-          fromAddress: keypair.address,
+          fromAddress: raKeypair.address,
           timestamp: timestamp,
           nonce: nonce,
           data: data,
@@ -95,7 +108,7 @@ class WebCallbackButton extends BaseComponent {
           amount: 0,
           type: TxType.reserve,
           toAddress: "Reserve_Base",
-          fromAddress: keypair.address,
+          fromAddress: raKeypair.address,
           timestamp: timestamp,
           nonce: nonce,
           data: data,
@@ -109,7 +122,7 @@ class WebCallbackButton extends BaseComponent {
           return false;
         }
 
-        final signature = await RawTransaction.getSignature(message: hash, privateKey: keypair.private, publicKey: keypair.public);
+        final signature = await RawTransaction.getSignature(message: hash, privateKey: raKeypair.private, publicKey: raKeypair.public);
         if (signature == null) {
           Toast.error("Signature generation failed.");
           return false;
@@ -117,7 +130,7 @@ class WebCallbackButton extends BaseComponent {
 
         final isValid = await txService.validateSignature(
           hash,
-          keypair.address,
+          raKeypair.address,
           signature,
         );
 
@@ -130,7 +143,7 @@ class WebCallbackButton extends BaseComponent {
           amount: 0,
           type: TxType.reserve,
           toAddress: "Reserve_Base",
-          fromAddress: keypair.address,
+          fromAddress: raKeypair.address,
           timestamp: timestamp,
           nonce: nonce,
           data: data,

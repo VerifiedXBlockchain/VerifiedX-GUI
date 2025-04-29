@@ -34,14 +34,20 @@ class WebTransactionCard extends BaseComponent {
       date = "$date | Settlement Date: $settlementDate";
     }
 
-    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
+    final address = ref.watch(webSessionProvider.select((v) => v.keypair?.address));
+    final raAddress = ref.watch(webSessionProvider.select((v) => v.raKeypair?.address));
+
     final isMobile = BreakPoints.useMobileLayout(context);
     final toMe = tx.toAddress == address;
 
+    final sameWalletTx = (address == tx.toAddress && raAddress == tx.fromAddress) || (address == tx.fromAddress && raAddress == tx.toAddress);
+
     final color = tx.type == TxType.rbxTransfer
-        ? toMe
-            ? Theme.of(context).colorScheme.success
-            : Theme.of(context).colorScheme.danger
+        ? sameWalletTx
+            ? Theme.of(context).colorScheme.secondary
+            : toMe
+                ? Theme.of(context).colorScheme.success
+                : Theme.of(context).colorScheme.danger
         : Colors.white;
 
     String text = tx.type == TxType.rbxTransfer ? "${tx.amount} VFX" : tx.typeLabel;
@@ -63,7 +69,7 @@ class WebTransactionCard extends BaseComponent {
           text,
           style: TextStyle(color: color),
         ),
-        subtitle: toMe
+        subtitle: sameWalletTx
             ? RichText(
                 text: TextSpan(
                   style: TextStyle(color: Colors.white70, fontSize: 12),
@@ -72,14 +78,6 @@ class WebTransactionCard extends BaseComponent {
                     TextSpan(
                         text: "${tx.fromAddress}\n",
                         style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                    TextSpan(text: date)
-                  ],
-                ),
-              )
-            : RichText(
-                text: TextSpan(
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                  children: [
                     TextSpan(text: "To: "),
                     TextSpan(
                         text: "${tx.toAddress}\n",
@@ -87,7 +85,32 @@ class WebTransactionCard extends BaseComponent {
                     TextSpan(text: date)
                   ],
                 ),
-              ),
+              )
+            : toMe
+                ? RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white70, fontSize: 12),
+                      children: [
+                        TextSpan(text: "From: "),
+                        TextSpan(
+                            text: "${tx.fromAddress}\n",
+                            style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                        TextSpan(text: date)
+                      ],
+                    ),
+                  )
+                : RichText(
+                    text: TextSpan(
+                      style: TextStyle(color: Colors.white70, fontSize: 12),
+                      children: [
+                        TextSpan(text: "To: "),
+                        TextSpan(
+                            text: "${tx.toAddress}\n",
+                            style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                        TextSpan(text: date)
+                      ],
+                    ),
+                  ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

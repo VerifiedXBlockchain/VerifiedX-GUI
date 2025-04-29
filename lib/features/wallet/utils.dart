@@ -7,9 +7,11 @@ import '../../core/dialogs.dart';
 import '../../core/providers/session_provider.dart';
 import '../../core/providers/web_session_provider.dart';
 import '../../core/theme/colors.dart';
+import '../../core/theme/components.dart';
 import '../btc/models/btc_address_type.dart';
 import '../btc/providers/btc_account_list_provider.dart';
 import '../encrypt/utils.dart';
+import '../moonpay/services/moonpay_service.dart';
 import '../payment/components/payment_disclaimer.dart';
 import 'package:rbx_wallet/features/payment/components/payment_iframe_container.dart'
     if (dart.library.io) 'package:rbx_wallet/features/payment/components/payment_iframe_container_mock.dart';
@@ -24,6 +26,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../core/breakpoints.dart';
 import '../../core/env.dart';
 import '../payment/payment_utils.dart';
+import '../smart_contracts/components/sc_creator/common/modal_container.dart';
 
 enum VfxOrBtcOption {
   vfx,
@@ -386,142 +389,336 @@ class AccountUtils {
     }
   }
 
-  static Future<void> getCoin(BuildContext context, WidgetRef ref, VfxOrBtcOption type) async {
-    if (kIsWeb) {
-      if (Env.isTestNet) {
-        if (type == VfxOrBtcOption.vfx) {
-          launchUrlString("https://testnet.rbx.network/faucet");
-        } else {
-          launchUrlString("https://mempool.space/testnet4/faucet");
-        }
-        return;
-      }
+  static Future<void> getCoin(BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
+    type ??= await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ModalContainer(
+            title: "Choose Coin Type",
+            withDecor: false,
+            withClose: true,
+            children: [
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Get \$VFX Now"),
+                    onTap: () {
+                      Navigator.of(context).pop(VfxOrBtcOption.vfx);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Get \$BTC Now"),
+                    onTap: () {
+                      Navigator.of(context).pop(VfxOrBtcOption.btc);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
+            ],
+          );
+        });
 
-      final address = type == VfxOrBtcOption.vfx ? ref.read(webSessionProvider).keypair?.address : ref.read(webSessionProvider).btcKeypair?.address;
-      if (address == null) {
-        Toast.error("No address selected");
-        return;
-      }
-      final maxWidth = BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
-      final maxHeight = BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
-      double width = MediaQuery.of(context).size.width - 32;
-      double height = MediaQuery.of(context).size.height - 64;
+    if (type == null) {
+      return;
+    }
 
-      if (width > maxWidth) {
-        width = maxWidth;
-      }
+    final vfxAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+    final btcAddress = kIsWeb ? ref.read(webSessionProvider).btcKeypair?.address : ref.read(sessionProvider).currentBtcAccount?.address;
 
-      if (height > maxHeight) {
-        height = maxHeight;
-      }
+    final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
-      final agreed = await PaymentTermsDialog.show(context);
+    if (address == null) {
+      Toast.error("No address selected");
+      return;
+    }
+
+    PaymentGateway? paymentGateway = await showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ModalContainer(
+            title: "Choose Payment Gateway",
+            withClose: true,
+            children: [
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Banxa"),
+                    onTap: () {
+                      Navigator.of(context).pop(PaymentGateway.banxa);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
+              if (kIsWeb && (type == VfxOrBtcOption.vfx ? Env.moonpayEnabledVFX : Env.moonpayEnabled)) ...[
+                SizedBox(
+                  height: 12,
+                ),
+                AppCard(
+                  padding: 0,
+                  child: ListTile(
+                      title: Text("Moonpay"),
+                      onTap: () {
+                        Navigator.of(context).pop(PaymentGateway.moonpay);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
+              ],
+              if (Env.isTestNet) ...[
+                SizedBox(
+                  height: 12,
+                ),
+                AppCard(
+                  padding: 0,
+                  child: ListTile(
+                      title: Text("Testnet Faucet"),
+                      onTap: () {
+                        Navigator.of(context).pop(PaymentGateway.moonpay);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
+              ]
+            ],
+          );
+        });
+    if (paymentGateway == null) {
+      return;
+    }
+    if (paymentGateway.hasTerms) {
+      final agreed = await PaymentTermsDialog.show(context, paymentGateway);
 
       if (agreed != true) {
         return;
       }
+    }
 
-      showDialog(
+    if (type == VfxOrBtcOption.vfx) {
+      switch (paymentGateway) {
+        case PaymentGateway.banxa:
+          if (kIsWeb) {
+            final maxWidth = BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
+            final maxHeight = BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
+            double width = MediaQuery.of(context).size.width - 32;
+            double height = MediaQuery.of(context).size.height - 64;
+
+            if (width > maxWidth) {
+              width = maxWidth;
+            }
+
+            if (height > maxHeight) {
+              height = maxHeight;
+            }
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  contentPadding: EdgeInsets.zero,
+                  insetPadding: EdgeInsets.zero,
+                  actionsPadding: EdgeInsets.zero,
+                  buttonPadding: EdgeInsets.zero,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      WebPaymentIFrameContainer(
+                        walletAddress: address,
+                        coinAmount: 100,
+                        width: width,
+                        height: height,
+                        coinType: 'vfx',
+                      ),
+                      SizedBox(
+                        width: width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: PaymentDisclaimer(
+                            paymentGateway: paymentGateway,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Close",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                );
+              },
+            );
+          } else {
+            final url = banxaPaymentUrl(amount: 5000, walletAddress: address, currency: "VFX");
+            if (url != null) {
+              launchUrl(Uri.parse(url));
+            }
+          }
+          break;
+        case PaymentGateway.moonpay:
+          if (kIsWeb) {
+            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production', 'vfx', '100', address, true);
+          } else {
+            Toast.error("Native Moonpay Integration Activating Soon.");
+          }
+
+          break;
+        case PaymentGateway.testnetFaucet:
+          launchUrlString("https://testnet.rbx.network/faucet");
+          break;
+      }
+    }
+
+    if (type == VfxOrBtcOption.btc) {
+      switch (paymentGateway) {
+        case PaymentGateway.banxa:
+          if (kIsWeb) {
+            final maxWidth = BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
+            final maxHeight = BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
+            double width = MediaQuery.of(context).size.width - 32;
+            double height = MediaQuery.of(context).size.height - 64;
+
+            if (width > maxWidth) {
+              width = maxWidth;
+            }
+
+            if (height > maxHeight) {
+              height = maxHeight;
+            }
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  contentPadding: EdgeInsets.zero,
+                  insetPadding: EdgeInsets.zero,
+                  actionsPadding: EdgeInsets.zero,
+                  buttonPadding: EdgeInsets.zero,
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      WebPaymentIFrameContainer(
+                        walletAddress: address,
+                        coinAmount: 0.001,
+                        width: width,
+                        height: height,
+                        coinType: 'btc',
+                      ),
+                      SizedBox(
+                        width: width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: PaymentDisclaimer(
+                            paymentGateway: paymentGateway,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        "Close",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                );
+              },
+            );
+          } else {
+            final url = banxaPaymentUrl(amount: 5000, walletAddress: address, currency: "BTC");
+            if (url != null) {
+              launchUrl(Uri.parse(url));
+            }
+          }
+          break;
+        case PaymentGateway.moonpay:
+          if (kIsWeb) {
+            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production', 'btc', '100', address, true);
+          } else {
+            Toast.error("Native Moonpay Integration Activating Soon.");
+          }
+          break;
+        case PaymentGateway.testnetFaucet:
+          launchUrlString("https://testnet.rbx.network/faucet");
+          break;
+      }
+    }
+  }
+
+  static Future<void> sellCoin(BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
+    type ??= await showModalBottomSheet(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.zero,
-            insetPadding: EdgeInsets.zero,
-            actionsPadding: EdgeInsets.zero,
-            buttonPadding: EdgeInsets.zero,
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                WebPaymentIFrameContainer(
-                  walletAddress: address,
-                  coinAmount: type == VfxOrBtcOption.vfx ? 5000 : 0.001,
-                  width: width,
-                  height: height,
-                  coinType: type == VfxOrBtcOption.vfx ? 'rbx' : 'btc',
-                ),
-                SizedBox(
-                  width: width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: PaymentDisclaimer(),
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  "Close",
-                  style: TextStyle(color: Colors.white),
-                ),
-              )
+          return ModalContainer(
+            title: "Choose Coin Type",
+            withDecor: false,
+            withClose: true,
+            children: [
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Get \$VFX Now"),
+                    onTap: () {
+                      Navigator.of(context).pop(VfxOrBtcOption.vfx);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Get \$BTC Now"),
+                    onTap: () {
+                      Navigator.of(context).pop(VfxOrBtcOption.btc);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
             ],
           );
-        },
-      );
+        });
+
+    if (type == null) {
       return;
     }
 
-    switch (type) {
-      case VfxOrBtcOption.vfx:
-        if (Env.isTestNet) {
-          launchUrlString("https://testnet.rbx.network/faucet");
-          return;
-        }
+    final vfxAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+    final btcAddress = kIsWeb ? ref.read(webSessionProvider).btcKeypair?.address : ref.read(sessionProvider).currentBtcAccount?.address;
 
-        String? address = ref.read(sessionProvider).currentWallet?.address;
-        if (address == null) {
-          if (ref.read(walletListProvider).isNotEmpty) {
-            address = ref.read(walletListProvider).first.address;
-          }
-        }
+    final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
-        if (address != null) {
-          Toast.error("Please create or import a VFX account before proceeding");
-          return;
-        }
+    if (address == null) {
+      Toast.error("No address selected");
+      return;
+    }
 
-        final agreed = await PaymentTermsDialog.show(context);
+    final agreed = await PaymentTermsDialog.show(context, PaymentGateway.moonpay);
 
-        if (agreed != true) {
-          return;
-        }
+    if (agreed != true) {
+      return;
+    }
 
-        final url = paymentUrl(amount: 100, walletAddress: address!, currency: "VFX");
-        if (url != null) {
-          launchUrl(Uri.parse(url));
-        }
-        break;
-      case VfxOrBtcOption.btc:
-        if (Env.btcIsTestNet) {
-          launchUrlString("https://mempool.space/testnet4/faucet");
-          return;
-        }
+    if (type == VfxOrBtcOption.vfx) {
+      Toast.message("VFX Off Ramp feature coming soon");
+    }
 
-        String? address = ref.read(sessionProvider).currentBtcAccount?.address;
-        if (address == null) {
-          if (ref.read(btcAccountListProvider).isNotEmpty) {
-            address = ref.read(btcAccountListProvider).first.address;
-          } else {
-            Toast.error("Please create or import a BTC account before proceeding");
-            return;
-          }
-        }
-
-        final agreed = await PaymentTermsDialog.show(context);
-
-        if (agreed != true) {
-          return;
-        }
-
-        final url = paymentUrl(amount: 0.001, walletAddress: address!, currency: "BTC");
-        if (url != null) {
-          launchUrl(Uri.parse(url));
-        }
-        break;
+    if (type == VfxOrBtcOption.btc) {
+      if (kIsWeb) {
+        MoonpayService().sell(Env.isTestNet ? 'sandbox' : 'production', 'btc', '100', address, true);
+      } else {
+        Toast.error("Native Moonpay Integration Activating Soon.");
+      }
     }
   }
 }

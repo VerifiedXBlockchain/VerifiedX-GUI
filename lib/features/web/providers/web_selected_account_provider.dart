@@ -13,6 +13,8 @@ class WebSelectedAccount {
   final String publicKey;
   final WebCurrencyType type;
   final double balance;
+  final double lockedBalance;
+  final double totalBalance;
   final String? domain;
 
   WebSelectedAccount({
@@ -21,6 +23,8 @@ class WebSelectedAccount {
     required this.publicKey,
     required this.type,
     required this.balance,
+    required this.lockedBalance,
+    required this.totalBalance,
     this.domain,
   });
 
@@ -48,6 +52,8 @@ class WebSelectedAccountProvider extends StateNotifier<WebSelectedAccount?> {
     required String publicKey,
     required WebCurrencyType type,
     required double balance,
+    required double lockedBalance,
+    required double totalBalance,
     String? domain,
   }) {
     state = WebSelectedAccount(
@@ -56,27 +62,38 @@ class WebSelectedAccountProvider extends StateNotifier<WebSelectedAccount?> {
       publicKey: publicKey,
       type: type,
       balance: balance,
+      lockedBalance: lockedBalance,
+      totalBalance: totalBalance,
       domain: domain,
     );
   }
 
-  setVfx(Keypair keypair, double balance, String? domain) {
+  setVfx(Keypair keypair, double balance, double lockedBalance, double totalBalance, String? domain) {
     set(
       address: keypair.address,
       privateKey: keypair.privateCorrected,
       publicKey: keypair.public,
       type: WebCurrencyType.vfx,
       balance: balance,
+      lockedBalance: lockedBalance,
+      totalBalance: totalBalance,
       domain: domain,
     );
   }
 
-  setVault(RaKeypair raKeypair, double balance) {
+  setVault(
+    RaKeypair raKeypair,
+    double balance,
+    double lockedBalance,
+    double totalBalance,
+  ) {
     set(
       address: raKeypair.address,
       privateKey: raKeypair.privateCorrected,
       publicKey: raKeypair.public,
       type: WebCurrencyType.vault,
+      lockedBalance: lockedBalance,
+      totalBalance: totalBalance,
       balance: balance,
     );
   }
@@ -88,6 +105,8 @@ class WebSelectedAccountProvider extends StateNotifier<WebSelectedAccount?> {
       publicKey: keypair.publicKey,
       type: WebCurrencyType.btc,
       balance: balance,
+      lockedBalance: 0,
+      totalBalance: balance,
       domain: keypair.adnr,
     );
   }

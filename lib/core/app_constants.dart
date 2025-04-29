@@ -2,7 +2,7 @@
 
 import 'package:rbx_wallet/core/env.dart';
 
-const APP_V = "5.0.2";
+const APP_V = "5.0.3";
 final APP_VERSION = "${Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
@@ -16,7 +16,7 @@ const ALLOW_DOUBLE_MINTES = false;
 const MIN_RBX_FOR_SC_ACTION = 0.001;
 const DELETE_DRAFT_ON_MINT = true;
 const USD_TO_RBX = 5.0;
-const ASSURED_AMOUNT_TO_VALIDATE = 50000.0;
+const ASSURED_AMOUNT_TO_VALIDATE = 5000.0;
 const ADNR_COST = 5.0;
 // const ADNR_TRANSFER_COST = 1.0;
 // const ADNR_DELETE_COST = 0.0;
