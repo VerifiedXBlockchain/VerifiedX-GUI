@@ -39,6 +39,8 @@ mixin _$TokenScFeature {
   @JsonKey(name: "TokenImageBase")
   String? get imageBase64 => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
+  String get description => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Asset? get webAsset => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -63,6 +65,7 @@ abstract class $TokenScFeatureCopyWith<$Res> {
       @JsonKey(name: "TokenVoting") bool voting,
       @JsonKey(name: "TokenImageURL") String? imageUrl,
       @JsonKey(name: "TokenImageBase") String? imageBase64,
+      @JsonKey(includeFromJson: false, includeToJson: false) String description,
       @JsonKey(includeFromJson: false, includeToJson: false) Asset? webAsset});
 
   $AssetCopyWith<$Res>? get webAsset;
@@ -90,6 +93,7 @@ class _$TokenScFeatureCopyWithImpl<$Res, $Val extends TokenScFeature>
     Object? voting = null,
     Object? imageUrl = freezed,
     Object? imageBase64 = freezed,
+    Object? description = null,
     Object? webAsset = freezed,
   }) {
     return _then(_value.copyWith(
@@ -129,6 +133,10 @@ class _$TokenScFeatureCopyWithImpl<$Res, $Val extends TokenScFeature>
           ? _value.imageBase64
           : imageBase64 // ignore: cast_nullable_to_non_nullable
               as String?,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
       webAsset: freezed == webAsset
           ? _value.webAsset
           : webAsset // ignore: cast_nullable_to_non_nullable
@@ -167,6 +175,7 @@ abstract class _$$_TokenScFeatureCopyWith<$Res>
       @JsonKey(name: "TokenVoting") bool voting,
       @JsonKey(name: "TokenImageURL") String? imageUrl,
       @JsonKey(name: "TokenImageBase") String? imageBase64,
+      @JsonKey(includeFromJson: false, includeToJson: false) String description,
       @JsonKey(includeFromJson: false, includeToJson: false) Asset? webAsset});
 
   @override
@@ -193,6 +202,7 @@ class __$$_TokenScFeatureCopyWithImpl<$Res>
     Object? voting = null,
     Object? imageUrl = freezed,
     Object? imageBase64 = freezed,
+    Object? description = null,
     Object? webAsset = freezed,
   }) {
     return _then(_$_TokenScFeature(
@@ -232,6 +242,10 @@ class __$$_TokenScFeatureCopyWithImpl<$Res>
           ? _value.imageBase64
           : imageBase64 // ignore: cast_nullable_to_non_nullable
               as String?,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
       webAsset: freezed == webAsset
           ? _value.webAsset
           : webAsset // ignore: cast_nullable_to_non_nullable
@@ -262,6 +276,8 @@ class _$_TokenScFeature extends _TokenScFeature {
           this.imageUrl,
       @JsonKey(name: "TokenImageBase")
           this.imageBase64,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.description = "",
       @JsonKey(includeFromJson: false, includeToJson: false)
           this.webAsset})
       : super._();
@@ -298,11 +314,14 @@ class _$_TokenScFeature extends _TokenScFeature {
   final String? imageBase64;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
+  final String description;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final Asset? webAsset;
 
   @override
   String toString() {
-    return 'TokenScFeature(name: $name, ticker: $ticker, decimalPlaces: $decimalPlaces, supply: $supply, burnable: $burnable, mintable: $mintable, voting: $voting, imageUrl: $imageUrl, imageBase64: $imageBase64, webAsset: $webAsset)';
+    return 'TokenScFeature(name: $name, ticker: $ticker, decimalPlaces: $decimalPlaces, supply: $supply, burnable: $burnable, mintable: $mintable, voting: $voting, imageUrl: $imageUrl, imageBase64: $imageBase64, description: $description, webAsset: $webAsset)';
   }
 
   @override
@@ -324,14 +343,27 @@ class _$_TokenScFeature extends _TokenScFeature {
                 other.imageUrl == imageUrl) &&
             (identical(other.imageBase64, imageBase64) ||
                 other.imageBase64 == imageBase64) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.webAsset, webAsset) ||
                 other.webAsset == webAsset));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, ticker, decimalPlaces,
-      supply, burnable, mintable, voting, imageUrl, imageBase64, webAsset);
+  int get hashCode => Object.hash(
+      runtimeType,
+      name,
+      ticker,
+      decimalPlaces,
+      supply,
+      burnable,
+      mintable,
+      voting,
+      imageUrl,
+      imageBase64,
+      description,
+      webAsset);
 
   @JsonKey(ignore: true)
   @override
@@ -368,6 +400,8 @@ abstract class _TokenScFeature extends TokenScFeature {
       @JsonKey(name: "TokenImageBase")
           final String? imageBase64,
       @JsonKey(includeFromJson: false, includeToJson: false)
+          final String description,
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final Asset? webAsset}) = _$_TokenScFeature;
   const _TokenScFeature._() : super._();
 
@@ -401,6 +435,9 @@ abstract class _TokenScFeature extends TokenScFeature {
   @override
   @JsonKey(name: "TokenImageBase")
   String? get imageBase64;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String get description;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   Asset? get webAsset;

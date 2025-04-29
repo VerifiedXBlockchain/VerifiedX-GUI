@@ -11,6 +11,7 @@ class WebFungibleToken with _$WebFungibleToken {
     @JsonKey(name: "sc_identifier") required String smartContractId,
     required String name,
     required String ticker,
+    String? description,
     @JsonKey(name: "owner_address") required String ownerAddress,
     @JsonKey(name: "image_url") String? imageUrl,
     @JsonKey(name: "can_mint") required bool canMint,
