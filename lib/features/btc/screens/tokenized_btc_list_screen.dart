@@ -90,34 +90,33 @@ class TokenizeBtcListScreen extends BaseScreen {
                   ),
                 ],
               ),
-              if (Env.isTestNet)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: AppButton(
-                    label: "Bulk vBTC Transfer",
-                    onPressed: () {
-                      final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
-                      final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: AppButton(
+                  label: "Bulk vBTC Transfer",
+                  onPressed: () {
+                    final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
+                    final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
 
-                      if (!kIsWeb && tokens.isEmpty) {
-                        Toast.error("No vBTC tokens with a balance");
-                        return;
-                      }
-                      if (kIsWeb && webTokens.isEmpty) {
-                        Toast.error("No vBTC tokens with a balance");
-                        return;
-                      }
+                    if (!kIsWeb && tokens.isEmpty) {
+                      Toast.error("No vBTC tokens with a balance");
+                      return;
+                    }
+                    if (kIsWeb && webTokens.isEmpty) {
+                      Toast.error("No vBTC tokens with a balance");
+                      return;
+                    }
 
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => BulkVbtcTransferScreen(),
-                        ),
-                      );
-                    },
-                    variant: AppColorVariant.Btc,
-                    type: AppButtonType.Elevated,
-                  ),
-                )
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => BulkVbtcTransferScreen(),
+                      ),
+                    );
+                  },
+                  variant: AppColorVariant.Btc,
+                  type: AppButtonType.Elevated,
+                ),
+              )
             ],
           ),
         AppCard(

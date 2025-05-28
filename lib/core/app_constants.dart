@@ -2,7 +2,7 @@
 
 import 'package:rbx_wallet/core/env.dart';
 
-const APP_V = "5.0.3";
+const APP_V = "5.0.4";
 final APP_VERSION = "${Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
@@ -37,6 +37,7 @@ const BTC_SATOSHI_MULTIPLIER = 0.00000001;
 const BTC_TX_EXPECTED_BYTES = 140;
 const BTC_MINIMUM_TX_AMOUNT = 0.00001;
 const BTC_WITHDRAWL_FEE_RATE = 10;
+const ALLOW_FAUCET_FOR_BTC_DOMAINS = true;
 
 const BACKUP_URL_PROPERTY_NAME = "MEDIA_BACKUP_URL";
 
