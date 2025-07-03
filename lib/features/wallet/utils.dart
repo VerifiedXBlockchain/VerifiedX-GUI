@@ -494,7 +494,7 @@ class AccountUtils {
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
               ],
-              if (kIsWeb && type == VfxOrBtcOption.btc) ...[
+              if (type == VfxOrBtcOption.btc) ...[
                 SizedBox(
                   height: 12,
                 ),
@@ -707,61 +707,65 @@ class AccountUtils {
               amountFiat: 100, walletAddress: address);
 
           if (url != null) {
-            final maxWidth =
-                BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
-            final maxHeight =
-                BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
-            double width = MediaQuery.of(context).size.width - 32;
-            double height = MediaQuery.of(context).size.height - 64;
+            if (kIsWeb) {
+              final maxWidth =
+                  BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
+              final maxHeight =
+                  BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
+              double width = MediaQuery.of(context).size.width - 32;
+              double height = MediaQuery.of(context).size.height - 64;
 
-            if (width > maxWidth) {
-              width = maxWidth;
-            }
+              if (width > maxWidth) {
+                width = maxWidth;
+              }
 
-            if (height > maxHeight) {
-              height = maxHeight;
-            }
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  contentPadding: EdgeInsets.zero,
-                  insetPadding: EdgeInsets.zero,
-                  actionsPadding: EdgeInsets.zero,
-                  buttonPadding: EdgeInsets.zero,
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      WebPaymentIFrameContainerCryptoDotCom(
-                        url: url,
-                        width: width,
-                        height: height,
-                      ),
-                      SizedBox(
-                        width: width,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: PaymentDisclaimer(
-                            paymentGateway: paymentGateway,
+              if (height > maxHeight) {
+                height = maxHeight;
+              }
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    contentPadding: EdgeInsets.zero,
+                    insetPadding: EdgeInsets.zero,
+                    actionsPadding: EdgeInsets.zero,
+                    buttonPadding: EdgeInsets.zero,
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WebPaymentIFrameContainerCryptoDotCom(
+                          url: url,
+                          width: width,
+                          height: height,
+                        ),
+                        SizedBox(
+                          width: width,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PaymentDisclaimer(
+                              paymentGateway: paymentGateway,
+                            ),
                           ),
                         ),
-                      ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "Close",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
                     ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        "Close",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  ],
-                );
-              },
-            );
+                  );
+                },
+              );
+            } else {
+              launchUrlString(url);
+            }
           }
 
           break;
