@@ -61,7 +61,8 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<BtcWebVbtcToken> getWebVbtcTokenDetail(String scIdentifier, String address) async {
+  Future<BtcWebVbtcToken> getWebVbtcTokenDetail(
+      String scIdentifier, String address) async {
     try {
       final response = await getJson('/btc/vbtc/detail/$scIdentifier/');
       response['address'] = address;
@@ -121,7 +122,11 @@ class ExplorerService extends BaseService {
       if (result.containsKey('success') && result['success'] == true) {
         final List<dynamic> data = result['data'];
 
-        return data.map((e) => PriceHistoryItem(DateTime.fromMillisecondsSinceEpoch((e[1] * 1000).round()), e[0])).toList();
+        return data
+            .map((e) => PriceHistoryItem(
+                DateTime.fromMillisecondsSinceEpoch((e[1] * 1000).round()),
+                e[0]))
+            .toList();
       }
 
       print(result[['message']]);
@@ -143,10 +148,17 @@ class ExplorerService extends BaseService {
         'limit': limit,
       };
 
-      final response = await getJson('/transaction/address/$address', params: params);
+      final response =
+          await getJson('/transaction/address/$address', params: params);
 
-      final List<WebTransaction> results = response['results'].map<WebTransaction>((json) => WebTransaction.fromJson(json)).toList();
-      return PaginatedResponse(count: response['count'], page: response['page'], num_pages: response['num_pages'], results: results);
+      final List<WebTransaction> results = response['results']
+          .map<WebTransaction>((json) => WebTransaction.fromJson(json))
+          .toList();
+      return PaginatedResponse(
+          count: response['count'],
+          page: response['page'],
+          num_pages: response['num_pages'],
+          results: results);
     } catch (e) {
       print("ERRR");
       print(e);
@@ -154,7 +166,8 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<PaginatedResponse<WebTransaction>> getTransactionsFromMultipleAddresses({
+  Future<PaginatedResponse<WebTransaction>>
+      getTransactionsFromMultipleAddresses({
     required int page,
     required List<String> addresses,
     int limit = 10,
@@ -165,10 +178,18 @@ class ExplorerService extends BaseService {
         'limit': limit,
       };
 
-      final response = await getJson('/transaction/addresses/${addresses.join(',')}', params: params);
+      final response = await getJson(
+          '/transaction/addresses/${addresses.join(',')}',
+          params: params);
 
-      final List<WebTransaction> results = response['results'].map<WebTransaction>((json) => WebTransaction.fromJson(json)).toList();
-      return PaginatedResponse(count: response['count'], page: response['page'], num_pages: response['num_pages'], results: results);
+      final List<WebTransaction> results = response['results']
+          .map<WebTransaction>((json) => WebTransaction.fromJson(json))
+          .toList();
+      return PaginatedResponse(
+          count: response['count'],
+          page: response['page'],
+          num_pages: response['num_pages'],
+          results: results);
     } catch (e) {
       print("ERRR");
       print(e);
@@ -180,7 +201,8 @@ class ExplorerService extends BaseService {
     try {
       final response = await getJson('/blocks', params: {'limit': 1});
 
-      if (response['results'] != null && (response['results'] as List).isNotEmpty) {
+      if (response['results'] != null &&
+          (response['results'] as List).isNotEmpty) {
         return WebBlock.fromJson(response['results'].first);
       }
       return null;
@@ -206,7 +228,9 @@ class ExplorerService extends BaseService {
 
       // final items = response['results'] as List<dynamic>;
 
-      final List<Nft> results = response['results'].map<Nft>((json) => WebNft.fromJson(json).smartContract).toList();
+      final List<Nft> results = response['results']
+          .map<Nft>((json) => WebNft.fromJson(json).smartContract)
+          .toList();
       return results;
       // return items.map((n) => Nft.fromJson(n['data'])).toList();
     } catch (e) {
@@ -232,7 +256,9 @@ class ExplorerService extends BaseService {
 
       // final items = response['results'] as List<dynamic>;
 
-      final List<WebNft> results = response['results'].map<WebNft>((json) => WebNft.fromJson(json)).toList();
+      final List<WebNft> results = response['results']
+          .map<WebNft>((json) => WebNft.fromJson(json))
+          .toList();
       return PaginatedResponse(
         results: results,
         page: response['page'],
@@ -253,18 +279,22 @@ class ExplorerService extends BaseService {
     String? search,
   }) async {
     try {
-      final addresses = ownerAddress.where((element) => element != null).join(',');
+      final addresses =
+          ownerAddress.where((element) => element != null).join(',');
 
       final params = {
         'page': page,
         'search': search ?? '',
       };
 
-      final response = await getJson('/nft/addresses/$addresses', params: params);
+      final response =
+          await getJson('/nft/addresses/$addresses', params: params);
 
       // final items = response['results'] as List<dynamic>;
 
-      final List<Nft> results = response['results'].map<Nft>((json) => WebNft.fromJson(json).smartContract).toList();
+      final List<Nft> results = response['results']
+          .map<Nft>((json) => WebNft.fromJson(json).smartContract)
+          .toList();
       return results;
       // return items.map((n) => Nft.fromJson(n['data'])).toList();
     } catch (e) {
@@ -290,7 +320,9 @@ class ExplorerService extends BaseService {
 
       // final items = response['results'] as List<dynamic>;
 
-      final List<Nft> results = response['results'].map<Nft>((json) => WebNft.fromJson(json).smartContract).toList();
+      final List<Nft> results = response['results']
+          .map<Nft>((json) => WebNft.fromJson(json).smartContract)
+          .toList();
       return results;
       // return items.map((n) => Nft.fromJson(n['data'])).toList();
     } catch (e) {
@@ -302,7 +334,8 @@ class ExplorerService extends BaseService {
   Future<List<String>> listedNftIds(String ownerAddress) async {
     try {
       final response = await getJson('/nft/listed/$ownerAddress/');
-      return response['results'].map<String>((id) => id.toString()).toList() as List<String>;
+      return response['results'].map<String>((id) => id.toString()).toList()
+          as List<String>;
     } catch (e) {
       print(e);
       return [];
@@ -340,10 +373,12 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<String?> uploadAsset(Uint8List bytes, String filename, String? ext) async {
+  Future<String?> uploadAsset(
+      Uint8List bytes, String filename, String? ext) async {
     FormData body = FormData();
 
-    final MultipartFile file = MultipartFile.fromBytes(bytes, filename: filename);
+    final MultipartFile file =
+        MultipartFile.fromBytes(bytes, filename: filename);
     MapEntry<String, MultipartFile> entry = MapEntry("file", file);
 
     body.files.add(entry);
@@ -357,7 +392,8 @@ class ExplorerService extends BaseService {
 
   Future<int?> validatorCount() async {
     try {
-      final response = await getJson('/masternodes/', params: {'limit': 0}, inspect: true);
+      final response =
+          await getJson('/masternodes/', params: {'limit': 0}, inspect: true);
 
       return response['count'];
     } catch (e) {
@@ -376,7 +412,8 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<String> faucetRequest(String phone, double amount, String address) async {
+  Future<String> faucetRequest(
+      String phone, double amount, String address) async {
     final params = {
       'phone': phone,
       'amount': amount,
@@ -447,7 +484,8 @@ class ExplorerService extends BaseService {
         final token = WebFungibleToken.fromJson(tokenData['token']);
         final balance = tokenData['balance'];
 
-        tokenBalances.add(WebFungibleTokenBalance(address: response['address'], token: token, balance: balance));
+        tokenBalances.add(WebFungibleTokenBalance(
+            address: response['address'], token: token, balance: balance));
       }
 
       return tokenBalances;
@@ -475,12 +513,21 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<PaginatedResponse<WebTokenVoteTopic>> listTokenVotingTopics(String scId, {int page = 1, int limit = 10}) async {
+  Future<PaginatedResponse<WebTokenVoteTopic>> listTokenVotingTopics(
+      String scId,
+      {int page = 1,
+      int limit = 10}) async {
     try {
       final response = await getJson("/fungible-tokens/$scId/voting-topics/");
-      final List<WebTokenVoteTopic> results = response['results'].map<WebTokenVoteTopic>((json) => WebTokenVoteTopic.fromJson(json)).toList();
+      final List<WebTokenVoteTopic> results = response['results']
+          .map<WebTokenVoteTopic>((json) => WebTokenVoteTopic.fromJson(json))
+          .toList();
 
-      return PaginatedResponse(count: response['count'], page: response['page'], num_pages: response['num_pages'], results: results);
+      return PaginatedResponse(
+          count: response['count'],
+          page: response['page'],
+          num_pages: response['num_pages'],
+          results: results);
     } catch (e) {
       print("listTokenVotingTopics error");
       print(e);
@@ -538,7 +585,8 @@ class ExplorerService extends BaseService {
 
   Future<bool?> verifyNftOwnership(String signature) async {
     try {
-      final result = await postJson("/nft/verify-ownership/", params: {'signature': signature});
+      final result = await postJson("/nft/verify-ownership/",
+          params: {'signature': signature});
 
       final Map<String, dynamic> data = result['data'];
 

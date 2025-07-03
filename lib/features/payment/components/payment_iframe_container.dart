@@ -20,11 +20,12 @@ class WebPaymentIFrameContainer extends StatefulWidget {
     required this.walletAddress,
     this.width = 400,
     this.height = 400,
-    this.coinType = 'rbx',
+    required this.coinType,
   });
 
   @override
-  State<WebPaymentIFrameContainer> createState() => _WebPaymentIFrameContainerState();
+  State<WebPaymentIFrameContainer> createState() =>
+      _WebPaymentIFrameContainerState();
 }
 
 class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
@@ -51,7 +52,9 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
 
     iframeElement.height = '${widget.width}';
     iframeElement.width = '${widget.height}';
-    iframeElement.src = kDebugMode ? "/assets/html/payment.html" : "/assets/assets/html/payment.html";
+    iframeElement.src = kDebugMode
+        ? "/assets/html/payment.html"
+        : "/assets/assets/html/payment.html";
     iframeElement.style.border = 'none';
 
     // ignore: undefined_prefixed_name
