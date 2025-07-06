@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/faucet/components/faucet_form.dart';
 import '../../btc_web/services/btc_web_service.dart';
 
 import '../../../core/app_constants.dart';
@@ -53,9 +54,14 @@ class CreateAdnrDialog extends BaseComponent {
               ),
               TextFormField(
                 controller: controller,
-                validator: (value) => formValidatorAlphaNumeric(value, "Domain Name"),
-                decoration: InputDecoration(label: Text("Domain Name"), suffix: Text(isBtc ? '.btc' : '.vfx')),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))],
+                validator: (value) =>
+                    formValidatorAlphaNumeric(value, "Domain Name"),
+                decoration: InputDecoration(
+                    label: Text("Domain Name"),
+                    suffix: Text(isBtc ? '.btc' : '.vfx')),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))
+                ],
               ),
             ],
           ),
@@ -71,142 +77,204 @@ class CreateAdnrDialog extends BaseComponent {
             style: TextStyle(color: Colors.white38),
           ),
         ),
-        TextButton(
-          onPressed: () async {
-            if (!formKey.currentState!.validate()) {
-              return;
-            }
+        Consumer(builder: (context, ref, _) {
+          final balance =
+              ref.watch(webSessionProvider.select((value) => value.balance)) ??
+                  0;
 
-            if (address.length > 65) {
-              Toast.error("Maximum characters for domain is 65");
-              return;
-            }
+          final useFaucet = isBtc &&
+              ALLOW_FAUCET_FOR_BTC_DOMAINS &&
+              balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION);
 
-            if (kIsWeb) {
-              final keyPair = ref.read(webSessionProvider).keypair;
-              if (keyPair == null) {
-                Toast.error("No account");
-                return;
-              }
+          return useFaucet
+              ? TextButton(
+                  onPressed: () async {
+                    final confirmed = await ConfirmDialog.show(
+                        title: "$ADNR_COST VFX Required",
+                        body:
+                            "There is a $ADNR_COST VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWoud you like to proceed?",
+                        confirmText: "Continue",
+                        cancelText: "No Thanks");
 
-              final domainWithoutSuffix = controller.text;
-              final domain = "$domainWithoutSuffix.${isBtc ? 'btc' : 'vfx'}";
-
-              ref.read(globalLoadingProvider.notifier).start();
-
-              final available = await ExplorerService().adnrAvailable(domain);
-
-              if (!available) {
-                ref.read(globalLoadingProvider.notifier).complete();
-                Toast.error("This ${isBtc ? 'BTC' : 'VFX'} Domain already exists");
-                return;
-              }
-              final btcAddress = isBtc ? ref.read(webSessionProvider).btcKeypair?.address : null;
-              if (isBtc && btcAddress == null) {
-                Toast.error("No BTC Address Found");
-                return;
-              }
-              final btcWif = ref.read(webSessionProvider).btcKeypair?.wif;
-              if (isBtc && btcWif == null) {
-                Toast.error("No BTC WIF Private Key Found");
-                return;
-              }
-
-              String? btcMessage;
-              String? btcSignature;
-
-              if (isBtc) {
-                // btcMessage = "1711996047";
-                btcMessage = (DateTime.now().millisecondsSinceEpoch / 1000).round().toString();
-                btcSignature = await BtcWebService().signMessage(ref.read(webSessionProvider).btcKeypair!.wif, btcMessage);
-                print("SIGNATURE: $btcSignature");
-              }
-
-              final data = isBtc
-                  ? {
-                      "Function": "BTCAdnrCreate()",
-                      "Name": domainWithoutSuffix,
-                      "BTCAddress": btcAddress,
-                      "Message": btcMessage,
-                      "Signature": btcSignature,
+                    if (confirmed != true) {
+                      Toast.error(
+                          "Not enough VFX in your account to create a BTC domain. $ADNR_COST VFX required (plus TX fee).");
+                      Navigator.of(context).pop();
                     }
-                  : {"Function": "AdnrCreate()", "Name": domainWithoutSuffix};
 
-              print(data);
+                    await InfoDialog.show(
+                      title: "VFX Faucet",
+                      content: FaucetForm(forceAmount: 6.0),
+                      closeText: "Close",
+                    );
 
-              final txData = await RawTransaction.generate(
-                keypair: ref.read(webSessionProvider).keypair!,
-                amount: ADNR_COST,
-                toAddress: "Adnr_Base",
-                txType: TxType.adnr,
-                data: data,
-              );
+                    Toast.message(
+                        "Please wait for your balance to arrive before continuing.");
+                  },
+                  child:
+                      Text("Continue", style: TextStyle(color: Colors.white)))
+              : TextButton(
+                  onPressed: () async {
+                    if (!formKey.currentState!.validate()) {
+                      return;
+                    }
 
-              ref.read(globalLoadingProvider.notifier).complete();
+                    if (address.length > 65) {
+                      Toast.error("Maximum characters for domain is 65");
+                      return;
+                    }
 
-              if (txData == null) {
-                Toast.error("Invalid transaction data.");
-                return;
-              }
+                    if (kIsWeb) {
+                      final keyPair = ref.read(webSessionProvider).keypair;
+                      if (keyPair == null) {
+                        Toast.error("No account");
+                        return;
+                      }
 
-              final txFee = txData['Fee'];
+                      final domainWithoutSuffix = controller.text;
+                      final domain =
+                          "$domainWithoutSuffix.${isBtc ? 'btc' : 'vfx'}";
 
-              final confirmed = await ConfirmDialog.show(
-                title: "Valid Transaction",
-                body:
-                    "The ${isBtc ? 'BTC' : 'VFX'} Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $domain\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
-                confirmText: "Send",
-                cancelText: "Cancel",
-              );
+                      ref.read(globalLoadingProvider.notifier).start();
 
-              if (confirmed != true) {
-                Navigator.of(context).pop();
-                return;
-              }
-              ref.read(globalLoadingProvider.notifier).start();
+                      final available =
+                          await ExplorerService().adnrAvailable(domain);
 
-              final tx = await RawService().sendTransaction(transactionData: txData, execute: true, widgetRef: ref);
-              ref.read(globalLoadingProvider.notifier).complete();
+                      if (!available) {
+                        ref.read(globalLoadingProvider.notifier).complete();
+                        Toast.error(
+                            "This ${isBtc ? 'BTC' : 'VFX'} Domain already exists");
+                        return;
+                      }
+                      final btcAddress = isBtc
+                          ? ref.read(webSessionProvider).btcKeypair?.address
+                          : null;
+                      if (isBtc && btcAddress == null) {
+                        Toast.error("No BTC Address Found");
+                        return;
+                      }
+                      final btcWif =
+                          ref.read(webSessionProvider).btcKeypair?.wif;
+                      if (isBtc && btcWif == null) {
+                        Toast.error("No BTC WIF Private Key Found");
+                        return;
+                      }
 
-              if (tx != null && tx['Result'] == "Success") {
-                ref.read(adnrPendingProvider.notifier).addId(address, "create", "null");
-                Toast.message("${isBtc ? 'BTC' : 'VFX'} Domain Transaction has been broadcasted. See log for hash.");
-                Navigator.of(context).pop();
+                      String? btcMessage;
+                      String? btcSignature;
 
-                return;
-              }
+                      if (isBtc) {
+                        // btcMessage = "1711996047";
+                        btcMessage =
+                            (DateTime.now().millisecondsSinceEpoch / 1000)
+                                .round()
+                                .toString();
+                        btcSignature = await BtcWebService().signMessage(
+                            ref.read(webSessionProvider).btcKeypair!.wif,
+                            btcMessage);
+                        print("SIGNATURE: $btcSignature");
+                      }
 
-              Toast.error();
-            } else {
-              ref.read(globalLoadingProvider.notifier).start();
-              final result = await AdnrService().createAdnr(address, controller.text);
-              ref.read(globalLoadingProvider.notifier).complete();
+                      final data = isBtc
+                          ? {
+                              "Function": "BTCAdnrCreate()",
+                              "Name": domainWithoutSuffix,
+                              "BTCAddress": btcAddress,
+                              "Message": btcMessage,
+                              "Signature": btcSignature,
+                            }
+                          : {
+                              "Function": "AdnrCreate()",
+                              "Name": domainWithoutSuffix
+                            };
 
-              if (result.success) {
-                Toast.message("VFX Domain Transaction has been broadcasted. See log for hash.");
-                if (result.hash != null) {
-                  ref.read(logProvider.notifier).append(
-                        LogEntry(
-                            message: "ADNR create transaction broadcasted. Tx Hash: ${result.hash}",
-                            textToCopy: result.hash,
-                            variant: AppColorVariant.Success),
+                      print(data);
+
+                      final txData = await RawTransaction.generate(
+                        keypair: ref.read(webSessionProvider).keypair!,
+                        amount: ADNR_COST,
+                        toAddress: "Adnr_Base",
+                        txType: TxType.adnr,
+                        data: data,
                       );
 
-                  ref.read(adnrPendingProvider.notifier).addId(address, "create", adnr ?? "null");
-                }
+                      ref.read(globalLoadingProvider.notifier).complete();
 
-                Navigator.of(context).pop();
-                return;
-              }
+                      if (txData == null) {
+                        Toast.error("Invalid transaction data.");
+                        return;
+                      }
 
-              Toast.error(result.message);
-            }
-          },
-          child: const Text(
-            "Create",
-            style: TextStyle(color: Colors.white),
-          ),
-        )
+                      final txFee = txData['Fee'];
+
+                      final confirmed = await ConfirmDialog.show(
+                        title: "Valid Transaction",
+                        body:
+                            "The ${isBtc ? 'BTC' : 'VFX'} Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $domain\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
+                        confirmText: "Send",
+                        cancelText: "Cancel",
+                      );
+
+                      if (confirmed != true) {
+                        Navigator.of(context).pop();
+                        return;
+                      }
+                      ref.read(globalLoadingProvider.notifier).start();
+
+                      final tx = await RawService().sendTransaction(
+                          transactionData: txData,
+                          execute: true,
+                          widgetRef: ref);
+                      ref.read(globalLoadingProvider.notifier).complete();
+
+                      if (tx != null && tx['Result'] == "Success") {
+                        ref
+                            .read(adnrPendingProvider.notifier)
+                            .addId(address, "create", "null");
+                        Toast.message(
+                            "${isBtc ? 'BTC' : 'VFX'} Domain Transaction has been broadcasted. See log for hash.");
+                        Navigator.of(context).pop();
+
+                        return;
+                      }
+
+                      Toast.error();
+                    } else {
+                      ref.read(globalLoadingProvider.notifier).start();
+                      final result = await AdnrService()
+                          .createAdnr(address, controller.text);
+                      ref.read(globalLoadingProvider.notifier).complete();
+
+                      if (result.success) {
+                        Toast.message(
+                            "VFX Domain Transaction has been broadcasted. See log for hash.");
+                        if (result.hash != null) {
+                          ref.read(logProvider.notifier).append(
+                                LogEntry(
+                                    message:
+                                        "ADNR create transaction broadcasted. Tx Hash: ${result.hash}",
+                                    textToCopy: result.hash,
+                                    variant: AppColorVariant.Success),
+                              );
+
+                          ref
+                              .read(adnrPendingProvider.notifier)
+                              .addId(address, "create", adnr ?? "null");
+                        }
+
+                        Navigator.of(context).pop();
+                        return;
+                      }
+
+                      Toast.error(result.message);
+                    }
+                  },
+                  child: const Text(
+                    "Create",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+        })
       ],
     );
   }

@@ -14,7 +14,10 @@ class FaucetFormstate {
   final double amount;
   final String phone;
 
-  FaucetFormstate({required this.verificationUuid, required this.amount, required this.phone});
+  FaucetFormstate(
+      {required this.verificationUuid,
+      required this.amount,
+      required this.phone});
 
   factory FaucetFormstate.empty() {
     return FaucetFormstate(
@@ -50,7 +53,8 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
 
   String? amountValidator(String? val) => formValidatorNumber(val, "Amount");
   String? phoneValidator(String? val) => formValidatorPhoneNumber(val);
-  String? verificationValidator(String? val) => formValidatorNumber(val, "Verification Code");
+  String? verificationValidator(String? val) =>
+      formValidatorNumber(val, "Verification Code");
 
   load(FaucetFormstate model) {
     state = model;
@@ -63,13 +67,14 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
     load(FaucetFormstate.empty());
   }
 
-  Future<bool?> submitRequest() async {
+  Future<bool?> submitRequest([double? amountOverride]) async {
     if (!formKey.currentState!.validate()) {
       return null;
     }
 
-    final address =
-        kIsWeb ? ref.watch(webSessionProvider.select((v) => v.keypair?.address)) : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
+    final address = kIsWeb
+        ? ref.watch(webSessionProvider.select((v) => v.keypair?.address))
+        : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
     if (address == null) {
       Toast.error("No Account Selected");
@@ -82,7 +87,8 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
       return false;
     }
 
-    final parsedAmount = double.tryParse(amountController.text);
+    final parsedAmount =
+        amountOverride ?? double.tryParse(amountController.text);
 
     if (parsedAmount == null) {
       Toast.error("Invalid Amount");
@@ -90,7 +96,8 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
     }
 
     try {
-      final result = await ExplorerService().faucetRequest(cleanPhone, parsedAmount, address);
+      final result = await ExplorerService()
+          .faucetRequest(cleanPhone, parsedAmount, address);
 
       state = state.requestCompleted(result);
       return true;
@@ -121,6 +128,7 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
   }
 }
 
-final faucetFormProvider = StateNotifierProvider<FaucetFormProvider, FaucetFormstate>(
+final faucetFormProvider =
+    StateNotifierProvider<FaucetFormProvider, FaucetFormstate>(
   (ref) => FaucetFormProvider(ref, FaucetFormstate.empty()),
 );

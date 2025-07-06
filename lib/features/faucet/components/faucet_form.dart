@@ -9,15 +9,17 @@ import '../../../core/theme/app_theme.dart';
 import '../providers/faucet_form_provider.dart';
 
 class FaucetForm extends BaseComponent {
-  const FaucetForm({super.key});
+  final double? forceAmount;
+  const FaucetForm({super.key, this.forceAmount});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(faucetFormProvider.notifier);
     final model = ref.watch(faucetFormProvider);
 
-    final address =
-        kIsWeb ? ref.watch(webSessionProvider.select((v) => v.keypair?.address)) : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
+    final address = kIsWeb
+        ? ref.watch(webSessionProvider.select((v) => v.keypair?.address))
+        : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
     if (address == null) {
       return Center(
@@ -40,7 +42,8 @@ class FaucetForm extends BaseComponent {
                     child: TextFormField(
                       controller: provider.verificationController,
                       validator: provider.verificationValidator,
-                      decoration: InputDecoration(label: Text("Verification Code")),
+                      decoration:
+                          InputDecoration(label: Text("Verification Code")),
                     ),
                   ),
                   SizedBox(
@@ -76,13 +79,19 @@ class FaucetForm extends BaseComponent {
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
-          TextFormField(
-            controller: provider.amountController,
-            validator: provider.amountValidator,
-            decoration: InputDecoration(
-              label: Text("Amount"),
+          if (forceAmount != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("Amount: $forceAmount VFX"),
             ),
-          ),
+          if (forceAmount == null)
+            TextFormField(
+              controller: provider.amountController,
+              validator: provider.amountValidator,
+              decoration: InputDecoration(
+                label: Text("Amount"),
+              ),
+            ),
           TextFormField(
             controller: provider.phoneController,
             validator: provider.phoneValidator,
@@ -102,7 +111,7 @@ class FaucetForm extends BaseComponent {
               ),
               AppButton(
                 onPressed: () {
-                  provider.submitRequest();
+                  provider.submitRequest(forceAmount);
                 },
                 variant: AppColorVariant.Secondary,
                 label: "Request VFX",

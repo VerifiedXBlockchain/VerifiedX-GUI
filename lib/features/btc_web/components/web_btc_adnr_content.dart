@@ -31,9 +31,15 @@ class WebBtcAdnrContent extends BaseComponent {
 
     final balance = session.balance ?? 0;
 
-    final isPendingCreate = ref.watch(adnrPendingProvider).contains("$address.create.${adnr ?? 'null'}");
-    final isPendingBurn = ref.watch(adnrPendingProvider).contains("$address.delete.${adnr ?? 'null'}");
-    final isPendingTransfer = ref.watch(adnrPendingProvider).contains("$address.transfer.${adnr ?? 'null'}");
+    final isPendingCreate = ref
+        .watch(adnrPendingProvider)
+        .contains("$address.create.${adnr ?? 'null'}");
+    final isPendingBurn = ref
+        .watch(adnrPendingProvider)
+        .contains("$address.delete.${adnr ?? 'null'}");
+    final isPendingTransfer = ref
+        .watch(adnrPendingProvider)
+        .contains("$address.transfer.${adnr ?? 'null'}");
 
     if (isPendingCreate) {
       return const Center(
@@ -92,9 +98,12 @@ class WebBtcAdnrContent extends BaseComponent {
                   label: "Create Domain",
                   variant: AppColorVariant.Btc,
                   onPressed: () async {
-                    if (balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION)) {
-                      Toast.error("Not enough VFX in your account to create a VFX domain. $ADNR_COST VFX required (plus TX fee).");
-                      return;
+                    if (!ALLOW_FAUCET_FOR_BTC_DOMAINS) {
+                      if (balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION)) {
+                        Toast.error(
+                            "Not enough VFX in your account to create a BTC domain. $ADNR_COST VFX required (plus TX fee).");
+                        return;
+                      }
                     }
 
                     await showDialog(
@@ -128,7 +137,10 @@ class WebBtcAdnrContent extends BaseComponent {
               children: [
                 Text(
                   adnr,
-                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium!
+                      .copyWith(color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(
@@ -148,16 +160,20 @@ class WebBtcAdnrContent extends BaseComponent {
                     AppButton(
                       label: "Transfer",
                       onPressed: () async {
-                        if (balance < (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
-                          Toast.error("Not enough VFX in this account to create a transaction.");
+                        if (balance <
+                            (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
+                          Toast.error(
+                              "Not enough VFX in this account to create a transaction.");
                           return;
                         }
 
                         final btcToAddress = await PromptModal.show(
                           contextOverride: context,
                           title: "Transfer BTC Domain",
-                          body: "There is a cost of $ADNR_TRANSFER_COST VFX to transfer a BTC Domain.",
-                          validator: (value) => formValidatorNotEmpty(value, "BTC Address"),
+                          body:
+                              "There is a cost of $ADNR_TRANSFER_COST VFX to transfer a BTC Domain.",
+                          validator: (value) =>
+                              formValidatorNotEmpty(value, "BTC Address"),
                           labelText: "BTC Address",
                         );
                         if (btcToAddress == null) return;
@@ -165,8 +181,10 @@ class WebBtcAdnrContent extends BaseComponent {
                         final vfxToAddress = await PromptModal.show(
                             contextOverride: context,
                             title: "VFX Owner",
-                            body: "What VFX address will manage this BTC domain?",
-                            validator: (value) => formValidatorRbxAddress(value, false),
+                            body:
+                                "What VFX address will manage this BTC domain?",
+                            validator: (value) =>
+                                formValidatorRbxAddress(value, false),
                             labelText: "VFX Address,");
                         if (vfxToAddress == null) return;
 
@@ -217,9 +235,12 @@ class WebBtcAdnrContent extends BaseComponent {
                         ref.read(globalLoadingProvider.notifier).complete();
 
                         if (tx != null && tx['Result'] == "Success") {
-                          ref.read(adnrPendingProvider.notifier).addId(address, "transfer", adnr);
+                          ref
+                              .read(adnrPendingProvider.notifier)
+                              .addId(address, "transfer", adnr);
 
-                          Toast.message("BTC Domain Transaction has been broadcasted. See log for hash.");
+                          Toast.message(
+                              "BTC Domain Transaction has been broadcasted. See log for hash.");
 
                           return;
                         }
@@ -231,8 +252,10 @@ class WebBtcAdnrContent extends BaseComponent {
                       label: "Delete",
                       variant: AppColorVariant.Danger,
                       onPressed: () async {
-                        if (balance < (ADNR_DELETE_COST + MIN_RBX_FOR_SC_ACTION)) {
-                          Toast.error("Not enough VFX in this account to create a transaction.");
+                        if (balance <
+                            (ADNR_DELETE_COST + MIN_RBX_FOR_SC_ACTION)) {
+                          Toast.error(
+                              "Not enough VFX in this account to create a transaction.");
                           return;
                         }
 
@@ -252,7 +275,10 @@ class WebBtcAdnrContent extends BaseComponent {
                             amount: ADNR_DELETE_COST,
                             toAddress: "Adnr_Base",
                             txType: TxType.adnr,
-                            data: {"Function": "BTCAdnrDelete()", "BTCFromAddress": account.address},
+                            data: {
+                              "Function": "BTCAdnrDelete()",
+                              "BTCFromAddress": account.address
+                            },
                           );
 
                           ref.read(globalLoadingProvider.notifier).complete();
@@ -279,13 +305,19 @@ class WebBtcAdnrContent extends BaseComponent {
 
                           ref.read(globalLoadingProvider.notifier).start();
 
-                          final tx = await RawService().sendTransaction(transactionData: txData, execute: true, widgetRef: ref);
+                          final tx = await RawService().sendTransaction(
+                              transactionData: txData,
+                              execute: true,
+                              widgetRef: ref);
                           ref.read(globalLoadingProvider.notifier).complete();
 
                           if (tx != null && tx['Result'] == "Success") {
-                            ref.read(adnrPendingProvider.notifier).addId(address, "delete", adnr);
+                            ref
+                                .read(adnrPendingProvider.notifier)
+                                .addId(address, "delete", adnr);
 
-                            Toast.message("BTC Domain Transaction has been broadcasted. See log for hash.");
+                            Toast.message(
+                                "BTC Domain Transaction has been broadcasted. See log for hash.");
                             return;
                           }
 
