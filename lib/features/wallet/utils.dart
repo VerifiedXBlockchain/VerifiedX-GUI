@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/services/explorer_service.dart';
 import '../../app.dart';
 import '../../core/dialogs.dart';
 import '../../core/providers/session_provider.dart';
@@ -25,6 +26,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../core/breakpoints.dart';
 import '../../core/env.dart';
+import '../payment/components/payment_iframe_container_crypto_dot_com.dart';
 import '../payment/payment_utils.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
 
@@ -39,7 +41,8 @@ enum _NewOrImportOption {
 }
 
 class AccountUtils {
-  static Future<void> promptVfxOrBtc(BuildContext context, WidgetRef ref) async {
+  static Future<void> promptVfxOrBtc(
+      BuildContext context, WidgetRef ref) async {
     final selection = await SpecialDialog<VfxOrBtcOption>().show(
       context,
       title: "Add New Account",
@@ -94,7 +97,8 @@ class AccountUtils {
     }
   }
 
-  static Future<void> promptVfxNewOrImport(BuildContext context, WidgetRef ref) async {
+  static Future<void> promptVfxNewOrImport(
+      BuildContext context, WidgetRef ref) async {
     final selection = await SpecialDialog<_NewOrImportOption>().show(
       context,
       title: "Add VFX Account",
@@ -142,7 +146,8 @@ class AccountUtils {
     }
   }
 
-  static Future<void> promptBtcNewOrImport(BuildContext context, WidgetRef ref) async {
+  static Future<void> promptBtcNewOrImport(
+      BuildContext context, WidgetRef ref) async {
     final selection = await SpecialDialog<_NewOrImportOption>().show(
       context,
       title: "Add BTC Account",
@@ -202,7 +207,8 @@ class AccountUtils {
     await ref.read(walletListProvider.notifier).create();
   }
 
-  static Future<void> importVfxAccount(BuildContext context, WidgetRef ref) async {
+  static Future<void> importVfxAccount(
+      BuildContext context, WidgetRef ref) async {
     if (!await passwordRequiredGuard(context, ref)) return;
     if (!widgetGuardWalletIsNotResyncing(ref)) return;
 
@@ -229,16 +235,21 @@ class AccountUtils {
       ),
       validator: (String? value) => formValidatorNotEmpty(value, "Private Key"),
       labelText: "Private Key",
-      inputFormatters: [FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))],
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))
+      ],
       onValidSubmission: (value) async {
         final resync = await ConfirmDialog.show(
           title: "Rescan Blocks?",
-          body: "Would you like to rescan the chain to include any transactions relevant to this key?",
+          body:
+              "Would you like to rescan the chain to include any transactions relevant to this key?",
           confirmText: "Yes",
           cancelText: "No",
         );
 
-        await ref.read(walletListProvider.notifier).import(value, false, resync == true);
+        await ref
+            .read(walletListProvider.notifier)
+            .import(value, false, resync == true);
       },
     );
   }
@@ -262,7 +273,8 @@ class AccountUtils {
             children: [
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Here are your BTC account details. Please ensure to back up your private key in a safe place."),
+                child: Text(
+                    "Here are your BTC account details. Please ensure to back up your private key in a safe place."),
               ),
               ListTile(
                 leading: const Icon(Icons.account_balance_wallet),
@@ -282,7 +294,8 @@ class AccountUtils {
                 title: TextFormField(
                   initialValue: account.privateKey,
                   decoration: InputDecoration(
-                    label: Text("Private Key", style: TextStyle(color: AppColors.getBtc())),
+                    label: Text("Private Key",
+                        style: TextStyle(color: AppColors.getBtc())),
                   ),
                   style: const TextStyle(
                     fontSize: 13,
@@ -295,7 +308,8 @@ class AccountUtils {
                     color: AppColors.getBtc(),
                   ),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: account.privateKey));
+                    await Clipboard.setData(
+                        ClipboardData(text: account.privateKey));
                     Toast.message("Private Key copied to clipboard");
                   },
                 ),
@@ -317,7 +331,8 @@ class AccountUtils {
     );
   }
 
-  static Future<void> importBtcAccount(BuildContext context, WidgetRef ref) async {
+  static Future<void> importBtcAccount(
+      BuildContext context, WidgetRef ref) async {
     final privateKeyController = TextEditingController();
     final List<String>? data = await showDialog(
       context: context,
@@ -329,7 +344,8 @@ class AccountUtils {
             children: [
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Paste in your BTC private key to import your account."),
+                child: Text(
+                    "Paste in your BTC private key to import your account."),
               ),
               ListTile(
                 leading: const Icon(Icons.security),
@@ -373,12 +389,15 @@ class AccountUtils {
       if (data.length == 2) {
         final privateKey = data.first;
         const addressType = BtcAddressType.segwit;
-        final success = await ref.read(btcAccountListProvider.notifier).importPrivateKey(privateKey, addressType);
+        final success = await ref
+            .read(btcAccountListProvider.notifier)
+            .importPrivateKey(privateKey, addressType);
         final btcAccountSyncInfo = ref.read(sessionProvider).btcAccountSyncInfo;
 
         if (success) {
           if (btcAccountSyncInfo != null) {
-            Toast.message("Private Key Imported! Please wait until ${btcAccountSyncInfo.nextSyncFormatted} for the balance to sync.");
+            Toast.message(
+                "Private Key Imported! Please wait until ${btcAccountSyncInfo.nextSyncFormatted} for the balance to sync.");
           } else {
             Toast.message("Private Key Imported!");
           }
@@ -389,7 +408,8 @@ class AccountUtils {
     }
   }
 
-  static Future<void> getCoin(BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
+  static Future<void> getCoin(
+      BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
     type ??= await showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -427,8 +447,12 @@ class AccountUtils {
       return;
     }
 
-    final vfxAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
-    final btcAddress = kIsWeb ? ref.read(webSessionProvider).btcKeypair?.address : ref.read(sessionProvider).currentBtcAccount?.address;
+    final vfxAddress = kIsWeb
+        ? ref.read(webSessionProvider).keypair?.address
+        : ref.read(sessionProvider).currentWallet?.address;
+    final btcAddress = kIsWeb
+        ? ref.read(webSessionProvider).btcKeypair?.address
+        : ref.read(sessionProvider).currentBtcAccount?.address;
 
     final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
@@ -453,7 +477,10 @@ class AccountUtils {
                     },
                     trailing: Icon(Icons.chevron_right, size: 16)),
               ),
-              if (kIsWeb && (type == VfxOrBtcOption.vfx ? Env.moonpayEnabledVFX : Env.moonpayEnabled)) ...[
+              if (kIsWeb &&
+                  (type == VfxOrBtcOption.vfx
+                      ? Env.moonpayEnabledVFX
+                      : Env.moonpayEnabled)) ...[
                 SizedBox(
                   height: 12,
                 ),
@@ -467,6 +494,20 @@ class AccountUtils {
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
               ],
+              if (!Env.isTestNet && type == VfxOrBtcOption.btc && false) ...[
+                SizedBox(
+                  height: 12,
+                ),
+                AppCard(
+                  padding: 0,
+                  child: ListTile(
+                      title: Text("Crypto.com"),
+                      onTap: () {
+                        Navigator.of(context).pop(PaymentGateway.cryptoDotCom);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
+              ],
               if (Env.isTestNet) ...[
                 SizedBox(
                   height: 12,
@@ -476,7 +517,7 @@ class AccountUtils {
                   child: ListTile(
                       title: Text("Testnet Faucet"),
                       onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.moonpay);
+                        Navigator.of(context).pop(PaymentGateway.testnetFaucet);
                       },
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
@@ -499,8 +540,10 @@ class AccountUtils {
       switch (paymentGateway) {
         case PaymentGateway.banxa:
           if (kIsWeb) {
-            final maxWidth = BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
-            final maxHeight = BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
+            final maxWidth =
+                BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
+            final maxHeight =
+                BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
             double width = MediaQuery.of(context).size.width - 32;
             double height = MediaQuery.of(context).size.height - 64;
 
@@ -555,7 +598,8 @@ class AccountUtils {
               },
             );
           } else {
-            final url = banxaPaymentUrl(amount: 5000, walletAddress: address, currency: "VFX");
+            final url = banxaPaymentUrl(
+                amount: 100, walletAddress: address, currency: "VFX");
             if (url != null) {
               launchUrl(Uri.parse(url));
             }
@@ -563,12 +607,17 @@ class AccountUtils {
           break;
         case PaymentGateway.moonpay:
           if (kIsWeb) {
-            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production', 'vfx', '100', address, true);
+            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production',
+                'vfx', '100', address, true);
           } else {
             Toast.error("Native Moonpay Integration Activating Soon.");
           }
 
           break;
+        case PaymentGateway.cryptoDotCom:
+          Toast.error("Not Activated");
+          break;
+
         case PaymentGateway.testnetFaucet:
           launchUrlString("https://testnet.rbx.network/faucet");
           break;
@@ -579,8 +628,10 @@ class AccountUtils {
       switch (paymentGateway) {
         case PaymentGateway.banxa:
           if (kIsWeb) {
-            final maxWidth = BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
-            final maxHeight = BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
+            final maxWidth =
+                BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
+            final maxHeight =
+                BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
             double width = MediaQuery.of(context).size.width - 32;
             double height = MediaQuery.of(context).size.height - 64;
 
@@ -635,7 +686,8 @@ class AccountUtils {
               },
             );
           } else {
-            final url = banxaPaymentUrl(amount: 5000, walletAddress: address, currency: "BTC");
+            final url = banxaPaymentUrl(
+                amount: 5000, walletAddress: address, currency: "BTC");
             if (url != null) {
               launchUrl(Uri.parse(url));
             }
@@ -643,19 +695,90 @@ class AccountUtils {
           break;
         case PaymentGateway.moonpay:
           if (kIsWeb) {
-            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production', 'btc', '100', address, true);
+            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production',
+                'btc', '100', address, true);
           } else {
             Toast.error("Native Moonpay Integration Activating Soon.");
           }
           break;
+
+        case PaymentGateway.cryptoDotCom:
+          final url = await getCryptoDotComBtcOnRampUrl(
+              amountFiat: 100, walletAddress: address);
+
+          if (url != null) {
+            if (kIsWeb) {
+              final maxWidth =
+                  BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
+              final maxHeight =
+                  BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
+              double width = MediaQuery.of(context).size.width - 32;
+              double height = MediaQuery.of(context).size.height - 64;
+
+              if (width > maxWidth) {
+                width = maxWidth;
+              }
+
+              if (height > maxHeight) {
+                height = maxHeight;
+              }
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    contentPadding: EdgeInsets.zero,
+                    insetPadding: EdgeInsets.zero,
+                    actionsPadding: EdgeInsets.zero,
+                    buttonPadding: EdgeInsets.zero,
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        WebPaymentIFrameContainerCryptoDotCom(
+                          url: url,
+                          width: width,
+                          height: height,
+                        ),
+                        SizedBox(
+                          width: width,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: PaymentDisclaimer(
+                              paymentGateway: paymentGateway,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "Close",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  );
+                },
+              );
+            } else {
+              launchUrlString(url);
+            }
+          }
+
+          break;
         case PaymentGateway.testnetFaucet:
-          launchUrlString("https://testnet.rbx.network/faucet");
+          // launchUrlString("https://testnet.rbx.network/faucet");
+          launchUrlString("https://mempool.space/testnet4/faucet");
           break;
       }
     }
   }
 
-  static Future<void> sellCoin(BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
+  static Future<void> sellCoin(
+      BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
     type ??= await showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -693,8 +816,12 @@ class AccountUtils {
       return;
     }
 
-    final vfxAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
-    final btcAddress = kIsWeb ? ref.read(webSessionProvider).btcKeypair?.address : ref.read(sessionProvider).currentBtcAccount?.address;
+    final vfxAddress = kIsWeb
+        ? ref.read(webSessionProvider).keypair?.address
+        : ref.read(sessionProvider).currentWallet?.address;
+    final btcAddress = kIsWeb
+        ? ref.read(webSessionProvider).btcKeypair?.address
+        : ref.read(sessionProvider).currentBtcAccount?.address;
 
     final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
@@ -703,7 +830,8 @@ class AccountUtils {
       return;
     }
 
-    final agreed = await PaymentTermsDialog.show(context, PaymentGateway.moonpay);
+    final agreed =
+        await PaymentTermsDialog.show(context, PaymentGateway.moonpay);
 
     if (agreed != true) {
       return;
@@ -715,7 +843,8 @@ class AccountUtils {
 
     if (type == VfxOrBtcOption.btc) {
       if (kIsWeb) {
-        MoonpayService().sell(Env.isTestNet ? 'sandbox' : 'production', 'btc', '100', address, true);
+        MoonpayService().sell(Env.isTestNet ? 'sandbox' : 'production', 'btc',
+            '100', address, true);
       } else {
         Toast.error("Native Moonpay Integration Activating Soon.");
       }
