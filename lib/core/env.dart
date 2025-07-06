@@ -138,11 +138,13 @@ class Env {
   }
 
   static String get explorerApiBaseUrl {
-    return DotEnv.dotenv.env['EXPLORER_API_BASE_URL'] ?? 'https://data.verifiedx.io/api';
+    return DotEnv.dotenv.env['EXPLORER_API_BASE_URL'] ??
+        'https://data.verifiedx.io/api';
   }
 
   static String get explorerWebsiteBaseUrl {
-    return DotEnv.dotenv.env['EXPLORER_WEBSITE_BASE_URL'] ?? 'https://spyglass.verifiedx.io';
+    return DotEnv.dotenv.env['EXPLORER_WEBSITE_BASE_URL'] ??
+        'https://spyglass.verifiedx.io';
   }
 
   static bool get launchCli {
@@ -178,7 +180,8 @@ class Env {
   }
 
   static String get portCheckerUrl {
-    return DotEnv.dotenv.env['PORT_CHECKER_URL'] ?? "https://us-central1-portpingr.cloudfunctions.net/pinger";
+    return DotEnv.dotenv.env['PORT_CHECKER_URL'] ??
+        "https://us-central1-portpingr.cloudfunctions.net/pinger";
   }
 
   static bool get hideCliOutput {
@@ -202,7 +205,8 @@ class Env {
   }
 
   static String get paymentEmbedUrl {
-    return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ?? "https://rbx-payment-integration.vercel.app/";
+    return DotEnv.dotenv.env['PAYMENT_EMBED_URL'] ??
+        "https://rbx-payment-integration.vercel.app/";
   }
 
   static String? get banxaPaymentDomain {
