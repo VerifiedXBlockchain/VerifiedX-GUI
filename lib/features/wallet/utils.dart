@@ -494,7 +494,7 @@ class AccountUtils {
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
               ],
-              if (type == VfxOrBtcOption.btc) ...[
+              if (!Env.isTestNet && type == VfxOrBtcOption.btc && false) ...[
                 SizedBox(
                   height: 12,
                 ),
