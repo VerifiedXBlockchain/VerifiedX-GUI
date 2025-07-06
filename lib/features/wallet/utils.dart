@@ -26,7 +26,8 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../core/breakpoints.dart';
 import '../../core/env.dart';
-import '../payment/components/payment_iframe_container_crypto_dot_com.dart';
+import '../payment/components/payment_iframe_container_crypto_dot_com.dart'
+    if (dart.library.io) '../payment/components/payment_iframe_container_crypto_dot_com_mock.dart';
 import '../payment/payment_utils.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
 
