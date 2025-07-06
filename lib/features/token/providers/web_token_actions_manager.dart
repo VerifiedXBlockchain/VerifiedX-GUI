@@ -419,7 +419,7 @@ class WebTokenActionsManager {
     final inputsMapped = await Future.wait(
       inputs.map(
         (input) async {
-          final message = "$toAddress${input.vfxFromAddress}";
+          final message = "$signatureInput$toAddress${input.vfxFromAddress}";
 
           final signature = await RawTransaction.getSignature(
             message: message,

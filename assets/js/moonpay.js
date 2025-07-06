@@ -71,9 +71,9 @@ const initMoonPay = async () => {
         const params = {
             apiKey: PUBLIC_KEYS[environment],
             theme: 'dark',
-            baseCurrencyCode: baseCurrencyCode,
+            currencyCode: baseCurrencyCode,
+            baseCurrencyCode: "usd",
             baseCurrencyAmount: baseCurrencyAmount,
-            defaultCurrencyCode: baseCurrencyCode,
             walletAddress: walletAddress
         }
 
