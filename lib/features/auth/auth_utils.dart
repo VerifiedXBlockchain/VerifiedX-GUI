@@ -49,8 +49,8 @@ Future<void> handleImportWithPrivateKey(
     contextOverride: context,
     tightPadding: true,
     title: "Import Wallet",
-    validator: (String? value) => formValidatorNotEmpty(value, "Private Key"),
-    labelText: "Private Key",
+    validator: (String? value) => formValidatorNotEmpty(value, "VFX Private Key"),
+    labelText: "VFX Private Key",
   );
 
   if (privateKey != null) {

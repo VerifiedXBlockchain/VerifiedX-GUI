@@ -52,7 +52,7 @@ class AuthTypeModal extends StatelessWidget {
           ListTile(
             leading: const Icon(FontAwesomeIcons.key),
             title: const Text(
-              "Private Key",
+              "VFX Private Key",
             ),
             trailing: const Icon(
               Icons.chevron_right,
