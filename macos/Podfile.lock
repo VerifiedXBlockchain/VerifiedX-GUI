@@ -74,20 +74,20 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/window_manager/macos
 
 SPEC CHECKSUMS:
-  bitsdojo_window_macos: 44e3b8fe3dd463820e0321f6256c5b1c16bb6a00
-  desktop_window: fb7c4f12c1129f947ac482296b6f14059d57a3c3
-  file_saver: 44e6fbf666677faf097302460e214e977fdd977b
-  flutter_window_close: ee4a6b81ca6fafe93b7cba48b0a18976e3f48e39
+  bitsdojo_window_macos: 7959fb0ca65a3ccda30095c181ecb856fae48ea9
+  desktop_window: de6acd6053564bdccd9f4b9473d25bf4f2ad9bdf
+  file_saver: e35bd97de451dde55ff8c38862ed7ad0f3418d0f
+  flutter_window_close: 9d78dd36bf853ca3d3e24d24b555b8d0786ed428
   FlutterMacOS: 8f6f14fa908a6fb3fba0cd85dbd81ec4b251fb24
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  path_provider_foundation: c68054786f1b4f3343858c1e1d0caaded73f0be9
-  screen_retriever: 59634572a57080243dd1bf715e55b6c54f241a38
-  shared_preferences_foundation: 986fc17f3d3251412d18b0265f9c64113a8c2472
-  sqflite: a5789cceda41d54d23f31d6de539d65bb14100ea
-  uni_links_desktop: 45900fb319df48fcdea2df0756e9c2626696b026
-  url_launcher_macos: 5335912b679c073563f29d89d33d10d459f95451
-  window_manager: 3a1844359a6295ab1e47659b1a777e36773cd6e8
+  path_provider_foundation: 9b2865ae0d177584c376882d93e61be1e80b9e39
+  screen_retriever: 4f97c103641aab8ce183fa5af3b87029df167936
+  shared_preferences_foundation: 9febbcd5d8b5587372cd230ce67c9dde54338f6b
+  sqflite: c73556b2499b92f0b6e6946abe4a4084510cdf90
+  uni_links_desktop: 34322c2646e4c9abc69b62e1865f9782d2850ba2
+  url_launcher_macos: be8b6bbc62bb3bd5befb226f3345dd434a91802f
+  window_manager: 1d01fa7ac65a6e6f83b965471b1a7fdd3f06166c
 
 PODFILE CHECKSUM: 353c8bcc5d5b0994e508d035b5431cfe18c1dea7
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
