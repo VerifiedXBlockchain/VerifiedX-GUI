@@ -28,9 +28,9 @@ const flavorName = String.fromEnvironment("ENV");
 
 _Environment _env = kIsWeb
     ? flavorName.isEmpty
-        ? _Environment.Release
+        ? _Environment.ReleaseTestNet
         : _Environment.values.firstWhere((env) => env.flavor == flavorName)
-    : _Environment.Release;
+    : _Environment.ReleaseTestNet;
 
 class Env {
   static init() async {
