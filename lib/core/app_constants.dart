@@ -2,7 +2,7 @@
 
 import 'package:rbx_wallet/core/env.dart';
 
-const APP_V = "5.0.5";
+const APP_V = "5.0.6";
 final APP_VERSION = "${Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
