@@ -495,7 +495,7 @@ class AccountUtils {
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
               ],
-              if (!Env.isTestNet && type == VfxOrBtcOption.btc && false) ...[
+              if (type == VfxOrBtcOption.btc) ...[
                 SizedBox(
                   height: 12,
                 ),
@@ -617,6 +617,7 @@ class AccountUtils {
           break;
         case PaymentGateway.cryptoDotCom:
           Toast.error("Not Activated");
+
           break;
 
         case PaymentGateway.testnetFaucet:
