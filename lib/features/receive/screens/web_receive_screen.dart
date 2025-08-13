@@ -22,6 +22,7 @@ import '../../nft/components/nft_qr_code.dart';
 import '../../web/components/web_no_wallet.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
+import '../components/recieve_request_buttons.dart';
 
 class WebReceiveScreen extends BaseScreen {
   const WebReceiveScreen({Key? key})
@@ -37,7 +38,8 @@ class WebReceiveScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final isMobile = BreakPoints.useMobileLayout(context);
 
-    final isBtc = ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
+    final isBtc =
+        ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
 
     return AppBar(
       title: isBtc ? Text("Receive BTC") : Text("Receive VFX"),
@@ -53,7 +55,9 @@ class WebReceiveScreen extends BaseScreen {
   }
 
   String generateLink(String address, double amount) {
-    return HtmlHelpers().getUrl().replaceAll("/receive", "/send/$address/$amount");
+    return HtmlHelpers()
+        .getUrl()
+        .replaceAll("/receive", "/send/$address/$amount");
   }
 
   Future<void> showRequestPrompt({
@@ -87,6 +91,9 @@ class WebReceiveScreen extends BaseScreen {
     if (selectedAccount == null) {
       return const WebNotWallet();
     }
+
+    final isBtc =
+        ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
 
     // if (usingBtc) {
     //   return Center(
@@ -156,7 +163,8 @@ class WebReceiveScreen extends BaseScreen {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      if (selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty) ...[
+                      if (selectedAccount.domain != null &&
+                          selectedAccount.domain!.isNotEmpty) ...[
                         AppCard(
                           padding: 0,
                           color: AppColors.getGray(ColorShade.s300),
@@ -184,60 +192,16 @@ class WebReceiveScreen extends BaseScreen {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AppVerticalIconButton(
-                            label: "Copy\nLink",
-                            icon: Icons.link,
-                            prettyIconType: PrettyIconType.custom,
-                            onPressed: () async {
-                              showRequestPrompt(
-                                  context: context,
-                                  address: selectedAccount.address,
-                                  onValidSubmission: (amount) async {
-                                    if (double.tryParse(amount) != null) {
-                                      final value = selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty
-                                          ? selectedAccount.domain!
-                                          : selectedAccount.address;
-                                      final url = generateLink(value, double.parse(amount));
-
-                                      await copyToClipboard(url, "Request funds link copied to clipboard");
-                                    } else {
-                                      Toast.error("Invalid amount");
-                                    }
-                                  });
-                            },
+                          RecieveCopyLinkButton(
+                            currency: isBtc ? 'btc' : "vfx",
+                            address: selectedAccount.address,
+                            domain: selectedAccount.domain,
                           ),
                           const SizedBox(width: 6),
-                          AppVerticalIconButton(
-                            label: "QR\nCode",
-                            icon: Icons.qr_code_rounded,
-                            prettyIconType: PrettyIconType.custom,
-                            onPressed: () async {
-                              showRequestPrompt(
-                                  context: context,
-                                  address: selectedAccount.address,
-                                  onValidSubmission: (amount) async {
-                                    if (double.tryParse(amount) != null) {
-                                      final value = selectedAccount.domain != null && selectedAccount.domain!.isNotEmpty
-                                          ? selectedAccount.domain!
-                                          : selectedAccount.address;
-                                      final url = generateLink(value, double.parse(amount));
-
-                                      showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return Center(
-                                              child: NftQrCode(
-                                                data: url,
-                                                withClose: true,
-                                                center: true,
-                                              ),
-                                            );
-                                          });
-                                    } else {
-                                      Toast.error("Invalid amount");
-                                    }
-                                  });
-                            },
+                          RecieveGenerateQrCode(
+                            currency: isBtc ? 'btc' : "vfx",
+                            address: selectedAccount.address,
+                            domain: selectedAccount.domain,
                           ),
                         ],
                       )

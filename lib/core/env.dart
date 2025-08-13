@@ -220,4 +220,9 @@ class Env {
   static bool get moonpayEnabledVFX {
     return DotEnv.dotenv.env['MOONPAY_ENABLED_VFX'] == "true";
   }
+
+  static String get onrampApiBaseUrl {
+    return DotEnv.dotenv.env['ONRAMP_API_BASE_URL'] ??
+        "https://api.onramp.verifiedx.io/api";
+  }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/payment/components/on_ramp_initializer.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
@@ -57,7 +58,11 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
   //   return bids;
   // }
 
-  bool validateBeforeBid(WebListing listing, double amount) {
+  bool? validateBeforeBid(WebListing listing, double? amount) {
+    if (amount == null) {
+      Toast.error();
+      return false;
+    }
     if (kIsWeb) {
       final balance = ref.read(webSessionProvider).balance;
       if (balance == null) {
@@ -66,6 +71,9 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       }
 
       if (balance < (amount + MIN_RBX_FOR_SC_ACTION)) {
+        if (ALLOW_BIDS_WITHOUT_BALANCE) {
+          return null;
+        }
         Toast.error("Not enough balance.");
         return false;
       }
@@ -80,12 +88,17 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     }
 
     if (wallet.balance < (amount + MIN_RBX_FOR_SC_ACTION)) {
+      if (ALLOW_BIDS_WITHOUT_BALANCE) {
+        return null;
+      }
+
       Toast.error("Not enough balance.");
       return false;
     }
 
     if (wallet.isValidating) {
-      if (wallet.balance < (amount + MIN_RBX_FOR_SC_ACTION + ASSURED_AMOUNT_TO_VALIDATE)) {
+      if (wallet.balance <
+          (amount + MIN_RBX_FOR_SC_ACTION + ASSURED_AMOUNT_TO_VALIDATE)) {
         Toast.error("Not enough balance since you are validating.");
         return false;
       }
@@ -94,7 +107,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     return true;
   }
 
-  Future<String?> getBidSignature(String purchaseKey, double amount, Keypair keypair) async {
+  Future<String?> getBidSignature(
+      String purchaseKey, double amount, Keypair keypair) async {
     const bidModifier = 100000000;
 
     final modifiedAmount = (amount * bidModifier).round();
@@ -103,7 +117,10 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     print("message: $message");
 
-    return await RawTransaction.getSignature(message: message, privateKey: keypair.private, publicKey: keypair.public);
+    return await RawTransaction.getSignature(
+        message: message,
+        privateKey: keypair.private,
+        publicKey: keypair.public);
   }
 
   Future<dynamic> buildSaleCompleteTx(
@@ -444,11 +461,15 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     return false;
   }
 
-  Future<void> waitForSaleStart(String nftId, String buyerAddress, double amount, [int attempt = 0]) async {
+  Future<void> waitForSaleStart(
+      String nftId, String buyerAddress, double amount,
+      [int attempt = 0]) async {
     print("Waiting for sale to start....");
     final nft = await ExplorerService().retrieveNft(nftId);
     if (nft != null) {
-      final txs = (await ExplorerService().getTransactions(address: buyerAddress, page: 1)).results;
+      final txs = (await ExplorerService()
+              .getTransactions(address: buyerAddress, page: 1))
+          .results;
 
       String? keySign;
       for (final t in txs) {
@@ -487,6 +508,26 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     return await waitForSaleStart(nftId, buyerAddress, amount, attempt + 1);
   }
 
+  Future<bool?> waitForBalanceToBuyNow(
+      BuildContext context, WebListing listing) async {
+    final balance = kIsWeb
+        ? ref.read(webSessionProvider).currentWallet?.balance
+        : ref.read(sessionProvider).currentWallet?.balance;
+
+    if (balance != null) {
+      final validBid = validateBeforeBid(listing, listing.buyNowPrice);
+      if (validBid == true) {
+        return await buyNow(context, listing);
+      }
+
+      print("still not enough balance...trying again in 10 sec");
+      await Future.delayed(Duration(seconds: 10));
+      return await waitForBalanceToBuyNow(context, listing);
+    }
+
+    return null;
+  }
+
   Future<bool?> buyNow(BuildContext context, WebListing listing) async {
     if (!kIsWeb) {
       if (!guardWalletIsSynced(ref)) {
@@ -494,7 +535,50 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       }
     }
 
-    if (!validateBeforeBid(listing, listing.buyNowPrice!)) {
+    bool? validBid = validateBeforeBid(listing, listing.buyNowPrice);
+
+    if (validBid == null) {
+      // send to on-ramp first
+      final address = kIsWeb
+          ? ref.read(webSessionProvider).currentWallet?.address
+          : ref.read(sessionProvider).currentWallet?.address;
+      if (address == null) {
+        return null;
+      }
+      final confirmed = await ConfirmDialog.show(
+        title: "Insufficient Balance",
+        body:
+            "This NFT has a buy now price of ${listing.buyNowPrice} VFX and you don't have enough balance to cover it.\n\nWould you like to pay with a Credit Card or another crypto token?",
+        cancelText: "No",
+        confirmText: "Yes",
+      );
+      if (confirmed == true) {
+        final shouldPollBalance = await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Pay with Credit Card / Crypto"),
+                content: OnRampInitializer(
+                  walletAddress: address,
+                  vfxAmount: listing.buyNowPrice! + (MIN_RBX_FOR_SC_ACTION * 2),
+                ),
+              );
+            });
+        if (shouldPollBalance == true) {
+          InfoDialog.show(
+              title: "Awaiting Payment Settle",
+              body:
+                  "Once your payment settles, you'll be asked to confirm the buy now transaction.",
+              closeText: "Okay");
+          return await waitForBalanceToBuyNow(context, listing);
+        }
+        return null;
+      }
+
+      return null;
+    }
+
+    if (!validBid) {
       return null;
     }
 
@@ -511,7 +595,9 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     }
     ref.read(globalLoadingProvider.notifier).start();
 
-    final address = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+    final address = kIsWeb
+        ? ref.read(webSessionProvider).keypair?.address
+        : ref.read(sessionProvider).currentWallet?.address;
     if (address == null) {
       Toast.error("No Account");
       ref.read(globalLoadingProvider.notifier).complete();
@@ -531,7 +617,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         return null;
       }
 
-      signature = await getBidSignature(listing.purchaseKey, listing.buyNowPrice!, keypair);
+      signature = await getBidSignature(
+          listing.purchaseKey, listing.buyNowPrice!, keypair);
 
       if (signature == null) {
         Toast.error("Could not produce signature");
@@ -552,7 +639,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         );
 
         if (presignedTx == null) {
-          Toast.error("A problem occurred presigning the sale transaction. Please try again");
+          Toast.error(
+              "A problem occurred presigning the sale transaction. Please try again");
           return null;
         }
 
@@ -586,7 +674,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         // Future.delayed(Duration(seconds: 10)).then((_) {
         //   waitForSaleStart(listing.nft!.smartContract.id, address, listing.buyNowPrice!);
         // });
-        Toast.message("Buy Now TX broadcasted. Please wait for it to be accepted by the shop owner");
+        Toast.message(
+            "Buy Now TX broadcasted. Please wait for it to be accepted by the shop owner");
 
         ref.read(globalLoadingProvider.notifier).complete();
         String body = "Please wait for the transaction to be finalized.";
@@ -594,7 +683,10 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
           body +=
               "\nBecause this auction house is hosted on the VFX Web Wallet, the seller will need to authorize the Sale Start transaction. You will see that in your transaction list once it's been sent.";
         }
-        InfoDialog.show(contextOverride: context, title: "Buy Now TX broadcasted.", body: body);
+        InfoDialog.show(
+            contextOverride: context,
+            title: "Buy Now TX broadcasted.",
+            body: body);
       }
     } else {
       final coreBid = Bid.create(
@@ -609,7 +701,11 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       );
 
       final bidSaved = await RemoteShopService().sendBid(coreBid, listing.id);
-      ref.read(webListingListProvider("${listing.collection.shop?.id},${listing.collection.id}").notifier).refresh();
+      ref
+          .read(webListingListProvider(
+                  "${listing.collection.shop?.id},${listing.collection.id}")
+              .notifier)
+          .refresh();
       ref.read(globalLoadingProvider.notifier).complete();
 
       return bidSaved && success;
@@ -636,14 +732,18 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       return null;
     }
 
-    final address = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+    final address = kIsWeb
+        ? ref.read(webSessionProvider).keypair?.address
+        : ref.read(sessionProvider).currentWallet?.address;
 
     if (address == null) {
       Toast.error("No account");
       return null;
     }
 
-    final minimumBid = (listing.auction?.currentBidPrice ?? listing.floorPrice!) + (listing.auction?.incrementAmount ?? 0.01);
+    final minimumBid =
+        (listing.auction?.currentBidPrice ?? listing.floorPrice!) +
+            (listing.auction?.incrementAmount ?? 0.01);
     print(minimumBid);
     final amountStr = await PromptModal.show(
       contextOverride: context,
@@ -671,11 +771,13 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     }
 
     if (amount <= listing.auction!.currentBidPrice!) {
-      Toast.error("Your bid must be greater than the current highest bid (${listing.auction!.currentBidPrice} VFX)");
+      Toast.error(
+          "Your bid must be greater than the current highest bid (${listing.auction!.currentBidPrice} VFX)");
       return null;
     }
 
-    if (amount <= listing.auction!.currentBidPrice! + listing.auction!.incrementAmount) {
+    if (amount <=
+        listing.auction!.currentBidPrice! + listing.auction!.incrementAmount) {
       Toast.error(
           "The minimum increment amount is ${listing.auction!.incrementAmount} VFX. A bid grater than ${listing.auction!.currentBidPrice! + listing.auction!.incrementAmount} VFX is required.");
       return null;
@@ -683,14 +785,20 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     double maxAmount = amount;
 
-    if (!validateBeforeBid(listing, listing.floorPrice!)) {
+    bool? validBid = validateBeforeBid(listing, listing.floorPrice!);
+    if (validBid == null) {
+      //TODO: send to on-ramp first
+      return null;
+    }
+    if (!validBid) {
       return null;
     }
 
     final confirmed = await ConfirmDialog.show(
       context: context,
       title: "Place Bid",
-      body: "Are you sure you want to place a bid of $amount VFX${amount != maxAmount ? ' with a max bid of $maxAmount VFX' : ''}?",
+      body:
+          "Are you sure you want to place a bid of $amount VFX${amount != maxAmount ? ' with a max bid of $maxAmount VFX' : ''}?",
       confirmText: "Place Bid",
       cancelText: "Cancel",
     );
@@ -729,7 +837,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         );
 
         if (presignedTx == null) {
-          Toast.error("A problem occurred presigning the sale transaction. Please try again");
+          Toast.error(
+              "A problem occurred presigning the sale transaction. Please try again");
           return null;
         }
 
@@ -770,12 +879,14 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         bidStatus: success ? BidStatus.Rejected : BidStatus.Accepted,
       );
 
-      success = success && await RemoteShopService().sendBid(coreBid, listing.id);
+      success =
+          success && await RemoteShopService().sendBid(coreBid, listing.id);
     }
 
     if (success) {
       if (kIsWeb) {
-        final authenticated = await guardWebAuthorizedFromProvider(ref, address);
+        final authenticated =
+            await guardWebAuthorizedFromProvider(ref, address);
         print("authenticated: $authenticated");
         if (authenticated) {
           final currentEmail = ref.read(webAuthTokenProvider)?.email;
@@ -784,7 +895,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
             String? email = await PromptModal.show(
               contextOverride: context,
               title: "Subscribe for updates?",
-              body: "In order for the web wallet to provide notifications to auction winners to sign transactions, an email address is required.",
+              body:
+                  "In order for the web wallet to provide notifications to auction winners to sign transactions, an email address is required.",
               validator: formValidatorEmail,
               labelText: "Email Address",
             );
@@ -792,9 +904,11 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
             email = email?.trim();
 
             if (email == null || email.isEmpty) {
-              Toast.error("You will not be notified. You can update this setting on the dashboard if you change your mind.");
+              Toast.error(
+                  "You will not be notified. You can update this setting on the dashboard if you change your mind.");
             } else {
-              final subscribed = await WebShopService().createContact(email, address);
+              final subscribed =
+                  await WebShopService().createContact(email, address);
               if (subscribed) {
                 ref.read(webAuthTokenProvider.notifier).addEmail(email);
                 Toast.message("Subscribed");
@@ -803,7 +917,11 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
           }
         }
       }
-      ref.read(webListingListProvider("${listing.collection.shop?.id},${listing.collection.id}").notifier).refresh();
+      ref
+          .read(webListingListProvider(
+                  "${listing.collection.shop?.id},${listing.collection.id}")
+              .notifier)
+          .refresh();
       Toast.message("Bid Submitted");
     } else {
       Toast.error();
@@ -814,6 +932,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
   }
 }
 
-final webBidListProvider = StateNotifierProvider.family<WebBidListProvider, List<Bid>, int>((ref, listingId) {
+final webBidListProvider =
+    StateNotifierProvider.family<WebBidListProvider, List<Bid>, int>(
+        (ref, listingId) {
   return WebBidListProvider(ref, listingId);
 });
