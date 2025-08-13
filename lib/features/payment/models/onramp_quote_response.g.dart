@@ -9,6 +9,7 @@ part of 'onramp_quote_response.dart';
 _$_OnrampQuoteResponse _$$_OnrampQuoteResponseFromJson(
         Map<String, dynamic> json) =>
     _$_OnrampQuoteResponse(
+      purchaseUuid: json['purchase_uuid'] as String,
       stripeCheckoutUrl: json['stripe_checkout_url'] as String,
       cryptoDotComCheckoutUrl: json['crypto_dot_com_checkout_url'] as String,
       amountUsd: (json['amount_usd'] as num).toDouble(),
@@ -20,6 +21,7 @@ _$_OnrampQuoteResponse _$$_OnrampQuoteResponseFromJson(
 Map<String, dynamic> _$$_OnrampQuoteResponseToJson(
         _$_OnrampQuoteResponse instance) =>
     <String, dynamic>{
+      'purchase_uuid': instance.purchaseUuid,
       'stripe_checkout_url': instance.stripeCheckoutUrl,
       'crypto_dot_com_checkout_url': instance.cryptoDotComCheckoutUrl,
       'amount_usd': instance.amountUsd,

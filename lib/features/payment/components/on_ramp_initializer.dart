@@ -65,7 +65,7 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
             onPressed: () {
               //TODO: iframe embed stuff
               launchUrlString(q.stripeCheckoutUrl);
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(q.purchaseUuid);
             },
           ),
           SizedBox(
@@ -77,7 +77,7 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
               //TODO: iframe embed stuff
 
               launchUrlString(q.cryptoDotComCheckoutUrl);
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(q.purchaseUuid);
             },
           ),
         ],

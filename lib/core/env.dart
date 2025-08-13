@@ -223,6 +223,6 @@ class Env {
 
   static String get onrampApiBaseUrl {
     return DotEnv.dotenv.env['ONRAMP_API_BASE_URL'] ??
-        "https://api.onramp.verifiedx.io/api";
+        "https://api.onramp.verifiedx.io";
   }
 }

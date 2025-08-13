@@ -12,6 +12,7 @@ import '../../../core/services/explorer_service.dart';
 import '../../dst/models/bid.dart';
 import '../../keygen/models/keypair.dart';
 import '../../nft/models/nft.dart';
+import '../../payment/components/onramp_purchase_details_widget.dart';
 import '../../raw/raw_service.dart';
 import '../../remote_shop/services/remote_shop_service.dart';
 import '../../smart_contracts/features/royalty/royalty.dart';
@@ -521,8 +522,28 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       }
 
       print("still not enough balance...trying again in 10 sec");
-      await Future.delayed(Duration(seconds: 10));
+      await Future.delayed(Duration(seconds: 5));
       return await waitForBalanceToBuyNow(context, listing);
+    }
+
+    return null;
+  }
+
+  Future<bool?> waitForBalanceToPlaceBid(
+      BuildContext context, WebListing listing, double amount) async {
+    final balance = kIsWeb
+        ? ref.read(webSessionProvider).currentWallet?.balance
+        : ref.read(sessionProvider).currentWallet?.balance;
+
+    if (balance != null) {
+      final validBid = validateBeforeBid(listing, listing.floorPrice!);
+      if (validBid == true) {
+        return await sendBid(context, listing, forceAmount: amount);
+      }
+
+      print("still not enough balance...trying again in 10 sec");
+      await Future.delayed(Duration(seconds: 5));
+      return await waitForBalanceToPlaceBid(context, listing, amount);
     }
 
     return null;
@@ -553,7 +574,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         confirmText: "Yes",
       );
       if (confirmed == true) {
-        final shouldPollBalance = await showDialog(
+        final purchaseUuid = await showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
@@ -564,13 +585,23 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
                 ),
               );
             });
-        if (shouldPollBalance == true) {
-          InfoDialog.show(
-              title: "Awaiting Payment Settle",
-              body:
-                  "Once your payment settles, you'll be asked to confirm the buy now transaction.",
-              closeText: "Okay");
-          return await waitForBalanceToBuyNow(context, listing);
+        if (purchaseUuid != null && purchaseUuid is String) {
+          final success = await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  content: OnrampPurchaseDetailsWidget(
+                    purchaseUuid: purchaseUuid,
+                    targetBalance: listing.buyNowPrice!,
+                  ),
+                );
+              });
+
+          if (success == true) {
+            return await waitForBalanceToBuyNow(context, listing);
+          }
+          return null;
         }
         return null;
       }
@@ -714,8 +745,8 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     return success;
   }
 
-  Future<bool?> sendBid(BuildContext context, WebListing listing) async {
-    print("sendBid");
+  Future<bool?> sendBid(BuildContext context, WebListing listing,
+      {double? forceAmount}) async {
     if (!kIsWeb) {
       if (!guardWalletIsSynced(ref)) {
         return null;
@@ -744,30 +775,36 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     final minimumBid =
         (listing.auction?.currentBidPrice ?? listing.floorPrice!) +
             (listing.auction?.incrementAmount ?? 0.01);
-    print(minimumBid);
-    final amountStr = await PromptModal.show(
-      contextOverride: context,
-      title: "Place Bid",
-      validator: (val) => formValidatorNumber(val, "Bid Amount"),
-      labelText: "Bid Amount (VFX)",
-      footer: "Must be greater than $minimumBid VFX",
-      confirmText: "Continue",
-      cancelText: "Cancel",
-    );
 
-    if (amountStr == null) {
-      return null;
-    }
+    double? amount = 0;
 
-    final amount = double.tryParse(amountStr);
-    if (amount == null) {
-      Toast.error("Invalid amount");
-      return null;
-    }
+    if (forceAmount == null) {
+      final amountStr = await PromptModal.show(
+        contextOverride: context,
+        title: "Place Bid",
+        validator: (val) => formValidatorNumber(val, "Bid Amount"),
+        labelText: "Bid Amount (VFX)",
+        footer: "Must be greater than $minimumBid VFX",
+        confirmText: "Continue",
+        cancelText: "Cancel",
+      );
 
-    if (listing.auction == null) {
-      Toast.error("No auction");
-      return null;
+      if (amountStr == null) {
+        return null;
+      }
+
+      amount = double.tryParse(amountStr);
+      if (amount == null) {
+        Toast.error("Invalid amount");
+        return null;
+      }
+
+      if (listing.auction == null) {
+        Toast.error("No auction");
+        return null;
+      }
+    } else {
+      amount = forceAmount;
     }
 
     if (amount <= listing.auction!.currentBidPrice!) {
@@ -783,13 +820,59 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       return null;
     }
 
-    double maxAmount = amount;
+    bool? validBid = validateBeforeBid(listing, amount);
 
-    bool? validBid = validateBeforeBid(listing, listing.floorPrice!);
     if (validBid == null) {
-      //TODO: send to on-ramp first
+      // send to on-ramp first
+      final address = kIsWeb
+          ? ref.read(webSessionProvider).currentWallet?.address
+          : ref.read(sessionProvider).currentWallet?.address;
+      if (address == null) {
+        return null;
+      }
+      final confirmed = await ConfirmDialog.show(
+        title: "Insufficient Balance",
+        body:
+            "You don't have enough balance to cover this bid.\n\nWould you like to pay with a Credit Card or another crypto token?",
+        cancelText: "No",
+        confirmText: "Yes",
+      );
+      if (confirmed == true) {
+        final purchaseUuid = await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Pay with Credit Card / Crypto"),
+                content: OnRampInitializer(
+                  walletAddress: address,
+                  vfxAmount: amount! + (MIN_RBX_FOR_SC_ACTION * 2),
+                ),
+              );
+            });
+        if (purchaseUuid != null && purchaseUuid is String) {
+          final success = await showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  content: OnrampPurchaseDetailsWidget(
+                    purchaseUuid: purchaseUuid,
+                    targetBalance: amount!,
+                  ),
+                );
+              });
+
+          if (success == true) {
+            return await waitForBalanceToPlaceBid(context, listing, amount);
+          }
+          return null;
+        }
+        return null;
+      }
+
       return null;
     }
+
     if (!validBid) {
       return null;
     }
@@ -798,7 +881,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       context: context,
       title: "Place Bid",
       body:
-          "Are you sure you want to place a bid of $amount VFX${amount != maxAmount ? ' with a max bid of $maxAmount VFX' : ''}?",
+          "Are you sure you want to place a bid of $amount VFX${amount != amount ? ' with a bid of $amount VFX' : ''}?",
       confirmText: "Place Bid",
       cancelText: "Cancel",
     );

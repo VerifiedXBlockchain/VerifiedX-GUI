@@ -96,10 +96,12 @@ class __SetCurrencyTypeState extends ConsumerState<_SetCurrencyType> {
             .set(WebCurrencyType.vfx);
       }
     });
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SizedBox.shrink();
   }
 }
