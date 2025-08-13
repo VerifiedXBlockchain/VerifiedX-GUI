@@ -576,6 +576,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       if (confirmed == true) {
         final purchaseUuid = await showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (context) {
               return AlertDialog(
                 title: Text("Pay with Credit Card / Crypto"),
@@ -840,6 +841,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       if (confirmed == true) {
         final purchaseUuid = await showDialog(
             context: context,
+            barrierDismissible: false,
             builder: (context) {
               return AlertDialog(
                 title: Text("Pay with Credit Card / Crypto"),

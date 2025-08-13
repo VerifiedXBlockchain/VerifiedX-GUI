@@ -1,3 +1,6 @@
+import 'package:flutter/foundation.dart';
+import 'package:rbx_wallet/utils/html_helpers.dart';
+
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
 import '../models/onramp_purchase_details.dart';
@@ -13,12 +16,17 @@ class OnrampService extends BaseService {
     required String vfxAddress,
     required double amount,
   }) async {
+    //TODO: get rid of localhost
+    final redirect = kIsWeb
+        ? "http://localhost:8000/web-wallet-success/"
+        : "${Env.onrampApiBaseUrl}/open-gui";
+
     final params = {
       "amount_vfx": amount,
       "vfx_address": vfxAddress,
-      "success_url": "${Env.onrampApiBaseUrl}/open-gui",
-      "cancel_url": "${Env.onrampApiBaseUrl}/open-gui",
-      "error_url": "${Env.onrampApiBaseUrl}/open-gui"
+      "success_url": redirect,
+      "cancel_url": redirect,
+      "error_url": redirect
     };
 
     try {
