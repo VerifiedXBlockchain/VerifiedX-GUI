@@ -28,6 +28,7 @@ _$_WebSessionModel _$$_WebSessionModelFromJson(Map<String, dynamic> json) =>
               _$WalletTypeEnumMap, json['selectedWalletType']) ??
           WalletType.rbx,
       raActivated: json['raActivated'] as bool? ?? false,
+      raDeactivated: json['raDeactivated'] as bool? ?? false,
       isAuthenticated: json['isAuthenticated'] as bool? ?? false,
       timezoneName: json['timezoneName'] as String? ?? "America/Los_Angeles",
       rememberMe: json['rememberMe'] as bool? ?? false,
@@ -55,6 +56,7 @@ Map<String, dynamic> _$$_WebSessionModelToJson(_$_WebSessionModel instance) =>
       'adnr': instance.adnr,
       'selectedWalletType': _$WalletTypeEnumMap[instance.selectedWalletType]!,
       'raActivated': instance.raActivated,
+      'raDeactivated': instance.raDeactivated,
       'isAuthenticated': instance.isAuthenticated,
       'timezoneName': instance.timezoneName,
       'rememberMe': instance.rememberMe,

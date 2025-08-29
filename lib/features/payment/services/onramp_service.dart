@@ -16,9 +16,8 @@ class OnrampService extends BaseService {
     required String vfxAddress,
     required double amount,
   }) async {
-    //TODO: get rid of localhost
     final redirect = kIsWeb
-        ? "http://localhost:8000/web-wallet-success/"
+        ? "${Env.onrampApiBaseUrl}/web-wallet-success/"
         : "${Env.onrampApiBaseUrl}/open-gui";
 
     final params = {

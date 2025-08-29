@@ -126,7 +126,8 @@ class _ContentWrapper extends BaseComponent {
             final url = HtmlHelpers().getUrl();
             print("URL: $url");
 
-            if (url.contains('/#dashboard/home') && !url.contains("all-tokens")) {
+            if (url.contains('/#dashboard/home') &&
+                !url.contains("all-tokens")) {
               ref.read(globalBalancesExpandedProvider.notifier).expand();
             }
           }
@@ -161,7 +162,11 @@ class _ContentWrapper extends BaseComponent {
           //       ),
           //     ),
           //   ),
-          if (kIsWeb) WebChatNotifier(ref: ref, address: ref.watch(webSessionProvider.select((v) => v.keypair?.address))),
+          if (kIsWeb)
+            WebChatNotifier(
+                ref: ref,
+                address: ref.watch(
+                    webSessionProvider.select((v) => v.keypair?.address))),
           Expanded(
             child: Stack(
               children: [
@@ -172,14 +177,17 @@ class _ContentWrapper extends BaseComponent {
                     padding: const EdgeInsets.only(top: 56.0),
                     child: AnimatedContainer(
                       duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                      width: sideNavExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED,
+                      width: sideNavExpanded
+                          ? SIDE_NAV_WIDTH_EXPANDED
+                          : SIDE_NAV_WIDTH_CONTRACTED,
                       curve: ROOT_CONTAINER_TRANSITION_CURVE,
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(top: 6, bottom: 12),
-                            child: WebMultiAccountSelector(expanded: sideNavExpanded),
+                            child: WebMultiAccountSelector(
+                                expanded: sideNavExpanded),
                           ),
                           Expanded(
                             child: RootContainerSideNav(
@@ -198,7 +206,10 @@ class _ContentWrapper extends BaseComponent {
                 AnimatedPadding(
                   duration: ROOT_CONTAINER_TRANSITION_DURATION,
                   curve: ROOT_CONTAINER_TRANSITION_CURVE,
-                  padding: EdgeInsets.only(left: sideNavExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED),
+                  padding: EdgeInsets.only(
+                      left: sideNavExpanded
+                          ? SIDE_NAV_WIDTH_EXPANDED
+                          : SIDE_NAV_WIDTH_CONTRACTED),
                   child: Stack(
                     children: [
                       Column(
@@ -218,7 +229,8 @@ class _ContentWrapper extends BaseComponent {
                       Align(
                         alignment: Alignment.topLeft,
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16).copyWith(top: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 16)
+                              .copyWith(top: 6),
                           child: MouseRegion(
                             onHover: (_) {
                               setState(() {
@@ -243,7 +255,9 @@ class _ContentWrapper extends BaseComponent {
 
                     return AnimatedPositioned(
                       left: 0,
-                      bottom: walletInfoIsExpanded || walletInfoPopupVisible ? 0 : -expandedHeight,
+                      bottom: walletInfoIsExpanded || walletInfoPopupVisible
+                          ? 0
+                          : -expandedHeight,
                       duration: ROOT_CONTAINER_TRANSITION_DURATION,
                       curve: ROOT_CONTAINER_TRANSITION_CURVE,
                       child: MouseRegion(
@@ -276,14 +290,17 @@ class _ContentWrapper extends BaseComponent {
                                   ),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6.0, horizontal: 12),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       AnimatedDefaultTextStyle(
                                         duration: Duration(milliseconds: 105),
                                         style: TextStyle(
-                                          color: walletInfoIsHovering ? Colors.white : Colors.white.withOpacity(0.75),
+                                          color: walletInfoIsHovering
+                                              ? Colors.white
+                                              : Colors.white.withOpacity(0.75),
                                           fontSize: 14,
                                         ),
                                         child: Text("Addresses"),
@@ -295,7 +312,9 @@ class _ContentWrapper extends BaseComponent {
                                         offset: Offset(0, 1),
                                         child: Icon(
                                           Icons.arrow_drop_down,
-                                          color: walletInfoIsHovering ? Colors.white : Colors.white.withOpacity(0.75),
+                                          color: walletInfoIsHovering
+                                              ? Colors.white
+                                              : Colors.white.withOpacity(0.75),
                                           size: 16,
                                         ),
                                       ),
@@ -316,19 +335,34 @@ class _ContentWrapper extends BaseComponent {
                                 ),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.all(16.0).copyWith(bottom: 0),
+                                padding: const EdgeInsets.all(16.0)
+                                    .copyWith(bottom: 0),
                                 child: Consumer(builder: (context, ref, _) {
-                                  final vfxKeypair = ref.watch(webSessionProvider.select((value) => value.keypair));
-                                  final vfxBalance = ref.watch(webSessionProvider.select((value) => value.balance));
+                                  final vfxKeypair = ref.watch(
+                                      webSessionProvider
+                                          .select((value) => value.keypair));
+                                  final vfxBalance = ref.watch(
+                                      webSessionProvider
+                                          .select((value) => value.balance));
 
-                                  final raKeypair = ref.watch(webSessionProvider.select((value) => value.raKeypair));
-                                  final raBalance = ref.watch(webSessionProvider.select((value) => value.raBalance));
-                                  final adnr = ref.watch(webSessionProvider.select((value) => value.adnr));
+                                  final raKeypair = ref.watch(webSessionProvider
+                                      .select((value) => value.raKeypair));
+                                  final raBalance = ref.watch(webSessionProvider
+                                      .select((value) => value.raBalance));
+                                  final adnr = ref.watch(webSessionProvider
+                                      .select((value) => value.adnr));
 
-                                  final vfxBalanceString = adnr != null ? "${vfxBalance ?? ""} VFX | @$adnr" : "${(vfxBalance ?? 0).toString()} VFX";
-                                  final btcKeypair = ref.watch(webSessionProvider.select((value) => value.btcKeypair));
-                                  final btcBalance = ref.watch(webSessionProvider.select((value) => value.btcBalanceInfo?.btcBalance));
-                                  final btcBalanceString = btcKeypair?.adnr != null
+                                  final vfxBalanceString = adnr != null
+                                      ? "${vfxBalance ?? ""} VFX | @$adnr"
+                                      : "${(vfxBalance ?? 0).toString()} VFX";
+                                  final btcKeypair = ref.watch(
+                                      webSessionProvider
+                                          .select((value) => value.btcKeypair));
+                                  final btcBalance = ref.watch(
+                                      webSessionProvider.select((value) =>
+                                          value.btcBalanceInfo?.btcBalance));
+                                  final btcBalanceString = btcKeypair?.adnr !=
+                                          null
                                       ? "${btcBalance ?? ""} BTC | @${btcKeypair!.adnr!}"
                                       : "${(btcBalance ?? 0).toString()} BTC";
                                   return Column(
@@ -353,12 +387,16 @@ class _ContentWrapper extends BaseComponent {
                                         ),
                                       if (raKeypair != null)
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 16.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 16.0),
                                           child: _WalletListItem(
                                             address: raKeypair.address,
                                             label: "Vault",
                                             balance: "${raBalance ?? 0} VFX",
                                             color: AppColors.getReserve(),
+                                            deactivated: ref.watch(
+                                                webSessionProvider.select(
+                                                    (v) => v.raDeactivated)),
                                             raKeypair: raKeypair,
                                             onMenuOpen: () {
                                               setState(() {
@@ -374,7 +412,8 @@ class _ContentWrapper extends BaseComponent {
                                         ),
                                       if (btcKeypair != null)
                                         Padding(
-                                          padding: const EdgeInsets.only(top: 16.0),
+                                          padding:
+                                              const EdgeInsets.only(top: 16.0),
                                           child: _WalletListItem(
                                             address: btcKeypair.address,
                                             btcKeypair: btcKeypair,
@@ -408,17 +447,23 @@ class _ContentWrapper extends BaseComponent {
                                               label: "Sign Out",
                                               icon: Icons.logout,
                                               onPressed: () async {
-                                                final confirmed = await ConfirmDialog.show(
+                                                final confirmed =
+                                                    await ConfirmDialog.show(
                                                   title: "Sign Out",
-                                                  body: "Are you sure you want to logout of the VFX Web Wallet?",
+                                                  body:
+                                                      "Are you sure you want to logout of the VFX Web Wallet?",
                                                   destructive: true,
                                                   confirmText: "Logout",
                                                   cancelText: "Cancel",
                                                 );
                                                 if (confirmed == true) {
-                                                  await ref.read(webSessionProvider.notifier).logout();
+                                                  await ref
+                                                      .read(webSessionProvider
+                                                          .notifier)
+                                                      .logout();
 
-                                                  AutoRouter.of(context).replace(const WebAuthRouter());
+                                                  AutoRouter.of(context).replace(
+                                                      const WebAuthRouter());
                                                 }
                                               },
                                             ),
@@ -478,19 +523,24 @@ class _ContentWrapper extends BaseComponent {
                                 ),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
-                                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                                  AnimatedDefaultTextStyle(
-                                    duration: Duration(milliseconds: 105),
-                                    style: TextStyle(
-                                      color: latestBlockIsHovering ? Colors.white : Colors.white.withOpacity(0.75),
-                                      fontSize: 14,
-                                    ),
-                                    child: Text(
-                                      "Block ${block.height}",
-                                    ),
-                                  ),
-                                ]),
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 6.0, horizontal: 12),
+                                child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      AnimatedDefaultTextStyle(
+                                        duration: Duration(milliseconds: 105),
+                                        style: TextStyle(
+                                          color: latestBlockIsHovering
+                                              ? Colors.white
+                                              : Colors.white.withOpacity(0.75),
+                                          fontSize: 14,
+                                        ),
+                                        child: Text(
+                                          "Block ${block.height}",
+                                        ),
+                                      ),
+                                    ]),
                               ),
                             ),
                           ),
@@ -539,7 +589,11 @@ class _ContentWrapper extends BaseComponent {
         //       ),
         //     ),
         //   ),
-        if (kIsWeb) WebChatNotifier(ref: ref, address: ref.watch(webSessionProvider.select((v) => v.keypair!.address))),
+        if (kIsWeb)
+          WebChatNotifier(
+              ref: ref,
+              address: ref
+                  .watch(webSessionProvider.select((v) => v.keypair!.address))),
         Expanded(child: child),
       ]),
     );
@@ -632,10 +686,15 @@ class WebAccountInfoBtc extends BaseComponent {
 
     final forceExpand = ref.watch(globalBalancesExpandedProvider);
 
-    final myBtcAddress = ref.watch(webSessionProvider.select((value) => value.btcKeypair?.address));
+    final myBtcAddress = ref
+        .watch(webSessionProvider.select((value) => value.btcKeypair?.address));
 
-    final List<BtcWebTransaction>? btcTransactions = myBtcAddress != null ? ref.watch(btcWebTransactionListProvider(myBtcAddress)) : null;
-    final latestBtcTx = btcTransactions != null && btcTransactions.isNotEmpty ? btcTransactions.first : null;
+    final List<BtcWebTransaction>? btcTransactions = myBtcAddress != null
+        ? ref.watch(btcWebTransactionListProvider(myBtcAddress))
+        : null;
+    final latestBtcTx = btcTransactions != null && btcTransactions.isNotEmpty
+        ? btcTransactions.first
+        : null;
 
     return RootContainerBalanceItem(
         topIndicator: FaIcon(
@@ -644,11 +703,14 @@ class WebAccountInfoBtc extends BaseComponent {
           size: 28,
         ),
         forceExpand: forceExpand,
-        heading: "${(sessionModel.btcBalanceInfo?.btcBalance ?? 0).toStringAsFixed(8)} BTC",
+        heading:
+            "${(sessionModel.btcBalanceInfo?.btcBalance ?? 0).toStringAsFixed(8)} BTC",
         headingColor: AppColors.getBtc(),
         accountCount: "",
         handleViewAllTxs: () {
-          ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
+          ref
+              .read(webSessionProvider.notifier)
+              .setSelectedWalletType(WalletType.btc);
 
           AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
         },
@@ -657,8 +719,11 @@ class WebAccountInfoBtc extends BaseComponent {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
-                    AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+                    ref
+                        .read(webSessionProvider.notifier)
+                        .setSelectedWalletType(WalletType.btc);
+                    AutoTabsRouter.of(context)
+                        .setActiveIndex(WebRouteIndex.transactions);
                   },
                   child: AppCard(
                     padding: 12,
@@ -711,7 +776,8 @@ class WebAccountInfoBtc extends BaseComponent {
           if (sessionModel.btcKeypair != null)
             AppVerticalIconButton(
               onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: sessionModel.btcKeypair!.address));
+                await Clipboard.setData(
+                    ClipboardData(text: sessionModel.btcKeypair!.address));
                 Toast.message("Address copied to clipboard");
               },
               icon: Icons.copy,
@@ -753,7 +819,9 @@ class WebAccountInfoVbtc extends BaseComponent {
     BtcWebTransaction? latestVbtcBtcTx = txs.isEmpty ? null : txs.first;
 
     WebTransaction? latestVbtcVfxTx = ref
-        .watch(webTransactionListProvider(ref.watch(webSessionProvider).keypair?.address ?? '').select((v) => v.transactions))
+        .watch(webTransactionListProvider(
+                ref.watch(webSessionProvider).keypair?.address ?? '')
+            .select((v) => v.transactions))
         .firstWhereOrNull((tx) => tx.isVbtcTx);
 
     if (latestVbtcBtcTx != null && latestVbtcVfxTx != null) {
@@ -775,11 +843,14 @@ class WebAccountInfoVbtc extends BaseComponent {
     final sum = vbtcTokens.fold<double>(
         0.0,
         (previousValue, element) =>
-            previousValue + element.balanceForAddress(ref.watch(webSessionProvider.select((value) => value.keypair?.address))));
+            previousValue +
+            element.balanceForAddress(ref.watch(
+                webSessionProvider.select((value) => value.keypair?.address))));
 
     return RootContainerBalanceItem(
       topIndicator: Container(
-        decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(32)),
+        decoration: BoxDecoration(
+            color: Colors.black, borderRadius: BorderRadius.circular(32)),
         child: Padding(
           padding: const EdgeInsets.all(4.0),
           child: Image.asset(
@@ -802,9 +873,11 @@ class WebAccountInfoVbtc extends BaseComponent {
               child: GestureDetector(
                 onTap: () {
                   if (Env.btcIsTestNet) {
-                    launchUrlString("https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
+                    launchUrlString(
+                        "https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
                   } else {
-                    launchUrlString("https://mempool.space/tx/${latestVbtcBtcTx!.txid}");
+                    launchUrlString(
+                        "https://mempool.space/tx/${latestVbtcBtcTx!.txid}");
                   }
 
                   // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
@@ -895,28 +968,36 @@ class WebAccountInfoVfx extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final sessionModel = ref.watch(webSessionProvider);
     final List<WebTransaction> vfxTransactions = sessionModel.keypair != null
-        ? ref.watch(webTransactionListProvider(sessionModel.keypair!.address).select((value) => value.transactions))
+        ? ref.watch(webTransactionListProvider(sessionModel.keypair!.address)
+            .select((value) => value.transactions))
         : [];
 
     final List<WebTransaction> raTransactions = sessionModel.raKeypair != null
-        ? ref.watch(webTransactionListProvider(sessionModel.raKeypair!.address).select((value) => value.transactions))
+        ? ref.watch(webTransactionListProvider(sessionModel.raKeypair!.address)
+            .select((value) => value.transactions))
         : [];
 
     final allTransactions = [...vfxTransactions, ...raTransactions];
-    allTransactions.sort((a, b) => a.date.millisecondsSinceEpoch > b.date.millisecondsSinceEpoch ? -1 : 1);
+    allTransactions.sort((a, b) =>
+        a.date.millisecondsSinceEpoch > b.date.millisecondsSinceEpoch ? -1 : 1);
 
-    final latestVfxTx = allTransactions.isNotEmpty ? allTransactions.first : null;
+    final latestVfxTx =
+        allTransactions.isNotEmpty ? allTransactions.first : null;
 
     final forceExpand = ref.watch(globalBalancesExpandedProvider);
 
     return RootContainerBalanceItem(
-      heading: '${(sessionModel.balance ?? 0) + (sessionModel.raBalance ?? 0)} VFX',
+      heading:
+          '${(sessionModel.balance ?? 0) + (sessionModel.raBalance ?? 0)} VFX',
       headingColor: AppColors.getBlue(),
       accountCount: '',
       forceExpand: forceExpand,
-      latestTx: latestVfxTx != null ? _LatestVfxTx(latestVfxTx: latestVfxTx) : null,
+      latestTx:
+          latestVfxTx != null ? _LatestVfxTx(latestVfxTx: latestVfxTx) : null,
       handleViewAllTxs: () {
-        ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
+        ref
+            .read(webSessionProvider.notifier)
+            .setSelectedWalletType(WalletType.rbx);
 
         AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
       },
@@ -929,7 +1010,8 @@ class WebAccountInfoVfx extends BaseComponent {
         if (sessionModel.keypair != null)
           AppVerticalIconButton(
             onPressed: () async {
-              await Clipboard.setData(ClipboardData(text: sessionModel.keypair!.address));
+              await Clipboard.setData(
+                  ClipboardData(text: sessionModel.keypair!.address));
               Toast.message("Address copied to clipboard");
             },
             icon: Icons.copy,
@@ -939,7 +1021,8 @@ class WebAccountInfoVfx extends BaseComponent {
         if (sessionModel.raKeypair != null)
           AppVerticalIconButton(
             onPressed: () async {
-              await Clipboard.setData(ClipboardData(text: sessionModel.raKeypair!.address));
+              await Clipboard.setData(
+                  ClipboardData(text: sessionModel.raKeypair!.address));
               Toast.message("Address copied to clipboard");
             },
             icon: Icons.copy,
@@ -978,10 +1061,12 @@ class _LatestVfxTx extends BaseComponent {
 
           // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
           if (!latestVfxTx.isPending) {
-            AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+            AutoTabsRouter.of(context)
+                .setActiveIndex(WebRouteIndex.transactions);
 
             Future.delayed(Duration(milliseconds: 100), () {
-              AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: latestVfxTx.hash));
+              AutoRouter.of(context).push(
+                  WebTransactionDetailScreenRoute(hash: latestVfxTx.hash));
             });
           }
         },
@@ -995,7 +1080,9 @@ class _LatestVfxTx extends BaseComponent {
                 Text(
                   "${latestVfxTx.amount} VFX",
                   style: TextStyle(
-                    color: latestVfxTx.amount != null && latestVfxTx.amount! < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
+                    color: latestVfxTx.amount != null && latestVfxTx.amount! < 0
+                        ? Colors.red.shade500
+                        : Theme.of(context).colorScheme.success,
                     fontWeight: FontWeight.w600,
                   ),
                 )
@@ -1011,7 +1098,9 @@ class _LatestVfxTx extends BaseComponent {
                 "From: ${latestVfxTx.fromAddress}",
                 style: TextStyle(
                   fontSize: 11,
-                  color: latestVfxTx.fromAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
+                  color: latestVfxTx.fromAddress.startsWith('xRBX')
+                      ? AppColors.getReserve()
+                      : Colors.white.withOpacity(0.9),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -1019,7 +1108,9 @@ class _LatestVfxTx extends BaseComponent {
                 "To: ${latestVfxTx.toAddress}",
                 style: TextStyle(
                   fontSize: 11,
-                  color: latestVfxTx.toAddress.startsWith('xRBX') ? AppColors.getReserve() : Colors.white.withOpacity(0.9),
+                  color: latestVfxTx.toAddress.startsWith('xRBX')
+                      ? AppColors.getReserve()
+                      : Colors.white.withOpacity(0.9),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -1029,7 +1120,9 @@ class _LatestVfxTx extends BaseComponent {
               Text(
                 latestVfxTx.isPending ? "Pending" : "Success",
                 style: TextStyle(
-                  color: latestVfxTx.isPending ? Theme.of(context).colorScheme.warning : AppColors.getSpringGreen(),
+                  color: latestVfxTx.isPending
+                      ? Theme.of(context).colorScheme.warning
+                      : AppColors.getSpringGreen(),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -1051,6 +1144,7 @@ class _WalletListItem extends StatelessWidget {
   final Keypair? keypair;
   final RaKeypair? raKeypair;
   final BtcWebAccount? btcKeypair;
+  final bool deactivated;
   const _WalletListItem({
     super.key,
     required this.address,
@@ -1059,6 +1153,7 @@ class _WalletListItem extends StatelessWidget {
     required this.color,
     required this.onMenuOpen,
     required this.onMenuClose,
+    this.deactivated = false,
     this.keypair,
     this.raKeypair,
     this.btcKeypair,
@@ -1066,6 +1161,19 @@ class _WalletListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (deactivated) {
+      return AppCard(
+        fullWidth: true,
+        padding: 0,
+        child: ListTile(
+          title: Text(
+            "Recovered & Deactivated",
+            style: Theme.of(context).textTheme.caption,
+          ),
+          leading: _LeadingIcon(color: color, label: label),
+        ),
+      );
+    }
     return AppCard(
       padding: 0,
       child: ListTile(
@@ -1099,35 +1207,7 @@ class _WalletListItem extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        leading: Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                color.withOpacity(0.6),
-                color.withOpacity(0.4),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(19),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.4),
-              width: 1,
-            ),
-          ),
-          child: Center(
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
+        leading: _LeadingIcon(color: color, label: label),
         trailing: PopupMenuButton<int>(
           color: AppColors.getGray(ColorShade.s200),
           tooltip: "",
@@ -1146,7 +1226,8 @@ class _WalletListItem extends StatelessWidget {
               case 1:
                 final confirmed = await ConfirmDialog.show(
                   title: "Reveal Private Key?",
-                  body: "Are you sure you want to reveal your private key for this account?",
+                  body:
+                      "Are you sure you want to reveal your private key for this account?",
                   confirmText: "Reveal",
                   cancelText: "Cancel",
                 );
@@ -1202,6 +1283,50 @@ class _WalletListItem extends StatelessWidget {
   }
 }
 
+class _LeadingIcon extends StatelessWidget {
+  const _LeadingIcon({
+    super.key,
+    required this.color,
+    required this.label,
+  });
+
+  final Color color;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 38,
+      height: 38,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            color.withOpacity(0.6),
+            color.withOpacity(0.4),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(19),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.4),
+          width: 1,
+        ),
+      ),
+      child: Center(
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _TopLeft extends BaseComponent {
   const _TopLeft({
     super.key,
@@ -1221,7 +1346,9 @@ class _TopLeft extends BaseComponent {
           mainAxisSize: MainAxisSize.min,
           children: [
             // RootContainerRotatingCube(),
-            ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc
+
+            ref.watch(webCurrencySegementedButtonProvider) ==
+                    WebCurrencyType.btc
                 ? Image.asset(
                     Assets.images.animatedCubeBtc.path,
                     scale: 1,
@@ -1271,7 +1398,9 @@ class _TopLeft extends BaseComponent {
                           return AnimatedDefaultTextStyle(
                             duration: ROOT_CONTAINER_TRANSITION_DURATION,
                             style: TextStyle(
-                              color: ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc
+                              color: ref.watch(
+                                          webCurrencySegementedButtonProvider) ==
+                                      WebCurrencyType.btc
                                   ? AppColors.getBtc()
                                   : AppColors.getBlue(ColorShade.s100),
                               fontSize: 26,
@@ -1295,7 +1424,8 @@ class _TopLeft extends BaseComponent {
                         "Switchblade",
                         style: TextStyle(
                           fontSize: 12,
-                          color: AppColors.getBlue(ColorShade.s50).withOpacity(0.7),
+                          color: AppColors.getBlue(ColorShade.s50)
+                              .withOpacity(0.7),
                           letterSpacing: 1,
                           fontWeight: FontWeight.w600,
                           height: 1,

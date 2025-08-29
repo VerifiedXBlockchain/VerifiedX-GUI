@@ -119,7 +119,7 @@ class Env {
       case _Environment.WebLocalEnv:
         return 'http://localhost:42069/';
       case _Environment.WebTestNet:
-        return 'https://wallet-test.verifiedx.io/';
+        return 'https://wallet-testnet.verifiedx.io/';
       default:
         return 'https://wallet.verifiedx.io/';
     }

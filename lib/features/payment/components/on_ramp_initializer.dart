@@ -5,11 +5,10 @@ import 'package:rbx_wallet/core/components/centered_loader.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import '../../../core/breakpoints.dart';
+import '../../../core/app_constants.dart';
 import '../models/onramp_quote_response.dart';
+import '../payment_utils.dart';
 import '../services/onramp_service.dart';
-import 'onramp_iframe_container.dart'
-    if (dart.library.io) 'onramp_iframe_container_mock.dart';
 
 class OnRampInitializer extends StatefulWidget {
   final String walletAddress;
@@ -70,75 +69,28 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
             icon: Icons.token,
             onPressed: () async {
               if (kIsWeb) {
-                final maxWidth =
-                    BreakPoints.useMobileLayout(context) ? 400.0 : 750.0;
-                final maxHeight =
-                    BreakPoints.useMobileLayout(context) ? 500.0 : 700.0;
-                double width = MediaQuery.of(context).size.width - 32;
-                double height = MediaQuery.of(context).size.height - 64;
-
-                if (width > maxWidth) {
-                  width = maxWidth;
-                }
-
-                if (height > maxHeight) {
-                  height = maxHeight;
-                }
-                final value = await showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      return AlertDialog(
-                        contentPadding: EdgeInsets.zero,
-                        insetPadding: EdgeInsets.zero,
-                        actionsPadding: EdgeInsets.zero,
-                        buttonPadding: EdgeInsets.zero,
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            OnrampIframeContainer(
-                              url: q.cryptoDotComCheckoutUrl,
-                              width: width,
-                              height: height,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: AppButton(
-                                label: "Cancel",
-                                onPressed: () {
-                                  Navigator.of(context).pop(null);
-                                },
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    });
-
-                print("VALUE $value");
-                if (value != null) {
-                  Navigator.of(context).pop(q.purchaseUuid);
-                }
+                showCryptoMerchantIframeEmbed(
+                    context, q.cryptoDotComCheckoutUrl, q.purchaseUuid);
               } else {
                 launchUrlString(q.cryptoDotComCheckoutUrl);
                 Navigator.of(context).pop(q.purchaseUuid);
               }
             },
           ),
-          SizedBox(
-            height: 8,
-          ),
-          AppButton(
-            label: "Pay with Stripe",
-            icon: Icons.credit_card,
-            onPressed: () {
-              if (kIsWeb) {
-              } else {
+          if (INCLUDE_STRIPE_INTEGRATION) ...[
+            SizedBox(
+              height: 8,
+            ),
+            AppButton(
+              label: "Pay with Credit Card",
+              icon: Icons.credit_card,
+              onPressed: () {
+                //Stripe does not allow for iframe embed
                 launchUrlString(q.stripeCheckoutUrl);
                 Navigator.of(context).pop(q.purchaseUuid);
-              }
-            },
-          ),
+              },
+            ),
+          ],
           SizedBox(
             height: 8,
           ),

@@ -36,6 +36,7 @@ abstract class WebSessionModel with _$WebSessionModel {
     // @Default(false) bool usingRa,
     @Default(WalletType.rbx) WalletType selectedWalletType,
     @Default(false) bool raActivated,
+    @Default(false) bool raDeactivated,
     @Default(false) bool isAuthenticated,
     @Default("America/Los_Angeles") String timezoneName,
     @Default(false) bool rememberMe,
@@ -46,7 +47,8 @@ abstract class WebSessionModel with _$WebSessionModel {
     @Default(false) bool ready,
   }) = _WebSessionModel;
 
-  factory WebSessionModel.fromJson(Map<String, dynamic> json) => _$WebSessionModelFromJson(json);
+  factory WebSessionModel.fromJson(Map<String, dynamic> json) =>
+      _$WebSessionModelFromJson(json);
 
   bool get usingRa {
     return selectedWalletType == WalletType.ra;

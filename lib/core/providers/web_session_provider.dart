@@ -41,35 +41,45 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
     init();
 
-    loopTimer = Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS), (_) {
+    loopTimer =
+        Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS), (_) {
       loop();
     });
 
-    btcLoopTimer = Timer.periodic(const Duration(seconds: REFRESH_TIMEOUT_SECONDS_WEB_BTC), (_) {
+    btcLoopTimer = Timer.periodic(
+        const Duration(seconds: REFRESH_TIMEOUT_SECONDS_WEB_BTC), (_) {
       btcLoop();
     });
   }
 
   void init() {
     state = WebSessionModel();
-    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
+    final rememberMe =
+        singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
     if (rememberMe) {
       final savedKeypair = singleton<Storage>().getMap(Storage.WEB_KEYPAIR);
       if (savedKeypair != null) {
         final keypair = Keypair.fromJson(savedKeypair);
 
-        final savedRaKeypair = singleton<Storage>().getMap(Storage.WEB_RA_KEYPAIR);
-        final raKeypair = savedRaKeypair != null ? RaKeypair.fromJson(savedRaKeypair) : null;
+        final savedRaKeypair =
+            singleton<Storage>().getMap(Storage.WEB_RA_KEYPAIR);
+        final raKeypair =
+            savedRaKeypair != null ? RaKeypair.fromJson(savedRaKeypair) : null;
 
-        final savedBtcKeypair = singleton<Storage>().getMap(Storage.WEB_BTC_KEYPAIR);
-        final btcKeyPair = savedBtcKeypair != null ? BtcWebAccount.fromJson(savedBtcKeypair) : null;
+        final savedBtcKeypair =
+            singleton<Storage>().getMap(Storage.WEB_BTC_KEYPAIR);
+        final btcKeyPair = savedBtcKeypair != null
+            ? BtcWebAccount.fromJson(savedBtcKeypair)
+            : null;
 
         login(keypair, raKeypair, btcKeyPair, andSave: false);
         ref.read(webTransactionListProvider(keypair.address).notifier);
 
-        final savedSelectedWalletType = singleton<Storage>().getString(Storage.WEB_SELECTED_WALLET_TYPE);
+        final savedSelectedWalletType =
+            singleton<Storage>().getString(Storage.WEB_SELECTED_WALLET_TYPE);
         if (savedSelectedWalletType != null) {
-          final walletType = WalletType.values.firstWhereOrNull((t) => t.storageName == savedSelectedWalletType);
+          final walletType = WalletType.values.firstWhereOrNull(
+              (t) => t.storageName == savedSelectedWalletType);
           if (walletType != null) {
             setSelectedWalletType(walletType, false);
           }
@@ -102,15 +112,18 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     singleton<Storage>().setBool(Storage.REMEMBER_ME, val);
   }
 
-  void login(Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeyPair, {bool andSave = true}) async {
-    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
+  void login(Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeyPair,
+      {bool andSave = true}) async {
+    final rememberMe =
+        singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
     if (rememberMe) {
       singleton<Storage>().setMap(Storage.WEB_KEYPAIR, keypair.toJson());
       if (raKeypair != null) {
         singleton<Storage>().setMap(Storage.WEB_RA_KEYPAIR, raKeypair.toJson());
       }
       if (btcKeyPair != null) {
-        singleton<Storage>().setMap(Storage.WEB_BTC_KEYPAIR, btcKeyPair.toJson());
+        singleton<Storage>()
+            .setMap(Storage.WEB_BTC_KEYPAIR, btcKeyPair.toJson());
       }
     }
 
@@ -123,9 +136,12 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
     final webAddress = await ExplorerService().getWebAddress(keypair.address);
 
-    ref
-        .read(webSelectedAccountProvider.notifier)
-        .setVfx(keypair, webAddress.balance, webAddress.balanceLocked, webAddress.balanceTotal, webAddress.adnr);
+    ref.read(webSelectedAccountProvider.notifier).setVfx(
+        keypair,
+        webAddress.balance,
+        webAddress.balanceLocked,
+        webAddress.balanceTotal,
+        webAddress.adnr);
 
     refreshBtcBalanceInfo();
 
@@ -155,26 +171,34 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       btcKeypair: account.btcKeypair,
     );
 
-    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
+    final rememberMe =
+        singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
 
     if (rememberMe) {
       if (account.keypair != null) {
-        singleton<Storage>().setMap(Storage.WEB_KEYPAIR, account.keypair!.toJson());
+        singleton<Storage>()
+            .setMap(Storage.WEB_KEYPAIR, account.keypair!.toJson());
       }
       if (account.raKeypair != null) {
-        singleton<Storage>().setMap(Storage.WEB_RA_KEYPAIR, account.raKeypair!.toJson());
+        singleton<Storage>()
+            .setMap(Storage.WEB_RA_KEYPAIR, account.raKeypair!.toJson());
       }
       if (account.btcKeypair != null) {
-        singleton<Storage>().setMap(Storage.WEB_BTC_KEYPAIR, account.btcKeypair!.toJson());
+        singleton<Storage>()
+            .setMap(Storage.WEB_BTC_KEYPAIR, account.btcKeypair!.toJson());
       }
     }
 
     if (account.keypair != null) {
-      final webAddress = await ExplorerService().getWebAddress(account.keypair!.address);
+      final webAddress =
+          await ExplorerService().getWebAddress(account.keypair!.address);
 
-      ref
-          .read(webSelectedAccountProvider.notifier)
-          .setVfx(account.keypair!, webAddress.balance, webAddress.balanceLocked, webAddress.balanceTotal, webAddress.adnr);
+      ref.read(webSelectedAccountProvider.notifier).setVfx(
+          account.keypair!,
+          webAddress.balance,
+          webAddress.balanceLocked,
+          webAddress.balanceTotal,
+          webAddress.adnr);
     }
 
     Future.delayed(Duration(milliseconds: 100), () {
@@ -189,11 +213,14 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
     if (type != WalletType.btc) {
       ref.read(mintedNftListProvider.notifier).load(1, state.keypair?.address);
-      ref.read(nftListProvider.notifier).load(1, [state.keypair?.address, state.raKeypair?.address]);
+      ref
+          .read(nftListProvider.notifier)
+          .load(1, [state.keypair?.address, state.raKeypair?.address]);
     }
 
     if (save) {
-      singleton<Storage>().setString(Storage.WEB_SELECTED_WALLET_TYPE, type.storageName);
+      singleton<Storage>()
+          .setString(Storage.WEB_SELECTED_WALLET_TYPE, type.storageName);
     }
   }
 
@@ -221,7 +248,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (state.keypair == null) {
       return;
     }
-    final webAddress = await ExplorerService().getWebAddress(state.keypair!.address);
+    final webAddress =
+        await ExplorerService().getWebAddress(state.keypair!.address);
 
     state = state.copyWith(
       balance: webAddress.balance,
@@ -240,7 +268,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     //   return;
     // }
 
-    final domain = await ExplorerService().btcAdnrLookup(state.btcKeypair!.address);
+    final domain =
+        await ExplorerService().btcAdnrLookup(state.btcKeypair!.address);
     if (state.btcKeypair!.adnr == null && domain != null) {
       state = state.copyWith(
         btcKeypair: state.btcKeypair!.copyWith(adnr: domain),
@@ -256,13 +285,15 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (state.raKeypair == null) {
       return;
     }
-    final webAddress = await ExplorerService().getWebAddress(state.raKeypair!.address);
+    final webAddress =
+        await ExplorerService().getWebAddress(state.raKeypair!.address);
 
     state = state.copyWith(
       raBalance: webAddress.balance,
       raBalanceLocked: webAddress.balanceLocked,
       raBalanceTotal: webAddress.balanceTotal,
       raActivated: webAddress.activated,
+      raDeactivated: webAddress.deactivated,
     );
   }
 
@@ -271,7 +302,9 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       return;
     }
 
-    ref.read(webTokenListProvider.notifier).load([state.keypair?.address, state.raKeypair?.address]);
+    ref
+        .read(webTokenListProvider.notifier)
+        .load([state.keypair?.address, state.raKeypair?.address]);
   }
 
   Future<void> getVbtcTokens() async {
@@ -279,7 +312,9 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       return;
     }
 
-    ref.read(btcWebVbtcTokenListProvider.notifier).load(state.keypair!.address, raAddress: state.raKeypair?.address);
+    ref
+        .read(btcWebVbtcTokenListProvider.notifier)
+        .load(state.keypair!.address, raAddress: state.raKeypair?.address);
   }
 
   // Future<void> getBalance() async {
@@ -295,7 +330,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (state.keypair == null) {
       return;
     }
-    ref.read(nftListProvider.notifier).reloadCurrentPage(address: [state.keypair?.address, state.raKeypair?.address]);
+    ref.read(nftListProvider.notifier).reloadCurrentPage(
+        address: [state.keypair?.address, state.raKeypair?.address]);
     ref.read(webListedNftsProvider.notifier).refresh(state.keypair!.address);
   }
 
@@ -318,7 +354,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
   void refreshBtcBalanceInfo() async {
     if (state.btcKeypair != null) {
-      final btcBalanceInfo = await BtcWebService().addressInfo(state.btcKeypair!.address);
+      final btcBalanceInfo =
+          await BtcWebService().addressInfo(state.btcKeypair!.address);
 
       print("${state.btcKeypair!.address}: ");
       print(btcBalanceInfo?.balance);
@@ -347,12 +384,16 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
   void getBtcBalances() {
     if (state.btcKeypair != null) {
-      ref.read(btcWebTransactionListProvider(state.btcKeypair!.address).notifier).load();
+      ref
+          .read(
+              btcWebTransactionListProvider(state.btcKeypair!.address).notifier)
+          .load();
       refreshBtcBalanceInfo();
     }
   }
 }
 
-final webSessionProvider = StateNotifierProvider<WebSessionProvider, WebSessionModel>(
+final webSessionProvider =
+    StateNotifierProvider<WebSessionProvider, WebSessionModel>(
   (ref) => WebSessionProvider(ref, WebSessionModel()),
 );

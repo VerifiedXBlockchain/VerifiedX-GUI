@@ -100,9 +100,38 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     final keypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
 
-    final balance = ref.watch(webSessionProvider.select((v) => v.raBalance)) ?? 0.0;
+    final balance =
+        ref.watch(webSessionProvider.select((v) => v.raBalance)) ?? 0.0;
     if (keypair == null) {
       return Center(child: Text("No Vault Account Found"));
+    }
+
+    if (ref.watch(webSessionProvider.select((v) => v.raDeactivated))) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.warning,
+                color: Theme.of(context).colorScheme.warning,
+              ),
+              Text(
+                "Warning",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                "This vault account has been recovered and therefore deactivated.\nPlease create a new web wallet account if you'd like to use this feature.",
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
+        ),
+      );
     }
     return Center(
       child: ConstrainedBox(
@@ -127,7 +156,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text("Your vault account is not activated yet. To protect funds and assets securely, please activate first.")
+                    Text(
+                        "Your vault account is not activated yet. To protect funds and assets securely, please activate first.")
                   ],
                 ),
               ),
@@ -156,7 +186,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       ),
                       InkWell(
                         onTap: () async {
-                          await Clipboard.setData(ClipboardData(text: keypair.address));
+                          await Clipboard.setData(
+                              ClipboardData(text: keypair.address));
                           Toast.message("Address copied to clipboard");
                         },
                         child: Icon(
@@ -190,7 +221,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           final session = ref.read(webSessionProvider);
                           final body =
                               "Available: ${session.raBalance} VFX\nLocked: ${session.raBalanceLocked} VFX\nTotal: ${session.raBalanceTotal} VFX";
-                          InfoDialog.show(title: "Vault Account Balance", body: body);
+                          InfoDialog.show(
+                              title: "Vault Account Balance", body: body);
                         },
                         child: Icon(
                           Icons.help,
@@ -204,6 +236,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                     height: 16,
                   ),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Status:",
@@ -214,7 +247,9 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       ),
                       Consumer(
                         builder: (context, ref, _) {
-                          final hasRecovered = ref.watch(webRaPendingRecoveryProvider).contains(keypair.address);
+                          final hasRecovered = ref
+                              .watch(webRaPendingRecoveryProvider)
+                              .contains(keypair.address);
 
                           if (hasRecovered) {
                             return Column(
@@ -222,7 +257,10 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                               children: [
                                 Text(
                                   "Recovery In Progress",
-                                  style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineMedium!
+                                      .copyWith(color: Colors.white),
                                 ),
                                 SizedBox(
                                   height: 8,
@@ -244,7 +282,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                             );
                           }
 
-                          if (ref.watch(webSessionProvider.select((v) => v.raActivated))) {
+                          if (ref.watch(webSessionProvider
+                              .select((v) => v.raActivated))) {
                             return AppBadge(
                               label: "Activated",
                               variant: AppColorVariant.Success,
@@ -286,8 +325,12 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           icon: Icons.arrow_upward,
                           // variant: AppColorVariant.Light,
                           onPressed: () {
-                            ref.read(webCurrencySegementedButtonProvider.notifier).set(WebCurrencyType.vault);
-                            AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.send);
+                            ref
+                                .read(webCurrencySegementedButtonProvider
+                                    .notifier)
+                                .set(WebCurrencyType.vault);
+                            AutoTabsRouter.of(context)
+                                .setActiveIndex(WebRouteIndex.send);
                           },
                         ),
                         AppButton(
@@ -305,7 +348,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                         padding: 0,
                                         child: ListTile(
                                           title: Text("NFTs"),
-                                          leading: Icon(Icons.lightbulb_outline),
+                                          leading:
+                                              Icon(Icons.lightbulb_outline),
                                           trailing: Icon(Icons.chevron_right),
                                           onTap: () {
                                             Navigator.of(context).pop("nfts");
@@ -329,7 +373,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                         padding: 0,
                                         child: ListTile(
                                           title: Text("Bitcoin (vBTC)"),
-                                          leading: Icon(FontAwesomeIcons.bitcoin),
+                                          leading:
+                                              Icon(FontAwesomeIcons.bitcoin),
                                           trailing: Icon(Icons.chevron_right),
                                           onTap: () {
                                             Navigator.of(context).pop("btc");
@@ -345,7 +390,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                             }
 
                             if (option == 'nfts') {
-                              final nfts = await ExplorerService().listNfts(keypair.address);
+                              final nfts = await ExplorerService()
+                                  .listNfts(keypair.address);
                               // final nfts = await ExplorerService().listNfts("xMjrfrzkrNC2g3KJidbwF21gB7R3m46B9w");
 
                               if (nfts.isEmpty) {
@@ -361,7 +407,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                       withClose: true,
                                       children: nfts.map((nft) {
                                         return Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
                                           child: AppCard(
                                             padding: 0,
                                             child: ListTile(
@@ -371,28 +418,38 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              trailing: Icon(Icons.chevron_right),
+                                              trailing:
+                                                  Icon(Icons.chevron_right),
                                               leading: Stack(
                                                 children: [
                                                   Builder(
                                                     builder: (context) {
-                                                      if (nft.currentEvolveAssetWeb != null && nft.currentEvolveAssetWeb!.isImage) {
+                                                      if (nft.currentEvolveAssetWeb !=
+                                                              null &&
+                                                          nft.currentEvolveAssetWeb!
+                                                              .isImage) {
                                                         return SizedBox(
                                                           width: 32,
                                                           height: 32,
                                                           child: AspectRatio(
                                                             aspectRatio: 1,
-                                                            child: CachedNetworkImage(
-                                                              imageUrl: nft.currentEvolveAssetWeb!.location,
-                                                              width: double.infinity,
+                                                            child:
+                                                                CachedNetworkImage(
+                                                              imageUrl: nft
+                                                                  .currentEvolveAssetWeb!
+                                                                  .location,
+                                                              width: double
+                                                                  .infinity,
                                                               fit: BoxFit.cover,
                                                             ),
                                                           ),
                                                         );
                                                       }
 
-                                                      if (nft.primaryAssetWeb != null) {
-                                                        return Icon(Icons.file_present_outlined);
+                                                      if (nft.primaryAssetWeb !=
+                                                          null) {
+                                                        return Icon(Icons
+                                                            .file_present_outlined);
                                                       }
 
                                                       return SizedBox(
@@ -405,7 +462,11 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               ),
                                               onTap: () {
                                                 Navigator.of(context).pop();
-                                                Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: nft.id)));
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            NftDetailScreen(
+                                                                id: nft.id)));
                                               },
                                             ),
                                           ),
@@ -419,17 +480,22 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
 
                             if (option == 'tokens') {
                               // final tokens = await ExplorerService().getTokenBalances("xMjrfrzkrNC2g3KJidbwF21gB7R3m46B9w");
-                              final tokens = await ExplorerService().getTokenBalances(keypair.address);
+                              final tokens = await ExplorerService()
+                                  .getTokenBalances(keypair.address);
 
                               if (tokens.isEmpty) {
-                                Toast.error("Your Vault Account has no Fungible Tokens.");
+                                Toast.error(
+                                    "Your Vault Account has no Fungible Tokens.");
 
                                 return;
                               }
 
                               final balance = tokens
                                   .where((a) => a.address == keypair.address)
-                                  .fold<double>(0, (currentValue, value) => currentValue + value.balance);
+                                  .fold<double>(
+                                      0,
+                                      (currentValue, value) =>
+                                          currentValue + value.balance);
 
                               showModalBottomSheet(
                                   context: context,
@@ -439,7 +505,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                       withClose: true,
                                       children: tokens.map((item) {
                                         return Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
                                           child: AppCard(
                                             padding: 0,
                                             child: ListTile(
@@ -449,18 +516,34 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              trailing: Icon(Icons.chevron_right),
-                                              leading: item.token.imageUrl != null && item.token.imageUrl!.isNotEmpty
-                                                  ? Image.network(item.token.imageUrl!, width: 48, height: 48, fit: BoxFit.cover)
-                                                  : PrettyIcon(
-                                                      type: PrettyIconType.fungibleToken,
-                                                    ),
+                                              trailing:
+                                                  Icon(Icons.chevron_right),
+                                              leading:
+                                                  item.token.imageUrl != null &&
+                                                          item.token.imageUrl!
+                                                              .isNotEmpty
+                                                      ? Image.network(
+                                                          item.token.imageUrl!,
+                                                          width: 48,
+                                                          height: 48,
+                                                          fit: BoxFit.cover)
+                                                      : PrettyIcon(
+                                                          type: PrettyIconType
+                                                              .fungibleToken,
+                                                        ),
                                               onTap: () {
                                                 Navigator.of(context).pop();
 
-                                                ref.invalidate(webTokenDetailProvider(item.token.smartContractId));
-                                                Navigator.of(context)
-                                                    .push(MaterialPageRoute(builder: (_) => WebTokenDetailScreen(scId: item.token.smartContractId)));
+                                                ref.invalidate(
+                                                    webTokenDetailProvider(item
+                                                        .token
+                                                        .smartContractId));
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            WebTokenDetailScreen(
+                                                                scId: item.token
+                                                                    .smartContractId)));
                                               },
                                             ),
                                           ),
@@ -473,10 +556,12 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                             }
 
                             if (option == 'btc') {
-                              final tokens = await ExplorerService().getWebVbtcTokens(keypair.address);
+                              final tokens = await ExplorerService()
+                                  .getWebVbtcTokens(keypair.address);
 
                               if (tokens.isEmpty) {
-                                Toast.error("Your Vault Account has no vBTC Tokens.");
+                                Toast.error(
+                                    "Your Vault Account has no vBTC Tokens.");
 
                                 return;
                               }
@@ -489,7 +574,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                       withClose: true,
                                       children: tokens.map((item) {
                                         return Padding(
-                                          padding: const EdgeInsets.symmetric(vertical: 8),
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 8),
                                           child: AppCard(
                                             padding: 0,
                                             child: ListTile(
@@ -499,7 +585,8 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              trailing: Icon(Icons.chevron_right),
+                                              trailing:
+                                                  Icon(Icons.chevron_right),
                                               leading: CachedNetworkImage(
                                                 imageUrl: item.imageUrl,
                                                 height: 32,
@@ -516,9 +603,16 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                                 Navigator.of(context).pop();
 
                                                 Navigator.of(context).push(MaterialPageRoute(
-                                                    builder: (_) => WebTokenizedBtcDetailScreen(
-                                                        scIdentifier: item.scIdentifier,
-                                                        address: ref.read(webSessionProvider).raKeypair?.address ?? '')));
+                                                    builder: (_) =>
+                                                        WebTokenizedBtcDetailScreen(
+                                                            scIdentifier: item
+                                                                .scIdentifier,
+                                                            address: ref
+                                                                    .read(
+                                                                        webSessionProvider)
+                                                                    .raKeypair
+                                                                    ?.address ??
+                                                                '')));
                                               },
                                             ),
                                           ),
@@ -534,8 +628,12 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           icon: Icons.arrow_downward,
                           variant: AppColorVariant.Light,
                           onPressed: () {
-                            ref.read(webCurrencySegementedButtonProvider.notifier).set(WebCurrencyType.vault);
-                            AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.recieve);
+                            ref
+                                .read(webCurrencySegementedButtonProvider
+                                    .notifier)
+                                .set(WebCurrencyType.vault);
+                            AutoTabsRouter.of(context)
+                                .setActiveIndex(WebRouteIndex.recieve);
                           },
                         ),
                         WebRecoverRaButton(),

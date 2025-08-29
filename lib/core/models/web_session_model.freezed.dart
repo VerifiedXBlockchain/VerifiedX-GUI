@@ -33,6 +33,7 @@ mixin _$WebSessionModel {
       throw _privateConstructorUsedError; // @Default(false) bool usingRa,
   WalletType get selectedWalletType => throw _privateConstructorUsedError;
   bool get raActivated => throw _privateConstructorUsedError;
+  bool get raDeactivated => throw _privateConstructorUsedError;
   bool get isAuthenticated => throw _privateConstructorUsedError;
   String get timezoneName => throw _privateConstructorUsedError;
   bool get rememberMe => throw _privateConstructorUsedError;
@@ -67,6 +68,7 @@ abstract class $WebSessionModelCopyWith<$Res> {
       String? adnr,
       WalletType selectedWalletType,
       bool raActivated,
+      bool raDeactivated,
       bool isAuthenticated,
       String timezoneName,
       bool rememberMe,
@@ -107,6 +109,7 @@ class _$WebSessionModelCopyWithImpl<$Res, $Val extends WebSessionModel>
     Object? adnr = freezed,
     Object? selectedWalletType = null,
     Object? raActivated = null,
+    Object? raDeactivated = null,
     Object? isAuthenticated = null,
     Object? timezoneName = null,
     Object? rememberMe = null,
@@ -164,6 +167,10 @@ class _$WebSessionModelCopyWithImpl<$Res, $Val extends WebSessionModel>
       raActivated: null == raActivated
           ? _value.raActivated
           : raActivated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      raDeactivated: null == raDeactivated
+          ? _value.raDeactivated
+          : raDeactivated // ignore: cast_nullable_to_non_nullable
               as bool,
       isAuthenticated: null == isAuthenticated
           ? _value.isAuthenticated
@@ -270,6 +277,7 @@ abstract class _$$_WebSessionModelCopyWith<$Res>
       String? adnr,
       WalletType selectedWalletType,
       bool raActivated,
+      bool raDeactivated,
       bool isAuthenticated,
       String timezoneName,
       bool rememberMe,
@@ -312,6 +320,7 @@ class __$$_WebSessionModelCopyWithImpl<$Res>
     Object? adnr = freezed,
     Object? selectedWalletType = null,
     Object? raActivated = null,
+    Object? raDeactivated = null,
     Object? isAuthenticated = null,
     Object? timezoneName = null,
     Object? rememberMe = null,
@@ -370,6 +379,10 @@ class __$$_WebSessionModelCopyWithImpl<$Res>
           ? _value.raActivated
           : raActivated // ignore: cast_nullable_to_non_nullable
               as bool,
+      raDeactivated: null == raDeactivated
+          ? _value.raDeactivated
+          : raDeactivated // ignore: cast_nullable_to_non_nullable
+              as bool,
       isAuthenticated: null == isAuthenticated
           ? _value.isAuthenticated
           : isAuthenticated // ignore: cast_nullable_to_non_nullable
@@ -422,6 +435,7 @@ class _$_WebSessionModel extends _WebSessionModel {
       this.adnr,
       this.selectedWalletType = WalletType.rbx,
       this.raActivated = false,
+      this.raDeactivated = false,
       this.isAuthenticated = false,
       this.timezoneName = "America/Los_Angeles",
       this.rememberMe = false,
@@ -464,6 +478,9 @@ class _$_WebSessionModel extends _WebSessionModel {
   final bool raActivated;
   @override
   @JsonKey()
+  final bool raDeactivated;
+  @override
+  @JsonKey()
   final bool isAuthenticated;
   @override
   @JsonKey()
@@ -488,7 +505,7 @@ class _$_WebSessionModel extends _WebSessionModel {
 
   @override
   String toString() {
-    return 'WebSessionModel(keypair: $keypair, raKeypair: $raKeypair, btcKeypair: $btcKeypair, balance: $balance, balanceTotal: $balanceTotal, balanceLocked: $balanceLocked, raBalance: $raBalance, raBalanceTotal: $raBalanceTotal, raBalanceLocked: $raBalanceLocked, adnr: $adnr, selectedWalletType: $selectedWalletType, raActivated: $raActivated, isAuthenticated: $isAuthenticated, timezoneName: $timezoneName, rememberMe: $rememberMe, currentRbxWalletIndex: $currentRbxWalletIndex, currentRaWalletIndex: $currentRaWalletIndex, currentBtcWalletIndex: $currentBtcWalletIndex, btcBalanceInfo: $btcBalanceInfo, ready: $ready)';
+    return 'WebSessionModel(keypair: $keypair, raKeypair: $raKeypair, btcKeypair: $btcKeypair, balance: $balance, balanceTotal: $balanceTotal, balanceLocked: $balanceLocked, raBalance: $raBalance, raBalanceTotal: $raBalanceTotal, raBalanceLocked: $raBalanceLocked, adnr: $adnr, selectedWalletType: $selectedWalletType, raActivated: $raActivated, raDeactivated: $raDeactivated, isAuthenticated: $isAuthenticated, timezoneName: $timezoneName, rememberMe: $rememberMe, currentRbxWalletIndex: $currentRbxWalletIndex, currentRaWalletIndex: $currentRaWalletIndex, currentBtcWalletIndex: $currentBtcWalletIndex, btcBalanceInfo: $btcBalanceInfo, ready: $ready)';
   }
 
   @override
@@ -517,6 +534,8 @@ class _$_WebSessionModel extends _WebSessionModel {
                 other.selectedWalletType == selectedWalletType) &&
             (identical(other.raActivated, raActivated) ||
                 other.raActivated == raActivated) &&
+            (identical(other.raDeactivated, raDeactivated) ||
+                other.raDeactivated == raDeactivated) &&
             (identical(other.isAuthenticated, isAuthenticated) ||
                 other.isAuthenticated == isAuthenticated) &&
             (identical(other.timezoneName, timezoneName) ||
@@ -550,6 +569,7 @@ class _$_WebSessionModel extends _WebSessionModel {
         adnr,
         selectedWalletType,
         raActivated,
+        raDeactivated,
         isAuthenticated,
         timezoneName,
         rememberMe,
@@ -588,6 +608,7 @@ abstract class _WebSessionModel extends WebSessionModel {
       final String? adnr,
       final WalletType selectedWalletType,
       final bool raActivated,
+      final bool raDeactivated,
       final bool isAuthenticated,
       final String timezoneName,
       final bool rememberMe,
@@ -625,6 +646,8 @@ abstract class _WebSessionModel extends WebSessionModel {
   WalletType get selectedWalletType;
   @override
   bool get raActivated;
+  @override
+  bool get raDeactivated;
   @override
   bool get isAuthenticated;
   @override
