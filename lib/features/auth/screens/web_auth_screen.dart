@@ -186,7 +186,25 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
           WebWalletWordWordmark(),
 
           const SizedBox(height: 16),
-          if (needsPassword)
+          if (needsPassword) ...[
+            // Show the address they're unlocking
+            Text(
+              "Unlock wallet for:",
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 12,
+              ),
+            ),
+            Text(
+              storage.getString(Storage.WEB_PRIMARY_ADDRESS) ??
+                  "Unknown Address",
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.7),
+                fontSize: 12,
+                fontFamily: 'RobotoMono',
+              ),
+            ),
+            const SizedBox(height: 16),
             AppButton(
               label: "Enter Password",
               icon: Icons.lock,
@@ -212,7 +230,6 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               },
               variant: AppColorVariant.Light,
             ),
-          if (needsPassword)
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: AppButton(
@@ -224,8 +241,8 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                 },
                 variant: AppColorVariant.Light,
               ),
-            )
-          else
+            ),
+          ] else
             AppButton(
               label: "Login / Create Account",
               icon: Icons.upload,

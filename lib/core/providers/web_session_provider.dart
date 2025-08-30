@@ -192,49 +192,38 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   /// Encrypt and save keys with password
   void encryptAndSaveKeys(Keypair keypair, RaKeypair? raKeypair,
       BtcWebAccount? btcKeyPair, String password) {
-    print("🔐 Starting encryptAndSaveKeys...");
     final storage = singleton<Storage>();
 
     try {
       // Store password hash for verification
-      print("🔐 Storing password hash...");
       PasswordVerificationService.storePasswordHash(password);
-      print("🔐 Password hash stored successfully");
+
+      // Store primary address unencrypted for display on auth screen
+      storage.setString(Storage.WEB_PRIMARY_ADDRESS, keypair.address);
 
       // Encrypt and store VFX keypair
-      print("🔐 Encrypting VFX keypair...");
       final encryptedVfx =
           EncryptionService.encrypt(keypair.toJson(), password);
       storage.setMap(Storage.WEB_KEYPAIR, encryptedVfx);
-      print("🔐 VFX keypair encrypted and stored");
 
       // Encrypt and store RA keypair if exists
       if (raKeypair != null) {
-        print("🔐 Encrypting RA keypair...");
         final encryptedRa =
             EncryptionService.encrypt(raKeypair.toJson(), password);
         storage.setMap(Storage.WEB_RA_KEYPAIR, encryptedRa);
-        print("🔐 RA keypair encrypted and stored");
       }
 
       // Encrypt and store BTC keypair if exists
       if (btcKeyPair != null) {
-        print("🔐 Encrypting BTC keypair...");
         final encryptedBtc =
             EncryptionService.encrypt(btcKeyPair.toJson(), password);
         storage.setMap(Storage.WEB_BTC_KEYPAIR, encryptedBtc);
-        print("🔐 BTC keypair encrypted and stored");
       }
 
       // Mark encryption as enabled
-      print("🔐 Setting encryption flags...");
       storage.setBool(Storage.ENCRYPTION_ENABLED, true);
       storage.setInt(Storage.ENCRYPTION_VERSION, 1);
-      print("🔐 Encryption flags set successfully");
-
-      print("🔐 encryptAndSaveKeys completed successfully!");
     } catch (e) {
-      print("🔐 ERROR in encryptAndSaveKeys: $e");
       rethrow;
     }
   }
@@ -254,6 +243,10 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         }
       }
     }
+
+    // Store primary address for display on auth screen (addresses are public info)
+    final storage = singleton<Storage>();
+    storage.setString(Storage.WEB_PRIMARY_ADDRESS, keypair.address);
 
     state = state.copyWith(
       keypair: keypair,

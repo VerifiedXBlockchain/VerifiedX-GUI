@@ -30,21 +30,20 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
     bool setAsCurrent = false,
     String? encryptionPassword,
   }) {
-    
     final existsAlready = state.isNotEmpty
         ? (state.where((element) =>
             element.keypair?.address == keypair?.address &&
             element.raKeypair?.address == raKeypair?.address &&
             element.btcKeypair?.address == btcKeypair?.address)).isNotEmpty
         : false;
-    
+
     if (existsAlready) {
       return;
     }
 
     final id = state.isNotEmpty ? state.last.id + 1 : 1;
 
-    // Create account 
+    // Create account
     final account = MultiAccountInstance(
       id: id,
       keypair: keypair,
@@ -99,18 +98,16 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
 
     final data = state.map((e) {
       var accountJson = e.toJson();
-      
+
       // Encrypt private keys if password provided
       if (encryptionPassword != null) {
         accountJson = MultiAccountEncryptionService.encryptAccountPrivateKeys(
-          accountJson, 
-          encryptionPassword
-        );
+            accountJson, encryptionPassword);
       }
-      
+
       return jsonEncode(accountJson);
     }).toList();
-    
+
     singleton<Storage>().setList(Storage.MULTIPLE_ACCOUNTS, data);
   }
 }
@@ -118,43 +115,48 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
 /// Creates a MultiAccountInstance that can handle encrypted private keys
 MultiAccountInstance _createAccountFromStoredJson(Map<String, dynamic> json) {
   // Check if any private keys are encrypted
-  final hasEncryptedKeys = MultiAccountEncryptionService.hasEncryptedPrivateKeys(json);
-  
+  final hasEncryptedKeys =
+      MultiAccountEncryptionService.hasEncryptedPrivateKeys(json);
+
   if (!hasEncryptedKeys) {
     // No encryption, create normally
     return MultiAccountInstance.fromJson(json);
   }
-  
+
   // Has encrypted keys - we need to create the account with placeholder/null private keys
   // The actual decryption will happen when the user switches to this account and enters password
-  
+
   // Create a copy of the JSON with placeholder private keys
   final modifiedJson = Map<String, dynamic>.from(json);
-  
+
   if (modifiedJson['keypair'] != null) {
     final keypairJson = Map<String, dynamic>.from(modifiedJson['keypair']);
     if (keypairJson['_isPrivateEncrypted'] == true) {
-      keypairJson['private'] = ''; // Placeholder - will be decrypted when needed
+      keypairJson['private'] =
+          ''; // Placeholder - will be decrypted when needed
     }
     modifiedJson['keypair'] = keypairJson;
   }
-  
+
   if (modifiedJson['raKeypair'] != null) {
     final raKeypairJson = Map<String, dynamic>.from(modifiedJson['raKeypair']);
     if (raKeypairJson['_isPrivateEncrypted'] == true) {
-      raKeypairJson['private'] = ''; // Placeholder - will be decrypted when needed
+      raKeypairJson['private'] =
+          ''; // Placeholder - will be decrypted when needed
     }
     modifiedJson['raKeypair'] = raKeypairJson;
   }
-  
+
   if (modifiedJson['btcKeypair'] != null) {
-    final btcKeypairJson = Map<String, dynamic>.from(modifiedJson['btcKeypair']);
+    final btcKeypairJson =
+        Map<String, dynamic>.from(modifiedJson['btcKeypair']);
     if (btcKeypairJson['_isPrivateEncrypted'] == true) {
-      btcKeypairJson['privateKey'] = ''; // Placeholder - will be decrypted when needed
+      btcKeypairJson['privateKey'] =
+          ''; // Placeholder - will be decrypted when needed
     }
     modifiedJson['btcKeypair'] = btcKeypairJson;
   }
-  
+
   return MultiAccountInstance.fromJson(modifiedJson);
 }
 
@@ -164,8 +166,8 @@ final multiAccountProvider =
   final savedData = singleton<Storage>().getList(Storage.MULTIPLE_ACCOUNTS);
   if (savedData != null) {
     final initialState = savedData
-        .map((e) => _createAccountFromStoredJson(
-            jsonDecode(e) as Map<String, dynamic>))
+        .map((e) =>
+            _createAccountFromStoredJson(jsonDecode(e) as Map<String, dynamic>))
         .toList();
 
     return MultiAccountProvider(ref, initialState);
@@ -181,35 +183,39 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
 
   Future<void> set(MultiAccountInstance account, [String? password]) async {
     var accountToUse = account;
-    
+
     // Need to check if the stored version has encrypted keys by looking at storage
     final storage = singleton<Storage>();
     final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
-    
+
     if (savedData != null) {
       // Find the stored JSON for this account
       final storedAccountJson = savedData
           .map((e) => jsonDecode(e) as Map<String, dynamic>)
           .where((json) => json['id'] == account.id)
           .firstOrNull;
-          
-      if (storedAccountJson != null && 
-          MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson)) {
+
+      if (storedAccountJson != null &&
+          MultiAccountEncryptionService.hasEncryptedPrivateKeys(
+              storedAccountJson)) {
         if (password == null) {
           throw Exception("Password required for encrypted account");
         }
-        
+
         // Decrypt private keys from the stored JSON
-        final decryptedJson = MultiAccountEncryptionService.decryptAccountPrivateKeys(
-          storedAccountJson,
-          password
-        );
+        final decryptedJson =
+            MultiAccountEncryptionService.decryptAccountPrivateKeys(
+                storedAccountJson, password);
         accountToUse = MultiAccountInstance.fromJson(decryptedJson);
       }
     }
-    
+
     state = accountToUse.id;
     ref.read(webSessionProvider.notifier).setMultiAccountInstance(accountToUse);
+    if (accountToUse.keypair != null) {
+      storage.setString(
+          Storage.WEB_PRIMARY_ADDRESS, accountToUse.keypair!.address);
+    }
     syncWithStorage();
   }
 

@@ -34,6 +34,7 @@ abstract class Storage {
   static const ENCRYPTION_ENABLED = "ENCRYPTION_ENABLED";
   static const ENCRYPTION_VERSION = "ENCRYPTION_VERSION";
   static const STORED_PASSWORD_HASH = "STORED_PASSWORD_HASH";
+  static const WEB_PRIMARY_ADDRESS = "WEB_PRIMARY_ADDRESS";
 
   bool isInitialized = false;
 
