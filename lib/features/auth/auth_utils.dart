@@ -60,7 +60,7 @@ Future<void> loginWithEncryption(
 
   // Load into current session
   print("🔑 Loading into current session...");
-  sessionProvider.login(keypair, raKeypair, btcKeypair, andSave: false);
+  sessionProvider.login(keypair, raKeypair, btcKeypair, andSave: false, encryptionPassword: password);
   print("🔑 loginWithEncryption completed");
 }
 

@@ -117,7 +117,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
           ? BtcWebAccount.fromJson(savedBtcKeypair)
           : null;
 
-      login(keypair, raKeypair, btcKeyPair, andSave: false);
+      login(keypair, raKeypair, btcKeyPair, andSave: false); // Legacy unencrypted keys - no encryption password
 
       final savedSelectedWalletType =
           storage.getString(Storage.WEB_SELECTED_WALLET_TYPE);
@@ -171,7 +171,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         }
 
         // Load keys into session
-        login(keypair, raKeypair, btcKeypair, andSave: false);
+        login(keypair, raKeypair, btcKeypair, andSave: false, encryptionPassword: password);
 
         // Restore wallet type selection
         final savedSelectedWalletType =
@@ -246,7 +246,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   }
 
   void login(Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeyPair,
-      {bool andSave = true}) async {
+      {bool andSave = true, String? encryptionPassword}) async {
     print("🔑 login() called with andSave: $andSave");
 
     if (andSave) {
@@ -291,6 +291,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
           raKeypair: raKeypair,
           btcKeypair: btcKeyPair,
           setAsCurrent: true,
+          encryptionPassword: encryptionPassword,
         );
 
     loop();

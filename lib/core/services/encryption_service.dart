@@ -129,4 +129,52 @@ class EncryptionService {
            data.containsKey('iv') &&
            data.containsKey('iterations');
   }
+
+  /// Encrypts a single string with password using AES-256-GCM
+  static Map<String, dynamic> encryptString(String plaintext, String password) {
+    final salt = _generateRandomBytes(_saltLength);
+    final iv = _generateRandomBytes(_ivLength);
+    
+    // Derive key from password using PBKDF2
+    final key = _deriveKey(password, salt);
+    
+    // Convert string to bytes
+    final plaintextBytes = Uint8List.fromList(utf8.encode(plaintext));
+    
+    // Encrypt using AES-GCM
+    final cipher = GCMBlockCipher(AESEngine());
+    final keyParam = KeyParameter(key);
+    final params = AEADParameters(keyParam, 128, iv, Uint8List(0));
+    
+    cipher.init(true, params);
+    final ciphertext = cipher.process(plaintextBytes);
+    
+    return {
+      'encrypted_data': base64.encode(ciphertext),
+      'salt': base64.encode(salt),
+      'iv': base64.encode(iv),
+      'iterations': _pbkdf2Iterations,
+    };
+  }
+
+  /// Decrypts a single string with password
+  static String decryptString(Map<String, dynamic> encryptedData, String password) {
+    final encryptedBytes = base64.decode(encryptedData['encrypted_data']);
+    final salt = base64.decode(encryptedData['salt']);
+    final iv = base64.decode(encryptedData['iv']);
+    final iterations = encryptedData['iterations'] ?? _pbkdf2Iterations;
+    
+    // Derive key from password
+    final key = _deriveKey(password, salt, iterations);
+    
+    // Decrypt using AES-GCM
+    final cipher = GCMBlockCipher(AESEngine());
+    final keyParam = KeyParameter(key);
+    final params = AEADParameters(keyParam, 128, iv, Uint8List(0));
+    
+    cipher.init(false, params);
+    final decryptedBytes = cipher.process(encryptedBytes);
+    
+    return utf8.decode(decryptedBytes);
+  }
 }

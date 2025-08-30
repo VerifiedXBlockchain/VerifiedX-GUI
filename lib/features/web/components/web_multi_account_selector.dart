@@ -15,6 +15,7 @@ import 'package:collection/collection.dart';
 import 'package:rbx_wallet/utils/validation.dart';
 
 import '../../../core/providers/web_session_provider.dart';
+import '../../../core/services/multi_account_password_service.dart';
 import '../../../core/utils.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../utils/toast.dart';
@@ -113,7 +114,8 @@ class WebMultiAccountSelector extends BaseComponent {
             return;
           }
 
-          ref.read(selectedMultiAccountProvider.notifier).setFromId(value);
+          // Use MultiAccountPasswordService to handle encrypted accounts
+          MultiAccountPasswordService.switchToAccountById(context, ref, value);
         },
         itemBuilder: (context) {
           final items = <PopupMenuEntry<int>>[];
@@ -206,7 +208,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: InkWell(
                 onTap: () {
-                  ref.read(selectedMultiAccountProvider.notifier).setFromId(account.id);
+                  MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
                 },
                 child: AppCard(
                   borderColor: selected ? Colors.white24 : null,
@@ -387,7 +389,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                 variant: AppColorVariant.Light,
                                 type: AppButtonType.Outlined,
                                 onPressed: () {
-                                  ref.read(selectedMultiAccountProvider.notifier).setFromId(account.id);
+                                  MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
                                 },
                               ),
                             SizedBox(
@@ -440,7 +442,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                 if (confimed == true) {
                                   ref.read(multiAccountProvider.notifier).remove(account.id);
                                   if (otherAccount != null) {
-                                    ref.read(selectedMultiAccountProvider.notifier).setFromId(otherAccount.id);
+                                    MultiAccountPasswordService.switchToAccountById(context, ref, otherAccount.id);
                                   }
                                 }
                               },
