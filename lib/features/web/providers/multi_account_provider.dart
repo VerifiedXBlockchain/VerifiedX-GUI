@@ -13,7 +13,9 @@ import "package:collection/collection.dart";
 
 class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
   final Ref ref;
-  MultiAccountProvider(this.ref, [List<MultiAccountInstance> initialState = const []]) : super(initialState);
+  MultiAccountProvider(this.ref,
+      [List<MultiAccountInstance> initialState = const []])
+      : super(initialState);
 
   set(List<MultiAccountInstance> accounts) {
     state = accounts;
@@ -91,18 +93,20 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
       return;
     }
 
-    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-    if (rememberMe) {
-      final data = state.map((e) => jsonEncode(e.toJson())).toList();
-      singleton<Storage>().setList(Storage.MULTIPLE_ACCOUNTS, data);
-    }
+    final data = state.map((e) => jsonEncode(e.toJson())).toList();
+    singleton<Storage>().setList(Storage.MULTIPLE_ACCOUNTS, data);
   }
 }
 
-final multiAccountProvider = StateNotifierProvider<MultiAccountProvider, List<MultiAccountInstance>>((ref) {
+final multiAccountProvider =
+    StateNotifierProvider<MultiAccountProvider, List<MultiAccountInstance>>(
+        (ref) {
   final savedData = singleton<Storage>().getList(Storage.MULTIPLE_ACCOUNTS);
   if (savedData != null) {
-    final initialState = savedData.map((e) => MultiAccountInstance.fromJson(jsonDecode(e) as Map<String, dynamic>)).toList();
+    final initialState = savedData
+        .map((e) => MultiAccountInstance.fromJson(
+            jsonDecode(e) as Map<String, dynamic>))
+        .toList();
 
     return MultiAccountProvider(ref, initialState);
   }
@@ -112,7 +116,8 @@ final multiAccountProvider = StateNotifierProvider<MultiAccountProvider, List<Mu
 
 class SelectedMultiAccountProvider extends StateNotifier<int> {
   final Ref ref;
-  SelectedMultiAccountProvider(this.ref, int initialState) : super(initialState);
+  SelectedMultiAccountProvider(this.ref, int initialState)
+      : super(initialState);
 
   set(MultiAccountInstance account) {
     state = account.id;
@@ -125,7 +130,8 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
       return;
     }
 
-    final account = ref.read(multiAccountProvider).firstWhereOrNull((a) => a.id == id);
+    final account =
+        ref.read(multiAccountProvider).firstWhereOrNull((a) => a.id == id);
 
     if (account != null) {
       set(account);
@@ -143,14 +149,13 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
       return;
     }
 
-    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-    if (rememberMe) {
-      singleton<Storage>().setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, state);
-    }
+    singleton<Storage>().setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, state);
   }
 }
 
-final selectedMultiAccountProvider = StateNotifierProvider<SelectedMultiAccountProvider, int?>((ref) {
-  final initialState = singleton<Storage>().getInt(Storage.MULTIPLE_ACCOUNT_SELECTED);
+final selectedMultiAccountProvider =
+    StateNotifierProvider<SelectedMultiAccountProvider, int?>((ref) {
+  final initialState =
+      singleton<Storage>().getInt(Storage.MULTIPLE_ACCOUNT_SELECTED);
   return SelectedMultiAccountProvider(ref, initialState ?? 1);
 });

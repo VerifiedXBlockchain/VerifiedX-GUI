@@ -39,12 +39,14 @@ abstract class WebSessionModel with _$WebSessionModel {
     @Default(false) bool raDeactivated,
     @Default(false) bool isAuthenticated,
     @Default("America/Los_Angeles") String timezoneName,
-    @Default(false) bool rememberMe,
     @Default(0) int currentRbxWalletIndex,
     @Default(0) int currentRaWalletIndex,
     @Default(0) int currentBtcWalletIndex,
     BtcWebBalanceInfo? btcBalanceInfo,
     @Default(false) bool ready,
+    @Default(false) bool needsPassword,
+    @Default(false) bool needsMigration,
+    @Default(false) bool hasEncryptedKeys,
   }) = _WebSessionModel;
 
   factory WebSessionModel.fromJson(Map<String, dynamic> json) =>

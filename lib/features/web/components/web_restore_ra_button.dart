@@ -40,7 +40,8 @@ class WebRestoreRaButton extends BaseComponent {
         final restoreCode = await PromptModal.show(
           contextOverride: context,
           title: "Restore Code",
-          body: "Paste in your RESTORE CODE to import your existing Vault Account.",
+          body:
+              "Paste in your RESTORE CODE to import your existing Vault Account.",
           validator: (v) => null,
           labelText: "Restore Code",
         );
@@ -53,11 +54,13 @@ class WebRestoreRaButton extends BaseComponent {
 
         final primaryPrivateKey = data.split("//")[0];
 
-        final tempKeypair = await KeygenService.importReserveAccountPrivateKey(primaryPrivateKey);
+        final tempKeypair = await KeygenService.importReserveAccountPrivateKey(
+            primaryPrivateKey);
 
         final recoveryPrivateKey = data.split("//")[1];
 
-        final recoveryKeypair = await KeygenService.importPrivateKey(recoveryPrivateKey);
+        final recoveryKeypair =
+            await KeygenService.importPrivateKey(recoveryPrivateKey);
 
         final raKeypair = RaKeypair(
           private: tempKeypair.private,
@@ -71,9 +74,10 @@ class WebRestoreRaButton extends BaseComponent {
 
         ref.read(webSessionProvider.notifier).setRaKeypair(raKeypair);
 
-        final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-        if (rememberMe) {
-          singleton<Storage>().setMap(Storage.WEB_RA_KEYPAIR, raKeypair.toJson());
+        // Only save unencrypted keys if encryption is NOT enabled (legacy mode)
+        final storage = singleton<Storage>();
+        if (!storage.isEncryptionEnabled()) {
+          storage.setMap(Storage.WEB_RA_KEYPAIR, raKeypair.toJson());
         }
 
         Toast.message("Vault Account restored");

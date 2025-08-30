@@ -31,7 +31,6 @@ _$_WebSessionModel _$$_WebSessionModelFromJson(Map<String, dynamic> json) =>
       raDeactivated: json['raDeactivated'] as bool? ?? false,
       isAuthenticated: json['isAuthenticated'] as bool? ?? false,
       timezoneName: json['timezoneName'] as String? ?? "America/Los_Angeles",
-      rememberMe: json['rememberMe'] as bool? ?? false,
       currentRbxWalletIndex: json['currentRbxWalletIndex'] as int? ?? 0,
       currentRaWalletIndex: json['currentRaWalletIndex'] as int? ?? 0,
       currentBtcWalletIndex: json['currentBtcWalletIndex'] as int? ?? 0,
@@ -40,6 +39,9 @@ _$_WebSessionModel _$$_WebSessionModelFromJson(Map<String, dynamic> json) =>
           : BtcWebBalanceInfo.fromJson(
               json['btcBalanceInfo'] as Map<String, dynamic>),
       ready: json['ready'] as bool? ?? false,
+      needsPassword: json['needsPassword'] as bool? ?? false,
+      needsMigration: json['needsMigration'] as bool? ?? false,
+      hasEncryptedKeys: json['hasEncryptedKeys'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_WebSessionModelToJson(_$_WebSessionModel instance) =>
@@ -59,12 +61,14 @@ Map<String, dynamic> _$$_WebSessionModelToJson(_$_WebSessionModel instance) =>
       'raDeactivated': instance.raDeactivated,
       'isAuthenticated': instance.isAuthenticated,
       'timezoneName': instance.timezoneName,
-      'rememberMe': instance.rememberMe,
       'currentRbxWalletIndex': instance.currentRbxWalletIndex,
       'currentRaWalletIndex': instance.currentRaWalletIndex,
       'currentBtcWalletIndex': instance.currentBtcWalletIndex,
       'btcBalanceInfo': instance.btcBalanceInfo,
       'ready': instance.ready,
+      'needsPassword': instance.needsPassword,
+      'needsMigration': instance.needsMigration,
+      'hasEncryptedKeys': instance.hasEncryptedKeys,
     };
 
 const _$WalletTypeEnumMap = {

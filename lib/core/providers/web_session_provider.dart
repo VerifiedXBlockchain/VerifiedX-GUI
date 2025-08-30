@@ -19,6 +19,8 @@ import '../models/web_session_model.dart';
 import '../../features/transactions/providers/web_transaction_list_provider.dart';
 import '../../features/web_shop/providers/web_listed_nfts_provider.dart';
 import '../../utils/html_helpers.dart';
+import '../services/encryption_service.dart';
+import '../services/password_verification_service.dart';
 
 import '../../app.dart';
 import '../../features/keygen/models/keypair.dart';
@@ -27,6 +29,8 @@ import '../app_constants.dart';
 import '../services/explorer_service.dart';
 import '../singletons.dart';
 import '../storage.dart';
+import '../web_router.gr.dart';
+import 'package:auto_route/auto_route.dart';
 
 class WebSessionProvider extends StateNotifier<WebSessionModel> {
   final Ref ref;
@@ -54,49 +58,39 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
   void init() {
     state = WebSessionModel();
-    final rememberMe =
-        singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-    if (rememberMe) {
-      final savedKeypair = singleton<Storage>().getMap(Storage.WEB_KEYPAIR);
-      if (savedKeypair != null) {
-        final keypair = Keypair.fromJson(savedKeypair);
+    final storage = singleton<Storage>();
+    final hasEncryptedKeys = storage.isEncryptionEnabled();
+    final hasPasswordHash = storage.hasPasswordHash();
 
-        final savedRaKeypair =
-            singleton<Storage>().getMap(Storage.WEB_RA_KEYPAIR);
-        final raKeypair =
-            savedRaKeypair != null ? RaKeypair.fromJson(savedRaKeypair) : null;
-
-        final savedBtcKeypair =
-            singleton<Storage>().getMap(Storage.WEB_BTC_KEYPAIR);
-        final btcKeyPair = savedBtcKeypair != null
-            ? BtcWebAccount.fromJson(savedBtcKeypair)
-            : null;
-
-        login(keypair, raKeypair, btcKeyPair, andSave: false);
-        ref.read(webTransactionListProvider(keypair.address).notifier);
-
-        final savedSelectedWalletType =
-            singleton<Storage>().getString(Storage.WEB_SELECTED_WALLET_TYPE);
-        if (savedSelectedWalletType != null) {
-          final walletType = WalletType.values.firstWhereOrNull(
-              (t) => t.storageName == savedSelectedWalletType);
-          if (walletType != null) {
-            setSelectedWalletType(walletType, false);
-          }
-        }
-      }
-    } else {
-      Future.delayed(const Duration(milliseconds: 500), () {
+    if (hasEncryptedKeys && hasPasswordHash) {
+      // Has encrypted keys - need password to decrypt
+      state = state.copyWith(
+        isAuthenticated: false,
+        ready: true,
+      );
+      // Redirect to auth screen for password entry
+      Future.delayed(const Duration(milliseconds: 100), () {
         final context = rootNavigatorKey.currentContext;
-
-        //TODO set whitelisted routes
-        // if (context != null) AutoRouter.of(context).replace(const WebAuthRouter());
+        if (context != null) {
+          AutoRouter.of(context).replace(const WebAuthRouter());
+        }
       });
-      state = state.copyWith(isAuthenticated: false);
+    } else {
+      // Check for legacy unencrypted keys
+      final savedKeypair = storage.getMap(Storage.WEB_KEYPAIR);
+      if (savedKeypair != null &&
+          !EncryptionService.isEncrypted(savedKeypair)) {
+        // Legacy unencrypted keys found - load them
+        _loadLegacyUnencryptedKeys(storage);
+        state = state.copyWith(ready: true); // Make sure we set ready flag
+      } else {
+        // No keys at all
+        state = state.copyWith(isAuthenticated: false, ready: true);
+      }
     }
 
     final timezoneName = DateTime.now().timeZoneName.toString();
-    state = state.copyWith(timezoneName: timezoneName, ready: true);
+    state = state.copyWith(timezoneName: timezoneName);
     Future.delayed(const Duration(milliseconds: 500), () {
       final url = HtmlHelpers().getUrl();
       print("URL: $url");
@@ -108,23 +102,170 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     });
   }
 
-  void setRememberMe(bool val) {
-    singleton<Storage>().setBool(Storage.REMEMBER_ME, val);
+  /// Load legacy unencrypted keys (backward compatibility)
+  void _loadLegacyUnencryptedKeys(Storage storage) {
+    final savedKeypair = storage.getMap(Storage.WEB_KEYPAIR);
+    if (savedKeypair != null) {
+      final keypair = Keypair.fromJson(savedKeypair);
+
+      final savedRaKeypair = storage.getMap(Storage.WEB_RA_KEYPAIR);
+      final raKeypair =
+          savedRaKeypair != null ? RaKeypair.fromJson(savedRaKeypair) : null;
+
+      final savedBtcKeypair = storage.getMap(Storage.WEB_BTC_KEYPAIR);
+      final btcKeyPair = savedBtcKeypair != null
+          ? BtcWebAccount.fromJson(savedBtcKeypair)
+          : null;
+
+      login(keypair, raKeypair, btcKeyPair, andSave: false);
+
+      final savedSelectedWalletType =
+          storage.getString(Storage.WEB_SELECTED_WALLET_TYPE);
+      if (savedSelectedWalletType != null) {
+        final walletType = WalletType.values
+            .firstWhereOrNull((t) => t.storageName == savedSelectedWalletType);
+        if (walletType != null) {
+          setSelectedWalletType(walletType, false);
+        }
+      }
+    }
+  }
+
+  /// Login with encrypted keys using password
+  Future<bool> loginWithPassword(String password) async {
+    final storage = singleton<Storage>();
+
+    // Verify password first
+    print("🔓 Verifying password...");
+    if (!PasswordVerificationService.verifyPassword(password)) {
+      print("🔓 Password verification FAILED");
+      return false;
+    }
+    print("🔓 Password verification SUCCESS");
+
+    try {
+      // Decrypt VFX keypair
+      final encryptedVfx = storage.getMap(Storage.WEB_KEYPAIR);
+      print("🔓 Encrypted VFX data: $encryptedVfx");
+      if (encryptedVfx != null) {
+        print("🔓 VFX data has keys: ${encryptedVfx.keys.toList()}");
+        print("Using password: $password");
+        final decryptedVfx = EncryptionService.decrypt(encryptedVfx, password);
+        final keypair = Keypair.fromJson(decryptedVfx);
+
+        // Decrypt RA keypair if exists
+        RaKeypair? raKeypair;
+        final encryptedRa = storage.getMap(Storage.WEB_RA_KEYPAIR);
+        if (encryptedRa != null) {
+          final decryptedRa = EncryptionService.decrypt(encryptedRa, password);
+          raKeypair = RaKeypair.fromJson(decryptedRa);
+        }
+
+        // Decrypt BTC keypair if exists
+        BtcWebAccount? btcKeypair;
+        final encryptedBtc = storage.getMap(Storage.WEB_BTC_KEYPAIR);
+        if (encryptedBtc != null) {
+          final decryptedBtc =
+              EncryptionService.decrypt(encryptedBtc, password);
+          btcKeypair = BtcWebAccount.fromJson(decryptedBtc);
+        }
+
+        // Load keys into session
+        login(keypair, raKeypair, btcKeypair, andSave: false);
+
+        // Restore wallet type selection
+        final savedSelectedWalletType =
+            storage.getString(Storage.WEB_SELECTED_WALLET_TYPE);
+        if (savedSelectedWalletType != null) {
+          final walletType = WalletType.values.firstWhereOrNull(
+              (t) => t.storageName == savedSelectedWalletType);
+          if (walletType != null) {
+            setSelectedWalletType(walletType, false);
+          }
+        }
+
+        return true;
+      }
+    } catch (e, st) {
+      print("Failed to decrypt keys: $e");
+      print(st);
+      return false;
+    }
+
+    return false;
+  }
+
+  /// Encrypt and save keys with password
+  void encryptAndSaveKeys(Keypair keypair, RaKeypair? raKeypair,
+      BtcWebAccount? btcKeyPair, String password) {
+    print("🔐 Starting encryptAndSaveKeys...");
+    final storage = singleton<Storage>();
+
+    try {
+      // Store password hash for verification
+      print("🔐 Storing password hash...");
+      PasswordVerificationService.storePasswordHash(password);
+      print("🔐 Password hash stored successfully");
+
+      // Encrypt and store VFX keypair
+      print("🔐 Encrypting VFX keypair...");
+      final encryptedVfx =
+          EncryptionService.encrypt(keypair.toJson(), password);
+      storage.setMap(Storage.WEB_KEYPAIR, encryptedVfx);
+      print("🔐 VFX keypair encrypted and stored");
+
+      // Encrypt and store RA keypair if exists
+      if (raKeypair != null) {
+        print("🔐 Encrypting RA keypair...");
+        final encryptedRa =
+            EncryptionService.encrypt(raKeypair.toJson(), password);
+        storage.setMap(Storage.WEB_RA_KEYPAIR, encryptedRa);
+        print("🔐 RA keypair encrypted and stored");
+      }
+
+      // Encrypt and store BTC keypair if exists
+      if (btcKeyPair != null) {
+        print("🔐 Encrypting BTC keypair...");
+        final encryptedBtc =
+            EncryptionService.encrypt(btcKeyPair.toJson(), password);
+        storage.setMap(Storage.WEB_BTC_KEYPAIR, encryptedBtc);
+        print("🔐 BTC keypair encrypted and stored");
+      }
+
+      // Mark encryption as enabled
+      print("🔐 Setting encryption flags...");
+      storage.setBool(Storage.ENCRYPTION_ENABLED, true);
+      storage.setInt(Storage.ENCRYPTION_VERSION, 1);
+      print("🔐 Encryption flags set successfully");
+
+      print("🔐 encryptAndSaveKeys completed successfully!");
+    } catch (e) {
+      print("🔐 ERROR in encryptAndSaveKeys: $e");
+      rethrow;
+    }
   }
 
   void login(Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeyPair,
       {bool andSave = true}) async {
-    final rememberMe =
-        singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-    if (rememberMe) {
-      singleton<Storage>().setMap(Storage.WEB_KEYPAIR, keypair.toJson());
-      if (raKeypair != null) {
-        singleton<Storage>().setMap(Storage.WEB_RA_KEYPAIR, raKeypair.toJson());
+    print("🔑 login() called with andSave: $andSave");
+
+    if (andSave) {
+      final storage = singleton<Storage>();
+      // Only save unencrypted keys if encryption is NOT enabled (legacy mode)
+      if (!storage.isEncryptionEnabled()) {
+        print("🔑 Saving unencrypted keys to storage (legacy mode)");
+        storage.setMap(Storage.WEB_KEYPAIR, keypair.toJson());
+        if (raKeypair != null) {
+          storage.setMap(Storage.WEB_RA_KEYPAIR, raKeypair.toJson());
+        }
+        if (btcKeyPair != null) {
+          storage.setMap(Storage.WEB_BTC_KEYPAIR, btcKeyPair.toJson());
+        }
+      } else {
+        print("🔑 Encryption enabled - NOT saving unencrypted keys to storage");
       }
-      if (btcKeyPair != null) {
-        singleton<Storage>()
-            .setMap(Storage.WEB_BTC_KEYPAIR, btcKeyPair.toJson());
-      }
+    } else {
+      print("🔑 NOT saving keys to storage (andSave=$andSave)");
     }
 
     state = state.copyWith(
@@ -171,21 +312,17 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       btcKeypair: account.btcKeypair,
     );
 
-    final rememberMe =
-        singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-
-    if (rememberMe) {
+    // Only save unencrypted keys if encryption is NOT enabled (legacy mode)
+    final storage = singleton<Storage>();
+    if (!storage.isEncryptionEnabled()) {
       if (account.keypair != null) {
-        singleton<Storage>()
-            .setMap(Storage.WEB_KEYPAIR, account.keypair!.toJson());
+        storage.setMap(Storage.WEB_KEYPAIR, account.keypair!.toJson());
       }
       if (account.raKeypair != null) {
-        singleton<Storage>()
-            .setMap(Storage.WEB_RA_KEYPAIR, account.raKeypair!.toJson());
+        storage.setMap(Storage.WEB_RA_KEYPAIR, account.raKeypair!.toJson());
       }
       if (account.btcKeypair != null) {
-        singleton<Storage>()
-            .setMap(Storage.WEB_BTC_KEYPAIR, account.btcKeypair!.toJson());
+        storage.setMap(Storage.WEB_BTC_KEYPAIR, account.btcKeypair!.toJson());
       }
     }
 
@@ -201,7 +338,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
           webAddress.adnr);
     }
 
-    Future.delayed(Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds: 100), () {
       refreshBtcBalanceInfo();
       loop();
       btcLoop();
@@ -344,10 +481,14 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     refreshBtcBalanceInfo();
 
     if (andSave) {
-      if (account != null) {
-        singleton<Storage>().setMap(Storage.WEB_BTC_KEYPAIR, account.toJson());
-      } else {
-        singleton<Storage>().remove(Storage.WEB_BTC_KEYPAIR);
+      final storage = singleton<Storage>();
+      // Only save unencrypted keys if encryption is NOT enabled (legacy mode)
+      if (!storage.isEncryptionEnabled()) {
+        if (account != null) {
+          storage.setMap(Storage.WEB_BTC_KEYPAIR, account.toJson());
+        } else {
+          storage.remove(Storage.WEB_BTC_KEYPAIR);
+        }
       }
     }
   }
@@ -372,6 +513,11 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     singleton<Storage>().remove(Storage.WEB_BTC_KEYPAIR);
     singleton<Storage>().remove(Storage.MULTIPLE_ACCOUNTS);
     singleton<Storage>().remove(Storage.MULTIPLE_ACCOUNT_SELECTED);
+    singleton<Storage>().remove(Storage.STORED_PASSWORD_HASH);
+    singleton<Storage>().remove(Storage.ENCRYPTION_ENABLED);
+    singleton<Storage>().remove(Storage.ENCRYPTION_VERSION);
+    singleton<Storage>().remove(Storage.WEB_AUTH_TOKEN);
+
     // state = WebSessionModel();
 
     await Future.delayed(const Duration(milliseconds: 150));
