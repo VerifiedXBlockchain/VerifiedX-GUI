@@ -18,6 +18,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/multi_account_password_service.dart';
 import '../../../core/utils.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../utils/html_helpers.dart';
 import '../../../utils/toast.dart';
 import '../../auth/auth_utils.dart';
 import '../../keygen/models/keypair.dart';
@@ -110,6 +111,12 @@ class WebMultiAccountSelector extends BaseComponent {
             return;
           }
 
+          if (value == -2) {
+            // Lock Wallet - hard redirect to "/" (clears memory but keeps encrypted storage)
+            HtmlHelpers().redirect("/");
+            return;
+          }
+
           if (value == selectedAccountId) {
             return;
           }
@@ -178,6 +185,21 @@ class WebMultiAccountSelector extends BaseComponent {
               ),
             );
           }
+
+          // Add Lock Wallet option
+          items.add(PopupMenuDivider());
+          items.add(
+            PopupMenuItem(
+              value: -2,
+              child: Row(
+                children: [
+                  Icon(Icons.lock, size: 16),
+                  SizedBox(width: 8),
+                  Text("Lock Wallet"),
+                ],
+              ),
+            ),
+          );
 
           return items;
         });
