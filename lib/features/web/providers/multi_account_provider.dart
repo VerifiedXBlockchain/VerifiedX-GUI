@@ -30,10 +30,6 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
     bool setAsCurrent = false,
     String? encryptionPassword,
   }) {
-    print("👥 MultiAccountProvider.add() called");
-    print("👥 Current state length: ${state.length}");
-    print("👥 Adding account with address: ${keypair?.address}");
-    print("👥 Encryption password provided: ${encryptionPassword != null}");
     
     final existsAlready = state.isNotEmpty
         ? (state.where((element) =>
@@ -41,11 +37,8 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
             element.raKeypair?.address == raKeypair?.address &&
             element.btcKeypair?.address == btcKeypair?.address)).isNotEmpty
         : false;
-
-    print("👥 Account exists already: $existsAlready");
     
     if (existsAlready) {
-      print("👥 Account already exists - skipping add");
       return;
     }
 
@@ -60,14 +53,11 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
     );
 
     state = [...state, account];
-    print("👥 Account added successfully - new state length: ${state.length}");
 
     if (setAsCurrent) {
-      print("👥 Setting as current account");
       ref.read(selectedMultiAccountProvider.notifier).set(account);
     }
 
-    print("👥 Calling syncWithStorage()");
     syncWithStorage(encryptionPassword);
   }
 
@@ -102,11 +92,7 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
   }
 
   syncWithStorage([String? encryptionPassword]) {
-    print("👥 syncWithStorage() called with ${state.length} accounts");
-    print("👥 Encryption password provided: ${encryptionPassword != null}");
-    
     if (state.isEmpty) {
-      print("👥 State is empty - removing MULTIPLE_ACCOUNTS storage");
       singleton<Storage>().remove(Storage.MULTIPLE_ACCOUNTS);
       return;
     }
@@ -116,7 +102,6 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
       
       // Encrypt private keys if password provided
       if (encryptionPassword != null) {
-        print("👥 Encrypting account ${e.id} private keys");
         accountJson = MultiAccountEncryptionService.encryptAccountPrivateKeys(
           accountJson, 
           encryptionPassword
@@ -126,9 +111,7 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
       return jsonEncode(accountJson);
     }).toList();
     
-    print("👥 Saving ${data.length} accounts to storage");
     singleton<Storage>().setList(Storage.MULTIPLE_ACCOUNTS, data);
-    print("👥 Accounts saved to storage successfully");
   }
 }
 

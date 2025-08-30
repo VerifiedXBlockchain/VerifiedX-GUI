@@ -52,16 +52,11 @@ Future<void> loginWithEncryption(
   BtcWebAccount? btcKeypair,
   String password,
 ) async {
-  print("🔑 loginWithEncryption called");
-  print(
-      "🔑 Received password: '${password.isNotEmpty ? '[REDACTED-${password.length} chars]' : 'empty'}'");
   final sessionProvider = ref.read(webSessionProvider.notifier);
   sessionProvider.encryptAndSaveKeys(keypair, raKeypair, btcKeypair, password);
 
   // Load into current session
-  print("🔑 Loading into current session...");
   sessionProvider.login(keypair, raKeypair, btcKeypair, andSave: false, encryptionPassword: password);
-  print("🔑 loginWithEncryption completed");
 }
 
 Future<void> handleImportWithPrivateKey(

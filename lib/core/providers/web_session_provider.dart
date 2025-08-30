@@ -136,20 +136,14 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     final storage = singleton<Storage>();
 
     // Verify password first
-    print("🔓 Verifying password...");
     if (!PasswordVerificationService.verifyPassword(password)) {
-      print("🔓 Password verification FAILED");
       return false;
     }
-    print("🔓 Password verification SUCCESS");
 
     try {
       // Decrypt VFX keypair
       final encryptedVfx = storage.getMap(Storage.WEB_KEYPAIR);
-      print("🔓 Encrypted VFX data: $encryptedVfx");
       if (encryptedVfx != null) {
-        print("🔓 VFX data has keys: ${encryptedVfx.keys.toList()}");
-        print("Using password: $password");
         final decryptedVfx = EncryptionService.decrypt(encryptedVfx, password);
         final keypair = Keypair.fromJson(decryptedVfx);
 
@@ -247,13 +241,10 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
   void login(Keypair keypair, RaKeypair? raKeypair, BtcWebAccount? btcKeyPair,
       {bool andSave = true, String? encryptionPassword}) async {
-    print("🔑 login() called with andSave: $andSave");
-
     if (andSave) {
       final storage = singleton<Storage>();
       // Only save unencrypted keys if encryption is NOT enabled (legacy mode)
       if (!storage.isEncryptionEnabled()) {
-        print("🔑 Saving unencrypted keys to storage (legacy mode)");
         storage.setMap(Storage.WEB_KEYPAIR, keypair.toJson());
         if (raKeypair != null) {
           storage.setMap(Storage.WEB_RA_KEYPAIR, raKeypair.toJson());
@@ -261,11 +252,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         if (btcKeyPair != null) {
           storage.setMap(Storage.WEB_BTC_KEYPAIR, btcKeyPair.toJson());
         }
-      } else {
-        print("🔑 Encryption enabled - NOT saving unencrypted keys to storage");
       }
-    } else {
-      print("🔑 NOT saving keys to storage (andSave=$andSave)");
     }
 
     state = state.copyWith(

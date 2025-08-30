@@ -43,7 +43,6 @@ class PasswordPromptService {
     String labelText = "New Password",
     String? customMessage,
   }) async {
-    print("🔑 Prompting for new password...");
     final password = await PromptModal.show(
       contextOverride: context,
       title: title,
@@ -55,11 +54,9 @@ class PasswordPromptService {
       lines: 1, // Ensure single line for password
     );
 
-    print("🔑 User entered password: '${password?.isNotEmpty == true ? '[REDACTED-${password!.length} chars]' : 'null/empty'}'");
     
     if (password != null) {
       // Confirm password
-      print("🔑 Prompting for password confirmation...");
       final confirmPassword = await PromptModal.show(
         contextOverride: context,
         title: "Confirm Password",
@@ -73,14 +70,10 @@ class PasswordPromptService {
         obscureText: true,
         lines: 1, // Ensure single line for password
       );
-
-      print("🔑 Password confirmation: '${confirmPassword?.isNotEmpty == true ? '[REDACTED-${confirmPassword!.length} chars]' : 'null/empty'}'");
       
       if (confirmPassword == password) {
-        print("🔑 Password confirmed successfully, returning password");
         return password;
       } else {
-        print("🔑 Password confirmation failed");
         Toast.error("Password confirmation failed");
         return null;
       }

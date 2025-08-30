@@ -39,19 +39,13 @@ class EncryptionService {
 
   /// Decrypts data with password
   static Map<String, dynamic> decrypt(Map<String, dynamic> encryptedData, String password) {
-    print("🔓 Decrypting data...");
-    print("🔓 Encrypted data structure: $encryptedData");
-    print("🔓 encrypted_data field: ${encryptedData['encrypted_data']}");
     final encryptedBytes = base64.decode(encryptedData['encrypted_data']);
     final salt = base64.decode(encryptedData['salt']);
     final iv = base64.decode(encryptedData['iv']);
     final iterations = encryptedData['iterations'] ?? _pbkdf2Iterations;
-    print("🔓 Using $iterations iterations for decryption");
     
     // Derive key from password
-    print("🔓 Deriving key from password...");
     final key = _deriveKey(password, salt, iterations);
-    print("🔓 Key derived successfully");
     
     // Decrypt using AES-GCM
     final cipher = GCMBlockCipher(AESEngine());
