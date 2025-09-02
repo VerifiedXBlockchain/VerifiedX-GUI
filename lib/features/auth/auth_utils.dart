@@ -7,13 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
-import '../../core/env.dart';
 import '../btc_web/models/btc_web_account.dart';
 import '../btc_web/services/btc_web_service.dart';
 import '../keygen/models/ra_keypair.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/services/password_prompt_service.dart';
-import '../../core/services/password_verification_service.dart';
 import '../../core/singletons.dart';
 import '../../core/storage.dart';
 import 'package:rbx_wallet/features/keygen/services/keygen_service.dart'
@@ -32,7 +30,12 @@ import '../../core/web_router.gr.dart';
 import '../global_loader/global_loading_provider.dart';
 import '../keygen/models/keypair.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
+import '../web/models/multi_account_instance.dart';
+import '../../core/services/multi_account_encryption_service.dart';
+import 'package:collection/collection.dart';
 import 'components/auth_type_modal.dart';
+
+enum KeypairType { vfx, ra, btc }
 
 Future<void> login(
   BuildContext context,
@@ -55,7 +58,6 @@ Future<void> loginWithEncryption(
   final sessionProvider = ref.read(webSessionProvider.notifier);
   sessionProvider.encryptAndSaveKeys(keypair, raKeypair, btcKeypair, password);
 
-  // Load into current session
   sessionProvider.login(keypair, raKeypair, btcKeypair, andSave: false, encryptionPassword: password);
 }
 
@@ -608,6 +610,95 @@ Future<dynamic> handleRecoverFromMnemonic(
   }
 }
 
+
+Future<void> showKeysForAccount(
+  BuildContext context,
+  WidgetRef ref,
+  MultiAccountInstance account,
+  KeypairType keypairType, [
+  bool forReveal = false,
+]) async {
+  final decryptedAccount = await _getDecryptedAccount(context, account);
+  if (decryptedAccount == null) return;
+  await _showKeysForType(context, decryptedAccount, keypairType, forReveal);
+}
+
+
+Future<MultiAccountInstance?> _getDecryptedAccount(
+  BuildContext context,
+  MultiAccountInstance account,
+) async {
+  final storage = singleton<Storage>();
+  final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
+  
+  if (savedData == null) return account;
+  
+  final storedAccountJson = savedData
+      .map((e) => jsonDecode(e) as Map<String, dynamic>)
+      .where((json) => json['id'] == account.id)
+      .firstOrNull;
+      
+  final hasEncryptedKeys = storedAccountJson != null && 
+      MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson);
+  
+  if (!hasEncryptedKeys) return account;
+  
+  final password = await PromptModal.show(
+    contextOverride: context,
+    title: "Enter Account Password",
+    labelText: "Account Password",
+    body: "Enter the password for this account to decrypt and view its private keys.",
+    validator: (value) => formValidatorNotEmpty(value, "Password"),
+    obscureText: true,
+    revealObscure: true,
+    lines: 1,
+  );
+  
+  if (password == null) return null;
+  
+  try {
+    final decryptedJson = MultiAccountEncryptionService.decryptAccountPrivateKeys(
+        storedAccountJson, password);
+    return MultiAccountInstance.fromJson(decryptedJson);
+  } catch (e) {
+    Toast.error("Failed to decrypt account keys. Check your password.");
+    return null;
+  }
+}
+
+Future<void> _showKeysForType(
+  BuildContext context,
+  MultiAccountInstance account,
+  KeypairType keypairType,
+  bool forReveal,
+) async {
+  switch (keypairType) {
+    case KeypairType.vfx:
+      if (account.keypair != null) {
+        await _showKeysInternal(context, account.keypair!, forReveal);
+      }
+      break;
+      
+    case KeypairType.ra:
+      if (account.raKeypair != null) {
+        await _showRaKeysInternal(context, account.raKeypair!, forReveal);
+      }
+      break;
+      
+    case KeypairType.btc:
+      if (account.btcKeypair != null) {
+        final kp = Keypair(
+          private: account.btcKeypair!.privateKey,
+          address: account.btcKeypair!.address,
+          public: account.btcKeypair!.publicKey,
+          btcWif: account.btcKeypair!.wif,
+        );
+        await _showKeysInternal(context, kp, forReveal);
+      }
+      break;
+  }
+}
+
 Future<void> showKeys(
   BuildContext context,
   Keypair keypair, [
@@ -615,14 +706,11 @@ Future<void> showKeys(
 ]) async {
   final storage = singleton<Storage>();
 
-  // Only require password if user has encrypted storage
   if (storage.isEncryptionEnabled() && storage.hasPasswordHash()) {
-    // User has encrypted storage - require password
     await PasswordPromptService.requirePasswordFor(context, (password) async {
       await _showKeysInternal(context, keypair, forReveal);
     }, customMessage: "Enter your password to reveal private keys.");
   } else {
-    // Legacy user with unencrypted storage - show keys directly
     await _showKeysInternal(context, keypair, forReveal);
   }
 }

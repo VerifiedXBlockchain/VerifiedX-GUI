@@ -21,7 +21,6 @@ import '../../../core/web_router.gr.dart';
 import '../../../utils/html_helpers.dart';
 import '../../../utils/toast.dart';
 import '../../auth/auth_utils.dart';
-import '../../keygen/models/keypair.dart';
 
 class WebMultiAccountSelector extends BaseComponent {
   final bool expanded;
@@ -279,7 +278,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       padding: const EdgeInsets.symmetric(horizontal: 4),
                                       child: InkWell(
                                         onTap: () async {
-                                          showKeys(context, keypair);
+                                          showKeysForAccount(context, ref, account, KeypairType.vfx);
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
@@ -323,7 +322,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       padding: const EdgeInsets.symmetric(horizontal: 4),
                                       child: InkWell(
                                         onTap: () async {
-                                          showRaKeys(context, raKeypair);
+                                          showKeysForAccount(context, ref, account, KeypairType.ra);
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
@@ -367,13 +366,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       padding: const EdgeInsets.symmetric(horizontal: 4),
                                       child: InkWell(
                                         onTap: () async {
-                                          final kp = Keypair(
-                                            private: btcKeypair.privateKey,
-                                            address: btcKeypair.address,
-                                            public: btcKeypair.publicKey,
-                                            btcWif: btcKeypair.wif,
-                                          );
-                                          showKeys(context, kp, true);
+                                          showKeysForAccount(context, ref, account, KeypairType.btc, true);
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
