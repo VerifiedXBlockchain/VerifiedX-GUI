@@ -20,6 +20,7 @@ import '../../../core/utils.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../utils/html_helpers.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils.dart';
 import '../../auth/auth_utils.dart';
 
 class WebMultiAccountSelector extends BaseComponent {
@@ -91,8 +92,11 @@ class WebMultiAccountSelector extends BaseComponent {
                   ),
           ),
         ),
-        onSelected: (value) {
+        onSelected: (value) async {
           if (value == 0) {
+            final migrationRequired = await checkEncryptionMigrationRequired(context, ref);
+            if (migrationRequired) return;
+            
             showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: false, onSuccess: () {
               Navigator.of(context).pop();
             });
@@ -476,7 +480,11 @@ class WebManageAccountsBottomSheet extends BaseComponent {
             child: AppButton(
               label: "Add Account",
               variant: AppColorVariant.Light,
-              onPressed: () {
+              onPressed: () async {
+                final migrationRequired = await checkEncryptionMigrationRequired(context, ref);
+                print("migrationRequired: $migrationRequired");
+                if (migrationRequired) return;
+                
                 showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: false, onSuccess: () {
                   Navigator.of(context).pop();
                 });
