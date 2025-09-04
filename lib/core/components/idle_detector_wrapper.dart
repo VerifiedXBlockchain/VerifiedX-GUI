@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../app_constants.dart';
 import '../providers/web_session_provider.dart';
+import '../dialogs.dart';
 import '../../utils/html_helpers.dart';
 
 class IdleDetectorWrapper extends ConsumerStatefulWidget {
@@ -23,6 +24,7 @@ class IdleDetectorWrapper extends ConsumerStatefulWidget {
 class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
   Timer? _idleTimer;
   late FocusNode _focusNode;
+  bool _isShowingWarning = false;
 
   @override
   void initState() {
@@ -40,13 +42,43 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
 
   void _resetIdleTimer() {
     _idleTimer?.cancel();
+    _isShowingWarning = false;
     
-    _idleTimer = Timer(widget.idleThreshold, () {
+    _idleTimer = Timer(widget.idleThreshold, () async {
       final session = ref.read(webSessionProvider);
-      if (session.isAuthenticated) {
+      if (session.isAuthenticated && !_isShowingWarning) {
+        _isShowingWarning = true;
+        await _showIdleWarning();
+      }
+    });
+  }
+
+  Future<void> _showIdleWarning() async {
+    Timer? autoLockTimer;
+    bool userResponded = false;
+
+    autoLockTimer = Timer(const Duration(seconds: 15), () {
+      if (!userResponded) {
+        Navigator.of(context, rootNavigator: true).pop(); 
         HtmlHelpers().redirect("/");
       }
     });
+
+    final confirmed = await ConfirmDialog.show(
+      title: "Session Timeout Warning",
+      body: "Your session will be locked due to inactivity. Do you want to stay logged in?\n\nThis dialog will auto-lock in 15 seconds.",
+      confirmText: "Stay Logged In",
+      cancelText: "Lock Now",
+    );
+
+    userResponded = true;
+    autoLockTimer.cancel();
+
+    if (confirmed == true) {
+      _resetIdleTimer();
+    } else {
+      HtmlHelpers().redirect("/");
+    }
   }
 
   void _onUserInteraction() {
