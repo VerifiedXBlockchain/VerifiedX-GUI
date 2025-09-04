@@ -482,7 +482,6 @@ class WebManageAccountsBottomSheet extends BaseComponent {
               variant: AppColorVariant.Light,
               onPressed: () async {
                 final migrationRequired = await checkEncryptionMigrationRequired(context, ref);
-                print("migrationRequired: $migrationRequired");
                 if (migrationRequired) return;
                 
                 showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: false, onSuccess: () {
