@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
@@ -92,10 +93,14 @@ class FaucetForm extends BaseComponent {
                 label: Text("Amount"),
               ),
             ),
-          TextFormField(
+          PhoneFormField(
             controller: provider.phoneController,
-            validator: provider.phoneValidator,
-            decoration: InputDecoration(
+            isCountrySelectionEnabled: true,
+            validator: PhoneValidator.compose([
+              PhoneValidator.required(),
+              PhoneValidator.valid(),
+            ]),
+            decoration: const InputDecoration(
               label: Text("Phone Number"),
             ),
           ),
