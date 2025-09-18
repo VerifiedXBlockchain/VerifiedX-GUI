@@ -49,7 +49,8 @@ Future<void> handleImportWithPrivateKey(
     contextOverride: context,
     tightPadding: true,
     title: "Import Wallet",
-    validator: (String? value) => formValidatorNotEmpty(value, "VFX Private Key"),
+    validator: (String? value) =>
+        formValidatorNotEmpty(value, "VFX Private Key"),
     labelText: "VFX Private Key",
   );
 
@@ -73,7 +74,8 @@ Future<void> handleImportWithPrivateKey(
         continue;
       }
 
-      reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+      reserveKeyPair =
+          await KeygenService.importReserveAccountPrivateKey(kp.private);
 
       if (reserveKeyPair.address.startsWith("xRBX")) {
         break;
@@ -82,10 +84,13 @@ Future<void> handleImportWithPrivateKey(
       append += 1;
     }
 
-    final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-    final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedEmail =
+        btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedPassword =
+        btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
 
-    final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+    final btcKeypair = await BtcWebService()
+        .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
 
     await login(context, ref, keypair, reserveKeyPair, btcKeypair);
   }
@@ -136,12 +141,14 @@ Future<void> handleImportWithBtcPrivateKey(
 
   if (privateKey.length == 64) {
     //Private Key
-    btcKeypair = await BtcWebService().keypairFromPrivateKey(privateKey, addressType);
+    btcKeypair =
+        await BtcWebService().keypairFromPrivateKey(privateKey, addressType);
   } else if (privateKey.length == 52) {
     //WIF
     btcKeypair = await BtcWebService().keypairFromWif(privateKey, addressType);
   } else {
-    Toast.error("Not a valid Private Key or WIF Key. Should be 64 or 52 characters");
+    Toast.error(
+        "Not a valid Private Key or WIF Key. Should be 64 or 52 characters");
     return;
   }
 
@@ -173,7 +180,8 @@ Future<void> handleImportWithBtcPrivateKey(
       continue;
     }
 
-    reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+    reserveKeyPair =
+        await KeygenService.importReserveAccountPrivateKey(kp.private);
 
     if (reserveKeyPair.address.startsWith("xRBX")) {
       break;
@@ -214,7 +222,8 @@ class BtcPrivateKeyImportModal extends StatefulWidget {
   });
 
   @override
-  State<BtcPrivateKeyImportModal> createState() => _BtcPrivateKeyImportModalState();
+  State<BtcPrivateKeyImportModal> createState() =>
+      _BtcPrivateKeyImportModalState();
 }
 
 class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
@@ -334,9 +343,14 @@ Future<void> handleCreateWithEmail(
   final regUpperChars = RegExp(r'/[A-Z]+/g');
   final regNumbers = RegExp(r'/[0-9]+/g');
 
-  final chars = regChars.hasMatch(password) ? regChars.allMatches(password).length : 1;
-  final upperChars = regUpperChars.hasMatch(password) ? regUpperChars.allMatches(password).length : 1;
-  final upperNumbers = regNumbers.hasMatch(password) ? regNumbers.allMatches(password).length : 1;
+  final chars =
+      regChars.hasMatch(password) ? regChars.allMatches(password).length : 1;
+  final upperChars = regUpperChars.hasMatch(password)
+      ? regUpperChars.allMatches(password).length
+      : 1;
+  final upperNumbers = regNumbers.hasMatch(password)
+      ? regNumbers.allMatches(password).length
+      : 1;
 
   // var append = 3571;
   seed = "$seed${(chars + upperChars + upperNumbers) * password.length}3571";
@@ -373,7 +387,8 @@ Future<void> handleCreateWithEmail(
       continue;
     }
 
-    reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+    reserveKeyPair =
+        await KeygenService.importReserveAccountPrivateKey(kp.private);
 
     if (reserveKeyPair.address.startsWith("xRBX")) {
       break;
@@ -384,10 +399,13 @@ Future<void> handleCreateWithEmail(
 
   // BTC
 
-  final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-  final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedEmail =
+      btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedPassword =
+      btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
 
-  final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+  final btcKeypair = await BtcWebService()
+      .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
 
   // if (forCreate) {
   //   await showKeys(context, keypair);
@@ -398,11 +416,13 @@ Future<void> handleCreateWithEmail(
     await handleRememberMe(context, ref);
   }
 
-  await login(context, ref, keypair.copyWith(email: email), reserveKeyPair, btcKeypair);
+  await login(
+      context, ref, keypair.copyWith(email: email), reserveKeyPair, btcKeypair);
 
   final authorized = await guardWebAuthorized(ref, keypair.address);
   if (authorized) {
-    final subscribed = await WebShopService().createContact(email, keypair.address);
+    final subscribed =
+        await WebShopService().createContact(email, keypair.address);
     if (subscribed) {
       ref.read(webAuthTokenProvider.notifier).addEmail(email);
     }
@@ -438,7 +458,8 @@ Future<void> handleCreateWithMnemonic(
     if (kp == null) {
       continue;
     }
-    reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+    reserveKeyPair =
+        await KeygenService.importReserveAccountPrivateKey(kp.private);
 
     if (reserveKeyPair.address.startsWith("xRBX")) {
       break;
@@ -447,10 +468,13 @@ Future<void> handleCreateWithMnemonic(
     append += 1;
   }
 
-  final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-  final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedEmail =
+      btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedPassword =
+      btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
 
-  final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+  final btcKeypair = await BtcWebService()
+      .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
   ref.read(globalLoadingProvider.notifier).complete();
 
   // final btcKeypair =
@@ -512,7 +536,8 @@ Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
       });
 }
 
-Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref, {bool showRememberMe = true}) async {
+Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
+    {bool showRememberMe = true}) async {
   final value = await PromptModal.show(
     contextOverride: context,
     title: "Input Recovery Mnemonic",
@@ -551,7 +576,8 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref, {
       if (kp == null) {
         continue;
       }
-      reserveKeyPair = await KeygenService.importReserveAccountPrivateKey(kp.private);
+      reserveKeyPair =
+          await KeygenService.importReserveAccountPrivateKey(kp.private);
 
       if (reserveKeyPair.address.startsWith("xRBX")) {
         print(reserveKeyPair.address);
@@ -561,10 +587,13 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref, {
       append += 1;
     }
 
-    final btcGeneratedEmail = btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-    final btcGeneratedPassword = btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedEmail =
+        btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+    final btcGeneratedPassword =
+        btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
 
-    final btcKeypair = await BtcWebService().keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+    final btcKeypair = await BtcWebService()
+        .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
 
     ref.read(globalLoadingProvider.notifier).complete();
 
@@ -593,11 +622,13 @@ Future<void> showKeys(
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: Text("Here are your${isBtc ? ' BTC' : ''} account details. Please ensure to back up your private key in a safe place."),
+              child: Text(
+                  "Here are your${isBtc ? ' BTC' : ''} account details. Please ensure to back up your private key in a safe place."),
             ),
             if (keypair.mneumonic != null)
               ListTile(
-                leading: isMobile ? null : const Icon(FontAwesomeIcons.paragraph),
+                leading:
+                    isMobile ? null : const Icon(FontAwesomeIcons.paragraph),
                 title: TextFormField(
                   initialValue: keypair.mneumonic!,
                   decoration: const InputDecoration(
@@ -611,20 +642,24 @@ Future<void> showKeys(
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: keypair.mneumonic));
+                    await Clipboard.setData(
+                        ClipboardData(text: keypair.mneumonic));
                     Toast.message("Mneumonic copied to clipboard");
                   },
                 ),
               ),
             ListTile(
-              leading: isMobile ? null : const Icon(Icons.account_balance_wallet),
+              leading:
+                  isMobile ? null : const Icon(Icons.account_balance_wallet),
               title: TextFormField(
                 initialValue: keypair.address,
                 decoration: InputDecoration(
                     label: Text(
                   "Address",
                   style: TextStyle(
-                    color: isBtc ? Theme.of(context).colorScheme.btcOrange : Theme.of(context).colorScheme.secondary,
+                    color: isBtc
+                        ? Theme.of(context).colorScheme.btcOrange
+                        : Theme.of(context).colorScheme.secondary,
                   ),
                 )),
                 readOnly: true,
@@ -657,7 +692,8 @@ Future<void> showKeys(
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: keypair.btcWif));
+                    await Clipboard.setData(
+                        ClipboardData(text: keypair.btcWif));
                     Toast.message("WIF private key copied to clipboard");
                   },
                 ),
@@ -666,12 +702,15 @@ Future<void> showKeys(
             ListTile(
               leading: isMobile ? null : const Icon(Icons.security),
               title: TextFormField(
-                initialValue: keypair.btcWif != null ? keypair.private : keypair.privateCorrected,
+                initialValue:
+                    keypair.btcWif != null ? keypair.private : keypair.private,
                 decoration: InputDecoration(
                   label: Text(
                     "Private Key",
                     style: TextStyle(
-                      color: isBtc ? Theme.of(context).colorScheme.btcOrange : Theme.of(context).colorScheme.secondary,
+                      color: isBtc
+                          ? Theme.of(context).colorScheme.btcOrange
+                          : Theme.of(context).colorScheme.secondary,
                     ),
                   ),
                 ),
@@ -681,7 +720,10 @@ Future<void> showKeys(
               trailing: IconButton(
                 icon: const Icon(Icons.copy),
                 onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: keypair.btcWif != null ? keypair.private : keypair.privateCorrected));
+                  await Clipboard.setData(ClipboardData(
+                      text: keypair.btcWif != null
+                          ? keypair.private
+                          : keypair.privateCorrected));
                   Toast.message("Private key copied to clipboard");
                 },
               ),
@@ -728,11 +770,13 @@ Future<void> showRaKeys(
             children: [
               const Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Here are your Vault Account details. Please ensure to back up your private key in a safe place."),
+                child: Text(
+                    "Here are your Vault Account details. Please ensure to back up your private key in a safe place."),
               ),
 
               ListTile(
-                leading: isMobile ? null : const Icon(Icons.account_balance_wallet),
+                leading:
+                    isMobile ? null : const Icon(Icons.account_balance_wallet),
                 title: TextFormField(
                   initialValue: keypair.address,
                   decoration: const InputDecoration(label: Text("Address")),
@@ -742,7 +786,8 @@ Future<void> showRaKeys(
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: keypair.address));
+                    await Clipboard.setData(
+                        ClipboardData(text: keypair.address));
                     Toast.message("Public key copied to clipboard");
                   },
                 ),
@@ -760,24 +805,28 @@ Future<void> showRaKeys(
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: keypair.privateCorrected));
+                    await Clipboard.setData(
+                        ClipboardData(text: keypair.privateCorrected));
                     Toast.message("Private key copied to clipboard");
                   },
                 ),
               ),
 
               ListTile(
-                leading: isMobile ? null : const Icon(Icons.account_balance_wallet),
+                leading:
+                    isMobile ? null : const Icon(Icons.account_balance_wallet),
                 title: TextFormField(
                   initialValue: keypair.recoveryAddress,
-                  decoration: const InputDecoration(label: Text("Recovery Address")),
+                  decoration:
+                      const InputDecoration(label: Text("Recovery Address")),
                   readOnly: true,
                   style: const TextStyle(fontSize: 13),
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: keypair.recoveryAddress));
+                    await Clipboard.setData(
+                        ClipboardData(text: keypair.recoveryAddress));
                     Toast.message("Recovery Address copied to clipboard");
                   },
                 ),
@@ -795,7 +844,8 @@ Future<void> showRaKeys(
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: keypair.recoveryPrivateCorrected));
+                    await Clipboard.setData(
+                        ClipboardData(text: keypair.recoveryPrivateCorrected));
                     Toast.message("Recovery Private Key copied to clipboard");
                   },
                 ),
@@ -815,7 +865,8 @@ Future<void> showRaKeys(
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
-                    await Clipboard.setData(ClipboardData(text: keypair.restoreCode));
+                    await Clipboard.setData(
+                        ClipboardData(text: keypair.restoreCode));
                     Toast.message("Restore Code copied to clipboard");
                   },
                 ),
@@ -831,7 +882,8 @@ Future<void> showRaKeys(
                     variant: AppColorVariant.Success,
                     icon: Icons.copy,
                     onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: keypair.backupContents));
+                      await Clipboard.setData(
+                          ClipboardData(text: keypair.backupContents));
                       Toast.message("Vault Account Data copied to clipboard");
                     },
                   ),
@@ -904,9 +956,12 @@ showWebLoginModal(
           );
 
           if (kind == 'new') {
-            final success = await ConfirmDialog.show(title: 'Mneumonic', body: 'Are you sure you want to create a Mneumonic account?');
+            final success = await ConfirmDialog.show(
+                title: 'Mneumonic',
+                body: 'Are you sure you want to create a Mneumonic account?');
             if (success == true) {
-              await handleCreateWithMnemonic(context, ref, showRememberMe: showRememberMe);
+              await handleCreateWithMnemonic(context, ref,
+                  showRememberMe: showRememberMe);
               if (ref.read(webSessionProvider).isAuthenticated) {
                 onSuccess();
               }
@@ -938,7 +993,9 @@ showWebLoginModal(
         },
         handlePrivateKey: allowPrivateKey
             ? (context) async {
-                await handleImportWithPrivateKey(context, ref, showRememberMe: showRememberMe).then((value) {
+                await handleImportWithPrivateKey(context, ref,
+                        showRememberMe: showRememberMe)
+                    .then((value) {
                   if (ref.read(webSessionProvider).isAuthenticated) {
                     onSuccess();
                   }
@@ -948,7 +1005,8 @@ showWebLoginModal(
             : null,
         handleBtcPrivateKey: allowBtcPrivateKey
             ? (context) async {
-                await handleImportWithBtcPrivateKey(context, ref, showRememberMe: showRememberMe);
+                await handleImportWithBtcPrivateKey(context, ref,
+                    showRememberMe: showRememberMe);
                 if (ref.read(webSessionProvider).isAuthenticated) {
                   onSuccess();
                 }
