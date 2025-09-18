@@ -11,7 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class Storage {
   static const CURRENT_WALLET_ADDRESS_KEY = "CURRENT_WALLET_ADDRESS_KEY";
-  static const CURRENT_BTC_ACCOUNT_ADDRESS_KEY = "CURRENT_BTC_ACCOUNT_ADDRESS_KEY";
+  static const CURRENT_BTC_ACCOUNT_ADDRESS_KEY =
+      "CURRENT_BTC_ACCOUNT_ADDRESS_KEY";
   static const DELETED_WALLETS_KEY = "DELETED_WALLETS";
   static const RENAMED_WALLETS_KEY = "RENAMED_WALLETS";
   static const LOCAL_SMART_CONTRACTS = "LOCAL_SMART_CONTRACTS2";
@@ -21,7 +22,6 @@ abstract class Storage {
   static const PENDING_ADNRS = "PENDING_ADNRS";
   static const WEB_KEYPAIR = "WEB_KEYPAIR_V2";
   static const WEB_RA_KEYPAIR = "WEB_RA_KEYPAIR_V2";
-  static const REMEMBER_ME = "REMEMBER_ME";
   static const SAVED_SHOPS = "SAVE_SHOPS";
   static const CHAT_PREPEND = "CHAT_";
   static const BUYER_CHAT_THREADS = "BUYER_CHAT_THREADS_V3";
@@ -31,6 +31,10 @@ abstract class Storage {
   static const WEB_SELECTED_WALLET_TYPE = "WEB_SELECTED_WALLET_TYPE";
   static const MULTIPLE_ACCOUNTS = "WEB_MULTIPLE_ACCOUNTS_v2";
   static const MULTIPLE_ACCOUNT_SELECTED = "WEB_MULTIPLE_ACCOUNT_SELECTED_v2";
+  static const ENCRYPTION_ENABLED = "ENCRYPTION_ENABLED";
+  static const ENCRYPTION_VERSION = "ENCRYPTION_VERSION";
+  static const STORED_PASSWORD_HASH = "STORED_PASSWORD_HASH";
+  static const WEB_PRIMARY_ADDRESS = "WEB_PRIMARY_ADDRESS";
 
   bool isInitialized = false;
 
@@ -54,6 +58,11 @@ abstract class Storage {
 
   List<String>? getStringList(String key);
   void setStringList(String key, List<String> value);
+
+  // Encryption helper methods
+  bool isEncryptionEnabled() => getBool(ENCRYPTION_ENABLED) ?? false;
+  int getEncryptionVersion() => getInt(ENCRYPTION_VERSION) ?? 0;
+  bool hasPasswordHash() => getString(STORED_PASSWORD_HASH) != null;
 }
 
 class StorageImplementation extends Storage {
@@ -69,7 +78,8 @@ class StorageImplementation extends Storage {
     isInitialized = true;
   }
 
-  String _buildKey(String key) => "${Env.storagePrefix}${Env.isTestNet ? '_TESTNET' : ''}_$key";
+  String _buildKey(String key) =>
+      "${Env.storagePrefix}${Env.isTestNet ? '_TESTNET' : ''}_$key";
 
   @override
   void remove(String key) => _instance.remove(_buildKey(key));
@@ -77,12 +87,14 @@ class StorageImplementation extends Storage {
   @override
   String? getString(String key) => _instance.getString(_buildKey(key));
   @override
-  void setString(String key, String value) => _instance.setString(_buildKey(key), value);
+  void setString(String key, String value) =>
+      _instance.setString(_buildKey(key), value);
 
   @override
   bool? getBool(String key) => _instance.getBool(_buildKey(key));
   @override
-  void setBool(String key, bool value) => _instance.setBool(_buildKey(key), value);
+  void setBool(String key, bool value) =>
+      _instance.setBool(_buildKey(key), value);
 
   @override
   int? getInt(String key) => _instance.getInt(_buildKey(key));
@@ -128,7 +140,8 @@ class StorageImplementation extends Storage {
     }
     final List<dynamic> data = jsonDecode(str);
 
-    final List<String> items = data.map<String>((item) => item.toString()).toList();
+    final List<String> items =
+        data.map<String>((item) => item.toString()).toList();
 
     return items;
   }
@@ -153,7 +166,8 @@ class StorageWebImplementation extends Storage {
     isInitialized = true;
   }
 
-  String _buildKey(String key) => "${Env.storagePrefix}${Env.isTestNet ? '_TESTNET' : ''}_$key";
+  String _buildKey(String key) =>
+      "${Env.storagePrefix}${Env.isTestNet ? '_TESTNET' : ''}_$key";
 
   @override
   Future<void> remove(String key) async {
@@ -163,7 +177,8 @@ class StorageWebImplementation extends Storage {
   @override
   String? getString(String key) => _instance.get(_buildKey(key));
   @override
-  void setString(String key, String value) => _instance.put(_buildKey(key), value);
+  void setString(String key, String value) =>
+      _instance.put(_buildKey(key), value);
 
   @override
   bool? getBool(String key) => _instance.get(_buildKey(key));
@@ -205,7 +220,8 @@ class StorageWebImplementation extends Storage {
     }
     final List<dynamic> data = jsonDecode(str);
 
-    final List<String> items = data.map<String>((item) => item.toString()).toList();
+    final List<String> items =
+        data.map<String>((item) => item.toString()).toList();
     return items;
   }
 
