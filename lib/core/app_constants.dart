@@ -42,8 +42,8 @@ const ALLOW_FAUCET_FOR_BTC_DOMAINS = true;
 
 const BACKUP_URL_PROPERTY_NAME = "MEDIA_BACKUP_URL";
 
-const ALLOW_BIDS_WITHOUT_BALANCE = true;
-const INCLUDE_STRIPE_INTEGRATION = true;
+const ALLOW_BIDS_WITHOUT_BALANCE = false;
+const INCLUDE_STRIPE_INTEGRATION = false;
 
 class TxType {
   static const int rbxTransfer = 0;

@@ -472,6 +472,7 @@ class AccountUtils {
             title: "Choose Payment Gateway",
             withClose: true,
             children: [
+              if(ALLOW_BIDS_WITHOUT_BALANCE || type == VfxOrBtcOption.btc)...[
               AppCard(
                 padding: 0,
                 child: ListTile(
@@ -484,13 +485,11 @@ class AccountUtils {
               SizedBox(
                 height: 12,
               ),
+              ],
               if (kIsWeb &&
                   (type == VfxOrBtcOption.vfx
                       ? Env.moonpayEnabledVFX
                       : Env.moonpayEnabled)) ...[
-                SizedBox(
-                  height: 12,
-                ),
                 AppCard(
                   padding: 0,
                   child: ListTile(
@@ -500,6 +499,9 @@ class AccountUtils {
                       },
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
+              SizedBox(
+                height: 12,
+              ),
               ],
               AppCard(
                 padding: 0,
