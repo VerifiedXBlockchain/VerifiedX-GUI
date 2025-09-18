@@ -58,7 +58,8 @@ Future<void> loginWithEncryption(
   final sessionProvider = ref.read(webSessionProvider.notifier);
   sessionProvider.encryptAndSaveKeys(keypair, raKeypair, btcKeypair, password);
 
-  sessionProvider.login(keypair, raKeypair, btcKeypair, andSave: false, encryptionPassword: password);
+  sessionProvider.login(keypair, raKeypair, btcKeypair,
+      andSave: false, encryptionPassword: password);
 }
 
 Future<void> handleImportWithPrivateKey(
@@ -536,8 +537,8 @@ Future<void> handleCreateWithMnemonic(
   // await showKeys(context, keypair);
 }
 
-Future<dynamic> handleRecoverFromMnemonic(
-    BuildContext context, WidgetRef ref) async {
+Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
+    {bool showRememberMe = true}) async {
   final value = await PromptModal.show(
     contextOverride: context,
     title: "Input Recovery Mnemonic",
@@ -610,7 +611,6 @@ Future<dynamic> handleRecoverFromMnemonic(
   }
 }
 
-
 Future<void> showKeysForAccount(
   BuildContext context,
   WidgetRef ref,
@@ -623,42 +623,43 @@ Future<void> showKeysForAccount(
   await _showKeysForType(context, decryptedAccount, keypairType, forReveal);
 }
 
-
 Future<MultiAccountInstance?> _getDecryptedAccount(
   BuildContext context,
   MultiAccountInstance account,
 ) async {
   final storage = singleton<Storage>();
   final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
-  
+
   if (savedData == null) return account;
-  
+
   final storedAccountJson = savedData
       .map((e) => jsonDecode(e) as Map<String, dynamic>)
       .where((json) => json['id'] == account.id)
       .firstOrNull;
-      
-  final hasEncryptedKeys = storedAccountJson != null && 
+
+  final hasEncryptedKeys = storedAccountJson != null &&
       MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson);
-  
+
   if (!hasEncryptedKeys) return account;
-  
+
   final password = await PromptModal.show(
     contextOverride: context,
     title: "Enter Account Password",
     labelText: "Account Password",
-    body: "Enter the password for this account to decrypt and view its private keys.",
+    body:
+        "Enter the password for this account to decrypt and view its private keys.",
     validator: (value) => formValidatorNotEmpty(value, "Password"),
     obscureText: true,
     revealObscure: true,
     lines: 1,
   );
-  
+
   if (password == null) return null;
-  
+
   try {
-    final decryptedJson = MultiAccountEncryptionService.decryptAccountPrivateKeys(
-        storedAccountJson, password);
+    final decryptedJson =
+        MultiAccountEncryptionService.decryptAccountPrivateKeys(
+            storedAccountJson, password);
     return MultiAccountInstance.fromJson(decryptedJson);
   } catch (e) {
     Toast.error("Failed to decrypt account keys. Check your password.");
@@ -678,13 +679,13 @@ Future<void> _showKeysForType(
         await _showKeysInternal(context, account.keypair!, forReveal);
       }
       break;
-      
+
     case KeypairType.ra:
       if (account.raKeypair != null) {
         await _showRaKeysInternal(context, account.raKeypair!, forReveal);
       }
       break;
-      
+
     case KeypairType.btc:
       if (account.btcKeypair != null) {
         final kp = Keypair(
@@ -814,9 +815,8 @@ Future<void> _showKeysInternal(
             ListTile(
               leading: isMobile ? null : const Icon(Icons.security),
               title: TextFormField(
-                initialValue: keypair.btcWif != null
-                    ? keypair.private
-                    : keypair.privateCorrected,
+                initialValue:
+                    keypair.btcWif != null ? keypair.private : keypair.private,
                 decoration: InputDecoration(
                   label: Text(
                     "Private Key",
