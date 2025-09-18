@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/services/explorer_service.dart';
 import 'package:rbx_wallet/core/utils.dart';
 import 'package:rbx_wallet/features/raw/raw_service.dart';
 import 'package:rbx_wallet/features/web/utils/raw_transaction.dart';
@@ -105,7 +106,9 @@ class NftDetailScreen extends BaseScreen {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: AppBadge(
                     label: nft.isPublished ? "Minted" : "Minting...",
-                    variant: nft.isPublished ? AppColorVariant.Success : AppColorVariant.Warning,
+                    variant: nft.isPublished
+                        ? AppColorVariant.Success
+                        : AppColorVariant.Warning,
                     progressAnimation: !nft.isPublished,
                   ),
                 ),
@@ -196,7 +199,8 @@ class NftDetailScreen extends BaseScreen {
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -215,8 +219,10 @@ class NftDetailScreen extends BaseScreen {
                                   ),
                                   InkWell(
                                     onTap: () async {
-                                      await Clipboard.setData(ClipboardData(text: nft.id));
-                                      Toast.message("Smart Contract Identifier copied to clipboard");
+                                      await Clipboard.setData(
+                                          ClipboardData(text: nft.id));
+                                      Toast.message(
+                                          "Smart Contract Identifier copied to clipboard");
                                     },
                                     child: Icon(
                                       Icons.copy,
@@ -235,7 +241,10 @@ class NftDetailScreen extends BaseScreen {
                       if (nft.minterName.isNotEmpty)
                         Text(
                           "Minted By: ${nft.minterName}",
-                          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(
                                 color: Colors.white,
                                 height: 1,
                               ),
@@ -267,7 +276,9 @@ class NftDetailScreen extends BaseScreen {
                               nft.currentOwner,
                               style: TextStyle(
                                 fontSize: 13,
-                                color: nft.currentOwner.startsWith("xRBX") ? Colors.deepPurple.shade200 : AppColors.getBlue(ColorShade.s50),
+                                color: nft.currentOwner.startsWith("xRBX")
+                                    ? Colors.deepPurple.shade200
+                                    : AppColors.getBlue(ColorShade.s50),
                               ),
                             ),
                             subtitle: const Text(
@@ -319,7 +330,11 @@ class NftDetailScreen extends BaseScreen {
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text(nft.nextOwner!,
-                            style: TextStyle(fontSize: 13, color: nft.nextOwner!.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white)),
+                            style: TextStyle(
+                                fontSize: 13,
+                                color: nft.nextOwner!.startsWith("xRBX")
+                                    ? Colors.deepPurple.shade200
+                                    : Colors.white)),
                         subtitle: const Text(
                           "Next Owner",
                         ),
@@ -352,11 +367,13 @@ class NftDetailScreen extends BaseScreen {
                                   children: [
                                     kIsWeb
                                         ? nft.currentEvolveAssetWeb != null
-                                            ? WebAssetCard(nft, nft.currentEvolveAssetWeb)
+                                            ? WebAssetCard(
+                                                nft, nft.currentEvolveAssetWeb)
                                             : buildAssetsNotAvailable(_provider)
                                         : AssetCard(
                                             nft.currentEvolveAsset,
-                                            ownerAddress: nft.nextOwner ?? nft.currentOwner,
+                                            ownerAddress: nft.nextOwner ??
+                                                nft.currentOwner,
                                             nftId: nft.id,
                                             isPrimaryAsset: true,
                                           ),
@@ -365,43 +382,66 @@ class NftDetailScreen extends BaseScreen {
                                         padding: const EdgeInsets.only(top: 8),
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "Additional Assets:",
-                                              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineSmall!
+                                                  .copyWith(
                                                     color: Colors.white,
                                                   ),
                                             ),
                                             const SizedBox(
                                               height: 6,
                                             ),
-                                            kIsWeb && nft.additionalAssetsWeb == null
-                                                ? buildAssetsNotAvailable(_provider, false)
+                                            kIsWeb &&
+                                                    nft.additionalAssetsWeb ==
+                                                        null
+                                                ? buildAssetsNotAvailable(
+                                                    _provider, false)
                                                 : kIsWeb
                                                     ? Wrap(
-                                                        children: (nft.additionalAssetsWeb ?? [])
-                                                            .map(
-                                                              (a) => Padding(
-                                                                padding: const EdgeInsets.only(right: 6.0),
-                                                                child: WebAssetThumbnail(
-                                                                  a,
-                                                                  nft: nft,
-                                                                ),
-                                                              ),
-                                                            )
-                                                            .toList(),
+                                                        children:
+                                                            (nft.additionalAssetsWeb ??
+                                                                    [])
+                                                                .map(
+                                                                  (a) =>
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            6.0),
+                                                                    child:
+                                                                        WebAssetThumbnail(
+                                                                      a,
+                                                                      nft: nft,
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                                .toList(),
                                                       )
                                                     : Wrap(
-                                                        children: nft.additionalLocalAssets
+                                                        children: nft
+                                                            .additionalLocalAssets
                                                             .map(
                                                               (a) => Padding(
-                                                                padding: const EdgeInsets.only(right: 6.0),
-                                                                child: AssetThumbnail(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            6.0),
+                                                                child:
+                                                                    AssetThumbnail(
                                                                   a,
                                                                   nftId: nft.id,
-                                                                  ownerAddress: nft.nextOwner ?? nft.currentOwner,
-                                                                  isPrimaryAsset: false,
+                                                                  ownerAddress:
+                                                                      nft.nextOwner ??
+                                                                          nft.currentOwner,
+                                                                  isPrimaryAsset:
+                                                                      false,
                                                                 ),
                                                               ),
                                                             )
@@ -443,7 +483,11 @@ class NftDetailScreen extends BaseScreen {
                 ),
                 if (nft.currentEvolveProperties.isNotEmpty) ...[
                   const Divider(),
-                  Text("Properties:", style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white)),
+                  Text("Properties:",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall!
+                          .copyWith(color: Colors.white)),
                   SizedBox(
                     height: 8,
                   ),
@@ -499,38 +543,56 @@ class NftDetailScreen extends BaseScreen {
                                             isScrollControlled: true,
                                             backgroundColor: Colors.black87,
                                             builder: (context) {
-                                              final address = kIsWeb ? ref.watch(webSessionProvider.select((value) => value.keypair?.address)) : null;
+                                              final address = kIsWeb
+                                                  ? ref.watch(webSessionProvider
+                                                      .select((value) => value
+                                                          .keypair?.address))
+                                                  : null;
 
-                                              return ModalContainer(color: Colors.black26, children: [
-                                                Column(
-                                                  mainAxisSize: MainAxisSize.min,
+                                              return ModalContainer(
+                                                  color: Colors.black26,
                                                   children: [
-                                                    EvolutionStateRow(
-                                                      nft.baseEvolutionPhase,
-                                                      nft: nft,
-                                                      nftId: id,
-                                                      canManageEvolve: nft.canManageEvolve(address),
-                                                      index: 0,
-                                                    ),
-                                                    ...nft.updatedEvolutionPhases
-                                                        .asMap()
-                                                        .entries
-                                                        .map(
-                                                          (entry) => EvolutionStateRow(
-                                                            entry.value,
-                                                            nft: nft,
-                                                            nftId: id,
-                                                            canManageEvolve: nft.canManageEvolve(address),
-                                                            index: entry.key + 1,
-                                                            onAssociate: () {
-                                                              Navigator.of(context).pop();
-                                                            },
-                                                          ),
-                                                        )
-                                                        .toList(),
-                                                  ],
-                                                )
-                                              ]);
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        EvolutionStateRow(
+                                                          nft.baseEvolutionPhase,
+                                                          nft: nft,
+                                                          nftId: id,
+                                                          canManageEvolve: nft
+                                                              .canManageEvolve(
+                                                                  address),
+                                                          index: 0,
+                                                        ),
+                                                        ...nft
+                                                            .updatedEvolutionPhases
+                                                            .asMap()
+                                                            .entries
+                                                            .map(
+                                                              (entry) =>
+                                                                  EvolutionStateRow(
+                                                                entry.value,
+                                                                nft: nft,
+                                                                nftId: id,
+                                                                canManageEvolve:
+                                                                    nft.canManageEvolve(
+                                                                        address),
+                                                                index:
+                                                                    entry.key +
+                                                                        1,
+                                                                onAssociate:
+                                                                    () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              ),
+                                                            )
+                                                            .toList(),
+                                                      ],
+                                                    )
+                                                  ]);
                                             });
                                       },
                                     )
@@ -585,11 +647,17 @@ class NftDetailScreen extends BaseScreen {
                             return;
                           }
 
-                          final randomKey = generateRandomString(8, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
-                          final timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+                          final randomKey = generateRandomString(8,
+                              'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
+                          final timestamp =
+                              (DateTime.now().millisecondsSinceEpoch / 1000)
+                                  .round();
                           final message = "$randomKey.$timestamp";
 
-                          final sigScript = await RawTransaction.getSignature(message: message, privateKey: privateKey, publicKey: publicKey);
+                          final sigScript = await RawTransaction.getSignature(
+                              message: message,
+                              privateKey: privateKey,
+                              publicKey: publicKey);
 
                           if (sigScript == null) {
                             Toast.error("Could not generate signature");
@@ -631,8 +699,10 @@ class NftDetailScreen extends BaseScreen {
                                     label: "Copy Signature",
                                     icon: Icons.copy,
                                     onPressed: () async {
-                                      await Clipboard.setData(ClipboardData(text: str));
-                                      Toast.message("Signature Verification copied to clipboard.");
+                                      await Clipboard.setData(
+                                          ClipboardData(text: str));
+                                      Toast.message(
+                                          "Signature Verification copied to clipboard.");
                                     },
                                   ),
                                 )
@@ -670,7 +740,10 @@ class NftDetailScreen extends BaseScreen {
                         if (!await passwordRequiredGuard(context, ref)) {
                           return;
                         }
-                        Wallet? wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == nft.currentOwner);
+                        Wallet? wallet = ref
+                            .read(walletListProvider)
+                            .firstWhereOrNull(
+                                (w) => w.address == nft.currentOwner);
                         if (wallet == null) {
                           Toast.error("No account selected");
                           return;
@@ -697,11 +770,13 @@ class NftDetailScreen extends BaseScreen {
                         String? address = await PromptModal.show(
                           contextOverride: context,
                           title: "Sell NFT",
-                          validator: (value) => formValidatorRbxAddress(value, true),
+                          validator: (value) =>
+                              formValidatorRbxAddress(value, true),
                           labelText: "VFX Address",
                           confirmText: "Continue",
                           inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
+                            FilteringTextInputFormatter.allow(
+                                RegExp('[a-zA-Z0-9.]')),
                           ],
                           lines: 1,
                         );
@@ -712,7 +787,8 @@ class NftDetailScreen extends BaseScreen {
 
                         address = address.trim().replaceAll("\n", "");
 
-                        final isValid = await BridgeService().validateSendToAddress(address);
+                        final isValid = await BridgeService()
+                            .validateSendToAddress(address);
                         if (!isValid) {
                           Toast.error("Invalid Address");
                           return;
@@ -724,7 +800,9 @@ class NftDetailScreen extends BaseScreen {
                           body: "How much are you selling this NFT for?",
                           labelText: "VFX Amount)",
                           confirmText: "Continue",
-                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
+                          ],
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return "Amount required";
@@ -758,7 +836,8 @@ class NftDetailScreen extends BaseScreen {
                         final String? backupUrl = await PromptModal.show(
                           contextOverride: context,
                           title: "Backup URL (Optional)",
-                          body: "Paste in a public URL to a hosted zipfile containing the assets.",
+                          body:
+                              "Paste in a public URL to a hosted zipfile containing the assets.",
                           validator: (value) {
                             return null;
                           },
@@ -768,13 +847,15 @@ class NftDetailScreen extends BaseScreen {
 
                         final confirmed = await ConfirmDialog.show(
                           title: "Confirm Sale Start",
-                          body: "Please confirm you want to sell the NFT to \"$address\" for $amount VFX.",
+                          body:
+                              "Please confirm you want to sell the NFT to \"$address\" for $amount VFX.",
                           confirmText: "Start Sale",
                         );
 
                         if (confirmed == true) {
                           ref.read(globalLoadingProvider.notifier).start();
-                          final success = await SmartContractService().transferSale(id, address, amount, backupUrl);
+                          final success = await SmartContractService()
+                              .transferSale(id, address, amount, backupUrl);
                           ref.read(globalLoadingProvider.notifier).complete();
                           if (success) {
                             // Toast.message("Sale Start transaction broadcasted");
@@ -787,7 +868,10 @@ class NftDetailScreen extends BaseScreen {
                   ),
 
                   Builder(builder: (context) {
-                    final address = kIsWeb ? ref.watch(webSessionProvider.select((value) => value.keypair?.address)) : null;
+                    final address = kIsWeb
+                        ? ref.watch(webSessionProvider
+                            .select((value) => value.keypair?.address))
+                        : null;
                     if (nft.manageable && nft.canManage(address)) {
                       return Padding(
                         padding: const EdgeInsets.all(4.0),
@@ -802,7 +886,10 @@ class NftDetailScreen extends BaseScreen {
                               builder: (context) {
                                 return ModalContainer(
                                   color: Colors.black26,
-                                  children: [NftMangementModal(nft.id, nft, showViewNft: false)],
+                                  children: [
+                                    NftMangementModal(nft.id, nft,
+                                        showViewNft: false)
+                                  ],
                                 );
                               },
                             );
@@ -841,6 +928,33 @@ class NftDetailScreen extends BaseScreen {
                       ),
                     ),
 
+                  if (!kIsWeb)
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: AppButton(
+                        label: "Sync Media",
+                        icon: Icons.sync,
+                        variant: AppColorVariant.Primary,
+                        onPressed: () async {
+                          final assets = [
+                            nft.primaryAsset,
+                            ...nft.additionalAssets
+                          ];
+                          Map<String, String> mediaMap = {};
+                          for (final a in assets) {
+                            final bytes = await a.file.readAsBytes();
+                            final url = await ExplorerService()
+                                .uploadAsset(bytes, a.fileName, a.extension);
+
+                            mediaMap[a.fileName] = url ?? 'ERROR';
+                          }
+
+                          await ExplorerService()
+                              .associateMedia(nft.id, mediaMap);
+                        },
+                      ),
+                    ),
+
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
@@ -851,43 +965,59 @@ class NftDetailScreen extends BaseScreen {
                       onPressed: nft.isPublished
                           ? () async {
                               if (nft.isListed(ref)) {
-                                Toast.error("This NFT is listed in your auction house. Please remove the listing before burning.");
+                                Toast.error(
+                                    "This NFT is listed in your auction house. Please remove the listing before burning.");
                                 return;
                               }
 
-                              if (!await passwordRequiredGuard(context, ref)) return;
+                              if (!await passwordRequiredGuard(context, ref))
+                                return;
 
                               if (kIsWeb) {
                                 if (nft.currentOwner.startsWith("xRBX")) {
-                                  Toast.error("Vault Accounts cannot burn NFTs");
+                                  Toast.error(
+                                      "Vault Accounts cannot burn NFTs");
                                   return;
                                 }
                               } else {
                                 if (nft.currentOwner.startsWith("xRBX")) {
-                                  Toast.error("Vault Accounts cannot burn NFTs");
+                                  Toast.error(
+                                      "Vault Accounts cannot burn NFTs");
                                   return;
                                 }
                               }
 
                               final confirmed = await ConfirmDialog.show(
                                 title: "Burn NFT?",
-                                body: "Are you sure you want to burn ${nft.name}",
+                                body:
+                                    "Are you sure you want to burn ${nft.name}",
                                 destructive: true,
                                 confirmText: "Burn",
                                 cancelText: "Cancel",
                               );
 
                               if (confirmed == true) {
-                                ref.read(globalLoadingProvider.notifier).start();
-                                final success = kIsWeb ? await _provider.burnWeb() : await _provider.burn();
+                                ref
+                                    .read(globalLoadingProvider.notifier)
+                                    .start();
+                                final success = kIsWeb
+                                    ? await _provider.burnWeb()
+                                    : await _provider.burn();
 
                                 if (success) {
-                                  Toast.message("Burn transaction sent successfully!");
-                                  ref.read(mySmartContractsProvider.notifier).load();
+                                  Toast.message(
+                                      "Burn transaction sent successfully!");
+                                  ref
+                                      .read(mySmartContractsProvider.notifier)
+                                      .load();
                                   Navigator.of(context).pop();
-                                  ref.read(globalLoadingProvider.notifier).complete();
+                                  ref
+                                      .read(globalLoadingProvider.notifier)
+                                      .complete();
                                 } else {
-                                  ref.read(globalLoadingProvider.notifier).complete();
+                                  ref
+                                      .read(globalLoadingProvider.notifier)
+                                      .complete();
 
                                   Toast.error();
                                 }
@@ -904,7 +1034,8 @@ class NftDetailScreen extends BaseScreen {
     );
   }
 
-  Widget buildAssetsNotAvailable(NftDetailProvider _provider, [bool includeButton = true]) {
+  Widget buildAssetsNotAvailable(NftDetailProvider _provider,
+      [bool includeButton = true]) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -928,7 +1059,8 @@ class NftDetailScreen extends BaseScreen {
                         final success = await _provider.transferWebIn();
 
                         if (success == true) {
-                          Toast.message("Transfer request has been broadcasted. Your assets should be available soon.");
+                          Toast.message(
+                              "Transfer request has been broadcasted. Your assets should be available soon.");
                         }
                       },
                       variant: AppColorVariant.Success,
@@ -984,7 +1116,9 @@ class NftPropertiesWrap extends StatelessWidget {
               }),
               title: Builder(builder: (context) {
                 if (p.name == BACKUP_URL_PROPERTY_NAME) {
-                  final url = p.value.replaceAll("https//", "https://").replaceAll("http//", 'http://');
+                  final url = p.value
+                      .replaceAll("https//", "https://")
+                      .replaceAll("http//", 'http://');
                   return Tooltip(
                     message: url,
                     child: InkWell(

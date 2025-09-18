@@ -63,9 +63,12 @@ const List<AutoRoute> webRoutes = [
 const List<AutoRoute> sharedWebRoutes = [
   AutoRoute(path: "token/create", page: WebTokenCreateScreen),
   AutoRoute(path: "token/detail/:scId", page: WebTokenDetailScreen),
-  AutoRoute(path: "token/detail/new-topic/:scId/:address", page: CreateTokenTopicScreen),
+  AutoRoute(
+      path: "token/detail/new-topic/:scId/:address",
+      page: CreateTokenTopicScreen),
   AutoRoute(path: "vbtc/create", page: TokenizeBtcScreen),
-  AutoRoute(path: "vbtc/detail/:scId/:address", page: WebTokenizedBtcDetailScreen),
+  AutoRoute(
+      path: "vbtc/detail/:scId/:address", page: WebTokenizedBtcDetailScreen),
   AutoRoute(path: "detail/:hash", page: WebTransactionDetailScreen),
 ];
 
@@ -101,7 +104,8 @@ const webDashboardTabRouter = AutoRoute(
       page: EmptyRouterPage,
       children: [
         AutoRoute(path: "", page: WebSendScreen),
-        AutoRoute(path: ":toAddress/:amount", page: WebPrefilledSendScreen),
+        AutoRoute(
+            path: ":currency/:toAddress/:amount", page: WebPrefilledSendScreen),
         ...sharedWebRoutes,
       ],
     ),
@@ -158,8 +162,14 @@ const webDashboardTabRouter = AutoRoute(
       children: [
         AutoRoute(path: "", page: WebSmartContractLandingScreen),
         AutoRoute(path: "create", page: WebCreateSmartContractScreen),
-        AutoRoute(path: "bulk", name: 'WebBulkCreateScreenRoute', page: BulkCreateScreen),
-        AutoRoute(path: "create", name: "WebSmartContractWizardScreenRoute", page: SmartContractWizardScreen),
+        AutoRoute(
+            path: "bulk",
+            name: 'WebBulkCreateScreenRoute',
+            page: BulkCreateScreen),
+        AutoRoute(
+            path: "create",
+            name: "WebSmartContractWizardScreenRoute",
+            page: SmartContractWizardScreen),
         // AutoRoute(path: "wizard", name: "WebBuldCreateScreen", page: BulkCreateScreen),
         ...sharedWebRoutes,
       ],

@@ -45,12 +45,14 @@ package_mac:
 	cd /Users/tylersavery/Projects/rbx/rbx_wallet/
 	open ./installers/exports/
 
+
+
 build_win_cli:
 	dotnet publish -c Release -r win-x64 ../Core-Cli/ --output ../Core-Cli/rbxpublished --self-contained true -p:PublishSingleFile=true
 
 package_m1:
 	rm -rf ../Core-CLI/bin/Release
-	cd ../Core-CLI && git pull && cd /Users/tyler/prj/rbx/rbx-wallet-gui/
+	cd ../Core-CLI && git pull && cd /Users/tyler/prj/vfx/vfx-gui/
 	dotnet publish -c Release -r osx-arm64 ../Core-Cli/ --self-contained true -f net6.0 -p:PublishSingleFile=true
 	rm -f ./installers/exports/RBX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/VFX-OSX-ARM-Installer.dmg
@@ -63,10 +65,9 @@ package_m1:
 	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
 	rm -f ./installers/exports/vfx-corecli-mac-arm.zip
-	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tyler/prj/rbx/rbx-wallet-gui/installers/exports/vfx-corecli-mac-arm.zip ./RBXCore/
-	cd /Users/tyler/prj/rbx/rbx-wallet-gui/
+	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tyler/prj/vfx/vfx-gui/installers/exports/vfx-corecli-mac-arm.zip ./RBXCore/
+	cd /Users/tyler/prj/vfx/vfx-gui/
 	open ./installers/exports/
-
 
 	
 

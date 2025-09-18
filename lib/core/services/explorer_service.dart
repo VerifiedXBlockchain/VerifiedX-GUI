@@ -600,4 +600,20 @@ class ExplorerService extends BaseService {
       return null;
     }
   }
+
+  Future<bool> associateMedia(String scId, Map<String, String> mediaMap) async {
+    try {
+      final result = await postJson(
+        "/media/associate-media/$scId/",
+        params: {'media_map': mediaMap},
+      );
+
+      print(result);
+
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

@@ -7,6 +7,7 @@ import '../../../utils/toast.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../../core/models/web_session_model.dart';
 import '../../web/components/web_wordmark.dart';
+import '../../../core/services/password_prompt_service.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/app_router.gr.dart';
@@ -49,7 +50,8 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
           return AlertDialog(
             title: Text(
               "Welcome to the VerifiedX Web Wallet!",
-              style: TextStyle(color: AppColors.getBlue(), fontWeight: FontWeight.w400),
+              style: TextStyle(
+                  color: AppColors.getBlue(), fontWeight: FontWeight.w400),
             ),
             content: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 500),
@@ -57,11 +59,13 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("The network does NOT store your email/password or mnemonic. They are used as seeds to generate your accounts' keypairs."),
+                  Text(
+                      "The network does NOT store your email/password or mnemonic. They are used as seeds to generate your accounts' keypairs."),
                   SizedBox(
                     height: 16,
                   ),
-                  Text("This includes your VFX account, Vault account, and Bitcoin account."),
+                  Text(
+                      "This includes your VFX account, Vault account, and Bitcoin account."),
                   SizedBox(
                     height: 16,
                   ),
@@ -95,9 +99,8 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
 
   void _handleSession(WebSessionModel session) {
     final currentPath = singleton<AppRouter>().current.path;
-    final bool rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
 
-    if (session.isAuthenticated && rememberMe) {
+    if (session.isAuthenticated) {
       if (currentPath == '/') {
         AutoRouter.of(context).push(WebDashboardContainerRoute());
       }
@@ -142,6 +145,13 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
     final isMobile = BreakPoints.useMobileLayout(context);
 
     final keypair = ref.watch(webSessionProvider.select((v) => v.keypair));
+    final session = ref.watch(webSessionProvider);
+
+    // Check if we need password for encrypted keys
+    final storage = singleton<Storage>();
+    final needsPassword = storage.isEncryptionEnabled() &&
+        storage.hasPasswordHash() &&
+        !session.isAuthenticated;
 
     return Center(
       child: Column(
@@ -176,16 +186,76 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
           WebWalletWordWordmark(),
 
           const SizedBox(height: 16),
-          AppButton(
-            label: "Login / Create Account",
-            icon: Icons.upload,
-            onPressed: () {
-              showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: true, onSuccess: () {
-                redirectToDashboard(true);
-              });
-            },
-            variant: AppColorVariant.Light,
-          ),
+          if (needsPassword) ...[
+            // Show the address they're unlocking
+            Text(
+              "Unlock wallet for:",
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.8),
+                fontSize: 12,
+              ),
+            ),
+            Text(
+              storage.getString(Storage.WEB_PRIMARY_ADDRESS) ??
+                  "Unknown Address",
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.7),
+                fontSize: 12,
+                fontFamily: 'RobotoMono',
+              ),
+            ),
+            const SizedBox(height: 16),
+            AppButton(
+              label: "Enter Password",
+              icon: Icons.lock,
+              onPressed: () async {
+                final password =
+                    await PasswordPromptService.promptAndVerifyPassword(
+                  context,
+                  title: "Enter Password",
+                  customMessage:
+                      "Enter your password to decrypt your stored keys.",
+                );
+
+                if (password != null) {
+                  final success = await ref
+                      .read(webSessionProvider.notifier)
+                      .loginWithPassword(password);
+                  if (success) {
+                    redirectToDashboard(false);
+                  } else {
+                    Toast.error("Failed to decrypt keys");
+                  }
+                }
+              },
+              variant: AppColorVariant.Light,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: AppButton(
+                label: "Logout",
+                type: AppButtonType.Text,
+                underlined: true,
+                onPressed: () async {
+                  ref.read(webSessionProvider.notifier).logout();
+                },
+                variant: AppColorVariant.Light,
+              ),
+            ),
+          ] else
+            AppButton(
+              label: "Login / Create Account",
+              icon: Icons.upload,
+              onPressed: () {
+                showWebLoginModal(context, ref,
+                    allowPrivateKey: true,
+                    allowBtcPrivateKey: true,
+                    showRememberMe: true, onSuccess: () {
+                  redirectToDashboard(true);
+                });
+              },
+              variant: AppColorVariant.Light,
+            ),
           if (keypair != null)
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
@@ -205,7 +275,11 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               padding: EdgeInsets.only(top: 16.0),
               child: Text(
                 "TESTNET",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green, letterSpacing: 2),
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                    letterSpacing: 2),
               ),
             ),
         ],

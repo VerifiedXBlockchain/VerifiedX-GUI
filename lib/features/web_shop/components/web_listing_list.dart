@@ -20,10 +20,12 @@ class WebListingListContainer extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  _WebListingListContainerState createState() => _WebListingListContainerState();
+  _WebListingListContainerState createState() =>
+      _WebListingListContainerState();
 }
 
-class _WebListingListContainerState extends ConsumerState<WebListingListContainer> {
+class _WebListingListContainerState
+    extends ConsumerState<WebListingListContainer> {
   late final int shopId;
   late final int collectionId;
 
@@ -33,7 +35,9 @@ class _WebListingListContainerState extends ConsumerState<WebListingListContaine
     collectionId = widget.collectionId;
     super.initState();
 
-    ref.read(webListingFullListProvider("$shopId,$collectionId").notifier).init();
+    ref
+        .read(webListingFullListProvider("$shopId,$collectionId").notifier)
+        .init();
   }
 
   @override
@@ -61,7 +65,8 @@ class WebListingList extends BaseComponent {
     final listModeProvider = ref.read(shopListViewProvider.notifier);
     final isMobile = BreakPoints.useMobileLayout(context);
 
-    final listings = ref.watch(webListingFullListProvider("$shopId,$collectionId"));
+    final listings =
+        ref.watch(webListingFullListProvider("$shopId,$collectionId"));
 
     if (listings.isEmpty) {
       return SizedBox();
@@ -79,15 +84,23 @@ class WebListingList extends BaseComponent {
                   children: [
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(top: 15, bottom: 8, left: isMobile ? 12 : 0),
+                        padding: EdgeInsets.only(
+                            top: 15, bottom: 8, left: isMobile ? 12 : 0),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(maxWidth: 600),
-                          child: Text(
-                            listing.collection.description,
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                                  color: Colors.white,
-                                ),
-                            textAlign: !isMobile ? TextAlign.center : TextAlign.left,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Text(
+                              listing.collection.description,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                    color: Colors.white,
+                                  ),
+                              textAlign:
+                                  !isMobile ? TextAlign.center : TextAlign.left,
+                            ),
                           ),
                         ),
                       ),
@@ -118,7 +131,9 @@ class WebListingList extends BaseComponent {
                     ),
                   ],
                 ),
-              isExpanded ? WebListingDetails(listing: listing) : WebListingDetailsListTile(listing: listing),
+              isExpanded
+                  ? WebListingDetails(listing: listing)
+                  : WebListingDetailsListTile(listing: listing),
             ],
           );
         });

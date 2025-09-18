@@ -80,7 +80,9 @@ class WebListingDetails extends BaseComponent {
                 height: 16,
               ),
 
-              if (listing.canBid && !listing.isSaleComplete && !listing.isSalePending)
+              if (listing.canBid &&
+                  !listing.isSaleComplete &&
+                  !listing.isSalePending)
                 _Countdown(
                   listing: listing,
                 ),
@@ -120,7 +122,9 @@ class WebListingDetails extends BaseComponent {
   @override
   Widget desktopBody(BuildContext context, WidgetRef ref) {
     final nft = listing.nft;
-    final myAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+    final myAddress = kIsWeb
+        ? ref.read(webSessionProvider).keypair?.address
+        : ref.read(sessionProvider).currentWallet?.address;
 
     return ContextMenuRegion(
       contextMenu: GenericContextMenu(
@@ -129,9 +133,12 @@ class WebListingDetails extends BaseComponent {
             ContextMenuButtonConfig(
               'Edit Listing',
               onPressed: () async {
-                ref.read(createWebListingProvider.notifier).load(listing, listing.collection.id, listing.collection.shop!.id);
+                ref.read(createWebListingProvider.notifier).load(listing,
+                    listing.collection.id, listing.collection.shop!.id);
                 if (Env.isWeb) {
-                  AutoRouter.of(context).push(CreateWebListingScreenRoute(shopId: listing.collection.shop!.id, collectionId: listing.collection.id));
+                  AutoRouter.of(context).push(CreateWebListingScreenRoute(
+                      shopId: listing.collection.shop!.id,
+                      collectionId: listing.collection.id));
                 }
               },
               icon: Icon(Icons.edit),
@@ -146,7 +153,9 @@ class WebListingDetails extends BaseComponent {
                   cancelText: "Cancel",
                 );
                 if (confirmed == true) {
-                  ref.read(createWebListingProvider.notifier).delete(context, listing.collection.shop!.id, listing);
+                  ref
+                      .read(createWebListingProvider.notifier)
+                      .delete(context, listing.collection.shop!.id, listing);
                 }
               },
               icon: Icon(Icons.delete),
@@ -205,19 +214,23 @@ class WebListingDetails extends BaseComponent {
                   SizedBox(
                     height: 16,
                   ),
-                  if (listing.canBid && !listing.isSaleComplete && !listing.isSalePending)
+                  if (listing.canBid &&
+                      !listing.isSaleComplete &&
+                      !listing.isSalePending)
                     _Countdown(
                       listing: listing,
                     ),
                   if (listing.isSaleComplete)
                     Text(
                       "Sale has Completed",
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                     ),
                   if (!listing.isSaleComplete && listing.isSalePending)
                     Text(
                       "Sale is Pending",
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                     ),
                 ],
               ),
@@ -260,8 +273,12 @@ class _PreviewState extends State<_Preview> {
 
     final isMobile = BreakPoints.useMobileLayout(context);
 
-    final primaryFilename = widget.listing.nft!.smartContract.primaryAsset.fileName;
-    final additionalFilenames = widget.listing.nft!.smartContract.additionalAssets.map((e) => e.fileName).toList();
+    final primaryFilename =
+        widget.listing.nft!.smartContract.primaryAsset.fileName;
+    final additionalFilenames = widget
+        .listing.nft!.smartContract.additionalAssets
+        .map((e) => e.fileName)
+        .toList();
 
     final assetFilenames = widget.listing.collection.shop!.isThirdParty
         ? [primaryFilename, ...additionalFilenames]
@@ -291,7 +308,8 @@ class _PreviewState extends State<_Preview> {
           if (["jpg", "jpeg", "gif", "png", "webp"].contains(ext)) {
             orderedThumbs.add(t);
             icons.add(null);
-          } else if (thumbnailPreviews != null && thumbnailPreviews.containsKey(fname)) {
+          } else if (thumbnailPreviews != null &&
+              thumbnailPreviews.containsKey(fname)) {
             orderedThumbs.add(thumbnailPreviews[fname]);
             icons.add(iconFromPath(fname));
           } else {
@@ -342,7 +360,8 @@ class _PreviewState extends State<_Preview> {
                     final i = entry.key;
                     final isIcon = path.contains("ICON||");
 
-                    IconData? icon = isIcon ? iconFromPath(path.split("||").last) : null;
+                    IconData? icon =
+                        isIcon ? iconFromPath(path.split("||").last) : null;
 
                     final IconData? extraIcon = icons[i];
 
@@ -363,7 +382,8 @@ class _PreviewState extends State<_Preview> {
                                           },
                                           child: Center(
                                             child: Padding(
-                                              padding: const EdgeInsets.all(16.0),
+                                              padding:
+                                                  const EdgeInsets.all(16.0),
                                               child: CachedNetworkImage(
                                                 imageUrl: path,
                                                 width: isMobile ? 300 : 512,
@@ -383,7 +403,8 @@ class _PreviewState extends State<_Preview> {
                                     Icon(icon),
                                     if (filename != null)
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 6.0),
+                                        padding:
+                                            const EdgeInsets.only(top: 6.0),
                                         child: Text(filename),
                                       )
                                   ],
@@ -404,9 +425,12 @@ class _PreviewState extends State<_Preview> {
                                                     setState(() {
                                                       rebuilding = true;
                                                     });
-                                                    await FileImage(File(path)).evict();
+                                                    await FileImage(File(path))
+                                                        .evict();
 
-                                                    Future.delayed(Duration(milliseconds: 300)).then((value) {
+                                                    Future.delayed(Duration(
+                                                            milliseconds: 300))
+                                                        .then((value) {
                                                       setState(() {
                                                         rebuilding = false;
                                                       });
@@ -421,7 +445,8 @@ class _PreviewState extends State<_Preview> {
                                           Align(
                                             alignment: Alignment.bottomRight,
                                             child: Padding(
-                                              padding: const EdgeInsets.all(8.0),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
                                               child: Icon(extraIcon),
                                             ),
                                           )
@@ -429,7 +454,8 @@ class _PreviewState extends State<_Preview> {
                                     );
                                   }
 
-                                  return Center(child: Icon(iconFromPath(path)));
+                                  return Center(
+                                      child: Icon(iconFromPath(path)));
                                 })),
                     );
                   }).toList(),
@@ -486,7 +512,9 @@ class _Details extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final myAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+    final myAddress = kIsWeb
+        ? ref.read(webSessionProvider).keypair?.address
+        : ref.read(sessionProvider).currentWallet?.address;
     if (listing.nft == null) {
       return SizedBox();
     }
@@ -504,7 +532,9 @@ class _Details extends BaseComponent {
                   Text(
                     "#${listing.listingId}",
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize! + 4,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyLarge!.fontSize! +
+                                  4,
                           color: Colors.white.withAlpha(200),
                           fontWeight: FontWeight.bold,
                         ),
@@ -542,10 +572,12 @@ class _Details extends BaseComponent {
                     variant: AppColorVariant.Light,
                     type: AppButtonType.Text,
                     onPressed: () {
-                      ref.read(createWebListingProvider.notifier).load(listing, listing.collection.id, listing.collection.shop!.id);
+                      ref.read(createWebListingProvider.notifier).load(listing,
+                          listing.collection.id, listing.collection.shop!.id);
                       if (Env.isWeb) {
-                        AutoRouter.of(context)
-                            .push(CreateWebListingScreenRoute(shopId: listing.collection.shop!.id, collectionId: listing.collection.id));
+                        AutoRouter.of(context).push(CreateWebListingScreenRoute(
+                            shopId: listing.collection.shop!.id,
+                            collectionId: listing.collection.id));
                       }
                     },
                   ),
@@ -565,7 +597,8 @@ class _Details extends BaseComponent {
                         cancelText: "Cancel",
                       );
                       if (confirmed == true) {
-                        ref.read(createWebListingProvider.notifier).delete(context, listing.collection.shop!.id, listing);
+                        ref.read(createWebListingProvider.notifier).delete(
+                            context, listing.collection.shop!.id, listing);
                       }
                     },
                   )
@@ -754,7 +787,8 @@ class _Features extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("NFT Features:", style: Theme.of(context).textTheme.headlineSmall),
+          Text("NFT Features:",
+              style: Theme.of(context).textTheme.headlineSmall),
           Builder(
             builder: (context) {
               if (nft.features.isEmpty) {
@@ -853,7 +887,8 @@ class _WebNftData extends StatelessWidget {
     required this.nft,
   });
 
-  TableRow buildDetailRow(BuildContext context, String label, String value, [bool copyValue = false]) {
+  TableRow buildDetailRow(BuildContext context, String label, String value,
+      [bool copyValue = false]) {
     final isMobile = BreakPoints.useMobileLayout(context);
 
     if (isMobile) {
@@ -934,7 +969,8 @@ class _WebNftData extends StatelessWidget {
         children: [
           const Text(
             "Details",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           const SizedBox(height: 8),
           Table(
@@ -942,7 +978,8 @@ class _WebNftData extends StatelessWidget {
             children: [
               buildDetailRow(context, "Identifier", nft.id, true),
               buildDetailRow(context, "Minted By", nft.minterName),
-              buildDetailRow(context, "Minter Address", nft.minterAddress, true),
+              buildDetailRow(
+                  context, "Minter Address", nft.minterAddress, true),
               buildDetailRow(context, "Owned by", nft.currentOwner, true),
               buildDetailRow(context, "Chain", "VFX"),
               //TODO: Auction stuff
@@ -971,7 +1008,8 @@ class _BuyNow extends BaseComponent {
         color: Colors.transparent,
         margin: EdgeInsets.zero,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: isMobile ? 0 : 16),
+          padding: EdgeInsets.symmetric(
+              vertical: 16.0, horizontal: isMobile ? 0 : 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1001,9 +1039,16 @@ class _BuyNow extends BaseComponent {
                     return;
                   }
 
-                  final success = await ref.read(webBidListProvider(listing.id).notifier).buyNow(context, listing);
+                  final success = await ref
+                      .read(webBidListProvider(listing.id).notifier)
+                      .buyNow(context, listing);
+
                   if (success == true) {
-                    ref.read(webListingFullListProvider("${listing.collection.shop!.id},${listing.collection.id}").notifier).fetch();
+                    ref
+                        .read(webListingFullListProvider(
+                                "${listing.collection.shop!.id},${listing.collection.id}")
+                            .notifier)
+                        .fetch();
                   }
                 },
               ),
@@ -1069,7 +1114,8 @@ class _Auction extends BaseComponent {
         color: Colors.transparent,
         margin: EdgeInsets.zero,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: isMobile ? 0 : 16),
+          padding: EdgeInsets.symmetric(
+              vertical: 16.0, horizontal: isMobile ? 0 : 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1094,7 +1140,9 @@ class _Auction extends BaseComponent {
               ],
               const SizedBox(height: 16),
               Row(
-                mainAxisAlignment: isMobile ? MainAxisAlignment.start : MainAxisAlignment.center,
+                mainAxisAlignment: isMobile
+                    ? MainAxisAlignment.start
+                    : MainAxisAlignment.center,
                 children: [
                   AppButton(
                       label: "Bid Now",
@@ -1105,8 +1153,14 @@ class _Auction extends BaseComponent {
                           Toast.error("You are the owner of this shop.");
                           return;
                         }
-                        ref.read(webBidListProvider(listing.id).notifier).sendBid(context, listing);
-                        ref.read(webListingFullListProvider("${listing.collection.shop!.id},${listing.collection.id}").notifier).fetch(1);
+                        ref
+                            .read(webBidListProvider(listing.id).notifier)
+                            .sendBid(context, listing);
+                        ref
+                            .read(webListingFullListProvider(
+                                    "${listing.collection.shop!.id},${listing.collection.id}")
+                                .notifier)
+                            .fetch(1);
                       }),
                   const SizedBox(
                     width: 6,
@@ -1146,7 +1200,9 @@ class _Countdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: BreakPoints.useMobileLayout(context) ? CrossAxisAlignment.stretch : CrossAxisAlignment.center,
+      crossAxisAlignment: BreakPoints.useMobileLayout(context)
+          ? CrossAxisAlignment.stretch
+          : CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         if (listing.isActive)
@@ -1313,11 +1369,15 @@ class _BidHistoryModal extends BaseComponent {
               return ListTile(
                 leading: _BidStatusIndicator(bid),
                 title: Text("${bid.amount} VFX"),
-                subtitle: SelectableText(isMobile ? "${bid.address} \n${timeago.format(bid.sendDateTime)}" : bid.address),
+                subtitle: SelectableText(isMobile
+                    ? "${bid.address} \n${timeago.format(bid.sendDateTime)}"
+                    : bid.address),
                 trailing: Builder(builder: (context) {
                   final currentAddress = kIsWeb
-                      ? ref.watch(webSessionProvider.select((v) => v.keypair?.address))
-                      : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
+                      ? ref.watch(
+                          webSessionProvider.select((v) => v.keypair?.address))
+                      : ref.watch(sessionProvider
+                          .select((v) => v.currentWallet?.address));
                   final isBidder = currentAddress == bid.address;
 
                   // if (isBidder && bid.bidStatus == BidStatus.Sent) {

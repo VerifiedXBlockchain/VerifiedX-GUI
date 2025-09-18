@@ -25,6 +25,8 @@ enum PaymentGateway {
       "https://help.crypto.com/en/",
       true),
   testnetFaucet("Testnet Faucet", "", "", "", "", false),
+  stripe("Stripe", "www.stripe.com", "https://stripe.com/legal/ssa",
+      "https://stripe.com/privacy", "https://support.stripe.com/", true),
   ;
 
   final String name;

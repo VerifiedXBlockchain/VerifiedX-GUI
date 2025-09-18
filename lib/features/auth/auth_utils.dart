@@ -7,11 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
-import '../../core/env.dart';
 import '../btc_web/models/btc_web_account.dart';
 import '../btc_web/services/btc_web_service.dart';
 import '../keygen/models/ra_keypair.dart';
 import '../../core/theme/app_theme.dart';
+import '../../core/services/password_prompt_service.dart';
+import '../../core/singletons.dart';
+import '../../core/storage.dart';
 import 'package:rbx_wallet/features/keygen/services/keygen_service.dart'
     if (dart.library.io) 'package:rbx_wallet/features/keygen/services/keygen_service_mock.dart';
 import 'package:rbx_wallet/features/web_shop/providers/web_auth_token_provider.dart';
@@ -28,7 +30,12 @@ import '../../core/web_router.gr.dart';
 import '../global_loader/global_loading_provider.dart';
 import '../keygen/models/keypair.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
+import '../web/models/multi_account_instance.dart';
+import '../../core/services/multi_account_encryption_service.dart';
+import 'package:collection/collection.dart';
 import 'components/auth_type_modal.dart';
+
+enum KeypairType { vfx, ra, btc }
 
 Future<void> login(
   BuildContext context,
@@ -38,6 +45,21 @@ Future<void> login(
   BtcWebAccount? btcKeypair,
 ) async {
   ref.read(webSessionProvider.notifier).login(keypair, raKeypair, btcKeypair);
+}
+
+Future<void> loginWithEncryption(
+  BuildContext context,
+  WidgetRef ref,
+  Keypair keypair,
+  RaKeypair? raKeypair,
+  BtcWebAccount? btcKeypair,
+  String password,
+) async {
+  final sessionProvider = ref.read(webSessionProvider.notifier);
+  sessionProvider.encryptAndSaveKeys(keypair, raKeypair, btcKeypair, password);
+
+  sessionProvider.login(keypair, raKeypair, btcKeypair,
+      andSave: false, encryptionPassword: password);
 }
 
 Future<void> handleImportWithPrivateKey(
@@ -55,9 +77,17 @@ Future<void> handleImportWithPrivateKey(
   );
 
   if (privateKey != null) {
-    if (showRememberMe) {
-      await handleRememberMe(context, ref);
-    }
+    // Auto-enable Remember Me since keys will be encrypted
+
+    // Collect encryption password
+    final encryptionPassword = await PasswordPromptService.promptNewPassword(
+      context,
+      title: "Set Encryption Password",
+      customMessage: "This password will encrypt your imported private key.",
+    );
+
+    if (encryptionPassword == null) return; // User cancelled
+
     final keypair = await KeygenService.importPrivateKey(privateKey);
 
     RaKeypair? reserveKeyPair;
@@ -92,7 +122,8 @@ Future<void> handleImportWithPrivateKey(
     final btcKeypair = await BtcWebService()
         .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
 
-    await login(context, ref, keypair, reserveKeyPair, btcKeypair);
+    await loginWithEncryption(
+        context, ref, keypair, reserveKeyPair, btcKeypair, encryptionPassword);
   }
 }
 
@@ -133,9 +164,16 @@ Future<void> handleImportWithBtcPrivateKey(
   final privateKey = result.privateKey;
   final addressType = result.addressType;
 
-  if (showRememberMe) {
-    await handleRememberMe(context, ref);
-  }
+  // Auto-enable Remember Me since keys will be encrypted
+
+  // Collect encryption password
+  final encryptionPassword = await PasswordPromptService.promptNewPassword(
+    context,
+    title: "Set Encryption Password",
+    customMessage: "This password will encrypt your imported BTC private key.",
+  );
+
+  if (encryptionPassword == null) return; // User cancelled
 
   late final BtcWebAccount? btcKeypair;
 
@@ -190,7 +228,8 @@ Future<void> handleImportWithBtcPrivateKey(
     append += 1;
   }
 
-  await login(context, ref, keypair, reserveKeyPair, btcKeypair);
+  await loginWithEncryption(
+      context, ref, keypair, reserveKeyPair, btcKeypair, encryptionPassword);
 }
 
 class BtcPrivateKeyImportModalResult {
@@ -331,7 +370,6 @@ Future<void> handleCreateWithEmail(
   String emailValue,
   String passwordValue, {
   bool forCreate = true,
-  bool showRememberMe = true,
 }) async {
   String email = emailValue.toLowerCase();
   String password = passwordValue;
@@ -412,12 +450,9 @@ Future<void> handleCreateWithEmail(
   // }
 
   // await TransactionService().createWallet(email, keypair.address);
-  if (showRememberMe) {
-    await handleRememberMe(context, ref);
-  }
 
-  await login(
-      context, ref, keypair.copyWith(email: email), reserveKeyPair, btcKeypair);
+  await loginWithEncryption(context, ref, keypair.copyWith(email: email),
+      reserveKeyPair, btcKeypair, password);
 
   final authorized = await guardWebAuthorized(ref, keypair.address);
   if (authorized) {
@@ -483,57 +518,23 @@ Future<void> handleCreateWithMnemonic(
   // ref.read(globalLoadingProvider.notifier).complete();
 
   // await TransactionService().createWallet(null, keypair.address);
-  if (showRememberMe) {
-    await handleRememberMe(context, ref);
-  }
-  login(context, ref, keypair, reserveKeyPair, btcKeypair);
-  // await showKeys(context, keypair);
-}
+  // Auto-enable Remember Me since keys will be encrypted
 
-Future<dynamic> handleRememberMe(BuildContext context, WidgetRef ref) async {
-  return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Store Private Keys?'),
-          content: const Text(
-              'Would you like your browser to remember your private keys locally?\nEither way, your key will never be transmitted accross the internet. \n\nChoose "No" if this is a shared computer.'),
-          actions: [
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.darkButtonBg,
-                textStyle: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                ref.read(webSessionProvider.notifier).setRememberMe(false);
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "No",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).colorScheme.info,
-                textStyle: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                ref.read(webSessionProvider.notifier).setRememberMe(true);
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                "Yes",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
-        );
-      });
+  // Collect encryption password
+  final encryptionPassword = await PasswordPromptService.promptNewPassword(
+    context,
+    title: "Set Encryption Password",
+    customMessage: "This password will encrypt your generated mnemonic keys.",
+  );
+
+  if (encryptionPassword == null) {
+    ref.read(globalLoadingProvider.notifier).complete();
+    return;
+  }
+
+  loginWithEncryption(
+      context, ref, keypair, reserveKeyPair, btcKeypair, encryptionPassword);
+  // await showKeys(context, keypair);
 }
 
 Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
@@ -548,9 +549,6 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
   );
 
   if (value != null) {
-    if (showRememberMe) {
-      await handleRememberMe(context, ref);
-    }
     RaKeypair? reserveKeyPair;
     ref.read(globalLoadingProvider.notifier).start();
 
@@ -597,13 +595,128 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
 
     ref.read(globalLoadingProvider.notifier).complete();
 
+    // Collect encryption password
+    final encryptionPassword = await PasswordPromptService.promptNewPassword(
+      context,
+      title: "Set Encryption Password",
+      customMessage: "This password will encrypt your recovered mnemonic keys.",
+    );
+
+    if (encryptionPassword == null) return;
+
     // showKeys(context, keypair);
     // await TransactionService().createWallet(null, keypair.address);
-    await login(context, ref, keypair, reserveKeyPair, btcKeypair);
+    await loginWithEncryption(
+        context, ref, keypair, reserveKeyPair, btcKeypair, encryptionPassword);
+  }
+}
+
+Future<void> showKeysForAccount(
+  BuildContext context,
+  WidgetRef ref,
+  MultiAccountInstance account,
+  KeypairType keypairType, [
+  bool forReveal = false,
+]) async {
+  final decryptedAccount = await _getDecryptedAccount(context, account);
+  if (decryptedAccount == null) return;
+  await _showKeysForType(context, decryptedAccount, keypairType, forReveal);
+}
+
+Future<MultiAccountInstance?> _getDecryptedAccount(
+  BuildContext context,
+  MultiAccountInstance account,
+) async {
+  final storage = singleton<Storage>();
+  final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
+
+  if (savedData == null) return account;
+
+  final storedAccountJson = savedData
+      .map((e) => jsonDecode(e) as Map<String, dynamic>)
+      .where((json) => json['id'] == account.id)
+      .firstOrNull;
+
+  final hasEncryptedKeys = storedAccountJson != null &&
+      MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson);
+
+  if (!hasEncryptedKeys) return account;
+
+  final password = await PromptModal.show(
+    contextOverride: context,
+    title: "Enter Account Password",
+    labelText: "Account Password",
+    body:
+        "Enter the password for this account to decrypt and view its private keys.",
+    validator: (value) => formValidatorNotEmpty(value, "Password"),
+    obscureText: true,
+    revealObscure: true,
+    lines: 1,
+  );
+
+  if (password == null) return null;
+
+  try {
+    final decryptedJson =
+        MultiAccountEncryptionService.decryptAccountPrivateKeys(
+            storedAccountJson, password);
+    return MultiAccountInstance.fromJson(decryptedJson);
+  } catch (e) {
+    Toast.error("Failed to decrypt account keys. Check your password.");
+    return null;
+  }
+}
+
+Future<void> _showKeysForType(
+  BuildContext context,
+  MultiAccountInstance account,
+  KeypairType keypairType,
+  bool forReveal,
+) async {
+  switch (keypairType) {
+    case KeypairType.vfx:
+      if (account.keypair != null) {
+        await _showKeysInternal(context, account.keypair!, forReveal);
+      }
+      break;
+
+    case KeypairType.ra:
+      if (account.raKeypair != null) {
+        await _showRaKeysInternal(context, account.raKeypair!, forReveal);
+      }
+      break;
+
+    case KeypairType.btc:
+      if (account.btcKeypair != null) {
+        final kp = Keypair(
+          private: account.btcKeypair!.privateKey,
+          address: account.btcKeypair!.address,
+          public: account.btcKeypair!.publicKey,
+          btcWif: account.btcKeypair!.wif,
+        );
+        await _showKeysInternal(context, kp, forReveal);
+      }
+      break;
   }
 }
 
 Future<void> showKeys(
+  BuildContext context,
+  Keypair keypair, [
+  bool forReveal = false,
+]) async {
+  final storage = singleton<Storage>();
+
+  if (storage.isEncryptionEnabled() && storage.hasPasswordHash()) {
+    await PasswordPromptService.requirePasswordFor(context, (password) async {
+      await _showKeysInternal(context, keypair, forReveal);
+    }, customMessage: "Enter your password to reveal private keys.");
+  } else {
+    await _showKeysInternal(context, keypair, forReveal);
+  }
+}
+
+Future<void> _showKeysInternal(
   BuildContext context,
   Keypair keypair, [
   bool forReveal = false,
@@ -751,6 +864,27 @@ Future<void> logout(BuildContext context, WidgetRef ref) async {
 }
 
 Future<void> showRaKeys(
+  BuildContext context,
+  RaKeypair keypair, [
+  bool forReveal = false,
+]) async {
+  final storage = singleton<Storage>();
+
+  // Only require password if user has encrypted storage
+  if (storage.isEncryptionEnabled() && storage.hasPasswordHash()) {
+    // User has encrypted storage - require password
+    await PasswordPromptService.requirePasswordFor(context, (password) async {
+      await _showRaKeysInternal(context, keypair, forReveal);
+    },
+        customMessage:
+            "Enter your password to reveal Vault account private keys.");
+  } else {
+    // Legacy user with unencrypted storage - show keys directly
+    await _showRaKeysInternal(context, keypair, forReveal);
+  }
+}
+
+Future<void> _showRaKeysInternal(
   BuildContext context,
   RaKeypair keypair, [
   bool forReveal = false,
@@ -984,7 +1118,6 @@ showWebLoginModal(
                   ref,
                   auth.email,
                   auth.password,
-                  showRememberMe: showRememberMe,
                 );
                 if (ref.read(webSessionProvider).isAuthenticated) {
                   onSuccess();

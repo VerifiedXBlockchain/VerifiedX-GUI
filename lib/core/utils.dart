@@ -8,11 +8,18 @@ import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dialogs.dart';
+import 'singletons.dart';
+import 'storage.dart';
+import 'providers/web_session_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/utils/html_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'services/password_prompt_service.dart';
+import 'singletons.dart';
+import 'storage.dart';
 import '../features/btc/services/btc_service.dart';
 import '../features/transactions/models/transaction.dart';
 
@@ -105,6 +112,23 @@ class AddressChoosingIconButton extends BaseComponent {
 }
 
 Future<bool> backupWebKeys(BuildContext context, WidgetRef ref) async {
+  final storage = singleton<Storage>();
+  
+  // Only require password if user has encrypted storage
+  if (storage.isEncryptionEnabled() && storage.hasPasswordHash()) {
+    // User has encrypted storage - require password
+    bool result = false;
+    await PasswordPromptService.requirePasswordFor(context, (password) async {
+      result = await _backupWebKeysInternal(context, ref);
+    }, customMessage: "Enter your password to backup your keys.");
+    return result;
+  } else {
+    // Legacy user with unencrypted storage - backup directly
+    return await _backupWebKeysInternal(context, ref);
+  }
+}
+
+Future<bool> _backupWebKeysInternal(BuildContext context, WidgetRef ref) async {
   try {
     final session = ref.read(webSessionProvider);
 
@@ -341,4 +365,19 @@ String formatDecimal(double number) {
   }
 
   return formatted;
+}
+
+Future<bool> checkEncryptionMigrationRequired(BuildContext context, WidgetRef ref) async {
+  final storage = singleton<Storage>();
+  final session = ref.read(webSessionProvider);
+  
+  if (!storage.isEncryptionEnabled() && session.isAuthenticated) {
+    await InfoDialog.show(
+      title: "Web Wallet Now Uses Encryption",
+      body: "The web wallet now uses encryption to protect your keys. In order to add an additional account you must fully sign out of the wallet and login again. Please make sure all your existing login details / keys are backed up before proceeding.",
+      closeText: "Okay",
+    );
+    return true;
+  }
+  return false;
 }

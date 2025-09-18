@@ -15,11 +15,13 @@ import 'package:collection/collection.dart';
 import 'package:rbx_wallet/utils/validation.dart';
 
 import '../../../core/providers/web_session_provider.dart';
+import '../../../core/services/multi_account_password_service.dart';
 import '../../../core/utils.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../utils/html_helpers.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils.dart';
 import '../../auth/auth_utils.dart';
-import '../../keygen/models/keypair.dart';
 
 class WebMultiAccountSelector extends BaseComponent {
   final bool expanded;
@@ -90,8 +92,11 @@ class WebMultiAccountSelector extends BaseComponent {
                   ),
           ),
         ),
-        onSelected: (value) {
+        onSelected: (value) async {
           if (value == 0) {
+            final migrationRequired = await checkEncryptionMigrationRequired(context, ref);
+            if (migrationRequired) return;
+            
             showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: false, onSuccess: () {
               Navigator.of(context).pop();
             });
@@ -109,11 +114,18 @@ class WebMultiAccountSelector extends BaseComponent {
             return;
           }
 
+          if (value == -2) {
+            // Lock Wallet - hard redirect to "/" (clears memory but keeps encrypted storage)
+            HtmlHelpers().redirect("/");
+            return;
+          }
+
           if (value == selectedAccountId) {
             return;
           }
 
-          ref.read(selectedMultiAccountProvider.notifier).setFromId(value);
+          // Use MultiAccountPasswordService to handle encrypted accounts
+          MultiAccountPasswordService.switchToAccountById(context, ref, value);
         },
         itemBuilder: (context) {
           final items = <PopupMenuEntry<int>>[];
@@ -177,6 +189,21 @@ class WebMultiAccountSelector extends BaseComponent {
             );
           }
 
+          // Add Lock Wallet option
+          items.add(PopupMenuDivider());
+          items.add(
+            PopupMenuItem(
+              value: -2,
+              child: Row(
+                children: [
+                  Icon(Icons.lock, size: 16),
+                  SizedBox(width: 8),
+                  Text("Lock Wallet"),
+                ],
+              ),
+            ),
+          );
+
           return items;
         });
   }
@@ -206,7 +233,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: InkWell(
                 onTap: () {
-                  ref.read(selectedMultiAccountProvider.notifier).setFromId(account.id);
+                  MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
                 },
                 child: AppCard(
                   borderColor: selected ? Colors.white24 : null,
@@ -255,7 +282,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       padding: const EdgeInsets.symmetric(horizontal: 4),
                                       child: InkWell(
                                         onTap: () async {
-                                          showKeys(context, keypair);
+                                          showKeysForAccount(context, ref, account, KeypairType.vfx);
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
@@ -299,7 +326,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       padding: const EdgeInsets.symmetric(horizontal: 4),
                                       child: InkWell(
                                         onTap: () async {
-                                          showRaKeys(context, raKeypair);
+                                          showKeysForAccount(context, ref, account, KeypairType.ra);
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
@@ -343,13 +370,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       padding: const EdgeInsets.symmetric(horizontal: 4),
                                       child: InkWell(
                                         onTap: () async {
-                                          final kp = Keypair(
-                                            private: btcKeypair.privateKey,
-                                            address: btcKeypair.address,
-                                            public: btcKeypair.publicKey,
-                                            btcWif: btcKeypair.wif,
-                                          );
-                                          showKeys(context, kp, true);
+                                          showKeysForAccount(context, ref, account, KeypairType.btc, true);
                                         },
                                         child: Icon(
                                           Icons.remove_red_eye,
@@ -387,7 +408,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                 variant: AppColorVariant.Light,
                                 type: AppButtonType.Outlined,
                                 onPressed: () {
-                                  ref.read(selectedMultiAccountProvider.notifier).setFromId(account.id);
+                                  MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
                                 },
                               ),
                             SizedBox(
@@ -440,7 +461,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                 if (confimed == true) {
                                   ref.read(multiAccountProvider.notifier).remove(account.id);
                                   if (otherAccount != null) {
-                                    ref.read(selectedMultiAccountProvider.notifier).setFromId(otherAccount.id);
+                                    MultiAccountPasswordService.switchToAccountById(context, ref, otherAccount.id);
                                   }
                                 }
                               },
@@ -459,7 +480,10 @@ class WebManageAccountsBottomSheet extends BaseComponent {
             child: AppButton(
               label: "Add Account",
               variant: AppColorVariant.Light,
-              onPressed: () {
+              onPressed: () async {
+                final migrationRequired = await checkEncryptionMigrationRequired(context, ref);
+                if (migrationRequired) return;
+                
                 showWebLoginModal(context, ref, allowPrivateKey: true, allowBtcPrivateKey: true, showRememberMe: false, onSuccess: () {
                   Navigator.of(context).pop();
                 });

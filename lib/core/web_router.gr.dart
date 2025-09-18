@@ -271,6 +271,7 @@ class WebRouter extends _i39.RootStackRouter {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<WebPrefilledSendScreenRouteArgs>(
           orElse: () => WebPrefilledSendScreenRouteArgs(
+                currency: pathParams.getString('currency'),
                 toAddress: pathParams.getString('toAddress'),
                 amount: pathParams.getDouble('amount'),
               ));
@@ -278,6 +279,7 @@ class WebRouter extends _i39.RootStackRouter {
         routeData: routeData,
         child: _i14.WebPrefilledSendScreen(
           key: args.key,
+          currency: args.currency,
           toAddress: args.toAddress,
           amount: args.amount,
         ),
@@ -594,7 +596,7 @@ class WebRouter extends _i39.RootStackRouter {
                 ),
                 _i39.RouteConfig(
                   WebPrefilledSendScreenRoute.name,
-                  path: ':toAddress/:amount',
+                  path: ':currency/:toAddress/:amount',
                   parent: WebSendTabRouter.name,
                 ),
                 _i39.RouteConfig(
@@ -1513,17 +1515,20 @@ class WebPrefilledSendScreenRoute
     extends _i39.PageRouteInfo<WebPrefilledSendScreenRouteArgs> {
   WebPrefilledSendScreenRoute({
     _i40.Key? key,
+    required String currency,
     required String toAddress,
     required double amount,
   }) : super(
           WebPrefilledSendScreenRoute.name,
-          path: ':toAddress/:amount',
+          path: ':currency/:toAddress/:amount',
           args: WebPrefilledSendScreenRouteArgs(
             key: key,
+            currency: currency,
             toAddress: toAddress,
             amount: amount,
           ),
           rawPathParams: {
+            'currency': currency,
             'toAddress': toAddress,
             'amount': amount,
           },
@@ -1535,11 +1540,14 @@ class WebPrefilledSendScreenRoute
 class WebPrefilledSendScreenRouteArgs {
   const WebPrefilledSendScreenRouteArgs({
     this.key,
+    required this.currency,
     required this.toAddress,
     required this.amount,
   });
 
   final _i40.Key? key;
+
+  final String currency;
 
   final String toAddress;
 
@@ -1547,7 +1555,7 @@ class WebPrefilledSendScreenRouteArgs {
 
   @override
   String toString() {
-    return 'WebPrefilledSendScreenRouteArgs{key: $key, toAddress: $toAddress, amount: $amount}';
+    return 'WebPrefilledSendScreenRouteArgs{key: $key, currency: $currency, toAddress: $toAddress, amount: $amount}';
   }
 }
 

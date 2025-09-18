@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
+import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
+import 'package:rbx_wallet/features/payment/services/onramp_service.dart';
 import '../../app.dart';
+import '../../core/app_constants.dart';
 import '../../core/dialogs.dart';
 import '../../core/providers/session_provider.dart';
 import '../../core/providers/web_session_provider.dart';
@@ -469,22 +472,24 @@ class AccountUtils {
             title: "Choose Payment Gateway",
             withClose: true,
             children: [
+              if(ALLOW_BIDS_WITHOUT_BALANCE || type == VfxOrBtcOption.btc)...[
               AppCard(
                 padding: 0,
                 child: ListTile(
-                    title: Text("Banxa"),
+                    title: Text("Crypto.com"),
                     onTap: () {
-                      Navigator.of(context).pop(PaymentGateway.banxa);
+                      Navigator.of(context).pop(PaymentGateway.cryptoDotCom);
                     },
                     trailing: Icon(Icons.chevron_right, size: 16)),
               ),
+              SizedBox(
+                height: 12,
+              ),
+              ],
               if (kIsWeb &&
                   (type == VfxOrBtcOption.vfx
                       ? Env.moonpayEnabledVFX
                       : Env.moonpayEnabled)) ...[
-                SizedBox(
-                  height: 12,
-                ),
                 AppCard(
                   padding: 0,
                   child: ListTile(
@@ -494,17 +499,29 @@ class AccountUtils {
                       },
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
+              SizedBox(
+                height: 12,
+              ),
               ],
-              if (type == VfxOrBtcOption.btc) ...[
+              AppCard(
+                padding: 0,
+                child: ListTile(
+                    title: Text("Banxa"),
+                    onTap: () {
+                      Navigator.of(context).pop(PaymentGateway.banxa);
+                    },
+                    trailing: Icon(Icons.chevron_right, size: 16)),
+              ),
+              if (INCLUDE_STRIPE_INTEGRATION) ...[
                 SizedBox(
                   height: 12,
                 ),
                 AppCard(
                   padding: 0,
                   child: ListTile(
-                      title: Text("Crypto.com"),
+                      title: Text("Stripe (Credit Card)"),
                       onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.cryptoDotCom);
+                        Navigator.of(context).pop(PaymentGateway.stripe);
                       },
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
@@ -616,7 +633,57 @@ class AccountUtils {
 
           break;
         case PaymentGateway.cryptoDotCom:
-          Toast.error("Not Activated");
+        case PaymentGateway.stripe:
+          final amountStr = await PromptModal.show(
+            title: "VFX Amount",
+            validator: (v) => formValidatorNumber(v, "Amount of VFX"),
+            labelText: "Amount of VFX",
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
+            ],
+          );
+
+          if (amountStr == null) {
+            return;
+          }
+
+          final amount = double.tryParse(amountStr);
+
+          if (amount == null) {
+            Toast.error("Invalid Amount");
+            return;
+          }
+          ref.read(globalLoadingProvider.notifier).start();
+
+          final result = await OnrampService()
+              .getQuote(amount: amount, vfxAddress: address);
+          ref.read(globalLoadingProvider.notifier).complete();
+
+          if (result == null) {
+            Toast.error();
+            return;
+          }
+
+          final confirmed = await ConfirmDialog.show(
+              title: "VFX Quote",
+              body:
+                  "${result.amountVfx} VFX for \$${result.amountUsd} USD\nWould you like to continue?",
+              confirmText: "Continue",
+              cancelText: "Cancel");
+          if (confirmed != true) {
+            return;
+          }
+
+          if (paymentGateway == PaymentGateway.cryptoDotCom) {
+            if (kIsWeb) {
+              await showCryptoMerchantIframeEmbed(context,
+                  result.cryptoDotComCheckoutUrl, result.purchaseUuid, false);
+            } else {
+              launchUrlString(result.cryptoDotComCheckoutUrl);
+            }
+          } else {
+            launchUrlString(result.stripeCheckoutUrl);
+          }
 
           break;
 
@@ -770,6 +837,9 @@ class AccountUtils {
             }
           }
 
+          break;
+        case PaymentGateway.stripe:
+          Toast.error("Not Activated");
           break;
         case PaymentGateway.testnetFaucet:
           // launchUrlString("https://testnet.rbx.network/faucet");

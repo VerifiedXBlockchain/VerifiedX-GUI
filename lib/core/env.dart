@@ -28,9 +28,9 @@ const flavorName = String.fromEnvironment("ENV");
 
 _Environment _env = kIsWeb
     ? flavorName.isEmpty
-        ? _Environment.Release
+        ? _Environment.ReleaseTestNet
         : _Environment.values.firstWhere((env) => env.flavor == flavorName)
-    : _Environment.Release;
+    : _Environment.ReleaseTestNet;
 
 class Env {
   static init() async {
@@ -119,7 +119,7 @@ class Env {
       case _Environment.WebLocalEnv:
         return 'http://localhost:42069/';
       case _Environment.WebTestNet:
-        return 'https://wallet-test.verifiedx.io/';
+        return 'https://wallet-testnet.verifiedx.io/';
       default:
         return 'https://wallet.verifiedx.io/';
     }
@@ -219,5 +219,10 @@ class Env {
 
   static bool get moonpayEnabledVFX {
     return DotEnv.dotenv.env['MOONPAY_ENABLED_VFX'] == "true";
+  }
+
+  static String get onrampApiBaseUrl {
+    return DotEnv.dotenv.env['ONRAMP_API_BASE_URL'] ??
+        "https://api.onramp.verifiedx.io";
   }
 }

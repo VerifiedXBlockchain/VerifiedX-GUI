@@ -96,7 +96,8 @@ class ListingDetailScreen extends BaseScreen {
                               subtitle: Text(nft.id),
                               leading: FutureBuilder(
                                 future: listing.thumbnail(),
-                                builder: (context, AsyncSnapshot<Widget> snapshot) {
+                                builder:
+                                    (context, AsyncSnapshot<Widget> snapshot) {
                                   if (snapshot.hasData) {
                                     return snapshot.data!;
                                   }
@@ -157,11 +158,15 @@ class ListingDetailScreen extends BaseScreen {
                                 listing.isBuyNow
                                     ? Icon(
                                         Icons.check,
-                                        color: Theme.of(context).colorScheme.success,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .success,
                                       )
                                     : Icon(
                                         Icons.close,
-                                        color: Theme.of(context).colorScheme.danger,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .danger,
                                       ),
                                 Text(" Buy Now"),
                               ],
@@ -174,11 +179,15 @@ class ListingDetailScreen extends BaseScreen {
                                 listing.isAuction
                                     ? Icon(
                                         Icons.check,
-                                        color: Theme.of(context).colorScheme.success,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .success,
                                       )
                                     : Icon(
                                         Icons.close,
-                                        color: Theme.of(context).colorScheme.danger,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .danger,
                                       ),
                                 Text(" Auction"),
                               ],
@@ -198,7 +207,8 @@ class ListingDetailScreen extends BaseScreen {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("${listing.buyNowPrice.toString()} VFX"),
+                              child:
+                                  Text("${listing.buyNowPrice.toString()} VFX"),
                             )
                           ])
                         : TableRow(children: [Container(), Container()]),
@@ -213,11 +223,14 @@ class ListingDetailScreen extends BaseScreen {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("${listing.floorPrice.toString()} VFX"),
+                              child:
+                                  Text("${listing.floorPrice.toString()} VFX"),
                             )
                           ])
                         : TableRow(children: [Container(), Container()]),
-                    listing.reservePrice != null && listing.reservePrice != 0 && listing.reservePrice != listing.floorPrice
+                    listing.reservePrice != null &&
+                            listing.reservePrice != 0 &&
+                            listing.reservePrice != listing.floorPrice
                         ? TableRow(children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -228,7 +241,8 @@ class ListingDetailScreen extends BaseScreen {
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Text("${listing.reservePrice.toString()} VFX"),
+                              child: Text(
+                                  "${listing.reservePrice.toString()} VFX"),
                             )
                           ])
                         : TableRow(children: [Container(), Container()]),
@@ -243,7 +257,8 @@ class ListingDetailScreen extends BaseScreen {
                   label: "Auction Activity",
                   variant: AppColorVariant.Success,
                   onPressed: () {
-                    AutoRouter.of(context).push(ListingAuctionDetailScreenRoute(listingId: listing.id));
+                    AutoRouter.of(context).push(
+                        ListingAuctionDetailScreenRoute(listingId: listing.id));
                   },
                 ),
               ),
@@ -260,7 +275,9 @@ class ListingDetailScreen extends BaseScreen {
                       variant: AppColorVariant.Light,
                       onPressed: () {
                         ref.read(listingFormProvider.notifier).load(listing);
-                        AutoRouter.of(context).push(CreateListingContainerScreenRoute(collectionId: listing.collectionId));
+                        AutoRouter.of(context).push(
+                            CreateListingContainerScreenRoute(
+                                collectionId: listing.collectionId));
                       },
                     ),
                   AppButton(
@@ -268,7 +285,9 @@ class ListingDetailScreen extends BaseScreen {
                     variant: AppColorVariant.Danger,
                     icon: Icons.delete,
                     onPressed: () {
-                      ref.read(listingFormProvider.notifier).delete(context, listing.collectionId, listing);
+                      ref
+                          .read(listingFormProvider.notifier)
+                          .delete(context, listing.collectionId, listing);
                     },
                   )
                 ],
