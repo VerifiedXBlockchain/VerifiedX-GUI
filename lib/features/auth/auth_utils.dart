@@ -534,7 +534,7 @@ Future<void> handleCreateWithMnemonic(
 
   loginWithEncryption(
       context, ref, keypair, reserveKeyPair, btcKeypair, encryptionPassword);
-  // await showKeys(context, keypair);
+  await showKeys(context, keypair,false,true);
 }
 
 Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
@@ -704,10 +704,11 @@ Future<void> showKeys(
   BuildContext context,
   Keypair keypair, [
   bool forReveal = false,
+  bool bypassPassword = false,
 ]) async {
   final storage = singleton<Storage>();
 
-  if (storage.isEncryptionEnabled() && storage.hasPasswordHash()) {
+  if (storage.isEncryptionEnabled() && storage.hasPasswordHash() && !bypassPassword) {
     await PasswordPromptService.requirePasswordFor(context, (password) async {
       await _showKeysInternal(context, keypair, forReveal);
     }, customMessage: "Enter your password to reveal private keys.");

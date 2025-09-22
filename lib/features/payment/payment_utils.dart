@@ -90,25 +90,26 @@ Future<void> showCryptoMerchantIframeEmbed(
           insetPadding: EdgeInsets.zero,
           actionsPadding: EdgeInsets.zero,
           buttonPadding: EdgeInsets.zero,
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              OnrampIframeContainer(
-                url: url,
-                width: width,
-                height: height,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: AppButton(
-                  label: "Cancel",
-                  onPressed: () {
-                    Navigator.of(context).pop(null);
-                  },
-                ),
-              )
-            ],
+          content: SizedBox(
+            width: width,
+            height: height,
+            child: OnrampIframeContainer(
+              url: url,
+              width: width,
+              height: height,
+            ),
           ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AppButton(
+                label: "Cancel",
+                onPressed: () {
+                  Navigator.of(context).pop(null);
+                },
+              ),
+            )
+          ],
         );
       });
 

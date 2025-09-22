@@ -4,6 +4,7 @@ import '../../utils/toast.dart';
 import '../../utils/validation.dart';
 import '../dialogs.dart';
 import 'password_verification_service.dart';
+import '../../core/app_constants.dart';
 
 class PasswordPromptService {
   /// Prompts user for password and verifies it against stored hash
@@ -22,6 +23,7 @@ class PasswordPromptService {
       obscureText: true,
       revealObscure: true,
       lines: 1, // Ensure single line for password
+      initialValue: DEBUG_ENCRYPTION_PASSWORD,
     );
 
     if (password != null) {
@@ -52,6 +54,7 @@ class PasswordPromptService {
       obscureText: true,
       revealObscure: true,
       lines: 1, // Ensure single line for password
+      initialValue: DEBUG_ENCRYPTION_PASSWORD,
     );
 
     
@@ -69,6 +72,7 @@ class PasswordPromptService {
         },
         obscureText: true,
         lines: 1, // Ensure single line for password
+        initialValue: DEBUG_ENCRYPTION_PASSWORD,
       );
       
       if (confirmPassword == password) {

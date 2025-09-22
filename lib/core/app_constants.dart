@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names, non_constant_identifier_names
 
 import 'package:rbx_wallet/core/env.dart';
+import 'package:flutter/foundation.dart';
 
 const APP_V = "5.0.7";
 final APP_VERSION = "${Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
@@ -42,8 +43,10 @@ const ALLOW_FAUCET_FOR_BTC_DOMAINS = true;
 
 const BACKUP_URL_PROPERTY_NAME = "MEDIA_BACKUP_URL";
 
-const ALLOW_BIDS_WITHOUT_BALANCE = false;
-const INCLUDE_STRIPE_INTEGRATION = false;
+const ALLOW_BIDS_WITHOUT_BALANCE = true;
+const INCLUDE_STRIPE_INTEGRATION = true;
+
+const DEBUG_ENCRYPTION_PASSWORD = kDebugMode ? "younotry" : "";
 
 class TxType {
   static const int rbxTransfer = 0;

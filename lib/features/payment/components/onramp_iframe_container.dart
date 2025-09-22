@@ -37,10 +37,12 @@ class _OnrampIframeContainerState extends State<OnrampIframeContainer> {
   }
 
   load() {
-    iframeElement.height = '${widget.width}';
-    iframeElement.width = '${widget.height}';
+    iframeElement.width = '${widget.width}';
+    iframeElement.height = '${widget.height}';
     iframeElement.src = widget.url;
     iframeElement.style.border = 'none';
+    iframeElement.style.width = '${widget.width}px';
+    iframeElement.style.height = '${widget.height}px';
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
