@@ -59,6 +59,8 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
         ? "/assets/html/payment.html"
         : "/assets/assets/html/payment.html";
     iframeElement!.style.border = 'none';
+    iframeElement!.style.width = '${widget.width}px';
+    iframeElement!.style.height = '${widget.height}px';
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
