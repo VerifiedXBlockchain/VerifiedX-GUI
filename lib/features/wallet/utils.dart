@@ -799,26 +799,25 @@ class AccountUtils {
                     insetPadding: EdgeInsets.zero,
                     actionsPadding: EdgeInsets.zero,
                     buttonPadding: EdgeInsets.zero,
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        WebPaymentIFrameContainerCryptoDotCom(
-                          url: url,
-                          width: width,
-                          height: height,
-                        ),
-                        SizedBox(
-                          width: width,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: PaymentDisclaimer(
-                              paymentGateway: paymentGateway,
-                            ),
-                          ),
-                        ),
-                      ],
+                    content: SizedBox(
+                      width: width,
+                      height: height,
+                      child: WebPaymentIFrameContainerCryptoDotCom(
+                        url: url,
+                        width: width,
+                        height: height,
+                      ),
                     ),
                     actions: [
+                      SizedBox(
+                        width: width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: PaymentDisclaimer(
+                            paymentGateway: paymentGateway,
+                          ),
+                        ),
+                      ),
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();

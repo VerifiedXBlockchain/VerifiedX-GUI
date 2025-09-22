@@ -302,6 +302,22 @@ class PromptModal {
 
     bool _obscureText = obscureText;
 
+    void _submit(BuildContext context) {
+      if (!_formKey.currentState!.validate()) return;
+
+      final value = _controller.value.text;
+
+      if (onValidSubmission != null) {
+        if (popOnValidSubmission) {
+          Navigator.of(context).pop();
+        }
+        onValidSubmission(value);
+        return;
+      } else {
+        Navigator.of(context).pop(value);
+      }
+    }
+
     return await showDialog(
       context: context,
       barrierDismissible: allowCancel,
@@ -356,6 +372,9 @@ class PromptModal {
                             ),
                             validator: validator,
                             inputFormatters: inputFormatters,
+                            onFieldSubmitted: (_) {
+                              _submit(context);
+                            },
                           ),
                         ),
                         if (obscureText && revealObscure)
@@ -407,19 +426,7 @@ class PromptModal {
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                if (!_formKey.currentState!.validate()) return;
-
-                final value = _controller.value.text;
-
-                if (onValidSubmission != null) {
-                  if (popOnValidSubmission) {
-                    Navigator.of(context).pop();
-                  }
-                  onValidSubmission(value);
-                  return;
-                } else {
-                  Navigator.of(context).pop(value);
-                }
+                _submit(context);
               },
               child: Text(confirmText ?? "Submit", style: TextStyle(color: Theme.of(context).colorScheme.info)),
             )

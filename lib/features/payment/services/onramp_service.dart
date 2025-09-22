@@ -25,7 +25,8 @@ class OnrampService extends BaseService {
       "vfx_address": vfxAddress,
       "success_url": redirect,
       "cancel_url": redirect,
-      "error_url": redirect
+      "error_url": redirect,
+      "is_testnet": Env.isTestNet,
     };
 
     try {
