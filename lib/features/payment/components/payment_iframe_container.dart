@@ -85,6 +85,12 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
   }
 
   @override
+  void dispose() {
+    iframeElement.src = 'about:blank';
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,

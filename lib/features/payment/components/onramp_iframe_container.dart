@@ -95,6 +95,13 @@ class _OnrampIframeContainerState extends State<OnrampIframeContainer> {
   }
 
   @override
+  void dispose() {
+    msgSub?.cancel();
+    iframeElement.src = 'about:blank';
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: widget.width,
