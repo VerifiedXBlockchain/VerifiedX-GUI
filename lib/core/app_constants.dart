@@ -44,9 +44,10 @@ const ALLOW_FAUCET_FOR_BTC_DOMAINS = true;
 const BACKUP_URL_PROPERTY_NAME = "MEDIA_BACKUP_URL";
 
 const ALLOW_BIDS_WITHOUT_BALANCE = true;
-const INCLUDE_STRIPE_INTEGRATION = true;
+const INCLUDE_STRIPE_INTEGRATION = false;
 
 const DEBUG_ENCRYPTION_PASSWORD = kDebugMode ? "younotry" : "";
+
 
 class TxType {
   static const int rbxTransfer = 0;
