@@ -30,14 +30,16 @@ class WebPaymentIFrameContainer extends StatefulWidget {
 
 class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
   late Widget iframeWidget;
+  late String viewType;
 
-  final IFrameElement iframeElement = IFrameElement();
+  IFrameElement? iframeElement;
 
   String? error;
 
   @override
   void initState() {
     super.initState();
+    viewType = 'payment-iframe-${DateTime.now().millisecondsSinceEpoch}';
     load();
   }
 
@@ -50,25 +52,26 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
       return;
     }
 
-    iframeElement.height = '${widget.width}';
-    iframeElement.width = '${widget.height}';
-    iframeElement.src = kDebugMode
+    iframeElement = IFrameElement();
+    iframeElement!.height = '${widget.width}';
+    iframeElement!.width = '${widget.height}';
+    iframeElement!.src = kDebugMode
         ? "/assets/html/payment.html"
         : "/assets/assets/html/payment.html";
-    iframeElement.style.border = 'none';
+    iframeElement!.style.border = 'none';
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
-      'iframeElement',
-      (int viewId) => iframeElement,
+      viewType,
+      (int viewId) => iframeElement!,
     );
 
     iframeWidget = HtmlElementView(
       key: UniqueKey(),
-      viewType: 'iframeElement',
+      viewType: viewType,
     );
 
-    iframeElement.onLoad.listen((event) {
+    iframeElement!.onLoad.listen((event) {
       final payload = {
         "width": widget.width,
         "height": widget.height,
@@ -79,14 +82,15 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
       };
 
       Future.delayed(Duration(milliseconds: 500)).then((value) {
-        iframeElement.contentWindow?.postMessage(jsonEncode(payload), "*");
+        iframeElement!.contentWindow?.postMessage(jsonEncode(payload), "*");
       });
     });
   }
 
   @override
   void dispose() {
-    iframeElement.src = 'about:blank';
+    iframeElement?.remove();
+    iframeElement = null;
     super.dispose();
   }
 
