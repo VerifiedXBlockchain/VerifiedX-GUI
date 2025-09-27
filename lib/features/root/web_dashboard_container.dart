@@ -8,6 +8,7 @@ import 'package:rbx_wallet/features/btc_web/providers/btc_web_vbtc_token_list_pr
 import 'package:rbx_wallet/features/home/components/home_buttons/backup_button.dart';
 import '../../app.dart';
 import '../../core/app_constants.dart';
+import '../../core/breakpoints.dart';
 import '../../core/components/buttons.dart';
 import '../../core/models/web_session_model.dart';
 import '../../core/providers/currency_segmented_button_provider.dart';
@@ -51,8 +52,10 @@ import '../navigation/components/root_container_balance_row.dart';
 import '../navigation/constants.dart';
 import '../transactions/providers/web_transaction_list_provider.dart';
 import '../web/components/web_latest_block.dart';
+import '../web/components/web_qr_scanner.dart';
 import 'navigation/components/web_drawer.dart';
 import 'package:collection/collection.dart';
+import '../../utils/html_helpers.dart';
 
 GlobalKey<ScaffoldState> webDashboardScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -599,8 +602,31 @@ class _ContentWrapper extends BaseComponent {
                   .watch(webSessionProvider.select((v) => v.keypair!.address))),
         Expanded(child: child),
       ]),
+      floatingActionButton: LayoutBuilder(
+        builder: (context, constraints) {
+          if (BreakPoints.useMobileLayout(context)) {
+            return WebQrScannerButton(
+              onQrCodeScanned: (result) {
+                _handleQrCodeScanned(context, ref, result);
+              },
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
+
+  void _handleQrCodeScanned(BuildContext context, WidgetRef ref, String result) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('QR Code: ${result.substring(0, 50)}'),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+  }
+
+
 }
 
 class WebAccountInfoExpanderRow extends BaseComponent {
