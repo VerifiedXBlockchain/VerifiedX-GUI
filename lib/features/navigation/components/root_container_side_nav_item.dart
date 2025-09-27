@@ -14,6 +14,8 @@ class RootContainerSideNavItem extends StatefulWidget {
   final Color? textColorOverrideIdle;
   final Color? textColorOverrideActive;
   final Color? textColorOverrideHover;
+  final Widget? customIconWidget;
+  final bool isNew;
   const RootContainerSideNavItem({
     super.key,
     required this.title,
@@ -25,10 +27,13 @@ class RootContainerSideNavItem extends StatefulWidget {
     this.textColorOverrideIdle,
     this.textColorOverrideActive,
     this.textColorOverrideHover,
+    this.customIconWidget,
+    this.isNew = false,
   });
 
   @override
-  State<RootContainerSideNavItem> createState() => _RootContainerSideNavItemState();
+  State<RootContainerSideNavItem> createState() =>
+      _RootContainerSideNavItemState();
 }
 
 class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
@@ -52,7 +57,8 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
         onTap: widget.onPressed,
         child: AnimatedContainer(
           duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          decoration: BoxDecoration(color: widget.isActive ? AppColors.getBlue() : Colors.white30),
+          decoration: BoxDecoration(
+              color: widget.isActive ? AppColors.getBlue() : Colors.white30),
           child: Padding(
             padding: const EdgeInsets.only(left: 2),
             child: AnimatedContainer(
@@ -65,10 +71,14 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                           : AppColors.getGray(ColorShade.s200),
                   border: Border(
                     top: BorderSide(
-                      color: widget.isActive ? AppColors.getBlue().withOpacity(0.1) : Colors.transparent,
+                      color: widget.isActive
+                          ? AppColors.getBlue().withOpacity(0.1)
+                          : Colors.transparent,
                     ),
                     bottom: BorderSide(
-                      color: widget.isActive ? AppColors.getBlue().withOpacity(0.05) : Colors.transparent,
+                      color: widget.isActive
+                          ? AppColors.getBlue().withOpacity(0.05)
+                          : Colors.transparent,
                     ),
                   )),
               child: Row(
@@ -81,13 +91,15 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                     width: 3,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 6),
                     child: Tooltip(
                         message: widget.isExpanded ? "" : widget.title,
                         child: PrettyIcon(
                           customIcon: widget.icon,
                           type: widget.iconType,
                           glow: isHovering || widget.isActive,
+                          customIconWidget: widget.customIconWidget,
                         )),
                   ),
                   Flexible(
@@ -96,18 +108,64 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                       opacity: widget.isExpanded ? 1 : 0,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 6.0),
-                        child: Text(
-                          widget.title,
-                          overflow: TextOverflow.visible,
-                          softWrap: false,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: widget.isActive
-                                ? widget.textColorOverrideActive ?? AppColors.getBlue(ColorShade.s100)
-                                : isHovering
-                                    ? widget.textColorOverrideHover ?? AppColors.getWhite(ColorShade.s200)
-                                    : widget.textColorOverrideIdle ?? AppColors.getWhite(ColorShade.s400).withOpacity(0.9),
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              widget.title,
+                              overflow: TextOverflow.visible,
+                              softWrap: false,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: widget.isActive
+                                    ? widget.textColorOverrideActive ??
+                                        AppColors.getBlue(ColorShade.s100)
+                                    : isHovering
+                                        ? widget.textColorOverrideHover ??
+                                            AppColors.getWhite(ColorShade.s200)
+                                        : widget.textColorOverrideIdle ??
+                                            AppColors.getWhite(ColorShade.s400)
+                                                .withOpacity(0.9),
+                              ),
+                            ),
+                            if (widget.isNew)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 6.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary
+                                          .withOpacity(0.8),
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black38,
+                                          blurRadius: 4,
+                                        )
+                                      ]),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 3, vertical: 1),
+                                    child: Transform.translate(
+                                      offset: Offset(0, 1),
+                                      child: Text(
+                                        "NEW",
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          height: 1,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                          ],
                         ),
                       ),
                     ),

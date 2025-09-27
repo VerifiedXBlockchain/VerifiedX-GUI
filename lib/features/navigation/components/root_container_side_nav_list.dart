@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/app.dart';
 import 'package:rbx_wallet/core/theme/colors.dart';
+import 'package:rbx_wallet/features/wallet/utils.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/web_router.gr.dart';
@@ -41,7 +42,9 @@ class RootContainerSideNavList extends BaseComponent {
             iconType: PrettyIconType.dashboard,
             onPressed: () {
               if (tabsRouter.activeIndex == 0) {
-                tabsRouter.stackRouterOfIndex(tabsRouter.activeIndex)!.popUntilRoot();
+                tabsRouter
+                    .stackRouterOfIndex(tabsRouter.activeIndex)!
+                    .popUntilRoot();
               } else {
                 tabsRouter.setActiveIndex(0);
               }
@@ -61,7 +64,8 @@ class RootContainerSideNavList extends BaseComponent {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
             },
-            isActive: tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.reserve : 14),
+            isActive:
+                tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.reserve : 14),
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
@@ -73,7 +77,8 @@ class RootContainerSideNavList extends BaseComponent {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
             },
-            isActive: tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.adnrs : 10),
+            isActive:
+                tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.adnrs : 10),
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
@@ -93,6 +98,26 @@ class RootContainerSideNavList extends BaseComponent {
             iconType: PrettyIconType.receive,
             onPressed: () {
               tabsRouter.setActiveIndex(2);
+              if (inDrawer) {
+                rootScaffoldKey.currentState!.closeDrawer();
+              }
+            },
+            isActive: tabsRouter.activeIndex == 2,
+            isExpanded: isExpanded,
+          ),
+          RootContainerSideNavItem(
+            title: "Crypto.com",
+            isNew: true,
+            iconType: PrettyIconType.custom,
+            customIconWidget: Image.asset(
+              "assets/images/crypto_dot_com_icon.png",
+              width: 16,
+              height: 16,
+              fit: BoxFit.contain,
+            ),
+            onPressed: () {
+              AccountUtils.showCryptoDotComOnrampFlow(context, ref);
+
               if (inDrawer) {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
@@ -131,7 +156,8 @@ class RootContainerSideNavList extends BaseComponent {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
             },
-            isActive: tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.vbtc : 15),
+            isActive:
+                tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.vbtc : 15),
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
@@ -149,12 +175,15 @@ class RootContainerSideNavList extends BaseComponent {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
               if (tabsRouter.activeIndex == 13) {
-                tabsRouter.stackRouterOfIndex(tabsRouter.activeIndex)!.popUntilRoot();
+                tabsRouter
+                    .stackRouterOfIndex(tabsRouter.activeIndex)!
+                    .popUntilRoot();
               } else {
                 tabsRouter.setActiveIndex(13);
               }
             },
-            isActive: tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.tokens : 13),
+            isActive:
+                tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.tokens : 13),
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
@@ -178,7 +207,8 @@ class RootContainerSideNavList extends BaseComponent {
               tabsRouter.setActiveIndex(8);
               tabsRouter.popTop();
             },
-            isActive: tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.smartContracts : 8),
+            isActive: tabsRouter.activeIndex ==
+                (kIsWeb ? WebRouteIndex.smartContracts : 8),
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
@@ -202,7 +232,8 @@ class RootContainerSideNavList extends BaseComponent {
               tabsRouter.setActiveIndex(7);
               tabsRouter.popTop();
             },
-            isActive: tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.nfts : 7),
+            isActive:
+                tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.nfts : 7),
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
@@ -220,12 +251,15 @@ class RootContainerSideNavList extends BaseComponent {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
               if (tabsRouter.activeIndex == 9) {
-                tabsRouter.stackRouterOfIndex(tabsRouter.activeIndex)!.popUntilRoot();
+                tabsRouter
+                    .stackRouterOfIndex(tabsRouter.activeIndex)!
+                    .popUntilRoot();
               } else {
                 tabsRouter.setActiveIndex(9);
               }
             },
-            isActive: tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.shop : 9),
+            isActive:
+                tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.shop : 9),
             isExpanded: isExpanded,
           ),
           if (!kIsWeb)
@@ -247,7 +281,9 @@ class RootContainerSideNavList extends BaseComponent {
               iconType: PrettyIconType.operations,
               onPressed: () {
                 if (tabsRouter.activeIndex == 16) {
-                  tabsRouter.stackRouterOfIndex(tabsRouter.activeIndex)!.popUntilRoot();
+                  tabsRouter
+                      .stackRouterOfIndex(tabsRouter.activeIndex)!
+                      .popUntilRoot();
                 } else {
                   tabsRouter.setActiveIndex(16);
                 }
@@ -266,7 +302,8 @@ class RootContainerSideNavList extends BaseComponent {
               onPressed: () async {
                 final confirmed = await ConfirmDialog.show(
                   title: "Sign Out",
-                  body: "Are you sure you want to logout of the VFX Web Wallet?",
+                  body:
+                      "Are you sure you want to logout of the VFX Web Wallet?",
                   destructive: true,
                   confirmText: "Logout",
                   cancelText: "Cancel",
