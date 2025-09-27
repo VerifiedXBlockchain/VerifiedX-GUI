@@ -23,8 +23,9 @@ class OnrampIframeContainer extends StatefulWidget {
 
 class _OnrampIframeContainerState extends State<OnrampIframeContainer> {
   late Widget iframeWidget;
+  late String viewType;
 
-  final IFrameElement iframeElement = IFrameElement();
+  IFrameElement? iframeElement;
 
   String? error;
   StreamSubscription<MessageEvent>? msgSub;
@@ -32,28 +33,33 @@ class _OnrampIframeContainerState extends State<OnrampIframeContainer> {
   @override
   void initState() {
     super.initState();
+    viewType = 'onramp-iframe-${DateTime.now().millisecondsSinceEpoch}';
     load();
     setupMessageListener();
   }
 
   load() {
-    iframeElement.height = '${widget.width}';
-    iframeElement.width = '${widget.height}';
-    iframeElement.src = widget.url;
-    iframeElement.style.border = 'none';
-
+  
+    iframeElement = IFrameElement();
+    iframeElement!.height = '${widget.width}';
+    iframeElement!.width = '${widget.height}';
+    iframeElement!.src = widget.url;
+    iframeElement!.style.border = 'none';
+    iframeElement!.style.width = '${widget.width}px';
+    iframeElement!.style.height = '${widget.height}px';
+    
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
-      'iframeElement',
-      (int viewId) => iframeElement,
+      viewType,
+      (int viewId) => iframeElement!,
     );
 
     iframeWidget = HtmlElementView(
       key: UniqueKey(),
-      viewType: 'iframeElement',
+      viewType: viewType,
     );
 
-    iframeElement.onLoad.listen((event) {});
+    iframeElement!.onLoad.listen((event) {});
   }
 
   void setupMessageListener() {
@@ -63,7 +69,7 @@ class _OnrampIframeContainerState extends State<OnrampIframeContainer> {
       // if (event.origin != expectedOrigin) return;
 
       // // 2) Ensure the message came from THIS iframe (not another frame on the page)
-      // if (event.source != iframeElement.contentWindow) return;
+      // if (event.source != iframeElement?.contentWindow) return;
 
       // 3) Extract the data (supports objects or JSON strings)
       final raw = event.data;
@@ -92,6 +98,14 @@ class _OnrampIframeContainerState extends State<OnrampIframeContainer> {
         Navigator.of(context).pop(true);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    msgSub?.cancel();
+    iframeElement?.remove();
+    iframeElement = null;
+    super.dispose();
   }
 
   @override

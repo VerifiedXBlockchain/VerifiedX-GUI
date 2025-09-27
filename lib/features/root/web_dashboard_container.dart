@@ -16,6 +16,8 @@ import '../../core/theme/app_theme.dart';
 import '../../core/theme/colors.dart';
 import '../../core/theme/components.dart';
 import '../../core/theme/pretty_icons.dart';
+import '../../utils/html_helpers.dart';
+import '../../core/components/idle_detector_wrapper.dart';
 import '../block/latest_block.dart';
 import '../btc/screens/tokenized_btc_list_screen.dart';
 import '../btc_web/components/web_btc_transaction_list.dart';
@@ -94,8 +96,10 @@ class WebDashboardContainer extends StatelessWidget {
     return AutoTabsScaffold(
       routes: routes,
       scaffoldKey: webDashboardScaffoldKey,
-      builder: (context, child, animated) => _ContentWrapper(
-        child: child,
+      builder: (context, child, animated) => IdleDetectorWrapper(
+        child: _ContentWrapper(
+          child: child,
+        ),
       ),
     );
   }

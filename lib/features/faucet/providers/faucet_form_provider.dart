@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:phone_form_field/phone_form_field.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
@@ -12,7 +13,7 @@ import '../../../utils/validation.dart';
 class FaucetFormstate {
   final String verificationUuid;
   final double amount;
-  final String phone;
+  final PhoneNumber? phone;
 
   FaucetFormstate(
       {required this.verificationUuid,
@@ -23,7 +24,7 @@ class FaucetFormstate {
     return FaucetFormstate(
       verificationUuid: '',
       amount: 5,
-      phone: '',
+      phone: null,
     );
   }
 
@@ -42,24 +43,23 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
   final GlobalKey<FormState> verificationFormKey = GlobalKey();
 
   late final TextEditingController amountController;
-  late final TextEditingController phoneController;
+  late final PhoneController phoneController;
   late final TextEditingController verificationController;
 
   FaucetFormProvider(this.ref, FaucetFormstate model) : super(model) {
     amountController = TextEditingController(text: model.amount.toString());
-    phoneController = TextEditingController(text: model.phone);
+    phoneController = PhoneController(model.phone);
     verificationController = TextEditingController();
   }
 
   String? amountValidator(String? val) => formValidatorNumber(val, "Amount");
-  String? phoneValidator(String? val) => formValidatorPhoneNumber(val);
   String? verificationValidator(String? val) =>
       formValidatorNumber(val, "Verification Code");
 
   load(FaucetFormstate model) {
     state = model;
     amountController.text = model.amount.toString();
-    phoneController.text = model.phone;
+    phoneController.value = model.phone;
     verificationController.text = '';
   }
 
@@ -81,11 +81,13 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
       return null;
     }
 
-    final cleanPhone = cleanPhoneNumber(phoneController.text);
-    if (cleanPhone == null) {
-      Toast.error("Invalid Phone Number");
+    final phoneNumber = phoneController.value;
+    if (phoneNumber == null) {
+      Toast.error("Phone Number is required");
       return false;
     }
+    
+    final cleanPhone = phoneNumber.international;
 
     final parsedAmount =
         amountOverride ?? double.tryParse(amountController.text);

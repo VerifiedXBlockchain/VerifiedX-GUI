@@ -7,13 +7,16 @@ import 'package:rbx_wallet/features/keygen/models/ra_keypair.dart';
 
 import '../../../core/singletons.dart';
 import '../../../core/storage.dart';
+import '../../../core/services/multi_account_encryption_service.dart';
 import '../../keygen/models/keypair.dart';
 import '../models/multi_account_instance.dart';
 import "package:collection/collection.dart";
 
 class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
   final Ref ref;
-  MultiAccountProvider(this.ref, [List<MultiAccountInstance> initialState = const []]) : super(initialState);
+  MultiAccountProvider(this.ref,
+      [List<MultiAccountInstance> initialState = const []])
+      : super(initialState);
 
   set(List<MultiAccountInstance> accounts) {
     state = accounts;
@@ -25,6 +28,7 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
     required RaKeypair? raKeypair,
     required BtcWebAccount? btcKeypair,
     bool setAsCurrent = false,
+    String? encryptionPassword,
   }) {
     final existsAlready = state.isNotEmpty
         ? (state.where((element) =>
@@ -39,6 +43,7 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
 
     final id = state.isNotEmpty ? state.last.id + 1 : 1;
 
+    // Create account
     final account = MultiAccountInstance(
       id: id,
       keypair: keypair,
@@ -52,7 +57,7 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
       ref.read(selectedMultiAccountProvider.notifier).set(account);
     }
 
-    syncWithStorage();
+    syncWithStorage(encryptionPassword);
   }
 
   remove(int id) {
@@ -85,24 +90,85 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
     syncWithStorage();
   }
 
-  syncWithStorage() {
+  syncWithStorage([String? encryptionPassword]) {
     if (state.isEmpty) {
       singleton<Storage>().remove(Storage.MULTIPLE_ACCOUNTS);
       return;
     }
 
-    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-    if (rememberMe) {
-      final data = state.map((e) => jsonEncode(e.toJson())).toList();
-      singleton<Storage>().setList(Storage.MULTIPLE_ACCOUNTS, data);
-    }
+    final data = state.map((e) {
+      var accountJson = e.toJson();
+
+      // Encrypt private keys if password provided
+      if (encryptionPassword != null) {
+        accountJson = MultiAccountEncryptionService.encryptAccountPrivateKeys(
+            accountJson, encryptionPassword);
+      }
+
+      return jsonEncode(accountJson);
+    }).toList();
+
+    singleton<Storage>().setList(Storage.MULTIPLE_ACCOUNTS, data);
   }
 }
 
-final multiAccountProvider = StateNotifierProvider<MultiAccountProvider, List<MultiAccountInstance>>((ref) {
+/// Creates a MultiAccountInstance that can handle encrypted private keys
+MultiAccountInstance _createAccountFromStoredJson(Map<String, dynamic> json) {
+  // Check if any private keys are encrypted
+  final hasEncryptedKeys =
+      MultiAccountEncryptionService.hasEncryptedPrivateKeys(json);
+
+  if (!hasEncryptedKeys) {
+    // No encryption, create normally
+    return MultiAccountInstance.fromJson(json);
+  }
+
+  // Has encrypted keys - we need to create the account with placeholder/null private keys
+  // The actual decryption will happen when the user switches to this account and enters password
+
+  // Create a copy of the JSON with placeholder private keys
+  final modifiedJson = Map<String, dynamic>.from(json);
+
+  if (modifiedJson['keypair'] != null) {
+    final keypairJson = Map<String, dynamic>.from(modifiedJson['keypair']);
+    if (keypairJson['_isPrivateEncrypted'] == true) {
+      keypairJson['private'] =
+          ''; // Placeholder - will be decrypted when needed
+    }
+    modifiedJson['keypair'] = keypairJson;
+  }
+
+  if (modifiedJson['raKeypair'] != null) {
+    final raKeypairJson = Map<String, dynamic>.from(modifiedJson['raKeypair']);
+    if (raKeypairJson['_isPrivateEncrypted'] == true) {
+      raKeypairJson['private'] =
+          ''; // Placeholder - will be decrypted when needed
+    }
+    modifiedJson['raKeypair'] = raKeypairJson;
+  }
+
+  if (modifiedJson['btcKeypair'] != null) {
+    final btcKeypairJson =
+        Map<String, dynamic>.from(modifiedJson['btcKeypair']);
+    if (btcKeypairJson['_isPrivateEncrypted'] == true) {
+      btcKeypairJson['privateKey'] =
+          ''; // Placeholder - will be decrypted when needed
+    }
+    modifiedJson['btcKeypair'] = btcKeypairJson;
+  }
+
+  return MultiAccountInstance.fromJson(modifiedJson);
+}
+
+final multiAccountProvider =
+    StateNotifierProvider<MultiAccountProvider, List<MultiAccountInstance>>(
+        (ref) {
   final savedData = singleton<Storage>().getList(Storage.MULTIPLE_ACCOUNTS);
   if (savedData != null) {
-    final initialState = savedData.map((e) => MultiAccountInstance.fromJson(jsonDecode(e) as Map<String, dynamic>)).toList();
+    final initialState = savedData
+        .map((e) =>
+            _createAccountFromStoredJson(jsonDecode(e) as Map<String, dynamic>))
+        .toList();
 
     return MultiAccountProvider(ref, initialState);
   }
@@ -112,23 +178,57 @@ final multiAccountProvider = StateNotifierProvider<MultiAccountProvider, List<Mu
 
 class SelectedMultiAccountProvider extends StateNotifier<int> {
   final Ref ref;
-  SelectedMultiAccountProvider(this.ref, int initialState) : super(initialState);
+  SelectedMultiAccountProvider(this.ref, int initialState)
+      : super(initialState);
 
-  set(MultiAccountInstance account) {
-    state = account.id;
-    ref.read(webSessionProvider.notifier).setMultiAccountInstance(account);
+  Future<void> set(MultiAccountInstance account, [String? password]) async {
+    var accountToUse = account;
+
+    // Need to check if the stored version has encrypted keys by looking at storage
+    final storage = singleton<Storage>();
+    final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
+
+    if (savedData != null) {
+      // Find the stored JSON for this account
+      final storedAccountJson = savedData
+          .map((e) => jsonDecode(e) as Map<String, dynamic>)
+          .where((json) => json['id'] == account.id)
+          .firstOrNull;
+
+      if (storedAccountJson != null &&
+          MultiAccountEncryptionService.hasEncryptedPrivateKeys(
+              storedAccountJson)) {
+        if (password == null) {
+          throw Exception("Password required for encrypted account");
+        }
+
+        // Decrypt private keys from the stored JSON
+        final decryptedJson =
+            MultiAccountEncryptionService.decryptAccountPrivateKeys(
+                storedAccountJson, password);
+        accountToUse = MultiAccountInstance.fromJson(decryptedJson);
+      }
+    }
+
+    state = accountToUse.id;
+    ref.read(webSessionProvider.notifier).setMultiAccountInstance(accountToUse);
+    if (accountToUse.keypair != null) {
+      storage.setString(
+          Storage.WEB_PRIMARY_ADDRESS, accountToUse.keypair!.address);
+    }
     syncWithStorage();
   }
 
-  setFromId(int id) {
+  Future<void> setFromId(int id, [String? password]) async {
     if (state == id) {
       return;
     }
 
-    final account = ref.read(multiAccountProvider).firstWhereOrNull((a) => a.id == id);
+    final account =
+        ref.read(multiAccountProvider).firstWhereOrNull((a) => a.id == id);
 
     if (account != null) {
-      set(account);
+      await set(account, password);
     }
   }
 
@@ -143,14 +243,13 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
       return;
     }
 
-    final rememberMe = singleton<Storage>().getBool(Storage.REMEMBER_ME) ?? false;
-    if (rememberMe) {
-      singleton<Storage>().setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, state);
-    }
+    singleton<Storage>().setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, state);
   }
 }
 
-final selectedMultiAccountProvider = StateNotifierProvider<SelectedMultiAccountProvider, int?>((ref) {
-  final initialState = singleton<Storage>().getInt(Storage.MULTIPLE_ACCOUNT_SELECTED);
+final selectedMultiAccountProvider =
+    StateNotifierProvider<SelectedMultiAccountProvider, int?>((ref) {
+  final initialState =
+      singleton<Storage>().getInt(Storage.MULTIPLE_ACCOUNT_SELECTED);
   return SelectedMultiAccountProvider(ref, initialState ?? 1);
 });

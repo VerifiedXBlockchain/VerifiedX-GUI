@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/components/buttons.dart';
+import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../../app.dart';
 import '../../../core/base_component.dart';
 import '../../../core/breakpoints.dart';
@@ -64,10 +66,13 @@ class WebWalletTypeSwitcher extends BaseComponent {
     final fontSize = BreakPoints.useMobileLayout(context) ? 12.0 : 14.0;
 
     final start = selectedAddress.substring(0, 5);
-    final end = selectedAddress.substring(selectedAddress.length - 5, selectedAddress.length);
+    final end = selectedAddress.substring(
+        selectedAddress.length - 5, selectedAddress.length);
     final truncatedAddress = "$start...$end";
 
-    final selectedAddressLabel = BreakPoints.useMobileLayout(context) ? truncatedAddress : selectedAddress;
+    final selectedAddressLabel = BreakPoints.useMobileLayout(context)
+        ? truncatedAddress
+        : selectedAddress;
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -113,17 +118,24 @@ class WebWalletTypeSwitcher extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    selectedWalletType == WalletType.rbx ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
+                    selectedWalletType == WalletType.rbx
+                        ? Icons.check_box_rounded
+                        : Icons.check_box_outline_blank_outlined,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   SizedBox(width: 6),
                   Text(
                     primaryAddress,
-                    style: TextStyle(fontSize: fontSize),
+                    style: TextStyle(
+                        fontSize: fontSize,
+                        color: Theme.of(context).colorScheme.secondary),
                   ),
                 ],
               ),
               onTap: () {
-                ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
+                ref
+                    .read(webSessionProvider.notifier)
+                    .setSelectedWalletType(WalletType.rbx);
               },
             ));
 
@@ -132,20 +144,26 @@ class WebWalletTypeSwitcher extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    selectedWalletType == WalletType.ra ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
+                    selectedWalletType == WalletType.ra
+                        ? Icons.check_box_rounded
+                        : Icons.check_box_outline_blank_outlined,
                     color: Colors.deepPurple.shade200,
                   ),
                   SizedBox(width: 6),
                   Expanded(
                     child: Text(
                       raAddress,
-                      style: TextStyle(color: Colors.deepPurple.shade200, fontSize: fontSize),
+                      style: TextStyle(
+                          color: Colors.deepPurple.shade200,
+                          fontSize: fontSize),
                     ),
                   ),
                 ],
               ),
               onTap: () {
-                ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.ra);
+                ref
+                    .read(webSessionProvider.notifier)
+                    .setSelectedWalletType(WalletType.ra);
               },
             ));
 
@@ -155,21 +173,26 @@ class WebWalletTypeSwitcher extends BaseComponent {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
-                      selectedWalletType == WalletType.btc ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
+                      selectedWalletType == WalletType.btc
+                          ? Icons.check_box_rounded
+                          : Icons.check_box_outline_blank_outlined,
                       color: Color(0xfff7931a),
                     ),
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         btcAddress,
-                        style: TextStyle(color: Color(0xfff7931a), fontSize: fontSize),
+                        style: TextStyle(
+                            color: Color(0xfff7931a), fontSize: fontSize),
                       ),
                     ),
                     SizedBox(width: 6),
                   ],
                 ),
                 onTap: () {
-                  ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
+                  ref
+                      .read(webSessionProvider.notifier)
+                      .setSelectedWalletType(WalletType.btc);
                 },
               ));
             } else {
@@ -185,7 +208,8 @@ class WebWalletTypeSwitcher extends BaseComponent {
                     Expanded(
                       child: Text(
                         "Add BTC Account",
-                        style: TextStyle(color: Color(0xfff7931a), fontSize: fontSize),
+                        style: TextStyle(
+                            color: Color(0xfff7931a), fontSize: fontSize),
                       ),
                     ),
                     SizedBox(width: 6),
@@ -204,14 +228,17 @@ class WebWalletTypeSwitcher extends BaseComponent {
                   }
 
                   if (option == NewBtcWalletOption.generate) {
-                    final account = await BtcWebService().keypairFromRandomMnemonic();
+                    final account =
+                        await BtcWebService().keypairFromRandomMnemonic();
 
                     if (account == null) {
                       Toast.error();
                       return;
                     }
 
-                    ref.read(webSessionProvider.notifier).updateBtcKeypair(account, true);
+                    ref
+                        .read(webSessionProvider.notifier)
+                        .updateBtcKeypair(account, true);
 
                     final keypair = Keypair(
                       private: account.privateKey,
@@ -231,25 +258,107 @@ class WebWalletTypeSwitcher extends BaseComponent {
                         confirmText: "Import",
                         cancelText: "Cancel",
                         labelColor: Theme.of(context).colorScheme.btcOrange,
-                        validator: (val) => formValidatorNotEmpty(val, "WIF Private Key"));
+                        validator: (val) =>
+                            formValidatorNotEmpty(val, "WIF Private Key"));
 
                     if (wif == null) {
                       return;
                     }
 
-                    final account = await BtcWebService().keypairFromWif(wif, 'bech32');
+                    final account =
+                        await BtcWebService().keypairFromWif(wif, 'bech32');
 
                     if (account == null) {
                       Toast.error();
                       return;
                     }
 
-                    ref.read(webSessionProvider.notifier).updateBtcKeypair(account, true);
+                    ref
+                        .read(webSessionProvider.notifier)
+                        .updateBtcKeypair(account, true);
 
                     Toast.message("BTC Account Imported");
                   }
                 },
               ));
+            }
+
+            if (BreakPoints.useMobileLayout(context)) {
+              list.add(PopupMenuDivider());
+
+              list.add(
+                PopupMenuItem(
+                  child: Center(
+                    child: AppButton(
+                      label: "Manage Accounts",
+                      type: AppButtonType.Text,
+                      variant: AppColorVariant.Light,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return ModalContainer(children: [
+                                _ManageAccountRow(
+                                  address: primaryAddress,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  handleReveal: () {
+                                    if (ref.read(webSessionProvider).keypair !=
+                                        null) {
+                                      showKeys(
+                                          context,
+                                          ref.read(webSessionProvider).keypair!,
+                                          true);
+                                    }
+                                  },
+                                ),
+                                _ManageAccountRow(
+                                  address: raAddress,
+                                  color: Theme.of(context).colorScheme.reserve,
+                                  handleReveal: () {
+                                    if (ref
+                                            .read(webSessionProvider)
+                                            .raKeypair !=
+                                        null) {
+                                      showRaKeys(
+                                          context,
+                                          ref
+                                              .read(webSessionProvider)
+                                              .raKeypair!,
+                                          true);
+                                    }
+                                  },
+                                ),
+                                if (btcAddress != null)
+                                  _ManageAccountRow(
+                                    address: btcAddress,
+                                    color:
+                                        Theme.of(context).colorScheme.btcOrange,
+                                    handleReveal: () {
+                                      final btcKeypair = ref
+                                          .read(webSessionProvider)
+                                          .btcKeypair;
+
+                                      if (btcKeypair != null) {
+                                        final kp = Keypair(
+                                          private: btcKeypair.privateKey,
+                                          address: btcKeypair.address,
+                                          public: btcKeypair.publicKey,
+                                          btcWif: btcKeypair.wif,
+                                        );
+                                        showKeys(context, kp, true);
+                                        return;
+                                      }
+                                    },
+                                  ),
+                              ]);
+                            });
+                      },
+                    ),
+                  ),
+                ),
+              );
             }
 
             return list;
@@ -258,5 +367,48 @@ class WebWalletTypeSwitcher extends BaseComponent {
         SizedBox(width: 4),
       ],
     );
+  }
+}
+
+class _ManageAccountRow extends StatelessWidget {
+  final String address;
+  final Color color;
+  final VoidCallback handleReveal;
+
+  const _ManageAccountRow({
+    super.key,
+    required this.address,
+    required this.color,
+    required this.handleReveal,
+    this.primaryAddress,
+  });
+
+  final String? primaryAddress;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+      Text(
+        address,
+        style: TextStyle(fontSize: 13, color: color),
+      ),
+      IconButton(
+        onPressed: () async {
+          final confirmed = await ConfirmDialog.show(
+            title: "Reveal Private Key?",
+            body:
+                "Are you sure you want to reveal your private key for this account?",
+            confirmText: "Reveal",
+            cancelText: "Cancel",
+          );
+
+          if (confirmed != true) {
+            return;
+          }
+          handleReveal();
+        },
+        icon: Icon(Icons.remove_red_eye),
+      )
+    ]);
   }
 }
