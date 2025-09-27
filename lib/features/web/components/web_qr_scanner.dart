@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:rbx_wallet/core/theme/colors.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
 
-import 'package:flutter_web_qrcode_scanner/flutter_web_qrcode_scanner.dart' if (dart.library.io) 'web_qr_scanner_mock.dart';
+import 'package:flutter_web_qrcode_scanner/flutter_web_qrcode_scanner.dart'
+    if (dart.library.io) 'web_qr_scanner_mock.dart';
 
 class WebQrScanner extends StatefulWidget {
   final Function(String) onQrCodeScanned;
@@ -32,7 +33,7 @@ class _WebQrScannerState extends State<WebQrScanner> {
 
   @override
   void dispose() {
-    _controller.stopVideoStream();
+    // _controller.stopVideoStream();
     super.dispose();
   }
 
@@ -75,7 +76,8 @@ class _WebQrScannerState extends State<WebQrScanner> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: (_isScanning ? AppColors.getBlue() : Colors.red).withOpacity(0.3),
+                    color: (_isScanning ? AppColors.getBlue() : Colors.red)
+                        .withOpacity(0.3),
                     blurRadius: 20,
                     spreadRadius: 5,
                   ),
@@ -136,9 +138,7 @@ class _WebQrScannerState extends State<WebQrScanner> {
                         controller: _controller,
                         cameraDirection: CameraDirection.back,
                         stopOnFirstResult: true,
-                        onGetResult: (result) =>
-                          widget.onQrCodeScanned(result)
-                        ,
+                        onGetResult: (result) => widget.onQrCodeScanned(result),
                         width: 292,
                         height: 292,
                       ),
@@ -192,7 +192,8 @@ class _WebQrScannerState extends State<WebQrScanner> {
                             height: 16,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.getBlue()),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.getBlue()),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -208,7 +209,7 @@ class _WebQrScannerState extends State<WebQrScanner> {
                       )
                     else
                       Text(
-                        _errorMessage != null 
+                        _errorMessage != null
                             ? 'Camera access required to scan QR codes'
                             : 'Position QR code within the frame to scan',
                         style: const TextStyle(

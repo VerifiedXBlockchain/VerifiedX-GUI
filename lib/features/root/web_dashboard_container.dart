@@ -602,31 +602,8 @@ class _ContentWrapper extends BaseComponent {
                   .watch(webSessionProvider.select((v) => v.keypair!.address))),
         Expanded(child: child),
       ]),
-      floatingActionButton: LayoutBuilder(
-        builder: (context, constraints) {
-          if (BreakPoints.useMobileLayout(context)) {
-            return WebQrScannerButton(
-              onQrCodeScanned: (result) {
-                _handleQrCodeScanned(context, ref, result);
-              },
-            );
-          }
-          return const SizedBox.shrink();
-        },
-      ),
     );
   }
-
-  void _handleQrCodeScanned(BuildContext context, WidgetRef ref, String result) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('QR Code: ${result.substring(0, 50)}'),
-          duration: const Duration(seconds: 3),
-        ),
-      );
-  }
-
-
 }
 
 class WebAccountInfoExpanderRow extends BaseComponent {

@@ -693,6 +693,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_qrcode_scanner:
+    dependency: "direct main"
+    description:
+      name: flutter_web_qrcode_scanner
+      sha256: a4fa2c7d2e6049cfe8400617417fb0efe63886656a2be0c7ee136d77bd17097b
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   flutter_window_close:
     dependency: "direct main"
     description:
