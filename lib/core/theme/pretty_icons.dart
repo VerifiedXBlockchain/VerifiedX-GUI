@@ -32,6 +32,7 @@ class PrettyIcon extends StatelessWidget {
   final Color? customIconColor;
   final bool glow;
   final double iconScale;
+  final Widget? customIconWidget;
 
   const PrettyIcon({
     super.key,
@@ -40,6 +41,7 @@ class PrettyIcon extends StatelessWidget {
     this.customIcon,
     this.customIconColor,
     this.iconScale = 1,
+    this.customIconWidget,
   });
 
   @override
@@ -53,7 +55,9 @@ class PrettyIcon extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: glow ? Color(0xffffedce).withOpacity(0.44) : Colors.transparent,
+              color: glow
+                  ? Color(0xffffedce).withOpacity(0.44)
+                  : Colors.transparent,
               blurRadius: 8.0,
               spreadRadius: 0,
             ),
@@ -70,12 +74,16 @@ class PrettyIcon extends StatelessWidget {
                 height: 24,
                 isAntiAlias: true,
               ),
-              if ((type == PrettyIconType.custom || type == PrettyIconType.topCards) && customIcon != null)
+              if ((type == PrettyIconType.custom ||
+                      type == PrettyIconType.topCards) &&
+                  customIcon != null)
                 Icon(
                   customIcon,
                   color: customIconColor ?? AppColors.getGray(),
                   size: iconScale * 18,
                 ),
+              if (type == PrettyIconType.custom && customIconWidget != null)
+                customIconWidget!
             ],
           ),
         ),
@@ -112,7 +120,9 @@ class _PrettyIconButtonState extends State<PrettyIconButton> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: MouseRegion(
-        cursor: widget.onPressed != null ? SystemMouseCursors.click : MouseCursor.defer,
+        cursor: widget.onPressed != null
+            ? SystemMouseCursors.click
+            : MouseCursor.defer,
         onHover: (_) {
           if (widget.onPressed == null) return;
 

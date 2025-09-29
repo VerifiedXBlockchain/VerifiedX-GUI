@@ -22,35 +22,45 @@ class WebPaymentIFrameContainerCryptoDotCom extends StatefulWidget {
 class _WebPaymentIFrameContainerCryptoDotComState
     extends State<WebPaymentIFrameContainerCryptoDotCom> {
   late Widget iframeWidget;
+  late String viewType;
 
-  final IFrameElement iframeElement = IFrameElement();
+  IFrameElement? iframeElement;
 
   String? error;
 
   @override
   void initState() {
     super.initState();
+    viewType = 'crypto-iframe-${DateTime.now().millisecondsSinceEpoch}';
     load();
   }
 
   load() {
-    iframeElement.height = '${widget.width}';
-    iframeElement.width = '${widget.height}';
-    iframeElement.src = widget.url;
-    iframeElement.style.border = 'none';
+    iframeElement = IFrameElement();
+    iframeElement!.height = '${widget.width}';
+    iframeElement!.width = '${widget.height}';
+    iframeElement!.src = widget.url;
+    iframeElement!.style.border = 'none';
 
     // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
-      'iframeElement',
-      (int viewId) => iframeElement,
+      viewType,
+      (int viewId) => iframeElement!,
     );
 
     iframeWidget = HtmlElementView(
       key: UniqueKey(),
-      viewType: 'iframeElement',
+      viewType: viewType,
     );
 
-    iframeElement.onLoad.listen((event) {});
+    iframeElement!.onLoad.listen((event) {});
+  }
+
+  @override
+  void dispose() {
+    iframeElement?.remove();
+    iframeElement = null;
+    super.dispose();
   }
 
   @override
