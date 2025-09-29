@@ -3,7 +3,7 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "5.0.7";
+const APP_V = "5.0.8";
 final APP_VERSION = "${Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
@@ -47,7 +47,6 @@ const ALLOW_BIDS_WITHOUT_BALANCE = true;
 const INCLUDE_STRIPE_INTEGRATION = false;
 
 const DEBUG_ENCRYPTION_PASSWORD = kDebugMode ? "younotry" : "";
-
 
 class TxType {
   static const int rbxTransfer = 0;
