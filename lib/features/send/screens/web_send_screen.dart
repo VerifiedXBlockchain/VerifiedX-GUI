@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/dialogs.dart';
+import 'package:rbx_wallet/core/env.dart';
+import 'package:rbx_wallet/core/providers/currency_segmented_button_provider.dart';
+import 'package:rbx_wallet/features/send/providers/send_form_provider.dart';
+import 'package:rbx_wallet/utils/validation.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/breakpoints.dart';
 import '../../../core/theme/colors.dart';
+import '../../btc/utils.dart';
 import '../../web/components/web_currency_segmented_button.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../../web/components/web_qr_scanner.dart';
@@ -13,6 +19,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../web/components/web_no_wallet.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../components/send_form.dart';
+import '../utils.dart';
 
 class WebSendScreen extends BaseScreen {
   const WebSendScreen({Key? key})
@@ -41,10 +48,9 @@ class WebSendScreen extends BaseScreen {
   @override
   FloatingActionButton? floatingActionButton(
       BuildContext context, WidgetRef ref) {
-    return null;
     if (BreakPoints.useMobileLayout(context)) {
       return FloatingActionButton.extended(
-        onPressed: () {
+        onPressed: () async {
           showDialog(
             context: context,
             barrierDismissible: true,
@@ -52,9 +58,8 @@ class WebSendScreen extends BaseScreen {
               return WebQrScanner(
                 onQrCodeScanned: (result) {
                   Navigator.of(context).pop();
-                  print(result);
                   if (result.isNotEmpty) {
-                    launchUrlString("cryptodotcom://pay?address=$result");
+                    handleQrScan(context, ref, result);
                   }
                 },
                 onClose: () {
