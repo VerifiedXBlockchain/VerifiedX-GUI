@@ -28,29 +28,13 @@ const flavorName = String.fromEnvironment("ENV");
 
 _Environment _env = kIsWeb
     ? flavorName.isEmpty
-        ? _Environment.ReleaseTestNet
+        ? _Environment.Release
         : _Environment.values.firstWhere((env) => env.flavor == flavorName)
-    : _Environment.ReleaseTestNet;
+    : _Environment.Release;
 
 class Env {
   static init() async {
     String? envPath;
-
-    // const envOverride = String.fromEnvironment("ENV");
-
-    // if (envOverride.isNotEmpty) {
-    //   if (envOverride == "web") {
-    //     _env = _Environment.Web;
-    //   } else if (envOverride == "web_testnet") {
-    //     _env = _Environment.WebTestNet;
-    //   } else if (envOverride == "web_local") {
-    //     _env = _Environment.WebLocalEnv;
-    //   } else if (envOverride == "testnet") {
-    //     _env = _Environment.ReleaseTestNet;
-    //   } else if (envOverride == "mainnet") {
-    //     _env = _Environment.Release;
-    //   }
-    // }
 
     switch (_env) {
       case _Environment.Dev:
