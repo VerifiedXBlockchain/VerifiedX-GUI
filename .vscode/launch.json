@@ -11,30 +11,17 @@
             "args": [
                 "-d",
                 "macos",
-                "--dart-define",
-                "ENV=mainnet"
             ]
         },
         {
-            "name": "Mac [TestNet]",
+            "name": "Mac [Testnet]",
             "type": "dart",
             "request": "launch",
             "args": [
                 "-d",
                 "macos",
                 "--dart-define",
-                "ENV=testnet"
-            ]
-        },
-        {
-            "name": "Win [TestNet]",
-            "type": "dart",
-            "request": "launch",
-            "args": [
-                "-d",
-                "windows",
-                "--dart-define",
-                "ENV=testnet"
+                "TESTNET=true"
             ]
         },
         {
@@ -46,8 +33,6 @@
                 "chrome",
                 "--web-port",
                 "42069",
-                "--dart-define",
-                "ENV=web_mainnet"
             ],
         },
         {
@@ -60,8 +45,8 @@
                 "--web-port",
                 "42069",
                 "--dart-define",
-                "ENV=web_testnet"
-            ],
+                "TESTNET=true"
+            ]
         },
     ]
 }

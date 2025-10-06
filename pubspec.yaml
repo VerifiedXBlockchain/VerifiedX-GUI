@@ -14,7 +14,6 @@ dependencies:
   dio: ^5.7.0
   flutter:
     sdk: flutter
-  flutter_dotenv: ^5.0.2
   flutter_riverpod: ^2.3.4
   get_it: ^7.2.0
   intl: ^0.17.0
@@ -99,7 +98,6 @@ flutter:
     - assets/images/
     - assets/images/connector/
     - assets/images/icons/
-    - assets/env/
     - assets/fonts/
     - assets/js/
     - assets/docs/

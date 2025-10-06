@@ -22,17 +22,19 @@ late final Box rbxBox;
 
 final rootAppWindow = appWindow;
 
-void main() async {
+void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Parse command-line args for --testnet flag (desktop only)
   if (!kIsWeb) {
+    Env.setTestnetFromArgs(args);
+
     FlutterWindowClose.setWindowShouldCloseHandler(() async {
       await BridgeService().killCli();
       return true;
     });
   }
 
-  await Env.init();
   if (kIsWeb) {
     await Hive.initFlutter();
     rbxBox = await Hive.openBox('VFX');
