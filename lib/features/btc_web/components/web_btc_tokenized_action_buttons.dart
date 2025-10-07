@@ -16,6 +16,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils.dart';
 import '../../../utils/validation.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../../btc/providers/btc_pending_tokenized_address_list_provider.dart';
@@ -40,10 +41,13 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final myAddress = ref.watch(webSessionProvider.select((value) => value.keypair?.address));
-    final myBalance = myAddress != null ? token.balanceForAddress(myAddress) : 0.0;
+    final myAddress =
+        ref.watch(webSessionProvider.select((value) => value.keypair?.address));
+    final myBalance =
+        myAddress != null ? token.balanceForAddress(myAddress) : 0.0;
 
-    final btcKeypair = ref.watch(webSessionProvider.select((value) => value.btcKeypair));
+    final btcKeypair =
+        ref.watch(webSessionProvider.select((value) => value.btcKeypair));
 
     return Wrap(
       alignment: WrapAlignment.center,
@@ -80,22 +84,26 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                         ),
                         if (btcKeypair != null)
                           Consumer(builder: (context, ref, _) {
-                            final balance = ref.watch(webSessionProvider.select((value) => value.btcBalanceInfo?.btcBalance));
+                            final balance = ref.watch(webSessionProvider.select(
+                                (value) => value.btcBalanceInfo?.btcBalance));
 
                             return ListTile(
                               title: Text(btcKeypair.address),
-                              subtitle: Text("${balance?.toStringAsFixed(8) ?? 0} BTC"),
+                              subtitle: Text(
+                                  "${balance?.toStringAsFixed(8) ?? 0} BTC"),
                               trailing: Icon(Icons.chevron_right),
                               onTap: () async {
                                 if (balance == null || balance <= 0) {
-                                  Toast.error("This BTC account doesn't have a balance");
+                                  Toast.error(
+                                      "This BTC account doesn't have a balance");
                                   return;
                                 }
 
                                 Navigator.of(context).pop();
                                 final amount = await PromptModal.show(
                                     title: "Amount (Balance: $balance BTC)",
-                                    validator: (val) => formValidatorNumber(val, "Amount"),
+                                    validator: (val) =>
+                                        formValidatorNumber(val, "Amount"),
                                     labelText: 'Deposit amount');
                                 if (amount == null) {
                                   return;
@@ -106,12 +114,14 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                 }
 
                                 if (parsedAmount <= 0) {
-                                  Toast.error("Amount must be greater than 0.0 BTC");
+                                  Toast.error(
+                                      "Amount must be greater than 0.0 BTC");
                                   return;
                                 }
 
                                 if (balance <= parsedAmount) {
-                                  Toast.error("Not enough BTC to cover this transaction + fee");
+                                  Toast.error(
+                                      "Not enough BTC to cover this transaction + fee");
                                   return;
                                 }
 
@@ -133,29 +143,40 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                   return;
                                 }
 
-                                final txHash = await BtcWebService().sendTransaction(btcKeypair.wif, token.depositAddress, parsedAmount, feeRate);
+                                final txHash = await BtcWebService()
+                                    .sendTransaction(
+                                        btcKeypair.wif,
+                                        token.depositAddress,
+                                        parsedAmount,
+                                        feeRate);
 
                                 if (txHash == null) {
                                   Toast.error();
                                   return;
                                 }
 
-                                Toast.message("$amount BTC has been sent to ${token.depositAddress}.");
+                                Toast.message(
+                                    "$amount BTC has been sent to ${token.depositAddress}.");
 
-                                ref.invalidate(btcWebTransactionListProvider(btcKeypair.address));
+                                ref.invalidate(btcWebTransactionListProvider(
+                                    btcKeypair.address));
 
                                 Future.delayed(Duration(seconds: 2), () {
-                                  ref.read(webSessionProvider.notifier).refreshBtcBalanceInfo();
+                                  ref
+                                      .read(webSessionProvider.notifier)
+                                      .refreshBtcBalanceInfo();
                                 });
 
                                 InfoDialog.show(
                                     title: "Transaction Broadcasted",
                                     buttonColorOverride: Color(0xfff7931a),
                                     content: ConstrainedBox(
-                                      constraints: BoxConstraints(maxWidth: 600),
+                                      constraints:
+                                          BoxConstraints(maxWidth: 600),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           TextFormField(
                                             initialValue: txHash,
@@ -170,8 +191,11 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                               suffix: IconButton(
                                                 icon: Icon(Icons.copy),
                                                 onPressed: () async {
-                                                  await Clipboard.setData(ClipboardData(text: txHash));
-                                                  Toast.message("Transaction Hash copied to clipboard");
+                                                  await Clipboard.setData(
+                                                      ClipboardData(
+                                                          text: txHash));
+                                                  Toast.message(
+                                                      "Transaction Hash copied to clipboard");
                                                 },
                                               ),
                                             ),
@@ -185,9 +209,11 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                             type: AppButtonType.Text,
                                             onPressed: () {
                                               if (Env.btcIsTestNet) {
-                                                launchUrlString("https://mempool.space/testnet4/tx/$txHash");
+                                                launchUrlString(
+                                                    "https://mempool.space/testnet4/tx/$txHash");
                                               } else {
-                                                launchUrlString("https://mempool.space/tx/$txHash");
+                                                launchUrlString(
+                                                    "https://mempool.space/tx/$txHash");
                                               }
                                             },
                                           )
@@ -199,11 +225,14 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                           }),
                         ListTile(
                           title: Text("Manual Send"),
-                          subtitle: Text("Send coin manually to this token’s BTC deposit address"),
+                          subtitle: Text(
+                              "Send coin manually to this token’s BTC deposit address"),
                           trailing: Icon(Icons.chevron_right),
                           onTap: () async {
-                            await Clipboard.setData(ClipboardData(text: token.depositAddress));
-                            Toast.message("Deposit address copied to clipboard");
+                            await Clipboard.setData(
+                                ClipboardData(text: token.depositAddress));
+                            Toast.message(
+                                "Deposit address copied to clipboard");
                             Navigator.of(context).pop();
                           },
                         ),
@@ -255,7 +284,9 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                     return;
                   }
 
-                  InfoDialog.show(title: "Response", content: SelectableText(jsonEncode(result)));
+                  InfoDialog.show(
+                      title: "Response",
+                      content: SelectableText(jsonEncode(result)));
                 }
               }
             }
@@ -275,12 +306,14 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               return;
             }
 
-            final toAddress = await manager.promptForAddress(title: "Transfer to");
+            final toAddress =
+                await manager.promptForAddress(title: "Transfer to");
             if (toAddress == null) {
               return;
             }
 
-            final success = await manager.transferVbtcOwnership(token, toAddress);
+            final success =
+                await manager.transferVbtcOwnership(token, toAddress);
           },
         ),
         AppButton(
@@ -305,11 +338,21 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               );
 
               if (result is _TransferShareModalResponse) {
-                final success = await manager.transferVbtcAmount(token, result.toAddress, result.amount);
+                final success = await manager.transferVbtcAmount(
+                    token, result.toAddress, result.amount);
               }
             }
           },
         ),
+        if (isOwner)
+          AppButton(
+            label: "Prove Ownership",
+            icon: Icons.security,
+            onPressed: () {
+              proveSmartContractOwnership(
+                  context, ref, token.ownerAddress, token.scIdentifier);
+            },
+          ),
         AppButton(
           label: "Borrow/Lend",
           icon: Icons.people,
@@ -361,7 +404,10 @@ class _TransferSharesModal extends BaseComponent {
       children: [
         Text(
           forWithdrawl ? "Withdraw BTC" : "Transfer vBTC",
-          style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall!
+              .copyWith(color: Colors.white),
         ),
         SizedBox(
           height: 8,
@@ -388,7 +434,9 @@ class _TransferSharesModal extends BaseComponent {
                     style: TextStyle(color: color),
                   ),
                 ),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
+                ],
               ),
               // Padding(
               //   padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -412,7 +460,9 @@ class _TransferSharesModal extends BaseComponent {
                   ),
                   AppButton(
                     label: forWithdrawl ? "Withdraw" : "Transfer",
-                    variant: forWithdrawl ? AppColorVariant.Secondary : AppColorVariant.Btc,
+                    variant: forWithdrawl
+                        ? AppColorVariant.Secondary
+                        : AppColorVariant.Btc,
                     onPressed: () {
                       final toAddress = toAddressController.text.trim();
                       if (toAddress.isEmpty) {
@@ -431,7 +481,8 @@ class _TransferSharesModal extends BaseComponent {
                         Toast.error("Not enough balance");
                         return;
                       }
-                      final result = _TransferShareModalResponse(toAddress: toAddress, amount: amount, feeRate: fee);
+                      final result = _TransferShareModalResponse(
+                          toAddress: toAddress, amount: amount, feeRate: fee);
                       Navigator.of(context).pop(result);
                     },
                   )

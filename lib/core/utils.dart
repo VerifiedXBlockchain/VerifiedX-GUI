@@ -5,9 +5,14 @@ import 'dart:typed_data';
 
 import 'package:archive/archive_io.dart';
 import 'package:file_saver/file_saver.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../features/nft/services/nft_service.dart';
+import '../features/web/utils/raw_transaction.dart';
+import 'components/buttons.dart';
 import 'dialogs.dart';
 import 'singletons.dart';
 import 'storage.dart';
@@ -70,10 +75,17 @@ Future<bool> backupKeys(BuildContext context, WidgetRef ref) async {
     final date = DateTime.now();
     final d = "${date.year}-${date.month}-${date.day}";
     if (Platform.isMacOS) {
-      await FileSaver.instance.saveAs(name: "vfx-keys-backup-$d", bytes: Uint8List.fromList(bytes), ext: 'txt', mimeType: MimeType.text);
+      await FileSaver.instance.saveAs(
+          name: "vfx-keys-backup-$d",
+          bytes: Uint8List.fromList(bytes),
+          ext: 'txt',
+          mimeType: MimeType.text);
     } else {
-      final data =
-          await FileSaver.instance.saveFile(name: "vfx-keys-backup-$d", bytes: Uint8List.fromList(bytes), ext: 'txt', mimeType: MimeType.text);
+      final data = await FileSaver.instance.saveFile(
+          name: "vfx-keys-backup-$d",
+          bytes: Uint8List.fromList(bytes),
+          ext: 'txt',
+          mimeType: MimeType.text);
       Toast.message("Saved to $data");
     }
 
@@ -113,7 +125,7 @@ class AddressChoosingIconButton extends BaseComponent {
 
 Future<bool> backupWebKeys(BuildContext context, WidgetRef ref) async {
   final storage = singleton<Storage>();
-  
+
   // Only require password if user has encrypted storage
   if (storage.isEncryptionEnabled() && storage.hasPasswordHash()) {
     // User has encrypted storage - require password
@@ -146,7 +158,8 @@ Future<bool> _backupWebKeysInternal(BuildContext context, WidgetRef ref) async {
       output += "Address:\n${session.raKeypair!.address}\n\n";
       output += "Public Key:\n${session.raKeypair!.public}\n\n";
       output += "Private Key:\n${session.raKeypair!.privateCorrected}\n\n\n";
-      output += "Recovery Private Key:\n${session.raKeypair!.recoveryPrivateCorrected}\n\n";
+      output +=
+          "Recovery Private Key:\n${session.raKeypair!.recoveryPrivateCorrected}\n\n";
       output += "Recovery Address:\n${session.raKeypair!.recoveryAddress}\n\n";
       output += "Restore Code:\n${session.raKeypair!.restoreCode}\n\n";
       output += "===================================\n\n";
@@ -191,7 +204,8 @@ Future<bool?> importMedia(BuildContext context, WidgetRef ref) async {
       if (filename.contains('/')) {
         final list = filename.split('/');
         if (filename.contains('thumbs')) {
-          filename = [list[list.length - 3], list[list.length - 2], list.last].join('/');
+          filename = [list[list.length - 3], list[list.length - 2], list.last]
+              .join('/');
         } else {
           filename = [list[list.length - 2], list.last].join('/');
         }
@@ -218,22 +232,28 @@ Future<bool?> importMedia(BuildContext context, WidgetRef ref) async {
 
 Future<bool> backupMedia(BuildContext context, WidgetRef ref) async {
   try {
-    Directory appDocDir = Platform.isMacOS ? await getApplicationDocumentsDirectory() : await getApplicationSupportDirectory();
+    Directory appDocDir = Platform.isMacOS
+        ? await getApplicationDocumentsDirectory()
+        : await getApplicationSupportDirectory();
 
     String rbxPath = appDocDir.path;
 
     final assetsFolderName = Env.isTestNet ? "AssetsTestNet" : "Assets";
 
     if (Platform.isMacOS) {
-      rbxPath = rbxPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/vfx");
+      rbxPath =
+          rbxPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/vfx");
     } else {
-      rbxPath = rbxPath.replaceAll("\\Roaming\\com.example\\rbx_wallet_gui", "\\Local\\VFX${Env.isTestNet ? 'Test' : ''}");
+      rbxPath = rbxPath.replaceAll("\\Roaming\\com.example\\rbx_wallet_gui",
+          "\\Local\\VFX${Env.isTestNet ? 'Test' : ''}");
     }
 
-    String inputPath = "$rbxPath${Platform.isWindows ? '\\' : '/'}$assetsFolderName";
+    String inputPath =
+        "$rbxPath${Platform.isWindows ? '\\' : '/'}$assetsFolderName";
 
-    final archive =
-        Platform.isMacOS ? createArchiveFromDirectory(Directory.fromUri(Uri.parse(inputPath))) : createArchiveFromDirectory(Directory(inputPath));
+    final archive = Platform.isMacOS
+        ? createArchiveFromDirectory(Directory.fromUri(Uri.parse(inputPath)))
+        : createArchiveFromDirectory(Directory(inputPath));
 
     var bytes = ZipEncoder().encode(archive);
     if (bytes == null) {
@@ -243,10 +263,17 @@ Future<bool> backupMedia(BuildContext context, WidgetRef ref) async {
     final date = DateTime.now();
     final d = "${date.year}-${date.month}-${date.day}";
     if (Platform.isMacOS) {
-      await FileSaver.instance.saveAs(name: "vfx-media-backup-$d", ext: "zip", mimeType: MimeType.zip, bytes: Uint8List.fromList(bytes));
+      await FileSaver.instance.saveAs(
+          name: "vfx-media-backup-$d",
+          ext: "zip",
+          mimeType: MimeType.zip,
+          bytes: Uint8List.fromList(bytes));
     } else {
-      final data =
-          await FileSaver.instance.saveFile(name: "vfx-media-backup-$d", ext: "zip", mimeType: MimeType.zip, bytes: Uint8List.fromList(bytes));
+      final data = await FileSaver.instance.saveFile(
+          name: "vfx-media-backup-$d",
+          ext: "zip",
+          mimeType: MimeType.zip,
+          bytes: Uint8List.fromList(bytes));
       Toast.message("Saved to $data");
     }
 
@@ -257,7 +284,9 @@ Future<bool> backupMedia(BuildContext context, WidgetRef ref) async {
   }
 }
 
-String generateRandomString(int len, [String chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890']) {
+String generateRandomString(int len,
+    [String chars =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890']) {
   var r = Random();
   return List.generate(len, (index) => chars[r.nextInt(chars.length)]).join();
 }
@@ -353,7 +382,8 @@ String? cleanPhoneNumber(String phoneNumber) {
 }
 
 String formatDecimal(double number) {
-  NumberFormat formatter = NumberFormat('#.##########'); // Adjust the number of '#' as needed
+  NumberFormat formatter =
+      NumberFormat('#.##########'); // Adjust the number of '#' as needed
   String formatted = formatter.format(number);
 
   // Ensure at least one decimal place if it's an integer
@@ -367,17 +397,102 @@ String formatDecimal(double number) {
   return formatted;
 }
 
-Future<bool> checkEncryptionMigrationRequired(BuildContext context, WidgetRef ref) async {
+Future<bool> checkEncryptionMigrationRequired(
+    BuildContext context, WidgetRef ref) async {
   final storage = singleton<Storage>();
   final session = ref.read(webSessionProvider);
-  
+
   if (!storage.isEncryptionEnabled() && session.isAuthenticated) {
     await InfoDialog.show(
       title: "Web Wallet Now Uses Encryption",
-      body: "The web wallet now uses encryption to protect your keys. In order to add an additional account you must fully sign out of the wallet and login again. Please make sure all your existing login details / keys are backed up before proceeding.",
+      body:
+          "The web wallet now uses encryption to protect your keys. In order to add an additional account you must fully sign out of the wallet and login again. Please make sure all your existing login details / keys are backed up before proceeding.",
       closeText: "Okay",
     );
     return true;
   }
   return false;
+}
+
+Future<void> proveSmartContractOwnership(BuildContext context, WidgetRef ref,
+    String ownerAddress, String scId) async {
+  String? str;
+
+  if (kIsWeb) {
+    final privateKey = ownerAddress.startsWith("xRBX")
+        ? ref.read(webSessionProvider).raKeypair?.private
+        : ref.read(webSessionProvider).keypair?.private;
+    final publicKey = ownerAddress.startsWith("xRBX")
+        ? ref.read(webSessionProvider).raKeypair?.public
+        : ref.read(webSessionProvider).keypair?.public;
+
+    final address = ownerAddress.startsWith("xRBX")
+        ? ref.read(webSessionProvider).raKeypair?.address
+        : ref.read(webSessionProvider).keypair?.address;
+    if (privateKey == null) {
+      Toast.error("Can't find private key");
+      return;
+    }
+    if (publicKey == null) {
+      Toast.error("Can't find public key");
+      return;
+    }
+
+    final randomKey = generateRandomString(
+        8, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
+    final timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).round();
+    final message = "$randomKey.$timestamp";
+
+    final sigScript = await RawTransaction.getSignature(
+        message: message, privateKey: privateKey, publicKey: publicKey);
+
+    if (sigScript == null) {
+      Toast.error("Could not generate signature");
+      return;
+    }
+
+    str = "$address<>$message<>$sigScript<>$scId";
+  } else {
+    str = await NftService().proveOwnership(scId);
+  }
+
+  if (str == null) {
+    return;
+  }
+
+  InfoDialog.show(
+    title: "Ownership Verification Signature",
+    content: SizedBox(
+      width: 420,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Send this ownership validation signature to prove you are the owner.",
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          TextFormField(
+            initialValue: str,
+            readOnly: true,
+            minLines: 7,
+            maxLines: 7,
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          Center(
+            child: AppButton(
+              label: "Copy Signature",
+              icon: Icons.copy,
+              onPressed: () async {
+                await Clipboard.setData(ClipboardData(text: str));
+                Toast.message("Signature Verification copied to clipboard.");
+              },
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }
