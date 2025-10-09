@@ -10,6 +10,7 @@ import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
+import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/utils.dart';
@@ -169,6 +170,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                           FilteringTextInputFormatter.allow(
                                               RegExp("[0-9.]"))
                                         ],
+                                        showUsdValue: true,
+                                        currencyType: CurrencyType.btc,
                                       );
 
                                       if (amount != null) {

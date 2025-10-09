@@ -1,30 +1,23 @@
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:rbx_wallet/features/btc/providers/btc_balance_provider.dart';
-import 'package:url_launcher/url_launcher_string.dart';
-import '../../../../../app.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
-import '../../../core/app_constants.dart';
+import 'package:url_launcher/url_launcher_string.dart';
+
+import '../../../../../app.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
+import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils.dart';
+import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
-import '../../btc/models/tokenized_bitcoin.dart';
-import '../../btc/providers/btc_pending_tokenized_address_list_provider.dart';
 import '../../btc/utils.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
-import '../../wallet/providers/wallet_list_provider.dart';
-import '../../../utils/toast.dart';
-
 import '../../token/providers/web_token_actions_manager.dart';
 import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
@@ -104,7 +97,14 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                     title: "Amount (Balance: $balance BTC)",
                                     validator: (val) =>
                                         formValidatorNumber(val, "Amount"),
-                                    labelText: 'Deposit amount');
+                                    labelText: 'Deposit amount',
+                                      inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp("[0-9.]"))
+                                        ],
+                                    showUsdValue: true,
+                                    currencyType: CurrencyType.btc,
+                                    );
                                 if (amount == null) {
                                   return;
                                 }
