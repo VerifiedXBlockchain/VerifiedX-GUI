@@ -45,6 +45,7 @@ import '../components/nft_qr_code.dart';
 import '../components/web_asset_card.dart';
 import '../components/web_asset_thumbnail.dart';
 import '../modals/nft_management_modal.dart';
+import '../models/nft.dart';
 import '../providers/nft_detail_provider.dart';
 import '../utils.dart';
 
@@ -252,13 +253,7 @@ class NftDetailScreen extends BaseScreen {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        nft.currentEvolveDescription.replaceAll("\\n", "\n"),
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
+                      _buildDescriptionWithDecrypt(context, ref, nft),
                     ],
                   ),
                 ),
@@ -988,6 +983,67 @@ class NftDetailScreen extends BaseScreen {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDescriptionWithDecrypt(
+    BuildContext context,
+    WidgetRef ref,
+    Nft nft,
+  ) {
+    // Get user's addresses for checking ownership
+    final List<String> userAddresses = [];
+
+    if (kIsWeb) {
+      final keypair = ref.watch(webSessionProvider.select((value) => value.keypair));
+      if (keypair?.address != null) {
+        userAddresses.add(keypair!.address);
+      }
+    } else {
+      final wallets = ref.watch(walletListProvider);
+      userAddresses.addAll(wallets.map((w) => w.address));
+    }
+
+    final canDecrypt = nft.canDecryptMessage(userAddresses);
+    final hasEncrypted = nft.hasEncryptedMessage;
+    final provider = ref.read(nftDetailProvider(nft.id).notifier);
+    final decryptedMessage = provider.decryptedMessage;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SelectableText(
+          nft.currentEvolveDescription.replaceAll("\\n", "\n"),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+              ),
+        ),
+        if (hasEncrypted && canDecrypt && decryptedMessage == null) ...[
+          const SizedBox(height: 8),
+          Center(
+            child: AppButton(
+              label: "Decrypt",
+              icon: Icons.lock_open,
+              variant: AppColorVariant.Success,
+              onPressed: () async {
+                final success = await provider.decryptMessage();
+                if (!success) {
+                  // Error toast already shown in provider
+                }
+              },
+            ),
+          ),
+        ],
+        if (decryptedMessage != null) ...[
+          const SizedBox(height: 8),
+          AppBadge(
+            label: "Decrypted",
+            variant: AppColorVariant.Success,
+          ),
+        ],
+      ],
     );
   }
 }

@@ -21,6 +21,7 @@ import '../../smart_contracts/models/feature.dart';
 import '../../smart_contracts/models/multi_asset.dart';
 
 import '../../web_shop/providers/web_listed_nfts_provider.dart';
+import 'vfx_shh_message.dart';
 
 part 'nft.freezed.dart';
 part 'nft.g.dart';
@@ -390,5 +391,29 @@ abstract class Nft with _$Nft {
 
   int get timestamp {
     return int.tryParse(id.split(":").last) ?? 0;
+  }
+
+  /// Checks if the NFT description contains a VFX-SHH encrypted message
+  bool get hasEncryptedMessage {
+    return VfxShhMessage.hasEncryptedMessage(currentEvolveDescription);
+  }
+
+  /// Parses and returns the VFX-SHH message if present
+  VfxShhMessage? get encryptedMessage {
+    return VfxShhMessage.parse(currentEvolveDescription);
+  }
+
+  /// Gets the recipient address from the encrypted message
+  String? get encryptedRecipientAddress {
+    return encryptedMessage?.recipientAddress;
+  }
+
+  /// Checks if the user can decrypt the message based on owned addresses
+  /// [userAddresses] - List of addresses owned by the user
+  bool canDecryptMessage(List<String> userAddresses) {
+    if (!hasEncryptedMessage) return false;
+    final recipientAddress = encryptedRecipientAddress;
+    if (recipientAddress == null) return false;
+    return userAddresses.contains(recipientAddress);
   }
 }
