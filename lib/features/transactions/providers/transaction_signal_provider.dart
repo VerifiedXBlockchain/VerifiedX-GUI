@@ -536,7 +536,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: transaction.hash,
             transaction: transaction,
-            title: "Domain Name Transfered",
+            title: "Domain Name Transferred",
             body: body,
             color: AppColorVariant.Warning,
             icon: Icons.move_down,
@@ -585,7 +585,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: transaction.hash,
             transaction: transaction,
-            title: "BTC Domain Name Transfered",
+            title: "BTC Domain Name Transferred",
             body: body,
             color: AppColorVariant.Btc,
             icon: Icons.move_down,

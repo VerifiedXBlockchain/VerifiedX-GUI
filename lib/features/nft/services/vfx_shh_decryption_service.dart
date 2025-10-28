@@ -32,7 +32,6 @@ class VfxShhDecryptionService {
       // Convert bytes to UTF-8 string
       return utf8.decode(plaintext);
     } catch (e) {
-      print('VFX-SHH Decryption Error: $e');
       return null;
     }
   }
@@ -56,11 +55,6 @@ class VfxShhDecryptionService {
     final tag = ciphertext.sublist(81, 97); // 16 bytes authentication tag
     final encryptedData = ciphertext.sublist(97); // Remaining bytes
 
-    print('Ephemeral key length: ${ephemeralPublicKeyBytes.length}');
-    print('Nonce length: ${nonce.length}');
-    print('Tag length: ${tag.length}');
-    print('Encrypted data length: ${encryptedData.length}');
-
     // Get SECP256k1 curve parameters
     final params = ECDomainParameters('secp256k1');
 
@@ -81,16 +75,11 @@ class VfxShhDecryptionService {
     // Format: 0x04 + x (32 bytes) + y (32 bytes)
     final sharedPointBytes = sharedPoint.getEncoded(false); // false = uncompressed
 
-    print('Shared secret point: ${HEX.encode(sharedPointBytes)}');
-
     // Python eciespy uses HKDF-SHA256 for key derivation
     // The input is: ephemeral_public_key (65 bytes) + shared_point (65 bytes) = 130 bytes
     // With default config: is_hkdf_key_compressed = False
     final hkdfInput = Uint8List.fromList([...ephemeralPublicKeyBytes, ...sharedPointBytes]);
-    print('HKDF input length: ${hkdfInput.length} bytes');
     final derivedKey = _hkdfSha256(hkdfInput, 32);
-
-    print('Derived key: ${HEX.encode(derivedKey)}');
 
     // Decrypt using AES-256-GCM with the nonce and tag from ciphertext
     final cipher = GCMBlockCipher(AESEngine());
@@ -114,7 +103,6 @@ class VfxShhDecryptionService {
       offset += cipher.doFinal(plaintext, offset);
       return plaintext.sublist(0, offset);
     } catch (e) {
-      print('GCM decryption failed: $e');
       throw Exception('Authentication tag verification failed: $e');
     }
   }
@@ -135,12 +123,6 @@ class VfxShhDecryptionService {
     final output = Uint8List(keyLength);
     hkdf.deriveKey(null, 0, output, 0);
     return output;
-  }
-
-  /// Convert BigInt to Uint8List with proper padding
-  static Uint8List _bigIntToUint8List(BigInt bigInt) {
-    final bytes = bigInt.toRadixString(16).padLeft(64, '0');
-    return Uint8List.fromList(HEX.decode(bytes));
   }
 
   /// Validates that a private key is in valid hex format

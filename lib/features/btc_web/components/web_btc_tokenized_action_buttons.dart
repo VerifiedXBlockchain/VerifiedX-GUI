@@ -261,7 +261,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               final address = await PromptModal.show(
                 title: 'BTC Address',
                 validator: (val) => formValidatorNotEmpty(val, "Address"),
-                labelText: "Recieving Address",
+                labelText: "Receiving Address",
               );
               if (address != null) {
                 // final feeRate = await PromptModal.show(

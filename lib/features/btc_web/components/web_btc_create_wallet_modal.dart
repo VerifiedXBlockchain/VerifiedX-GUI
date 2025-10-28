@@ -36,7 +36,7 @@ class WebCreateBtcWalletModal extends StatelessWidget {
               color: Colors.black,
               child: ListTile(
                 title: Text("Generate Keypair"),
-                subtitle: Text("Generate arandom BTC keypair."),
+                subtitle: Text("Generate a random BTC keypair."),
                 trailing: Icon(Icons.chevron_right),
                 leading: Icon(FontAwesomeIcons.diceD6),
                 onTap: () async {

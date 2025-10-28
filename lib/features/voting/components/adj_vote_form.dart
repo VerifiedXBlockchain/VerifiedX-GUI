@@ -149,7 +149,7 @@ class AdjVoteForm extends BaseComponent {
                 ],
               ),
               _FormField(
-                label: "Bandwith (in TB)",
+                label: "Bandwidth (in TB)",
                 controller: provider.bandwithController,
                 required: true,
                 selectOnFocus: true,
@@ -263,10 +263,7 @@ class _FormField extends StatelessWidget {
       maxLines: lines != null ? lines! * 2 : null,
       maxLength: maxLength,
       decoration: InputDecoration(label: Text(label), hintText: hintText),
-      onTap: selectOnFocus
-          ? () => controller.selection = TextSelection(
-              baseOffset: 0, extentOffset: controller.value.text.length)
-          : () => {},
+      onTap: selectOnFocus ? () => controller.selection = TextSelection(baseOffset: 0, extentOffset: controller.value.text.length) : () => {},
       validator: required
           ? (val) => formValidatorNotEmpty(val, label)
           : (val) {

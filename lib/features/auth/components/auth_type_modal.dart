@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 
 class AuthTypeModal extends StatelessWidget {
-  final Function() handleMneumonic;
+  final Function() handleMnemonic;
   final Function() handleUsername;
   final Function(BuildContext context)? handlePrivateKey;
   final Function(BuildContext context)? handleBtcPrivateKey;
@@ -11,7 +11,7 @@ class AuthTypeModal extends StatelessWidget {
   const AuthTypeModal({
     Key? key,
     required this.handleUsername,
-    required this.handleMneumonic,
+    required this.handleMnemonic,
     this.handlePrivateKey,
     this.handleBtcPrivateKey,
   }) : super(key: key);
@@ -39,13 +39,13 @@ class AuthTypeModal extends StatelessWidget {
         ListTile(
           leading: const Icon(FontAwesomeIcons.paragraph),
           title: const Text(
-            "Mneumonic (HD account)",
+            "Mnemonic (HD account)",
           ),
           trailing: const Icon(
             Icons.chevron_right,
             size: 32,
           ),
-          onTap: handleMneumonic,
+          onTap: handleMnemonic,
         ),
         if (handlePrivateKey != null) const Divider(height: 1),
         if (handlePrivateKey != null)

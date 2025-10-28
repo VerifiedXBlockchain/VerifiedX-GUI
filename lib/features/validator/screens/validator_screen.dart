@@ -59,7 +59,7 @@ class ValidatorScreen extends BaseScreen {
 
     // if (validator == null) {
     //   return InvalidWallet(
-    //     message: "${currentWallet.address} is not eligable to be a validator",
+    //     message: "${currentWallet.address} is not eligible to be a validator",
     //   );
     // }
 

@@ -59,7 +59,7 @@ class WebCallbackButton extends BaseComponent {
           title: "Callback Transaction",
           body: "Are you sure you want to callback this transaction?",
           confirmText: "Callback",
-          cancelText: "Canacel",
+          cancelText: "Cancel",
         );
 
         if (confirmed != true) {

@@ -959,7 +959,7 @@ class NftDetailScreen extends BaseScreen {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "NFT assets have not been transfered to the VFX Web Wallet.",
+                  "NFT assets have not been transferred to the VFX Web Wallet.",
                   textAlign: TextAlign.center,
                 ),
                 if (includeButton)

@@ -28,7 +28,7 @@ Future<bool?> activateVaultAccountWeb({
       title: "Activate Vault Account?",
       body: "There is a cost of $RA_ACTIVATION_COST VFX to activate your Vault Account which is burned.\n\nContinue?",
       confirmText: "Activate",
-      cancelText: "Canacel",
+      cancelText: "Cancel",
     );
 
     if (confirmed != true) {

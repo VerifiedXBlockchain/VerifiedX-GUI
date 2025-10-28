@@ -247,7 +247,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final fee = await txService.getFee(txData);
 
     if (fee == null) {
-      Toast.error("Failed to retreive fee");
+      Toast.error("Failed to retrieve fee");
       return false;
     }
 

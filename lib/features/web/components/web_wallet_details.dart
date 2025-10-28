@@ -53,7 +53,7 @@ class WebWalletDetails extends BaseComponent {
                 ),
                 SizedBox(width: 2),
                 Tooltip(
-                  message: ["Balance: ${btcInfo.btcBalance} BTC", "Sent: ${btcInfo.btcTotalSent} BTC", "Recieved: ${btcInfo.btcTotalRecieved} BTC"]
+                  message: ["Balance: ${btcInfo.btcBalance} BTC", "Sent: ${btcInfo.btcTotalSent} BTC", "Received: ${btcInfo.btcTotalRecieved} BTC"]
                       .join('\n'),
                   child: Icon(Icons.help, color: Theme.of(context).colorScheme.secondary.withOpacity(0.7), size: 14),
                 ),

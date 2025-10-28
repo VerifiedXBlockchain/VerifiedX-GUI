@@ -54,7 +54,7 @@ class AdjudicatorScreen extends BaseScreen {
 
     // if (validator == null) {
     //   return InvalidWallet(
-    //     message: "${currentWallet.address} is not eligable to be a validator",
+    //     message: "${currentWallet.address} is not eligible to be a validator",
     //   );
     // }
     if (!currentWallet.isValidating) {
@@ -116,7 +116,7 @@ class AdjudicatorScreen extends BaseScreen {
             // final success = await ref.read(currentValidatorProvider.notifier).stopValidating();
 
             // if (success) {
-            //   Toast.message("${currentWallet.label} hast stopped validating.");
+            //   Toast.message("${currentWallet.label} has stopped validating.");
             //   await ref.read(sessionProvider.notifier).load();
             // } else {
             //   Toast.error();

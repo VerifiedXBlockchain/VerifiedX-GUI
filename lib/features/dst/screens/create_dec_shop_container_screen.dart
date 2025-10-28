@@ -110,7 +110,7 @@ class CreateDecShopContainerScreen extends BaseScreen {
                       final confirmed = await ConfirmDialog.show(
                         title: "Publish Updates?",
                         body:
-                            "Your local changes were saved succesfully. Would you like to publish this to the network?${model.updateWillCost ? '\n\n1 VFX is required since you have already published within the past 24 hours.' : ''}",
+                            "Your local changes were saved successfully. Would you like to publish this to the network?${model.updateWillCost ? '\n\n1 VFX is required since you have already published within the past 24 hours.' : ''}",
                       );
 
                       ref.invalidate(decShopProvider);
