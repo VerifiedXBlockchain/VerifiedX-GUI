@@ -25,6 +25,7 @@ import '../models/token_sc_feature.dart';
 import '../providers/token_nfts_provider.dart';
 import 'token_topic_detail_screen.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils.dart';
 
 import '../../../core/theme/components.dart';
 import '../components/ban_token_address_button.dart';
@@ -216,6 +217,14 @@ class TokenManagementScreen extends BaseScreen {
                     fromAddress: nft.currentOwner,
                     showRaErrorMessage: showRaErrorMessage,
                     isOwnedByRa: isOwnedByRA,
+                  ),
+                  AppButton(
+                    label: "Prove Ownership",
+                    variant: AppColorVariant.Primary,
+                    icon: Icons.verified_user,
+                    onPressed: () async {
+                      await proveSmartContractOwnership(context, ref, nft.currentOwner, nft.id);
+                    },
                   ),
                   if (token.voting)
                     AppButton(

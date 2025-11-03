@@ -118,7 +118,7 @@ class KeygenCta extends BaseComponent {
                   title: TextFormField(
                     initialValue: keypair.mneumonic!,
                     decoration: const InputDecoration(
-                      label: Text("Recovery Mneumonic"),
+                      label: Text("Recovery Mnemonic"),
                     ),
                     style: const TextStyle(fontSize: 16),
                     readOnly: true,
@@ -129,7 +129,7 @@ class KeygenCta extends BaseComponent {
                     icon: const Icon(Icons.copy),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: keypair.mneumonic));
-                      Toast.message("Mneumonic copied to clipboard");
+                      Toast.message("Mnemonic copied to clipboard");
                     },
                   ),
                 ),

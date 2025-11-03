@@ -109,7 +109,7 @@ class WebBurnTokenAmountButton extends BaseComponent {
         }
 
         if (amount > balance) {
-          Toast.error("This address's ($address) ${tokenDetail.token.ticker} balance is insufficent.");
+          Toast.error("This address's ($address) ${tokenDetail.token.ticker} balance is insufficient.");
           return;
         }
 
@@ -157,7 +157,7 @@ class WebTransferTokenAmountButton extends BaseComponent {
         }
 
         if (amount > balance) {
-          Toast.error("This address's ($address) ${tokenDetail.token.ticker} balance is insufficent.");
+          Toast.error("This address's ($address) ${tokenDetail.token.ticker} balance is insufficient.");
           return;
         }
 

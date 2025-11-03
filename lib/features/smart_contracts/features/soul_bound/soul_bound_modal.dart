@@ -164,7 +164,7 @@ class SoulBoundModal extends BaseComponent {
     return TextFormField(
       controller: _provider.beneficiaryAddressController,
       decoration: InputDecoration(
-          label: const Text("Beneficary Address (Optional)"),
+          label: const Text("Beneficiary Address (Optional)"),
           labelStyle: const TextStyle(color: Colors.white),
           suffixIcon: kIsWeb
               ? IconButton(

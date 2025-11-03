@@ -195,7 +195,7 @@ class RecoveryPhraseDialog extends StatelessWidget {
                   icon: Icons.copy,
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: mneumonic));
-                    Toast.message("Mneumonic copied to clipboard");
+                    Toast.message("Mnemonic copied to clipboard");
                   },
                 )
               ],

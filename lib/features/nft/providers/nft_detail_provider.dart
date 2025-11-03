@@ -18,16 +18,21 @@ import '../../wallet/providers/wallet_list_provider.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../models/nft.dart';
 import '../services/nft_service.dart';
+import '../services/vfx_shh_decryption_service.dart';
 import 'burned_provider.dart';
 import 'transferred_provider.dart';
+import '../../web/providers/multi_account_provider.dart';
 
 class NftDetailProvider extends StateNotifier<Nft?> {
   final Ref ref;
   final String id;
+  String? _decryptedMessage;
 
   NftDetailProvider(this.ref, this.id) : super(null) {
     init();
   }
+
+  String? get decryptedMessage => _decryptedMessage;
 
   Future<Nft?> _retrieve() async {
     final nft = kIsWeb ? await ExplorerService().retrieveNft(id) : await NftService().retrieve(id);
@@ -36,19 +41,24 @@ class NftDetailProvider extends StateNotifier<Nft?> {
   }
 
   Future<void> init() async {
-    state = await _retrieve();
+    final nft = await _retrieve();
+    if (!mounted) return;
+
+    state = nft;
 
     pollForUpdate();
     pollForGeneralUpdate();
   }
 
   Future<void> pollForUpdate() async {
-    if (state == null) return;
+    if (state == null || !mounted) return;
 
     if (!state!.isPublished) {
       await Future.delayed(const Duration(seconds: 10));
+      if (!mounted) return;
+
       final updated = await _retrieve();
-      if (updated != null && updated.isPublished) {
+      if (updated != null && updated.isPublished && mounted) {
         state = updated;
         return;
       }
@@ -58,28 +68,30 @@ class NftDetailProvider extends StateNotifier<Nft?> {
   }
 
   Future<void> pollForEvolutionUpdate(int stage) async {
-    if (state == null) return;
+    if (state == null || !mounted) return;
     await Future.delayed(const Duration(seconds: 10));
+    if (!mounted) return;
 
     final updated = await _retrieve();
-    if (updated != null && updated.currentEvolvePhaseIndex + 1 == stage) {
+    if (updated != null && updated.currentEvolvePhaseIndex + 1 == stage && mounted) {
       state = updated;
       return;
     }
 
-    pollForEvolutionUpdate(stage);
+    if (mounted) pollForEvolutionUpdate(stage);
   }
 
   Future<void> pollForGeneralUpdate() async {
-    if (state == null) return;
+    if (state == null || !mounted) return;
     await Future.delayed(const Duration(seconds: 30));
+    if (!mounted) return;
 
     final updated = await _retrieve();
-    if (updated != null) {
+    if (updated != null && mounted) {
       state = updated;
     }
 
-    pollForGeneralUpdate();
+    if (mounted) pollForGeneralUpdate();
   }
 
   Future<void> togglePrivate() async {
@@ -235,7 +247,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final fee = await txService.getFee(txData);
 
     if (fee == null) {
-      Toast.error("Failed to retreive fee");
+      Toast.error("Failed to retrieve fee");
       return false;
     }
 
@@ -611,8 +623,109 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     ref.read(burnedProvider.notifier).addId(id);
     return success;
   }
+
+  /// Decrypts VFX-SHH encrypted message in NFT description
+  /// Returns true if decryption was successful
+  Future<bool> decryptMessage() async {
+    if (state == null) {
+      Toast.error("NFT not loaded");
+      return false;
+    }
+
+    if (!state!.hasEncryptedMessage) {
+      Toast.error("No encrypted message found");
+      return false;
+    }
+
+    final encryptedMsg = state!.encryptedMessage;
+    if (encryptedMsg == null) {
+      Toast.error("Could not parse encrypted message");
+      return false;
+    }
+
+    final recipientAddress = encryptedMsg.recipientAddress;
+
+    // Get private key for the recipient address
+    String? privateKey;
+
+    if (kIsWeb) {
+      // Web: Get private key from multi-account provider or main keypair
+      final keypair = ref.read(webSessionProvider).keypair;
+      final allAccounts = ref.read(multiAccountProvider);
+
+      if (keypair?.address == recipientAddress) {
+        privateKey = keypair?.private;
+      } else {
+        // Check in multi-accounts
+        final account = allAccounts.firstWhereOrNull(
+          (a) => a.keypair?.address == recipientAddress,
+        );
+        privateKey = account?.keypair?.private;
+      }
+    } else {
+      // Desktop: Get private key from wallet list via CLI
+      final wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == recipientAddress);
+
+      if (wallet != null) {
+        // Check if we already have the private key
+        if (wallet.privateKey != null && wallet.privateKey!.isNotEmpty) {
+          privateKey = wallet.privateKey;
+        } else {
+          // Need to request from CLI - this requires the wallet to be unlocked
+          Toast.error("Private key not available. Please ensure wallet is unlocked.");
+          return false;
+        }
+      }
+    }
+
+    if (privateKey == null || privateKey.isEmpty) {
+      Toast.error("Private key not found for recipient address");
+      return false;
+    }
+
+    // Decrypt the message
+    final plaintext = await VfxShhDecryptionService.decrypt(
+      encryptedMsg.encryptedData,
+      privateKey,
+    );
+
+    if (plaintext == null) {
+      Toast.error("Failed to decrypt message. Invalid key or corrupted data.");
+      return false;
+    }
+
+    // Store decrypted message flag
+    _decryptedMessage = plaintext;
+
+    // Replace only the VFX-SHH encrypted block with the decrypted text
+    final originalDescription = state!.currentEvolveDescription;
+
+    // Build the VFX-SHH pattern to find and replace
+    // The description might have literal \n or actual newlines
+    final pattern = RegExp(
+      r'VFX-SHH:' + RegExp.escape(recipientAddress) + r'(?:\\n|\s*\n\s*)[A-Za-z0-9+/=\n\s\\]+?(?:\\n|\s*\n\s*)/VFX-SHH',
+      caseSensitive: false,
+      multiLine: true,
+    );
+
+    final updatedDescription = originalDescription.replaceFirst(
+      pattern,
+      plaintext,
+    );
+
+    // Update state with decrypted description (triggers UI rebuild)
+    state = state!.copyWith(description: updatedDescription);
+
+    Toast.message("Message decrypted successfully!");
+    return true;
+  }
+
+  /// Clears the decrypted message (for re-encryption scenarios)
+  void clearDecryptedMessage() {
+    _decryptedMessage = null;
+  }
 }
 
-final nftDetailProvider = StateNotifierProvider.family<NftDetailProvider, Nft?, String>(
+final nftDetailProvider = StateNotifierProvider.autoDispose.family<NftDetailProvider, Nft?, String>(
   (ref, id) => NftDetailProvider(ref, id),
 );

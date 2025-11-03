@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../core/utils.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
@@ -58,6 +59,15 @@ class WebTokenManagementActions extends BaseComponent {
               if (isOwner) WebPauseTokenButton(token: token),
               if (isOwner) WebTokenBanAddressButton(token: token),
               if (isOwner && token.bannedAddresses.isNotEmpty) WebTokenListBannedAddressesButton(token: token),
+              if (isOwner)
+                AppButton(
+                  label: "Prove Ownership",
+                  variant: AppColorVariant.Primary,
+                  icon: Icons.verified_user,
+                  onPressed: () async {
+                    await proveSmartContractOwnership(context, ref, token.ownerAddress, token.smartContractId);
+                  },
+                ),
               if (isOwner)
                 AppButton(
                   label: "Voting",
