@@ -7,7 +7,14 @@ class MoonpayServiceImpl extends MoonpayServiceInterface {
   }
 
   @override
-  Future<void> sell(String environment, String baseCurrencyCode, String baseCurrencyAmount, String walletAddress, bool popup) {
+  Future<void> sell(
+    String environment,
+    String baseCurrencyCode,
+    String baseCurrencyAmount,
+    String walletAddress,
+    bool popup, {
+    MoonPayDepositCallback? onDeposit,
+  }) {
     throw UnimplementedError();
   }
 }

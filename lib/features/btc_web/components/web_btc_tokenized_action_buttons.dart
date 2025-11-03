@@ -94,17 +94,17 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
 
                                 Navigator.of(context).pop();
                                 final amount = await PromptModal.show(
-                                    title: "Amount (Balance: $balance BTC)",
-                                    validator: (val) =>
-                                        formValidatorNumber(val, "Amount"),
-                                    labelText: 'Deposit amount',
-                                      inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp("[0-9.]"))
-                                        ],
-                                    showUsdValue: true,
-                                    currencyType: CurrencyType.btc,
-                                    );
+                                  title: "Amount (Balance: $balance BTC)",
+                                  validator: (val) =>
+                                      formValidatorNumber(val, "Amount"),
+                                  labelText: 'Deposit amount',
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp("[0-9.]"))
+                                  ],
+                                  showUsdValue: true,
+                                  currencyType: CurrencyType.btc,
+                                );
                                 if (amount == null) {
                                   return;
                                 }
@@ -276,7 +276,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                     scId: token.scIdentifier,
                     amount: double.parse(amount),
                     btcAddress: address,
-                    feeRate: feeRate,
+                    feeRate: (feeRate * 3),
                   );
 
                   if (result == null) {

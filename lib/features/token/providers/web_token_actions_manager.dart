@@ -70,7 +70,8 @@ class WebTokenActionsManager {
     if (showConfirmation) {
       final confirmed = await ConfirmDialog.show(
         title: "Valid Transaction",
-        body: "Transaction verified. There will be a fee of $txFee VFX. Would you like to proceed?",
+        body:
+            "Transaction verified. There will be a fee of $txFee VFX. Would you like to proceed?",
         confirmText: "Yes",
         cancelText: "Cancel",
       );
@@ -83,7 +84,8 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).start();
     }
 
-    final tx = await RawService().sendTransaction(transactionData: txData, execute: true, ref: ref);
+    final tx = await RawService()
+        .sendTransaction(transactionData: txData, execute: true, ref: ref);
 
     if (showLoader) {
       ref.read(globalLoadingProvider.notifier).complete();
@@ -100,7 +102,9 @@ class WebTokenActionsManager {
     return false;
   }
 
-  Future<bool?> mintTokens(WebFungibleToken token, String address, double amount, [bool silent = false]) async {
+  Future<bool?> mintTokens(
+      WebFungibleToken token, String address, double amount,
+      [bool silent = false]) async {
     final data = {
       "Function": "TokenMint()",
       "ContractUID": token.smartContractId,
@@ -110,10 +114,16 @@ class WebTokenActionsManager {
       "TokenName": token.name,
     };
 
-    return await _verifyConfirmAndSendTx(toAddress: "Token_Base", data: data, showConfirmation: !silent, showLoader: !silent, showToasts: !silent);
+    return await _verifyConfirmAndSendTx(
+        toAddress: "Token_Base",
+        data: data,
+        showConfirmation: !silent,
+        showLoader: !silent,
+        showToasts: !silent);
   }
 
-  Future<bool?> transferAmount(WebFungibleToken token, String toAddress, String fromAddress, double amount) async {
+  Future<bool?> transferAmount(WebFungibleToken token, String toAddress,
+      String fromAddress, double amount) async {
     final data = {
       "Function": "TokenTransfer()",
       "ContractUID": token.smartContractId,
@@ -130,7 +140,8 @@ class WebTokenActionsManager {
     );
   }
 
-  Future<bool?> burnAmount(WebFungibleToken token, String address, double amount) async {
+  Future<bool?> burnAmount(
+      WebFungibleToken token, String address, double amount) async {
     final data = {
       "Function": "TokenBurn()",
       "ContractUID": token.smartContractId,
@@ -224,7 +235,11 @@ class WebTokenActionsManager {
 
   Future<bool?> createVotingTopic(NewTokenTopic topic) async {
     final now = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-    final end = (DateTime.now().add(Duration(days: topic.votingDaysAsInt)).millisecondsSinceEpoch / 1000).round();
+    final end = (DateTime.now()
+                .add(Duration(days: topic.votingDaysAsInt))
+                .millisecondsSinceEpoch /
+            1000)
+        .round();
     final topicUid = "${generateRandomString(8)}$now";
     final h = ref.read(walletInfoProvider)?.blockHeight ?? 0;
 
@@ -259,7 +274,8 @@ class WebTokenActionsManager {
     );
   }
 
-  Future<bool?> voteOnTopic(String scId, String scOwnerAddress, String fromAddress, String topicId, bool value) async {
+  Future<bool?> voteOnTopic(String scId, String scOwnerAddress,
+      String fromAddress, String topicId, bool value) async {
     final data = {
       "Function": "TokenVoteTopicCast()",
       "ContractUID": scId,
@@ -316,7 +332,8 @@ class WebTokenActionsManager {
       return false;
     }
 
-    final locator = await RawService().beaconUpload(token.scIdentifier, toAddress, beaconSignature);
+    final locator = await RawService()
+        .beaconUpload(token.scIdentifier, toAddress, beaconSignature);
 
     if (locator == null) {
       Toast.error("Could not create beacon upload request.");
@@ -324,7 +341,8 @@ class WebTokenActionsManager {
     }
     final txService = RawService();
 
-    final nftTransferData = await txService.nftTransferData(token.scIdentifier, toAddress, locator);
+    final nftTransferData =
+        await txService.nftTransferData(token.scIdentifier, toAddress, locator);
 
     return await _verifyConfirmAndSendTx(
       toAddress: toAddress,
@@ -346,13 +364,14 @@ class WebTokenActionsManager {
     }
 
     final timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-    final uniqueId = generateRandomString(16, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
+    final uniqueId = generateRandomString(
+        16, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
     final message = "${keypair.address}.$timestamp.$uniqueId";
 
-    print("MESSAGE: $message");
-
-    final signature = await RawTransaction.getSignature(message: message, privateKey: keypair.private, publicKey: keypair.public);
-    print("MESSAGE: $signature");
+    final signature = await RawTransaction.getSignature(
+        message: message,
+        privateKey: keypair.private,
+        publicKey: keypair.public);
 
     if (signature == null) {
       Toast.error("Signature generation failed.");
@@ -370,8 +389,6 @@ class WebTokenActionsManager {
       'ChosenFeeRate': feeRate,
       "IsTest": false,
     };
-    print(data);
-    print("------");
 
     final result = await RawService().withdrawVbtc(data);
 
@@ -383,7 +400,8 @@ class WebTokenActionsManager {
     return await sendWithdrawlFinializationTx(result);
   }
 
-  Future<bool?> sendWithdrawlFinializationTx(WebWithdrawlBtcResult result) async {
+  Future<bool?> sendWithdrawlFinializationTx(
+      WebWithdrawlBtcResult result) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
       Toast.error("No VFX account found");
@@ -405,7 +423,8 @@ class WebTokenActionsManager {
     );
   }
 
-  Future<bool?> transferVbtcMulti(String toAddress, List<VBtcInput> inputs) async {
+  Future<bool?> transferVbtcMulti(
+      String toAddress, List<VBtcInput> inputs) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
       Toast.error("No VFX account found");
@@ -465,8 +484,10 @@ class WebTokenActionsManager {
 
   bool verifyBalance({bool isRa = false}) {
     if (isRa) {
-      if ((ref.read(webSessionProvider).raBalance ?? 0) < MIN_RBX_FOR_SC_ACTION) {
-        Toast.error("A balance on your Vault account is required to broadcast this transaction");
+      if ((ref.read(webSessionProvider).raBalance ?? 0) <
+          MIN_RBX_FOR_SC_ACTION) {
+        Toast.error(
+            "A balance on your Vault account is required to broadcast this transaction");
 
         return false;
       }
@@ -474,7 +495,8 @@ class WebTokenActionsManager {
     }
 
     if ((ref.read(webSessionProvider).balance ?? 0) < MIN_RBX_FOR_SC_ACTION) {
-      Toast.error("A balance on your VFX account is required to broadcast this transaction");
+      Toast.error(
+          "A balance on your VFX account is required to broadcast this transaction");
 
       return false;
     }
@@ -484,7 +506,8 @@ class WebTokenActionsManager {
   bool guardIsTokenOwner(WebFungibleToken token) {
     final sessionModel = ref.read(webSessionProvider);
 
-    if ([sessionModel.keypair?.address, sessionModel.raKeypair?.address].contains(token.ownerAddress)) {
+    if ([sessionModel.keypair?.address, sessionModel.raKeypair?.address]
+        .contains(token.ownerAddress)) {
       return true;
     }
     Toast.error("Only the owner of this token can perform this action");
@@ -502,7 +525,8 @@ class WebTokenActionsManager {
       return true;
     }
 
-    Toast.error("Vault accounts cannot perform this action. Please transfer ownership to your standard VFX account first");
+    Toast.error(
+        "Vault accounts cannot perform this action. Please transfer ownership to your standard VFX account first");
     return false;
   }
 

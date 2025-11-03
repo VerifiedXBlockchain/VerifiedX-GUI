@@ -8,6 +8,7 @@ import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/features/payment/services/onramp_service.dart';
 import '../../app.dart';
 import '../../core/app_constants.dart';
+import '../../core/components/buttons.dart';
 import '../../core/dialogs.dart';
 import '../../core/providers/session_provider.dart';
 import '../../core/providers/web_session_provider.dart';
@@ -15,6 +16,9 @@ import '../../core/theme/colors.dart';
 import '../../core/theme/components.dart';
 import '../btc/models/btc_address_type.dart';
 import '../btc/providers/btc_account_list_provider.dart';
+import '../btc/utils.dart' as btc_utils;
+import '../btc_web/services/btc_web_service.dart';
+import '../btc_web/providers/btc_web_transaction_list_provider.dart';
 import '../encrypt/utils.dart';
 import '../moonpay/services/moonpay_service.dart';
 import '../payment/components/payment_disclaimer.dart';
@@ -628,7 +632,7 @@ class AccountUtils {
         case PaymentGateway.moonpay:
           if (kIsWeb) {
             MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production',
-                'vfx', '100', address, true);
+                'btc', '100', address, true);
           } else {
             Toast.error("Native Moonpay Integration Activating Soon.");
           }
@@ -903,8 +907,282 @@ class AccountUtils {
 
     if (type == VfxOrBtcOption.btc) {
       if (kIsWeb) {
-        MoonpayService().sell(Env.isTestNet ? 'sandbox' : 'production', 'btc',
-            '100', address, true);
+        final btcKeypair = ref.read(webSessionProvider).btcKeypair;
+        print("🌙 Starting MoonPay offramp flow");
+        print("  btcKeypair available: ${btcKeypair != null}");
+
+        MoonpayService().sell(
+          Env.isTestNet ? 'sandbox' : 'production',
+          'btc',
+          '100',
+          address,
+          true,
+          onDeposit: btcKeypair != null
+              ? (cryptoCurrency, cryptoCurrencyAmount, depositWalletAddress) async {
+                  print("🚀 onDeposit handler called in wallet utils");
+                  print("  cryptoCurrency: $cryptoCurrency");
+                  print("  cryptoCurrencyAmount: $cryptoCurrencyAmount");
+                  print("  depositWalletAddress: $depositWalletAddress");
+
+                  // Get BTC balance
+                  final balance = ref.read(webSessionProvider).btcBalanceInfo?.btcBalance;
+                  print("  Current BTC balance: $balance");
+
+                  if (balance == null || balance <= 0) {
+                    print("❌ Balance check failed: balance is null or zero");
+                    Toast.error("BTC account has no balance");
+                    return null;
+                  }
+
+                  if (balance <= cryptoCurrencyAmount) {
+                    print("❌ Balance check failed: insufficient balance");
+                    Toast.error("Not enough BTC to cover transaction + fee");
+                    return null;
+                  }
+
+                  print("✅ Balance check passed, showing confirmation dialog");
+                  // Show confirmation dialog with 3 options
+                  final choice = await showDialog<String>(
+                    context: rootNavigatorKey.currentContext!,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("Complete MoonPay Deposit"),
+                        content: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 600),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "To complete this off-ramp, send the exact BTC amount to the deposit address below:",
+                                style: TextStyle(color: Colors.white70),
+                              ),
+                              SizedBox(height: 16),
+                              TextFormField(
+                                initialValue: cryptoCurrencyAmount.toString(),
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  label: Text(
+                                    "Amount",
+                                    style: TextStyle(color: Color(0xfff7931a)),
+                                  ),
+                                  suffix: IconButton(
+                                    icon: Icon(Icons.copy),
+                                    onPressed: () async {
+                                      await Clipboard.setData(
+                                          ClipboardData(text: cryptoCurrencyAmount.toString()));
+                                      Toast.message("Amount copied");
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 12),
+                              TextFormField(
+                                initialValue: depositWalletAddress,
+                                readOnly: true,
+                                decoration: InputDecoration(
+                                  label: Text(
+                                    "Deposit Address (MoonPay)",
+                                    style: TextStyle(color: Color(0xfff7931a)),
+                                  ),
+                                  suffix: IconButton(
+                                    icon: Icon(Icons.copy),
+                                    onPressed: () async {
+                                      await Clipboard.setData(
+                                          ClipboardData(text: depositWalletAddress));
+                                      Toast.message("Address copied");
+                                    },
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 16),
+                              Container(
+                                padding: EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.05),
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Manual Deposit",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(height: 4),
+                                    Text(
+                                      "You can send this from another wallet by sending the exact amount ($cryptoCurrencyAmount $cryptoCurrency) to the deposit address above.",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Colors.white60,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 16),
+                              Text(
+                                "From: ${btcKeypair.address}",
+                                style: TextStyle(fontSize: 13, color: Colors.white54),
+                              ),
+                            ],
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop('cancel');
+                            },
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(color: Theme.of(context).colorScheme.info),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop('manual');
+                            },
+                            child: Text(
+                              "I have/will send manually",
+                              style: TextStyle(color: Colors.white70),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop('send');
+                            },
+                            child: Text(
+                              "Send Now",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+
+                  print("Dialog result: $choice");
+
+                  if (choice == 'cancel' || choice == null) {
+                    print("❌ User cancelled");
+                    return null;
+                  }
+
+                  if (choice == 'manual') {
+                    print("✅ User chose manual send, returning 'manual' to MoonPay");
+                    Toast.message("MoonPay transaction marked as manual deposit");
+                    return 'manual';
+                  }
+
+                  print("✅ User confirmed, prompting for fee rate");
+                  // Prompt for fee rate
+                  final feeRate = await btc_utils.promptForFeeRate(rootNavigatorKey.currentContext!);
+
+                  print("Fee rate selected: $feeRate");
+
+                  if (feeRate == null) {
+                    print("❌ User cancelled at fee rate selection");
+                    return null;
+                  }
+
+                  print("✅ Fee rate confirmed, showing final confirmation");
+                  // Final confirmation with fee
+                  final finalConfirmed = await ConfirmDialog.show(
+                    title: "Confirm Send",
+                    body:
+                        "Amount: $cryptoCurrencyAmount $cryptoCurrency\nTo: $depositWalletAddress\nFrom: ${btcKeypair.address}\nFee Rate: $feeRate sats/vB",
+                    confirmText: "Send",
+                    cancelText: "Cancel",
+                  );
+
+                  print("Final confirmation result: $finalConfirmed");
+
+                  if (finalConfirmed != true) {
+                    print("❌ User cancelled at final confirmation");
+                    return null;
+                  }
+
+                  print("✅ User confirmed, sending BTC transaction");
+                  // Send BTC transaction
+                  final txHash = await BtcWebService().sendTransaction(
+                    btcKeypair.wif,
+                    depositWalletAddress,
+                    cryptoCurrencyAmount,
+                    feeRate,
+                  );
+
+                  print("Transaction result: $txHash");
+
+                  if (txHash == null) {
+                    print("❌ Transaction failed");
+                    Toast.error("Transaction failed");
+                    return null;
+                  }
+
+                  print("✅ Transaction successful, txHash: $txHash");
+
+                  // Refresh balance
+                  ref.invalidate(btcWebTransactionListProvider(btcKeypair.address));
+                  Future.delayed(Duration(seconds: 2), () {
+                    ref.read(webSessionProvider.notifier).refreshBtcBalanceInfo();
+                  });
+
+                  Toast.message("$cryptoCurrencyAmount $cryptoCurrency sent to $depositWalletAddress");
+
+                  // Show tx details
+                  InfoDialog.show(
+                    title: "Transaction Sent",
+                    buttonColorOverride: Color(0xfff7931a),
+                    content: ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: 600),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            initialValue: txHash,
+                            readOnly: true,
+                            decoration: InputDecoration(
+                              label: Text(
+                                "Transaction Hash",
+                                style: TextStyle(color: Color(0xfff7931a)),
+                              ),
+                              suffix: IconButton(
+                                icon: Icon(Icons.copy),
+                                onPressed: () async {
+                                  await Clipboard.setData(ClipboardData(text: txHash));
+                                  Toast.message("Tx hash copied");
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 12),
+                          AppButton(
+                            label: "Open in BTC Explorer",
+                            variant: AppColorVariant.Btc,
+                            type: AppButtonType.Text,
+                            onPressed: () {
+                              if (Env.btcIsTestNet) {
+                                launchUrlString("https://mempool.space/testnet4/tx/$txHash");
+                              } else {
+                                launchUrlString("https://mempool.space/tx/$txHash");
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+
+                  print("🎉 Returning txHash to JS: $txHash");
+                  return txHash;
+                }
+              : null,
+        );
       } else {
         Toast.error("Native Moonpay Integration Activating Soon.");
       }
