@@ -121,6 +121,10 @@ deploy_web_testnet:
 	fvm flutter build web --dart-define TESTNET=true --release
 	firebase use rbx-web-wallet-testnet && firebase deploy --only hosting
 
+deploy_web_devnet:
+	fvm flutter build web --dart-define DEVNET=true --release
+	firebase use vfx-wallet-devnet && firebase deploy --only hosting
+
 
 deploy_web_no_build:
 	firebase deploy --only hosting

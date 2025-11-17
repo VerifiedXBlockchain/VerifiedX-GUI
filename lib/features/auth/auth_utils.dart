@@ -818,8 +818,9 @@ Future<void> _showKeysInternal(
             ListTile(
               leading: isMobile ? null : const Icon(Icons.security),
               title: TextFormField(
-                initialValue:
-                    keypair.btcWif != null ? keypair.private : keypair.private,
+                initialValue: keypair.btcWif != null
+                    ? keypair.private
+                    : keypair.privateCorrected,
                 decoration: InputDecoration(
                   label: Text(
                     "Private Key",

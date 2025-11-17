@@ -48,5 +48,18 @@
                 "TESTNET=true"
             ]
         },
+        {
+            "name": "Web [Devent]",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-port",
+                "42069",
+                "--dart-define",
+                "DEVNET=true"
+            ]
+        },
     ]
 }

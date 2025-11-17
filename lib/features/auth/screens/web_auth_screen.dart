@@ -293,15 +293,15 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               ),
             ),
 
-          if (Env.isTestNet)
-            const Padding(
+          if (Env.isTestNet || Env.isDevnet)
+            Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: Text(
-                "TESTNET",
+                Env.isDevnet ? 'DEVNET' : "TESTNET",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Env.isDevnet ? Colors.orange.shade800 : Colors.green,
                     letterSpacing: 2),
               ),
             ),
