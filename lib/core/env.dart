@@ -21,9 +21,9 @@ class Env {
   }
 
   static String get baseExplorerUrl {
-    return _isTestnet
-        ? 'https://spyglass-testnet.verifiedx.io/'
-        : 'https://spyglass.verifiedx.io/';
+    if (_isDevnet) return 'https://spyglass-devnet.verifiedx.io/';
+    if (_isTestnet) return 'https://spyglass-testnet.verifiedx.io/';
+    return 'https://spyglass.verifiedx.io/';
   }
 
   static String get appBaseUrl {

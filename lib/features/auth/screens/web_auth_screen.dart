@@ -301,7 +301,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Env.isDevnet ? Colors.orange.shade800 : Colors.green,
+                    color: Env.isDevnet ? Colors.yellow.shade800 : Colors.green,
                     letterSpacing: 2),
               ),
             ),

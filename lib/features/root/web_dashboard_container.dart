@@ -185,7 +185,7 @@ class _ContentWrapper extends BaseComponent {
             Container(
               width: double.infinity,
               color:
-                  Env.isDevnet ? Colors.orange.shade800 : Colors.green.shade800,
+                  Env.isDevnet ? Colors.yellow.shade800 : Colors.green.shade800,
               child: Padding(
                 padding: EdgeInsets.all(2.0),
                 child: Center(

@@ -4,7 +4,8 @@ import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
 const APP_V = "5.0.10";
-final APP_VERSION = "${Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
+final APP_VERSION =
+    "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
 const ALLOW_PAYMENT = true;

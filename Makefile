@@ -51,9 +51,9 @@ build_win_cli:
 	dotnet publish -c Release -r win-x64 ../Core-Cli/ --output ../Core-Cli/rbxpublished --self-contained true -p:PublishSingleFile=true
 
 package_m1:
-	rm -rf ../Core-CLI/bin/Release
-	cd ../Core-CLI && git pull && cd /Users/tyler/prj/vfx/vfx-gui/
-	dotnet publish -c Release -r osx-arm64 ../Core-Cli/ --self-contained true -f net6.0 -p:PublishSingleFile=true
+# 	rm -rf ../Core-CLI/bin/Release
+# 	cd ../Core-CLI && git pull && cd /Users/tyler/prj/vfx/vfx-gui/
+# 	dotnet publish -c Release -r osx-arm64 ../Core-Cli/ --self-contained true -f net6.0 -p:PublishSingleFile=true
 	rm -f ./installers/exports/RBX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/VFX-OSX-ARM-Installer.dmg
 	rm -f ./installers/resources/Runner/VFXWallet.app

@@ -155,7 +155,8 @@ class SessionModel {
       startTime: startTime ?? this.startTime,
       currentWallet: currentWallet ?? this.currentWallet,
       // ready: ready ?? this.ready,
-      filteringTransactions: filteringTransactions ?? this.filteringTransactions,
+      filteringTransactions:
+          filteringTransactions ?? this.filteringTransactions,
       cliStarted: cliStarted ?? this.cliStarted,
       remoteBlockHeight: remoteBlockHeight ?? this.remoteBlockHeight,
       blocksAreSyncing: blocksAreSyncing ?? this.blocksAreSyncing,
@@ -200,7 +201,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
   static const _initial = SessionModel();
 
-  SessionProvider(this.ref, [SessionModel sessionModel = _initial]) : super(sessionModel) {
+  SessionProvider(this.ref, [SessionModel sessionModel = _initial])
+      : super(sessionModel) {
     if (kIsWeb) {
       return;
     }
@@ -208,16 +210,22 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> init(bool inLoop) async {
-    final token = kDebugMode ? DEV_API_TOKEN : generateRandomString(8).toLowerCase();
+    final token =
+        kDebugMode ? DEV_API_TOKEN : generateRandomString(8).toLowerCase();
 
-    ref.read(logProvider.notifier).append(LogEntry(message: "Welcome to VerifiedX Wallet version $APP_VERSION"));
+    ref.read(logProvider.notifier).append(
+        LogEntry(message: "Welcome to VerifiedX Wallet version $APP_VERSION"));
 
     bool cliStarted = state.cliStarted;
     if (!cliStarted) {
-      ref.read(logProvider.notifier).append(LogEntry(message: "Starting VFXCore..."));
+      ref
+          .read(logProvider.notifier)
+          .append(LogEntry(message: "Starting VFXCore..."));
       cliStarted = await _startCli(token);
     } else {
-      ref.read(logProvider.notifier).append(LogEntry(message: "VFXCore already running."));
+      ref
+          .read(logProvider.notifier)
+          .append(LogEntry(message: "VFXCore already running."));
     }
 
     if (!cliStarted) {
@@ -274,7 +282,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
   Future<void> setupChatListeners() async {
     final decShop = await DstService().retreiveShop();
     if (decShop != null && !decShop.isOffline) {
-      ref.read(chatNotificationProvider("${decShop.ownerAddress}|seller").notifier);
+      ref.read(
+          chatNotificationProvider("${decShop.ownerAddress}|seller").notifier);
     } else {
       final address = state.currentWallet?.address;
       if (address != null) {
@@ -324,7 +333,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> checkGuiUpdateStatus([bool inLoop = false]) async {
-    if (Env.isTestNet) {
+    if (Env.isTestNet || Env.isDevnet) {
       return;
     }
     final remoteInfo = await RemoteInfoService.fetchInfo();
@@ -350,7 +359,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     if (blockHeight == null) {
       if (attempt > 20) {
-        print("block height still null after 20 attempts so we shall stop the remote check");
+        print(
+            "block height still null after 20 attempts so we shall stop the remote check");
         return;
       }
       await Future.delayed(const Duration(seconds: 5));
@@ -578,15 +588,19 @@ class SessionProvider extends StateNotifier<SessionModel> {
     final response = await BridgeService().wallets();
     final reserveResponse = await ReserveAccountService().wallets();
 
-    Map<String, dynamic>? names = singleton<Storage>().getMap(Storage.RENAMED_WALLETS_KEY);
+    Map<String, dynamic>? names =
+        singleton<Storage>().getMap(Storage.RENAMED_WALLETS_KEY);
 
     names ??= {};
 
-    List<dynamic>? deleted = singleton<Storage>().getList(Storage.DELETED_WALLETS_KEY);
+    List<dynamic>? deleted =
+        singleton<Storage>().getList(Storage.DELETED_WALLETS_KEY);
 
     deleted ??= [];
 
-    if (response.isNotEmpty && response != "Command not recognized." && response != "No Accounts") {
+    if (response.isNotEmpty &&
+        response != "Command not recognized." &&
+        response != "No Accounts") {
       final items = jsonDecode(response);
 
       for (final item in items) {
@@ -596,7 +610,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
         final Map<String, dynamic> _item = {
           ...item,
-          'friendlyName': names.containsKey(item['Address']) ? names[item['Address']] : null,
+          'friendlyName': names.containsKey(item['Address'])
+              ? names[item['Address']]
+              : null,
         };
         wallets.add(Wallet.fromJson(_item));
       }
@@ -610,7 +626,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
             item['IsValidating'] = false;
             final Map<String, dynamic> _item = {
               ...item,
-              'friendlyName': names.containsKey(item['Address']) ? names[item['Address']] : null,
+              'friendlyName': names.containsKey(item['Address'])
+                  ? names[item['Address']]
+                  : null,
             };
             if (!deleted.contains(item['Address'])) {
               wallets.add(Wallet.fromJson(_item));
@@ -625,19 +643,23 @@ class SessionProvider extends StateNotifier<SessionModel> {
     if (wallets.isNotEmpty) {
       final totalBalance = wallets.map((e) => e.balance).toList().sum;
 
-      final currentWalletAddress = singleton<Storage>().getString(Storage.CURRENT_WALLET_ADDRESS_KEY);
+      final currentWalletAddress =
+          singleton<Storage>().getString(Storage.CURRENT_WALLET_ADDRESS_KEY);
 
       if (currentWalletAddress != null) {
-        final currentWallet = wallets.firstWhereOrNull((element) => element.address == currentWalletAddress);
+        final currentWallet = wallets.firstWhereOrNull(
+            (element) => element.address == currentWalletAddress);
 
         if (currentWallet != null) {
-          state = state.copyWith(currentWallet: currentWallet, totalBalance: totalBalance);
+          state = state.copyWith(
+              currentWallet: currentWallet, totalBalance: totalBalance);
           ref.read(currentValidatorProvider.notifier).set(currentWallet);
         } else {
           state = state.copyWith(totalBalance: totalBalance);
         }
       } else {
-        state = state.copyWith(currentWallet: wallets.first, totalBalance: totalBalance);
+        state = state.copyWith(
+            currentWallet: wallets.first, totalBalance: totalBalance);
         ref.read(currentValidatorProvider.notifier).set(wallets.first);
       }
 
@@ -649,7 +671,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
         }
       }
 
-      ref.read(reserveAccountProvider.notifier).set(reservedWalletsAfterDeleteCheck);
+      ref
+          .read(reserveAccountProvider.notifier)
+          .set(reservedWalletsAfterDeleteCheck);
     }
   }
 
@@ -712,11 +736,13 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
   void setCurrentWallet(Wallet wallet, [bool updateGlobalCurrency = true]) {
     state = state.copyWith(currentWallet: wallet, btcSelected: false);
-    singleton<Storage>().setString(Storage.CURRENT_WALLET_ADDRESS_KEY, wallet.address);
+    singleton<Storage>()
+        .setString(Storage.CURRENT_WALLET_ADDRESS_KEY, wallet.address);
 
     final validators = ref.read(validatorListProvider);
 
-    final currentValidator = validators.firstWhereOrNull((element) => element.address == wallet.address);
+    final currentValidator = validators
+        .firstWhereOrNull((element) => element.address == wallet.address);
 
     ref.read(currentValidatorProvider.notifier).set(currentValidator);
 
@@ -726,9 +752,11 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
   }
 
-  void setCurrentBtcAccount(BtcAccount account, [bool updateGlobalCurrency = true]) {
+  void setCurrentBtcAccount(BtcAccount account,
+      [bool updateGlobalCurrency = true]) {
     state = state.copyWith(currentBtcAccount: account, btcSelected: true);
-    singleton<Storage>().setString(Storage.CURRENT_BTC_ACCOUNT_ADDRESS_KEY, account.address);
+    singleton<Storage>()
+        .setString(Storage.CURRENT_BTC_ACCOUNT_ADDRESS_KEY, account.address);
     if (updateGlobalCurrency) {
       ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
     }
@@ -759,7 +787,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
     } else {
       if (state.windowsLauncherPath == null) {
         final appPath = Directory.current.path;
-        final p = "$appPath\\RBXCore\\${Env.isTestNet ? 'RBXLauncherTestNet.exe' : 'RBXLauncher.exe'}";
+        final p =
+            "$appPath\\RBXCore\\${Env.isTestNet || Env.isDevnet ? 'RBXLauncherTestNet.exe' : 'RBXLauncher.exe'}";
         state = state.copyWith(windowsLauncherPath: p);
         return p;
       }
@@ -779,17 +808,21 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
   Future<bool> _cliCheck([int attempt = 1, int maxAttempts = 500]) async {
     if (attempt > maxAttempts) {
-      ref.read(logProvider.notifier).append(LogEntry(message: "Attempted $maxAttempts. Something went wrong."));
+      ref.read(logProvider.notifier).append(
+          LogEntry(message: "Attempted $maxAttempts. Something went wrong."));
 
       return false;
     }
 
     final isRunning = await _cliIsActive();
     if (isRunning) {
-      ref.read(logProvider.notifier).append(LogEntry(message: "VerifedX Wallet Started Successfully", variant: AppColorVariant.Success));
+      ref.read(logProvider.notifier).append(LogEntry(
+          message: "VerifedX Wallet Started Successfully",
+          variant: AppColorVariant.Success));
       await fetchConfig();
       final cliVersion = await BridgeService().getCliVersion();
-      ref.read(logProvider.notifier).append(LogEntry(message: "CLI Version: $cliVersion", variant: AppColorVariant.Info));
+      ref.read(logProvider.notifier).append(LogEntry(
+          message: "CLI Version: $cliVersion", variant: AppColorVariant.Info));
       state = state.copyWith(cliVersion: cliVersion);
       ref.read(passwordRequiredProvider.notifier).check();
       ref.read(walletIsEncryptedProvider.notifier).check();
@@ -817,7 +850,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
     if (Env.launchCli) {
       if (await _cliIsActive()) {
         await fetchConfig();
-        ref.read(logProvider.notifier).append(LogEntry(message: "CLI is already running!"));
+        ref
+            .read(logProvider.notifier)
+            .append(LogEntry(message: "CLI is already running!"));
 
         return true;
       }
@@ -825,10 +860,12 @@ class SessionProvider extends StateNotifier<SessionModel> {
       startupDataLoop();
 
       final cliPath = Env.cliPathOverride ?? getCliPath();
-      List<String> options = Env.isTestNet ? ['enableapi', 'gui'] : ['enableapi', 'gui', 'apitoken=$apiToken'];
+      List<String> options = Env.isTestNet || Env.isDevnet
+          ? ['enableapi', 'gui']
+          : ['enableapi', 'gui', 'apitoken=$apiToken'];
       // List<String> options = ['enableapi', 'gui'];
 
-      if (Env.isTestNet) {
+      if (Env.isTestNet || Env.isDevnet) {
         options.add("testnet");
       }
 
@@ -847,10 +884,17 @@ class SessionProvider extends StateNotifier<SessionModel> {
           //   await Future.delayed(Duration(milliseconds: 100));
           // }
 
-          ref.read(logProvider.notifier).append(LogEntry(message: "Launching CLI in the background."));
-          final List<String> params = Env.isTestNet || kDebugMode ? [cliPath] : [cliPath, 'apitoken=$apiToken'];
+          ref
+              .read(logProvider.notifier)
+              .append(LogEntry(message: "Launching CLI in the background."));
+          final List<String> params =
+              Env.isTestNet || Env.isDevnet || kDebugMode
+                  ? [cliPath]
+                  : [cliPath, 'apitoken=$apiToken'];
           pm.run(params).then((result) {
-            ref.read(logProvider.notifier).append(LogEntry(message: "Command ran successfully."));
+            ref
+                .read(logProvider.notifier)
+                .append(LogEntry(message: "Command ran successfully."));
           });
 
           singleton<ApiTokenManager>().set(apiToken);
@@ -879,7 +923,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
         );
         cmd = '"$cliPath" ${options.join(' ')}';
 
-        ref.read(logProvider.notifier).append(LogEntry(message: "Launching CLI in the background."));
+        ref
+            .read(logProvider.notifier)
+            .append(LogEntry(message: "Launching CLI in the background."));
 
         try {
           shell.run(cmd);
@@ -889,8 +935,11 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
           return await _cliCheck();
         } catch (e) {
-          ref.read(logProvider.notifier).append(LogEntry(message: "Process Error.", variant: AppColorVariant.Danger));
-          ref.read(logProvider.notifier).append(LogEntry(message: "$e", variant: AppColorVariant.Danger));
+          ref.read(logProvider.notifier).append(LogEntry(
+              message: "Process Error.", variant: AppColorVariant.Danger));
+          ref
+              .read(logProvider.notifier)
+              .append(LogEntry(message: "$e", variant: AppColorVariant.Danger));
 
           return false;
         }
@@ -914,7 +963,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
     final Map<String, dynamic> data = jsonDecode(string);
 
     if (data.containsKey('NextBlock') && data.containsKey('CurrentPercent')) {
-      return StartupData(data['NextBlock'].toString(), data['CurrentPercent'].toString());
+      return StartupData(
+          data['NextBlock'].toString(), data['CurrentPercent'].toString());
     }
 
     return null;
@@ -966,7 +1016,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
     ref.invalidate(btcPriceDataDetailProvider);
 
     if (inLoop) {
-      await Future.delayed(const Duration(seconds: REFRESH_TIMEOUT_SECONDS_BTC));
+      await Future.delayed(
+          const Duration(seconds: REFRESH_TIMEOUT_SECONDS_BTC));
       btcLoop(true);
     }
   }
@@ -989,7 +1040,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
   void toggleToBtcWallet([bool updateWallet = true]) {
     final accounts = ref.read(btcAccountListProvider);
     if (accounts.isNotEmpty && updateWallet) {
-      state = state.copyWith(btcSelected: true, currentBtcAccount: accounts.first);
+      state =
+          state.copyWith(btcSelected: true, currentBtcAccount: accounts.first);
     } else {
       state = state.copyWith(btcSelected: true);
     }
