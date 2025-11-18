@@ -158,7 +158,7 @@ class AdjudicatorInVoteDetails extends BaseComponent {
               width: 10,
             ),
             _AdjudicatorDetailValue(
-              label: 'Bandwith (TB): ',
+              label: 'Bandwidth (TB): ',
               value: details.bandwith != 0 ? details.bandwith.toString() : 'Unlimitted',
             ),
           ],
@@ -178,7 +178,7 @@ class AdjudicatorInVoteDetails extends BaseComponent {
           value: details.githubLink,
         ),
         _AdjudicatorDetailValue(
-          label: 'Adittional Links: ',
+          label: 'Additional Links: ',
           value: details.supplementalURLs,
         ),
       ],

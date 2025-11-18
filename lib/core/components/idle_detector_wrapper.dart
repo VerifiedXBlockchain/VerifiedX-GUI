@@ -6,6 +6,8 @@ import '../app_constants.dart';
 import '../providers/web_session_provider.dart';
 import '../dialogs.dart';
 import '../../utils/html_helpers.dart';
+import '../storage.dart';
+import '../singletons.dart';
 
 class IdleDetectorWrapper extends ConsumerStatefulWidget {
   final Widget child;
@@ -59,8 +61,8 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
 
     autoLockTimer = Timer(const Duration(seconds: 15), () {
       if (!userResponded) {
-        Navigator.of(context, rootNavigator: true).pop(); 
-        HtmlHelpers().redirect("/");
+        Navigator.of(context, rootNavigator: true).pop();
+        _savePendingRedirectAndLock();
       }
     });
 
@@ -77,8 +79,24 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
     if (confirmed == true) {
       _resetIdleTimer();
     } else {
-      HtmlHelpers().redirect("/");
+      _savePendingRedirectAndLock();
     }
+  }
+
+  void _savePendingRedirectAndLock() {
+    final currentUrl = HtmlHelpers().getUrl();
+
+    // Only save if we're on a dashboard route (not already on auth screen)
+    if (currentUrl.contains('/#/dashboard') || currentUrl.contains('#/dashboard')) {
+      // Extract just the hash portion of the URL
+      final hashIndex = currentUrl.indexOf('#');
+      if (hashIndex != -1) {
+        final hashPath = currentUrl.substring(hashIndex + 1);
+        singleton<Storage>().setString(Storage.PENDING_REDIRECT_URL, hashPath);
+      }
+    }
+
+    HtmlHelpers().redirect("/");
   }
 
   void _onUserInteraction() {

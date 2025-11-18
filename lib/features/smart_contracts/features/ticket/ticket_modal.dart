@@ -99,7 +99,7 @@ class TicketModal extends BaseComponent {
                 child: TextFormField(
                   controller: _provider.quantityController,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  validator: (value) => formValidatorNotEmpty(value, "Quanity"),
+                  validator: (value) => formValidatorNotEmpty(value, "Quantity"),
                   decoration: const InputDecoration(
                     label: Text(
                       "Quantity to Mint",

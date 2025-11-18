@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -6,18 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_window_close/flutter_window_close.dart';
-import '../features/wallet/providers/wallet_list_provider.dart';
-import '../features/web/providers/multi_account_provider.dart';
-import 'theme/components.dart';
-import 'utils.dart';
-import '../features/global_loader/global_loading_provider.dart';
-import '../features/payment/components/payment_disclaimer.dart';
 
 import '../app.dart';
+import '../core/providers/currency_segmented_button_provider.dart';
 import '../features/bridge/services/bridge_service.dart';
+import '../features/global_loader/global_loading_provider.dart';
+import '../features/payment/components/payment_disclaimer.dart';
+import '../features/price/providers/price_detail_providers.dart';
+import '../features/wallet/providers/wallet_list_provider.dart';
+import '../features/web/providers/multi_account_provider.dart';
 import '../utils/toast.dart';
 import '../utils/validation.dart';
 import 'theme/app_theme.dart';
+import 'theme/components.dart';
+import 'utils.dart';
 
 class InfoDialog {
   static alert(
@@ -292,6 +293,8 @@ class PromptModal {
     Color? labelColor,
     Widget? sufixIcon,
     TextEditingController? controller,
+    bool showUsdValue = false,
+    CurrencyType currencyType = CurrencyType.vfx,
   }) async {
     // final context = rootNavigatorKey.currentContext!;
     final context = contextOverride ?? rootNavigatorKey.currentContext!;
@@ -301,6 +304,32 @@ class PromptModal {
     final TextEditingController _controller = controller ?? TextEditingController(text: initialValue);
 
     bool _obscureText = obscureText;
+    double _usdValue = 0.0;
+
+    void _calculateUsdValue(WidgetRef ref) {
+      if (!showUsdValue) return;
+      
+      final parsedAmount = double.tryParse(_controller.value.text);
+      if (parsedAmount == null || parsedAmount <= 0) {
+        _usdValue = 0.0;
+        return;
+      }
+
+      double? usdPrice;
+      
+      // Determine currency type and get appropriate price
+      if (currencyType == CurrencyType.btc) {
+        usdPrice = ref.read(btcCurrentPriceDataDetailProvider);
+      } else if (currencyType == CurrencyType.vfx) {
+        usdPrice = ref.read(vfxCurrentPriceDataDetailProvider);
+      }
+
+      if (usdPrice != null) {
+        _usdValue = parsedAmount * usdPrice;
+      } else {
+        _usdValue = 0.0;
+      }
+    }
 
     void _submit(BuildContext context) {
       if (!_formKey.currentState!.validate()) return;
@@ -351,44 +380,55 @@ class PromptModal {
                 children: [
                   if (body != null) Text(body),
                   StatefulBuilder(builder: (context, setState) {
-                    return Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: _controller,
-                            obscureText: _obscureText,
-                            autofocus: true,
-                            minLines: lines,
-                            maxLines: lines,
-                            keyboardType: keyboardType,
-                            decoration: InputDecoration(
-                              suffix: sufixIcon,
-                              label: Text(
-                                labelText,
-                                style: TextStyle(color: labelColor ?? Theme.of(context).colorScheme.secondary),
+                    return Consumer(
+                      builder: (context, ref, child) {
+                        _controller.addListener(() {
+                          setState(() {
+                          _calculateUsdValue(ref);
+                          });
+                        });
+                        
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: _controller,
+                                obscureText: _obscureText,
+                                autofocus: true,
+                                minLines: lines,
+                                maxLines: lines,
+                                keyboardType: keyboardType,
+                                decoration: InputDecoration(
+                                  suffix: sufixIcon,
+                                  label: Text(
+                                    labelText,
+                                    style: TextStyle(color: labelColor ?? Theme.of(context).colorScheme.secondary),
+                                  ),
+                                  prefixText: prefixText,
+                                  helperText: showUsdValue && _usdValue > 0 ? "\$${_usdValue.toStringAsFixed(2)} USD" : null,
+                                ),
+                                validator: validator,
+                                inputFormatters: inputFormatters,
+                                onFieldSubmitted: (_) {
+                                  _submit(context);
+                                },
                               ),
-                              prefixText: prefixText,
                             ),
-                            validator: validator,
-                            inputFormatters: inputFormatters,
-                            onFieldSubmitted: (_) {
-                              _submit(context);
-                            },
-                          ),
-                        ),
-                        if (obscureText && revealObscure)
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                            icon: Icon(
-                              _obscureText ? Icons.remove_red_eye : Icons.hide_source_outlined,
-                            ),
-                          )
-                      ],
+                            if (obscureText && revealObscure)
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                                icon: Icon(
+                                  _obscureText ? Icons.remove_red_eye : Icons.hide_source_outlined,
+                                ),
+                              )
+                          ],
+                        );
+                      },
                     );
                   }),
                   if (footer != null)

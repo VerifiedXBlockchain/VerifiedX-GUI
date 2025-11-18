@@ -1,4 +1,5 @@
 let moonPay;
+let currentMoonPaySdk; // Store current SDK instance for handlers
 
 var scriptLoadingStatus = {
     isLoading: false,
@@ -123,15 +124,84 @@ const initMoonPay = async () => {
             baseCurrencyCode: baseCurrencyCode,
             baseCurrencyAmount: baseCurrencyAmount,
             defaultCurrencyCode: baseCurrencyCode,
-            walletAddress: walletAddress
+            walletAddress: walletAddress,
+
         }
 
         const moonPaySdk = moonPay({
             flow: 'sell',
             environment: environment,
             variant: 'overlay',
-            params: params
+            params: params,
+            handlers: {
+                async onInitiateDeposit(properties) {
+                    console.log("onInitiateDeposit called", properties)
+                    const {
+                        cryptoCurrency,
+                        cryptoCurrencyAmount,
+                        depositWalletAddress,
+                    } = properties;
+
+                    // Extract currency code from object
+                    const currencyCode = typeof cryptoCurrency === 'string'
+                        ? cryptoCurrency
+                        : (cryptoCurrency?.code || 'btc');
+
+                    // Try to close the modal
+                    try {
+                        if (currentMoonPaySdk?.hide) {
+                            currentMoonPaySdk.hide();
+                        } else if (currentMoonPaySdk?.close) {
+                            currentMoonPaySdk.close();
+                        }
+                    } catch (e) {
+                        console.log("Could not close MoonPay modal", e);
+                    }
+
+                    // Wait for Flutter to complete the send
+                    return new Promise((resolve, reject) => {
+                        // Call Flutter callback with deposit details and callbacks
+                        console.log("Checking for Flutter callback...");
+                        console.log("window.flutterMoonPayDepositCallback exists:", !!window.flutterMoonPayDepositCallback);
+
+                        if (window.flutterMoonPayDepositCallback) {
+                            console.log("Calling Flutter callback with:", {
+                                currencyCode,
+                                cryptoCurrencyAmount,
+                                depositWalletAddress
+                            });
+
+                            try {
+                                window.flutterMoonPayDepositCallback(
+                                    currencyCode,
+                                    cryptoCurrencyAmount,
+                                    depositWalletAddress,
+                                    (txHash) => {
+                                        console.log("Flutter callback resolved with txHash:", txHash);
+                                        resolve({ depositId: txHash });
+                                    },
+                                    (error) => {
+                                        console.error("Flutter callback rejected with error:", error);
+                                        reject(error);
+                                    }
+                                );
+                                console.log("Flutter callback invoked successfully");
+                            } catch (e) {
+                                console.error("Exception calling Flutter callback:", e);
+                                reject(e);
+                            }
+                        } else {
+                            console.error("Flutter callback not registered on window");
+                            console.log("Available window properties:", Object.keys(window).filter(k => k.includes('flutter')));
+                            reject(new Error("Flutter callback not registered"));
+                        }
+                    });
+                }
+            }
         });
+
+        // Store SDK instance for handler access
+        currentMoonPaySdk = moonPaySdk;
 
         const urlForSignature = moonPaySdk.generateUrlForSigning();
 

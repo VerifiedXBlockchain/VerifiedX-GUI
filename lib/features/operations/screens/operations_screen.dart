@@ -40,7 +40,8 @@ class OperationsScreen extends BaseScreen {
     return Column(
       children: [
         HomeButtons(
-          includeRestoreHd: ref.watch(walletListProvider.select((v) => v.isEmpty)),
+          includeRestoreHd:
+              ref.watch(walletListProvider.select((v) => v.isEmpty)),
         ),
         SizedBox(
           height: 16,
@@ -65,12 +66,18 @@ class OperationsScreen extends BaseScreen {
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             child: ListView.builder(
-                              controller: ref.read(logProvider.notifier).scrollController,
+                              controller: ref
+                                  .read(logProvider.notifier)
+                                  .scrollController,
                               itemCount: logEntries.length,
                               itemBuilder: (context, index) {
                                 final entry = logEntries[index];
                                 return Padding(
-                                  padding: EdgeInsets.only(top: index == 0 ? 8 : 0, bottom: index + 1 == logEntries.length ? 28 : 0),
+                                  padding: EdgeInsets.only(
+                                      top: index == 0 ? 8 : 0,
+                                      bottom: index + 1 == logEntries.length
+                                          ? 28
+                                          : 0),
                                   child: LogItem(entry),
                                 );
                               },
@@ -103,7 +110,8 @@ class OperationsScreen extends BaseScreen {
                           IconButton(
                             iconSize: 16,
                             onPressed: () {
-                              launchUrl(Uri.parse("https://discord.gg/7cd5ebDQCj"));
+                              launchUrl(
+                                  Uri.parse("https://discord.gg/7cd5ebDQCj"));
                             },
                             icon: FaIcon(
                               FontAwesomeIcons.discord,
@@ -113,7 +121,8 @@ class OperationsScreen extends BaseScreen {
                           IconButton(
                             iconSize: 16,
                             onPressed: () {
-                              launchUrl(Uri.parse("https://github.com/VerifiedXBlockchain"));
+                              launchUrl(Uri.parse(
+                                  "https://github.com/VerifiedXBlockchain"));
                             },
                             icon: FaIcon(
                               FontAwesomeIcons.github,
@@ -126,7 +135,10 @@ class OperationsScreen extends BaseScreen {
                             },
                             child: Text(
                               "Docs",
-                              style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12, decoration: TextDecoration.underline),
+                              style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 12,
+                                  decoration: TextDecoration.underline),
                             ),
                           ),
 
@@ -137,7 +149,7 @@ class OperationsScreen extends BaseScreen {
                         height: 12,
                       ),
                       Text(
-                        "VFX Wallet${Env.isTestNet ? ' [TESTNET]' : ''}\nVersion $APP_VERSION ($APP_VERSION_NICKNAME)",
+                        "VFX Wallet${Env.isDevnet ? '[DEVNET]' : Env.isTestNet ? ' [TESTNET]' : ''}\nVersion $APP_VERSION ($APP_VERSION_NICKNAME)",
                         style: TextStyle(
                           fontSize: 11,
                           color: AppColors.getBlue(ColorShade.s50),
@@ -197,7 +209,8 @@ class NewStatusContainer extends ConsumerWidget {
         if (walletInfo != null)
           _DetailItem(
             label: "Wallet Started",
-            value: ref.watch(sessionProvider.select((v) => v.startTimeFormatted)),
+            value:
+                ref.watch(sessionProvider.select((v) => v.startTimeFormatted)),
             icon: Icons.timer,
           ),
         if (walletInfo?.networkMetrics != null)
@@ -218,7 +231,8 @@ class NewStatusContainer extends ConsumerWidget {
                 onTap: () async {
                   final m = await BridgeService().networkMetrics();
 
-                  final validatorCount = await ExplorerService().validatorCount();
+                  final validatorCount =
+                      await ExplorerService().validatorCount();
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -236,12 +250,22 @@ class NewStatusContainer extends ConsumerWidget {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Block Diff Avg: ${metrics.blockDiffAvg}", style: style),
-                              Text("Block Last Received: ${metrics.blockLastReceived.toLocal()}", style: style),
-                              Text("Block Last Delay: ${metrics.blockLastDelay}", style: style),
-                              Text("Time Since Last Block: ${metrics.timeSinceLastBlockSeconds}s", style: style),
-                              Text("Blocks Averaged: ${metrics.blocksAveraged}", style: style),
-                              if (validatorCount != null) Text("Active Validators: $validatorCount", style: style),
+                              Text("Block Diff Avg: ${metrics.blockDiffAvg}",
+                                  style: style),
+                              Text(
+                                  "Block Last Received: ${metrics.blockLastReceived.toLocal()}",
+                                  style: style),
+                              Text(
+                                  "Block Last Delay: ${metrics.blockLastDelay}",
+                                  style: style),
+                              Text(
+                                  "Time Since Last Block: ${metrics.timeSinceLastBlockSeconds}s",
+                                  style: style),
+                              Text("Blocks Averaged: ${metrics.blocksAveraged}",
+                                  style: style),
+                              if (validatorCount != null)
+                                Text("Active Validators: $validatorCount",
+                                    style: style),
                             ],
                           ),
                           actions: [

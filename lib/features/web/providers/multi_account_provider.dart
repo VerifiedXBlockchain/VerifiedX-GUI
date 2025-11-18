@@ -96,19 +96,80 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
       return;
     }
 
-    final data = state.map((e) {
-      var accountJson = e.toJson();
-
-      // Encrypt private keys if password provided
-      if (encryptionPassword != null) {
-        accountJson = MultiAccountEncryptionService.encryptAccountPrivateKeys(
-            accountJson, encryptionPassword);
-      }
-
-      return jsonEncode(accountJson);
-    }).toList();
+    final storedAccountsMap = _getStoredAccountsMap();
+    final data = state
+        .map((account) => _prepareAccountForStorage(
+            account, storedAccountsMap[account.id], encryptionPassword))
+        .toList();
 
     singleton<Storage>().setList(Storage.MULTIPLE_ACCOUNTS, data);
+  }
+
+  /// Retrieves stored accounts as a map of ID -> JSON
+  Map<int, Map<String, dynamic>> _getStoredAccountsMap() {
+    final storedData = singleton<Storage>().getList(Storage.MULTIPLE_ACCOUNTS);
+    final storedAccountsMap = <int, Map<String, dynamic>>{};
+
+    if (storedData != null) {
+      for (var stored in storedData) {
+        final json = jsonDecode(stored) as Map<String, dynamic>;
+        storedAccountsMap[json['id'] as int] = json;
+      }
+    }
+
+    return storedAccountsMap;
+  }
+
+  /// Prepares an account for storage, handling encryption appropriately
+  String _prepareAccountForStorage(
+    MultiAccountInstance account,
+    Map<String, dynamic>? storedAccount,
+    String? encryptionPassword,
+  ) {
+    var accountJson = account.toJson();
+
+    // Case 1: Account already exists with encryption - preserve encrypted keys
+    if (storedAccount != null &&
+        MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccount)) {
+      return jsonEncode(_mergeWithEncryptedKeys(accountJson, storedAccount));
+    }
+
+    // Case 2: New account being added with encryption
+    if (encryptionPassword != null && storedAccount == null) {
+      accountJson = MultiAccountEncryptionService.encryptAccountPrivateKeys(
+          accountJson, encryptionPassword);
+    }
+
+    // Case 3: No encryption needed or account is unencrypted
+    return jsonEncode(accountJson);
+  }
+
+  /// Merges current account data with encrypted keys from storage
+  Map<String, dynamic> _mergeWithEncryptedKeys(
+    Map<String, dynamic> currentAccountJson,
+    Map<String, dynamic> storedAccount,
+  ) {
+    final merged = Map<String, dynamic>.from(currentAccountJson);
+
+    // Preserve each encrypted keypair from storage
+    _preserveEncryptedKeypair(merged, storedAccount, 'keypair', 'private');
+    _preserveEncryptedKeypair(merged, storedAccount, 'raKeypair', 'private');
+    _preserveEncryptedKeypair(
+        merged, storedAccount, 'btcKeypair', 'privateKey');
+
+    return merged;
+  }
+
+  /// Preserves an encrypted keypair field from stored account
+  void _preserveEncryptedKeypair(
+    Map<String, dynamic> merged,
+    Map<String, dynamic> storedAccount,
+    String keypairKey,
+    String privateKeyField,
+  ) {
+    if (storedAccount[keypairKey]?['_isPrivateEncrypted'] == true) {
+      merged[keypairKey] = storedAccount[keypairKey];
+    }
   }
 }
 

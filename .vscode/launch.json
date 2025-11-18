@@ -25,6 +25,17 @@
             ]
         },
         {
+            "name": "Mac [Devnet]",
+            "type": "dart",
+            "request": "launch",
+            "args": [
+                "-d",
+                "macos",
+                "--dart-define",
+                "DEVNET=true"
+            ]
+        },
+        {
             "name": "Web [Mainnet]",
             "request": "launch",
             "type": "dart",
@@ -46,6 +57,19 @@
                 "42069",
                 "--dart-define",
                 "TESTNET=true"
+            ]
+        },
+        {
+            "name": "Web [Devnet]",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-d",
+                "chrome",
+                "--web-port",
+                "42069",
+                "--dart-define",
+                "DEVNET=true"
             ]
         },
     ]

@@ -748,7 +748,7 @@ Future<void> _showKeysInternal(
                 title: TextFormField(
                   initialValue: keypair.mneumonic!,
                   decoration: const InputDecoration(
-                    label: Text("Recovery Mneumonic"),
+                    label: Text("Recovery Mnemonic"),
                   ),
                   style: const TextStyle(fontSize: 16),
                   readOnly: true,
@@ -760,7 +760,7 @@ Future<void> _showKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.mneumonic));
-                    Toast.message("Mneumonic copied to clipboard");
+                    Toast.message("Mnemonic copied to clipboard");
                   },
                 ),
               ),
@@ -818,8 +818,9 @@ Future<void> _showKeysInternal(
             ListTile(
               leading: isMobile ? null : const Icon(Icons.security),
               title: TextFormField(
-                initialValue:
-                    keypair.btcWif != null ? keypair.private : keypair.private,
+                initialValue: keypair.btcWif != null
+                    ? keypair.private
+                    : keypair.privateCorrected,
                 decoration: InputDecoration(
                   label: Text(
                     "Private Key",
@@ -1057,7 +1058,7 @@ showWebLoginModal(
     context: context,
     builder: (context) {
       return AuthTypeModal(
-        handleMneumonic: () async {
+        handleMnemonic: () async {
           final kind = await showModalBottomSheet(
             context: context,
             builder: (context) {
@@ -1070,7 +1071,7 @@ showWebLoginModal(
                       onTap: () {
                         Navigator.of(context).pop("new");
                       },
-                      title: Text("Create New Mnumonic"),
+                      title: Text("Create New Mnemonic"),
                       trailing: Icon(Icons.chevron_right),
                     ),
                   ),
@@ -1080,7 +1081,7 @@ showWebLoginModal(
                   AppCard(
                     padding: 0,
                     child: ListTile(
-                      title: Text("Recover From  Mnumonic"),
+                      title: Text("Recover From  Mnemonic"),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.of(context).pop("recover");
@@ -1094,8 +1095,8 @@ showWebLoginModal(
 
           if (kind == 'new') {
             final success = await ConfirmDialog.show(
-                title: 'Mneumonic',
-                body: 'Are you sure you want to create a Mneumonic account?');
+                title: 'Mnemonic',
+                body: 'Are you sure you want to create a Mnemonic account?');
             if (success == true) {
               await handleCreateWithMnemonic(context, ref,
                   showRememberMe: showRememberMe);

@@ -73,7 +73,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                       context: context,
                       builder: (context) {
                         return AuthTypeModal(
-                          handleMneumonic: () async {
+                          handleMnemonic: () async {
                             await handleRecoverFromMnemonic(context, ref);
                             if (ref.read(webSessionProvider).isAuthenticated) {
                               // redirectToDashboard();

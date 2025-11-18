@@ -10,6 +10,7 @@ import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
+import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/utils.dart';
@@ -68,13 +69,15 @@ class TokenizedBtcActionButtons extends BaseComponent {
               onPressed: () async {
                 final confirmed = await ConfirmDialog.show(
                   title: "Generate BTC Address",
-                  body: "Are you sure you want to generate this token's BTC address?",
+                  body:
+                      "Are you sure you want to generate this token's BTC address?",
                   confirmText: "Generate",
                   cancelText: "Cancel",
                 );
                 if (confirmed == true) {
                   ref.read(globalLoadingProvider.notifier).start();
-                  final address = await BtcService().generateTokenizedBitcoinAddress(token.smartContractUid);
+                  final address = await BtcService()
+                      .generateTokenizedBitcoinAddress(token.smartContractUid);
                   ref.read(globalLoadingProvider.notifier).complete();
 
                   if (address == null) {
@@ -90,14 +93,20 @@ class TokenizedBtcActionButtons extends BaseComponent {
                         ),
                       );
                   ref.read(tokenizedBitcoinListProvider.notifier).refresh();
-                  ref.read(btcPendingTokenizedAddressListProvider.notifier).addScId(token.smartContractUid);
+                  ref
+                      .read(btcPendingTokenizedAddressListProvider.notifier)
+                      .addScId(token.smartContractUid);
                 }
               },
             ),
           );
         }
 
-        final isOwner = ref.watch(walletListProvider).firstWhereOrNull((w) => w.address == scOwner) != null && scOwner == token.rbxAddress;
+        final isOwner = ref
+                    .watch(walletListProvider)
+                    .firstWhereOrNull((w) => w.address == scOwner) !=
+                null &&
+            scOwner == token.rbxAddress;
 
         return Wrap(
           alignment: WrapAlignment.center,
@@ -119,7 +128,10 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 label: "Fund",
                 icon: Icons.outbox,
                 onPressed: () {
-                  final btcAccounts = ref.watch(btcAccountListProvider).where((a) => a.balance > 0).toList();
+                  final btcAccounts = ref
+                      .watch(btcAccountListProvider)
+                      .where((a) => a.balance > 0)
+                      .toList();
 
                   showModalBottomSheet(
                     context: context,
@@ -130,7 +142,10 @@ class TokenizedBtcActionButtons extends BaseComponent {
                         children: [
                           Text(
                             "Choose BTC Account to Send From",
-                            style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .copyWith(color: Colors.white),
                           ),
                           ListView(
                             shrinkWrap: true,
@@ -148,13 +163,20 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                                       final amount = await PromptModal.show(
                                         title: "BTC Amount",
-                                        validator: (v) => formValidatorNumber(v, "Amount"),
+                                        validator: (v) =>
+                                            formValidatorNumber(v, "Amount"),
                                         labelText: "Amount",
-                                        inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
+                                        inputFormatters: [
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp("[0-9.]"))
+                                        ],
+                                        showUsdValue: true,
+                                        currencyType: CurrencyType.btc,
                                       );
 
                                       if (amount != null) {
-                                        final parsedAmount = double.tryParse(amount);
+                                        final parsedAmount =
+                                            double.tryParse(amount);
 
                                         if (parsedAmount == null) {
                                           Toast.error("Invalid Amount");
@@ -162,16 +184,19 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                         }
 
                                         if (parsedAmount <= 0) {
-                                          Toast.error("Amount must be greater than 0.0 BTC");
+                                          Toast.error(
+                                              "Amount must be greater than 0.0 BTC");
                                           return;
                                         }
 
                                         if (parsedAmount >= account.balance) {
-                                          Toast.error("Insufficient Balance to cover tx and fee. This account only has ${account.balance} BTC.");
+                                          Toast.error(
+                                              "Insufficient Balance to cover tx and fee. This account only has ${account.balance} BTC.");
                                           return;
                                         }
 
-                                        final feeRate = await promptForFeeRate(context);
+                                        final feeRate =
+                                            await promptForFeeRate(context);
 
                                         if (feeRate == null) {
                                           return;
@@ -186,13 +211,18 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                         // }
 
                                         final calculatedFeeRate =
-                                            await BtcService().getFee(account.address, token.btcAddress!, parsedAmount, feeRate);
+                                            await BtcService().getFee(
+                                                account.address,
+                                                token.btcAddress!,
+                                                parsedAmount,
+                                                feeRate);
 
                                         if (calculatedFeeRate == null) {
                                           return;
                                         }
 
-                                        final confirmed = await ConfirmDialog.show(
+                                        final confirmed =
+                                            await ConfirmDialog.show(
                                           title: "Confirm Transaction",
                                           body:
                                               "Sending ${parsedAmount.toStringAsFixed(9)} BTC from ${account.address} to ${token.btcAddress}.\n\nFee:\n${calculatedFeeRate.toStringAsFixed(8)} BTC",
@@ -203,22 +233,30 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                         if (confirmed != true) {
                                           return;
                                         }
-                                        ref.read(globalLoadingProvider.notifier).start();
+                                        ref
+                                            .read(
+                                                globalLoadingProvider.notifier)
+                                            .start();
 
-                                        final result = await BtcService().sendTransaction(
+                                        final result =
+                                            await BtcService().sendTransaction(
                                           amount: parsedAmount,
                                           feeRate: feeRate,
                                           fromAddress: account.address,
                                           toAddress: token.btcAddress!,
                                         );
-                                        ref.read(globalLoadingProvider.notifier).complete();
+                                        ref
+                                            .read(
+                                                globalLoadingProvider.notifier)
+                                            .complete();
 
                                         if (!result.success) {
                                           Toast.error(result.message);
                                           return;
                                         }
                                         final txHash = result.message;
-                                        final message = "BTC TX broadcasted with hash of $txHash";
+                                        final message =
+                                            "BTC TX broadcasted with hash of $txHash";
                                         ref.read(logProvider.notifier).append(
                                               LogEntry(
                                                 message: message,
@@ -226,16 +264,20 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                                 variant: AppColorVariant.Btc,
                                               ),
                                             );
-                                        Toast.message("$amount BTC has been sent to ${token.btcAddress}.");
+                                        Toast.message(
+                                            "$amount BTC has been sent to ${token.btcAddress}.");
 
                                         InfoDialog.show(
                                             title: "Transaction Broadcasted",
-                                            buttonColorOverride: Color(0xfff7931a),
+                                            buttonColorOverride:
+                                                Color(0xfff7931a),
                                             content: ConstrainedBox(
-                                              constraints: BoxConstraints(maxWidth: 600),
+                                              constraints:
+                                                  BoxConstraints(maxWidth: 600),
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
                                                   TextFormField(
                                                     initialValue: txHash,
@@ -244,14 +286,19 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                                       label: Text(
                                                         "Transaction Hash",
                                                         style: TextStyle(
-                                                          color: Color(0xfff7931a),
+                                                          color:
+                                                              Color(0xfff7931a),
                                                         ),
                                                       ),
                                                       suffix: IconButton(
                                                         icon: Icon(Icons.copy),
                                                         onPressed: () async {
-                                                          await Clipboard.setData(ClipboardData(text: txHash));
-                                                          Toast.message("Transaction Hash copied to clipboard");
+                                                          await Clipboard.setData(
+                                                              ClipboardData(
+                                                                  text:
+                                                                      txHash));
+                                                          Toast.message(
+                                                              "Transaction Hash copied to clipboard");
                                                         },
                                                       ),
                                                     ),
@@ -260,14 +307,18 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                                     height: 12,
                                                   ),
                                                   AppButton(
-                                                    label: "Open in BTC Explorer",
-                                                    variant: AppColorVariant.Btc,
+                                                    label:
+                                                        "Open in BTC Explorer",
+                                                    variant:
+                                                        AppColorVariant.Btc,
                                                     type: AppButtonType.Text,
                                                     onPressed: () {
                                                       if (Env.btcIsTestNet) {
-                                                        launchUrlString("https://mempool.space/testnet4/tx/$txHash");
+                                                        launchUrlString(
+                                                            "https://mempool.space/testnet4/tx/$txHash");
                                                       } else {
-                                                        launchUrlString("https://mempool.space/tx/$txHash");
+                                                        launchUrlString(
+                                                            "https://mempool.space/tx/$txHash");
                                                       }
                                                     },
                                                   )
@@ -284,11 +335,14 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 margin: EdgeInsets.symmetric(vertical: 8),
                                 child: ListTile(
                                   title: Text("Manual Send"),
-                                  subtitle: Text("Send coin manually to this token's BTC deposit address"),
+                                  subtitle: Text(
+                                      "Send coin manually to this token's BTC deposit address"),
                                   trailing: Icon(Icons.send),
                                   onTap: () async {
-                                    await Clipboard.setData(ClipboardData(text: token.btcAddress));
-                                    Toast.message("Send funds to ${token.btcAddress} (address copied to clipboard)");
+                                    await Clipboard.setData(
+                                        ClipboardData(text: token.btcAddress));
+                                    Toast.message(
+                                        "Send funds to ${token.btcAddress} (address copied to clipboard)");
                                   },
                                 ),
                               ),
@@ -308,7 +362,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
               variant: AppColorVariant.Primary,
               onPressed: () async {
                 if (isRa) {
-                  Toast.error("Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address");
+                  Toast.error(
+                      "Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address");
                   return;
                 }
 
@@ -325,7 +380,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 if (result is _TransferShareModalResponse) {
                   final confirmed = await ConfirmDialog.show(
                     title: "Withdraw BTC",
-                    body: "Are you sure you want to withdraw ${result.amount} BTC to ${result.toAddress}?",
+                    body:
+                        "Are you sure you want to withdraw ${result.amount} BTC to ${result.toAddress}?",
                   );
 
                   if (confirmed != true) {
@@ -343,11 +399,15 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   ref.read(globalLoadingProvider.notifier).complete();
 
                   if (withdrawlHash != null) {
-                    final message = "BTC Withdrawl TX Broadcasted successfully. Hash: $withdrawlHash";
+                    final message =
+                        "BTC Withdrawl TX Broadcasted successfully. Hash: $withdrawlHash";
                     Toast.message(message);
 
                     ref.read(logProvider.notifier).append(
-                          LogEntry(message: message, variant: AppColorVariant.Btc, textToCopy: withdrawlHash),
+                          LogEntry(
+                              message: message,
+                              variant: AppColorVariant.Btc,
+                              textToCopy: withdrawlHash),
                         );
                   }
                 }
@@ -367,7 +427,10 @@ class TokenizedBtcActionButtons extends BaseComponent {
                         children: [
                           Text(
                             "Transfer",
-                            style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .copyWith(color: Colors.white),
                           ),
                           if (isOwner)
                             AppCard(
@@ -375,7 +438,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               margin: EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
                                 title: Text("Transfer Token Ownership"),
-                                subtitle: Text("Transfer the ownership of this token to another VFX account."),
+                                subtitle: Text(
+                                    "Transfer the ownership of this token to another VFX account."),
                                 trailing: Icon(Icons.chevron_right),
                                 onTap: () {
                                   Navigator.of(context).pop(1);
@@ -389,7 +453,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               title: Text("Transfer vBTC"),
                               // leading: Icon(FontAwesomeIcons.btc),
 
-                              subtitle: Text("Transfer a specific portion of the vBTC within the token to another VFX address."),
+                              subtitle: Text(
+                                  "Transfer a specific portion of the vBTC within the token to another VFX address."),
                               trailing: Icon(Icons.chevron_right),
                               onTap: () {
                                 Navigator.of(context).pop(2);
@@ -412,8 +477,10 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               padding: 0,
                               margin: EdgeInsets.symmetric(vertical: 4),
                               child: ListTile(
-                                title: Text("Transfer Ownership To Reserve/Protected Account"),
-                                subtitle: Text("Transfer the ownership of this token to your reserve/protected account."),
+                                title: Text(
+                                    "Transfer Ownership To Reserve/Protected Account"),
+                                subtitle: Text(
+                                    "Transfer the ownership of this token to your reserve/protected account."),
                                 trailing: Icon(Icons.chevron_right),
                                 onTap: () {
                                   Navigator.of(context).pop(4);
@@ -430,13 +497,16 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                 if (option == 1) {
                   if (token.balance == 0) {
-                    Toast.error("vBTC tokens with zero balance can not be transferred.");
+                    Toast.error(
+                        "vBTC tokens with zero balance can not be transferred.");
                     return;
                   }
-                  final nft = await NftService().retrieve(token.smartContractUid);
+                  final nft =
+                      await NftService().retrieve(token.smartContractUid);
 
                   if (nft == null) {
-                    Toast.error("Could not resolve nft from ${token.smartContractUid}");
+                    Toast.error(
+                        "Could not resolve nft from ${token.smartContractUid}");
                     return;
                   }
                   await initTransferNftProcess(
@@ -462,7 +532,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   if (result is _TransferShareModalResponse) {
                     final confirmed = await ConfirmDialog.show(
                       title: "Transfer BTC",
-                      body: "Are you sure you want to transfer ${result.amount} vBTC to ${result.toAddress}?",
+                      body:
+                          "Are you sure you want to transfer ${result.amount} vBTC to ${result.toAddress}?",
                     );
 
                     if (confirmed != true) {
@@ -470,7 +541,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     }
 
                     if (isRa) {
-                      if (!await passwordRequiredGuardV2(context, ref, token.rbxAddress)) {
+                      if (!await passwordRequiredGuardV2(
+                          context, ref, token.rbxAddress)) {
                         return;
                       }
                     }
@@ -485,26 +557,35 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     ref.read(globalLoadingProvider.notifier).complete();
 
                     if (success) {
-                      const message = "BTC Transfer TX Broadcasted successfully.";
-                      Toast.message("BTC Transfer TX Broadcasted successfully. ");
+                      const message =
+                          "BTC Transfer TX Broadcasted successfully.";
+                      Toast.message(
+                          "BTC Transfer TX Broadcasted successfully. ");
 
                       ref.read(logProvider.notifier).append(
-                            LogEntry(message: message, variant: AppColorVariant.Btc),
+                            LogEntry(
+                                message: message, variant: AppColorVariant.Btc),
                           );
                     }
                   }
                 }
 
                 if (option == 4) {
-                  final nft = await NftService().retrieve(token.smartContractUid);
+                  final nft =
+                      await NftService().retrieve(token.smartContractUid);
                   if (nft == null) {
-                    Toast.error("Could not resolve nft from ${token.smartContractUid}");
+                    Toast.error(
+                        "Could not resolve nft from ${token.smartContractUid}");
                     return;
                   }
 
-                  final wallets = ref.read(walletListProvider).where((w) => w.isReserved).toList();
+                  final wallets = ref
+                      .read(walletListProvider)
+                      .where((w) => w.isReserved)
+                      .toList();
                   if (wallets.isEmpty) {
-                    Toast.error("You don't have any Vault Accounts in this wallet");
+                    Toast.error(
+                        "You don't have any Vault Accounts in this wallet");
                     return;
                   }
 
@@ -554,6 +635,15 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 }
               },
             ),
+            if (isOwner)
+              AppButton(
+                label: "Prove Ownership",
+                icon: Icons.security,
+                onPressed: () {
+                  proveSmartContractOwnership(
+                      context, ref, token.rbxAddress, token.smartContractUid);
+                },
+              ),
             AppButton(
               label: "Borrow/Lend",
               icon: Icons.people,
@@ -704,7 +794,10 @@ class _TransferSharesModal extends BaseComponent {
       children: [
         Text(
           forWithdrawl ? "Withdraw BTC" : "Transfer vBTC",
-          style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
+          style: Theme.of(context)
+              .textTheme
+              .headlineSmall!
+              .copyWith(color: Colors.white),
         ),
         SizedBox(
           height: 8,
@@ -717,7 +810,10 @@ class _TransferSharesModal extends BaseComponent {
               TextFormField(
                 controller: toAddressController,
                 decoration: InputDecoration(
-                  suffix: !forWithdrawl ? AddressChoosingIconButton(controller: toAddressController) : null,
+                  suffix: !forWithdrawl
+                      ? AddressChoosingIconButton(
+                          controller: toAddressController)
+                      : null,
                   label: Text(
                     forWithdrawl ? "To BTC Address" : "To VFX Address",
                     style: TextStyle(color: color),
@@ -743,12 +839,15 @@ class _TransferSharesModal extends BaseComponent {
                     style: TextStyle(color: color),
                   ),
                 ),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
+                ],
               ),
               if (forWithdrawl) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text("Fee Rate: $BTC_WITHDRAWL_FEE_RATE SATS per byte (${satashiToBtcLabel(BTC_WITHDRAWL_FEE_RATE)} BTC per byte)"),
+                  child: Text(
+                      "Fee Rate: $BTC_WITHDRAWL_FEE_RATE SATS per byte (${satashiToBtcLabel(BTC_WITHDRAWL_FEE_RATE)} BTC per byte)"),
                 ),
                 Text(
                   "This is a Multi-signature. The fee rate has been calculated for you.",
@@ -852,7 +951,9 @@ class _TransferSharesModal extends BaseComponent {
                   ),
                   AppButton(
                     label: forWithdrawl ? "Withdraw" : "Transfer",
-                    variant: forWithdrawl ? AppColorVariant.Secondary : AppColorVariant.Btc,
+                    variant: forWithdrawl
+                        ? AppColorVariant.Secondary
+                        : AppColorVariant.Btc,
                     onPressed: () {
                       final toAddress = toAddressController.text.trim();
                       if (toAddress.isEmpty) {
@@ -878,7 +979,8 @@ class _TransferSharesModal extends BaseComponent {
                         Toast.error("Not enough balance");
                         return;
                       }
-                      final result = _TransferShareModalResponse(toAddress: toAddress, amount: amount, feeRate: fee);
+                      final result = _TransferShareModalResponse(
+                          toAddress: toAddress, amount: amount, feeRate: fee);
                       Navigator.of(context).pop(result);
                     },
                   )

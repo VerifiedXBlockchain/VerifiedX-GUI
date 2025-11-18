@@ -26,7 +26,8 @@ class BootContainer extends BaseComponent {
       start = logs.length - maxLogs;
     }
 
-    final List<LogEntry> truncatedLogs = logs.isEmpty ? [] : logs.getRange(start, logs.length - 1).toList();
+    final List<LogEntry> truncatedLogs =
+        logs.isEmpty ? [] : logs.getRange(start, logs.length - 1).toList();
 
     return Column(
       children: [
@@ -37,7 +38,7 @@ class BootContainer extends BaseComponent {
                 child: Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Text(
-                    "VFX Wallet${Env.isTestNet ? ' [TESTNET]' : ''} Version $APP_VERSION ($APP_VERSION_NICKNAME)",
+                    "VFX Wallet${Env.isDevnet ? '[DEVNET]' : Env.isTestNet ? ' [TESTNET]' : ''} Version $APP_VERSION ($APP_VERSION_NICKNAME)",
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.getBlue(
@@ -55,7 +56,8 @@ class BootContainer extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // const CenteredLoader(),
-                      Transform.scale(scale: 2.0, child: RootContainerRotatingCube()),
+                      Transform.scale(
+                          scale: 2.0, child: RootContainerRotatingCube()),
                       const SizedBox(
                         height: 32,
                       ),
@@ -90,19 +92,31 @@ class BootContainer extends BaseComponent {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      "Syncing state treis due to improper shutdown".toUpperCase(),
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Theme.of(context).colorScheme.warning),
+                                      "Syncing state treis due to improper shutdown"
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .warning),
                                     ),
                                     const SizedBox(height: 6),
                                     const Divider(),
                                     Text(
                                       "Block: ${data.block}",
-                                      style: const TextStyle(fontFamily: 'RobotoMono', fontSize: 16, fontWeight: FontWeight.bold),
+                                      style: const TextStyle(
+                                          fontFamily: 'RobotoMono',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     const SizedBox(height: 3),
                                     Text(
                                       "Progress: ${data.percent}",
-                                      style: const TextStyle(fontFamily: 'RobotoMono', fontSize: 16, fontWeight: FontWeight.bold),
+                                      style: const TextStyle(
+                                          fontFamily: 'RobotoMono',
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     const SizedBox(height: 10),
                                     SizedBox(

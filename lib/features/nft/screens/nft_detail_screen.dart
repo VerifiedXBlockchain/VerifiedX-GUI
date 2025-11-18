@@ -45,6 +45,7 @@ import '../components/nft_qr_code.dart';
 import '../components/web_asset_card.dart';
 import '../components/web_asset_thumbnail.dart';
 import '../modals/nft_management_modal.dart';
+import '../models/nft.dart';
 import '../providers/nft_detail_provider.dart';
 import '../utils.dart';
 
@@ -252,13 +253,7 @@ class NftDetailScreen extends BaseScreen {
                       const SizedBox(
                         height: 4,
                       ),
-                      Text(
-                        nft.currentEvolveDescription.replaceAll("\\n", "\n"),
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                            ),
-                      ),
+                      _buildDescriptionWithDecrypt(context, ref, nft),
                     ],
                   ),
                 ),
@@ -624,92 +619,9 @@ class NftDetailScreen extends BaseScreen {
                       label: "Prove Ownership",
                       icon: Icons.security,
                       variant: AppColorVariant.Primary,
-                      onPressed: () async {
-                        String? str;
-
-                        if (kIsWeb) {
-                          final privateKey = nft.currentOwner.startsWith("xRBX")
-                              ? ref.read(webSessionProvider).raKeypair?.private
-                              : ref.read(webSessionProvider).keypair?.private;
-                          final publicKey = nft.currentOwner.startsWith("xRBX")
-                              ? ref.read(webSessionProvider).raKeypair?.public
-                              : ref.read(webSessionProvider).keypair?.public;
-
-                          final address = nft.currentOwner.startsWith("xRBX")
-                              ? ref.read(webSessionProvider).raKeypair?.address
-                              : ref.read(webSessionProvider).keypair?.address;
-                          if (privateKey == null) {
-                            Toast.error("Can't find private key");
-                            return;
-                          }
-                          if (publicKey == null) {
-                            Toast.error("Can't find public key");
-                            return;
-                          }
-
-                          final randomKey = generateRandomString(8,
-                              'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
-                          final timestamp =
-                              (DateTime.now().millisecondsSinceEpoch / 1000)
-                                  .round();
-                          final message = "$randomKey.$timestamp";
-
-                          final sigScript = await RawTransaction.getSignature(
-                              message: message,
-                              privateKey: privateKey,
-                              publicKey: publicKey);
-
-                          if (sigScript == null) {
-                            Toast.error("Could not generate signature");
-                            return;
-                          }
-
-                          str = "$address<>$message<>$sigScript<>${nft.id}";
-                        } else {
-                          str = await NftService().proveOwnership(id);
-                        }
-
-                        if (str == null) {
-                          return;
-                        }
-
-                        InfoDialog.show(
-                          title: "Ownership Verification Signature",
-                          content: SizedBox(
-                            width: 420,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Send this ownership validation signature to prove you are the owner.",
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                TextFormField(
-                                  initialValue: str,
-                                  readOnly: true,
-                                  minLines: 7,
-                                  maxLines: 7,
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Center(
-                                  child: AppButton(
-                                    label: "Copy Signature",
-                                    icon: Icons.copy,
-                                    onPressed: () async {
-                                      await Clipboard.setData(
-                                          ClipboardData(text: str));
-                                      Toast.message(
-                                          "Signature Verification copied to clipboard.");
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                      onPressed: () {
+                        proveSmartContractOwnership(
+                            context, ref, nft.currentOwner, nft.id);
                       },
                     ),
                   ),
@@ -1047,7 +959,7 @@ class NftDetailScreen extends BaseScreen {
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
-                  "NFT assets have not been transfered to the VFX Web Wallet.",
+                  "NFT assets have not been transferred to the VFX Web Wallet.",
                   textAlign: TextAlign.center,
                 ),
                 if (includeButton)
@@ -1071,6 +983,67 @@ class NftDetailScreen extends BaseScreen {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDescriptionWithDecrypt(
+    BuildContext context,
+    WidgetRef ref,
+    Nft nft,
+  ) {
+    // Get user's addresses for checking ownership
+    final List<String> userAddresses = [];
+
+    if (kIsWeb) {
+      final keypair = ref.watch(webSessionProvider.select((value) => value.keypair));
+      if (keypair?.address != null) {
+        userAddresses.add(keypair!.address);
+      }
+    } else {
+      final wallets = ref.watch(walletListProvider);
+      userAddresses.addAll(wallets.map((w) => w.address));
+    }
+
+    final canDecrypt = nft.canDecryptMessage(userAddresses);
+    final hasEncrypted = nft.hasEncryptedMessage;
+    final provider = ref.read(nftDetailProvider(nft.id).notifier);
+    final decryptedMessage = provider.decryptedMessage;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SelectableText(
+          nft.currentEvolveDescription.replaceAll("\\n", "\n"),
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w400,
+              ),
+        ),
+        if (hasEncrypted && canDecrypt && decryptedMessage == null) ...[
+          const SizedBox(height: 8),
+          Center(
+            child: AppButton(
+              label: "Decrypt",
+              icon: Icons.lock_open,
+              variant: AppColorVariant.Success,
+              onPressed: () async {
+                final success = await provider.decryptMessage();
+                if (!success) {
+                  // Error toast already shown in provider
+                }
+              },
+            ),
+          ),
+        ],
+        if (decryptedMessage != null) ...[
+          const SizedBox(height: 8),
+          AppBadge(
+            label: "Decrypted",
+            variant: AppColorVariant.Success,
+          ),
+        ],
+      ],
     );
   }
 }

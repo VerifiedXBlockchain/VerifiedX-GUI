@@ -458,7 +458,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       }
     }
 
-    Toast.error("A problem ocurred", surpressErrors);
+    Toast.error("A problem occurred", surpressErrors);
     return false;
   }
 

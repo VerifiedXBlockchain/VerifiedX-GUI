@@ -44,7 +44,8 @@ class Footer extends BaseComponent {
                       IconButton(
                         iconSize: 16,
                         onPressed: () {
-                          launchUrl(Uri.parse("https://github.com/VerifiedXBlockchain"));
+                          launchUrl(Uri.parse(
+                              "https://github.com/VerifiedXBlockchain"));
                         },
                         icon: FaIcon(
                           FontAwesomeIcons.github,
@@ -57,13 +58,16 @@ class Footer extends BaseComponent {
                         },
                         child: Text(
                           "Wiki",
-                          style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontSize: 12, decoration: TextDecoration.underline),
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: 12,
+                              decoration: TextDecoration.underline),
                         ),
                       ),
                     ],
                   ),
                   Text(
-                    "RBXWallet version $APP_VERSION ${Env.isTestNet ? '[TESTNET]' : ''}",
+                    "VFXWallet version $APP_VERSION ${Env.isDevnet ? '[DEVNET]' : Env.isTestNet ? '[TESTNET]' : ''}",
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(
                           fontSize: 9,
                         ),

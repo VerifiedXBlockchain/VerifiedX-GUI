@@ -56,6 +56,8 @@ import '../web/components/web_qr_scanner.dart';
 import 'navigation/components/web_drawer.dart';
 import 'package:collection/collection.dart';
 import '../../utils/html_helpers.dart';
+import '../../core/storage.dart';
+import '../../core/singletons.dart';
 
 GlobalKey<ScaffoldState> webDashboardScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -73,7 +75,7 @@ class WebRouteIndex {
   static get vbtc => 10;
 }
 
-class WebDashboardContainer extends StatelessWidget {
+class WebDashboardContainer extends ConsumerWidget {
   WebDashboardContainer({Key? key}) : super(key: key);
 
   final List<PageRouteInfo> routes = [
@@ -92,7 +94,37 @@ class WebDashboardContainer extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Check authentication status
+    final session = ref.watch(webSessionProvider);
+
+    // If not authenticated, save the current URL and redirect to auth screen
+    if (!session.isAuthenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final currentUrl = HtmlHelpers().getUrl();
+
+        // Save the intended destination if it's a dashboard route
+        if (currentUrl.contains('/dashboard')) {
+          final hashIndex = currentUrl.indexOf('#');
+          if (hashIndex != -1) {
+            final hashPath = currentUrl.substring(hashIndex + 1);
+            singleton<Storage>()
+                .setString(Storage.PENDING_REDIRECT_URL, hashPath);
+          }
+        }
+
+        // Redirect to auth screen
+        AutoRouter.of(context).replace(const WebAuthRouter());
+      });
+
+      // Return a loading indicator while redirecting
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return AutoTabsScaffold(
       routes: routes,
       scaffoldKey: webDashboardScaffoldKey,
@@ -149,25 +181,26 @@ class _ContentWrapper extends BaseComponent {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // if (Env.isTestNet)
-          //   Container(
-          //     width: double.infinity,
-          //     color: Colors.green.shade800,
-          //     child: const Padding(
-          //       padding: EdgeInsets.all(4.0),
-          //       child: Center(
-          //         child: Text(
-          //           "VFX TESTNET",
-          //           style: TextStyle(
-          //             fontSize: 13,
-          //             letterSpacing: 2,
-          //             fontWeight: FontWeight.bold,
-          //             color: Colors.white,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
+          if (Env.isTestNet || Env.isDevnet)
+            Container(
+              width: double.infinity,
+              color:
+                  Env.isDevnet ? Colors.yellow.shade800 : Colors.green.shade800,
+              child: Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Center(
+                  child: Text(
+                    "VFX ${Env.isDevnet ? 'DEVNET' : "TESTNET"}",
+                    style: TextStyle(
+                      fontSize: 13,
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           if (kIsWeb)
             WebChatNotifier(
                 ref: ref,

@@ -70,6 +70,17 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       );
       // Redirect to auth screen for password entry
       Future.delayed(const Duration(milliseconds: 100), () {
+        // Save current URL if it's a dashboard route
+        final currentUrl = HtmlHelpers().getUrl();
+
+        if (currentUrl.contains('/dashboard')) {
+          final hashIndex = currentUrl.indexOf('#');
+          if (hashIndex != -1) {
+            final hashPath = currentUrl.substring(hashIndex + 1);
+            storage.setString(Storage.PENDING_REDIRECT_URL, hashPath);
+          }
+        }
+
         final context = rootNavigatorKey.currentContext;
         if (context != null) {
           AutoRouter.of(context).replace(const WebAuthRouter());

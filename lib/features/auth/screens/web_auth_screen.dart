@@ -133,7 +133,30 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
 
     ref.read(globalBalancesExpandedProvider.notifier).expand();
 
-    AutoRouter.of(context).push(WebDashboardContainerRoute());
+    // Check for pending redirect URL
+    final storage = singleton<Storage>();
+    final pendingRedirect = storage.getString(Storage.PENDING_REDIRECT_URL);
+
+    if (pendingRedirect != null && pendingRedirect.isNotEmpty) {
+      // Clear the pending redirect
+      storage.remove(Storage.PENDING_REDIRECT_URL);
+
+      try {
+        // Try using navigateNamed first (replaces current route in stack)
+        await AutoRouter.of(context).navigateNamed(pendingRedirect);
+      } catch (e) {
+        try {
+          // Fallback to pushNamed
+          await AutoRouter.of(context).pushNamed(pendingRedirect);
+        } catch (e) {
+          // If both fail, go to dashboard
+          AutoRouter.of(context).push(WebDashboardContainerRoute());
+        }
+      }
+    } else {
+      // Default navigation to dashboard
+      AutoRouter.of(context).push(WebDashboardContainerRoute());
+    }
   }
 
   @override
@@ -270,15 +293,15 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               ),
             ),
 
-          if (Env.isTestNet)
-            const Padding(
+          if (Env.isTestNet || Env.isDevnet)
+            Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: Text(
-                "TESTNET",
+                Env.isDevnet ? 'DEVNET' : "TESTNET",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Env.isDevnet ? Colors.yellow.shade800 : Colors.green,
                     letterSpacing: 2),
               ),
             ),

@@ -131,7 +131,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
 
         if (parsed < BTC_MINIMUM_TX_AMOUNT) {
-          return "The minimum transaction acmount is $BTC_MINIMUM_TX_AMOUNT BTC";
+          return "The minimum transaction amount is $BTC_MINIMUM_TX_AMOUNT BTC";
         }
         return null;
       } else {
@@ -148,7 +148,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
 
         if (parsed < BTC_MINIMUM_TX_AMOUNT) {
-          return "The minimum transaction acmount is $BTC_MINIMUM_TX_AMOUNT BTC";
+          return "The minimum transaction amount is $BTC_MINIMUM_TX_AMOUNT BTC";
         }
 
         return null;
@@ -437,7 +437,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
 
         if (amountDouble < BTC_MINIMUM_TX_AMOUNT) {
-          Toast.error("The minimum transaction acmount is $BTC_MINIMUM_TX_AMOUNT BTC");
+          Toast.error("The minimum transaction amount is $BTC_MINIMUM_TX_AMOUNT BTC");
           return;
         }
 
@@ -573,13 +573,13 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       }
 
       if (amountDouble > currentWallet.balance) {
-        Toast.error("Insufficent balance to send");
+        Toast.error("Insufficient balance to send");
         return;
       }
 
       if (currentWallet.isValidating) {
         if (amountDouble > currentWallet.balance - ASSURED_AMOUNT_TO_VALIDATE) {
-          Toast.error("Insufficent balance since you are validating.");
+          Toast.error("Insufficient balance since you are validating.");
           return;
         }
       }
@@ -598,7 +598,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       }
 
       if (selectedAccount.balance < amountDouble) {
-        Toast.error("Insufficent balance to send");
+        Toast.error("Insufficient balance to send");
         return;
       }
 

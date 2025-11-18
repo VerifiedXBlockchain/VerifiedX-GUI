@@ -125,12 +125,12 @@ class ScWizedCard extends BaseComponent {
                         int v = int.tryParse(value) ?? 1;
                         if (v < 1) {
                           v = 1;
-                          Toast.error("Min quanity is 1.");
+                          Toast.error("Min quantity is 1.");
                         }
 
                         if (v > 100) {
                           v = 100;
-                          Toast.error("Max quanity is 100.");
+                          Toast.error("Max quantity is 100.");
                         }
 
                         provider.updateQuantity(item.index, v);
