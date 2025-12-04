@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/butterfly_create_response.dart';
+import '../models/butterfly_create_link_response.dart';
 import '../models/butterfly_link.dart';
 import '../services/butterfly_service.dart';
 import 'butterfly_links_provider.dart';
@@ -21,7 +21,7 @@ class ButterflyCreationState {
   final double amount;
   final String message;
   final ButterflyIcon icon;
-  final ButterflyCreateResponse? createResponse;
+  final ButterflyCreateLinkResponse? createResponse;
   final String? txHash;
   final String? errorMessage;
   final bool isProcessing;
@@ -44,7 +44,7 @@ class ButterflyCreationState {
     double? amount,
     String? message,
     ButterflyIcon? icon,
-    ButterflyCreateResponse? createResponse,
+    ButterflyCreateLinkResponse? createResponse,
     String? txHash,
     String? errorMessage,
     bool? isProcessing,

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'butterfly_create_response.dart';
+part of 'butterfly_create_link_response.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,13 +14,13 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-ButterflyCreateResponse _$ButterflyCreateResponseFromJson(
+ButterflyCreateLinkResponse _$ButterflyCreateLinkResponseFromJson(
     Map<String, dynamic> json) {
-  return _ButterflyCreateResponse.fromJson(json);
+  return _ButterflyCreateLinkResponse.fromJson(json);
 }
 
 /// @nodoc
-mixin _$ButterflyCreateResponse {
+mixin _$ButterflyCreateLinkResponse {
   @JsonKey(name: 'link_id')
   String get linkId => throw _privateConstructorUsedError;
   String? get uuid => throw _privateConstructorUsedError;
@@ -41,15 +41,17 @@ mixin _$ButterflyCreateResponse {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ButterflyCreateResponseCopyWith<ButterflyCreateResponse> get copyWith =>
-      throw _privateConstructorUsedError;
+  $ButterflyCreateLinkResponseCopyWith<ButterflyCreateLinkResponse>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ButterflyCreateResponseCopyWith<$Res> {
-  factory $ButterflyCreateResponseCopyWith(ButterflyCreateResponse value,
-          $Res Function(ButterflyCreateResponse) then) =
-      _$ButterflyCreateResponseCopyWithImpl<$Res, ButterflyCreateResponse>;
+abstract class $ButterflyCreateLinkResponseCopyWith<$Res> {
+  factory $ButterflyCreateLinkResponseCopyWith(
+          ButterflyCreateLinkResponse value,
+          $Res Function(ButterflyCreateLinkResponse) then) =
+      _$ButterflyCreateLinkResponseCopyWithImpl<$Res,
+          ButterflyCreateLinkResponse>;
   @useResult
   $Res call(
       {@JsonKey(name: 'link_id') String linkId,
@@ -65,10 +67,10 @@ abstract class $ButterflyCreateResponseCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ButterflyCreateResponseCopyWithImpl<$Res,
-        $Val extends ButterflyCreateResponse>
-    implements $ButterflyCreateResponseCopyWith<$Res> {
-  _$ButterflyCreateResponseCopyWithImpl(this._value, this._then);
+class _$ButterflyCreateLinkResponseCopyWithImpl<$Res,
+        $Val extends ButterflyCreateLinkResponse>
+    implements $ButterflyCreateLinkResponseCopyWith<$Res> {
+  _$ButterflyCreateLinkResponseCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -135,11 +137,12 @@ class _$ButterflyCreateResponseCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_ButterflyCreateResponseCopyWith<$Res>
-    implements $ButterflyCreateResponseCopyWith<$Res> {
-  factory _$$_ButterflyCreateResponseCopyWith(_$_ButterflyCreateResponse value,
-          $Res Function(_$_ButterflyCreateResponse) then) =
-      __$$_ButterflyCreateResponseCopyWithImpl<$Res>;
+abstract class _$$_ButterflyCreateLinkResponseCopyWith<$Res>
+    implements $ButterflyCreateLinkResponseCopyWith<$Res> {
+  factory _$$_ButterflyCreateLinkResponseCopyWith(
+          _$_ButterflyCreateLinkResponse value,
+          $Res Function(_$_ButterflyCreateLinkResponse) then) =
+      __$$_ButterflyCreateLinkResponseCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -156,12 +159,13 @@ abstract class _$$_ButterflyCreateResponseCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_ButterflyCreateResponseCopyWithImpl<$Res>
-    extends _$ButterflyCreateResponseCopyWithImpl<$Res,
-        _$_ButterflyCreateResponse>
-    implements _$$_ButterflyCreateResponseCopyWith<$Res> {
-  __$$_ButterflyCreateResponseCopyWithImpl(_$_ButterflyCreateResponse _value,
-      $Res Function(_$_ButterflyCreateResponse) _then)
+class __$$_ButterflyCreateLinkResponseCopyWithImpl<$Res>
+    extends _$ButterflyCreateLinkResponseCopyWithImpl<$Res,
+        _$_ButterflyCreateLinkResponse>
+    implements _$$_ButterflyCreateLinkResponseCopyWith<$Res> {
+  __$$_ButterflyCreateLinkResponseCopyWithImpl(
+      _$_ButterflyCreateLinkResponse _value,
+      $Res Function(_$_ButterflyCreateLinkResponse) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -178,7 +182,7 @@ class __$$_ButterflyCreateResponseCopyWithImpl<$Res>
     Object? tokenSymbol = freezed,
     Object? chain = freezed,
   }) {
-    return _then(_$_ButterflyCreateResponse(
+    return _then(_$_ButterflyCreateLinkResponse(
       linkId: null == linkId
           ? _value.linkId
           : linkId // ignore: cast_nullable_to_non_nullable
@@ -225,8 +229,8 @@ class __$$_ButterflyCreateResponseCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_ButterflyCreateResponse extends _ButterflyCreateResponse {
-  const _$_ButterflyCreateResponse(
+class _$_ButterflyCreateLinkResponse extends _ButterflyCreateLinkResponse {
+  const _$_ButterflyCreateLinkResponse(
       {@JsonKey(name: 'link_id')
           required this.linkId,
       this.uuid,
@@ -246,8 +250,8 @@ class _$_ButterflyCreateResponse extends _ButterflyCreateResponse {
       : _rawTransaction = rawTransaction,
         super._();
 
-  factory _$_ButterflyCreateResponse.fromJson(Map<String, dynamic> json) =>
-      _$$_ButterflyCreateResponseFromJson(json);
+  factory _$_ButterflyCreateLinkResponse.fromJson(Map<String, dynamic> json) =>
+      _$$_ButterflyCreateLinkResponseFromJson(json);
 
   @override
   @JsonKey(name: 'link_id')
@@ -286,14 +290,14 @@ class _$_ButterflyCreateResponse extends _ButterflyCreateResponse {
 
   @override
   String toString() {
-    return 'ButterflyCreateResponse(linkId: $linkId, uuid: $uuid, shortUrl: $shortUrl, fullUrl: $fullUrl, status: $status, escrowAddress: $escrowAddress, rawTransaction: $rawTransaction, amount: $amount, tokenSymbol: $tokenSymbol, chain: $chain)';
+    return 'ButterflyCreateLinkResponse(linkId: $linkId, uuid: $uuid, shortUrl: $shortUrl, fullUrl: $fullUrl, status: $status, escrowAddress: $escrowAddress, rawTransaction: $rawTransaction, amount: $amount, tokenSymbol: $tokenSymbol, chain: $chain)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_ButterflyCreateResponse &&
+            other is _$_ButterflyCreateLinkResponse &&
             (identical(other.linkId, linkId) || other.linkId == linkId) &&
             (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.shortUrl, shortUrl) ||
@@ -328,21 +332,21 @@ class _$_ButterflyCreateResponse extends _ButterflyCreateResponse {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_ButterflyCreateResponseCopyWith<_$_ButterflyCreateResponse>
-      get copyWith =>
-          __$$_ButterflyCreateResponseCopyWithImpl<_$_ButterflyCreateResponse>(
-              this, _$identity);
+  _$$_ButterflyCreateLinkResponseCopyWith<_$_ButterflyCreateLinkResponse>
+      get copyWith => __$$_ButterflyCreateLinkResponseCopyWithImpl<
+          _$_ButterflyCreateLinkResponse>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_ButterflyCreateResponseToJson(
+    return _$$_ButterflyCreateLinkResponseToJson(
       this,
     );
   }
 }
 
-abstract class _ButterflyCreateResponse extends ButterflyCreateResponse {
-  const factory _ButterflyCreateResponse(
+abstract class _ButterflyCreateLinkResponse
+    extends ButterflyCreateLinkResponse {
+  const factory _ButterflyCreateLinkResponse(
       {@JsonKey(name: 'link_id')
           required final String linkId,
       final String? uuid,
@@ -358,11 +362,11 @@ abstract class _ButterflyCreateResponse extends ButterflyCreateResponse {
       required final double amount,
       @JsonKey(name: 'token_symbol')
           final String? tokenSymbol,
-      final String? chain}) = _$_ButterflyCreateResponse;
-  const _ButterflyCreateResponse._() : super._();
+      final String? chain}) = _$_ButterflyCreateLinkResponse;
+  const _ButterflyCreateLinkResponse._() : super._();
 
-  factory _ButterflyCreateResponse.fromJson(Map<String, dynamic> json) =
-      _$_ButterflyCreateResponse.fromJson;
+  factory _ButterflyCreateLinkResponse.fromJson(Map<String, dynamic> json) =
+      _$_ButterflyCreateLinkResponse.fromJson;
 
   @override
   @JsonKey(name: 'link_id')
@@ -392,6 +396,6 @@ abstract class _ButterflyCreateResponse extends ButterflyCreateResponse {
   String? get chain;
   @override
   @JsonKey(ignore: true)
-  _$$_ButterflyCreateResponseCopyWith<_$_ButterflyCreateResponse>
+  _$$_ButterflyCreateLinkResponseCopyWith<_$_ButterflyCreateLinkResponse>
       get copyWith => throw _privateConstructorUsedError;
 }

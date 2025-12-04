@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'butterfly_create_response.dart';
+part of 'butterfly_create_link_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_ButterflyCreateResponse _$$_ButterflyCreateResponseFromJson(
+_$_ButterflyCreateLinkResponse _$$_ButterflyCreateLinkResponseFromJson(
         Map<String, dynamic> json) =>
-    _$_ButterflyCreateResponse(
+    _$_ButterflyCreateLinkResponse(
       linkId: json['link_id'] as String,
       uuid: json['uuid'] as String?,
       shortUrl: json['short_url'] as String,
@@ -21,8 +21,8 @@ _$_ButterflyCreateResponse _$$_ButterflyCreateResponseFromJson(
       chain: json['chain'] as String?,
     );
 
-Map<String, dynamic> _$$_ButterflyCreateResponseToJson(
-        _$_ButterflyCreateResponse instance) =>
+Map<String, dynamic> _$$_ButterflyCreateLinkResponseToJson(
+        _$_ButterflyCreateLinkResponse instance) =>
     <String, dynamic>{
       'link_id': instance.linkId,
       'uuid': instance.uuid,

@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
-import '../models/butterfly_create_response.dart';
+import '../models/butterfly_create_link_response.dart';
 import '../models/butterfly_link.dart';
 import '../models/butterfly_status_response.dart';
 import '../models/onramp_purchase_details.dart';
@@ -75,7 +75,7 @@ class ButterflyService extends BaseService {
   }
 
   /// Creates a new Butterfly payment link
-  Future<ButterflyCreateResponse?> createButterflyLink({
+  Future<ButterflyCreateLinkResponse?> createButterflyLink({
     required double amount,
     String message = 'Payment from VFX Wallet',
     ButterflyIcon icon = ButterflyIcon.defaultIcon,
@@ -94,7 +94,7 @@ class ButterflyService extends BaseService {
         'icon': _iconToString(icon),
         'message': message,
       });
-      return ButterflyCreateResponse.fromJson(response.data);
+      return ButterflyCreateLinkResponse.fromJson(response.data);
     } catch (e) {
       print('Error creating Butterfly link: $e');
       return null;

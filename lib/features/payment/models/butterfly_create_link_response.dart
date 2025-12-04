@@ -1,13 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'butterfly_create_response.freezed.dart';
-part 'butterfly_create_response.g.dart';
+part 'butterfly_create_link_response.freezed.dart';
+part 'butterfly_create_link_response.g.dart';
 
 @freezed
-class ButterflyCreateResponse with _$ButterflyCreateResponse {
-  const ButterflyCreateResponse._();
+class ButterflyCreateLinkResponse with _$ButterflyCreateLinkResponse {
+  const ButterflyCreateLinkResponse._();
 
-  const factory ButterflyCreateResponse({
+  const factory ButterflyCreateLinkResponse({
     @JsonKey(name: 'link_id') required String linkId,
     String? uuid,
     @JsonKey(name: 'short_url') required String shortUrl,
@@ -18,10 +18,10 @@ class ButterflyCreateResponse with _$ButterflyCreateResponse {
     required double amount,
     @JsonKey(name: 'token_symbol') String? tokenSymbol,
     String? chain,
-  }) = _ButterflyCreateResponse;
+  }) = _ButterflyCreateLinkResponse;
 
-  factory ButterflyCreateResponse.fromJson(Map<String, dynamic> json) =>
-      _$ButterflyCreateResponseFromJson(json);
+  factory ButterflyCreateLinkResponse.fromJson(Map<String, dynamic> json) =>
+      _$ButterflyCreateLinkResponseFromJson(json);
 
   double get amountDouble => amount;
 }

@@ -10,7 +10,7 @@ import '../../price/providers/price_detail_providers.dart';
 import '../models/butterfly_link.dart';
 import '../providers/butterfly_creation_provider.dart';
 
-class ButterflyCreationDialog extends ConsumerStatefulWidget {
+class ButterflyCreateLinkDialog extends ConsumerStatefulWidget {
   final double amount;
   final String message;
   final ButterflyIcon icon;
@@ -18,7 +18,7 @@ class ButterflyCreationDialog extends ConsumerStatefulWidget {
   final Future<String?> Function(double amount, String toAddress) sendTransaction;
   final VoidCallback? onComplete;
 
-  const ButterflyCreationDialog({
+  const ButterflyCreateLinkDialog({
     super.key,
     required this.amount,
     required this.message,
@@ -29,12 +29,12 @@ class ButterflyCreationDialog extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ButterflyCreationDialog> createState() =>
-      _ButterflyCreationDialogState();
+  ConsumerState<ButterflyCreateLinkDialog> createState() =>
+      _ButterflyCreateLinkDialogState();
 }
 
-class _ButterflyCreationDialogState
-    extends ConsumerState<ButterflyCreationDialog> {
+class _ButterflyCreateLinkDialogState
+    extends ConsumerState<ButterflyCreateLinkDialog> {
   @override
   void initState() {
     super.initState();

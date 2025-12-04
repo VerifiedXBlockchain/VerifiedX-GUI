@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
-import '../components/butterfly_form.dart';
+import '../components/butterfly_link_form.dart';
 
 class ButterflyScreen extends BaseScreen {
   final String walletAddress;
@@ -29,7 +29,7 @@ class ButterflyScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
-      child: ButterflyForm(
+      child: ButterflyLinkForm(
         walletAddress: walletAddress,
         balance: balance,
         sendTransaction: sendTransaction,

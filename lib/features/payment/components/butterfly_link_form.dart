@@ -6,16 +6,16 @@ import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../models/butterfly_link.dart';
 import '../providers/butterfly_links_provider.dart';
-import 'butterfly_creation_dialog.dart';
+import 'butterfly_create_link_dialog.dart';
 import 'butterfly_icon_selector.dart';
 import 'butterfly_link_card.dart';
 
-class ButterflyForm extends ConsumerStatefulWidget {
+class ButterflyLinkForm extends ConsumerStatefulWidget {
   final String walletAddress;
   final double balance;
   final Future<String?> Function(double amount, String toAddress) sendTransaction;
 
-  const ButterflyForm({
+  const ButterflyLinkForm({
     super.key,
     required this.walletAddress,
     required this.balance,
@@ -23,10 +23,10 @@ class ButterflyForm extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<ButterflyForm> createState() => _ButterflyFormState();
+  ConsumerState<ButterflyLinkForm> createState() => _ButterflyLinkFormState();
 }
 
-class _ButterflyFormState extends ConsumerState<ButterflyForm> {
+class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   final _messageController = TextEditingController();
@@ -65,7 +65,7 @@ class _ButterflyFormState extends ConsumerState<ButterflyForm> {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => ButterflyCreationDialog(
+        builder: (context) => ButterflyCreateLinkDialog(
           amount: amount,
           message: message,
           icon: _selectedIcon,
