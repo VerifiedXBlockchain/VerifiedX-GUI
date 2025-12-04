@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
-import 'package:rbx_wallet/features/payment/services/onramp_service.dart';
+import 'package:rbx_wallet/features/payment/services/butterfly_service.dart';
 import '../../app.dart';
 import '../../core/app_constants.dart';
 import '../../core/components/buttons.dart';
@@ -648,7 +648,7 @@ class AccountUtils {
           }
           ref.read(globalLoadingProvider.notifier).start();
 
-          final result = await OnrampService()
+          final result = await ButterflyService()
               .getQuote(amount: amount, vfxAddress: address);
           ref.read(globalLoadingProvider.notifier).complete();
 
@@ -1261,7 +1261,7 @@ class AccountUtils {
       ref.read(globalLoadingProvider.notifier).start();
 
       final result =
-          await OnrampService().getQuote(amount: amount, vfxAddress: address);
+          await ButterflyService().getQuote(amount: amount, vfxAddress: address);
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (result == null) {
