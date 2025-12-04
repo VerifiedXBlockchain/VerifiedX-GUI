@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app_constants.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/components/currency_segmented_button.dart';
@@ -56,7 +57,7 @@ class SendScreen extends BaseScreen {
                 btcAccount: currentBtcAccount,
               ),
                   // Show Payment Link button only for VFX
-        if (!isBtc && currentWallet != null)
+        if (BUTTERFLY_ENABLED && !isBtc && currentWallet != null)
           Padding(
             padding: const EdgeInsets.all(16),
             child: AppButton(

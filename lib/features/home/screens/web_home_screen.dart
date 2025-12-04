@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
+import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/features/misc/providers/global_balances_expanded_provider.dart';
 import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -29,6 +30,8 @@ import '../../web/components/web_wallet_mobile_account_info.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
 
 import '../../../core/dialogs.dart';
+import '../../../core/services/butterfly_bridge_url_service.dart';
+import '../../../core/services/password_prompt_service.dart';
 import '../../web/components/web_wordmark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -569,6 +572,55 @@ class _Actions extends BaseComponent {
               //   },
               // ),
 
+              if (BUTTERFLY_ENABLED && ref.read(webSessionProvider).keypair != null && !isMobile)
+                AppVerticalIconButton(
+                  label: "Login to\nButterfly",
+                  prettyIconType: PrettyIconType.custom,
+                  icon: FontAwesomeIcons.wallet,
+                  iconScale: 0.7,
+                  onPressed: () async {
+                    final keypair = ref.read(webSessionProvider).keypair;
+                    if (keypair == null) {
+                      Toast.error("No wallet selected.");
+                      return;
+                    }
+
+                    final password = await PasswordPromptService.promptNewPassword(
+                      rootNavigatorKey.currentContext!,
+                      title: "Create Butterfly Password",
+                      customMessage: "Create a password to securely transfer your credentials to Butterfly. You will need to enter this same password on the Butterfly website.",
+                    );
+
+                    if (password == null) return;
+
+                    final confirmed = await ConfirmDialog.show(
+                      title: "Login to Butterfly",
+                      body: "You are about to open Butterfly and log in with:\n\n${keypair.address}\n\nContinue?",
+                      confirmText: "Open Butterfly",
+                      cancelText: "Cancel",
+                    );
+
+                    if (confirmed != true) return;
+
+                    try {
+                      ref.read(globalLoadingProvider.notifier).start();
+                      await Future.delayed(Duration(milliseconds: 250));
+                      final url = ButterflyBridgeUrlService.createBridgeUrl(
+                        privateKey: keypair.privateCorrected,
+                        password: password,
+                        address: keypair.address,
+                        publicKey: keypair.public,
+                        targetBaseUrl: Env.butterflyWebBaseUrl,
+                      );
+                      ref.read(globalLoadingProvider.notifier).complete();
+                      await launchUrlString(url, mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      ref.read(globalLoadingProvider.notifier).complete();
+                      Toast.error("Failed to generate login URL: $e");
+                    }
+                  },
+                  color: AppColors.getWhite(ColorShade.s200),
+                ),
               if (ref.read(webSessionProvider).keypair != null && !isMobile)
                 AppVerticalIconButton(
                   label: "Sign\nOut",

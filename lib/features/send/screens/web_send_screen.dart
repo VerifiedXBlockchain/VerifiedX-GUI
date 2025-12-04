@@ -109,7 +109,7 @@ class WebSendScreen extends BaseScreen {
                 ),
               ),
               // Show Payment Link button only for VFX
-              if (!isBtc)
+              if (BUTTERFLY_ENABLED && !isBtc)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: AppButton(
