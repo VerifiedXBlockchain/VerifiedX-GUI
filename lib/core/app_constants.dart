@@ -9,7 +9,7 @@ final APP_VERSION =
 const APP_VERSION_NICKNAME = "Switchblade";
 
 const ALLOW_PAYMENT = true;
-const BUTTERFLY_ENABLED = true;
+const BUTTERFLY_ENABLED = kDebugMode;
 
 const REFRESH_TIMEOUT_SECONDS = 30;
 const REFRESH_TIMEOUT_SECONDS_WEB_BTC = 90;

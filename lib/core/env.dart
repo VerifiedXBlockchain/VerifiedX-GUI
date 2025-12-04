@@ -180,7 +180,6 @@ class Env {
 
   static String get butterflyApiBaseUrl {
 
-    if (_isTestnet) return 'https://api-testnet.befree.io';
     return 'https://api.befree.io';
     // return 'http://localhost:8000';
   }
