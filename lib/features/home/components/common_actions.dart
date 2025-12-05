@@ -1,9 +1,14 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rbx_wallet/core/app_constants.dart';
 import 'package:rbx_wallet/core/app_router.gr.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
+import 'package:rbx_wallet/core/providers/web_session_provider.dart';
+import 'package:rbx_wallet/core/services/butterfly_bridge_url_service.dart';
+import 'package:rbx_wallet/core/services/password_prompt_service.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/utils/toast.dart';
@@ -92,7 +97,8 @@ class CommonActions extends BaseComponent {
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {
-                  RootContainerUtils.navigateToTab(context, RootTab.transactions);
+                  RootContainerUtils.navigateToTab(
+                      context, RootTab.transactions);
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
@@ -133,7 +139,8 @@ class CommonActions extends BaseComponent {
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
                 onPressed: () async {
-                  launchUrlString("https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
+                  launchUrlString(
+                      "https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
@@ -144,7 +151,8 @@ class CommonActions extends BaseComponent {
                 onPressed: () async {
                   final sig = await PromptModal.show(
                     title: "Validate Ownership",
-                    body: "Paste in the signature provided by the owner to validate its ownership.",
+                    body:
+                        "Paste in the signature provided by the owner to validate its ownership.",
                     validator: (val) => formValidatorNotEmpty(val, "Signature"),
                     labelText: "Signature",
                   );
@@ -164,19 +172,30 @@ class CommonActions extends BaseComponent {
                     if (verified == null) {
                       return;
                     }
-                    final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
+                    final color = verified
+                        ? Theme.of(context).colorScheme.success
+                        : Theme.of(context).colorScheme.danger;
                     final iconData = verified ? Icons.check : Icons.close;
                     final title = verified ? "Verified" : "Not Verified";
-                    final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
-                    final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
+                    final subtitle = verified
+                        ? "Ownership Verified"
+                        : "Ownership NOT Verified";
+                    final body = verified
+                        ? "$address\nOWNS\n$scId"
+                        : "$address\ndoes NOT own\n$scId";
 
                     InfoDialog.show(
                       title: title,
-                      content: NftVerificationSuccessDialog(iconData: iconData, color: color, subtitle: subtitle, body: body),
+                      content: NftVerificationSuccessDialog(
+                          iconData: iconData,
+                          color: color,
+                          subtitle: subtitle,
+                          body: body),
                     );
                   }
                 },
               ),
+
               AppVerticalIconButton(
                 label: "Open\nExplorer",
                 icon: Icons.open_in_browser,
@@ -189,6 +208,86 @@ class CommonActions extends BaseComponent {
                   );
                 },
               ),
+              if (BUTTERFLY_ENABLED)
+                AppVerticalIconButton(
+                  label: "Login to\nButterfly",
+                  prettyIconType: PrettyIconType.butterfly,
+                  icon: FontAwesomeIcons.wallet,
+                  iconScale: 0.7,
+                  onPressed: () async {
+                    // Get wallet keys based on platform
+                    String? privateKey;
+                    String? publicKey;
+                    String? address;
+
+                    if (kIsWeb) {
+                      final keypair = ref.read(webSessionProvider).keypair;
+                      if (keypair == null) {
+                        Toast.error(
+                            "No wallet selected. Please create or import a wallet first.");
+                        return;
+                      }
+                      privateKey = keypair.privateCorrected;
+                      publicKey = keypair.public;
+                      address = keypair.address;
+                    } else {
+                      final wallet = ref.read(sessionProvider).currentWallet;
+                      if (wallet == null) {
+                        Toast.error("No Account Selected");
+                        return;
+                      }
+                      if (wallet.privateKey == null) {
+                        Toast.error("Private key not available.");
+                        return;
+                      }
+                      privateKey = wallet.privateKey!;
+                      publicKey = wallet.publicKey;
+                      address = wallet.address;
+                    }
+
+                    // Prompt for password
+                    final password =
+                        await PasswordPromptService.promptNewPassword(
+                      rootNavigatorKey.currentContext!,
+                      title: "Create Butterfly Password",
+                      customMessage:
+                          "Create a password to securely transfer your credentials to Butterfly. You will need to enter this same password on the Butterfly website.",
+                    );
+
+                    if (password == null) return;
+
+                    // Confirmation dialog
+                    final confirmed = await ConfirmDialog.show(
+                      title: "Login to Butterfly",
+                      body:
+                          "You are about to open Butterfly and log in with:\n\n$address\n\nContinue?",
+                      confirmText: "Open Butterfly",
+                      cancelText: "Cancel",
+                    );
+
+                    if (confirmed != true) return;
+
+                    // Generate encrypted URL and launch
+                    try {
+                      ref.read(globalLoadingProvider.notifier).start();
+                      await Future.delayed(Duration(milliseconds: 250));
+                      final url = ButterflyBridgeUrlService.createBridgeUrl(
+                        privateKey: privateKey,
+                        password: password,
+                        address: address,
+                        publicKey: publicKey,
+                        targetBaseUrl: Env.butterflyWebBaseUrl,
+                      );
+                      ref.read(globalLoadingProvider.notifier).complete();
+                      await launchUrlString(url,
+                          mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      ref.read(globalLoadingProvider.notifier).complete();
+                      Toast.error("Failed to generate login URL: $e");
+                    }
+                  },
+                  color: AppColors.getWhite(ColorShade.s200),
+                ),
             ],
           ),
         ),

@@ -36,7 +36,7 @@ abstract class Storage {
   static const STORED_PASSWORD_HASH = "STORED_PASSWORD_HASH";
   static const WEB_PRIMARY_ADDRESS = "WEB_PRIMARY_ADDRESS";
   static const PENDING_REDIRECT_URL = "PENDING_REDIRECT_URL";
-
+  static const BUTTERFLY_LINKS = "BUTTERFLY_LINKS";
   bool isInitialized = false;
 
   Future<void> init();

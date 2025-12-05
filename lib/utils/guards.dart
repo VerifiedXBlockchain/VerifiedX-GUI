@@ -8,7 +8,8 @@ import '../features/bridge/providers/wallet_info_provider.dart';
 import 'toast.dart';
 
 bool guardWalletIsSynced(Ref ref) {
-  if (ref.read(walletInfoProvider) == null || !ref.read(walletInfoProvider)!.isChainSynced) {
+  if (ref.read(walletInfoProvider) == null ||
+      !ref.read(walletInfoProvider)!.isChainSynced) {
     Toast.error("Please wait until your wallet is synced with the network");
     return false;
   }
@@ -17,8 +18,15 @@ bool guardWalletIsSynced(Ref ref) {
 }
 
 bool widgetGuardWalletIsSynced(WidgetRef ref) {
-  if (ref.read(walletInfoProvider) == null || !ref.read(walletInfoProvider)!.isChainSynced) {
+  if (ref.read(walletInfoProvider) == null ||
+      !ref.read(walletInfoProvider)!.isChainSynced) {
+    if (kDebugMode) {
+      Toast.error(
+          "Please wait until your wallet is synced with the network. In debug mode, you shall pass.");
+      return true;
+    }
     Toast.error("Please wait until your wallet is synced with the network");
+
     return false;
   }
 
@@ -50,7 +58,9 @@ bool guardWalletIsNotResyncing(Ref ref, [bool showMessage = true]) {
 }
 
 Future<bool> guardWebAuthorized(WidgetRef ref, String expectedAddress) async {
-  final address = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+  final address = kIsWeb
+      ? ref.read(webSessionProvider).keypair?.address
+      : ref.read(sessionProvider).currentWallet?.address;
 
   if (address != expectedAddress) {
     return false;
@@ -71,12 +81,15 @@ Future<bool> guardWebAuthorized(WidgetRef ref, String expectedAddress) async {
   return false;
 }
 
-Future<bool> guardWebAuthorizedFromProvider(Ref ref, String? expectedAddress, [bool withError = true]) async {
+Future<bool> guardWebAuthorizedFromProvider(Ref ref, String? expectedAddress,
+    [bool withError = true]) async {
   if (expectedAddress == null) {
     print("Address was null");
     return false;
   }
-  final address = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
+  final address = kIsWeb
+      ? ref.read(webSessionProvider).keypair?.address
+      : ref.read(sessionProvider).currentWallet?.address;
 
   if (address != expectedAddress) {
     if (withError) {

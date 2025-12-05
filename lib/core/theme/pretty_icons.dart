@@ -18,6 +18,7 @@ enum PrettyIconType {
   transactions('transactions'),
   validator('validator'),
   custom('custom'),
+  butterfly('butterfly'),
   topCards('custom', 1.4),
   ;
 

@@ -32,63 +32,6 @@ class $AssetsDocsGen {
   List<String> get values => [nftMetadataExampleCsv, nftMetadataExampleJson];
 }
 
-class $AssetsEnvGen {
-  const $AssetsEnvGen();
-
-  /// File path: assets/env/block_explorer_test_net_env
-  String get blockExplorerTestNetEnv =>
-      'assets/env/block_explorer_test_net_env';
-
-  /// File path: assets/env/dev_env
-  String get devEnv => 'assets/env/dev_env';
-
-  /// File path: assets/env/dev_win_env
-  String get devWinEnv => 'assets/env/dev_win_env';
-
-  /// File path: assets/env/local_testnet_env
-  String get localTestnetEnv => 'assets/env/local_testnet_env';
-
-  /// File path: assets/env/mac_dev_env
-  String get macDevEnv => 'assets/env/mac_dev_env';
-
-  /// File path: assets/env/mac_testnet_env
-  String get macTestnetEnv => 'assets/env/mac_testnet_env';
-
-  /// File path: assets/env/release_env
-  String get releaseEnv => 'assets/env/release_env';
-
-  /// File path: assets/env/release_testnet
-  String get releaseTestnet => 'assets/env/release_testnet';
-
-  /// File path: assets/env/web_dev_env
-  String get webDevEnv => 'assets/env/web_dev_env';
-
-  /// File path: assets/env/web_env
-  String get webEnv => 'assets/env/web_env';
-
-  /// File path: assets/env/web_local_env
-  String get webLocalEnv => 'assets/env/web_local_env';
-
-  /// File path: assets/env/win_testnet_env
-  String get winTestnetEnv => 'assets/env/win_testnet_env';
-
-  /// List of all assets
-  List<String> get values => [
-        blockExplorerTestNetEnv,
-        devEnv,
-        devWinEnv,
-        localTestnetEnv,
-        macDevEnv,
-        macTestnetEnv,
-        releaseEnv,
-        releaseTestnet,
-        webDevEnv,
-        webEnv,
-        webLocalEnv,
-        winTestnetEnv
-      ];
-}
-
 class $AssetsFontsGen {
   const $AssetsFontsGen();
 
@@ -158,6 +101,14 @@ class $AssetsImagesGen {
   AssetGenImage get animatedCubeFast =>
       const AssetGenImage('assets/images/animated_cube_fast.gif');
 
+  /// File path: assets/images/butterfly_icon.png
+  AssetGenImage get butterflyIcon =>
+      const AssetGenImage('assets/images/butterfly_icon.png');
+
+  /// File path: assets/images/butterfly_wordmark.png
+  AssetGenImage get butterflyWordmark =>
+      const AssetGenImage('assets/images/butterfly_wordmark.png');
+
   $AssetsImagesConnectorGen get connector => const $AssetsImagesConnectorGen();
 
   /// File path: assets/images/connector1.png
@@ -167,6 +118,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/connector2.png
   AssetGenImage get connector2 =>
       const AssetGenImage('assets/images/connector2.png');
+
+  /// File path: assets/images/crypto_dot_com_icon.png
+  AssetGenImage get cryptoDotComIcon =>
+      const AssetGenImage('assets/images/crypto_dot_com_icon.png');
 
   /// File path: assets/images/cube_still.png
   AssetGenImage get cubeStill =>
@@ -316,8 +271,11 @@ class $AssetsImagesGen {
         animatedCube,
         animatedCubeBtc,
         animatedCubeFast,
+        butterflyIcon,
+        butterflyWordmark,
         connector1,
         connector2,
+        cryptoDotComIcon,
         cubeStill,
         decorBottom,
         decorBottomLeft,
@@ -914,7 +872,6 @@ class Assets {
 
   static const $AssetsDataGen data = $AssetsDataGen();
   static const $AssetsDocsGen docs = $AssetsDocsGen();
-  static const $AssetsEnvGen env = $AssetsEnvGen();
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsHtmlGen html = $AssetsHtmlGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();

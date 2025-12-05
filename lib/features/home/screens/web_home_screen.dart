@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/services/explorer_service.dart';
+import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/features/misc/providers/global_balances_expanded_provider.dart';
 import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -29,6 +30,8 @@ import '../../web/components/web_wallet_mobile_account_info.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
 
 import '../../../core/dialogs.dart';
+import '../../../core/services/butterfly_bridge_url_service.dart';
+import '../../../core/services/password_prompt_service.dart';
 import '../../web/components/web_wordmark.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -63,7 +66,8 @@ class WebHomeScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
-    final address = ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
+    final address =
+        ref.watch(webSessionProvider.select((v) => v.currentWallet?.address));
     final isMobile = BreakPoints.useMobileLayout(context);
 
     return isMobile
@@ -79,7 +83,8 @@ class WebHomeScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final visibilityProvider = ref.read(webMobileAccountInfoVisibleProvider.notifier);
+    final visibilityProvider =
+        ref.read(webMobileAccountInfoVisibleProvider.notifier);
     final visibilityState = ref.watch(webMobileAccountInfoVisibleProvider);
 
     return Stack(
@@ -125,8 +130,11 @@ class WebHomeScreen extends BaseScreen {
                   ),
                   GestureDetector(
                     onTap: () {
-                      ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
-                      Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                      ref
+                          .read(currencySegementedButtonProvider.notifier)
+                          .set(CurrencyType.vfx);
+                      Navigator.of(webDashboardScaffoldKey.currentContext!)
+                          .push(
                         MaterialPageRoute(
                           fullscreenDialog: true,
                           builder: (_) => WebPriceChartScreen(
@@ -141,7 +149,8 @@ class WebHomeScreen extends BaseScreen {
                       actions: [
                         AppButton(
                           onPressed: () async {
-                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.vfx);
+                            AccountUtils.getCoin(
+                                context, ref, VfxOrBtcOption.vfx);
                           },
                           variant: AppColorVariant.Secondary,
                           type: AppButtonType.Outlined,
@@ -155,8 +164,11 @@ class WebHomeScreen extends BaseScreen {
                   ),
                   GestureDetector(
                     onTap: () {
-                      ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
-                      Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                      ref
+                          .read(currencySegementedButtonProvider.notifier)
+                          .set(CurrencyType.btc);
+                      Navigator.of(webDashboardScaffoldKey.currentContext!)
+                          .push(
                         MaterialPageRoute(
                           fullscreenDialog: true,
                           builder: (_) => WebPriceChartScreen(
@@ -171,7 +183,8 @@ class WebHomeScreen extends BaseScreen {
                       actions: [
                         AppButton(
                           onPressed: () {
-                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.btc);
+                            AccountUtils.getCoin(
+                                context, ref, VfxOrBtcOption.btc);
                           },
                           label: "Get BTC",
                           variant: AppColorVariant.Btc,
@@ -200,7 +213,9 @@ class WebHomeScreen extends BaseScreen {
         AnimatedPositioned(
           duration: ROOT_CONTAINER_TRANSITION_DURATION,
           curve: ROOT_CONTAINER_TRANSITION_CURVE,
-          top: visibilityState == 0 ? 0 : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
+          top: visibilityState == 0
+              ? 0
+              : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
           left: 0,
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -220,7 +235,9 @@ class WebHomeScreen extends BaseScreen {
         AnimatedPositioned(
           duration: ROOT_CONTAINER_TRANSITION_DURATION,
           curve: ROOT_CONTAINER_TRANSITION_CURVE,
-          top: visibilityState == 2 ? 0 : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
+          top: visibilityState == 2
+              ? 0
+              : -(ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT + 64),
           left: 0,
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -234,7 +251,8 @@ class WebHomeScreen extends BaseScreen {
   @override
   Widget desktopBody(BuildContext context, WidgetRef ref) {
     return Padding(
-      padding: const EdgeInsets.only(top: ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT),
+      padding: const EdgeInsets.only(
+          top: ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT),
       child: Column(
         children: [
           SizedBox(
@@ -252,8 +270,12 @@ class WebHomeScreen extends BaseScreen {
                       actions: [
                         AppButton(
                           onPressed: () {
-                            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
-                            Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                            ref
+                                .read(currencySegementedButtonProvider.notifier)
+                                .set(CurrencyType.vfx);
+                            Navigator.of(
+                                    webDashboardScaffoldKey.currentContext!)
+                                .push(
                               MaterialPageRoute(
                                 fullscreenDialog: true,
                                 builder: (_) => WebPriceChartScreen(
@@ -268,7 +290,8 @@ class WebHomeScreen extends BaseScreen {
                         ),
                         AppButton(
                           onPressed: () async {
-                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.vfx);
+                            AccountUtils.getCoin(
+                                context, ref, VfxOrBtcOption.vfx);
                           },
                           variant: AppColorVariant.Secondary,
                           type: AppButtonType.Outlined,
@@ -286,8 +309,12 @@ class WebHomeScreen extends BaseScreen {
                       actions: [
                         AppButton(
                           onPressed: () {
-                            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
-                            Navigator.of(webDashboardScaffoldKey.currentContext!).push(
+                            ref
+                                .read(currencySegementedButtonProvider.notifier)
+                                .set(CurrencyType.btc);
+                            Navigator.of(
+                                    webDashboardScaffoldKey.currentContext!)
+                                .push(
                               MaterialPageRoute(
                                 fullscreenDialog: true,
                                 builder: (_) => WebPriceChartScreen(
@@ -302,7 +329,8 @@ class WebHomeScreen extends BaseScreen {
                         ),
                         AppButton(
                           onPressed: () {
-                            AccountUtils.getCoin(context, ref, VfxOrBtcOption.btc);
+                            AccountUtils.getCoin(
+                                context, ref, VfxOrBtcOption.btc);
                           },
                           label: "Get BTC",
                           variant: AppColorVariant.Btc,
@@ -330,7 +358,8 @@ class _Brand extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isMobile = BreakPoints.useMobileLayout(context);
-    final smallPhone = MediaQuery.of(context).size.width <= smallPhoneWidth && MediaQuery.of(context).size.height <= smallPhoneHeight;
+    final smallPhone = MediaQuery.of(context).size.width <= smallPhoneWidth &&
+        MediaQuery.of(context).size.height <= smallPhoneHeight;
 
     return Center(
       child: Flex(
@@ -371,9 +400,11 @@ class _Actions extends BaseComponent {
     final tabsRouter = AutoTabsRouter.of(context);
 
     final isMobile = BreakPoints.useMobileLayout(context);
-    final smallPhone = MediaQuery.of(context).size.width <= smallPhoneWidth && MediaQuery.of(context).size.height <= smallPhoneHeight;
+    final smallPhone = MediaQuery.of(context).size.width <= smallPhoneWidth &&
+        MediaQuery.of(context).size.height <= smallPhoneHeight;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: isMobile ? 0 : 16),
+      padding:
+          EdgeInsets.symmetric(vertical: 16.0, horizontal: isMobile ? 0 : 16),
       child: AppCard(
         padding: smallPhone ? 6 : 20,
         fullWidth: true,
@@ -439,7 +470,8 @@ class _Actions extends BaseComponent {
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
                 onPressed: () {
-                  launchUrlString("https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
+                  launchUrlString(
+                      "https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
@@ -461,7 +493,8 @@ class _Actions extends BaseComponent {
                                     size: 18,
                                   ),
                                   onTap: () {
-                                    launchUrlString("https://discord.gg/7cd5ebDQCj");
+                                    launchUrlString(
+                                        "https://discord.gg/7cd5ebDQCj");
                                   },
                                   trailing: Icon(Icons.open_in_new, size: 16)),
                             ),
@@ -491,7 +524,8 @@ class _Actions extends BaseComponent {
                                     Icons.read_more,
                                   ),
                                   onTap: () {
-                                    launchUrlString("https://docs.verifiedx.io");
+                                    launchUrlString(
+                                        "https://docs.verifiedx.io");
                                   },
                                   trailing: Icon(Icons.open_in_new, size: 16)),
                             )
@@ -522,8 +556,10 @@ class _Actions extends BaseComponent {
                   onPressed: () async {
                     final sig = await PromptModal.show(
                       title: "Validate Ownership",
-                      body: "Paste in the signature provided by the owner to validate its ownership.",
-                      validator: (val) => formValidatorNotEmpty(val, "Signature"),
+                      body:
+                          "Paste in the signature provided by the owner to validate its ownership.",
+                      validator: (val) =>
+                          formValidatorNotEmpty(val, "Signature"),
                       labelText: "Signature",
                     );
                     if (sig != null && sig.isNotEmpty) {
@@ -536,16 +572,23 @@ class _Actions extends BaseComponent {
                       final address = components.first;
                       final scId = components.last;
 
-                      var verified = await ExplorerService().verifyNftOwnership(sig);
+                      var verified =
+                          await ExplorerService().verifyNftOwnership(sig);
                       if (verified == null) {
                         return;
                       }
 
-                      final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
+                      final color = verified
+                          ? Theme.of(context).colorScheme.success
+                          : Theme.of(context).colorScheme.danger;
                       final iconData = verified ? Icons.check : Icons.close;
                       final title = verified ? "Verified" : "Not Verified";
-                      final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
-                      final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
+                      final subtitle = verified
+                          ? "Ownership Verified"
+                          : "Ownership NOT Verified";
+                      final body = verified
+                          ? "$address\nOWNS\n$scId"
+                          : "$address\ndoes NOT own\n$scId";
 
                       InfoDialog.show(
                         title: title,
@@ -569,6 +612,61 @@ class _Actions extends BaseComponent {
               //   },
               // ),
 
+              if (BUTTERFLY_ENABLED &&
+                  ref.read(webSessionProvider).keypair != null &&
+                  !isMobile)
+                AppVerticalIconButton(
+                  label: "Login to\nButterfly",
+                  prettyIconType: PrettyIconType.butterfly,
+                  icon: FontAwesomeIcons.wallet,
+                  iconScale: 0.7,
+                  onPressed: () async {
+                    final keypair = ref.read(webSessionProvider).keypair;
+                    if (keypair == null) {
+                      Toast.error("No wallet selected.");
+                      return;
+                    }
+
+                    final password =
+                        await PasswordPromptService.promptNewPassword(
+                      rootNavigatorKey.currentContext!,
+                      title: "Create Butterfly Password",
+                      customMessage:
+                          "Create a password to securely transfer your credentials to Butterfly. You will need to enter this same password on the Butterfly website.",
+                    );
+
+                    if (password == null) return;
+
+                    final confirmed = await ConfirmDialog.show(
+                      title: "Login to Butterfly",
+                      body:
+                          "You are about to open Butterfly and log in with:\n\n${keypair.address}\n\nContinue?",
+                      confirmText: "Open Butterfly",
+                      cancelText: "Cancel",
+                    );
+
+                    if (confirmed != true) return;
+
+                    try {
+                      ref.read(globalLoadingProvider.notifier).start();
+                      await Future.delayed(Duration(milliseconds: 250));
+                      final url = ButterflyBridgeUrlService.createBridgeUrl(
+                        privateKey: keypair.privateCorrected,
+                        password: password,
+                        address: keypair.address,
+                        publicKey: keypair.public,
+                        targetBaseUrl: Env.butterflyWebBaseUrl,
+                      );
+                      ref.read(globalLoadingProvider.notifier).complete();
+                      await launchUrlString(url,
+                          mode: LaunchMode.externalApplication);
+                    } catch (e) {
+                      ref.read(globalLoadingProvider.notifier).complete();
+                      Toast.error("Failed to generate login URL: $e");
+                    }
+                  },
+                  color: AppColors.getWhite(ColorShade.s200),
+                ),
               if (ref.read(webSessionProvider).keypair != null && !isMobile)
                 AppVerticalIconButton(
                   label: "Sign\nOut",
@@ -577,7 +675,8 @@ class _Actions extends BaseComponent {
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
                       title: "Sign Out",
-                      body: "Are you sure you want to logout of the VFX Web Wallet?",
+                      body:
+                          "Are you sure you want to logout of the VFX Web Wallet?",
                       destructive: true,
                       confirmText: "Logout",
                       cancelText: "Cancel",
