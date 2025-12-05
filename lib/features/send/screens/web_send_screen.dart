@@ -8,6 +8,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../payment/components/butterfly_logo_lockup.dart';
 import '../../payment/screens/butterfly_screen.dart';
 import '../../raw/raw_service.dart';
 import '../../web/components/web_currency_segmented_button.dart';
@@ -110,52 +111,64 @@ class WebSendScreen extends BaseScreen {
               ),
               // Show Payment Link button only for VFX
               if (BUTTERFLY_ENABLED && !isBtc)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: AppButton(
-                    label: 'Create Payment Link',
-                    variant: AppColorVariant.Secondary,
-                    type: AppButtonType.Outlined,
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ButterflyScreen(
-                            walletAddress: wallet?.address ?? keypair.address,
-                            balance: wallet?.balance ?? 0.0,
-                            sendTransaction: (amount, toAddress) async {
-                              try {
-                                final txData = await RawTransaction.generate(
-                                  keypair: keypair,
-                                  amount: amount,
-                                  toAddress: toAddress,
-                                  txType: TxType.rbxTransfer,
-                                );
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 16,
+                    ),
+                    ButterflyLogoLockup(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: AppButton(
+                        label: 'Create Payment Link',
+                        variant: AppColorVariant.Secondary,
+                        type: AppButtonType.Outlined,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ButterflyScreen(
+                                walletAddress:
+                                    wallet?.address ?? keypair.address,
+                                sendTransaction: (amount, toAddress) async {
+                                  try {
+                                    final txData =
+                                        await RawTransaction.generate(
+                                      keypair: keypair,
+                                      amount: amount,
+                                      toAddress: toAddress,
+                                      txType: TxType.rbxTransfer,
+                                    );
 
-                                if (txData == null) {
-                                  return null;
-                                }
+                                    if (txData == null) {
+                                      return null;
+                                    }
 
-                                final result = await RawService().sendTransaction(
-                                  transactionData: txData,
-                                  execute: true,
-                                  widgetRef: ref,
-                                );
+                                    final result =
+                                        await RawService().sendTransaction(
+                                      transactionData: txData,
+                                      execute: true,
+                                      widgetRef: ref,
+                                    );
 
-                                if (result != null && result['Result'] == 'Success') {
-                                  return result['Hash'] as String?;
-                                }
-                                return null;
-                              } catch (e) {
-                                print('Error sending transaction: $e');
-                                return null;
-                              }
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                                    if (result != null &&
+                                        result['Result'] == 'Success') {
+                                      return result['Hash'] as String?;
+                                    }
+                                    return null;
+                                  } catch (e) {
+                                    print('Error sending transaction: $e');
+                                    return null;
+                                  }
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               SizedBox(
                 height: 20,

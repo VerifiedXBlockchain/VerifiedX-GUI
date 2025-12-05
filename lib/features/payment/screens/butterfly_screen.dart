@@ -6,13 +6,12 @@ import '../components/butterfly_link_form.dart';
 
 class ButterflyScreen extends BaseScreen {
   final String walletAddress;
-  final double balance;
-  final Future<String?> Function(double amount, String toAddress) sendTransaction;
+  final Future<String?> Function(double amount, String toAddress)
+      sendTransaction;
 
   const ButterflyScreen({
     Key? key,
     required this.walletAddress,
-    required this.balance,
     required this.sendTransaction,
   }) : super(key: key);
 
@@ -31,7 +30,6 @@ class ButterflyScreen extends BaseScreen {
       padding: const EdgeInsets.all(16),
       child: ButterflyLinkForm(
         walletAddress: walletAddress,
-        balance: balance,
         sendTransaction: sendTransaction,
       ),
     );

@@ -10,6 +10,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/guards.dart';
 import '../../bridge/services/bridge_service.dart';
+import '../../payment/components/butterfly_logo_lockup.dart';
 import '../../payment/screens/butterfly_screen.dart';
 import '../../wallet/components/invalid_wallet.dart';
 import '../components/send_form.dart';
@@ -44,9 +45,13 @@ class SendScreen extends BaseScreen {
         Builder(builder: (context) {
           final isBtc = ref.watch(sessionProvider.select((v) => v.btcSelected));
 
-          final currentWallet = !isBtc ? ref.watch(sessionProvider.select((v) => v.currentWallet)) : null;
-          final currentBtcAccount = isBtc ? ref.watch(sessionProvider.select((v) => v.currentBtcAccount)) : null;
-          print(currentWallet?.balance);
+          final currentWallet = !isBtc
+              ? ref.watch(sessionProvider.select((v) => v.currentWallet))
+              : null;
+          final currentBtcAccount = isBtc
+              ? ref.watch(sessionProvider.select((v) => v.currentBtcAccount))
+              : null;
+
           if (currentWallet == null && currentBtcAccount == null) {
             return const InvalidWallet(message: "No account selected");
           }
@@ -56,45 +61,53 @@ class SendScreen extends BaseScreen {
                 wallet: currentWallet,
                 btcAccount: currentBtcAccount,
               ),
-                  // Show Payment Link button only for VFX
-        if (BUTTERFLY_ENABLED && !isBtc && currentWallet != null)
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: AppButton(
-              label: 'Create Payment Link',
-              variant: AppColorVariant.Secondary,
-              type: AppButtonType.Outlined,
-              onPressed: () {
-                if (!widgetGuardWalletIsSynced(ref)&& !kDebugMode) return;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ButterflyScreen(
-                      walletAddress: currentWallet.address,
-                      balance: currentWallet.balance,
-                      sendTransaction: (amount, toAddress) async {
-                        final result = await BridgeService().sendFunds(
-                          amount: amount,
-                          to: toAddress,
-                          from: currentWallet.address,
-                        );
-                        if (result == null ||
-                            result.toLowerCase().contains('error') ||
-                            result.toLowerCase().contains('fail')) {
-                          return null;
-                        }
-                        return result;
-                      },
+              // Show Payment Link button only for VFX
+              if (BUTTERFLY_ENABLED && !isBtc && currentWallet != null)
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 16,
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
+                    ButterflyLogoLockup(),
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: AppButton(
+                        label: 'Create Payment Link',
+                        variant: AppColorVariant.Secondary,
+                        type: AppButtonType.Outlined,
+                        onPressed: () {
+                          if (!widgetGuardWalletIsSynced(ref)) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ButterflyScreen(
+                                walletAddress: currentWallet.address,
+                                sendTransaction: (amount, toAddress) async {
+                                  final result =
+                                      await BridgeService().sendFunds(
+                                    amount: amount,
+                                    to: toAddress,
+                                    from: currentWallet.address,
+                                  );
+                                  if (result == null ||
+                                      result.toLowerCase().contains('error') ||
+                                      result.toLowerCase().contains('fail')) {
+                                    return null;
+                                  }
+                                  return result;
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
             ],
           );
         }),
-        
       ],
     );
   }

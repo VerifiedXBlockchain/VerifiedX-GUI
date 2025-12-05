@@ -74,7 +74,7 @@ class ButterflyCreationState {
       case ButterflyCreationStep.waitingForFund:
         return 'Waiting for Confirmation';
       case ButterflyCreationStep.complete:
-        return 'Link Ready!';
+        return 'Payment Link Ready!';
       case ButterflyCreationStep.error:
         return 'Error';
     }
@@ -134,7 +134,8 @@ class ButterflyCreationProvider extends StateNotifier<ButterflyCreationState> {
     // Step 1: Create the Butterfly link
     final response = await ButterflyService().createButterflyLink(
       amount: state.amount,
-      message: state.message.isEmpty ? 'Payment from VFX Wallet' : state.message,
+      message:
+          state.message.isEmpty ? 'Payment from VFX Wallet' : state.message,
       icon: state.icon,
     );
 
@@ -195,8 +196,8 @@ class ButterflyCreationProvider extends StateNotifier<ButterflyCreationState> {
         return;
       }
 
-      final status =
-          await ButterflyService().getButterflyStatus(state.createResponse!.linkId);
+      final status = await ButterflyService()
+          .getButterflyStatus(state.createResponse!.linkId);
 
       if (status != null && status.isReadyForRedemption) {
         timer.cancel();
@@ -209,7 +210,8 @@ class ButterflyCreationProvider extends StateNotifier<ButterflyCreationState> {
           escrowAddress: state.createResponse!.escrowAddress,
           amount: state.createResponse!.amountDouble,
           claimAmount: status.claimAmountDouble ?? state.amount,
-          message: state.message.isEmpty ? 'Payment from VFX Wallet' : state.message,
+          message:
+              state.message.isEmpty ? 'Payment from VFX Wallet' : state.message,
           icon: state.icon,
           status: ButterflyLinkStatus.readyForRedemption,
           senderAddress: senderAddress,

@@ -1,7 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:share_plus/share_plus.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/theme/app_theme.dart';
@@ -15,7 +16,8 @@ class ButterflyCreateLinkDialog extends ConsumerStatefulWidget {
   final String message;
   final ButterflyIcon icon;
   final String walletAddress;
-  final Future<String?> Function(double amount, String toAddress) sendTransaction;
+  final Future<String?> Function(double amount, String toAddress)
+      sendTransaction;
   final VoidCallback? onComplete;
 
   const ButterflyCreateLinkDialog({
@@ -67,6 +69,7 @@ class _ButterflyCreateLinkDialogState
         width: 400,
         child: _buildContent(state),
       ),
+      actionsAlignment: MainAxisAlignment.center,
       actions: _buildActions(state),
     );
   }
@@ -97,7 +100,7 @@ class _ButterflyCreateLinkDialogState
         return _buildConfirmContent(state);
 
       case ButterflyCreationStep.sendingTx:
-        return _buildProcessingContent('Sending VFX to escrow...');
+        return _buildProcessingContent('Sending VFX...');
 
       case ButterflyCreationStep.waitingForFund:
         return _buildProcessingContent(
@@ -120,14 +123,14 @@ class _ButterflyCreateLinkDialogState
     final estimatedFee = vfxPrice != null && vfxPrice > 0
         ? feeInUsd / vfxPrice
         : 0.01; // Fallback if price not available
-  print('vfxPrice:$vfxPrice');
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildDetailRow('Amount', '${state.amount.toStringAsFixed(8)} VFX'),
         const SizedBox(height: 8),
-        _buildDetailRow('Estimated Fee', '~${estimatedFee.toStringAsFixed(8)} VFX (\$$feeInUsd)'),
+        _buildDetailRow('Estimated Fee',
+            '~${estimatedFee.toStringAsFixed(8)} VFX (\$$feeInUsd)'),
         const Divider(),
         _buildDetailRow(
           'Total',
@@ -154,7 +157,7 @@ class _ButterflyCreateLinkDialogState
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'The recipient will receive ${state.amount.toStringAsFixed(2)} VFX when they claim the link.',
+                  'The recipient will receive ${state.amount} VFX when they claim the link.',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.blue[300],
@@ -191,6 +194,7 @@ class _ButterflyCreateLinkDialogState
 
     return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           padding: const EdgeInsets.all(16),
@@ -220,8 +224,9 @@ class _ButterflyCreateLinkDialogState
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.grey[800],
-            borderRadius: BorderRadius.circular(8),
+            // color: Colors.grey[800],
+            border: Border.all(color: Colors.white24),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Column(
             children: [
@@ -229,35 +234,39 @@ class _ButterflyCreateLinkDialogState
                 link.shortUrl,
                 style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AppButton(
-                    label: 'Copy Link',
-                    type: AppButtonType.Outlined,
-                    variant: AppColorVariant.Secondary,
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: link.fullUrl));
-                      Toast.message('Link copied to clipboard!');
-                    },
-                  ),
-                ],
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                AppButton(
+                  label: 'Copy Link',
+                  type: AppButtonType.Outlined,
+                  variant: AppColorVariant.Secondary,
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: link.fullUrl));
+                    Toast.message('Link copied to clipboard!');
+                  },
+                ),
+                SizedBox(
+                  width: 8,
+                ),
+                AppButton(
+                  label: 'Share Link',
+                  type: AppButtonType.Outlined,
+                  variant: AppColorVariant.Secondary,
+                  onPressed: () {
+                    Share.share(link.fullUrl);
+                  },
+                ),
+              ]),
             ],
           ),
         ),
         const SizedBox(height: 12),
         Text(
-          'Share this link with the recipient. They can claim the VFX without needing a wallet.',
+          'Share this link with the recipient.\nThey can claim the VFX without needing a wallet.',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[500],
-          ),
+          style: TextStyle(fontSize: 14, color: Colors.white70),
         ),
       ],
     );
@@ -335,12 +344,16 @@ class _ButterflyCreateLinkDialogState
               ref.read(butterflyCreationProvider.notifier).reset();
               Navigator.of(context).pop();
             },
-            child: const Text('Cancel'),
+            child: const Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white70),
+            ),
           ),
           AppButton(
-            label: 'Confirm & Send',
-            icon: Icons.send,
+            label: 'Create Link',
+            icon: Icons.check,
             onPressed: _onConfirm,
+            variant: AppColorVariant.Success,
           ),
         ];
 

@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/features/payment/providers/current_vfx_balance_provider.dart';
 
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
@@ -12,13 +14,14 @@ import 'butterfly_link_card.dart';
 
 class ButterflyLinkForm extends ConsumerStatefulWidget {
   final String walletAddress;
-  final double balance;
-  final Future<String?> Function(double amount, String toAddress) sendTransaction;
+  // final double balance;
+  final Future<String?> Function(double amount, String toAddress)
+      sendTransaction;
 
   const ButterflyLinkForm({
     super.key,
     required this.walletAddress,
-    required this.balance,
+    // required this.balance,
     required this.sendTransaction,
   });
 
@@ -47,7 +50,8 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
     if (amount == null || amount <= 0) {
       return 'Please enter a valid amount';
     }
-    if (amount > widget.balance) {
+
+    if (amount > ref.read(currentVfxBalanceProvider)) {
       return 'Insufficient balance';
     }
     // Minimum amount check (0.01 VFX + fee)
@@ -179,7 +183,8 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
   Widget build(BuildContext context) {
     final linksModel = ref.watch(butterflyLinksProvider);
     final pendingCount = linksModel.links
-        .where((l) => l.status == ButterflyLinkStatus.pending ||
+        .where((l) =>
+            l.status == ButterflyLinkStatus.pending ||
             l.status == ButterflyLinkStatus.readyForRedemption)
         .length;
 
@@ -188,30 +193,10 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Create Payment Link',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Create a shareable link to receive VFX. The recipient can claim the funds without needing a wallet.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[400],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          Text(
+            'Use Butterfly to create a payment link, claimable by anyone you send the link to.',
+            style: TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -221,7 +206,8 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
               hintText: 'Enter amount',
               border: const OutlineInputBorder(),
               suffixText: 'VFX',
-              helperText: 'Available: ${widget.balance.toStringAsFixed(2)} VFX',
+              helperText:
+                  'Available: ${ref.watch(currentVfxBalanceProvider)} VFX',
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
@@ -254,6 +240,7 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
           AppButton(
             label: 'Create Payment Link',
             onPressed: _onSubmit,
+            variant: AppColorVariant.Success,
           ),
           const SizedBox(height: 12),
           AppButton(
@@ -265,15 +252,15 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
             icon: Icons.history,
             onPressed: _showHistory,
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Note: A small fee (\$0.01 USD in VFX) will be added to cover platform costs.',
-            style: TextStyle(
-              fontSize: 11,
-              color: Colors.grey[500],
-            ),
-            textAlign: TextAlign.center,
-          ),
+          // const SizedBox(height: 8),
+          // Text(
+          //   'Note: A fee (\$0.01 USD in VFX) will be added to cover platform costs.',
+          //   style: TextStyle(
+          //     fontSize: 11,
+          //     color: Colors.grey[500],
+          //   ),
+          //   textAlign: TextAlign.center,
+          // ),
         ],
       ),
     );
