@@ -182,7 +182,7 @@ class _VfxDomain extends BaseComponent {
                 variant: AppColorVariant.Success,
                 onPressed: () async {
                   if (balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION)) {
-                    Toast.error("Not enough VFX in this account to create a VFX domain. $ADNR_COST RBX required (plus TX fee).");
+                    Toast.error("Not enough VFX in this account to create a VFX domain. $ADNR_COST VFX required (plus TX fee).");
                     return;
                   }
 

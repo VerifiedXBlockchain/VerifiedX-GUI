@@ -123,7 +123,7 @@ class VfxAdnrCard extends BaseComponent {
                                 return;
                               }
                               if (wallet.balance < (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
-                                Toast.error("Not enough VFX in this wallet to transfer a VFX domain. $ADNR_COST RBX required (plus TX fee).");
+                                Toast.error("Not enough VFX in this wallet to transfer a VFX domain. $ADNR_COST VFX required (plus TX fee).");
                                 return;
                               }
 
