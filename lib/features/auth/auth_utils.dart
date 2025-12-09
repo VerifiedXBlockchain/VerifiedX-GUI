@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +35,9 @@ import '../web/models/multi_account_instance.dart';
 import '../../core/services/multi_account_encryption_service.dart';
 import 'package:collection/collection.dart';
 import 'components/auth_type_modal.dart';
+import 'services/extension_crypto_service.dart';
+import 'services/verifiedx_extension_service.dart'
+    if (dart.library.io) 'services/verifiedx_extension_service_stub.dart';
 
 enum KeypairType { vfx, ra, btc }
 
@@ -139,6 +143,131 @@ String btcGeneratedPasswordFromPrivateKey(String privateKey) {
     privateKey = privateKey.replaceFirst("00", "");
   }
   return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
+}
+
+/// Handle login with VFX Browser Extension
+/// This function:
+/// 1. Requests the encrypted key from the extension
+/// 2. Prompts user for their wallet password
+/// 3. Decrypts the private key
+/// 4. Generates RA and BTC keypairs
+/// 5. Logs in with encrypted storage
+Future<void> handleLoginWithExtension(
+  BuildContext context,
+  WidgetRef ref,
+) async {
+  if (!kIsWeb) {
+    Toast.error("VFX Extension is only available on web");
+    return;
+  }
+
+  if (!VerifiedXExtensionService.isExtensionInstalled()) {
+    Toast.error("VFX Extension not detected");
+    return;
+  }
+
+  ref.read(globalLoadingProvider.notifier).start();
+
+  ExtensionEncryptedKeyData? encryptedData;
+
+  try {
+    // Request encrypted key from extension
+    encryptedData = await VerifiedXExtensionService.requestKey();
+  } catch (e) {
+    ref.read(globalLoadingProvider.notifier).complete();
+    final errorMessage = e.toString();
+
+    if (errorMessage.contains('rejected')) {
+      Toast.message("Request cancelled");
+    } else if (errorMessage.contains('timed out')) {
+      Toast.error("Request timed out");
+    } else if (errorMessage.contains('locked')) {
+      Toast.error("Please unlock your extension wallet first");
+    } else {
+      // Show the actual error for debugging
+      Toast.error(errorMessage);
+      print("Extension error: $errorMessage");
+    }
+    return;
+  }
+
+  ref.read(globalLoadingProvider.notifier).complete();
+
+  // Prompt for password to decrypt the key
+  final password = await PromptModal.show(
+    contextOverride: context,
+    title: "Enter Wallet Password",
+    body: "Enter the password you used in the VFX Extension to decrypt your private key.",
+    validator: (value) => formValidatorNotEmpty(value, "Password"),
+    labelText: "Wallet Password",
+    obscureText: true,
+    revealObscure: true,
+    lines: 1,
+  );
+
+  if (password == null || password.isEmpty) {
+    return;
+  }
+
+  ref.read(globalLoadingProvider.notifier).start();
+
+  // Decrypt the private key
+  String privateKey;
+  try {
+    privateKey = ExtensionCryptoService.decryptPrivateKey(
+      salt: encryptedData.salt,
+      iv: encryptedData.iv,
+      cipherText: encryptedData.cipherText,
+      password: password,
+    );
+  } catch (e) {
+    ref.read(globalLoadingProvider.notifier).complete();
+    Toast.error("Decryption failed. Check your password.");
+    return;
+  }
+
+  // Import the private key to create keypair
+  final keypair = await KeygenService.importPrivateKey(privateKey);
+
+  // Generate Reserve Account keypair (same logic as other import methods)
+  RaKeypair? reserveKeyPair;
+  int append = 0;
+  while (true) {
+    String input = keypair.private;
+    if (input.startsWith("00")) {
+      input = input.substring(2);
+    }
+    String seed = "${input.substring(0, 32)}$append";
+
+    final kp = await KeygenService.seedToKeypair(seed);
+    if (kp == null) {
+      continue;
+    }
+
+    reserveKeyPair =
+        await KeygenService.importReserveAccountPrivateKey(kp.private);
+
+    if (reserveKeyPair.address.startsWith("xRBX")) {
+      break;
+    }
+
+    append += 1;
+  }
+
+  // Generate BTC keypair
+  final btcGeneratedEmail =
+      btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
+  final btcGeneratedPassword =
+      btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
+
+  final btcKeypair = await BtcWebService()
+      .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
+
+  ref.read(globalLoadingProvider.notifier).complete();
+
+  // Login with encryption using the same password from the extension
+  await loginWithEncryption(
+      context, ref, keypair, reserveKeyPair, btcKeypair, password);
 }
 
 Future<void> handleImportWithBtcPrivateKey(
@@ -1052,6 +1181,7 @@ showWebLoginModal(
   required bool allowBtcPrivateKey,
   required VoidCallback onSuccess,
   bool showRememberMe = true,
+  Function(BuildContext)? handleExtension,
 }) {
   showModalBottomSheet(
     backgroundColor: Colors.transparent,
@@ -1144,6 +1274,14 @@ showWebLoginModal(
             ? (context) async {
                 await handleImportWithBtcPrivateKey(context, ref,
                     showRememberMe: showRememberMe);
+                if (ref.read(webSessionProvider).isAuthenticated) {
+                  onSuccess();
+                }
+              }
+            : null,
+        handleExtension: handleExtension != null
+            ? (context) async {
+                await handleExtension(context);
                 if (ref.read(webSessionProvider).isAuthenticated) {
                   onSuccess();
                 }

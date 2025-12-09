@@ -7,6 +7,7 @@ class AuthTypeModal extends StatelessWidget {
   final Function() handleUsername;
   final Function(BuildContext context)? handlePrivateKey;
   final Function(BuildContext context)? handleBtcPrivateKey;
+  final Function(BuildContext context)? handleExtension;
 
   const AuthTypeModal({
     Key? key,
@@ -14,6 +15,7 @@ class AuthTypeModal extends StatelessWidget {
     required this.handleMnemonic,
     this.handlePrivateKey,
     this.handleBtcPrivateKey,
+    this.handleExtension,
   }) : super(key: key);
 
   @override
@@ -75,6 +77,21 @@ class AuthTypeModal extends StatelessWidget {
             ),
             onTap: () {
               handleBtcPrivateKey!(context);
+            },
+          ),
+        if (handleExtension != null) const Divider(height: 1),
+        if (handleExtension != null)
+          ListTile(
+            leading: const Icon(Icons.extension),
+            title: const Text(
+              "VFX Extension",
+            ),
+            trailing: const Icon(
+              Icons.chevron_right,
+              size: 32,
+            ),
+            onTap: () {
+              handleExtension!(context);
             },
           ),
       ],

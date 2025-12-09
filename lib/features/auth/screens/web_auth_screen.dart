@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/colors.dart';
@@ -24,6 +25,8 @@ import '../../../core/web_router.gr.dart';
 import '../../../generated/assets.gen.dart';
 import '../auth_utils.dart';
 import '../components/auth_type_modal.dart';
+import '../services/verifiedx_extension_service.dart'
+    if (dart.library.io) '../services/verifiedx_extension_service_stub.dart';
 
 class WebAuthScreen extends BaseStatefulScreen {
   const WebAuthScreen({Key? key})
@@ -37,10 +40,30 @@ class WebAuthScreen extends BaseStatefulScreen {
 }
 
 class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
+  bool _isExtensionAvailable = false;
+
   @override
   void initState() {
-    _handleSession(ref.read(webSessionProvider));
     super.initState();
+    _handleSession(ref.read(webSessionProvider));
+    _checkExtension();
+  }
+
+  void _checkExtension() {
+    if (kIsWeb) {
+      // Check if extension is already available
+      _isExtensionAvailable = VerifiedXExtensionService.isExtensionInstalled();
+
+      // Also listen for the extension initialization event
+      // (in case extension loads after the page)
+      VerifiedXExtensionService.onExtensionInitialized(() {
+        if (mounted) {
+          setState(() {
+            _isExtensionAvailable = true;
+          });
+        }
+      });
+    }
   }
 
   Future<void> _showWelcomeMessage() async {
@@ -270,12 +293,21 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               label: "Login / Create Account",
               icon: Icons.upload,
               onPressed: () {
-                showWebLoginModal(context, ref,
-                    allowPrivateKey: true,
-                    allowBtcPrivateKey: true,
-                    showRememberMe: true, onSuccess: () {
-                  redirectToDashboard(true);
-                });
+                showWebLoginModal(
+                  context,
+                  ref,
+                  allowPrivateKey: true,
+                  allowBtcPrivateKey: true,
+                  showRememberMe: true,
+                  handleExtension: _isExtensionAvailable
+                      ? (ctx) async {
+                          await handleLoginWithExtension(ctx, ref);
+                        }
+                      : null,
+                  onSuccess: () {
+                    redirectToDashboard(true);
+                  },
+                );
               },
               variant: AppColorVariant.Light,
             ),
