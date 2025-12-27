@@ -109,8 +109,8 @@ class Env {
   }
 
   static bool get promptForUpdates {
-    // Only prompt for updates on mainnet release
-    return !_isTestnet && !kIsWeb;
+    // Prompt for updates on all desktop networks
+    return !kIsWeb;
   }
 
   static String get validatorPort {

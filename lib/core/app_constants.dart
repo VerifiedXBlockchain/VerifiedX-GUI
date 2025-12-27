@@ -3,7 +3,7 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "5.2.0";
+const APP_V = "5.2.1";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";

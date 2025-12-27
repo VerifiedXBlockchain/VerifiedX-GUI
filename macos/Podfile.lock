@@ -16,8 +16,6 @@ PODS:
     - FlutterMacOS
   - screen_retriever (0.0.1):
     - FlutterMacOS
-  - share_plus_macos (0.0.1):
-    - FlutterMacOS
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -39,7 +37,6 @@ DEPENDENCIES:
   - FlutterMacOS (from `Flutter/ephemeral`)
   - path_provider_foundation (from `Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos`)
   - screen_retriever (from `Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos`)
-  - share_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/share_plus_macos/macos`)
   - shared_preferences_foundation (from `Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/macos`)
   - sqflite (from `Flutter/ephemeral/.symlinks/plugins/sqflite/macos`)
   - uni_links_desktop (from `Flutter/ephemeral/.symlinks/plugins/uni_links_desktop/macos`)
@@ -65,8 +62,6 @@ EXTERNAL SOURCES:
     :path: Flutter/ephemeral/.symlinks/plugins/path_provider_foundation/macos
   screen_retriever:
     :path: Flutter/ephemeral/.symlinks/plugins/screen_retriever/macos
-  share_plus_macos:
-    :path: Flutter/ephemeral/.symlinks/plugins/share_plus_macos/macos
   shared_preferences_foundation:
     :path: Flutter/ephemeral/.symlinks/plugins/shared_preferences_foundation/macos
   sqflite:
@@ -87,7 +82,6 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   path_provider_foundation: 9b2865ae0d177584c376882d93e61be1e80b9e39
   screen_retriever: 4f97c103641aab8ce183fa5af3b87029df167936
-  share_plus_macos: bad864466cc8d3edc440a2dec8befc781bf002e4
   shared_preferences_foundation: 9febbcd5d8b5587372cd230ce67c9dde54338f6b
   sqflite: c73556b2499b92f0b6e6946abe4a4084510cdf90
   uni_links_desktop: 34322c2646e4c9abc69b62e1865f9782d2850ba2

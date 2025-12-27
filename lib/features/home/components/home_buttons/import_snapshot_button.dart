@@ -26,21 +26,24 @@ class ImportSnapshotButton extends BaseComponent {
               final int? blockHeight = int.tryParse(data['BlockHeight']);
 
               if (blockHeight == null) {
-                Toast.error("Problem fetching local block height. Please try again.");
+                Toast.error(
+                    "Problem fetching local block height. Please try again.");
                 return;
               }
 
               final remoteInfo = await RemoteInfoService.fetchInfo();
               if (remoteInfo == null) {
-                Toast.error("Problem fetching snapshot block height. Please try again.");
+                Toast.error(
+                    "Problem fetching snapshot block height. Please try again.");
                 return;
               }
               final snapshotHeight = remoteInfo.snapshot.height;
 
               if (blockHeight < snapshotHeight) {
-                ref.read(sessionProvider.notifier).promptForSnapshotImport(remoteInfo);
+                ref.read(sessionProvider.notifier).promptForSnapshotImport();
               } else {
-                Toast.message("Your local blockheight is further along than the snapshot.");
+                Toast.message(
+                    "Your local blockheight is further along than the snapshot.");
               }
             }
           : null,

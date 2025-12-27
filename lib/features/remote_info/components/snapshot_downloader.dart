@@ -1,25 +1,22 @@
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart';
-import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
+import '../../../core/models/snapshot_info.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/files.dart';
 import '../../../utils/formatting.dart';
-import 'package:path/path.dart' as p;
 
 class SnapshotDownloader extends StatefulWidget {
-  final String downloadUrl;
+  final SnapshotInfo snapshotInfo;
   final Ref ref;
 
   const SnapshotDownloader({
     Key? key,
-    required this.downloadUrl,
+    required this.snapshotInfo,
     required this.ref,
   }) : super(key: key);
 
@@ -28,19 +25,23 @@ class SnapshotDownloader extends StatefulWidget {
 }
 
 class _SnapshotDownloaderState extends State<SnapshotDownloader> {
-  int progress = 0;
-  int? total;
-  bool isInitializating = true;
+  int bytesDownloaded = 0;
+  int totalBytes = 0;
+  bool isInitializing = true;
   bool isDownloading = false;
-  bool isInstalling = false;
   bool isReady = false;
-  String? backupDir;
-
-  List<String> installLog = [];
+  String? currentFile;
+  int filesDownloaded = 0;
+  int totalFiles = 0;
 
   @override
   void initState() {
     super.initState();
+    totalBytes = widget.snapshotInfo.totalSizeBytes ?? 0;
+    totalFiles = widget.snapshotInfo.urls?.length ?? 0;
+
+    print('[SnapshotDownloader] initState - totalSizeBytes from API: ${widget.snapshotInfo.totalSizeBytes}');
+    print('[SnapshotDownloader] initState - totalBytes set to: $totalBytes');
 
     Future.delayed(const Duration(milliseconds: 300)).then((_) {
       init();
@@ -49,108 +50,121 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
   Future<void> init() async {
     await widget.ref.read(sessionProvider.notifier).stopCli();
-
     download();
   }
 
   Future<void> download() async {
     setState(() {
-      isInitializating = false;
+      isInitializing = false;
       isDownloading = true;
     });
-    final downloadDirectory = await getTemporaryDirectory();
-    final path = "${downloadDirectory.path}/snapshot.zip";
 
-    Dio().download(widget.downloadUrl, path, onReceiveProgress: (value1, value2) {
+    print('[SnapshotDownloader] Starting download...');
+    print('[SnapshotDownloader] snapshotInfo: ${widget.snapshotInfo}');
+    print('[SnapshotDownloader] urls: ${widget.snapshotInfo.urls}');
+    print('[SnapshotDownloader] totalBytes: $totalBytes, totalFiles: $totalFiles');
+
+    try {
+      final _dbPath = await dbPath();
+      print('[SnapshotDownloader] dbPath: $_dbPath');
+      final dir = Directory(_dbPath);
+
+      // Delete existing DB folder if it exists
+      if (await dir.exists()) {
+        print('[SnapshotDownloader] Deleting existing folder: $_dbPath');
+        try {
+          await dir.delete(recursive: true);
+          print('[SnapshotDownloader] Deleted successfully');
+        } catch (e) {
+          print('[SnapshotDownloader] Delete failed: $e');
+          // Try to at least delete the Databases subfolder
+          try {
+            final dbSubfolder = Directory("$_dbPath/Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}");
+            if (await dbSubfolder.exists()) {
+              await dbSubfolder.delete(recursive: true);
+              print('[SnapshotDownloader] Deleted Databases subfolder');
+            }
+          } catch (e2) {
+            print('[SnapshotDownloader] Subfolder delete also failed: $e2');
+          }
+        }
+      } else {
+        print('[SnapshotDownloader] No existing dir: $_dbPath');
+      }
+
+      // Create new DB folder
+      await Directory(_dbPath).create(recursive: true);
+      final dbFolder = "$_dbPath/Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
+      await Directory(dbFolder).create(recursive: true);
+      print('[SnapshotDownloader] Created dbFolder: $dbFolder');
+
+      final urls = widget.snapshotInfo.urls ?? [];
+      print('[SnapshotDownloader] Downloading ${urls.length} files');
+
+      if (urls.isEmpty) {
+        print('[SnapshotDownloader] ERROR: No URLs to download!');
+        return;
+      }
+
+      final dio = Dio();
+      int cumulativeBytes = 0;
+
+      for (final url in urls) {
+        final filename = url.split('/').last;
+        final filePath = "$dbFolder/$filename";
+
+        print('[SnapshotDownloader] Downloading: $url -> $filePath');
+
+        setState(() {
+          currentFile = filename;
+        });
+
+        try {
+          await dio.download(
+            url,
+            filePath,
+            onReceiveProgress: (received, fileTotal) {
+              setState(() {
+                bytesDownloaded = cumulativeBytes + received;
+              });
+            },
+          );
+
+          // Get actual file size after download
+          final file = File(filePath);
+          if (await file.exists()) {
+            final fileSize = await file.length();
+            cumulativeBytes += fileSize;
+            setState(() {
+              bytesDownloaded = cumulativeBytes;
+            });
+          }
+
+          print('[SnapshotDownloader] Completed: $filename');
+        } catch (e) {
+          print('[SnapshotDownloader] Failed to download $filename: $e (skipping)');
+          // Continue to next file on error (404, network issue, etc)
+        }
+
+        filesDownloaded++;
+      }
+
+      // Adjust final bytesDownloaded to match totalBytes
       setState(() {
-        progress = value1;
-        total = value2;
+        bytesDownloaded = totalBytes;
       });
-      // print("Downloading $value1/$value2");
-    }).then((value) => downloadReady(path));
-  }
 
-  installLogAdd(String string) {
-    installLog.add(string);
-    setState(() {});
-  }
-
-  installLogReplaceLatest(String string) {
-    if (installLog.isEmpty) {
-      installLogAdd(string);
-      return;
+      print('[SnapshotDownloader] All downloads complete');
+      downloadComplete();
+    } catch (e, st) {
+      print('[SnapshotDownloader] ERROR: $e');
+      print('[SnapshotDownloader] Stack: $st');
     }
-
-    installLog[installLog.length - 1] = string;
-    setState(() {});
   }
 
-  Future<void> downloadReady(String zipPath) async {
+  Future<void> downloadComplete() async {
     setState(() {
       isDownloading = false;
-      isInstalling = true;
-    });
-
-    await Future.delayed(Duration(milliseconds: 500));
-
-    final _dbPath = await dbPath();
-    final dir = Directory(_dbPath);
-
-    final date = DateTime.now();
-    String backupDirName = "${_dbPath.replaceAll('rbx', '').replaceAll('RBX', '')}\\RBX_BACKUP_${(date.microsecondsSinceEpoch / 1000).round()}";
-    if (Platform.isMacOS) {
-      backupDirName = backupDirName.toLowerCase().replaceAll("\\", '/').replaceAll('//', '/');
-    }
-
-    if (Platform.isMacOS) {
-      backupDirName = backupDirName.toLowerCase().replaceAll("\\", '/').replaceAll('//', '/');
-    }
-    setState(() {
-      backupDir = backupDirName;
-    });
-
-    installLogAdd("Backing up current VFX folder as '$backupDirName'...");
-
-    await dir.rename(backupDirName);
-    installLogAdd("Backed up.");
-    await Directory(_dbPath).create();
-
-    installLogAdd("Extracting Snapshot (this may take some time)...");
-    await Future.delayed(Duration(milliseconds: 500));
-
-    await extractZipFile(zipPath, _dbPath);
-
-    // final bytes = await File(zipPath).readAsBytes();
-    // final archive = ZipDecoder().decodeBytes(bytes);
-    // for (final file in archive) {
-    //   String filename = file.name;
-    //   print("filename before: $filename");
-
-    //   if (filename.contains('/')) {
-    //     filename = filename.split('/').last;
-    //   }
-
-    //   print("filename after: $filename");
-
-    //   installLogReplaceLatest("Extracting Snapshot ($filename)...");
-
-    //   if (file.isFile) {
-    //     final data = file.content as List<int>;
-
-    //     final p = "$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename";
-    //     installLogAdd("Extracting '$p'...");
-    //     File(p)
-    //       ..createSync(recursive: true)
-    //       ..writeAsBytesSync(data);
-    //   } else {
-    //     Directory("$_dbPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename").create(recursive: true);
-    //   }
-    // }
-
-    installLogAdd("Snapshot extracted");
-    installLogAdd("Starting CLI");
-    setState(() {
-      isInstalling = false;
       isReady = true;
     });
 
@@ -158,74 +172,15 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     await widget.ref.read(sessionProvider.notifier).fetchConfig();
   }
 
-  // Future<void> extractZipFile(String zipPath, String outputPath) async {
-  //   final inputStream = InputFileStream(zipPath);
-  //   final archive = ZipDecoder().decodeBuffer(inputStream);
-
-  //   for (final file in archive.files) {
-  //     final filename = p.basename(file.name);
-  //     print("Extracting: $filename");
-  //     installLogAdd("Extracting $filename...");
-  //     await Future.delayed(Duration(milliseconds: 500));
-
-  //     final outputFilePath = p.join(outputPath, "Databases${Env.isTestNet ? 'TestNet' : ''}", filename);
-
-  //     if (file.isFile) {
-  //       final outputFile = File(outputFilePath);
-  //       outputFile.createSync(recursive: true);
-  //       outputFile.writeAsBytesSync(file.content as List<int>);
-  //     } else {
-  //       Directory(outputFilePath).createSync(recursive: true);
-  //     }
-  //   }
-
-  //   inputStream.close();
-  // }
-
-  Future<void> extractZipFile(String zipPath, String outputPath) async {
-    final inputStream = InputFileStream(zipPath);
-    final archive = ZipDecoder().decodeBuffer(inputStream);
-
-    for (final file in archive.files) {
-      String filename = file.name;
-      print("filename before: $filename");
-
-      if (filename.contains('/')) {
-        filename = filename.split('/').last;
-      }
-
-      print("filename after: $filename");
-
-      installLogAdd("Extracting $filename...");
-      await Future.delayed(Duration(milliseconds: 500));
-
-      final outputFilePath = "$outputPath/Databases${Env.isTestNet ? 'TestNet' : ''}/$filename";
-
-      if (file.isFile) {
-        final outputFile = File(outputFilePath);
-        outputFile.createSync(recursive: true);
-        outputFile.writeAsBytesSync(file.content as List<int>);
-      } else {
-        Directory(outputFilePath).createSync(recursive: true);
-      }
-    }
-
-    inputStream.close();
-  }
-
   @override
   Widget build(BuildContext context) {
-    final double percent = total != null ? progress / total! : 0;
+    final double percent =
+        totalBytes > 0 ? (bytesDownloaded / totalBytes).clamp(0.0, 1.0) : 0;
 
     String title = "Initializing...";
     if (isDownloading) {
       title = "Downloading...";
     }
-
-    if (isInstalling) {
-      title = "Installing...";
-    }
-
     if (isReady) {
       title = "All done!";
     }
@@ -235,26 +190,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       content: SizedBox(
         width: 600,
         child: Builder(builder: (context) {
-          if (isInstalling) {
-            return Container(
-              color: Colors.black87,
-              child: Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: installLog.length,
-                  itemBuilder: (context, index) {
-                    return Text(
-                      installLog[index],
-                      style: Theme.of(context).textTheme.bodySmall,
-                    );
-                  },
-                ),
-              ),
-            );
-          }
-
-          if (isInitializating) {
+          if (isInitializing) {
             return const Text("Shutting down CLI...");
           }
 
@@ -266,10 +202,11 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   "${(percent * 100).round()}%",
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
+                    fontSize: 24,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: LinearProgressIndicator(
                     color: Colors.green,
                     minHeight: 12,
@@ -277,10 +214,19 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                     value: percent,
                   ),
                 ),
-                if (total != null)
-                  Text(
-                    "${readableFileSize(progress)} / ${readableFileSize(total!)}",
-                    style: Theme.of(context).textTheme.bodySmall,
+                Text(
+                  "${(bytesDownloaded / 1073741824).toStringAsFixed(2)} GB / ${(totalBytes / 1073741824).toStringAsFixed(2)} GB",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                if (currentFile != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      "Downloading: $currentFile",
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.white54,
+                          ),
+                    ),
                   ),
               ],
             );
@@ -295,7 +241,9 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   size: 40,
                   color: Theme.of(context).colorScheme.success,
                 ),
+                const SizedBox(height: 8),
                 const Text("Database Snapshot Imported."),
+                const SizedBox(height: 4),
                 const Text(
                   "Starting up CLI now...",
                   style: TextStyle(
@@ -303,38 +251,16 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const Divider(),
-                if (backupDir != null) ...[
-                  Text(
-                    "Note: In case your mistakenly imported this snapshot, your previous database folder was backed up to\n$backupDir",
-                    style: Theme.of(context).textTheme.bodySmall,
-                    textAlign: TextAlign.center,
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(color: Colors.white70),
                   ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  AppButton(
-                    label: "Open Folder",
-                    variant: AppColorVariant.Light,
-                    type: AppButtonType.Text,
-                    icon: Icons.folder,
-                    onPressed: () {
-                      openFile(File(backupDir!));
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          "Close",
-                          style: TextStyle(color: Colors.white70),
-                        )),
-                  )
-                ]
+                ),
               ],
             );
           }
