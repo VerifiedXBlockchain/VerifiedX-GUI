@@ -79,7 +79,8 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
           print('[SnapshotDownloader] Delete failed: $e');
           // Try to at least delete the Databases subfolder
           try {
-            final dbSubfolder = Directory("$_dbPath/Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}");
+            final fallbackSep = Platform.isWindows ? '\\' : '/';
+            final dbSubfolder = Directory("$_dbPath${fallbackSep}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}");
             if (await dbSubfolder.exists()) {
               await dbSubfolder.delete(recursive: true);
               print('[SnapshotDownloader] Deleted Databases subfolder');
@@ -94,7 +95,8 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
       // Create new DB folder
       await Directory(_dbPath).create(recursive: true);
-      final dbFolder = "$_dbPath/Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
+      final sep = Platform.isWindows ? '\\' : '/';
+      final dbFolder = "$_dbPath${sep}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
       await Directory(dbFolder).create(recursive: true);
       print('[SnapshotDownloader] Created dbFolder: $dbFolder');
 
@@ -111,7 +113,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
       for (final url in urls) {
         final filename = url.split('/').last;
-        final filePath = "$dbFolder/$filename";
+        final filePath = "$dbFolder$sep$filename";
 
         print('[SnapshotDownloader] Downloading: $url -> $filePath');
 
