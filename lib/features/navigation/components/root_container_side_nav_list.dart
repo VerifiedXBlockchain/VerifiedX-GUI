@@ -2,10 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/app.dart';
+import 'package:rbx_wallet/core/app_constants.dart';
+import 'package:rbx_wallet/core/env.dart';
+import 'package:rbx_wallet/core/services/butterfly_bridge_url_service.dart';
+import 'package:rbx_wallet/core/services/password_prompt_service.dart';
 import 'package:rbx_wallet/core/theme/colors.dart';
+import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/features/wallet/utils.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/web_router.gr.dart';
@@ -105,6 +110,26 @@ class RootContainerSideNavList extends BaseComponent {
             isActive: tabsRouter.activeIndex == 2,
             isExpanded: isExpanded,
           ),
+          if (BUTTERFLY_ENABLED)
+            RootContainerSideNavItem(
+              title: "Pay /w Butterfly",
+              iconType: PrettyIconType.butterfly,
+              onPressed: () async {
+                if (inDrawer) {
+                  rootScaffoldKey.currentState!.closeDrawer();
+                }
+
+                final result = await ButterflyOptionsDialog.show();
+                if (result == "visit") {
+                  launchUrlString(Env.butterflyWebBaseUrl,
+                      mode: LaunchMode.externalApplication);
+                } else if (result == "login") {
+                  await _handleButterflyLogin(context, ref);
+                }
+              },
+              isActive: false,
+              isExpanded: isExpanded,
+            ),
           RootContainerSideNavItem(
             title: "Crypto.com",
             isNew: true,
@@ -320,5 +345,74 @@ class RootContainerSideNavList extends BaseComponent {
         ],
       );
     });
+  }
+}
+
+Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
+  // Get wallet keys based on platform
+  String? privateKey;
+  String? publicKey;
+  String? address;
+
+  if (kIsWeb) {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error("No wallet selected. Please create or import a wallet first.");
+      return;
+    }
+    privateKey = keypair.privateCorrected;
+    publicKey = keypair.public;
+    address = keypair.address;
+  } else {
+    final wallet = ref.read(sessionProvider).currentWallet;
+    if (wallet == null) {
+      Toast.error("No Account Selected");
+      return;
+    }
+    if (wallet.privateKey == null) {
+      Toast.error("Private key not available.");
+      return;
+    }
+    privateKey = wallet.privateKey!;
+    publicKey = wallet.publicKey;
+    address = wallet.address;
+  }
+
+  // Prompt for password
+  final password = await PasswordPromptService.promptNewPassword(
+    rootNavigatorKey.currentContext!,
+    title: "Create Butterfly Password",
+    customMessage:
+        "Create a password to securely transfer your credentials to Butterfly. You will need to enter this same password on the Butterfly website.",
+  );
+
+  if (password == null) return;
+
+  // Confirmation dialog
+  final confirmed = await ConfirmDialog.show(
+    title: "Login to Butterfly",
+    body: "You are about to open Butterfly and log in with:\n\n$address\n\nContinue?",
+    confirmText: "Open Butterfly",
+    cancelText: "Cancel",
+  );
+
+  if (confirmed != true) return;
+
+  // Generate encrypted URL and launch
+  try {
+    ref.read(globalLoadingProvider.notifier).start();
+    await Future.delayed(const Duration(milliseconds: 250));
+    final url = ButterflyBridgeUrlService.createBridgeUrl(
+      privateKey: privateKey,
+      password: password,
+      address: address,
+      publicKey: publicKey,
+      targetBaseUrl: Env.butterflyWebBaseUrl,
+    );
+    ref.read(globalLoadingProvider.notifier).complete();
+    await launchUrlString(url, mode: LaunchMode.externalApplication);
+  } catch (e) {
+    ref.read(globalLoadingProvider.notifier).complete();
+    Toast.error("Failed to generate login URL: $e");
   }
 }
