@@ -80,7 +80,8 @@ class InfoDialog {
           child: Text(
             closeText ?? "Close",
             style: TextStyle(
-              color: buttonColorOverride ?? Theme.of(context).colorScheme.secondary,
+              color: buttonColorOverride ??
+                  Theme.of(context).colorScheme.secondary,
             ),
           ),
         )
@@ -130,7 +131,11 @@ class ConfirmDialog {
   }) {
     return AlertDialog(
       title: Text(title),
-      content: body != null ? ConstrainedBox(constraints: const BoxConstraints(maxWidth: 500), child: Text(body)) : content,
+      content: body != null
+          ? ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: Text(body))
+          : content,
       actions: [
         TextButton(
           style: TextButton.styleFrom(
@@ -149,7 +154,9 @@ class ConfirmDialog {
         ),
         TextButton(
           style: TextButton.styleFrom(
-            primary: destructive ? Colors.red.shade600 : Theme.of(context).colorScheme.info,
+            primary: destructive
+                ? Colors.red.shade600
+                : Theme.of(context).colorScheme.info,
             textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
           onPressed: () {
@@ -302,14 +309,15 @@ class PromptModal {
 
     final GlobalKey<FormState> _formKey = GlobalKey();
 
-    final TextEditingController _controller = controller ?? TextEditingController(text: initialValue);
+    final TextEditingController _controller =
+        controller ?? TextEditingController(text: initialValue);
 
     bool _obscureText = obscureText;
     double _usdValue = 0.0;
 
     void _calculateUsdValue(WidgetRef ref) {
       if (!showUsdValue) return;
-      
+
       final parsedAmount = double.tryParse(_controller.value.text);
       if (parsedAmount == null || parsedAmount <= 0) {
         _usdValue = 0.0;
@@ -317,7 +325,7 @@ class PromptModal {
       }
 
       double? usdPrice;
-      
+
       // Determine currency type and get appropriate price
       if (currencyType == CurrencyType.btc) {
         usdPrice = ref.read(btcCurrentPriceDataDetailProvider);
@@ -368,9 +376,15 @@ class PromptModal {
                   title,
                   style: const TextStyle(color: Colors.white),
                 ),
-          titlePadding: tightPadding ? const EdgeInsets.all(12.0) : const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 20),
-          contentPadding: tightPadding ? const EdgeInsets.all(12.0) : const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
-          insetPadding: tightPadding ? const EdgeInsets.all(8.0) : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
+          titlePadding: tightPadding
+              ? const EdgeInsets.all(12.0)
+              : const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 20),
+          contentPadding: tightPadding
+              ? const EdgeInsets.all(12.0)
+              : const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+          insetPadding: tightPadding
+              ? const EdgeInsets.all(8.0)
+              : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
           content: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 600, minWidth: 400),
             child: Form(
@@ -385,10 +399,10 @@ class PromptModal {
                       builder: (context, ref, child) {
                         _controller.addListener(() {
                           setState(() {
-                          _calculateUsdValue(ref);
+                            _calculateUsdValue(ref);
                           });
                         });
-                        
+
                         return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -404,10 +418,16 @@ class PromptModal {
                                   suffix: sufixIcon,
                                   label: Text(
                                     labelText,
-                                    style: TextStyle(color: labelColor ?? Theme.of(context).colorScheme.secondary),
+                                    style: TextStyle(
+                                        color: labelColor ??
+                                            Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
                                   ),
                                   prefixText: prefixText,
-                                  helperText: showUsdValue && _usdValue > 0 ? "\$${_usdValue.toStringAsFixed(2)} USD" : null,
+                                  helperText: showUsdValue && _usdValue > 0
+                                      ? "\$${_usdValue.toStringAsFixed(2)} USD"
+                                      : null,
                                 ),
                                 validator: validator,
                                 inputFormatters: inputFormatters,
@@ -424,7 +444,9 @@ class PromptModal {
                                   });
                                 },
                                 icon: Icon(
-                                  _obscureText ? Icons.remove_red_eye : Icons.hide_source_outlined,
+                                  _obscureText
+                                      ? Icons.remove_red_eye
+                                      : Icons.hide_source_outlined,
                                 ),
                               )
                           ],
@@ -463,13 +485,16 @@ class PromptModal {
               ),
             TextButton(
               style: TextButton.styleFrom(
-                primary: destructive ? Colors.red.shade600 : Theme.of(context).colorScheme.info,
+                primary: destructive
+                    ? Colors.red.shade600
+                    : Theme.of(context).colorScheme.info,
                 textStyle: const TextStyle(fontWeight: FontWeight.bold),
               ),
               onPressed: () {
                 _submit(context);
               },
-              child: Text(confirmText ?? "Submit", style: TextStyle(color: Theme.of(context).colorScheme.info)),
+              child: Text(confirmText ?? "Submit",
+                  style: TextStyle(color: Theme.of(context).colorScheme.info)),
             )
           ],
         );
@@ -496,16 +521,20 @@ class AuthModal {
 
     final GlobalKey<FormState> _formKey = GlobalKey();
 
-    final TextEditingController _emailController = TextEditingController(text: '');
+    final TextEditingController _emailController =
+        TextEditingController(text: '');
 
-    final TextEditingController _passwordController = TextEditingController(text: '');
+    final TextEditingController _passwordController =
+        TextEditingController(text: '');
 
-    final TextEditingController _confirmPasswordController = TextEditingController(text: '');
+    final TextEditingController _confirmPasswordController =
+        TextEditingController(text: '');
 
     Future<void> submit(BuildContext context) async {
       if (!_formKey.currentState!.validate()) return;
 
-      if (forCreate && _passwordController.text != _confirmPasswordController.text) {
+      if (forCreate &&
+          _passwordController.text != _confirmPasswordController.text) {
         Toast.error("Passwords do not match");
         return;
       }
@@ -543,7 +572,8 @@ class AuthModal {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (withExplanation)
-                      const Text("An account is required to continue.\nPlease create your account now with your email address and a password."),
+                      const Text(
+                          "An account is required to continue.\nPlease create your account now with your email address and a password."),
                     const Text(
                       "Your email and password is used to seed your private key which is processed in this browser and will never be transmitted across the internet.",
                       style: TextStyle(
@@ -586,7 +616,9 @@ class AuthModal {
                               });
                             },
                             icon: Icon(
-                              obscuringPassword ? Icons.remove_red_eye : Icons.hide_source_outlined,
+                              obscuringPassword
+                                  ? Icons.remove_red_eye
+                                  : Icons.hide_source_outlined,
                             ),
                           )
                         ],
@@ -623,7 +655,8 @@ class AuthModal {
               },
               child: Text(
                 "Cancel",
-                style: TextStyle(color: Theme.of(context).colorScheme.info.withOpacity(0.7)),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.info.withOpacity(0.7)),
               ),
             ),
             TextButton(
@@ -634,7 +667,8 @@ class AuthModal {
               onPressed: () {
                 submit(context);
               },
-              child: Text("Login", style: TextStyle(color: Theme.of(context).colorScheme.info)),
+              child: Text("Login",
+                  style: TextStyle(color: Theme.of(context).colorScheme.info)),
             )
           ],
         );
@@ -644,7 +678,8 @@ class AuthModal {
 }
 
 class PaymentTermsDialog {
-  static Future<bool?> show(BuildContext context, PaymentGateway paymentGateway) async {
+  static Future<bool?> show(
+      BuildContext context, PaymentGateway paymentGateway) async {
     return await showDialog(
       context: context,
       builder: (context) {
@@ -695,11 +730,13 @@ class PaymentTermsDialog {
                           Navigator.of(context).pop(true);
                         }
                       : () {
-                          Toast.error("You must agree to the terms before proceeding.");
+                          Toast.error(
+                              "You must agree to the terms before proceeding.");
                         },
                   child: Text(
                     "Confirm",
-                    style: TextStyle(color: hasAgreed ? Colors.white : Colors.white54),
+                    style: TextStyle(
+                        color: hasAgreed ? Colors.white : Colors.white54),
                   ),
                 )
               ],
@@ -716,11 +753,20 @@ class SelectAddressDialog {
     List<Map<String, dynamic>> wallets;
     if (kIsWeb) {
       wallets = [
-        ...ref.read(multiAccountProvider).map((e) => {'address': e.keypair?.address ?? '', 'vault': false}).toList(),
-        ...ref.read(multiAccountProvider).map((e) => {'address': e.raKeypair?.address ?? '', 'vault': true}).toList()
+        ...ref
+            .read(multiAccountProvider)
+            .map((e) => {'address': e.keypair?.address ?? '', 'vault': false})
+            .toList(),
+        ...ref
+            .read(multiAccountProvider)
+            .map((e) => {'address': e.raKeypair?.address ?? '', 'vault': true})
+            .toList()
       ];
     } else {
-      wallets = ref.read(walletListProvider).map((e) => {'address': e.address, 'vault': e.isReserved}).toList();
+      wallets = ref
+          .read(walletListProvider)
+          .map((e) => {'address': e.address, 'vault': e.isReserved})
+          .toList();
     }
 
     return await showDialog(
@@ -750,8 +796,11 @@ class SelectAddressDialog {
                     },
                     child: Text(
                       w['address'],
-                      style:
-                          TextStyle(color: !w['vault'] ? Colors.white : Theme.of(context).colorScheme.reserve, decoration: TextDecoration.underline),
+                      style: TextStyle(
+                          color: !w['vault']
+                              ? Colors.white
+                              : Theme.of(context).colorScheme.reserve,
+                          decoration: TextDecoration.underline),
                     ),
                   ),
                 )
@@ -804,7 +853,8 @@ class SpecialDialog<T> {
                                   style: TextStyle(fontSize: 18),
                                 ),
                               ),
-                            if (title == null && dissmissible) SizedBox(height: 18 + 8 + 8),
+                            if (title == null && dissmissible)
+                              SizedBox(height: 18 + 8 + 8),
                             Container(color: Colors.black12, child: widget),
                           ],
                         ),
@@ -856,10 +906,9 @@ class ButterflyOptionsDialog {
           ),
           content: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
-            child: Text(
-                BreakPoints.useMobileLayout(context)
-                    ? "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly.\n\nAuto-login with this account?"
-                    : "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly. No Borders, No Restrictions, No Limits, and No Accounts Needed… Be Free!\nAuto-login with this account?"),
+            child: Text(BreakPoints.useMobileLayout(context)
+                ? "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly.\n\nAuto-login with this account?"
+                : "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly. No Borders, No Restrictions, No Limits, and No Accounts Needed… Be Free!\n\nAuto-login with this account?"),
           ),
           actions: [
             TextButton(

@@ -242,16 +242,16 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
             onPressed: _onSubmit,
             variant: AppColorVariant.Success,
           ),
-          const SizedBox(height: 12),
-          AppButton(
-            label: pendingCount > 0
-                ? 'View History ($pendingCount active)'
-                : 'View History',
-            type: AppButtonType.Text,
-            variant: AppColorVariant.Secondary,
-            icon: Icons.history,
-            onPressed: _showHistory,
-          ),
+          // const SizedBox(height: 12),
+          // AppButton(
+          //   label: pendingCount > 0
+          //       ? 'View History ($pendingCount active)'
+          //       : 'View History',
+          //   type: AppButtonType.Text,
+          //   variant: AppColorVariant.Secondary,
+          //   icon: Icons.history,
+          //   onPressed: _showHistory,
+          // ),
           // const SizedBox(height: 8),
           // Text(
           //   'Note: A fee (\$0.01 USD in VFX) will be added to cover platform costs.',
