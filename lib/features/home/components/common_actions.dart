@@ -7,24 +7,20 @@ import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/utils/toast.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../app.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/open_explorer_modal.dart';
 import '../../../core/dialogs.dart';
-import '../../../core/env.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../../utils/validation.dart';
 import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
-import '../../faucet/screens/faucet_screen.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../navigation/utils.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../nft/services/nft_service.dart';
 import '../../token/providers/token_list_provider.dart';
-import '../../wallet/utils.dart';
 
 import '../../../core/theme/pretty_icons.dart';
 import 'home_buttons/verify_nft_ownership_button.dart';
@@ -92,7 +88,8 @@ class CommonActions extends BaseComponent {
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {
-                  RootContainerUtils.navigateToTab(context, RootTab.transactions);
+                  RootContainerUtils.navigateToTab(
+                      context, RootTab.transactions);
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
@@ -133,7 +130,8 @@ class CommonActions extends BaseComponent {
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
                 onPressed: () async {
-                  launchUrlString("https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
+                  launchUrlString(
+                      "https://docs.verifiedx.io/docs/tutorials/video-tutorials/");
                 },
                 color: AppColors.getWhite(ColorShade.s200),
               ),
@@ -144,7 +142,8 @@ class CommonActions extends BaseComponent {
                 onPressed: () async {
                   final sig = await PromptModal.show(
                     title: "Validate Ownership",
-                    body: "Paste in the signature provided by the owner to validate its ownership.",
+                    body:
+                        "Paste in the signature provided by the owner to validate its ownership.",
                     validator: (val) => formValidatorNotEmpty(val, "Signature"),
                     labelText: "Signature",
                   );
@@ -164,19 +163,30 @@ class CommonActions extends BaseComponent {
                     if (verified == null) {
                       return;
                     }
-                    final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
+                    final color = verified
+                        ? Theme.of(context).colorScheme.success
+                        : Theme.of(context).colorScheme.danger;
                     final iconData = verified ? Icons.check : Icons.close;
                     final title = verified ? "Verified" : "Not Verified";
-                    final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
-                    final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
+                    final subtitle = verified
+                        ? "Ownership Verified"
+                        : "Ownership NOT Verified";
+                    final body = verified
+                        ? "$address\nOWNS\n$scId"
+                        : "$address\ndoes NOT own\n$scId";
 
                     InfoDialog.show(
                       title: title,
-                      content: NftVerificationSuccessDialog(iconData: iconData, color: color, subtitle: subtitle, body: body),
+                      content: NftVerificationSuccessDialog(
+                          iconData: iconData,
+                          color: color,
+                          subtitle: subtitle,
+                          body: body),
                     );
                   }
                 },
               ),
+
               AppVerticalIconButton(
                 label: "Open\nExplorer",
                 icon: Icons.open_in_browser,

@@ -16,6 +16,7 @@ import '../features/wallet/providers/wallet_list_provider.dart';
 import '../features/web/providers/multi_account_provider.dart';
 import '../utils/toast.dart';
 import '../utils/validation.dart';
+import 'breakpoints.dart';
 import 'theme/app_theme.dart';
 import 'theme/components.dart';
 import 'utils.dart';
@@ -828,6 +829,57 @@ class SpecialDialog<T> {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+class ButterflyOptionsDialog {
+  static Future<String?> show({BuildContext? context}) async {
+    return await showDialog<String>(
+      context: context ?? rootNavigatorKey.currentContext!,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Launch Butterfly"),
+              IconButton(
+                onPressed: () => Navigator.of(context).pop(null),
+                icon: const Icon(Icons.close, size: 20),
+                color: Colors.white38,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(),
+              ),
+            ],
+          ),
+          content: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Text(
+                BreakPoints.useMobileLayout(context)
+                    ? "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly.\n\nAuto-login with this account?"
+                    : "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly. No Borders, No Restrictions, No Limits, and No Accounts Needed… Be Free!\nAuto-login with this account?"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop("visit"),
+              child: Text(
+                "Just Take Me There",
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop("login"),
+              child: Text(
+                "Login with this Account",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

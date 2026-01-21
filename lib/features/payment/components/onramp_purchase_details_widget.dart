@@ -5,7 +5,7 @@ import 'package:rbx_wallet/core/components/centered_loader.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/features/payment/models/onramp_purchase_details.dart';
-import 'package:rbx_wallet/features/payment/services/onramp_service.dart';
+import 'package:rbx_wallet/features/payment/services/butterfly_service.dart';
 
 class OnrampPurchaseDetailsWidget extends ConsumerStatefulWidget {
   final String purchaseUuid;
@@ -34,7 +34,7 @@ class _OnrampPurchaseDetailsWidgetState
 
   Future<void> load() async {
     final p =
-        await OnrampService().retrievePurchaseDetails(widget.purchaseUuid);
+        await ButterflyService().retrievePurchaseDetails(widget.purchaseUuid);
 
     setState(() {
       purchase = p;

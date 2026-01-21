@@ -101,6 +101,14 @@ class $AssetsImagesGen {
   AssetGenImage get animatedCubeFast =>
       const AssetGenImage('assets/images/animated_cube_fast.gif');
 
+  /// File path: assets/images/butterfly_icon.png
+  AssetGenImage get butterflyIcon =>
+      const AssetGenImage('assets/images/butterfly_icon.png');
+
+  /// File path: assets/images/butterfly_wordmark.png
+  AssetGenImage get butterflyWordmark =>
+      const AssetGenImage('assets/images/butterfly_wordmark.png');
+
   $AssetsImagesConnectorGen get connector => const $AssetsImagesConnectorGen();
 
   /// File path: assets/images/connector1.png
@@ -263,6 +271,8 @@ class $AssetsImagesGen {
         animatedCube,
         animatedCubeBtc,
         animatedCubeFast,
+        butterflyIcon,
+        butterflyWordmark,
         connector1,
         connector2,
         cryptoDotComIcon,

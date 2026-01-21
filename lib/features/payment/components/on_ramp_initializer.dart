@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/app_constants.dart';
 import '../models/onramp_quote_response.dart';
 import '../payment_utils.dart';
-import '../services/onramp_service.dart';
+import '../services/butterfly_service.dart';
 
 class OnRampInitializer extends StatefulWidget {
   final String walletAddress;
@@ -31,7 +31,7 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
   }
 
   Future<void> getQuote() async {
-    final data = await OnrampService()
+    final data = await ButterflyService()
         .getQuote(vfxAddress: widget.walletAddress, amount: widget.vfxAmount);
 
     setState(() {
