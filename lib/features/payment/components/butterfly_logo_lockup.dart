@@ -16,10 +16,10 @@ class ButterflyLogoLockup extends StatelessWidget {
           width: 64,
           height: 64,
         ),
-        Image.asset(
-          "assets/images/butterfly_wordmark.png",
-          height: 72,
-        ),
+        // Image.asset(
+        //   "assets/images/butterfly_wordmark.png",
+        //   height: 72,
+        // ),
       ],
     );
   }
