@@ -29,7 +29,7 @@ build_core:
 package_mac:
 	rm -rf ../Core-CLI/bin/Release
 	cd ../Core-CLI && git pull && cd /Users/tylersavery/Projects/rbx/rbx_wallet/
-	dotnet publish -c Release -r osx-x64 ../Core-Cli/ --self-contained true -f net6.0 -p:PublishSingleFile=true
+	dotnet publish -c Release -r osx-x64 ../Core-Cli/ReserveBlockCore/ReserveBlockCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 	rm -f ./installers/exports/RBX-OSX-INTEL-Installer.dmg
 	rm -f ./installers/exports/VFX-OSX-INTEL-Installer.dmg
 	rm -f ./installers/resources/Runner/VFXWallet.app
@@ -53,7 +53,7 @@ build_win_cli:
 package_m1:
 	rm -rf ../Core-CLI/bin/Release
 	cd ../Core-CLI && git pull && cd /Users/tyler/prj/vfx/vfx-gui/
-	dotnet publish -c Release -r osx-arm64 ../Core-Cli/ --self-contained true -f net6.0 -p:PublishSingleFile=true
+	dotnet publish -c Release -r osx-arm64 -p:RuntimeIdentifier=osx-arm64 ../Core-Cli/ReserveBlockCore/ReserveBlockCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 	rm -f ./installers/exports/RBX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/VFX-OSX-ARM-Installer.dmg
 	rm -f ./installers/resources/Runner/VFXWallet.app
@@ -75,7 +75,7 @@ build_win:
 	if exist .\build\windows\runner\Release rmdir /s /q ".\build\windows\runner\Release"
 	fvm flutter build windows --release
 	move ".\build\windows\runner\Release\rbx_wallet_gui.exe" ".\build\windows\runner\Release\VFXWallet.exe"
-	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\ --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
+	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\ReserveBlockCore\ReserveBlockCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
 	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
 	copy ".\installers\resources\windows-64\RBXLauncher.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncher.exe" 
 	copy ".\installers\resources\windows-64\RBXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncherTestNet.exe" 

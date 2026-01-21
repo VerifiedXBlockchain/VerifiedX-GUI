@@ -34,6 +34,8 @@ import '../../features/dst/services/dst_service.dart';
 import '../../features/remote_info/components/snapshot_downloader.dart';
 import '../../features/remote_info/models/remote_info.dart';
 import '../../features/remote_info/services/remote_info_service.dart';
+import '../models/snapshot_info.dart';
+import '../services/snapshot_service.dart';
 import '../../features/remote_shop/providers/connected_shop_provider.dart';
 import '../../features/remote_shop/providers/thumbnail_fetcher_provider.dart';
 import '../../features/reserve/providers/reserve_account_provider.dart';
@@ -101,6 +103,7 @@ class SessionModel {
   final BtcAccountSyncInfo? btcAccountSyncInfo;
   final BtcRecommendedFees? btcRecommendedFees;
   final bool snapshotRequested;
+  final SnapshotInfo? snapshotInfo;
 
   const SessionModel({
     this.currentWallet,
@@ -125,6 +128,7 @@ class SessionModel {
     this.btcAccountSyncInfo,
     this.btcRecommendedFees,
     this.snapshotRequested = false,
+    this.snapshotInfo,
   });
 
   SessionModel copyWith({
@@ -150,6 +154,7 @@ class SessionModel {
     BtcAccountSyncInfo? btcAccountSyncInfo,
     BtcRecommendedFees? btcRecommendedFees,
     bool? snapshotRequested,
+    SnapshotInfo? snapshotInfo,
   }) {
     return SessionModel(
       startTime: startTime ?? this.startTime,
@@ -177,6 +182,7 @@ class SessionModel {
       btcAccountSyncInfo: btcAccountSyncInfo ?? this.btcAccountSyncInfo,
       btcRecommendedFees: btcRecommendedFees ?? this.btcRecommendedFees,
       snapshotRequested: snapshotRequested ?? this.snapshotRequested,
+      snapshotInfo: snapshotInfo ?? this.snapshotInfo,
     );
   }
 
@@ -369,7 +375,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
 
     final remoteInfo = await RemoteInfoService.fetchInfo();
-    state = state.copyWith(remoteInfo: remoteInfo);
+    final snapshotInfo = await SnapshotService().fetchLatest();
+    state = state.copyWith(remoteInfo: remoteInfo, snapshotInfo: snapshotInfo);
 
     await Future.delayed(const Duration(seconds: 3));
 
@@ -378,12 +385,16 @@ class SessionProvider extends StateNotifier<SessionModel> {
         updateGui();
         return;
       }
+    }
 
-      final snapshotHeight = remoteInfo.snapshot.height;
-
+    if (snapshotInfo != null && snapshotInfo.isAvailable) {
+      final snapshotHeight = snapshotInfo.height!;
       if (blockHeight < (snapshotHeight - 5000)) {
         promptForSnapshotImport();
       }
+    }
+
+    if (remoteInfo != null) {
 
       final cliUpdateAvailable = await BridgeService().updateCli(false);
       if (cliUpdateAvailable == true) {
@@ -412,17 +423,15 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
   }
 
-  Future<void> promptForSnapshotImport([RemoteInfo? remoteInfoOverride]) async {
-    // final context = rootNavigatorKey.currentContext!;
-
-    final remoteInfo = remoteInfoOverride ?? state.remoteInfo;
+  Future<void> promptForSnapshotImport() async {
+    final snapshotInfo = state.snapshotInfo;
 
     final blockHeight = ref.read(walletInfoProvider)!.blockHeight;
-    if (remoteInfo == null) {
+    if (snapshotInfo == null || !snapshotInfo.isAvailable) {
       Toast.error("Could not determine latest snapshot state");
       return;
     }
-    final snapshotHeight = remoteInfo.snapshot.height;
+    final snapshotHeight = snapshotInfo.height!;
 
     final confirmed = await ConfirmDialog.show(
       title: "Import Snapshot?",
@@ -435,7 +444,6 @@ class SessionProvider extends StateNotifier<SessionModel> {
     state = state.copyWith(snapshotRequested: true);
 
     if (confirmed == true) {
-      // importSnapshot();
       bool? shouldContinue = true;
       if (ref.read(walletListProvider).isNotEmpty) {
         shouldContinue = await ConfirmDialog.show(
@@ -454,19 +462,18 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> importSnapshot() async {
-    if (state.remoteInfo?.snapshot.url == null) {
+    final snapshotInfo = state.snapshotInfo;
+    if (snapshotInfo == null || !snapshotInfo.isAvailable) {
       Toast.error();
       return;
     }
-
-    final url = state.remoteInfo!.snapshot.url;
 
     showDialog(
         barrierDismissible: false,
         context: rootNavigatorKey.currentContext!,
         builder: (context) {
           return SnapshotDownloader(
-            downloadUrl: url,
+            snapshotInfo: snapshotInfo,
             ref: ref,
           );
         });
@@ -616,23 +623,23 @@ class SessionProvider extends StateNotifier<SessionModel> {
         };
         wallets.add(Wallet.fromJson(_item));
       }
+    }
 
-      if (reserveResponse.isNotEmpty) {
-        final data = jsonDecode(reserveResponse);
-        if (data['Success'] == true && data['ReserveAccounts'] != null) {
-          final reserveItems = data['ReserveAccounts'];
-          for (Map<String, dynamic> item in reserveItems) {
-            item['Balance'] = item['TotalBalance'];
-            item['IsValidating'] = false;
-            final Map<String, dynamic> _item = {
-              ...item,
-              'friendlyName': names.containsKey(item['Address'])
-                  ? names[item['Address']]
-                  : null,
-            };
-            if (!deleted.contains(item['Address'])) {
-              wallets.add(Wallet.fromJson(_item));
-            }
+    if (reserveResponse.isNotEmpty) {
+      final data = jsonDecode(reserveResponse);
+      if (data['Success'] == true && data['ReserveAccounts'] != null) {
+        final reserveItems = data['ReserveAccounts'];
+        for (Map<String, dynamic> item in reserveItems) {
+          item['Balance'] = item['TotalBalance'];
+          item['IsValidating'] = false;
+          final Map<String, dynamic> _item = {
+            ...item,
+            'friendlyName': names.containsKey(item['Address'])
+                ? names[item['Address']]
+                : null,
+          };
+          if (!deleted.contains(item['Address'])) {
+            wallets.add(Wallet.fromJson(_item));
           }
         }
       }
