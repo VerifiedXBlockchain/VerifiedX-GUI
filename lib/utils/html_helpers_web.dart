@@ -8,7 +8,7 @@ import 'html_helpers_interface.dart';
 class HtmlHelpersImplementation extends HtmlHelpersInterface {
   @override
   void redirect(String url) {
-    html.window.open(url, "_self");
+    html.window.location.href = url;
   }
 
   @override

@@ -58,9 +58,11 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
   Future<void> _showIdleWarning() async {
     Timer? autoLockTimer;
     bool userResponded = false;
+    bool isLocking = false;
 
     autoLockTimer = Timer(const Duration(seconds: 15), () {
-      if (!userResponded) {
+      if (!userResponded && !isLocking) {
+        isLocking = true;
         Navigator.of(context, rootNavigator: true).pop();
         _savePendingRedirectAndLock();
       }
@@ -78,7 +80,8 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
 
     if (confirmed == true) {
       _resetIdleTimer();
-    } else {
+    } else if (!isLocking) {
+      isLocking = true;
       _savePendingRedirectAndLock();
     }
   }
@@ -96,7 +99,10 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
       }
     }
 
-    HtmlHelpers().redirect("/");
+    // Soft lock: clear in-memory session state and navigate to auth screen
+    // via Flutter router instead of doing a full page reload, which avoids
+    // IndexedDB flush race conditions that could corrupt the password hash.
+    ref.read(webSessionProvider.notifier).softLock();
   }
 
   void _onUserInteraction() {

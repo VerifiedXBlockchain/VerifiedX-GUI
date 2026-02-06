@@ -314,6 +314,7 @@ class PromptModal {
 
     bool _obscureText = obscureText;
     double _usdValue = 0.0;
+    bool _listenerAdded = false;
 
     void _calculateUsdValue(WidgetRef ref) {
       if (!showUsdValue) return;
@@ -397,11 +398,14 @@ class PromptModal {
                   StatefulBuilder(builder: (context, setState) {
                     return Consumer(
                       builder: (context, ref, child) {
-                        _controller.addListener(() {
-                          setState(() {
-                            _calculateUsdValue(ref);
+                        if (!_listenerAdded) {
+                          _listenerAdded = true;
+                          _controller.addListener(() {
+                            setState(() {
+                              _calculateUsdValue(ref);
+                            });
                           });
-                        });
+                        }
 
                         return Row(
                           mainAxisSize: MainAxisSize.min,

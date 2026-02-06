@@ -499,6 +499,32 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     }
   }
 
+  /// Soft lock: clears in-memory sensitive data without reloading the page.
+  /// Storage (encrypted keys, password hash) remains intact so the user
+  /// can unlock again by entering their password.
+  void softLock() {
+    state = state.copyWith(
+      keypair: null,
+      raKeypair: null,
+      btcKeypair: null,
+      isAuthenticated: false,
+      balance: null,
+      balanceTotal: null,
+      balanceLocked: null,
+      raBalance: null,
+      raBalanceTotal: null,
+      raBalanceLocked: null,
+      adnr: null,
+      btcBalanceInfo: null,
+    );
+
+    // Navigate to auth screen using Flutter router (no page reload)
+    final context = rootNavigatorKey.currentContext;
+    if (context != null) {
+      AutoRouter.of(context).replace(const WebAuthRouter());
+    }
+  }
+
   Future<void> logout() async {
     singleton<Storage>().remove(Storage.WEB_KEYPAIR);
     singleton<Storage>().remove(Storage.WEB_RA_KEYPAIR);
