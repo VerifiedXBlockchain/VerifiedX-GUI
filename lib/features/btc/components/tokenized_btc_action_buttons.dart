@@ -30,7 +30,12 @@ import '../providers/btc_account_list_provider.dart';
 import '../providers/btc_pending_tokenized_address_list_provider.dart';
 import '../providers/tokenized_bitcoin_list_provider.dart';
 import '../services/btc_service.dart';
+import '../services/vbtc_v2_service.dart';
 import '../utils.dart';
+import '../models/btc_fee_rate_preset.dart';
+import '../models/btc_recommended_fees.dart';
+import '../../../core/providers/session_provider.dart';
+import './withdrawal_processing_dialog.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -388,27 +393,77 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     return;
                   }
 
-                  ref.read(globalLoadingProvider.notifier).start();
-                  final withdrawlHash = await BtcService().withdrawCoin(
-                    token.smartContractUid,
-                    result.toAddress,
-                    token.rbxAddress,
-                    result.amount,
-                    result.feeRate,
-                  );
-                  ref.read(globalLoadingProvider.notifier).complete();
+                  if (token.version >= 2) {
+                    // V2: request withdrawal first, then show processing dialog
+                    final withdrawResult = await VbtcV2Service().requestWithdrawal(
+                      scUid: token.smartContractUid,
+                      requestorAddress: token.rbxAddress,
+                      btcAddress: result.toAddress,
+                      amount: result.amount,
+                      feeRate: result.feeRate,
+                    );
 
-                  if (withdrawlHash != null) {
-                    final message =
-                        "BTC Withdrawl TX Broadcasted successfully. Hash: $withdrawlHash";
-                    Toast.message(message);
+                    String? requestHash = withdrawResult.requestHash;
 
-                    ref.read(logProvider.notifier).append(
-                          LogEntry(
+                    if (!withdrawResult.success) {
+                      // Check for active withdrawal recovery
+                      final message = withdrawResult.message ?? "";
+                      final match = RegExp(r'Request Hash:\s*(0x[a-fA-F0-9]+)').firstMatch(message);
+                      if (match != null) {
+                        requestHash = match.group(1);
+                      } else {
+                        Toast.error(withdrawResult.message ?? "Failed to request withdrawal.");
+                        return;
+                      }
+                    }
+
+                    if (requestHash == null) {
+                      Toast.error("No request hash returned.");
+                      return;
+                    }
+
+                    final dialogResult = await WithdrawalProcessingDialog.show(
+                      scUid: token.smartContractUid,
+                      requestHash: requestHash,
+                      ownerAddress: isOwner ? token.rbxAddress : null,
+                    );
+
+                    ref.read(tokenizedBitcoinListProvider.notifier).refresh();
+
+                    if (dialogResult != null && dialogResult.success) {
+                      final message = "vBTC V2 Withdrawal completed successfully.";
+                      ref.read(logProvider.notifier).append(
+                            LogEntry(
                               message: message,
                               variant: AppColorVariant.Btc,
-                              textToCopy: withdrawlHash),
-                        );
+                              textToCopy: dialogResult.btcTransactionHash,
+                            ),
+                          );
+                    }
+                  } else {
+                    // V1: existing flow
+                    ref.read(globalLoadingProvider.notifier).start();
+                    final withdrawlHash = await BtcService().withdrawCoin(
+                      token.smartContractUid,
+                      result.toAddress,
+                      token.rbxAddress,
+                      result.amount,
+                      result.feeRate,
+                    );
+                    ref.read(globalLoadingProvider.notifier).complete();
+
+                    if (withdrawlHash != null) {
+                      final message =
+                          "BTC Withdrawl TX Broadcasted successfully. Hash: $withdrawlHash";
+                      Toast.message(message);
+
+                      ref.read(logProvider.notifier).append(
+                            LogEntry(
+                                message: message,
+                                variant: AppColorVariant.Btc,
+                                textToCopy: withdrawlHash),
+                          );
+                    }
                   }
                 }
               },
@@ -501,22 +556,63 @@ class TokenizedBtcActionButtons extends BaseComponent {
                         "vBTC tokens with zero balance can not be transferred.");
                     return;
                   }
-                  final nft =
-                      await NftService().retrieve(token.smartContractUid);
 
-                  if (nft == null) {
-                    Toast.error(
-                        "Could not resolve nft from ${token.smartContractUid}");
-                    return;
+                  if (token.version >= 2) {
+                    // V2: prompt for destination address, then call VbtcV2Service
+                    final toAddress = await PromptModal.show(
+                      title: "Transfer Ownership",
+                      labelText: "To VFX Address",
+                      validator: (v) =>
+                          formValidatorNotEmpty(v, "VFX Address"),
+                    );
+
+                    if (toAddress == null || toAddress.isEmpty) return;
+
+                    final confirmed = await ConfirmDialog.show(
+                      title: "Transfer Ownership",
+                      body:
+                          "Are you sure you want to transfer ownership of this vBTC token to $toAddress?",
+                    );
+
+                    if (confirmed != true) return;
+
+                    ref.read(globalLoadingProvider.notifier).start();
+                    final success = await VbtcV2Service().transferOwnership(
+                      scUid: token.smartContractUid,
+                      toAddress: toAddress,
+                    );
+                    ref.read(globalLoadingProvider.notifier).complete();
+
+                    if (success) {
+                      Toast.message("Ownership transfer initiated.");
+                      ref.read(logProvider.notifier).append(
+                            LogEntry(
+                              message:
+                                  "vBTC V2 ownership transfer initiated to $toAddress",
+                              variant: AppColorVariant.Btc,
+                            ),
+                          );
+                      ref.read(tokenizedBitcoinListProvider.notifier).refresh();
+                    }
+                  } else {
+                    // V1: existing NFT transfer flow
+                    final nft =
+                        await NftService().retrieve(token.smartContractUid);
+
+                    if (nft == null) {
+                      Toast.error(
+                          "Could not resolve nft from ${token.smartContractUid}");
+                      return;
+                    }
+                    await initTransferNftProcess(
+                      context,
+                      ref,
+                      nft,
+                      backupRequired: false,
+                      titleOverride: "Transfer Token",
+                      isToken: true,
+                    );
                   }
-                  await initTransferNftProcess(
-                    context,
-                    ref,
-                    nft,
-                    backupRequired: false,
-                    titleOverride: "Transfer Token",
-                    isToken: true,
-                  );
                 }
                 if (option == 2) {
                   final result = await showModalBottomSheet(
@@ -546,26 +642,54 @@ class TokenizedBtcActionButtons extends BaseComponent {
                         return;
                       }
                     }
-                    ref.read(globalLoadingProvider.notifier).start();
 
-                    final success = await BtcService().transferTokenShares(
-                      token.smartContractUid,
-                      result.toAddress,
-                      token.rbxAddress,
-                      result.amount,
-                    );
-                    ref.read(globalLoadingProvider.notifier).complete();
+                    if (token.version >= 2) {
+                      // V2: use VbtcV2Service for transfer
+                      ref.read(globalLoadingProvider.notifier).start();
+                      final txHash = await VbtcV2Service().transferVbtc(
+                        scUid: token.smartContractUid,
+                        fromAddress: token.rbxAddress,
+                        toAddress: result.toAddress,
+                        amount: result.amount,
+                      );
+                      ref.read(globalLoadingProvider.notifier).complete();
 
-                    if (success) {
-                      const message =
-                          "BTC Transfer TX Broadcasted successfully.";
-                      Toast.message(
-                          "BTC Transfer TX Broadcasted successfully. ");
+                      if (txHash != null) {
+                        final message =
+                            "vBTC V2 Transfer TX Broadcasted. Hash: $txHash";
+                        Toast.message(message);
 
-                      ref.read(logProvider.notifier).append(
-                            LogEntry(
-                                message: message, variant: AppColorVariant.Btc),
-                          );
+                        ref.read(logProvider.notifier).append(
+                              LogEntry(
+                                message: message,
+                                variant: AppColorVariant.Btc,
+                                textToCopy: txHash,
+                              ),
+                            );
+                        ref.read(tokenizedBitcoinListProvider.notifier).refresh();
+                      }
+                    } else {
+                      // V1: existing flow
+                      ref.read(globalLoadingProvider.notifier).start();
+                      final success = await BtcService().transferTokenShares(
+                        token.smartContractUid,
+                        result.toAddress,
+                        token.rbxAddress,
+                        result.amount,
+                      );
+                      ref.read(globalLoadingProvider.notifier).complete();
+
+                      if (success) {
+                        const message =
+                            "BTC Transfer TX Broadcasted successfully.";
+                        Toast.message(
+                            "BTC Transfer TX Broadcasted successfully. ");
+
+                        ref.read(logProvider.notifier).append(
+                              LogEntry(
+                                  message: message, variant: AppColorVariant.Btc),
+                            );
+                      }
                     }
                   }
                 }
@@ -843,7 +967,89 @@ class _TransferSharesModal extends BaseComponent {
                   FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
                 ],
               ),
-              if (forWithdrawl) ...[
+              if (forWithdrawl && token.version >= 2)
+                Builder(
+                  builder: (context) {
+                    final selectedPreset = ref.watch(_v2FeeRatePresetProvider);
+                    final recommendedFees = ref.watch(sessionProvider).btcRecommendedFees ?? BtcRecommendedFees.fallback();
+
+                    switch (selectedPreset) {
+                      case BtcFeeRatePreset.custom:
+                        fee = 1;
+                        break;
+                      case BtcFeeRatePreset.minimum:
+                        fee = recommendedFees.minimumFee;
+                        break;
+                      case BtcFeeRatePreset.economy:
+                        fee = recommendedFees.economyFee;
+                        break;
+                      case BtcFeeRatePreset.hour:
+                        fee = recommendedFees.hourFee;
+                        break;
+                      case BtcFeeRatePreset.halfHour:
+                        fee = recommendedFees.halfHourFee;
+                        break;
+                      case BtcFeeRatePreset.fastest:
+                        fee = recommendedFees.fastestFee;
+                        break;
+                    }
+
+                    final feeBtc = satashiToBtcLabel(fee);
+                    final feeEstimate = satashiTxFeeEstimate(fee);
+                    final feeEstimateBtc = btcTxFeeEstimateLabel(fee);
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const SizedBox(width: 100, child: Text("Fee Rate:")),
+                          title: Row(
+                            children: [
+                              PopupMenuButton<BtcFeeRatePreset>(
+                                color: Color(0xFF080808),
+                                onSelected: (value) {
+                                  ref.read(_v2FeeRatePresetProvider.notifier).state = value;
+                                },
+                                itemBuilder: (context) {
+                                  return BtcFeeRatePreset.values.where((type) => type != BtcFeeRatePreset.custom).map((preset) {
+                                    return PopupMenuItem(
+                                      value: preset,
+                                      child: Text(preset.label),
+                                    );
+                                  }).toList();
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      selectedPreset.label,
+                                      style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.btcOrange),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      size: 24,
+                                      color: Theme.of(context).colorScheme.btcOrange,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          "Fee Estimate: ~$feeEstimate SATS | ~$feeEstimateBtc BTC    ($fee SATS /byte | $feeBtc BTC /byte)",
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              if (forWithdrawl && token.version < 2) ...[
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Text(
@@ -854,89 +1060,6 @@ class _TransferSharesModal extends BaseComponent {
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
-              // if (forWithdrawl)
-              //   Builder(
-              //     builder: (context) {
-              //       final state = ref.watch(vBtcOnboardProvider);
-
-              //       final recommendedFees = ref.watch(sessionProvider).btcRecommendedFees ?? BtcRecommendedFees.fallback();
-
-              //       switch (state.btcFeeRatePreset) {
-              //         case BtcFeeRatePreset.custom:
-              //           fee = 1;
-              //           break;
-              //         case BtcFeeRatePreset.minimum:
-              //           fee = recommendedFees.minimumFee;
-              //           break;
-              //         case BtcFeeRatePreset.economy:
-              //           fee = recommendedFees.economyFee;
-              //           break;
-              //         case BtcFeeRatePreset.hour:
-              //           fee = recommendedFees.hourFee;
-              //           break;
-              //         case BtcFeeRatePreset.halfHour:
-              //           fee = recommendedFees.halfHourFee;
-              //           break;
-              //         case BtcFeeRatePreset.fastest:
-              //           fee = recommendedFees.fastestFee;
-              //           break;
-              //       }
-
-              //       final feeBtc = satashiToBtcLabel(fee);
-              //       final feeEstimate = satashiTxFeeEstimate(fee);
-              //       final feeEstimateBtc = btcTxFeeEstimateLabel(fee);
-
-              //       return Column(
-              //         mainAxisSize: MainAxisSize.min,
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           ListTile(
-              //             contentPadding: EdgeInsets.zero,
-              //             leading: const SizedBox(width: 100, child: Text("Fee Rate:")),
-              //             title: Row(
-              //               children: [
-              //                 PopupMenuButton<BtcFeeRatePreset>(
-              //                   color: Color(0xFF080808),
-              //                   onSelected: (value) {
-              //                     ref.read(vBtcOnboardProvider.notifier).setBtcFeeRatePreset(value);
-              //                   },
-              //                   itemBuilder: (context) {
-              //                     return BtcFeeRatePreset.values.where((type) => type != BtcFeeRatePreset.custom).map((preset) {
-              //                       return PopupMenuItem(
-              //                         value: preset,
-              //                         child: Text(preset.label),
-              //                       );
-              //                     }).toList();
-              //                   },
-              //                   child: Row(
-              //                     mainAxisSize: MainAxisSize.min,
-              //                     children: [
-              //                       Text(
-              //                         state.btcFeeRatePreset.label,
-              //                         style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.btcOrange),
-              //                       ),
-              //                       Icon(
-              //                         Icons.arrow_drop_down,
-              //                         size: 24,
-              //                         color: Theme.of(context).colorScheme.btcOrange,
-              //                       ),
-              //                     ],
-              //                   ),
-              //                 ),
-              //               ],
-              //             ),
-              //           ),
-              //           SizedBox(
-              //             height: 8,
-              //           ),
-              //           Text(
-              //             "Fee Estimate: ~$feeEstimate SATS | ~$feeEstimateBtc BTC    ($fee SATS /byte | $feeBtc BTC /byte)",
-              //             style: Theme.of(context).textTheme.caption,
-              //           ),
-              //         ],
-              //       );
-              //     },
-              //   ),
               Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -961,26 +1084,47 @@ class _TransferSharesModal extends BaseComponent {
                         return;
                       }
 
-                      // final fromAddress = forWithdrawl ? fromAddressController.text.trim() : null;
-                      // if (forWithdrawl && fromAddress!.isEmpty) {
-                      //   print("Invalid From Address");
-                      //   return;
-                      // }
-
                       final amount = double.tryParse(amountControlller.text);
 
                       if (amount == null || amount <= 0) {
                         Toast.error("Invalid Amount");
                         return;
                       }
-                      print("-----");
 
                       if (amount > token.myBalance) {
                         Toast.error("Not enough balance");
                         return;
                       }
+
+                      // For V2 withdrawal, compute fee from the selected preset
+                      int resolvedFee = fee;
+                      if (forWithdrawl && token.version >= 2) {
+                        final preset = ref.read(_v2FeeRatePresetProvider);
+                        final recommendedFees = ref.read(sessionProvider).btcRecommendedFees ?? BtcRecommendedFees.fallback();
+                        switch (preset) {
+                          case BtcFeeRatePreset.custom:
+                            resolvedFee = 1;
+                            break;
+                          case BtcFeeRatePreset.minimum:
+                            resolvedFee = recommendedFees.minimumFee;
+                            break;
+                          case BtcFeeRatePreset.economy:
+                            resolvedFee = recommendedFees.economyFee;
+                            break;
+                          case BtcFeeRatePreset.hour:
+                            resolvedFee = recommendedFees.hourFee;
+                            break;
+                          case BtcFeeRatePreset.halfHour:
+                            resolvedFee = recommendedFees.halfHourFee;
+                            break;
+                          case BtcFeeRatePreset.fastest:
+                            resolvedFee = recommendedFees.fastestFee;
+                            break;
+                        }
+                      }
+
                       final result = _TransferShareModalResponse(
-                          toAddress: toAddress, amount: amount, feeRate: fee);
+                          toAddress: toAddress, amount: amount, feeRate: resolvedFee);
                       Navigator.of(context).pop(result);
                     },
                   )
@@ -993,3 +1137,7 @@ class _TransferSharesModal extends BaseComponent {
     );
   }
 }
+
+final _v2FeeRatePresetProvider = StateProvider.autoDispose<BtcFeeRatePreset>(
+  (ref) => BtcFeeRatePreset.economy,
+);
