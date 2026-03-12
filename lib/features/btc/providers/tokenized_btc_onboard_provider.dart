@@ -4,6 +4,7 @@ import '../models/btc_account.dart';
 import '../models/btc_fee_rate_preset.dart';
 import '../models/tokenized_bitcoin.dart';
 import 'btc_account_list_provider.dart';
+import 'mpc_ceremony_provider.dart';
 import 'tokenize_btc_form_provider.dart';
 import 'tokenized_bitcoin_list_provider.dart';
 import '../services/btc_service.dart';
@@ -162,7 +163,7 @@ class VBtcOnboardState {
         return "Waiting for BTC transfer to reflect on-chain.";
 
       case VBtcProcessingState.waitingForTokenization:
-        return "Waiting for vBTC Tokenization to compile.";
+        return "MPC ceremony and contract creation in progress.";
 
       case VBtcProcessingState.waitingForBtcToVbtcTransfer:
         return "Waiting for BTC to vBTC transaction to reflect on-chain.";
@@ -196,8 +197,9 @@ class VBtcOnboardState {
 class VBtcOnboard extends _$VBtcOnboard {
   ProviderSubscription<List<Transaction>>? vfxTransferListener;
   ProviderSubscription<List<BtcAccount>>? btcTransferListener;
-  ProviderSubscription<List<TokenizedBitcoin>>? btcTokenizationListener;
+  ProviderSubscription<MpcCeremonyState>? ceremonyCeremonyListener;
   ProviderSubscription<List<TokenizedBitcoin>>? btcToVbtcListener;
+  ProviderSubscription<List<TokenizedBitcoin>>? tokenInListListener;
 
   final GlobalKey<FormState> btcTransferFormKey = GlobalKey<FormState>();
 
@@ -247,27 +249,46 @@ class VBtcOnboard extends _$VBtcOnboard {
   }
 
   void setupTokenizationListener() {
-    btcTokenizationListener = ref.listen(tokenizedBitcoinListProvider,
+    // Check if ceremony already completed (handles timing where state
+    // transitioned before listener was attached)
+    final currentCeremonyState = ref.read(mpcCeremonyProvider);
+    if (currentCeremonyState.isContractCreated) {
+      ref.invalidate(tokenizedBitcoinListProvider);
+      _waitForTokenInList();
+      return;
+    }
+
+    ceremonyCeremonyListener = ref.listen(mpcCeremonyProvider,
+        (previous, MpcCeremonyState ceremonyState) {
+      if (state.step != VBtcOnboardStep.tokenize) return;
+
+      if (ceremonyState.isContractCreated) {
+        ref.invalidate(tokenizedBitcoinListProvider);
+        _waitForTokenInList();
+        ceremonyCeremonyListener?.close();
+      }
+
+      if (ceremonyState.isFailed) {
+        state = state.copyWith(processingState: VBtcProcessingState.ready);
+        ceremonyCeremonyListener?.close();
+      }
+    });
+  }
+
+  void _waitForTokenInList() {
+    tokenInListListener?.close();
+    tokenInListListener = ref.listen(tokenizedBitcoinListProvider,
         (previous, List<TokenizedBitcoin> tokens) {
       if (state.step == VBtcOnboardStep.tokenize) {
         final token = tokens
             .firstWhereOrNull((t) => t.rbxAddress == state.vfxWallet?.address);
 
         if (token != null) {
-          final tx = ref
-              .read(transactionListProvider(TransactionListType.Success))
-              .firstWhereOrNull((t) => t.timestamp == token.timestamp);
-          // check to make sure the tx has succeeeded
-
-          if (tx != null) {
-            Toast.message("Token Deployed!");
-            state = state.copyWith(
-                step: VBtcOnboardStep.transferBtcToVbtc,
-                processingState: VBtcProcessingState.ready,
-                tokenizedBtc: token);
-
-            btcTokenizationListener?.close();
-          }
+          Toast.message("Token Deployed!");
+          state = state.copyWith(
+              step: VBtcOnboardStep.transferBtcToVbtc,
+              processingState: VBtcProcessingState.ready,
+              tokenizedBtc: token);
         }
       }
     });
@@ -301,8 +322,10 @@ class VBtcOnboard extends _$VBtcOnboard {
     btcTransferAmountController.clear();
     vfxTransferListener?.close();
     btcTransferListener?.close();
-    btcTokenizationListener?.close();
+    ceremonyCeremonyListener?.close();
+    tokenInListListener?.close();
     btcToVbtcListener?.close();
+    ref.read(mpcCeremonyProvider.notifier).reset();
   }
 
   void setProcessingState(VBtcProcessingState processingState) {
@@ -318,11 +341,9 @@ class VBtcOnboard extends _$VBtcOnboard {
       case VBtcProcessingState.waitingForTokenization:
         setupTokenizationListener();
         break;
-
       case VBtcProcessingState.waitingForBtcToVbtcTransfer:
         setupBtcToVbtcListener();
         break;
-
       default:
         break;
     }
