@@ -406,11 +406,21 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     String? requestHash = withdrawResult.requestHash;
 
                     if (!withdrawResult.success) {
-                      // Check for active withdrawal recovery
+                      // Check for active withdrawal — show recovery dialog
                       final message = withdrawResult.message ?? "";
                       final match = RegExp(r'Request Hash:\s*(0x[a-fA-F0-9]+)').firstMatch(message);
                       if (match != null) {
                         requestHash = match.group(1);
+
+                        // Phase 5: Ask user if they want to complete the pending withdrawal
+                        final shouldComplete = await ConfirmDialog.show(
+                          title: "Pending Withdrawal Found",
+                          body: "You have a pending withdrawal for this contract. Would you like to complete it?",
+                          confirmText: "Complete",
+                          cancelText: "Dismiss",
+                        );
+
+                        if (shouldComplete != true) return;
                       } else {
                         Toast.error(withdrawResult.message ?? "Failed to request withdrawal.");
                         return;
