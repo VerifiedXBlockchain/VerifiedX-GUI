@@ -18,6 +18,7 @@ class TokenizedBitcoin with _$TokenizedBitcoin {
     @JsonKey(name: "TokenDescription") required String tokenDescription,
     @JsonKey(name: "SmartContractMainId") required double smartContractMainId,
     @JsonKey(name: "IsPublished") required bool isPublished,
+    @JsonKey(name: "Version") @Default(1) int version,
   }) = _TokenizedBitcoin;
 
   factory TokenizedBitcoin.fromJson(Map<String, dynamic> json) => _$TokenizedBitcoinFromJson(json);

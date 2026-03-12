@@ -40,6 +40,8 @@ mixin _$TokenizedBitcoin {
   double get smartContractMainId => throw _privateConstructorUsedError;
   @JsonKey(name: "IsPublished")
   bool get isPublished => throw _privateConstructorUsedError;
+  @JsonKey(name: "Version")
+  int get version => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -63,7 +65,8 @@ abstract class $TokenizedBitcoinCopyWith<$Res> {
       @JsonKey(name: "TokenName") String tokenName,
       @JsonKey(name: "TokenDescription") String tokenDescription,
       @JsonKey(name: "SmartContractMainId") double smartContractMainId,
-      @JsonKey(name: "IsPublished") bool isPublished});
+      @JsonKey(name: "IsPublished") bool isPublished,
+      @JsonKey(name: "Version") int version});
 }
 
 /// @nodoc
@@ -89,6 +92,7 @@ class _$TokenizedBitcoinCopyWithImpl<$Res, $Val extends TokenizedBitcoin>
     Object? tokenDescription = null,
     Object? smartContractMainId = null,
     Object? isPublished = null,
+    Object? version = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -131,6 +135,10 @@ class _$TokenizedBitcoinCopyWithImpl<$Res, $Val extends TokenizedBitcoin>
           ? _value.isPublished
           : isPublished // ignore: cast_nullable_to_non_nullable
               as bool,
+      version: null == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -153,7 +161,8 @@ abstract class _$$_TokenizedBitcoinCopyWith<$Res>
       @JsonKey(name: "TokenName") String tokenName,
       @JsonKey(name: "TokenDescription") String tokenDescription,
       @JsonKey(name: "SmartContractMainId") double smartContractMainId,
-      @JsonKey(name: "IsPublished") bool isPublished});
+      @JsonKey(name: "IsPublished") bool isPublished,
+      @JsonKey(name: "Version") int version});
 }
 
 /// @nodoc
@@ -177,6 +186,7 @@ class __$$_TokenizedBitcoinCopyWithImpl<$Res>
     Object? tokenDescription = null,
     Object? smartContractMainId = null,
     Object? isPublished = null,
+    Object? version = null,
   }) {
     return _then(_$_TokenizedBitcoin(
       id: null == id
@@ -219,6 +229,10 @@ class __$$_TokenizedBitcoinCopyWithImpl<$Res>
           ? _value.isPublished
           : isPublished // ignore: cast_nullable_to_non_nullable
               as bool,
+      version: null == version
+          ? _value.version
+          : version // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -236,7 +250,8 @@ class _$_TokenizedBitcoin extends _TokenizedBitcoin {
       @JsonKey(name: "TokenName") required this.tokenName,
       @JsonKey(name: "TokenDescription") required this.tokenDescription,
       @JsonKey(name: "SmartContractMainId") required this.smartContractMainId,
-      @JsonKey(name: "IsPublished") required this.isPublished})
+      @JsonKey(name: "IsPublished") required this.isPublished,
+      @JsonKey(name: "Version") this.version = 1})
       : super._();
 
   factory _$_TokenizedBitcoin.fromJson(Map<String, dynamic> json) =>
@@ -272,10 +287,13 @@ class _$_TokenizedBitcoin extends _TokenizedBitcoin {
   @override
   @JsonKey(name: "IsPublished")
   final bool isPublished;
+  @override
+  @JsonKey(name: "Version")
+  final int version;
 
   @override
   String toString() {
-    return 'TokenizedBitcoin(id: $id, smartContractUid: $smartContractUid, rbxAddress: $rbxAddress, btcAddress: $btcAddress, balance: $balance, myBalance: $myBalance, tokenName: $tokenName, tokenDescription: $tokenDescription, smartContractMainId: $smartContractMainId, isPublished: $isPublished)';
+    return 'TokenizedBitcoin(id: $id, smartContractUid: $smartContractUid, rbxAddress: $rbxAddress, btcAddress: $btcAddress, balance: $balance, myBalance: $myBalance, tokenName: $tokenName, tokenDescription: $tokenDescription, smartContractMainId: $smartContractMainId, isPublished: $isPublished, version: $version)';
   }
 
   @override
@@ -300,7 +318,8 @@ class _$_TokenizedBitcoin extends _TokenizedBitcoin {
             (identical(other.smartContractMainId, smartContractMainId) ||
                 other.smartContractMainId == smartContractMainId) &&
             (identical(other.isPublished, isPublished) ||
-                other.isPublished == isPublished));
+                other.isPublished == isPublished) &&
+            (identical(other.version, version) || other.version == version));
   }
 
   @JsonKey(ignore: true)
@@ -316,7 +335,8 @@ class _$_TokenizedBitcoin extends _TokenizedBitcoin {
       tokenName,
       tokenDescription,
       smartContractMainId,
-      isPublished);
+      isPublished,
+      version);
 
   @JsonKey(ignore: true)
   @override
@@ -353,7 +373,9 @@ abstract class _TokenizedBitcoin extends TokenizedBitcoin {
       @JsonKey(name: "SmartContractMainId")
           required final double smartContractMainId,
       @JsonKey(name: "IsPublished")
-          required final bool isPublished}) = _$_TokenizedBitcoin;
+          required final bool isPublished,
+      @JsonKey(name: "Version")
+          final int version}) = _$_TokenizedBitcoin;
   _TokenizedBitcoin._() : super._();
 
   factory _TokenizedBitcoin.fromJson(Map<String, dynamic> json) =
@@ -389,6 +411,9 @@ abstract class _TokenizedBitcoin extends TokenizedBitcoin {
   @override
   @JsonKey(name: "IsPublished")
   bool get isPublished;
+  @override
+  @JsonKey(name: "Version")
+  int get version;
   @override
   @JsonKey(ignore: true)
   _$$_TokenizedBitcoinCopyWith<_$_TokenizedBitcoin> get copyWith =>

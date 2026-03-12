@@ -18,6 +18,7 @@ _$_TokenizedBitcoin _$$_TokenizedBitcoinFromJson(Map<String, dynamic> json) =>
       tokenDescription: json['TokenDescription'] as String,
       smartContractMainId: (json['SmartContractMainId'] as num).toDouble(),
       isPublished: json['IsPublished'] as bool,
+      version: json['Version'] as int? ?? 1,
     );
 
 Map<String, dynamic> _$$_TokenizedBitcoinToJson(_$_TokenizedBitcoin instance) =>
@@ -32,4 +33,5 @@ Map<String, dynamic> _$$_TokenizedBitcoinToJson(_$_TokenizedBitcoin instance) =>
       'TokenDescription': instance.tokenDescription,
       'SmartContractMainId': instance.smartContractMainId,
       'IsPublished': instance.isPublished,
+      'Version': instance.version,
     };
