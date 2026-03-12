@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -10,7 +8,6 @@ import '../../../core/theme/app_theme.dart';
 import '../../asset/asset.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
-import '../services/btc_service.dart';
 import '../../smart_contracts/components/sc_creator/common/compile_animation.dart';
 import '../../smart_contracts/models/multi_asset.dart';
 import '../../smart_contracts/models/smart_contract.dart';
@@ -20,6 +17,8 @@ import '../../../core/services/explorer_service.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../raw/raw_service.dart';
 import '../../wallet/models/wallet.dart';
+import './mpc_ceremony_provider.dart';
+import 'tokenized_bitcoin_list_provider.dart';
 
 part 'tokenize_btc_form_provider.freezed.dart';
 
@@ -44,6 +43,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
 
   final tokenNameController = TextEditingController();
   final tokenDescriptionController = TextEditingController();
+  final tokenTickerController = TextEditingController();
 
   setAsset(Asset? asset) {
     state = state.copyWith(asset: asset);
@@ -120,6 +120,9 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
     );
   }
 
+  /// V2 submit: validates form, starts MPC ceremony, returns immediately.
+  /// The screen is responsible for showing the progress modal and watching
+  /// the ceremony provider state for completion.
   Future<bool?> submit() async {
     if (!formKey.currentState!.validate()) {
       return null;
@@ -130,39 +133,43 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
       return null;
     }
 
-    final assetLocation = state.asset?.location;
-
     state = state.copyWith(isProcessing: true);
 
-    String? tokenName = tokenNameController.text.trim();
-    String? tokenDescription = tokenDescriptionController.text.trim();
-
-    if (tokenName.isEmpty) {
-      tokenName = null;
-    }
-
-    if (tokenDescription.isEmpty) {
-      tokenDescription = null;
-    }
-
-    final hash = await BtcService().tokenizeBtc(
-      rbxAddress: state.vfxAddress!,
-      fileLocation: assetLocation,
-      name: tokenName,
-      description: tokenDescription,
-      multiAsset: state.additionalAssets.isNotEmpty ? MultiAsset(assets: state.additionalAssets) : null,
-    );
+    await ref.read(mpcCeremonyProvider.notifier).startCeremony(state.vfxAddress!);
 
     state = state.copyWith(isProcessing: false);
-    if (hash != null) {
-      Toast.message("Transaction Broadcasted with hash of $hash");
+
+    // Check if ceremony started successfully
+    final ceremonyState = ref.read(mpcCeremonyProvider);
+    if (ceremonyState.isFailed) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Called by the screen after ceremony completes to create the on-chain contract.
+  Future<bool> createContractFromCeremony() async {
+    final name = tokenNameController.text.trim();
+    final description = tokenDescriptionController.text.trim();
+    final ticker = tokenTickerController.text.trim();
+
+    await ref.read(mpcCeremonyProvider.notifier).createContract(
+      name: name.isNotEmpty ? name : "vBTC Token",
+      description: description.isNotEmpty ? description : "vBTC Token",
+      ticker: ticker.isNotEmpty ? ticker : "vBTC",
+    );
+
+    final ceremonyState = ref.read(mpcCeremonyProvider);
+    if (ceremonyState.isContractCreated) {
       ref.read(logProvider.notifier).append(
             LogEntry(
-              message: "BTC Tokenization Transaction Broadcasted with hash of $hash",
-              textToCopy: hash,
+              message: "vBTC V2 Contract Created. Hash: ${ceremonyState.contractHash}",
+              textToCopy: ceremonyState.contractHash,
               variant: AppColorVariant.Btc,
             ),
           );
+      ref.invalidate(tokenizedBitcoinListProvider);
       clear();
       return true;
     }
@@ -288,6 +295,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
     state = TokenizeBtcFormState();
     tokenNameController.clear();
     tokenDescriptionController.clear();
+    tokenTickerController.clear();
   }
 }
 

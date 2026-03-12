@@ -14,6 +14,8 @@ import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../utils/toast.dart';
 
 import '../../../utils/files.dart';
+import '../components/mpc_ceremony_progress_modal.dart';
+import '../providers/mpc_ceremony_provider.dart';
 import '../providers/tokenize_btc_form_provider.dart';
 
 class TokenizeBtcScreen extends BaseScreen {
@@ -47,6 +49,20 @@ class TokenizeBtcForm extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final formState = ref.watch(tokenizeBtcFormProvider);
     final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
+    final ceremonyState = ref.watch(mpcCeremonyProvider);
+
+    // Watch for ceremony completion to trigger contract creation
+    ref.listen<MpcCeremonyState>(mpcCeremonyProvider, (previous, next) {
+      if (previous?.phase != MpcCeremonyPhase.ceremonyCompleted &&
+          next.phase == MpcCeremonyPhase.ceremonyCompleted) {
+        // Ceremony just completed — create the contract
+        formProvider.createContractFromCeremony();
+      }
+      if (next.isContractCreated) {
+        onSuccess();
+      }
+    });
+
     return AppCard(
       padding: 16,
       child: Form(
@@ -90,6 +106,21 @@ class TokenizeBtcForm extends BaseComponent {
               minLines: 3,
               maxLines: 3,
             ),
+            TextFormField(
+              controller: formProvider.tokenTickerController,
+              decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.getWhite()),
+                ),
+                label: Text(
+                  "Token Ticker (Optional)",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                hintText: "vBTC",
+              ),
+            ),
             SizedBox(
               height: 12,
             ),
@@ -110,7 +141,7 @@ class TokenizeBtcForm extends BaseComponent {
 
                 if (kIsWeb) {
                   if (a != null) {
-                    final base64 = resizeImageAndBase64FromBytes(a!.bytes!, 64);
+                    final base64 = resizeImageAndBase64FromBytes(a.bytes!, 64);
                     if (base64 != null) {
                       formProvider.setImageBase64(base64);
                     }
@@ -159,166 +190,7 @@ class TokenizeBtcForm extends BaseComponent {
               height: 22,
             ),
             Center(
-              child: VBtcButton(
-                // processing: formState.isProcessing,
-                label: "Compile & Mint",
-                // variant: AppColorVariant.Light,
-                onPressed: () async {
-                  if (formState.isProcessing) {
-                    return;
-                  }
-
-                  if (kIsWeb) {
-                    final compileAnimation = Completer<BuildContext>();
-                    formProvider.showCompileAnimation(context, compileAnimation);
-                    final dialogContext = await compileAnimation.future;
-
-                    await Future.delayed(Duration(seconds: 2));
-
-                    final success = await formProvider.submitWeb();
-
-                    if (success == true) {
-                      Navigator.pop(dialogContext);
-                      final completeAnimation = Completer<BuildContext>();
-                      formProvider.showCompileComplete(context, completeAnimation);
-                      final completedDialogContext = await completeAnimation.future;
-                      await Future.delayed(const Duration(seconds: 3));
-                      Navigator.pop(completedDialogContext);
-                      await InfoDialog.show(
-                        title: "Transaction Broadcasted",
-                        body: "Once this transaction reflects on chain, you'll be able to deposit BTC funds in this vBTC token.",
-                      );
-
-                      onSuccess();
-                    } else {
-                      Navigator.pop(dialogContext);
-                    }
-                    return;
-                  }
-
-                  if (formState.vfxAddress == null) {
-                    Toast.error("A VFX address is required");
-                    return;
-                  }
-
-                  final confirmed = await ConfirmDialog.show(
-                      title: "Compile & Mint?",
-                      cancelText: "Cancel",
-                      confirmText: "Compile & Mint",
-                      content: Consumer(builder: (context, ref, child) {
-                        final formState = ref.watch(tokenizeBtcFormProvider);
-                        final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
-
-                        final wallets = ref.watch(walletListProvider).where((a) => a.balance > MIN_RBX_FOR_SC_ACTION && !a.isReserved);
-
-                        return ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 500),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("This transaction requires a network fee ~0.000028 VFX."),
-                              if (wallets.length == 1) Text("VFX Account: ${formState.vfxAddress}"),
-                              if (wallets.length > 1)
-                                Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 12,
-                                    ),
-                                    Text("Change Account:"),
-                                    Row(
-                                      children: [
-                                        PopupMenuButton<String>(
-                                          onSelected: (address) {
-                                            formProvider.setAddress(address);
-                                          },
-                                          color: Color(0xFF080808),
-                                          constraints: const BoxConstraints(
-                                            minWidth: 2.0 * 56.0,
-                                            maxWidth: 8.0 * 56.0,
-                                          ),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Text("VFX Address:"),
-                                              SizedBox(width: 4),
-                                              Text(
-                                                formState.vfxAddress ?? "None",
-                                                style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-                                              ),
-                                              Transform.translate(
-                                                offset: Offset(0, 2),
-                                                child: Icon(
-                                                  Icons.arrow_drop_down,
-                                                  size: 18,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          itemBuilder: (context) {
-                                            return wallets.map(
-                                              (w) {
-                                                return PopupMenuItem(
-                                                  value: w.address,
-                                                  child: Text(
-                                                    "${w.labelWithoutTruncation} (${w.balance} VFX)",
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      color:
-                                                          w.address == formState.vfxAddress ? Theme.of(context).colorScheme.secondary : Colors.white,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                            ).toList();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Text("Continue?")
-                            ],
-                          ),
-                        );
-                      }));
-
-                  if (confirmed != true) {
-                    return;
-                  }
-
-                  final compileAnimation = Completer<BuildContext>();
-                  formProvider.showCompileAnimation(context, compileAnimation);
-                  final dialogContext = await compileAnimation.future;
-
-                  await Future.delayed(Duration(seconds: 2));
-
-                  final success = await formProvider.submit();
-
-                  if (success == true) {
-                    Navigator.pop(dialogContext);
-                    final completeAnimation = Completer<BuildContext>();
-                    formProvider.showCompileComplete(context, completeAnimation);
-                    final completedDialogContext = await completeAnimation.future;
-                    await Future.delayed(const Duration(seconds: 3));
-                    Navigator.pop(completedDialogContext);
-                    await InfoDialog.show(
-                      title: "Transaction Broadcasted",
-                      body: "Once this transaction reflects on chain, you'll be able to deposit BTC funds in this vBTC token.",
-                    );
-
-                    onSuccess();
-                  } else {
-                    Navigator.pop(dialogContext);
-                  }
-                },
-              ),
+              child: _buildSubmitButton(context, ref, formState, formProvider, ceremonyState),
             ),
             SizedBox(
               height: 8,
@@ -326,6 +198,166 @@ class TokenizeBtcForm extends BaseComponent {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSubmitButton(
+    BuildContext context,
+    WidgetRef ref,
+    TokenizeBtcFormState formState,
+    TokenizeBtcFormProvider formProvider,
+    MpcCeremonyState ceremonyState,
+  ) {
+    // If a ceremony is in progress, show "View Progress" button
+    if (!ceremonyState.isIdle && !ceremonyState.isFailed && !ceremonyState.isContractCreated) {
+      return VBtcButton(
+        label: "View Progress",
+        icon: Icons.visibility,
+        onPressed: () {
+          MpcCeremonyProgressModal.show(context);
+        },
+      );
+    }
+
+    // Web flow — unchanged
+    if (kIsWeb) {
+      return VBtcButton(
+        label: "Compile & Mint",
+        onPressed: () async {
+          if (formState.isProcessing) return;
+
+          final compileAnimation = Completer<BuildContext>();
+          formProvider.showCompileAnimation(context, compileAnimation);
+          final dialogContext = await compileAnimation.future;
+
+          await Future.delayed(Duration(seconds: 2));
+
+          final success = await formProvider.submitWeb();
+
+          if (success == true) {
+            Navigator.pop(dialogContext);
+            final completeAnimation = Completer<BuildContext>();
+            formProvider.showCompileComplete(context, completeAnimation);
+            final completedDialogContext = await completeAnimation.future;
+            await Future.delayed(const Duration(seconds: 3));
+            Navigator.pop(completedDialogContext);
+            await InfoDialog.show(
+              title: "Transaction Broadcasted",
+              body: "Once this transaction reflects on chain, you'll be able to deposit BTC funds in this vBTC token.",
+            );
+
+            onSuccess();
+          } else {
+            Navigator.pop(dialogContext);
+          }
+        },
+      );
+    }
+
+    // Desktop V2 flow
+    return VBtcButton(
+      label: "Start Ceremony",
+      onPressed: () async {
+        if (formState.isProcessing) return;
+
+        if (formState.vfxAddress == null) {
+          Toast.error("A VFX address is required");
+          return;
+        }
+
+        final confirmed = await ConfirmDialog.show(
+          title: "Create vBTC Token?",
+          cancelText: "Cancel",
+          confirmText: "Start Ceremony",
+          content: Consumer(builder: (context, ref, child) {
+            final formState = ref.watch(tokenizeBtcFormProvider);
+            final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
+
+            final wallets = ref.watch(walletListProvider).where((a) => a.balance > MIN_RBX_FOR_SC_ACTION && !a.isReserved);
+
+            return ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 500),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("This will start an MPC ceremony to create your vBTC token."),
+                  Text("A network fee of ~0.000028 VFX is required."),
+                  if (wallets.length == 1) Text("VFX Account: ${formState.vfxAddress}"),
+                  if (wallets.length > 1)
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 12),
+                        Text("Change Account:"),
+                        Row(
+                          children: [
+                            PopupMenuButton<String>(
+                              onSelected: (address) {
+                                formProvider.setAddress(address);
+                              },
+                              color: Color(0xFF080808),
+                              constraints: const BoxConstraints(
+                                minWidth: 2.0 * 56.0,
+                                maxWidth: 8.0 * 56.0,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text("VFX Address:"),
+                                  SizedBox(width: 4),
+                                  Text(
+                                    formState.vfxAddress ?? "None",
+                                    style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+                                  ),
+                                  Transform.translate(
+                                    offset: Offset(0, 2),
+                                    child: Icon(
+                                      Icons.arrow_drop_down,
+                                      size: 18,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              itemBuilder: (context) {
+                                return wallets.map(
+                                  (w) {
+                                    return PopupMenuItem(
+                                      value: w.address,
+                                      child: Text(
+                                        "${w.labelWithoutTruncation} (${w.balance} VFX)",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: w.address == formState.vfxAddress ? Theme.of(context).colorScheme.secondary : Colors.white,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).toList();
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  SizedBox(height: 12),
+                  Text("Continue?"),
+                ],
+              ),
+            );
+          }),
+        );
+
+        if (confirmed != true) return;
+
+        final success = await formProvider.submit();
+
+        if (success == true) {
+          MpcCeremonyProgressModal.show(context);
+        }
+      },
     );
   }
 }
