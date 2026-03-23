@@ -256,7 +256,7 @@ class TokenizeBtcForm extends BaseComponent {
 
     // Desktop V2 flow
     return VBtcButton(
-      label: "Start Ceremony",
+      label: "Mint & Deploy",
       onPressed: () async {
         if (formState.isProcessing) return;
 
@@ -268,7 +268,7 @@ class TokenizeBtcForm extends BaseComponent {
         final confirmed = await ConfirmDialog.show(
           title: "Create vBTC Token?",
           cancelText: "Cancel",
-          confirmText: "Start Ceremony",
+          confirmText: "Mint & Deploy",
           content: Consumer(builder: (context, ref, child) {
             final formState = ref.watch(tokenizeBtcFormProvider);
             final formProvider = ref.read(tokenizeBtcFormProvider.notifier);

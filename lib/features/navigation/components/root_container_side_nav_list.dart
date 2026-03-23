@@ -132,7 +132,6 @@ class RootContainerSideNavList extends BaseComponent {
             ),
           RootContainerSideNavItem(
             title: "Crypto.com",
-            isNew: true,
             iconType: PrettyIconType.custom,
             customIconWidget: Image.asset(
               "assets/images/crypto_dot_com_icon.png",
@@ -357,7 +356,8 @@ Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
   if (kIsWeb) {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No wallet selected. Please create or import a wallet first.");
+      Toast.error(
+          "No wallet selected. Please create or import a wallet first.");
       return;
     }
     privateKey = keypair.privateCorrected;
@@ -391,7 +391,8 @@ Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
   // Confirmation dialog
   final confirmed = await ConfirmDialog.show(
     title: "Login to Butterfly",
-    body: "You are about to open Butterfly and log in with:\n\n$address\n\nContinue?",
+    body:
+        "You are about to open Butterfly and log in with:\n\n$address\n\nContinue?",
     confirmText: "Open Butterfly",
     cancelText: "Cancel",
   );

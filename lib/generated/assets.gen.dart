@@ -735,6 +735,10 @@ class $AssetsImagesIconsGen {
   AssetGenImage get bitcoin =>
       const AssetGenImage('assets/images/icons/bitcoin.png');
 
+  /// File path: assets/images/icons/butterfly.png
+  AssetGenImage get butterfly =>
+      const AssetGenImage('assets/images/icons/butterfly.png');
+
   /// File path: assets/images/icons/custom.png
   AssetGenImage get custom =>
       const AssetGenImage('assets/images/icons/custom.png');
@@ -838,6 +842,7 @@ class $AssetsImagesIconsGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         bitcoin,
+        butterfly,
         custom,
         dashboard,
         domain,

@@ -26,6 +26,7 @@ import '../../../utils/toast.dart';
 import 'package:collection/collection.dart';
 
 import '../../../core/theme/components.dart';
+import '../../price/providers/price_detail_providers.dart';
 
 class TokenizedBtcDetailScreen extends BaseScreen {
   final double tokenId;
@@ -49,6 +50,8 @@ class TokenizedBtcDetailScreen extends BaseScreen {
         shadowColor: Colors.transparent,
       );
     }
+
+    final btcPrice = ref.watch(btcCurrentPriceDataDetailProvider);
 
     return AppBar(
       backgroundColor: Colors.black,
@@ -91,10 +94,12 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                   ),
                 );
               }
+              final totalUsd = _formatUsd(token.balance, btcPrice);
+              final myUsd = _formatUsd(token.myBalance, btcPrice);
               return Tooltip(
-                message: "Token Total Balance: ${token.balance} vBTC",
+                message: "Token Total Balance: ${token.balance} vBTC${totalUsd != null ? ' ($totalUsd USD)' : ''}",
                 child: Text(
-                  "My Balance: ${token.myBalance} vBTC",
+                  "My Balance: ${token.myBalance} vBTC${myUsd != null ? ' ($myUsd USD)' : ''}",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -111,6 +116,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final token = ref.watch(tokenizedBtcDetailProvider(tokenId));
+    final btcPrice = ref.watch(btcCurrentPriceDataDetailProvider);
 
     if (token == null) {
       return Center(
@@ -196,12 +202,14 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                       ),
                       _DetailRow(
                         label: "My Balance",
-                        value: scOwner != token.rbxAddress && token.myBalance == 0 ? "Confirming Balance..." : "${token.myBalance} vBTC",
+                        value: scOwner != token.rbxAddress && token.myBalance == 0
+                            ? "Confirming Balance..."
+                            : "${token.myBalance} vBTC${_formatUsd(token.myBalance, btcPrice) != null ? ' (${_formatUsd(token.myBalance, btcPrice)} USD)' : ''}",
                       ),
                       if (scOwner == token.rbxAddress)
                         _DetailRow(
                           label: "Token Total Balance",
-                          value: "${token.balance} vBTC",
+                          value: "${token.balance} vBTC${_formatUsd(token.balance, btcPrice) != null ? ' (${_formatUsd(token.balance, btcPrice)} USD)' : ''}",
                         ),
                     ],
                   ),
@@ -499,6 +507,11 @@ class _DetailRow extends StatelessWidget {
       ),
     );
   }
+}
+
+String? _formatUsd(double btcAmount, double? btcPrice) {
+  if (btcPrice == null || btcAmount == 0) return null;
+  return '\$${(btcAmount * btcPrice).toStringAsFixed(2)}';
 }
 
 class BtcTokenImage extends StatefulWidget {

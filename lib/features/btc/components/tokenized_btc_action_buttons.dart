@@ -36,6 +36,7 @@ import '../models/btc_fee_rate_preset.dart';
 import '../models/btc_recommended_fees.dart';
 import '../../../core/providers/session_provider.dart';
 import './withdrawal_processing_dialog.dart';
+import '../../price/providers/price_detail_providers.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -372,6 +373,44 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   return;
                 }
 
+                // V2: refresh token data and check for pending withdrawal before showing the form
+                if (token.version >= 2) {
+                  // Fetch fresh V2 contract data to get current withdrawal state
+                  final freshContracts = await VbtcV2Service().getContractList();
+                  final freshToken = freshContracts.firstWhereOrNull(
+                    (t) => t.smartContractUid == token.smartContractUid,
+                  );
+
+                  if (freshToken != null && freshToken.hasPendingWithdrawal) {
+                    final shouldComplete = await ConfirmDialog.show(
+                      title: "Pending Withdrawal Found",
+                      body: "You have a pending withdrawal of ${freshToken.activeWithdrawalAmount} vBTC to ${freshToken.activeWithdrawalBtcDestination}.\n\nWould you like to complete it?",
+                      confirmText: "Complete",
+                      cancelText: "Dismiss",
+                    );
+
+                    if (shouldComplete != true) return;
+
+                    final dialogResult = await WithdrawalProcessingDialog.show(
+                      scUid: token.smartContractUid,
+                      requestHash: freshToken.activeWithdrawalRequestHash!,
+                      ownerAddress: isOwner ? token.rbxAddress : null,
+                    );
+
+                    ref.read(tokenizedBitcoinListProvider.notifier).refresh();
+
+                    if (dialogResult != null && dialogResult.success) {
+                      ref.read(logProvider.notifier).append(
+                            LogEntry(
+                              message: "vBTC V2 Withdrawal completed successfully.",
+                              variant: AppColorVariant.Btc,
+                            ),
+                          );
+                    }
+                    return;
+                  }
+                }
+
                 final result = await showModalBottomSheet(
                   context: context,
                   builder: (context) {
@@ -404,15 +443,16 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     );
 
                     String? requestHash = withdrawResult.requestHash;
+                    bool needsBlockConfirmation = withdrawResult.success;
 
                     if (!withdrawResult.success) {
-                      // Check for active withdrawal — show recovery dialog
+                      // Fallback: parse hash from error if model data was stale
                       final message = withdrawResult.message ?? "";
-                      final match = RegExp(r'Request Hash:\s*(0x[a-fA-F0-9]+)').firstMatch(message);
+                      final match = RegExp(r'Request Hash:\s*((?:0x)?[a-fA-F0-9]+)').firstMatch(message);
                       if (match != null) {
                         requestHash = match.group(1);
+                        needsBlockConfirmation = false; // already in a block
 
-                        // Phase 5: Ask user if they want to complete the pending withdrawal
                         final shouldComplete = await ConfirmDialog.show(
                           title: "Pending Withdrawal Found",
                           body: "You have a pending withdrawal for this contract. Would you like to complete it?",
@@ -436,6 +476,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       scUid: token.smartContractUid,
                       requestHash: requestHash,
                       ownerAddress: isOwner ? token.rbxAddress : null,
+                      waitForConfirmation: needsBlockConfirmation,
                     );
 
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
@@ -497,6 +538,19 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 .headlineSmall!
                                 .copyWith(color: Colors.white),
                           ),
+                          AppCard(
+                            padding: 0,
+                            margin: EdgeInsets.symmetric(vertical: 4),
+                            child: ListTile(
+                              title: Text("Transfer vBTC"),
+                              subtitle: Text(
+                                  "Transfer a specific portion of the vBTC within the token to another VFX address."),
+                              trailing: Icon(Icons.chevron_right),
+                              onTap: () {
+                                Navigator.of(context).pop(2);
+                              },
+                            ),
+                          ),
                           if (isOwner)
                             AppCard(
                               padding: 0,
@@ -511,32 +565,6 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 },
                               ),
                             ),
-                          AppCard(
-                            padding: 0,
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            child: ListTile(
-                              title: Text("Transfer vBTC"),
-                              // leading: Icon(FontAwesomeIcons.btc),
-
-                              subtitle: Text(
-                                  "Transfer a specific portion of the vBTC within the token to another VFX address."),
-                              trailing: Icon(Icons.chevron_right),
-                              onTap: () {
-                                Navigator.of(context).pop(2);
-                              },
-                            ),
-                          ),
-                          // Card(
-                          //   color: Colors.white10,
-                          //   child: ListTile(
-                          //     title: Text("Withdraw BTC"),
-                          //     subtitle: Text("Convert vBTC to BTC and transfer it from this token to a BTC address."),
-                          //     trailing: Icon(Icons.chevron_right),
-                          //     onTap: () {
-                          //       Navigator.of(context).pop(3);
-                          //     },
-                          //   ),
-                          // ),
                           if (isOwner)
                             AppCard(
                               padding: 0,
@@ -918,8 +946,7 @@ class _TransferSharesModal extends BaseComponent {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final color = Theme.of(context).colorScheme.btcOrange;
-    // int fee = 0;
-    // BtcFeeRatePreset btcFeeRatePreset = BtcFeeRatePreset.economy;
+    final btcPrice = ref.watch(btcCurrentPriceDataDetailProvider);
     int fee = 0;
 
     return ModalContainer(
@@ -933,6 +960,18 @@ class _TransferSharesModal extends BaseComponent {
               .headlineSmall!
               .copyWith(color: Colors.white),
         ),
+        if (!forWithdrawl) ...[
+          SizedBox(height: 4),
+          Builder(builder: (context) {
+            final usd = btcPrice != null && token.myBalance > 0
+                ? ' (\$${(token.myBalance * btcPrice).toStringAsFixed(2)} USD)'
+                : '';
+            return Text(
+              "Your Balance: ${token.myBalance} vBTC$usd",
+              style: TextStyle(color: Colors.white70, fontSize: 13),
+            );
+          }),
+        ],
         SizedBox(
           height: 8,
         ),
@@ -954,22 +993,11 @@ class _TransferSharesModal extends BaseComponent {
                   ),
                 ),
               ),
-              // if (forWithdrawl)
-              //   TextFormField(
-              //     controller: fromAddressController,
-              //     readOnly: true,
-              //     decoration: InputDecoration(
-              //       label: Text(
-              //         "From VFX Address",
-              //         style: TextStyle(color: color),
-              //       ),
-              //     ),
-              //   ),
               TextFormField(
                 controller: amountControlller,
                 decoration: InputDecoration(
                   label: Text(
-                    "Amount of BTC to ${forWithdrawl ? 'Withdraw' : 'Send'}",
+                    "Amount of vBTC to ${forWithdrawl ? 'Withdraw' : 'Send'}",
                     style: TextStyle(color: color),
                   ),
                 ),
@@ -977,6 +1005,23 @@ class _TransferSharesModal extends BaseComponent {
                   FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
                 ],
               ),
+              if (btcPrice != null)
+                ValueListenableBuilder<TextEditingValue>(
+                  valueListenable: amountControlller,
+                  builder: (context, value, _) {
+                    final amount = double.tryParse(value.text);
+                    if (amount == null || amount <= 0) {
+                      return SizedBox.shrink();
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 4, left: 2),
+                      child: Text(
+                        '\$${(amount * btcPrice).toStringAsFixed(2)} USD',
+                        style: TextStyle(color: Colors.white38, fontSize: 12),
+                      ),
+                    );
+                  },
+                ),
               if (forWithdrawl && token.version >= 2)
                 Builder(
                   builder: (context) {

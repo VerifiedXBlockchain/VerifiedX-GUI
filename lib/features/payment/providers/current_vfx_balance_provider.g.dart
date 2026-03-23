@@ -6,7 +6,7 @@ part of 'current_vfx_balance_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$currentVfxBalanceHash() => r'487764c50a12f075f4c459437536a55a7b21bcec';
+String _$currentVfxBalanceHash() => r'd8c84fa73eef69c470785a097ddb0272f9efe486';
 
 /// See also [currentVfxBalance].
 @ProviderFor(currentVfxBalance)

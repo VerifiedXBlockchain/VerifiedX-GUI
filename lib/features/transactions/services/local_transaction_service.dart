@@ -29,7 +29,16 @@ class LocalTransactionService extends BaseService {
       transactions.add(Transaction.fromJson(item));
     }
 
-    return transactions.reversed.toList();
+    // Deduplicate by hash — prefer entries with a valid status
+    final Map<String, Transaction> deduped = {};
+    for (final tx in transactions) {
+      final existing = deduped[tx.hash];
+      if (existing == null || (existing.status == null && tx.status != null)) {
+        deduped[tx.hash] = tx;
+      }
+    }
+
+    return deduped.values.toList().reversed.toList();
   }
 
   Future<List<Transaction>> transactionsAll() async {

@@ -41,7 +41,17 @@ mixin _$TokenizedBitcoin {
   @JsonKey(name: "IsPublished")
   bool get isPublished => throw _privateConstructorUsedError;
   @JsonKey(name: "Version")
-  int get version => throw _privateConstructorUsedError;
+  int get version =>
+      throw _privateConstructorUsedError; // V2 pending withdrawal fields (populated from GetContractList)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get activeWithdrawalRequestHash => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get activeWithdrawalBtcDestination =>
+      throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  double? get activeWithdrawalAmount => throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  int get withdrawalStatus => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -56,17 +66,36 @@ abstract class $TokenizedBitcoinCopyWith<$Res> {
       _$TokenizedBitcoinCopyWithImpl<$Res, TokenizedBitcoin>;
   @useResult
   $Res call(
-      {@JsonKey(name: "Id") double id,
-      @JsonKey(name: "SmartContractUID") String smartContractUid,
-      @JsonKey(name: "RBXAddress") String rbxAddress,
-      @JsonKey(name: "DepositAddress") String? btcAddress,
-      @JsonKey(name: "Balance") double balance,
-      @JsonKey(name: "MyBalance") double myBalance,
-      @JsonKey(name: "TokenName") String tokenName,
-      @JsonKey(name: "TokenDescription") String tokenDescription,
-      @JsonKey(name: "SmartContractMainId") double smartContractMainId,
-      @JsonKey(name: "IsPublished") bool isPublished,
-      @JsonKey(name: "Version") int version});
+      {@JsonKey(name: "Id")
+          double id,
+      @JsonKey(name: "SmartContractUID")
+          String smartContractUid,
+      @JsonKey(name: "RBXAddress")
+          String rbxAddress,
+      @JsonKey(name: "DepositAddress")
+          String? btcAddress,
+      @JsonKey(name: "Balance")
+          double balance,
+      @JsonKey(name: "MyBalance")
+          double myBalance,
+      @JsonKey(name: "TokenName")
+          String tokenName,
+      @JsonKey(name: "TokenDescription")
+          String tokenDescription,
+      @JsonKey(name: "SmartContractMainId")
+          double smartContractMainId,
+      @JsonKey(name: "IsPublished")
+          bool isPublished,
+      @JsonKey(name: "Version")
+          int version,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String? activeWithdrawalRequestHash,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String? activeWithdrawalBtcDestination,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          double? activeWithdrawalAmount,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          int withdrawalStatus});
 }
 
 /// @nodoc
@@ -93,6 +122,10 @@ class _$TokenizedBitcoinCopyWithImpl<$Res, $Val extends TokenizedBitcoin>
     Object? smartContractMainId = null,
     Object? isPublished = null,
     Object? version = null,
+    Object? activeWithdrawalRequestHash = freezed,
+    Object? activeWithdrawalBtcDestination = freezed,
+    Object? activeWithdrawalAmount = freezed,
+    Object? withdrawalStatus = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -139,6 +172,22 @@ class _$TokenizedBitcoinCopyWithImpl<$Res, $Val extends TokenizedBitcoin>
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as int,
+      activeWithdrawalRequestHash: freezed == activeWithdrawalRequestHash
+          ? _value.activeWithdrawalRequestHash
+          : activeWithdrawalRequestHash // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activeWithdrawalBtcDestination: freezed == activeWithdrawalBtcDestination
+          ? _value.activeWithdrawalBtcDestination
+          : activeWithdrawalBtcDestination // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activeWithdrawalAmount: freezed == activeWithdrawalAmount
+          ? _value.activeWithdrawalAmount
+          : activeWithdrawalAmount // ignore: cast_nullable_to_non_nullable
+              as double?,
+      withdrawalStatus: null == withdrawalStatus
+          ? _value.withdrawalStatus
+          : withdrawalStatus // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -152,17 +201,36 @@ abstract class _$$_TokenizedBitcoinCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "Id") double id,
-      @JsonKey(name: "SmartContractUID") String smartContractUid,
-      @JsonKey(name: "RBXAddress") String rbxAddress,
-      @JsonKey(name: "DepositAddress") String? btcAddress,
-      @JsonKey(name: "Balance") double balance,
-      @JsonKey(name: "MyBalance") double myBalance,
-      @JsonKey(name: "TokenName") String tokenName,
-      @JsonKey(name: "TokenDescription") String tokenDescription,
-      @JsonKey(name: "SmartContractMainId") double smartContractMainId,
-      @JsonKey(name: "IsPublished") bool isPublished,
-      @JsonKey(name: "Version") int version});
+      {@JsonKey(name: "Id")
+          double id,
+      @JsonKey(name: "SmartContractUID")
+          String smartContractUid,
+      @JsonKey(name: "RBXAddress")
+          String rbxAddress,
+      @JsonKey(name: "DepositAddress")
+          String? btcAddress,
+      @JsonKey(name: "Balance")
+          double balance,
+      @JsonKey(name: "MyBalance")
+          double myBalance,
+      @JsonKey(name: "TokenName")
+          String tokenName,
+      @JsonKey(name: "TokenDescription")
+          String tokenDescription,
+      @JsonKey(name: "SmartContractMainId")
+          double smartContractMainId,
+      @JsonKey(name: "IsPublished")
+          bool isPublished,
+      @JsonKey(name: "Version")
+          int version,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String? activeWithdrawalRequestHash,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String? activeWithdrawalBtcDestination,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          double? activeWithdrawalAmount,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          int withdrawalStatus});
 }
 
 /// @nodoc
@@ -187,6 +255,10 @@ class __$$_TokenizedBitcoinCopyWithImpl<$Res>
     Object? smartContractMainId = null,
     Object? isPublished = null,
     Object? version = null,
+    Object? activeWithdrawalRequestHash = freezed,
+    Object? activeWithdrawalBtcDestination = freezed,
+    Object? activeWithdrawalAmount = freezed,
+    Object? withdrawalStatus = null,
   }) {
     return _then(_$_TokenizedBitcoin(
       id: null == id
@@ -233,6 +305,22 @@ class __$$_TokenizedBitcoinCopyWithImpl<$Res>
           ? _value.version
           : version // ignore: cast_nullable_to_non_nullable
               as int,
+      activeWithdrawalRequestHash: freezed == activeWithdrawalRequestHash
+          ? _value.activeWithdrawalRequestHash
+          : activeWithdrawalRequestHash // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activeWithdrawalBtcDestination: freezed == activeWithdrawalBtcDestination
+          ? _value.activeWithdrawalBtcDestination
+          : activeWithdrawalBtcDestination // ignore: cast_nullable_to_non_nullable
+              as String?,
+      activeWithdrawalAmount: freezed == activeWithdrawalAmount
+          ? _value.activeWithdrawalAmount
+          : activeWithdrawalAmount // ignore: cast_nullable_to_non_nullable
+              as double?,
+      withdrawalStatus: null == withdrawalStatus
+          ? _value.withdrawalStatus
+          : withdrawalStatus // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -241,17 +329,36 @@ class __$$_TokenizedBitcoinCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TokenizedBitcoin extends _TokenizedBitcoin {
   _$_TokenizedBitcoin(
-      {@JsonKey(name: "Id") required this.id,
-      @JsonKey(name: "SmartContractUID") required this.smartContractUid,
-      @JsonKey(name: "RBXAddress") required this.rbxAddress,
-      @JsonKey(name: "DepositAddress") this.btcAddress,
-      @JsonKey(name: "Balance") this.balance = 0.0,
-      @JsonKey(name: "MyBalance") this.myBalance = 0.0,
-      @JsonKey(name: "TokenName") required this.tokenName,
-      @JsonKey(name: "TokenDescription") required this.tokenDescription,
-      @JsonKey(name: "SmartContractMainId") required this.smartContractMainId,
-      @JsonKey(name: "IsPublished") required this.isPublished,
-      @JsonKey(name: "Version") this.version = 1})
+      {@JsonKey(name: "Id")
+          required this.id,
+      @JsonKey(name: "SmartContractUID")
+          required this.smartContractUid,
+      @JsonKey(name: "RBXAddress")
+          required this.rbxAddress,
+      @JsonKey(name: "DepositAddress")
+          this.btcAddress,
+      @JsonKey(name: "Balance")
+          this.balance = 0.0,
+      @JsonKey(name: "MyBalance")
+          this.myBalance = 0.0,
+      @JsonKey(name: "TokenName")
+          required this.tokenName,
+      @JsonKey(name: "TokenDescription")
+          required this.tokenDescription,
+      @JsonKey(name: "SmartContractMainId")
+          required this.smartContractMainId,
+      @JsonKey(name: "IsPublished")
+          required this.isPublished,
+      @JsonKey(name: "Version")
+          this.version = 1,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.activeWithdrawalRequestHash,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.activeWithdrawalBtcDestination,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.activeWithdrawalAmount,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.withdrawalStatus = 0})
       : super._();
 
   factory _$_TokenizedBitcoin.fromJson(Map<String, dynamic> json) =>
@@ -290,10 +397,23 @@ class _$_TokenizedBitcoin extends _TokenizedBitcoin {
   @override
   @JsonKey(name: "Version")
   final int version;
+// V2 pending withdrawal fields (populated from GetContractList)
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final String? activeWithdrawalRequestHash;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final String? activeWithdrawalBtcDestination;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final double? activeWithdrawalAmount;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final int withdrawalStatus;
 
   @override
   String toString() {
-    return 'TokenizedBitcoin(id: $id, smartContractUid: $smartContractUid, rbxAddress: $rbxAddress, btcAddress: $btcAddress, balance: $balance, myBalance: $myBalance, tokenName: $tokenName, tokenDescription: $tokenDescription, smartContractMainId: $smartContractMainId, isPublished: $isPublished, version: $version)';
+    return 'TokenizedBitcoin(id: $id, smartContractUid: $smartContractUid, rbxAddress: $rbxAddress, btcAddress: $btcAddress, balance: $balance, myBalance: $myBalance, tokenName: $tokenName, tokenDescription: $tokenDescription, smartContractMainId: $smartContractMainId, isPublished: $isPublished, version: $version, activeWithdrawalRequestHash: $activeWithdrawalRequestHash, activeWithdrawalBtcDestination: $activeWithdrawalBtcDestination, activeWithdrawalAmount: $activeWithdrawalAmount, withdrawalStatus: $withdrawalStatus)';
   }
 
   @override
@@ -319,7 +439,19 @@ class _$_TokenizedBitcoin extends _TokenizedBitcoin {
                 other.smartContractMainId == smartContractMainId) &&
             (identical(other.isPublished, isPublished) ||
                 other.isPublished == isPublished) &&
-            (identical(other.version, version) || other.version == version));
+            (identical(other.version, version) || other.version == version) &&
+            (identical(other.activeWithdrawalRequestHash,
+                    activeWithdrawalRequestHash) ||
+                other.activeWithdrawalRequestHash ==
+                    activeWithdrawalRequestHash) &&
+            (identical(other.activeWithdrawalBtcDestination,
+                    activeWithdrawalBtcDestination) ||
+                other.activeWithdrawalBtcDestination ==
+                    activeWithdrawalBtcDestination) &&
+            (identical(other.activeWithdrawalAmount, activeWithdrawalAmount) ||
+                other.activeWithdrawalAmount == activeWithdrawalAmount) &&
+            (identical(other.withdrawalStatus, withdrawalStatus) ||
+                other.withdrawalStatus == withdrawalStatus));
   }
 
   @JsonKey(ignore: true)
@@ -336,7 +468,11 @@ class _$_TokenizedBitcoin extends _TokenizedBitcoin {
       tokenDescription,
       smartContractMainId,
       isPublished,
-      version);
+      version,
+      activeWithdrawalRequestHash,
+      activeWithdrawalBtcDestination,
+      activeWithdrawalAmount,
+      withdrawalStatus);
 
   @JsonKey(ignore: true)
   @override
@@ -375,7 +511,15 @@ abstract class _TokenizedBitcoin extends TokenizedBitcoin {
       @JsonKey(name: "IsPublished")
           required final bool isPublished,
       @JsonKey(name: "Version")
-          final int version}) = _$_TokenizedBitcoin;
+          final int version,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final String? activeWithdrawalRequestHash,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final String? activeWithdrawalBtcDestination,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final double? activeWithdrawalAmount,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final int withdrawalStatus}) = _$_TokenizedBitcoin;
   _TokenizedBitcoin._() : super._();
 
   factory _TokenizedBitcoin.fromJson(Map<String, dynamic> json) =
@@ -414,6 +558,18 @@ abstract class _TokenizedBitcoin extends TokenizedBitcoin {
   @override
   @JsonKey(name: "Version")
   int get version;
+  @override // V2 pending withdrawal fields (populated from GetContractList)
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get activeWithdrawalRequestHash;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  String? get activeWithdrawalBtcDestination;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  double? get activeWithdrawalAmount;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  int get withdrawalStatus;
   @override
   @JsonKey(ignore: true)
   _$$_TokenizedBitcoinCopyWith<_$_TokenizedBitcoin> get copyWith =>

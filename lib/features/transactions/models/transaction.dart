@@ -20,6 +20,7 @@ enum TransactionStatus {
 
 statusFromJson(int? status) {
   if (status == null) return null;
+  if (status < 0 || status >= TransactionStatus.values.length) return null;
   return TransactionStatus.values[status];
 }
 
@@ -230,6 +231,35 @@ class Transaction with _$Transaction {
         return "Tokenization Withdrawl";
       case 21:
         return "Tokenization Withdrawl";
+      case 25:
+        return "vBTC Contract Mint";
+      case 26:
+        final data = parseNftData(this);
+        if (data != null) {
+          final amount = nftDataValue(data, 'Amount');
+          if (amount != null) {
+            return "vBTC Transfer ($amount vBTC)";
+          }
+        }
+        return "vBTC Transfer";
+      case 27:
+        final data = parseNftData(this);
+        if (data != null) {
+          final amount = nftDataValue(data, 'Amount');
+          if (amount != null) {
+            return "vBTC Withdrawal Request ($amount vBTC)";
+          }
+        }
+        return "vBTC Withdrawal Request";
+      case 28:
+        final data = parseNftData(this);
+        if (data != null) {
+          final amount = nftDataValue(data, 'Amount');
+          if (amount != null) {
+            return "vBTC Withdrawal Complete ($amount vBTC)";
+          }
+        }
+        return "vBTC Withdrawal Complete";
       default:
         return type.toString();
     }
@@ -268,6 +298,10 @@ class Transaction with _$Transaction {
         }
       }
     }
+
+    // V2 vBTC transaction types
+    if (type >= 25 && type <= 28) return true;
+
     return false;
   }
 

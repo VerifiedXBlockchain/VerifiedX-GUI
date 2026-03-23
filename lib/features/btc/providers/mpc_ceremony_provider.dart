@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/toast.dart';
 import '../models/mpc_ceremony.dart';
 import '../services/vbtc_v2_service.dart';
+
+const _tag = '[vBTC-V2] MpcCeremony';
 
 enum MpcCeremonyPhase {
   idle,
@@ -67,10 +71,12 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
 
   Future<void> startCeremony(String ownerAddress) async {
     _ownerAddress = ownerAddress;
+    debugPrint('$_tag startCeremony for owner: $ownerAddress');
 
     final ceremonyId = await VbtcV2Service().initiateCeremony(ownerAddress);
 
     if (ceremonyId == null) {
+      debugPrint('$_tag startCeremony FAILED — no ceremonyId returned');
       state = const MpcCeremonyState(
         phase: MpcCeremonyPhase.failed,
         errorMessage: "Failed to initiate MPC ceremony.",
@@ -78,6 +84,7 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
       return;
     }
 
+    debugPrint('$_tag Ceremony initiated — ceremonyId: $ceremonyId, starting polling');
     state = MpcCeremonyState(
       phase: MpcCeremonyPhase.ceremonyInProgress,
       ceremony: MpcCeremony(
@@ -105,6 +112,8 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
     if (_ceremonyStartTime != null &&
         DateTime.now().difference(_ceremonyStartTime!) > _kCeremonyTimeoutDuration) {
       _pollingTimer?.cancel();
+      final elapsed = DateTime.now().difference(_ceremonyStartTime!);
+      debugPrint('$_tag Poll TIMEOUT after ${elapsed.inSeconds}s — aborting');
       state = const MpcCeremonyState(
         phase: MpcCeremonyPhase.failed,
         errorMessage: "Ceremony timed out. Please try again.",
@@ -119,8 +128,10 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
 
     if (result == null) {
       _consecutivePollFailures++;
+      debugPrint('$_tag Poll returned null — consecutive failures: $_consecutivePollFailures/$_kMaxConsecutivePollFailures');
       if (_consecutivePollFailures >= _kMaxConsecutivePollFailures) {
         _pollingTimer?.cancel();
+        debugPrint('$_tag Max poll failures reached — aborting');
         state = const MpcCeremonyState(
           phase: MpcCeremonyPhase.failed,
           errorMessage: "Lost connection while monitoring ceremony. Please try again.",
@@ -133,9 +144,12 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
     _consecutivePollFailures = 0;
 
     final ceremony = MpcCeremony.fromJson(result);
+    debugPrint('$_tag Poll → status: ${ceremony.status.name} | progress: ${ceremony.progressPercentage}%');
 
     if (ceremony.status == MpcCeremonyStatus.completed) {
       _pollingTimer?.cancel();
+      debugPrint('$_tag Ceremony COMPLETED — depositAddress: ${ceremony.depositAddress} | frostKey: ${ceremony.frostGroupPublicKey}');
+      debugPrint('$_tag Full ceremony result:\n${const JsonEncoder.withIndent('  ').convert(result)}');
       state = MpcCeremonyState(
         phase: MpcCeremonyPhase.ceremonyCompleted,
         ceremony: ceremony,
@@ -147,6 +161,7 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
     if (ceremony.status == MpcCeremonyStatus.failed ||
         ceremony.status == MpcCeremonyStatus.timedOut) {
       _pollingTimer?.cancel();
+      debugPrint('$_tag Ceremony ${ceremony.status.name.toUpperCase()} — full result:\n${const JsonEncoder.withIndent('  ').convert(result)}');
       state = MpcCeremonyState(
         phase: MpcCeremonyPhase.failed,
         ceremony: ceremony,
@@ -173,6 +188,7 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
     if (state.phase != MpcCeremonyPhase.ceremonyCompleted) return;
     if (state.ceremony == null || _ownerAddress == null) return;
 
+    debugPrint('$_tag createContract — owner: $_ownerAddress, name: $name, ticker: $ticker, ceremonyId: ${state.ceremony!.ceremonyId}');
     state = state.copyWith(phase: MpcCeremonyPhase.creatingContract);
 
     final hash = await VbtcV2Service().createContract(
@@ -186,6 +202,7 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
     if (!mounted) return;
 
     if (hash != null) {
+      debugPrint('$_tag Contract created — hash: $hash');
       state = MpcCeremonyState(
         phase: MpcCeremonyPhase.contractCreated,
         ceremony: state.ceremony,
@@ -193,6 +210,7 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
       );
       Toast.message("vBTC contract created. Hash: $hash");
     } else {
+      debugPrint('$_tag Contract creation FAILED');
       state = MpcCeremonyState(
         phase: MpcCeremonyPhase.failed,
         ceremony: state.ceremony,

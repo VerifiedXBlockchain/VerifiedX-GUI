@@ -19,9 +19,17 @@ class TokenizedBitcoin with _$TokenizedBitcoin {
     @JsonKey(name: "SmartContractMainId") required double smartContractMainId,
     @JsonKey(name: "IsPublished") required bool isPublished,
     @JsonKey(name: "Version") @Default(1) int version,
+    // V2 pending withdrawal fields (populated from GetContractList)
+    @JsonKey(includeFromJson: false, includeToJson: false) String? activeWithdrawalRequestHash,
+    @JsonKey(includeFromJson: false, includeToJson: false) String? activeWithdrawalBtcDestination,
+    @JsonKey(includeFromJson: false, includeToJson: false) double? activeWithdrawalAmount,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Default(0) int withdrawalStatus,
   }) = _TokenizedBitcoin;
 
   factory TokenizedBitcoin.fromJson(Map<String, dynamic> json) => _$TokenizedBitcoinFromJson(json);
+
+  bool get hasPendingWithdrawal =>
+      activeWithdrawalRequestHash != null && activeWithdrawalRequestHash!.isNotEmpty;
 
   int get timestamp {
     return int.tryParse(smartContractUid.split(":").last) ?? 0;
