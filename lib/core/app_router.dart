@@ -45,6 +45,7 @@ import '../features/smart_contracts/screens/smart_contract_drafts_screen.dart';
 import '../features/smart_contracts/screens/smart_contracts_screen.dart';
 import '../features/smart_contracts/screens/template_chooser_screen.dart';
 import '../features/token/screens/token_topic_create_screen.dart';
+import '../features/privacy/screens/privacy_screen.dart';
 import '../features/transactions/screens/transactions_screen.dart';
 import '../features/validator/screens/validator_screen.dart';
 import '../features/voting/screens/create_topic_screen.dart';
@@ -238,6 +239,14 @@ const List<AutoRoute> appRoutes = [
             path: "",
             page: OperationsScreen,
           ),
+        ],
+      ),
+      AutoRoute(
+        path: "privacy",
+        name: "PrivacyTabRouter",
+        page: EmptyRouterPage,
+        children: [
+          AutoRoute(path: "", page: PrivacyScreen),
         ],
       ),
       // AutoRoute(
