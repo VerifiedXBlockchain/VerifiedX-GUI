@@ -16,6 +16,8 @@ import '../../features/bridge/services/bridge_service_v2.dart';
 import '../../features/btc/providers/electrum_connected_provider.dart';
 import '../../features/btc/providers/tokenized_bitcoin_list_provider.dart';
 import '../../features/price/providers/price_detail_providers.dart';
+import '../../features/privacy/providers/plonk_status_provider.dart';
+import '../../features/privacy/providers/shielded_address_provider.dart';
 import '../../features/token/providers/token_list_provider.dart';
 
 import '../../features/btc/models/btc_account.dart';
@@ -267,6 +269,10 @@ class SessionProvider extends StateNotifier<SessionModel> {
     ref.read(beaconListProvider.notifier).refresh();
 
     updateBtcFeeRates();
+
+    // Load PRISM privacy layer status + shielded address
+    ref.read(plonkStatusNotifierProvider.notifier).load();
+    ref.read(shieldedAddressProvider.notifier).load();
 
     Future.delayed(const Duration(milliseconds: 300)).then((_) async {
       ref.read(walletInfoProvider.notifier).infoLoop(inLoop);
