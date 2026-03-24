@@ -325,7 +325,7 @@ class _LatestBtcTx extends BaseComponent {
               Text(
                 "From: ${tx.fromAddress}\nTo: ${tx.toAddress}",
                 style: TextStyle(
-                  fontSize: 11,
+                  fontSize: 10,
                   color: Colors.white.withOpacity(0.9),
                 ),
                 textAlign: TextAlign.center,
