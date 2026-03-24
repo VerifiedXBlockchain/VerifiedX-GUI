@@ -12,6 +12,7 @@ import '../models/shielded_balance.dart';
 import '../providers/shielded_balance_provider.dart';
 import 'commitment_list.dart';
 import 'consolidate_dialog.dart';
+import 'privacy_settings_menu.dart';
 import 'private_transfer_dialog.dart';
 import 'shield_dialog.dart';
 import 'unshield_dialog.dart';
@@ -92,6 +93,7 @@ class _AddressCard extends StatelessWidget {
                 Toast.message("Address copied to clipboard");
               },
             ),
+            const PrivacySettingsMenu(),
           ],
         ),
       ),
