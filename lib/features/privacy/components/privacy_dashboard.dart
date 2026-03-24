@@ -11,6 +11,10 @@ import '../models/shielded_address.dart';
 import '../models/shielded_balance.dart';
 import '../providers/shielded_balance_provider.dart';
 import 'commitment_list.dart';
+import 'consolidate_dialog.dart';
+import 'private_transfer_dialog.dart';
+import 'shield_dialog.dart';
+import 'unshield_dialog.dart';
 
 class PrivacyDashboard extends BaseComponent {
   final ShieldedAddress address;
@@ -198,9 +202,7 @@ class _ActionButtons extends StatelessWidget {
                 label: "Shield",
                 icon: Icons.arrow_downward,
                 variant: AppColorVariant.Success,
-                onPressed: () {
-                  Toast.message("Shield dialog coming in Phase 5");
-                },
+                onPressed: () => ShieldDialog.show(),
               ),
             ),
             const SizedBox(width: 8),
@@ -209,9 +211,7 @@ class _ActionButtons extends StatelessWidget {
                 label: "Unshield",
                 icon: Icons.arrow_upward,
                 variant: AppColorVariant.Warning,
-                onPressed: () {
-                  Toast.message("Unshield dialog coming in Phase 5");
-                },
+                onPressed: () => UnshieldDialog.show(),
               ),
             ),
             const SizedBox(width: 8),
@@ -220,9 +220,7 @@ class _ActionButtons extends StatelessWidget {
                 label: "Transfer",
                 icon: Icons.send,
                 variant: AppColorVariant.Primary,
-                onPressed: () {
-                  Toast.message("Transfer dialog coming in Phase 5");
-                },
+                onPressed: () => PrivateTransferDialog.show(),
               ),
             ),
             const SizedBox(width: 8),
@@ -231,9 +229,7 @@ class _ActionButtons extends StatelessWidget {
                 label: "Consolidate",
                 icon: Icons.compress,
                 variant: AppColorVariant.Info,
-                onPressed: () {
-                  Toast.message("Consolidate dialog coming in Phase 5");
-                },
+                onPressed: () => ConsolidateDialog.show(),
               ),
             ),
           ],
