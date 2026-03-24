@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/theme/colors.dart';
 import '../components/privacy_activation_card.dart';
+import '../components/privacy_dashboard.dart';
 import '../providers/plonk_status_provider.dart';
 import '../providers/shielded_address_provider.dart';
 
@@ -65,24 +66,6 @@ class PrivacyScreen extends BaseScreen {
       return const PrivacyActivationCard();
     }
 
-    // Placeholder for dashboard (Phase 4)
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.shield, size: 48, color: AppColors.getBlue()),
-          const SizedBox(height: 16),
-          Text(
-            shieldedAddress.zfxAddress,
-            style: const TextStyle(color: Colors.white70, fontSize: 14),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            "Privacy wallet active. Dashboard coming soon.",
-            style: TextStyle(color: Colors.white38, fontSize: 13),
-          ),
-        ],
-      ),
-    );
+    return PrivacyDashboard(address: shieldedAddress);
   }
 }
