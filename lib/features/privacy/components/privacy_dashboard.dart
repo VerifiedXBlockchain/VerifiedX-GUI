@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../app.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../utils/toast.dart';
+import '../../../utils/validation.dart';
 import '../models/shielded_address.dart';
 import '../models/shielded_balance.dart';
+import '../providers/shielded_address_provider.dart';
 import '../providers/shielded_balance_provider.dart';
 import 'commitment_list.dart';
 import 'consolidate_dialog.dart';
@@ -28,11 +32,13 @@ class PrivacyDashboard extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final balance = ref.watch(shieldedBalanceProvider);
+    final isUnlocked = ref.watch(privacyUnlockedProvider);
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (!isUnlocked) _UnlockBanner(),
           _AddressCard(address: address),
           const SizedBox(height: 16),
           _BalanceCard(balance: balance),
@@ -190,9 +196,57 @@ class _BalanceCard extends StatelessWidget {
   }
 }
 
-class _ActionButtons extends StatelessWidget {
+class _UnlockBanner extends ConsumerWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Card(
+        color: Colors.orange.withOpacity(0.1),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              const Icon(Icons.lock, color: Colors.orange, size: 20),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Text(
+                  "Enter your privacy password to unlock spending operations.",
+                  style: TextStyle(color: Colors.orange, fontSize: 13),
+                ),
+              ),
+              AppButton(
+                label: "Unlock",
+                icon: Icons.lock_open,
+                variant: AppColorVariant.Warning,
+                onPressed: () async {
+                  final password = await PromptModal.show(
+                    contextOverride: rootNavigatorKey.currentContext!,
+                    title: "Unlock Privacy Wallet",
+                    labelText: "Password",
+                    body: "Enter your privacy wallet password to enable spending.",
+                    validator: (value) => formValidatorNotEmpty(value, "Password"),
+                    obscureText: true,
+                    revealObscure: true,
+                    lines: 1,
+                  );
+                  if (password != null) {
+                    ref.read(shieldedAddressProvider.notifier).setPassword(password);
+                    Toast.message("Privacy wallet unlocked");
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ActionButtons extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       color: AppColors.getGray(ColorShade.s200),
       child: Padding(
@@ -213,7 +267,7 @@ class _ActionButtons extends StatelessWidget {
                 label: "Unshield",
                 icon: Icons.arrow_upward,
                 variant: AppColorVariant.Warning,
-                onPressed: () => UnshieldDialog.show(),
+                onPressed: () => _requireUnlock(ref, () => UnshieldDialog.show()),
               ),
             ),
             const SizedBox(width: 8),
@@ -221,8 +275,8 @@ class _ActionButtons extends StatelessWidget {
               child: AppButton(
                 label: "Transfer",
                 icon: Icons.send,
-                variant: AppColorVariant.Primary,
-                onPressed: () => PrivateTransferDialog.show(),
+                variant: AppColorVariant.Prism,
+                onPressed: () => _requireUnlock(ref, () => PrivateTransferDialog.show()),
               ),
             ),
             const SizedBox(width: 8),
@@ -231,12 +285,36 @@ class _ActionButtons extends StatelessWidget {
                 label: "Consolidate",
                 icon: Icons.compress,
                 variant: AppColorVariant.Info,
-                onPressed: () => ConsolidateDialog.show(),
+                onPressed: () => _requireUnlock(ref, () => ConsolidateDialog.show()),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _requireUnlock(WidgetRef ref, VoidCallback action) async {
+    if (ref.read(privacyUnlockedProvider)) {
+      action();
+      return;
+    }
+
+    final password = await PromptModal.show(
+      contextOverride: rootNavigatorKey.currentContext!,
+      title: "Unlock Privacy Wallet",
+      labelText: "Password",
+      body: "Enter your privacy wallet password to enable spending.",
+      validator: (value) => formValidatorNotEmpty(value, "Password"),
+      obscureText: true,
+      revealObscure: true,
+      lines: 1,
+    );
+
+    if (password != null) {
+      ref.read(shieldedAddressProvider.notifier).setPassword(password);
+      Toast.message("Privacy wallet unlocked");
+      action();
+    }
   }
 }

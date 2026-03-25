@@ -270,9 +270,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     updateBtcFeeRates();
 
-    // Load PRISM privacy layer status + shielded address
+    // Load PRISM privacy layer status
     ref.read(plonkStatusNotifierProvider.notifier).load();
-    ref.read(shieldedAddressProvider.notifier).load();
 
     Future.delayed(const Duration(milliseconds: 300)).then((_) async {
       ref.read(walletInfoProvider.notifier).infoLoop(inLoop);
@@ -687,6 +686,12 @@ class SessionProvider extends StateNotifier<SessionModel> {
       ref
           .read(reserveAccountProvider.notifier)
           .set(reservedWalletsAfterDeleteCheck);
+    }
+
+    // Load PRISM shielded address now that currentWallet is available
+    final privacyAddress = state.currentWallet?.address;
+    if (privacyAddress != null) {
+      ref.read(shieldedAddressProvider.notifier).load(privacyAddress);
     }
   }
 

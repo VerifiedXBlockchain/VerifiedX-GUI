@@ -17,7 +17,7 @@ class TxHelper {
 
   static List<TxHelper> getAllTypes() {
     final List<Transaction> types = [];
-    for (var i = 0; i <= 19; i++) {
+    for (var i = 0; i <= 38; i++) {
       types.add(
         Transaction(hash: "", toAddress: "", fromAddress: "", type: i, amount: 0, nonce: 0, fee: 0, timestamp: 0, nftData: null, height: 0),
       );
@@ -67,6 +67,44 @@ class TxHelper {
         return "vBTC TX";
       case 19:
         return "vBTC Burn";
+      case 20:
+        return "vBTC Withdrawal (Arb)";
+      case 21:
+        return "vBTC Withdrawal (Owner)";
+      case 22:
+        return "vBTC V2 Validator Register";
+      case 23:
+        return "vBTC V2 Validator Heartbeat";
+      case 24:
+        return "vBTC V2 Validator Exit";
+      case 25:
+        return "vBTC V2 Contract Create";
+      case 26:
+        return "vBTC V2 Transfer";
+      case 27:
+        return "vBTC V2 Withdrawal Request";
+      case 28:
+        return "vBTC V2 Withdrawal Complete";
+      case 29:
+        return "vBTC V2 Withdrawal Cancel";
+      case 30:
+        return "vBTC V2 Withdrawal Vote";
+      case 31:
+        return "VFX Shield";
+      case 32:
+        return "VFX Unshield";
+      case 33:
+        return "VFX Private Transfer";
+      case 34:
+        return "vBTC V2 Shield";
+      case 35:
+        return "vBTC V2 Unshield";
+      case 36:
+        return "vBTC V2 Private Transfer";
+      case 37:
+        return "vBTC V2 Bridge Lock";
+      case 38:
+        return "vBTC V2 Bridge Unlock";
       default:
         return type.toString();
     }

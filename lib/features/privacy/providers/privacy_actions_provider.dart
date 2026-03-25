@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
+import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
 
 class PrivacyActionsNotifier extends StateNotifier<bool> {
@@ -11,6 +12,8 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
 
   bool get isLoading => state;
 
+  String? get _password => ref.read(shieldedAddressProvider.notifier).walletPassword;
+
   Future<bool> shield({
     required String fromAddress,
     required double amount,
@@ -18,22 +21,17 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
   }) async {
     state = true;
     try {
-      final result = await PrivacyService().shieldVfx(
+      await PrivacyService().shieldVfx(
         fromAddress: fromAddress,
         amount: amount,
         recipientZfxAddress: recipientZfxAddress,
       );
 
-      if (result != null) {
-        Toast.message("Shield transaction broadcast successfully");
-        ref.read(shieldedBalanceProvider.notifier).fetch();
-        return true;
-      }
-
-      Toast.error("Shield transaction failed");
-      return false;
+      Toast.message("Shield transaction broadcast successfully");
+      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      return true;
     } catch (e) {
-      Toast.error("Shield error: $e");
+      Toast.error("Shield failed: $e");
       return false;
     } finally {
       state = false;
@@ -45,24 +43,24 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     required String toAddress,
     required double amount,
   }) async {
+    if (_password == null) {
+      Toast.error("Privacy wallet password required. Please unlock first.");
+      return false;
+    }
     state = true;
     try {
-      final result = await PrivacyService().unshieldVfx(
+      await PrivacyService().unshieldVfx(
         zfxAddress: zfxAddress,
         toAddress: toAddress,
         amount: amount,
+        walletPassword: _password!,
       );
 
-      if (result != null) {
-        Toast.message("Unshield transaction broadcast successfully");
-        ref.read(shieldedBalanceProvider.notifier).fetch();
-        return true;
-      }
-
-      Toast.error("Unshield transaction failed");
-      return false;
+      Toast.message("Unshield transaction broadcast successfully");
+      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      return true;
     } catch (e) {
-      Toast.error("Unshield error: $e");
+      Toast.error("Unshield failed: $e");
       return false;
     } finally {
       state = false;
@@ -74,24 +72,24 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     required String recipientZfxAddress,
     required double amount,
   }) async {
+    if (_password == null) {
+      Toast.error("Privacy wallet password required. Please unlock first.");
+      return false;
+    }
     state = true;
     try {
-      final result = await PrivacyService().privateTransferVfx(
+      await PrivacyService().privateTransferVfx(
         zfxAddress: zfxAddress,
         recipientZfxAddress: recipientZfxAddress,
         amount: amount,
+        walletPassword: _password!,
       );
 
-      if (result != null) {
-        Toast.message("Private transfer broadcast successfully");
-        ref.read(shieldedBalanceProvider.notifier).fetch();
-        return true;
-      }
-
-      Toast.error("Private transfer failed");
-      return false;
+      Toast.message("Private transfer broadcast successfully");
+      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      return true;
     } catch (e) {
-      Toast.error("Private transfer error: $e");
+      Toast.error("Private transfer failed: $e");
       return false;
     } finally {
       state = false;
@@ -101,22 +99,22 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
   Future<bool> consolidate({
     required String zfxAddress,
   }) async {
+    if (_password == null) {
+      Toast.error("Privacy wallet password required. Please unlock first.");
+      return false;
+    }
     state = true;
     try {
-      final result = await PrivacyService().consolidateVfx(
+      await PrivacyService().consolidateVfx(
         zfxAddress: zfxAddress,
+        walletPassword: _password!,
       );
 
-      if (result != null) {
-        Toast.message("Consolidation broadcast successfully");
-        ref.read(shieldedBalanceProvider.notifier).fetch();
-        return true;
-      }
-
-      Toast.error("Consolidation failed");
-      return false;
+      Toast.message("Consolidation broadcast successfully");
+      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      return true;
     } catch (e) {
-      Toast.error("Consolidation error: $e");
+      Toast.error("Consolidation failed: $e");
       return false;
     } finally {
       state = false;

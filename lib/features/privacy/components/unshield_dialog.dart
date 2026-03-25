@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
+import '../../../core/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../providers/privacy_actions_provider.dart';
@@ -101,9 +102,9 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
               enabled: !_isSubmitting,
             ),
             const SizedBox(height: 8),
-            const Text(
-              "0.000003 VFX fee deducted from shielded balance.",
-              style: TextStyle(color: Colors.white38, fontSize: 11),
+            Text(
+              "$PRIVACY_TX_FIXED_FEE_LABEL fee deducted from shielded balance.",
+              style: const TextStyle(color: Colors.white38, fontSize: 11),
             ),
           ],
         ),

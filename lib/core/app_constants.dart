@@ -37,6 +37,10 @@ const SHOP_DELETE_COST = 1.0;
 const SHOP_UPDATE_COST = 1.0;
 const RA_ACTIVATION_COST = 4.0;
 
+const PRIVACY_TX_FIXED_FEE = 0.000003;
+const PRIVACY_TX_FIXED_FEE_LABEL = "0.000003 VFX";
+const MIN_SHIELD_AMOUNT_VFX = 0.001;
+
 const BTC_SATOSHI_MULTIPLIER = 0.00000001;
 const BTC_TX_EXPECTED_BYTES = 140;
 const BTC_MINIMUM_TX_AMOUNT = 0.00001;
@@ -66,6 +70,25 @@ class TxType {
   static const int tokenTx = 15;
   static const int tokenDeploy = 17;
   static const int tokenizeTx = 18;
+  static const int tokenizeWdArb = 20;
+  static const int tokenizeWdOwner = 21;
+  static const int vbtcV2ValidatorRegister = 22;
+  static const int vbtcV2ValidatorHeartbeat = 23;
+  static const int vbtcV2ValidatorExit = 24;
+  static const int vbtcV2ContractCreate = 25;
+  static const int vbtcV2Transfer = 26;
+  static const int vbtcV2WithdrawalRequest = 27;
+  static const int vbtcV2WithdrawalComplete = 28;
+  static const int vbtcV2WithdrawalCancel = 29;
+  static const int vbtcV2WithdrawalVote = 30;
+  static const int vfxShield = 31;
+  static const int vfxUnshield = 32;
+  static const int vfxPrivateTransfer = 33;
+  static const int vbtcV2Shield = 34;
+  static const int vbtcV2Unshield = 35;
+  static const int vbtcV2PrivateTransfer = 36;
+  static const int vbtcV2BridgeLock = 37;
+  static const int vbtcV2BridgeUnlock = 38;
 }
 
 const DEFAULT_REJECTED_EXTENIONS = [

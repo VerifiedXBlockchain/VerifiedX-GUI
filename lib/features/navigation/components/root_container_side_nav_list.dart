@@ -185,6 +185,26 @@ class RootContainerSideNavList extends BaseComponent {
                 tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.vbtc : 15),
             isExpanded: isExpanded,
           ),
+          if (!kIsWeb)
+            Builder(builder: (context) {
+              final plonkStatus = ref.watch(plonkStatusNotifierProvider);
+              final isEnabled = plonkStatus?.isPrivacyEnabled ?? false;
+              if (!isEnabled) return const SizedBox.shrink();
+              return RootContainerSideNavItem(
+                title: "Privacy",
+                iconType: PrettyIconType.custom,
+                icon: Icons.shield,
+                isNew: true,
+                onPressed: () {
+                  tabsRouter.setActiveIndex(17);
+                  if (inDrawer) {
+                    rootScaffoldKey.currentState!.closeDrawer();
+                  }
+                },
+                isActive: tabsRouter.activeIndex == 17,
+                isExpanded: isExpanded,
+              );
+            }),
           RootContainerSideNavItem(
             title: "Fungible Tokens",
             iconType: PrettyIconType.fungibleToken,
@@ -319,25 +339,6 @@ class RootContainerSideNavList extends BaseComponent {
               isActive: tabsRouter.activeIndex == 16,
               isExpanded: isExpanded,
             ),
-          if (!kIsWeb)
-            Builder(builder: (context) {
-              final plonkStatus = ref.watch(plonkStatusNotifierProvider);
-              final isEnabled = plonkStatus?.isPrivacyEnabled ?? false;
-              if (!isEnabled) return const SizedBox.shrink();
-              return RootContainerSideNavItem(
-                title: "Privacy",
-                iconType: PrettyIconType.lock,
-                isNew: true,
-                onPressed: () {
-                  tabsRouter.setActiveIndex(17);
-                  if (inDrawer) {
-                    rootScaffoldKey.currentState!.closeDrawer();
-                  }
-                },
-                isActive: tabsRouter.activeIndex == 17,
-                isExpanded: isExpanded,
-              );
-            }),
           if (kIsWeb)
             RootContainerSideNavItem(
               title: "Sign Out",

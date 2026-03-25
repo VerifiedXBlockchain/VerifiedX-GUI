@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
+import '../../../core/app_constants.dart';
 import '../../../utils/toast.dart';
 import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
@@ -20,6 +21,17 @@ class PrivateTransferDialog extends ConsumerStatefulWidget {
   ConsumerState<PrivateTransferDialog> createState() => _PrivateTransferDialogState();
 }
 
+// Base58 alphabet (no 0, O, I, l)
+const _base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+
+bool _isValidZfxAddress(String address) {
+  if (!address.startsWith('zfx_')) return false;
+  final body = address.substring(4);
+  // Base58Check of 39 bytes (2 version + 33 key + 4 checksum) produces ~53 chars
+  if (body.length < 40) return false;
+  return body.split('').every((c) => _base58Chars.contains(c));
+}
+
 class _PrivateTransferDialogState extends ConsumerState<PrivateTransferDialog> {
   final _recipientController = TextEditingController();
   final _amountController = TextEditingController();
@@ -34,7 +46,7 @@ class _PrivateTransferDialogState extends ConsumerState<PrivateTransferDialog> {
 
   Future<void> _submit() async {
     final recipient = _recipientController.text.trim();
-    if (recipient.isEmpty || !recipient.startsWith("zfx_")) {
+    if (!_isValidZfxAddress(recipient)) {
       Toast.error("Recipient must be a valid zfx_ address");
       return;
     }
@@ -100,9 +112,9 @@ class _PrivateTransferDialogState extends ConsumerState<PrivateTransferDialog> {
               enabled: !_isSubmitting,
             ),
             const SizedBox(height: 8),
-            const Text(
-              "0.000003 VFX fee deducted from shielded balance.",
-              style: TextStyle(color: Colors.white38, fontSize: 11),
+            Text(
+              "$PRIVACY_TX_FIXED_FEE_LABEL fee deducted from shielded balance.",
+              style: const TextStyle(color: Colors.white38, fontSize: 11),
             ),
           ],
         ),

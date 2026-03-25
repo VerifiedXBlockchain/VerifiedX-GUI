@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
+import '../../../core/app_constants.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
@@ -40,8 +41,8 @@ class _ShieldDialogState extends ConsumerState<ShieldDialog> {
     }
 
     final amount = double.tryParse(_amountController.text.trim());
-    if (amount == null || amount < 0.001) {
-      Toast.error("Minimum shield amount is 0.001 VFX");
+    if (amount == null || amount < MIN_SHIELD_AMOUNT_VFX) {
+      Toast.error("Minimum shield amount is $MIN_SHIELD_AMOUNT_VFX VFX");
       return;
     }
 
@@ -92,7 +93,7 @@ class _ShieldDialogState extends ConsumerState<ShieldDialog> {
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: const InputDecoration(
                 labelText: "Amount (VFX)",
-                hintText: "Min: 0.001",
+                hintText: "Min: $MIN_SHIELD_AMOUNT_VFX",
                 border: OutlineInputBorder(),
               ),
               enabled: !_isSubmitting,

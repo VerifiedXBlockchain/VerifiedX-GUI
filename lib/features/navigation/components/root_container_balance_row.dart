@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/dialogs.dart';
+import '../../../core/env.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../btc/models/btc_transaction.dart';
@@ -333,13 +335,16 @@ class _LatestBtcTx extends BaseComponent {
               SizedBox(
                 height: 2,
               ),
-              Text(
-                tx.isConfirmed ? "Confirmed" : "Pending",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: tx.isConfirmed ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.warning,
-                ),
-              )
+              Builder(builder: (context) {
+                final isConfirmed = (kDebugMode && Env.isTestNet) ? true : tx.isConfirmed;
+                return Text(
+                  isConfirmed ? "Success" : "Pending",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isConfirmed ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.warning,
+                  ),
+                );
+              })
             ],
           ),
         ),

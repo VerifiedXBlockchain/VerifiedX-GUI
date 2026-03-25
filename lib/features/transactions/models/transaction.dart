@@ -260,6 +260,26 @@ class Transaction with _$Transaction {
           }
         }
         return "vBTC Withdrawal Complete";
+      case 29:
+        return "vBTC Withdrawal Cancel";
+      case 30:
+        return "vBTC Withdrawal Vote";
+      case 31:
+        return "VFX Shield";
+      case 32:
+        return "VFX Unshield";
+      case 33:
+        return "VFX Private Transfer";
+      case 34:
+        return "vBTC Shield";
+      case 35:
+        return "vBTC Unshield";
+      case 36:
+        return "vBTC Private Transfer";
+      case 37:
+        return "vBTC Bridge Lock";
+      case 38:
+        return "vBTC Bridge Unlock";
       default:
         return type.toString();
     }

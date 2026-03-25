@@ -119,9 +119,41 @@ All endpoints return JSON with a consistent envelope:
 
 ## Shielded Address Management
 
-### Generate Shielded Address
+### Create Shielded Address from Account (Recommended)
 
-Derives a `zfx_` address from an HD wallet seed. The same address is used for both VFX and vBTC shielded operations.
+Derives a `zfx_` address from a transparent account's private key. No HD wallet required. The shielded wallet is persisted on the node.
+
+**`POST /privacyapi/PrivacyV1/CreateShieldedAddressFromAccount`**
+
+**Request Body:**
+```json
+{
+  "TransparentAddress": "RBx..."
+}
+```
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `TransparentAddress` | string | Yes | A transparent VFX address that exists in the local wallet. |
+
+**Response:**
+```json
+{
+  "Success": true,
+  "Result": {
+    "ZfxAddress": "zfx_abc123...",
+    "TransparentSourceAddress": "RBx..."
+  }
+}
+```
+
+> **Note:** This derives the shielded address deterministically from the account's private key using `ShieldedHdDerivation.DeriveFromPrivateKey`. Calling it again with the same address returns the same `zfx_` address.
+
+---
+
+### Generate Shielded Address (HD Wallet)
+
+Derives a `zfx_` address from an HD wallet seed. Only needed if using HD wallet-based derivation.
 
 **`POST /privacyapi/PrivacyV1/GenerateShieldedAddress`**
 
@@ -142,7 +174,7 @@ Derives a `zfx_` address from an HD wallet seed. The same address is used for bo
 | `CoinType` | uint | No | BIP-44 coin type. Default: `889`. |
 | `AddressIndex` | uint | No | Address index in derivation path. Default: `0`. |
 
-> **Note:** Either `UseLocalHdWallet: true` or `WalletSeedHex` must be provided.
+> **Note:** Either `UseLocalHdWallet: true` or `WalletSeedHex` must be provided. Requires an HD wallet on the node.
 
 **Response:**
 ```json
@@ -773,8 +805,8 @@ All spending operations (unshield, transfer, consolidate) implement **optimistic
 ### Example 1: Shield VFX and Send Privately
 
 ```
-Step 1: Generate shielded address
-  POST /GenerateShieldedAddress { "UseLocalHdWallet": true, "AddressIndex": 0 }
+Step 1: Create shielded address from transparent account
+  POST /CreateShieldedAddressFromAccount { "TransparentAddress": "RBxMyTransparent..." }
   → zfx_myaddr...
 
 Step 2: Shield VFX from transparent wallet
@@ -805,8 +837,8 @@ Step 5: Send privately to another zfx_ address
 ### Example 2: Shield vBTC and Transfer Privately
 
 ```
-Step 1: Generate shielded address (if not already done)
-  POST /GenerateShieldedAddress { "UseLocalHdWallet": true, "AddressIndex": 0 }
+Step 1: Create shielded address (if not already done)
+  POST /CreateShieldedAddressFromAccount { "TransparentAddress": "RBxMyAddr..." }
 
 Step 2: Ensure you have shielded VFX for fees
   POST /ShieldVFX {
@@ -893,7 +925,8 @@ GET /GetShieldedBalance?zfxAddress=zfx_myaddr...
 | # | Method | Endpoint | Asset | Description |
 |---|--------|----------|-------|-------------|
 | 1 | GET | `GetPlonkStatus` | — | PLONK ZK proof system status |
-| 2 | POST | `GenerateShieldedAddress` | — | Derive `zfx_` address from HD seed |
+| 2 | POST | `CreateShieldedAddressFromAccount` | — | Derive `zfx_` address from transparent account (recommended) |
+| 2b | POST | `GenerateShieldedAddress` | — | Derive `zfx_` address from HD seed (requires HD wallet) |
 | 3 | POST | `ExportViewingKey` | — | Export viewing key (Base64) |
 | 4 | POST | `ImportViewingKey` | — | Import view-only wallet |
 | 5 | POST | `ShieldVFX` | VFX | Transparent → Shielded |

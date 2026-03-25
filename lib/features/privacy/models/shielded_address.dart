@@ -9,9 +9,7 @@ class ShieldedAddress with _$ShieldedAddress {
 
   factory ShieldedAddress({
     @JsonKey(name: "ZfxAddress") required String zfxAddress,
-    @JsonKey(name: "DerivationPath") required String derivationPath,
-    @JsonKey(name: "CoinType") @Default(889) int coinType,
-    @JsonKey(name: "AddressIndex") @Default(0) int addressIndex,
+    @JsonKey(name: "TransparentSourceAddress") @Default("") String transparentSourceAddress,
   }) = _ShieldedAddress;
 
   factory ShieldedAddress.fromJson(Map<String, dynamic> json) => _$ShieldedAddressFromJson(json);

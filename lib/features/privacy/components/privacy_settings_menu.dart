@@ -29,6 +29,9 @@ class PrivacySettingsMenu extends ConsumerWidget {
           case 'resync':
             _resyncWallet(ref);
             break;
+          case 'reset':
+            _resetWallet(ref);
+            break;
         }
       },
       itemBuilder: (context) => [
@@ -60,6 +63,16 @@ class PrivacySettingsMenu extends ConsumerWidget {
               const Icon(Icons.sync, size: 18, color: Colors.orange),
               const SizedBox(width: 8),
               const Text("Resync Wallet", style: TextStyle(color: Colors.orange)),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'reset',
+          child: Row(
+            children: [
+              Icon(Icons.delete_forever, size: 18, color: Colors.red.shade300),
+              const SizedBox(width: 8),
+              Text("Reset Privacy Wallet", style: TextStyle(color: Colors.red.shade300)),
             ],
           ),
         ),
@@ -163,6 +176,21 @@ class PrivacySettingsMenu extends ConsumerWidget {
       } else {
         Toast.error("Resync failed");
       }
+    }
+  }
+
+  Future<void> _resetWallet(WidgetRef ref) async {
+    final confirmed = await ConfirmDialog.show(
+      title: "Reset Privacy Wallet",
+      body: "This will clear your local privacy wallet state and return to the activation screen. Your shielded funds on the network are not affected — you can re-activate with the same account to recover them.\n\nContinue?",
+      confirmText: "Reset",
+      cancelText: "Cancel",
+      destructive: true,
+    );
+
+    if (confirmed == true) {
+      ref.read(shieldedAddressProvider.notifier).clear();
+      Toast.message("Privacy wallet reset");
     }
   }
 }

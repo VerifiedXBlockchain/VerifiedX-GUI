@@ -19,29 +19,43 @@ class PrivacyService extends BaseService {
     }
   }
 
-  Future<ShieldedAddress?> generateShieldedAddress() async {
+  Future<ShieldedAddress?> createShieldedAddressFromAccount({
+    required String transparentAddress,
+    required String walletPassword,
+  }) async {
     try {
       final result = await postJson(
-        '/GenerateShieldedAddress',
+        '/CreateShieldedAddressFromAccount',
         params: {
-          "UseLocalHdWallet": true,
-          "CoinType": 889,
-          "AddressIndex": 0,
+          "TransparentAddress": transparentAddress,
+          "WalletPassword": walletPassword,
         },
       );
 
+      print("CreateShieldedAddressFromAccount raw response: $result");
+
       final data = result['data'];
-      if (data != null && data['Success'] == true && data['Result'] != null) {
-        return ShieldedAddress.fromJson(data['Result']);
+      if (data == null) {
+        throw Exception("No response data from server");
       }
-      return null;
+
+      if (data['Success'] != true) {
+        final message = data['Message'] ?? 'Unknown error';
+        throw Exception(message);
+      }
+
+      if (data['Result'] == null) {
+        throw Exception("Success but no Result in response");
+      }
+
+      return ShieldedAddress.fromJson(data['Result']);
     } catch (e) {
-      print("GenerateShieldedAddress error: $e");
-      return null;
+      print("CreateShieldedAddressFromAccount error: $e");
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>?> shieldVfx({
+  Future<Map<String, dynamic>> shieldVfx({
     required String fromAddress,
     required double amount,
     required String recipientZfxAddress,
@@ -56,21 +70,25 @@ class PrivacyService extends BaseService {
         },
       );
 
+      print("ShieldVFX raw response: $result");
+
       final data = result['data'];
-      if (data != null && data['Success'] == true) {
-        return data;
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
       }
-      return null;
+      return data;
     } catch (e) {
       print("ShieldVFX error: $e");
-      return null;
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>?> unshieldVfx({
+  Future<Map<String, dynamic>> unshieldVfx({
     required String zfxAddress,
     required String toAddress,
     required double amount,
+    required String walletPassword,
   }) async {
     try {
       final result = await postJson(
@@ -79,24 +97,29 @@ class PrivacyService extends BaseService {
           "ZfxAddress": zfxAddress,
           "TransparentToAddress": toAddress,
           "TransparentAmount": amount,
+          "WalletPassword": walletPassword,
         },
       );
 
+      print("UnshieldVFX raw response: $result");
+
       final data = result['data'];
-      if (data != null && data['Success'] == true) {
-        return data;
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
       }
-      return null;
+      return data;
     } catch (e) {
       print("UnshieldVFX error: $e");
-      return null;
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>?> privateTransferVfx({
+  Future<Map<String, dynamic>> privateTransferVfx({
     required String zfxAddress,
     required String recipientZfxAddress,
     required double amount,
+    required String walletPassword,
   }) async {
     try {
       final result = await postJson(
@@ -105,39 +128,48 @@ class PrivacyService extends BaseService {
           "ZfxAddress": zfxAddress,
           "RecipientZfxAddress": recipientZfxAddress,
           "PaymentAmount": amount,
+          "WalletPassword": walletPassword,
         },
       );
 
+      print("PrivateTransferVFX raw response: $result");
+
       final data = result['data'];
-      if (data != null && data['Success'] == true) {
-        return data;
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
       }
-      return null;
+      return data;
     } catch (e) {
       print("PrivateTransferVFX error: $e");
-      return null;
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>?> consolidateVfx({
+  Future<Map<String, dynamic>> consolidateVfx({
     required String zfxAddress,
+    required String walletPassword,
   }) async {
     try {
       final result = await postJson(
         '/ConsolidateShieldedVFX',
         params: {
           "ZfxAddress": zfxAddress,
+          "WalletPassword": walletPassword,
         },
       );
 
+      print("ConsolidateShieldedVFX raw response: $result");
+
       final data = result['data'];
-      if (data != null && data['Success'] == true) {
-        return data;
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
       }
-      return null;
+      return data;
     } catch (e) {
       print("ConsolidateShieldedVFX error: $e");
-      return null;
+      rethrow;
     }
   }
 
@@ -155,9 +187,12 @@ class PrivacyService extends BaseService {
         cleanPath: false,
       );
 
+      print("GetShieldedBalance raw response: $result");
+
       if (result['Success'] == true && result['Result'] != null) {
         return ShieldedBalance.fromJson(result['Result']);
       }
+      print("GetShieldedBalance: Success=${result['Success']}, Message=${result['Message']}");
       return null;
     } catch (e) {
       print("GetShieldedBalance error: $e");
