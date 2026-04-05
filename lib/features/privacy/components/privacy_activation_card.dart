@@ -7,6 +7,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../../core/dialogs.dart';
@@ -72,6 +73,8 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
   bool _isLoading = false;
 
   Future<void> _activate() async {
+    if (!widgetGuardWalletIsSynced(ref)) return;
+
     final wallet = ref.read(sessionProvider).currentWallet;
     if (wallet == null) {
       Toast.error("No account selected");

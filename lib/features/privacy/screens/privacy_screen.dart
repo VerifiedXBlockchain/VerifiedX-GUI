@@ -25,6 +25,11 @@ class PrivacyScreen extends BaseScreen {
     final plonkStatus = ref.watch(plonkStatusNotifierProvider);
     final shieldedAddress = ref.watch(shieldedAddressProvider);
 
+    if (plonkStatus == null || !plonkStatus.isPrivacyEnabled) {
+      // Trigger a fresh check whenever the user lands here and privacy isn't enabled
+      Future.microtask(() => ref.read(plonkStatusNotifierProvider.notifier).refresh());
+    }
+
     if (plonkStatus == null) {
       return Center(
         child: Column(
@@ -46,16 +51,27 @@ class PrivacyScreen extends BaseScreen {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.shield_outlined, size: 48, color: AppColors.getBlue()),
-            const SizedBox(height: 16),
+            Icon(Icons.shield_outlined, size: 48, color: AppColors.getPrism()),
+            const SizedBox(height: 24),
             const Text(
-              "Privacy layer is not available on this node.",
-              style: TextStyle(color: Colors.white70, fontSize: 16),
+              "Privacy Layer Starting Up",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             const Text(
-              "PLONK proof generation and verification are required.",
-              style: TextStyle(color: Colors.white38, fontSize: 13),
+              "The PLONK proof system is initializing. This may take a moment\nwhile cryptographic parameters are loaded.",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white70, fontSize: 14, height: 1.5),
+            ),
+            const SizedBox(height: 24),
+            const SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(strokeWidth: 2),
             ),
           ],
         ),

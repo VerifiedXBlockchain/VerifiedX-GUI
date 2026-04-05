@@ -7,7 +7,7 @@ part of 'plonk_status_provider.dart';
 // **************************************************************************
 
 String _$plonkStatusNotifierHash() =>
-    r'08b197c20131377a1f97399ef0563a8c0a28b53b';
+    r'63df4d4ed54dba067b56234f317600d32f02be23';
 
 /// See also [PlonkStatusNotifier].
 @ProviderFor(PlonkStatusNotifier)

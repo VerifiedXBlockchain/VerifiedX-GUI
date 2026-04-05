@@ -55,6 +55,8 @@ redeploy_cli:
 	cp -r ../Core-CLI/ReserveBlockCore/bin/Release/net6.0/osx-arm64/publish/ /Applications/VFXWallet.app/Contents/Resources/RBXCore
 	@echo "CLI rebuilt and deployed to /Applications/VFXWallet.app"
 
+	
+
 build_win_cli:
 	dotnet publish -c Release -r win-x64 ../Core-Cli/ --output ../Core-Cli/rbxpublished --self-contained true -p:PublishSingleFile=true
 

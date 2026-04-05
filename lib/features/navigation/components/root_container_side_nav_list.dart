@@ -9,7 +9,6 @@ import 'package:rbx_wallet/core/services/butterfly_bridge_url_service.dart';
 import 'package:rbx_wallet/core/services/password_prompt_service.dart';
 import 'package:rbx_wallet/core/theme/colors.dart';
 import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
-import 'package:rbx_wallet/features/privacy/providers/plonk_status_provider.dart';
 import 'package:rbx_wallet/features/wallet/utils.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/dialogs.dart';
@@ -186,25 +185,20 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           if (!kIsWeb)
-            Builder(builder: (context) {
-              final plonkStatus = ref.watch(plonkStatusNotifierProvider);
-              final isEnabled = plonkStatus?.isPrivacyEnabled ?? false;
-              if (!isEnabled) return const SizedBox.shrink();
-              return RootContainerSideNavItem(
-                title: "Privacy",
-                iconType: PrettyIconType.custom,
-                icon: Icons.shield,
-                isNew: true,
-                onPressed: () {
-                  tabsRouter.setActiveIndex(17);
-                  if (inDrawer) {
-                    rootScaffoldKey.currentState!.closeDrawer();
-                  }
-                },
-                isActive: tabsRouter.activeIndex == 17,
-                isExpanded: isExpanded,
-              );
-            }),
+            RootContainerSideNavItem(
+              title: "Privacy",
+              iconType: PrettyIconType.custom,
+              icon: Icons.shield,
+              isNew: true,
+              onPressed: () {
+                tabsRouter.setActiveIndex(17);
+                if (inDrawer) {
+                  rootScaffoldKey.currentState!.closeDrawer();
+                }
+              },
+              isActive: tabsRouter.activeIndex == 17,
+              isExpanded: isExpanded,
+            ),
           RootContainerSideNavItem(
             title: "Fungible Tokens",
             iconType: PrettyIconType.fungibleToken,

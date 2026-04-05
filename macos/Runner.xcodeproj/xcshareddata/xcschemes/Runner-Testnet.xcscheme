@@ -9,8 +9,8 @@
          <ExecutionAction
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
-               title = "Set Mainnet Environment"
-               scriptText = "MACOS_DIR=&quot;${WORKSPACE_PATH%/*}&quot;&#10;echo &apos;DART_DEFINES=&apos; &gt; &quot;${MACOS_DIR}/Flutter/EnvironmentConfig.xcconfig&quot;&#10;">
+               title = "Set Testnet Environment"
+               scriptText = "MACOS_DIR=&quot;${WORKSPACE_PATH%/*}&quot;&#10;echo &apos;DART_DEFINES=VEVTVE5FVD10cnVl&apos; &gt; &quot;${MACOS_DIR}/Flutter/EnvironmentConfig.xcconfig&quot;&#10;">
             </ActionContent>
          </ExecutionAction>
       </PreActions>
@@ -92,14 +92,5 @@
    <ArchiveAction
       buildConfiguration = "Release"
       revealArchiveInOrganizer = "YES">
-      <PostActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "&#10;">
-            </ActionContent>
-         </ExecutionAction>
-      </PostActions>
    </ArchiveAction>
 </Scheme>
