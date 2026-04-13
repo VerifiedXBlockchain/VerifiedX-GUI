@@ -8,6 +8,8 @@ import '../../../utils/toast.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/vbtc_privacy_actions_provider.dart';
+import '../utils/vfx_fee_guard.dart';
+
 
 class UnshieldVbtcDialog extends ConsumerStatefulWidget {
   final TokenizedBitcoin token;
@@ -38,6 +40,8 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
   }
 
   Future<void> _submit() async {
+    if (!await VfxFeeGuard.check(ref)) return;
+
     final toAddress = _toAddressController.text.trim();
     if (toAddress.isEmpty) {
       Toast.error("Please enter a destination address");

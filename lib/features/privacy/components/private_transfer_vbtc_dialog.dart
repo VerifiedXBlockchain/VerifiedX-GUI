@@ -8,6 +8,8 @@ import '../../../utils/toast.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/vbtc_privacy_actions_provider.dart';
+import '../utils/vfx_fee_guard.dart';
+
 
 // Base58 alphabet (no 0, O, I, l)
 const _base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
@@ -48,6 +50,8 @@ class _PrivateTransferVbtcDialogState extends ConsumerState<PrivateTransferVbtcD
   }
 
   Future<void> _submit() async {
+    if (!await VfxFeeGuard.check(ref)) return;
+
     final recipient = _recipientController.text.trim();
     if (!_isValidZfxAddress(recipient)) {
       Toast.error("Recipient must be a valid zfx_ address");

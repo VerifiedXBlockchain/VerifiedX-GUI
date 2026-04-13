@@ -9,6 +9,8 @@ import '../../btc/models/tokenized_bitcoin.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/shielded_vbtc_balance_provider.dart';
 import '../providers/vbtc_privacy_actions_provider.dart';
+import '../utils/vfx_fee_guard.dart';
+
 
 class ConsolidateVbtcDialog extends ConsumerStatefulWidget {
   final TokenizedBitcoin token;
@@ -30,6 +32,8 @@ class _ConsolidateVbtcDialogState extends ConsumerState<ConsolidateVbtcDialog> {
   bool _isSubmitting = false;
 
   Future<void> _submit() async {
+    if (!await VfxFeeGuard.check(ref)) return;
+
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
       Toast.error("No shielded address found");
