@@ -8,6 +8,7 @@ import '../../../core/theme/colors.dart';
 import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
 import '../providers/shielded_address_provider.dart';
+import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
 
 class PrivacySettingsMenu extends ConsumerWidget {
   const PrivacySettingsMenu({super.key});
@@ -28,6 +29,9 @@ class PrivacySettingsMenu extends ConsumerWidget {
             break;
           case 'resync':
             _resyncWallet(ref);
+            break;
+          case 'resync_vbtc':
+            _resyncVbtcWallet(ref);
             break;
           case 'reset':
             _resetWallet(ref);
@@ -63,6 +67,16 @@ class PrivacySettingsMenu extends ConsumerWidget {
               const Icon(Icons.sync, size: 18, color: Colors.orange),
               const SizedBox(width: 8),
               const Text("Resync Wallet", style: TextStyle(color: Colors.orange)),
+            ],
+          ),
+        ),
+        PopupMenuItem(
+          value: 'resync_vbtc',
+          child: Row(
+            children: [
+              Icon(Icons.sync, size: 18, color: AppColors.getBtc()),
+              const SizedBox(width: 8),
+              Text("Resync vBTC Wallet", style: TextStyle(color: AppColors.getBtc())),
             ],
           ),
         ),
@@ -175,6 +189,95 @@ class PrivacySettingsMenu extends ConsumerWidget {
         Toast.message("Resync complete");
       } else {
         Toast.error("Resync failed");
+      }
+    }
+  }
+
+  Future<void> _resyncVbtcWallet(WidgetRef ref) async {
+    final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
+    if (zfxAddress == null) {
+      Toast.error("No shielded address found");
+      return;
+    }
+
+    final allTokens = ref.read(tokenizedBitcoinListProvider);
+    final vbtcTokens = allTokens.where((t) => t.version == 2).toList();
+
+    if (vbtcTokens.isEmpty) {
+      Toast.error("No vBTC tokens found");
+      return;
+    }
+
+    final context = rootNavigatorKey.currentContext!;
+
+    // If only one token, skip the picker
+    String selectedUid;
+    String selectedName;
+    if (vbtcTokens.length == 1) {
+      selectedUid = vbtcTokens.first.smartContractUid;
+      selectedName = vbtcTokens.first.tokenName;
+    } else {
+      // Show picker dialog
+      final picked = await showDialog<int>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Select vBTC Contract"),
+          content: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  "Choose which vBTC contract to resync.",
+                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+                const SizedBox(height: 12),
+                ...List.generate(vbtcTokens.length, (i) {
+                  final token = vbtcTokens[i];
+                  return ListTile(
+                    title: Text(token.tokenName, style: TextStyle(color: AppColors.getBtc())),
+                    subtitle: Text(
+                      token.smartContractUid,
+                      style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: Colors.white38),
+                    ),
+                    onTap: () => Navigator.of(ctx).pop(i),
+                  );
+                }),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text("Cancel"),
+            ),
+          ],
+        ),
+      );
+
+      if (picked == null) return;
+      selectedUid = vbtcTokens[picked].smartContractUid;
+      selectedName = vbtcTokens[picked].tokenName;
+    }
+
+    final confirmed = await ConfirmDialog.show(
+      title: "Resync vBTC Wallet",
+      body: "This will wipe cached notes and balances for \"$selectedName\" and rescan from the beginning. This may take a while.\n\nContinue?",
+      confirmText: "Resync",
+      cancelText: "Cancel",
+      destructive: true,
+    );
+
+    if (confirmed == true) {
+      Toast.message("vBTC resync started...");
+      final success = await PrivacyService().resyncShieldedVbtc(
+        zfxAddress: zfxAddress,
+        vbtcContractUid: selectedUid,
+      );
+      if (success) {
+        Toast.message("vBTC resync complete");
+      } else {
+        Toast.error("vBTC resync failed");
       }
     }
   }
