@@ -21,4 +21,9 @@ class ShieldedBalance with _$ShieldedBalance {
   factory ShieldedBalance.fromJson(Map<String, dynamic> json) => _$ShieldedBalanceFromJson(json);
 
   double get vfxBalance => shieldedBalances['VFX'] ?? 0.0;
+
+  /// Returns the shielded balance for a specific vBTC contract.
+  double vbtcBalance(String contractUid) {
+    return shieldedBalances[contractUid] ?? 0.0;
+  }
 }
