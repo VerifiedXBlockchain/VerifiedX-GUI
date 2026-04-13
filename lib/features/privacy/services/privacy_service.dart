@@ -298,4 +298,186 @@ class PrivacyService extends BaseService {
       return false;
     }
   }
+
+  // ── vBTC Shielding Methods ──────────────────────────────────────────
+
+  Future<Map<String, dynamic>> shieldVbtc({
+    required String fromAddress,
+    required String vbtcContractUid,
+    required double vbtcAmount,
+    required String recipientZfxAddress,
+  }) async {
+    try {
+      final result = await postJson(
+        '/ShieldVBTC',
+        params: {
+          "FromAddress": fromAddress,
+          "VbtcContractUid": vbtcContractUid,
+          "VbtcAmount": vbtcAmount,
+          "RecipientZfxAddress": recipientZfxAddress,
+        },
+      );
+
+      print("ShieldVBTC raw response: $result");
+
+      final data = result['data'];
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
+      }
+      return data;
+    } catch (e) {
+      print("ShieldVBTC error: $e");
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> unshieldVbtc({
+    required String zfxAddress,
+    required String walletPassword,
+    required String vbtcContractUid,
+    required String toAddress,
+    required double vbtcAmount,
+  }) async {
+    try {
+      final result = await postJson(
+        '/UnshieldVBTC',
+        params: {
+          "ZfxAddress": zfxAddress,
+          "WalletPassword": walletPassword,
+          "VbtcContractUid": vbtcContractUid,
+          "TransparentToAddress": toAddress,
+          "VbtcAmount": vbtcAmount,
+        },
+      );
+
+      print("UnshieldVBTC raw response: $result");
+
+      final data = result['data'];
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
+      }
+      return data;
+    } catch (e) {
+      print("UnshieldVBTC error: $e");
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> privateTransferVbtc({
+    required String zfxAddress,
+    required String walletPassword,
+    required String vbtcContractUid,
+    required String recipientZfxAddress,
+    required double amount,
+  }) async {
+    try {
+      final result = await postJson(
+        '/PrivateTransferVBTC',
+        params: {
+          "ZfxAddress": zfxAddress,
+          "WalletPassword": walletPassword,
+          "VbtcContractUid": vbtcContractUid,
+          "RecipientZfxAddress": recipientZfxAddress,
+          "PaymentAmount": amount,
+        },
+      );
+
+      print("PrivateTransferVBTC raw response: $result");
+
+      final data = result['data'];
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
+      }
+      return data;
+    } catch (e) {
+      print("PrivateTransferVBTC error: $e");
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> consolidateVbtc({
+    required String zfxAddress,
+    required String walletPassword,
+    required String vbtcContractUid,
+  }) async {
+    try {
+      final result = await postJson(
+        '/ConsolidateShieldedVBTC',
+        params: {
+          "ZfxAddress": zfxAddress,
+          "WalletPassword": walletPassword,
+          "VbtcContractUid": vbtcContractUid,
+        },
+      );
+
+      print("ConsolidateShieldedVBTC raw response: $result");
+
+      final data = result['data'];
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true) {
+        throw Exception(data['Message'] ?? 'Unknown error');
+      }
+      return data;
+    } catch (e) {
+      print("ConsolidateShieldedVBTC error: $e");
+      rethrow;
+    }
+  }
+
+  Future<ShieldedBalance?> getShieldedVbtcBalance(
+    String zfxAddress,
+    String vbtcContractUid, {
+    bool includeCommitments = false,
+  }) async {
+    try {
+      final result = await getJson(
+        '/GetShieldedVbtcBalance',
+        params: {
+          "zfxAddress": zfxAddress,
+          "vbtcContractUid": vbtcContractUid,
+          "includeCommitments": includeCommitments,
+        },
+        cleanPath: false,
+      );
+
+      print("GetShieldedVbtcBalance raw response: $result");
+
+      if (result['Success'] == true && result['Result'] != null) {
+        return ShieldedBalance.fromJson(result['Result']);
+      }
+      print("GetShieldedVbtcBalance: Success=${result['Success']}, Message=${result['Message']}");
+      return null;
+    } catch (e) {
+      print("GetShieldedVbtcBalance error: $e");
+      return null;
+    }
+  }
+
+  Future<bool> resyncShieldedVbtc({
+    required String zfxAddress,
+    required String vbtcContractUid,
+    int fromHeight = 0,
+    int toHeight = 0,
+  }) async {
+    try {
+      final result = await postJson(
+        '/ResyncShieldedVBTC',
+        params: {
+          "ZfxAddress": zfxAddress,
+          "VbtcContractUid": vbtcContractUid,
+          "FromHeight": fromHeight,
+          "ToHeight": toHeight,
+        },
+      );
+
+      final data = result['data'];
+      return data != null && data['Success'] == true;
+    } catch (e) {
+      print("ResyncShieldedVBTC error: $e");
+      return false;
+    }
+  }
 }
