@@ -5,8 +5,10 @@ import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
+import '../../../utils/validation.dart';
 import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
+import '../utils/vfx_fee_guard.dart';
 
 class UnshieldDialog extends ConsumerStatefulWidget {
   const UnshieldDialog({super.key});
@@ -35,9 +37,11 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
   }
 
   Future<void> _submit() async {
+    if (!await VfxFeeGuard.check(ref)) return;
+
     final toAddress = _toAddressController.text.trim();
-    if (toAddress.isEmpty) {
-      Toast.error("Please enter a destination address");
+    if (!isValidRbxAddress(toAddress)) {
+      Toast.error("Please enter a valid VFX address");
       return;
     }
 

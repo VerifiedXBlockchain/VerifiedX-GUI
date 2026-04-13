@@ -1,7 +1,23 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
+
 import '../../../core/services/base_service.dart';
 import '../models/plonk_status.dart';
 import '../models/shielded_address.dart';
 import '../models/shielded_balance.dart';
+
+const _tag = '[Privacy]';
+
+void _log(String method, String message, [Map<String, dynamic>? json]) {
+  final prefix = '$_tag $method';
+  if (json != null) {
+    const encoder = JsonEncoder.withIndent('  ');
+    debugPrint('$prefix $message:\n${encoder.convert(json)}');
+  } else {
+    debugPrint('$prefix $message');
+  }
+}
 
 class PrivacyService extends BaseService {
   PrivacyService() : super(apiBasePathOverride: "/privacyapi/PrivacyV1");
@@ -14,7 +30,7 @@ class PrivacyService extends BaseService {
       }
       return null;
     } catch (e) {
-      print("GetPlonkStatus error: $e");
+      _log('GetPlonkStatus', 'error: $e');
       return null;
     }
   }
@@ -32,9 +48,8 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("CreateShieldedAddressFromAccount raw response: $result");
-
       final data = result['data'];
+      _log('CreateShieldedAddressFromAccount', 'success=${data?['Success']}');
       if (data == null) {
         throw Exception("No response data from server");
       }
@@ -50,7 +65,7 @@ class PrivacyService extends BaseService {
 
       return ShieldedAddress.fromJson(data['Result']);
     } catch (e) {
-      print("CreateShieldedAddressFromAccount error: $e");
+      _log('CreateShieldedAddressFromAccount', 'error: $e');
       rethrow;
     }
   }
@@ -70,16 +85,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("ShieldVFX raw response: $result");
-
       final data = result['data'];
+      _log('ShieldVFX', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("ShieldVFX error: $e");
+      _log('ShieldVFX', 'error: $e');
       rethrow;
     }
   }
@@ -101,16 +115,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("UnshieldVFX raw response: $result");
-
       final data = result['data'];
+      _log('UnshieldVFX', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("UnshieldVFX error: $e");
+      _log('UnshieldVFX', 'error: $e');
       rethrow;
     }
   }
@@ -132,16 +145,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("PrivateTransferVFX raw response: $result");
-
       final data = result['data'];
+      _log('PrivateTransferVFX', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("PrivateTransferVFX error: $e");
+      _log('PrivateTransferVFX', 'error: $e');
       rethrow;
     }
   }
@@ -159,16 +171,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("ConsolidateShieldedVFX raw response: $result");
-
       final data = result['data'];
+      _log('ConsolidateShieldedVFX', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("ConsolidateShieldedVFX error: $e");
+      _log('ConsolidateShieldedVFX', 'error: $e');
       rethrow;
     }
   }
@@ -187,15 +198,15 @@ class PrivacyService extends BaseService {
         cleanPath: false,
       );
 
-      print("GetShieldedBalance raw response: $result");
+      _log('GetShieldedBalance', 'success=${result['Success']}');
 
       if (result['Success'] == true && result['Result'] != null) {
         return ShieldedBalance.fromJson(result['Result']);
       }
-      print("GetShieldedBalance: Success=${result['Success']}, Message=${result['Message']}");
+      _log('GetShieldedBalance', 'no result: Message=${result['Message']}');
       return null;
     } catch (e) {
-      print("GetShieldedBalance error: $e");
+      _log('GetShieldedBalance', 'error: $e');
       return null;
     }
   }
@@ -217,7 +228,7 @@ class PrivacyService extends BaseService {
       }
       return null;
     } catch (e) {
-      print("ExportViewingKey error: $e");
+      _log('ExportViewingKey', 'error: $e');
       return null;
     }
   }
@@ -245,7 +256,7 @@ class PrivacyService extends BaseService {
       final data = result['data'];
       return data != null && data['Success'] == true;
     } catch (e) {
-      print("ImportViewingKey error: $e");
+      _log('ImportViewingKey', 'error: $e');
       return false;
     }
   }
@@ -271,7 +282,7 @@ class PrivacyService extends BaseService {
       }
       return null;
     } catch (e) {
-      print("ScanShielded error: $e");
+      _log('ScanShielded', 'error: $e');
       return null;
     }
   }
@@ -294,7 +305,7 @@ class PrivacyService extends BaseService {
       final data = result['data'];
       return data != null && data['Success'] == true;
     } catch (e) {
-      print("ResyncShieldedWallet error: $e");
+      _log('ResyncShieldedWallet', 'error: $e');
       return false;
     }
   }
@@ -318,16 +329,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("ShieldVBTC raw response: $result");
-
       final data = result['data'];
+      _log('ShieldVBTC', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("ShieldVBTC error: $e");
+      _log('ShieldVBTC', 'error: $e');
       rethrow;
     }
   }
@@ -351,16 +361,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("UnshieldVBTC raw response: $result");
-
       final data = result['data'];
+      _log('UnshieldVBTC', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("UnshieldVBTC error: $e");
+      _log('UnshieldVBTC', 'error: $e');
       rethrow;
     }
   }
@@ -384,16 +393,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("PrivateTransferVBTC raw response: $result");
-
       final data = result['data'];
+      _log('PrivateTransferVBTC', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("PrivateTransferVBTC error: $e");
+      _log('PrivateTransferVBTC', 'error: $e');
       rethrow;
     }
   }
@@ -413,16 +421,15 @@ class PrivacyService extends BaseService {
         },
       );
 
-      print("ConsolidateShieldedVBTC raw response: $result");
-
       final data = result['data'];
+      _log('ConsolidateShieldedVBTC', 'success=${data?['Success']}');
       if (data == null) throw Exception("No response data from server");
       if (data['Success'] != true) {
         throw Exception(data['Message'] ?? 'Unknown error');
       }
       return data;
     } catch (e) {
-      print("ConsolidateShieldedVBTC error: $e");
+      _log('ConsolidateShieldedVBTC', 'error: $e');
       rethrow;
     }
   }
@@ -443,15 +450,15 @@ class PrivacyService extends BaseService {
         cleanPath: false,
       );
 
-      print("GetShieldedVbtcBalance raw response: $result");
+      _log('GetShieldedVbtcBalance', 'success=${result['Success']}');
 
       if (result['Success'] == true && result['Result'] != null) {
         return ShieldedBalance.fromJson(result['Result']);
       }
-      print("GetShieldedVbtcBalance: Success=${result['Success']}, Message=${result['Message']}");
+      _log('GetShieldedVbtcBalance', 'no result: Message=${result['Message']}');
       return null;
     } catch (e) {
-      print("GetShieldedVbtcBalance error: $e");
+      _log('GetShieldedVbtcBalance', 'error: $e');
       return null;
     }
   }
@@ -476,7 +483,7 @@ class PrivacyService extends BaseService {
       final data = result['data'];
       return data != null && data['Success'] == true;
     } catch (e) {
-      print("ResyncShieldedVBTC error: $e");
+      _log('ResyncShieldedVBTC', 'error: $e');
       return false;
     }
   }

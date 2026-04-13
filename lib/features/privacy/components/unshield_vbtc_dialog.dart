@@ -5,6 +5,7 @@ import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
+import '../../../utils/validation.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/vbtc_privacy_actions_provider.dart';
@@ -43,8 +44,8 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
     if (!await VfxFeeGuard.check(ref)) return;
 
     final toAddress = _toAddressController.text.trim();
-    if (toAddress.isEmpty) {
-      Toast.error("Please enter a destination address");
+    if (!isValidRbxAddress(toAddress)) {
+      Toast.error("Please enter a valid VFX address");
       return;
     }
 

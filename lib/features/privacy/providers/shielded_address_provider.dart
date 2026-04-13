@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app_constants.dart';
 import '../../../core/singletons.dart';
 import '../../../core/storage.dart';
 import '../models/shielded_address.dart';
@@ -13,6 +14,7 @@ const _storageKey = "PRISM_ZFX_ADDRESS";
 class ShieldedAddressNotifier extends StateNotifier<ShieldedAddress?> {
   final Ref ref;
   String? _walletPassword;
+  Timer? _lockTimer;
 
   ShieldedAddressNotifier(this.ref) : super(null);
 
@@ -26,8 +28,7 @@ class ShieldedAddressNotifier extends StateNotifier<ShieldedAddress?> {
       walletPassword: password,
     );
     if (address != null) {
-      _walletPassword = password;
-      ref.read(privacyUnlockedProvider.notifier).state = true;
+      _setPasswordAndStartTimer(password);
       state = address;
       singleton<Storage>().setString(_storageKey, address.zfxAddress);
       ref.read(shieldedBalanceProvider.notifier).start(address.zfxAddress);
@@ -50,16 +51,48 @@ class ShieldedAddressNotifier extends StateNotifier<ShieldedAddress?> {
 
   /// Set the password for the current session (e.g. after user enters it on restart).
   void setPassword(String password) {
-    _walletPassword = password;
-    ref.read(privacyUnlockedProvider.notifier).state = true;
+    _setPasswordAndStartTimer(password);
   }
 
-  void clear() {
-    state = null;
+  /// Resets the inactivity timer. Call this when the password is used for an operation.
+  void resetLockTimer() {
+    _startLockTimer();
+  }
+
+  /// Locks the privacy wallet — clears the password but preserves wallet state.
+  void lock() {
+    _lockTimer?.cancel();
+    _lockTimer = null;
     _walletPassword = null;
     ref.read(privacyUnlockedProvider.notifier).state = false;
+  }
+
+  /// Clears everything — password, wallet state, and local storage.
+  void clear() {
+    lock();
+    state = null;
     singleton<Storage>().remove(_storageKey);
     ref.read(shieldedBalanceProvider.notifier).stop();
+  }
+
+  void _setPasswordAndStartTimer(String password) {
+    _walletPassword = password;
+    ref.read(privacyUnlockedProvider.notifier).state = true;
+    _startLockTimer();
+  }
+
+  void _startLockTimer() {
+    _lockTimer?.cancel();
+    _lockTimer = Timer(
+      const Duration(minutes: IDLE_TIMEOUT_MINUTES),
+      lock,
+    );
+  }
+
+  @override
+  void dispose() {
+    _lockTimer?.cancel();
+    super.dispose();
   }
 }
 

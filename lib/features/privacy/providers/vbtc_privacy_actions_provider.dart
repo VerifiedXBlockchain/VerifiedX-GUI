@@ -7,6 +7,12 @@ import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
 import 'shielded_vbtc_balance_provider.dart';
 
+/// Heuristic: does this error message suggest a wrong password?
+bool _isAuthError(Object e) {
+  final msg = e.toString().toLowerCase();
+  return msg.contains('password') || msg.contains('unauthorized') || msg.contains('authentication');
+}
+
 class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
   final Ref ref;
 
@@ -15,6 +21,14 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
   bool get isLoading => state;
 
   String? get _password => ref.read(shieldedAddressProvider.notifier).walletPassword;
+
+  void _resetTimer() => ref.read(shieldedAddressProvider.notifier).resetLockTimer();
+
+  void _handleAuthError(Object e) {
+    if (_isAuthError(e)) {
+      ref.read(shieldedAddressProvider.notifier).lock();
+    }
+  }
 
   /// Checks that the user has enough shielded VFX to cover the privacy tx fee.
   /// Returns true if sufficient, false otherwise.
@@ -66,6 +80,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       Toast.error("Insufficient shielded VFX to cover the privacy transaction fee.");
       return false;
     }
+    _resetTimer();
     state = true;
     try {
       await PrivacyService().unshieldVbtc(
@@ -83,6 +98,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       ]);
       return true;
     } catch (e) {
+      _handleAuthError(e);
       Toast.error("vBTC unshield failed: $e");
       return false;
     } finally {
@@ -104,6 +120,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       Toast.error("Insufficient shielded VFX to cover the privacy transaction fee.");
       return false;
     }
+    _resetTimer();
     state = true;
     try {
       await PrivacyService().privateTransferVbtc(
@@ -121,6 +138,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       ]);
       return true;
     } catch (e) {
+      _handleAuthError(e);
       Toast.error("vBTC private transfer failed: $e");
       return false;
     } finally {
@@ -140,6 +158,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       Toast.error("Insufficient shielded VFX to cover the privacy transaction fee.");
       return false;
     }
+    _resetTimer();
     state = true;
     try {
       await PrivacyService().consolidateVbtc(
@@ -155,6 +174,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       ]);
       return true;
     } catch (e) {
+      _handleAuthError(e);
       Toast.error("vBTC consolidation failed: $e");
       return false;
     } finally {

@@ -8,6 +8,7 @@ import '../../../utils/toast.dart';
 import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/shielded_balance_provider.dart';
+import '../utils/vfx_fee_guard.dart';
 
 class ConsolidateDialog extends ConsumerStatefulWidget {
   const ConsolidateDialog({super.key});
@@ -27,6 +28,8 @@ class _ConsolidateDialogState extends ConsumerState<ConsolidateDialog> {
   bool _isSubmitting = false;
 
   Future<void> _submit() async {
+    if (!await VfxFeeGuard.check(ref)) return;
+
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
       Toast.error("No shielded address found");

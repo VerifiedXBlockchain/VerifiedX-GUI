@@ -5,6 +5,12 @@ import '../services/privacy_service.dart';
 import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
 
+/// Heuristic: does this error message suggest a wrong password?
+bool _isAuthError(Object e) {
+  final msg = e.toString().toLowerCase();
+  return msg.contains('password') || msg.contains('unauthorized') || msg.contains('authentication');
+}
+
 class PrivacyActionsNotifier extends StateNotifier<bool> {
   final Ref ref;
 
@@ -13,6 +19,14 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
   bool get isLoading => state;
 
   String? get _password => ref.read(shieldedAddressProvider.notifier).walletPassword;
+
+  void _resetTimer() => ref.read(shieldedAddressProvider.notifier).resetLockTimer();
+
+  void _handleAuthError(Object e) {
+    if (_isAuthError(e)) {
+      ref.read(shieldedAddressProvider.notifier).lock();
+    }
+  }
 
   Future<bool> shield({
     required String fromAddress,
@@ -47,6 +61,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       Toast.error("Privacy wallet password required. Please unlock first.");
       return false;
     }
+    _resetTimer();
     state = true;
     try {
       await PrivacyService().unshieldVfx(
@@ -60,6 +75,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       await ref.read(shieldedBalanceProvider.notifier).fetch();
       return true;
     } catch (e) {
+      _handleAuthError(e);
       Toast.error("Unshield failed: $e");
       return false;
     } finally {
@@ -76,6 +92,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       Toast.error("Privacy wallet password required. Please unlock first.");
       return false;
     }
+    _resetTimer();
     state = true;
     try {
       await PrivacyService().privateTransferVfx(
@@ -89,6 +106,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       await ref.read(shieldedBalanceProvider.notifier).fetch();
       return true;
     } catch (e) {
+      _handleAuthError(e);
       Toast.error("Private transfer failed: $e");
       return false;
     } finally {
@@ -103,6 +121,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       Toast.error("Privacy wallet password required. Please unlock first.");
       return false;
     }
+    _resetTimer();
     state = true;
     try {
       await PrivacyService().consolidateVfx(
@@ -114,6 +133,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       await ref.read(shieldedBalanceProvider.notifier).fetch();
       return true;
     } catch (e) {
+      _handleAuthError(e);
       Toast.error("Consolidation failed: $e");
       return false;
     } finally {

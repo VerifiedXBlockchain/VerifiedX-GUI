@@ -1,0 +1,6 @@
+{
+  "installed_at": "2026-04-13T15:11:50Z",
+  "layout": "standalone",
+  "stacks": {"flutter": "."},
+  "files": ["agents/executor.md", "context/ROUTER.md", "context/architecture.md", "context/decisions.md", "context/conventions.md", "context/patterns/README.md"]
+}

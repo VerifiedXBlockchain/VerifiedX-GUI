@@ -9,17 +9,7 @@ import '../../btc/models/tokenized_bitcoin.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/vbtc_privacy_actions_provider.dart';
 import '../utils/vfx_fee_guard.dart';
-
-
-// Base58 alphabet (no 0, O, I, l)
-const _base58Chars = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
-
-bool _isValidZfxAddress(String address) {
-  if (!address.startsWith('zfx_')) return false;
-  final body = address.substring(4);
-  if (body.length < 40) return false;
-  return body.split('').every((c) => _base58Chars.contains(c));
-}
+import '../utils/zfx_address_validation.dart';
 
 class PrivateTransferVbtcDialog extends ConsumerStatefulWidget {
   final TokenizedBitcoin token;
@@ -53,7 +43,7 @@ class _PrivateTransferVbtcDialogState extends ConsumerState<PrivateTransferVbtcD
     if (!await VfxFeeGuard.check(ref)) return;
 
     final recipient = _recipientController.text.trim();
-    if (!_isValidZfxAddress(recipient)) {
+    if (!isValidZfxAddress(recipient)) {
       Toast.error("Recipient must be a valid zfx_ address");
       return;
     }
