@@ -1,101 +1,98 @@
-# Phase 5: Action Dialogs — Verification Report
+# Phase 5: Action Dialogs — vBTC Shield, Unshield, Transfer, Consolidate — Verification Report
 
-**Phase Objective:** All 4 privacy operations become functional.
+**Verdict**: PASS
+**Date**: 2026-04-13
 
-**Reviewed:** 2026-03-24
+## Checklist
+- [x] `ShieldVbtcDialog` — mirrors `ShieldDialog`
+  - [x] Contract UID field (pre-filled, read-only)
+  - [x] Amount field labeled "Amount (vBTC)"
+  - [x] Min amount: `MIN_SHIELD_AMOUNT_VBTC`
+  - [x] Description: "Move vBTC from your transparent wallet into the shielded pool."
+  - [x] No password needed
+- [x] `UnshieldVbtcDialog` — mirrors `UnshieldDialog`
+  - [x] Contract UID (read-only)
+  - [x] To Address field (transparent VFX address)
+  - [x] Amount field labeled "Amount (vBTC)"
+  - [x] Fee info with `PRIVACY_TX_FIXED_FEE_LABEL`
+- [x] `PrivateTransferVbtcDialog` — mirrors `PrivateTransferDialog`
+  - [x] Contract UID (read-only)
+  - [x] Recipient zfx_ address field with validation
+  - [x] Amount field labeled "Amount (vBTC)"
+  - [x] Fee info present
+- [x] `ConsolidateVbtcDialog` — mirrors `ConsolidateDialog`
+  - [x] Contract UID (read-only)
+  - [x] Shows current note count
+  - [x] Requires >= 2 notes
+  - [x] Fee info present
+- [x] All dialogs use `ConsumerStatefulWidget` + `static show()` pattern
+- [x] Dashboard wired to actual dialog calls (placeholders removed)
 
----
-
-## Plan Task Checklist
-
-### `lib/features/privacy/components/shield_dialog.dart`
-
-- [x] From Address: pre-filled from current wallet via `sessionProvider`
-- [x] Amount: text field with decimal keyboard type
-- [x] Validates minimum 0.001 VFX (`amount < 0.001`)
-- [x] Shows transparent fee info ("Transparent network fee will be auto-calculated.")
-- [x] Recipient auto-set to user's zfx_ address (reads `shieldedAddressProvider`)
-- [x] Confirm calls `privacyActionsProvider.shield()`, closes dialog on success, balance refreshes via provider
-- [x] Loading state with submitting guard, `mounted` check before setState
-- [x] Cancel/Cancel disabled during submission
-
-### `lib/features/privacy/components/unshield_dialog.dart`
-
-- [x] To Address: blank text field (any transparent address)
-- [x] Amount: text field with decimal keyboard type
-- [x] Shows fee deduction note ("0.000003 VFX fee deducted from shielded balance.")
-- [x] Validates non-empty address and amount > 0
-- [x] Confirm calls `privacyActionsProvider.unshield()`
-- [x] Loading state, `mounted` check, closes on success
-
-### `lib/features/privacy/components/private_transfer_dialog.dart`
-
-- [x] Recipient: blank text field
-- [x] Validates `zfx_` prefix (`!recipient.startsWith("zfx_")`)
-- [x] Amount: text field with decimal keyboard type
-- [x] Fee info shown ("0.000003 VFX fee deducted from shielded balance.")
-- [x] Confirm calls `privacyActionsProvider.transfer()`
-- [x] Loading state, `mounted` check, closes on success
-
-### `lib/features/privacy/components/consolidate_dialog.dart`
-
-- [x] No form fields, just confirmation text
-- [x] Shows: "Merge your 2 smallest notes into a single note."
-- [x] Shows fee: "Fee: 0.000003 VFX (deducted from shielded balance)"
-- [x] Disabled if < 2 unspent notes (`noteCount >= 2` check)
-- [x] Warning text shown when cannot consolidate: "At least 2 unspent notes are required"
-- [x] Confirm calls `privacyActionsProvider.consolidate()`
-- [x] Watches `shieldedBalanceProvider` for live note count
-- [x] Loading state, `mounted` check, closes on success
-
-### `lib/features/privacy/components/privacy_dashboard.dart` (modified)
-
-- [x] Action buttons wired to open their respective dialogs via static `show()` methods
-- [x] Shield → `ShieldDialog.show()`
-- [x] Unshield → `UnshieldDialog.show()`
-- [x] Transfer → `PrivateTransferDialog.show()`
-- [x] Consolidate → `ConsolidateDialog.show()`
-- [x] Imports added for all 4 dialog files
-
----
+## Files Reviewed
+- `lib/features/privacy/components/shield_vbtc_dialog.dart` (new)
+- `lib/features/privacy/components/unshield_vbtc_dialog.dart` (new)
+- `lib/features/privacy/components/private_transfer_vbtc_dialog.dart` (new)
+- `lib/features/privacy/components/consolidate_vbtc_dialog.dart` (new)
+- `lib/features/privacy/components/privacy_dashboard.dart` (modified — dialog integration)
+- `lib/features/privacy/components/shield_dialog.dart` (existing, for comparison)
 
 ## Findings
 
-### API Field Mapping Verification
+### Dialog-by-Dialog Review
 
-Each dialog passes the correct parameters to the provider, which in turn passes them to the service with the correct API field names (verified in Phase 1):
+#### ShieldVbtcDialog
+- **Pattern**: `ConsumerStatefulWidget` + `static show(TokenizedBitcoin token)` — matches VFX `ShieldDialog` exactly
+- **Contract UID**: Displayed as read-only text (token name + UID in monospace) — lines 91-98
+- **Amount**: "Amount (vBTC)" label, min check `MIN_SHIELD_AMOUNT_VBTC` — lines 47, 109
+- **Description**: Exact match: "Move vBTC from your transparent wallet into the shielded pool." — line 86
+- **No password**: Calls `vbtcPrivacyActionsProvider.notifier.shieldVbtc()` which doesn't require password — correct
+- **Submit**: Validates wallet, amount, zfxAddress. Calls provider. Pops on success. Matches VFX pattern.
 
-| Dialog | Provider Method | Service Method | API Fields |
-|--------|----------------|----------------|------------|
-| Shield | `shield(fromAddress, amount, recipientZfxAddress)` | `shieldVfx()` | FromAddress, ShieldAmount, RecipientZfxAddress |
-| Unshield | `unshield(zfxAddress, toAddress, amount)` | `unshieldVfx()` | ZfxAddress, TransparentToAddress, TransparentAmount |
-| Transfer | `transfer(zfxAddress, recipientZfxAddress, amount)` | `privateTransferVfx()` | ZfxAddress, RecipientZfxAddress, PaymentAmount |
-| Consolidate | `consolidate(zfxAddress)` | `consolidateVfx()` | ZfxAddress |
+#### UnshieldVbtcDialog
+- **To Address**: TextField with "To Address (transparent)" label — line 101
+- **Amount**: "Amount (vBTC)" label — line 112
+- **Fee info**: "A fee of $PRIVACY_TX_FIXED_FEE_LABEL will be deducted from your shielded VFX balance." — line 119
+- **Contract UID**: Read-only display — lines 89-96
+- **VFX fee guard**: Handled at provider level (`_hasVfxFeeBalance()` in `VbtcPrivacyActionsNotifier.unshieldVbtc`). The dialog itself does not pre-check — Phase 6 will add the pre-show guard.
 
-All match the integration guide.
+#### PrivateTransferVbtcDialog
+- **Recipient**: zfx_ address field with robust validation — `_isValidZfxAddress()` checks prefix + base58 alphabet + min length — lines 15-20
+- **Amount**: "Amount (vBTC)" label — line 123
+- **Fee info**: Same fee message — line 130
+- **Contract UID**: Read-only display — lines 100-107
 
-### Pattern Compliance
+#### ConsolidateVbtcDialog
+- **Note count**: Reads from `shieldedVbtcBalanceProvider` per-contract — lines 53-55
+- **>= 2 notes guard**: `canConsolidate = noteCount >= 2` disables button — line 106
+- **Warning text**: Shows "At least 2 unspent notes are required" when insufficient — lines 90-96
+- **Fee info**: "Fee: $PRIVACY_TX_FIXED_FEE_LABEL (deducted from shielded VFX balance)" — line 87
 
-**Dialog pattern:** All dialogs use `ConsumerStatefulWidget` with a static `show()` method using `rootNavigatorKey.currentContext!` — this is consistent with how other dialogs are launched in the codebase (e.g., `ConfirmDialog.show()`).
+### Dashboard Integration (Phase 5 additions)
+The dashboard was updated alongside the dialogs:
+- Placeholder Toast methods removed
+- Actual dialog `show()` calls wired: `ShieldVbtcDialog.show(token)`, `UnshieldVbtcDialog.show(token)`, etc.
+- Token filtering added: `allTokens.where((t) => t.version == 2)` — correct filter for v2 vBTC tokens
+- `BaseComponent` replaced with `ConsumerStatefulWidget` for stateful lifecycle
+- Phase 4's duplicate polling issue resolved — `_startVbtcPolling`/`stopAll` removed; `VbtcBalanceCard` handles its own lifecycle
 
-**ColorScheme extensions:** `Theme.of(context).colorScheme.success`, `.warning`, `.danger`, `.info` — all verified to exist in `CustomColorScheme` extension at `lib/core/theme/app_theme.dart:45-75`.
+### Pattern Consistency with VFX Dialogs
 
-**Validation:** Each dialog validates inputs before submission:
-- Shield: amount >= 0.001 (matches `MinShieldAmountVFX` from plan constants)
-- Unshield: non-empty address, amount > 0
-- Transfer: `zfx_` prefix validation, amount > 0
-- Consolidate: >= 2 unspent notes
+| Aspect | VFX Dialogs | vBTC Dialogs | Match |
+|---|---|---|---|
+| Widget type | `ConsumerStatefulWidget` | `ConsumerStatefulWidget` | Yes |
+| Show pattern | `static show()` | `static show(token)` | Yes (+ token param) |
+| Submit flow | validate -> setState loading -> call provider -> pop on success | Same | Yes |
+| Error handling | `Toast.error()` | `Toast.error()` | Yes |
+| Loading state | `_isSubmitting` bool | `_isSubmitting` bool | Yes |
+| Controller disposal | `dispose()` | `dispose()` | Yes |
 
-**Lifecycle safety:** All dialogs check `mounted` before calling `setState` after async operations, and dispose TextEditingControllers properly.
+### Issues
+None.
 
-### Observations (No Action Required)
+### Warnings
+None.
 
-1. **Fee constant not extracted:** The fee value "0.000003" appears as a hardcoded string in multiple dialogs. This matches the plan constant `PrivateTxFixedFee=0.000003`. Since it's display-only text (the actual fee is calculated server-side), this is fine.
-
-2. **Shield dialog uses `wallet.address` rather than a dropdown:** The plan mentions "dropdown pre-filled with current wallet." The implementation reads the single current wallet from `sessionProvider` and displays it as text. This is simpler and sufficient — the desktop app typically has one active wallet at a time.
-
----
-
-## Verdict: PASS
-
-All 4 dialogs implemented with correct form fields, validation, provider method calls, fee information, and loading states. Dashboard buttons correctly wired to open each dialog. Input validation covers minimum amounts, address format, and note count. API parameter chain verified end-to-end from dialog through provider to service.
+### Notes
+- The VFX fee guard is currently only at the provider level (toast on error). The plan specifies a pre-show dialog guard — this is Phase 6's responsibility (`VfxFeeGuard.check()`). The current implementation is functional but the UX will improve in Phase 6.
+- `PrivateTransferVbtcDialog` includes its own `_isValidZfxAddress` helper with base58 validation. This is a slightly more thorough validation than the VFX `PrivateTransferDialog` might have — good defensive coding.
+- The `version == 2` filter on the dashboard is a smart addition not in the original plan, ensuring only v2 vBTC contracts (which support shielding) are shown.
