@@ -3,25 +3,30 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
-import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
 import '../models/shielded_address.dart';
 import '../models/shielded_balance.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/shielded_balance_provider.dart';
 import 'commitment_list.dart';
 import 'consolidate_dialog.dart';
+import 'consolidate_vbtc_dialog.dart';
 import 'privacy_settings_menu.dart';
 import 'private_transfer_dialog.dart';
+import 'private_transfer_vbtc_dialog.dart';
 import 'shield_dialog.dart';
+import 'shield_vbtc_dialog.dart';
 import 'unshield_dialog.dart';
+import 'unshield_vbtc_dialog.dart';
+import 'vbtc_balance_card.dart';
 
-class PrivacyDashboard extends BaseComponent {
+class PrivacyDashboard extends ConsumerStatefulWidget {
   final ShieldedAddress address;
 
   const PrivacyDashboard({
@@ -30,21 +35,76 @@ class PrivacyDashboard extends BaseComponent {
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<PrivacyDashboard> createState() => _PrivacyDashboardState();
+}
+
+class _PrivacyDashboardState extends ConsumerState<PrivacyDashboard> {
+  Future<void> _requireUnlock(VoidCallback action) async {
+    if (ref.read(privacyUnlockedProvider)) {
+      action();
+      return;
+    }
+
+    final password = await PromptModal.show(
+      contextOverride: rootNavigatorKey.currentContext!,
+      title: "Unlock Privacy Wallet",
+      labelText: "Password",
+      body: "Enter your privacy wallet password to enable spending.",
+      validator: (value) => formValidatorNotEmpty(value, "Password"),
+      obscureText: true,
+      revealObscure: true,
+      lines: 1,
+    );
+
+    if (password != null) {
+      ref.read(shieldedAddressProvider.notifier).setPassword(password);
+      Toast.message("Privacy wallet unlocked");
+      action();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final balance = ref.watch(shieldedBalanceProvider);
     final isUnlocked = ref.watch(privacyUnlockedProvider);
+    final allTokens = ref.watch(tokenizedBitcoinListProvider);
+    final vbtcTokens = allTokens.where((t) => t.version == 2).toList();
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isUnlocked) _UnlockBanner(),
-          _AddressCard(address: address),
+          _AddressCard(address: widget.address),
           const SizedBox(height: 16),
           _BalanceCard(balance: balance),
           const SizedBox(height: 16),
           _ActionButtons(),
           const SizedBox(height: 16),
+          if (vbtcTokens.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                "Shielded vBTC",
+                style: TextStyle(
+                  color: AppColors.getBtc(),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            ...vbtcTokens.map((token) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: VbtcBalanceCard(
+                    token: token,
+                    onShield: () => ShieldVbtcDialog.show(token),
+                    onUnshield: () => _requireUnlock(() => UnshieldVbtcDialog.show(token)),
+                    onTransfer: () => _requireUnlock(() => PrivateTransferVbtcDialog.show(token)),
+                    onConsolidate: () => _requireUnlock(() => ConsolidateVbtcDialog.show(token)),
+                  ),
+                )),
+            const SizedBox(height: 8),
+          ],
           if (balance != null) CommitmentList(balance: balance),
         ],
       ),
