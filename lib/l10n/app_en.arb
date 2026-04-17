@@ -1,0 +1,161 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "VFX Wallet",
+  "@appTitle": {
+    "description": "Application title shown in window titles and browser tab."
+  },
+
+  "navDashboard": "Dashboard",
+  "@navDashboard": {
+    "description": "Primary navigation label for the dashboard / home screen."
+  },
+  "navTransactions": "Transactions",
+  "@navTransactions": {
+    "description": "Primary navigation label for the transactions list."
+  },
+  "navWallet": "Wallet",
+  "@navWallet": {
+    "description": "Primary navigation label for the wallet section."
+  },
+  "navNfts": "NFTs",
+  "@navNfts": {
+    "description": "Primary navigation label for the NFTs section."
+  },
+  "navDomains": "Domains",
+  "@navDomains": {
+    "description": "Primary navigation label for VFX domains (ADNR)."
+  },
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Primary navigation label for settings."
+  },
+
+  "actionSend": "Send",
+  "@actionSend": {
+    "description": "Send funds / send transaction button."
+  },
+  "actionReceive": "Receive",
+  "@actionReceive": {
+    "description": "Receive funds button."
+  },
+  "actionCopy": "Copy",
+  "@actionCopy": {
+    "description": "Generic copy-to-clipboard action."
+  },
+  "actionPaste": "Paste",
+  "@actionPaste": {
+    "description": "Generic paste-from-clipboard action."
+  },
+  "actionConfirm": "Confirm",
+  "@actionConfirm": {
+    "description": "Confirm action — submits or approves the current step."
+  },
+  "actionCancel": "Cancel",
+  "@actionCancel": {
+    "description": "Cancel action — dismisses the current action."
+  },
+  "actionClose": "Close",
+  "@actionClose": {
+    "description": "Close action — closes a dialog or panel."
+  },
+  "actionSave": "Save",
+  "@actionSave": {
+    "description": "Save action — persists current form state."
+  },
+  "actionDelete": "Delete",
+  "@actionDelete": {
+    "description": "Delete action — destructive, removes an item."
+  },
+  "actionSearch": "Search",
+  "@actionSearch": {
+    "description": "Search action or search field placeholder."
+  },
+
+  "statusLoading": "Loading...",
+  "@statusLoading": {
+    "description": "Generic loading indicator text."
+  },
+  "statusPending": "Pending",
+  "@statusPending": {
+    "description": "Pending status for transactions or operations."
+  },
+  "statusConfirmed": "Confirmed",
+  "@statusConfirmed": {
+    "description": "Confirmed status for a transaction."
+  },
+  "statusFailed": "Failed",
+  "@statusFailed": {
+    "description": "Failed status for a transaction."
+  },
+
+  "labelAmount": "Amount",
+  "@labelAmount": {
+    "description": "Form label for an amount field."
+  },
+  "labelAddress": "Address",
+  "@labelAddress": {
+    "description": "Form label for a wallet address field."
+  },
+  "labelBalance": "Balance",
+  "@labelBalance": {
+    "description": "Wallet balance label."
+  },
+  "labelAvailable": "Available",
+  "@labelAvailable": {
+    "description": "Available (spendable) balance label."
+  },
+  "labelTotal": "Total",
+  "@labelTotal": {
+    "description": "Generic total label."
+  },
+  "labelFee": "Fee",
+  "@labelFee": {
+    "description": "Transaction or network fee label."
+  },
+  "labelFrom": "From",
+  "@labelFrom": {
+    "description": "From address label in a transaction."
+  },
+  "labelTo": "To",
+  "@labelTo": {
+    "description": "To address label in a transaction."
+  },
+
+  "walletCreate": "Create Wallet",
+  "@walletCreate": {
+    "description": "Create a new wallet call-to-action."
+  },
+  "walletImport": "Import Wallet",
+  "@walletImport": {
+    "description": "Import an existing wallet call-to-action."
+  },
+  "walletPrivateKey": "Private Key",
+  "@walletPrivateKey": {
+    "description": "Label for a private key field."
+  },
+  "walletRecoveryPhrase": "Recovery Phrase",
+  "@walletRecoveryPhrase": {
+    "description": "Label for a wallet recovery / seed phrase."
+  },
+
+  "messageNoResults": "No results found",
+  "@messageNoResults": {
+    "description": "Empty state for search or list views."
+  },
+  "messageCopiedToClipboard": "Copied to clipboard",
+  "@messageCopiedToClipboard": {
+    "description": "Transient toast shown after a copy action."
+  },
+
+  "sentAmount": "Sent {amount} VFX",
+  "@sentAmount": {
+    "description": "Toast shown after a successful send transaction, with the sent amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1.25"
+      }
+    }
+  }
+}

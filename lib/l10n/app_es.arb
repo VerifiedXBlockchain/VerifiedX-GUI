@@ -1,0 +1,46 @@
+{
+  "@@locale": "es",
+
+  "appTitle": "VFX Wallet",
+  "navDashboard": "Dashboard",
+  "navTransactions": "Transactions",
+  "navWallet": "Wallet",
+  "navNfts": "NFTs",
+  "navDomains": "Domains",
+  "navSettings": "Settings",
+
+  "actionSend": "Send",
+  "actionReceive": "Receive",
+  "actionCopy": "Copy",
+  "actionPaste": "Paste",
+  "actionConfirm": "Confirm",
+  "actionCancel": "Cancel",
+  "actionClose": "Close",
+  "actionSave": "Save",
+  "actionDelete": "Delete",
+  "actionSearch": "Search",
+
+  "statusLoading": "Loading...",
+  "statusPending": "Pending",
+  "statusConfirmed": "Confirmed",
+  "statusFailed": "Failed",
+
+  "labelAmount": "Amount",
+  "labelAddress": "Address",
+  "labelBalance": "Balance",
+  "labelAvailable": "Available",
+  "labelTotal": "Total",
+  "labelFee": "Fee",
+  "labelFrom": "From",
+  "labelTo": "To",
+
+  "walletCreate": "Create Wallet",
+  "walletImport": "Import Wallet",
+  "walletPrivateKey": "Private Key",
+  "walletRecoveryPhrase": "Recovery Phrase",
+
+  "messageNoResults": "No results found",
+  "messageCopiedToClipboard": "Copied to clipboard",
+
+  "sentAmount": "Sent {amount} VFX"
+}

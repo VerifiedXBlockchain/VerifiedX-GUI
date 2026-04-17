@@ -17,6 +17,7 @@ import 'features/bridge/services/bridge_service.dart';
 import 'features/remote_shop/providers/shop_loading_provider.dart';
 import 'generated/assets.gen.dart';
 
+import 'l10n/generated/app_localizations.dart';
 import 'core/app_router.gr.dart';
 import 'core/components/boot_container.dart';
 import 'core/components/centered_loader.dart';
@@ -102,6 +103,8 @@ class AppContainer extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       theme: AppTheme.dark().themeData,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: AutoRouterDelegate(
         router,
@@ -182,7 +185,7 @@ class AppContent extends BaseComponent {
                       color: Colors.black54,
                       child: Center(
                         child: Text(
-                          "Loading...",
+                          AppLocalizations.of(context).statusLoading,
                           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
