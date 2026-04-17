@@ -19,6 +19,7 @@ import 'generated/assets.gen.dart';
 
 import 'l10n/generated/app_localizations.dart';
 import 'core/app_router.gr.dart';
+import 'core/providers/locale_provider.dart';
 import 'core/components/boot_container.dart';
 import 'core/components/centered_loader.dart';
 import 'core/env.dart';
@@ -103,6 +104,7 @@ class AppContainer extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       theme: AppTheme.dark().themeData,
+      locale: ref.watch(localeProvider),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),

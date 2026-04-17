@@ -108,5 +108,10 @@
   "configButtonOpenConfig": "Abrir config",
   "configButtonViewDocs": "Ver documentación",
   "configWarningAdvanced": "Advertencia: Estas son opciones avanzadas. Procede con precaución.",
-  "configRestartRequiredToast": "Se requiere reiniciar el CLI para aplicar los cambios."
+  "configRestartRequiredToast": "Se requiere reiniciar el CLI para aplicar los cambios.",
+
+  "settingsLanguageSection": "Idioma",
+  "settingsLanguageSystemDefault": "Predeterminado del sistema",
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageSpanish": "Español"
 }

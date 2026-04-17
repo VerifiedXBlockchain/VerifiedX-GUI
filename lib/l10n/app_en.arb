@@ -430,5 +430,22 @@
   "configRestartRequiredToast": "CLI restart is required for changes to propagate.",
   "@configRestartRequiredToast": {
     "description": "Toast shown after saving config changes that require a CLI restart."
+  },
+
+  "settingsLanguageSection": "Language",
+  "@settingsLanguageSection": {
+    "description": "Section header in settings for the UI language / locale picker."
+  },
+  "settingsLanguageSystemDefault": "System default",
+  "@settingsLanguageSystemDefault": {
+    "description": "Language-picker option that follows the OS / browser locale."
+  },
+  "settingsLanguageEnglish": "English",
+  "@settingsLanguageEnglish": {
+    "description": "English language option in the language picker. Shown in the locale's own script — NOT translated."
+  },
+  "settingsLanguageSpanish": "Español",
+  "@settingsLanguageSpanish": {
+    "description": "Spanish language option in the language picker. Shown in the locale's own script — NOT translated."
   }
 }

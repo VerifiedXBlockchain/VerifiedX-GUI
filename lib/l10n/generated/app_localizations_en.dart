@@ -304,4 +304,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get configRestartRequiredToast => 'CLI restart is required for changes to propagate.';
+
+  @override
+  String get settingsLanguageSection => 'Language';
+
+  @override
+  String get settingsLanguageSystemDefault => 'System default';
+
+  @override
+  String get settingsLanguageEnglish => 'English';
+
+  @override
+  String get settingsLanguageSpanish => 'Español';
 }

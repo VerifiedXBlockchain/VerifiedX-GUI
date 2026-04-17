@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:intl/intl.dart';
 
-String formatIntWithCommas(int number) {
-  NumberFormat numberFormat = NumberFormat.decimalPattern('en_us');
+String formatIntWithCommas(int number, {String? locale}) {
+  NumberFormat numberFormat = NumberFormat.decimalPattern(locale ?? 'en_us');
   return numberFormat.format(number);
 }
 

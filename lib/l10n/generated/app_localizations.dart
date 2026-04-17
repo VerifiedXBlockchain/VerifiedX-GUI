@@ -674,6 +674,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'CLI restart is required for changes to propagate.'**
   String get configRestartRequiredToast;
+
+  /// Section header in settings for the UI language / locale picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get settingsLanguageSection;
+
+  /// Language-picker option that follows the OS / browser locale.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get settingsLanguageSystemDefault;
+
+  /// English language option in the language picker. Shown in the locale's own script — NOT translated.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get settingsLanguageEnglish;
+
+  /// Spanish language option in the language picker. Shown in the locale's own script — NOT translated.
+  ///
+  /// In en, this message translates to:
+  /// **'Español'**
+  String get settingsLanguageSpanish;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

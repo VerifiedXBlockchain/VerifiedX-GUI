@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
+import '../../../core/providers/locale_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
@@ -106,6 +107,7 @@ class ConfigContainerScreen extends BaseScreen {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const _LanguageSection(),
                 const ConfigurationFormGroup(),
               ],
             ),
@@ -145,6 +147,51 @@ class ConfigContainerScreen extends BaseScreen {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _LanguageSection extends ConsumerWidget {
+  const _LanguageSection();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final current = ref.watch(localeProvider);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Row(
+        children: [
+          const Icon(Icons.language, size: 20),
+          const SizedBox(width: 8),
+          Text(
+            l10n.settingsLanguageSection,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(width: 16),
+          DropdownButton<Locale?>(
+            value: current,
+            onChanged: (locale) {
+              ref.read(localeProvider.notifier).setLocale(locale);
+            },
+            items: [
+              DropdownMenuItem<Locale?>(
+                value: null,
+                child: Text(l10n.settingsLanguageSystemDefault),
+              ),
+              DropdownMenuItem<Locale?>(
+                value: const Locale('en'),
+                child: Text(l10n.settingsLanguageEnglish),
+              ),
+              DropdownMenuItem<Locale?>(
+                value: const Locale('es'),
+                child: Text(l10n.settingsLanguageSpanish),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
