@@ -195,6 +195,42 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get actionSearch;
 
+  /// Continue action — proceeds past a confirmation prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get actionContinue;
+
+  /// Clear action — resets a form.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get actionClear;
+
+  /// Done action — dismisses a completion dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get actionDone;
+
+  /// Import action — imports a wallet or key.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get actionImport;
+
+  /// Affirmative response in a confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get actionYes;
+
+  /// Negative response in a confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get actionNo;
+
   /// Generic loading indicator text.
   ///
   /// In en, this message translates to:
@@ -218,6 +254,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed'**
   String get statusFailed;
+
+  /// Successful status — used in the transactions tab label.
+  ///
+  /// In en, this message translates to:
+  /// **'Successful'**
+  String get statusSuccessful;
 
   /// Form label for an amount field.
   ///
@@ -248,6 +290,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get labelTotal;
+
+  /// Locked balance label in the send form.
+  ///
+  /// In en, this message translates to:
+  /// **'Locked'**
+  String get labelLocked;
 
   /// Transaction or network fee label.
   ///
@@ -303,11 +351,329 @@ abstract class AppLocalizations {
   /// **'Copied to clipboard'**
   String get messageCopiedToClipboard;
 
+  /// Transient toast shown after copying a wallet address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address copied to clipboard'**
+  String get messageAddressCopied;
+
+  /// Transient toast shown after copying a private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Private Key copied to clipboard'**
+  String get messagePrivateKeyCopied;
+
+  /// Empty-state message shown when the user has no wallet/account selected.
+  ///
+  /// In en, this message translates to:
+  /// **'No account selected'**
+  String get messageNoAccountSelected;
+
+  /// Error toast shown when clipboard contents cannot be pasted as an address.
+  ///
+  /// In en, this message translates to:
+  /// **'Clipboard text is invalid'**
+  String get messageClipboardInvalid;
+
   /// Toast shown after a successful send transaction, with the sent amount.
   ///
   /// In en, this message translates to:
   /// **'Sent {amount} VFX'**
   String sentAmount(String amount);
+
+  /// Send screen app bar title — currency is VFX or BTC.
+  ///
+  /// In en, this message translates to:
+  /// **'Send {currency}'**
+  String sendAppBarTitle(String currency);
+
+  /// Recipient label (with colon) in the send form.
+  ///
+  /// In en, this message translates to:
+  /// **'To:'**
+  String get sendFormLabelTo;
+
+  /// Sender label (with colon) in the send form.
+  ///
+  /// In en, this message translates to:
+  /// **'From:'**
+  String get sendFormLabelFrom;
+
+  /// Amount label (with colon) in the send form.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount:'**
+  String get sendFormLabelAmount;
+
+  /// Fee rate label (with colon) in the BTC send form.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee Rate:'**
+  String get sendFormLabelFeeRate;
+
+  /// Placeholder text for the recipient address field in the send form.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient\'s Account Address'**
+  String get sendRecipientHint;
+
+  /// Placeholder for the amount field in the send form.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount of {currency} to send'**
+  String sendAmountHint(String currency);
+
+  /// Warning badge shown when a Vault account is not yet activated.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Activated'**
+  String get sendBadgeNotActivated;
+
+  /// Title of the dialog used to pick one of the user's own addresses as recipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an address'**
+  String get sendChooseAddressTitle;
+
+  /// Call-to-action that opens the Butterfly payment-link flow.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Payment Link'**
+  String get sendPaymentLinkCta;
+
+  /// Helper text beneath the recipient address field on non-macOS platforms. Intentionally ends with a trailing space — followed inline by 'here' link and period.
+  ///
+  /// In en, this message translates to:
+  /// **'Use ctrl+v to paste or click '**
+  String get sendPasteHelperCtrl;
+
+  /// Helper text beneath the recipient address field on macOS. Intentionally ends with a trailing space.
+  ///
+  /// In en, this message translates to:
+  /// **'Use cmd+v to paste or click '**
+  String get sendPasteHelperCmd;
+
+  /// Inline clickable link in the paste helper text (reads as 'click here').
+  ///
+  /// In en, this message translates to:
+  /// **'here'**
+  String get sendPasteHelperHereLink;
+
+  /// Receive screen app bar title — currency is VFX or BTC.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive {currency}'**
+  String receiveAppBarTitle(String currency);
+
+  /// Subtitle above the currently selected VFX receive address. vaultSuffix is either empty or ' Vault Account'.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Selected VFX{vaultSuffix} Address'**
+  String receiveSelectedVfxAddress(String vaultSuffix);
+
+  /// Subtitle above the currently selected BTC receive address.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Selected BTC Address'**
+  String get receiveSelectedBtcAddress;
+
+  /// Error toast when attempting to copy an inactive Vault account address.
+  ///
+  /// In en, this message translates to:
+  /// **'This Vault Account has not been activated yet.'**
+  String get receiveVaultNotActivatedToast;
+
+  /// Two-line vertical button label on the receive screen. Newline must be preserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy\nAddress'**
+  String get receiveActionCopyAddress;
+
+  /// Two-line vertical button label on the receive screen. Newline must be preserved.
+  ///
+  /// In en, this message translates to:
+  /// **'New\nAccount'**
+  String get receiveActionNewAccount;
+
+  /// Two-line vertical button label on the receive screen. Newline must be preserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Import\nKey'**
+  String get receiveActionImportKey;
+
+  /// Confirmation dialog title asking whether to rescan the chain after importing a key.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan Blocks?'**
+  String get receiveRescanDialogTitle;
+
+  /// Confirmation dialog body explaining the rescan prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to rescan the chain to include any transactions relevant to this key?'**
+  String get receiveRescanDialogBody;
+
+  /// Dialog title shown after a new BTC account is generated.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Account Created'**
+  String get receiveBtcAccountCreatedTitle;
+
+  /// Body text urging the user to back up the newly generated BTC private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Here are your BTC account details. Please ensure to back up your private key in a safe place.'**
+  String get receiveBtcAccountCreatedBody;
+
+  /// Dialog title for the BTC private key import form.
+  ///
+  /// In en, this message translates to:
+  /// **'Import BTC Private Key'**
+  String get receiveBtcImportKeyDialogTitle;
+
+  /// Instruction in the BTC private key import dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste in your BTC private key to import your account.'**
+  String get receiveBtcImportKeyDialogBody;
+
+  /// Transactions screen title when viewing both VFX and BTC.
+  ///
+  /// In en, this message translates to:
+  /// **'All Transactions'**
+  String get txAppBarAll;
+
+  /// Transactions screen title when filtered to VFX.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Transactions'**
+  String get txAppBarVfx;
+
+  /// Transactions screen title when filtered to BTC.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Transactions'**
+  String get txAppBarBtc;
+
+  /// Transactions tab label for the full list.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get txTabAll;
+
+  /// Transactions tab label for pending transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get txTabPending;
+
+  /// Transactions tab label for successful transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Successful'**
+  String get txTabSuccessful;
+
+  /// Transactions tab label for failed transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed'**
+  String get txTabFailed;
+
+  /// Transactions tab label for Vault-account transactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Vaulted'**
+  String get txTabVaulted;
+
+  /// BTC transactions tab label (sibling of 'Inputs').
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions'**
+  String get txTabTransactions;
+
+  /// BTC inputs (UTXO) tab label.
+  ///
+  /// In en, this message translates to:
+  /// **'Inputs'**
+  String get txTabInputs;
+
+  /// Web-only section heading above the keygen CTA on the dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Keys'**
+  String get homeKeysHeading;
+
+  /// Two-line vertical button label on the dashboard common actions. Newline must be preserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Send\nCoin'**
+  String get homeActionSendCoin;
+
+  /// Two-line vertical button label on the dashboard common actions. Newline must be preserved.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive\nCoin'**
+  String get homeActionReceiveCoin;
+
+  /// Abbreviated label for the transactions shortcut tile on the dashboard. Kept short to fit a tight tile.
+  ///
+  /// In en, this message translates to:
+  /// **'TXs'**
+  String get homeActionTxs;
+
+  /// Call-to-action button on the dashboard that opens the buy/faucet options.
+  ///
+  /// In en, this message translates to:
+  /// **'Get \$VFX/\$BTC Now'**
+  String get homeGetVfxBtcCta;
+
+  /// Shortened CTA variant for the dashboard (VFX only).
+  ///
+  /// In en, this message translates to:
+  /// **'Get \$VFX'**
+  String get homeGetVfxCta;
+
+  /// App bar title for the advanced CLI configuration screen.
+  ///
+  /// In en, this message translates to:
+  /// **'CLI Configuration'**
+  String get configAppBarTitle;
+
+  /// Confirm dialog title when the user tries to close the config screen with unsaved changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the configuration screen?'**
+  String get configCloseDialogTitle;
+
+  /// Confirm dialog body warning that unsaved config changes are lost on close.
+  ///
+  /// In en, this message translates to:
+  /// **'All unsaved changes will be lost.'**
+  String get configCloseDialogBody;
+
+  /// App bar action to open the raw config file in the OS file viewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Config'**
+  String get configButtonOpenConfig;
+
+  /// App bar action to open the external config documentation URL.
+  ///
+  /// In en, this message translates to:
+  /// **'View Docs'**
+  String get configButtonViewDocs;
+
+  /// Warning banner above the advanced CLI config form.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: These are advanced options. Proceed with caution.'**
+  String get configWarningAdvanced;
+
+  /// Toast shown after saving config changes that require a CLI restart.
+  ///
+  /// In en, this message translates to:
+  /// **'CLI restart is required for changes to propagate.'**
+  String get configRestartRequiredToast;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

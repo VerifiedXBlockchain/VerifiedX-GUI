@@ -71,6 +71,30 @@
   "@actionSearch": {
     "description": "Search action or search field placeholder."
   },
+  "actionContinue": "Continue",
+  "@actionContinue": {
+    "description": "Continue action — proceeds past a confirmation prompt."
+  },
+  "actionClear": "Clear",
+  "@actionClear": {
+    "description": "Clear action — resets a form."
+  },
+  "actionDone": "Done",
+  "@actionDone": {
+    "description": "Done action — dismisses a completion dialog."
+  },
+  "actionImport": "Import",
+  "@actionImport": {
+    "description": "Import action — imports a wallet or key."
+  },
+  "actionYes": "Yes",
+  "@actionYes": {
+    "description": "Affirmative response in a confirmation dialog."
+  },
+  "actionNo": "No",
+  "@actionNo": {
+    "description": "Negative response in a confirmation dialog."
+  },
 
   "statusLoading": "Loading...",
   "@statusLoading": {
@@ -87,6 +111,10 @@
   "statusFailed": "Failed",
   "@statusFailed": {
     "description": "Failed status for a transaction."
+  },
+  "statusSuccessful": "Successful",
+  "@statusSuccessful": {
+    "description": "Successful status — used in the transactions tab label."
   },
 
   "labelAmount": "Amount",
@@ -108,6 +136,10 @@
   "labelTotal": "Total",
   "@labelTotal": {
     "description": "Generic total label."
+  },
+  "labelLocked": "Locked",
+  "@labelLocked": {
+    "description": "Locked balance label in the send form."
   },
   "labelFee": "Fee",
   "@labelFee": {
@@ -147,6 +179,22 @@
   "@messageCopiedToClipboard": {
     "description": "Transient toast shown after a copy action."
   },
+  "messageAddressCopied": "Address copied to clipboard",
+  "@messageAddressCopied": {
+    "description": "Transient toast shown after copying a wallet address."
+  },
+  "messagePrivateKeyCopied": "Private Key copied to clipboard",
+  "@messagePrivateKeyCopied": {
+    "description": "Transient toast shown after copying a private key."
+  },
+  "messageNoAccountSelected": "No account selected",
+  "@messageNoAccountSelected": {
+    "description": "Empty-state message shown when the user has no wallet/account selected."
+  },
+  "messageClipboardInvalid": "Clipboard text is invalid",
+  "@messageClipboardInvalid": {
+    "description": "Error toast shown when clipboard contents cannot be pasted as an address."
+  },
 
   "sentAmount": "Sent {amount} VFX",
   "@sentAmount": {
@@ -157,5 +205,230 @@
         "example": "1.25"
       }
     }
+  },
+
+  "sendAppBarTitle": "Send {currency}",
+  "@sendAppBarTitle": {
+    "description": "Send screen app bar title — currency is VFX or BTC.",
+    "placeholders": {
+      "currency": {
+        "type": "String",
+        "example": "VFX"
+      }
+    }
+  },
+  "sendFormLabelTo": "To:",
+  "@sendFormLabelTo": {
+    "description": "Recipient label (with colon) in the send form."
+  },
+  "sendFormLabelFrom": "From:",
+  "@sendFormLabelFrom": {
+    "description": "Sender label (with colon) in the send form."
+  },
+  "sendFormLabelAmount": "Amount:",
+  "@sendFormLabelAmount": {
+    "description": "Amount label (with colon) in the send form."
+  },
+  "sendFormLabelFeeRate": "Fee Rate:",
+  "@sendFormLabelFeeRate": {
+    "description": "Fee rate label (with colon) in the BTC send form."
+  },
+  "sendRecipientHint": "Recipient's Account Address",
+  "@sendRecipientHint": {
+    "description": "Placeholder text for the recipient address field in the send form."
+  },
+  "sendAmountHint": "Amount of {currency} to send",
+  "@sendAmountHint": {
+    "description": "Placeholder for the amount field in the send form.",
+    "placeholders": {
+      "currency": {
+        "type": "String",
+        "example": "VFX"
+      }
+    }
+  },
+  "sendBadgeNotActivated": "Not Activated",
+  "@sendBadgeNotActivated": {
+    "description": "Warning badge shown when a Vault account is not yet activated."
+  },
+  "sendChooseAddressTitle": "Choose an address",
+  "@sendChooseAddressTitle": {
+    "description": "Title of the dialog used to pick one of the user's own addresses as recipient."
+  },
+  "sendPaymentLinkCta": "Create Payment Link",
+  "@sendPaymentLinkCta": {
+    "description": "Call-to-action that opens the Butterfly payment-link flow."
+  },
+  "sendPasteHelperCtrl": "Use ctrl+v to paste or click ",
+  "@sendPasteHelperCtrl": {
+    "description": "Helper text beneath the recipient address field on non-macOS platforms. Intentionally ends with a trailing space — followed inline by 'here' link and period."
+  },
+  "sendPasteHelperCmd": "Use cmd+v to paste or click ",
+  "@sendPasteHelperCmd": {
+    "description": "Helper text beneath the recipient address field on macOS. Intentionally ends with a trailing space."
+  },
+  "sendPasteHelperHereLink": "here",
+  "@sendPasteHelperHereLink": {
+    "description": "Inline clickable link in the paste helper text (reads as 'click here')."
+  },
+
+  "receiveAppBarTitle": "Receive {currency}",
+  "@receiveAppBarTitle": {
+    "description": "Receive screen app bar title — currency is VFX or BTC.",
+    "placeholders": {
+      "currency": {
+        "type": "String",
+        "example": "VFX"
+      }
+    }
+  },
+  "receiveSelectedVfxAddress": "Your Selected VFX{vaultSuffix} Address",
+  "@receiveSelectedVfxAddress": {
+    "description": "Subtitle above the currently selected VFX receive address. vaultSuffix is either empty or ' Vault Account'.",
+    "placeholders": {
+      "vaultSuffix": {
+        "type": "String",
+        "example": " Vault Account"
+      }
+    }
+  },
+  "receiveSelectedBtcAddress": "Your Selected BTC Address",
+  "@receiveSelectedBtcAddress": {
+    "description": "Subtitle above the currently selected BTC receive address."
+  },
+  "receiveVaultNotActivatedToast": "This Vault Account has not been activated yet.",
+  "@receiveVaultNotActivatedToast": {
+    "description": "Error toast when attempting to copy an inactive Vault account address."
+  },
+  "receiveActionCopyAddress": "Copy\nAddress",
+  "@receiveActionCopyAddress": {
+    "description": "Two-line vertical button label on the receive screen. Newline must be preserved."
+  },
+  "receiveActionNewAccount": "New\nAccount",
+  "@receiveActionNewAccount": {
+    "description": "Two-line vertical button label on the receive screen. Newline must be preserved."
+  },
+  "receiveActionImportKey": "Import\nKey",
+  "@receiveActionImportKey": {
+    "description": "Two-line vertical button label on the receive screen. Newline must be preserved."
+  },
+  "receiveRescanDialogTitle": "Rescan Blocks?",
+  "@receiveRescanDialogTitle": {
+    "description": "Confirmation dialog title asking whether to rescan the chain after importing a key."
+  },
+  "receiveRescanDialogBody": "Would you like to rescan the chain to include any transactions relevant to this key?",
+  "@receiveRescanDialogBody": {
+    "description": "Confirmation dialog body explaining the rescan prompt."
+  },
+  "receiveBtcAccountCreatedTitle": "BTC Account Created",
+  "@receiveBtcAccountCreatedTitle": {
+    "description": "Dialog title shown after a new BTC account is generated."
+  },
+  "receiveBtcAccountCreatedBody": "Here are your BTC account details. Please ensure to back up your private key in a safe place.",
+  "@receiveBtcAccountCreatedBody": {
+    "description": "Body text urging the user to back up the newly generated BTC private key."
+  },
+  "receiveBtcImportKeyDialogTitle": "Import BTC Private Key",
+  "@receiveBtcImportKeyDialogTitle": {
+    "description": "Dialog title for the BTC private key import form."
+  },
+  "receiveBtcImportKeyDialogBody": "Paste in your BTC private key to import your account.",
+  "@receiveBtcImportKeyDialogBody": {
+    "description": "Instruction in the BTC private key import dialog."
+  },
+
+  "txAppBarAll": "All Transactions",
+  "@txAppBarAll": {
+    "description": "Transactions screen title when viewing both VFX and BTC."
+  },
+  "txAppBarVfx": "VFX Transactions",
+  "@txAppBarVfx": {
+    "description": "Transactions screen title when filtered to VFX."
+  },
+  "txAppBarBtc": "BTC Transactions",
+  "@txAppBarBtc": {
+    "description": "Transactions screen title when filtered to BTC."
+  },
+  "txTabAll": "All",
+  "@txTabAll": {
+    "description": "Transactions tab label for the full list."
+  },
+  "txTabPending": "Pending",
+  "@txTabPending": {
+    "description": "Transactions tab label for pending transactions."
+  },
+  "txTabSuccessful": "Successful",
+  "@txTabSuccessful": {
+    "description": "Transactions tab label for successful transactions."
+  },
+  "txTabFailed": "Failed",
+  "@txTabFailed": {
+    "description": "Transactions tab label for failed transactions."
+  },
+  "txTabVaulted": "Vaulted",
+  "@txTabVaulted": {
+    "description": "Transactions tab label for Vault-account transactions."
+  },
+  "txTabTransactions": "Transactions",
+  "@txTabTransactions": {
+    "description": "BTC transactions tab label (sibling of 'Inputs')."
+  },
+  "txTabInputs": "Inputs",
+  "@txTabInputs": {
+    "description": "BTC inputs (UTXO) tab label."
+  },
+
+  "homeKeysHeading": "Keys",
+  "@homeKeysHeading": {
+    "description": "Web-only section heading above the keygen CTA on the dashboard."
+  },
+  "homeActionSendCoin": "Send\nCoin",
+  "@homeActionSendCoin": {
+    "description": "Two-line vertical button label on the dashboard common actions. Newline must be preserved."
+  },
+  "homeActionReceiveCoin": "Receive\nCoin",
+  "@homeActionReceiveCoin": {
+    "description": "Two-line vertical button label on the dashboard common actions. Newline must be preserved."
+  },
+  "homeActionTxs": "TXs",
+  "@homeActionTxs": {
+    "description": "Abbreviated label for the transactions shortcut tile on the dashboard. Kept short to fit a tight tile."
+  },
+  "homeGetVfxBtcCta": "Get $VFX/$BTC Now",
+  "@homeGetVfxBtcCta": {
+    "description": "Call-to-action button on the dashboard that opens the buy/faucet options."
+  },
+  "homeGetVfxCta": "Get $VFX",
+  "@homeGetVfxCta": {
+    "description": "Shortened CTA variant for the dashboard (VFX only)."
+  },
+
+  "configAppBarTitle": "CLI Configuration",
+  "@configAppBarTitle": {
+    "description": "App bar title for the advanced CLI configuration screen."
+  },
+  "configCloseDialogTitle": "Are you sure you want to close the configuration screen?",
+  "@configCloseDialogTitle": {
+    "description": "Confirm dialog title when the user tries to close the config screen with unsaved changes."
+  },
+  "configCloseDialogBody": "All unsaved changes will be lost.",
+  "@configCloseDialogBody": {
+    "description": "Confirm dialog body warning that unsaved config changes are lost on close."
+  },
+  "configButtonOpenConfig": "Open Config",
+  "@configButtonOpenConfig": {
+    "description": "App bar action to open the raw config file in the OS file viewer."
+  },
+  "configButtonViewDocs": "View Docs",
+  "@configButtonViewDocs": {
+    "description": "App bar action to open the external config documentation URL."
+  },
+  "configWarningAdvanced": "Warning: These are advanced options. Proceed with caution.",
+  "@configWarningAdvanced": {
+    "description": "Warning banner above the advanced CLI config form."
+  },
+  "configRestartRequiredToast": "CLI restart is required for changes to propagate.",
+  "@configRestartRequiredToast": {
+    "description": "Toast shown after saving config changes that require a CLI restart."
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/components/currency_segmented_button.dart';
 import '../../../core/providers/session_provider.dart';
@@ -26,7 +27,7 @@ class SendScreen extends BaseScreen {
     final isBtc = ref.watch(sessionProvider.select((v) => v.btcSelected));
 
     return AppBar(
-      title: Text("Send ${isBtc ? 'BTC' : 'VFX'}"),
+      title: Text(AppLocalizations.of(context).sendAppBarTitle(isBtc ? 'BTC' : 'VFX')),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // leading: BackToHomeButton(),
@@ -53,7 +54,7 @@ class SendScreen extends BaseScreen {
               : null;
 
           if (currentWallet == null && currentBtcAccount == null) {
-            return const InvalidWallet(message: "No account selected");
+            return InvalidWallet(message: AppLocalizations.of(context).messageNoAccountSelected);
           }
           return Column(
             children: [
@@ -73,7 +74,7 @@ class SendScreen extends BaseScreen {
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: AppButton(
-                        label: 'Create Payment Link',
+                        label: AppLocalizations.of(context).sendPaymentLinkCta,
                         variant: AppColorVariant.Secondary,
                         type: AppButtonType.Outlined,
                         onPressed: () {

@@ -23,6 +23,7 @@ import '../../nft/services/nft_service.dart';
 import '../../token/providers/token_list_provider.dart';
 
 import '../../../core/theme/pretty_icons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'home_buttons/verify_nft_ownership_button.dart';
 
 class CommonActions extends BaseComponent {
@@ -66,7 +67,7 @@ class CommonActions extends BaseComponent {
               //   color: AppColors.getWhite(ColorShade.s200),
               // ),
               AppVerticalIconButton(
-                label: "Send\nCoin",
+                label: AppLocalizations.of(context).homeActionSendCoin,
                 prettyIconType: PrettyIconType.send,
                 icon: Icons.arrow_upward,
                 onPressed: () {
@@ -75,7 +76,7 @@ class CommonActions extends BaseComponent {
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
-                label: "Receive\nCoin",
+                label: AppLocalizations.of(context).homeActionReceiveCoin,
                 icon: Icons.arrow_downward,
                 prettyIconType: PrettyIconType.receive,
                 onPressed: () {
@@ -84,7 +85,7 @@ class CommonActions extends BaseComponent {
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
-                label: "TXs",
+                label: AppLocalizations.of(context).homeActionTxs,
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {

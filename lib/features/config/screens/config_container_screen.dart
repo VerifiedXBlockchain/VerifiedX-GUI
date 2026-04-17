@@ -12,6 +12,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/files.dart';
@@ -27,14 +28,14 @@ class ConfigContainerScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final provider = ref.read(configFormProvider.notifier);
     return AppBar(
-      title: const Text("CLI Configuration"),
+      title: Text(AppLocalizations.of(context).configAppBarTitle),
       leading: IconButton(
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
-            title: "Are you sure you want to close the configuration screen?",
-            body: "All unsaved changes will be lost.",
-            cancelText: "Cancel",
-            confirmText: "Continue",
+            title: AppLocalizations.of(context).configCloseDialogTitle,
+            body: AppLocalizations.of(context).configCloseDialogBody,
+            cancelText: AppLocalizations.of(context).actionCancel,
+            confirmText: AppLocalizations.of(context).actionContinue,
           );
 
           if (confirmed == true) {
@@ -51,7 +52,7 @@ class ConfigContainerScreen extends BaseScreen {
             final p = await configPath();
             openFile(File(p));
           },
-          label: "Open Config",
+          label: AppLocalizations.of(context).configButtonOpenConfig,
           type: AppButtonType.Text,
           variant: AppColorVariant.Light,
           icon: Icons.launch,
@@ -60,7 +61,7 @@ class ConfigContainerScreen extends BaseScreen {
           onPressed: () {
             launchUrl(Uri.parse('https://github.com/ReserveBlockIO/ReserveBlock-Core/blob/main/ConfigSetup.md'));
           },
-          label: "View Docs",
+          label: AppLocalizations.of(context).configButtonViewDocs,
           type: AppButtonType.Text,
           variant: AppColorVariant.Light,
           icon: Icons.launch,
@@ -87,8 +88,8 @@ class ConfigContainerScreen extends BaseScreen {
             const SizedBox(
               width: 8,
             ),
-            const Text("Warning: These are advanced options. Proceed with caution.",
-                style: TextStyle(
+            Text(AppLocalizations.of(context).configWarningAdvanced,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 )),
@@ -129,12 +130,12 @@ class ConfigContainerScreen extends BaseScreen {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 AppButton(
-                  label: 'Save',
+                  label: AppLocalizations.of(context).actionSave,
                   variant: AppColorVariant.Success,
                   onPressed: () async {
                     final shouldRestart = await provider.submit();
                     if (!shouldRestart) {
-                      Toast.message("CLI restart is required for changes to propagate.");
+                      Toast.message(AppLocalizations.of(context).configRestartRequiredToast);
                     }
                     AutoRouter.of(context).pop();
                   },

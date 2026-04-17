@@ -23,6 +23,7 @@ import '../../wallet/providers/wallet_list_provider.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/breakpoints.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/web_session_provider.dart';
@@ -54,13 +55,13 @@ class SendForm extends BaseComponent {
     super.key,
   });
 
-  Future<void> _pasteAddress(SendFormProvider formProvider) async {
+  Future<void> _pasteAddress(BuildContext context, SendFormProvider formProvider) async {
     ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData != null && clipboardData.text != null) {
       final normalizedText = clipboardData.text!.replaceAll(RegExp('[^a-zA-Z0-9]'), "");
       formProvider.addressController.text = normalizedText;
     } else {
-      Toast.error("Clipboard text is invalid");
+      Toast.error(AppLocalizations.of(context).messageClipboardInvalid);
     }
   }
 
@@ -78,15 +79,15 @@ class SendForm extends BaseComponent {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Choose an address"),
+            title: Text(AppLocalizations.of(context).sendChooseAddressTitle),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(null);
                 },
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.white60),
+                child: Text(
+                  AppLocalizations.of(context).actionCancel,
+                  style: const TextStyle(color: Colors.white60),
                 ),
               )
             ],
@@ -126,10 +127,10 @@ class SendForm extends BaseComponent {
     final formProvider = ref.read(sendFormProvider.notifier);
     final formState = ref.watch(sendFormProvider);
 
-    String pasteMessage = "Use ctrl+v to paste or click ";
+    String pasteMessage = AppLocalizations.of(context).sendPasteHelperCtrl;
 
     if (!kIsWeb && Platform.isMacOS) {
-      pasteMessage = pasteMessage.replaceAll("ctrl+v", "cmd+v");
+      pasteMessage = AppLocalizations.of(context).sendPasteHelperCmd;
     }
 
     final isMobile = BreakPoints.useMobileLayout(context);
@@ -185,7 +186,7 @@ class SendForm extends BaseComponent {
                     if (!BreakPoints.useMobileLayout(context))
                       SizedBox(
                         width: 72,
-                        child: Text("From:"),
+                        child: Text(AppLocalizations.of(context).sendFormLabelFrom),
                       ),
                     Expanded(
                       child: Column(
@@ -193,7 +194,7 @@ class SendForm extends BaseComponent {
                         children: [
                           if (!isBtc && wallet!.isReserved && !wallet!.isNetworkProtected)
                             AppBadge(
-                              label: 'Not Activated',
+                              label: AppLocalizations.of(context).sendBadgeNotActivated,
                               variant: AppColorVariant.Danger,
                             ),
                           Row(
@@ -308,19 +309,19 @@ class SendForm extends BaseComponent {
                                 ),
                               if (lockedBalance > 0) ...[
                                 BalanceIndicator(
-                                  label: "Available",
+                                  label: AppLocalizations.of(context).labelAvailable,
                                   value: balance,
                                   bgColor: wallet!.isReserved ? Colors.deepPurple.shade400 : Colors.white,
                                   fgColor: wallet!.isReserved ? Colors.white : Colors.black,
                                 ),
                                 BalanceIndicator(
-                                  label: "Locked",
+                                  label: AppLocalizations.of(context).labelLocked,
                                   value: lockedBalance,
                                   bgColor: Colors.red.shade700,
                                   fgColor: Colors.white,
                                 ),
                                 BalanceIndicator(
-                                  label: "Total",
+                                  label: AppLocalizations.of(context).labelTotal,
                                   value: totalBalance,
                                   bgColor: Colors.green.shade700,
                                   fgColor: Colors.white,
@@ -346,19 +347,19 @@ class SendForm extends BaseComponent {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   BalanceIndicator(
-                                    label: "Available",
+                                    label: AppLocalizations.of(context).labelAvailable,
                                     value: wallet!.availableBalance,
                                     bgColor: wallet!.isReserved ? Colors.deepPurple.shade400 : Colors.white,
                                     fgColor: wallet!.isReserved ? Colors.white : Colors.black,
                                   ),
                                   BalanceIndicator(
-                                    label: "Locked",
+                                    label: AppLocalizations.of(context).labelLocked,
                                     value: wallet!.lockedBalance,
                                     bgColor: Colors.red.shade700,
                                     fgColor: Colors.white,
                                   ),
                                   BalanceIndicator(
-                                    label: "Total",
+                                    label: AppLocalizations.of(context).labelTotal,
                                     value: wallet!.balance,
                                     bgColor: Colors.green.shade700,
                                     fgColor: Colors.white,
@@ -369,11 +370,11 @@ class SendForm extends BaseComponent {
                 ),
               ),
               ListTile(
-                leading: isMobile ? null : const SizedBox(width: leadingWidth, child: Text("To:")),
+                leading: isMobile ? null : SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelTo)),
                 title: TextFormField(
                   controller: formProvider.addressController,
                   validator: formProvider.addressValidator,
-                  decoration: const InputDecoration(hintText: "Recipient's Account Address"),
+                  decoration: InputDecoration(hintText: AppLocalizations.of(context).sendRecipientHint),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
                   ],
@@ -386,10 +387,10 @@ class SendForm extends BaseComponent {
                       Text(pasteMessage),
                       InkWell(
                         onTap: () {
-                          _pasteAddress(formProvider);
+                          _pasteAddress(context, formProvider);
                         },
                         child: Text(
-                          "here",
+                          AppLocalizations.of(context).sendPasteHelperHereLink,
                           style: TextStyle(
                             decoration: TextDecoration.underline,
                             color: Theme.of(context).colorScheme.secondary,
@@ -409,7 +410,7 @@ class SendForm extends BaseComponent {
                             type: PrettyIconType.custom,
                             customIcon: Icons.paste,
                             onPressed: () {
-                              _pasteAddress(formProvider);
+                              _pasteAddress(context, formProvider);
                             },
                           ),
                           if (!kIsWeb)
@@ -425,13 +426,13 @@ class SendForm extends BaseComponent {
                       ),
               ),
               ListTile(
-                leading: isMobile ? null : const SizedBox(width: leadingWidth, child: Text("Amount:")),
+                leading: isMobile ? null : SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelAmount)),
                 title: TextFormField(
                   controller: formProvider.amountController,
                   validator: formProvider.amountValidator,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
                   decoration: InputDecoration(
-                      hintText: "Amount of ${isBtc ? 'BTC' : 'VFX'} to send",
+                      hintText: AppLocalizations.of(context).sendAmountHint(isBtc ? 'BTC' : 'VFX'),
                       helperText: formState.usdValue > 0 ? "\$${formState.usdValue.toStringAsFixed(2)} USD" : null),
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 ),
@@ -472,7 +473,7 @@ class SendForm extends BaseComponent {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        leading: const SizedBox(width: leadingWidth, child: Text("Fee Rate:")),
+                        leading: SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelFeeRate)),
                         title: Row(
                           children: [
                             PopupMenuButton<BtcFeeRatePreset>(
@@ -545,7 +546,7 @@ class SendForm extends BaseComponent {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     AppButton(
-                      label: "Clear",
+                      label: AppLocalizations.of(context).actionClear,
                       type: AppButtonType.Text,
                       variant: AppColorVariant.Info,
                       onPressed: () {
@@ -555,7 +556,7 @@ class SendForm extends BaseComponent {
                     ),
                     Consumer(builder: (context, ref, _) {
                       return AppButton(
-                        label: "Send",
+                        label: AppLocalizations.of(context).actionSend,
                         type: AppButtonType.Elevated,
                         variant: isBtc ? AppColorVariant.Btc : AppColorVariant.Primary,
                         processing: formState.isProcessing,
