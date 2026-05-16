@@ -8,6 +8,7 @@ import '../../../core/storage.dart';
 import '../models/shielded_address.dart';
 import '../services/privacy_service.dart';
 import 'shielded_balance_provider.dart';
+import 'shielded_vbtc_balance_provider.dart';
 
 const _storageKey = "PRISM_ZFX_ADDRESS";
 
@@ -73,6 +74,7 @@ class ShieldedAddressNotifier extends StateNotifier<ShieldedAddress?> {
     state = null;
     singleton<Storage>().remove(_storageKey);
     ref.read(shieldedBalanceProvider.notifier).stop();
+    ref.read(shieldedVbtcBalanceProvider.notifier).stopAll();
   }
 
   void _setPasswordAndStartTimer(String password) {

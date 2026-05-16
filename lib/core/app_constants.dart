@@ -3,13 +3,14 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "5.3.2";
+const APP_V = "6.0.0";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
 const ALLOW_PAYMENT = true;
 const BUTTERFLY_ENABLED = true;
+const VALIDATOR_NAV_ENABLED = false;
 
 const REFRESH_TIMEOUT_SECONDS = 30;
 const REFRESH_TIMEOUT_SECONDS_WEB_BTC = 90;

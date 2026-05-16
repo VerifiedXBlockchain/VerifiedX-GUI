@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../privacy/providers/local_privacy_tx_provider.dart';
 import '../../validator/providers/validating_status_provider.dart';
 import '../models/transaction.dart';
 import '../services/local_transaction_service.dart';
@@ -35,7 +36,7 @@ class TransactionListProvider extends StateNotifier<List<Transaction>> {
     if (kIsWeb) {
       return;
     }
-    late final List<Transaction> transactions;
+    late List<Transaction> transactions;
 
     switch (type) {
       case TransactionListType.All:
@@ -56,6 +57,16 @@ class TransactionListProvider extends StateNotifier<List<Transaction>> {
       case TransactionListType.Reserved:
         transactions = await LocalTransactionService().transactionsReserved();
         break;
+    }
+
+    // Merge locally-tracked privacy transactions that the CLI doesn't report yet.
+    if (type == TransactionListType.All) {
+      final cliHashes = transactions.map((t) => t.hash).toSet();
+      ref.read(localPrivacyTxProvider.notifier).removeIfPresent(cliHashes);
+      final localTxs = ref.read(localPrivacyTxProvider);
+      if (localTxs.isNotEmpty) {
+        transactions = [...localTxs.where((t) => !cliHashes.contains(t.hash)), ...transactions];
+      }
     }
 
     state = transactions;

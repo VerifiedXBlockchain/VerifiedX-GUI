@@ -7,6 +7,7 @@ import '../services/privacy_service.dart';
 
 class ShieldedVbtcBalanceManager extends StateNotifier<Map<String, ShieldedBalance?>> {
   final Map<String, Timer> _timers = {};
+  final Map<String, DateTime> _optimisticUntil = {};
   String? _zfxAddress;
 
   ShieldedVbtcBalanceManager() : super({});
@@ -29,13 +30,36 @@ class ShieldedVbtcBalanceManager extends StateNotifier<Map<String, ShieldedBalan
       includeCommitments: true,
     );
     if (balance != null) {
+      final guard = _optimisticUntil[contractUid];
+      if (guard != null && DateTime.now().isBefore(guard)) {
+        final currentBalance = state[contractUid];
+        if (balance.vbtcBalance(contractUid) <= 0 &&
+            (currentBalance?.vbtcBalance(contractUid) ?? 0) > 0) {
+          return;
+        }
+        _optimisticUntil.remove(contractUid);
+      }
       state = {...state, contractUid: balance};
     }
+  }
+
+  /// Optimistically adjusts the displayed vBTC balance for [contractUid] by
+  /// [delta]. Prevents the next few fetches from overwriting with a transient zero.
+  void optimisticAdjust(String contractUid, double delta) {
+    final current = state[contractUid];
+    if (current == null) return;
+    final currentVbtc = current.vbtcBalance(contractUid);
+    final newVbtc = (currentVbtc + delta).clamp(0.0, double.infinity);
+    final updatedBalances = Map<String, double>.from(current.shieldedBalances);
+    updatedBalances[contractUid] = newVbtc;
+    state = {...state, contractUid: current.copyWith(shieldedBalances: updatedBalances)};
+    _optimisticUntil[contractUid] = DateTime.now().add(const Duration(seconds: 90));
   }
 
   void stop(String contractUid) {
     _timers[contractUid]?.cancel();
     _timers.remove(contractUid);
+    _optimisticUntil.remove(contractUid);
     final updated = Map<String, ShieldedBalance?>.from(state);
     updated.remove(contractUid);
     state = updated;
@@ -46,6 +70,7 @@ class ShieldedVbtcBalanceManager extends StateNotifier<Map<String, ShieldedBalan
       timer.cancel();
     }
     _timers.clear();
+    _optimisticUntil.clear();
     _zfxAddress = null;
     state = {};
   }

@@ -1,7 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app_constants.dart';
 import '../../../utils/toast.dart';
+import '../../transactions/models/transaction.dart';
+import '../../transactions/providers/transaction_list_provider.dart';
 import '../services/privacy_service.dart';
+import 'local_privacy_tx_provider.dart';
 import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
 
@@ -28,6 +32,35 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     }
   }
 
+  void _injectLocalTx({
+    required String hash,
+    required String fromAddress,
+    required String toAddress,
+    required double amount,
+    required int type,
+  }) {
+    final tx = Transaction(
+      hash: hash,
+      fromAddress: fromAddress,
+      toAddress: toAddress,
+      amount: amount,
+      type: type,
+      status: TransactionStatus.Pending,
+      nonce: 0,
+      fee: PRIVACY_TX_FIXED_FEE,
+      timestamp: (DateTime.now().millisecondsSinceEpoch / 1000).round(),
+      nftData: null,
+      height: 0,
+    );
+    // Persist in the local privacy tx store so it survives list reloads.
+    ref.read(localPrivacyTxProvider.notifier).add(tx);
+    // Also inject immediately into the current list state for instant feedback.
+    ref.read(transactionListProvider(TransactionListType.All).notifier).set([
+      tx,
+      ...ref.read(transactionListProvider(TransactionListType.All)),
+    ]);
+  }
+
   Future<bool> shield({
     required String fromAddress,
     required double amount,
@@ -35,14 +68,25 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
   }) async {
     state = true;
     try {
-      await PrivacyService().shieldVfx(
+      final result = await PrivacyService().shieldVfx(
         fromAddress: fromAddress,
         amount: amount,
         recipientZfxAddress: recipientZfxAddress,
       );
 
       Toast.message("Shield transaction broadcast successfully");
-      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(amount);
+
+      final hash = result['Hash'] as String?;
+      if (hash != null) {
+        _injectLocalTx(
+          hash: hash,
+          fromAddress: fromAddress,
+          toAddress: recipientZfxAddress,
+          amount: amount,
+          type: TxType.vfxShield,
+        );
+      }
       return true;
     } catch (e) {
       Toast.error("Shield failed: $e");
@@ -64,7 +108,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     _resetTimer();
     state = true;
     try {
-      await PrivacyService().unshieldVfx(
+      final result = await PrivacyService().unshieldVfx(
         zfxAddress: zfxAddress,
         toAddress: toAddress,
         amount: amount,
@@ -72,7 +116,18 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       );
 
       Toast.message("Unshield transaction broadcast successfully");
-      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-(amount + PRIVACY_TX_FIXED_FEE));
+
+      final hash = result['Hash'] as String?;
+      if (hash != null) {
+        _injectLocalTx(
+          hash: hash,
+          fromAddress: zfxAddress,
+          toAddress: toAddress,
+          amount: amount,
+          type: TxType.vfxUnshield,
+        );
+      }
       return true;
     } catch (e) {
       _handleAuthError(e);
@@ -95,7 +150,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     _resetTimer();
     state = true;
     try {
-      await PrivacyService().privateTransferVfx(
+      final result = await PrivacyService().privateTransferVfx(
         zfxAddress: zfxAddress,
         recipientZfxAddress: recipientZfxAddress,
         amount: amount,
@@ -103,7 +158,18 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       );
 
       Toast.message("Private transfer broadcast successfully");
-      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-(amount + PRIVACY_TX_FIXED_FEE));
+
+      final hash = result['Hash'] as String?;
+      if (hash != null) {
+        _injectLocalTx(
+          hash: hash,
+          fromAddress: zfxAddress,
+          toAddress: recipientZfxAddress,
+          amount: amount,
+          type: TxType.vfxPrivateTransfer,
+        );
+      }
       return true;
     } catch (e) {
       _handleAuthError(e);
@@ -130,7 +196,9 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       );
 
       Toast.message("Consolidation broadcast successfully");
-      await ref.read(shieldedBalanceProvider.notifier).fetch();
+      // Balance stays the same during consolidation — just apply a zero delta
+      // to activate the optimistic guard against transient zero fetches.
+      ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(0);
       return true;
     } catch (e) {
       _handleAuthError(e);

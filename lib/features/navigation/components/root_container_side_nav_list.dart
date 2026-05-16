@@ -301,7 +301,7 @@ class RootContainerSideNavList extends BaseComponent {
                 tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.shop : 9),
             isExpanded: isExpanded,
           ),
-          if (!kIsWeb)
+          if (!kIsWeb && VALIDATOR_NAV_ENABLED)
             RootContainerSideNavItem(
               title: "Validator",
               iconType: PrettyIconType.validator,

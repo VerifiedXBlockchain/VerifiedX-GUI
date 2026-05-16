@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../btc/providers/tokenized_bitcoin_list_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 
+import '../../../../core/app_constants.dart';
 import '../../../../core/base_component.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../generated/assets.gen.dart';
@@ -220,7 +221,7 @@ class MainMenu extends BaseComponent {
                     },
                     isActive: tabsRouter.activeIndex == 3,
                   ),
-                  if (!kIsWeb)
+                  if (!kIsWeb && VALIDATOR_NAV_ENABLED)
                     _NavButton(
                       title: "Validator",
                       icon: Icons.check_circle,

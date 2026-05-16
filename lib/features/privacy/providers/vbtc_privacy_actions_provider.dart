@@ -2,7 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../utils/toast.dart';
+import '../../transactions/models/transaction.dart';
+import '../../transactions/providers/transaction_list_provider.dart';
 import '../services/privacy_service.dart';
+import 'local_privacy_tx_provider.dart';
 import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
 import 'shielded_vbtc_balance_provider.dart';
@@ -30,6 +33,33 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
     }
   }
 
+  void _injectLocalTx({
+    required String hash,
+    required String fromAddress,
+    required String toAddress,
+    required double amount,
+    required int type,
+  }) {
+    final tx = Transaction(
+      hash: hash,
+      fromAddress: fromAddress,
+      toAddress: toAddress,
+      amount: amount,
+      type: type,
+      status: TransactionStatus.Pending,
+      nonce: 0,
+      fee: PRIVACY_TX_FIXED_FEE,
+      timestamp: (DateTime.now().millisecondsSinceEpoch / 1000).round(),
+      nftData: null,
+      height: 0,
+    );
+    ref.read(localPrivacyTxProvider.notifier).add(tx);
+    ref.read(transactionListProvider(TransactionListType.All).notifier).set([
+      tx,
+      ...ref.read(transactionListProvider(TransactionListType.All)),
+    ]);
+  }
+
   /// Checks that the user has enough shielded VFX to cover the privacy tx fee.
   /// Returns true if sufficient, false otherwise.
   bool _hasVfxFeeBalance() {
@@ -48,7 +78,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
   }) async {
     state = true;
     try {
-      await PrivacyService().shieldVbtc(
+      final result = await PrivacyService().shieldVbtc(
         fromAddress: fromAddress,
         vbtcContractUid: vbtcContractUid,
         vbtcAmount: vbtcAmount,
@@ -56,7 +86,18 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       );
 
       Toast.message("vBTC shield transaction broadcast successfully");
-      await ref.read(shieldedVbtcBalanceProvider.notifier).fetch(vbtcContractUid);
+      ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, vbtcAmount);
+
+      final hash = result['Hash'] as String?;
+      if (hash != null) {
+        _injectLocalTx(
+          hash: hash,
+          fromAddress: fromAddress,
+          toAddress: recipientZfxAddress,
+          amount: vbtcAmount,
+          type: TxType.vbtcV2Shield,
+        );
+      }
       return true;
     } catch (e) {
       Toast.error("vBTC shield failed: $e");
@@ -83,7 +124,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
     _resetTimer();
     state = true;
     try {
-      await PrivacyService().unshieldVbtc(
+      final result = await PrivacyService().unshieldVbtc(
         zfxAddress: zfxAddress,
         walletPassword: _password!,
         vbtcContractUid: vbtcContractUid,
@@ -92,10 +133,19 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       );
 
       Toast.message("vBTC unshield transaction broadcast successfully");
-      await Future.wait([
-        ref.read(shieldedVbtcBalanceProvider.notifier).fetch(vbtcContractUid),
-        ref.read(shieldedBalanceProvider.notifier).fetch(),
-      ]);
+      ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, -vbtcAmount);
+      ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-PRIVACY_TX_FIXED_FEE);
+
+      final hash = result['Hash'] as String?;
+      if (hash != null) {
+        _injectLocalTx(
+          hash: hash,
+          fromAddress: zfxAddress,
+          toAddress: toAddress,
+          amount: vbtcAmount,
+          type: TxType.vbtcV2Unshield,
+        );
+      }
       return true;
     } catch (e) {
       _handleAuthError(e);
@@ -123,7 +173,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
     _resetTimer();
     state = true;
     try {
-      await PrivacyService().privateTransferVbtc(
+      final result = await PrivacyService().privateTransferVbtc(
         zfxAddress: zfxAddress,
         walletPassword: _password!,
         vbtcContractUid: vbtcContractUid,
@@ -132,10 +182,19 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       );
 
       Toast.message("vBTC private transfer broadcast successfully");
-      await Future.wait([
-        ref.read(shieldedVbtcBalanceProvider.notifier).fetch(vbtcContractUid),
-        ref.read(shieldedBalanceProvider.notifier).fetch(),
-      ]);
+      ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, -amount);
+      ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-PRIVACY_TX_FIXED_FEE);
+
+      final hash = result['Hash'] as String?;
+      if (hash != null) {
+        _injectLocalTx(
+          hash: hash,
+          fromAddress: zfxAddress,
+          toAddress: recipientZfxAddress,
+          amount: amount,
+          type: TxType.vbtcV2PrivateTransfer,
+        );
+      }
       return true;
     } catch (e) {
       _handleAuthError(e);
@@ -161,17 +220,26 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
     _resetTimer();
     state = true;
     try {
-      await PrivacyService().consolidateVbtc(
+      final result = await PrivacyService().consolidateVbtc(
         zfxAddress: zfxAddress,
         walletPassword: _password!,
         vbtcContractUid: vbtcContractUid,
       );
 
       Toast.message("vBTC consolidation broadcast successfully");
-      await Future.wait([
-        ref.read(shieldedVbtcBalanceProvider.notifier).fetch(vbtcContractUid),
-        ref.read(shieldedBalanceProvider.notifier).fetch(),
-      ]);
+      ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, 0);
+      ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-PRIVACY_TX_FIXED_FEE);
+
+      final hash = result['Hash'] as String?;
+      if (hash != null) {
+        _injectLocalTx(
+          hash: hash,
+          fromAddress: zfxAddress,
+          toAddress: zfxAddress,
+          amount: 0,
+          type: TxType.vbtcV2PrivateTransfer,
+        );
+      }
       return true;
     } catch (e) {
       _handleAuthError(e);
