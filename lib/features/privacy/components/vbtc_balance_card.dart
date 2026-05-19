@@ -77,7 +77,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.token.tokenName,
+                widget.token.tokenName.replaceAll(RegExp(r'\s*[Vv]2\s*'), ' ').trim(),
                 style: TextStyle(
                   color: AppColors.getBtc(),
                   fontSize: 12,
@@ -101,7 +101,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Text(
-                      "${balance.unspentSum} vBTC",
+                      "${balance.vbtcBalance(widget.token.smartContractUid)} vBTC",
                       style: TextStyle(
                         color: AppColors.getBtc(),
                         fontSize: 22,
@@ -143,7 +143,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
           child: AppButton(
             label: "Shield",
             icon: Icons.arrow_downward,
-            variant: AppColorVariant.Btc,
+            variant: AppColorVariant.Success,
             onPressed: widget.onShield,
           ),
         ),
@@ -161,7 +161,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
           child: AppButton(
             label: "Transfer",
             icon: Icons.send,
-            variant: AppColorVariant.Btc,
+            variant: AppColorVariant.Prism,
             onPressed: widget.onTransfer,
           ),
         ),

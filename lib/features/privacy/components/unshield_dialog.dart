@@ -6,6 +6,8 @@ import '../../../core/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
+import '../../wallet/providers/wallet_list_provider.dart';
 import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
 import '../utils/vfx_fee_guard.dart';
@@ -34,6 +36,46 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
     _toAddressController.dispose();
     _amountController.dispose();
     super.dispose();
+  }
+
+  void _showAddressPicker() {
+    final wallets = ref.read(walletListProvider);
+    if (wallets.isEmpty) {
+      Toast.error("No accounts found");
+      return;
+    }
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => ModalContainer(
+        title: "Select Account",
+        withClose: true,
+        children: wallets.map((wallet) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 4),
+            child: ListTile(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              tileColor: Colors.white.withOpacity(0.03),
+              leading: const Icon(Icons.account_balance_wallet, size: 18, color: Colors.white54),
+              title: Text(
+                wallet.adnr != null ? "${wallet.adnr}.vfx" : wallet.address,
+                style: const TextStyle(fontSize: 13),
+              ),
+              subtitle: wallet.adnr != null
+                  ? Text(wallet.address, style: const TextStyle(fontSize: 11, color: Colors.white38, fontFamily: 'monospace'))
+                  : null,
+              trailing: Text(
+                "${wallet.balance} VFX",
+                style: const TextStyle(fontSize: 12, color: Colors.white54),
+              ),
+              onTap: () {
+                _toAddressController.text = wallet.address;
+                Navigator.of(context).pop();
+              },
+            ),
+          );
+        }).toList(),
+      ),
+    );
   }
 
   Future<void> _submit() async {
@@ -88,10 +130,15 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
             const SizedBox(height: 16),
             TextField(
               controller: _toAddressController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: "To Address (transparent)",
                 hintText: "Enter VFX address",
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.account_balance_wallet, size: 20),
+                  tooltip: "Select from my accounts",
+                  onPressed: _isSubmitting ? null : () => _showAddressPicker(),
+                ),
               ),
               enabled: !_isSubmitting,
             ),

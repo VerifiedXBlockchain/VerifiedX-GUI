@@ -33,7 +33,11 @@ mixin _$ShieldedBalance {
   bool get isViewOnly => throw _privateConstructorUsedError;
   @JsonKey(name: "Commitments")
   List<ShieldedCommitment>? get commitments =>
-      throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; // vBTC-specific fields (GetShieldedVbtcBalance returns a different shape)
+  @JsonKey(name: "ShieldedVbtcBalance")
+  double get shieldedVbtcBalance => throw _privateConstructorUsedError;
+  @JsonKey(name: "VbtcContractUid")
+  String? get vbtcContractUid => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -53,7 +57,9 @@ abstract class $ShieldedBalanceCopyWith<$Res> {
       @JsonKey(name: "UnspentSum") double unspentSum,
       @JsonKey(name: "LastScannedBlock") int lastScannedBlock,
       @JsonKey(name: "IsViewOnly") bool isViewOnly,
-      @JsonKey(name: "Commitments") List<ShieldedCommitment>? commitments});
+      @JsonKey(name: "Commitments") List<ShieldedCommitment>? commitments,
+      @JsonKey(name: "ShieldedVbtcBalance") double shieldedVbtcBalance,
+      @JsonKey(name: "VbtcContractUid") String? vbtcContractUid});
 }
 
 /// @nodoc
@@ -75,6 +81,8 @@ class _$ShieldedBalanceCopyWithImpl<$Res, $Val extends ShieldedBalance>
     Object? lastScannedBlock = null,
     Object? isViewOnly = null,
     Object? commitments = freezed,
+    Object? shieldedVbtcBalance = null,
+    Object? vbtcContractUid = freezed,
   }) {
     return _then(_value.copyWith(
       shieldedBalances: null == shieldedBalances
@@ -101,6 +109,14 @@ class _$ShieldedBalanceCopyWithImpl<$Res, $Val extends ShieldedBalance>
           ? _value.commitments
           : commitments // ignore: cast_nullable_to_non_nullable
               as List<ShieldedCommitment>?,
+      shieldedVbtcBalance: null == shieldedVbtcBalance
+          ? _value.shieldedVbtcBalance
+          : shieldedVbtcBalance // ignore: cast_nullable_to_non_nullable
+              as double,
+      vbtcContractUid: freezed == vbtcContractUid
+          ? _value.vbtcContractUid
+          : vbtcContractUid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -119,7 +135,9 @@ abstract class _$$_ShieldedBalanceCopyWith<$Res>
       @JsonKey(name: "UnspentSum") double unspentSum,
       @JsonKey(name: "LastScannedBlock") int lastScannedBlock,
       @JsonKey(name: "IsViewOnly") bool isViewOnly,
-      @JsonKey(name: "Commitments") List<ShieldedCommitment>? commitments});
+      @JsonKey(name: "Commitments") List<ShieldedCommitment>? commitments,
+      @JsonKey(name: "ShieldedVbtcBalance") double shieldedVbtcBalance,
+      @JsonKey(name: "VbtcContractUid") String? vbtcContractUid});
 }
 
 /// @nodoc
@@ -139,6 +157,8 @@ class __$$_ShieldedBalanceCopyWithImpl<$Res>
     Object? lastScannedBlock = null,
     Object? isViewOnly = null,
     Object? commitments = freezed,
+    Object? shieldedVbtcBalance = null,
+    Object? vbtcContractUid = freezed,
   }) {
     return _then(_$_ShieldedBalance(
       shieldedBalances: null == shieldedBalances
@@ -165,6 +185,14 @@ class __$$_ShieldedBalanceCopyWithImpl<$Res>
           ? _value._commitments
           : commitments // ignore: cast_nullable_to_non_nullable
               as List<ShieldedCommitment>?,
+      shieldedVbtcBalance: null == shieldedVbtcBalance
+          ? _value.shieldedVbtcBalance
+          : shieldedVbtcBalance // ignore: cast_nullable_to_non_nullable
+              as double,
+      vbtcContractUid: freezed == vbtcContractUid
+          ? _value.vbtcContractUid
+          : vbtcContractUid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -184,7 +212,11 @@ class _$_ShieldedBalance extends _ShieldedBalance {
       @JsonKey(name: "IsViewOnly")
           this.isViewOnly = false,
       @JsonKey(name: "Commitments")
-          final List<ShieldedCommitment>? commitments})
+          final List<ShieldedCommitment>? commitments,
+      @JsonKey(name: "ShieldedVbtcBalance")
+          this.shieldedVbtcBalance = 0.0,
+      @JsonKey(name: "VbtcContractUid")
+          this.vbtcContractUid})
       : _shieldedBalances = shieldedBalances,
         _commitments = commitments,
         super._();
@@ -224,9 +256,17 @@ class _$_ShieldedBalance extends _ShieldedBalance {
     return EqualUnmodifiableListView(value);
   }
 
+// vBTC-specific fields (GetShieldedVbtcBalance returns a different shape)
+  @override
+  @JsonKey(name: "ShieldedVbtcBalance")
+  final double shieldedVbtcBalance;
+  @override
+  @JsonKey(name: "VbtcContractUid")
+  final String? vbtcContractUid;
+
   @override
   String toString() {
-    return 'ShieldedBalance(shieldedBalances: $shieldedBalances, unspentCommitments: $unspentCommitments, unspentSum: $unspentSum, lastScannedBlock: $lastScannedBlock, isViewOnly: $isViewOnly, commitments: $commitments)';
+    return 'ShieldedBalance(shieldedBalances: $shieldedBalances, unspentCommitments: $unspentCommitments, unspentSum: $unspentSum, lastScannedBlock: $lastScannedBlock, isViewOnly: $isViewOnly, commitments: $commitments, shieldedVbtcBalance: $shieldedVbtcBalance, vbtcContractUid: $vbtcContractUid)';
   }
 
   @override
@@ -245,7 +285,11 @@ class _$_ShieldedBalance extends _ShieldedBalance {
             (identical(other.isViewOnly, isViewOnly) ||
                 other.isViewOnly == isViewOnly) &&
             const DeepCollectionEquality()
-                .equals(other._commitments, _commitments));
+                .equals(other._commitments, _commitments) &&
+            (identical(other.shieldedVbtcBalance, shieldedVbtcBalance) ||
+                other.shieldedVbtcBalance == shieldedVbtcBalance) &&
+            (identical(other.vbtcContractUid, vbtcContractUid) ||
+                other.vbtcContractUid == vbtcContractUid));
   }
 
   @JsonKey(ignore: true)
@@ -257,7 +301,9 @@ class _$_ShieldedBalance extends _ShieldedBalance {
       unspentSum,
       lastScannedBlock,
       isViewOnly,
-      const DeepCollectionEquality().hash(_commitments));
+      const DeepCollectionEquality().hash(_commitments),
+      shieldedVbtcBalance,
+      vbtcContractUid);
 
   @JsonKey(ignore: true)
   @override
@@ -286,7 +332,11 @@ abstract class _ShieldedBalance extends ShieldedBalance {
       @JsonKey(name: "IsViewOnly")
           final bool isViewOnly,
       @JsonKey(name: "Commitments")
-          final List<ShieldedCommitment>? commitments}) = _$_ShieldedBalance;
+          final List<ShieldedCommitment>? commitments,
+      @JsonKey(name: "ShieldedVbtcBalance")
+          final double shieldedVbtcBalance,
+      @JsonKey(name: "VbtcContractUid")
+          final String? vbtcContractUid}) = _$_ShieldedBalance;
   _ShieldedBalance._() : super._();
 
   factory _ShieldedBalance.fromJson(Map<String, dynamic> json) =
@@ -310,6 +360,12 @@ abstract class _ShieldedBalance extends ShieldedBalance {
   @override
   @JsonKey(name: "Commitments")
   List<ShieldedCommitment>? get commitments;
+  @override // vBTC-specific fields (GetShieldedVbtcBalance returns a different shape)
+  @JsonKey(name: "ShieldedVbtcBalance")
+  double get shieldedVbtcBalance;
+  @override
+  @JsonKey(name: "VbtcContractUid")
+  String? get vbtcContractUid;
   @override
   @JsonKey(ignore: true)
   _$$_ShieldedBalanceCopyWith<_$_ShieldedBalance> get copyWith =>

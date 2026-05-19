@@ -57,7 +57,7 @@ class VbtcV2Service extends BaseService {
             btcAddress: c['DepositAddress'],
             balance: (c['Balance'] ?? 0).toDouble(),
             myBalance: (c['MyBalance'] ?? c['Balance'] ?? 0).toDouble(),
-            tokenName: c['Name'] ?? c['TokenName'] ?? 'vBTC V2',
+            tokenName: c['Name'] ?? c['TokenName'] ?? 'vBTC',
             tokenDescription: c['Description'] ?? c['TokenDescription'] ?? '',
             smartContractMainId: (c['SmartContractMainId'] ?? 0).toDouble(),
             isPublished: c['IsPublished'] ?? true,

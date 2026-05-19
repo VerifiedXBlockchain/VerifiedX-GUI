@@ -357,7 +357,7 @@ class PrivacyService extends BaseService {
           "WalletPassword": walletPassword,
           "VbtcContractUid": vbtcContractUid,
           "TransparentToAddress": toAddress,
-          "VbtcAmount": vbtcAmount,
+          "TransparentVbtcAmount": vbtcAmount,
         },
       );
 

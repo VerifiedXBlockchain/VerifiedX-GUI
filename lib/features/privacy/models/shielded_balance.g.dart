@@ -20,6 +20,9 @@ _$_ShieldedBalance _$$_ShieldedBalanceFromJson(Map<String, dynamic> json) =>
       commitments: (json['Commitments'] as List<dynamic>?)
           ?.map((e) => ShieldedCommitment.fromJson(e as Map<String, dynamic>))
           .toList(),
+      shieldedVbtcBalance:
+          (json['ShieldedVbtcBalance'] as num?)?.toDouble() ?? 0.0,
+      vbtcContractUid: json['VbtcContractUid'] as String?,
     );
 
 Map<String, dynamic> _$$_ShieldedBalanceToJson(_$_ShieldedBalance instance) =>
@@ -30,4 +33,6 @@ Map<String, dynamic> _$$_ShieldedBalanceToJson(_$_ShieldedBalance instance) =>
       'LastScannedBlock': instance.lastScannedBlock,
       'IsViewOnly': instance.isViewOnly,
       'Commitments': instance.commitments,
+      'ShieldedVbtcBalance': instance.shieldedVbtcBalance,
+      'VbtcContractUid': instance.vbtcContractUid,
     };

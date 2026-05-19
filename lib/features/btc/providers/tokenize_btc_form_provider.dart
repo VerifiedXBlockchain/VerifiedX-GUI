@@ -164,7 +164,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
     if (ceremonyState.isContractCreated) {
       ref.read(logProvider.notifier).append(
             LogEntry(
-              message: "vBTC V2 Contract Created. Hash: ${ceremonyState.contractHash}",
+              message: "vBTC Contract Created. Hash: ${ceremonyState.contractHash}",
               textToCopy: ceremonyState.contractHash,
               variant: AppColorVariant.Btc,
             ),

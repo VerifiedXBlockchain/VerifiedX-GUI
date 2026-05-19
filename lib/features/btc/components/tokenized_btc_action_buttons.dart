@@ -402,7 +402,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     if (dialogResult != null && dialogResult.success) {
                       ref.read(logProvider.notifier).append(
                             LogEntry(
-                              message: "vBTC V2 Withdrawal completed successfully.",
+                              message: "vBTC Withdrawal completed successfully.",
                               variant: AppColorVariant.Btc,
                             ),
                           );
@@ -434,6 +434,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                   if (token.version >= 2) {
                     // V2: request withdrawal first, then show processing dialog
+                    ref.read(globalLoadingProvider.notifier).start();
                     final withdrawResult = await VbtcV2Service().requestWithdrawal(
                       scUid: token.smartContractUid,
                       requestorAddress: token.rbxAddress,
@@ -441,6 +442,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       amount: result.amount,
                       feeRate: result.feeRate,
                     );
+                    ref.read(globalLoadingProvider.notifier).complete();
 
                     String? requestHash = withdrawResult.requestHash;
                     bool needsBlockConfirmation = withdrawResult.success;
@@ -482,7 +484,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
 
                     if (dialogResult != null && dialogResult.success) {
-                      final message = "vBTC V2 Withdrawal completed successfully.";
+                      final message = "vBTC Withdrawal completed successfully.";
                       ref.read(logProvider.notifier).append(
                             LogEntry(
                               message: message,
@@ -626,7 +628,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       ref.read(logProvider.notifier).append(
                             LogEntry(
                               message:
-                                  "vBTC V2 ownership transfer initiated to $toAddress",
+                                  "vBTC ownership transfer initiated to $toAddress",
                               variant: AppColorVariant.Btc,
                             ),
                           );
@@ -694,7 +696,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                       if (txHash != null) {
                         final message =
-                            "vBTC V2 Transfer TX Broadcasted. Hash: $txHash";
+                            "vBTC Transfer TX Broadcasted. Hash: $txHash";
                         Toast.message(message);
 
                         ref.read(logProvider.notifier).append(

@@ -51,7 +51,9 @@ class ShieldedVbtcBalanceManager extends StateNotifier<Map<String, ShieldedBalan
     final currentVbtc = current.vbtcBalance(contractUid);
     final newVbtc = (currentVbtc + delta).clamp(0.0, double.infinity);
     final updatedBalances = Map<String, double>.from(current.shieldedBalances);
-    updatedBalances[contractUid] = newVbtc;
+    // Write to the same key format the CLI uses (try prefixed first, fall back to raw).
+    final key = updatedBalances.containsKey('VBTC:$contractUid') ? 'VBTC:$contractUid' : contractUid;
+    updatedBalances[key] = newVbtc;
     state = {...state, contractUid: current.copyWith(shieldedBalances: updatedBalances)};
     _optimisticUntil[contractUid] = DateTime.now().add(const Duration(seconds: 90));
   }

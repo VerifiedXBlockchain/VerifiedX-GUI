@@ -72,23 +72,23 @@ class TxHelper {
       case 21:
         return "vBTC Withdrawal (Owner)";
       case 22:
-        return "vBTC V2 Validator Register";
+        return "vBTC Validator Register";
       case 23:
-        return "vBTC V2 Validator Heartbeat";
+        return "vBTC Validator Heartbeat";
       case 24:
-        return "vBTC V2 Validator Exit";
+        return "vBTC Validator Exit";
       case 25:
-        return "vBTC V2 Contract Create";
+        return "vBTC Contract Create";
       case 26:
-        return "vBTC V2 Transfer";
+        return "vBTC Transfer";
       case 27:
-        return "vBTC V2 Withdrawal Request";
+        return "vBTC Withdrawal Request";
       case 28:
-        return "vBTC V2 Withdrawal Complete";
+        return "vBTC Withdrawal Complete";
       case 29:
-        return "vBTC V2 Withdrawal Cancel";
+        return "vBTC Withdrawal Cancel";
       case 30:
-        return "vBTC V2 Withdrawal Vote";
+        return "vBTC Withdrawal Vote";
       case 31:
         return "VFX Shield";
       case 32:
@@ -96,15 +96,15 @@ class TxHelper {
       case 33:
         return "VFX Private Transfer";
       case 34:
-        return "vBTC V2 Shield";
+        return "vBTC Shield";
       case 35:
-        return "vBTC V2 Unshield";
+        return "vBTC Unshield";
       case 36:
-        return "vBTC V2 Private Transfer";
+        return "vBTC Private Transfer";
       case 37:
-        return "vBTC V2 Bridge Lock";
+        return "vBTC Bridge Lock";
       case 38:
-        return "vBTC V2 Bridge Unlock";
+        return "vBTC Bridge Unlock";
       default:
         return type.toString();
     }
