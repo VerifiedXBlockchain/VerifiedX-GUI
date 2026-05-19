@@ -28,6 +28,31 @@ enum BridgeLockStatus {
   unknown,
 }
 
+/// Wire names for [BridgeLockStatus], indexed to match the CLI enum order so
+/// that an integer status value can be mapped back to the string Newtonsoft
+/// would have produced under `StringEnumConverter`. The CLI doesn't register
+/// `StringEnumConverter` globally, so `GetBridgeLocksByOwner` serializes
+/// `Status` as an integer; we normalize back to the string form here.
+const List<String> _bridgeLockStatusWireNames = [
+  'Locked',
+  'ProofSubmitted',
+  'Minted',
+  'Redeeming',
+  'Redeemed',
+  'Unlocked',
+  'Failed',
+  'AttestationPending',
+  'AttestationReady',
+  'MintedOnBase',
+  'ExitBurned',
+  'UnlockedOnVFX',
+  'BTCExitBurned',
+  'BTCExitSigning',
+  'BTCExitBroadcast',
+  'BTCExitComplete',
+  'Expired',
+];
+
 /// Maps the CLI's string status to a [BridgeLockStatus]. Falls back to
 /// [BridgeLockStatus.unknown] for forward-compatibility if the CLI adds new
 /// states we haven't surfaced yet.
@@ -134,6 +159,16 @@ class BridgeLockRecord with _$BridgeLockRecord {
     final signatureCount = pick(['signaturesCollected']) ??
         ((signaturesMap is Map) ? signaturesMap.length : 0);
 
+    // The CLI's `GetBridgeLocksByOwner` returns `Status` as an integer
+    // (no global StringEnumConverter). Normalize to the string the freezed
+    // model expects.
+    final rawStatus = pick(['status', 'Status']);
+    final normalizedStatus = rawStatus is int
+        ? (rawStatus >= 0 && rawStatus < _bridgeLockStatusWireNames.length
+            ? _bridgeLockStatusWireNames[rawStatus]
+            : null)
+        : rawStatus;
+
     return BridgeLockRecord.fromJson({
       'lockId': pick(['lockId', 'LockId']) ?? '',
       'scUID': pick(['scUID', 'SmartContractUID']) ?? '',
@@ -141,7 +176,7 @@ class BridgeLockRecord with _$BridgeLockRecord {
       'amount': pick(['amount', 'Amount']) ?? 0,
       'amountSats': pick(['amountSats', 'AmountSats']) ?? 0,
       'evmDestination': pick(['evmDestination', 'EvmDestination']) ?? '',
-      'status': pick(['status', 'Status']),
+      'status': normalizedStatus,
       'vfxLockTxHash': pick(['vfxLockTxHash', 'VfxLockTxHash']),
       'vfxLockConfirmedOnChain':
           pick(['vfxLockConfirmedOnChain', 'VfxLockConfirmedOnChain']) ?? false,
