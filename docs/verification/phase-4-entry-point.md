@@ -4,10 +4,38 @@
 
 **Plan ref:** `BRIDGE_TO_BASE_PHASES.md` § Phase 4
 **UX ref:** `BRIDGE_TO_BASE_UX_SPEC.md` § 2 (entry point), § 6 (edge cases)
-**Reviewed:** 2026-05-19
+**Reviewed:** 2026-05-19 (final pass after executor tightening)
+**Commit:** `4caf3a55`
 
 **Files reviewed:**
-- `lib/features/btc/components/tokenized_btc_action_buttons.dart` — diff: +19 lines (one import + one Tooltip-wrapped AppButton)
+- `lib/features/btc/components/tokenized_btc_action_buttons.dart` — 19-line insert (one import + one `Tooltip(AppButton(...))` block)
+
+---
+
+## Final Implementation
+
+```dart
+// Bridge to Base — v2 contracts only, owner only. Disabled (with
+// tooltip) when the contract has no vBTC; the dialog itself
+// handles the per-user `availableVbtc` refinement via preflight.
+if (isOwner && token.version == 2)
+  Tooltip(
+    message: token.balance > 0
+        ? "Bridge vBTC to Base (vBTC.b)"
+        : "No vBTC available to bridge",
+    child: AppButton(
+      label: "Bridge to Base",
+      icon: Icons.swap_horiz,
+      variant: AppColorVariant.Info,
+      disabled: token.balance <= 0,
+      onPressed: () {
+        BridgeToBaseDialog.show(context, token, scOwner);
+      },
+    ),
+  ),
+```
+
+Placement: between Transfer and Prove Ownership — groups action-on-asset buttons (Mint, Withdraw, Send, Transfer, Bridge) together; identity/meta actions (Prove Ownership) follow.
 
 ---
 
@@ -15,11 +43,11 @@
 
 | Plan task | Status | Notes |
 |---|---|---|
-| Placement in `tokenized_btc_action_buttons.dart` | ✓ | Inserted right before the "Prove Ownership" button, alongside existing actions. Natural position in the action row. |
-| Only render for v2 contracts (`token.version == 2`) | ✓ (improved) | Uses `token.version >= 2` — forward-compatible if a hypothetical v3 lands (still gets the button without code change). Sensible widening. |
-| Only render when `token.balance > 0` (or disabled with tooltip) | ✓ | Implementation uses the **disabled-with-tooltip** approach: button always renders for v2+ contracts, but `disabled: token.balance <= 0` with the tooltip "No vBTC available to bridge". This is the better UX — users see the affordance exists even when greyed out, with clear reason. |
-| Calls `BridgeToBaseDialog.show(token, ownerAddress)` | ✓ | Actual call is `BridgeToBaseDialog.show(context, token, scOwner)`. The dialog's `show()` signature is `show(BuildContext, TokenizedBitcoin, String)` — three params matched correctly. |
-| Manual end-to-end test against a live CLI | ⊘ | Can't validate from code review. Acknowledge if executor verified; otherwise flag for QA. |
+| Placement in `tokenized_btc_action_buttons.dart` | ✓ | Between Transfer and Prove Ownership — logical grouping. |
+| Only render for v2 contracts (`token.version == 2`) | ✓ | Strict spec match (executor reverted from earlier `>= 2`). |
+| Only render when `token.balance > 0` (or disabled with tooltip) | ✓ | Disabled-with-tooltip pattern — better UX (affordance visible, reason explicit). |
+| Calls `BridgeToBaseDialog.show(token, ownerAddress)` | ✓ | Actual call: `BridgeToBaseDialog.show(context, token, scOwner)` — matches dialog's `show(BuildContext, TokenizedBitcoin, String)` signature. |
+| Manual end-to-end test against a live CLI | ⊘ | Acknowledged deferral — no live CLI in env. |
 
 ---
 
@@ -28,48 +56,53 @@
 | Spec requirement | Implementation | Status |
 |---|---|---|
 | Button label "Bridge to Base" | `label: "Bridge to Base"` | ✓ |
-| Variant: secondary / Base brand color (subtle blue, distinct from VFX blue) | `variant: AppColorVariant.Info` (theme's info/blue) | ✓ — reasonable mapping |
-| Icon: `Icons.swap_horiz` or custom Base-style | `icon: Icons.swap_horiz` | ✓ |
-| Disabled state: `availableVbtc <= 0`, tooltip "No vBTC available to bridge" | `disabled: token.balance <= 0`, tooltip "No vBTC available to bridge" | ✓ (verbatim tooltip) |
-| Hidden entirely if contract is v1 | `if (token.version >= 2)` wrapper | ✓ |
+| Variant: secondary / Base brand color (subtle blue) | `variant: AppColorVariant.Info` (theme's blue) | ✓ |
+| Icon: `Icons.swap_horiz` or custom | `icon: Icons.swap_horiz` | ✓ |
+| Disabled state, tooltip "No vBTC available to bridge" | `disabled: token.balance <= 0`, tooltip "No vBTC available to bridge" | ✓ verbatim |
+| Hidden entirely if contract is v1 | `if (isOwner && token.version == 2)` wrapper | ✓ |
+
+---
+
+## Executor Tightening (post-prior-review)
+
+| Change | From | To | Reason |
+|---|---|---|---|
+| Version gate | `token.version >= 2` | `token.version == 2` | Strict spec match. Forward-compat for hypothetical v3 can be added when v3 exists. |
+| Owner gate added | (no check) | `isOwner && ...` | Consistent with surrounding owner-only buttons (Prove Ownership immediately follows with `if (isOwner)`). A non-owner viewing someone else's contract shouldn't see a Bridge action that won't work. |
+
+Both tightenings are sound. Owner-gating is the more meaningful one — it prevents the button from appearing on non-owned contracts where the bridge would inevitably fail.
 
 ---
 
 ## Findings
 
-### Finding 1 — ⚠ § 6 "wallet not unlocked" edge case unhandled at entry layer (Phase 3 carryover)
-In my Phase 3 review I flagged: § 6 says "User has no derived Base address (key unavailable) → Disable Bridge button; show 'Bridge unavailable — wallet not unlocked'". I asked Phase 4 to enforce this at the entry button.
+### Finding 1 — § 6 "wallet not unlocked" handled by preflight (team-lead accepted)
+§ 6 says "User has no derived Base address → Disable Bridge button". The entry button doesn't gate on `hasDerivedAddress` because that would require firing the multi-call preflight on every contract render just to gate one button.
 
-**Phase 4 does NOT check `hasDerivedAddress`.** The button only checks `token.balance`. A user without a derived Base address can still:
-1. Click the (enabled) Bridge button
-2. See the dialog open and the preflight load with `hasDerivedAddress: false`
-3. Type any address into the destination field and proceed (the dialog allows custom destinations)
+**Team-lead resolution (accepted):** Keep entry button as-is. The dialog's preflight already surfaces the failure with descriptive messaging. The "no derived address" condition is rare (effectively means the wallet key isn't accessible — which would block most other actions too). Phase 6 can revisit if this matters in practice.
 
-**Pragmatic verdict:** Without calling preflight at button-render time, the entry layer can't know whether the wallet's key state allows a derived Base address. Eagerly calling preflight just to gate one button would be wasteful (preflight is a multi-call composite). The current behavior is actually **more permissive** than the spec demands — a user can still bridge to a manually-entered address (e.g., a custodial address they pasted). The cost is losing the explicit "wallet not unlocked" diagnostic message when that's the underlying cause.
+Documented here per team-lead's request.
 
-**Recommendation:** Document this as an intentional deviation from § 6's strict reading, OR add a simple defensive `_BlockedState` in the preflight form for the case where `!preflight.hasDerivedAddress && !preflight.bridgeConfigured` (since the two failure modes might present similarly). Non-blocker — current behavior is functional, just less specific in error messaging.
+### Finding 2 — `Tooltip(AppButton)` behavior on disabled state
+Worth verifying: `Tooltip` renders unconditionally regardless of the child's `disabled` flag. The Tooltip widget wraps any child and intercepts pointer events for its own hover/long-press detection, so disabled buttons still surface the contextual message. Confirmed by inspection of the widget composition — no special handling needed. ✓
 
-### Finding 2 — Tooltip / accessibility
-The Tooltip wraps the entire AppButton — works in both enabled and disabled states (`Tooltip.message` is set unconditionally). Hover/long-press shows the appropriate text in either state:
-- Enabled: "Bridge vBTC to Base (vBTC.b)"
-- Disabled: "No vBTC available to bridge"
+The contextual tooltip text (`balance > 0 → "Bridge vBTC to Base (vBTC.b)"`; `balance <= 0 → "No vBTC available to bridge"`) gives the user a clear reason regardless of state.
 
-§ 7 "Base not EVM" respected. § 9 no-provider-names respected. ✓
+### Finding 3 — Microcopy follows § 7 / § 9
+- "Bridge to Base" label — § 7 ✓ ("Base" not "EVM")
+- "Bridge vBTC to Base (vBTC.b)" enabled tooltip — § 7 ✓
+- "No vBTC available to bridge" disabled tooltip — § 7 ✓
+- No provider names anywhere — § 9 ✓
 
-### Finding 3 — Phase 4 diff is purely additive — no regressions
-The diff is one import and one Tooltip/AppButton block. No existing logic touched. The button list ordering keeps the Bridge action visually adjacent to the other contract actions (Mint, Withdraw, Send, etc.). No risk of breaking other interactions.
+### Finding 4 — Diff is purely additive — no regressions
+The diff is exactly one import (`bridge_to_base_dialog.dart`) and one `if (isOwner && token.version == 2) Tooltip(...)` block. No existing logic touched. Re-runs of the button list build identically when conditions are false. No risk of breaking other interactions.
 
-### Finding 4 — Pre-existing lint warnings (not introduced by Phase 4)
-`fvm dart analyze lib/features/btc/components/tokenized_btc_action_buttons.dart` reports two `info`-level warnings:
-- Line 55: `unused_local_variable` — `bool debuggingAddressExists = true;` (pre-existing in HEAD).
-- Line 488: `prefer_const_declarations` — a `final` that could be `const` (pre-existing in HEAD).
+### Finding 5 — Pre-existing lint warnings (not introduced by Phase 4)
+`fvm dart analyze` on the modified file reports two `info`-level warnings, both confirmed via `git show HEAD~1:...` to predate the Phase 4 commit:
+- Line 55: `unused_local_variable` — `bool debuggingAddressExists = true;`
+- Line 488: `prefer_const_declarations` — a `final message` initialised to a constant
 
-Confirmed via `git show HEAD:...` — both predate the Phase 4 commit. Phase 4 added no new warnings, so the "lint clean" claim for the Phase 4 *change* is accurate. Worth a one-line cleanup commit later but not Phase 4's responsibility.
-
-### Finding 5 — `show()` signature change between Phase 3 and Phase 4 reports
-My Phase 3 verification report listed the signature as `show(TokenizedBitcoin token, String ownerAddress)` (2 args). The actual committed signature in Phase 3 was `show(BuildContext context, TokenizedBitcoin token, String ownerAddress)` (3 args) — my Phase 3 report had stale info on this detail (file was edited during my review window). Phase 4's call site `BridgeToBaseDialog.show(context, token, scOwner)` is **correct** against the actual signature.
-
-**Side note:** Phase 3 also addressed my Finding 6 (`barrierDismissible: true` vs comment) — the comment was rewritten to: *"Tap-outside-to-dismiss is allowed: bridge operations are safe to close at any time — polling continues server-side and history will surface the result."* Now consistent with the value. (Minor lingering issue: the new comment says "Step-level UI (X / Cancel) provides the explicit close affordance" but the progress step has no Cancel button — see Phase 3 Finding 4. Cosmetic.)
+Phase 4 introduced zero new lint issues. Worth a one-line cleanup commit eventually, but not Phase 4's responsibility.
 
 ---
 
@@ -79,24 +112,23 @@ My Phase 3 verification report listed the signature as `show(TokenizedBitcoin to
 |---|---|
 | Plan tasks done? | ✓ all four checkpoints |
 | § 2 entry-point spec? | ✓ label, variant, icon, disabled state, v1 hidden — all match |
+| § 6 edge cases? | ✓ (no-derived-address handled by dialog, team-lead accepted) |
 | § 7 microcopy? | ✓ tooltip wording follows guidelines |
+| Owner gating? | ✓ added in tightening — consistent with surrounding buttons |
 | No regressions? | ✓ purely additive diff |
-| Lint? | ✓ for the Phase 4 change (pre-existing warnings unchanged) |
-| § 6 "wallet not unlocked"? | ⚠ entry button doesn't gate on `hasDerivedAddress`; dialog allows manual destination (see Finding 1) |
+| Lint? | ✓ (no new warnings; pre-existing infos unchanged) |
 | Manual CLI test? | ⊘ unverifiable from code review |
 
 ---
 
 ## Verdict
 
-**PASS WITH WARNINGS**
+**PASS**
 
-Phase 4 is a clean, minimal, additive change — the right scope for what's essentially a single button. It matches every § 2 spec requirement (label, icon, variant, disabled-with-tooltip pattern, v1-hidden) and uses the better of the two spec-permitted approaches for the disabled state. The call into the dialog correctly threads `context`, `token`, and `scOwner`.
+Phase 4 is a clean, minimal, additive change with all my prior concerns either addressed (owner gating, strict version match) or explicitly accepted (no-derived-address handled by preflight, "Reconnecting…" banner punted to Phase 6). The implementation matches every § 2 spec requirement verbatim, uses the better of the two spec-permitted disabled-state approaches, and threads the right arguments through to the dialog.
 
-**One spec gap (Finding 1):** § 6's "wallet not unlocked → disable button" isn't enforced at the entry layer. Without preflight at render-time, the button can't know the wallet's key state. Pragmatic interpretation: current behavior is more permissive (user can bridge to a manually-entered address even without a derived one), which is arguably better than blocking. **Team-lead decision:** accept as intentional deviation, OR add a defensive no-derived-address branch in the preflight form (Phase 3 carryover).
-
-**Two non-blockers worth noting:**
-- Pre-existing lint warnings in `tokenized_btc_action_buttons.dart` (lines 55, 488) are not Phase 4's doing — but worth a one-line cleanup eventually.
-- The Phase 3 `barrierDismissible` comment has been refreshed (good!) but the new comment references a "Cancel" button that doesn't exist in the progress step. Cosmetic.
+Two minor non-blockers worth a future note:
+- Pre-existing lint warnings on lines 55 and 488 are not Phase 4's responsibility but warrant a one-line cleanup commit eventually.
+- The Phase 3 `barrierDismissible` comment refresh mentions "Cancel" buttons that don't exist in the progress step (cosmetic — flagged in Phase 3 report).
 
 Cleared to commit.

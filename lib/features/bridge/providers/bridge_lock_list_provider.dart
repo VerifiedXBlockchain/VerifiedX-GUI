@@ -31,6 +31,12 @@ class BridgeLockListNotifier extends StateNotifier<List<BridgeLockRecord>> {
   final String ownerAddress;
   Timer? _refreshTimer;
   bool _isFetching = false;
+  bool _hasLoaded = false;
+
+  /// True once the initial fetch (or any subsequent fetch) has completed.
+  /// Lets callers distinguish "still loading the first batch" from
+  /// "loaded and the list really is empty" — both look the same in `state`.
+  bool get hasLoaded => _hasLoaded;
 
   Future<void> _bootstrap() async {
     await _fetchOnce();
@@ -56,6 +62,7 @@ class BridgeLockListNotifier extends StateNotifier<List<BridgeLockRecord>> {
       final sorted = [...list]
         ..sort((a, b) => b.createdAtUtc.compareTo(a.createdAtUtc));
       state = sorted;
+      _hasLoaded = true;
       return sorted;
     } finally {
       _isFetching = false;

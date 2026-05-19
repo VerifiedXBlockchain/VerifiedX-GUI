@@ -223,6 +223,15 @@ class BridgeLockRecord with _$BridgeLockRecord {
   /// True when the bridge ended in failure.
   bool get isFailed => status == BridgeLockStatus.failed;
 
+  /// True when the CLI will accept a `RetryMintForLock` call for this record.
+  ///
+  /// The CLI rejects retry on `Minted` / `MintedOnBase` (already done) and on
+  /// records that haven't yet been confirmed on VFX (`vfxLockConfirmedOnChain`
+  /// false — there's nothing to retry against). The most useful surfaced case
+  /// is `Failed`. We keep this conservative; Phase 6 can broaden if we want
+  /// to also surface retry for stuck `AttestationReady` / `ProofSubmitted`.
+  bool get canRetry => isFailed && vfxLockConfirmedOnChain;
+
   /// Created-at as a [DateTime], or null if the timestamp is missing.
   DateTime? get createdAt =>
       createdAtUtc > 0 ? DateTime.fromMillisecondsSinceEpoch(createdAtUtc * 1000, isUtc: true) : null;

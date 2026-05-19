@@ -45,6 +45,31 @@ class BridgeToBaseDialog extends ConsumerStatefulWidget {
     );
   }
 
+  /// Opens a read-only progress view for an existing bridge lock.
+  ///
+  /// Used by the history list when a row is tapped, and by `BridgeResult`'s
+  /// failure "View Details" action. Renders [BridgeProgress] in `readOnly`
+  /// mode so the live `bridgeOperationProvider` polls in the background but
+  /// no terminal-state advance fires.
+  static Future<void> showHistoryDetail(
+    BuildContext context,
+    String lockId,
+  ) async {
+    await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text("Bridge details"),
+        content: BridgeProgress(lockId: lockId, readOnly: true),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Close"),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   ConsumerState<BridgeToBaseDialog> createState() => _BridgeToBaseDialogState();
 }
@@ -178,30 +203,13 @@ class _BridgeToBaseDialogState extends ConsumerState<BridgeToBaseDialog> {
         return BridgeResult(
           record: record,
           onDone: _close,
-          // Phase 5 will wire a real "view details" navigation; for now we
-          // surface the read-only progress view in a new dialog so users can
-          // still get to the tx hashes.
+          // Failure path: jump into the same read-only detail view the history
+          // list uses, so the user can copy hashes / inspect signature progress.
           onViewDetails: record.isFailed
-              ? () => _showReadOnlyProgress(record.lockId)
+              ? () => BridgeToBaseDialog.showHistoryDetail(context, record.lockId)
               : null,
         );
     }
-  }
-
-  Future<void> _showReadOnlyProgress(String lockId) async {
-    await showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text("Bridge details"),
-        content: BridgeProgress(lockId: lockId, readOnly: true),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Close"),
-          ),
-        ],
-      ),
-    );
   }
 }
 
