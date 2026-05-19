@@ -142,9 +142,30 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
           );
         }
         if (preflight.hasNoVbtc) {
+          // `availableVbtc` is the chain-confirmed amount available to bridge
+          // — it can read 0 while the wallet's cached `token.balance` still
+          // shows something. There are two distinct cases:
+          //   1. CLI couldn't read the balance at all (`vbtcError` set) —
+          //      e.g. Electrum unreachable, contract not found in State Trei.
+          //   2. CLI read it cleanly and the answer really is 0 — usually
+          //      because the BTC deposit hasn't confirmed on-chain yet, or
+          //      it's locked in an in-flight bridge reservation.
+          final cliError = preflight.vbtcError;
+          debugPrint('[bridge preflight] availableVbtc=${preflight.availableVbtc} vbtcError=$cliError');
+          final message = cliError != null && cliError.isNotEmpty
+              ? "Couldn't read your vBTC balance: $cliError"
+              : "Nothing available to bridge yet.\n\n"
+                  "Your wallet may show a balance, but the chain doesn't "
+                  "see any confirmed vBTC for this contract yet. The most "
+                  "common cause is a BTC deposit that hasn't received enough "
+                  "Bitcoin confirmations. Bridge reservations from an earlier "
+                  "attempt could also be holding the balance.\n\n"
+                  "Wait a few minutes and try again, or check Bridge History "
+                  "below for any in-flight operations.";
           return _BlockedState(
-            message: "You don't have any vBTC in this contract to bridge.",
+            message: message,
             onCancel: widget.onCancel,
+            onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
           );
         }
         _maybeSeedDestination(preflight);
@@ -527,8 +548,13 @@ class _ErrorState extends StatelessWidget {
 class _BlockedState extends StatelessWidget {
   final String message;
   final VoidCallback onCancel;
+  final VoidCallback? onRetry;
 
-  const _BlockedState({required this.message, required this.onCancel});
+  const _BlockedState({
+    required this.message,
+    required this.onCancel,
+    this.onRetry,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -540,13 +566,23 @@ class _BlockedState extends StatelessWidget {
         children: [
           Text(message, style: const TextStyle(color: Colors.white)),
           const SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerRight,
-            child: AppButton(
-              label: "Close",
-              variant: AppColorVariant.Light,
-              onPressed: onCancel,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              AppButton(
+                label: "Close",
+                variant: AppColorVariant.Light,
+                onPressed: onCancel,
+              ),
+              if (onRetry != null) ...[
+                const SizedBox(width: 8),
+                AppButton(
+                  label: "Try Again",
+                  variant: AppColorVariant.Warning,
+                  onPressed: onRetry!,
+                ),
+              ],
+            ],
           ),
         ],
       ),

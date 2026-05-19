@@ -139,6 +139,70 @@ records                   → _RecordList
 
 ---
 
+## Specific Scrutiny Items (per team-lead's brief)
+
+### Scrutiny 1 — `_consecutiveFailures` cannot distinguish transport failure from server-side lock deletion
+`VbtcBridgeService.getStatus` returns `null` for **two** distinct reasons:
+- Transport exception (caught by outer try/catch) — transient network failure
+- CLI returns `success: false` — explicit "lock not found" or similar error
+
+Both produce identical `null` returns to `BridgeOperationNotifier._fetchOnce`, which increments `_consecutiveFailures` in either case. The comment in `_fetchOnce` acknowledges this directly: *"almost certainly a transport blip rather than the lock disappearing."*
+
+**The argument is sound:** locks are persistent LiteDB records on the CLI (verified in Phase 1 against `BridgeLockRecord.cs`). A successful poll cannot reasonably be followed by a "lock not found" response unless the CLI's local DB is wiped between polls or the user switches wallets mid-session — both extremely rare. The worst-case UX is a permanently-displayed "Reconnecting…" banner in that pathological case, which is harmless.
+
+**Could be improved by:** Making `getStatus` distinguish (e.g., throw on transport vs return null on "lock not found"), but that'd require a service-layer refactor + cascading provider updates. Acceptable conflation for now. ✓
+
+### Scrutiny 2 — Cached-records-on-refresh-failure preserved silently
+`BridgeHistoryList` 4-branch render:
+```
+!hasLoaded                 → _Loading
+error != null && empty     → _ErrorState
+empty                      → _Empty
+records present (with or without error) → _RecordList
+```
+
+When `error != null && scoped.isNotEmpty`, the user sees records with **no visible error indicator** — `_error` is held silently in the notifier. Trade-off:
+- ✓ Don't lose visible history on transient blips (stale > nothing)
+- ✗ User can't tell that the data is stale
+
+**Defensible UX choice.** Code comment in `BridgeHistoryList` explains: *"If a refresh fails but we already have cached records, keep them visible — losing list contents on a transient failure is worse than a stale-but-correct list."*
+
+**Soft improvement** (not in spec): a subtle "refresh failed" chip near the refresh icon. Defer.
+
+### Scrutiny 3 — `friendlyStatus` jargon leak audit
+Searched `lib/features/bridge/` for `.statusRaw`, `.status.name`, `.status.toString` usage:
+
+| File | Match | User-facing? |
+|---|---|---|
+| `bridge_operation_provider.dart:156` | `debugPrint('$_tag $lockId terminal (${current?.statusRaw}) — polling stopped');` | **NO** — debugPrint, not UI |
+| All other files | (no matches) | n/a |
+
+`friendlyStatus` is consistently used in all 5 badge code paths in `bridge_history_item.dart`. **No jargon leaks anywhere user-facing.** ✓
+
+### Scrutiny 4 — Notification identifier dedup safety
+Identifiers used:
+- `"bridge_${lockId}_minted"`
+- `"bridge_${lockId}_failed"`
+
+`TransactionNotificationProvider.add(notification, [seconds=5])`:
+```dart
+if (state.firstWhereOrNull((n) => n.identifier == notification.identifier) == null) {
+  state = [...state, notification];
+  await Future.delayed(Duration(seconds: seconds));
+  remove(notification.identifier);
+}
+```
+
+- Lock IDs are unique → no collision across bridges.
+- Each lock produces at most one notification per outcome → no within-lock collision (further enforced by `_firedTerminalNotification` guard).
+- `bridge_*` prefix not used anywhere else in the codebase: `grep -rn "identifier:" lib/features/transactions/ lib/features/privacy/ | grep -i bridge` returns nothing.
+
+**Identifier scheme is safe.** ✓
+
+The only known limitation is the retry-then-success edge case (`_firedTerminalNotification` persists after first failure → success retry won't notify), captured below as Finding 5.
+
+---
+
 ## Findings
 
 ### Finding 1 — `isReconnecting` mechanism is sound

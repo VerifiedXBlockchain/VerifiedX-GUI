@@ -522,6 +522,9 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 }
               },
             ),
+            // Force a line break after Withdraw — a full-width zero-height
+            // SizedBox makes the surrounding `Wrap` start a new run.
+            const SizedBox(width: double.infinity, height: 0),
             AppButton(
               label: "Transfer",
               variant: AppColorVariant.Primary,
@@ -811,7 +814,6 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 child: AppButton(
                   label: "Bridge to Base",
                   icon: Icons.swap_horiz,
-                  variant: AppColorVariant.Info,
                   disabled: token.balance <= 0,
                   onPressed: () {
                     BridgeToBaseDialog.show(context, token, scOwner);
