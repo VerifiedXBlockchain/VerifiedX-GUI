@@ -152,7 +152,13 @@ This is a Phase-1 fix that landed inside the Phase 2 commit window — slight sc
 
 ## Minor Observations (non-blocking)
 
-1. **`bridgeOperationProvider` is NOT `.autoDispose`.** Once `ref.watch(bridgeOperationProvider(lockId))` is called, the notifier lives for the app's lifetime. The internal timer self-cancels at terminal status, so quiescent cost is zero — but if Phase 5's history view eagerly watches `bridgeOperationProvider` for every row, you'll create one persistent notifier per lock. Recommend Phase 5 only watch `bridgeOperationProvider` for the *currently-open* progress dialog (not row-by-row in the list); the list itself has all the data via `bridgeLockListProvider`.
+1. **Directory-name ambiguity:** `lib/features/bridge/` is shared between two unrelated features:
+   - **Legacy CLI-process "bridge"** (the desktop wrapper that spawns the CORE CLI subprocess) — owns `services/bridge_service.dart`, `services/bridge_service_v2.dart`, `providers/log_provider.dart`, `providers/status_provider.dart`, `providers/wallet_info_provider.dart`, plus `models/log_entry.dart` etc.
+   - **New vBTC→Base bridge** (this work) — owns `services/vbtc_bridge_service.dart`, `providers/bridge_*_provider.dart`, `models/bridge_lock_record.dart` etc.
+   
+   The new files are sensibly prefixed (`vbtc_bridge_service.dart`, `bridge_lock_*`, `bridge_preflight_*`, `bridge_operation_*`) and there's no symbol collision (`VbtcBridgeService` vs `BridgeService`). But the shared parent directory means future contributors searching `features/bridge/` will see two semantically different feature sets mixed together. Worth keeping in mind for future organization — possible future cleanup: rename either the legacy folder to `cli_bridge/` or move the new files under `features/vbtc_bridge/`. Not a blocker for this phase.
+
+2. **`bridgeOperationProvider` is NOT `.autoDispose`.** Once `ref.watch(bridgeOperationProvider(lockId))` is called, the notifier lives for the app's lifetime. The internal timer self-cancels at terminal status, so quiescent cost is zero — but if Phase 5's history view eagerly watches `bridgeOperationProvider` for every row, you'll create one persistent notifier per lock. Recommend Phase 5 only watch `bridgeOperationProvider` for the *currently-open* progress dialog (not row-by-row in the list); the list itself has all the data via `bridgeLockListProvider`.
 
 2. **`debugPrint` once per fetch.** Reasonable noise level; could be elevated to `kIsWeb`-only or removed once feature is stable. Matches existing patterns.
 
