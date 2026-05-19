@@ -11,6 +11,7 @@ import '../../btc/models/tokenized_bitcoin.dart';
 import '../models/bridge_preflight.dart';
 import '../providers/bridge_preflight_provider.dart';
 import 'bridge_explorer_links.dart';
+import 'bridge_format.dart';
 
 /// Step 1 of the bridge flow. Owns no state of its own — the parent dialog
 /// passes the amount/destination controllers in so values survive when the
@@ -77,7 +78,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
   }
 
   void _setMax(BridgePreflight preflight) {
-    widget.amountController.text = preflight.availableVbtc.toString();
+    widget.amountController.text = formatVbtc(preflight.availableVbtc);
     rebuild();
   }
 
@@ -86,7 +87,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
     final value = double.tryParse(raw.trim());
     if (value == null || value <= 0) return "Enter a positive amount";
     if (value > preflight.availableVbtc) {
-      return "Exceeds available (${preflight.availableVbtc} vBTC)";
+      return "Exceeds available (${formatVbtc(preflight.availableVbtc)} vBTC)";
     }
     return null;
   }
@@ -128,6 +129,15 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
         if (!preflight.bridgeConfigured) {
           return _BlockedState(
             message: "Bridging is currently unavailable. The CLI is not configured to talk to Base.",
+            onCancel: widget.onCancel,
+          );
+        }
+        if (!preflight.hasDerivedAddress) {
+          // UX § 6 — "User has no derived Base address (key unavailable)".
+          return _BlockedState(
+            message:
+                "Bridge unavailable — your Base address couldn't be derived. "
+                "This usually means the wallet is locked. Unlock your wallet and try again.",
             onCancel: widget.onCancel,
           );
         }
@@ -198,7 +208,7 @@ class _Form extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  "Available: ${preflight.availableVbtc} vBTC",
+                  "Available: ${formatVbtc(preflight.availableVbtc)} vBTC",
                   style: const TextStyle(color: Colors.white54, fontSize: 11),
                 ),
               ),
@@ -366,12 +376,12 @@ class _NetworkInfo extends StatelessWidget {
           _row(
             context,
             "ETH for gas",
-            preflight.ethBalance == null ? "—" : "${preflight.ethBalance} ETH",
+            preflight.ethBalance == null ? "—" : "${preflight.ethBalance!.toStringAsFixed(6)} ETH",
           ),
           _row(
             context,
             "vBTC.b balance",
-            preflight.vbtcBBalance == null ? "—" : "${preflight.vbtcBBalance} vBTC.b",
+            preflight.vbtcBBalance == null ? "—" : "${formatVbtc(preflight.vbtcBBalance!)} vBTC.b",
           ),
         ],
       ),

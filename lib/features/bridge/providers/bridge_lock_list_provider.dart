@@ -32,11 +32,18 @@ class BridgeLockListNotifier extends StateNotifier<List<BridgeLockRecord>> {
   Timer? _refreshTimer;
   bool _isFetching = false;
   bool _hasLoaded = false;
+  Object? _error;
 
-  /// True once the initial fetch (or any subsequent fetch) has completed.
+  /// True once the initial fetch (or any subsequent fetch) has completed —
+  /// either successfully or with an error captured in [error].
   /// Lets callers distinguish "still loading the first batch" from
   /// "loaded and the list really is empty" — both look the same in `state`.
   bool get hasLoaded => _hasLoaded;
+
+  /// Non-null when the last fetch failed. Cleared on the next successful
+  /// fetch. Lets the UI render a dedicated error state with a Retry button
+  /// instead of mistaking a transport failure for an empty history.
+  Object? get error => _error;
 
   Future<void> _bootstrap() async {
     await _fetchOnce();
@@ -61,9 +68,24 @@ class BridgeLockListNotifier extends StateNotifier<List<BridgeLockRecord>> {
       if (!mounted) return state;
       final sorted = [...list]
         ..sort((a, b) => b.createdAtUtc.compareTo(a.createdAtUtc));
+      // Clear any prior error and re-emit state. Even if `sorted` equals the
+      // current state, we want to notify so widgets that watch `error`
+      // re-render with the cleared value.
+      _error = null;
       state = sorted;
       _hasLoaded = true;
       return sorted;
+    } catch (e, st) {
+      debugPrint('$_tag $ownerAddress fetch FAILED: $e\n$st');
+      if (!mounted) return state;
+      _error = e;
+      _hasLoaded = true;
+      // Force a state-notification so widgets reading `error` (which only
+      // re-render when state changes) pick up the new error. Re-assigning
+      // the same list isn't enough — Riverpod's StateNotifier uses
+      // identity, and `state = state` doesn't notify. Use a fresh copy.
+      state = List<BridgeLockRecord>.from(state);
+      return state;
     } finally {
       _isFetching = false;
     }

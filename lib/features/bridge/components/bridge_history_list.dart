@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/components/buttons.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../models/bridge_lock_record.dart';
 import '../providers/bridge_lock_list_provider.dart';
@@ -72,32 +74,47 @@ class _BridgeHistoryListState extends ConsumerState<BridgeHistoryList> {
     }
 
     final all = ref.watch(bridgeLockListProvider(widget.ownerAddress));
-    final hasLoaded =
-        ref.watch(bridgeLockListProvider(widget.ownerAddress).notifier).hasLoaded;
+    final notifier = ref.watch(bridgeLockListProvider(widget.ownerAddress).notifier);
+    final hasLoaded = notifier.hasLoaded;
+    final error = notifier.error;
     final scoped = all.where((r) => r.scUid == widget.scUid).toList(growable: false);
+
+    Widget body;
+    if (!hasLoaded) {
+      body = const _Loading();
+    } else if (error != null && scoped.isEmpty) {
+      // Only show the dedicated error state when we have no records to fall
+      // back on. If a refresh fails but we already have cached records,
+      // keep them visible — losing list contents on a transient failure is
+      // worse than a stale-but-correct list.
+      body = _ErrorState(
+        message: _messageFromError(error),
+        onRetry: () => notifier.refresh(),
+      );
+    } else if (scoped.isEmpty) {
+      body = const _Empty();
+    } else {
+      body = _RecordList(
+        records: scoped,
+        retrying: _retrying,
+        onTap: _openDetail,
+        onRetry: _retry,
+      );
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (widget.showHeader)
-          _Header(
-            onRefresh: () => ref
-                .read(bridgeLockListProvider(widget.ownerAddress).notifier)
-                .refresh(),
-          ),
-        if (!hasLoaded)
-          const _Loading()
-        else if (scoped.isEmpty)
-          const _Empty()
-        else
-          _RecordList(
-            records: scoped,
-            retrying: _retrying,
-            onTap: _openDetail,
-            onRetry: _retry,
-          ),
+          _Header(onRefresh: () => notifier.refresh()),
+        body,
       ],
     );
+  }
+
+  static String _messageFromError(Object error) {
+    if (error is BridgeServiceException) return error.message;
+    return "Couldn't load bridge history. Check your connection and try again.";
   }
 }
 
@@ -149,6 +166,46 @@ class _Loading extends StatelessWidget {
           Text(
             "Loading bridge history…",
             style: TextStyle(color: Colors.white54, fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ErrorState extends StatelessWidget {
+  final String message;
+  final VoidCallback onRetry;
+
+  const _ErrorState({required this.message, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
+      decoration: BoxDecoration(
+        color: Colors.redAccent.withOpacity(0.05),
+        border: Border.all(color: Colors.redAccent.withOpacity(0.4)),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, color: Colors.redAccent, size: 18),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message,
+              style: const TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ),
+          const SizedBox(width: 8),
+          AppButton(
+            label: "Try again",
+            type: AppButtonType.Outlined,
+            variant: AppColorVariant.Warning,
+            size: AppSizeVariant.Sm,
+            onPressed: onRetry,
           ),
         ],
       ),

@@ -7,6 +7,7 @@ import '../../../utils/toast.dart';
 import '../models/bridge_lock_record.dart';
 import '../providers/bridge_operation_provider.dart';
 import 'bridge_explorer_links.dart';
+import 'bridge_format.dart';
 
 /// Step 3 of the bridge flow — and the read-only progress view re-used by
 /// Phase 5's history detail.
@@ -45,6 +46,8 @@ class _BridgeProgressState extends ConsumerState<BridgeProgress> {
   @override
   Widget build(BuildContext context) {
     final record = ref.watch(bridgeOperationProvider(widget.lockId));
+    final isReconnecting =
+        ref.watch(bridgeOperationProvider(widget.lockId).notifier).isReconnecting;
 
     if (record != null &&
         record.isTerminal &&
@@ -72,12 +75,92 @@ class _BridgeProgressState extends ConsumerState<BridgeProgress> {
             _Header(record: record),
             const SizedBox(height: 16),
             _Stepper(record: record),
+            if (isReconnecting && !record.isTerminal) ...[
+              const SizedBox(height: 12),
+              const _ReconnectingBanner(),
+            ],
+            if (record.isStalled()) ...[
+              const SizedBox(height: 12),
+              const _StalledWarning(),
+            ],
             if (!widget.readOnly) ...[
               const SizedBox(height: 16),
               const _SafeToCloseNote(),
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+/// Shown when polling has failed at least twice in a row but we still have a
+/// last-known record on screen (UX § 6 — "Pause polling; show 'Reconnecting…'
+/// banner; resume on recovery"). The provider keeps polling on its normal
+/// cadence; this is purely visual.
+class _ReconnectingBanner extends StatelessWidget {
+  const _ReconnectingBanner();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.05),
+        border: Border.all(color: Colors.white24),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          SizedBox(
+            width: 14,
+            height: 14,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              "Reconnecting… the bridge service didn't respond to recent status checks. We'll keep retrying.",
+              style: TextStyle(color: Colors.white70, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Surfaced when a non-terminal record is older than 5 minutes (UX § 6).
+/// Polling keeps running — this is just a heads-up so users don't think
+/// the app has hung. "Continue waiting" is implicit: the polling continues
+/// regardless; this banner just informs.
+class _StalledWarning extends StatelessWidget {
+  const _StalledWarning();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.amber.withOpacity(0.08),
+        border: Border.all(color: Colors.amber.withOpacity(0.6)),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const [
+          Icon(Icons.access_time, color: Colors.amberAccent, size: 16),
+          SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              "Taking longer than expected. Validator signing can occasionally lag — "
+              "we'll keep watching. You can safely close this dialog; "
+              "Bridge History will surface the final result.",
+              style: TextStyle(color: Colors.amberAccent, fontSize: 12),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -93,7 +176,7 @@ class _Header extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "${record.amount} vBTC → ${_shortDest(record.evmDestination)}",
+          "${formatVbtc(record.amount)} vBTC → ${_shortDest(record.evmDestination)}",
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 2),

@@ -202,6 +202,45 @@ class BridgeLockRecord with _$BridgeLockRecord {
   /// [BridgeLockStatus.unknown] if the value is missing or unrecognized.
   BridgeLockStatus get status => bridgeLockStatusFromString(statusRaw);
 
+  /// User-facing label for the current status. Maps the CLI's enum names to
+  /// jargon-free phrases (UX § 7 — "avoid jargon: prefer 'validator
+  /// signatures' over 'attestations'"). Falls back to the raw enum name only
+  /// for `unknown` so future CLI additions are still readable.
+  String get friendlyStatus {
+    switch (status) {
+      case BridgeLockStatus.locked:
+        return vfxLockConfirmedOnChain ? "Confirmed" : "Locking";
+      case BridgeLockStatus.attestationPending:
+      case BridgeLockStatus.attestationReady:
+        return "Awaiting signatures";
+      case BridgeLockStatus.proofSubmitted:
+        return "Minting";
+      case BridgeLockStatus.minted:
+      case BridgeLockStatus.mintedOnBase:
+        return "Minted";
+      case BridgeLockStatus.failed:
+        return "Failed";
+      case BridgeLockStatus.expired:
+        return "Expired";
+      // Exit-flow states — bridge-in users won't usually see these, but if
+      // they do we surface something readable rather than CLI jargon.
+      case BridgeLockStatus.redeeming:
+      case BridgeLockStatus.exitBurned:
+      case BridgeLockStatus.btcExitBurned:
+      case BridgeLockStatus.btcExitSigning:
+      case BridgeLockStatus.btcExitBroadcast:
+        return "Exiting";
+      case BridgeLockStatus.redeemed:
+      case BridgeLockStatus.unlocked:
+      case BridgeLockStatus.unlockedOnVFX:
+      case BridgeLockStatus.btcExitComplete:
+        return "Returned";
+      case BridgeLockStatus.unknown:
+        final raw = statusRaw;
+        return raw != null && raw.isNotEmpty ? raw : "Unknown";
+    }
+  }
+
   /// True when the bridge is in a terminal state — no further polling needed.
   bool get isTerminal {
     switch (status) {
@@ -231,6 +270,19 @@ class BridgeLockRecord with _$BridgeLockRecord {
   /// is `Failed`. We keep this conservative; Phase 6 can broaden if we want
   /// to also surface retry for stuck `AttestationReady` / `ProofSubmitted`.
   bool get canRetry => isFailed && vfxLockConfirmedOnChain;
+
+  /// True when a non-terminal record was created more than [threshold] ago.
+  /// Used to surface a "taking longer than expected" warning in the bridge
+  /// progress UI (UX § 6 — "Lock confirmed but signature collection stalls").
+  ///
+  /// Returns false when the record is terminal or when the timestamp is
+  /// missing; the warning is intentionally conservative.
+  bool isStalled([Duration threshold = const Duration(minutes: 5)]) {
+    if (isTerminal) return false;
+    final created = createdAt;
+    if (created == null) return false;
+    return DateTime.now().toUtc().difference(created) > threshold;
+  }
 
   /// Created-at as a [DateTime], or null if the timestamp is missing.
   DateTime? get createdAt =>

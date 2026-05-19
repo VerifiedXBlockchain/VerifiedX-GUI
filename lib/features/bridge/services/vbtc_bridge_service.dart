@@ -135,7 +135,12 @@ class VbtcBridgeService extends BaseService {
   /// `GET /vbtcapi/vbtc/GetBridgeLocksByOwner/{ownerAddress}`
   ///
   /// Returns all locks for an owner across every contract. Caller filters by
-  /// `scUID` when needed. Returns an empty list on any failure.
+  /// `scUID` when needed.
+  ///
+  /// **Throws** [BridgeServiceException] on transport errors or when the CLI
+  /// reports `Success: false`. Returns an empty list only when the CLI
+  /// genuinely has no locks for the owner. This lets [BridgeLockListNotifier]
+  /// distinguish "loaded and empty" from "couldn't load."
   ///
   /// Note: this endpoint lives on `VBTCController`, not the wallet API used by
   /// the other bridge methods — see [_VbtcControllerProxy].
@@ -143,39 +148,41 @@ class VbtcBridgeService extends BaseService {
     const method = 'getLocksByOwner';
     _log(method, 'GET /vbtcapi/vbtc/GetBridgeLocksByOwner/$ownerAddress');
 
+    final Map<String, dynamic> data;
     try {
-      final data = await _vbtcController.getJson(
+      data = await _vbtcController.getJson(
         "/GetBridgeLocksByOwner/$ownerAddress",
         cleanPath: false,
       );
-
-      if (data['Success'] != true) {
-        _log(method, 'FAILED: ${data['Message']}');
-        return [];
-      }
-
-      final rawLocks = data['Locks'];
-      if (rawLocks is! List) {
-        _log(method, 'No Locks array in response');
-        return [];
-      }
-
-      final locks = <BridgeLockRecord>[];
-      for (final item in rawLocks) {
-        if (item is Map<String, dynamic>) {
-          try {
-            locks.add(BridgeLockRecord.fromUnifiedJson(item));
-          } catch (e) {
-            _log(method, 'Failed to parse lock entry: $e');
-          }
-        }
-      }
-      _log(method, 'Parsed ${locks.length} locks');
-      return locks;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
+      throw BridgeServiceException("Couldn't reach the bridge service.", cause: e);
+    }
+
+    if (data['Success'] != true) {
+      final msg = data['Message']?.toString() ?? 'Bridge history is unavailable.';
+      _log(method, 'FAILED: $msg');
+      throw BridgeServiceException(msg);
+    }
+
+    final rawLocks = data['Locks'];
+    if (rawLocks is! List) {
+      _log(method, 'No Locks array in response');
       return [];
     }
+
+    final locks = <BridgeLockRecord>[];
+    for (final item in rawLocks) {
+      if (item is Map<String, dynamic>) {
+        try {
+          locks.add(BridgeLockRecord.fromUnifiedJson(item));
+        } catch (e) {
+          _log(method, 'Failed to parse lock entry: $e');
+        }
+      }
+    }
+    _log(method, 'Parsed ${locks.length} locks');
+    return locks;
   }
 
   /// `POST /wallet/api/vbtc/bridge/retry/{lockId}/{ownerAddress}`
@@ -243,4 +250,18 @@ class VbtcBridgeService extends BaseService {
 /// `/vbtcapi/vbtc` route prefix.
 class _VbtcControllerProxy extends BaseService {
   _VbtcControllerProxy() : super(apiBasePathOverride: "/vbtcapi/vbtc");
+}
+
+/// Surfaced by [VbtcBridgeService.getLocksByOwner] when the CLI is
+/// unreachable or returns a failure response. Provider/UI layers catch this
+/// to distinguish "real error" from "successfully fetched, empty list."
+class BridgeServiceException implements Exception {
+  final String message;
+  final Object? cause;
+
+  BridgeServiceException(this.message, {this.cause});
+
+  @override
+  String toString() =>
+      cause == null ? 'BridgeServiceException: $message' : 'BridgeServiceException: $message ($cause)';
 }

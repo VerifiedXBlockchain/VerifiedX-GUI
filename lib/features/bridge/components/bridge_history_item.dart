@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../models/bridge_lock_record.dart';
+import 'bridge_format.dart';
 
 /// Tiny holder for the status pill's color + label. Records would be cleaner
 /// but this project is on Dart 2.19.
@@ -57,18 +58,16 @@ class BridgeHistoryItem extends StatelessWidget {
   }
 
   static _StatusBadge _statusBadge(BridgeLockRecord r) {
-    if (r.isSuccessful) return const _StatusBadge(Colors.greenAccent, "Minted");
-    if (r.isFailed) return const _StatusBadge(Colors.redAccent, "Failed");
+    if (r.isSuccessful) return _StatusBadge(Colors.greenAccent, r.friendlyStatus);
+    if (r.isFailed) return _StatusBadge(Colors.redAccent, r.friendlyStatus);
     if (r.status == BridgeLockStatus.expired) {
-      return const _StatusBadge(Colors.white38, "Expired");
+      return _StatusBadge(Colors.white38, r.friendlyStatus);
     }
     if (r.status == BridgeLockStatus.unknown) {
-      final raw = r.statusRaw;
-      return _StatusBadge(Colors.white38, raw != null && raw.isNotEmpty ? raw : "Unknown");
+      return _StatusBadge(Colors.white38, r.friendlyStatus);
     }
     // Anything else non-terminal — in flight.
-    final raw = r.statusRaw;
-    return _StatusBadge(Colors.amberAccent, raw != null && raw.isNotEmpty ? raw : "In flight");
+    return _StatusBadge(Colors.amberAccent, r.friendlyStatus);
   }
 
   @override
@@ -89,7 +88,7 @@ class BridgeHistoryItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${r.amount} vBTC → ${_shortDestination(r.evmDestination)}",
+                    "${formatVbtc(r.amount)} vBTC → ${_shortDestination(r.evmDestination)}",
                     style: const TextStyle(color: Colors.white, fontSize: 13),
                   ),
                   const SizedBox(height: 2),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import 'bridge_format.dart';
 
 /// Step 2 of the bridge flow. Stateless review screen — the parent owns the
 /// data and the actions.
@@ -48,7 +49,7 @@ class BridgeConfirmation extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "$amount vBTC",
+                  "${formatVbtc(amount)} vBTC",
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 const Text("from VFX", style: TextStyle(color: Colors.white54, fontSize: 12)),
@@ -56,7 +57,7 @@ class BridgeConfirmation extends StatelessWidget {
                 const Icon(Icons.arrow_downward, size: 16, color: Colors.white38),
                 const SizedBox(height: 10),
                 Text(
-                  "$amount vBTC.b",
+                  "${formatVbtc(amount)} vBTC.b",
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 Text(
@@ -74,7 +75,7 @@ class BridgeConfirmation extends StatelessWidget {
           const SizedBox(height: 16),
           const Text("This will:", style: TextStyle(color: Colors.white70, fontSize: 12)),
           const SizedBox(height: 6),
-          _StepLine(index: 1, label: "Lock your $amount vBTC on VFX"),
+          _StepLine(index: 1, label: "Lock your ${formatVbtc(amount)} vBTC on VFX"),
           const _StepLine(index: 2, label: "Wait for validator signatures"),
           _StepLine(
             index: 3,

@@ -7,6 +7,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../models/bridge_lock_record.dart';
 import 'bridge_explorer_links.dart';
+import 'bridge_format.dart';
 
 /// Step 4 of the bridge flow. Stateless terminal screen.
 ///
@@ -68,7 +69,7 @@ class _Success extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            "You now have ${record.amount} vBTC.b on Base",
+            "You now have ${formatVbtc(record.amount)} vBTC.b on Base",
             style: const TextStyle(color: Colors.white, fontSize: 14),
           ),
           const SizedBox(height: 4),
