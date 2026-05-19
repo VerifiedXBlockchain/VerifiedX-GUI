@@ -16,6 +16,7 @@ import '../../../core/theme/components.dart';
 import '../../../core/utils.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../bridge/components/bridge_to_base_dialog.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../encrypt/utils.dart';
@@ -799,6 +800,24 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 }
               },
             ),
+            // Bridge to Base — v2 contracts only, owner only. Disabled (with
+            // tooltip) when the contract has no vBTC; the dialog itself
+            // handles the per-user `availableVbtc` refinement via preflight.
+            if (isOwner && token.version == 2)
+              Tooltip(
+                message: token.balance > 0
+                    ? "Bridge vBTC to Base (vBTC.b)"
+                    : "No vBTC available to bridge",
+                child: AppButton(
+                  label: "Bridge to Base",
+                  icon: Icons.swap_horiz,
+                  variant: AppColorVariant.Info,
+                  disabled: token.balance <= 0,
+                  onPressed: () {
+                    BridgeToBaseDialog.show(context, token, scOwner);
+                  },
+                ),
+              ),
             if (isOwner)
               AppButton(
                 label: "Prove Ownership",
