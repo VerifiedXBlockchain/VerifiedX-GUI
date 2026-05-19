@@ -94,7 +94,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
   String? _validateDestination(String? raw) {
     if (raw == null || raw.trim().isEmpty) return "Base address is required";
     if (!_evmAddressPattern.hasMatch(raw.trim())) {
-      return "Must be a valid 0x EVM address (40 hex chars)";
+      return "Must be a valid 0x Base address (40 hex chars)";
     }
     return null;
   }

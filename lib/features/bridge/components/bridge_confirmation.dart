@@ -75,7 +75,7 @@ class BridgeConfirmation extends StatelessWidget {
           const Text("This will:", style: TextStyle(color: Colors.white70, fontSize: 12)),
           const SizedBox(height: 6),
           _StepLine(index: 1, label: "Lock your $amount vBTC on VFX"),
-          const _StepLine(index: 2, label: "Wait for validators to sign mint attestations"),
+          const _StepLine(index: 2, label: "Wait for validator signatures"),
           _StepLine(
             index: 3,
             label: "Submit a mintWithProof transaction on Base "
