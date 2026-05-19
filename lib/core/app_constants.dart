@@ -43,6 +43,11 @@ const PRIVACY_TX_FIXED_FEE_LABEL = "0.000003 VFX";
 const MIN_SHIELD_AMOUNT_VFX = 0.001;
 const MIN_SHIELD_AMOUNT_VBTC = 0.00001;
 
+/// Minimum ETH balance on the user's derived Base address required before we
+/// stop warning about gas. Used by the vBTC → Base bridge preflight check.
+/// Warning-only — bridging is not blocked, since real-world gas costs vary.
+const BRIDGE_MIN_ETH_FOR_GAS = 0.0005;
+
 const BTC_SATOSHI_MULTIPLIER = 0.00000001;
 const BTC_TX_EXPECTED_BYTES = 140;
 const BTC_MINIMUM_TX_AMOUNT = 0.00001;
