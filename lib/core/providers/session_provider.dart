@@ -558,12 +558,13 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> stopCli() async {
-    // ref.read(logProvider.notifier).clear();
-    state = _initial.copyWith(windowsLauncherPath: state.windowsLauncherPath);
-    // ref.read(logProvider.notifier).append(LogEntry(message: "Shutting down CLI..."));
+    print('[Snapshot] stopCli: resetting state (preserving snapshotRequested=${state.snapshotRequested})');
+    state = _initial.copyWith(windowsLauncherPath: state.windowsLauncherPath, snapshotRequested: state.snapshotRequested);
+    print('[Snapshot] stopCli: sending killCli command...');
     await BridgeService().killCli();
-    // ref.read(logProvider.notifier).append(LogEntry(message: "CLI terminated."));
+    print('[Snapshot] stopCli: killCli sent, waiting 5 seconds for CLI to exit...');
     await Future.delayed(const Duration(milliseconds: 5000));
+    print('[Snapshot] stopCli: 5 second wait complete');
   }
 
   Future<void> restartCli() async {

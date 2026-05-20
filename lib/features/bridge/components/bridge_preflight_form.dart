@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,23 +47,43 @@ class BridgePreflightForm extends ConsumerStatefulWidget {
 
 class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
   final _formKey = GlobalKey<FormState>();
-  bool _destinationEdited = false;
+  bool _detailsExpanded = false;
+  Timer? _refreshTimer;
+
+  // Manual error state — keyed to the two input fields. We don't use
+  // AutovalidateMode here because the requested UX is: no errors until the
+  // user clicks Review Bridge, and any typing immediately clears the error
+  // for that field (without re-running validation mid-keystroke).
+  String? _amountError;
+  String? _destinationError;
 
   static final _evmAddressPattern = RegExp(r'^0x[0-9a-fA-F]{40}$');
+
+  /// Interval for auto-refreshing preflight while the form is open. Lets the
+  /// user see incoming gas funds without manually retrying.
+  static const _preflightRefreshInterval = Duration(seconds: 10);
+
+  @override
+  void initState() {
+    super.initState();
+    // Poll preflight every 10s so the user can watch their ETH gas balance
+    // tick up after they fund the address from an exchange / external wallet.
+    _refreshTimer = Timer.periodic(_preflightRefreshInterval, (_) {
+      if (!mounted) return;
+      ref.invalidate(bridgePreflightProvider(_args));
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
 
   BridgePreflightArgs get _args => BridgePreflightArgs(
         ownerAddress: widget.ownerAddress,
         scUid: widget.token.smartContractUid,
       );
-
-  void _maybeSeedDestination(BridgePreflight preflight) {
-    // Auto-fill the destination with the derived Base address the first time
-    // preflight returns one, unless the user has already typed something.
-    if (_destinationEdited) return;
-    if (widget.destinationController.text.isNotEmpty) return;
-    if (preflight.derivedBaseAddress.isEmpty) return;
-    widget.destinationController.text = preflight.derivedBaseAddress;
-  }
 
   /// Public so the step's child widgets (which only have access to the state
   /// object, not setState directly) can request a rebuild after updating one
@@ -70,11 +92,15 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
     if (mounted) setState(() {});
   }
 
-  void _resetToDerived(BridgePreflight preflight) {
-    if (preflight.derivedBaseAddress.isEmpty) return;
-    widget.destinationController.text = preflight.derivedBaseAddress;
-    _destinationEdited = false;
-    rebuild();
+  /// Force an immediate preflight refresh — used by the "Refresh" button in
+  /// the gas funding section so users don't have to wait for the next poll
+  /// tick after sending a gas tx.
+  void refreshPreflight() {
+    ref.invalidate(bridgePreflightProvider(_args));
+  }
+
+  void _toggleDetails() {
+    setState(() => _detailsExpanded = !_detailsExpanded);
   }
 
   void _setMax(BridgePreflight preflight) {
@@ -100,8 +126,27 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
     return null;
   }
 
+  /// Called from the input's onChanged. Clears the per-field error if one is
+  /// currently displayed so the user gets a fresh slate while editing.
+  void clearAmountError() {
+    if (_amountError != null) setState(() => _amountError = null);
+  }
+
+  void clearDestinationError() {
+    if (_destinationError != null) setState(() => _destinationError = null);
+  }
+
   void _submit(BridgePreflight preflight) {
-    if (!_formKey.currentState!.validate()) return;
+    final amountErr =
+        _validateAmount(widget.amountController.text, preflight);
+    final destErr = _validateDestination(widget.destinationController.text);
+    if (amountErr != null || destErr != null) {
+      setState(() {
+        _amountError = amountErr;
+        _destinationError = destErr;
+      });
+      return;
+    }
     final amount = double.parse(widget.amountController.text.trim());
     final destination = widget.destinationController.text.trim();
     widget.onReview(preflight, amount, destination);
@@ -112,6 +157,12 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
     final async = ref.watch(bridgePreflightProvider(_args));
 
     return async.when(
+      // Keep the previously rendered form on background re-fetches (the
+      // 10s polling tick) instead of flashing back to a spinner each time —
+      // otherwise the user's amount/destination input would be wiped out
+      // visually every tick.
+      skipLoadingOnReload: true,
+      skipLoadingOnRefresh: true,
       loading: () => _Loading(onCancel: widget.onCancel),
       error: (err, _) => _ErrorState(
         message: "Couldn't reach the bridge service. Check your connection and try again.",
@@ -168,7 +219,6 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
             onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
           );
         }
-        _maybeSeedDestination(preflight);
         return _Form(
           state: this,
           preflight: preflight,
@@ -186,23 +236,20 @@ class _Form extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lowGas = preflight.isLowOnGas(BRIDGE_MIN_ETH_FOR_GAS);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 480),
       child: SingleChildScrollView(
         child: Form(
           key: state._formKey,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          // No autovalidateMode — we manage error display manually so it only
+          // surfaces on Review Bridge press and clears the moment the user
+          // starts typing in a field.
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const _OneWayDisclaimer(),
               const SizedBox(height: 16),
-              if (lowGas) ...[
-                _GasWarning(address: preflight.derivedBaseAddress),
-                const SizedBox(height: 16),
-              ],
               const Text("Amount to bridge", style: TextStyle(color: Colors.white70, fontSize: 12)),
               const SizedBox(height: 4),
               Row(
@@ -211,12 +258,25 @@ class _Form extends StatelessWidget {
                     child: TextFormField(
                       controller: state.widget.amountController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
+                      inputFormatters: [
+                        // Allow only digits + a single decimal point. Rejects
+                        // any other character at the keystroke level so the
+                        // user can't even type letters / commas / multiple dots.
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          if (newValue.text.isEmpty) return newValue;
+                          final ok = RegExp(r'^\d*\.?\d*$').hasMatch(newValue.text);
+                          return ok ? newValue : oldValue;
+                        }),
+                      ],
+                      decoration: InputDecoration(
                         suffixText: "vBTC",
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
+                        errorText: state._amountError,
                       ),
-                      validator: (raw) => state._validateAmount(raw, preflight),
-                      onChanged: (_) => state.rebuild(),
+                      onChanged: (_) {
+                        state.clearAmountError();
+                        state.rebuild();
+                      },
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -238,36 +298,37 @@ class _Form extends StatelessWidget {
               const SizedBox(height: 4),
               TextFormField(
                 controller: state.widget.destinationController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: "0x…",
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
+                  errorText: state._destinationError,
                 ),
-                validator: state._validateDestination,
                 onChanged: (_) {
-                  state._destinationEdited = true;
+                  state.clearDestinationError();
                   state.rebuild();
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Row(
-                  children: [
-                    const Expanded(
-                      child: Text(
-                        "Auto-derived from your VFX key. Edit to send to a different Base address (get this from your DeFi provider / Base wallet).",
-                        style: TextStyle(color: Colors.white38, fontSize: 11),
-                      ),
-                    ),
-                    if (preflight.derivedBaseAddress.isNotEmpty)
-                      TextButton(
-                        onPressed: () => state._resetToDerived(preflight),
-                        child: const Text("Reset to derived"),
-                      ),
-                  ],
+              const Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: Text(
+                  "Paste the destination address from your DeFi provider or Base wallet.",
+                  style: TextStyle(color: Colors.white38, fontSize: 11),
                 ),
               ),
               const SizedBox(height: 16),
-              _NetworkInfo(preflight: preflight),
+              _GasFundingSection(
+                preflight: preflight,
+                onRefresh: state.refreshPreflight,
+              ),
+              const SizedBox(height: 12),
+              _DetailsToggle(
+                expanded: state._detailsExpanded,
+                onToggle: state._toggleDetails,
+              ),
+              if (state._detailsExpanded) ...[
+                const SizedBox(height: 8),
+                _NetworkInfo(preflight: preflight),
+              ],
               const SizedBox(height: 24),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -281,7 +342,7 @@ class _Form extends StatelessWidget {
                   const SizedBox(width: 8),
                   AppButton(
                     label: "Review Bridge",
-                    variant: AppColorVariant.Info,
+                    variant: AppColorVariant.Success,
                     onPressed: () => state._submit(preflight),
                   ),
                 ],
@@ -323,38 +384,165 @@ class _OneWayDisclaimer extends StatelessWidget {
   }
 }
 
-class _GasWarning extends StatelessWidget {
-  final String address;
-  const _GasWarning({required this.address});
+/// Always-visible gas funding section. The mint transaction on Base is paid
+/// from the user's derived Base address — surfaced here with current balance
+/// and clear funding instructions because most users will have 0 ETH on this
+/// address by default. The form polls preflight every 10s so the balance
+/// updates automatically once funds arrive; the inline "Refresh" button
+/// lets impatient users trigger an immediate check.
+class _GasFundingSection extends StatelessWidget {
+  final BridgePreflight preflight;
+  final VoidCallback onRefresh;
+  const _GasFundingSection({required this.preflight, required this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
+    final lowGas = preflight.isLowOnGas(BRIDGE_MIN_ETH_FOR_GAS);
+    final ethBalance = preflight.ethBalance;
+    final hasZeroEth = ethBalance == null || ethBalance <= 0;
+
+    // Accent color: amber for low/zero ETH, neutral white border once funded.
+    final accent = lowGas ? Colors.amberAccent : Colors.white24;
+    final accentBg = lowGas ? Colors.amber.withOpacity(0.06) : Colors.white.withOpacity(0.03);
+
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.amber.withOpacity(0.08),
-        border: Border.all(color: Colors.amber.withOpacity(0.6)),
+        color: accentBg,
+        border: Border.all(color: accent),
         borderRadius: BorderRadius.circular(6),
       ),
-      child: Row(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.warning_amber, size: 18, color: Colors.amber),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              "Low ETH on your Base address for gas. Consider funding ${_short(address)} with more ETH before bridging.",
-              style: const TextStyle(color: Colors.amberAccent, fontSize: 12),
+          Row(
+            children: [
+              Icon(lowGas ? Icons.warning_amber : Icons.local_gas_station,
+                  size: 16, color: lowGas ? Colors.amberAccent : Colors.white70),
+              const SizedBox(width: 6),
+              const Expanded(
+                child: Text(
+                  "Gas (paid on Base)",
+                  style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                ),
+              ),
+              InkWell(
+                onTap: onRefresh,
+                borderRadius: BorderRadius.circular(4),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Icon(Icons.refresh, size: 14, color: Colors.white54),
+                      SizedBox(width: 4),
+                      Text(
+                        "Refresh",
+                        style: TextStyle(color: Colors.white54, fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "Your gas address",
+            style: TextStyle(color: Colors.white54, fontSize: 11),
+          ),
+          const SizedBox(height: 2),
+          Row(
+            children: [
+              Expanded(
+                child: SelectableText(
+                  preflight.derivedBaseAddress.isNotEmpty
+                      ? preflight.derivedBaseAddress
+                      : "—",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ),
+              if (preflight.derivedBaseAddress.isNotEmpty)
+                InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: preflight.derivedBaseAddress),
+                    );
+                    Toast.message("Copied to clipboard");
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            "Current balance",
+            style: TextStyle(color: Colors.white54, fontSize: 11),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            ethBalance == null ? "—" : "${ethBalance.toStringAsFixed(6)} ETH",
+            style: TextStyle(
+              color: lowGas ? Colors.amberAccent : Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
             ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            hasZeroEth
+                ? "This address pays the gas fee for the mint transaction on "
+                    "Base. Send a small amount of Base ETH (≈ 0.001 ETH) to "
+                    "the address above before bridging. You can fund it from "
+                    "any exchange or Base wallet that supports withdrawing to "
+                    "Base mainnet. Balance updates automatically every 10s — "
+                    "tap Refresh for an immediate check."
+                : "Low balance — gas costs vary. Top up the address above if "
+                    "the mint fails.",
+            style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.4),
           ),
         ],
       ),
     );
   }
+}
 
-  String _short(String addr) {
-    if (addr.length < 12) return addr;
-    return "${addr.substring(0, 6)}…${addr.substring(addr.length - 4)}";
+/// Compact "Show details / Hide details" toggle.
+class _DetailsToggle extends StatelessWidget {
+  final bool expanded;
+  final VoidCallback onToggle;
+  const _DetailsToggle({required this.expanded, required this.onToggle});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onToggle,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              expanded ? "Hide details" : "Show details",
+              style: const TextStyle(color: Colors.white54, fontSize: 12),
+            ),
+            const SizedBox(width: 4),
+            Icon(
+              expanded ? Icons.expand_less : Icons.expand_more,
+              size: 16,
+              color: Colors.white54,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 

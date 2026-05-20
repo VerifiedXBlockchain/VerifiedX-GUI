@@ -24,6 +24,12 @@ class BridgeProgress extends ConsumerStatefulWidget {
   final String lockId;
   final bool readOnly;
 
+  /// Optional seed record. When provided, the widget renders this record
+  /// immediately while the live `bridgeOperationProvider` fetches the latest
+  /// status in the background. Prevents the dialog from showing an empty
+  /// spinner when we already have the data (e.g. opening a history row).
+  final BridgeLockRecord? seedRecord;
+
   /// Called once when the record first reaches a terminal state. The dialog
   /// uses this to transition to the result step. Ignored when [readOnly] is
   /// true.
@@ -33,6 +39,7 @@ class BridgeProgress extends ConsumerStatefulWidget {
     super.key,
     required this.lockId,
     this.readOnly = false,
+    this.seedRecord,
     this.onTerminal,
   });
 
@@ -45,11 +52,16 @@ class _BridgeProgressState extends ConsumerState<BridgeProgress> {
 
   @override
   Widget build(BuildContext context) {
-    final record = ref.watch(bridgeOperationProvider(widget.lockId));
+    final liveRecord = ref.watch(bridgeOperationProvider(widget.lockId));
     final isReconnecting =
         ref.watch(bridgeOperationProvider(widget.lockId).notifier).isReconnecting;
 
+    // Prefer the live record once it arrives; fall back to the seed (cached
+    // history record) until then so the dialog never appears empty.
+    final record = liveRecord ?? widget.seedRecord;
+
     if (record != null &&
+        liveRecord != null &&
         record.isTerminal &&
         !_firedTerminal &&
         !widget.readOnly &&
@@ -398,7 +410,12 @@ class _TxRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Use baseline alignment so the default-font label and the monospace hash
+    // share the same text baseline instead of floating at slightly different
+    // vertical positions (monospace fonts have different x-height metrics).
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
       children: [
         Text("$label: ", style: const TextStyle(color: Colors.white54, fontSize: 11)),
         Text(

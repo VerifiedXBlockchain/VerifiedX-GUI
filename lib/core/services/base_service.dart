@@ -12,6 +12,9 @@ import '../../features/inspector/network_inspector.dart';
 import '../env.dart';
 
 class BaseService {
+  /// Set to true during snapshot import to suppress DIO error noise in logs.
+  static bool suppressErrors = false;
+
   final String? hostOverride;
   final String? apiBasePathOverride;
   final bool withWebAuth;
@@ -102,8 +105,10 @@ class BaseService {
 
       return response.toString();
     } catch (e, st) {
-      print(e);
-      print(st);
+      if (!suppressErrors) {
+        print(e);
+        print(st);
+      }
       if (!preventError) {
         rethrow;
       }
@@ -199,7 +204,7 @@ class BaseService {
       // }
       // return response.data;
     } catch (e) {
-      print(e);
+      if (!suppressErrors) print(e);
       rethrow;
     }
   }

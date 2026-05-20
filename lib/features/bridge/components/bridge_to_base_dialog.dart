@@ -51,15 +51,28 @@ class BridgeToBaseDialog extends ConsumerStatefulWidget {
   /// failure "View Details" action. Renders [BridgeProgress] in `readOnly`
   /// mode so the live `bridgeOperationProvider` polls in the background but
   /// no terminal-state advance fires.
+  ///
+  /// Pass [seedRecord] (typically the row you already have in the history
+  /// list) so the dialog renders the stepper immediately — the live fetch
+  /// updates it in the background. Without a seed, a failed `getStatus`
+  /// would leave the dialog stuck on the loading spinner.
   static Future<void> showHistoryDetail(
     BuildContext context,
-    String lockId,
-  ) async {
+    String lockId, {
+    BridgeLockRecord? seedRecord,
+  }) async {
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text("Bridge details"),
-        content: BridgeProgress(lockId: lockId, readOnly: true),
+        content: SizedBox(
+          width: 520,
+          child: BridgeProgress(
+            lockId: lockId,
+            readOnly: true,
+            seedRecord: seedRecord,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
@@ -206,7 +219,11 @@ class _BridgeToBaseDialogState extends ConsumerState<BridgeToBaseDialog> {
           // Failure path: jump into the same read-only detail view the history
           // list uses, so the user can copy hashes / inspect signature progress.
           onViewDetails: record.isFailed
-              ? () => BridgeToBaseDialog.showHistoryDetail(context, record.lockId)
+              ? () => BridgeToBaseDialog.showHistoryDetail(
+                    context,
+                    record.lockId,
+                    seedRecord: record,
+                  )
               : null,
         );
     }

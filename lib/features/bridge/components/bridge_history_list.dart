@@ -49,7 +49,14 @@ class _BridgeHistoryListState extends ConsumerState<BridgeHistoryList> {
   final Set<String> _retrying = <String>{};
 
   void _openDetail(BridgeLockRecord record) {
-    BridgeToBaseDialog.showHistoryDetail(context, record.lockId);
+    // Pass the cached record as seed so the detail view renders immediately
+    // even if the live status endpoint is slow or down (e.g. during a CLI
+    // network upgrade). The provider's poll will refresh it in the background.
+    BridgeToBaseDialog.showHistoryDetail(
+      context,
+      record.lockId,
+      seedRecord: record,
+    );
   }
 
   Future<void> _retry(BridgeLockRecord record) async {

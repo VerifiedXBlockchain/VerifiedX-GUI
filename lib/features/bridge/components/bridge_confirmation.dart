@@ -123,7 +123,7 @@ class BridgeConfirmation extends StatelessWidget {
               const SizedBox(width: 8),
               AppButton(
                 label: "Confirm & Bridge",
-                variant: AppColorVariant.Info,
+                variant: AppColorVariant.Success,
                 processing: isSubmitting,
                 onPressed: isSubmitting ? () {} : onConfirm,
               ),
