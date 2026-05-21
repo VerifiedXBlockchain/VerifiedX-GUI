@@ -160,7 +160,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                     if (token is TokenizedBitcoin) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                          builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                         ),
                       );
                       return;
@@ -204,7 +204,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                       if (token is TokenizedBitcoin) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                            builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                           ),
                         );
                         return;
@@ -377,7 +377,7 @@ class TokenizedBtcListTile extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                  builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                 ),
               );
             },
@@ -405,7 +405,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
           ? () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                  builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                 ),
               );
             }
@@ -478,7 +478,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => TokenizedBtcDetailScreen(tokenId: item.token.id),
+                                builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
                               ),
                             );
                           },
@@ -515,7 +515,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (_) => TokenizedBtcDetailScreen(tokenId: item.token.id),
+                                          builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
                                         ),
                                       );
                                     },

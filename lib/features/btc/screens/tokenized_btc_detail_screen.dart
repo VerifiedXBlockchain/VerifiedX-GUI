@@ -30,12 +30,12 @@ import '../../bridge/components/bridge_history_list.dart';
 import '../../price/providers/price_detail_providers.dart';
 
 class TokenizedBtcDetailScreen extends BaseScreen {
-  final double tokenId;
-  const TokenizedBtcDetailScreen({super.key, required this.tokenId});
+  final String tokenKey;
+  const TokenizedBtcDetailScreen({super.key, required this.tokenKey});
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
-    final token = ref.watch(tokenizedBtcDetailProvider(tokenId));
+    final token = ref.watch(tokenizedBtcDetailProvider(tokenKey));
 
     if (token == null) {
       return AppBar(
@@ -116,7 +116,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final token = ref.watch(tokenizedBtcDetailProvider(tokenId));
+    final token = ref.watch(tokenizedBtcDetailProvider(tokenKey));
     final btcPrice = ref.watch(btcCurrentPriceDataDetailProvider);
 
     if (token == null) {

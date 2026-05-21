@@ -141,6 +141,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       .where((a) => a.balance > 0)
                       .toList();
 
+                  bool isSending = false;
                   final parentContext = context;
                   showModalBottomSheet(
                     context: parentContext,
@@ -187,6 +188,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                     subtitle: Text("${account.balance} BTC"),
                                     trailing: Icon(Icons.send),
                                     onTap: () async {
+                                      if (isSending) return;
+                                      isSending = true;
                                       Navigator.of(context).pop();
 
                                       final amount = await PromptModal.show(
