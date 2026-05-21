@@ -167,7 +167,7 @@ class Env {
   }
 
   static bool get moonpayEnabled {
-    return kIsWeb; // Only enabled on web
+    return true;
   }
 
   static bool get moonpayEnabledVFX {

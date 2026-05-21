@@ -26,6 +26,7 @@ import '../../nft/utils.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
+import '../../wallet/utils.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/btc_account_list_provider.dart';
 import '../providers/btc_pending_tokenized_address_list_provider.dart';
@@ -140,15 +141,16 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       .where((a) => a.balance > 0)
                       .toList();
 
+                  final parentContext = context;
                   showModalBottomSheet(
-                    context: context,
+                    context: parentContext,
                     builder: (context) {
                       return ModalContainer(
                         withDecor: false,
                         withClose: true,
                         children: [
                           Text(
-                            "Choose BTC Account to Send From",
+                            "Fund Token",
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall!
@@ -157,6 +159,25 @@ class TokenizedBtcActionButtons extends BaseComponent {
                           ListView(
                             shrinkWrap: true,
                             children: [
+                              AppCard(
+                                padding: 0,
+                                margin: EdgeInsets.symmetric(vertical: 8),
+                                child: ListTile(
+                                  title: Text("Buy BTC (On-Ramp)"),
+                                  subtitle: Text(
+                                      "Purchase BTC with fiat and send directly to this token"),
+                                  trailing: Icon(Icons.credit_card),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    AccountUtils.getCoin(
+                                      parentContext,
+                                      ref,
+                                      VfxOrBtcOption.btc,
+                                      btcAddressOverride: token.btcAddress!,
+                                    );
+                                  },
+                                ),
+                              ),
                               ...btcAccounts.map((account) {
                                 return AppCard(
                                   padding: 0,
@@ -343,13 +364,12 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 child: ListTile(
                                   title: Text("Manual Send"),
                                   subtitle: Text(
-                                      "Send coin manually to this token's BTC deposit address"),
-                                  trailing: Icon(Icons.send),
-                                  onTap: () async {
-                                    await Clipboard.setData(
-                                        ClipboardData(text: token.btcAddress));
-                                    Toast.message(
-                                        "Send funds to ${token.btcAddress} (address copied to clipboard)");
+                                      "Send BTC from any exchange or wallet to this token's deposit address"),
+                                  trailing: Icon(Icons.content_copy),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    _showManualSendDialog(
+                                        parentContext, token.btcAddress!);
                                   },
                                 ),
                               ),
@@ -940,6 +960,90 @@ class TokenizedBtcActionButtons extends BaseComponent {
       },
     );
   }
+}
+
+void _showManualSendDialog(BuildContext context, String btcAddress) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.send, color: Color(0xfff7931a)),
+            SizedBox(width: 8),
+            Text("Fund via Manual Send"),
+          ],
+        ),
+        content: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 500),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Send BTC from any exchange or external wallet to the deposit address below.",
+                style: TextStyle(color: Colors.white70),
+              ),
+              SizedBox(height: 16),
+              Text(
+                "Deposit Address",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xfff7931a),
+                ),
+              ),
+              SizedBox(height: 4),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black38,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white12),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SelectableText(
+                        btcAddress,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    IconButton(
+                      icon: Icon(Icons.copy, size: 18, color: Color(0xfff7931a)),
+                      tooltip: "Copy address",
+                      onPressed: () async {
+                        await Clipboard.setData(ClipboardData(text: btcAddress));
+                        Toast.message("Address copied to clipboard");
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 12),
+              Text(
+                "Once the BTC transaction is confirmed on-chain, your vBTC balance will update automatically.",
+                style: TextStyle(color: Colors.white38, fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Close", style: TextStyle(color: Colors.white70)),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class _TransferShareModalResponse {
