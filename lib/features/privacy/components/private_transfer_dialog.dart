@@ -115,13 +115,25 @@ class _PrivateTransferDialogState extends ConsumerState<PrivateTransferDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
+          child: Text(
+            "Cancel",
+            style: TextStyle(
+              color: _isSubmitting ? Colors.white24 : Colors.white70,
+              fontSize: 15,
+            ),
+          ),
         ),
         TextButton(
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : const Text("Transfer"),
+              : Text(
+                  "Transfer",
+                  style: TextStyle(
+                    color: _isSubmitting ? Colors.white24 : const Color(0xFF73c4fa),
+                    fontSize: 15,
+                  ),
+                ),
         ),
       ],
     );

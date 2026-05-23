@@ -30,13 +30,14 @@ class ShieldedBalanceNotifier extends StateNotifier<ShieldedBalance?> {
     );
     if (balance != null) {
       // If we recently applied an optimistic adjustment, don't overwrite with
-      // a transient zero balance (the CLI marks inputs as spent before the
-      // change output confirms).
+      // a transient intermediate balance (the CLI marks inputs as spent before
+      // the change output confirms, producing a temporarily lower value).
       if (_optimisticUntil != null && DateTime.now().isBefore(_optimisticUntil!)) {
-        if (balance.vfxBalance <= 0 && (state?.vfxBalance ?? 0) > 0) {
-          return;
+        final optimisticVfx = state?.vfxBalance ?? 0;
+        if (balance.vfxBalance < optimisticVfx) {
+          return; // Still processing — keep the optimistic value
         }
-        // Real balance came back non-zero — clear the guard.
+        // Balance recovered to at least the optimistic value — clear the guard.
         _optimisticUntil = null;
       }
       state = balance;

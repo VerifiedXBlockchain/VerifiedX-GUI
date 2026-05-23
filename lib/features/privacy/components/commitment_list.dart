@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../core/base_component.dart';
+import '../../../core/env.dart';
 import '../../../core/theme/colors.dart';
 import '../models/shielded_balance.dart';
 import '../models/shielded_commitment.dart';
@@ -30,18 +32,33 @@ class CommitmentList extends BaseComponent {
         child: ExpansionTile(
           initiallyExpanded: false,
           tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-          title: Text(
-            "Commitments (${unspent.length} note${unspent.length == 1 ? '' : 's'})",
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-            ),
+          title: Row(
+            children: [
+              Text(
+                "Commitments (${unspent.length} note${unspent.length == 1 ? '' : 's'})",
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(width: 6),
+              Tooltip(
+                message:
+                    "Notes represent individual shielded outputs that make up your\n"
+                    "private balance. Each note is a separate commitment on-chain.\n"
+                    "When you send a private transaction, notes are consumed and\n"
+                    "new ones are created as change. Use consolidation to merge\n"
+                    "many small notes into fewer larger ones.",
+                child: Icon(Icons.info_outline, size: 15, color: Colors.white30),
+              ),
+            ],
           ),
           iconColor: Colors.white54,
           collapsedIconColor: Colors.white38,
           children: [
             const Divider(height: 1, color: Colors.white12),
             ...unspent.map((c) => _CommitmentRow(commitment: c)),
+            const SizedBox(height: 16),
           ],
         ),
       ),
@@ -82,12 +99,29 @@ class _CommitmentRow extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  "Tree pos: ${commitment.treePosition}  |  Block: ${commitment.blockHeight}",
-                  style: const TextStyle(
-                    color: Colors.white38,
-                    fontSize: 11,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      "Tree pos: ${commitment.treePosition}  |  ",
+                      style: const TextStyle(
+                        color: Colors.white38,
+                        fontSize: 11,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        launchUrlString("${Env.baseExplorerUrl}block/${commitment.blockHeight}");
+                      },
+                      child: Text(
+                        "Block: ${commitment.blockHeight}",
+                        style: const TextStyle(
+                          color: Colors.white54,
+                          fontSize: 11,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
