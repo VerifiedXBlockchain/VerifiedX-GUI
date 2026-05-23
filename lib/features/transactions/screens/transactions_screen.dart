@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_const
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/components/currency_segmented_button.dart';
@@ -10,11 +12,42 @@ import 'package:rbx_wallet/core/components/back_to_home_button.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
+import '../../../core/providers/session_provider.dart';
 import '../../btc/components/btc_transaction_list.dart';
 import '../components/combined_transactions_list.dart';
 import '../components/transaction_list.dart';
 import '../components/vfx_transaction_filter_button.dart';
 import '../providers/transaction_list_provider.dart';
+
+/// Wrapper that runs a faster transaction poll while the screen is visible.
+class _FastPollScope extends ConsumerStatefulWidget {
+  final Widget child;
+  const _FastPollScope({required this.child});
+
+  @override
+  ConsumerState<_FastPollScope> createState() => _FastPollScopeState();
+}
+
+class _FastPollScopeState extends ConsumerState<_FastPollScope> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
+      ref.read(sessionProvider.notifier).loadTransactions();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}
 
 class TransactionsScreen extends BaseScreen {
   const TransactionsScreen({Key? key}) : super(key: key, verticalPadding: 0, horizontalPadding: 0);
@@ -58,6 +91,10 @@ class TransactionsScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    return _FastPollScope(child: _buildBody(context, ref));
+  }
+
+  Widget _buildBody(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(currencySegementedButtonProvider);
     final btcColor = Theme.of(context).colorScheme.btcOrange;
     switch (mode) {

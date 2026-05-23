@@ -9,6 +9,7 @@ import '../../global_loader/global_loading_provider.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 
+import '../../../core/utils/tx_refresh.dart';
 import '../../bridge/models/log_entry.dart';
 
 part 'btc_adnr_transfer_form_provider.freezed.dart';
@@ -78,6 +79,7 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
     ref.read(globalLoadingProvider.notifier).complete();
     ref.read(adnrPendingProvider.notifier).addId(state.fromBtcAddress!, "transfer", state.domainName ?? 'null');
 
+    notifyTransactionSubmitted();
     state = BtcAdnrTransferFormState();
 
     return true;

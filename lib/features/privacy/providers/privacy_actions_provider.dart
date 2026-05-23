@@ -1,8 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_constants.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../../../utils/toast.dart';
-import '../../transactions/providers/transaction_list_provider.dart';
 import '../services/privacy_service.dart';
 import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
@@ -30,10 +30,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     }
   }
 
-  /// Reload the transaction list so the CLI's pending record shows up.
-  void _refreshTxList() {
-    ref.read(transactionListProvider(TransactionListType.All).notifier).load();
-  }
+  void _refreshTxList() => notifyTransactionSubmitted();
 
   Future<bool> shield({
     required String fromAddress,

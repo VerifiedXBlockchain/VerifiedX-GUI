@@ -6,6 +6,7 @@ import '../../../core/base_component.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../services/mother_service.dart';
 
 class MotherAddHostDialog extends BaseComponent {
@@ -76,6 +77,8 @@ class MotherAddHostDialog extends BaseComponent {
               Toast.error();
               return;
             }
+
+            notifyTransactionSubmitted();
 
             final restart = await ConfirmDialog.show(
               title: "CLI Restart Required",

@@ -879,7 +879,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       startupDataLoop();
 
       final cliPath = Env.cliPathOverride ?? getCliPath();
-      List<String> options = Env.isTestNet || Env.isDevnet
+      List<String> options = Env.isTestNet || Env.isDevnet || kDebugMode
           ? ['enableapi', 'gui']
           : ['enableapi', 'gui', 'apitoken=$apiToken'];
       // List<String> options = ['enableapi', 'gui'];

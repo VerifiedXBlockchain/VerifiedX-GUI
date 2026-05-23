@@ -26,6 +26,7 @@ import '../../global_loader/global_loading_provider.dart';
 import '../../token/providers/web_token_actions_manager.dart';
 import '../providers/bulk_vbtc_transfer_provider.dart';
 import '../services/btc_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class BulkVbtcTransferScreen extends BaseScreen {
   const BulkVbtcTransferScreen({super.key});
@@ -608,6 +609,8 @@ class _ConfirmBottomSheet extends BaseComponent {
                             variant: AppColorVariant.Btc,
                           ),
                         );
+
+                    notifyTransactionSubmitted();
 
                     for (var element in provider.controllers) {
                       element.clear();

@@ -20,6 +20,7 @@ import '../../encrypt/utils.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../providers/adnr_pending_provider.dart';
 import '../services/adnr_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 import 'create_adnr_dialog.dart';
 
 class VfxAdnrCard extends BaseComponent {
@@ -149,6 +150,7 @@ class VfxAdnrCard extends BaseComponent {
                                         ref.read(adnrPendingProvider.notifier).addId(wallet.address, "transfer", wallet.adnr ?? "null");
                                       }
 
+                                      notifyTransactionSubmitted();
                                       return;
                                     }
 
@@ -198,6 +200,7 @@ class VfxAdnrCard extends BaseComponent {
                                   );
                               ref.read(adnrPendingProvider.notifier).addId(wallet.address, "burn", wallet.adnr ?? "null");
                             }
+                            notifyTransactionSubmitted();
                           }
                         }
                       },
@@ -262,6 +265,7 @@ class VfxAdnrCard extends BaseComponent {
           ref.read(logProvider.notifier).append(
                 LogEntry(message: message, textToCopy: txHash, variant: AppColorVariant.Success),
               );
+          notifyTransactionSubmitted();
           await InfoDialog.show(
             contextOverride: context,
             title: "Funds Sent",

@@ -12,6 +12,7 @@ import '../../smart_contracts/components/sc_creator/common/compile_animation.dar
 import '../../smart_contracts/models/multi_asset.dart';
 import '../../smart_contracts/models/smart_contract.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 import '../../../core/services/explorer_service.dart';
 import '../../nft/providers/nft_list_provider.dart';
@@ -285,6 +286,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
         ref.read(webSessionProvider).keypair?.address,
         ref.read(webSessionProvider).raKeypair?.address,
       ]);
+      notifyTransactionSubmitted();
       clear();
       return true;
     }

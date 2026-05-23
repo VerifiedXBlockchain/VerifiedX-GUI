@@ -12,6 +12,7 @@ import '../models/token_sc_feature.dart';
 import '../services/token_service.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class MintTokensButton extends BaseComponent {
   final Nft nft;
@@ -71,6 +72,7 @@ class MintTokensButton extends BaseComponent {
 
               if (success) {
                 Toast.message("Token mint transaction broadcasted");
+                notifyTransactionSubmitted();
               }
             },
     );

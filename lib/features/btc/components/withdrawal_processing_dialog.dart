@@ -12,6 +12,7 @@ import '../../../utils/toast.dart';
 import '../models/withdrawal_result.dart';
 import '../services/vbtc_v2_service.dart';
 import '../../transactions/services/local_transaction_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 const _tag = '[vBTC-V2] WithdrawalDialog';
 
@@ -135,6 +136,10 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     if (!mounted) return;
 
     debugPrint('$_tag completeWithdrawal result — success: ${result.success}, vfxTx: ${result.vfxTransactionHash}, btcTx: ${result.btcTransactionHash}, message: ${result.message}');
+
+    if (result.success) {
+      notifyTransactionSubmitted();
+    }
 
     setState(() {
       _result = result;

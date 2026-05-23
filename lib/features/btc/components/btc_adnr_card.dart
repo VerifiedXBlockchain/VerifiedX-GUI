@@ -20,6 +20,7 @@ import '../models/btc_account.dart';
 import '../providers/btc_adnr_create_form_provider.dart';
 import '../providers/btc_adnr_transfer_form_provider.dart';
 import '../services/btc_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class BtcAdnrCard extends BaseComponent {
   const BtcAdnrCard({
@@ -161,6 +162,7 @@ class BtcAdnrCard extends BaseComponent {
                       final hash = await BtcService().deleteAdnr(btcAddress: account.address);
                       ref.read(adnrPendingProvider.notifier).addId(account.address, "burn", account.adnr!);
                       Toast.message("TX broadcasted!");
+                      notifyTransactionSubmitted();
                     },
                     variant: AppColorVariant.Danger,
                   ),

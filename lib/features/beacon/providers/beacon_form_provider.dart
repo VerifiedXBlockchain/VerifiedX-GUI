@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../models/beacon.dart';
 import '../services/beacon_service.dart';
@@ -74,6 +75,7 @@ class BeaconFormProvider extends StateNotifier<Beacon> {
       return false;
     }
 
+    notifyTransactionSubmitted();
     clear();
 
     return true;

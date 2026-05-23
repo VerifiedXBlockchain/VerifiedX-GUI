@@ -37,6 +37,7 @@ import '../services/smart_contract_service.dart';
 import 'my_smart_contracts_provider.dart';
 import 'property_wizard_form_provider.dart';
 import 'sc_wizard_minting_progress_provider.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 const LOG_HISTORY_LENGTH = 1000;
 
@@ -827,6 +828,8 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     }
     ref.read(scWizardMintingProgress.notifier).setPercent(1);
     ref.read(scWizardMintingProgress.notifier).setLabel("Complete");
+
+    notifyTransactionSubmitted();
 
     ref.read(mintedNftListProvider.notifier).reloadCurrentPage();
 

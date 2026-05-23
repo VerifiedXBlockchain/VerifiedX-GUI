@@ -39,6 +39,7 @@ import '../models/btc_recommended_fees.dart';
 import '../../../core/providers/session_provider.dart';
 import './withdrawal_processing_dialog.dart';
 import '../../price/providers/price_detail_providers.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -297,6 +298,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                             );
                                         Toast.message(
                                             "$amount BTC has been sent to ${token.btcAddress}.");
+                                        notifyTransactionSubmitted();
 
                                         InfoDialog.show(
                                             title: "Transaction Broadcasted",
@@ -516,6 +518,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               textToCopy: dialogResult.btcTransactionHash,
                             ),
                           );
+                      notifyTransactionSubmitted();
                     }
                   } else {
                     // V1: existing flow
@@ -540,6 +543,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 variant: AppColorVariant.Btc,
                                 textToCopy: withdrawlHash),
                           );
+                      notifyTransactionSubmitted();
                     }
                   }
                 }
@@ -659,6 +663,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               variant: AppColorVariant.Btc,
                             ),
                           );
+                      notifyTransactionSubmitted();
                       ref.read(tokenizedBitcoinListProvider.notifier).refresh();
                     }
                   } else {
@@ -733,6 +738,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 textToCopy: txHash,
                               ),
                             );
+                        notifyTransactionSubmitted();
                         ref.read(tokenizedBitcoinListProvider.notifier).refresh();
                       }
                     } else {
@@ -756,6 +762,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               LogEntry(
                                   message: message, variant: AppColorVariant.Btc),
                             );
+                        notifyTransactionSubmitted();
                       }
                     }
                   }

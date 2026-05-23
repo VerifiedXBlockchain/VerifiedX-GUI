@@ -11,6 +11,7 @@ import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../utils/toast.dart';
 import 'package:collection/collection.dart';
 
+import '../../../core/utils/tx_refresh.dart';
 import '../../bridge/models/log_entry.dart';
 
 part 'btc_adnr_create_form_provider.freezed.dart';
@@ -111,6 +112,7 @@ class BtcAdnrCreateFormProvider extends StateNotifier<BtcAdnrCreateFormState> {
       ref.read(logProvider.notifier).append(
             LogEntry(message: "BTC Domain Create TX Sent: $hash", textToCopy: hash, variant: AppColorVariant.Btc),
           );
+      notifyTransactionSubmitted();
       state = BtcAdnrCreateFormState();
       return true;
     }
