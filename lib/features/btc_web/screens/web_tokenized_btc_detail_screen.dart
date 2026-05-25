@@ -204,6 +204,42 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                         .toList(),
                   )
                 ],
+                if (token.version >= 2 && token.withdrawalRequests != null && token.withdrawalRequests!.isNotEmpty) ...[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Withdrawal History:",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  ListView.builder(
+                    itemCount: token.withdrawalRequests!.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final wr = token.withdrawalRequests![index];
+                      final status = wr['status'] ?? 'unknown';
+                      final amount = wr['amount'] ?? '0';
+                      final btcAddr = wr['btc_address'] ?? '';
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: AppCard(
+                          padding: 8,
+                          child: ListTile(
+                            title: Text("$amount vBTC → $btcAddr"),
+                            subtitle: Text("Status: $status"),
+                            trailing: status == 'completed'
+                                ? Icon(Icons.check_circle, color: Colors.green)
+                                : Icon(Icons.pending, color: Colors.orange),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -361,6 +397,29 @@ class _VBTCDetails extends StatelessWidget {
               label: "Token Total Balance",
               value: "${token.globalBalance} vBTC",
             ),
+          if (token.version >= 2) ...[
+            _DetailRow(
+              label: "Version",
+              value: "V${token.version}",
+            ),
+            if (token.frostGroupPublicKey != null)
+              _DetailRow(
+                label: "FROST Group Key",
+                value: token.frostGroupPublicKey!,
+                inExpanded: true,
+                withCopy: true,
+              ),
+            if (token.requiredThreshold != null)
+              _DetailRow(
+                label: "Signing Threshold",
+                value: "${token.requiredThreshold}",
+              ),
+            if (token.isPendingWithdrawal)
+              _DetailRow(
+                label: "Status",
+                value: "Pending Withdrawal",
+              ),
+          ],
         ],
       ),
     );
