@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/explorer_service.dart';
 import '../../../core/utils.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../btc/models/vbtc_input.dart';
@@ -329,6 +330,109 @@ class WebTokenActionsManager {
       data: data,
       txType: TxType.vbtcV2Transfer,
     );
+  }
+
+  /// Sends a V2 withdrawal request raw TX (Type 27).
+  /// Returns the transaction hash on success (used as withdrawal_request_hash).
+  Future<String?> requestV2Withdrawal({
+    required String scIdentifier,
+    required String requestorAddress,
+    required String btcAddress,
+    required double amount,
+    required int feeRate,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error("No keypair found to sign transaction");
+      return null;
+    }
+
+    final data = {
+      "Function": "VBTCWithdrawalRequest()",
+      "ContractUID": scIdentifier,
+      "RequestorAddress": requestorAddress,
+      "BTCAddress": btcAddress,
+      "Amount": amount,
+      "FeeRate": feeRate,
+    };
+
+    ref.read(globalLoadingProvider.notifier).start();
+
+    final txData = await RawTransaction.generate(
+      keypair: keypair,
+      toAddress: requestorAddress,
+      amount: 0,
+      txType: TxType.vbtcV2WithdrawalRequest,
+      data: data,
+    );
+
+    ref.read(globalLoadingProvider.notifier).complete();
+
+    if (txData == null) {
+      Toast.error("Invalid transaction data.");
+      return null;
+    }
+
+    final txFee = txData['Fee'];
+    final confirmed = await ConfirmDialog.show(
+      title: "Confirm Withdrawal Request",
+      body: "Withdraw $amount BTC to $btcAddress\nFee rate: $feeRate sats/byte\nVFX TX fee: $txFee VFX\n\nProceed?",
+      confirmText: "Yes",
+      cancelText: "Cancel",
+    );
+
+    if (confirmed != true) {
+      return null;
+    }
+
+    ref.read(globalLoadingProvider.notifier).start();
+
+    final tx = await RawService()
+        .sendTransaction(transactionData: txData, execute: true, ref: ref);
+
+    ref.read(globalLoadingProvider.notifier).complete();
+
+    if (tx != null && tx['Result'] == "Success") {
+      final hash = tx['Hash'] as String?;
+      return hash;
+    }
+
+    Toast.error(tx?['Message'] ?? "Transaction failed");
+    return null;
+  }
+
+  /// Calls the Spyglass API to trigger FROST signing for a V2 withdrawal.
+  Future<Map<String, dynamic>?> completeV2Withdrawal({
+    required String scIdentifier,
+    required String requestHash,
+  }) async {
+    try {
+      return await ExplorerService().completeV2Withdrawal(scIdentifier, requestHash);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Calls the Spyglass API to cancel a pending V2 withdrawal.
+  Future<bool> cancelV2Withdrawal({
+    required String scIdentifier,
+    required String ownerAddress,
+    required String requestHash,
+    String btcTxHash = '',
+    String failureProof = '',
+  }) async {
+    try {
+      final result = await ExplorerService().cancelV2Withdrawal(
+        scIdentifier: scIdentifier,
+        ownerAddress: ownerAddress,
+        requestHash: requestHash,
+        btcTxHash: btcTxHash,
+        failureProof: failureProof,
+      );
+      return result['success'] == true;
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<bool?> transferVbtcOwnership(

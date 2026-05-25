@@ -22,6 +22,7 @@ import '../../token/providers/web_token_actions_manager.dart';
 import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import '../services/btc_web_service.dart';
+import 'web_v2_withdrawal_dialog.dart';
 
 class WebTokenizedBtcActionButtons extends BaseComponent {
   final BtcWebVbtcToken token;
@@ -251,42 +252,91 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             if (!manager.verifyBalance()) {
               return;
             }
-            final amount = await PromptModal.show(
-              title: 'Amount',
-              validator: (val) => formValidatorNumber(val, "Amount"),
-              body: 'How much BTC do you want to withdraw?',
-              labelText: "Withdrawl Amount",
-            );
-            if (amount != null && double.tryParse(amount) != null) {
+
+            if (token.version >= 2) {
+              // V2: Check for pending withdrawal to resume
+              if (token.isPendingWithdrawal && token.withdrawalRequests != null) {
+                final pending = token.withdrawalRequests!.where(
+                  (wr) => wr['status'] == 'pending',
+                );
+                if (pending.isNotEmpty) {
+                  final requestHash = pending.first['request_transaction_hash'] as String?;
+                  if (requestHash != null) {
+                    WebV2WithdrawalDialog.show(
+                      scIdentifier: token.scIdentifier,
+                      requestorAddress: myAddress!,
+                      btcAddress: pending.first['btc_address'] ?? '',
+                      amount: double.tryParse(pending.first['amount'] ?? '0') ?? 0,
+                      feeRate: 0,
+                      ownerAddress: token.ownerAddress,
+                      existingRequestHash: requestHash,
+                    );
+                    return;
+                  }
+                }
+              }
+
+              // V2: New withdrawal request
+              final amount = await PromptModal.show(
+                title: 'Amount',
+                validator: (val) => formValidatorNumber(val, "Amount"),
+                body: 'How much BTC do you want to withdraw?',
+                labelText: "Withdrawal Amount",
+              );
+              if (amount == null || double.tryParse(amount) == null) return;
+
               final address = await PromptModal.show(
                 title: 'BTC Address',
                 validator: (val) => formValidatorNotEmpty(val, "Address"),
-                labelText: "Receiving Address",
+                labelText: "Receiving BTC Address",
               );
-              if (address != null) {
-                // final feeRate = await PromptModal.show(
-                //   title: 'Fee Rate',
-                //   validator: (val) => formValidatorInteger(val, "Fee Rate"),
-                //   labelText: "Fee Rate",
-                // );
-                final feeRate = await promptForFeeRate(context);
+              if (address == null) return;
 
-                if (feeRate != null) {
-                  final result = await manager.withdrawVbtc(
-                    scId: token.scIdentifier,
-                    amount: double.parse(amount),
-                    btcAddress: address,
-                    feeRate: (feeRate * 3),
-                  );
+              final feeRate = await promptForFeeRate(context);
+              if (feeRate == null) return;
 
-                  if (result == null) {
-                    Toast.error();
-                    return;
+              WebV2WithdrawalDialog.show(
+                scIdentifier: token.scIdentifier,
+                requestorAddress: myAddress!,
+                btcAddress: address,
+                amount: double.parse(amount),
+                feeRate: feeRate,
+                ownerAddress: token.ownerAddress,
+              );
+            } else {
+              // V1: Existing flow
+              final amount = await PromptModal.show(
+                title: 'Amount',
+                validator: (val) => formValidatorNumber(val, "Amount"),
+                body: 'How much BTC do you want to withdraw?',
+                labelText: "Withdrawl Amount",
+              );
+              if (amount != null && double.tryParse(amount) != null) {
+                final address = await PromptModal.show(
+                  title: 'BTC Address',
+                  validator: (val) => formValidatorNotEmpty(val, "Address"),
+                  labelText: "Receiving Address",
+                );
+                if (address != null) {
+                  final feeRate = await promptForFeeRate(context);
+
+                  if (feeRate != null) {
+                    final result = await manager.withdrawVbtc(
+                      scId: token.scIdentifier,
+                      amount: double.parse(amount),
+                      btcAddress: address,
+                      feeRate: (feeRate * 3),
+                    );
+
+                    if (result == null) {
+                      Toast.error();
+                      return;
+                    }
+
+                    InfoDialog.show(
+                        title: "Response",
+                        content: SelectableText(jsonEncode(result)));
                   }
-
-                  InfoDialog.show(
-                      title: "Response",
-                      content: SelectableText(jsonEncode(result)));
                 }
               }
             }
