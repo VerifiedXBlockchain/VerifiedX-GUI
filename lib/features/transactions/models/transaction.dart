@@ -228,9 +228,13 @@ class Transaction with _$Transaction {
       case 19:
         return "Tokenization Burn";
       case 20:
-        return "Tokenization Withdrawl";
+        return "Tokenization Withdrawal Request";
       case 21:
-        return "Tokenization Withdrawl";
+        return "Tokenization Withdrawal Complete";
+      case 22:
+        return "Validator Registration";
+      case 23:
+        return "Validator Heartbeat";
       case 25:
         return "vBTC Contract Mint";
       case 26:
@@ -319,8 +323,9 @@ class Transaction with _$Transaction {
       }
     }
 
-    // V2 vBTC transaction types
-    if (type >= 25 && type <= 28) return true;
+    // V2 vBTC transaction types (mint, transfer, withdrawal, cancel, vote, bridge)
+    if (type >= 25 && type <= 30) return true;
+    if (type == 37 || type == 38) return true;
 
     return false;
   }
