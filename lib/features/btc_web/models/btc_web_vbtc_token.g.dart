@@ -16,10 +16,17 @@ _$_BtcWebVbtcToken _$$_BtcWebVbtcTokenFromJson(Map<String, dynamic> json) =>
       ownerAddress: json['owner_address'] as String,
       imageUrl: json['image_url'] as String,
       depositAddress: json['deposit_address'] as String,
-      publicKeyProofs: json['public_key_proofs'] as String,
+      publicKeyProofs: json['public_key_proofs'] as String?,
       globalBalance: (json['global_balance'] as num).toDouble(),
       createdAt: DateTime.parse(json['created_at'] as String),
       nft: WebNft.fromJson(json['nft'] as Map<String, dynamic>),
+      version: json['version'] as int? ?? 1,
+      isPendingWithdrawal: json['is_pending_withdrawal'] as bool? ?? false,
+      frostGroupPublicKey: json['frost_group_public_key'] as String?,
+      requiredThreshold: json['required_threshold'] as int?,
+      withdrawalRequests: (json['withdrawal_requests'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
     );
 
 Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
@@ -36,4 +43,9 @@ Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
       'global_balance': instance.globalBalance,
       'created_at': instance.createdAt.toIso8601String(),
       'nft': instance.nft,
+      'version': instance.version,
+      'is_pending_withdrawal': instance.isPendingWithdrawal,
+      'frost_group_public_key': instance.frostGroupPublicKey,
+      'required_threshold': instance.requiredThreshold,
+      'withdrawal_requests': instance.withdrawalRequests,
     };

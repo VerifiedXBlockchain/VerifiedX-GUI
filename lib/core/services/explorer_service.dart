@@ -616,4 +616,132 @@ class ExplorerService extends BaseService {
       return false;
     }
   }
+
+  // ─── vBTC V2 ────────────────────────────────────────────────────────────────
+
+  Future<List<BtcWebVbtcToken>> getWebVbtcV2Tokens(String address) async {
+    try {
+      final response = await getJson('/btc/vbtc-v2/$address/');
+
+      final results = response['results'];
+      final List<BtcWebVbtcToken> tokens = [];
+      for (final result in results) {
+        result['address'] = address;
+        result['version'] = 2;
+        tokens.add(BtcWebVbtcToken.fromJson(result));
+      }
+
+      return tokens;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future<BtcWebVbtcToken> getWebVbtcV2TokenDetail(String scIdentifier) async {
+    try {
+      final response = await getJson('/btc/vbtc-v2/detail/$scIdentifier/');
+      response['version'] = 2;
+      // The V2 detail endpoint returns addresses map with balances,
+      // but no single 'address' field — set a placeholder for the model
+      if (!response.containsKey('address')) {
+        response['address'] = response['owner_address'] ?? '';
+      }
+      return BtcWebVbtcToken.fromJson(response);
+    } catch (e) {
+      print(e);
+      throw "Error getting V2 token details";
+    }
+  }
+
+  Future<Map<String, dynamic>> initiateV2Ceremony(String ownerAddress) async {
+    try {
+      final response = await postJson(
+        '/btc/vbtc-v2/ceremony/initiate/',
+        params: {'owner_address': ownerAddress},
+      );
+      return response['data'];
+    } catch (e) {
+      print(e);
+      throw "Error initiating V2 ceremony";
+    }
+  }
+
+  Future<Map<String, dynamic>> getV2CeremonyStatus(String ceremonyId) async {
+    try {
+      final response = await getJson('/btc/vbtc-v2/ceremony/$ceremonyId/');
+      return response;
+    } catch (e) {
+      print(e);
+      throw "Error getting V2 ceremony status";
+    }
+  }
+
+  Future<Map<String, dynamic>> createV2Contract({
+    required String ownerAddress,
+    required String name,
+    required String description,
+    required String ticker,
+    required String ceremonyId,
+  }) async {
+    try {
+      final response = await postJson(
+        '/btc/vbtc-v2/create/',
+        params: {
+          'owner_address': ownerAddress,
+          'name': name,
+          'description': description,
+          'ticker': ticker,
+          'ceremony_id': ceremonyId,
+        },
+      );
+      return response['data'];
+    } catch (e) {
+      print(e);
+      throw "Error creating V2 contract";
+    }
+  }
+
+  Future<Map<String, dynamic>> completeV2Withdrawal(
+      String scIdentifier, String requestHash) async {
+    try {
+      final response = await postJson(
+        '/btc/vbtc-v2/withdraw/complete/',
+        params: {
+          'sc_identifier': scIdentifier,
+          'withdrawal_request_hash': requestHash,
+        },
+        timeout: 180000,
+      );
+      return response['data'];
+    } catch (e) {
+      print(e);
+      throw "Error completing V2 withdrawal";
+    }
+  }
+
+  Future<Map<String, dynamic>> cancelV2Withdrawal({
+    required String scIdentifier,
+    required String ownerAddress,
+    required String requestHash,
+    String btcTxHash = '',
+    String failureProof = '',
+  }) async {
+    try {
+      final response = await postJson(
+        '/btc/vbtc-v2/withdraw/cancel/',
+        params: {
+          'sc_identifier': scIdentifier,
+          'owner_address': ownerAddress,
+          'withdrawal_request_hash': requestHash,
+          'btc_tx_hash': btcTxHash,
+          'failure_proof': failureProof,
+        },
+      );
+      return response['data'];
+    } catch (e) {
+      print(e);
+      throw "Error cancelling V2 withdrawal";
+    }
+  }
 }
