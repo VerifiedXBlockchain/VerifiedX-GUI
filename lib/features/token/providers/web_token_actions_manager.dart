@@ -310,6 +310,27 @@ class WebTokenActionsManager {
     );
   }
 
+  Future<bool?> transferVbtcV2({
+    required BtcWebVbtcToken token,
+    required String toAddress,
+    required String fromAddress,
+    required double amount,
+  }) async {
+    final data = {
+      "Function": "TransferVBTCV2()",
+      "ContractUID": token.scIdentifier,
+      "FromAddress": fromAddress,
+      "ToAddress": toAddress,
+      "Amount": amount,
+    };
+
+    return await _verifyConfirmAndSendTx(
+      toAddress: toAddress,
+      data: data,
+      txType: TxType.vbtcV2Transfer,
+    );
+  }
+
   Future<bool?> transferVbtcOwnership(
     BtcWebVbtcToken token,
     String toAddress,

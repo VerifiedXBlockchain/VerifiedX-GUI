@@ -338,8 +338,17 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               );
 
               if (result is _TransferShareModalResponse) {
-                final success = await manager.transferVbtcAmount(
-                    token, result.toAddress, result.amount);
+                if (token.version >= 2) {
+                  final success = await manager.transferVbtcV2(
+                    token: token,
+                    toAddress: result.toAddress,
+                    fromAddress: myAddress,
+                    amount: result.amount,
+                  );
+                } else {
+                  final success = await manager.transferVbtcAmount(
+                      token, result.toAddress, result.amount);
+                }
               }
             }
           },
