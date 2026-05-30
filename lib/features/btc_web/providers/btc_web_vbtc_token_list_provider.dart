@@ -15,22 +15,12 @@ class BtcWebVbtcTokenListProvider extends StateNotifier<List<BtcWebVbtcToken>> {
 
     final explorer = ExplorerService();
 
-    // Fetch V1 tokens
-    final v1Tokens = await explorer.getWebVbtcTokens(vfxAddress);
-    results = [...v1Tokens];
+    final tokens = await explorer.getWebVbtcTokens(vfxAddress);
+    results = [...tokens];
 
     if (raAddress != null) {
-      final raV1Tokens = await explorer.getWebVbtcTokens(raAddress);
-      results = [...results, ...raV1Tokens];
-    }
-
-    // Fetch V2 tokens
-    final v2Tokens = await explorer.getWebVbtcV2Tokens(vfxAddress);
-    results = [...results, ...v2Tokens];
-
-    if (raAddress != null) {
-      final raV2Tokens = await explorer.getWebVbtcV2Tokens(raAddress);
-      results = [...results, ...raV2Tokens];
+      final raTokens = await explorer.getWebVbtcTokens(raAddress);
+      results = [...results, ...raTokens];
     }
 
     // Sort by createdAt descending (newest first)

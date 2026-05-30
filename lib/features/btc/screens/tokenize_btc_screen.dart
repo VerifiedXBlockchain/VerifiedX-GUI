@@ -238,7 +238,18 @@ class TokenizeBtcForm extends BaseComponent {
             return;
           }
 
-          WebMpcCeremonyDialog.show(ownerAddress: keypair.address);
+          final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
+          final success = await WebMpcCeremonyDialog.show(
+            ownerAddress: keypair.address,
+            name: formProvider.tokenNameController.text.trim(),
+            description: formProvider.tokenDescriptionController.text.trim(),
+            ticker: formProvider.tokenTickerController.text.trim(),
+          );
+
+          if (success == true) {
+            formProvider.clear();
+            if (context.mounted) Navigator.of(context).pop();
+          }
         },
       );
     }
@@ -344,7 +355,12 @@ class TokenizeBtcForm extends BaseComponent {
         final success = await formProvider.submit();
 
         if (success == true) {
-          MpcCeremonyProgressModal.show(context);
+          final created = await MpcCeremonyProgressModal.show(context);
+
+          if (created == true) {
+            formProvider.clear();
+            if (context.mounted) Navigator.of(context).pop();
+          }
         }
       },
     );

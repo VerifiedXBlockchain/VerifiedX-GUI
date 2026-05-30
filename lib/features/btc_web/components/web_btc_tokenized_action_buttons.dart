@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../app.dart';
+import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
@@ -253,119 +252,86 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               return;
             }
 
-            if (token.version >= 2) {
-              // V2: Check for pending withdrawal to resume
-              if (token.isPendingWithdrawal && token.withdrawalRequests != null) {
-                final pending = token.withdrawalRequests!.where(
-                  (wr) => wr['status'] == 'pending',
-                );
-                if (pending.isNotEmpty) {
-                  final requestHash = pending.first['request_transaction_hash'] as String?;
-                  if (requestHash != null) {
-                    WebV2WithdrawalDialog.show(
-                      scIdentifier: token.scIdentifier,
-                      requestorAddress: myAddress!,
-                      btcAddress: pending.first['btc_address'] ?? '',
-                      amount: double.tryParse(pending.first['amount'] ?? '0') ?? 0,
-                      feeRate: 0,
-                      ownerAddress: token.ownerAddress,
-                      existingRequestHash: requestHash,
-                    );
-                    return;
-                  }
-                }
-              }
-
-              // V2: New withdrawal request
-              final amount = await PromptModal.show(
-                title: 'Amount',
-                validator: (val) => formValidatorNumber(val, "Amount"),
-                body: 'How much BTC do you want to withdraw?',
-                labelText: "Withdrawal Amount",
+            // Check for pending withdrawal to resume
+            if (token.isPendingWithdrawal && token.withdrawalRequests != null) {
+              final pending = token.withdrawalRequests!.where(
+                (wr) => wr['status'] == 'pending',
               );
-              if (amount == null || double.tryParse(amount) == null) return;
-
-              final address = await PromptModal.show(
-                title: 'BTC Address',
-                validator: (val) => formValidatorNotEmpty(val, "Address"),
-                labelText: "Receiving BTC Address",
-              );
-              if (address == null) return;
-
-              final feeRate = await promptForFeeRate(context);
-              if (feeRate == null) return;
-
-              WebV2WithdrawalDialog.show(
-                scIdentifier: token.scIdentifier,
-                requestorAddress: myAddress!,
-                btcAddress: address,
-                amount: double.parse(amount),
-                feeRate: feeRate,
-                ownerAddress: token.ownerAddress,
-              );
-            } else {
-              // V1: Existing flow
-              final amount = await PromptModal.show(
-                title: 'Amount',
-                validator: (val) => formValidatorNumber(val, "Amount"),
-                body: 'How much BTC do you want to withdraw?',
-                labelText: "Withdrawl Amount",
-              );
-              if (amount != null && double.tryParse(amount) != null) {
-                final address = await PromptModal.show(
-                  title: 'BTC Address',
-                  validator: (val) => formValidatorNotEmpty(val, "Address"),
-                  labelText: "Receiving Address",
-                );
-                if (address != null) {
-                  final feeRate = await promptForFeeRate(context);
-
-                  if (feeRate != null) {
-                    final result = await manager.withdrawVbtc(
-                      scId: token.scIdentifier,
-                      amount: double.parse(amount),
-                      btcAddress: address,
-                      feeRate: (feeRate * 3),
-                    );
-
-                    if (result == null) {
-                      Toast.error();
-                      return;
-                    }
-
-                    InfoDialog.show(
-                        title: "Response",
-                        content: SelectableText(jsonEncode(result)));
-                  }
+              if (pending.isNotEmpty) {
+                final requestHash = pending.first['request_transaction_hash'] as String?;
+                if (requestHash != null) {
+                  WebV2WithdrawalDialog.show(
+                    scIdentifier: token.scIdentifier,
+                    requestorAddress: myAddress!,
+                    btcAddress: pending.first['btc_address'] ?? '',
+                    amount: (pending.first['amount'] is num) ? (pending.first['amount'] as num).toDouble() : (double.tryParse(pending.first['amount'].toString()) ?? 0),
+                    feeRate: 0,
+                    ownerAddress: token.ownerAddress,
+                    existingRequestHash: requestHash,
+                  );
+                  return;
                 }
               }
             }
-          },
-        ),
-        AppButton(
-          label: "Transfer Ownership",
-          icon: Icons.person,
-          variant: AppColorVariant.Primary,
-          onPressed: () async {
-            final manager = ref.read(webTokenActionsManager);
-            if (token.globalBalance <= 0) {
-              Toast.error("vBTC tokens with no balance can not be transferred");
-              return;
-            }
-            if (!manager.verifyBalance()) {
+
+            // New withdrawal request
+            final amountStr = await PromptModal.show(
+              title: 'Amount',
+              validator: (val) => formValidatorNumber(val, "Amount"),
+              body: 'How much BTC do you want to withdraw?',
+              labelText: "Withdrawal Amount",
+            );
+            if (amountStr == null) return;
+            final withdrawAmount = double.tryParse(amountStr);
+            if (withdrawAmount == null || withdrawAmount <= 0) {
+              Toast.error("Invalid amount");
               return;
             }
 
-            final toAddress =
-                await manager.promptForAddress(title: "Transfer to");
-            if (toAddress == null) {
+            final available = token.balanceForAddress(myAddress);
+            if (withdrawAmount > available) {
+              Toast.error("Insufficient balance. Available: $available vBTC");
               return;
             }
 
-            final success =
-                await manager.transferVbtcOwnership(token, toAddress);
+            final address = await PromptModal.show(
+              title: 'BTC Address',
+              validator: (val) => formValidatorNotEmpty(val, "Address"),
+              labelText: "Receiving BTC Address",
+            );
+            if (address == null) return;
+
+            final feeRate = await promptForFeeRate(context);
+            if (feeRate == null) return;
+
+            WebV2WithdrawalDialog.show(
+              scIdentifier: token.scIdentifier,
+              requestorAddress: myAddress!,
+              btcAddress: address,
+              amount: withdrawAmount,
+              feeRate: feeRate,
+              ownerAddress: token.ownerAddress,
+            );
           },
         ),
+        if (WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED)
+          AppButton(
+            label: "Transfer Ownership",
+            icon: Icons.person,
+            variant: AppColorVariant.Primary,
+            onPressed: () async {
+              final manager = ref.read(webTokenActionsManager);
+              if (token.globalBalance <= 0) {
+                Toast.error("vBTC tokens with no balance can not be transferred");
+                return;
+              }
+              if (!manager.verifyBalance()) {
+                return;
+              }
+
+              Toast.message("Ownership transfer is not yet available on the web wallet.");
+            },
+          ),
         AppButton(
           label: "Transfer",
           variant: AppColorVariant.Primary,
@@ -388,17 +354,12 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               );
 
               if (result is _TransferShareModalResponse) {
-                if (token.version >= 2) {
-                  final success = await manager.transferVbtcV2(
-                    token: token,
-                    toAddress: result.toAddress,
-                    fromAddress: myAddress,
-                    amount: result.amount,
-                  );
-                } else {
-                  final success = await manager.transferVbtcAmount(
-                      token, result.toAddress, result.amount);
-                }
+                await manager.transferVbtcV2(
+                  token: token,
+                  toAddress: result.toAddress,
+                  fromAddress: myAddress,
+                  amount: result.amount,
+                );
               }
             }
           },

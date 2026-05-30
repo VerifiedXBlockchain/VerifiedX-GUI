@@ -6,26 +6,48 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils.dart';
+import '../../../core/app_constants.dart';
 import '../../../utils/toast.dart';
+import '../../transactions/models/web_transaction.dart';
+import '../../transactions/providers/web_transaction_list_provider.dart';
+import '../../web/utils/raw_transaction.dart';
 import '../providers/btc_web_vbtc_token_list_provider.dart';
 
-enum _CeremonyStep { initiating, polling, promptingDetails, creatingContract, success, failure }
+enum _CeremonyStep { initiating, polling, creatingContract, success, failure }
 
 class WebMpcCeremonyDialog extends ConsumerStatefulWidget {
   final String ownerAddress;
+  final String name;
+  final String description;
+  final String ticker;
 
   const WebMpcCeremonyDialog({
     super.key,
     required this.ownerAddress,
+    required this.name,
+    required this.description,
+    required this.ticker,
   });
 
-  static Future<void> show({required String ownerAddress}) {
-    return showDialog(
+  static Future<bool?> show({
+    required String ownerAddress,
+    required String name,
+    required String description,
+    required String ticker,
+  }) {
+    return showDialog<bool>(
       context: rootNavigatorKey.currentContext!,
       barrierDismissible: false,
-      builder: (_) => WebMpcCeremonyDialog(ownerAddress: ownerAddress),
+      builder: (_) => WebMpcCeremonyDialog(
+        ownerAddress: ownerAddress,
+        name: name,
+        description: description,
+        ticker: ticker,
+      ),
     );
   }
 
@@ -43,10 +65,6 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
   String? _scIdentifier;
   Timer? _pollTimer;
 
-  final _nameController = TextEditingController(text: "vBTC Token");
-  final _descriptionController = TextEditingController(text: "vBTC Token");
-  final _tickerController = TextEditingController(text: "vBTC");
-
   @override
   void initState() {
     super.initState();
@@ -56,27 +74,84 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
   @override
   void dispose() {
     _pollTimer?.cancel();
-    _nameController.dispose();
-    _descriptionController.dispose();
-    _tickerController.dispose();
     super.dispose();
   }
 
   Future<void> _initiateCeremony() async {
     setState(() => _step = _CeremonyStep.initiating);
 
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      setState(() {
+        _step = _CeremonyStep.failure;
+        _errorMessage = "No keypair found.";
+      });
+      return;
+    }
+
     try {
-      final result = await ExplorerService().initiateV2Ceremony(widget.ownerAddress);
+      // Step 1: Prepare — get ceremony ID and messages to sign
+      final prepared = await ExplorerService().prepareV2Ceremony(widget.ownerAddress);
 
       if (!mounted) return;
 
-      if (result['success'] == true && result['ceremony_id'] != null) {
-        _ceremonyId = result['ceremony_id'];
+      if (prepared['success'] != true || prepared['ceremony_id'] == null) {
+        setState(() {
+          _step = _CeremonyStep.failure;
+          _errorMessage = prepared['message'] ?? "Failed to prepare MPC ceremony.";
+        });
+        return;
+      }
+
+      _ceremonyId = prepared['ceremony_id'] as String;
+      final sessionId = prepared['session_id'] as String;
+      final messages = prepared['messages_to_sign'] as Map<String, dynamic>;
+      final startMessage = messages['start_message'] as String;
+      final startTimestamp = messages['start_timestamp'] as int;
+      final shareMessage = messages['share_distribution_message'] as String;
+      final shareTimestamp = messages['share_distribution_timestamp'] as int;
+
+      // Step 2: Sign both messages
+      final startSig = await RawTransaction.getSignature(
+        message: startMessage,
+        privateKey: keypair.private,
+        publicKey: keypair.public,
+      );
+
+      final shareSig = await RawTransaction.getSignature(
+        message: shareMessage,
+        privateKey: keypair.private,
+        publicKey: keypair.public,
+      );
+
+      if (startSig == null || shareSig == null) {
+        if (!mounted) return;
+        setState(() {
+          _step = _CeremonyStep.failure;
+          _errorMessage = "Failed to sign ceremony messages.";
+        });
+        return;
+      }
+
+      // Step 3: Execute — send signatures to start the ceremony
+      final executeResult = await ExplorerService().executeV2Ceremony(
+        ceremonyId: _ceremonyId!,
+        sessionId: sessionId,
+        ownerAddress: widget.ownerAddress,
+        startSignature: startSig,
+        startTimestamp: startTimestamp,
+        shareDistributionSignature: shareSig,
+        shareDistributionTimestamp: shareTimestamp,
+      );
+
+      if (!mounted) return;
+
+      if (executeResult['success'] == true) {
         _startPolling();
       } else {
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = result['message'] ?? "Failed to initiate MPC ceremony.";
+          _errorMessage = executeResult['message'] ?? "Failed to execute MPC ceremony.";
         });
       }
     } catch (e) {
@@ -113,7 +188,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
 
         if (status == 'Completed' || status == 'completed') {
           timer.cancel();
-          setState(() => _step = _CeremonyStep.promptingDetails);
+          _createContract();
         } else if (status == 'Failed' || status == 'failed' || status == 'TimedOut') {
           timer.cancel();
           setState(() {
@@ -128,33 +203,107 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
   }
 
   Future<void> _createContract() async {
-    final name = _nameController.text.trim();
-    final description = _descriptionController.text.trim();
-    final ticker = _tickerController.text.trim();
+    final name = widget.name.isNotEmpty ? widget.name : 'vBTC Token';
+    final description = widget.description.isNotEmpty ? widget.description : name;
+    final ticker = widget.ticker.isNotEmpty ? widget.ticker : 'vBTC';
 
-    if (name.isEmpty) {
-      Toast.error("Token name is required");
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      setState(() {
+        _step = _CeremonyStep.failure;
+        _errorMessage = "No keypair found.";
+      });
       return;
     }
 
     setState(() => _step = _CeremonyStep.creatingContract);
 
     try {
-      final result = await ExplorerService().createV2Contract(
+      // Step 1: Sign ownership proof
+      final timestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      final uniqueId = generateRandomString(16, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
+      final signatureData = '${widget.ownerAddress}$name$description$ticker${_ceremonyId}$timestamp$uniqueId';
+
+      final ownerSignature = await RawTransaction.getSignature(
+        message: signatureData,
+        privateKey: keypair.private,
+        publicKey: keypair.public,
+      );
+
+      if (ownerSignature == null) {
+        if (!mounted) return;
+        setState(() {
+          _step = _CeremonyStep.failure;
+          _errorMessage = "Failed to sign ownership proof.";
+        });
+        return;
+      }
+
+      // Step 2: Prepare — get hash to sign
+      final prepared = await ExplorerService().prepareV2Create(
         ownerAddress: widget.ownerAddress,
         name: name,
-        description: description.isNotEmpty ? description : name,
-        ticker: ticker.isNotEmpty ? ticker : "vBTC",
+        description: description,
+        ticker: ticker,
         ceremonyId: _ceremonyId!,
+        timestamp: timestamp,
+        uniqueId: uniqueId,
+        ownerSignature: ownerSignature,
+      );
+
+      if (!mounted) return;
+
+      if (prepared['success'] != true || prepared['Hash'] == null) {
+        setState(() {
+          _step = _CeremonyStep.failure;
+          _errorMessage = prepared['message'] ?? "Failed to prepare contract creation.";
+        });
+        return;
+      }
+
+      // Step 3: Sign the TX hash
+      final signature = await RawTransaction.getSignature(
+        message: prepared['Hash'] as String,
+        privateKey: keypair.private,
+        publicKey: keypair.public,
+      );
+
+      if (signature == null) {
+        if (!mounted) return;
+        setState(() {
+          _step = _CeremonyStep.failure;
+          _errorMessage = "Failed to sign contract creation transaction.";
+        });
+        return;
+      }
+
+      // Step 4: Send — broadcast the signed TX
+      final result = await ExplorerService().sendV2Create(
+        hash: prepared['Hash'] as String,
+        signature: signature,
+        publicKey: keypair.public,
       );
 
       if (!mounted) return;
 
       if (result['success'] == true) {
+        final txHash = result['TransactionHash'] as String? ?? result['Hash'] as String? ?? '';
+        ref.read(webTransactionListProvider(widget.ownerAddress).notifier).insertPendingTx(
+          WebTransaction(
+            hash: txHash,
+            toAddress: widget.ownerAddress,
+            fromAddress: widget.ownerAddress,
+            type: TxType.vbtcV2ContractCreate,
+            amount: 0,
+            fee: 0,
+            date: DateTime.now(),
+            height: 0,
+          ),
+        );
         setState(() {
           _step = _CeremonyStep.success;
-          _transactionHash = result['transaction_hash'];
-          _scIdentifier = result['sc_identifier'];
+          _transactionHash = txHash;
+          _scIdentifier = result['SmartContractUID'] as String?;
         });
       } else {
         setState(() {
@@ -181,7 +330,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
             _titleForStep(),
             style: const TextStyle(color: Colors.white),
           ),
-          if (_step == _CeremonyStep.success || _step == _CeremonyStep.failure || _step == _CeremonyStep.promptingDetails)
+          if (_step == _CeremonyStep.success || _step == _CeremonyStep.failure)
             IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.close, size: 20),
@@ -199,7 +348,6 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
           children: [
             if (_step == _CeremonyStep.initiating) _buildInitiatingSection(),
             if (_step == _CeremonyStep.polling) _buildPollingSection(),
-            if (_step == _CeremonyStep.promptingDetails) _buildDetailsSection(),
             if (_step == _CeremonyStep.creatingContract) _buildCreatingSection(),
             if (_step == _CeremonyStep.success) _buildSuccessSection(),
             if (_step == _CeremonyStep.failure) _buildFailureSection(),
@@ -215,8 +363,6 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         return "Starting MPC Ceremony";
       case _CeremonyStep.polling:
         return "MPC Ceremony in Progress";
-      case _CeremonyStep.promptingDetails:
-        return "Ceremony Complete";
       case _CeremonyStep.creatingContract:
         return "Creating Contract";
       case _CeremonyStep.success:
@@ -264,47 +410,6 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         const Text(
           "Validators are generating threshold signing keys. This typically takes 30-90 seconds.",
           style: TextStyle(color: Colors.white38, fontSize: 12),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildDetailsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: const [
-            Icon(Icons.check_circle, color: Color(0xFF43ae52), size: 20),
-            SizedBox(width: 8),
-            Text("MPC ceremony completed!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
-          ],
-        ),
-        const SizedBox(height: 16),
-        const Text("Enter token details to create the contract:", style: TextStyle(color: Colors.white70)),
-        const SizedBox(height: 12),
-        TextFormField(
-          controller: _nameController,
-          decoration: const InputDecoration(labelText: "Token Name"),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _descriptionController,
-          decoration: const InputDecoration(labelText: "Description"),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _tickerController,
-          decoration: const InputDecoration(labelText: "Ticker"),
-        ),
-        const SizedBox(height: 16),
-        Align(
-          alignment: Alignment.centerRight,
-          child: AppButton(
-            label: "Create Token",
-            variant: AppColorVariant.Success,
-            onPressed: _createContract,
-          ),
         ),
       ],
     );
@@ -367,11 +472,10 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
             label: "Done",
             variant: AppColorVariant.Success,
             onPressed: () {
-              // Refresh the token list
               ref.read(btcWebVbtcTokenListProvider.notifier).reload(
                 widget.ownerAddress,
               );
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
             },
           ),
         ),

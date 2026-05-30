@@ -57,24 +57,6 @@ class WebTokenizedBtcListTile extends BaseComponent {
                     fontSize: 22,
                   ),
                 ),
-                if (token.version >= 2) ...[
-                  SizedBox(width: 8),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.btcOrange,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      "V2",
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
               ],
             ),
             subtitle: Column(

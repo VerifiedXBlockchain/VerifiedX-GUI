@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/utils.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
-import '../../btc/models/vbtc_input.dart';
 import '../../nft/models/nft.dart';
 import '../models/web_fungible_token.dart';
 import '../../web/utils/raw_transaction.dart';
@@ -20,6 +19,8 @@ import '../../global_loader/global_loading_provider.dart';
 import '../../keygen/models/keypair.dart';
 import '../../keygen/models/ra_keypair.dart';
 import '../../raw/raw_service.dart';
+import '../../transactions/models/web_transaction.dart';
+import '../../transactions/providers/web_transaction_list_provider.dart';
 import '../models/new_token_topic.dart';
 
 class WebTokenActionsManager {
@@ -292,23 +293,43 @@ class WebTokenActionsManager {
     );
   }
 
-  Future<bool?> transferVbtcAmount(
-    BtcWebVbtcToken token,
-    String toAddress,
-    double amount,
-  ) async {
-    final data = [
-      {
-        "Function": "TransferCoin()",
-        "ContractUID": token.scIdentifier,
-        "Amount": amount,
-      }
-    ];
-    return await _verifyConfirmAndSendTx(
-      toAddress: toAddress,
-      data: data,
-      txType: TxType.tokenizeTx,
+  /// Signs a hash and sends the signature to a "send" endpoint.
+  /// Common pattern for all V2 two-step operations.
+  Future<Map<String, dynamic>?> _signAndSend({
+    required String hash,
+    required Future<Map<String, dynamic>> Function({
+      required String hash,
+      required String signature,
+      required String publicKey,
+    }) sendFn,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error("No keypair found to sign transaction");
+      return null;
+    }
+
+    final signature = await RawTransaction.getSignature(
+      message: hash,
+      privateKey: keypair.private,
+      publicKey: keypair.public,
     );
+
+    if (signature == null) {
+      Toast.error("Failed to sign transaction");
+      return null;
+    }
+
+    try {
+      return await sendFn(
+        hash: hash,
+        signature: signature,
+        publicKey: keypair.public,
+      );
+    } catch (e) {
+      Toast.error("Transaction failed: $e");
+      return null;
+    }
   }
 
   Future<bool?> transferVbtcV2({
@@ -317,294 +338,329 @@ class WebTokenActionsManager {
     required String fromAddress,
     required double amount,
   }) async {
-    final data = {
-      "Function": "TransferVBTCV2()",
-      "ContractUID": token.scIdentifier,
-      "FromAddress": fromAddress,
-      "ToAddress": toAddress,
-      "Amount": amount,
-    };
+    ref.read(globalLoadingProvider.notifier).start();
 
-    return await _verifyConfirmAndSendTx(
-      toAddress: toAddress,
-      data: data,
-      txType: TxType.vbtcV2Transfer,
-    );
+    try {
+      final prepared = await ExplorerService().prepareV2Transfer(
+        scIdentifier: token.scIdentifier,
+        fromAddress: fromAddress,
+        toAddress: toAddress,
+        amount: amount,
+      );
+
+      ref.read(globalLoadingProvider.notifier).complete();
+
+      if (prepared['success'] != true || prepared['Hash'] == null) {
+        Toast.error(prepared['message'] ?? "Failed to prepare transfer");
+        return false;
+      }
+
+      final confirmed = await ConfirmDialog.show(
+        title: "Confirm Transfer",
+        body: "Transfer $amount vBTC to $toAddress?",
+        confirmText: "Transfer",
+        cancelText: "Cancel",
+      );
+
+      if (confirmed != true) return null;
+
+      ref.read(globalLoadingProvider.notifier).start();
+
+      final result = await _signAndSend(
+        hash: prepared['Hash'],
+        sendFn: ExplorerService().sendV2Transfer,
+      );
+
+      ref.read(globalLoadingProvider.notifier).complete();
+
+      if (result != null && result['success'] == true) {
+        Toast.message("vBTC transfer broadcasted successfully");
+        ref.read(webTransactionListProvider(fromAddress).notifier).insertPendingTx(
+          WebTransaction(
+            hash: result['Hash'] ?? prepared['Hash'] ?? '',
+            toAddress: toAddress,
+            fromAddress: fromAddress,
+            type: TxType.vbtcV2Transfer,
+            amount: 0,
+            fee: 0,
+            date: DateTime.now(),
+            height: 0,
+          ),
+        );
+        return true;
+      }
+
+      Toast.error(result?['message'] ?? "Transfer failed");
+      return false;
+    } catch (e) {
+      ref.read(globalLoadingProvider.notifier).complete();
+      Toast.error("Transfer failed: $e");
+      return false;
+    }
   }
 
-  /// Sends a V2 withdrawal request raw TX (Type 27).
-  /// Returns the transaction hash on success (used as withdrawal_request_hash).
-  Future<String?> requestV2Withdrawal({
+  /// V2 withdrawal request via prepare→sign→send.
+  /// Returns { 'success': true, 'hash': '...' } or { 'success': false, 'message': '...' }.
+  Future<Map<String, dynamic>> requestV2Withdrawal({
     required String scIdentifier,
     required String requestorAddress,
     required String btcAddress,
     required double amount,
     required int feeRate,
   }) async {
-    final keypair = ref.read(webSessionProvider).keypair;
-    if (keypair == null) {
-      Toast.error("No keypair found to sign transaction");
-      return null;
-    }
-
-    final data = {
-      "Function": "VBTCWithdrawalRequest()",
-      "ContractUID": scIdentifier,
-      "RequestorAddress": requestorAddress,
-      "BTCAddress": btcAddress,
-      "Amount": amount,
-      "FeeRate": feeRate,
-    };
-
     ref.read(globalLoadingProvider.notifier).start();
 
-    final txData = await RawTransaction.generate(
-      keypair: keypair,
-      toAddress: requestorAddress,
-      amount: 0,
-      txType: TxType.vbtcV2WithdrawalRequest,
-      data: data,
-    );
+    try {
+      final prepared = await ExplorerService().prepareV2WithdrawalRequest(
+        scIdentifier: scIdentifier,
+        requestorAddress: requestorAddress,
+        btcAddress: btcAddress,
+        amount: amount,
+        feeRate: feeRate,
+      );
 
-    ref.read(globalLoadingProvider.notifier).complete();
+      ref.read(globalLoadingProvider.notifier).complete();
 
-    if (txData == null) {
-      Toast.error("Invalid transaction data.");
-      return null;
+      if (prepared['success'] != true || prepared['Hash'] == null) {
+        return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare withdrawal request'};
+      }
+
+      final confirmed = await ConfirmDialog.show(
+        title: "Confirm Withdrawal Request",
+        body: "Withdraw $amount BTC to $btcAddress\nFee rate: $feeRate sats/byte\n\nProceed?",
+        confirmText: "Yes",
+        cancelText: "Cancel",
+      );
+
+      if (confirmed != true) return {'success': false, 'message': 'Cancelled'};
+
+      ref.read(globalLoadingProvider.notifier).start();
+
+      final result = await _signAndSend(
+        hash: prepared['Hash'],
+        sendFn: ExplorerService().sendV2WithdrawalRequest,
+      );
+
+      ref.read(globalLoadingProvider.notifier).complete();
+
+      if (result != null && result['success'] == true) {
+        final hash = result['Hash'] as String?;
+        if (hash != null) {
+          ref.read(webTransactionListProvider(requestorAddress).notifier).insertPendingTx(
+            WebTransaction(
+              hash: hash,
+              toAddress: requestorAddress,
+              fromAddress: requestorAddress,
+              type: TxType.vbtcV2WithdrawalRequest,
+              amount: 0,
+              fee: 0,
+              date: DateTime.now(),
+              height: 0,
+            ),
+          );
+        }
+        return {'success': true, 'hash': hash};
+      }
+
+      return {'success': false, 'message': result?['message'] ?? 'Withdrawal request failed'};
+    } catch (e) {
+      ref.read(globalLoadingProvider.notifier).complete();
+      return {'success': false, 'message': 'Withdrawal request failed: $e'};
     }
-
-    final txFee = txData['Fee'];
-    final confirmed = await ConfirmDialog.show(
-      title: "Confirm Withdrawal Request",
-      body: "Withdraw $amount BTC to $btcAddress\nFee rate: $feeRate sats/byte\nVFX TX fee: $txFee VFX\n\nProceed?",
-      confirmText: "Yes",
-      cancelText: "Cancel",
-    );
-
-    if (confirmed != true) {
-      return null;
-    }
-
-    ref.read(globalLoadingProvider.notifier).start();
-
-    final tx = await RawService()
-        .sendTransaction(transactionData: txData, execute: true, ref: ref);
-
-    ref.read(globalLoadingProvider.notifier).complete();
-
-    if (tx != null && tx['Result'] == "Success") {
-      final hash = tx['Hash'] as String?;
-      return hash;
-    }
-
-    Toast.error(tx?['Message'] ?? "Transaction failed");
-    return null;
   }
 
-  /// Calls the Spyglass API to trigger FROST signing for a V2 withdrawal.
+  /// V2 withdrawal complete via prepare→sign two messages→execute→broadcast BTC.
   Future<Map<String, dynamic>?> completeV2Withdrawal({
     required String scIdentifier,
     required String requestHash,
   }) async {
-    try {
-      return await ExplorerService().completeV2Withdrawal(scIdentifier, requestHash);
-    } catch (e) {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error("No keypair found");
       return null;
     }
-  }
 
-  /// Calls the Spyglass API to cancel a pending V2 withdrawal.
-  Future<bool> cancelV2Withdrawal({
-    required String scIdentifier,
-    required String ownerAddress,
-    required String requestHash,
-    String btcTxHash = '',
-    String failureProof = '',
-  }) async {
     try {
-      final result = await ExplorerService().cancelV2Withdrawal(
+      // Step 1: Prepare — get messages to sign + withdrawal params
+      final prepared = await ExplorerService().prepareV2WithdrawalComplete(
         scIdentifier: scIdentifier,
-        ownerAddress: ownerAddress,
-        requestHash: requestHash,
-        btcTxHash: btcTxHash,
-        failureProof: failureProof,
+        withdrawalRequestHash: requestHash,
+        ownerAddress: keypair.address,
       );
-      return result['success'] == true;
-    } catch (e) {
-      return false;
-    }
-  }
 
-  Future<bool?> transferVbtcOwnership(
-    BtcWebVbtcToken token,
-    String toAddress,
-  ) async {
-    final message = token.scIdentifier;
-    final keypair = ref.read(webSessionProvider).keypair;
-    if (keypair == null) {
-      Toast.error("No VFX account found");
-      return null;
-    }
+      if (prepared['success'] != true || prepared['StartMessage'] == null) {
+        return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare FROST signing'};
+      }
 
-    final beaconSignature = await RawTransaction.getSignature(
-      message: message,
-      privateKey: keypair.private,
-      publicKey: keypair.public,
-    );
+      final startMessage = prepared['StartMessage'] as String;
+      final startTimestamp = prepared['StartTimestamp'] as int;
+      final shareMessage = prepared['ShareDistributionMessage'] as String;
+      final shareTimestamp = prepared['ShareDistributionTimestamp'] as int;
+      final sessionId = prepared['SessionId'] as String;
 
-    if (beaconSignature == null) {
-      Toast.error("Couldn't produce beacon upload signature");
-      return false;
-    }
-
-    final locator = await RawService()
-        .beaconUpload(token.scIdentifier, toAddress, beaconSignature);
-
-    if (locator == null) {
-      Toast.error("Could not create beacon upload request.");
-      return false;
-    }
-    final txService = RawService();
-
-    final nftTransferData =
-        await txService.nftTransferData(token.scIdentifier, toAddress, locator);
-
-    return await _verifyConfirmAndSendTx(
-      toAddress: toAddress,
-      data: nftTransferData,
-      txType: TxType.tokenizeTx,
-    );
-  }
-
-  Future<bool?> withdrawVbtc({
-    required String scId,
-    required double amount,
-    required String btcAddress,
-    required int feeRate,
-  }) async {
-    final keypair = ref.read(webSessionProvider).keypair;
-    if (keypair == null) {
-      Toast.error("No VFX account found");
-      return null;
-    }
-
-    final timestamp = (DateTime.now().millisecondsSinceEpoch / 1000).round();
-    final uniqueId = generateRandomString(
-        16, 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz');
-    final message = "${keypair.address}.$timestamp.$uniqueId";
-
-    final signature = await RawTransaction.getSignature(
-        message: message,
+      // Step 2: Sign both messages (same pattern as ceremony)
+      final startSig = await RawTransaction.getSignature(
+        message: startMessage,
         privateKey: keypair.private,
-        publicKey: keypair.public);
+        publicKey: keypair.public,
+      );
 
-    if (signature == null) {
-      Toast.error("Signature generation failed.");
-      return null;
-    }
+      final shareSig = await RawTransaction.getSignature(
+        message: shareMessage,
+        privateKey: keypair.private,
+        publicKey: keypair.public,
+      );
 
-    final data = {
-      'SmartContractUID': scId,
-      'Amount': amount,
-      'VFXAddress': keypair.address,
-      'BTCToAddress': btcAddress,
-      'Timestamp': timestamp,
-      'UniqueId': uniqueId,
-      'VFXSignature': signature,
-      'ChosenFeeRate': feeRate,
-      "IsTest": false,
-    };
+      if (startSig == null || shareSig == null) {
+        return {'success': false, 'message': 'Failed to sign FROST messages'};
+      }
 
-    final result = await RawService().withdrawVbtc(data);
+      // Step 3: Execute — kicks off FROST signing asynchronously, returns job_id
+      final executeResult = await ExplorerService().executeV2WithdrawalComplete(
+        scIdentifier: scIdentifier,
+        withdrawalRequestHash: requestHash,
+        ownerAddress: keypair.address,
+        sessionId: sessionId,
+        startSignature: startSig,
+        startTimestamp: startTimestamp,
+        shareDistributionSignature: shareSig,
+        shareDistributionTimestamp: shareTimestamp,
+        amount: (prepared['Amount'] as num?)?.toDouble() ?? 0,
+        btcDestination: prepared['BTCDestination'] as String? ?? '',
+        feeRate: prepared['FeeRate'] as int? ?? 0,
+      );
 
-    if (result == null) {
-      Toast.error();
-      return null;
-    }
+      final jobId = executeResult['job_id'] as String?;
+      if (jobId == null) {
+        return {'success': false, 'message': 'Failed to start FROST signing'};
+      }
 
-    return await sendWithdrawlFinializationTx(result);
-  }
+      // Step 4: Poll for FROST signing result (up to 3 minutes)
+      String? signedBtcTxHex;
+      int notFoundCount = 0;
+      for (int i = 0; i < 36; i++) {
+        await Future.delayed(const Duration(seconds: 5));
+        try {
+          final status = await ExplorerService().getV2WithdrawalCompleteStatus(jobId);
+          if (status['status'] == 'complete') {
+            signedBtcTxHex = status['signed_btc_tx_hex'] as String?;
+            break;
+          } else if (status['status'] == 'failed') {
+            return {'success': false, 'message': status['message'] ?? 'FROST signing failed'};
+          } else if (status['success'] == false) {
+            notFoundCount++;
+            // Job not registered yet (race) — tolerate a few misses, bail if persistent
+            if (notFoundCount > 6) {
+              return {'success': false, 'message': status['message'] ?? 'FROST signing job not found'};
+            }
+          } else {
+            notFoundCount = 0; // reset if we get a valid pending response
+          }
+        } catch (_) {
+          // transient error — keep polling
+        }
+      }
 
-  Future<bool?> sendWithdrawlFinializationTx(
-      WebWithdrawlBtcResult result) async {
-    final keypair = ref.read(webSessionProvider).keypair;
-    if (keypair == null) {
-      Toast.error("No VFX account found");
-      return null;
-    }
+      if (signedBtcTxHex == null || signedBtcTxHex.isEmpty) {
+        return {'success': false, 'message': 'FROST signing timed out. The withdrawal may still complete — check back shortly.'};
+      }
 
-    final data = {
-      "Function": "TokenizedWithdrawalComplete()",
-      "ContractUID": result.scId,
-      "UniqueId": result.uniqueId,
-      "TransactionHash": result.txHash,
-    };
+      // Step 5: Broadcast the signed BTC TX
+      final broadcastResult = await ExplorerService().broadcastBtcTransaction(signedBtcTxHex);
 
-    return await _verifyConfirmAndSendTx(
-      toAddress: "TW_Base",
-      data: data,
-      txType: 21,
-      showConfirmation: false,
-    );
-  }
+      if (broadcastResult['success'] != true) {
+        return {
+          'success': false,
+          'message': broadcastResult['message'] ?? 'Failed to broadcast BTC transaction',
+          'SignedBTCTxHex': signedBtcTxHex,
+        };
+      }
 
-  Future<bool?> transferVbtcMulti(
-      String toAddress, List<VBtcInput> inputs) async {
-    final keypair = ref.read(webSessionProvider).keypair;
-    if (keypair == null) {
-      Toast.error("No VFX account found");
-      return null;
-    }
+      final btcTxHash = broadcastResult['txid'] as String;
 
-    ref.read(globalLoadingProvider.notifier).start();
+      // Step 6: Record completion on VFX chain (Type 28 TX)
+      try {
+        final completePrepared = await ExplorerService().prepareV2WithdrawalCompleteTx(
+          scIdentifier: scIdentifier,
+          fromAddress: keypair.address,
+          withdrawalRequestHash: requestHash,
+          btcTransactionHash: btcTxHash,
+          amount: (prepared['Amount'] as num?)?.toDouble() ?? 0,
+          btcDestination: prepared['BTCDestination'] as String? ?? '',
+        );
 
-    final signatureInput = generateRandomString(12);
-
-    final inputsMapped = await Future.wait(
-      inputs.map(
-        (input) async {
-          final message = "$signatureInput$toAddress${input.vfxFromAddress}";
-
-          final signature = await RawTransaction.getSignature(
-            message: message,
+        if (completePrepared['success'] == true && completePrepared['Hash'] != null) {
+          final completeSig = await RawTransaction.getSignature(
+            message: completePrepared['Hash'] as String,
             privateKey: keypair.private,
             publicKey: keypair.public,
           );
 
-          if (signature == null) {
-            Toast.error("Could not generate signature");
-            return null;
+          if (completeSig != null) {
+            await ExplorerService().sendV2WithdrawalCompleteTx(
+              hash: completePrepared['Hash'] as String,
+              signature: completeSig,
+              publicKey: keypair.public,
+            );
           }
+        }
+      } catch (e) {
+        // Type 28 TX failed but BTC was already sent — not critical
+        print('Warning: Failed to record withdrawal completion on VFX chain: $e');
+      }
 
-          return {
-            "SCUID": input.scId,
-            "FromAddress": input.vfxFromAddress,
-            "Amount": input.amount,
-            "Signature": signature,
-          };
-        },
-      ),
-    );
+      return {
+        'success': true,
+        'btc_transaction_hash': btcTxHash,
+      };
+    } catch (e) {
+      return {'success': false, 'message': 'FROST signing failed: $e'};
+    }
+  }
 
-    final validInputs = inputsMapped.whereType<Map<String, dynamic>>().toList();
+  /// V2 withdrawal cancel via prepare→sign→send.
+  Future<bool> cancelV2Withdrawal({
+    required String scIdentifier,
+    required String ownerAddress,
+    required String requestHash,
+  }) async {
+    try {
+      final prepared = await ExplorerService().prepareV2WithdrawalCancel(
+        scIdentifier: scIdentifier,
+        ownerAddress: ownerAddress,
+        withdrawalRequestHash: requestHash,
+      );
 
-    final data = {
-      "Function": "TransferCoinMulti()",
-      "Inputs": validInputs,
-      "Amount": inputs.fold<double>(
-        0.0,
-        (previousValue, element) => previousValue + element.amount,
-      ),
-      "SignatureInput": signatureInput,
-    };
+      if (prepared['success'] != true || prepared['Hash'] == null) {
+        Toast.error(prepared['message'] ?? "Failed to prepare cancellation");
+        return false;
+      }
 
-    ref.read(globalLoadingProvider.notifier).complete();
+      final result = await _signAndSend(
+        hash: prepared['Hash'],
+        sendFn: ExplorerService().sendV2WithdrawalCancel,
+      );
 
-    return await _verifyConfirmAndSendTx(
-      toAddress: toAddress,
-      data: data,
-      txType: TxType.tokenizeTx,
-    );
+      if (result != null && result['success'] == true) {
+        ref.read(webTransactionListProvider(ownerAddress).notifier).insertPendingTx(
+          WebTransaction(
+            hash: result['Hash'] ?? prepared['Hash'] ?? '',
+            toAddress: ownerAddress,
+            fromAddress: ownerAddress,
+            type: TxType.vbtcV2WithdrawalCancel,
+            amount: 0,
+            fee: 0,
+            date: DateTime.now(),
+            height: 0,
+          ),
+        );
+        return true;
+      }
+      return false;
+    } catch (e) {
+      Toast.error("Cancellation failed: $e");
+      return false;
+    }
   }
 
   bool verifyBalance({bool isRa = false}) {

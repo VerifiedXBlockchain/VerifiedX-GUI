@@ -69,7 +69,6 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   _DialogStep _step = _DialogStep.broadcasting;
   String? _requestHash;
   String? _btcTxHash;
-  String? _vfxTxHash;
   String? _errorMessage;
   Timer? _pollTimer;
   int _pollCount = 0;
@@ -81,9 +80,9 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     if (widget.existingRequestHash != null) {
       _requestHash = widget.existingRequestHash;
       _step = _DialogStep.frostSigning;
-      _runFrostSigning();
+      Future(_runFrostSigning);
     } else {
-      _broadcastRequest();
+      Future(_broadcastRequest);
     }
   }
 
@@ -97,7 +96,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     setState(() => _step = _DialogStep.broadcasting);
 
     final manager = ref.read(webTokenActionsManager);
-    final hash = await manager.requestV2Withdrawal(
+    final result = await manager.requestV2Withdrawal(
       scIdentifier: widget.scIdentifier,
       requestorAddress: widget.requestorAddress,
       btcAddress: widget.btcAddress,
@@ -107,15 +106,15 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
 
     if (!mounted) return;
 
-    if (hash == null) {
+    if (result['success'] != true || result['hash'] == null) {
       setState(() {
         _step = _DialogStep.failure;
-        _errorMessage = "Failed to broadcast withdrawal request.";
+        _errorMessage = result['message'] ?? "Failed to broadcast withdrawal request.";
       });
       return;
     }
 
-    _requestHash = hash;
+    _requestHash = result['hash'] as String;
     _waitForBlockConfirmation();
   }
 
@@ -169,7 +168,6 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
       setState(() {
         _step = _DialogStep.success;
         _btcTxHash = result['btc_transaction_hash'];
-        _vfxTxHash = result['vfx_transaction_hash'];
       });
     } else {
       setState(() {
@@ -281,12 +279,8 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             Text("Withdrawal completed successfully!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
           ],
         ),
-        if (_vfxTxHash != null) ...[
-          const SizedBox(height: 16),
-          _buildHashRow("VFX Transaction:", _vfxTxHash!),
-        ],
         if (_btcTxHash != null) ...[
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           _buildHashRow(
             "BTC Transaction:",
             _btcTxHash!,
