@@ -327,7 +327,7 @@ class WebTokenActionsManager {
 
     // Step 2: Get transfer TX data
     try {
-      final txData = await ExplorerService().getVbtcOwnershipTransferData(
+      final response = await ExplorerService().getVbtcOwnershipTransferData(
         scIdentifier: scIdentifier,
         toAddress: toAddress,
         locator: locator,
@@ -335,15 +335,15 @@ class WebTokenActionsManager {
 
       ref.read(globalLoadingProvider.notifier).complete();
 
-      if (txData is Map && txData['Success'] == false) {
-        Toast.error(txData['Message'] ?? "Failed to prepare ownership transfer");
+      if (response['success'] != true || response['tx_data'] == null) {
+        Toast.error(response['message'] ?? "Failed to prepare ownership transfer");
         return false;
       }
 
       // Step 3: Build, sign, send via standard raw TX pipeline
       return await _verifyConfirmAndSendTx(
         toAddress: toAddress,
-        data: txData,
+        data: response['tx_data'],
         txType: 18, // TKNZ_TX
       );
     } catch (e) {

@@ -272,7 +272,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                                         final manager = ref.read(webTokenActionsManager);
                                         await manager.cancelV2Withdrawal(
                                           scIdentifier: token.scIdentifier,
-                                          ownerAddress: address,
+                                          ownerAddress: token.ownerAddress,
                                           requestHash: wr['request_transaction_hash'] ?? '',
                                         );
                                       }
@@ -409,8 +409,9 @@ class _VBTCDetails extends StatelessWidget {
           ),
           _DetailRow(
             label: "Owner",
-            value: address,
-            isReserve: address.startsWith("xRBX"),
+            value: token.ownerAddress,
+            isReserve: token.ownerAddress.startsWith("xRBX"),
+            withCopy: true,
           ),
           _DetailRow(
             label: "My Balance",

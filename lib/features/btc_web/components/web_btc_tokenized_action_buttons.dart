@@ -314,7 +314,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             );
           },
         ),
-        if (WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED)
+        if (WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED && isOwner)
           AppButton(
             label: "Transfer Ownership",
             icon: Icons.person,
