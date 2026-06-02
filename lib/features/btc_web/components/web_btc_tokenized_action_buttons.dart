@@ -329,7 +329,25 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                 return;
               }
 
-              Toast.message("Ownership transfer is not yet available on the web wallet.");
+              final toAddress = await PromptModal.show(
+                title: "Transfer Ownership",
+                validator: (val) => formValidatorNotEmpty(val, "Address"),
+                labelText: "Recipient VFX Address",
+              );
+              if (toAddress == null || toAddress.isEmpty) return;
+
+              final confirmed = await ConfirmDialog.show(
+                title: "Transfer Ownership",
+                body: "Transfer ownership of this vBTC token to $toAddress?\n\nThis cannot be undone.",
+                confirmText: "Transfer",
+                cancelText: "Cancel",
+              );
+              if (confirmed != true) return;
+
+              await manager.transferVbtcOwnership(
+                scIdentifier: token.scIdentifier,
+                toAddress: toAddress,
+              );
             },
           ),
         AppButton(

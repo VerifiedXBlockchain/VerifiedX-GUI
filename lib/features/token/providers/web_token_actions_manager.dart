@@ -295,6 +295,64 @@ class WebTokenActionsManager {
 
   /// Signs a hash and sends the signature to a "send" endpoint.
   /// Common pattern for all V2 two-step operations.
+  Future<bool?> transferVbtcOwnership({
+    required String scIdentifier,
+    required String toAddress,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error("No VFX account found");
+      return false;
+    }
+
+    // Step 1: Beacon upload
+    final beaconSig = await RawTransaction.getSignature(
+      message: scIdentifier,
+      privateKey: keypair.private,
+      publicKey: keypair.public,
+    );
+    if (beaconSig == null) {
+      Toast.error("Failed to sign beacon upload");
+      return false;
+    }
+
+    ref.read(globalLoadingProvider.notifier).start();
+
+    final locator = await RawService().beaconUpload(scIdentifier, toAddress, beaconSig);
+    if (locator == null) {
+      ref.read(globalLoadingProvider.notifier).complete();
+      Toast.error("Beacon upload failed");
+      return false;
+    }
+
+    // Step 2: Get transfer TX data
+    try {
+      final txData = await ExplorerService().getVbtcOwnershipTransferData(
+        scIdentifier: scIdentifier,
+        toAddress: toAddress,
+        locator: locator,
+      );
+
+      ref.read(globalLoadingProvider.notifier).complete();
+
+      if (txData is Map && txData['Success'] == false) {
+        Toast.error(txData['Message'] ?? "Failed to prepare ownership transfer");
+        return false;
+      }
+
+      // Step 3: Build, sign, send via standard raw TX pipeline
+      return await _verifyConfirmAndSendTx(
+        toAddress: toAddress,
+        data: txData,
+        txType: 18, // TKNZ_TX
+      );
+    } catch (e) {
+      ref.read(globalLoadingProvider.notifier).complete();
+      Toast.error("Ownership transfer failed: $e");
+      return false;
+    }
+  }
+
   Future<Map<String, dynamic>?> _signAndSend({
     required String hash,
     required Future<Map<String, dynamic>> Function({

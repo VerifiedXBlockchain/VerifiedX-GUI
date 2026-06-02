@@ -654,6 +654,24 @@ class ExplorerService extends BaseService {
     }
   }
 
+  // --- V2 Ownership Transfer ---
+
+  Future<dynamic> getVbtcOwnershipTransferData({
+    required String scIdentifier,
+    required String toAddress,
+    required String locator,
+  }) async {
+    try {
+      final response = await getJson(
+        '/btc/vbtc-v2/ownership-transfer/$scIdentifier/$toAddress/$locator/',
+      );
+      return response;
+    } catch (e) {
+      print(e);
+      throw "Error getting ownership transfer data";
+    }
+  }
+
   // --- V2 Ceremony (MPC) ---
 
   Future<Map<String, dynamic>> prepareV2Ceremony(String ownerAddress) async {
