@@ -550,32 +550,8 @@ class _ConfirmBottomSheet extends BaseComponent {
                 }
 
                 if (kIsWeb) {
-                  final balance = ref.read(webSessionProvider).balance;
-
-                  if (balance == null || balance < MIN_RBX_FOR_SC_ACTION) {
-                    Toast.error(
-                        "Selected VFX account doesn't have enough balance");
-                    return;
-                  }
-
-                  final manager = ref.read(webTokenActionsManager);
-
-                  final success =
-                      await manager.transferVbtcMulti(toAddress, validInputs);
-
-                  if (success == true) {
-                    Toast.message("vBTC Bulk Transfer TX broadcasted");
-                    for (var element in provider.controllers) {
-                      element.clear();
-                    }
-                    provider.addressController.clear();
-                    ref.invalidate(bulkVbtcTransferProvider);
-
-                    Toast.message(
-                        "$totalAmount vBTC has been sent to $toAddress.");
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  }
+                  Toast.error("Bulk transfer is not yet available on the web wallet.");
+                  return;
                 } else {
                   final currentWallet = ref.read(sessionProvider).currentWallet;
                   if (currentWallet == null) {
