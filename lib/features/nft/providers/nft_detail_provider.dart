@@ -196,24 +196,37 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       return null;
     }
 
-    final message = id;
+    // Media-less tokens (e.g. vBTC V2's synthetic FileSize=0 / Location
+    // "default" placeholder) have no file on any node, so the beacon upload
+    // must be skipped: a failed push leaves a stale beacon record that poisons
+    // retries. "NA" is the protocol's no-media locator — recipients skip the
+    // beacon download and create the contract from chain data.
+    final isMediaLess = state != null &&
+        state!.primaryAsset.fileSize == 0 &&
+        state!.primaryAsset.location == "default" &&
+        state!.additionalAssets.isEmpty;
 
-    final beaconSignature = await RawTransaction.getSignature(
-      message: message,
-      privateKey: private,
-      publicKey: public,
-    );
+    String? locator;
+    if (isMediaLess) {
+      locator = "NA";
+    } else {
+      final beaconSignature = await RawTransaction.getSignature(
+        message: id,
+        privateKey: private,
+        publicKey: public,
+      );
 
-    if (beaconSignature == null) {
-      Toast.error("Couldn't produce beacon upload signature");
-      return false;
-    }
+      if (beaconSignature == null) {
+        Toast.error("Couldn't produce beacon upload signature");
+        return false;
+      }
 
-    final locator = await RawService().beaconUpload(id, toAddress, beaconSignature);
+      locator = await RawService().beaconUpload(id, toAddress, beaconSignature);
 
-    if (locator == null) {
-      Toast.error("Could not create beacon upload request.");
-      return false;
+      if (locator == null) {
+        Toast.error("Could not create beacon upload request.");
+        return false;
+      }
     }
 
     final txService = RawService();
@@ -340,6 +353,13 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     if (locators == null) {
       Toast.error("Locators request failed.");
       return false;
+    }
+
+    if (locators == "NA") {
+      // "NA" means the token has no media (e.g. vBTC V2) — there is nothing
+      // to download from a beacon, so just refresh from chain data.
+      state = await _retrieve();
+      return true;
     }
 
     final message = id;

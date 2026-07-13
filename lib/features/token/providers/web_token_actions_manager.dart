@@ -305,32 +305,20 @@ class WebTokenActionsManager {
       return false;
     }
 
-    // Step 1: Beacon upload
-    final beaconSig = await RawTransaction.getSignature(
-      message: scIdentifier,
-      privateKey: keypair.private,
-      publicKey: keypair.public,
-    );
-    if (beaconSig == null) {
-      Toast.error("Failed to sign beacon upload");
-      return false;
-    }
-
     ref.read(globalLoadingProvider.notifier).start();
 
-    final locator = await RawService().beaconUpload(scIdentifier, toAddress, beaconSig);
-    if (locator == null) {
-      ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error("Beacon upload failed");
-      return false;
-    }
-
-    // Step 2: Get transfer TX data
+    // Step 1: Get transfer TX data.
+    // vBTC V2 tokens are media-less (synthetic placeholder asset, MD5List "NA"
+    // in the state trei), so the beacon upload step must be skipped: no file
+    // exists to push, and a failed push leaves a stale beacon record that
+    // poisons all retries of this transfer. "NA" is the protocol's standing
+    // no-media locator — recipient nodes skip the beacon download and create
+    // the contract from chain data.
     try {
       final response = await ExplorerService().getVbtcOwnershipTransferData(
         scIdentifier: scIdentifier,
         toAddress: toAddress,
-        locator: locator,
+        locator: "NA",
       );
 
       ref.read(globalLoadingProvider.notifier).complete();
@@ -340,7 +328,7 @@ class WebTokenActionsManager {
         return false;
       }
 
-      // Step 3: Build, sign, send via standard raw TX pipeline
+      // Step 2: Build, sign, send via standard raw TX pipeline
       return await _verifyConfirmAndSendTx(
         toAddress: toAddress,
         data: response['tx_data'],

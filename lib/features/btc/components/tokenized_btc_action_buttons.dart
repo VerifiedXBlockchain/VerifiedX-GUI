@@ -769,14 +769,6 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 }
 
                 if (option == 4) {
-                  final nft =
-                      await NftService().retrieve(token.smartContractUid);
-                  if (nft == null) {
-                    Toast.error(
-                        "Could not resolve nft from ${token.smartContractUid}");
-                    return;
-                  }
-
                   final wallets = ref
                       .read(walletListProvider)
                       .where((w) => w.isReserved)
@@ -820,15 +812,57 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       });
 
                   if (wallet is Wallet) {
-                    await initTransferNftProcess(
-                      context,
-                      ref,
-                      nft,
-                      backupRequired: false,
-                      titleOverride: "Transfer Token",
-                      isToken: true,
-                      prefillAddress: wallet.address,
-                    );
+                    if (token.version >= 2) {
+                      // V2 tokens are media-less and must not go through the
+                      // NFT/beacon transfer flow — the V2 CLI endpoint handles
+                      // the ownership transfer without beacon involvement.
+                      final confirmed = await ConfirmDialog.show(
+                        title: "Transfer Ownership",
+                        body:
+                            "Are you sure you want to transfer ownership of this vBTC token to ${wallet.address}?",
+                      );
+
+                      if (confirmed != true) return;
+
+                      ref.read(globalLoadingProvider.notifier).start();
+                      final success = await VbtcV2Service().transferOwnership(
+                        scUid: token.smartContractUid,
+                        toAddress: wallet.address,
+                      );
+                      ref.read(globalLoadingProvider.notifier).complete();
+
+                      if (success) {
+                        Toast.message("Ownership transfer initiated.");
+                        ref.read(logProvider.notifier).append(
+                              LogEntry(
+                                message:
+                                    "vBTC ownership transfer initiated to ${wallet.address}",
+                                variant: AppColorVariant.Btc,
+                              ),
+                            );
+                        notifyTransactionSubmitted();
+                        ref
+                            .read(tokenizedBitcoinListProvider.notifier)
+                            .refresh();
+                      }
+                    } else {
+                      final nft =
+                          await NftService().retrieve(token.smartContractUid);
+                      if (nft == null) {
+                        Toast.error(
+                            "Could not resolve nft from ${token.smartContractUid}");
+                        return;
+                      }
+                      await initTransferNftProcess(
+                        context,
+                        ref,
+                        nft,
+                        backupRequired: false,
+                        titleOverride: "Transfer Token",
+                        isToken: true,
+                        prefillAddress: wallet.address,
+                      );
+                    }
                   }
                 }
               },

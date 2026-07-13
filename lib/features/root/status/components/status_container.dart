@@ -102,7 +102,7 @@ class StatusContainer extends BaseComponent {
                   if (walletInfo != null)
                     _DetailItem(
                       label: "Peers (In / Out)",
-                      value: "${walletInfo.peerCount} / 14",
+                      value: "${walletInfo.peerCount} / 10",
                       icon: Icons.people_alt,
                     ),
                   if (walletInfo != null)
