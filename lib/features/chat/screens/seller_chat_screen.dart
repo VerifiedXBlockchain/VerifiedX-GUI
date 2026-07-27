@@ -6,6 +6,7 @@ import '../../../core/dialogs.dart';
 import '../components/new_chat_message.dart';
 import '../components/shop_chat_list.dart';
 import '../providers/seller_chat_list_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class SellerChatScreen extends BaseScreen {
   final String address;
@@ -13,8 +14,9 @@ class SellerChatScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: Text("Chat"),
+      title: Text(l10n.chatTitleSingle),
       actions: [
         IconButton(
           onPressed: () {
@@ -26,11 +28,11 @@ class SellerChatScreen extends BaseScreen {
           icon: Icon(Icons.delete),
           onPressed: () async {
             final confirmed = await ConfirmDialog.show(
-              title: "Delete Chat Thread",
-              body: "Are you sure you want to delete this chat thread locally?",
+              title: l10n.chatDeleteThread,
+              body: l10n.mktDeleteChatThreadLocalBody,
               destructive: true,
-              confirmText: "Delete",
-              cancelText: "Cancel",
+              confirmText: l10n.actionDelete,
+              cancelText: l10n.actionCancel,
             );
 
             if (confirmed == true) {

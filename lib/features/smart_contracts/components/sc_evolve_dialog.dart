@@ -9,6 +9,7 @@ import '../providers/sc_wizard_provider.dart';
 import '../../../core/base_component.dart';
 import '../../asset/asset.dart';
 import 'sc_creator/common/file_selector.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardEvolvesDialog extends BaseComponent {
   ScWizardEvolvesDialog({Key? key, required this.entryIndex, required this.phaseIndex}) : super(key: key);
@@ -25,11 +26,12 @@ class ScWizardEvolvesDialog extends BaseComponent {
     final provider = ref.read(evolvePhaseWizardFormProvider(phaseIndex).notifier);
     final model = ref.read(evolvePhaseWizardFormProvider(phaseIndex));
     final type = ref.read(scWizardProvider.notifier).getEvolveType(entryIndex);
+    final l10n = AppLocalizations.of(context);
     return StatefulBuilder(builder: (context, setState) {
       return Form(
         key: formKey,
         child: AlertDialog(
-          title: const Text("Evolving phase"),
+          title: Text(l10n.scwEvolvingPhase),
           content: SizedBox(
             width: 400,
             child: Column(
@@ -44,10 +46,10 @@ class ScWizardEvolvesDialog extends BaseComponent {
                       child: TextFormField(
                         validator: provider.nameValidator,
                         controller: provider.nameController,
-                        decoration: const InputDecoration(
-                          suffix: HelpButton(HelpType.evolveStageName),
-                          label: Text("Evolve Stage Name"),
-                          labelStyle: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          suffix: const HelpButton(HelpType.evolveStageName),
+                          label: Text(l10n.scwEvolveStageName),
+                          labelStyle: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -57,7 +59,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
                   ],
                 ),
                 FileSelector(
-                  title: "Evolve Stage Asset",
+                  title: l10n.scwEvolveStageAsset,
                   asset: ref.watch(evolvePhaseWizardFormProvider(phaseIndex)).asset,
                   transparentBackground: true,
                   allowReplace: false,
@@ -69,10 +71,10 @@ class ScWizardEvolvesDialog extends BaseComponent {
                   controller: provider.descriptionController,
                   validator: provider.descriptionValidator,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    suffix: HelpButton(HelpType.evolveStageDescription),
-                    label: Text("Evolve Stage Description"),
-                    labelStyle: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    suffix: const HelpButton(HelpType.evolveStageDescription),
+                    label: Text(l10n.scwEvolveStageDescription),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ),
                 const SizedBox(
@@ -81,18 +83,19 @@ class ScWizardEvolvesDialog extends BaseComponent {
                 if (type == EvolveType.time)
                   Column(
                     children: [
-                      buildDate(provider, () => _showDatePicker(context, ref), type),
+                      buildDate(l10n, provider, () => _showDatePicker(context, ref), type),
                       const SizedBox(
                         height: 6,
                       ),
                       buildTime(
+                        l10n,
                         provider,
                         () => _showTimePicker(context, ref),
                         type,
                       ),
                     ],
                   ),
-                if (type == EvolveType.blockHeight) buildBlockHeight(provider, type),
+                if (type == EvolveType.blockHeight) buildBlockHeight(l10n, provider, type),
               ],
             ),
           ),
@@ -101,9 +104,9 @@ class ScWizardEvolvesDialog extends BaseComponent {
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.white60),
+              child: Text(
+                l10n.actionCancel,
+                style: const TextStyle(color: Colors.white60),
               ),
             ),
             TextButton(
@@ -117,9 +120,9 @@ class ScWizardEvolvesDialog extends BaseComponent {
                   Navigator.of(context).pop(e);
                 }
               },
-              child: const Text(
-                "Add evolving phase",
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                l10n.scwAddEvolvingPhase,
+                style: const TextStyle(color: Colors.white),
               ),
             )
           ],
@@ -165,7 +168,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
     }
   }
 
-  TextFormField buildTime(EvolvePhaseWizardFormProvider _provider, Future<void> Function() _showTimePicker, EvolveType type) {
+  TextFormField buildTime(AppLocalizations l10n, EvolvePhaseWizardFormProvider _provider, Future<void> Function() _showTimePicker, EvolveType type) {
     return TextFormField(
       controller: _provider.timeController,
       validator: (val) {
@@ -180,7 +183,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
           subtle: true,
         ),
         label: Text(
-          "Evolution Time (${DateTime.now().timeZoneName.toString()})",
+          l10n.scwEvolutionTime(DateTime.now().timeZoneName.toString()),
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -195,7 +198,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
     );
   }
 
-  TextFormField buildBlockHeight(EvolvePhaseWizardFormProvider _provider, EvolveType type) {
+  TextFormField buildBlockHeight(AppLocalizations l10n, EvolvePhaseWizardFormProvider _provider, EvolveType type) {
     return TextFormField(
       controller: _provider.blockHeightController,
       validator: (val) => _provider.blockHeightValidator(val, type),
@@ -204,13 +207,13 @@ class ScWizardEvolvesDialog extends BaseComponent {
           RegExp("[0-9]"),
         )
       ],
-      decoration: const InputDecoration(
-        suffix: HelpButton(
+      decoration: InputDecoration(
+        suffix: const HelpButton(
           HelpType.evolveBlockHeight,
         ),
         label: Text(
-          "Block Height Value",
-          style: TextStyle(
+          l10n.scwBlockHeightValue,
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -218,7 +221,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
     );
   }
 
-  TextFormField buildDate(EvolvePhaseWizardFormProvider _provider, Future<void> Function() _showDatePicker, EvolveType type) {
+  TextFormField buildDate(AppLocalizations l10n, EvolvePhaseWizardFormProvider _provider, Future<void> Function() _showDatePicker, EvolveType type) {
     return TextFormField(
       controller: _provider.dateController,
       validator: (value) => _provider.dateTimeValidator(value, type),
@@ -230,9 +233,9 @@ class ScWizardEvolvesDialog extends BaseComponent {
           HelpType.evolveDatetime,
           subtle: true,
         ),
-        label: const Text(
-          "Evolution Date",
-          style: TextStyle(
+        label: Text(
+          l10n.scwEvolutionDate,
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),

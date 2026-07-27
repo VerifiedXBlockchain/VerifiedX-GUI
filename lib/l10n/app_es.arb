@@ -5007,5 +5007,1332 @@
   "dialogClose": "Cerrar",
   "dialogYes": "Sí",
   "dialogNo": "No",
-  "dialogSubmit": "Enviar"
+  "dialogSubmit": "Enviar",
+  "govAdjAdditionalLinksLabel": "Enlaces adicionales: ",
+  "govAdjBandwidthLabel": "Ancho de banda (TB): ",
+  "govAdjBandwidthUnlimited": "Ilimitado",
+  "govAdjCpuCoresLabel": "Núcleos de CPU: ",
+  "govAdjCpuLabel": "CPU: ",
+  "govAdjCpuThreadsLabel": "Hilos de CPU: ",
+  "govAdjGithubLinkLabel": "Enlace de Github: ",
+  "govAdjHdSizeLabel": "Tamaño del disco: ",
+  "govAdjInternetDownLabel": "Velocidad de bajada (Gbps): ",
+  "govAdjInternetUpLabel": "Velocidad de subida (Gbps): ",
+  "govAdjIpAddressLabel": "Dirección IP del adjudicador propuesto: ",
+  "govAdjMachineProviderLabel": "Proveedor de la máquina: ",
+  "govAdjMachineTypeLabel": "Tipo de máquina: ",
+  "govAdjOperatingSystemLabel": "Sistema operativo: ",
+  "govAdjRamLabel": "RAM (GB): ",
+  "govAdjReasonLabel": "Razones para ser agregado como adjudicador: ",
+  "govAdjTechnicalBackgroundLabel": "Experiencia técnica: ",
+  "govAdjVfxAddressLabel": "Dirección VFX del adjudicador propuesto: ",
+  "govVoteBlock": "Bloque {height}",
+  "@govVoteBlock": {
+    "placeholders": {
+      "height": {
+        "type": "int"
+      }
+    }
+  },
+  "hnavActivatingSoon": "Se activará pronto.",
+  "hnavAgreeAndClose": "Aceptar y cerrar",
+  "hnavAllMyTokens": "Todos mis tokens",
+  "hnavBackupKeysSubtitle": "Exporta y guarda todas las claves privadas y direcciones de tu VFX{vaultSuffix} y BTC en un archivo de texto.",
+  "@hnavBackupKeysSubtitle": {
+    "placeholders": {
+      "vaultSuffix": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavBackupLabel": "Copia de seguridad",
+  "hnavBackupMediaSubtitle": "Comprime y exporta los archivos multimedia de tus NFT.",
+  "hnavBlockNumber": "Bloque {height}",
+  "@hnavBlockNumber": {
+    "placeholders": {
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavBtcInactive": "BTC inactivo",
+  "hnavBtcLoading": "Cargando BTC",
+  "hnavBtcLoginWarningBody": "Ten en cuenta que si inicias sesión con una clave privada BTC, y esta clave se generó originalmente con un mecanismo de inicio de sesión distinto, los pares de claves de tu cuenta VFX/de bóveda no coincidirán con tu inicio de sesión anterior, ya que las claves privadas no son reversibles.",
+  "hnavBtcOffline": "BTC sin conexión",
+  "hnavBtcOnline": "BTC en línea",
+  "hnavCliInactive": "CLI inactivo",
+  "hnavCloseRecoveryPhraseBody": "¿Seguro que copiaste tu frase de recuperación en un lugar seguro?",
+  "hnavCloseRecoveryPhraseTitle": "¿Cerrar la frase de recuperación?",
+  "hnavConfigAccountUnlockTime": "Tiempo de desbloqueo de la cuenta",
+  "hnavConfigAllowedExtensionTypes": "Tipos de extensión permitidos",
+  "hnavConfigApiCallUrl": "URL de llamada a la API",
+  "hnavConfigApiPort": "Puerto de la API",
+  "hnavConfigAutoDownloadNft": "Descargar automáticamente los archivos de NFT",
+  "hnavConfigHeader": "Configuración",
+  "hnavConfigIgnoreIncomingNfts": "Ignorar NFTs entrantes",
+  "hnavConfigMotherAddress": "Dirección Mother",
+  "hnavConfigMotherPassword": "Contraseña Mother",
+  "hnavConfigNftTimeout": "Tiempo de espera de NFT",
+  "hnavConfigPasswordClearTime": "Tiempo para borrar la contraseña",
+  "hnavConfigRejectedExtensionTypes": "Tipos de extensión de activos rechazados",
+  "hnavConfirmCreateMnemonicBody": "¿Seguro que quieres crear una cuenta con mnemónico?",
+  "hnavCopyRecoveryPhraseInstruction": "Copia tu frase de recuperación en un lugar seguro.",
+  "hnavCopyToClipboard": "Copiar al portapapeles",
+  "hnavCouldNotGenerateKeypair": "No se pudo generar el par de claves",
+  "hnavCreateNewMnemonic": "Crear mnemónico nuevo",
+  "hnavCurrencyAll": "Todas",
+  "hnavDecryptAccountKeysBody": "Ingresa la contraseña de esta cuenta para descifrar y ver sus claves privadas.",
+  "hnavDecryptionFailedCheckPassword": "Falló el descifrado. Revisa tu contraseña.",
+  "hnavEncryptGeneratedMnemonicMessage": "Esta contraseña cifrará las claves del mnemónico que generaste.",
+  "hnavEncryptImportedBtcPrivateKeyMessage": "Esta contraseña cifrará tu clave privada BTC importada.",
+  "hnavEncryptImportedPrivateKeyMessage": "Esta contraseña cifrará tu clave privada importada.",
+  "hnavEncryptRecoveredMnemonicMessage": "Esta contraseña cifrará las claves del mnemónico que recuperaste.",
+  "hnavEnterAccountPasswordTitle": "Ingresa la contraseña de la cuenta",
+  "hnavEnterBtcAddressHint": "Ingresa tu dirección BTC",
+  "hnavEnterBtcPrivateKeyOrWif": "Ingresa tu clave privada BTC o clave WIF:",
+  "hnavEnterPrivateKeyHint": "Ingresa tu clave privada",
+  "hnavEnterWalletPasswordTitle": "Ingresa la contraseña de la billetera",
+  "hnavExtensionDecryptPasswordBody": "Ingresa la contraseña que usaste en la extensión VFX para descifrar tu clave privada.",
+  "hnavExtensionNotDetected": "No se detectó la extensión VFX",
+  "hnavExtensionUnlockFirst": "Primero desbloquea la billetera de tu extensión",
+  "hnavExtensionWebOnly": "La extensión VFX solo está disponible en la web",
+  "hnavFailedDecryptAccountKeys": "No se pudieron descifrar las claves de la cuenta. Revisa tu contraseña.",
+  "hnavFungibleToken": "Token fungible",
+  "hnavFungibleTokenWithBalance": "Token fungible ({balance} {ticker})",
+  "@hnavFungibleTokenWithBalance": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "ticker": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavHd12Words": "12 palabras",
+  "hnavHd24Words": "24 palabras",
+  "hnavHdAccountTitle": "Cuenta HD",
+  "hnavHdCreateAccount": "Crear cuenta HD",
+  "hnavHdEncryptedError": "No puedes crear una cuenta HD con una billetera cifrada.",
+  "hnavHdExplanation1": "Al crear una cuenta HD, creas una función para recuperar tus claves privadas mediante una frase de recuperación.",
+  "hnavHdExplanation2": "Una vez generada, cualquier clave que crees usará esta frase como semilla para generar la clave privada. Por lo tanto, solo necesitarás recordar esto para recuperar tus claves de forma determinista.",
+  "hnavHdExplanation3": "Esta es una función avanzada y no se recomienda a menos que conozcas los conceptos de billeteras jerárquicas deterministas (HD).\n\nCualquier clave creada antes de esto no se podrá recuperar con esta frase, así que asegúrate de respaldarlas también.",
+  "hnavHdGenerateStrength": "Generar con nivel de seguridad:",
+  "hnavIDontKnow": "No lo sé",
+  "hnavImportBtcPrivateKeyOrWifTitle": "Importar clave privada BTC o clave WIF",
+  "hnavInvalidBtcAddress": "Dirección BTC inválida",
+  "hnavInvalidPrivateKeyOrWif": "No es una clave privada ni una clave WIF válida. Debe tener 64 o 52 caracteres",
+  "hnavIsAdjudicating": "{label} está adjudicando...",
+  "@hnavIsAdjudicating": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavKeysBackedUpSuccess": "Claves respaldadas exitosamente.",
+  "hnavMediaBackedUpSuccess": "Multimedia respaldada exitosamente.",
+  "hnavMempool": "Mempool",
+  "hnavMempoolEmpty": "El mempool está vacío.",
+  "hnavMnemonicTitle": "Mnemónico",
+  "hnavNoTokensEmptyState": "No tienes tokens vBTC, tokens fungibles ni tokens no fungibles",
+  "hnavNoWalletDetected": "No se detectó ninguna billetera.",
+  "hnavNonFungibleToken": "Token no fungible",
+  "hnavNoticeTitle": "Aviso",
+  "hnavPasteBtcAddress": "Pega tu dirección BTC:",
+  "hnavPortNotOpen": "El puerto {port} NO está abierto. Configura tu firewall.",
+  "@hnavPortNotOpen": {
+    "placeholders": {
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavPortOpen": "¡El puerto {port} está abierto!",
+  "@hnavPortOpen": {
+    "placeholders": {
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavProposalsVoting": "Propuestas y votación",
+  "hnavRecoverFromMnemonic": "Recuperar desde mnemónico",
+  "hnavRecoveryPhraseGeneratedTitle": "Frase de recuperación generada",
+  "hnavRequestCancelled": "Solicitud cancelada",
+  "hnavRequestTimedOut": "La solicitud expiró",
+  "hnavReserveAccountsNotExported": "Ten en cuenta que las cuentas de reserva/protegidas no se exportarán.",
+  "hnavRestoreHiddenBracket": "[Restaurar ocultas]",
+  "hnavResyncing": "Resincronizando...",
+  "hnavRevealPrivateKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas.",
+  "hnavRevealVaultKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas de la cuenta de bóveda.",
+  "hnavSectionAccountSecurity": "Seguridad de la cuenta",
+  "hnavSectionDiagnose": "Diagnóstico",
+  "hnavSectionTokensNfts": "Tokens / NFTs",
+  "hnavSectionValidator": "Validador",
+  "hnavSelectAddressType": "Selecciona tu tipo de dirección:",
+  "hnavSelectedBtcAccountTooltip": "Cuenta BTC seleccionada",
+  "hnavSelectedVfxAddressTooltip": "Dirección VFX seleccionada",
+  "hnavSetEncryptionPasswordTitle": "Establecer contraseña de cifrado",
+  "hnavShowKeysAccountDetailsBody": "Aquí están los detalles de tu cuenta{currencySuffix}. Asegúrate de respaldar tu clave privada en un lugar seguro.",
+  "@hnavShowKeysAccountDetailsBody": {
+    "placeholders": {
+      "currencySuffix": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavSnapshotAllDone": "¡Todo listo!",
+  "hnavSnapshotDownloading": "Descargando...",
+  "hnavSnapshotDownloadingFile": "Descargando: {file}",
+  "@hnavSnapshotDownloadingFile": {
+    "placeholders": {
+      "file": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavSnapshotError": "Ocurrió un error. Reinicia e inténtalo de nuevo.",
+  "hnavSnapshotImported": "Snapshot de la base de datos importado.",
+  "hnavSnapshotInitializing": "Inicializando...",
+  "hnavSnapshotShuttingDown": "Cerrando el CLI...",
+  "hnavSnapshotStartingUp": "Iniciando el CLI ahora...",
+  "hnavStartAdjudicating": "Iniciar adjudicación",
+  "hnavStopAdjudicating": "Detener adjudicación",
+  "hnavSynced": "Sincronizado",
+  "hnavSyncing": "Sincronizando...",
+  "hnavValidating": "Validando...",
+  "hnavVaultAccountDetailsBody": "Aquí están los detalles de tu cuenta de bóveda. Asegúrate de respaldar tu clave privada en un lugar seguro.",
+  "hnavVaultAccountDetailsTitle": "Detalles de la cuenta de bóveda",
+  "hnavVaultSuffix": " de bóveda",
+  "hnavVbtcTokenWithBalance": "Token vBTC ({balance} vBTC)",
+  "@hnavVbtcTokenWithBalance": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "hnavVfxCliLoading": "Cargando CLI de VFX",
+  "hnavVfxCliOffline": "CLI de VFX sin conexión",
+  "hnavVfxOnline": "VFX en línea",
+  "hnavWalletPasswordLabel": "Contraseña de la billetera",
+  "hnavWarningTitle": "Advertencia",
+  "mktAddReservePrice": "Agregar precio de reserva",
+  "mktAuction": "Subasta",
+  "mktAuctionActivityForTitle": "Actividad de subasta de {name}",
+  "@mktAuctionActivityForTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mktAuctionAlreadyStartedToast": "La subasta ya comenzó.",
+  "mktAuctionFloorPriceLabel": "Precio base de la subasta",
+  "mktAuctionNotLiveToast": "La subasta no está activa",
+  "mktAuctionOverToast": "La subasta ha terminado",
+  "mktAuctionReservePriceLabel": "Precio de reserva de la subasta",
+  "mktAuctionStartedDatesLocked": "La subasta ya comenzó, por lo que no se pueden actualizar las fechas ni las horas.",
+  "mktAuctionStartedPricingLocked": "La subasta ya comenzó, por lo que no se pueden actualizar los precios.",
+  "mktBidAmountLabel": "Monto de la oferta (VFX)",
+  "mktBidIncrementToast": "El incremento mínimo es de {increment} VFX. Se requiere una oferta mayor que {minimum} VFX.",
+  "@mktBidIncrementToast": {
+    "placeholders": {
+      "increment": {
+        "type": "String"
+      },
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "mktBidInsufficientBody": "No tienes saldo suficiente para cubrir esta oferta.\n\n¿Quieres pagar con tarjeta de crédito u otro token cripto?",
+  "mktBidMustBeGreaterFooter": "Debe ser mayor que {minimum} VFX",
+  "@mktBidMustBeGreaterFooter": {
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "mktBidMustBeGreaterToast": "Tu oferta debe ser mayor que la oferta más alta actual ({price} VFX)",
+  "@mktBidMustBeGreaterToast": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "mktBidSubmittedToast": "Oferta enviada",
+  "mktBuyNowConfirmBody": "¿Seguro que quieres comprar ahora por {price} VFX?",
+  "@mktBuyNowConfirmBody": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "mktBuyNowInsufficientBody": "Este NFT tiene un precio de compra inmediata de {price} VFX y no tienes saldo suficiente para cubrirlo.\n\n¿Quieres pagar con tarjeta de crédito u otro token cripto?",
+  "@mktBuyNowInsufficientBody": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "mktBuyNowPriceLabel": "Precio de compra inmediata",
+  "mktBuyNowTxBroadcastedTitle": "Transacción de compra inmediata transmitida.",
+  "mktBuyNowTxBroadcastedToast": "Transacción de compra inmediata transmitida. Espera a que el dueño de la tienda la acepte",
+  "mktChooseAddressTitle": "Elige una dirección",
+  "mktCloseCreateListingTitle": "¿Seguro que quieres cerrar la pantalla de creación de la publicación?",
+  "mktCloseEditListingTitle": "¿Seguro que quieres cerrar la pantalla de edición de la publicación?",
+  "mktCollectionDeletedToast": "Colección eliminada.",
+  "mktCollectionDescriptionLabel": "Descripción de la colección",
+  "mktCollectionNameLabel": "Nombre de la colección",
+  "mktCouldNotGenerateHashToast": "No se pudo generar el hash",
+  "mktCouldNotGetFeeToast": "No se pudo obtener la comisión",
+  "mktCouldNotGetNonceToast": "No se pudo obtener el nonce",
+  "mktCouldNotGetTimestampToast": "No se pudo obtener la marca de tiempo",
+  "mktCouldNotProduceSignatureToast": "No se pudo generar la firma",
+  "mktCouldNotVerifyTransactionToast": "No se pudo verificar la transacción",
+  "mktCreateAuctionHouseBody": "Crea tu casa de subastas / galería y publícala en la red.\nLuego podrás crear colecciones y agregarles publicaciones.",
+  "mktDatesHeading": "Fechas",
+  "mktDeleteChatThreadBody": "¿Seguro que quieres eliminar este hilo de chat?",
+  "mktDeleteChatThreadLocalBody": "¿Seguro que quieres eliminar este hilo de chat localmente?",
+  "mktDeleteListing": "Eliminar publicación",
+  "mktDeleteStoreConfirmBody": "¿Seguro que quieres eliminar esta tienda?",
+  "mktEditCollection": "Editar colección",
+  "mktEditListing": "Editar publicación",
+  "mktEnableAuction": "¿Habilitar subasta?",
+  "mktEnableBuyNow": "¿Habilitar compra inmediata?",
+  "mktEndDateLabel": "Fecha de fin",
+  "mktEndTimeLabel": "Hora de fin",
+  "mktErrorOccurred": "Ocurrió un error.",
+  "mktGalleryOnly": "¿Solo galería?",
+  "mktInsufficientBalanceTitle": "Saldo insuficiente",
+  "mktListingForTitle": "Publicación de {name}",
+  "@mktListingForTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mktNftAlreadyListedToast": "Este NFT ya está publicado. Elige otro",
+  "mktNftColonLabel": "NFT:",
+  "mktNftNameLabel": "NFT: {name}",
+  "@mktNftNameLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "mktNoAccountToast": "No hay cuenta",
+  "mktNoAuctionToast": "No hay subasta",
+  "mktNoBalanceToast": "Sin saldo",
+  "mktNoBidsYet": "Aún no hay ofertas.",
+  "mktNoMessagesYet": "Aún no hay mensajes",
+  "mktNoShopToast": "No hay tienda",
+  "mktNoThreadToast": "No hay hilo",
+  "mktNotEnoughBalanceToast": "Saldo insuficiente.",
+  "mktNotEnoughBalanceValidatingToast": "Saldo insuficiente porque estás validando.",
+  "mktNotNotifiedToast": "No recibirás notificaciones. Puedes cambiar esta configuración en el panel si cambias de opinión.",
+  "mktOptionsHeading": "Opciones",
+  "mktOwnersAddressLabel": "Dirección del propietario",
+  "mktPayWithCardCryptoTitle": "Pagar con tarjeta de crédito / cripto",
+  "mktPlaceBid": "Hacer oferta",
+  "mktPlaceBidConfirmBody": "¿Seguro que quieres hacer una oferta de {amount} VFX?",
+  "@mktPlaceBidConfirmBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "mktPresignProblemToast": "Ocurrió un problema al prefirmar la transacción de venta. Inténtalo de nuevo",
+  "mktProblemOccurredToast": "Ocurrió un problema",
+  "mktPublishLive": "Publicar en vivo",
+  "mktReplaceNft": "Reemplazar NFT",
+  "mktReservePriceLabel": "Precio de reserva",
+  "mktSelectNft": "Seleccionar NFT",
+  "mktSelectOwnerAddressHint": "Selecciona una dirección de la lista para que sea el propietario de la tienda.",
+  "mktShopDescriptionLabel": "Descripción de la tienda",
+  "mktShopIdentifierLabel": "Identificador de la tienda",
+  "mktShopNameLabel": "Nombre de la tienda",
+  "mktSignatureNotValidPrimaryToast": "Firma no válida (primaria)",
+  "mktStartDateLabel": "Fecha de inicio",
+  "mktStartTimeLabel": "Hora de inicio",
+  "mktSubscribeUpdatesBody": "Para que la web wallet pueda enviar notificaciones a los ganadores de subastas para firmar transacciones, se requiere una dirección de correo electrónico.",
+  "mktSubscribeUpdatesTitle": "¿Suscribirte para recibir novedades?",
+  "mktSubscribedToast": "Suscrito",
+  "mktThirdPartySaleStartNote": "Como esta casa de subastas está alojada en la Web Wallet de VFX, el vendedor deberá autorizar la transacción de inicio de venta. La verás en tu lista de transacciones una vez enviada.",
+  "mktTxBroadcastedToast": "Transacción transmitida",
+  "mktWaitForFinalizeBody": "Espera a que la transacción se finalice.",
+  "scwAddAFeature": "Agregar una función",
+  "scwAddCreatorName": "Agregar nombre del creador",
+  "scwAddDescription": "Agregar descripción",
+  "scwAddEvolvingPhase": "Agregar fase de evolución",
+  "scwAddName": "Agregar nombre",
+  "scwAddProperty": "Agregar propiedad",
+  "scwAddPropertyButton": "Agregar propiedad",
+  "scwAddRoyalty": "Agregar regalía",
+  "scwAddStat": "Agregar estadística",
+  "scwAdditionalAssets": "Activos adicionales",
+  "scwAllowVoting": "Permitir votación",
+  "scwBeneficiaryAddressOptional": "Dirección del beneficiario (opcional)",
+  "scwBlockHeightValue": "Valor de altura de bloque",
+  "scwCantAddEvolveBody": "Ya tienes una función de evolución en este contrato inteligente. Edita la función de evolución existente para agregar más etapas.",
+  "scwCantAddEvolveTitle": "No se puede agregar evolución",
+  "scwCantAddMultiAssetBody": "Ya tienes una función de multiactivo en este contrato inteligente. Edita la función de multiactivo existente para agregar más activos.",
+  "scwCantAddMultiAssetTitle": "No se puede agregar multiactivo",
+  "scwCantAddRoyaltyBody": "Ya tienes una función de regalía en este contrato inteligente.",
+  "scwCantAddRoyaltyTitle": "No se puede agregar regalía",
+  "scwCantAddSoulBoundBody": "Ya tienes una función de Soul Bound en este contrato inteligente.",
+  "scwCantAddSoulBoundTitle": "No se puede agregar Soul Bound",
+  "scwChoose": "Elegir",
+  "scwChooseAnAddress": "Elige una dirección",
+  "scwCollectionDescription": "Descripción de la colección",
+  "scwCollectionName": "Nombre de la colección",
+  "scwCollectionThumbnail": "Miniatura de la colección",
+  "scwCollectionWizard": "Asistente de colección",
+  "scwColorProperty": "Propiedad de color",
+  "scwCreateAndMintBody": "Comienza con un contrato inteligente base y agrega funciones personalizadas",
+  "scwCreateAndMintTitle": "Crear un contrato inteligente y emitir",
+  "scwCreateSmartContractTitle": "Crear contrato inteligente",
+  "scwCreatorName": "Nombre del creador",
+  "scwCreatorRetainedOwnership": "Propiedad retenida del creador",
+  "scwCreatorValue": "Creador: {name}",
+  "@scwCreatorValue": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "scwDeletePrimaryAssetBody": "¿Estás seguro de que quieres eliminar el activo principal?",
+  "scwDeletePrimaryAssetTitle": "¿Eliminar activo principal?",
+  "scwDescription": "Descripción",
+  "scwDescriptionOfPhysicalDigitalGood": "Descripción del bien físico/digital",
+  "scwDownloadExampleCsv": "Descargar CSV de ejemplo",
+  "scwDownloadExampleJson": "Descargar JSON de ejemplo",
+  "scwEdit": "Editar",
+  "scwEditCreatorName": "Editar nombre del creador",
+  "scwEditDescription": "Editar descripción",
+  "scwEditName": "Editar nombre",
+  "scwEventAddress": "Dirección del evento",
+  "scwEventCode": "Código del evento",
+  "scwEventDate": "Fecha del evento",
+  "scwEventDescription": "Descripción del evento",
+  "scwEventName": "Nombre del evento",
+  "scwEventTime": "Hora del evento",
+  "scwEventUrl": "URL del evento",
+  "scwEvolutionDate": "Fecha de evolución",
+  "scwEvolutionTime": "Hora de evolución ({timezone})",
+  "@scwEvolutionTime": {
+    "placeholders": {
+      "timezone": {
+        "type": "String"
+      }
+    }
+  },
+  "scwEvolve": "Evolución",
+  "scwEvolveOnRedeem": "¿Evolucionar al canjear?",
+  "scwEvolveStageAsset": "Activo de la etapa de evolución",
+  "scwEvolveStageDescription": "Descripción de la etapa de evolución",
+  "scwEvolveStageName": "Nombre de la etapa de evolución",
+  "scwEvolveType": "Tipo de evolución",
+  "scwEvolveTypeBlockHeight": "Altura de bloque",
+  "scwEvolveTypeDateTime": "Fecha/Hora",
+  "scwEvolveTypeManualOnly": "Solo manual",
+  "scwEvolveWithType": "Evolución ({type})",
+  "@scwEvolveWithType": {
+    "placeholders": {
+      "type": {
+        "type": "String"
+      }
+    }
+  },
+  "scwEvolvingPhase": "Fase de evolución",
+  "scwExpireDate": "Fecha de expiración",
+  "scwExpireTime": "Hora de expiración",
+  "scwFractionalInterest": "Interés fraccionario",
+  "scwFractionalizationTitle": "Fraccionamiento",
+  "scwFullDescription": "Descripción completa",
+  "scwImages": "Imagen(es)",
+  "scwImporting": "Importando",
+  "scwLaunchIdeBody": "Abre el IDE en línea para escribir tu propio código Trillium para tu contrato inteligente",
+  "scwLaunchIdeMobileBody": "El IDE está optimizado para pantallas más grandes. ¿Quieres continuar?",
+  "scwLaunchIdeMobileTitle": "¿Iniciar IDE en el móvil?",
+  "scwLaunchIdeTitle": "Iniciar IDE",
+  "scwLaunchWizard": "Iniciar asistente",
+  "scwMaxQuantity": "La cantidad máxima es 100.",
+  "scwMetadataUrl": "URL de metadatos",
+  "scwMinQuantity": "La cantidad mínima es 1.",
+  "scwMintNftCollectionBody": "Emite varios contratos inteligentes en una colección",
+  "scwMintNftCollectionTitle": "Emitir colección de NFT",
+  "scwName": "Nombre",
+  "scwNetwork": "Red",
+  "scwNetworkContractAddress": "Dirección del contrato de {network}",
+  "@scwNetworkContractAddress": {
+    "placeholders": {
+      "network": {
+        "type": "String"
+      }
+    }
+  },
+  "scwNoProperties": "Sin propiedades",
+  "scwNotImplemented": "No implementado.",
+  "scwNumericalProperty": "Propiedad numérica",
+  "scwOtherOptions": "Otras opciones",
+  "scwOwnerAddress": "Dirección del propietario",
+  "scwPairWrapTitle": "Emparejar/Envolver con un NFT existente",
+  "scwPercentage": "Porcentaje",
+  "scwPercentageRequiredForVotingApproval": "Porcentaje requerido para aprobar la votación",
+  "scwPhaseLabel": "Fase #{number}: {name}",
+  "@scwPhaseLabel": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      },
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "scwPhysicalDigitalGoodName": "Nombre del bien físico/digital",
+  "scwPrimaryAsset": "Activo principal",
+  "scwProperties": "Propiedades",
+  "scwPropertiesOptional": "Propiedades (opcional)",
+  "scwPropertyName": "Nombre de la propiedad",
+  "scwPropertyType": "Tipo de propiedad",
+  "scwPropertyTypeColor": "Color",
+  "scwPropertyTypeNumber": "Número",
+  "scwPropertyTypeText": "Texto",
+  "scwPropertyValue": "Valor de la propiedad",
+  "scwProvenanceFilesOptional": "Archivos de procedencia (opcional)",
+  "scwQuantity": "Cantidad",
+  "scwQuantityToMint": "Cantidad a emitir",
+  "scwQuantityValue": "Cantidad: {quantity}",
+  "@scwQuantityValue": {
+    "placeholders": {
+      "quantity": {
+        "type": "int"
+      }
+    }
+  },
+  "scwReasonForPairingWrapping": "Motivo del emparejamiento/envoltura",
+  "scwRemove": "Eliminar",
+  "scwRemoveAssetBody": "¿Estás seguro de que quieres eliminar este activo adicional?",
+  "scwRemoveAssetTitle": "¿Eliminar activo?",
+  "scwRemovePhaseBody": "¿Estás seguro de que quieres eliminar esta fase de evolución?",
+  "scwRemovePhaseTitle": "¿Eliminar fase?",
+  "scwRemovePropertyBody": "¿Estás seguro de que quieres eliminar esta propiedad?",
+  "scwRemovePropertyTitle": "¿Eliminar propiedad?",
+  "scwRemoveRoyaltyBody": "¿Estás seguro de que quieres eliminar la regalía?",
+  "scwRemoveRoyaltyTitle": "¿Eliminar regalía?",
+  "scwRoyaltyTitle": "Regalía",
+  "scwRoyaltyToAddress": "{amount} a {address}",
+  "@scwRoyaltyToAddress": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "scwRoyaltyType": "Tipo de regalía",
+  "scwRoyaltyTypeFixed": "Fijo",
+  "scwRoyaltyTypePercent": "Porcentaje",
+  "scwSeatingInfo": "Información de asientos",
+  "scwSoulBoundTitle": "Soul Bound",
+  "scwStatTypeString": "Tipo: String",
+  "scwStats": "Estadísticas",
+  "scwTextProperty": "Propiedad de texto",
+  "scwTicketTitle": "Boleto",
+  "scwTicketType": "Tipo de boleto",
+  "scwTokenIdOptional": "ID del token (opcional)",
+  "scwTokenStandardOptional": "Estándar del token (opcional)",
+  "scwTokenizationTitle": "Tokenización",
+  "scwUploadCsv": "Subir CSV",
+  "scwUploadJson": "Subir JSON",
+  "scwUploadJsonCsv": "Subir JSON / CSV",
+  "scwUploadJsonCsvBody": "Crea una colección con un archivo JSON o CSV. Consulta los archivos de ejemplo a continuación y úsalos como plantilla. Al subir el archivo podrás configurar y ajustar las opciones a través de la interfaz del asistente.\n\nEsta es una función avanzada para usuarios que quieren compilar y emitir colecciones fuera de la interfaz gráfica.",
+  "scwUseMyAddress": "Usar mi dirección",
+  "scwVotingDescription": "Descripción de la votación",
+  "tkbAmountGreaterThanZero": "El monto debe ser mayor que 0.0 BTC",
+  "tkbAmountOfVbtcTo": "Monto de vBTC para {action}",
+  "@tkbAmountOfVbtcTo": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbAssociateLocalFile": "Asociar archivo local",
+  "tkbAssociateMedia": "Asociar recurso",
+  "tkbAuthorizeNow": "Autorizar ahora",
+  "tkbBalanceFoundBody": "Se encontró un saldo de {balance} VFX en esta cuenta. Saltando al paso 3.",
+  "@tkbBalanceFoundBody": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbBalanceValue": "Saldo: {balance}",
+  "@tkbBalanceValue": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbBlockHeightValue": "Altura de bloque: {height}",
+  "@tkbBlockHeightValue": {
+    "placeholders": {
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbBtcAddressGenerated": "Dirección BTC generada ({address})",
+  "@tkbBtcAddressGenerated": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbBtcAddressPending": "Dirección BTC pendiente",
+  "tkbBtcAmount": "Monto de BTC",
+  "tkbBtcSentTo": "Se han enviado {amount} BTC a {address}.",
+  "@tkbBtcSentTo": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbBtcTransferBroadcasted": "TX de transferencia de BTC transmitida con éxito.",
+  "tkbBtcWithdrawalBroadcasted": "TX de retiro de BTC transmitida con éxito. Hash: {hash}",
+  "@tkbBtcWithdrawalBroadcasted": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbCallMedia": "Solicitar recurso",
+  "tkbCallMediaFromBeacon": "Solicitar recurso desde el Beacon",
+  "tkbCallToBeaconStartedBody": "Ten paciencia mientras se solicitan y descargan TODOS los recursos asociados al NFT.\n\nNo cierres tu billetera ni intentes solicitarlo de nuevo.",
+  "tkbCallToBeaconStartedTitle": "El proceso de solicitud al Beacon ha comenzado.",
+  "tkbCallToBeaconStartedToast": "El proceso de solicitud al Beacon ha comenzado. Ten paciencia mientras se solicitan y descargan TODOS los recursos asociados al NFT.",
+  "tkbCheckOtherAccount": "Revisa cualquier otra cuenta con la misma dirección para encontrar el recurso multimedia.",
+  "tkbChooseBtcAccount": "Elige la cuenta BTC desde la cual enviar",
+  "tkbChooseVaultAccount": "Elige una Cuenta de bóveda",
+  "tkbComplete": "Completar",
+  "tkbConfirmSendBtcBody": "Enviando {amount} BTC desde {from} a {to}.\n\nComisión:\n{fee} BTC",
+  "@tkbConfirmSendBtcBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbConfirmTransaction": "Confirmar transacción",
+  "tkbConfirmVoteNoBody": "¿Seguro que quieres votar NO en este tema del token?",
+  "tkbConfirmVoteYesBody": "¿Seguro que quieres votar SÍ en este tema del token?",
+  "tkbControlledBy": "Controlado por: {address}",
+  "@tkbControlledBy": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbCouldNotResolveNft": "No se pudo resolver el NFT desde {id}",
+  "@tkbCouldNotResolveNft": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbCreateBtcDomain": "Crear dominio BTC",
+  "tkbCreateDomainFor": "Crear dominio para {address}",
+  "@tkbCreateDomainFor": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbCreateTokenTopicBody": "¿Seguro que quieres crear este tema del token?",
+  "tkbCreationPending": "Creación pendiente",
+  "tkbDeleteBtcDomainBody": "¿Seguro que quieres eliminar este dominio BTC?\n{costLine}\n\nUna vez eliminado, este ADNR ya no podrá recibir transacciones.",
+  "@tkbDeleteBtcDomainBody": {
+    "placeholders": {
+      "costLine": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbDeleteDomainNoCost": "No hay costo para eliminar un dominio VFX (aparte de la comisión de la TX).",
+  "tkbDeleteDomainWithCost": "Hay un costo de {cost} VFX para eliminar un dominio RBX.",
+  "@tkbDeleteDomainWithCost": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbDeletePending": "Eliminación pendiente",
+  "tkbDescriptionColon": "Descripción:",
+  "tkbDismiss": "Descartar",
+  "tkbDomainName": "Nombre del dominio",
+  "tkbDomainNameRule": "Tu dominio solo debe contener letras y números y se le agregará automáticamente \".btc\" al verificarse",
+  "tkbDownloadAsset": "Descargar recurso",
+  "tkbError": "Error",
+  "tkbErrorLoadingData": "Error al cargar los datos",
+  "tkbFailedRequestWithdrawal": "No se pudo solicitar el retiro.",
+  "tkbFeeEstimate": "Estimación de tarifa: ~{feeEstimate} SATS | ~{feeEstimateBtc} BTC    ({fee} SATS /byte | {feeBtc} BTC /byte)",
+  "@tkbFeeEstimate": {
+    "placeholders": {
+      "feeEstimate": {
+        "type": "String"
+      },
+      "feeEstimateBtc": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      },
+      "feeBtc": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbFeeRateHint": "Tarifa en satoshis",
+  "tkbFeeRatePerByte": "Tarifa: {sats} SATS por byte ({btc} BTC por byte)",
+  "@tkbFeeRatePerByte": {
+    "placeholders": {
+      "sats": {
+        "type": "String"
+      },
+      "btc": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbFeeRateRequired": "Se requiere la tarifa",
+  "tkbFileNameLabel": "Nombre del archivo: {name}",
+  "@tkbFileNameLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbFileSize": "Tamaño del archivo",
+  "tkbFileType": "Tipo de archivo",
+  "tkbFilenameCreator": "Nombre del archivo: {filename} | Creador: {creator}",
+  "@tkbFilenameCreator": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      },
+      "creator": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbFixedSupply": "Suministro fijo",
+  "tkbFungibleToken": "Token fungible",
+  "tkbGenerate": "Generar",
+  "tkbGenerateBtcAddress": "Generar dirección BTC",
+  "tkbGenerateBtcAddressBody": "¿Seguro que quieres generar la dirección BTC de este token?",
+  "tkbImagePreviewNotFound": "No se encontró el archivo para la vista previa.\nProbablemente esto significa que este NFT ya no existe en esta máquina.\n",
+  "tkbInProgress": "En curso",
+  "tkbInfinite": "Infinito",
+  "tkbInsufficientBalanceAccount": "Saldo insuficiente para cubrir la tx y la comisión. Esta cuenta solo tiene {balance} BTC.",
+  "@tkbInsufficientBalanceAccount": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbInvalidFeeRate": "Tarifa inválida. Debe ser al menos 1 satoshi.",
+  "tkbManualSendSubtitle": "Envía la moneda manualmente a la dirección de depósito BTC de este token",
+  "tkbMediaNotFound": "No se encontró el archivo del recurso multimedia en tu máquina ({fileName}).",
+  "@tkbMediaNotFound": {
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbMinimumTokenRequirement": "Requisito mínimo de tokens",
+  "tkbMinimumTokenRequirementHelper": "El saldo mínimo de tokens necesario para votar.",
+  "tkbMinimumTokensToVote": "Tokens mínimos para votar: {count}",
+  "@tkbMinimumTokensToVote": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbMultiSigFeeCalculated": "Esto es una firma múltiple. La tarifa se ha calculado por ti.",
+  "tkbNeedTokensToVote": "Necesitas al menos {count} tokens para votar.",
+  "@tkbNeedTokensToVote": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbNoAddressesHolding": "Ninguna de tus direcciones posee {ticker}",
+  "@tkbNoAddressesHolding": {
+    "placeholders": {
+      "ticker": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbNoFungibleTokens": "Sin tokens fungibles",
+  "tkbNoFungibleTokensBody": "No tienes tokens fungibles con suministro en ninguna de tus cuentas.",
+  "tkbNoRequestHash": "No se devolvió ningún hash de solicitud.",
+  "tkbNoUpper": "NO",
+  "tkbNoUtxos": "Sin UTXOs",
+  "tkbNoVaultAccounts": "No tienes ninguna Cuenta de bóveda en esta billetera",
+  "tkbNoVotesYet": "Aún no hay votos.",
+  "tkbNone": "Ninguna",
+  "tkbNotFound": "No encontrado.",
+  "tkbOpenAsset": "Abrir recurso",
+  "tkbOpenFolder": "Abrir carpeta",
+  "tkbOwnershipTransferInitiated": "Transferencia de propiedad iniciada.",
+  "tkbPassword": "Contraseña",
+  "tkbPendingWithdrawalBody": "Tienes un retiro pendiente de {amount} vBTC a {destination}.\n\n¿Quieres completarlo?",
+  "@tkbPendingWithdrawalBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbPendingWithdrawalContractBody": "Tienes un retiro pendiente para este contrato. ¿Quieres completarlo?",
+  "tkbPendingWithdrawalFound": "Retiro pendiente encontrado",
+  "tkbPercentages": "Porcentajes",
+  "tkbResult": "Resultado",
+  "tkbResultFail": "Rechazado",
+  "tkbResultPass": "Aprobado",
+  "tkbSelectVfxAddress": "Selecciona la dirección VFX",
+  "tkbSelectedAddress": "Dirección seleccionada:",
+  "tkbSendAutomatically": "Enviar automáticamente",
+  "tkbSendFundsTo": "Envía fondos a {address} (dirección copiada al portapapeles)",
+  "@tkbSendFundsTo": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbSendManually": "Enviar manualmente",
+  "tkbSmartContractUidWithValue": "UID del contrato inteligente: {uid}",
+  "@tkbSmartContractUidWithValue": {
+    "placeholders": {
+      "uid": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbToBtcAddress": "A la dirección BTC",
+  "tkbToVfxAddress": "A la dirección VFX",
+  "tkbTokenBalances": "Saldos de tokens",
+  "tkbTokenDetails": "Detalles del token",
+  "tkbTokenTopicCreated": "Tema del token creado",
+  "tkbTopicUidLabel": "UID: {uid}",
+  "@tkbTopicUidLabel": {
+    "placeholders": {
+      "uid": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbTotalVotes": "Votos totales",
+  "tkbTransactionBroadcastedBang": "¡Transacción transmitida!",
+  "tkbTransactionHash": "Hash de la transacción",
+  "tkbTransactionHashCopied": "Hash de la transacción copiado al portapapeles",
+  "tkbTransferBtc": "Transferir BTC",
+  "tkbTransferDomainFrom": "Transferir dominio desde {address}",
+  "@tkbTransferDomainFrom": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbTransferOwnershipBody": "¿Seguro que quieres transferir la propiedad de este token vBTC a {address}?",
+  "@tkbTransferOwnershipBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbTransferOwnershipToReserve": "Transferir la propiedad a una Cuenta de reserva/protegida",
+  "tkbTransferOwnershipToReserveSubtitle": "Transfiere la propiedad de este token a tu cuenta de reserva/protegida.",
+  "tkbTransferPending": "Transferencia pendiente",
+  "tkbTransferToken": "Transferir token",
+  "tkbTransferTokenOwnership": "Transferir la propiedad del token",
+  "tkbTransferTokenOwnershipSubtitle": "Transfiere la propiedad de este token a otra cuenta VFX.",
+  "tkbTransferVbtc": "Transferir vBTC",
+  "tkbTransferVbtcBody": "¿Seguro que quieres transferir {amount} vBTC a {address}?",
+  "@tkbTransferVbtcBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbTransferVbtcSubtitle": "Transfiere una porción específica del vBTC dentro del token a otra dirección VFX.",
+  "tkbTxBroadcasted": "¡TX transmitida!",
+  "tkbUtxoAddress": "Dirección: {address}",
+  "@tkbUtxoAddress": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbUtxoDetails": "TX ID: {txId}\nMonto:{amount}",
+  "@tkbUtxoDetails": {
+    "placeholders": {
+      "txId": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbUtxoUnused": "Sin usar",
+  "tkbUtxoUsed": "Usado",
+  "tkbVaultAccountPassword": "Contraseña de la Cuenta de bóveda",
+  "tkbVaultAuthorizeDownload": "Como esta es una Cuenta de bóveda, deberás autorizar la descarga.",
+  "tkbVaultCannotWithdraw": "Las Cuentas de bóveda no pueden retirar. Transfiere vBTC a una dirección VFX estándar",
+  "tkbVaultOwnedCannotAction": "Los tokens que pertenecen a una Cuenta de bóveda no pueden realizar esta acción.",
+  "tkbVbtcTransferBroadcasted": "TX de transferencia vBTC V2 transmitida. Hash: {hash}",
+  "@tkbVbtcTransferBroadcasted": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbVbtcZeroBalance": "Los tokens vBTC con saldo cero no se pueden transferir.",
+  "tkbVfxWalletRequired": "Se requiere una billetera VFX para esta funcionalidad.",
+  "tkbVoteCounts": "Conteo de votos",
+  "tkbVotedOnBlock": "Votaste {label} en el bloque {block}.",
+  "@tkbVotedOnBlock": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "block": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbVotesNo": "Votos en contra",
+  "tkbVotesYes": "Votos a favor",
+  "tkbWalletControlsDomain": "Esta billetera controlará la propiedad de transferencia/eliminación sobre este nuevo dominio.",
+  "tkbWithdrawBtc": "Retirar BTC",
+  "tkbWithdrawBtcBody": "¿Seguro que quieres retirar {amount} BTC a {address}?",
+  "@tkbWithdrawBtcBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbYesUpper": "SÍ",
+  "tkbYouHaveVoted": "Has votado.",
+  "tkbYourBalanceValue": "Tu saldo: {balance}",
+  "@tkbYourBalanceValue": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbYourBalanceVbtc": "Tu saldo: {balance} vBTC{usd}",
+  "@tkbYourBalanceVbtc": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "usd": {
+        "type": "String"
+      }
+    }
+  },
+  "txpAccountBalance": "Saldo de la cuenta",
+  "txpAccountCreated": "Cuenta creada",
+  "txpActivateOnNetwork": "¿Activar en la red?",
+  "txpActivateOnNetworkBody": "Hay un costo de 4 VFX (que se queman) más la comisión de TX para activar esta cuenta de bóveda en la red.  ¿Continuar?",
+  "txpAddBtcAccount": "Agregar cuenta BTC",
+  "txpAddNewAccount": "Agregar nueva cuenta",
+  "txpAddVfxAccount": "Agregar cuenta VFX",
+  "txpAddressCopied": "Dirección copiada",
+  "txpAddressCopiedClipboard": "Dirección copiada al portapapeles.",
+  "txpAllAddresses": "Todas las direcciones",
+  "txpAmountCopied": "Monto copiado",
+  "txpAutoActivate": "¿Activar automáticamente?",
+  "txpAutoActivateBody": "¿Te gustaría activar automáticamente esta cuenta una vez que se reciban los fondos?",
+  "txpAutoActivateQueued": "Activación automática en cola.",
+  "txpBlockDiffAvg": "Promedio de diferencia de bloques: {value}",
+  "@txpBlockDiffAvg": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "txpBlockLastDelay": "Retraso del último bloque: {value}",
+  "@txpBlockLastDelay": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "txpBlockLastReceived": "Último bloque recibido: {value}",
+  "@txpBlockLastReceived": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "txpBlockNumber": "Número de bloque",
+  "txpBlocksAveraged": "Bloques promediados: {value}",
+  "@txpBlocksAveraged": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "txpBtcNoBalance": "La cuenta BTC no tiene saldo",
+  "txpChooseCoinType": "Elige el tipo de moneda",
+  "txpChoosePaymentGateway": "Elige la pasarela de pago",
+  "txpClearFilters": "Limpiar filtros",
+  "txpCompleteMoonpayDeposit": "Completar depósito de MoonPay",
+  "txpCompleteSale": "Completar venta",
+  "txpCompleteSaleConfirmBody": "¿Seguro que quieres completar la venta de {scId} por {amount} VFX?",
+  "@txpCompleteSaleConfirmBody": {
+    "placeholders": {
+      "scId": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "txpConfirmPassword": "Confirmar contraseña",
+  "txpConfirmPasswordBody": "Por favor confirma tu contraseña.",
+  "txpConfirmSend": "Confirmar envío",
+  "txpConfirmSendBody": "Monto: {amount} {currency}\nPara: {toAddress}\nDe: {fromAddress}\nTasa de comisión: {feeRate} sats/vB",
+  "@txpConfirmSendBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "toAddress": {
+        "type": "String"
+      },
+      "fromAddress": {
+        "type": "String"
+      },
+      "feeRate": {
+        "type": "String"
+      }
+    }
+  },
+  "txpCopyAddress": "Copiar dirección",
+  "txpCreate": "Crear",
+  "txpCreateBtcAccountSub": "Crea una nueva cuenta BTC",
+  "txpCreateVfxAccountSub": "Crea una nueva cuenta VFX",
+  "txpCryptoDotComOnRamp": "On-Ramp de Crypto.com",
+  "txpData": "Datos",
+  "txpDate": "Fecha",
+  "txpDepositAddressMoonpay": "Dirección de depósito (MoonPay)",
+  "txpDisclaimerAnd": " y la ",
+  "txpDisclaimerIntro": "Entiendo que ahora compraré la moneda nativa VFX o BTC directamente a través de {gateway} (",
+  "@txpDisclaimerIntro": {
+    "placeholders": {
+      "gateway": {
+        "type": "String"
+      }
+    }
+  },
+  "txpDisclaimerMiddle": "), que es una plataforma de servicios de terceros. Al continuar y contratar los servicios de {gateway}, reconoces que has leído y aceptado los ",
+  "@txpDisclaimerMiddle": {
+    "placeholders": {
+      "gateway": {
+        "type": "String"
+      }
+    }
+  },
+  "txpDisclaimerOutro": ". Además, entiendes que la Red VFX de VerifiedX es un ecosistema autónomo y descentralizado y no comparte ninguna comisión por tu uso de los servicios de {gateway}, y no asume ninguna responsabilidad por cualquier problema que pueda afectar tu transacción con cualquier proveedor de servicios de terceros en cualquier momento. Para cualquier pregunta relacionada con los servicios de {gateway}, comunícate con {gateway} en ",
+  "@txpDisclaimerOutro": {
+    "placeholders": {
+      "gateway": {
+        "type": "String"
+      }
+    }
+  },
+  "txpErrorOccurred": "Ocurrió un error",
+  "txpFundAccount": "Financiar cuenta",
+  "txpFundVaultBody": "Ahora debes financiar tu cuenta de bóveda con un mínimo de 5 VFX. Se quemarán 4 VFX al activarla.",
+  "txpFundVaultBodyShort": "Ahora debes financiar tu cuenta de bóveda con un mínimo de 5 VFX.",
+  "txpFundsSent": "Fondos enviados",
+  "txpFundsSentBody": "Se enviaron {amount} VFX a {address}.\n\nEspera a que la transacción se refleje y luego activa tu cuenta de bóveda.",
+  "@txpFundsSentBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "txpGetBtcNow": "Obtén $BTC ahora",
+  "txpGetQuote": "Obtener cotización",
+  "txpGetVfxNow": "Obtén $VFX ahora",
+  "txpImportBtcKeySub": "Importa una clave privada BTC existente",
+  "txpImportVfxKeySub": "Importa una clave privada VFX existente",
+  "txpManualDeposit": "Depósito manual",
+  "txpManualDepositBody": "Puedes enviar esto desde otra billetera enviando la cantidad exacta ({amount} {currency}) a la dirección de depósito de arriba.",
+  "@txpManualDepositBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "txpMeMarker": "[YO]",
+  "txpMinBalanceActivate": "Se requiere un saldo mínimo de 5 VFX para activar.",
+  "txpMoonpayManualMarked": "Transacción de MoonPay marcada como depósito manual",
+  "txpMustConfirmPassword": "Debes confirmar tu contraseña.",
+  "txpNativeMoonpaySoon": "La integración nativa de Moonpay se activará pronto.",
+  "txpNoAccountFound": "No se encontró ninguna cuenta",
+  "txpNoAddressSelected": "No hay dirección seleccionada",
+  "txpNonce": "Nonce",
+  "txpNotAvailableOnPlatform": "No disponible en esta plataforma",
+  "txpNotEnoughBtcFee": "No hay suficiente BTC para cubrir la transacción + comisión",
+  "txpNotVaultAccount": "No es una cuenta de bóveda",
+  "txpOffRampInstructions": "Para completar este retiro, envía la cantidad exacta de BTC a la dirección de depósito de abajo:",
+  "txpOriginalTx": "TX original",
+  "txpPasswordsDoNotMatch": "Las contraseñas no coinciden.",
+  "txpPleaseSendFundsTo": "Por favor envía fondos a {address}",
+  "@txpPleaseSendFundsTo": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "txpPrivacyPolicy": "Política de privacidad",
+  "txpRestoreCodeRecoveryBody": "Pega tu CÓDIGO DE RESTAURACIÓN para importar la cuenta de recuperación de esta cuenta de bóveda.",
+  "txpScanAndPay": "Escanear y pagar",
+  "txpSendManually": "Ya envié / enviaré manualmente",
+  "txpSendNow": "Enviar ahora",
+  "txpSendingConfirmBody": "Enviando:\n{amount} VFX\n\nPara:\n{toAddress}\n\nDe:\n{fromAddress}",
+  "@txpSendingConfirmBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "toAddress": {
+        "type": "String"
+      },
+      "fromAddress": {
+        "type": "String"
+      }
+    }
+  },
+  "txpSentToAddress": "{amount} {currency} enviados a {address}",
+  "@txpSentToAddress": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "currency": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "txpSetupBtcAccount": "Configura una cuenta de Bitcoin",
+  "txpSetupVaultAccount": "Configurar cuenta de bóveda",
+  "txpSetupVaultAccountBody": "Crea una contraseña para continuar. Debes recordar esta contraseña, ya que será necesaria para cualquier transacción con esta cuenta de bóveda.",
+  "txpSetupVfxAccount": "Configura una cuenta de VerifiedX",
+  "txpStatusWithValue": "Estado: {value}",
+  "@txpStatusWithValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "txpStripeCreditCard": "Stripe (Tarjeta de crédito)",
+  "txpSufficientBalanceBody": "Tienes una cuenta con saldo suficiente.\n\n¿Te gustaría enviar 5 VFX desde:\n{address}\n[Saldo: {balance} VFX]?",
+  "@txpSufficientBalanceBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "txpTermsOfUse": "Términos de uso",
+  "txpTestnetFaucet": "Faucet de testnet",
+  "txpTestnetFaucetNoTerms": "El faucet de testnet no tiene términos. ¡Diviértete!",
+  "txpTileAmountLabel": "Monto: ",
+  "txpTileDateLabel": "Fecha: {date}",
+  "@txpTileDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "txpTileHashLabel": "Hash: {hash}",
+  "@txpTileHashLabel": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "txpTileSettlementDateLabel": "Fecha de liquidación: {date}",
+  "@txpTileSettlementDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "txpTileStatusLabel": "Estado: ",
+  "txpTileTypeLabel": "Tipo: ",
+  "txpTileViewData": "Ver datos",
+  "txpTimeSinceLastBlock": "Tiempo desde el último bloque: {value}s",
+  "@txpTimeSinceLastBlock": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "txpTransactionFailed": "La transacción falló",
+  "txpTransactionHashLabel": "Hash de transacción",
+  "txpTransactionSent": "Transacción enviada",
+  "txpTxDetailTitle": "Detalle de transacción",
+  "txpTxFilters": "Filtros de transacción",
+  "txpTxHash": "Hash de Tx",
+  "txpTxHashCopied": "Hash de Tx copiado",
+  "txpTxType": "Tipo de Tx",
+  "txpTxTypeLabel": "Tipo de Tx{suffix}:",
+  "@txpTxTypeLabel": {
+    "placeholders": {
+      "suffix": {
+        "type": "String"
+      }
+    }
+  },
+  "txpValueCopied": "'{value}' copiado al portapapeles",
+  "@txpValueCopied": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "txpVaultActivationSent": "Se envió la transacción de activación de la cuenta de bóveda.\n\nEspera a que se refleje como \"Activada\".",
+  "txpVfxAmount": "Monto de VFX",
+  "txpVfxOffRampSoon": "La función de retiro de VFX estará disponible pronto",
+  "txpVfxQuote": "Cotización de VFX",
+  "txpVfxQuoteBody": "{amountVfx} VFX por ${amountUsd} USD\n¿Te gustaría continuar?",
+  "@txpVfxQuoteBody": {
+    "placeholders": {
+      "amountVfx": {
+        "type": "String"
+      },
+      "amountUsd": {
+        "type": "String"
+      }
+    }
+  },
+  "txpWalletDetailsBackup": "Aquí están los detalles de tu billetera. Asegúrate de respaldar tu clave privada en un lugar seguro.",
+  "txpWalletVersionInfo": "VFX Wallet{envTag}\nVersión {version} ({nickname})",
+  "@txpWalletVersionInfo": {
+    "placeholders": {
+      "envTag": {
+        "type": "String"
+      },
+      "version": {
+        "type": "String"
+      },
+      "nickname": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbHashLabel": "Hash: {hash}",
+  "@tkbHashLabel": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  }
 }

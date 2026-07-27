@@ -5,6 +5,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(vBtcOnboardProvider.notifier);
     final state = ref.watch(vBtcOnboardProvider);
 
@@ -12,9 +13,9 @@ class _TransferBtcToVbtcStep extends BaseComponent {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("No BTC account / Token Found."),
+          Text(l10n.btcNoBtcAccountOrToken),
           AppButton(
-            label: "Start Over",
+            label: l10n.btcStartOver,
             onPressed: () {
               provider.reset();
             },
@@ -34,11 +35,11 @@ class _TransferBtcToVbtcStep extends BaseComponent {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (!state.transferToTokenManually) ...[
-              Text("From: ${state.btcAccount!.address}"),
+              Text(l10n.btcFromAddress(state.btcAccount!.address)),
               SizedBox(
                 height: 8,
               ),
-              Text("To: ${state.tokenizedBtc!.btcAddress}"),
+              Text(l10n.btcToAddress(state.tokenizedBtc!.btcAddress ?? '')),
               SizedBox(
                 height: 8,
               ),
@@ -46,7 +47,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                 controller: provider.btcTransferAmountController,
                 validator: (val) => formValidatorNumber(val, "Amount"),
                 decoration:
-                    InputDecoration(label: Text("Amount to Send (BTC)")),
+                    InputDecoration(label: Text(l10n.btcAmountToSendLabel)),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
                 ],
@@ -90,8 +91,8 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        leading: const SizedBox(
-                            width: 100, child: Text("Fee Rate:")),
+                        leading: SizedBox(
+                            width: 100, child: Text(l10n.btcFeeRateLabel)),
                         title: Row(
                           children: [
                             PopupMenuButton<BtcFeeRatePreset>(
@@ -137,7 +138,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                         height: 8,
                       ),
                       Text(
-                        "Fee Estimate: ~$feeEstimate SATS | ~$feeEstimateBtc BTC    ($fee SATS /byte | $feeBtc BTC /byte)",
+                        l10n.tkbFeeEstimate(feeEstimate.toString(), feeEstimateBtc, fee.toString(), feeBtc),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -148,7 +149,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AppButton(
-                    label: "Initiate Transfer",
+                    label: l10n.btcInitiateTransfer,
                     variant: AppColorVariant.Btc,
                     onPressed: () async {
                       if (!provider.btcTransferFormKey.currentState!
@@ -161,7 +162,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                       final amountParsed = double.tryParse(
                           provider.btcTransferAmountController.text.trim());
                       if (amountParsed == null) {
-                        Toast.error("Invalid Amount");
+                        Toast.error(l10n.btcInvalidAmount);
                         return;
                       }
 
@@ -170,7 +171,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
 
                       if (amountParsed > state.btcAccount!.balance) {
                         Toast.error(
-                            "Not enough balance in BTC account to send $amountParsed BTC");
+                            l10n.btcNotEnoughBalance(amountParsed.toString()));
                         return;
                       }
 
@@ -188,16 +189,15 @@ class _TransferBtcToVbtcStep extends BaseComponent {
             ],
             if (!state.transferToTokenManually) ...[
               Divider(),
-              Text(
-                  "Alternatively, you can send the BTC manually to your token's deposit address."),
+              Text(l10n.btcManualSendBody),
             ],
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Center(
                 child: AppButton(
                   label: state.transferToTokenManually
-                      ? "Send Automatically"
-                      : "Send Manually",
+                      ? l10n.tkbSendAutomatically
+                      : l10n.tkbSendManually,
                   type: AppButtonType.Text,
                   underlined: true,
                   onPressed: () {
@@ -213,13 +213,13 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                 initialValue: state.tokenizedBtc!.btcAddress,
                 readOnly: true,
                 decoration: InputDecoration(
-                  label: Text("BTC Address"),
+                  label: Text(l10n.btcAddressLabel),
                   suffix: IconButton(
                     icon: Icon(Icons.copy),
                     onPressed: () async {
                       await Clipboard.setData(
                           ClipboardData(text: state.tokenizedBtc!.btcAddress));
-                      Toast.message("Address copied to clipboard!");
+                      Toast.message(l10n.btcAddressCopiedToast);
                     },
                   ),
                 ),
@@ -229,7 +229,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
               ),
               Center(
                 child: AppButton(
-                  label: "I've sent this manually!",
+                  label: l10n.btcSentManually,
                   type: AppButtonType.Text,
                   underlined: true,
                   onPressed: () {
@@ -268,6 +268,7 @@ class _TransferBtcStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(vBtcOnboardProvider.notifier);
     final state = ref.watch(vBtcOnboardProvider);
 
@@ -275,9 +276,9 @@ class _TransferBtcStep extends BaseComponent {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("No BTC Account Found."),
+          Text(l10n.btcNoBtcAccount),
           AppButton(
-            label: "Start Over",
+            label: l10n.btcStartOver,
             onPressed: () {
               provider.reset();
             },
@@ -294,13 +295,13 @@ class _TransferBtcStep extends BaseComponent {
             initialValue: state.btcAccount!.address,
             readOnly: true,
             decoration: InputDecoration(
-              label: Text("BTC Address"),
+              label: Text(l10n.btcAddressLabel),
               suffix: IconButton(
                 icon: Icon(Icons.copy),
                 onPressed: () async {
                   await Clipboard.setData(
                       ClipboardData(text: state.btcAccount!.address));
-                  Toast.message("WIF private key copied to clipboard");
+                  Toast.message(l10n.btcWifCopiedToast);
                 },
               ),
             ),
@@ -310,7 +311,7 @@ class _TransferBtcStep extends BaseComponent {
           height: 12,
         ),
         AppButton(
-          label: "Done!",
+          label: l10n.btcDoneExclamation,
           onPressed: () {
             provider
                 .setProcessingState(VBtcProcessingState.waitingForBtcTransfer);
@@ -327,6 +328,7 @@ class _CreateOrImportVfxWalletStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(vBtcOnboardProvider.notifier);
     final state = ref.watch(vBtcOnboardProvider);
 
@@ -340,14 +342,14 @@ class _CreateOrImportVfxWalletStep extends BaseComponent {
           spacing: 16,
           children: [
             AppButton(
-              label: "Import Existing",
+              label: l10n.btcImportExisting,
               icon: Icons.upload,
               onPressed: () async {
                 final pkey = await PromptModal.show(
-                  title: "Import Wallet",
+                  title: l10n.walletImportTitle,
                   validator: (String? value) =>
                       formValidatorNotEmpty(value, "Private Key"),
-                  labelText: "Private Key",
+                  labelText: l10n.walletPrivateKeyLabel,
                   onValidSubmission: (value) async {},
                 );
 
@@ -358,26 +360,25 @@ class _CreateOrImportVfxWalletStep extends BaseComponent {
                   if (w != null) {
                     if (w.balance >= VBTC_ONBOARD_VFX_AMOUNT) {
                       await InfoDialog.show(
-                        title: "Balance Found!",
-                        body:
-                            "A balance of ${w.balance} VFX was found in this account. Skipping to step 3.",
+                        title: l10n.btcBalanceFoundTitle,
+                        body: l10n.tkbBalanceFoundBody(w.balance.toString()),
                       );
                     }
                     provider.setVfxWallet(w);
-                    Toast.message("VFX Account Imported Successfully");
+                    Toast.message(l10n.btcVfxAccountImportedToast);
                   }
                 }
               },
               variant: AppColorVariant.Secondary,
             ),
             AppButton(
-              label: "Create New",
+              label: l10n.btcCreateNew,
               icon: Icons.add,
               onPressed: () async {
                 final w = await ref.read(walletListProvider.notifier).create();
                 if (w != null) {
                   provider.setVfxWallet(w);
-                  Toast.message("VFX account Created Successfully");
+                  Toast.message(l10n.btcVfxAccountCreatedToast);
                 }
               },
               variant: AppColorVariant.Secondary,
@@ -388,7 +389,7 @@ class _CreateOrImportVfxWalletStep extends BaseComponent {
           SizedBox(
             height: 16,
           ),
-          Text("Or use one of your existing VFX Accounts:"),
+          Text(l10n.btcUseExistingVfxAccount),
           SizedBox(
             height: 8,
           ),
@@ -416,6 +417,7 @@ class _FaucetWithdrawlStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(vBtcOnboardProvider.notifier);
     final state = ref.watch(vBtcOnboardProvider);
 
@@ -423,9 +425,9 @@ class _FaucetWithdrawlStep extends BaseComponent {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("No VFX Account Found."),
+          Text(l10n.btcNoVfxAccount),
           AppButton(
-            label: "Start Over",
+            label: l10n.btcStartOver,
             onPressed: () {
               provider.reset();
             },
@@ -438,18 +440,18 @@ class _FaucetWithdrawlStep extends BaseComponent {
       spacing: 16,
       children: [
         AppButton(
-          label: "Use Faucet",
+          label: l10n.btcUseFaucet,
           onPressed: () async {
             final phone = await PromptModal.show(
-              title: "Phone Number",
+              title: l10n.btcPhoneNumberTitle,
               validator: formValidatorPhoneNumber,
-              labelText: "Your Phone Number",
+              labelText: l10n.btcPhoneNumberLabel,
             );
 
             if (phone != null) {
               final cleanPhone = cleanPhoneNumber(phone);
               if (cleanPhone == null) {
-                Toast.error("Invalid Phone Number");
+                Toast.error(l10n.btcInvalidPhoneToast);
                 return;
               }
 
@@ -458,9 +460,9 @@ class _FaucetWithdrawlStep extends BaseComponent {
                     VBTC_ONBOARD_VFX_AMOUNT, state.vfxWallet!.address);
 
                 final code = await PromptModal.show(
-                  title: "Enter verification code sent to $phone",
+                  title: l10n.btcVerificationCodeTitle(phone),
                   validator: (v) => formValidatorNumber(v, "Verification Code"),
-                  labelText: "Verification Code",
+                  labelText: l10n.btcVerificationCodeLabel,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
                   ],
@@ -471,7 +473,7 @@ class _FaucetWithdrawlStep extends BaseComponent {
                       await ExplorerService().faucetVerify(uuid, code.trim());
 
                   Toast.message(
-                      "Success! Funds are on their way. TX Hash: $result");
+                      l10n.btcFundsSuccessToast(result));
                   provider.setProcessingState(
                       VBtcProcessingState.waitingForVfxTransfer);
                 }
@@ -495,6 +497,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(vBtcOnboardProvider.notifier);
     final state = ref.watch(vBtcOnboardProvider);
 
@@ -507,7 +510,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
           spacing: 16,
           children: [
             AppButton(
-              label: "Import Existing",
+              label: l10n.btcImportExisting,
               icon: Icons.upload,
               variant: AppColorVariant.Btc,
               onPressed: () async {
@@ -516,14 +519,13 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text("Import BTC Private Key"),
+                      title: Text(l10n.walletImportBtcDialogTitle),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                                "Paste in your BTC private key to import your account."),
+                            child: Text(l10n.walletImportBtcDialogBody),
                           ),
                           ListTile(
                             leading: const Icon(Icons.security),
@@ -531,7 +533,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                               controller: privateKeyController,
                               decoration: InputDecoration(
                                   label: Text(
-                                "Private Key",
+                                l10n.walletPrivateKeyLabel,
                                 style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -548,7 +550,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                             Navigator.of(context).pop();
                           },
                           child: Text(
-                            "Cancel",
+                            l10n.actionCancel,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -558,7 +560,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                                 .pop([privateKeyController.text, "test"]);
                           },
                           child: Text(
-                            "Import",
+                            l10n.actionImport,
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.btcOrange),
                           ),
@@ -581,9 +583,9 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                     if (success) {
                       if (btcAccountSyncInfo != null) {
                         Toast.message(
-                            "Private Key Imported! Please wait until ${btcAccountSyncInfo.nextSyncFormatted} for the balance to sync.");
+                            l10n.walletPrivateKeyImportedSyncToast(btcAccountSyncInfo.nextSyncFormatted));
                       } else {
-                        Toast.message("Private Key Imported!");
+                        Toast.message(l10n.walletPrivateKeyImportedToast);
                       }
                       final account = ref
                           .read(btcAccountListProvider)
@@ -599,7 +601,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
               },
             ),
             AppButton(
-              label: "Create New",
+              label: l10n.btcCreateNew,
               icon: Icons.add,
               onPressed: () async {
                 final account =
@@ -613,14 +615,13 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text("BTC Account Created"),
+                      title: Text(l10n.walletBtcAccountCreatedTitle),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Align(
+                          Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                                "Here are your BTC account details. Please ensure to back up your private key in a safe place."),
+                            child: Text(l10n.walletBtcAccountCreatedBody),
                           ),
                           ListTile(
                             leading: const Icon(Icons.account_balance_wallet),
@@ -628,7 +629,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                               initialValue: account.address,
                               decoration: InputDecoration(
                                   label: Text(
-                                "Address",
+                                l10n.walletAddressLabel,
                                 style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
@@ -643,7 +644,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                             title: TextFormField(
                               initialValue: account.privateKey,
                               decoration: InputDecoration(
-                                label: Text("Private Key",
+                                label: Text(l10n.walletPrivateKeyLabel,
                                     style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -663,7 +664,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                                 await Clipboard.setData(
                                     ClipboardData(text: account.privateKey));
                                 Toast.message(
-                                    "Private Key copied to clipboard");
+                                    l10n.walletPrivateKeyCopiedToast);
                               },
                             ),
                           ),
@@ -675,7 +676,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                               Navigator.of(context).pop();
                             },
                             child: Text(
-                              "Done",
+                              l10n.actionDone,
                               style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.btcOrange),
@@ -695,7 +696,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
           SizedBox(
             height: 16,
           ),
-          Text("Or use one of your existing BTC Accounts:"),
+          Text(l10n.btcUseExistingBtcAccount),
           SizedBox(
             height: 8,
           ),

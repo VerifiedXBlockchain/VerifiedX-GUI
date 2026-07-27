@@ -2,6 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
+
 enum PaymentGateway {
   banxa(
       "Banxa",
@@ -49,8 +51,9 @@ class PaymentDisclaimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (paymentGateway == PaymentGateway.testnetFaucet) {
-      return Text("Testnet Faucet does not have any terms. Have fun!");
+      return Text(l10n.txpTestnetFaucetNoTerms);
     }
 
     final textStyle = TextStyle(fontSize: 14, color: Colors.white);
@@ -67,9 +70,7 @@ class PaymentDisclaimer extends StatelessWidget {
       text: TextSpan(
         style: textStyle,
         children: [
-          TextSpan(
-              text:
-                  "I understand that I will now be purchasing VFX or BTC native coin directly through ${paymentGateway.name} ("),
+          TextSpan(text: l10n.txpDisclaimerIntro(paymentGateway.name)),
           TextSpan(
             text: paymentGateway.website,
             style: linkStyle,
@@ -78,29 +79,25 @@ class PaymentDisclaimer extends StatelessWidget {
                 launchUrl(Uri.parse("https://${paymentGateway.website}"));
               },
           ),
+          TextSpan(text: l10n.txpDisclaimerMiddle(paymentGateway.name)),
           TextSpan(
-              text:
-                  "), which is a third-party services platform. By proceeding and procuring services from ${paymentGateway.name}, you acknowledge that you have read and agreed to ${paymentGateway.name}’s "),
-          TextSpan(
-            text: "Terms of Use",
+            text: l10n.txpTermsOfUse,
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 launchUrl(Uri.parse(paymentGateway.termsUrl));
               },
           ),
-          TextSpan(text: " and "),
+          TextSpan(text: l10n.txpDisclaimerAnd),
           TextSpan(
-            text: "Privacy Policy",
+            text: l10n.txpPrivacyPolicy,
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 launchUrl(Uri.parse(paymentGateway.privacyUrl));
               },
           ),
-          TextSpan(
-              text:
-                  ". You additionally understand that the VerifiedX VFX Network is an autonomous and decentralized ecosystem and does not share in any fees whatsoever by you utilizing ${paymentGateway.name}’s services and does not take any responsibility for any issues that may affect your transaction with any third-party service provider at anytime. For any questions related to ${paymentGateway.name}’s services, please contact ${paymentGateway.name} at "),
+          TextSpan(text: l10n.txpDisclaimerOutro(paymentGateway.name)),
           TextSpan(
             text: paymentGateway.supportUrl,
             style: linkStyle,

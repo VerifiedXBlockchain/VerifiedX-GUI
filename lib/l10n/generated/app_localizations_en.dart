@@ -3592,4 +3592,2026 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dialogSubmit => 'Submit';
+
+  @override
+  String get govAdjAdditionalLinksLabel => 'Additional Links: ';
+
+  @override
+  String get govAdjBandwidthLabel => 'Bandwidth (TB): ';
+
+  @override
+  String get govAdjBandwidthUnlimited => 'Unlimited';
+
+  @override
+  String get govAdjCpuCoresLabel => 'CPU Cores: ';
+
+  @override
+  String get govAdjCpuLabel => 'CPU: ';
+
+  @override
+  String get govAdjCpuThreadsLabel => 'CPU Threads: ';
+
+  @override
+  String get govAdjGithubLinkLabel => 'Github Link: ';
+
+  @override
+  String get govAdjHdSizeLabel => 'HD Size: ';
+
+  @override
+  String get govAdjInternetDownLabel => 'Internet Speed down(Gbps): ';
+
+  @override
+  String get govAdjInternetUpLabel => 'Internet Speed up(Gbps): ';
+
+  @override
+  String get govAdjIpAddressLabel => 'Adjudicator to be Ip Address: ';
+
+  @override
+  String get govAdjMachineProviderLabel => 'Machine Provider: ';
+
+  @override
+  String get govAdjMachineTypeLabel => 'Machine type: ';
+
+  @override
+  String get govAdjOperatingSystemLabel => 'Operating System: ';
+
+  @override
+  String get govAdjRamLabel => 'RAM (GB): ';
+
+  @override
+  String get govAdjReasonLabel => 'Reasons to be added as adjudicator: ';
+
+  @override
+  String get govAdjTechnicalBackgroundLabel => 'Technical background: ';
+
+  @override
+  String get govAdjVfxAddressLabel => 'Adjudicator to be VFX Address: ';
+
+  @override
+  String govVoteBlock(int height) {
+    return 'Block $height';
+  }
+
+  @override
+  String get hnavActivatingSoon => 'Activating soon.';
+
+  @override
+  String get hnavAgreeAndClose => 'Agree and Close';
+
+  @override
+  String get hnavAllMyTokens => 'All My Tokens';
+
+  @override
+  String hnavBackupKeysSubtitle(String vaultSuffix) {
+    return 'Export and save all your VFX$vaultSuffix and BTC private keys & addresses to a text file.';
+  }
+
+  @override
+  String get hnavBackupLabel => 'Backup';
+
+  @override
+  String get hnavBackupMediaSubtitle => 'Zip and export your NFT media assets.';
+
+  @override
+  String hnavBlockNumber(String height) {
+    return 'Block $height';
+  }
+
+  @override
+  String get hnavBtcInactive => 'BTC Inactive';
+
+  @override
+  String get hnavBtcLoading => 'BTC Loading';
+
+  @override
+  String get hnavBtcLoginWarningBody => 'Although if you login with a BTC Private key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.';
+
+  @override
+  String get hnavBtcOffline => 'BTC Offline';
+
+  @override
+  String get hnavBtcOnline => 'BTC Online';
+
+  @override
+  String get hnavCliInactive => 'CLI Inactive';
+
+  @override
+  String get hnavCloseRecoveryPhraseBody => 'Are you sure you have copied your recovery phrase to a secure location?';
+
+  @override
+  String get hnavCloseRecoveryPhraseTitle => 'Close Recovery Phrase?';
+
+  @override
+  String get hnavConfigAccountUnlockTime => 'Account Unlock Time';
+
+  @override
+  String get hnavConfigAllowedExtensionTypes => 'Allowed Extension Types';
+
+  @override
+  String get hnavConfigApiCallUrl => 'Api Call Url';
+
+  @override
+  String get hnavConfigApiPort => 'Api Port';
+
+  @override
+  String get hnavConfigAutoDownloadNft => 'Auto Download NFT Assets';
+
+  @override
+  String get hnavConfigHeader => 'Configuration';
+
+  @override
+  String get hnavConfigIgnoreIncomingNfts => 'Ignore Incoming NFTs';
+
+  @override
+  String get hnavConfigMotherAddress => 'Mother Address';
+
+  @override
+  String get hnavConfigMotherPassword => 'Mother Password';
+
+  @override
+  String get hnavConfigNftTimeout => 'NFT Timeout';
+
+  @override
+  String get hnavConfigPasswordClearTime => 'Password Clear Time';
+
+  @override
+  String get hnavConfigRejectedExtensionTypes => 'Rejected Asset Extension Types';
+
+  @override
+  String get hnavConfirmCreateMnemonicBody => 'Are you sure you want to create a Mnemonic account?';
+
+  @override
+  String get hnavCopyRecoveryPhraseInstruction => 'Copy your recovery phrase to a secure location.';
+
+  @override
+  String get hnavCopyToClipboard => 'Copy to Clipboard';
+
+  @override
+  String get hnavCouldNotGenerateKeypair => 'Could not generate keypair';
+
+  @override
+  String get hnavCreateNewMnemonic => 'Create New Mnemonic';
+
+  @override
+  String get hnavCurrencyAll => 'All';
+
+  @override
+  String get hnavDecryptAccountKeysBody => 'Enter the password for this account to decrypt and view its private keys.';
+
+  @override
+  String get hnavDecryptionFailedCheckPassword => 'Decryption failed. Check your password.';
+
+  @override
+  String get hnavEncryptGeneratedMnemonicMessage => 'This password will encrypt your generated mnemonic keys.';
+
+  @override
+  String get hnavEncryptImportedBtcPrivateKeyMessage => 'This password will encrypt your imported BTC private key.';
+
+  @override
+  String get hnavEncryptImportedPrivateKeyMessage => 'This password will encrypt your imported private key.';
+
+  @override
+  String get hnavEncryptRecoveredMnemonicMessage => 'This password will encrypt your recovered mnemonic keys.';
+
+  @override
+  String get hnavEnterAccountPasswordTitle => 'Enter Account Password';
+
+  @override
+  String get hnavEnterBtcAddressHint => 'Enter your BTC address';
+
+  @override
+  String get hnavEnterBtcPrivateKeyOrWif => 'Enter your BTC Private Key or WIF Key:';
+
+  @override
+  String get hnavEnterPrivateKeyHint => 'Enter your private key';
+
+  @override
+  String get hnavEnterWalletPasswordTitle => 'Enter Wallet Password';
+
+  @override
+  String get hnavExtensionDecryptPasswordBody => 'Enter the password you used in the VFX Extension to decrypt your private key.';
+
+  @override
+  String get hnavExtensionNotDetected => 'VFX Extension not detected';
+
+  @override
+  String get hnavExtensionUnlockFirst => 'Please unlock your extension wallet first';
+
+  @override
+  String get hnavExtensionWebOnly => 'VFX Extension is only available on web';
+
+  @override
+  String get hnavFailedDecryptAccountKeys => 'Failed to decrypt account keys. Check your password.';
+
+  @override
+  String get hnavFungibleToken => 'Fungible Token';
+
+  @override
+  String hnavFungibleTokenWithBalance(String balance, String ticker) {
+    return 'Fungible Token ($balance $ticker)';
+  }
+
+  @override
+  String get hnavHd12Words => '12 Words';
+
+  @override
+  String get hnavHd24Words => '24 Words';
+
+  @override
+  String get hnavHdAccountTitle => 'HD Account';
+
+  @override
+  String get hnavHdCreateAccount => 'Create HD Account';
+
+  @override
+  String get hnavHdEncryptedError => 'You can not create an HD account with an encrypted wallet.';
+
+  @override
+  String get hnavHdExplanation1 => 'By creating an HD account you are creating a function to recover your private keys by use of recovery phrase.';
+
+  @override
+  String get hnavHdExplanation2 => 'Once generated, any keys you create will use this phrase to seed the private key generation. Therefore, you will only need to remember this to deterministically recover your keys.';
+
+  @override
+  String get hnavHdExplanation3 => 'This is an advanced feature and is not recommended unless you are familiar with Hierarchical Deterministic concepts.\n\nAny keys created prior to this will not be recoverable through this phrase so please ensure they are backed up as well.';
+
+  @override
+  String get hnavHdGenerateStrength => 'Generate with strength:';
+
+  @override
+  String get hnavIDontKnow => 'I don\'t know';
+
+  @override
+  String get hnavImportBtcPrivateKeyOrWifTitle => 'Import BTC Private Key or WIF Key';
+
+  @override
+  String get hnavInvalidBtcAddress => 'Invalid BTC Address';
+
+  @override
+  String get hnavInvalidPrivateKeyOrWif => 'Not a valid Private Key or WIF Key. Should be 64 or 52 characters';
+
+  @override
+  String hnavIsAdjudicating(String label) {
+    return '$label is Adjudicating...';
+  }
+
+  @override
+  String get hnavKeysBackedUpSuccess => 'Keys backed up successfully.';
+
+  @override
+  String get hnavMediaBackedUpSuccess => 'Media backed up successfully.';
+
+  @override
+  String get hnavMempool => 'Mempool';
+
+  @override
+  String get hnavMempoolEmpty => 'Mempool is empty.';
+
+  @override
+  String get hnavMnemonicTitle => 'Mnemonic';
+
+  @override
+  String get hnavNoTokensEmptyState => 'You have no vBTC Tokens, Fungible Tokens, or Non-Fungible Tokens';
+
+  @override
+  String get hnavNoWalletDetected => 'No Wallet detected.';
+
+  @override
+  String get hnavNonFungibleToken => 'Non-Fungible Token';
+
+  @override
+  String get hnavNoticeTitle => 'Notice';
+
+  @override
+  String get hnavPasteBtcAddress => 'Paste your BTC address:';
+
+  @override
+  String hnavPortNotOpen(String port) {
+    return 'Port $port is NOT open. Please configure your firewall.';
+  }
+
+  @override
+  String hnavPortOpen(String port) {
+    return 'Port $port is open!';
+  }
+
+  @override
+  String get hnavProposalsVoting => 'Proposals & Voting';
+
+  @override
+  String get hnavRecoverFromMnemonic => 'Recover From Mnemonic';
+
+  @override
+  String get hnavRecoveryPhraseGeneratedTitle => 'Recovery Phrase Generated';
+
+  @override
+  String get hnavRequestCancelled => 'Request cancelled';
+
+  @override
+  String get hnavRequestTimedOut => 'Request timed out';
+
+  @override
+  String get hnavReserveAccountsNotExported => 'Please note that Reserve/Protected Accounts will not be exported.';
+
+  @override
+  String get hnavRestoreHiddenBracket => '[Restore Hidden]';
+
+  @override
+  String get hnavResyncing => 'Resyncing...';
+
+  @override
+  String get hnavRevealPrivateKeysPasswordMessage => 'Enter your password to reveal private keys.';
+
+  @override
+  String get hnavRevealVaultKeysPasswordMessage => 'Enter your password to reveal Vault account private keys.';
+
+  @override
+  String get hnavSectionAccountSecurity => 'Account Security';
+
+  @override
+  String get hnavSectionDiagnose => 'Diagnose';
+
+  @override
+  String get hnavSectionTokensNfts => 'Tokens / NFTs';
+
+  @override
+  String get hnavSectionValidator => 'Validator';
+
+  @override
+  String get hnavSelectAddressType => 'Select your address type:';
+
+  @override
+  String get hnavSelectedBtcAccountTooltip => 'Selected BTC Account';
+
+  @override
+  String get hnavSelectedVfxAddressTooltip => 'Selected VFX Address';
+
+  @override
+  String get hnavSetEncryptionPasswordTitle => 'Set Encryption Password';
+
+  @override
+  String hnavShowKeysAccountDetailsBody(String currencySuffix) {
+    return 'Here are your$currencySuffix account details. Please ensure to back up your private key in a safe place.';
+  }
+
+  @override
+  String get hnavSnapshotAllDone => 'All done!';
+
+  @override
+  String get hnavSnapshotDownloading => 'Downloading...';
+
+  @override
+  String hnavSnapshotDownloadingFile(String file) {
+    return 'Downloading: $file';
+  }
+
+  @override
+  String get hnavSnapshotError => 'An error occurred. Please restart and try again.';
+
+  @override
+  String get hnavSnapshotImported => 'Database Snapshot Imported.';
+
+  @override
+  String get hnavSnapshotInitializing => 'Initializing...';
+
+  @override
+  String get hnavSnapshotShuttingDown => 'Shutting down CLI...';
+
+  @override
+  String get hnavSnapshotStartingUp => 'Starting up CLI now...';
+
+  @override
+  String get hnavStartAdjudicating => 'Start Adjudicating';
+
+  @override
+  String get hnavStopAdjudicating => 'Stop Adjudicating';
+
+  @override
+  String get hnavSynced => 'Synced';
+
+  @override
+  String get hnavSyncing => 'Syncing...';
+
+  @override
+  String get hnavValidating => 'Validating...';
+
+  @override
+  String get hnavVaultAccountDetailsBody => 'Here are your Vault Account details. Please ensure to back up your private key in a safe place.';
+
+  @override
+  String get hnavVaultAccountDetailsTitle => 'Vault Account Details';
+
+  @override
+  String get hnavVaultSuffix => ' Vault';
+
+  @override
+  String hnavVbtcTokenWithBalance(String balance) {
+    return 'vBTC Token ($balance vBTC)';
+  }
+
+  @override
+  String get hnavVfxCliLoading => 'VFX CLI Loading';
+
+  @override
+  String get hnavVfxCliOffline => 'VFX CLI Offline';
+
+  @override
+  String get hnavVfxOnline => 'VFX Online';
+
+  @override
+  String get hnavWalletPasswordLabel => 'Wallet Password';
+
+  @override
+  String get hnavWarningTitle => 'Warning';
+
+  @override
+  String get mktAddReservePrice => 'Add Reserve Price';
+
+  @override
+  String get mktAuction => 'Auction';
+
+  @override
+  String mktAuctionActivityForTitle(String name) {
+    return 'Auction Activity for $name';
+  }
+
+  @override
+  String get mktAuctionAlreadyStartedToast => 'The auction has already started.';
+
+  @override
+  String get mktAuctionFloorPriceLabel => 'Auction Floor Price';
+
+  @override
+  String get mktAuctionNotLiveToast => 'Auction is not live';
+
+  @override
+  String get mktAuctionOverToast => 'Auction is over';
+
+  @override
+  String get mktAuctionReservePriceLabel => 'Auction Reserve Price';
+
+  @override
+  String get mktAuctionStartedDatesLocked => 'Auction has started so the dates & times can\'t be updated.';
+
+  @override
+  String get mktAuctionStartedPricingLocked => 'Auction has started so the pricing can\'t be updated.';
+
+  @override
+  String get mktBidAmountLabel => 'Bid Amount (VFX)';
+
+  @override
+  String mktBidIncrementToast(String increment, String minimum) {
+    return 'The minimum increment amount is $increment VFX. A bid greater than $minimum VFX is required.';
+  }
+
+  @override
+  String get mktBidInsufficientBody => 'You don\'t have enough balance to cover this bid.\n\nWould you like to pay with a Credit Card or another crypto token?';
+
+  @override
+  String mktBidMustBeGreaterFooter(String minimum) {
+    return 'Must be greater than $minimum VFX';
+  }
+
+  @override
+  String mktBidMustBeGreaterToast(String price) {
+    return 'Your bid must be greater than the current highest bid ($price VFX)';
+  }
+
+  @override
+  String get mktBidSubmittedToast => 'Bid Submitted';
+
+  @override
+  String mktBuyNowConfirmBody(String price) {
+    return 'Are you sure you want to buy now for $price VFX?';
+  }
+
+  @override
+  String mktBuyNowInsufficientBody(String price) {
+    return 'This NFT has a buy now price of $price VFX and you don\'t have enough balance to cover it.\n\nWould you like to pay with a Credit Card or another crypto token?';
+  }
+
+  @override
+  String get mktBuyNowPriceLabel => 'Buy Now Price';
+
+  @override
+  String get mktBuyNowTxBroadcastedTitle => 'Buy Now TX broadcasted.';
+
+  @override
+  String get mktBuyNowTxBroadcastedToast => 'Buy Now TX broadcasted. Please wait for it to be accepted by the shop owner';
+
+  @override
+  String get mktChooseAddressTitle => 'Choose an Address';
+
+  @override
+  String get mktCloseCreateListingTitle => 'Are you sure you want to close the listing creation screen?';
+
+  @override
+  String get mktCloseEditListingTitle => 'Are you sure you want to close the listing editing screen?';
+
+  @override
+  String get mktCollectionDeletedToast => 'Collection deleted.';
+
+  @override
+  String get mktCollectionDescriptionLabel => 'Collection Description';
+
+  @override
+  String get mktCollectionNameLabel => 'Collection Name';
+
+  @override
+  String get mktCouldNotGenerateHashToast => 'Could not generate hash';
+
+  @override
+  String get mktCouldNotGetFeeToast => 'Could not get fee';
+
+  @override
+  String get mktCouldNotGetNonceToast => 'Could not get nonce';
+
+  @override
+  String get mktCouldNotGetTimestampToast => 'Could not get timestamp';
+
+  @override
+  String get mktCouldNotProduceSignatureToast => 'Could not produce signature';
+
+  @override
+  String get mktCouldNotVerifyTransactionToast => 'Could not verify transaction';
+
+  @override
+  String get mktCreateAuctionHouseBody => 'Create your auction house / gallery and publish it to the network.\nThen you\'ll be able to create collections and add listings to them.';
+
+  @override
+  String get mktDatesHeading => 'Dates';
+
+  @override
+  String get mktDeleteChatThreadBody => 'Are you sure you want to delete this chat thread?';
+
+  @override
+  String get mktDeleteChatThreadLocalBody => 'Are you sure you want to delete this chat thread locally?';
+
+  @override
+  String get mktDeleteListing => 'Delete Listing';
+
+  @override
+  String get mktDeleteStoreConfirmBody => 'Are you sure you want to delete this store?';
+
+  @override
+  String get mktEditCollection => 'Edit Collection';
+
+  @override
+  String get mktEditListing => 'Edit Listing';
+
+  @override
+  String get mktEnableAuction => 'Enable Auction?';
+
+  @override
+  String get mktEnableBuyNow => 'Enable Buy Now?';
+
+  @override
+  String get mktEndDateLabel => 'End Date';
+
+  @override
+  String get mktEndTimeLabel => 'End Time';
+
+  @override
+  String get mktErrorOccurred => 'An error occurred.';
+
+  @override
+  String get mktGalleryOnly => 'Gallery Only?';
+
+  @override
+  String get mktInsufficientBalanceTitle => 'Insufficient Balance';
+
+  @override
+  String mktListingForTitle(String name) {
+    return 'Listing for $name';
+  }
+
+  @override
+  String get mktNftAlreadyListedToast => 'This NFT is already listed. Please choose another';
+
+  @override
+  String get mktNftColonLabel => 'NFT:';
+
+  @override
+  String mktNftNameLabel(String name) {
+    return 'NFT: $name';
+  }
+
+  @override
+  String get mktNoAccountToast => 'No Account';
+
+  @override
+  String get mktNoAuctionToast => 'No auction';
+
+  @override
+  String get mktNoBalanceToast => 'No Balance';
+
+  @override
+  String get mktNoBidsYet => 'No Bids Yet.';
+
+  @override
+  String get mktNoMessagesYet => 'No messages yet';
+
+  @override
+  String get mktNoShopToast => 'No shop';
+
+  @override
+  String get mktNoThreadToast => 'No Thread';
+
+  @override
+  String get mktNotEnoughBalanceToast => 'Not enough balance.';
+
+  @override
+  String get mktNotEnoughBalanceValidatingToast => 'Not enough balance since you are validating.';
+
+  @override
+  String get mktNotNotifiedToast => 'You will not be notified. You can update this setting on the dashboard if you change your mind.';
+
+  @override
+  String get mktOptionsHeading => 'Options';
+
+  @override
+  String get mktOwnersAddressLabel => 'Owner\'s Address';
+
+  @override
+  String get mktPayWithCardCryptoTitle => 'Pay with Credit Card / Crypto';
+
+  @override
+  String get mktPlaceBid => 'Place Bid';
+
+  @override
+  String mktPlaceBidConfirmBody(String amount) {
+    return 'Are you sure you want to place a bid of $amount VFX?';
+  }
+
+  @override
+  String get mktPresignProblemToast => 'A problem occurred presigning the sale transaction. Please try again';
+
+  @override
+  String get mktProblemOccurredToast => 'A problem occurred';
+
+  @override
+  String get mktPublishLive => 'Publish Live';
+
+  @override
+  String get mktReplaceNft => 'Replace NFT';
+
+  @override
+  String get mktReservePriceLabel => 'Reserve Price';
+
+  @override
+  String get mktSelectNft => 'Select NFT';
+
+  @override
+  String get mktSelectOwnerAddressHint => 'Select an address from the list to be the shop owner.';
+
+  @override
+  String get mktShopDescriptionLabel => 'Shop Description';
+
+  @override
+  String get mktShopIdentifierLabel => 'Shop Identifier';
+
+  @override
+  String get mktShopNameLabel => 'Shop Name';
+
+  @override
+  String get mktSignatureNotValidPrimaryToast => 'Signature not valid (primary)';
+
+  @override
+  String get mktStartDateLabel => 'Start Date';
+
+  @override
+  String get mktStartTimeLabel => 'Start Time';
+
+  @override
+  String get mktSubscribeUpdatesBody => 'In order for the web wallet to provide notifications to auction winners to sign transactions, an email address is required.';
+
+  @override
+  String get mktSubscribeUpdatesTitle => 'Subscribe for updates?';
+
+  @override
+  String get mktSubscribedToast => 'Subscribed';
+
+  @override
+  String get mktThirdPartySaleStartNote => 'Because this auction house is hosted on the VFX Web Wallet, the seller will need to authorize the Sale Start transaction. You will see that in your transaction list once it\'s been sent.';
+
+  @override
+  String get mktTxBroadcastedToast => 'TX Broadcasted';
+
+  @override
+  String get mktWaitForFinalizeBody => 'Please wait for the transaction to be finalized.';
+
+  @override
+  String get scwAddAFeature => 'Add a Feature';
+
+  @override
+  String get scwAddCreatorName => 'Add Creator Name';
+
+  @override
+  String get scwAddDescription => 'Add Description';
+
+  @override
+  String get scwAddEvolvingPhase => 'Add evolving phase';
+
+  @override
+  String get scwAddName => 'Add Name';
+
+  @override
+  String get scwAddProperty => 'Add property';
+
+  @override
+  String get scwAddPropertyButton => 'Add Property';
+
+  @override
+  String get scwAddRoyalty => 'Add Royalty';
+
+  @override
+  String get scwAddStat => 'Add Stat';
+
+  @override
+  String get scwAdditionalAssets => 'Additional Assets';
+
+  @override
+  String get scwAllowVoting => 'Allow Voting';
+
+  @override
+  String get scwBeneficiaryAddressOptional => 'Beneficiary Address (Optional)';
+
+  @override
+  String get scwBlockHeightValue => 'Block Height Value';
+
+  @override
+  String get scwCantAddEvolveBody => 'You already have an evolve feature in this smart contract. Edit the existing evolving feature to add more stages.';
+
+  @override
+  String get scwCantAddEvolveTitle => 'Can\'t add Evolve';
+
+  @override
+  String get scwCantAddMultiAssetBody => 'You already have a multi asset feature in this smart contract. Edit the existing multi asset feature to add more assets.';
+
+  @override
+  String get scwCantAddMultiAssetTitle => 'Can\'t add Multi Asset';
+
+  @override
+  String get scwCantAddRoyaltyBody => 'You already have a royalty feature in this smart contract.';
+
+  @override
+  String get scwCantAddRoyaltyTitle => 'Can\'t add Royalty';
+
+  @override
+  String get scwCantAddSoulBoundBody => 'You already have a soul bound feature in this smart contract.';
+
+  @override
+  String get scwCantAddSoulBoundTitle => 'Can\'t add Soul Bound';
+
+  @override
+  String get scwChoose => 'Choose';
+
+  @override
+  String get scwChooseAnAddress => 'Choose an address';
+
+  @override
+  String get scwCollectionDescription => 'Collection Description';
+
+  @override
+  String get scwCollectionName => 'Collection Name';
+
+  @override
+  String get scwCollectionThumbnail => 'Collection Thumbnail';
+
+  @override
+  String get scwCollectionWizard => 'Collection Wizard';
+
+  @override
+  String get scwColorProperty => 'Color Property';
+
+  @override
+  String get scwCreateAndMintBody => 'Start with a baseline smart contract and add customized features';
+
+  @override
+  String get scwCreateAndMintTitle => 'Create a Smart Contract & Mint';
+
+  @override
+  String get scwCreateSmartContractTitle => 'Create Smart Contract';
+
+  @override
+  String get scwCreatorName => 'Creator Name';
+
+  @override
+  String get scwCreatorRetainedOwnership => 'Creator’s Retained Ownership';
+
+  @override
+  String scwCreatorValue(String name) {
+    return 'Creator: $name';
+  }
+
+  @override
+  String get scwDeletePrimaryAssetBody => 'Are you sure you want to delete the primary asset?';
+
+  @override
+  String get scwDeletePrimaryAssetTitle => 'Delete Primary Asset?';
+
+  @override
+  String get scwDescription => 'Description';
+
+  @override
+  String get scwDescriptionOfPhysicalDigitalGood => 'Description of Physical/Digital Good';
+
+  @override
+  String get scwDownloadExampleCsv => 'Download Example CSV';
+
+  @override
+  String get scwDownloadExampleJson => 'Download Example JSON';
+
+  @override
+  String get scwEdit => 'Edit';
+
+  @override
+  String get scwEditCreatorName => 'Edit Creator Name';
+
+  @override
+  String get scwEditDescription => 'Edit Description';
+
+  @override
+  String get scwEditName => 'Edit Name';
+
+  @override
+  String get scwEventAddress => 'Event Address';
+
+  @override
+  String get scwEventCode => 'Event Code';
+
+  @override
+  String get scwEventDate => 'Event Date';
+
+  @override
+  String get scwEventDescription => 'Event Description';
+
+  @override
+  String get scwEventName => 'Event Name';
+
+  @override
+  String get scwEventTime => 'Event Time';
+
+  @override
+  String get scwEventUrl => 'Event URL';
+
+  @override
+  String get scwEvolutionDate => 'Evolution Date';
+
+  @override
+  String scwEvolutionTime(String timezone) {
+    return 'Evolution Time ($timezone)';
+  }
+
+  @override
+  String get scwEvolve => 'Evolve';
+
+  @override
+  String get scwEvolveOnRedeem => 'Evolve on Redeem?';
+
+  @override
+  String get scwEvolveStageAsset => 'Evolve Stage Asset';
+
+  @override
+  String get scwEvolveStageDescription => 'Evolve Stage Description';
+
+  @override
+  String get scwEvolveStageName => 'Evolve Stage Name';
+
+  @override
+  String get scwEvolveType => 'Evolve Type';
+
+  @override
+  String get scwEvolveTypeBlockHeight => 'Block Height';
+
+  @override
+  String get scwEvolveTypeDateTime => 'Date/Time';
+
+  @override
+  String get scwEvolveTypeManualOnly => 'Manual Only';
+
+  @override
+  String scwEvolveWithType(String type) {
+    return 'Evolve ($type)';
+  }
+
+  @override
+  String get scwEvolvingPhase => 'Evolving phase';
+
+  @override
+  String get scwExpireDate => 'Expire Date';
+
+  @override
+  String get scwExpireTime => 'Expire Time';
+
+  @override
+  String get scwFractionalInterest => 'Fractional Interest';
+
+  @override
+  String get scwFractionalizationTitle => 'Fractionalization';
+
+  @override
+  String get scwFullDescription => 'Full Description';
+
+  @override
+  String get scwImages => 'Image(s)';
+
+  @override
+  String get scwImporting => 'Importing';
+
+  @override
+  String get scwLaunchIdeBody => 'Open the online IDE to write your own Trillium code for your smart contract';
+
+  @override
+  String get scwLaunchIdeMobileBody => 'The IDE is optimized for larger screens. Would you like to proceed?';
+
+  @override
+  String get scwLaunchIdeMobileTitle => 'Launch IDE on mobile?';
+
+  @override
+  String get scwLaunchIdeTitle => 'Launch IDE';
+
+  @override
+  String get scwLaunchWizard => 'Launch Wizard';
+
+  @override
+  String get scwMaxQuantity => 'Max quantity is 100.';
+
+  @override
+  String get scwMetadataUrl => 'Metadata URL';
+
+  @override
+  String get scwMinQuantity => 'Min quantity is 1.';
+
+  @override
+  String get scwMintNftCollectionBody => 'Mint multiple Smart Contracts into a collection';
+
+  @override
+  String get scwMintNftCollectionTitle => 'Mint NFT Collection';
+
+  @override
+  String get scwName => 'Name';
+
+  @override
+  String get scwNetwork => 'Network';
+
+  @override
+  String scwNetworkContractAddress(String network) {
+    return '$network Contract Address';
+  }
+
+  @override
+  String get scwNoProperties => 'No Properties';
+
+  @override
+  String get scwNotImplemented => 'Not implemented.';
+
+  @override
+  String get scwNumericalProperty => 'Numerical Property';
+
+  @override
+  String get scwOtherOptions => 'Other Options';
+
+  @override
+  String get scwOwnerAddress => 'Owner Address';
+
+  @override
+  String get scwPairWrapTitle => 'Pair/Wrap with Existing NFT';
+
+  @override
+  String get scwPercentage => 'Percentage';
+
+  @override
+  String get scwPercentageRequiredForVotingApproval => 'Percentage Required for Voting Approval';
+
+  @override
+  String scwPhaseLabel(int number, String name) {
+    return 'Phase #$number: $name';
+  }
+
+  @override
+  String get scwPhysicalDigitalGoodName => 'Physical/Digital Good Name';
+
+  @override
+  String get scwPrimaryAsset => 'Primary Asset';
+
+  @override
+  String get scwProperties => 'Properties';
+
+  @override
+  String get scwPropertiesOptional => 'Properties (Optional)';
+
+  @override
+  String get scwPropertyName => 'Property Name';
+
+  @override
+  String get scwPropertyType => 'Property Type';
+
+  @override
+  String get scwPropertyTypeColor => 'Color';
+
+  @override
+  String get scwPropertyTypeNumber => 'Number';
+
+  @override
+  String get scwPropertyTypeText => 'Text';
+
+  @override
+  String get scwPropertyValue => 'Property Value';
+
+  @override
+  String get scwProvenanceFilesOptional => 'Provenance Files (Optional)';
+
+  @override
+  String get scwQuantity => 'Quantity';
+
+  @override
+  String get scwQuantityToMint => 'Quantity to Mint';
+
+  @override
+  String scwQuantityValue(int quantity) {
+    return 'Quantity: $quantity';
+  }
+
+  @override
+  String get scwReasonForPairingWrapping => 'Reason for Pairing/Wrapping';
+
+  @override
+  String get scwRemove => 'Remove';
+
+  @override
+  String get scwRemoveAssetBody => 'Are you sure you want to remove this additional asset?';
+
+  @override
+  String get scwRemoveAssetTitle => 'Remove Asset?';
+
+  @override
+  String get scwRemovePhaseBody => 'Are you sure you want to remove this evolution phase?';
+
+  @override
+  String get scwRemovePhaseTitle => 'Remove Phase?';
+
+  @override
+  String get scwRemovePropertyBody => 'Are you sure you want to remove this property?';
+
+  @override
+  String get scwRemovePropertyTitle => 'Remove Property?';
+
+  @override
+  String get scwRemoveRoyaltyBody => 'Are you sure you want to remove the royalty?';
+
+  @override
+  String get scwRemoveRoyaltyTitle => 'Remove Royalty?';
+
+  @override
+  String get scwRoyaltyTitle => 'Royalty';
+
+  @override
+  String scwRoyaltyToAddress(String amount, String address) {
+    return '$amount to $address';
+  }
+
+  @override
+  String get scwRoyaltyType => 'Royalty Type';
+
+  @override
+  String get scwRoyaltyTypeFixed => 'Fixed';
+
+  @override
+  String get scwRoyaltyTypePercent => 'Percent';
+
+  @override
+  String get scwSeatingInfo => 'Seating Info';
+
+  @override
+  String get scwSoulBoundTitle => 'Soul Bound';
+
+  @override
+  String get scwStatTypeString => 'Type: String';
+
+  @override
+  String get scwStats => 'Stats';
+
+  @override
+  String get scwTextProperty => 'Text Property';
+
+  @override
+  String get scwTicketTitle => 'Ticket';
+
+  @override
+  String get scwTicketType => 'Ticket Type';
+
+  @override
+  String get scwTokenIdOptional => 'Token ID (Optional)';
+
+  @override
+  String get scwTokenStandardOptional => 'Token Standard (Optional)';
+
+  @override
+  String get scwTokenizationTitle => 'Tokenization';
+
+  @override
+  String get scwUploadCsv => 'Upload CSV';
+
+  @override
+  String get scwUploadJson => 'Upload JSON';
+
+  @override
+  String get scwUploadJsonCsv => 'Upload JSON / CSV';
+
+  @override
+  String get scwUploadJsonCsvBody => 'Create a collection with a JSON or CSV file. See the example files below and use them as a template. Upon uploading the file you will be able to configure and tweak the settings through the wizard\'s UI.\n\nThis is an advanced feature for users who want to compile and mint collections outside of the graphical user interface.';
+
+  @override
+  String get scwUseMyAddress => 'Use My Address';
+
+  @override
+  String get scwVotingDescription => 'Voting Description';
+
+  @override
+  String get tkbAmountGreaterThanZero => 'Amount must be greater than 0.0 BTC';
+
+  @override
+  String tkbAmountOfVbtcTo(String action) {
+    return 'Amount of vBTC to $action';
+  }
+
+  @override
+  String get tkbAssociateLocalFile => 'Associate Local File';
+
+  @override
+  String get tkbAssociateMedia => 'Associate Media';
+
+  @override
+  String get tkbAuthorizeNow => 'Authorize Now';
+
+  @override
+  String tkbBalanceFoundBody(String balance) {
+    return 'A balance of $balance VFX was found in this account. Skipping to step 3.';
+  }
+
+  @override
+  String tkbBalanceValue(String balance) {
+    return 'Balance: $balance';
+  }
+
+  @override
+  String tkbBlockHeightValue(String height) {
+    return 'Block Height: $height';
+  }
+
+  @override
+  String tkbBtcAddressGenerated(String address) {
+    return 'BTC Address generated ($address)';
+  }
+
+  @override
+  String get tkbBtcAddressPending => 'BTC Address Pending';
+
+  @override
+  String get tkbBtcAmount => 'BTC Amount';
+
+  @override
+  String tkbBtcSentTo(String amount, String address) {
+    return '$amount BTC has been sent to $address.';
+  }
+
+  @override
+  String get tkbBtcTransferBroadcasted => 'BTC Transfer TX Broadcasted successfully.';
+
+  @override
+  String tkbBtcWithdrawalBroadcasted(String hash) {
+    return 'BTC Withdrawl TX Broadcasted successfully. Hash: $hash';
+  }
+
+  @override
+  String get tkbCallMedia => 'Call Media';
+
+  @override
+  String get tkbCallMediaFromBeacon => 'Call Media from Beacon';
+
+  @override
+  String get tkbCallToBeaconStartedBody => 'Please be patient while ALL assets associated with the NFT are called and downloaded.\n\nDo not close your wallet or attempt to call again.';
+
+  @override
+  String get tkbCallToBeaconStartedTitle => 'Call to beacon process has started.';
+
+  @override
+  String get tkbCallToBeaconStartedToast => 'Call to beacon process has started. Please be patient while ALL assets associated with the NFT are called and downloaded.';
+
+  @override
+  String get tkbCheckOtherAccount => 'Please check any other account with the same address for the media.';
+
+  @override
+  String get tkbChooseBtcAccount => 'Choose BTC Account to Send From';
+
+  @override
+  String get tkbChooseVaultAccount => 'Choose Vault Account';
+
+  @override
+  String get tkbComplete => 'Complete';
+
+  @override
+  String tkbConfirmSendBtcBody(String amount, String from, String to, String fee) {
+    return 'Sending $amount BTC from $from to $to.\n\nFee:\n$fee BTC';
+  }
+
+  @override
+  String get tkbConfirmTransaction => 'Confirm Transaction';
+
+  @override
+  String get tkbConfirmVoteNoBody => 'Are you sure you want to vote NO on this token topic?';
+
+  @override
+  String get tkbConfirmVoteYesBody => 'Are you sure you want to vote YES on this token topic?';
+
+  @override
+  String tkbControlledBy(String address) {
+    return 'Controlled by: $address';
+  }
+
+  @override
+  String tkbCouldNotResolveNft(String id) {
+    return 'Could not resolve nft from $id';
+  }
+
+  @override
+  String get tkbCreateBtcDomain => 'Create BTC Domain';
+
+  @override
+  String tkbCreateDomainFor(String address) {
+    return 'Create Domain for $address';
+  }
+
+  @override
+  String get tkbCreateTokenTopicBody => 'Are you sure you want to create this token topic?';
+
+  @override
+  String get tkbCreationPending => 'Creation Pending';
+
+  @override
+  String tkbDeleteBtcDomainBody(String costLine) {
+    return 'Are you sure you want to delete this BTC Domain?\n$costLine\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.';
+  }
+
+  @override
+  String get tkbDeleteDomainNoCost => 'There is no cost to delete and VFX Domain (aside from the TX fee).';
+
+  @override
+  String tkbDeleteDomainWithCost(String cost) {
+    return 'There is a cost of $cost VFX to delete an RBX Domain.';
+  }
+
+  @override
+  String get tkbDeletePending => 'Delete Pending';
+
+  @override
+  String get tkbDescriptionColon => 'Description:';
+
+  @override
+  String get tkbDismiss => 'Dismiss';
+
+  @override
+  String get tkbDomainName => 'Domain Name';
+
+  @override
+  String get tkbDomainNameRule => 'Your domain must only contain letters and numbers and will automatically be appended with \".btc\" upon verification';
+
+  @override
+  String get tkbDownloadAsset => 'Download Asset';
+
+  @override
+  String get tkbError => 'Error';
+
+  @override
+  String get tkbErrorLoadingData => 'Error Loading Data';
+
+  @override
+  String get tkbFailedRequestWithdrawal => 'Failed to request withdrawal.';
+
+  @override
+  String tkbFeeEstimate(String feeEstimate, String feeEstimateBtc, String fee, String feeBtc) {
+    return 'Fee Estimate: ~$feeEstimate SATS | ~$feeEstimateBtc BTC    ($fee SATS /byte | $feeBtc BTC /byte)';
+  }
+
+  @override
+  String get tkbFeeRateHint => 'Fee rate in satoshis';
+
+  @override
+  String tkbFeeRatePerByte(String sats, String btc) {
+    return 'Fee Rate: $sats SATS per byte ($btc BTC per byte)';
+  }
+
+  @override
+  String get tkbFeeRateRequired => 'Fee Rate Required';
+
+  @override
+  String tkbFileNameLabel(String name) {
+    return 'File Name: $name';
+  }
+
+  @override
+  String get tkbFileSize => 'File Size';
+
+  @override
+  String get tkbFileType => 'File Type';
+
+  @override
+  String tkbFilenameCreator(String filename, String creator) {
+    return 'Filename: $filename | Creator: $creator';
+  }
+
+  @override
+  String get tkbFixedSupply => 'Fixed Supply';
+
+  @override
+  String get tkbFungibleToken => 'Fungible Token';
+
+  @override
+  String get tkbGenerate => 'Generate';
+
+  @override
+  String get tkbGenerateBtcAddress => 'Generate BTC Address';
+
+  @override
+  String get tkbGenerateBtcAddressBody => 'Are you sure you want to generate this token\'\'s BTC address?';
+
+  @override
+  String get tkbImagePreviewNotFound => 'File not found for preview.\nLikely this means this NFT no longer exists on this machine.\n';
+
+  @override
+  String get tkbInProgress => 'In Progress';
+
+  @override
+  String get tkbInfinite => 'Infinite';
+
+  @override
+  String tkbInsufficientBalanceAccount(String balance) {
+    return 'Insufficient Balance to cover tx and fee. This account only has $balance BTC.';
+  }
+
+  @override
+  String get tkbInvalidFeeRate => 'Invalid Fee Rate. Must be atleast 1 satoshi.';
+
+  @override
+  String get tkbManualSendSubtitle => 'Send coin manually to this token\'\'s BTC deposit address';
+
+  @override
+  String tkbMediaNotFound(String fileName) {
+    return 'Media asset file not found on your machine ($fileName).';
+  }
+
+  @override
+  String get tkbMinimumTokenRequirement => 'Minimum Token Requirement';
+
+  @override
+  String get tkbMinimumTokenRequirementHelper => 'The minimum token balance required to vote.';
+
+  @override
+  String tkbMinimumTokensToVote(String count) {
+    return 'Minimum Tokens to Vote: $count';
+  }
+
+  @override
+  String get tkbMultiSigFeeCalculated => 'This is a Multi-signature. The fee rate has been calculated for you.';
+
+  @override
+  String tkbNeedTokensToVote(String count) {
+    return 'You need at least $count tokens to vote.';
+  }
+
+  @override
+  String tkbNoAddressesHolding(String ticker) {
+    return 'None of your addresses are holding $ticker';
+  }
+
+  @override
+  String get tkbNoFungibleTokens => 'No Fungible Tokens';
+
+  @override
+  String get tkbNoFungibleTokensBody => 'You have no fungible tokens with supply in any of your accounts.';
+
+  @override
+  String get tkbNoRequestHash => 'No request hash returned.';
+
+  @override
+  String get tkbNoUpper => 'NO';
+
+  @override
+  String get tkbNoUtxos => 'No UTXOs';
+
+  @override
+  String get tkbNoVaultAccounts => 'You don\'\'t have any Vault Accounts in this wallet';
+
+  @override
+  String get tkbNoVotesYet => 'No votes yet.';
+
+  @override
+  String get tkbNone => 'None';
+
+  @override
+  String get tkbNotFound => 'Not Found.';
+
+  @override
+  String get tkbOpenAsset => 'Open Asset';
+
+  @override
+  String get tkbOpenFolder => 'Open Folder';
+
+  @override
+  String get tkbOwnershipTransferInitiated => 'Ownership transfer initiated.';
+
+  @override
+  String get tkbPassword => 'Password';
+
+  @override
+  String tkbPendingWithdrawalBody(String amount, String destination) {
+    return 'You have a pending withdrawal of $amount vBTC to $destination.\n\nWould you like to complete it?';
+  }
+
+  @override
+  String get tkbPendingWithdrawalContractBody => 'You have a pending withdrawal for this contract. Would you like to complete it?';
+
+  @override
+  String get tkbPendingWithdrawalFound => 'Pending Withdrawal Found';
+
+  @override
+  String get tkbPercentages => 'Percentages';
+
+  @override
+  String get tkbResult => 'Result';
+
+  @override
+  String get tkbResultFail => 'Fail';
+
+  @override
+  String get tkbResultPass => 'Pass';
+
+  @override
+  String get tkbSelectVfxAddress => 'Select VFX Address';
+
+  @override
+  String get tkbSelectedAddress => 'Selected Address:';
+
+  @override
+  String get tkbSendAutomatically => 'Send Automatically';
+
+  @override
+  String tkbSendFundsTo(String address) {
+    return 'Send funds to $address (address copied to clipboard)';
+  }
+
+  @override
+  String get tkbSendManually => 'Send Manually';
+
+  @override
+  String tkbSmartContractUidWithValue(String uid) {
+    return 'Smart Contract UID: $uid';
+  }
+
+  @override
+  String get tkbToBtcAddress => 'To BTC Address';
+
+  @override
+  String get tkbToVfxAddress => 'To VFX Address';
+
+  @override
+  String get tkbTokenBalances => 'Token Balances';
+
+  @override
+  String get tkbTokenDetails => 'Token Details';
+
+  @override
+  String get tkbTokenTopicCreated => 'Token Topic Created';
+
+  @override
+  String tkbTopicUidLabel(String uid) {
+    return 'UID: $uid';
+  }
+
+  @override
+  String get tkbTotalVotes => 'Total Votes';
+
+  @override
+  String get tkbTransactionBroadcastedBang => 'Transaction Broadcasted!';
+
+  @override
+  String get tkbTransactionHash => 'Transaction Hash';
+
+  @override
+  String get tkbTransactionHashCopied => 'Transaction Hash copied to clipboard';
+
+  @override
+  String get tkbTransferBtc => 'Transfer BTC';
+
+  @override
+  String tkbTransferDomainFrom(String address) {
+    return 'Transfer Domain from $address';
+  }
+
+  @override
+  String tkbTransferOwnershipBody(String address) {
+    return 'Are you sure you want to transfer ownership of this vBTC token to $address?';
+  }
+
+  @override
+  String get tkbTransferOwnershipToReserve => 'Transfer Ownership To Reserve/Protected Account';
+
+  @override
+  String get tkbTransferOwnershipToReserveSubtitle => 'Transfer the ownership of this token to your reserve/protected account.';
+
+  @override
+  String get tkbTransferPending => 'Transfer Pending';
+
+  @override
+  String get tkbTransferToken => 'Transfer Token';
+
+  @override
+  String get tkbTransferTokenOwnership => 'Transfer Token Ownership';
+
+  @override
+  String get tkbTransferTokenOwnershipSubtitle => 'Transfer the ownership of this token to another VFX account.';
+
+  @override
+  String get tkbTransferVbtc => 'Transfer vBTC';
+
+  @override
+  String tkbTransferVbtcBody(String amount, String address) {
+    return 'Are you sure you want to transfer $amount vBTC to $address?';
+  }
+
+  @override
+  String get tkbTransferVbtcSubtitle => 'Transfer a specific portion of the vBTC within the token to another VFX address.';
+
+  @override
+  String get tkbTxBroadcasted => 'TX broadcasted!';
+
+  @override
+  String tkbUtxoAddress(String address) {
+    return 'Address: $address';
+  }
+
+  @override
+  String tkbUtxoDetails(String txId, String amount) {
+    return 'TX ID: $txId\nAmount:$amount';
+  }
+
+  @override
+  String get tkbUtxoUnused => 'Unused';
+
+  @override
+  String get tkbUtxoUsed => 'Used';
+
+  @override
+  String get tkbVaultAccountPassword => 'Vault Account Password';
+
+  @override
+  String get tkbVaultAuthorizeDownload => 'Since this is a Vault Account you\'\'ll need to authorize the download.';
+
+  @override
+  String get tkbVaultCannotWithdraw => 'Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address';
+
+  @override
+  String get tkbVaultOwnedCannotAction => 'Vault Account owned tokens can not perform this action.';
+
+  @override
+  String tkbVbtcTransferBroadcasted(String hash) {
+    return 'vBTC V2 Transfer TX Broadcasted. Hash: $hash';
+  }
+
+  @override
+  String get tkbVbtcZeroBalance => 'vBTC tokens with zero balance can not be transferred.';
+
+  @override
+  String get tkbVfxWalletRequired => 'An VFX wallet is required for this functionality.';
+
+  @override
+  String get tkbVoteCounts => 'Vote Counts';
+
+  @override
+  String tkbVotedOnBlock(String label, String block) {
+    return 'You voted $label on block $block.';
+  }
+
+  @override
+  String get tkbVotesNo => 'Votes No';
+
+  @override
+  String get tkbVotesYes => 'Votes Yes';
+
+  @override
+  String get tkbWalletControlsDomain => 'This wallet will control transfer/delete ownership over this new domain.';
+
+  @override
+  String get tkbWithdrawBtc => 'Withdraw BTC';
+
+  @override
+  String tkbWithdrawBtcBody(String amount, String address) {
+    return 'Are you sure you want to withdraw $amount BTC to $address?';
+  }
+
+  @override
+  String get tkbYesUpper => 'YES';
+
+  @override
+  String get tkbYouHaveVoted => 'You have voted.';
+
+  @override
+  String tkbYourBalanceValue(String balance) {
+    return 'Your Balance: $balance';
+  }
+
+  @override
+  String tkbYourBalanceVbtc(String balance, String usd) {
+    return 'Your Balance: $balance vBTC$usd';
+  }
+
+  @override
+  String get txpAccountBalance => 'Account Balance';
+
+  @override
+  String get txpAccountCreated => 'Account Created';
+
+  @override
+  String get txpActivateOnNetwork => 'Activate on Network?';
+
+  @override
+  String get txpActivateOnNetworkBody => 'There is a cost of 4 VFX (which is burned) plus TX fee to activate this Vault Account on the network.  Continue?';
+
+  @override
+  String get txpAddBtcAccount => 'Add BTC Account';
+
+  @override
+  String get txpAddNewAccount => 'Add New Account';
+
+  @override
+  String get txpAddVfxAccount => 'Add VFX Account';
+
+  @override
+  String get txpAddressCopied => 'Address copied';
+
+  @override
+  String get txpAddressCopiedClipboard => 'Address copied to clipboard.';
+
+  @override
+  String get txpAllAddresses => 'All Addresses';
+
+  @override
+  String get txpAmountCopied => 'Amount copied';
+
+  @override
+  String get txpAutoActivate => 'Auto Activate?';
+
+  @override
+  String get txpAutoActivateBody => 'Would you like to automatically activate this account once the funds are received?';
+
+  @override
+  String get txpAutoActivateQueued => 'Auto activate queued.';
+
+  @override
+  String txpBlockDiffAvg(String value) {
+    return 'Block Diff Avg: $value';
+  }
+
+  @override
+  String txpBlockLastDelay(String value) {
+    return 'Block Last Delay: $value';
+  }
+
+  @override
+  String txpBlockLastReceived(String value) {
+    return 'Block Last Received: $value';
+  }
+
+  @override
+  String get txpBlockNumber => 'Block Number';
+
+  @override
+  String txpBlocksAveraged(String value) {
+    return 'Blocks Averaged: $value';
+  }
+
+  @override
+  String get txpBtcNoBalance => 'BTC account has no balance';
+
+  @override
+  String get txpChooseCoinType => 'Choose Coin Type';
+
+  @override
+  String get txpChoosePaymentGateway => 'Choose Payment Gateway';
+
+  @override
+  String get txpClearFilters => 'Clear Filters';
+
+  @override
+  String get txpCompleteMoonpayDeposit => 'Complete MoonPay Deposit';
+
+  @override
+  String get txpCompleteSale => 'Complete Sale';
+
+  @override
+  String txpCompleteSaleConfirmBody(String scId, String amount) {
+    return 'Are you sure you want to complete the sale of $scId for $amount VFX?';
+  }
+
+  @override
+  String get txpConfirmPassword => 'Confirm Password';
+
+  @override
+  String get txpConfirmPasswordBody => 'Please confirm your password.';
+
+  @override
+  String get txpConfirmSend => 'Confirm Send';
+
+  @override
+  String txpConfirmSendBody(String amount, String currency, String toAddress, String fromAddress, String feeRate) {
+    return 'Amount: $amount $currency\nTo: $toAddress\nFrom: $fromAddress\nFee Rate: $feeRate sats/vB';
+  }
+
+  @override
+  String get txpCopyAddress => 'Copy Address';
+
+  @override
+  String get txpCreate => 'Create';
+
+  @override
+  String get txpCreateBtcAccountSub => 'Create a new BTC account';
+
+  @override
+  String get txpCreateVfxAccountSub => 'Create a new VFX account';
+
+  @override
+  String get txpCryptoDotComOnRamp => 'Crypto.com On-Ramp';
+
+  @override
+  String get txpData => 'Data';
+
+  @override
+  String get txpDate => 'Date';
+
+  @override
+  String get txpDepositAddressMoonpay => 'Deposit Address (MoonPay)';
+
+  @override
+  String get txpDisclaimerAnd => ' and ';
+
+  @override
+  String txpDisclaimerIntro(String gateway) {
+    return 'I understand that I will now be purchasing VFX or BTC native coin directly through $gateway (';
+  }
+
+  @override
+  String txpDisclaimerMiddle(String gateway) {
+    return '), which is a third-party services platform. By proceeding and procuring services from $gateway, you acknowledge that you have read and agreed to $gateway’s ';
+  }
+
+  @override
+  String txpDisclaimerOutro(String gateway) {
+    return '. You additionally understand that the VerifiedX VFX Network is an autonomous and decentralized ecosystem and does not share in any fees whatsoever by you utilizing $gateway’s services and does not take any responsibility for any issues that may affect your transaction with any third-party service provider at anytime. For any questions related to $gateway’s services, please contact $gateway at ';
+  }
+
+  @override
+  String get txpErrorOccurred => 'An error occurred';
+
+  @override
+  String get txpFundAccount => 'Fund Account';
+
+  @override
+  String get txpFundVaultBody => 'You must now fund your Vault Account with a minimum of 5 VFX. 4 VFX will be burned upon activation.';
+
+  @override
+  String get txpFundVaultBodyShort => 'You must now fund your Vault Account with a minimum of 5 VFX.';
+
+  @override
+  String get txpFundsSent => 'Funds Sent';
+
+  @override
+  String txpFundsSentBody(String amount, String address) {
+    return '$amount VFX has been sent to $address.\n\nPlease wait for transaction to reflect and then activate your Vault Account.';
+  }
+
+  @override
+  String get txpGetBtcNow => 'Get \$BTC Now';
+
+  @override
+  String get txpGetQuote => 'Get Quote';
+
+  @override
+  String get txpGetVfxNow => 'Get \$VFX Now';
+
+  @override
+  String get txpImportBtcKeySub => 'Import an existing BTC private key';
+
+  @override
+  String get txpImportVfxKeySub => 'Import an existing VFX private key';
+
+  @override
+  String get txpManualDeposit => 'Manual Deposit';
+
+  @override
+  String txpManualDepositBody(String amount, String currency) {
+    return 'You can send this from another wallet by sending the exact amount ($amount $currency) to the deposit address above.';
+  }
+
+  @override
+  String get txpMeMarker => '[ME]';
+
+  @override
+  String get txpMinBalanceActivate => 'A minimum balance of 5 VFX is required to activate.';
+
+  @override
+  String get txpMoonpayManualMarked => 'MoonPay transaction marked as manual deposit';
+
+  @override
+  String get txpMustConfirmPassword => 'You must confirm your password.';
+
+  @override
+  String get txpNativeMoonpaySoon => 'Native Moonpay Integration Activating Soon.';
+
+  @override
+  String get txpNoAccountFound => 'No account found';
+
+  @override
+  String get txpNoAddressSelected => 'No address selected';
+
+  @override
+  String get txpNonce => 'Nonce';
+
+  @override
+  String get txpNotAvailableOnPlatform => 'Not available on this platform';
+
+  @override
+  String get txpNotEnoughBtcFee => 'Not enough BTC to cover transaction + fee';
+
+  @override
+  String get txpNotVaultAccount => 'Not a Vault Account';
+
+  @override
+  String get txpOffRampInstructions => 'To complete this off-ramp, send the exact BTC amount to the deposit address below:';
+
+  @override
+  String get txpOriginalTx => 'Original TX';
+
+  @override
+  String get txpPasswordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String txpPleaseSendFundsTo(String address) {
+    return 'Please send funds to $address';
+  }
+
+  @override
+  String get txpPrivacyPolicy => 'Privacy Policy';
+
+  @override
+  String get txpRestoreCodeRecoveryBody => 'Paste in your RESTORE CODE to import the recovery account for this Vault Account.';
+
+  @override
+  String get txpScanAndPay => 'Scan & Pay';
+
+  @override
+  String get txpSendManually => 'I have/will send manually';
+
+  @override
+  String get txpSendNow => 'Send Now';
+
+  @override
+  String txpSendingConfirmBody(String amount, String toAddress, String fromAddress) {
+    return 'Sending:\n$amount VFX\n\nTo:\n$toAddress\n\nFrom:\n$fromAddress';
+  }
+
+  @override
+  String txpSentToAddress(String amount, String currency, String address) {
+    return '$amount $currency sent to $address';
+  }
+
+  @override
+  String get txpSetupBtcAccount => 'Setup a Bitcoin account';
+
+  @override
+  String get txpSetupVaultAccount => 'Setup Vault Account';
+
+  @override
+  String get txpSetupVaultAccountBody => 'Create a password to continue. You must remember this password as it will be required for any transaction with this Vault Account.';
+
+  @override
+  String get txpSetupVfxAccount => 'Setup a VerifiedX account';
+
+  @override
+  String txpStatusWithValue(String value) {
+    return 'Status: $value';
+  }
+
+  @override
+  String get txpStripeCreditCard => 'Stripe (Credit Card)';
+
+  @override
+  String txpSufficientBalanceBody(String address, String balance) {
+    return 'You have an account with a sufficient balance.\n\nWould you like to send 5 VFX from:\n$address\n[Balance: $balance VFX]?';
+  }
+
+  @override
+  String get txpTermsOfUse => 'Terms of Use';
+
+  @override
+  String get txpTestnetFaucet => 'Testnet Faucet';
+
+  @override
+  String get txpTestnetFaucetNoTerms => 'Testnet Faucet does not have any terms. Have fun!';
+
+  @override
+  String get txpTileAmountLabel => 'Amount: ';
+
+  @override
+  String txpTileDateLabel(String date) {
+    return 'Date: $date';
+  }
+
+  @override
+  String txpTileHashLabel(String hash) {
+    return 'Hash: $hash';
+  }
+
+  @override
+  String txpTileSettlementDateLabel(String date) {
+    return 'Settlement Date: $date';
+  }
+
+  @override
+  String get txpTileStatusLabel => 'Status: ';
+
+  @override
+  String get txpTileTypeLabel => 'Type: ';
+
+  @override
+  String get txpTileViewData => 'View Data';
+
+  @override
+  String txpTimeSinceLastBlock(String value) {
+    return 'Time Since Last Block: ${value}s';
+  }
+
+  @override
+  String get txpTransactionFailed => 'Transaction failed';
+
+  @override
+  String get txpTransactionHashLabel => 'Transaction Hash';
+
+  @override
+  String get txpTransactionSent => 'Transaction Sent';
+
+  @override
+  String get txpTxDetailTitle => 'Transaction Detail';
+
+  @override
+  String get txpTxFilters => 'Transaction Filters';
+
+  @override
+  String get txpTxHash => 'Tx Hash';
+
+  @override
+  String get txpTxHashCopied => 'Tx hash copied';
+
+  @override
+  String get txpTxType => 'Tx Type';
+
+  @override
+  String txpTxTypeLabel(String suffix) {
+    return 'Tx Type$suffix:';
+  }
+
+  @override
+  String txpValueCopied(String value) {
+    return '\'$value\' Copied to clipboard';
+  }
+
+  @override
+  String get txpVaultActivationSent => 'Vault Account activation transaction sent.\n\nPlease wait for it to reflect as \"Activated\".';
+
+  @override
+  String get txpVfxAmount => 'VFX Amount';
+
+  @override
+  String get txpVfxOffRampSoon => 'VFX Off Ramp feature coming soon';
+
+  @override
+  String get txpVfxQuote => 'VFX Quote';
+
+  @override
+  String txpVfxQuoteBody(String amountVfx, String amountUsd) {
+    return '$amountVfx VFX for \$$amountUsd USD\nWould you like to continue?';
+  }
+
+  @override
+  String get txpWalletDetailsBackup => 'Here are your wallet details. Please ensure to back up your private key in a safe place.';
+
+  @override
+  String txpWalletVersionInfo(String envTag, String version, String nickname) {
+    return 'VFX Wallet$envTag\nVersion $version ($nickname)';
+  }
+
+  @override
+  String tkbHashLabel(String hash) {
+    return 'Hash: $hash';
+  }
 }

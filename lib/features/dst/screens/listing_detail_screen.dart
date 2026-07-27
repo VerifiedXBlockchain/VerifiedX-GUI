@@ -12,6 +12,7 @@ import '../../../core/theme/components.dart';
 import '../../../core/app_router.gr.dart';
 import '../providers/listing_detail_provider.dart';
 import '../providers/listing_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ListingDetailScreen extends BaseScreen {
   final int listingId;
@@ -22,6 +23,7 @@ class ListingDetailScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(listingDetailProvider(listingId));
 
     return data.when(
@@ -33,7 +35,7 @@ class ListingDetailScreen extends BaseScreen {
         }
         return AppBar(
           title: Text(
-            "Listing for ${listing.nft != null ? listing.nft!.name : listing.smartContractUid}",
+            l10n.mktListingForTitle(listing.nft != null ? listing.nft!.name : listing.smartContractUid),
           ),
           backgroundColor: Colors.black,
         );
@@ -43,16 +45,17 @@ class ListingDetailScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(listingDetailProvider(listingId));
 
     final headingStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
 
     return data.when(
       loading: () => CenteredLoader(),
-      error: (_, __) => Center(child: Text("An error occurred.")),
+      error: (_, __) => Center(child: Text(l10n.mktErrorOccurred)),
       data: (listing) {
         if (listing == null) {
-          return Center(child: Text("An error occurred."));
+          return Center(child: Text(l10n.mktErrorOccurred));
         }
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -61,7 +64,7 @@ class ListingDetailScreen extends BaseScreen {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AppBadge(
-                  label: "Completed",
+                  label: l10n.dstCompleted,
                   variant: AppColorVariant.Warning,
                 ),
               ),
@@ -81,7 +84,7 @@ class ListingDetailScreen extends BaseScreen {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'NFT',
+                          l10n.nftDetailFallback,
                           style: headingStyle,
                         ),
                       ),
@@ -116,7 +119,7 @@ class ListingDetailScreen extends BaseScreen {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Owner',
+                          l10n.btcDetailOwnerLabel,
                           style: headingStyle,
                         ),
                       ),
@@ -129,7 +132,7 @@ class ListingDetailScreen extends BaseScreen {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Dates',
+                          l10n.mktDatesHeading,
                           style: headingStyle,
                         ),
                       ),
@@ -144,7 +147,7 @@ class ListingDetailScreen extends BaseScreen {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Options',
+                          l10n.mktOptionsHeading,
                           style: headingStyle,
                         ),
                       ),
@@ -168,7 +171,7 @@ class ListingDetailScreen extends BaseScreen {
                                             .colorScheme
                                             .danger,
                                       ),
-                                Text(" Buy Now"),
+                                Text(" ${l10n.shopBuyNow}"),
                               ],
                             ),
                             SizedBox(
@@ -189,7 +192,7 @@ class ListingDetailScreen extends BaseScreen {
                                             .colorScheme
                                             .danger,
                                       ),
-                                Text(" Auction"),
+                                Text(" ${l10n.mktAuction}"),
                               ],
                             ),
                           ],
@@ -201,7 +204,7 @@ class ListingDetailScreen extends BaseScreen {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'Buy Now Price',
+                                l10n.mktBuyNowPriceLabel,
                                 style: headingStyle,
                               ),
                             ),
@@ -217,7 +220,7 @@ class ListingDetailScreen extends BaseScreen {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'Auction Floor Price',
+                                l10n.mktAuctionFloorPriceLabel,
                                 style: headingStyle,
                               ),
                             ),
@@ -235,7 +238,7 @@ class ListingDetailScreen extends BaseScreen {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'Auction Reserve Price',
+                                l10n.mktAuctionReservePriceLabel,
                                 style: headingStyle,
                               ),
                             ),
@@ -254,7 +257,7 @@ class ListingDetailScreen extends BaseScreen {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AppButton(
-                  label: "Auction Activity",
+                  label: l10n.dstAuctionActivity,
                   variant: AppColorVariant.Success,
                   onPressed: () {
                     AutoRouter.of(context).push(
@@ -270,7 +273,7 @@ class ListingDetailScreen extends BaseScreen {
                 children: [
                   if (!listing.deactivateForSeller)
                     AppButton(
-                      label: 'Edit Listing',
+                      label: l10n.mktEditListing,
                       icon: Icons.edit,
                       variant: AppColorVariant.Light,
                       onPressed: () {
@@ -281,7 +284,7 @@ class ListingDetailScreen extends BaseScreen {
                       },
                     ),
                   AppButton(
-                    label: 'Delete Listing',
+                    label: l10n.mktDeleteListing,
                     variant: AppColorVariant.Danger,
                     icon: Icons.delete,
                     onPressed: () {

@@ -10,6 +10,7 @@ import '../../core/providers/currency_segmented_button_provider.dart';
 import '../../core/providers/session_provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/colors.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../bridge/providers/status_provider.dart';
 import '../bridge/providers/wallet_info_provider.dart';
 import '../btc/providers/electrum_connected_provider.dart';
@@ -93,6 +94,7 @@ class _LayoutState extends State<_Layout> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
+      final l10n = AppLocalizations.of(context);
       final tabsRouter = AutoTabsRouter.of(context);
       final globalBalancesExpanded = ref.watch(globalBalancesExpandedProvider);
 
@@ -144,7 +146,7 @@ class _LayoutState extends State<_Layout> {
                         width: 4,
                       ),
                       Text(
-                        "Validating...",
+                        l10n.hnavValidating,
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.white,
@@ -363,7 +365,7 @@ class _LayoutState extends State<_Layout> {
                                           child: Builder(builder: (context) {
                                             if (vfxWallet != null) {
                                               return Tooltip(
-                                                message: "Selected VFX Address",
+                                                message: l10n.hnavSelectedVfxAddressTooltip,
                                                 child: Row(
                                                   children: [
                                                     Text(vfxWallet.address),
@@ -388,7 +390,7 @@ class _LayoutState extends State<_Layout> {
 
                                             if (btcWallet != null) {
                                               return Tooltip(
-                                                message: "Selected BTC Account",
+                                                message: l10n.hnavSelectedBtcAccountTooltip,
                                                 child: Row(
                                                   children: [
                                                     Text(btcWallet.address),
@@ -410,7 +412,7 @@ class _LayoutState extends State<_Layout> {
                                                 ),
                                               );
                                             }
-                                            return Text("Select Account");
+                                            return Text(l10n.webSelectAccount);
                                           }),
                                         ),
                                         Transform.translate(
@@ -498,7 +500,7 @@ class _LayoutState extends State<_Layout> {
                                         fontSize: 14,
                                       ),
                                       child: Text(
-                                        "Block ${block.height}",
+                                        l10n.hnavBlockNumber(block.height.toString()),
                                       ),
                                     ),
                                     SizedBox(
@@ -510,23 +512,23 @@ class _LayoutState extends State<_Layout> {
                                         late final String message;
                                         if (!ref.watch(sessionProvider.select((v) => v.cliStarted))) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "CLI Inactive";
+                                          message = l10n.hnavCliInactive;
                                         } else {
                                           final status = ref.watch(statusProvider);
 
                                           switch (status) {
                                             case BridgeStatus.Loading:
                                               color = Theme.of(context).colorScheme.warning;
-                                              message = "VFX CLI Loading";
+                                              message = l10n.hnavVfxCliLoading;
                                               break;
                                             case BridgeStatus.Online:
                                               color = Theme.of(context).colorScheme.success;
-                                              message = "VFX Online";
+                                              message = l10n.hnavVfxOnline;
                                               break;
 
                                             case BridgeStatus.Offline:
                                               color = Theme.of(context).colorScheme.danger;
-                                              message = "VFX CLI Offline";
+                                              message = l10n.hnavVfxCliOffline;
                                               break;
                                           }
                                         }
@@ -557,23 +559,23 @@ class _LayoutState extends State<_Layout> {
                                         late final String message;
                                         if (!sessionState.cliStarted) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "BTC Inactive";
+                                          message = l10n.hnavBtcInactive;
                                         } else {
                                           final electrumConnected = ref.watch(electrumConnectedProvider);
 
                                           switch (electrumConnected) {
                                             case null:
                                               color = Theme.of(context).colorScheme.warning;
-                                              message = "BTC Loading";
+                                              message = l10n.hnavBtcLoading;
                                               break;
                                             case true:
                                               color = Theme.of(context).colorScheme.success;
-                                              message = "BTC Online";
+                                              message = l10n.hnavBtcOnline;
                                               break;
 
                                             case false:
                                               color = Theme.of(context).colorScheme.danger;
-                                              message = "BTC Offline";
+                                              message = l10n.hnavBtcOffline;
                                               break;
                                           }
                                         }
@@ -606,19 +608,19 @@ class _LayoutState extends State<_Layout> {
                                         bool isSynced = false;
                                         if (!session.cliStarted) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "CLI Inactive";
+                                          message = l10n.hnavCliInactive;
                                         } else if (walletInfo == null) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "Loading...";
+                                          message = l10n.statusLoading;
                                         } else if (walletInfo.isResyncing) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "Resyncing...";
+                                          message = l10n.hnavResyncing;
                                         } else if (!walletInfo.isChainSynced) {
                                           color = AppColors.getGold();
-                                          message = "Syncing...";
+                                          message = l10n.hnavSyncing;
                                         } else {
                                           color = Theme.of(context).colorScheme.success;
-                                          message = "Synced";
+                                          message = l10n.hnavSynced;
                                           isSynced = true;
                                         }
 
@@ -679,6 +681,7 @@ class AccountManagementContainer extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final mode = ref.watch(currencySegementedButtonProvider);
 
     return Column(
@@ -701,7 +704,7 @@ class AccountManagementContainer extends BaseComponent {
                         Opacity(
                           opacity: 0.7,
                           child: AppButton(
-                            label: "[Restore Hidden]",
+                            label: l10n.hnavRestoreHiddenBracket,
                             type: AppButtonType.Text,
                             variant: AppColorVariant.Light,
                             onPressed: () {
@@ -714,7 +717,7 @@ class AccountManagementContainer extends BaseComponent {
                           ),
                         ),
                         AppButton(
-                          label: "Add Account",
+                          label: l10n.navAddAccount,
                           onPressed: () {
                             AccountUtils.promptVfxNewOrImport(context, ref);
                           },
@@ -726,7 +729,7 @@ class AccountManagementContainer extends BaseComponent {
 
                   case CurrencyType.btc:
                     return AppButton(
-                      label: "Add Account",
+                      label: l10n.navAddAccount,
                       onPressed: () {
                         AccountUtils.promptBtcNewOrImport(context, ref);
                       },
@@ -741,7 +744,7 @@ class AccountManagementContainer extends BaseComponent {
                         Opacity(
                           opacity: 0.7,
                           child: AppButton(
-                            label: "[Restore Hidden]",
+                            label: l10n.hnavRestoreHiddenBracket,
                             type: AppButtonType.Text,
                             variant: AppColorVariant.Light,
                             onPressed: () {
@@ -754,7 +757,7 @@ class AccountManagementContainer extends BaseComponent {
                           ),
                         ),
                         AppButton(
-                          label: "Add Account",
+                          label: l10n.navAddAccount,
                           onPressed: () {
                             AccountUtils.promptVfxOrBtc(context, ref);
                           },

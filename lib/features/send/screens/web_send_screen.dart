@@ -19,6 +19,7 @@ import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../components/send_form.dart';
 import '../utils.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebSendScreen extends BaseScreen {
   const WebSendScreen({Key? key})
@@ -35,10 +36,13 @@ class WebSendScreen extends BaseScreen {
     final isMobile = BreakPoints.useMobileLayout(context);
     final isBtc =
         ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
+    final l10n = AppLocalizations.of(context);
 
     return AppBar(
       leading: isMobile ? WebMobileDrawerButton() : null,
-      title: isBtc ? Text("Send BTC") : Text("Send VFX"),
+      title: isBtc
+          ? Text(l10n.sendAppBarTitle('BTC'))
+          : Text(l10n.sendAppBarTitle('VFX')),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
     );
@@ -47,6 +51,7 @@ class WebSendScreen extends BaseScreen {
   @override
   FloatingActionButton? floatingActionButton(
       BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     if (BreakPoints.useMobileLayout(context)) {
       return FloatingActionButton.extended(
         onPressed: () async {
@@ -69,7 +74,7 @@ class WebSendScreen extends BaseScreen {
           );
         },
         backgroundColor: AppColors.getBlue(),
-        label: Text("Scan & Pay"),
+        label: Text(l10n.txpScanAndPay),
         icon: Icon(Icons.qr_code_scanner),
       );
     }
@@ -85,6 +90,7 @@ class WebSendScreen extends BaseScreen {
         ref.watch(webSessionProvider.select((v) => v.btcKeypair));
     final isBtc =
         ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
+    final l10n = AppLocalizations.of(context);
 
     if (keypair == null && raKeypair == null && btcWebAccount == null) {
       return const Center(child: WebNotWallet());
@@ -121,7 +127,7 @@ class WebSendScreen extends BaseScreen {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: AppButton(
-                        label: 'Create Payment Link',
+                        label: l10n.sendPaymentLinkCta,
                         variant: AppColorVariant.Secondary,
                         type: AppButtonType.Outlined,
                         onPressed: () {

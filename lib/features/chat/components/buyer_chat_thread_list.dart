@@ -6,17 +6,19 @@ import '../../../core/base_component.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/buyer_chat_thread_list_provider.dart';
 import '../../remote_shop/providers/connected_shop_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class BuyerChatThreadList extends BaseComponent {
   const BuyerChatThreadList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final threads = ref.watch(buyerChatThreadListProvider);
 
     if (threads.isEmpty) {
       return Center(
-        child: Text("No Chats"),
+        child: Text(l10n.chatNoChats),
       );
     }
 

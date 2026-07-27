@@ -5,6 +5,7 @@ import '../../../core/components/centered_loader.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 import '../models/price_data.dart';
 import '../providers/price_detail_providers.dart';
@@ -32,6 +33,7 @@ class CoinPriceSummary extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = type == CoinPriceSummaryType.vfx ? ref.watch(vfxPriceDataDetailProvider) : ref.watch(btcPriceDataDetailProvider);
     return AppCard(
       fullHeight: !mini,
@@ -41,7 +43,7 @@ class CoinPriceSummary extends BaseComponent {
         child: data.when(
           data: (priceData) {
             if (priceData == null) {
-              return Text("Error Loading Data");
+              return Text(l10n.tkbErrorLoadingData);
             }
             return _CoinPriceSummaryContent(
               type: type,
@@ -50,7 +52,7 @@ class CoinPriceSummary extends BaseComponent {
               mini: mini,
             );
           },
-          error: (e, _) => Text("Error Loading Data"),
+          error: (e, _) => Text(l10n.tkbErrorLoadingData),
           loading: () => CenteredLoader(),
         ),
       ),

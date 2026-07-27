@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../services/mother_service.dart';
 
@@ -14,10 +15,11 @@ class MotherAddHostDialog extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final ipAddressController = TextEditingController();
     final passwordController = TextEditingController();
     return AlertDialog(
-      title: const Text("Add Host"),
+      title: Text(l10n.motherAddHostTitle),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500, minWidth: 300),
         child: Form(
@@ -25,16 +27,16 @@ class MotherAddHostDialog extends BaseComponent {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text("Set the IP address and password set of your MOTHER HOST."),
+              Text(l10n.motherAddHostBody),
               TextFormField(
                 controller: ipAddressController,
-                decoration: const InputDecoration(label: Text("IP Address of HOST")),
+                decoration: InputDecoration(label: Text(l10n.motherIpHostLabel)),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
                 ],
                 validator: (val) {
                   if (val == null || val.isEmpty) {
-                    return "IP Address Required";
+                    return l10n.motherIpRequired;
                   }
                   return null;
                 },
@@ -42,10 +44,10 @@ class MotherAddHostDialog extends BaseComponent {
               TextFormField(
                 controller: passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(label: Text("Password set on HOST")),
+                decoration: InputDecoration(label: Text(l10n.motherPasswordHostLabel)),
                 validator: (val) {
                   if (val == null || val.isEmpty) {
-                    return "Password Required";
+                    return l10n.motherPasswordRequired;
                   }
                   return null;
                 },
@@ -59,9 +61,9 @@ class MotherAddHostDialog extends BaseComponent {
           onPressed: () {
             Navigator.of(context).pop(null);
           },
-          child: const Text(
-            "Cancel",
-            style: TextStyle(color: Colors.white54),
+          child: Text(
+            l10n.actionCancel,
+            style: const TextStyle(color: Colors.white54),
           ),
         ),
         TextButton(
@@ -78,10 +80,10 @@ class MotherAddHostDialog extends BaseComponent {
             }
 
             final restart = await ConfirmDialog.show(
-              title: "CLI Restart Required",
-              body: "Would you like to restart now?",
-              confirmText: "Restart",
-              cancelText: "Later",
+              title: l10n.motherCliRestartTitle,
+              body: l10n.motherCliRestartBody,
+              confirmText: l10n.beaconRestartNow,
+              cancelText: l10n.beaconLater,
             );
 
             if (restart == true) {
@@ -90,9 +92,9 @@ class MotherAddHostDialog extends BaseComponent {
 
             Navigator.of(context).pop(true);
           },
-          child: const Text(
-            "Add",
-            style: TextStyle(
+          child: Text(
+            l10n.beaconAdd,
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),

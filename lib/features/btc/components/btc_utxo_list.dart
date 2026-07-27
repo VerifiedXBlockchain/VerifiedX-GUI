@@ -6,17 +6,19 @@ import '../../../core/base_component.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class BtcUtxoList extends BaseComponent {
   const BtcUtxoList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final utxos = ref.watch(combinedBtcUtxoListProvider);
 
     if (utxos.isEmpty) {
       return Center(
-        child: Text("No UTXOs"),
+        child: Text(l10n.tkbNoUtxos),
       );
     }
 
@@ -47,21 +49,22 @@ class UtxoListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: AppCard(
         padding: 0,
         child: ListTile(
           dense: true,
-          title: Text("Address: ${utxo.address}"),
-          subtitle: Text("TX ID: ${utxo.hash}\nAmount:${utxo.valueBtcLabel}"),
+          title: Text(l10n.tkbUtxoAddress(utxo.address)),
+          subtitle: Text(l10n.tkbUtxoDetails(utxo.hash, utxo.valueBtcLabel)),
           trailing: utxo.isUsed
               ? AppBadge(
-                  label: "Used",
+                  label: l10n.tkbUtxoUsed,
                   variant: AppColorVariant.Btc,
                 )
               : AppBadge(
-                  label: "Unused",
+                  label: l10n.tkbUtxoUnused,
                   variant: AppColorVariant.Primary,
                 ),
         ),

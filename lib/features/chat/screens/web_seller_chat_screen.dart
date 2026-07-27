@@ -12,6 +12,7 @@ import '../../dst/providers/dec_shop_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../web_shop/services/web_shop_service.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebSellerChatScreen extends BaseScreen {
   final String address;
@@ -24,10 +25,11 @@ class WebSellerChatScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final identifier = shopId == 0 ? address : "$shopId||$address";
 
     return AppBar(
-      title: Text("Chat with $address"),
+      title: Text(l10n.chatWithAddress(address)),
       backgroundColor: Colors.black,
       actions: [
         IconButton(
@@ -40,11 +42,11 @@ class WebSellerChatScreen extends BaseScreen {
           icon: Icon(Icons.delete),
           onPressed: () async {
             final confirmed = await ConfirmDialog.show(
-              title: "Delete Chat Thread",
-              body: "Are you sure you want to delete this chat thread?",
+              title: l10n.chatDeleteThread,
+              body: l10n.mktDeleteChatThreadBody,
               destructive: true,
-              confirmText: "Delete",
-              cancelText: "Cancel",
+              confirmText: l10n.actionDelete,
+              cancelText: l10n.actionCancel,
             );
 
             if (confirmed == true) {
@@ -54,7 +56,7 @@ class WebSellerChatScreen extends BaseScreen {
               if (shopId != 0) {
                 final shop = await WebShopService().retrieveShop(shopId);
                 if (shop == null) {
-                  Toast.error("No shop");
+                  Toast.error(l10n.mktNoShopToast);
                   ref.read(globalLoadingProvider.notifier).complete();
                   return;
                 }
@@ -63,7 +65,7 @@ class WebSellerChatScreen extends BaseScreen {
               }
 
               if (url == null) {
-                Toast.error("No shop");
+                Toast.error(l10n.mktNoShopToast);
                 return;
               }
 
@@ -73,7 +75,7 @@ class WebSellerChatScreen extends BaseScreen {
               );
 
               if (webThread == null) {
-                Toast.error("No Thread ");
+                Toast.error(l10n.mktNoThreadToast);
                 ref.read(globalLoadingProvider.notifier).complete();
                 return;
               }

@@ -7,6 +7,7 @@ import '../../../core/env.dart';
 import '../../../core/models/snapshot_info.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/files.dart';
 import '../../../utils/formatting.dart';
 
@@ -176,15 +177,16 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final double percent =
         totalBytes > 0 ? (bytesDownloaded / totalBytes).clamp(0.0, 1.0) : 0;
 
-    String title = "Initializing...";
+    String title = l10n.hnavSnapshotInitializing;
     if (isDownloading) {
-      title = "Downloading...";
+      title = l10n.hnavSnapshotDownloading;
     }
     if (isReady) {
-      title = "All done!";
+      title = l10n.hnavSnapshotAllDone;
     }
 
     return AlertDialog(
@@ -193,7 +195,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
         width: 600,
         child: Builder(builder: (context) {
           if (isInitializing) {
-            return const Text("Shutting down CLI...");
+            return Text(l10n.hnavSnapshotShuttingDown);
           }
 
           if (isDownloading) {
@@ -224,7 +226,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      "Downloading: $currentFile",
+                      l10n.hnavSnapshotDownloadingFile(currentFile!),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.white54,
                           ),
@@ -244,11 +246,11 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   color: Theme.of(context).colorScheme.success,
                 ),
                 const SizedBox(height: 8),
-                const Text("Database Snapshot Imported."),
+                Text(l10n.hnavSnapshotImported),
                 const SizedBox(height: 4),
-                const Text(
-                  "Starting up CLI now...",
-                  style: TextStyle(
+                Text(
+                  l10n.hnavSnapshotStartingUp,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
@@ -258,16 +260,16 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text(
-                    "Close",
-                    style: TextStyle(color: Colors.white70),
+                  child: Text(
+                    l10n.actionClose,
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ),
               ],
             );
           }
 
-          return const Text("An error occurred. Please restart and try again.");
+          return Text(l10n.hnavSnapshotError);
         }),
       ),
     );

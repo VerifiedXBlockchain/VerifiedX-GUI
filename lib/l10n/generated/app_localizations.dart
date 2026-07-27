@@ -6818,6 +6818,3702 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Submit'**
   String get dialogSubmit;
+
+  /// No description provided for @govAdjAdditionalLinksLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Links: '**
+  String get govAdjAdditionalLinksLabel;
+
+  /// No description provided for @govAdjBandwidthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth (TB): '**
+  String get govAdjBandwidthLabel;
+
+  /// No description provided for @govAdjBandwidthUnlimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited'**
+  String get govAdjBandwidthUnlimited;
+
+  /// No description provided for @govAdjCpuCoresLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU Cores: '**
+  String get govAdjCpuCoresLabel;
+
+  /// No description provided for @govAdjCpuLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU: '**
+  String get govAdjCpuLabel;
+
+  /// No description provided for @govAdjCpuThreadsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU Threads: '**
+  String get govAdjCpuThreadsLabel;
+
+  /// No description provided for @govAdjGithubLinkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Github Link: '**
+  String get govAdjGithubLinkLabel;
+
+  /// No description provided for @govAdjHdSizeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'HD Size: '**
+  String get govAdjHdSizeLabel;
+
+  /// No description provided for @govAdjInternetDownLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet Speed down(Gbps): '**
+  String get govAdjInternetDownLabel;
+
+  /// No description provided for @govAdjInternetUpLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet Speed up(Gbps): '**
+  String get govAdjInternetUpLabel;
+
+  /// No description provided for @govAdjIpAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjudicator to be Ip Address: '**
+  String get govAdjIpAddressLabel;
+
+  /// No description provided for @govAdjMachineProviderLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine Provider: '**
+  String get govAdjMachineProviderLabel;
+
+  /// No description provided for @govAdjMachineTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine type: '**
+  String get govAdjMachineTypeLabel;
+
+  /// No description provided for @govAdjOperatingSystemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Operating System: '**
+  String get govAdjOperatingSystemLabel;
+
+  /// No description provided for @govAdjRamLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'RAM (GB): '**
+  String get govAdjRamLabel;
+
+  /// No description provided for @govAdjReasonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reasons to be added as adjudicator: '**
+  String get govAdjReasonLabel;
+
+  /// No description provided for @govAdjTechnicalBackgroundLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical background: '**
+  String get govAdjTechnicalBackgroundLabel;
+
+  /// No description provided for @govAdjVfxAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjudicator to be VFX Address: '**
+  String get govAdjVfxAddressLabel;
+
+  /// No description provided for @govVoteBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {height}'**
+  String govVoteBlock(int height);
+
+  /// No description provided for @hnavActivatingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Activating soon.'**
+  String get hnavActivatingSoon;
+
+  /// No description provided for @hnavAgreeAndClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree and Close'**
+  String get hnavAgreeAndClose;
+
+  /// No description provided for @hnavAllMyTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'All My Tokens'**
+  String get hnavAllMyTokens;
+
+  /// No description provided for @hnavBackupKeysSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Export and save all your VFX{vaultSuffix} and BTC private keys & addresses to a text file.'**
+  String hnavBackupKeysSubtitle(String vaultSuffix);
+
+  /// No description provided for @hnavBackupLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup'**
+  String get hnavBackupLabel;
+
+  /// No description provided for @hnavBackupMediaSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip and export your NFT media assets.'**
+  String get hnavBackupMediaSubtitle;
+
+  /// No description provided for @hnavBlockNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {height}'**
+  String hnavBlockNumber(String height);
+
+  /// No description provided for @hnavBtcInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Inactive'**
+  String get hnavBtcInactive;
+
+  /// No description provided for @hnavBtcLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Loading'**
+  String get hnavBtcLoading;
+
+  /// No description provided for @hnavBtcLoginWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Although if you login with a BTC Private key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.'**
+  String get hnavBtcLoginWarningBody;
+
+  /// No description provided for @hnavBtcOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Offline'**
+  String get hnavBtcOffline;
+
+  /// No description provided for @hnavBtcOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Online'**
+  String get hnavBtcOnline;
+
+  /// No description provided for @hnavCliInactive.
+  ///
+  /// In en, this message translates to:
+  /// **'CLI Inactive'**
+  String get hnavCliInactive;
+
+  /// No description provided for @hnavCloseRecoveryPhraseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you have copied your recovery phrase to a secure location?'**
+  String get hnavCloseRecoveryPhraseBody;
+
+  /// No description provided for @hnavCloseRecoveryPhraseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Close Recovery Phrase?'**
+  String get hnavCloseRecoveryPhraseTitle;
+
+  /// No description provided for @hnavConfigAccountUnlockTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Unlock Time'**
+  String get hnavConfigAccountUnlockTime;
+
+  /// No description provided for @hnavConfigAllowedExtensionTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed Extension Types'**
+  String get hnavConfigAllowedExtensionTypes;
+
+  /// No description provided for @hnavConfigApiCallUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Api Call Url'**
+  String get hnavConfigApiCallUrl;
+
+  /// No description provided for @hnavConfigApiPort.
+  ///
+  /// In en, this message translates to:
+  /// **'Api Port'**
+  String get hnavConfigApiPort;
+
+  /// No description provided for @hnavConfigAutoDownloadNft.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Download NFT Assets'**
+  String get hnavConfigAutoDownloadNft;
+
+  /// No description provided for @hnavConfigHeader.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration'**
+  String get hnavConfigHeader;
+
+  /// No description provided for @hnavConfigIgnoreIncomingNfts.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore Incoming NFTs'**
+  String get hnavConfigIgnoreIncomingNfts;
+
+  /// No description provided for @hnavConfigMotherAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Mother Address'**
+  String get hnavConfigMotherAddress;
+
+  /// No description provided for @hnavConfigMotherPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Mother Password'**
+  String get hnavConfigMotherPassword;
+
+  /// No description provided for @hnavConfigNftTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Timeout'**
+  String get hnavConfigNftTimeout;
+
+  /// No description provided for @hnavConfigPasswordClearTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Password Clear Time'**
+  String get hnavConfigPasswordClearTime;
+
+  /// No description provided for @hnavConfigRejectedExtensionTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected Asset Extension Types'**
+  String get hnavConfigRejectedExtensionTypes;
+
+  /// No description provided for @hnavConfirmCreateMnemonicBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to create a Mnemonic account?'**
+  String get hnavConfirmCreateMnemonicBody;
+
+  /// No description provided for @hnavCopyRecoveryPhraseInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy your recovery phrase to a secure location.'**
+  String get hnavCopyRecoveryPhraseInstruction;
+
+  /// No description provided for @hnavCopyToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to Clipboard'**
+  String get hnavCopyToClipboard;
+
+  /// No description provided for @hnavCouldNotGenerateKeypair.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not generate keypair'**
+  String get hnavCouldNotGenerateKeypair;
+
+  /// No description provided for @hnavCreateNewMnemonic.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Mnemonic'**
+  String get hnavCreateNewMnemonic;
+
+  /// No description provided for @hnavCurrencyAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get hnavCurrencyAll;
+
+  /// No description provided for @hnavDecryptAccountKeysBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password for this account to decrypt and view its private keys.'**
+  String get hnavDecryptAccountKeysBody;
+
+  /// No description provided for @hnavDecryptionFailedCheckPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Decryption failed. Check your password.'**
+  String get hnavDecryptionFailedCheckPassword;
+
+  /// No description provided for @hnavEncryptGeneratedMnemonicMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This password will encrypt your generated mnemonic keys.'**
+  String get hnavEncryptGeneratedMnemonicMessage;
+
+  /// No description provided for @hnavEncryptImportedBtcPrivateKeyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This password will encrypt your imported BTC private key.'**
+  String get hnavEncryptImportedBtcPrivateKeyMessage;
+
+  /// No description provided for @hnavEncryptImportedPrivateKeyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This password will encrypt your imported private key.'**
+  String get hnavEncryptImportedPrivateKeyMessage;
+
+  /// No description provided for @hnavEncryptRecoveredMnemonicMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This password will encrypt your recovered mnemonic keys.'**
+  String get hnavEncryptRecoveredMnemonicMessage;
+
+  /// No description provided for @hnavEnterAccountPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Account Password'**
+  String get hnavEnterAccountPasswordTitle;
+
+  /// No description provided for @hnavEnterBtcAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your BTC address'**
+  String get hnavEnterBtcAddressHint;
+
+  /// No description provided for @hnavEnterBtcPrivateKeyOrWif.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your BTC Private Key or WIF Key:'**
+  String get hnavEnterBtcPrivateKeyOrWif;
+
+  /// No description provided for @hnavEnterPrivateKeyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your private key'**
+  String get hnavEnterPrivateKeyHint;
+
+  /// No description provided for @hnavEnterWalletPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter Wallet Password'**
+  String get hnavEnterWalletPasswordTitle;
+
+  /// No description provided for @hnavExtensionDecryptPasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password you used in the VFX Extension to decrypt your private key.'**
+  String get hnavExtensionDecryptPasswordBody;
+
+  /// No description provided for @hnavExtensionNotDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Extension not detected'**
+  String get hnavExtensionNotDetected;
+
+  /// No description provided for @hnavExtensionUnlockFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Please unlock your extension wallet first'**
+  String get hnavExtensionUnlockFirst;
+
+  /// No description provided for @hnavExtensionWebOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Extension is only available on web'**
+  String get hnavExtensionWebOnly;
+
+  /// No description provided for @hnavFailedDecryptAccountKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to decrypt account keys. Check your password.'**
+  String get hnavFailedDecryptAccountKeys;
+
+  /// No description provided for @hnavFungibleToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token'**
+  String get hnavFungibleToken;
+
+  /// No description provided for @hnavFungibleTokenWithBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token ({balance} {ticker})'**
+  String hnavFungibleTokenWithBalance(String balance, String ticker);
+
+  /// No description provided for @hnavHd12Words.
+  ///
+  /// In en, this message translates to:
+  /// **'12 Words'**
+  String get hnavHd12Words;
+
+  /// No description provided for @hnavHd24Words.
+  ///
+  /// In en, this message translates to:
+  /// **'24 Words'**
+  String get hnavHd24Words;
+
+  /// No description provided for @hnavHdAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'HD Account'**
+  String get hnavHdAccountTitle;
+
+  /// No description provided for @hnavHdCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create HD Account'**
+  String get hnavHdCreateAccount;
+
+  /// No description provided for @hnavHdEncryptedError.
+  ///
+  /// In en, this message translates to:
+  /// **'You can not create an HD account with an encrypted wallet.'**
+  String get hnavHdEncryptedError;
+
+  /// No description provided for @hnavHdExplanation1.
+  ///
+  /// In en, this message translates to:
+  /// **'By creating an HD account you are creating a function to recover your private keys by use of recovery phrase.'**
+  String get hnavHdExplanation1;
+
+  /// No description provided for @hnavHdExplanation2.
+  ///
+  /// In en, this message translates to:
+  /// **'Once generated, any keys you create will use this phrase to seed the private key generation. Therefore, you will only need to remember this to deterministically recover your keys.'**
+  String get hnavHdExplanation2;
+
+  /// No description provided for @hnavHdExplanation3.
+  ///
+  /// In en, this message translates to:
+  /// **'This is an advanced feature and is not recommended unless you are familiar with Hierarchical Deterministic concepts.\n\nAny keys created prior to this will not be recoverable through this phrase so please ensure they are backed up as well.'**
+  String get hnavHdExplanation3;
+
+  /// No description provided for @hnavHdGenerateStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate with strength:'**
+  String get hnavHdGenerateStrength;
+
+  /// No description provided for @hnavIDontKnow.
+  ///
+  /// In en, this message translates to:
+  /// **'I don\'t know'**
+  String get hnavIDontKnow;
+
+  /// No description provided for @hnavImportBtcPrivateKeyOrWifTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import BTC Private Key or WIF Key'**
+  String get hnavImportBtcPrivateKeyOrWifTitle;
+
+  /// No description provided for @hnavInvalidBtcAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid BTC Address'**
+  String get hnavInvalidBtcAddress;
+
+  /// No description provided for @hnavInvalidPrivateKeyOrWif.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a valid Private Key or WIF Key. Should be 64 or 52 characters'**
+  String get hnavInvalidPrivateKeyOrWif;
+
+  /// No description provided for @hnavIsAdjudicating.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} is Adjudicating...'**
+  String hnavIsAdjudicating(String label);
+
+  /// No description provided for @hnavKeysBackedUpSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Keys backed up successfully.'**
+  String get hnavKeysBackedUpSuccess;
+
+  /// No description provided for @hnavMediaBackedUpSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Media backed up successfully.'**
+  String get hnavMediaBackedUpSuccess;
+
+  /// No description provided for @hnavMempool.
+  ///
+  /// In en, this message translates to:
+  /// **'Mempool'**
+  String get hnavMempool;
+
+  /// No description provided for @hnavMempoolEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Mempool is empty.'**
+  String get hnavMempoolEmpty;
+
+  /// No description provided for @hnavMnemonicTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mnemonic'**
+  String get hnavMnemonicTitle;
+
+  /// No description provided for @hnavNoTokensEmptyState.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no vBTC Tokens, Fungible Tokens, or Non-Fungible Tokens'**
+  String get hnavNoTokensEmptyState;
+
+  /// No description provided for @hnavNoWalletDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'No Wallet detected.'**
+  String get hnavNoWalletDetected;
+
+  /// No description provided for @hnavNonFungibleToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Non-Fungible Token'**
+  String get hnavNonFungibleToken;
+
+  /// No description provided for @hnavNoticeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notice'**
+  String get hnavNoticeTitle;
+
+  /// No description provided for @hnavPasteBtcAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste your BTC address:'**
+  String get hnavPasteBtcAddress;
+
+  /// No description provided for @hnavPortNotOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Port {port} is NOT open. Please configure your firewall.'**
+  String hnavPortNotOpen(String port);
+
+  /// No description provided for @hnavPortOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Port {port} is open!'**
+  String hnavPortOpen(String port);
+
+  /// No description provided for @hnavProposalsVoting.
+  ///
+  /// In en, this message translates to:
+  /// **'Proposals & Voting'**
+  String get hnavProposalsVoting;
+
+  /// No description provided for @hnavRecoverFromMnemonic.
+  ///
+  /// In en, this message translates to:
+  /// **'Recover From Mnemonic'**
+  String get hnavRecoverFromMnemonic;
+
+  /// No description provided for @hnavRecoveryPhraseGeneratedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery Phrase Generated'**
+  String get hnavRecoveryPhraseGeneratedTitle;
+
+  /// No description provided for @hnavRequestCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Request cancelled'**
+  String get hnavRequestCancelled;
+
+  /// No description provided for @hnavRequestTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Request timed out'**
+  String get hnavRequestTimedOut;
+
+  /// No description provided for @hnavReserveAccountsNotExported.
+  ///
+  /// In en, this message translates to:
+  /// **'Please note that Reserve/Protected Accounts will not be exported.'**
+  String get hnavReserveAccountsNotExported;
+
+  /// No description provided for @hnavRestoreHiddenBracket.
+  ///
+  /// In en, this message translates to:
+  /// **'[Restore Hidden]'**
+  String get hnavRestoreHiddenBracket;
+
+  /// No description provided for @hnavResyncing.
+  ///
+  /// In en, this message translates to:
+  /// **'Resyncing...'**
+  String get hnavResyncing;
+
+  /// No description provided for @hnavRevealPrivateKeysPasswordMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to reveal private keys.'**
+  String get hnavRevealPrivateKeysPasswordMessage;
+
+  /// No description provided for @hnavRevealVaultKeysPasswordMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to reveal Vault account private keys.'**
+  String get hnavRevealVaultKeysPasswordMessage;
+
+  /// No description provided for @hnavSectionAccountSecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Security'**
+  String get hnavSectionAccountSecurity;
+
+  /// No description provided for @hnavSectionDiagnose.
+  ///
+  /// In en, this message translates to:
+  /// **'Diagnose'**
+  String get hnavSectionDiagnose;
+
+  /// No description provided for @hnavSectionTokensNfts.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens / NFTs'**
+  String get hnavSectionTokensNfts;
+
+  /// No description provided for @hnavSectionValidator.
+  ///
+  /// In en, this message translates to:
+  /// **'Validator'**
+  String get hnavSectionValidator;
+
+  /// No description provided for @hnavSelectAddressType.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your address type:'**
+  String get hnavSelectAddressType;
+
+  /// No description provided for @hnavSelectedBtcAccountTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected BTC Account'**
+  String get hnavSelectedBtcAccountTooltip;
+
+  /// No description provided for @hnavSelectedVfxAddressTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected VFX Address'**
+  String get hnavSelectedVfxAddressTooltip;
+
+  /// No description provided for @hnavSetEncryptionPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Encryption Password'**
+  String get hnavSetEncryptionPasswordTitle;
+
+  /// No description provided for @hnavShowKeysAccountDetailsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Here are your{currencySuffix} account details. Please ensure to back up your private key in a safe place.'**
+  String hnavShowKeysAccountDetailsBody(String currencySuffix);
+
+  /// No description provided for @hnavSnapshotAllDone.
+  ///
+  /// In en, this message translates to:
+  /// **'All done!'**
+  String get hnavSnapshotAllDone;
+
+  /// No description provided for @hnavSnapshotDownloading.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading...'**
+  String get hnavSnapshotDownloading;
+
+  /// No description provided for @hnavSnapshotDownloadingFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading: {file}'**
+  String hnavSnapshotDownloadingFile(String file);
+
+  /// No description provided for @hnavSnapshotError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred. Please restart and try again.'**
+  String get hnavSnapshotError;
+
+  /// No description provided for @hnavSnapshotImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Database Snapshot Imported.'**
+  String get hnavSnapshotImported;
+
+  /// No description provided for @hnavSnapshotInitializing.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing...'**
+  String get hnavSnapshotInitializing;
+
+  /// No description provided for @hnavSnapshotShuttingDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Shutting down CLI...'**
+  String get hnavSnapshotShuttingDown;
+
+  /// No description provided for @hnavSnapshotStartingUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting up CLI now...'**
+  String get hnavSnapshotStartingUp;
+
+  /// No description provided for @hnavStartAdjudicating.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Adjudicating'**
+  String get hnavStartAdjudicating;
+
+  /// No description provided for @hnavStopAdjudicating.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Adjudicating'**
+  String get hnavStopAdjudicating;
+
+  /// No description provided for @hnavSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced'**
+  String get hnavSynced;
+
+  /// No description provided for @hnavSyncing.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing...'**
+  String get hnavSyncing;
+
+  /// No description provided for @hnavValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating...'**
+  String get hnavValidating;
+
+  /// No description provided for @hnavVaultAccountDetailsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Here are your Vault Account details. Please ensure to back up your private key in a safe place.'**
+  String get hnavVaultAccountDetailsBody;
+
+  /// No description provided for @hnavVaultAccountDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Account Details'**
+  String get hnavVaultAccountDetailsTitle;
+
+  /// No description provided for @hnavVaultSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' Vault'**
+  String get hnavVaultSuffix;
+
+  /// No description provided for @hnavVbtcTokenWithBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Token ({balance} vBTC)'**
+  String hnavVbtcTokenWithBalance(String balance);
+
+  /// No description provided for @hnavVfxCliLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX CLI Loading'**
+  String get hnavVfxCliLoading;
+
+  /// No description provided for @hnavVfxCliOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX CLI Offline'**
+  String get hnavVfxCliOffline;
+
+  /// No description provided for @hnavVfxOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Online'**
+  String get hnavVfxOnline;
+
+  /// No description provided for @hnavWalletPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Password'**
+  String get hnavWalletPasswordLabel;
+
+  /// No description provided for @hnavWarningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning'**
+  String get hnavWarningTitle;
+
+  /// No description provided for @mktAddReservePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Reserve Price'**
+  String get mktAddReservePrice;
+
+  /// No description provided for @mktAuction.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction'**
+  String get mktAuction;
+
+  /// No description provided for @mktAuctionActivityForTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Activity for {name}'**
+  String mktAuctionActivityForTitle(String name);
+
+  /// No description provided for @mktAuctionAlreadyStartedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'The auction has already started.'**
+  String get mktAuctionAlreadyStartedToast;
+
+  /// No description provided for @mktAuctionFloorPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Floor Price'**
+  String get mktAuctionFloorPriceLabel;
+
+  /// No description provided for @mktAuctionNotLiveToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction is not live'**
+  String get mktAuctionNotLiveToast;
+
+  /// No description provided for @mktAuctionOverToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction is over'**
+  String get mktAuctionOverToast;
+
+  /// No description provided for @mktAuctionReservePriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Reserve Price'**
+  String get mktAuctionReservePriceLabel;
+
+  /// No description provided for @mktAuctionStartedDatesLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction has started so the dates & times can\'t be updated.'**
+  String get mktAuctionStartedDatesLocked;
+
+  /// No description provided for @mktAuctionStartedPricingLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction has started so the pricing can\'t be updated.'**
+  String get mktAuctionStartedPricingLocked;
+
+  /// No description provided for @mktBidAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid Amount (VFX)'**
+  String get mktBidAmountLabel;
+
+  /// No description provided for @mktBidIncrementToast.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum increment amount is {increment} VFX. A bid greater than {minimum} VFX is required.'**
+  String mktBidIncrementToast(String increment, String minimum);
+
+  /// No description provided for @mktBidInsufficientBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have enough balance to cover this bid.\n\nWould you like to pay with a Credit Card or another crypto token?'**
+  String get mktBidInsufficientBody;
+
+  /// No description provided for @mktBidMustBeGreaterFooter.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be greater than {minimum} VFX'**
+  String mktBidMustBeGreaterFooter(String minimum);
+
+  /// No description provided for @mktBidMustBeGreaterToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bid must be greater than the current highest bid ({price} VFX)'**
+  String mktBidMustBeGreaterToast(String price);
+
+  /// No description provided for @mktBidSubmittedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid Submitted'**
+  String get mktBidSubmittedToast;
+
+  /// No description provided for @mktBuyNowConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to buy now for {price} VFX?'**
+  String mktBuyNowConfirmBody(String price);
+
+  /// No description provided for @mktBuyNowInsufficientBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This NFT has a buy now price of {price} VFX and you don\'t have enough balance to cover it.\n\nWould you like to pay with a Credit Card or another crypto token?'**
+  String mktBuyNowInsufficientBody(String price);
+
+  /// No description provided for @mktBuyNowPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now Price'**
+  String get mktBuyNowPriceLabel;
+
+  /// No description provided for @mktBuyNowTxBroadcastedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now TX broadcasted.'**
+  String get mktBuyNowTxBroadcastedTitle;
+
+  /// No description provided for @mktBuyNowTxBroadcastedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now TX broadcasted. Please wait for it to be accepted by the shop owner'**
+  String get mktBuyNowTxBroadcastedToast;
+
+  /// No description provided for @mktChooseAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an Address'**
+  String get mktChooseAddressTitle;
+
+  /// No description provided for @mktCloseCreateListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the listing creation screen?'**
+  String get mktCloseCreateListingTitle;
+
+  /// No description provided for @mktCloseEditListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the listing editing screen?'**
+  String get mktCloseEditListingTitle;
+
+  /// No description provided for @mktCollectionDeletedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection deleted.'**
+  String get mktCollectionDeletedToast;
+
+  /// No description provided for @mktCollectionDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Description'**
+  String get mktCollectionDescriptionLabel;
+
+  /// No description provided for @mktCollectionNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Name'**
+  String get mktCollectionNameLabel;
+
+  /// No description provided for @mktCouldNotGenerateHashToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not generate hash'**
+  String get mktCouldNotGenerateHashToast;
+
+  /// No description provided for @mktCouldNotGetFeeToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not get fee'**
+  String get mktCouldNotGetFeeToast;
+
+  /// No description provided for @mktCouldNotGetNonceToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not get nonce'**
+  String get mktCouldNotGetNonceToast;
+
+  /// No description provided for @mktCouldNotGetTimestampToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not get timestamp'**
+  String get mktCouldNotGetTimestampToast;
+
+  /// No description provided for @mktCouldNotProduceSignatureToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not produce signature'**
+  String get mktCouldNotProduceSignatureToast;
+
+  /// No description provided for @mktCouldNotVerifyTransactionToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not verify transaction'**
+  String get mktCouldNotVerifyTransactionToast;
+
+  /// No description provided for @mktCreateAuctionHouseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your auction house / gallery and publish it to the network.\nThen you\'ll be able to create collections and add listings to them.'**
+  String get mktCreateAuctionHouseBody;
+
+  /// No description provided for @mktDatesHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates'**
+  String get mktDatesHeading;
+
+  /// No description provided for @mktDeleteChatThreadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this chat thread?'**
+  String get mktDeleteChatThreadBody;
+
+  /// No description provided for @mktDeleteChatThreadLocalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this chat thread locally?'**
+  String get mktDeleteChatThreadLocalBody;
+
+  /// No description provided for @mktDeleteListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Listing'**
+  String get mktDeleteListing;
+
+  /// No description provided for @mktDeleteStoreConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this store?'**
+  String get mktDeleteStoreConfirmBody;
+
+  /// No description provided for @mktEditCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Collection'**
+  String get mktEditCollection;
+
+  /// No description provided for @mktEditListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Listing'**
+  String get mktEditListing;
+
+  /// No description provided for @mktEnableAuction.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Auction?'**
+  String get mktEnableAuction;
+
+  /// No description provided for @mktEnableBuyNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Buy Now?'**
+  String get mktEnableBuyNow;
+
+  /// No description provided for @mktEndDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'End Date'**
+  String get mktEndDateLabel;
+
+  /// No description provided for @mktEndTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'End Time'**
+  String get mktEndTimeLabel;
+
+  /// No description provided for @mktErrorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred.'**
+  String get mktErrorOccurred;
+
+  /// No description provided for @mktGalleryOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery Only?'**
+  String get mktGalleryOnly;
+
+  /// No description provided for @mktInsufficientBalanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient Balance'**
+  String get mktInsufficientBalanceTitle;
+
+  /// No description provided for @mktListingForTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing for {name}'**
+  String mktListingForTitle(String name);
+
+  /// No description provided for @mktNftAlreadyListedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'This NFT is already listed. Please choose another'**
+  String get mktNftAlreadyListedToast;
+
+  /// No description provided for @mktNftColonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT:'**
+  String get mktNftColonLabel;
+
+  /// No description provided for @mktNftNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT: {name}'**
+  String mktNftNameLabel(String name);
+
+  /// No description provided for @mktNoAccountToast.
+  ///
+  /// In en, this message translates to:
+  /// **'No Account'**
+  String get mktNoAccountToast;
+
+  /// No description provided for @mktNoAuctionToast.
+  ///
+  /// In en, this message translates to:
+  /// **'No auction'**
+  String get mktNoAuctionToast;
+
+  /// No description provided for @mktNoBalanceToast.
+  ///
+  /// In en, this message translates to:
+  /// **'No Balance'**
+  String get mktNoBalanceToast;
+
+  /// No description provided for @mktNoBidsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No Bids Yet.'**
+  String get mktNoBidsYet;
+
+  /// No description provided for @mktNoMessagesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet'**
+  String get mktNoMessagesYet;
+
+  /// No description provided for @mktNoShopToast.
+  ///
+  /// In en, this message translates to:
+  /// **'No shop'**
+  String get mktNoShopToast;
+
+  /// No description provided for @mktNoThreadToast.
+  ///
+  /// In en, this message translates to:
+  /// **'No Thread'**
+  String get mktNoThreadToast;
+
+  /// No description provided for @mktNotEnoughBalanceToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance.'**
+  String get mktNotEnoughBalanceToast;
+
+  /// No description provided for @mktNotEnoughBalanceValidatingToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance since you are validating.'**
+  String get mktNotEnoughBalanceValidatingToast;
+
+  /// No description provided for @mktNotNotifiedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'You will not be notified. You can update this setting on the dashboard if you change your mind.'**
+  String get mktNotNotifiedToast;
+
+  /// No description provided for @mktOptionsHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get mktOptionsHeading;
+
+  /// No description provided for @mktOwnersAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner\'s Address'**
+  String get mktOwnersAddressLabel;
+
+  /// No description provided for @mktPayWithCardCryptoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay with Credit Card / Crypto'**
+  String get mktPayWithCardCryptoTitle;
+
+  /// No description provided for @mktPlaceBid.
+  ///
+  /// In en, this message translates to:
+  /// **'Place Bid'**
+  String get mktPlaceBid;
+
+  /// No description provided for @mktPlaceBidConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to place a bid of {amount} VFX?'**
+  String mktPlaceBidConfirmBody(String amount);
+
+  /// No description provided for @mktPresignProblemToast.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred presigning the sale transaction. Please try again'**
+  String get mktPresignProblemToast;
+
+  /// No description provided for @mktProblemOccurredToast.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred'**
+  String get mktProblemOccurredToast;
+
+  /// No description provided for @mktPublishLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish Live'**
+  String get mktPublishLive;
+
+  /// No description provided for @mktReplaceNft.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace NFT'**
+  String get mktReplaceNft;
+
+  /// No description provided for @mktReservePriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve Price'**
+  String get mktReservePriceLabel;
+
+  /// No description provided for @mktSelectNft.
+  ///
+  /// In en, this message translates to:
+  /// **'Select NFT'**
+  String get mktSelectNft;
+
+  /// No description provided for @mktSelectOwnerAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select an address from the list to be the shop owner.'**
+  String get mktSelectOwnerAddressHint;
+
+  /// No description provided for @mktShopDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Description'**
+  String get mktShopDescriptionLabel;
+
+  /// No description provided for @mktShopIdentifierLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Identifier'**
+  String get mktShopIdentifierLabel;
+
+  /// No description provided for @mktShopNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Name'**
+  String get mktShopNameLabel;
+
+  /// No description provided for @mktSignatureNotValidPrimaryToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature not valid (primary)'**
+  String get mktSignatureNotValidPrimaryToast;
+
+  /// No description provided for @mktStartDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Date'**
+  String get mktStartDateLabel;
+
+  /// No description provided for @mktStartTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Time'**
+  String get mktStartTimeLabel;
+
+  /// No description provided for @mktSubscribeUpdatesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In order for the web wallet to provide notifications to auction winners to sign transactions, an email address is required.'**
+  String get mktSubscribeUpdatesBody;
+
+  /// No description provided for @mktSubscribeUpdatesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe for updates?'**
+  String get mktSubscribeUpdatesTitle;
+
+  /// No description provided for @mktSubscribedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribed'**
+  String get mktSubscribedToast;
+
+  /// No description provided for @mktThirdPartySaleStartNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Because this auction house is hosted on the VFX Web Wallet, the seller will need to authorize the Sale Start transaction. You will see that in your transaction list once it\'s been sent.'**
+  String get mktThirdPartySaleStartNote;
+
+  /// No description provided for @mktTxBroadcastedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'TX Broadcasted'**
+  String get mktTxBroadcastedToast;
+
+  /// No description provided for @mktWaitForFinalizeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait for the transaction to be finalized.'**
+  String get mktWaitForFinalizeBody;
+
+  /// No description provided for @scwAddAFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a Feature'**
+  String get scwAddAFeature;
+
+  /// No description provided for @scwAddCreatorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Creator Name'**
+  String get scwAddCreatorName;
+
+  /// No description provided for @scwAddDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Description'**
+  String get scwAddDescription;
+
+  /// No description provided for @scwAddEvolvingPhase.
+  ///
+  /// In en, this message translates to:
+  /// **'Add evolving phase'**
+  String get scwAddEvolvingPhase;
+
+  /// No description provided for @scwAddName.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Name'**
+  String get scwAddName;
+
+  /// No description provided for @scwAddProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add property'**
+  String get scwAddProperty;
+
+  /// No description provided for @scwAddPropertyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Property'**
+  String get scwAddPropertyButton;
+
+  /// No description provided for @scwAddRoyalty.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Royalty'**
+  String get scwAddRoyalty;
+
+  /// No description provided for @scwAddStat.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Stat'**
+  String get scwAddStat;
+
+  /// No description provided for @scwAdditionalAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Assets'**
+  String get scwAdditionalAssets;
+
+  /// No description provided for @scwAllowVoting.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Voting'**
+  String get scwAllowVoting;
+
+  /// No description provided for @scwBeneficiaryAddressOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Beneficiary Address (Optional)'**
+  String get scwBeneficiaryAddressOptional;
+
+  /// No description provided for @scwBlockHeightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Height Value'**
+  String get scwBlockHeightValue;
+
+  /// No description provided for @scwCantAddEvolveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have an evolve feature in this smart contract. Edit the existing evolving feature to add more stages.'**
+  String get scwCantAddEvolveBody;
+
+  /// No description provided for @scwCantAddEvolveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t add Evolve'**
+  String get scwCantAddEvolveTitle;
+
+  /// No description provided for @scwCantAddMultiAssetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have a multi asset feature in this smart contract. Edit the existing multi asset feature to add more assets.'**
+  String get scwCantAddMultiAssetBody;
+
+  /// No description provided for @scwCantAddMultiAssetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t add Multi Asset'**
+  String get scwCantAddMultiAssetTitle;
+
+  /// No description provided for @scwCantAddRoyaltyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have a royalty feature in this smart contract.'**
+  String get scwCantAddRoyaltyBody;
+
+  /// No description provided for @scwCantAddRoyaltyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t add Royalty'**
+  String get scwCantAddRoyaltyTitle;
+
+  /// No description provided for @scwCantAddSoulBoundBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You already have a soul bound feature in this smart contract.'**
+  String get scwCantAddSoulBoundBody;
+
+  /// No description provided for @scwCantAddSoulBoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t add Soul Bound'**
+  String get scwCantAddSoulBoundTitle;
+
+  /// No description provided for @scwChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose'**
+  String get scwChoose;
+
+  /// No description provided for @scwChooseAnAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an address'**
+  String get scwChooseAnAddress;
+
+  /// No description provided for @scwCollectionDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Description'**
+  String get scwCollectionDescription;
+
+  /// No description provided for @scwCollectionName.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Name'**
+  String get scwCollectionName;
+
+  /// No description provided for @scwCollectionThumbnail.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Thumbnail'**
+  String get scwCollectionThumbnail;
+
+  /// No description provided for @scwCollectionWizard.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Wizard'**
+  String get scwCollectionWizard;
+
+  /// No description provided for @scwColorProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Color Property'**
+  String get scwColorProperty;
+
+  /// No description provided for @scwCreateAndMintBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with a baseline smart contract and add customized features'**
+  String get scwCreateAndMintBody;
+
+  /// No description provided for @scwCreateAndMintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a Smart Contract & Mint'**
+  String get scwCreateAndMintTitle;
+
+  /// No description provided for @scwCreateSmartContractTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Smart Contract'**
+  String get scwCreateSmartContractTitle;
+
+  /// No description provided for @scwCreatorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Creator Name'**
+  String get scwCreatorName;
+
+  /// No description provided for @scwCreatorRetainedOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Creator’s Retained Ownership'**
+  String get scwCreatorRetainedOwnership;
+
+  /// No description provided for @scwCreatorValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Creator: {name}'**
+  String scwCreatorValue(String name);
+
+  /// No description provided for @scwDeletePrimaryAssetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete the primary asset?'**
+  String get scwDeletePrimaryAssetBody;
+
+  /// No description provided for @scwDeletePrimaryAssetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Primary Asset?'**
+  String get scwDeletePrimaryAssetTitle;
+
+  /// No description provided for @scwDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get scwDescription;
+
+  /// No description provided for @scwDescriptionOfPhysicalDigitalGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Description of Physical/Digital Good'**
+  String get scwDescriptionOfPhysicalDigitalGood;
+
+  /// No description provided for @scwDownloadExampleCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Example CSV'**
+  String get scwDownloadExampleCsv;
+
+  /// No description provided for @scwDownloadExampleJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Example JSON'**
+  String get scwDownloadExampleJson;
+
+  /// No description provided for @scwEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get scwEdit;
+
+  /// No description provided for @scwEditCreatorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Creator Name'**
+  String get scwEditCreatorName;
+
+  /// No description provided for @scwEditDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Description'**
+  String get scwEditDescription;
+
+  /// No description provided for @scwEditName.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Name'**
+  String get scwEditName;
+
+  /// No description provided for @scwEventAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Address'**
+  String get scwEventAddress;
+
+  /// No description provided for @scwEventCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Code'**
+  String get scwEventCode;
+
+  /// No description provided for @scwEventDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Date'**
+  String get scwEventDate;
+
+  /// No description provided for @scwEventDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Description'**
+  String get scwEventDescription;
+
+  /// No description provided for @scwEventName.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Name'**
+  String get scwEventName;
+
+  /// No description provided for @scwEventTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Event Time'**
+  String get scwEventTime;
+
+  /// No description provided for @scwEventUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Event URL'**
+  String get scwEventUrl;
+
+  /// No description provided for @scwEvolutionDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Date'**
+  String get scwEvolutionDate;
+
+  /// No description provided for @scwEvolutionTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Time ({timezone})'**
+  String scwEvolutionTime(String timezone);
+
+  /// No description provided for @scwEvolve.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve'**
+  String get scwEvolve;
+
+  /// No description provided for @scwEvolveOnRedeem.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve on Redeem?'**
+  String get scwEvolveOnRedeem;
+
+  /// No description provided for @scwEvolveStageAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Stage Asset'**
+  String get scwEvolveStageAsset;
+
+  /// No description provided for @scwEvolveStageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Stage Description'**
+  String get scwEvolveStageDescription;
+
+  /// No description provided for @scwEvolveStageName.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Stage Name'**
+  String get scwEvolveStageName;
+
+  /// No description provided for @scwEvolveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Type'**
+  String get scwEvolveType;
+
+  /// No description provided for @scwEvolveTypeBlockHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Height'**
+  String get scwEvolveTypeBlockHeight;
+
+  /// No description provided for @scwEvolveTypeDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Date/Time'**
+  String get scwEvolveTypeDateTime;
+
+  /// No description provided for @scwEvolveTypeManualOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Only'**
+  String get scwEvolveTypeManualOnly;
+
+  /// No description provided for @scwEvolveWithType.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve ({type})'**
+  String scwEvolveWithType(String type);
+
+  /// No description provided for @scwEvolvingPhase.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolving phase'**
+  String get scwEvolvingPhase;
+
+  /// No description provided for @scwExpireDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expire Date'**
+  String get scwExpireDate;
+
+  /// No description provided for @scwExpireTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Expire Time'**
+  String get scwExpireTime;
+
+  /// No description provided for @scwFractionalInterest.
+  ///
+  /// In en, this message translates to:
+  /// **'Fractional Interest'**
+  String get scwFractionalInterest;
+
+  /// No description provided for @scwFractionalizationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Fractionalization'**
+  String get scwFractionalizationTitle;
+
+  /// No description provided for @scwFullDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Description'**
+  String get scwFullDescription;
+
+  /// No description provided for @scwImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Image(s)'**
+  String get scwImages;
+
+  /// No description provided for @scwImporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing'**
+  String get scwImporting;
+
+  /// No description provided for @scwLaunchIdeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the online IDE to write your own Trillium code for your smart contract'**
+  String get scwLaunchIdeBody;
+
+  /// No description provided for @scwLaunchIdeMobileBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The IDE is optimized for larger screens. Would you like to proceed?'**
+  String get scwLaunchIdeMobileBody;
+
+  /// No description provided for @scwLaunchIdeMobileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch IDE on mobile?'**
+  String get scwLaunchIdeMobileTitle;
+
+  /// No description provided for @scwLaunchIdeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch IDE'**
+  String get scwLaunchIdeTitle;
+
+  /// No description provided for @scwLaunchWizard.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch Wizard'**
+  String get scwLaunchWizard;
+
+  /// No description provided for @scwMaxQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Max quantity is 100.'**
+  String get scwMaxQuantity;
+
+  /// No description provided for @scwMetadataUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata URL'**
+  String get scwMetadataUrl;
+
+  /// No description provided for @scwMinQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Min quantity is 1.'**
+  String get scwMinQuantity;
+
+  /// No description provided for @scwMintNftCollectionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint multiple Smart Contracts into a collection'**
+  String get scwMintNftCollectionBody;
+
+  /// No description provided for @scwMintNftCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint NFT Collection'**
+  String get scwMintNftCollectionTitle;
+
+  /// No description provided for @scwName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get scwName;
+
+  /// No description provided for @scwNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get scwNetwork;
+
+  /// No description provided for @scwNetworkContractAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'{network} Contract Address'**
+  String scwNetworkContractAddress(String network);
+
+  /// No description provided for @scwNoProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'No Properties'**
+  String get scwNoProperties;
+
+  /// No description provided for @scwNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Not implemented.'**
+  String get scwNotImplemented;
+
+  /// No description provided for @scwNumericalProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Numerical Property'**
+  String get scwNumericalProperty;
+
+  /// No description provided for @scwOtherOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Other Options'**
+  String get scwOtherOptions;
+
+  /// No description provided for @scwOwnerAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner Address'**
+  String get scwOwnerAddress;
+
+  /// No description provided for @scwPairWrapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair/Wrap with Existing NFT'**
+  String get scwPairWrapTitle;
+
+  /// No description provided for @scwPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage'**
+  String get scwPercentage;
+
+  /// No description provided for @scwPercentageRequiredForVotingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentage Required for Voting Approval'**
+  String get scwPercentageRequiredForVotingApproval;
+
+  /// No description provided for @scwPhaseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phase #{number}: {name}'**
+  String scwPhaseLabel(int number, String name);
+
+  /// No description provided for @scwPhysicalDigitalGoodName.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical/Digital Good Name'**
+  String get scwPhysicalDigitalGoodName;
+
+  /// No description provided for @scwPrimaryAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Asset'**
+  String get scwPrimaryAsset;
+
+  /// No description provided for @scwProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'Properties'**
+  String get scwProperties;
+
+  /// No description provided for @scwPropertiesOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Properties (Optional)'**
+  String get scwPropertiesOptional;
+
+  /// No description provided for @scwPropertyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Name'**
+  String get scwPropertyName;
+
+  /// No description provided for @scwPropertyType.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Type'**
+  String get scwPropertyType;
+
+  /// No description provided for @scwPropertyTypeColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Color'**
+  String get scwPropertyTypeColor;
+
+  /// No description provided for @scwPropertyTypeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Number'**
+  String get scwPropertyTypeNumber;
+
+  /// No description provided for @scwPropertyTypeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get scwPropertyTypeText;
+
+  /// No description provided for @scwPropertyValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Value'**
+  String get scwPropertyValue;
+
+  /// No description provided for @scwProvenanceFilesOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Provenance Files (Optional)'**
+  String get scwProvenanceFilesOptional;
+
+  /// No description provided for @scwQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get scwQuantity;
+
+  /// No description provided for @scwQuantityToMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity to Mint'**
+  String get scwQuantityToMint;
+
+  /// No description provided for @scwQuantityValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity: {quantity}'**
+  String scwQuantityValue(int quantity);
+
+  /// No description provided for @scwReasonForPairingWrapping.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason for Pairing/Wrapping'**
+  String get scwReasonForPairingWrapping;
+
+  /// No description provided for @scwRemove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get scwRemove;
+
+  /// No description provided for @scwRemoveAssetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this additional asset?'**
+  String get scwRemoveAssetBody;
+
+  /// No description provided for @scwRemoveAssetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Asset?'**
+  String get scwRemoveAssetTitle;
+
+  /// No description provided for @scwRemovePhaseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this evolution phase?'**
+  String get scwRemovePhaseBody;
+
+  /// No description provided for @scwRemovePhaseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Phase?'**
+  String get scwRemovePhaseTitle;
+
+  /// No description provided for @scwRemovePropertyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove this property?'**
+  String get scwRemovePropertyBody;
+
+  /// No description provided for @scwRemovePropertyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Property?'**
+  String get scwRemovePropertyTitle;
+
+  /// No description provided for @scwRemoveRoyaltyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove the royalty?'**
+  String get scwRemoveRoyaltyBody;
+
+  /// No description provided for @scwRemoveRoyaltyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Royalty?'**
+  String get scwRemoveRoyaltyTitle;
+
+  /// No description provided for @scwRoyaltyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty'**
+  String get scwRoyaltyTitle;
+
+  /// No description provided for @scwRoyaltyToAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} to {address}'**
+  String scwRoyaltyToAddress(String amount, String address);
+
+  /// No description provided for @scwRoyaltyType.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty Type'**
+  String get scwRoyaltyType;
+
+  /// No description provided for @scwRoyaltyTypeFixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed'**
+  String get scwRoyaltyTypeFixed;
+
+  /// No description provided for @scwRoyaltyTypePercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Percent'**
+  String get scwRoyaltyTypePercent;
+
+  /// No description provided for @scwSeatingInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Seating Info'**
+  String get scwSeatingInfo;
+
+  /// No description provided for @scwSoulBoundTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Soul Bound'**
+  String get scwSoulBoundTitle;
+
+  /// No description provided for @scwStatTypeString.
+  ///
+  /// In en, this message translates to:
+  /// **'Type: String'**
+  String get scwStatTypeString;
+
+  /// No description provided for @scwStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get scwStats;
+
+  /// No description provided for @scwTextProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Text Property'**
+  String get scwTextProperty;
+
+  /// No description provided for @scwTicketTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket'**
+  String get scwTicketTitle;
+
+  /// No description provided for @scwTicketType.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket Type'**
+  String get scwTicketType;
+
+  /// No description provided for @scwTokenIdOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Token ID (Optional)'**
+  String get scwTokenIdOptional;
+
+  /// No description provided for @scwTokenStandardOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Standard (Optional)'**
+  String get scwTokenStandardOptional;
+
+  /// No description provided for @scwTokenizationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenization'**
+  String get scwTokenizationTitle;
+
+  /// No description provided for @scwUploadCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload CSV'**
+  String get scwUploadCsv;
+
+  /// No description provided for @scwUploadJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload JSON'**
+  String get scwUploadJson;
+
+  /// No description provided for @scwUploadJsonCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload JSON / CSV'**
+  String get scwUploadJsonCsv;
+
+  /// No description provided for @scwUploadJsonCsvBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a collection with a JSON or CSV file. See the example files below and use them as a template. Upon uploading the file you will be able to configure and tweak the settings through the wizard\'s UI.\n\nThis is an advanced feature for users who want to compile and mint collections outside of the graphical user interface.'**
+  String get scwUploadJsonCsvBody;
+
+  /// No description provided for @scwUseMyAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Use My Address'**
+  String get scwUseMyAddress;
+
+  /// No description provided for @scwVotingDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Voting Description'**
+  String get scwVotingDescription;
+
+  /// No description provided for @tkbAmountGreaterThanZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount must be greater than 0.0 BTC'**
+  String get tkbAmountGreaterThanZero;
+
+  /// No description provided for @tkbAmountOfVbtcTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount of vBTC to {action}'**
+  String tkbAmountOfVbtcTo(String action);
+
+  /// No description provided for @tkbAssociateLocalFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Associate Local File'**
+  String get tkbAssociateLocalFile;
+
+  /// No description provided for @tkbAssociateMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Associate Media'**
+  String get tkbAssociateMedia;
+
+  /// No description provided for @tkbAuthorizeNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Authorize Now'**
+  String get tkbAuthorizeNow;
+
+  /// No description provided for @tkbBalanceFoundBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A balance of {balance} VFX was found in this account. Skipping to step 3.'**
+  String tkbBalanceFoundBody(String balance);
+
+  /// No description provided for @tkbBalanceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance: {balance}'**
+  String tkbBalanceValue(String balance);
+
+  /// No description provided for @tkbBlockHeightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Height: {height}'**
+  String tkbBlockHeightValue(String height);
+
+  /// No description provided for @tkbBtcAddressGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Address generated ({address})'**
+  String tkbBtcAddressGenerated(String address);
+
+  /// No description provided for @tkbBtcAddressPending.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Address Pending'**
+  String get tkbBtcAddressPending;
+
+  /// No description provided for @tkbBtcAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Amount'**
+  String get tkbBtcAmount;
+
+  /// No description provided for @tkbBtcSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} BTC has been sent to {address}.'**
+  String tkbBtcSentTo(String amount, String address);
+
+  /// No description provided for @tkbBtcTransferBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Transfer TX Broadcasted successfully.'**
+  String get tkbBtcTransferBroadcasted;
+
+  /// No description provided for @tkbBtcWithdrawalBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Withdrawl TX Broadcasted successfully. Hash: {hash}'**
+  String tkbBtcWithdrawalBroadcasted(String hash);
+
+  /// No description provided for @tkbCallMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Media'**
+  String get tkbCallMedia;
+
+  /// No description provided for @tkbCallMediaFromBeacon.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Media from Beacon'**
+  String get tkbCallMediaFromBeacon;
+
+  /// No description provided for @tkbCallToBeaconStartedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please be patient while ALL assets associated with the NFT are called and downloaded.\n\nDo not close your wallet or attempt to call again.'**
+  String get tkbCallToBeaconStartedBody;
+
+  /// No description provided for @tkbCallToBeaconStartedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Call to beacon process has started.'**
+  String get tkbCallToBeaconStartedTitle;
+
+  /// No description provided for @tkbCallToBeaconStartedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Call to beacon process has started. Please be patient while ALL assets associated with the NFT are called and downloaded.'**
+  String get tkbCallToBeaconStartedToast;
+
+  /// No description provided for @tkbCheckOtherAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please check any other account with the same address for the media.'**
+  String get tkbCheckOtherAccount;
+
+  /// No description provided for @tkbChooseBtcAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose BTC Account to Send From'**
+  String get tkbChooseBtcAccount;
+
+  /// No description provided for @tkbChooseVaultAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Vault Account'**
+  String get tkbChooseVaultAccount;
+
+  /// No description provided for @tkbComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get tkbComplete;
+
+  /// No description provided for @tkbConfirmSendBtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending {amount} BTC from {from} to {to}.\n\nFee:\n{fee} BTC'**
+  String tkbConfirmSendBtcBody(String amount, String from, String to, String fee);
+
+  /// No description provided for @tkbConfirmTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Transaction'**
+  String get tkbConfirmTransaction;
+
+  /// No description provided for @tkbConfirmVoteNoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to vote NO on this token topic?'**
+  String get tkbConfirmVoteNoBody;
+
+  /// No description provided for @tkbConfirmVoteYesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to vote YES on this token topic?'**
+  String get tkbConfirmVoteYesBody;
+
+  /// No description provided for @tkbControlledBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Controlled by: {address}'**
+  String tkbControlledBy(String address);
+
+  /// No description provided for @tkbCouldNotResolveNft.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not resolve nft from {id}'**
+  String tkbCouldNotResolveNft(String id);
+
+  /// No description provided for @tkbCreateBtcDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'Create BTC Domain'**
+  String get tkbCreateBtcDomain;
+
+  /// No description provided for @tkbCreateDomainFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Domain for {address}'**
+  String tkbCreateDomainFor(String address);
+
+  /// No description provided for @tkbCreateTokenTopicBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to create this token topic?'**
+  String get tkbCreateTokenTopicBody;
+
+  /// No description provided for @tkbCreationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Creation Pending'**
+  String get tkbCreationPending;
+
+  /// No description provided for @tkbDeleteBtcDomainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this BTC Domain?\n{costLine}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.'**
+  String tkbDeleteBtcDomainBody(String costLine);
+
+  /// No description provided for @tkbDeleteDomainNoCost.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no cost to delete and VFX Domain (aside from the TX fee).'**
+  String get tkbDeleteDomainNoCost;
+
+  /// No description provided for @tkbDeleteDomainWithCost.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} VFX to delete an RBX Domain.'**
+  String tkbDeleteDomainWithCost(String cost);
+
+  /// No description provided for @tkbDeletePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Pending'**
+  String get tkbDeletePending;
+
+  /// No description provided for @tkbDescriptionColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Description:'**
+  String get tkbDescriptionColon;
+
+  /// No description provided for @tkbDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get tkbDismiss;
+
+  /// No description provided for @tkbDomainName.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain Name'**
+  String get tkbDomainName;
+
+  /// No description provided for @tkbDomainNameRule.
+  ///
+  /// In en, this message translates to:
+  /// **'Your domain must only contain letters and numbers and will automatically be appended with \".btc\" upon verification'**
+  String get tkbDomainNameRule;
+
+  /// No description provided for @tkbDownloadAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Asset'**
+  String get tkbDownloadAsset;
+
+  /// No description provided for @tkbError.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get tkbError;
+
+  /// No description provided for @tkbErrorLoadingData.
+  ///
+  /// In en, this message translates to:
+  /// **'Error Loading Data'**
+  String get tkbErrorLoadingData;
+
+  /// No description provided for @tkbFailedRequestWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to request withdrawal.'**
+  String get tkbFailedRequestWithdrawal;
+
+  /// No description provided for @tkbFeeEstimate.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee Estimate: ~{feeEstimate} SATS | ~{feeEstimateBtc} BTC    ({fee} SATS /byte | {feeBtc} BTC /byte)'**
+  String tkbFeeEstimate(String feeEstimate, String feeEstimateBtc, String fee, String feeBtc);
+
+  /// No description provided for @tkbFeeRateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee rate in satoshis'**
+  String get tkbFeeRateHint;
+
+  /// No description provided for @tkbFeeRatePerByte.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee Rate: {sats} SATS per byte ({btc} BTC per byte)'**
+  String tkbFeeRatePerByte(String sats, String btc);
+
+  /// No description provided for @tkbFeeRateRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee Rate Required'**
+  String get tkbFeeRateRequired;
+
+  /// No description provided for @tkbFileNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'File Name: {name}'**
+  String tkbFileNameLabel(String name);
+
+  /// No description provided for @tkbFileSize.
+  ///
+  /// In en, this message translates to:
+  /// **'File Size'**
+  String get tkbFileSize;
+
+  /// No description provided for @tkbFileType.
+  ///
+  /// In en, this message translates to:
+  /// **'File Type'**
+  String get tkbFileType;
+
+  /// No description provided for @tkbFilenameCreator.
+  ///
+  /// In en, this message translates to:
+  /// **'Filename: {filename} | Creator: {creator}'**
+  String tkbFilenameCreator(String filename, String creator);
+
+  /// No description provided for @tkbFixedSupply.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed Supply'**
+  String get tkbFixedSupply;
+
+  /// No description provided for @tkbFungibleToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token'**
+  String get tkbFungibleToken;
+
+  /// No description provided for @tkbGenerate.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate'**
+  String get tkbGenerate;
+
+  /// No description provided for @tkbGenerateBtcAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate BTC Address'**
+  String get tkbGenerateBtcAddress;
+
+  /// No description provided for @tkbGenerateBtcAddressBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to generate this token\'\'s BTC address?'**
+  String get tkbGenerateBtcAddressBody;
+
+  /// No description provided for @tkbImagePreviewNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'File not found for preview.\nLikely this means this NFT no longer exists on this machine.\n'**
+  String get tkbImagePreviewNotFound;
+
+  /// No description provided for @tkbInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'In Progress'**
+  String get tkbInProgress;
+
+  /// No description provided for @tkbInfinite.
+  ///
+  /// In en, this message translates to:
+  /// **'Infinite'**
+  String get tkbInfinite;
+
+  /// No description provided for @tkbInsufficientBalanceAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient Balance to cover tx and fee. This account only has {balance} BTC.'**
+  String tkbInsufficientBalanceAccount(String balance);
+
+  /// No description provided for @tkbInvalidFeeRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Fee Rate. Must be atleast 1 satoshi.'**
+  String get tkbInvalidFeeRate;
+
+  /// No description provided for @tkbManualSendSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send coin manually to this token\'\'s BTC deposit address'**
+  String get tkbManualSendSubtitle;
+
+  /// No description provided for @tkbMediaNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Media asset file not found on your machine ({fileName}).'**
+  String tkbMediaNotFound(String fileName);
+
+  /// No description provided for @tkbMinimumTokenRequirement.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum Token Requirement'**
+  String get tkbMinimumTokenRequirement;
+
+  /// No description provided for @tkbMinimumTokenRequirementHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum token balance required to vote.'**
+  String get tkbMinimumTokenRequirementHelper;
+
+  /// No description provided for @tkbMinimumTokensToVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum Tokens to Vote: {count}'**
+  String tkbMinimumTokensToVote(String count);
+
+  /// No description provided for @tkbMultiSigFeeCalculated.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a Multi-signature. The fee rate has been calculated for you.'**
+  String get tkbMultiSigFeeCalculated;
+
+  /// No description provided for @tkbNeedTokensToVote.
+  ///
+  /// In en, this message translates to:
+  /// **'You need at least {count} tokens to vote.'**
+  String tkbNeedTokensToVote(String count);
+
+  /// No description provided for @tkbNoAddressesHolding.
+  ///
+  /// In en, this message translates to:
+  /// **'None of your addresses are holding {ticker}'**
+  String tkbNoAddressesHolding(String ticker);
+
+  /// No description provided for @tkbNoFungibleTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'No Fungible Tokens'**
+  String get tkbNoFungibleTokens;
+
+  /// No description provided for @tkbNoFungibleTokensBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have no fungible tokens with supply in any of your accounts.'**
+  String get tkbNoFungibleTokensBody;
+
+  /// No description provided for @tkbNoRequestHash.
+  ///
+  /// In en, this message translates to:
+  /// **'No request hash returned.'**
+  String get tkbNoRequestHash;
+
+  /// No description provided for @tkbNoUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'NO'**
+  String get tkbNoUpper;
+
+  /// No description provided for @tkbNoUtxos.
+  ///
+  /// In en, this message translates to:
+  /// **'No UTXOs'**
+  String get tkbNoUtxos;
+
+  /// No description provided for @tkbNoVaultAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'\'t have any Vault Accounts in this wallet'**
+  String get tkbNoVaultAccounts;
+
+  /// No description provided for @tkbNoVotesYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No votes yet.'**
+  String get tkbNoVotesYet;
+
+  /// No description provided for @tkbNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get tkbNone;
+
+  /// No description provided for @tkbNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Found.'**
+  String get tkbNotFound;
+
+  /// No description provided for @tkbOpenAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Asset'**
+  String get tkbOpenAsset;
+
+  /// No description provided for @tkbOpenFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Folder'**
+  String get tkbOpenFolder;
+
+  /// No description provided for @tkbOwnershipTransferInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership transfer initiated.'**
+  String get tkbOwnershipTransferInitiated;
+
+  /// No description provided for @tkbPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get tkbPassword;
+
+  /// No description provided for @tkbPendingWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have a pending withdrawal of {amount} vBTC to {destination}.\n\nWould you like to complete it?'**
+  String tkbPendingWithdrawalBody(String amount, String destination);
+
+  /// No description provided for @tkbPendingWithdrawalContractBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have a pending withdrawal for this contract. Would you like to complete it?'**
+  String get tkbPendingWithdrawalContractBody;
+
+  /// No description provided for @tkbPendingWithdrawalFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Withdrawal Found'**
+  String get tkbPendingWithdrawalFound;
+
+  /// No description provided for @tkbPercentages.
+  ///
+  /// In en, this message translates to:
+  /// **'Percentages'**
+  String get tkbPercentages;
+
+  /// No description provided for @tkbResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Result'**
+  String get tkbResult;
+
+  /// No description provided for @tkbResultFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Fail'**
+  String get tkbResultFail;
+
+  /// No description provided for @tkbResultPass.
+  ///
+  /// In en, this message translates to:
+  /// **'Pass'**
+  String get tkbResultPass;
+
+  /// No description provided for @tkbSelectVfxAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Select VFX Address'**
+  String get tkbSelectVfxAddress;
+
+  /// No description provided for @tkbSelectedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Address:'**
+  String get tkbSelectedAddress;
+
+  /// No description provided for @tkbSendAutomatically.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Automatically'**
+  String get tkbSendAutomatically;
+
+  /// No description provided for @tkbSendFundsTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Send funds to {address} (address copied to clipboard)'**
+  String tkbSendFundsTo(String address);
+
+  /// No description provided for @tkbSendManually.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Manually'**
+  String get tkbSendManually;
+
+  /// No description provided for @tkbSmartContractUidWithValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract UID: {uid}'**
+  String tkbSmartContractUidWithValue(String uid);
+
+  /// No description provided for @tkbToBtcAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'To BTC Address'**
+  String get tkbToBtcAddress;
+
+  /// No description provided for @tkbToVfxAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'To VFX Address'**
+  String get tkbToVfxAddress;
+
+  /// No description provided for @tkbTokenBalances.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Balances'**
+  String get tkbTokenBalances;
+
+  /// No description provided for @tkbTokenDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Details'**
+  String get tkbTokenDetails;
+
+  /// No description provided for @tkbTokenTopicCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Topic Created'**
+  String get tkbTokenTopicCreated;
+
+  /// No description provided for @tkbTopicUidLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'UID: {uid}'**
+  String tkbTopicUidLabel(String uid);
+
+  /// No description provided for @tkbTotalVotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Votes'**
+  String get tkbTotalVotes;
+
+  /// No description provided for @tkbTransactionBroadcastedBang.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Broadcasted!'**
+  String get tkbTransactionBroadcastedBang;
+
+  /// No description provided for @tkbTransactionHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Hash'**
+  String get tkbTransactionHash;
+
+  /// No description provided for @tkbTransactionHashCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Hash copied to clipboard'**
+  String get tkbTransactionHashCopied;
+
+  /// No description provided for @tkbTransferBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer BTC'**
+  String get tkbTransferBtc;
+
+  /// No description provided for @tkbTransferDomainFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Domain from {address}'**
+  String tkbTransferDomainFrom(String address);
+
+  /// No description provided for @tkbTransferOwnershipBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to transfer ownership of this vBTC token to {address}?'**
+  String tkbTransferOwnershipBody(String address);
+
+  /// No description provided for @tkbTransferOwnershipToReserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Ownership To Reserve/Protected Account'**
+  String get tkbTransferOwnershipToReserve;
+
+  /// No description provided for @tkbTransferOwnershipToReserveSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer the ownership of this token to your reserve/protected account.'**
+  String get tkbTransferOwnershipToReserveSubtitle;
+
+  /// No description provided for @tkbTransferPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Pending'**
+  String get tkbTransferPending;
+
+  /// No description provided for @tkbTransferToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Token'**
+  String get tkbTransferToken;
+
+  /// No description provided for @tkbTransferTokenOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Token Ownership'**
+  String get tkbTransferTokenOwnership;
+
+  /// No description provided for @tkbTransferTokenOwnershipSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer the ownership of this token to another VFX account.'**
+  String get tkbTransferTokenOwnershipSubtitle;
+
+  /// No description provided for @tkbTransferVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer vBTC'**
+  String get tkbTransferVbtc;
+
+  /// No description provided for @tkbTransferVbtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to transfer {amount} vBTC to {address}?'**
+  String tkbTransferVbtcBody(String amount, String address);
+
+  /// No description provided for @tkbTransferVbtcSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer a specific portion of the vBTC within the token to another VFX address.'**
+  String get tkbTransferVbtcSubtitle;
+
+  /// No description provided for @tkbTxBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'TX broadcasted!'**
+  String get tkbTxBroadcasted;
+
+  /// No description provided for @tkbUtxoAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address: {address}'**
+  String tkbUtxoAddress(String address);
+
+  /// No description provided for @tkbUtxoDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'TX ID: {txId}\nAmount:{amount}'**
+  String tkbUtxoDetails(String txId, String amount);
+
+  /// No description provided for @tkbUtxoUnused.
+  ///
+  /// In en, this message translates to:
+  /// **'Unused'**
+  String get tkbUtxoUnused;
+
+  /// No description provided for @tkbUtxoUsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Used'**
+  String get tkbUtxoUsed;
+
+  /// No description provided for @tkbVaultAccountPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Account Password'**
+  String get tkbVaultAccountPassword;
+
+  /// No description provided for @tkbVaultAuthorizeDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Since this is a Vault Account you\'\'ll need to authorize the download.'**
+  String get tkbVaultAuthorizeDownload;
+
+  /// No description provided for @tkbVaultCannotWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address'**
+  String get tkbVaultCannotWithdraw;
+
+  /// No description provided for @tkbVaultOwnedCannotAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Account owned tokens can not perform this action.'**
+  String get tkbVaultOwnedCannotAction;
+
+  /// No description provided for @tkbVbtcTransferBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC V2 Transfer TX Broadcasted. Hash: {hash}'**
+  String tkbVbtcTransferBroadcasted(String hash);
+
+  /// No description provided for @tkbVbtcZeroBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC tokens with zero balance can not be transferred.'**
+  String get tkbVbtcZeroBalance;
+
+  /// No description provided for @tkbVfxWalletRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'An VFX wallet is required for this functionality.'**
+  String get tkbVfxWalletRequired;
+
+  /// No description provided for @tkbVoteCounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote Counts'**
+  String get tkbVoteCounts;
+
+  /// No description provided for @tkbVotedOnBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'You voted {label} on block {block}.'**
+  String tkbVotedOnBlock(String label, String block);
+
+  /// No description provided for @tkbVotesNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Votes No'**
+  String get tkbVotesNo;
+
+  /// No description provided for @tkbVotesYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Votes Yes'**
+  String get tkbVotesYes;
+
+  /// No description provided for @tkbWalletControlsDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet will control transfer/delete ownership over this new domain.'**
+  String get tkbWalletControlsDomain;
+
+  /// No description provided for @tkbWithdrawBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw BTC'**
+  String get tkbWithdrawBtc;
+
+  /// No description provided for @tkbWithdrawBtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to withdraw {amount} BTC to {address}?'**
+  String tkbWithdrawBtcBody(String amount, String address);
+
+  /// No description provided for @tkbYesUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'YES'**
+  String get tkbYesUpper;
+
+  /// No description provided for @tkbYouHaveVoted.
+  ///
+  /// In en, this message translates to:
+  /// **'You have voted.'**
+  String get tkbYouHaveVoted;
+
+  /// No description provided for @tkbYourBalanceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Balance: {balance}'**
+  String tkbYourBalanceValue(String balance);
+
+  /// No description provided for @tkbYourBalanceVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Balance: {balance} vBTC{usd}'**
+  String tkbYourBalanceVbtc(String balance, String usd);
+
+  /// No description provided for @txpAccountBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Balance'**
+  String get txpAccountBalance;
+
+  /// No description provided for @txpAccountCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Created'**
+  String get txpAccountCreated;
+
+  /// No description provided for @txpActivateOnNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate on Network?'**
+  String get txpActivateOnNetwork;
+
+  /// No description provided for @txpActivateOnNetworkBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of 4 VFX (which is burned) plus TX fee to activate this Vault Account on the network.  Continue?'**
+  String get txpActivateOnNetworkBody;
+
+  /// No description provided for @txpAddBtcAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add BTC Account'**
+  String get txpAddBtcAccount;
+
+  /// No description provided for @txpAddNewAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add New Account'**
+  String get txpAddNewAccount;
+
+  /// No description provided for @txpAddVfxAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Add VFX Account'**
+  String get txpAddVfxAccount;
+
+  /// No description provided for @txpAddressCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Address copied'**
+  String get txpAddressCopied;
+
+  /// No description provided for @txpAddressCopiedClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Address copied to clipboard.'**
+  String get txpAddressCopiedClipboard;
+
+  /// No description provided for @txpAllAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'All Addresses'**
+  String get txpAllAddresses;
+
+  /// No description provided for @txpAmountCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount copied'**
+  String get txpAmountCopied;
+
+  /// No description provided for @txpAutoActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Activate?'**
+  String get txpAutoActivate;
+
+  /// No description provided for @txpAutoActivateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to automatically activate this account once the funds are received?'**
+  String get txpAutoActivateBody;
+
+  /// No description provided for @txpAutoActivateQueued.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto activate queued.'**
+  String get txpAutoActivateQueued;
+
+  /// No description provided for @txpBlockDiffAvg.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Diff Avg: {value}'**
+  String txpBlockDiffAvg(String value);
+
+  /// No description provided for @txpBlockLastDelay.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Last Delay: {value}'**
+  String txpBlockLastDelay(String value);
+
+  /// No description provided for @txpBlockLastReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Last Received: {value}'**
+  String txpBlockLastReceived(String value);
+
+  /// No description provided for @txpBlockNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Number'**
+  String get txpBlockNumber;
+
+  /// No description provided for @txpBlocksAveraged.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocks Averaged: {value}'**
+  String txpBlocksAveraged(String value);
+
+  /// No description provided for @txpBtcNoBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC account has no balance'**
+  String get txpBtcNoBalance;
+
+  /// No description provided for @txpChooseCoinType.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Coin Type'**
+  String get txpChooseCoinType;
+
+  /// No description provided for @txpChoosePaymentGateway.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Payment Gateway'**
+  String get txpChoosePaymentGateway;
+
+  /// No description provided for @txpClearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Filters'**
+  String get txpClearFilters;
+
+  /// No description provided for @txpCompleteMoonpayDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete MoonPay Deposit'**
+  String get txpCompleteMoonpayDeposit;
+
+  /// No description provided for @txpCompleteSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Sale'**
+  String get txpCompleteSale;
+
+  /// No description provided for @txpCompleteSaleConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to complete the sale of {scId} for {amount} VFX?'**
+  String txpCompleteSaleConfirmBody(String scId, String amount);
+
+  /// No description provided for @txpConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get txpConfirmPassword;
+
+  /// No description provided for @txpConfirmPasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password.'**
+  String get txpConfirmPasswordBody;
+
+  /// No description provided for @txpConfirmSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Send'**
+  String get txpConfirmSend;
+
+  /// No description provided for @txpConfirmSendBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount: {amount} {currency}\nTo: {toAddress}\nFrom: {fromAddress}\nFee Rate: {feeRate} sats/vB'**
+  String txpConfirmSendBody(String amount, String currency, String toAddress, String fromAddress, String feeRate);
+
+  /// No description provided for @txpCopyAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Address'**
+  String get txpCopyAddress;
+
+  /// No description provided for @txpCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get txpCreate;
+
+  /// No description provided for @txpCreateBtcAccountSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new BTC account'**
+  String get txpCreateBtcAccountSub;
+
+  /// No description provided for @txpCreateVfxAccountSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a new VFX account'**
+  String get txpCreateVfxAccountSub;
+
+  /// No description provided for @txpCryptoDotComOnRamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Crypto.com On-Ramp'**
+  String get txpCryptoDotComOnRamp;
+
+  /// No description provided for @txpData.
+  ///
+  /// In en, this message translates to:
+  /// **'Data'**
+  String get txpData;
+
+  /// No description provided for @txpDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get txpDate;
+
+  /// No description provided for @txpDepositAddressMoonpay.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit Address (MoonPay)'**
+  String get txpDepositAddressMoonpay;
+
+  /// No description provided for @txpDisclaimerAnd.
+  ///
+  /// In en, this message translates to:
+  /// **' and '**
+  String get txpDisclaimerAnd;
+
+  /// No description provided for @txpDisclaimerIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand that I will now be purchasing VFX or BTC native coin directly through {gateway} ('**
+  String txpDisclaimerIntro(String gateway);
+
+  /// No description provided for @txpDisclaimerMiddle.
+  ///
+  /// In en, this message translates to:
+  /// **'), which is a third-party services platform. By proceeding and procuring services from {gateway}, you acknowledge that you have read and agreed to {gateway}’s '**
+  String txpDisclaimerMiddle(String gateway);
+
+  /// No description provided for @txpDisclaimerOutro.
+  ///
+  /// In en, this message translates to:
+  /// **'. You additionally understand that the VerifiedX VFX Network is an autonomous and decentralized ecosystem and does not share in any fees whatsoever by you utilizing {gateway}’s services and does not take any responsibility for any issues that may affect your transaction with any third-party service provider at anytime. For any questions related to {gateway}’s services, please contact {gateway} at '**
+  String txpDisclaimerOutro(String gateway);
+
+  /// No description provided for @txpErrorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get txpErrorOccurred;
+
+  /// No description provided for @txpFundAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund Account'**
+  String get txpFundAccount;
+
+  /// No description provided for @txpFundVaultBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You must now fund your Vault Account with a minimum of 5 VFX. 4 VFX will be burned upon activation.'**
+  String get txpFundVaultBody;
+
+  /// No description provided for @txpFundVaultBodyShort.
+  ///
+  /// In en, this message translates to:
+  /// **'You must now fund your Vault Account with a minimum of 5 VFX.'**
+  String get txpFundVaultBodyShort;
+
+  /// No description provided for @txpFundsSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Funds Sent'**
+  String get txpFundsSent;
+
+  /// No description provided for @txpFundsSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} VFX has been sent to {address}.\n\nPlease wait for transaction to reflect and then activate your Vault Account.'**
+  String txpFundsSentBody(String amount, String address);
+
+  /// No description provided for @txpGetBtcNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Get \$BTC Now'**
+  String get txpGetBtcNow;
+
+  /// No description provided for @txpGetQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Quote'**
+  String get txpGetQuote;
+
+  /// No description provided for @txpGetVfxNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Get \$VFX Now'**
+  String get txpGetVfxNow;
+
+  /// No description provided for @txpImportBtcKeySub.
+  ///
+  /// In en, this message translates to:
+  /// **'Import an existing BTC private key'**
+  String get txpImportBtcKeySub;
+
+  /// No description provided for @txpImportVfxKeySub.
+  ///
+  /// In en, this message translates to:
+  /// **'Import an existing VFX private key'**
+  String get txpImportVfxKeySub;
+
+  /// No description provided for @txpManualDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual Deposit'**
+  String get txpManualDeposit;
+
+  /// No description provided for @txpManualDepositBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You can send this from another wallet by sending the exact amount ({amount} {currency}) to the deposit address above.'**
+  String txpManualDepositBody(String amount, String currency);
+
+  /// No description provided for @txpMeMarker.
+  ///
+  /// In en, this message translates to:
+  /// **'[ME]'**
+  String get txpMeMarker;
+
+  /// No description provided for @txpMinBalanceActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'A minimum balance of 5 VFX is required to activate.'**
+  String get txpMinBalanceActivate;
+
+  /// No description provided for @txpMoonpayManualMarked.
+  ///
+  /// In en, this message translates to:
+  /// **'MoonPay transaction marked as manual deposit'**
+  String get txpMoonpayManualMarked;
+
+  /// No description provided for @txpMustConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'You must confirm your password.'**
+  String get txpMustConfirmPassword;
+
+  /// No description provided for @txpNativeMoonpaySoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Native Moonpay Integration Activating Soon.'**
+  String get txpNativeMoonpaySoon;
+
+  /// No description provided for @txpNoAccountFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No account found'**
+  String get txpNoAccountFound;
+
+  /// No description provided for @txpNoAddressSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No address selected'**
+  String get txpNoAddressSelected;
+
+  /// No description provided for @txpNonce.
+  ///
+  /// In en, this message translates to:
+  /// **'Nonce'**
+  String get txpNonce;
+
+  /// No description provided for @txpNotAvailableOnPlatform.
+  ///
+  /// In en, this message translates to:
+  /// **'Not available on this platform'**
+  String get txpNotAvailableOnPlatform;
+
+  /// No description provided for @txpNotEnoughBtcFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough BTC to cover transaction + fee'**
+  String get txpNotEnoughBtcFee;
+
+  /// No description provided for @txpNotVaultAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a Vault Account'**
+  String get txpNotVaultAccount;
+
+  /// No description provided for @txpOffRampInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'To complete this off-ramp, send the exact BTC amount to the deposit address below:'**
+  String get txpOffRampInstructions;
+
+  /// No description provided for @txpOriginalTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Original TX'**
+  String get txpOriginalTx;
+
+  /// No description provided for @txpPasswordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get txpPasswordsDoNotMatch;
+
+  /// No description provided for @txpPleaseSendFundsTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Please send funds to {address}'**
+  String txpPleaseSendFundsTo(String address);
+
+  /// No description provided for @txpPrivacyPolicy.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get txpPrivacyPolicy;
+
+  /// No description provided for @txpRestoreCodeRecoveryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste in your RESTORE CODE to import the recovery account for this Vault Account.'**
+  String get txpRestoreCodeRecoveryBody;
+
+  /// No description provided for @txpScanAndPay.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan & Pay'**
+  String get txpScanAndPay;
+
+  /// No description provided for @txpSendManually.
+  ///
+  /// In en, this message translates to:
+  /// **'I have/will send manually'**
+  String get txpSendManually;
+
+  /// No description provided for @txpSendNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Send Now'**
+  String get txpSendNow;
+
+  /// No description provided for @txpSendingConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending:\n{amount} VFX\n\nTo:\n{toAddress}\n\nFrom:\n{fromAddress}'**
+  String txpSendingConfirmBody(String amount, String toAddress, String fromAddress);
+
+  /// No description provided for @txpSentToAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} {currency} sent to {address}'**
+  String txpSentToAddress(String amount, String currency, String address);
+
+  /// No description provided for @txpSetupBtcAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup a Bitcoin account'**
+  String get txpSetupBtcAccount;
+
+  /// No description provided for @txpSetupVaultAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Vault Account'**
+  String get txpSetupVaultAccount;
+
+  /// No description provided for @txpSetupVaultAccountBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a password to continue. You must remember this password as it will be required for any transaction with this Vault Account.'**
+  String get txpSetupVaultAccountBody;
+
+  /// No description provided for @txpSetupVfxAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup a VerifiedX account'**
+  String get txpSetupVfxAccount;
+
+  /// No description provided for @txpStatusWithValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: {value}'**
+  String txpStatusWithValue(String value);
+
+  /// No description provided for @txpStripeCreditCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe (Credit Card)'**
+  String get txpStripeCreditCard;
+
+  /// No description provided for @txpSufficientBalanceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an account with a sufficient balance.\n\nWould you like to send 5 VFX from:\n{address}\n[Balance: {balance} VFX]?'**
+  String txpSufficientBalanceBody(String address, String balance);
+
+  /// No description provided for @txpTermsOfUse.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get txpTermsOfUse;
+
+  /// No description provided for @txpTestnetFaucet.
+  ///
+  /// In en, this message translates to:
+  /// **'Testnet Faucet'**
+  String get txpTestnetFaucet;
+
+  /// No description provided for @txpTestnetFaucetNoTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'Testnet Faucet does not have any terms. Have fun!'**
+  String get txpTestnetFaucetNoTerms;
+
+  /// No description provided for @txpTileAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount: '**
+  String get txpTileAmountLabel;
+
+  /// No description provided for @txpTileDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date: {date}'**
+  String txpTileDateLabel(String date);
+
+  /// No description provided for @txpTileHashLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hash: {hash}'**
+  String txpTileHashLabel(String hash);
+
+  /// No description provided for @txpTileSettlementDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Settlement Date: {date}'**
+  String txpTileSettlementDateLabel(String date);
+
+  /// No description provided for @txpTileStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: '**
+  String get txpTileStatusLabel;
+
+  /// No description provided for @txpTileTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type: '**
+  String get txpTileTypeLabel;
+
+  /// No description provided for @txpTileViewData.
+  ///
+  /// In en, this message translates to:
+  /// **'View Data'**
+  String get txpTileViewData;
+
+  /// No description provided for @txpTimeSinceLastBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Time Since Last Block: {value}s'**
+  String txpTimeSinceLastBlock(String value);
+
+  /// No description provided for @txpTransactionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction failed'**
+  String get txpTransactionFailed;
+
+  /// No description provided for @txpTransactionHashLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Hash'**
+  String get txpTransactionHashLabel;
+
+  /// No description provided for @txpTransactionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Sent'**
+  String get txpTransactionSent;
+
+  /// No description provided for @txpTxDetailTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Detail'**
+  String get txpTxDetailTitle;
+
+  /// No description provided for @txpTxFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Filters'**
+  String get txpTxFilters;
+
+  /// No description provided for @txpTxHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Tx Hash'**
+  String get txpTxHash;
+
+  /// No description provided for @txpTxHashCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Tx hash copied'**
+  String get txpTxHashCopied;
+
+  /// No description provided for @txpTxType.
+  ///
+  /// In en, this message translates to:
+  /// **'Tx Type'**
+  String get txpTxType;
+
+  /// No description provided for @txpTxTypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tx Type{suffix}:'**
+  String txpTxTypeLabel(String suffix);
+
+  /// No description provided for @txpValueCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'\'{value}\' Copied to clipboard'**
+  String txpValueCopied(String value);
+
+  /// No description provided for @txpVaultActivationSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Account activation transaction sent.\n\nPlease wait for it to reflect as \"Activated\".'**
+  String get txpVaultActivationSent;
+
+  /// No description provided for @txpVfxAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Amount'**
+  String get txpVfxAmount;
+
+  /// No description provided for @txpVfxOffRampSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Off Ramp feature coming soon'**
+  String get txpVfxOffRampSoon;
+
+  /// No description provided for @txpVfxQuote.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Quote'**
+  String get txpVfxQuote;
+
+  /// No description provided for @txpVfxQuoteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{amountVfx} VFX for \${amountUsd} USD\nWould you like to continue?'**
+  String txpVfxQuoteBody(String amountVfx, String amountUsd);
+
+  /// No description provided for @txpWalletDetailsBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Here are your wallet details. Please ensure to back up your private key in a safe place.'**
+  String get txpWalletDetailsBackup;
+
+  /// No description provided for @txpWalletVersionInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Wallet{envTag}\nVersion {version} ({nickname})'**
+  String txpWalletVersionInfo(String envTag, String version, String nickname);
+
+  /// No description provided for @tkbHashLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hash: {hash}'**
+  String tkbHashLabel(String hash);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

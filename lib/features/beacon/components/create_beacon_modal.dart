@@ -7,6 +7,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../providers/beacon_form_provider.dart';
@@ -19,13 +20,14 @@ class CreateBeaconModal extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(beaconFormProvider.notifier);
     final model = ref.watch(beaconFormProvider);
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       withClose: true,
       withDecor: false,
       children: [
-        const Text("Create Beacon"),
+        Text(l10n.beaconCreateTitle),
         Text(
-          "Create a beacon if you want to be the owner of the relay of assets. Setup your wallet as a beacon to partipate in media transferring on the VFX network. The name is a friendly name only visible to you. You can configure a specific port or just use the default setting. You can also configure whether your beacon is private and how long assets should remain cached.",
+          l10n.beaconCreateBodyExplanation,
           style: Theme.of(context).textTheme.bodySmall,
         ),
         Form(
@@ -39,8 +41,8 @@ class CreateBeaconModal extends BaseComponent {
                     child: TextFormField(
                       controller: provider.nameController,
                       validator: provider.nameValidator,
-                      decoration: const InputDecoration(
-                        label: Text("Beacon Name"),
+                      decoration: InputDecoration(
+                        label: Text(l10n.beaconNameLabel),
                       ),
                       inputFormatters: [
                         FilteringTextInputFormatter.allow(
@@ -53,8 +55,8 @@ class CreateBeaconModal extends BaseComponent {
                     width: 240,
                     child: TextFormField(
                       controller: provider.portController,
-                      decoration: const InputDecoration(
-                          label: Text("Port (leave blank for default)")),
+                      decoration: InputDecoration(
+                          label: Text(l10n.beaconPortLabel)),
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ),
@@ -63,9 +65,8 @@ class CreateBeaconModal extends BaseComponent {
                     width: 240,
                     child: TextFormField(
                       controller: provider.periodController,
-                      decoration: const InputDecoration(
-                          label:
-                              Text("Days to retain files (0 for unlimited)")),
+                      decoration: InputDecoration(
+                          label: Text(l10n.beaconRetainDaysLabel)),
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                   ),
@@ -76,14 +77,14 @@ class CreateBeaconModal extends BaseComponent {
                 controlAffinity: ListTileControlAffinity.leading,
                 value: model.isBeaconPrivate,
                 onChanged: provider.setIsPrivate,
-                title: const Text("Make Private"),
+                title: Text(l10n.beaconMakePrivate),
               ),
               CheckboxListTile(
                 contentPadding: EdgeInsets.zero,
                 controlAffinity: ListTileControlAffinity.leading,
                 value: model.autoDeleteAfterDownload,
                 onChanged: provider.setAutoDelete,
-                title: const Text("Auto Delete After Download"),
+                title: Text(l10n.beaconAutoDelete),
               )
             ],
           ),
@@ -95,7 +96,7 @@ class CreateBeaconModal extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppButton(
-              label: "Cancel",
+              label: l10n.beaconCancel,
               type: AppButtonType.Text,
               variant: AppColorVariant.Light,
               onPressed: () {
@@ -105,7 +106,7 @@ class CreateBeaconModal extends BaseComponent {
               },
             ),
             AppButton(
-              label: "Create",
+              label: l10n.beaconCreate,
               variant: AppColorVariant.Success,
               onPressed: () async {
                 final success = await provider.submit();
@@ -115,11 +116,10 @@ class CreateBeaconModal extends BaseComponent {
                 }
 
                 final confirmed = await ConfirmDialog.show(
-                  title: "Beacon Created",
-                  body:
-                      "A CLI restart is required for this to take affect.\n\nRestart Now?",
-                  confirmText: "Restart",
-                  cancelText: "Later",
+                  title: l10n.beaconCreatedTitle,
+                  body: l10n.beaconCreatedBody,
+                  confirmText: l10n.beaconRestartNow,
+                  cancelText: l10n.beaconLater,
                 );
 
                 if (confirmed == true) {

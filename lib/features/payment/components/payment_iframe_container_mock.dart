@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
+
 class WebPaymentIFrameContainer extends StatefulWidget {
   final String fiatType;
   final double coinAmount;
@@ -25,6 +27,7 @@ class WebPaymentIFrameContainer extends StatefulWidget {
 class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
   @override
   Widget build(BuildContext context) {
-    return Text("Not available on this platform");
+    final l10n = AppLocalizations.of(context);
+    return Text(l10n.txpNotAvailableOnPlatform);
   }
 }

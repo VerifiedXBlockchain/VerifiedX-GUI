@@ -6,6 +6,7 @@ import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/features/payment/models/onramp_purchase_details.dart';
 import 'package:rbx_wallet/features/payment/services/butterfly_service.dart';
+import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
 
 class OnrampPurchaseDetailsWidget extends ConsumerStatefulWidget {
   final String purchaseUuid;
@@ -66,6 +67,7 @@ class _OnrampPurchaseDetailsWidgetState
     }
 
     final p = purchase!;
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -77,7 +79,7 @@ class _OnrampPurchaseDetailsWidgetState
         SizedBox(
           height: 8,
         ),
-        Text("Status: ${p.statusLabel}"),
+        Text(l10n.txpStatusWithValue(p.statusLabel)),
       ],
     );
   }

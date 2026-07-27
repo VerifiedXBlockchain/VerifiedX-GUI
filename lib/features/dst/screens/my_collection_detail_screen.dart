@@ -13,6 +13,7 @@ import '../providers/collection_form_provider.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/app_router.gr.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class MyCollectionDetailScreen extends BaseScreen {
   final int collectionId;
@@ -23,6 +24,7 @@ class MyCollectionDetailScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(storeDetailProvider(collectionId));
 
     return data.when(
@@ -41,7 +43,7 @@ class MyCollectionDetailScreen extends BaseScreen {
                 AutoRouter.of(context).push(CreateListingContainerScreenRoute(collectionId: collectionId));
               },
               child: Text(
-                "Create Listing",
+                l10n.shopCreateListing,
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -53,14 +55,15 @@ class MyCollectionDetailScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(storeDetailProvider(collectionId));
 
     return data.when(
       loading: () => CenteredLoader(),
-      error: (_, __) => Center(child: Text("An error occurred.")),
+      error: (_, __) => Center(child: Text(l10n.mktErrorOccurred)),
       data: (store) {
         if (store == null) {
-          return Center(child: Text("An error occurred."));
+          return Center(child: Text(l10n.mktErrorOccurred));
         }
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -88,7 +91,7 @@ class MyCollectionDetailScreen extends BaseScreen {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   AppButton(
-                    label: 'Edit Collection',
+                    label: l10n.mktEditCollection,
                     icon: Icons.edit,
                     variant: AppColorVariant.Light,
                     onPressed: () {
@@ -97,7 +100,7 @@ class MyCollectionDetailScreen extends BaseScreen {
                     },
                   ),
                   AppButton(
-                    label: 'Create Listing',
+                    label: l10n.shopCreateListing,
                     icon: Icons.add,
                     variant: AppColorVariant.Success,
                     onPressed: () {
@@ -105,21 +108,21 @@ class MyCollectionDetailScreen extends BaseScreen {
                     },
                   ),
                   AppButton(
-                    label: 'Delete Collection',
+                    label: l10n.dstDeleteCollection,
                     variant: AppColorVariant.Danger,
                     icon: Icons.delete,
                     onPressed: () async {
                       final confirmed = await ConfirmDialog.show(
-                        title: "Delete Collection",
-                        body: "Are you sure you want to delete this store?",
+                        title: l10n.dstDeleteCollection,
+                        body: l10n.mktDeleteStoreConfirmBody,
                         destructive: true,
-                        confirmText: "Delete",
-                        cancelText: "Cancel",
+                        confirmText: l10n.actionDelete,
+                        cancelText: l10n.actionCancel,
                       );
 
                       if (confirmed == true) {
                         ref.read(storeFormProvider.notifier).delete(context, store);
-                        Toast.message("Collection deleted.");
+                        Toast.message(l10n.mktCollectionDeletedToast);
                       }
                     },
                   )

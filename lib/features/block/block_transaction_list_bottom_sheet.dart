@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/base_component.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../transactions/models/transaction.dart';
 
 class BlockTransactionListBottomSheet extends BaseComponent {
@@ -23,7 +24,7 @@ class BlockTransactionListBottomSheet extends BaseComponent {
               final tx = transactions[index];
               return ListTile(
                 title: Text("${tx.fromAddress} => ${tx.toAddress}"),
-                subtitle: Text("Hash: ${tx.hash}"),
+                subtitle: Text(AppLocalizations.of(context).tkbHashLabel(tx.hash)),
                 trailing: Text("${tx.amount} VFX"),
               );
             },

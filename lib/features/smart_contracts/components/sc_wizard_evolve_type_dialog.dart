@@ -4,6 +4,7 @@ import '../../../core/components/buttons.dart';
 import 'sc_creator/common/help_button.dart';
 import '../features/evolve/evolve.dart';
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardEvolveTypeDialog extends BaseComponent {
   const ScWizardEvolveTypeDialog({
@@ -12,10 +13,11 @@ class ScWizardEvolveTypeDialog extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [const Text("Evolve Type"), const HelpButton(HelpType.evolveType)],
+        children: [Text(l10n.scwEvolveType), const HelpButton(HelpType.evolveType)],
       ),
       actionsAlignment: MainAxisAlignment.start,
       content: SizedBox(
@@ -26,19 +28,19 @@ class ScWizardEvolveTypeDialog extends BaseComponent {
           runSpacing: 8.0,
           children: [
             AppButton(
-              label: "Date/Time",
+              label: l10n.scwEvolveTypeDateTime,
               onPressed: () {
                 Navigator.of(context).pop(EvolveType.time);
               },
             ),
             AppButton(
-              label: "Block Height",
+              label: l10n.scwEvolveTypeBlockHeight,
               onPressed: () {
                 Navigator.of(context).pop(EvolveType.blockHeight);
               },
             ),
             AppButton(
-              label: "Manual Only",
+              label: l10n.scwEvolveTypeManualOnly,
               onPressed: () {
                 Navigator.of(context).pop(EvolveType.manualOnly);
               },
@@ -51,9 +53,9 @@ class ScWizardEvolveTypeDialog extends BaseComponent {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text(
-            "Cancel",
-            style: TextStyle(
+          child: Text(
+            l10n.actionCancel,
+            style: const TextStyle(
               color: Colors.white54,
             ),
           ),

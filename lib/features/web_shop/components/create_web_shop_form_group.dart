@@ -7,6 +7,7 @@ import '../../../utils/validation.dart';
 import '../../smart_contracts/components/sc_creator/common/form_group_container.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../providers/web_shop_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateWebShopFormGroup extends BaseComponent {
   const CreateWebShopFormGroup({Key? key}) : super(key: key);
@@ -52,21 +53,22 @@ class CreateWebShopFormGroup extends BaseComponent {
   }
 
   Future<String?> chooseAddress(BuildContext context, WidgetRef ref, WebShopFormProvider formProvider) async {
+    final l10n = AppLocalizations.of(context);
     final wallets = ref.read(walletListProvider);
 
     final address = await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Choose an Address"),
+            title: Text(l10n.mktChooseAddressTitle),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(null);
                 },
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.white60),
+                child: Text(
+                  l10n.actionCancel,
+                  style: const TextStyle(color: Colors.white60),
                 ),
               )
             ],
@@ -100,15 +102,16 @@ class _DecShopName extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webShopFormProvider.notifier);
     return TextFormField(
       controller: provider.nameController,
       onChanged: provider.updateName,
       validator: (value) => formValidatorNotEmpty(value, "Shop Name"),
       decoration: InputDecoration(
-        label: const Text(
-          "Shop Name",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktShopNameLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -122,6 +125,7 @@ class _DecUrl extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webShopFormProvider.notifier);
     return TextFormField(
       maxLength: 62,
@@ -133,9 +137,9 @@ class _DecUrl extends BaseComponent {
       ],
       validator: (value) => formValidatorNotEmpty(value, "Shop Identifier"),
       decoration: InputDecoration(
-        label: const Text(
-          "Shop Identifier",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktShopIdentifierLabel,
+          style: const TextStyle(color: Colors.white),
         ),
         hintText: "MyNewShop",
         prefixText: "vfx://",
@@ -151,6 +155,7 @@ class _DecShopDescription extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webShopFormProvider.notifier);
     return TextFormField(
       controller: provider.descriptionController,
@@ -158,9 +163,9 @@ class _DecShopDescription extends BaseComponent {
       validator: (value) => formValidatorNotEmpty(value, "Shop Description"),
       maxLines: 3,
       decoration: InputDecoration(
-        label: const Text(
-          "Shop Description",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktShopDescriptionLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );

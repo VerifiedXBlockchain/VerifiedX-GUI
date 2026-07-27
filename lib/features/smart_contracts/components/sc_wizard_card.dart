@@ -28,6 +28,7 @@ import 'sc_creator/common/help_button.dart';
 import 'sc_wizard_asset_preview.dart';
 import 'sc_wizard_royalty_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizedCard extends BaseComponent {
   final int index;
@@ -42,6 +43,7 @@ class ScWizedCard extends BaseComponent {
     final item = ref.watch(scWizardProvider)[index];
 
     final entry = item.entry;
+    final l10n = AppLocalizations.of(context);
     return Card(
       color: Colors.black54,
       child: Padding(
@@ -57,7 +59,7 @@ class ScWizedCard extends BaseComponent {
                   children: [
                     Expanded(
                       child: Text(
-                        entry.name.isEmpty ? "Name" : entry.name,
+                        entry.name.isEmpty ? l10n.scwName : entry.name,
                         style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                               color: entry.name.isEmpty ? Colors.white54 : Colors.white,
                             ),
@@ -70,9 +72,9 @@ class ScWizedCard extends BaseComponent {
                       onPressed: () async {
                         final value = await PromptModal.show(
                           contextOverride: context,
-                          title: entry.name.isEmpty ? "Add Name" : "Edit Name",
+                          title: entry.name.isEmpty ? l10n.scwAddName : l10n.scwEditName,
                           validator: (value) => formValidatorNotEmpty(value, "Name"),
-                          labelText: "Name",
+                          labelText: l10n.scwName,
                           initialValue: entry.name,
                         );
                         if (value != null && value.isNotEmpty) {
@@ -95,7 +97,7 @@ class ScWizedCard extends BaseComponent {
                   children: [
                     Expanded(
                       child: Text(
-                        "Quantity: ${entry.quantity}",
+                        l10n.scwQuantityValue(entry.quantity),
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white),
                       ),
                     ),
@@ -106,9 +108,9 @@ class ScWizedCard extends BaseComponent {
                       onPressed: () async {
                         String? value = await PromptModal.show(
                           contextOverride: context,
-                          title: "Quantity to Mint",
+                          title: l10n.scwQuantityToMint,
                           validator: (value) => formValidatorNotEmpty(value, "Quantity"),
-                          labelText: "Quantity",
+                          labelText: l10n.scwQuantity,
                           initialValue: entry.quantity.toString(),
                           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                         );
@@ -125,12 +127,12 @@ class ScWizedCard extends BaseComponent {
                         int v = int.tryParse(value) ?? 1;
                         if (v < 1) {
                           v = 1;
-                          Toast.error("Min quantity is 1.");
+                          Toast.error(l10n.scwMinQuantity);
                         }
 
                         if (v > 100) {
                           v = 100;
-                          Toast.error("Max quantity is 100.");
+                          Toast.error(l10n.scwMaxQuantity);
                         }
 
                         provider.updateQuantity(item.index, v);
@@ -158,7 +160,7 @@ class ScWizedCard extends BaseComponent {
                           ? Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text("Primary Asset"),
+                                Text(l10n.scwPrimaryAsset),
                                 FileSelector(
                                   transparentBackground: true,
                                   asset: entry.primaryAsset,
@@ -207,10 +209,10 @@ class ScWizedCard extends BaseComponent {
                                           onPressed: () async {
                                             final confirmed = await ConfirmDialog.show(
                                               context: context,
-                                              title: "Delete Primary Asset?",
-                                              body: "Are you sure you want to delete the primary asset?",
-                                              confirmText: "Delete",
-                                              cancelText: "Cancel",
+                                              title: l10n.scwDeletePrimaryAssetTitle,
+                                              body: l10n.scwDeletePrimaryAssetBody,
+                                              confirmText: l10n.actionDelete,
+                                              cancelText: l10n.actionCancel,
                                               destructive: true,
                                             );
 
@@ -231,7 +233,7 @@ class ScWizedCard extends BaseComponent {
                   children: [
                     Expanded(
                       child: Text(
-                        entry.creatorName.isEmpty ? "Creator Name" : "Creator: ${entry.creatorName}",
+                        entry.creatorName.isEmpty ? l10n.scwCreatorName : l10n.scwCreatorValue(entry.creatorName),
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: entry.creatorName.isEmpty ? Colors.white54 : Colors.white,
                               fontWeight: FontWeight.w600,
@@ -245,9 +247,9 @@ class ScWizedCard extends BaseComponent {
                       onPressed: () async {
                         final value = await PromptModal.show(
                           contextOverride: context,
-                          title: entry.creatorName.isEmpty ? "Add Creator Name" : "Edit Creator Name",
+                          title: entry.creatorName.isEmpty ? l10n.scwAddCreatorName : l10n.scwEditCreatorName,
                           validator: (value) => formValidatorNotEmpty(value, "Creator Name"),
-                          labelText: "Creator Name",
+                          labelText: l10n.scwCreatorName,
                           initialValue: entry.creatorName,
                         );
                         if (value != null && value.isNotEmpty) {
@@ -271,7 +273,7 @@ class ScWizedCard extends BaseComponent {
                   children: [
                     Expanded(
                       child: Text(
-                        entry.description.isEmpty ? "Description" : entry.description,
+                        entry.description.isEmpty ? l10n.scwDescription : entry.description,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -286,9 +288,9 @@ class ScWizedCard extends BaseComponent {
                       onPressed: () async {
                         final value = await PromptModal.show(
                           contextOverride: context,
-                          title: entry.name.isEmpty ? "Add Description" : "Edit Description",
+                          title: entry.name.isEmpty ? l10n.scwAddDescription : l10n.scwEditDescription,
                           validator: (value) => formValidatorNotEmpty(value, "Description"),
-                          labelText: "Description",
+                          labelText: l10n.scwDescription,
                           initialValue: entry.description,
                           lines: 3,
                         );
@@ -313,7 +315,7 @@ class ScWizedCard extends BaseComponent {
                   children: [
                     Expanded(
                       child: Text(
-                        "Royalty",
+                        l10n.scwRoyaltyTitle,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: entry.royalty == null ? Colors.white54 : Colors.white,
                             ),
@@ -346,10 +348,10 @@ class ScWizedCard extends BaseComponent {
                         constraints: const BoxConstraints(),
                         onPressed: () async {
                           final confirmed = await ConfirmDialog.show(
-                            title: "Remove Royalty?",
-                            body: "Are you sure you want to remove the royalty?",
-                            confirmText: "Remove",
-                            cancelText: "Cancel",
+                            title: l10n.scwRemoveRoyaltyTitle,
+                            body: l10n.scwRemoveRoyaltyBody,
+                            confirmText: l10n.scwRemove,
+                            cancelText: l10n.actionCancel,
                             destructive: true,
                           );
 
@@ -366,7 +368,7 @@ class ScWizedCard extends BaseComponent {
                 ),
                 if (entry.royalty != null)
                   Text(
-                    "${entry.royalty!.amountWithSuffix} to ${entry.royalty!.address}",
+                    l10n.scwRoyaltyToAddress(entry.royalty!.amountWithSuffix, entry.royalty!.address),
                     style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 11),
                   ),
                 const Divider(),
@@ -374,7 +376,7 @@ class ScWizedCard extends BaseComponent {
                   children: [
                     Expanded(
                       child: Text(
-                        "Additional Assets",
+                        l10n.scwAdditionalAssets,
                         style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                               color: entry.additionalAssets.isEmpty ? Colors.white54 : Colors.white,
                             ),
@@ -470,10 +472,10 @@ class ScWizedCard extends BaseComponent {
                                   constraints: const BoxConstraints(),
                                   onPressed: () async {
                                     final confirmed = await ConfirmDialog.show(
-                                      title: "Remove Asset?",
-                                      body: "Are you sure you want to remove this additional asset?",
-                                      confirmText: "Remove",
-                                      cancelText: "Cancel",
+                                      title: l10n.scwRemoveAssetTitle,
+                                      body: l10n.scwRemoveAssetBody,
+                                      confirmText: l10n.scwRemove,
+                                      cancelText: l10n.actionCancel,
                                       destructive: true,
                                     );
 
@@ -501,7 +503,7 @@ class ScWizedCard extends BaseComponent {
                       children: [
                         Expanded(
                           child: Text(
-                            entry.evolve.phases.isEmpty ? "Evolve" : "Evolve (${entry.evolve.typeLabel})",
+                            entry.evolve.phases.isEmpty ? l10n.scwEvolve : l10n.scwEvolveWithType(entry.evolve.typeLabel),
                             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                   color: entry.evolve.phases.isEmpty ? Colors.white54 : Colors.white,
                                 ),
@@ -555,17 +557,17 @@ class ScWizedCard extends BaseComponent {
                                 padding: const EdgeInsets.symmetric(vertical: 6.0),
                                 child: Row(
                                   children: [
-                                    Expanded(child: Text('Phase #${i + 1}: ${phase.name}')),
+                                    Expanded(child: Text(l10n.scwPhaseLabel(i + 1, phase.name))),
                                     IconButton(
                                       visualDensity: VisualDensity.compact,
                                       padding: EdgeInsets.zero,
                                       constraints: const BoxConstraints(),
                                       onPressed: () async {
                                         final confirmed = await ConfirmDialog.show(
-                                          title: "Remove Phase?",
-                                          body: "Are you sure you want to remove this evolution phase?",
-                                          confirmText: "Remove",
-                                          cancelText: "Cancel",
+                                          title: l10n.scwRemovePhaseTitle,
+                                          body: l10n.scwRemovePhaseBody,
+                                          confirmText: l10n.scwRemove,
+                                          cancelText: l10n.actionCancel,
                                           destructive: true,
                                         );
 
@@ -599,13 +601,14 @@ class ScWizedCard extends BaseComponent {
   }
 
   Widget _showProperties(BuildContext context, BulkSmartContractEntry entry, WidgetRef ref, ScWizardItem item, ScWizardProvider provider) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: Text(
-                "Properties",
+                l10n.scwProperties,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: entry.evolve.phases.isEmpty ? Colors.white54 : Colors.white,
                     ),
@@ -694,10 +697,10 @@ class ScWizedCard extends BaseComponent {
                           constraints: const BoxConstraints(),
                           onPressed: () async {
                             final confirmed = await ConfirmDialog.show(
-                              title: "Remove Property?",
-                              body: "Are you sure you want to remove this property?",
-                              confirmText: "Remove",
-                              cancelText: "Cancel",
+                              title: l10n.scwRemovePropertyTitle,
+                              body: l10n.scwRemovePropertyBody,
+                              confirmText: l10n.scwRemove,
+                              cancelText: l10n.actionCancel,
                               destructive: true,
                             );
 

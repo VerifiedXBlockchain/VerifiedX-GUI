@@ -3592,4 +3592,2026 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get dialogSubmit => 'Enviar';
+
+  @override
+  String get govAdjAdditionalLinksLabel => 'Enlaces adicionales: ';
+
+  @override
+  String get govAdjBandwidthLabel => 'Ancho de banda (TB): ';
+
+  @override
+  String get govAdjBandwidthUnlimited => 'Ilimitado';
+
+  @override
+  String get govAdjCpuCoresLabel => 'Núcleos de CPU: ';
+
+  @override
+  String get govAdjCpuLabel => 'CPU: ';
+
+  @override
+  String get govAdjCpuThreadsLabel => 'Hilos de CPU: ';
+
+  @override
+  String get govAdjGithubLinkLabel => 'Enlace de Github: ';
+
+  @override
+  String get govAdjHdSizeLabel => 'Tamaño del disco: ';
+
+  @override
+  String get govAdjInternetDownLabel => 'Velocidad de bajada (Gbps): ';
+
+  @override
+  String get govAdjInternetUpLabel => 'Velocidad de subida (Gbps): ';
+
+  @override
+  String get govAdjIpAddressLabel => 'Dirección IP del adjudicador propuesto: ';
+
+  @override
+  String get govAdjMachineProviderLabel => 'Proveedor de la máquina: ';
+
+  @override
+  String get govAdjMachineTypeLabel => 'Tipo de máquina: ';
+
+  @override
+  String get govAdjOperatingSystemLabel => 'Sistema operativo: ';
+
+  @override
+  String get govAdjRamLabel => 'RAM (GB): ';
+
+  @override
+  String get govAdjReasonLabel => 'Razones para ser agregado como adjudicador: ';
+
+  @override
+  String get govAdjTechnicalBackgroundLabel => 'Experiencia técnica: ';
+
+  @override
+  String get govAdjVfxAddressLabel => 'Dirección VFX del adjudicador propuesto: ';
+
+  @override
+  String govVoteBlock(int height) {
+    return 'Bloque $height';
+  }
+
+  @override
+  String get hnavActivatingSoon => 'Se activará pronto.';
+
+  @override
+  String get hnavAgreeAndClose => 'Aceptar y cerrar';
+
+  @override
+  String get hnavAllMyTokens => 'Todos mis tokens';
+
+  @override
+  String hnavBackupKeysSubtitle(String vaultSuffix) {
+    return 'Exporta y guarda todas las claves privadas y direcciones de tu VFX$vaultSuffix y BTC en un archivo de texto.';
+  }
+
+  @override
+  String get hnavBackupLabel => 'Copia de seguridad';
+
+  @override
+  String get hnavBackupMediaSubtitle => 'Comprime y exporta los archivos multimedia de tus NFT.';
+
+  @override
+  String hnavBlockNumber(String height) {
+    return 'Bloque $height';
+  }
+
+  @override
+  String get hnavBtcInactive => 'BTC inactivo';
+
+  @override
+  String get hnavBtcLoading => 'Cargando BTC';
+
+  @override
+  String get hnavBtcLoginWarningBody => 'Ten en cuenta que si inicias sesión con una clave privada BTC, y esta clave se generó originalmente con un mecanismo de inicio de sesión distinto, los pares de claves de tu cuenta VFX/de bóveda no coincidirán con tu inicio de sesión anterior, ya que las claves privadas no son reversibles.';
+
+  @override
+  String get hnavBtcOffline => 'BTC sin conexión';
+
+  @override
+  String get hnavBtcOnline => 'BTC en línea';
+
+  @override
+  String get hnavCliInactive => 'CLI inactivo';
+
+  @override
+  String get hnavCloseRecoveryPhraseBody => '¿Seguro que copiaste tu frase de recuperación en un lugar seguro?';
+
+  @override
+  String get hnavCloseRecoveryPhraseTitle => '¿Cerrar la frase de recuperación?';
+
+  @override
+  String get hnavConfigAccountUnlockTime => 'Tiempo de desbloqueo de la cuenta';
+
+  @override
+  String get hnavConfigAllowedExtensionTypes => 'Tipos de extensión permitidos';
+
+  @override
+  String get hnavConfigApiCallUrl => 'URL de llamada a la API';
+
+  @override
+  String get hnavConfigApiPort => 'Puerto de la API';
+
+  @override
+  String get hnavConfigAutoDownloadNft => 'Descargar automáticamente los archivos de NFT';
+
+  @override
+  String get hnavConfigHeader => 'Configuración';
+
+  @override
+  String get hnavConfigIgnoreIncomingNfts => 'Ignorar NFTs entrantes';
+
+  @override
+  String get hnavConfigMotherAddress => 'Dirección Mother';
+
+  @override
+  String get hnavConfigMotherPassword => 'Contraseña Mother';
+
+  @override
+  String get hnavConfigNftTimeout => 'Tiempo de espera de NFT';
+
+  @override
+  String get hnavConfigPasswordClearTime => 'Tiempo para borrar la contraseña';
+
+  @override
+  String get hnavConfigRejectedExtensionTypes => 'Tipos de extensión de activos rechazados';
+
+  @override
+  String get hnavConfirmCreateMnemonicBody => '¿Seguro que quieres crear una cuenta con mnemónico?';
+
+  @override
+  String get hnavCopyRecoveryPhraseInstruction => 'Copia tu frase de recuperación en un lugar seguro.';
+
+  @override
+  String get hnavCopyToClipboard => 'Copiar al portapapeles';
+
+  @override
+  String get hnavCouldNotGenerateKeypair => 'No se pudo generar el par de claves';
+
+  @override
+  String get hnavCreateNewMnemonic => 'Crear mnemónico nuevo';
+
+  @override
+  String get hnavCurrencyAll => 'Todas';
+
+  @override
+  String get hnavDecryptAccountKeysBody => 'Ingresa la contraseña de esta cuenta para descifrar y ver sus claves privadas.';
+
+  @override
+  String get hnavDecryptionFailedCheckPassword => 'Falló el descifrado. Revisa tu contraseña.';
+
+  @override
+  String get hnavEncryptGeneratedMnemonicMessage => 'Esta contraseña cifrará las claves del mnemónico que generaste.';
+
+  @override
+  String get hnavEncryptImportedBtcPrivateKeyMessage => 'Esta contraseña cifrará tu clave privada BTC importada.';
+
+  @override
+  String get hnavEncryptImportedPrivateKeyMessage => 'Esta contraseña cifrará tu clave privada importada.';
+
+  @override
+  String get hnavEncryptRecoveredMnemonicMessage => 'Esta contraseña cifrará las claves del mnemónico que recuperaste.';
+
+  @override
+  String get hnavEnterAccountPasswordTitle => 'Ingresa la contraseña de la cuenta';
+
+  @override
+  String get hnavEnterBtcAddressHint => 'Ingresa tu dirección BTC';
+
+  @override
+  String get hnavEnterBtcPrivateKeyOrWif => 'Ingresa tu clave privada BTC o clave WIF:';
+
+  @override
+  String get hnavEnterPrivateKeyHint => 'Ingresa tu clave privada';
+
+  @override
+  String get hnavEnterWalletPasswordTitle => 'Ingresa la contraseña de la billetera';
+
+  @override
+  String get hnavExtensionDecryptPasswordBody => 'Ingresa la contraseña que usaste en la extensión VFX para descifrar tu clave privada.';
+
+  @override
+  String get hnavExtensionNotDetected => 'No se detectó la extensión VFX';
+
+  @override
+  String get hnavExtensionUnlockFirst => 'Primero desbloquea la billetera de tu extensión';
+
+  @override
+  String get hnavExtensionWebOnly => 'La extensión VFX solo está disponible en la web';
+
+  @override
+  String get hnavFailedDecryptAccountKeys => 'No se pudieron descifrar las claves de la cuenta. Revisa tu contraseña.';
+
+  @override
+  String get hnavFungibleToken => 'Token fungible';
+
+  @override
+  String hnavFungibleTokenWithBalance(String balance, String ticker) {
+    return 'Token fungible ($balance $ticker)';
+  }
+
+  @override
+  String get hnavHd12Words => '12 palabras';
+
+  @override
+  String get hnavHd24Words => '24 palabras';
+
+  @override
+  String get hnavHdAccountTitle => 'Cuenta HD';
+
+  @override
+  String get hnavHdCreateAccount => 'Crear cuenta HD';
+
+  @override
+  String get hnavHdEncryptedError => 'No puedes crear una cuenta HD con una billetera cifrada.';
+
+  @override
+  String get hnavHdExplanation1 => 'Al crear una cuenta HD, creas una función para recuperar tus claves privadas mediante una frase de recuperación.';
+
+  @override
+  String get hnavHdExplanation2 => 'Una vez generada, cualquier clave que crees usará esta frase como semilla para generar la clave privada. Por lo tanto, solo necesitarás recordar esto para recuperar tus claves de forma determinista.';
+
+  @override
+  String get hnavHdExplanation3 => 'Esta es una función avanzada y no se recomienda a menos que conozcas los conceptos de billeteras jerárquicas deterministas (HD).\n\nCualquier clave creada antes de esto no se podrá recuperar con esta frase, así que asegúrate de respaldarlas también.';
+
+  @override
+  String get hnavHdGenerateStrength => 'Generar con nivel de seguridad:';
+
+  @override
+  String get hnavIDontKnow => 'No lo sé';
+
+  @override
+  String get hnavImportBtcPrivateKeyOrWifTitle => 'Importar clave privada BTC o clave WIF';
+
+  @override
+  String get hnavInvalidBtcAddress => 'Dirección BTC inválida';
+
+  @override
+  String get hnavInvalidPrivateKeyOrWif => 'No es una clave privada ni una clave WIF válida. Debe tener 64 o 52 caracteres';
+
+  @override
+  String hnavIsAdjudicating(String label) {
+    return '$label está adjudicando...';
+  }
+
+  @override
+  String get hnavKeysBackedUpSuccess => 'Claves respaldadas exitosamente.';
+
+  @override
+  String get hnavMediaBackedUpSuccess => 'Multimedia respaldada exitosamente.';
+
+  @override
+  String get hnavMempool => 'Mempool';
+
+  @override
+  String get hnavMempoolEmpty => 'El mempool está vacío.';
+
+  @override
+  String get hnavMnemonicTitle => 'Mnemónico';
+
+  @override
+  String get hnavNoTokensEmptyState => 'No tienes tokens vBTC, tokens fungibles ni tokens no fungibles';
+
+  @override
+  String get hnavNoWalletDetected => 'No se detectó ninguna billetera.';
+
+  @override
+  String get hnavNonFungibleToken => 'Token no fungible';
+
+  @override
+  String get hnavNoticeTitle => 'Aviso';
+
+  @override
+  String get hnavPasteBtcAddress => 'Pega tu dirección BTC:';
+
+  @override
+  String hnavPortNotOpen(String port) {
+    return 'El puerto $port NO está abierto. Configura tu firewall.';
+  }
+
+  @override
+  String hnavPortOpen(String port) {
+    return '¡El puerto $port está abierto!';
+  }
+
+  @override
+  String get hnavProposalsVoting => 'Propuestas y votación';
+
+  @override
+  String get hnavRecoverFromMnemonic => 'Recuperar desde mnemónico';
+
+  @override
+  String get hnavRecoveryPhraseGeneratedTitle => 'Frase de recuperación generada';
+
+  @override
+  String get hnavRequestCancelled => 'Solicitud cancelada';
+
+  @override
+  String get hnavRequestTimedOut => 'La solicitud expiró';
+
+  @override
+  String get hnavReserveAccountsNotExported => 'Ten en cuenta que las cuentas de reserva/protegidas no se exportarán.';
+
+  @override
+  String get hnavRestoreHiddenBracket => '[Restaurar ocultas]';
+
+  @override
+  String get hnavResyncing => 'Resincronizando...';
+
+  @override
+  String get hnavRevealPrivateKeysPasswordMessage => 'Ingresa tu contraseña para revelar las claves privadas.';
+
+  @override
+  String get hnavRevealVaultKeysPasswordMessage => 'Ingresa tu contraseña para revelar las claves privadas de la cuenta de bóveda.';
+
+  @override
+  String get hnavSectionAccountSecurity => 'Seguridad de la cuenta';
+
+  @override
+  String get hnavSectionDiagnose => 'Diagnóstico';
+
+  @override
+  String get hnavSectionTokensNfts => 'Tokens / NFTs';
+
+  @override
+  String get hnavSectionValidator => 'Validador';
+
+  @override
+  String get hnavSelectAddressType => 'Selecciona tu tipo de dirección:';
+
+  @override
+  String get hnavSelectedBtcAccountTooltip => 'Cuenta BTC seleccionada';
+
+  @override
+  String get hnavSelectedVfxAddressTooltip => 'Dirección VFX seleccionada';
+
+  @override
+  String get hnavSetEncryptionPasswordTitle => 'Establecer contraseña de cifrado';
+
+  @override
+  String hnavShowKeysAccountDetailsBody(String currencySuffix) {
+    return 'Aquí están los detalles de tu cuenta$currencySuffix. Asegúrate de respaldar tu clave privada en un lugar seguro.';
+  }
+
+  @override
+  String get hnavSnapshotAllDone => '¡Todo listo!';
+
+  @override
+  String get hnavSnapshotDownloading => 'Descargando...';
+
+  @override
+  String hnavSnapshotDownloadingFile(String file) {
+    return 'Descargando: $file';
+  }
+
+  @override
+  String get hnavSnapshotError => 'Ocurrió un error. Reinicia e inténtalo de nuevo.';
+
+  @override
+  String get hnavSnapshotImported => 'Snapshot de la base de datos importado.';
+
+  @override
+  String get hnavSnapshotInitializing => 'Inicializando...';
+
+  @override
+  String get hnavSnapshotShuttingDown => 'Cerrando el CLI...';
+
+  @override
+  String get hnavSnapshotStartingUp => 'Iniciando el CLI ahora...';
+
+  @override
+  String get hnavStartAdjudicating => 'Iniciar adjudicación';
+
+  @override
+  String get hnavStopAdjudicating => 'Detener adjudicación';
+
+  @override
+  String get hnavSynced => 'Sincronizado';
+
+  @override
+  String get hnavSyncing => 'Sincronizando...';
+
+  @override
+  String get hnavValidating => 'Validando...';
+
+  @override
+  String get hnavVaultAccountDetailsBody => 'Aquí están los detalles de tu cuenta de bóveda. Asegúrate de respaldar tu clave privada en un lugar seguro.';
+
+  @override
+  String get hnavVaultAccountDetailsTitle => 'Detalles de la cuenta de bóveda';
+
+  @override
+  String get hnavVaultSuffix => ' de bóveda';
+
+  @override
+  String hnavVbtcTokenWithBalance(String balance) {
+    return 'Token vBTC ($balance vBTC)';
+  }
+
+  @override
+  String get hnavVfxCliLoading => 'Cargando CLI de VFX';
+
+  @override
+  String get hnavVfxCliOffline => 'CLI de VFX sin conexión';
+
+  @override
+  String get hnavVfxOnline => 'VFX en línea';
+
+  @override
+  String get hnavWalletPasswordLabel => 'Contraseña de la billetera';
+
+  @override
+  String get hnavWarningTitle => 'Advertencia';
+
+  @override
+  String get mktAddReservePrice => 'Agregar precio de reserva';
+
+  @override
+  String get mktAuction => 'Subasta';
+
+  @override
+  String mktAuctionActivityForTitle(String name) {
+    return 'Actividad de subasta de $name';
+  }
+
+  @override
+  String get mktAuctionAlreadyStartedToast => 'La subasta ya comenzó.';
+
+  @override
+  String get mktAuctionFloorPriceLabel => 'Precio base de la subasta';
+
+  @override
+  String get mktAuctionNotLiveToast => 'La subasta no está activa';
+
+  @override
+  String get mktAuctionOverToast => 'La subasta ha terminado';
+
+  @override
+  String get mktAuctionReservePriceLabel => 'Precio de reserva de la subasta';
+
+  @override
+  String get mktAuctionStartedDatesLocked => 'La subasta ya comenzó, por lo que no se pueden actualizar las fechas ni las horas.';
+
+  @override
+  String get mktAuctionStartedPricingLocked => 'La subasta ya comenzó, por lo que no se pueden actualizar los precios.';
+
+  @override
+  String get mktBidAmountLabel => 'Monto de la oferta (VFX)';
+
+  @override
+  String mktBidIncrementToast(String increment, String minimum) {
+    return 'El incremento mínimo es de $increment VFX. Se requiere una oferta mayor que $minimum VFX.';
+  }
+
+  @override
+  String get mktBidInsufficientBody => 'No tienes saldo suficiente para cubrir esta oferta.\n\n¿Quieres pagar con tarjeta de crédito u otro token cripto?';
+
+  @override
+  String mktBidMustBeGreaterFooter(String minimum) {
+    return 'Debe ser mayor que $minimum VFX';
+  }
+
+  @override
+  String mktBidMustBeGreaterToast(String price) {
+    return 'Tu oferta debe ser mayor que la oferta más alta actual ($price VFX)';
+  }
+
+  @override
+  String get mktBidSubmittedToast => 'Oferta enviada';
+
+  @override
+  String mktBuyNowConfirmBody(String price) {
+    return '¿Seguro que quieres comprar ahora por $price VFX?';
+  }
+
+  @override
+  String mktBuyNowInsufficientBody(String price) {
+    return 'Este NFT tiene un precio de compra inmediata de $price VFX y no tienes saldo suficiente para cubrirlo.\n\n¿Quieres pagar con tarjeta de crédito u otro token cripto?';
+  }
+
+  @override
+  String get mktBuyNowPriceLabel => 'Precio de compra inmediata';
+
+  @override
+  String get mktBuyNowTxBroadcastedTitle => 'Transacción de compra inmediata transmitida.';
+
+  @override
+  String get mktBuyNowTxBroadcastedToast => 'Transacción de compra inmediata transmitida. Espera a que el dueño de la tienda la acepte';
+
+  @override
+  String get mktChooseAddressTitle => 'Elige una dirección';
+
+  @override
+  String get mktCloseCreateListingTitle => '¿Seguro que quieres cerrar la pantalla de creación de la publicación?';
+
+  @override
+  String get mktCloseEditListingTitle => '¿Seguro que quieres cerrar la pantalla de edición de la publicación?';
+
+  @override
+  String get mktCollectionDeletedToast => 'Colección eliminada.';
+
+  @override
+  String get mktCollectionDescriptionLabel => 'Descripción de la colección';
+
+  @override
+  String get mktCollectionNameLabel => 'Nombre de la colección';
+
+  @override
+  String get mktCouldNotGenerateHashToast => 'No se pudo generar el hash';
+
+  @override
+  String get mktCouldNotGetFeeToast => 'No se pudo obtener la comisión';
+
+  @override
+  String get mktCouldNotGetNonceToast => 'No se pudo obtener el nonce';
+
+  @override
+  String get mktCouldNotGetTimestampToast => 'No se pudo obtener la marca de tiempo';
+
+  @override
+  String get mktCouldNotProduceSignatureToast => 'No se pudo generar la firma';
+
+  @override
+  String get mktCouldNotVerifyTransactionToast => 'No se pudo verificar la transacción';
+
+  @override
+  String get mktCreateAuctionHouseBody => 'Crea tu casa de subastas / galería y publícala en la red.\nLuego podrás crear colecciones y agregarles publicaciones.';
+
+  @override
+  String get mktDatesHeading => 'Fechas';
+
+  @override
+  String get mktDeleteChatThreadBody => '¿Seguro que quieres eliminar este hilo de chat?';
+
+  @override
+  String get mktDeleteChatThreadLocalBody => '¿Seguro que quieres eliminar este hilo de chat localmente?';
+
+  @override
+  String get mktDeleteListing => 'Eliminar publicación';
+
+  @override
+  String get mktDeleteStoreConfirmBody => '¿Seguro que quieres eliminar esta tienda?';
+
+  @override
+  String get mktEditCollection => 'Editar colección';
+
+  @override
+  String get mktEditListing => 'Editar publicación';
+
+  @override
+  String get mktEnableAuction => '¿Habilitar subasta?';
+
+  @override
+  String get mktEnableBuyNow => '¿Habilitar compra inmediata?';
+
+  @override
+  String get mktEndDateLabel => 'Fecha de fin';
+
+  @override
+  String get mktEndTimeLabel => 'Hora de fin';
+
+  @override
+  String get mktErrorOccurred => 'Ocurrió un error.';
+
+  @override
+  String get mktGalleryOnly => '¿Solo galería?';
+
+  @override
+  String get mktInsufficientBalanceTitle => 'Saldo insuficiente';
+
+  @override
+  String mktListingForTitle(String name) {
+    return 'Publicación de $name';
+  }
+
+  @override
+  String get mktNftAlreadyListedToast => 'Este NFT ya está publicado. Elige otro';
+
+  @override
+  String get mktNftColonLabel => 'NFT:';
+
+  @override
+  String mktNftNameLabel(String name) {
+    return 'NFT: $name';
+  }
+
+  @override
+  String get mktNoAccountToast => 'No hay cuenta';
+
+  @override
+  String get mktNoAuctionToast => 'No hay subasta';
+
+  @override
+  String get mktNoBalanceToast => 'Sin saldo';
+
+  @override
+  String get mktNoBidsYet => 'Aún no hay ofertas.';
+
+  @override
+  String get mktNoMessagesYet => 'Aún no hay mensajes';
+
+  @override
+  String get mktNoShopToast => 'No hay tienda';
+
+  @override
+  String get mktNoThreadToast => 'No hay hilo';
+
+  @override
+  String get mktNotEnoughBalanceToast => 'Saldo insuficiente.';
+
+  @override
+  String get mktNotEnoughBalanceValidatingToast => 'Saldo insuficiente porque estás validando.';
+
+  @override
+  String get mktNotNotifiedToast => 'No recibirás notificaciones. Puedes cambiar esta configuración en el panel si cambias de opinión.';
+
+  @override
+  String get mktOptionsHeading => 'Opciones';
+
+  @override
+  String get mktOwnersAddressLabel => 'Dirección del propietario';
+
+  @override
+  String get mktPayWithCardCryptoTitle => 'Pagar con tarjeta de crédito / cripto';
+
+  @override
+  String get mktPlaceBid => 'Hacer oferta';
+
+  @override
+  String mktPlaceBidConfirmBody(String amount) {
+    return '¿Seguro que quieres hacer una oferta de $amount VFX?';
+  }
+
+  @override
+  String get mktPresignProblemToast => 'Ocurrió un problema al prefirmar la transacción de venta. Inténtalo de nuevo';
+
+  @override
+  String get mktProblemOccurredToast => 'Ocurrió un problema';
+
+  @override
+  String get mktPublishLive => 'Publicar en vivo';
+
+  @override
+  String get mktReplaceNft => 'Reemplazar NFT';
+
+  @override
+  String get mktReservePriceLabel => 'Precio de reserva';
+
+  @override
+  String get mktSelectNft => 'Seleccionar NFT';
+
+  @override
+  String get mktSelectOwnerAddressHint => 'Selecciona una dirección de la lista para que sea el propietario de la tienda.';
+
+  @override
+  String get mktShopDescriptionLabel => 'Descripción de la tienda';
+
+  @override
+  String get mktShopIdentifierLabel => 'Identificador de la tienda';
+
+  @override
+  String get mktShopNameLabel => 'Nombre de la tienda';
+
+  @override
+  String get mktSignatureNotValidPrimaryToast => 'Firma no válida (primaria)';
+
+  @override
+  String get mktStartDateLabel => 'Fecha de inicio';
+
+  @override
+  String get mktStartTimeLabel => 'Hora de inicio';
+
+  @override
+  String get mktSubscribeUpdatesBody => 'Para que la web wallet pueda enviar notificaciones a los ganadores de subastas para firmar transacciones, se requiere una dirección de correo electrónico.';
+
+  @override
+  String get mktSubscribeUpdatesTitle => '¿Suscribirte para recibir novedades?';
+
+  @override
+  String get mktSubscribedToast => 'Suscrito';
+
+  @override
+  String get mktThirdPartySaleStartNote => 'Como esta casa de subastas está alojada en la Web Wallet de VFX, el vendedor deberá autorizar la transacción de inicio de venta. La verás en tu lista de transacciones una vez enviada.';
+
+  @override
+  String get mktTxBroadcastedToast => 'Transacción transmitida';
+
+  @override
+  String get mktWaitForFinalizeBody => 'Espera a que la transacción se finalice.';
+
+  @override
+  String get scwAddAFeature => 'Agregar una función';
+
+  @override
+  String get scwAddCreatorName => 'Agregar nombre del creador';
+
+  @override
+  String get scwAddDescription => 'Agregar descripción';
+
+  @override
+  String get scwAddEvolvingPhase => 'Agregar fase de evolución';
+
+  @override
+  String get scwAddName => 'Agregar nombre';
+
+  @override
+  String get scwAddProperty => 'Agregar propiedad';
+
+  @override
+  String get scwAddPropertyButton => 'Agregar propiedad';
+
+  @override
+  String get scwAddRoyalty => 'Agregar regalía';
+
+  @override
+  String get scwAddStat => 'Agregar estadística';
+
+  @override
+  String get scwAdditionalAssets => 'Activos adicionales';
+
+  @override
+  String get scwAllowVoting => 'Permitir votación';
+
+  @override
+  String get scwBeneficiaryAddressOptional => 'Dirección del beneficiario (opcional)';
+
+  @override
+  String get scwBlockHeightValue => 'Valor de altura de bloque';
+
+  @override
+  String get scwCantAddEvolveBody => 'Ya tienes una función de evolución en este contrato inteligente. Edita la función de evolución existente para agregar más etapas.';
+
+  @override
+  String get scwCantAddEvolveTitle => 'No se puede agregar evolución';
+
+  @override
+  String get scwCantAddMultiAssetBody => 'Ya tienes una función de multiactivo en este contrato inteligente. Edita la función de multiactivo existente para agregar más activos.';
+
+  @override
+  String get scwCantAddMultiAssetTitle => 'No se puede agregar multiactivo';
+
+  @override
+  String get scwCantAddRoyaltyBody => 'Ya tienes una función de regalía en este contrato inteligente.';
+
+  @override
+  String get scwCantAddRoyaltyTitle => 'No se puede agregar regalía';
+
+  @override
+  String get scwCantAddSoulBoundBody => 'Ya tienes una función de Soul Bound en este contrato inteligente.';
+
+  @override
+  String get scwCantAddSoulBoundTitle => 'No se puede agregar Soul Bound';
+
+  @override
+  String get scwChoose => 'Elegir';
+
+  @override
+  String get scwChooseAnAddress => 'Elige una dirección';
+
+  @override
+  String get scwCollectionDescription => 'Descripción de la colección';
+
+  @override
+  String get scwCollectionName => 'Nombre de la colección';
+
+  @override
+  String get scwCollectionThumbnail => 'Miniatura de la colección';
+
+  @override
+  String get scwCollectionWizard => 'Asistente de colección';
+
+  @override
+  String get scwColorProperty => 'Propiedad de color';
+
+  @override
+  String get scwCreateAndMintBody => 'Comienza con un contrato inteligente base y agrega funciones personalizadas';
+
+  @override
+  String get scwCreateAndMintTitle => 'Crear un contrato inteligente y emitir';
+
+  @override
+  String get scwCreateSmartContractTitle => 'Crear contrato inteligente';
+
+  @override
+  String get scwCreatorName => 'Nombre del creador';
+
+  @override
+  String get scwCreatorRetainedOwnership => 'Propiedad retenida del creador';
+
+  @override
+  String scwCreatorValue(String name) {
+    return 'Creador: $name';
+  }
+
+  @override
+  String get scwDeletePrimaryAssetBody => '¿Estás seguro de que quieres eliminar el activo principal?';
+
+  @override
+  String get scwDeletePrimaryAssetTitle => '¿Eliminar activo principal?';
+
+  @override
+  String get scwDescription => 'Descripción';
+
+  @override
+  String get scwDescriptionOfPhysicalDigitalGood => 'Descripción del bien físico/digital';
+
+  @override
+  String get scwDownloadExampleCsv => 'Descargar CSV de ejemplo';
+
+  @override
+  String get scwDownloadExampleJson => 'Descargar JSON de ejemplo';
+
+  @override
+  String get scwEdit => 'Editar';
+
+  @override
+  String get scwEditCreatorName => 'Editar nombre del creador';
+
+  @override
+  String get scwEditDescription => 'Editar descripción';
+
+  @override
+  String get scwEditName => 'Editar nombre';
+
+  @override
+  String get scwEventAddress => 'Dirección del evento';
+
+  @override
+  String get scwEventCode => 'Código del evento';
+
+  @override
+  String get scwEventDate => 'Fecha del evento';
+
+  @override
+  String get scwEventDescription => 'Descripción del evento';
+
+  @override
+  String get scwEventName => 'Nombre del evento';
+
+  @override
+  String get scwEventTime => 'Hora del evento';
+
+  @override
+  String get scwEventUrl => 'URL del evento';
+
+  @override
+  String get scwEvolutionDate => 'Fecha de evolución';
+
+  @override
+  String scwEvolutionTime(String timezone) {
+    return 'Hora de evolución ($timezone)';
+  }
+
+  @override
+  String get scwEvolve => 'Evolución';
+
+  @override
+  String get scwEvolveOnRedeem => '¿Evolucionar al canjear?';
+
+  @override
+  String get scwEvolveStageAsset => 'Activo de la etapa de evolución';
+
+  @override
+  String get scwEvolveStageDescription => 'Descripción de la etapa de evolución';
+
+  @override
+  String get scwEvolveStageName => 'Nombre de la etapa de evolución';
+
+  @override
+  String get scwEvolveType => 'Tipo de evolución';
+
+  @override
+  String get scwEvolveTypeBlockHeight => 'Altura de bloque';
+
+  @override
+  String get scwEvolveTypeDateTime => 'Fecha/Hora';
+
+  @override
+  String get scwEvolveTypeManualOnly => 'Solo manual';
+
+  @override
+  String scwEvolveWithType(String type) {
+    return 'Evolución ($type)';
+  }
+
+  @override
+  String get scwEvolvingPhase => 'Fase de evolución';
+
+  @override
+  String get scwExpireDate => 'Fecha de expiración';
+
+  @override
+  String get scwExpireTime => 'Hora de expiración';
+
+  @override
+  String get scwFractionalInterest => 'Interés fraccionario';
+
+  @override
+  String get scwFractionalizationTitle => 'Fraccionamiento';
+
+  @override
+  String get scwFullDescription => 'Descripción completa';
+
+  @override
+  String get scwImages => 'Imagen(es)';
+
+  @override
+  String get scwImporting => 'Importando';
+
+  @override
+  String get scwLaunchIdeBody => 'Abre el IDE en línea para escribir tu propio código Trillium para tu contrato inteligente';
+
+  @override
+  String get scwLaunchIdeMobileBody => 'El IDE está optimizado para pantallas más grandes. ¿Quieres continuar?';
+
+  @override
+  String get scwLaunchIdeMobileTitle => '¿Iniciar IDE en el móvil?';
+
+  @override
+  String get scwLaunchIdeTitle => 'Iniciar IDE';
+
+  @override
+  String get scwLaunchWizard => 'Iniciar asistente';
+
+  @override
+  String get scwMaxQuantity => 'La cantidad máxima es 100.';
+
+  @override
+  String get scwMetadataUrl => 'URL de metadatos';
+
+  @override
+  String get scwMinQuantity => 'La cantidad mínima es 1.';
+
+  @override
+  String get scwMintNftCollectionBody => 'Emite varios contratos inteligentes en una colección';
+
+  @override
+  String get scwMintNftCollectionTitle => 'Emitir colección de NFT';
+
+  @override
+  String get scwName => 'Nombre';
+
+  @override
+  String get scwNetwork => 'Red';
+
+  @override
+  String scwNetworkContractAddress(String network) {
+    return 'Dirección del contrato de $network';
+  }
+
+  @override
+  String get scwNoProperties => 'Sin propiedades';
+
+  @override
+  String get scwNotImplemented => 'No implementado.';
+
+  @override
+  String get scwNumericalProperty => 'Propiedad numérica';
+
+  @override
+  String get scwOtherOptions => 'Otras opciones';
+
+  @override
+  String get scwOwnerAddress => 'Dirección del propietario';
+
+  @override
+  String get scwPairWrapTitle => 'Emparejar/Envolver con un NFT existente';
+
+  @override
+  String get scwPercentage => 'Porcentaje';
+
+  @override
+  String get scwPercentageRequiredForVotingApproval => 'Porcentaje requerido para aprobar la votación';
+
+  @override
+  String scwPhaseLabel(int number, String name) {
+    return 'Fase #$number: $name';
+  }
+
+  @override
+  String get scwPhysicalDigitalGoodName => 'Nombre del bien físico/digital';
+
+  @override
+  String get scwPrimaryAsset => 'Activo principal';
+
+  @override
+  String get scwProperties => 'Propiedades';
+
+  @override
+  String get scwPropertiesOptional => 'Propiedades (opcional)';
+
+  @override
+  String get scwPropertyName => 'Nombre de la propiedad';
+
+  @override
+  String get scwPropertyType => 'Tipo de propiedad';
+
+  @override
+  String get scwPropertyTypeColor => 'Color';
+
+  @override
+  String get scwPropertyTypeNumber => 'Número';
+
+  @override
+  String get scwPropertyTypeText => 'Texto';
+
+  @override
+  String get scwPropertyValue => 'Valor de la propiedad';
+
+  @override
+  String get scwProvenanceFilesOptional => 'Archivos de procedencia (opcional)';
+
+  @override
+  String get scwQuantity => 'Cantidad';
+
+  @override
+  String get scwQuantityToMint => 'Cantidad a emitir';
+
+  @override
+  String scwQuantityValue(int quantity) {
+    return 'Cantidad: $quantity';
+  }
+
+  @override
+  String get scwReasonForPairingWrapping => 'Motivo del emparejamiento/envoltura';
+
+  @override
+  String get scwRemove => 'Eliminar';
+
+  @override
+  String get scwRemoveAssetBody => '¿Estás seguro de que quieres eliminar este activo adicional?';
+
+  @override
+  String get scwRemoveAssetTitle => '¿Eliminar activo?';
+
+  @override
+  String get scwRemovePhaseBody => '¿Estás seguro de que quieres eliminar esta fase de evolución?';
+
+  @override
+  String get scwRemovePhaseTitle => '¿Eliminar fase?';
+
+  @override
+  String get scwRemovePropertyBody => '¿Estás seguro de que quieres eliminar esta propiedad?';
+
+  @override
+  String get scwRemovePropertyTitle => '¿Eliminar propiedad?';
+
+  @override
+  String get scwRemoveRoyaltyBody => '¿Estás seguro de que quieres eliminar la regalía?';
+
+  @override
+  String get scwRemoveRoyaltyTitle => '¿Eliminar regalía?';
+
+  @override
+  String get scwRoyaltyTitle => 'Regalía';
+
+  @override
+  String scwRoyaltyToAddress(String amount, String address) {
+    return '$amount a $address';
+  }
+
+  @override
+  String get scwRoyaltyType => 'Tipo de regalía';
+
+  @override
+  String get scwRoyaltyTypeFixed => 'Fijo';
+
+  @override
+  String get scwRoyaltyTypePercent => 'Porcentaje';
+
+  @override
+  String get scwSeatingInfo => 'Información de asientos';
+
+  @override
+  String get scwSoulBoundTitle => 'Soul Bound';
+
+  @override
+  String get scwStatTypeString => 'Tipo: String';
+
+  @override
+  String get scwStats => 'Estadísticas';
+
+  @override
+  String get scwTextProperty => 'Propiedad de texto';
+
+  @override
+  String get scwTicketTitle => 'Boleto';
+
+  @override
+  String get scwTicketType => 'Tipo de boleto';
+
+  @override
+  String get scwTokenIdOptional => 'ID del token (opcional)';
+
+  @override
+  String get scwTokenStandardOptional => 'Estándar del token (opcional)';
+
+  @override
+  String get scwTokenizationTitle => 'Tokenización';
+
+  @override
+  String get scwUploadCsv => 'Subir CSV';
+
+  @override
+  String get scwUploadJson => 'Subir JSON';
+
+  @override
+  String get scwUploadJsonCsv => 'Subir JSON / CSV';
+
+  @override
+  String get scwUploadJsonCsvBody => 'Crea una colección con un archivo JSON o CSV. Consulta los archivos de ejemplo a continuación y úsalos como plantilla. Al subir el archivo podrás configurar y ajustar las opciones a través de la interfaz del asistente.\n\nEsta es una función avanzada para usuarios que quieren compilar y emitir colecciones fuera de la interfaz gráfica.';
+
+  @override
+  String get scwUseMyAddress => 'Usar mi dirección';
+
+  @override
+  String get scwVotingDescription => 'Descripción de la votación';
+
+  @override
+  String get tkbAmountGreaterThanZero => 'El monto debe ser mayor que 0.0 BTC';
+
+  @override
+  String tkbAmountOfVbtcTo(String action) {
+    return 'Monto de vBTC para $action';
+  }
+
+  @override
+  String get tkbAssociateLocalFile => 'Asociar archivo local';
+
+  @override
+  String get tkbAssociateMedia => 'Asociar recurso';
+
+  @override
+  String get tkbAuthorizeNow => 'Autorizar ahora';
+
+  @override
+  String tkbBalanceFoundBody(String balance) {
+    return 'Se encontró un saldo de $balance VFX en esta cuenta. Saltando al paso 3.';
+  }
+
+  @override
+  String tkbBalanceValue(String balance) {
+    return 'Saldo: $balance';
+  }
+
+  @override
+  String tkbBlockHeightValue(String height) {
+    return 'Altura de bloque: $height';
+  }
+
+  @override
+  String tkbBtcAddressGenerated(String address) {
+    return 'Dirección BTC generada ($address)';
+  }
+
+  @override
+  String get tkbBtcAddressPending => 'Dirección BTC pendiente';
+
+  @override
+  String get tkbBtcAmount => 'Monto de BTC';
+
+  @override
+  String tkbBtcSentTo(String amount, String address) {
+    return 'Se han enviado $amount BTC a $address.';
+  }
+
+  @override
+  String get tkbBtcTransferBroadcasted => 'TX de transferencia de BTC transmitida con éxito.';
+
+  @override
+  String tkbBtcWithdrawalBroadcasted(String hash) {
+    return 'TX de retiro de BTC transmitida con éxito. Hash: $hash';
+  }
+
+  @override
+  String get tkbCallMedia => 'Solicitar recurso';
+
+  @override
+  String get tkbCallMediaFromBeacon => 'Solicitar recurso desde el Beacon';
+
+  @override
+  String get tkbCallToBeaconStartedBody => 'Ten paciencia mientras se solicitan y descargan TODOS los recursos asociados al NFT.\n\nNo cierres tu billetera ni intentes solicitarlo de nuevo.';
+
+  @override
+  String get tkbCallToBeaconStartedTitle => 'El proceso de solicitud al Beacon ha comenzado.';
+
+  @override
+  String get tkbCallToBeaconStartedToast => 'El proceso de solicitud al Beacon ha comenzado. Ten paciencia mientras se solicitan y descargan TODOS los recursos asociados al NFT.';
+
+  @override
+  String get tkbCheckOtherAccount => 'Revisa cualquier otra cuenta con la misma dirección para encontrar el recurso multimedia.';
+
+  @override
+  String get tkbChooseBtcAccount => 'Elige la cuenta BTC desde la cual enviar';
+
+  @override
+  String get tkbChooseVaultAccount => 'Elige una Cuenta de bóveda';
+
+  @override
+  String get tkbComplete => 'Completar';
+
+  @override
+  String tkbConfirmSendBtcBody(String amount, String from, String to, String fee) {
+    return 'Enviando $amount BTC desde $from a $to.\n\nComisión:\n$fee BTC';
+  }
+
+  @override
+  String get tkbConfirmTransaction => 'Confirmar transacción';
+
+  @override
+  String get tkbConfirmVoteNoBody => '¿Seguro que quieres votar NO en este tema del token?';
+
+  @override
+  String get tkbConfirmVoteYesBody => '¿Seguro que quieres votar SÍ en este tema del token?';
+
+  @override
+  String tkbControlledBy(String address) {
+    return 'Controlado por: $address';
+  }
+
+  @override
+  String tkbCouldNotResolveNft(String id) {
+    return 'No se pudo resolver el NFT desde $id';
+  }
+
+  @override
+  String get tkbCreateBtcDomain => 'Crear dominio BTC';
+
+  @override
+  String tkbCreateDomainFor(String address) {
+    return 'Crear dominio para $address';
+  }
+
+  @override
+  String get tkbCreateTokenTopicBody => '¿Seguro que quieres crear este tema del token?';
+
+  @override
+  String get tkbCreationPending => 'Creación pendiente';
+
+  @override
+  String tkbDeleteBtcDomainBody(String costLine) {
+    return '¿Seguro que quieres eliminar este dominio BTC?\n$costLine\n\nUna vez eliminado, este ADNR ya no podrá recibir transacciones.';
+  }
+
+  @override
+  String get tkbDeleteDomainNoCost => 'No hay costo para eliminar un dominio VFX (aparte de la comisión de la TX).';
+
+  @override
+  String tkbDeleteDomainWithCost(String cost) {
+    return 'Hay un costo de $cost VFX para eliminar un dominio RBX.';
+  }
+
+  @override
+  String get tkbDeletePending => 'Eliminación pendiente';
+
+  @override
+  String get tkbDescriptionColon => 'Descripción:';
+
+  @override
+  String get tkbDismiss => 'Descartar';
+
+  @override
+  String get tkbDomainName => 'Nombre del dominio';
+
+  @override
+  String get tkbDomainNameRule => 'Tu dominio solo debe contener letras y números y se le agregará automáticamente \".btc\" al verificarse';
+
+  @override
+  String get tkbDownloadAsset => 'Descargar recurso';
+
+  @override
+  String get tkbError => 'Error';
+
+  @override
+  String get tkbErrorLoadingData => 'Error al cargar los datos';
+
+  @override
+  String get tkbFailedRequestWithdrawal => 'No se pudo solicitar el retiro.';
+
+  @override
+  String tkbFeeEstimate(String feeEstimate, String feeEstimateBtc, String fee, String feeBtc) {
+    return 'Estimación de tarifa: ~$feeEstimate SATS | ~$feeEstimateBtc BTC    ($fee SATS /byte | $feeBtc BTC /byte)';
+  }
+
+  @override
+  String get tkbFeeRateHint => 'Tarifa en satoshis';
+
+  @override
+  String tkbFeeRatePerByte(String sats, String btc) {
+    return 'Tarifa: $sats SATS por byte ($btc BTC por byte)';
+  }
+
+  @override
+  String get tkbFeeRateRequired => 'Se requiere la tarifa';
+
+  @override
+  String tkbFileNameLabel(String name) {
+    return 'Nombre del archivo: $name';
+  }
+
+  @override
+  String get tkbFileSize => 'Tamaño del archivo';
+
+  @override
+  String get tkbFileType => 'Tipo de archivo';
+
+  @override
+  String tkbFilenameCreator(String filename, String creator) {
+    return 'Nombre del archivo: $filename | Creador: $creator';
+  }
+
+  @override
+  String get tkbFixedSupply => 'Suministro fijo';
+
+  @override
+  String get tkbFungibleToken => 'Token fungible';
+
+  @override
+  String get tkbGenerate => 'Generar';
+
+  @override
+  String get tkbGenerateBtcAddress => 'Generar dirección BTC';
+
+  @override
+  String get tkbGenerateBtcAddressBody => '¿Seguro que quieres generar la dirección BTC de este token?';
+
+  @override
+  String get tkbImagePreviewNotFound => 'No se encontró el archivo para la vista previa.\nProbablemente esto significa que este NFT ya no existe en esta máquina.\n';
+
+  @override
+  String get tkbInProgress => 'En curso';
+
+  @override
+  String get tkbInfinite => 'Infinito';
+
+  @override
+  String tkbInsufficientBalanceAccount(String balance) {
+    return 'Saldo insuficiente para cubrir la tx y la comisión. Esta cuenta solo tiene $balance BTC.';
+  }
+
+  @override
+  String get tkbInvalidFeeRate => 'Tarifa inválida. Debe ser al menos 1 satoshi.';
+
+  @override
+  String get tkbManualSendSubtitle => 'Envía la moneda manualmente a la dirección de depósito BTC de este token';
+
+  @override
+  String tkbMediaNotFound(String fileName) {
+    return 'No se encontró el archivo del recurso multimedia en tu máquina ($fileName).';
+  }
+
+  @override
+  String get tkbMinimumTokenRequirement => 'Requisito mínimo de tokens';
+
+  @override
+  String get tkbMinimumTokenRequirementHelper => 'El saldo mínimo de tokens necesario para votar.';
+
+  @override
+  String tkbMinimumTokensToVote(String count) {
+    return 'Tokens mínimos para votar: $count';
+  }
+
+  @override
+  String get tkbMultiSigFeeCalculated => 'Esto es una firma múltiple. La tarifa se ha calculado por ti.';
+
+  @override
+  String tkbNeedTokensToVote(String count) {
+    return 'Necesitas al menos $count tokens para votar.';
+  }
+
+  @override
+  String tkbNoAddressesHolding(String ticker) {
+    return 'Ninguna de tus direcciones posee $ticker';
+  }
+
+  @override
+  String get tkbNoFungibleTokens => 'Sin tokens fungibles';
+
+  @override
+  String get tkbNoFungibleTokensBody => 'No tienes tokens fungibles con suministro en ninguna de tus cuentas.';
+
+  @override
+  String get tkbNoRequestHash => 'No se devolvió ningún hash de solicitud.';
+
+  @override
+  String get tkbNoUpper => 'NO';
+
+  @override
+  String get tkbNoUtxos => 'Sin UTXOs';
+
+  @override
+  String get tkbNoVaultAccounts => 'No tienes ninguna Cuenta de bóveda en esta billetera';
+
+  @override
+  String get tkbNoVotesYet => 'Aún no hay votos.';
+
+  @override
+  String get tkbNone => 'Ninguna';
+
+  @override
+  String get tkbNotFound => 'No encontrado.';
+
+  @override
+  String get tkbOpenAsset => 'Abrir recurso';
+
+  @override
+  String get tkbOpenFolder => 'Abrir carpeta';
+
+  @override
+  String get tkbOwnershipTransferInitiated => 'Transferencia de propiedad iniciada.';
+
+  @override
+  String get tkbPassword => 'Contraseña';
+
+  @override
+  String tkbPendingWithdrawalBody(String amount, String destination) {
+    return 'Tienes un retiro pendiente de $amount vBTC a $destination.\n\n¿Quieres completarlo?';
+  }
+
+  @override
+  String get tkbPendingWithdrawalContractBody => 'Tienes un retiro pendiente para este contrato. ¿Quieres completarlo?';
+
+  @override
+  String get tkbPendingWithdrawalFound => 'Retiro pendiente encontrado';
+
+  @override
+  String get tkbPercentages => 'Porcentajes';
+
+  @override
+  String get tkbResult => 'Resultado';
+
+  @override
+  String get tkbResultFail => 'Rechazado';
+
+  @override
+  String get tkbResultPass => 'Aprobado';
+
+  @override
+  String get tkbSelectVfxAddress => 'Selecciona la dirección VFX';
+
+  @override
+  String get tkbSelectedAddress => 'Dirección seleccionada:';
+
+  @override
+  String get tkbSendAutomatically => 'Enviar automáticamente';
+
+  @override
+  String tkbSendFundsTo(String address) {
+    return 'Envía fondos a $address (dirección copiada al portapapeles)';
+  }
+
+  @override
+  String get tkbSendManually => 'Enviar manualmente';
+
+  @override
+  String tkbSmartContractUidWithValue(String uid) {
+    return 'UID del contrato inteligente: $uid';
+  }
+
+  @override
+  String get tkbToBtcAddress => 'A la dirección BTC';
+
+  @override
+  String get tkbToVfxAddress => 'A la dirección VFX';
+
+  @override
+  String get tkbTokenBalances => 'Saldos de tokens';
+
+  @override
+  String get tkbTokenDetails => 'Detalles del token';
+
+  @override
+  String get tkbTokenTopicCreated => 'Tema del token creado';
+
+  @override
+  String tkbTopicUidLabel(String uid) {
+    return 'UID: $uid';
+  }
+
+  @override
+  String get tkbTotalVotes => 'Votos totales';
+
+  @override
+  String get tkbTransactionBroadcastedBang => '¡Transacción transmitida!';
+
+  @override
+  String get tkbTransactionHash => 'Hash de la transacción';
+
+  @override
+  String get tkbTransactionHashCopied => 'Hash de la transacción copiado al portapapeles';
+
+  @override
+  String get tkbTransferBtc => 'Transferir BTC';
+
+  @override
+  String tkbTransferDomainFrom(String address) {
+    return 'Transferir dominio desde $address';
+  }
+
+  @override
+  String tkbTransferOwnershipBody(String address) {
+    return '¿Seguro que quieres transferir la propiedad de este token vBTC a $address?';
+  }
+
+  @override
+  String get tkbTransferOwnershipToReserve => 'Transferir la propiedad a una Cuenta de reserva/protegida';
+
+  @override
+  String get tkbTransferOwnershipToReserveSubtitle => 'Transfiere la propiedad de este token a tu cuenta de reserva/protegida.';
+
+  @override
+  String get tkbTransferPending => 'Transferencia pendiente';
+
+  @override
+  String get tkbTransferToken => 'Transferir token';
+
+  @override
+  String get tkbTransferTokenOwnership => 'Transferir la propiedad del token';
+
+  @override
+  String get tkbTransferTokenOwnershipSubtitle => 'Transfiere la propiedad de este token a otra cuenta VFX.';
+
+  @override
+  String get tkbTransferVbtc => 'Transferir vBTC';
+
+  @override
+  String tkbTransferVbtcBody(String amount, String address) {
+    return '¿Seguro que quieres transferir $amount vBTC a $address?';
+  }
+
+  @override
+  String get tkbTransferVbtcSubtitle => 'Transfiere una porción específica del vBTC dentro del token a otra dirección VFX.';
+
+  @override
+  String get tkbTxBroadcasted => '¡TX transmitida!';
+
+  @override
+  String tkbUtxoAddress(String address) {
+    return 'Dirección: $address';
+  }
+
+  @override
+  String tkbUtxoDetails(String txId, String amount) {
+    return 'TX ID: $txId\nMonto:$amount';
+  }
+
+  @override
+  String get tkbUtxoUnused => 'Sin usar';
+
+  @override
+  String get tkbUtxoUsed => 'Usado';
+
+  @override
+  String get tkbVaultAccountPassword => 'Contraseña de la Cuenta de bóveda';
+
+  @override
+  String get tkbVaultAuthorizeDownload => 'Como esta es una Cuenta de bóveda, deberás autorizar la descarga.';
+
+  @override
+  String get tkbVaultCannotWithdraw => 'Las Cuentas de bóveda no pueden retirar. Transfiere vBTC a una dirección VFX estándar';
+
+  @override
+  String get tkbVaultOwnedCannotAction => 'Los tokens que pertenecen a una Cuenta de bóveda no pueden realizar esta acción.';
+
+  @override
+  String tkbVbtcTransferBroadcasted(String hash) {
+    return 'TX de transferencia vBTC V2 transmitida. Hash: $hash';
+  }
+
+  @override
+  String get tkbVbtcZeroBalance => 'Los tokens vBTC con saldo cero no se pueden transferir.';
+
+  @override
+  String get tkbVfxWalletRequired => 'Se requiere una billetera VFX para esta funcionalidad.';
+
+  @override
+  String get tkbVoteCounts => 'Conteo de votos';
+
+  @override
+  String tkbVotedOnBlock(String label, String block) {
+    return 'Votaste $label en el bloque $block.';
+  }
+
+  @override
+  String get tkbVotesNo => 'Votos en contra';
+
+  @override
+  String get tkbVotesYes => 'Votos a favor';
+
+  @override
+  String get tkbWalletControlsDomain => 'Esta billetera controlará la propiedad de transferencia/eliminación sobre este nuevo dominio.';
+
+  @override
+  String get tkbWithdrawBtc => 'Retirar BTC';
+
+  @override
+  String tkbWithdrawBtcBody(String amount, String address) {
+    return '¿Seguro que quieres retirar $amount BTC a $address?';
+  }
+
+  @override
+  String get tkbYesUpper => 'SÍ';
+
+  @override
+  String get tkbYouHaveVoted => 'Has votado.';
+
+  @override
+  String tkbYourBalanceValue(String balance) {
+    return 'Tu saldo: $balance';
+  }
+
+  @override
+  String tkbYourBalanceVbtc(String balance, String usd) {
+    return 'Tu saldo: $balance vBTC$usd';
+  }
+
+  @override
+  String get txpAccountBalance => 'Saldo de la cuenta';
+
+  @override
+  String get txpAccountCreated => 'Cuenta creada';
+
+  @override
+  String get txpActivateOnNetwork => '¿Activar en la red?';
+
+  @override
+  String get txpActivateOnNetworkBody => 'Hay un costo de 4 VFX (que se queman) más la comisión de TX para activar esta cuenta de bóveda en la red.  ¿Continuar?';
+
+  @override
+  String get txpAddBtcAccount => 'Agregar cuenta BTC';
+
+  @override
+  String get txpAddNewAccount => 'Agregar nueva cuenta';
+
+  @override
+  String get txpAddVfxAccount => 'Agregar cuenta VFX';
+
+  @override
+  String get txpAddressCopied => 'Dirección copiada';
+
+  @override
+  String get txpAddressCopiedClipboard => 'Dirección copiada al portapapeles.';
+
+  @override
+  String get txpAllAddresses => 'Todas las direcciones';
+
+  @override
+  String get txpAmountCopied => 'Monto copiado';
+
+  @override
+  String get txpAutoActivate => '¿Activar automáticamente?';
+
+  @override
+  String get txpAutoActivateBody => '¿Te gustaría activar automáticamente esta cuenta una vez que se reciban los fondos?';
+
+  @override
+  String get txpAutoActivateQueued => 'Activación automática en cola.';
+
+  @override
+  String txpBlockDiffAvg(String value) {
+    return 'Promedio de diferencia de bloques: $value';
+  }
+
+  @override
+  String txpBlockLastDelay(String value) {
+    return 'Retraso del último bloque: $value';
+  }
+
+  @override
+  String txpBlockLastReceived(String value) {
+    return 'Último bloque recibido: $value';
+  }
+
+  @override
+  String get txpBlockNumber => 'Número de bloque';
+
+  @override
+  String txpBlocksAveraged(String value) {
+    return 'Bloques promediados: $value';
+  }
+
+  @override
+  String get txpBtcNoBalance => 'La cuenta BTC no tiene saldo';
+
+  @override
+  String get txpChooseCoinType => 'Elige el tipo de moneda';
+
+  @override
+  String get txpChoosePaymentGateway => 'Elige la pasarela de pago';
+
+  @override
+  String get txpClearFilters => 'Limpiar filtros';
+
+  @override
+  String get txpCompleteMoonpayDeposit => 'Completar depósito de MoonPay';
+
+  @override
+  String get txpCompleteSale => 'Completar venta';
+
+  @override
+  String txpCompleteSaleConfirmBody(String scId, String amount) {
+    return '¿Seguro que quieres completar la venta de $scId por $amount VFX?';
+  }
+
+  @override
+  String get txpConfirmPassword => 'Confirmar contraseña';
+
+  @override
+  String get txpConfirmPasswordBody => 'Por favor confirma tu contraseña.';
+
+  @override
+  String get txpConfirmSend => 'Confirmar envío';
+
+  @override
+  String txpConfirmSendBody(String amount, String currency, String toAddress, String fromAddress, String feeRate) {
+    return 'Monto: $amount $currency\nPara: $toAddress\nDe: $fromAddress\nTasa de comisión: $feeRate sats/vB';
+  }
+
+  @override
+  String get txpCopyAddress => 'Copiar dirección';
+
+  @override
+  String get txpCreate => 'Crear';
+
+  @override
+  String get txpCreateBtcAccountSub => 'Crea una nueva cuenta BTC';
+
+  @override
+  String get txpCreateVfxAccountSub => 'Crea una nueva cuenta VFX';
+
+  @override
+  String get txpCryptoDotComOnRamp => 'On-Ramp de Crypto.com';
+
+  @override
+  String get txpData => 'Datos';
+
+  @override
+  String get txpDate => 'Fecha';
+
+  @override
+  String get txpDepositAddressMoonpay => 'Dirección de depósito (MoonPay)';
+
+  @override
+  String get txpDisclaimerAnd => ' y la ';
+
+  @override
+  String txpDisclaimerIntro(String gateway) {
+    return 'Entiendo que ahora compraré la moneda nativa VFX o BTC directamente a través de $gateway (';
+  }
+
+  @override
+  String txpDisclaimerMiddle(String gateway) {
+    return '), que es una plataforma de servicios de terceros. Al continuar y contratar los servicios de $gateway, reconoces que has leído y aceptado los ';
+  }
+
+  @override
+  String txpDisclaimerOutro(String gateway) {
+    return '. Además, entiendes que la Red VFX de VerifiedX es un ecosistema autónomo y descentralizado y no comparte ninguna comisión por tu uso de los servicios de $gateway, y no asume ninguna responsabilidad por cualquier problema que pueda afectar tu transacción con cualquier proveedor de servicios de terceros en cualquier momento. Para cualquier pregunta relacionada con los servicios de $gateway, comunícate con $gateway en ';
+  }
+
+  @override
+  String get txpErrorOccurred => 'Ocurrió un error';
+
+  @override
+  String get txpFundAccount => 'Financiar cuenta';
+
+  @override
+  String get txpFundVaultBody => 'Ahora debes financiar tu cuenta de bóveda con un mínimo de 5 VFX. Se quemarán 4 VFX al activarla.';
+
+  @override
+  String get txpFundVaultBodyShort => 'Ahora debes financiar tu cuenta de bóveda con un mínimo de 5 VFX.';
+
+  @override
+  String get txpFundsSent => 'Fondos enviados';
+
+  @override
+  String txpFundsSentBody(String amount, String address) {
+    return 'Se enviaron $amount VFX a $address.\n\nEspera a que la transacción se refleje y luego activa tu cuenta de bóveda.';
+  }
+
+  @override
+  String get txpGetBtcNow => 'Obtén \$BTC ahora';
+
+  @override
+  String get txpGetQuote => 'Obtener cotización';
+
+  @override
+  String get txpGetVfxNow => 'Obtén \$VFX ahora';
+
+  @override
+  String get txpImportBtcKeySub => 'Importa una clave privada BTC existente';
+
+  @override
+  String get txpImportVfxKeySub => 'Importa una clave privada VFX existente';
+
+  @override
+  String get txpManualDeposit => 'Depósito manual';
+
+  @override
+  String txpManualDepositBody(String amount, String currency) {
+    return 'Puedes enviar esto desde otra billetera enviando la cantidad exacta ($amount $currency) a la dirección de depósito de arriba.';
+  }
+
+  @override
+  String get txpMeMarker => '[YO]';
+
+  @override
+  String get txpMinBalanceActivate => 'Se requiere un saldo mínimo de 5 VFX para activar.';
+
+  @override
+  String get txpMoonpayManualMarked => 'Transacción de MoonPay marcada como depósito manual';
+
+  @override
+  String get txpMustConfirmPassword => 'Debes confirmar tu contraseña.';
+
+  @override
+  String get txpNativeMoonpaySoon => 'La integración nativa de Moonpay se activará pronto.';
+
+  @override
+  String get txpNoAccountFound => 'No se encontró ninguna cuenta';
+
+  @override
+  String get txpNoAddressSelected => 'No hay dirección seleccionada';
+
+  @override
+  String get txpNonce => 'Nonce';
+
+  @override
+  String get txpNotAvailableOnPlatform => 'No disponible en esta plataforma';
+
+  @override
+  String get txpNotEnoughBtcFee => 'No hay suficiente BTC para cubrir la transacción + comisión';
+
+  @override
+  String get txpNotVaultAccount => 'No es una cuenta de bóveda';
+
+  @override
+  String get txpOffRampInstructions => 'Para completar este retiro, envía la cantidad exacta de BTC a la dirección de depósito de abajo:';
+
+  @override
+  String get txpOriginalTx => 'TX original';
+
+  @override
+  String get txpPasswordsDoNotMatch => 'Las contraseñas no coinciden.';
+
+  @override
+  String txpPleaseSendFundsTo(String address) {
+    return 'Por favor envía fondos a $address';
+  }
+
+  @override
+  String get txpPrivacyPolicy => 'Política de privacidad';
+
+  @override
+  String get txpRestoreCodeRecoveryBody => 'Pega tu CÓDIGO DE RESTAURACIÓN para importar la cuenta de recuperación de esta cuenta de bóveda.';
+
+  @override
+  String get txpScanAndPay => 'Escanear y pagar';
+
+  @override
+  String get txpSendManually => 'Ya envié / enviaré manualmente';
+
+  @override
+  String get txpSendNow => 'Enviar ahora';
+
+  @override
+  String txpSendingConfirmBody(String amount, String toAddress, String fromAddress) {
+    return 'Enviando:\n$amount VFX\n\nPara:\n$toAddress\n\nDe:\n$fromAddress';
+  }
+
+  @override
+  String txpSentToAddress(String amount, String currency, String address) {
+    return '$amount $currency enviados a $address';
+  }
+
+  @override
+  String get txpSetupBtcAccount => 'Configura una cuenta de Bitcoin';
+
+  @override
+  String get txpSetupVaultAccount => 'Configurar cuenta de bóveda';
+
+  @override
+  String get txpSetupVaultAccountBody => 'Crea una contraseña para continuar. Debes recordar esta contraseña, ya que será necesaria para cualquier transacción con esta cuenta de bóveda.';
+
+  @override
+  String get txpSetupVfxAccount => 'Configura una cuenta de VerifiedX';
+
+  @override
+  String txpStatusWithValue(String value) {
+    return 'Estado: $value';
+  }
+
+  @override
+  String get txpStripeCreditCard => 'Stripe (Tarjeta de crédito)';
+
+  @override
+  String txpSufficientBalanceBody(String address, String balance) {
+    return 'Tienes una cuenta con saldo suficiente.\n\n¿Te gustaría enviar 5 VFX desde:\n$address\n[Saldo: $balance VFX]?';
+  }
+
+  @override
+  String get txpTermsOfUse => 'Términos de uso';
+
+  @override
+  String get txpTestnetFaucet => 'Faucet de testnet';
+
+  @override
+  String get txpTestnetFaucetNoTerms => 'El faucet de testnet no tiene términos. ¡Diviértete!';
+
+  @override
+  String get txpTileAmountLabel => 'Monto: ';
+
+  @override
+  String txpTileDateLabel(String date) {
+    return 'Fecha: $date';
+  }
+
+  @override
+  String txpTileHashLabel(String hash) {
+    return 'Hash: $hash';
+  }
+
+  @override
+  String txpTileSettlementDateLabel(String date) {
+    return 'Fecha de liquidación: $date';
+  }
+
+  @override
+  String get txpTileStatusLabel => 'Estado: ';
+
+  @override
+  String get txpTileTypeLabel => 'Tipo: ';
+
+  @override
+  String get txpTileViewData => 'Ver datos';
+
+  @override
+  String txpTimeSinceLastBlock(String value) {
+    return 'Tiempo desde el último bloque: ${value}s';
+  }
+
+  @override
+  String get txpTransactionFailed => 'La transacción falló';
+
+  @override
+  String get txpTransactionHashLabel => 'Hash de transacción';
+
+  @override
+  String get txpTransactionSent => 'Transacción enviada';
+
+  @override
+  String get txpTxDetailTitle => 'Detalle de transacción';
+
+  @override
+  String get txpTxFilters => 'Filtros de transacción';
+
+  @override
+  String get txpTxHash => 'Hash de Tx';
+
+  @override
+  String get txpTxHashCopied => 'Hash de Tx copiado';
+
+  @override
+  String get txpTxType => 'Tipo de Tx';
+
+  @override
+  String txpTxTypeLabel(String suffix) {
+    return 'Tipo de Tx$suffix:';
+  }
+
+  @override
+  String txpValueCopied(String value) {
+    return '\'$value\' copiado al portapapeles';
+  }
+
+  @override
+  String get txpVaultActivationSent => 'Se envió la transacción de activación de la cuenta de bóveda.\n\nEspera a que se refleje como \"Activada\".';
+
+  @override
+  String get txpVfxAmount => 'Monto de VFX';
+
+  @override
+  String get txpVfxOffRampSoon => 'La función de retiro de VFX estará disponible pronto';
+
+  @override
+  String get txpVfxQuote => 'Cotización de VFX';
+
+  @override
+  String txpVfxQuoteBody(String amountVfx, String amountUsd) {
+    return '$amountVfx VFX por \$$amountUsd USD\n¿Te gustaría continuar?';
+  }
+
+  @override
+  String get txpWalletDetailsBackup => 'Aquí están los detalles de tu billetera. Asegúrate de respaldar tu clave privada en un lugar seguro.';
+
+  @override
+  String txpWalletVersionInfo(String envTag, String version, String nickname) {
+    return 'VFX Wallet$envTag\nVersión $version ($nickname)';
+  }
+
+  @override
+  String tkbHashLabel(String hash) {
+    return 'Hash: $hash';
+  }
 }

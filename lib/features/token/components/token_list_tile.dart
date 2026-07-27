@@ -7,6 +7,8 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/cached_memory_image_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../nft/providers/transferred_provider.dart';
 import '../../nft/services/nft_service.dart';
 import 'burn_tokens_button.dart';
@@ -38,13 +40,14 @@ class TokenListTile extends BaseComponent {
 
   void showRaErrorMessage() {
     InfoDialog.show(
-      title: "Not Supported by Vault Account",
-      body: "Vault Account owned tokens can not perform this action.",
+      title: globalL10n.tokenNotSupportedByVault,
+      body: globalL10n.tkbVaultOwnedCannotAction,
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final isOwnedByRA = address.startsWith("xRBX");
 
     bool canBurn = true;
@@ -92,7 +95,7 @@ class TokenListTile extends BaseComponent {
               color: isOwnedByRA ? Theme.of(context).colorScheme.reserve : null,
             ),
           ),
-          subtitle: Text("Balance: ${tokenAccount.balance}"),
+          subtitle: Text(l10n.tkbBalanceValue(tokenAccount.balance.toString())),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -116,13 +119,13 @@ class TokenListTile extends BaseComponent {
                 Padding(
                   padding: const EdgeInsets.only(left: 6.0),
                   child: AppButton(
-                    label: "Voting",
+                    label: l10n.tokenVoting,
                     variant: AppColorVariant.Light,
                     onPressed: () async {
                       final nft = await NftService().getNftData(tokenAccount.smartContractId);
                       if (nft != null && nft.tokenStateDetails != null) {
                         if (nft.tokenStateDetails!.topicList.isEmpty) {
-                          InfoDialog.show(title: "No Topics", body: "This token doesn't have any voting topics yet.");
+                          InfoDialog.show(title: l10n.tokenNoTopicsTitle, body: l10n.tokenNoTopicsBody);
                           return;
                         }
 
@@ -204,7 +207,7 @@ class TokenListTile extends BaseComponent {
 
                   if (nft != null && nft.tokenStateDetails != null) {
                     InfoDialog.show(
-                      title: "Token Details",
+                      title: l10n.tkbTokenDetails,
                       content: TokenDetailsContent(
                         token: nft.tokenStateDetails!,
                         tokenAccount: tokenAccount,
