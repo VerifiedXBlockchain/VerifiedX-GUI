@@ -343,7 +343,8 @@ class _FaucetWithdrawlStep extends BaseComponent {
 
                 final code = await PromptModal.show(
                   title: l10n.btcVerificationCodeTitle(phone),
-                  validator: (v) => formValidatorNumber(v, "Verification Code"),
+                  validator: (v) =>
+                      formValidatorNumber(v, l10n.btcVerificationCodeLabel),
                   labelText: l10n.btcVerificationCodeLabel,
                 );
 

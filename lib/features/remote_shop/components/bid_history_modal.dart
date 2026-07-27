@@ -23,9 +23,9 @@ class BidHistoryModal extends BaseComponent {
       withClose: true,
       withDecor: false,
       children: [
-        const Text(
-          "Current Bids",
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context).r3gCurrentBids,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -52,7 +52,7 @@ class BidHistoryModal extends BaseComponent {
                       onPressed: () async {
                         final success = await RemoteShopService().resendBid(bid.id);
                         if (success) {
-                          Toast.message("Bid Resent!");
+                          Toast.message(AppLocalizations.of(context).r3gBidResent);
                           Navigator.of(context).pop();
                         }
                       },

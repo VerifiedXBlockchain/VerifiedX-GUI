@@ -77,7 +77,7 @@ class FaucetForm extends BaseComponent {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "VFX Address: $address",
+            l10n.r3eVfxAddress(address),
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
             ),

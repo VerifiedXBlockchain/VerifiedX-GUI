@@ -247,7 +247,7 @@ class _FloorPrice extends BaseComponent {
       controller: provider.floorPriceController,
       onChanged: provider.updateFloorPrice,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-      validator: (value) => formValidatorNotEmpty(value, "Floor Price"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.shopFloorPriceLabel),
       decoration: InputDecoration(
         suffixText: "VFX",
         label: Text(
@@ -274,7 +274,7 @@ class _ReservePrice extends BaseComponent {
       controller: provider.reservePriceController,
       onChanged: provider.updateReservePrice,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-      validator: (value) => formValidatorNotEmpty(value, "Reserve Price"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.mktReservePriceLabel),
       decoration: InputDecoration(
         suffixText: "VFX",
         label: Text(

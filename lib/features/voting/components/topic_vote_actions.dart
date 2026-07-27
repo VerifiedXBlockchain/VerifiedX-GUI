@@ -7,6 +7,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../encrypt/utils.dart';
 import '../providers/my_vote_list_provider.dart';
 import '../providers/pending_votes_provider.dart';
@@ -22,6 +23,7 @@ class TopicVoteActions extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final topic = ref.watch(votingProvider(topicUid));
     final provider = ref.read(votingProvider(topicUid).notifier);
 
@@ -32,38 +34,38 @@ class TopicVoteActions extends BaseComponent {
     }
 
     if (!topic.isActive) {
-      return _ErrorMessage("Voting Ended on ${topic.endsAtFormatted}.");
+      return _ErrorMessage(l10n.r3hVotingEndedOn(topic.endsAtFormatted));
     }
 
     final myAddress = ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
     if (myAddress == null) {
-      return const _ErrorMessage("Must have an account selected to vote.");
+      return _ErrorMessage(l10n.r3hMustSelectAccountToVote);
     }
 
     final isValidating = ref.watch(sessionProvider.select((v) => v.currentWallet?.isValidating)) == true;
     if (!isValidating) {
-      return const _ErrorMessage("You must be a validator to vote.");
+      return _ErrorMessage(l10n.votingMustBeValidatorToVote);
     }
 
     final existingVote = myVotes.firstWhereOrNull((a) => a.address == myAddress && a.topicUid == topic.uid);
 
     if (existingVote != null) {
       if (existingVote.blockHeight == 0) {
-        return _ErrorMessage("You voted ${existingVote.voteTypeLabel}. Transaction is pending.");
+        return _ErrorMessage(l10n.r3hYouVotedPending(existingVote.voteTypeLabel));
       }
-      return _ErrorMessage("You voted ${existingVote.voteTypeLabel} on block ${existingVote.blockHeight}");
+      return _ErrorMessage(l10n.r3hYouVotedOnBlock(existingVote.voteTypeLabel, existingVote.blockHeight.toString()));
     }
 
     if (ref.read(pendingVotesProvider).contains(topic.uid)) {
-      return const _ErrorMessage("Vote transaction pending.");
+      return _ErrorMessage(l10n.votingPendingTx);
     }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Cast Your Vote",
+          l10n.votingCastYourVote,
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 color: Colors.white,
               ),
@@ -73,14 +75,14 @@ class TopicVoteActions extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AppButton(
-              label: "Vote Yes",
+              label: l10n.tokenVoteYes,
               onPressed: () async {
                 if (!await passwordRequiredGuard(context, ref)) return;
                 final confirmed = await ConfirmDialog.show(
-                  title: "Confirm Vote [YES]",
-                  body: "Are you sure you want to vote YES on this topic?",
-                  confirmText: "Vote YES",
-                  cancelText: "Cancel",
+                  title: l10n.r3hConfirmVoteYesTitle,
+                  body: l10n.r3hConfirmVoteYesBody,
+                  confirmText: l10n.r3hVoteYesUpper,
+                  cancelText: l10n.actionCancel,
                 );
                 if (confirmed == true) {
                   provider.voteYes();
@@ -93,15 +95,15 @@ class TopicVoteActions extends BaseComponent {
               width: 16,
             ),
             AppButton(
-              label: "Vote No",
+              label: l10n.tokenVoteNo,
               onPressed: () async {
                 if (!await passwordRequiredGuard(context, ref)) return;
 
                 final confirmed = await ConfirmDialog.show(
-                  title: "Confirm Vote [NO]",
-                  body: "Are you sure you want to vote NO on this topic?",
-                  confirmText: "Vote NO",
-                  cancelText: "Cancel",
+                  title: l10n.r3hConfirmVoteNoTitle,
+                  body: l10n.r3hConfirmVoteNoBody,
+                  confirmText: l10n.r3hVoteNoUpper,
+                  cancelText: l10n.actionCancel,
                 );
                 if (confirmed == true) {
                   provider.voteNo();
@@ -114,7 +116,7 @@ class TopicVoteActions extends BaseComponent {
         ),
         const SizedBox(height: 8),
         Text(
-          "Voting ends ${topic.endsAtFormatted}.",
+          l10n.r3hVotingEndsOn(topic.endsAtFormatted),
           style: Theme.of(context).textTheme.bodySmall,
         )
       ],

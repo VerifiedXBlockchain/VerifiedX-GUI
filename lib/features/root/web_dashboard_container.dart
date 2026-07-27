@@ -1309,11 +1309,11 @@ class _WalletListItem extends StatelessWidget {
             return [
               PopupMenuItem(
                 value: 0,
-                child: Text("Copy Address"),
+                child: Text(AppLocalizations.of(context).adnrFundCopyAddress),
               ),
               PopupMenuItem(
                 value: 1,
-                child: Text("Reveal Private Key"),
+                child: Text(AppLocalizations.of(context).walletRevealPrivateKey),
               ),
             ];
           },

@@ -77,9 +77,9 @@ class WebBtcAdnrContent extends BaseComponent {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Create a BTC Domain as an alias to your account's address for receiving funds.",
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context).r3eCreateBtcDomainDesc,
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                   textAlign: TextAlign.center,
@@ -163,8 +163,8 @@ class WebBtcAdnrContent extends BaseComponent {
                       onPressed: () async {
                         if (balance <
                             (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
-                          Toast.error(
-                              "Not enough VFX in this account to create a transaction.");
+                          Toast.error(AppLocalizations.of(context)
+                              .adnrInsufficientFundsTransfer);
                           return;
                         }
 
@@ -182,8 +182,8 @@ class WebBtcAdnrContent extends BaseComponent {
                         final vfxToAddress = await PromptModal.show(
                             contextOverride: context,
                             title: AppLocalizations.of(context).btcVfxOwnerTitle,
-                            body:
-                                "What VFX address will manage this BTC domain?",
+                            body: AppLocalizations.of(context)
+                                .r3eWhichVfxManageDomain,
                             validator: (value) =>
                                 formValidatorRbxAddress(value, false),
                             labelText: AppLocalizations.of(context).btcVfxAddressLabelComma);
@@ -214,8 +214,12 @@ class WebBtcAdnrContent extends BaseComponent {
 
                         final confirmed = await ConfirmDialog.show(
                           title: AppLocalizations.of(context).btcValidTxTitle,
-                          body:
-                              "The BTC Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
+                          body: AppLocalizations.of(context)
+                              .r3eBtcDomainValidBody(
+                                  "$adnr.vfx",
+                                  ADNR_COST.toString(),
+                                  txFee.toString(),
+                                  (ADNR_COST + txFee).toString()),
                           confirmText: AppLocalizations.of(context).actionSend,
                           cancelText: AppLocalizations.of(context).actionCancel,
                         );
@@ -240,8 +244,8 @@ class WebBtcAdnrContent extends BaseComponent {
                               .read(adnrPendingProvider.notifier)
                               .addId(address, "transfer", adnr);
 
-                          Toast.message(
-                              "BTC Domain Transaction has been broadcasted. See log for hash.");
+                          Toast.message(AppLocalizations.of(context)
+                              .r3eBtcDomainBroadcasted);
 
                           return;
                         }
@@ -255,15 +259,19 @@ class WebBtcAdnrContent extends BaseComponent {
                       onPressed: () async {
                         if (balance <
                             (ADNR_DELETE_COST + MIN_RBX_FOR_SC_ACTION)) {
-                          Toast.error(
-                              "Not enough VFX in this account to create a transaction.");
+                          Toast.error(AppLocalizations.of(context)
+                              .adnrInsufficientFundsTransfer);
                           return;
                         }
 
                         final confirmed = await ConfirmDialog.show(
                           title: AppLocalizations.of(context).btcDeleteDomainTitle,
-                          body:
-                              "Are you sure you want to delete this BTC Domain?\n${ADNR_DELETE_COST == 0 ? 'There is no cost to delete and BTC Domain (aside from the TX fee).' : 'There is a cost of $ADNR_DELETE_COST VFX to delete a BTC Domain.'}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+                          body: AppLocalizations.of(context)
+                              .r3eDeleteBtcDomainBody(ADNR_DELETE_COST == 0
+                                  ? AppLocalizations.of(context).r3eNoCostToDelete
+                                  : AppLocalizations.of(context)
+                                      .r3eCostToDelete(
+                                          ADNR_DELETE_COST.toString())),
                           destructive: true,
                           cancelText: AppLocalizations.of(context).actionCancel,
                           confirmText: AppLocalizations.of(context).walletDelete,
@@ -294,7 +302,11 @@ class WebBtcAdnrContent extends BaseComponent {
                           final confirmed = await ConfirmDialog.show(
                             title: AppLocalizations.of(context).btcValidTxTitle,
                             body:
-                                "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.btc\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
+                                AppLocalizations.of(context).r3eVfxDomainValidBody(
+                                  "$adnr.btc",
+                                  ADNR_COST.toString(),
+                                  txFee.toString(),
+                                  (ADNR_COST + txFee).toString()),
                             confirmText: AppLocalizations.of(context).actionSend,
                             cancelText: AppLocalizations.of(context).actionCancel,
                           );
@@ -317,8 +329,8 @@ class WebBtcAdnrContent extends BaseComponent {
                                 .read(adnrPendingProvider.notifier)
                                 .addId(address, "delete", adnr);
 
-                            Toast.message(
-                                "BTC Domain Transaction has been broadcasted. See log for hash.");
+                            Toast.message(AppLocalizations.of(context)
+                                .r3eBtcDomainBroadcasted);
                             return;
                           }
 

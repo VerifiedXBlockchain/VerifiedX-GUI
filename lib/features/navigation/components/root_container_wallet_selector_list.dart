@@ -41,7 +41,7 @@ class RootContainerWalletSelectorList extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "No VFX Accounts",
+                  AppLocalizations.of(context).navNoVfxAccounts,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(
@@ -81,7 +81,7 @@ class RootContainerWalletSelectorList extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "No BTC Accounts",
+                  AppLocalizations.of(context).navNoBtcAccounts,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(
@@ -120,7 +120,7 @@ class RootContainerWalletSelectorList extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "No Accounts",
+                  AppLocalizations.of(context).navNoAccounts,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(

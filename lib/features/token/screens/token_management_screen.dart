@@ -15,6 +15,7 @@ import '../../../core/providers/cached_memory_image_provider.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../nft/models/nft.dart';
 import '../../nft/services/nft_service.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
@@ -169,10 +170,10 @@ class TokenManagementScreen extends BaseScreen {
   void showRaErrorMessage([BuildContext? context]) {
     final title = context != null
         ? AppLocalizations.of(context).tokenNotSupportedByVault
-        : "Not Supported by Vault Account";
+        : globalL10n.tokenNotSupportedByVault;
     InfoDialog.show(
       title: title,
-      body: "Vault Account owned tokens can not perform this action. Please change hte ownership to a standard VFX account to continue.",
+      body: globalL10n.r3hVaultActionNotAllowedBody,
     );
   }
 
@@ -354,7 +355,7 @@ class TokenManagementScreen extends BaseScreen {
             Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 2),
               child: Text(
-                "Token Accounts",
+                AppLocalizations.of(context).r3hTokenAccounts,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
             ),
@@ -362,7 +363,7 @@ class TokenManagementScreen extends BaseScreen {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("No tokens in any of your accounts."),
+                  Text(AppLocalizations.of(context).r3hNoTokensInAccounts),
                   if (token.mintable)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -443,20 +444,20 @@ class TokenDetailsContent extends StatelessWidget {
                   ),
                   if (!token.mintable)
                     TokenDetailRow(
-                      label: 'Fixed Supply',
+                      label: AppLocalizations.of(context).tkbFixedSupply,
                       value: "${(min(token.currentSupply, token.startingSupply))}",
                     ),
                   // if (token.currentSupply > 0)
 
                   TokenDetailRow(
                     label: AppLocalizations.of(context).tokenLifetimeCapLabel,
-                    value: token.mintable ? 'Infinite' : (min(token.currentSupply, token.startingSupply)).toString(),
+                    value: token.mintable ? AppLocalizations.of(context).beaconCacheInfinite : (min(token.currentSupply, token.startingSupply)).toString(),
                   ),
 
                   if (nft.tokenDetails != null)
                     TokenDetailRow(
                       label: AppLocalizations.of(context).tokenMintableLabel,
-                      value: nft.tokenDetails!.mintable ? "YES" : "NO",
+                      value: nft.tokenDetails!.mintable ? AppLocalizations.of(context).r3hYesUpper : AppLocalizations.of(context).r3hNoUpper,
                       dividerBelow: false,
                     ),
                 ],
@@ -489,12 +490,12 @@ class TokenDetailsContent extends StatelessWidget {
                   if (nft.tokenDetails != null)
                     TokenDetailRow(
                       label: AppLocalizations.of(context).tokenBurnableLabel,
-                      value: nft.tokenDetails!.burnable ? "YES" : "NO",
+                      value: nft.tokenDetails!.burnable ? AppLocalizations.of(context).r3hYesUpper : AppLocalizations.of(context).r3hNoUpper,
                     ),
                   if (nft.tokenDetails != null)
                     TokenDetailRow(
                       label: AppLocalizations.of(context).tokenVoting,
-                      value: nft.tokenDetails!.voting ? "YES" : "NO",
+                      value: nft.tokenDetails!.voting ? AppLocalizations.of(context).r3hYesUpper : AppLocalizations.of(context).r3hNoUpper,
                       dividerBelow: false,
                     ),
                 ],
@@ -510,7 +511,7 @@ class TokenDetailsContent extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              "Description:",
+              AppLocalizations.of(context).r3hDescriptionColon,
               style: TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w100),
             ),
           ),
@@ -562,7 +563,7 @@ class TokenDetailRow extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () async {
                       await Clipboard.setData(ClipboardData(text: value));
-                      Toast.message("$label copied to clipboard");
+                      Toast.message(AppLocalizations.of(context).r3hCopiedToClipboard(label));
                     },
                     child: Icon(
                       Icons.copy,

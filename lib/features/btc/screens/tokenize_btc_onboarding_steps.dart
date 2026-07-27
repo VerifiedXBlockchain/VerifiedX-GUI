@@ -348,7 +348,7 @@ class _CreateOrImportVfxWalletStep extends BaseComponent {
                 final pkey = await PromptModal.show(
                   title: l10n.walletImportTitle,
                   validator: (String? value) =>
-                      formValidatorNotEmpty(value, "Private Key"),
+                      formValidatorNotEmpty(value, l10n.walletPrivateKey),
                   labelText: l10n.walletPrivateKeyLabel,
                   onValidSubmission: (value) async {},
                 );
@@ -461,7 +461,8 @@ class _FaucetWithdrawlStep extends BaseComponent {
 
                 final code = await PromptModal.show(
                   title: l10n.btcVerificationCodeTitle(phone),
-                  validator: (v) => formValidatorNumber(v, "Verification Code"),
+                  validator: (v) =>
+                      formValidatorNumber(v, l10n.btcVerificationCodeLabel),
                   labelText: l10n.btcVerificationCodeLabel,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[0-9.]"))

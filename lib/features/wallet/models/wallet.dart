@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../l10n/l10n_helper.dart';
 import '../../keygen/models/keypair.dart';
 
 part 'wallet.freezed.dart';
@@ -58,7 +59,7 @@ class Wallet with _$Wallet {
 
   String get balanceLabel {
     if (isReserved) {
-      return "Available: $availableBalance VFX";
+      return globalL10n.r3hAvailableBalance(availableBalance.toString());
     }
 
     return "$balance VFX";

@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/app_constants.dart';
 import '../../core/dialogs.dart';
 import '../../core/utils.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../utils/toast.dart';
 import '../../utils/validation.dart';
 import '../asset/asset.dart';
@@ -68,6 +69,8 @@ Future<dynamic> initTransferNftProcess(
   String? prefillAddress,
 }) async {
   final id = nft.id;
+  final l10n = AppLocalizations.of(context);
+  final assetLabel = isToken ? 'Token' : 'NFT';
 
   final _provider = ref.read(nftDetailProvider(id).notifier);
 
@@ -76,7 +79,7 @@ Future<dynamic> initTransferNftProcess(
   String? fromAddress;
 
   if (nft.isListed(ref)) {
-    Toast.error("This ${isToken ? 'Token' : 'NFT'} is listed in your auction house. Please remove the listing before transferring.");
+    Toast.error(l10n.r3gAssetListedInAuctionHouse(assetLabel));
     return;
   }
 
@@ -87,14 +90,14 @@ Future<dynamic> initTransferNftProcess(
 
     Wallet? wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == nft.currentOwner);
     if (wallet == null) {
-      Toast.error("No account selected");
+      Toast.error(l10n.messageNoAccountSelected);
       return;
     }
 
     fromAddress = wallet.address;
 
     if (wallet.balance < MIN_RBX_FOR_SC_ACTION) {
-      Toast.error("Not enough balance for transaction");
+      Toast.error(l10n.nftNotEnoughBalanceToast);
       return;
     }
 
@@ -103,14 +106,14 @@ Future<dynamic> initTransferNftProcess(
     final filesReady = await _nft.areFilesReady();
 
     if (!filesReady) {
-      Toast.error("Media files not found on this machine.");
+      Toast.error(l10n.r3gMediaFilesNotFound);
       return;
     }
     if (wallet.isReserved) {
       reservePassword = await PromptModal.show(
-        title: "Vault Account Password",
+        title: l10n.tkbVaultAccountPassword,
         validator: (_) => null,
-        labelText: "Password",
+        labelText: l10n.reservePasswordLabel,
         lines: 1,
         obscureText: true,
         revealObscure: true,
@@ -120,9 +123,9 @@ Future<dynamic> initTransferNftProcess(
       }
 
       final hoursString = await PromptModal.show(
-        title: "Timelock Duration",
+        title: l10n.svcTimelockDuration,
         validator: (_) => null,
-        labelText: "Hours (24 Minimum)",
+        labelText: l10n.svcTimelockHoursLabel,
         initialValue: "24",
         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       );
@@ -136,9 +139,9 @@ Future<dynamic> initTransferNftProcess(
 
   if (kIsWeb && nft.currentOwner.startsWith("xRBX")) {
     final hoursString = await PromptModal.show(
-      title: "Timelock Duration",
+      title: l10n.svcTimelockDuration,
       validator: (_) => null,
-      labelText: "Hours (24 Minimum)",
+      labelText: l10n.svcTimelockHoursLabel,
       initialValue: "24",
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
     );
@@ -153,10 +156,10 @@ Future<dynamic> initTransferNftProcess(
     controller: controller,
     contextOverride: context,
     // initialValue: prefillAddress ?? '',
-    title: titleOverride ?? "Transfer ${isToken ? 'Token' : 'NFT'}",
+    title: titleOverride ?? l10n.r3gTransferAssetTitle(assetLabel),
     validator: (value) => formValidatorRbxAddress(value, true),
-    labelText: "VFX Address",
-    confirmText: "Continue",
+    labelText: l10n.bw2LabelVfxAddress,
+    confirmText: l10n.actionContinue,
     inputFormatters: [
       FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
     ],
@@ -173,7 +176,7 @@ Future<dynamic> initTransferNftProcess(
         if (success == true) {
           ref.read(transferredProvider.notifier).addId(id);
 
-          Toast.message("${isToken ? 'Token' : 'NFT'} Transfer sent successfully to $address!");
+          Toast.message(l10n.r3gAssetTransferSentSuccess(assetLabel, address));
           Navigator.of(context).pop();
         } else {
           Toast.error();
@@ -182,31 +185,35 @@ Future<dynamic> initTransferNftProcess(
       } else {
         final isValid = await BridgeService().validateSendToAddress(address);
         if (!isValid) {
-          Toast.error("Invalid Address");
+          Toast.error(l10n.nftInvalidAddressToast);
           return;
         }
 
+        final optionalSuffix = backupRequired ? '' : l10n.r3gOptionalParenthetical;
         PromptModal.show(
           contextOverride: context,
-          title: "Backup URL ${backupRequired ? '' : '(Optional)'}",
-          body: "Paste in a public URL to a hosted zipfile containing the assets.",
+          title: l10n.r3gBackupUrlTitle(optionalSuffix),
+          body: l10n.r3gPasteZipfileUrl,
           validator: (value) {
             if (backupRequired) {
               if (value == null || value.trim().isEmpty) {
-                return "Backup URL required";
+                return l10n.r3gBackupUrlRequired;
               }
               return null;
             }
             return null;
           },
-          labelText: "URL ${backupRequired ? '' : '(Optional)'}",
-          confirmText: "Transfer",
+          labelText: l10n.r3gUrlOptionalLabel(optionalSuffix),
+          confirmText: l10n.nftTransfer,
           onValidSubmission: (url) async {
             final confirmed = await ConfirmDialog.show(
-              title: "Confirm Transfer",
-              body:
-                  "Please confirm you want to send the ${isToken ? 'Token' : 'NFT'} to \"$address\".${reservePassword == null ? '\n\nIf this address is not correct, there will be no way to recover the ownership of the ${isToken ? 'Token' : 'NFT'}.' : ''}",
-              confirmText: "Send",
+              title: l10n.bw2ConfirmTransfer,
+              body: l10n.r3gConfirmSendAssetBody(
+                assetLabel,
+                address,
+                reservePassword == null ? l10n.r3gNoRecoveryWarning(assetLabel) : '',
+              ),
+              confirmText: l10n.actionSend,
             );
 
             if (confirmed == true) {
@@ -225,10 +232,9 @@ Future<dynamic> initTransferNftProcess(
               }
 
               await InfoDialog.show(
-                title: "Transfer in Progress",
-                body:
-                    "Please ensure to keep your wallet open until this ${isToken ? 'Token' : 'NFT'} transfer transaction appears in your transaction list.\n\nTo monitor the asset transfer progress, open your 'sclog.txt' in your databases folder.",
-                closeText: "Okay",
+                title: l10n.r3gTransferInProgress,
+                body: l10n.r3gTransferInProgressBody(assetLabel),
+                closeText: l10n.walletOkay,
               );
 
               Navigator.of(context).pop();

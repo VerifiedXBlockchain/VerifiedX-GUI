@@ -12,6 +12,7 @@ import '../../raw/raw_service.dart';
 import '../../reserve/providers/pending_callback_provider.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../utils/raw_transaction.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import 'package:collection/collection.dart';
 
@@ -21,6 +22,7 @@ class WebCallbackButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final raKeypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
 
     if (raKeypair == null) {
@@ -45,21 +47,21 @@ class WebCallbackButton extends BaseComponent {
 
     if (alreadyCalledBack) {
       return Text(
-        "Called Back".toUpperCase(),
+        l10n.webCalledBack.toUpperCase(),
         style: TextStyle(color: Theme.of(context).colorScheme.warning),
       );
     }
 
     return AppButton(
-      label: "Callback",
+      label: l10n.reserveCallbackLabel,
       variant: AppColorVariant.Warning,
       disabled: ref.watch(pendingCallbackProvider).contains(tx.hash),
       onPressed: () async {
         final confirmed = await ConfirmDialog.show(
-          title: "Callback Transaction",
-          body: "Are you sure you want to callback this transaction?",
-          confirmText: "Callback",
-          cancelText: "Cancel",
+          title: l10n.reserveCallbackTitle,
+          body: l10n.webCallbackBody,
+          confirmText: l10n.reserveCallbackLabel,
+          cancelText: l10n.actionCancel,
         );
 
         if (confirmed != true) {
@@ -71,13 +73,13 @@ class WebCallbackButton extends BaseComponent {
         final timestamp = await txService.getTimestamp();
 
         if (timestamp == null) {
-          Toast.error("Failed to retrieve timestamp");
+          Toast.error(l10n.r3fFailedRetrieveTimestamp);
           return false;
         }
 
         final nonce = await txService.getNonce(raKeypair.address);
         if (nonce == null) {
-          Toast.error("Failed to retrieve nonce");
+          Toast.error(l10n.r3fFailedRetrieveNonce);
           return false;
         }
 
@@ -100,7 +102,7 @@ class WebCallbackButton extends BaseComponent {
         final fee = await txService.getFee(txData);
 
         if (fee == null) {
-          Toast.error("Failed to parse fee");
+          Toast.error(l10n.r3fFailedParseFee);
           return false;
         }
 
@@ -118,13 +120,13 @@ class WebCallbackButton extends BaseComponent {
 
         final hash = (await txService.getHash(txData));
         if (hash == null) {
-          Toast.error("Failed to parse hash");
+          Toast.error(l10n.r3fFailedParseHash);
           return false;
         }
 
         final signature = await RawTransaction.getSignature(message: hash, privateKey: raKeypair.private, publicKey: raKeypair.public);
         if (signature == null) {
-          Toast.error("Signature generation failed.");
+          Toast.error(l10n.webErrorSignatureGen);
           return false;
         }
 
@@ -135,7 +137,7 @@ class WebCallbackButton extends BaseComponent {
         );
 
         if (!isValid) {
-          Toast.error("Signature not valid");
+          Toast.error(l10n.webErrorSignatureInvalid);
           return false;
         }
 
@@ -159,7 +161,7 @@ class WebCallbackButton extends BaseComponent {
         ));
 
         if (verifyTransactionData == null) {
-          Toast.error("Transaction not valid");
+          Toast.error(l10n.webErrorTxInvalid);
           return false;
         }
 
@@ -172,7 +174,7 @@ class WebCallbackButton extends BaseComponent {
         if (_tx != null) {
           if (_tx['Result'] == "Success") {
             ref.read(pendingCallbackProvider.notifier).addHash(tx.hash);
-            Toast.message("Callback TX broadcasted");
+            Toast.message(l10n.webCallbackBroadcasted);
             return true;
           }
         }

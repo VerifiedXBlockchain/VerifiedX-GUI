@@ -8,6 +8,7 @@ import '../../../../../core/components/buttons.dart';
 import '../../../../../core/dialogs.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/components.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 import '../../../features/evolve/evolve.dart';
 import '../../../features/evolve/evolve_form_provider.dart';
 import '../../../features/evolve/evolve_modal.dart';
@@ -140,6 +141,7 @@ class _FeatureCard extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppCard(
       padding: 6,
       child: ListTile(
@@ -210,14 +212,14 @@ class _FeatureCard extends BaseComponent {
               ),
             const SizedBox(width: 6),
             AppButton(
-              label: "Remove",
+              label: l10n.beaconRemove,
               variant: AppColorVariant.Danger,
               type: AppButtonType.Outlined,
               onPressed: readOnly
                   ? null
                   : () async {
                       final confirmed = await ConfirmDialog.show(
-                          title: "Delete?", body: "Are you sure you want to delete this?", confirmText: "Delete", destructive: true);
+                          title: l10n.r3aDeleteQuestion, body: l10n.r3aDeleteThisConfirm, confirmText: l10n.actionDelete, destructive: true);
 
                       if (confirmed != true) return;
 

@@ -10,6 +10,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../providers/web_shop_bid_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CompleteSaleButton extends BaseComponent {
   final WebTransaction tx;
@@ -23,6 +24,7 @@ class CompleteSaleButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final myAddress = ref.watch(webSessionProvider.select((v) => v.keypair?.address));
 
     if (tx.type == TxType.nftSale) {
@@ -34,7 +36,7 @@ class CompleteSaleButton extends BaseComponent {
 
         if (function == "Sale_Start()" && nftId != null && keySign != null && amount != null) {
           return AppButton(
-            label: "Complete Sale",
+            label: l10n.txpCompleteSale,
             variant: AppColorVariant.Success,
             icon: Icons.check,
             size: AppSizeVariant.Lg,
@@ -45,7 +47,7 @@ class CompleteSaleButton extends BaseComponent {
               }
 
               if (nft.currentOwner == myAddress) {
-                Toast.error("You are already the owner of this NFT.");
+                Toast.error(l10n.r3bAlreadyOwnerNft);
                 return;
               }
 

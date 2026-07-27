@@ -505,7 +505,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                       readOnly: true,
                       decoration: InputDecoration(
                         label: Text(
-                          "Transaction Hash",
+                          globalL10n.tkbTransactionHash,
                           style: TextStyle(
                             color: Color(0xfff7931a),
                           ),

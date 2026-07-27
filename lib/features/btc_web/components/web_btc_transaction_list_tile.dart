@@ -369,7 +369,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                     child: InkWell(
                                       onTap: () async {
                                         await Clipboard.setData(ClipboardData(text: output.scriptpubkeyAddress));
-                                        Toast.message("Address copied to clipboard");
+                                        Toast.message(AppLocalizations.of(context).messageAddressCopied);
                                       },
                                       child: Icon(
                                         Icons.copy,

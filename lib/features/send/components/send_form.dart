@@ -510,7 +510,7 @@ class SendForm extends BaseComponent {
                                   controller: formProvider.btcCustomFeeRateController,
                                   validator: formProvider.btcCustomFeeRateValidator,
                                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9]"))],
-                                  decoration: InputDecoration(hintText: "Fee rate in satoshis"),
+                                  decoration: InputDecoration(hintText: AppLocalizations.of(context).tkbFeeRateHint),
                                   keyboardType: const TextInputType.numberWithOptions(decimal: false),
                                 ),
                               ),
@@ -521,7 +521,12 @@ class SendForm extends BaseComponent {
                         Padding(
                           padding: const EdgeInsets.only(left: leadingWidth + 30),
                           child: Text(
-                            "Fee Rate: $fee SATS /byte [$feeBtc BTC /byte]\nFee Estimate: ~$feeEstimate SATS [~$feeEstimateBtc BTC]    ",
+                            AppLocalizations.of(context).r3gFeeRateEstimatePreset(
+                              fee.toString(),
+                              feeBtc,
+                              feeEstimate.toString(),
+                              feeEstimateBtc,
+                            ),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),
@@ -529,7 +534,12 @@ class SendForm extends BaseComponent {
                         Padding(
                           padding: const EdgeInsets.only(left: leadingWidth + 30),
                           child: Text(
-                            "Fee Rate: ${formState.btcCustomFeeRate} SATS /byte [${(formState.btcCustomFeeRate * BTC_SATOSHI_MULTIPLIER).toStringAsFixed(9)} BTC /byte]\nFee Estimate: ${(formState.btcCustomFeeRate * BTC_TX_EXPECTED_BYTES)} SATS [~${(formState.btcCustomFeeRate * BTC_TX_EXPECTED_BYTES * BTC_SATOSHI_MULTIPLIER).toStringAsFixed(9)} BTC]",
+                            AppLocalizations.of(context).r3gFeeRateEstimateCustom(
+                              formState.btcCustomFeeRate.toString(),
+                              (formState.btcCustomFeeRate * BTC_SATOSHI_MULTIPLIER).toStringAsFixed(9),
+                              (formState.btcCustomFeeRate * BTC_TX_EXPECTED_BYTES).toString(),
+                              (formState.btcCustomFeeRate * BTC_TX_EXPECTED_BYTES * BTC_SATOSHI_MULTIPLIER).toStringAsFixed(9),
+                            ),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ),

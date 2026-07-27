@@ -151,14 +151,14 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       color: Theme.of(context).colorScheme.warning,
                     ),
                     Text(
-                      "Warning",
+                      AppLocalizations.of(context).hnavWarningTitle,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                     Text(
-                        "Your vault account is not activated yet. To protect funds and assets securely, please activate first.")
+                        AppLocalizations.of(context).r3dVaultNotActivatedWarning)
                   ],
                 ),
               ),
@@ -257,7 +257,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  "Recovery In Progress",
+                                  AppLocalizations.of(context).r3dRecoveryInProgress,
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium!
@@ -486,7 +486,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
 
                               if (tokens.isEmpty) {
                                 Toast.error(
-                                    "Your Vault Account has no Fungible Tokens.");
+                                    AppLocalizations.of(context).r3dVaultNoFungibleTokens);
 
                                 return;
                               }
@@ -562,7 +562,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
 
                               if (tokens.isEmpty) {
                                 Toast.error(
-                                    "Your Vault Account has no vBTC Tokens.");
+                                    AppLocalizations.of(context).r3dVaultNoVbtcTokens);
 
                                 return;
                               }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../l10n/l10n_helper.dart';
 
 part 'butterfly_link.freezed.dart';
 part 'butterfly_link.g.dart';
@@ -60,13 +61,13 @@ class ButterflyLink with _$ButterflyLink {
   String get statusLabel {
     switch (status) {
       case ButterflyLinkStatus.pending:
-        return 'Pending Deposit';
+        return globalL10n.r3dPendingDeposit;
       case ButterflyLinkStatus.readyForRedemption:
-        return 'Ready to Claim';
+        return globalL10n.r3dReadyToClaim;
       case ButterflyLinkStatus.claiming:
-        return 'Being Claimed';
+        return globalL10n.r3dBeingClaimed;
       case ButterflyLinkStatus.claimed:
-        return 'Claimed';
+        return globalL10n.r3dClaimed;
     }
   }
 

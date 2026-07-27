@@ -52,7 +52,7 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "${q.amountVfx} VFX for \$${q.amountUsd} USD",
+            AppLocalizations.of(context).r3dVfxForUsd(q.amountVfx.toString(), q.amountUsd.toString()),
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -107,6 +107,6 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
       );
     }
 
-    return Text("An error occurred");
+    return Text(AppLocalizations.of(context).txpErrorOccurred);
   }
 }

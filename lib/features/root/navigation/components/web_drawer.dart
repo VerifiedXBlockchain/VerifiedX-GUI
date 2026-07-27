@@ -167,7 +167,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "VFX Domains",
+            AppLocalizations.of(context).adnrTitleVfx,
             style: TextStyle(
               color: tabsRouter.activeIndex == WebRouteIndex.adnrs ? activeColor : color,
             ),
@@ -183,7 +183,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "Smart Contracts",
+            AppLocalizations.of(context).scTitle,
             style: TextStyle(
               color: tabsRouter.activeIndex == WebRouteIndex.smartContracts ? activeColor : color,
             ),
@@ -223,7 +223,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "P2P Auctions",
+            AppLocalizations.of(context).dstAuctionsTitle,
             style: TextStyle(
               color: tabsRouter.activeIndex == WebRouteIndex.shop ? activeColor : color,
             ),
@@ -255,7 +255,7 @@ class WebMenu extends BaseComponent {
             final l10n = AppLocalizations.of(context);
             final confirmed = await ConfirmDialog.show(
               title: l10n.navMenuLogout,
-              body: "Are you sure you want to logout of the VFX Web Wallet?",
+              body: l10n.r3hLogoutConfirmBody,
               destructive: true,
               confirmText: l10n.navMenuLogout,
               cancelText: l10n.actionCancel,

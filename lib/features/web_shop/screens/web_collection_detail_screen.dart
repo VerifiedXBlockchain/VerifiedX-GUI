@@ -61,7 +61,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                     type: AppButtonType.Text,
                     variant: AppColorVariant.Light,
                     icon: Icons.chat_bubble_outline,
-                    label: 'Chat',
+                    label: AppLocalizations.of(context).chatTitleSingle,
                     onPressed: () async {
                       final thread = await WebChatService().getOrCreateThread(
                         shopUrl: collection.shop!.url,
@@ -69,7 +69,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                         isThirdParty: true,
                       );
                       if (thread == null) {
-                        Toast.error("Could not create or get thread");
+                        Toast.error(AppLocalizations.of(context).r3bCouldNotCreateThread);
                         return;
                       }
                       AutoRouter.of(context).push(WebShopChatScreenRoute(identifier: thread.uuid));
@@ -83,7 +83,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: "${Env.appBaseUrl}/#dashboard/p2p/shop/${collection.shop!.id}/collection/${collection.id}"));
-                    Toast.message("Share url copied to clipboard");
+                    Toast.message(AppLocalizations.of(context).r3bShareUrlCopied);
                   },
                 ),
                 IconButton(
@@ -147,13 +147,13 @@ class WebCollectionDetailScreen extends BaseScreen {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           AppButton(
-                            label: isMobile ? "Delete" : "Delete collection",
+                            label: isMobile ? AppLocalizations.of(context).actionDelete : AppLocalizations.of(context).dstDeleteCollection,
                             icon: Icons.delete,
                             variant: AppColorVariant.Danger,
                             onPressed: () async {
                               final confirmed = await ConfirmDialog.show(
                                 title: AppLocalizations.of(context).shopDeleteCollectionConfirm,
-                                body: "This is permanent",
+                                body: AppLocalizations.of(context).r3bThisIsPermanent,
                                 cancelText: AppLocalizations.of(context).actionCancel,
                                 confirmText: AppLocalizations.of(context).adnrDelete,
                               );
@@ -163,7 +163,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
-                            label: isMobile ? "Edit" : "Edit Collection",
+                            label: isMobile ? AppLocalizations.of(context).scwEdit : AppLocalizations.of(context).mktEditCollection,
                             icon: Icons.edit,
                             variant: AppColorVariant.Primary,
                             onPressed: () {

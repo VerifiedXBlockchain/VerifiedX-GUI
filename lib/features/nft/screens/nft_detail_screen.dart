@@ -28,6 +28,7 @@ import '../../../core/components/centered_loader.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../asset/asset_card.dart';
@@ -64,7 +65,7 @@ class NftDetailScreen extends BaseScreen {
     await Clipboard.setData(
       ClipboardData(text: val),
     );
-    Toast.message("$val copied to clipboard");
+    Toast.message(globalL10n.r3gValueCopiedToClipboard(val));
   }
 
   @override
@@ -107,7 +108,7 @@ class NftDetailScreen extends BaseScreen {
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: AppBadge(
-                    label: nft.isPublished ? "Minted" : "Minting...",
+                    label: nft.isPublished ? AppLocalizations.of(context).r3gMinted : AppLocalizations.of(context).r3gMinting,
                     variant: nft.isPublished
                         ? AppColorVariant.Success
                         : AppColorVariant.Warning,
@@ -166,7 +167,7 @@ class NftDetailScreen extends BaseScreen {
                             width: 4,
                           ),
                           Text(
-                            "NFT Locked",
+                            AppLocalizations.of(context).nftLockedBadge,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
@@ -207,7 +208,7 @@ class NftDetailScreen extends BaseScreen {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Tooltip(
-                                    message: "Smart Contract ID",
+                                    message: AppLocalizations.of(context).btcDetailScIdLabel,
                                     child: Text(
                                       nft.id,
                                       style: TextStyle(
@@ -224,7 +225,7 @@ class NftDetailScreen extends BaseScreen {
                                       await Clipboard.setData(
                                           ClipboardData(text: nft.id));
                                       Toast.message(
-                                          "Smart Contract Identifier copied to clipboard");
+                                          AppLocalizations.of(context).r3gSmartContractIdCopied);
                                     },
                                     child: Icon(
                                       Icons.copy,
@@ -242,7 +243,7 @@ class NftDetailScreen extends BaseScreen {
                       ),
                       if (nft.minterName.isNotEmpty)
                         Text(
-                          "Minted By: ${nft.minterName}",
+                          AppLocalizations.of(context).r3gMintedByName(nft.minterName),
                           style: Theme.of(context)
                               .textTheme
                               .headlineSmall!
@@ -277,8 +278,8 @@ class NftDetailScreen extends BaseScreen {
                                     : AppColors.getBlue(ColorShade.s50),
                               ),
                             ),
-                            subtitle: const Text(
-                              "Owner",
+                            subtitle: Text(
+                              AppLocalizations.of(context).btcDetailOwnerLabel,
                             ),
                             trailing: IconButton(
                               iconSize: 16,
@@ -331,8 +332,8 @@ class NftDetailScreen extends BaseScreen {
                                 color: nft.nextOwner!.startsWith("xRBX")
                                     ? Colors.deepPurple.shade200
                                     : Colors.white)),
-                        subtitle: const Text(
-                          "Next Owner",
+                        subtitle: Text(
+                          AppLocalizations.of(context).r3gNextOwner,
                         ),
                         leading: IconButton(
                           icon: const Icon(Icons.copy),
@@ -382,7 +383,7 @@ class NftDetailScreen extends BaseScreen {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Additional Assets:",
+                                              AppLocalizations.of(context).r3gAdditionalAssetsColon,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .headlineSmall!
@@ -501,16 +502,16 @@ class NftDetailScreen extends BaseScreen {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(
+                      children: [
+                        const Icon(
                           Icons.cancel,
                           size: 16,
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 4.0),
+                          padding: const EdgeInsets.only(left: 4.0),
                           child: Text(
-                            "No features",
-                            style: TextStyle(fontSize: 16),
+                            AppLocalizations.of(context).r3gNoFeatures,
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ),
                       ],
@@ -711,7 +712,7 @@ class NftDetailScreen extends BaseScreen {
                         final String? amountString = await PromptModal.show(
                           contextOverride: context,
                           title: l10n.nftSellAmountTitle,
-                          body: "How much are you selling this NFT for?",
+                          body: l10n.r3gSellNftPrompt,
                           labelText: l10n.nftSellAmountLabel,
                           confirmText: l10n.actionContinue,
                           inputFormatters: [
@@ -719,18 +720,18 @@ class NftDetailScreen extends BaseScreen {
                           ],
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return "Amount required";
+                              return l10n.svcAmountRequired;
                             }
 
                             double parsed = 0;
                             try {
                               parsed = double.parse(value);
                             } catch (e) {
-                              return "Not a valid amount";
+                              return l10n.svcNotValidAmount;
                             }
 
                             if (parsed <= 0) {
-                              return "The amount has to be a positive value";
+                              return l10n.svcAmountPositive;
                             }
                             return null;
                           },
@@ -750,8 +751,7 @@ class NftDetailScreen extends BaseScreen {
                         final String? backupUrl = await PromptModal.show(
                           contextOverride: context,
                           title: l10n.nftBackupUrlTitle,
-                          body:
-                              "Paste in a public URL to a hosted zipfile containing the assets.",
+                          body: l10n.r3gPasteZipfileUrl,
                           validator: (value) {
                             return null;
                           },
@@ -761,9 +761,8 @@ class NftDetailScreen extends BaseScreen {
 
                         final confirmed = await ConfirmDialog.show(
                           title: l10n.nftConfirmSaleStartTitle,
-                          body:
-                              "Please confirm you want to sell the NFT to \"$address\" for $amount VFX.",
-                          confirmText: "Start Sale",
+                          body: l10n.r3gConfirmSellNftBody(address, amount.toString()),
+                          confirmText: l10n.r3gStartSale,
                         );
 
                         if (confirmed == true) {
@@ -880,7 +879,7 @@ class NftDetailScreen extends BaseScreen {
                           ? () async {
                               if (nft.isListed(ref)) {
                                 Toast.error(
-                                    "This NFT is listed in your auction house. Please remove the listing before burning.");
+                                    AppLocalizations.of(context).r3gNftListedBeforeBurning);
                                 return;
                               }
 
@@ -890,13 +889,13 @@ class NftDetailScreen extends BaseScreen {
                               if (kIsWeb) {
                                 if (nft.currentOwner.startsWith("xRBX")) {
                                   Toast.error(
-                                      "Vault Accounts cannot burn NFTs");
+                                      AppLocalizations.of(context).r3gVaultCannotBurnNfts);
                                   return;
                                 }
                               } else {
                                 if (nft.currentOwner.startsWith("xRBX")) {
                                   Toast.error(
-                                      "Vault Accounts cannot burn NFTs");
+                                      AppLocalizations.of(context).r3gVaultCannotBurnNfts);
                                   return;
                                 }
                               }
@@ -904,7 +903,7 @@ class NftDetailScreen extends BaseScreen {
                               final confirmed = await ConfirmDialog.show(
                                 title: AppLocalizations.of(context).nftBurnTitle,
                                 body:
-                                    "Are you sure you want to burn ${nft.name}",
+                                    AppLocalizations.of(context).r3gConfirmBurnName(nft.name),
                                 destructive: true,
                                 confirmText: AppLocalizations.of(context).nftBurn,
                                 cancelText: AppLocalizations.of(context).actionCancel,
@@ -920,7 +919,7 @@ class NftDetailScreen extends BaseScreen {
 
                                 if (success) {
                                   Toast.message(
-                                      "Burn transaction sent successfully!");
+                                      AppLocalizations.of(context).r3gBurnSentSuccess);
                                   ref
                                       .read(mySmartContractsProvider.notifier)
                                       .load();
@@ -960,8 +959,8 @@ class NftDetailScreen extends BaseScreen {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "NFT assets have not been transferred to the VFX Web Wallet.",
+                Text(
+                  AppLocalizations.of(context).r3gNftAssetsNotTransferred,
                   textAlign: TextAlign.center,
                 ),
                 if (includeButton)
@@ -1100,7 +1099,7 @@ class NftPropertiesWrap extends StatelessWidget {
                         launchUrlString(url);
                       },
                       child: Text(
-                        "Open",
+                        AppLocalizations.of(context).nftQrOpen,
                         style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     ),

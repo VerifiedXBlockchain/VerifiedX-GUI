@@ -427,10 +427,12 @@ class ReceiveScreen extends BaseScreen {
 
                                     if (success) {
                                       if (btcAccountSyncInfo != null) {
-                                        Toast.message(
-                                            "Private Key Imported! Please wait until ${btcAccountSyncInfo.nextSyncFormatted} for the balance to sync.");
+                                        Toast.message(AppLocalizations.of(context)
+                                            .r3fPrivateKeyImportedSync(
+                                                btcAccountSyncInfo.nextSyncFormatted));
                                       } else {
-                                        Toast.message("Private Key Imported!");
+                                        Toast.message(AppLocalizations.of(context)
+                                            .walletPrivateKeyImportedToast);
                                       }
                                     } else {
                                       Toast.error();

@@ -73,7 +73,7 @@ class WebHomeScreen extends BaseScreen {
 
     return isMobile
         ? AppBar(
-            title: const Text("Dashboard"),
+            title: Text(AppLocalizations.of(context).navDashboard),
             backgroundColor: Colors.black,
             shadowColor: Colors.transparent,
             actions: [WebWalletTypeSwitcher()],
@@ -118,7 +118,7 @@ class WebHomeScreen extends BaseScreen {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Coin Prices",
+                    AppLocalizations.of(context).r3eCoinPrices,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
@@ -155,7 +155,7 @@ class WebHomeScreen extends BaseScreen {
                           },
                           variant: AppColorVariant.Secondary,
                           type: AppButtonType.Outlined,
-                          label: "Get VFX",
+                          label: AppLocalizations.of(context).bw2StepGetVfx,
                         ),
                       ],
                     ),
@@ -187,7 +187,7 @@ class WebHomeScreen extends BaseScreen {
                             AccountUtils.getCoin(
                                 context, ref, VfxOrBtcOption.btc);
                           },
-                          label: "Get BTC",
+                          label: AppLocalizations.of(context).r3eGetBtc,
                           variant: AppColorVariant.Btc,
                           type: AppButtonType.Outlined,
                         ),
@@ -285,7 +285,7 @@ class WebHomeScreen extends BaseScreen {
                               ),
                             );
                           },
-                          label: "View Chart",
+                          label: AppLocalizations.of(context).r3eViewChart,
                           variant: AppColorVariant.Light,
                           type: AppButtonType.Outlined,
                         ),
@@ -296,7 +296,7 @@ class WebHomeScreen extends BaseScreen {
                           },
                           variant: AppColorVariant.Secondary,
                           type: AppButtonType.Outlined,
-                          label: "Get VFX",
+                          label: AppLocalizations.of(context).bw2StepGetVfx,
                         ),
                       ],
                     ),
@@ -324,7 +324,7 @@ class WebHomeScreen extends BaseScreen {
                               ),
                             );
                           },
-                          label: "View Chart",
+                          label: AppLocalizations.of(context).r3eViewChart,
                           variant: AppColorVariant.Light,
                           type: AppButtonType.Outlined,
                         ),
@@ -333,7 +333,7 @@ class WebHomeScreen extends BaseScreen {
                             AccountUtils.getCoin(
                                 context, ref, VfxOrBtcOption.btc);
                           },
-                          label: "Get BTC",
+                          label: AppLocalizations.of(context).r3eGetBtc,
                           variant: AppColorVariant.Btc,
                           type: AppButtonType.Outlined,
                         ),

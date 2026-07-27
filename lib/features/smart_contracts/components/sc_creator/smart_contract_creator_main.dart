@@ -18,6 +18,7 @@ import '../../../../core/providers/session_provider.dart';
 import '../../../../core/providers/web_session_provider.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../utils/toast.dart';
+import '../../../../l10n/l10n_helper.dart';
 import '../../../encrypt/utils.dart';
 import '../../../nft/providers/nft_detail_provider.dart';
 import '../../models/compiled_smart_contract.dart';
@@ -43,9 +44,8 @@ class SmartContractCreatorMain extends BaseComponent {
     ref.read(createSmartContractProvider.notifier).clearSmartContract();
 
     await InfoDialog.show(
-      title: "Stand by",
-      body:
-          "Smart Contract mint transaction has been broadcasted.\n\nThe NFTs screen will reflect the change once the block is crafted and block height has synced with this transaction.",
+      title: globalL10n.tokenFormStandByTitle,
+      body: globalL10n.r3aMintBroadcastedBody,
     );
 
     // Future.delayed(const Duration(milliseconds: 300)).then((_) {
@@ -60,9 +60,9 @@ class SmartContractCreatorMain extends BaseComponent {
     final errors = _provider.isValidForCompile();
     if (errors.isNotEmpty) {
       InfoDialog.show(
-        title: "Invalid Smart Contract",
+        title: globalL10n.r3aInvalidSmartContract,
         body: errors.join("\n"),
-        closeText: "Okay",
+        closeText: globalL10n.walletOkay,
       );
 
       return;
@@ -70,10 +70,10 @@ class SmartContractCreatorMain extends BaseComponent {
 
     if (_provider.shouldWarnEvo) {
       final shouldContinue = await ConfirmDialog.show(
-        title: "Evolve stage(s) in the past",
-        body: "One or more of your evolve stages will have already evolved at the time of minting.\n\nAre your sure you want to proceed?",
-        confirmText: "Continue",
-        cancelText: "Cancel",
+        title: globalL10n.r3aEvolveStagesInPast,
+        body: globalL10n.r3aEvolveStagesInPastBody,
+        confirmText: globalL10n.actionContinue,
+        cancelText: globalL10n.actionCancel,
       );
       if (shouldContinue != true) {
         return;
@@ -82,14 +82,14 @@ class SmartContractCreatorMain extends BaseComponent {
 
     if (!kIsWeb) {
       if (ref.read(sessionProvider).currentWallet!.balance < MIN_RBX_FOR_SC_ACTION) {
-        Toast.error("Not enough VFX balance to mint a smart contract.");
+        Toast.error(globalL10n.r3aNotEnoughVfxToMint);
         return;
       }
     }
 
     if (kIsWeb) {
       if (ref.read(webSessionProvider).currentWallet == null) {
-        Toast.error("No account");
+        Toast.error(globalL10n.adnrNoAccountToast);
         return;
       }
     }
@@ -117,7 +117,7 @@ class SmartContractCreatorMain extends BaseComponent {
       }
 
       if (amountInt > MAX_COMPILE_QUANTITY) {
-        Toast.error("The maxium number you can mint at one time is $MAX_COMPILE_QUANTITY.");
+        Toast.error(globalL10n.r3aMaxMintAtOnce(MAX_COMPILE_QUANTITY.toString()));
         return;
       }
     }
@@ -125,13 +125,13 @@ class SmartContractCreatorMain extends BaseComponent {
     if (!kIsWeb) {
       final String? backupUrl = await PromptModal.show(
         contextOverride: context,
-        title: "Backup URL (Optional)",
-        body: "Paste in a public URL to a hosted zipfile containing the assets.",
+        title: globalL10n.nftBackupUrlTitle,
+        body: globalL10n.r3aBackupUrlBody,
         validator: (value) {
           return null;
         },
-        labelText: "URL (Optional)",
-        confirmText: "Continue",
+        labelText: globalL10n.nftBackupUrlLabel,
+        confirmText: globalL10n.actionContinue,
       );
 
       if (backupUrl != null) {
@@ -145,20 +145,19 @@ class SmartContractCreatorMain extends BaseComponent {
     }
 
     final confirmed = await ConfirmDialog.show(
-      title: "Compile & Mint Smart Contract?",
-      body:
-          "Are you sure you want to proceed?\nOnce compiled you will not be able to make any changes\nand the smart contract will be deployed to the chain.",
-      confirmText: "Continue",
-      cancelText: "Cancel",
+      title: globalL10n.r3aCompileMintScConfirm,
+      body: globalL10n.r3aCompileMintBodySimple,
+      confirmText: globalL10n.actionContinue,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed == true) {
       final extraConfirm = await ConfirmDialog.show(
-        title: "Confirm Address",
-        body:
-            "This will be minted by ${kIsWeb ? ref.read(webSessionProvider).currentWallet!.labelWithoutTruncation : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation}",
-        confirmText: "Compile & Mint",
-        cancelText: "Cancel",
+        title: globalL10n.tokenFormConfirmAddressTitle,
+        body: globalL10n.r3aWillBeMintedBy(
+            kIsWeb ? ref.read(webSessionProvider).currentWallet!.labelWithoutTruncation : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation),
+        confirmText: globalL10n.btcCompileMint,
+        cancelText: globalL10n.actionCancel,
       );
 
       if (extraConfirm != true) {
@@ -184,13 +183,13 @@ class SmartContractCreatorMain extends BaseComponent {
           final completedDialogContext = await completeAnimation.future;
           await Future.delayed(const Duration(seconds: 3));
           Navigator.pop(completedDialogContext);
-          Toast.message("Smart Contract minted successfully.");
+          Toast.message(globalL10n.r3aScMintedSuccessfully);
 
           mintedComplete(null, context, ref);
         } else {
           Navigator.pop(dialogContext);
 
-          Toast.error("A problem occurred minting this smart contract.");
+          Toast.error(globalL10n.r3aProblemMintingSc);
         }
       } else {
         try {
@@ -220,7 +219,7 @@ class SmartContractCreatorMain extends BaseComponent {
               final completedDialogContext = await completeAnimation.future;
               await Future.delayed(const Duration(seconds: 3));
               Navigator.pop(completedDialogContext);
-              Toast.message("Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.");
+              Toast.message(globalL10n.r3aMintTxSent);
 
               mintedComplete(sc.id, context, ref);
             } else {
@@ -229,7 +228,7 @@ class SmartContractCreatorMain extends BaseComponent {
                 ref.read(sessionProvider.notifier).setIsMintingOrCompiling(false);
               }
 
-              Toast.error("A problem occurred minting this smart contract.");
+              Toast.error(globalL10n.r3aProblemMintingSc);
             }
           } else {
             Navigator.pop(dialogContext);
@@ -237,7 +236,7 @@ class SmartContractCreatorMain extends BaseComponent {
               ref.read(sessionProvider.notifier).setIsMintingOrCompiling(false);
             }
 
-            Toast.error("A problem occurred compiling this smart contract.");
+            Toast.error(globalL10n.r3aProblemCompilingSc);
           }
         } catch (e) {
           Navigator.pop(dialogContext);
@@ -258,11 +257,11 @@ class SmartContractCreatorMain extends BaseComponent {
     final _provider = ref.read(createSmartContractProvider.notifier);
 
     final confirmed = await ConfirmDialog.show(
-      title: "Delete Draft",
-      body: "Are you sure you wan't to delete this smart contract draft?",
+      title: globalL10n.r3aDeleteDraft,
+      body: globalL10n.r3aDeleteDraftConfirm,
       destructive: true,
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      confirmText: globalL10n.actionDelete,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed != true) {
@@ -272,7 +271,7 @@ class SmartContractCreatorMain extends BaseComponent {
     _provider.deleteDraft();
     ref.read(draftsSmartContractProvider.notifier).load();
 
-    Toast.message("Draft Delete");
+    Toast.message(globalL10n.r3aDraftDeleted);
 
     AutoRouter.of(context).pop();
   }
@@ -364,7 +363,7 @@ class SmartContractCreatorMain extends BaseComponent {
   Widget buildDeleteButton(SmartContract _model, BuildContext context, WidgetRef ref) {
     if (kIsWeb) return const SizedBox();
     return AppButton(
-      label: "Delete",
+      label: globalL10n.actionDelete,
       helpType: HelpType.delete,
       onPressed: _model.isCompiled
           ? null
@@ -437,7 +436,7 @@ class SmartContractCreatorMain extends BaseComponent {
                     width: 4,
                   ),
                   Text(
-                    "Compile & Mint",
+                    globalL10n.btcCompileMint,
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 16,
@@ -459,12 +458,12 @@ class SmartContractCreatorMain extends BaseComponent {
   Widget buildSaveButton(SmartContract _model, WidgetRef ref) {
     if (kIsWeb) return const SizedBox();
     return AppButton(
-      label: "Save as Draft",
+      label: globalL10n.r3aSaveAsDraft,
       onPressed: _model.isCompiled
           ? null
           : () {
               ref.read(createSmartContractProvider.notifier).saveDraft();
-              Toast.message("Draft saved!");
+              Toast.message(globalL10n.r3aDraftSaved);
             },
       icon: Icons.save,
       helpType: HelpType.saveAsDraft,

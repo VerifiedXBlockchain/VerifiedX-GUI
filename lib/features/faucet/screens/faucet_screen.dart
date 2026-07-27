@@ -51,12 +51,13 @@ class FaucetScreen extends BaseScreen {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        "The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.",
+                        AppLocalizations.of(context).r3eFaucetIntro,
                         textAlign: TextAlign.center,
                       ),
                       Divider(),
                       Text(
-                        "Max Amount: ${snapshot.data} VFX",
+                        AppLocalizations.of(context)
+                            .r3eMaxAmount(snapshot.data.toString()),
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
                         ),

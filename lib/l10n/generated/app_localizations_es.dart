@@ -221,7 +221,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get receiveActionImportKey => 'Importar\nClave';
 
   @override
-  String get receiveRescanDialogTitle => '¿Volver a escanear bloques?';
+  String get receiveRescanDialogTitle => '¿Reescanear bloques?';
 
   @override
   String get receiveRescanDialogBody => '¿Quieres volver a escanear la cadena para incluir las transacciones relevantes a esta clave?';
@@ -311,7 +311,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get settingsLanguageSection => 'Idioma';
 
   @override
-  String get settingsLanguageSystemDefault => 'Predeterminado del sistema';
+  String get settingsLanguageSystemDefault => 'Idioma del sistema';
 
   @override
   String get settingsLanguageEnglish => 'English';
@@ -357,7 +357,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get walletRescanBlocksTitle => '¿Volver a escanear bloques?';
+  String get walletRescanBlocksTitle => '¿Reescanear bloques?';
 
   @override
   String get walletRescanBlocksBodyKeys => '¿Quieres volver a escanear la cadena para incluir las transacciones relevantes a estas claves?';
@@ -850,7 +850,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get btcDetailScOwnerLabel => 'Propietario del contrato inteligente';
 
   @override
-  String get btcDetailScOwnerAddressLabel => 'Dirección del propietario del contrato inteligente';
+  String get btcDetailScOwnerAddressLabel => 'Dirección del dueño del contrato';
 
   @override
   String get btcDetailDepositAddressLabel => 'Dirección de depósito BTC';
@@ -1700,7 +1700,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nftViewCode => 'Ver código';
 
   @override
-  String get nftSyncMedia => 'Sincronizar contenido';
+  String get nftSyncMedia => 'Sincronizar medios';
 
   @override
   String get nftBurn => 'Quemar';
@@ -2129,7 +2129,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get shopUrlPromptTitle => 'URL de la tienda';
 
   @override
-  String get shopUrlRequired => 'Se requiere la URL de la tienda';
+  String get shopUrlRequired => 'URL de tienda requerida';
 
   @override
   String get shopUrlLabel => 'Ingresa solo el nombre de la tienda';
@@ -3042,7 +3042,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get beaconLater => 'Más tarde';
 
   @override
-  String get beaconAutoDeleteAssets => 'Eliminar archivos automáticamente';
+  String get beaconAutoDeleteAssets => 'Autoeliminar archivos';
 
   @override
   String get beaconAssetCache => 'Caché de archivos';
@@ -3274,7 +3274,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get webBackupKeys => 'Respaldar claves';
 
   @override
-  String get webSetActive => 'Establecer como activa';
+  String get webSetActive => 'Activar';
 
   @override
   String get webScanCameraError => 'Error de cámara';
@@ -3333,7 +3333,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get motherChildNo => 'No';
 
   @override
-  String get motherUpdateHostInfo => 'Actualizar información del Host';
+  String get motherUpdateHostInfo => 'Actualizar datos del host';
 
   @override
   String get motherSetWalletHost => 'Establecer billetera como Host';
@@ -3412,7 +3412,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeVisitWebsite => 'Visitar sitio web';
 
   @override
-  String get homeReadDocs => 'Leer documentación';
+  String get homeReadDocs => 'Ver docs';
 
   @override
   String get homeValidateOwnership => 'Validar propiedad';
@@ -3667,7 +3667,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get hnavBackupLabel => 'Copia de seguridad';
+  String get hnavBackupLabel => 'Respaldo';
 
   @override
   String get hnavBackupMediaSubtitle => 'Comprime y exporta los archivos multimedia de tus NFT.';
@@ -3708,13 +3708,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hnavConfigAllowedExtensionTypes => 'Tipos de extensión permitidos';
 
   @override
-  String get hnavConfigApiCallUrl => 'URL de llamada a la API';
+  String get hnavConfigApiCallUrl => 'URL de la API';
 
   @override
   String get hnavConfigApiPort => 'Puerto de la API';
 
   @override
-  String get hnavConfigAutoDownloadNft => 'Descargar automáticamente los archivos de NFT';
+  String get hnavConfigAutoDownloadNft => 'Autodescargar archivos NFT';
 
   @override
   String get hnavConfigHeader => 'Configuración';
@@ -4094,7 +4094,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get mktBuyNowPriceLabel => 'Precio de compra inmediata';
 
   @override
-  String get mktBuyNowTxBroadcastedTitle => 'Transacción de compra inmediata transmitida.';
+  String get mktBuyNowTxBroadcastedTitle => 'TX de compra inmediata transmitida.';
 
   @override
   String get mktBuyNowTxBroadcastedToast => 'Transacción de compra inmediata transmitida. Espera a que el dueño de la tienda la acepte';
@@ -4476,7 +4476,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwEvolveStageDescription => 'Descripción de la etapa de evolución';
 
   @override
-  String get scwEvolveStageName => 'Nombre de la etapa de evolución';
+  String get scwEvolveStageName => 'Nombre de la etapa';
 
   @override
   String get scwEvolveType => 'Tipo de evolución';
@@ -5270,7 +5270,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String txpBlockDiffAvg(String value) {
-    return 'Promedio de diferencia de bloques: $value';
+    return 'Dif. media de bloques: $value';
   }
 
   @override
@@ -5394,7 +5394,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get txpGetBtcNow => 'Obtén \$BTC ahora';
 
   @override
-  String get txpGetQuote => 'Obtener cotización';
+  String get txpGetQuote => 'Cotizar';
 
   @override
   String get txpGetVfxNow => 'Obtén \$VFX ahora';
@@ -5951,7 +5951,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2MpcCeremonyInProgress => 'Ceremonia MPC en progreso';
 
   @override
-  String get bw2MpcCeremonyTimedOutToast => 'La ceremonia MPC agotó el tiempo de espera.';
+  String get bw2MpcCeremonyTimedOutToast => 'La ceremonia MPC expiró.';
 
   @override
   String get bw2MultiSigHigherFee => 'Esta es una transacción multifirma, por lo que se recomienda una tasa de comisión más alta.';
@@ -5977,10 +5977,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2NoInitialIssuance => 'Sin emisión inicial';
 
   @override
-  String get bw2NoKeypairFound => 'No se encontró un par de claves';
+  String get bw2NoKeypairFound => 'Par de claves no encontrado';
 
   @override
-  String get bw2NoKeypairFoundPeriod => 'No se encontró un par de claves.';
+  String get bw2NoKeypairFoundPeriod => 'Par de claves no encontrado.';
 
   @override
   String get bw2NoKeypairToSign => 'No se encontró un par de claves para firmar la transacción';
@@ -6381,7 +6381,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get prvBridgeAboutTo => 'Estás a punto de transferir mediante el puente';
+  String get prvBridgeAboutTo => 'Vas a transferir por el puente';
 
   @override
   String get prvBridgeAmountRequired => 'El monto es obligatorio';
@@ -6641,7 +6641,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvBridgeSuccessTitle => 'Transferido a Base';
 
   @override
-  String get prvBridgeThisWill => 'Esto hará lo siguiente:';
+  String get prvBridgeThisWill => 'Esto hará:';
 
   @override
   String get prvBridgeToBaseTitle => 'Transferir a Base';
@@ -6852,7 +6852,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvNoVbtcTokens => 'No se encontraron tokens de vBTC';
 
   @override
-  String get prvNoWalletSelected => 'No hay ninguna billetera seleccionada';
+  String get prvNoWalletSelected => 'Ninguna billetera seleccionada';
 
   @override
   String prvNoteCount(int count) {
@@ -7245,7 +7245,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcGuiUpdateTitle => 'Actualización de GUI';
 
   @override
-  String get svcImBackedUp => 'Tengo copia de seguridad';
+  String get svcImBackedUp => 'Ya tengo respaldo';
 
   @override
   String svcImportSnapshotBody(String blockHeight, String snapshotHeight) {
@@ -7552,4 +7552,3181 @@ class AppLocalizationsEs extends AppLocalizations {
   String svcVfxSentToAddressDashboard(String amount, String address) {
     return 'Se han enviado $amount VFX a $address. Consulta el panel para ver el ID de la transacción.';
   }
+
+  @override
+  String get r3aActivatingSoon => 'Activándose pronto...';
+
+  @override
+  String get r3aAdditionalOwners => 'Propietarios adicionales';
+
+  @override
+  String get r3aAssetIsRequired => 'Se requiere un activo';
+
+  @override
+  String get r3aAssets => 'Activos';
+
+  @override
+  String get r3aAutomatedAppControlled => 'Automático/por la app';
+
+  @override
+  String r3aBlockHeightMustBeGreaterThan(String currentBh) {
+    return 'La altura de bloque debe ser mayor que $currentBh.';
+  }
+
+  @override
+  String get r3aBtcTokenization => 'Tokenización de BTC';
+
+  @override
+  String get r3aChooseAFile => 'Elegir un archivo';
+
+  @override
+  String get r3aClearNftWizardTitle => '¿Vaciar el asistente de colección NFT?';
+
+  @override
+  String get r3aCloseNftWizardConfirm => '¿Seguro que deseas cerrar el asistente de colección NFT?';
+
+  @override
+  String get r3aCloseScCreatorConfirm => '¿Seguro que deseas cerrar el creador de contratos?';
+
+  @override
+  String get r3aCompileMintScConfirm => '¿Compilar y emitir el contrato inteligente?';
+
+  @override
+  String r3aConfirmMintBody(String amount) {
+    return '¿Seguro que deseas emitir $amount contrato(s) inteligente(s)?\n\nUna vez compilado no podrás hacer cambios\ny el contrato se desplegará en la cadena.';
+  }
+
+  @override
+  String get r3aConsumable => 'Consumible';
+
+  @override
+  String get r3aCreateInstance => 'Crear instancia';
+
+  @override
+  String get r3aCreateNewInstance => 'Crear nueva instancia';
+
+  @override
+  String get r3aCreateNewPhase => 'Crear nueva fase';
+
+  @override
+  String get r3aCreateRarity => 'Crear rareza';
+
+  @override
+  String get r3aCreatorRetainedOwnership => 'Propiedad retenida por creador';
+
+  @override
+  String get r3aDateMustBeInFuture => 'La fecha debe ser futura.';
+
+  @override
+  String get r3aDateTime => 'Fecha/Hora';
+
+  @override
+  String get r3aDeleteInstanceConfirm => '¿Seguro que deseas eliminar esta instancia?';
+
+  @override
+  String get r3aDeleteInstanceTitle => '¿Eliminar instancia?';
+
+  @override
+  String get r3aDeleteStage => 'Eliminar etapa';
+
+  @override
+  String get r3aDeleteThisStageConfirm => '¿Seguro que deseas eliminar esta etapa?';
+
+  @override
+  String get r3aDescriptionIsRequired => 'La descripción es obligatoria';
+
+  @override
+  String get r3aEditRarity => 'Editar rareza';
+
+  @override
+  String r3aEvolutionTime(String tz) {
+    return 'Hora de evolución ($tz)';
+  }
+
+  @override
+  String get r3aEvolutionType => 'Tipo de evolución';
+
+  @override
+  String r3aEvolveStageNumber(String number) {
+    return 'Etapa de evolución $number';
+  }
+
+  @override
+  String get r3aEvolvingMode => 'Modo de evolución';
+
+  @override
+  String get r3aFeatureDescBtcTokenization => 'Tokeniza BTC dentro de un contrato inteligente';
+
+  @override
+  String get r3aFeatureDescEvolution => 'Permite que el contrato evolucione según el tiempo o variables de red';
+
+  @override
+  String get r3aFeatureDescFractional => 'Comparte la propiedad entre varias billeteras con votación';
+
+  @override
+  String get r3aFeatureDescMultiAsset => 'Permite compilar varios activos en el contrato inteligente';
+
+  @override
+  String get r3aFeatureDescPair => 'Vincula/envuelve este contrato con un NFT existente dentro o fuera de esta red';
+
+  @override
+  String get r3aFeatureDescRoyalty => 'Incluye una regalía aplicada en cadena en cada intercambio';
+
+  @override
+  String get r3aFeatureDescSoulBound => 'Crea un contrato no transferible ligado a una dirección permanente';
+
+  @override
+  String get r3aFeatureDescTokenization => 'Vincula este contrato con un bien físico/digital';
+
+  @override
+  String get r3aFeatureNameEvolving => 'Evolutivo';
+
+  @override
+  String get r3aInvalidHexColor => 'Color hex inválido';
+
+  @override
+  String get r3aInvalidSmartContract => 'Contrato inteligente inválido';
+
+  @override
+  String get r3aInvalidValue => 'Valor inválido';
+
+  @override
+  String get r3aIssuerMinterControlled => 'Por emisor/creador';
+
+  @override
+  String get r3aLabel => 'Etiqueta';
+
+  @override
+  String get r3aMint => 'Emitir';
+
+  @override
+  String get r3aMintPhysicalRwa => 'Emitir un activo físico o del mundo real';
+
+  @override
+  String get r3aMinterAddressColon => 'Dirección del emisor:';
+
+  @override
+  String get r3aMinterNameIsRequired => 'El nombre del emisor es obligatorio';
+
+  @override
+  String get r3aMultiAsset => 'Multiactivo';
+
+  @override
+  String get r3aMusicRelease => 'Lanzamiento musical';
+
+  @override
+  String get r3aNameIsRequired => 'El nombre es obligatorio';
+
+  @override
+  String get r3aNewInstance => 'Nueva instancia';
+
+  @override
+  String get r3aNftAddress => 'Dirección del NFT';
+
+  @override
+  String get r3aNftCollectionWizard => 'Asistente de colección NFT';
+
+  @override
+  String get r3aNotEnoughVfxToMint => 'Saldo VFX insuficiente para emitir un contrato inteligente.';
+
+  @override
+  String get r3aNotImplemented => 'No implementado';
+
+  @override
+  String get r3aOnlineEvent => 'Evento en línea';
+
+  @override
+  String get r3aPhysicalEvent => 'Evento físico';
+
+  @override
+  String get r3aPrimaryAssetIsRequired => 'El activo principal es obligatorio';
+
+  @override
+  String get r3aPrimaryAssetOverride => 'Anular activo principal';
+
+  @override
+  String get r3aRareness => 'Rareza';
+
+  @override
+  String get r3aReason => 'Motivo';
+
+  @override
+  String get r3aRemoveEverythingConfirm => '¿Seguro que deseas eliminar todo?';
+
+  @override
+  String get r3aRequiredForBlockHeightEvolution => 'Requerido para evolución por altura de bloque.';
+
+  @override
+  String get r3aRequiredForDateTimeEvolution => 'Requerido para evolución por fecha/hora.';
+
+  @override
+  String get r3aSaveAndClose => 'Guardar y cerrar';
+
+  @override
+  String get r3aSaveClose => 'Guardar y cerrar';
+
+  @override
+  String get r3aSelfDestructive => 'Autodestructivo';
+
+  @override
+  String get r3aStatsOverride => 'Anular estadísticas';
+
+  @override
+  String get r3aThumbnailOverride => 'Anular miniatura';
+
+  @override
+  String get r3aTicketing => 'Entradas';
+
+  @override
+  String get r3aTimeMustBeInFuture => 'La hora debe ser futura.';
+
+  @override
+  String get r3aToken => 'Token';
+
+  @override
+  String get r3aTokenizationPhysicalDigital => 'Tokenización de bien físico/digital';
+
+  @override
+  String get r3aValueIsRequired => 'Se requiere un valor';
+
+  @override
+  String get r3aViewCompiledSmartContract => 'Ver contrato inteligente compilado';
+
+  @override
+  String r3aWillBeMintedBy(String name) {
+    return 'Esto será emitido por $name';
+  }
+
+  @override
+  String get r3aWrap => 'Envolver';
+
+  @override
+  String get r3bActionCreation => 'creación';
+
+  @override
+  String get r3bActionEditing => 'edición';
+
+  @override
+  String get r3bActionPublish => 'Publicar';
+
+  @override
+  String get r3bActive => 'Activo:';
+
+  @override
+  String get r3bAddBeaconDescription => 'Agrega un beacon existente a los nodos externos para usar ese relay en vez de los predeterminados de la red VFX. Configura tu billetera para usar un beacon remoto en la transferencia de medios en lugar de los beacons predeterminados de la red VFX. Necesitarás la dirección IP del beacon remoto. Si ese beacon usa un puerto no predeterminado, indícalo también. El nombre del beacon es un alias visible solo para ti.';
+
+  @override
+  String get r3bAddressRequired => 'Dirección obligatoria.';
+
+  @override
+  String get r3bAlreadyOwnerNft => 'Ya eres el dueño de este NFT.';
+
+  @override
+  String r3bAmountValue(String amount) {
+    return 'Monto: $amount';
+  }
+
+  @override
+  String get r3bApproveSaleStart => 'Aprueba la transacción de inicio de venta para tu compra en la tienda.';
+
+  @override
+  String get r3bAssetCache => 'Caché de activos';
+
+  @override
+  String get r3bAuctionEnds => 'La subasta termina';
+
+  @override
+  String get r3bAutoDeleteAssets => 'Autoeliminar activos';
+
+  @override
+  String get r3bBaselineAsset => 'Activo base';
+
+  @override
+  String get r3bBeaconUploadSigFailed => 'No se pudo generar la firma de subida al beacon';
+
+  @override
+  String get r3bBidAmount => 'Monto de oferta';
+
+  @override
+  String get r3bBidNotFound => 'Error: oferta no encontrada.';
+
+  @override
+  String get r3bBuyNowTag => '[Comprar ya]';
+
+  @override
+  String r3bBuyerLabel(String address) {
+    return 'Comprador: $address';
+  }
+
+  @override
+  String get r3bChain => 'Cadena';
+
+  @override
+  String r3bCloseCollectionConfirm(String action) {
+    return '¿Seguro que quieres cerrar la pantalla de $action de la colección?';
+  }
+
+  @override
+  String r3bCloseShopConfirm(String action) {
+    return '¿Seguro que quieres cerrar la pantalla de $action de la tienda?';
+  }
+
+  @override
+  String r3bCloseStoreConfirm(String action) {
+    return '¿Seguro que quieres cerrar la pantalla de $action de la tienda?';
+  }
+
+  @override
+  String get r3bCollectionCreatedToast => 'Colección creada';
+
+  @override
+  String get r3bCollectionUpdatedToast => '¡Colección actualizada!';
+
+  @override
+  String get r3bCollections => 'Colecciones';
+
+  @override
+  String get r3bCouldNotCreateThread => 'No se pudo crear u obtener el chat';
+
+  @override
+  String get r3bCouldNotLogin => 'No se pudo iniciar sesión';
+
+  @override
+  String get r3bCouldNotVerifyTx => 'No se pudo verificar la transacción.';
+
+  @override
+  String get r3bCreateAuctionHouse => 'Crear casa de subastas';
+
+  @override
+  String get r3bCreateCollectionsHint => 'Ahora puedes crear colecciones y agregarles publicaciones.';
+
+  @override
+  String get r3bCreateListingsHint => 'Ahora puedes crear publicaciones para los NFT que tienes.';
+
+  @override
+  String get r3bCreateNewCollection => 'Crear colección nueva';
+
+  @override
+  String get r3bCurrentBidPrice => 'Precio de oferta actual:';
+
+  @override
+  String get r3bCurrentBids => 'Ofertas actuales';
+
+  @override
+  String get r3bDay => 'día';
+
+  @override
+  String get r3bDays => 'días';
+
+  @override
+  String get r3bDeleteListingConfirm => '¿Seguro que quieres eliminar esta publicación?';
+
+  @override
+  String get r3bDeleteShopConfirm => '¿Seguro que quieres eliminar esta tienda?';
+
+  @override
+  String r3bDeleteShopConfirmPublished(String cost) {
+    return '¿Seguro que quieres eliminar esta tienda? Eliminarla de la red cuesta $cost VFX.';
+  }
+
+  @override
+  String get r3bEditAuctionHouse => 'Editar casa de subastas';
+
+  @override
+  String get r3bEnableOneOption => 'Activa al menos una opción (Galería, Comprar ya o Subasta)';
+
+  @override
+  String get r3bEndDateAfterStart => 'La fecha de fin debe ser posterior a la de inicio';
+
+  @override
+  String get r3bEndsIn => 'Termina en';
+
+  @override
+  String get r3bErrorGeneratingScData => 'Error al generar los datos del contrato inteligente';
+
+  @override
+  String get r3bFailedParseFee => 'No se pudo procesar la comisión';
+
+  @override
+  String get r3bFailedParseHash => 'No se pudo procesar el hash';
+
+  @override
+  String get r3bFailedRetrieveNonce => 'No se pudo obtener el nonce';
+
+  @override
+  String get r3bFailedRetrieveTimestamp => 'No se pudo obtener la marca de tiempo';
+
+  @override
+  String get r3bIdentifier => 'Identificador';
+
+  @override
+  String get r3bImportAndPublish => 'Importar y publicar';
+
+  @override
+  String get r3bImportShopBroadcastBody => 'Cuando la transacción se refleje en la cadena, tu tienda aparecerá aquí.';
+
+  @override
+  String r3bImportShopConfirmBody(String cost) {
+    return '¿Seguro que quieres importar esta tienda? Se cobrará una comisión de $cost VFX para publicar este cambio en la red.\n\nEsta es una acción destructiva y no conservará tus colecciones ni publicaciones.';
+  }
+
+  @override
+  String r3bIncorrectLoginDetails(String address) {
+    return 'Datos de acceso incorrectos para $address.';
+  }
+
+  @override
+  String get r3bIncrementAmount => 'Monto de incremento:';
+
+  @override
+  String get r3bInfinite => 'Infinito';
+
+  @override
+  String r3bLabelCopied(String label) {
+    return '$label copiado al portapapeles';
+  }
+
+  @override
+  String get r3bLoggedInSuccess => 'Sesión iniciada con éxito';
+
+  @override
+  String get r3bMintedBy => 'Emitido por';
+
+  @override
+  String get r3bMinterAddress => 'Dirección del emisor';
+
+  @override
+  String get r3bMyShopSuffix => ' [Mi tienda]';
+
+  @override
+  String get r3bNftFeatures => 'Características del NFT:';
+
+  @override
+  String get r3bNftMustBeSet => 'Debes definir el NFT';
+
+  @override
+  String get r3bNoAddress => 'No hay dirección.';
+
+  @override
+  String get r3bNoAuctionHouses => 'Sin casas de subastas';
+
+  @override
+  String get r3bNoBids => 'Sin ofertas.';
+
+  @override
+  String get r3bNoCollections => 'Sin colecciones';
+
+  @override
+  String get r3bNoListings => 'Sin publicaciones';
+
+  @override
+  String get r3bNoPrivateKey => 'No hay clave privada.';
+
+  @override
+  String get r3bNoPublicKey => 'No hay clave pública.';
+
+  @override
+  String get r3bNotAuthorized => 'No autorizado';
+
+  @override
+  String r3bNotOwnerLoginAs(String address) {
+    return 'No eres el dueño de esta tienda. Inicia sesión como $address';
+  }
+
+  @override
+  String get r3bOffline => 'Desconectada';
+
+  @override
+  String get r3bOnline => 'Conectada';
+
+  @override
+  String get r3bOr => 'o';
+
+  @override
+  String get r3bOwnedBy => 'Propiedad de';
+
+  @override
+  String get r3bPrivateTag => '[Privado]';
+
+  @override
+  String r3bPublishShopBody(String cost) {
+    return 'Publicar tu tienda en la red cuesta $cost VFX (más la comisión de transacción).';
+  }
+
+  @override
+  String get r3bReadyToImport => 'Listo para importar';
+
+  @override
+  String get r3bReserveGteFloor => 'El precio de reserva debe ser mayor o igual al precio mínimo.';
+
+  @override
+  String get r3bReserveMet => 'Reserva alcanzada:';
+
+  @override
+  String get r3bSaleCompleted => 'Venta completada';
+
+  @override
+  String get r3bSalePending => 'Venta pendiente';
+
+  @override
+  String get r3bSaveChanges => 'Guardar cambios';
+
+  @override
+  String get r3bSetupAuctionHouse => 'Configurar casa de subastas';
+
+  @override
+  String get r3bSetupAuctionHousePrompt => 'Primero configura tu casa de subastas / galería.\nLuego podrás crear colecciones y agregarles publicaciones.';
+
+  @override
+  String get r3bShareListing => 'Compartir publicación';
+
+  @override
+  String get r3bShareUrlCopied => 'URL copiada al portapapeles';
+
+  @override
+  String get r3bShopDeleteBroadcast => 'Transacción de eliminación de tienda enviada a la red';
+
+  @override
+  String get r3bShopIsOffline => 'La tienda está desconectada.';
+
+  @override
+  String get r3bShopNotFound => 'Tienda no encontrada';
+
+  @override
+  String get r3bShopPublishBroadcast => 'Transacción de publicación de tienda enviada a la red';
+
+  @override
+  String get r3bShopUpdateBroadcast => 'Transacción de actualización de tienda enviada a la red';
+
+  @override
+  String get r3bShopUrlImportPrompt => '¿Qué URL de tienda quieres importar?';
+
+  @override
+  String get r3bShopUrlNotAvailable => 'La URL de la tienda no está disponible.';
+
+  @override
+  String get r3bSignInToAuthorize => 'Para autorizar esta transacción, inicia sesión como';
+
+  @override
+  String get r3bSignatureNotValidPrimary => 'Firma no válida (primaria)';
+
+  @override
+  String r3bSmartContractId(String id) {
+    return 'ID del contrato inteligente: $id';
+  }
+
+  @override
+  String get r3bStartBeforeEnd => 'La fecha de inicio debe ser anterior a la de fin.';
+
+  @override
+  String get r3bSubscribeUpdatesBody => 'Para que la billetera web te envíe notificaciones sobre ofertas y compras que debas firmar, se necesita un correo electrónico.';
+
+  @override
+  String get r3bThisIsPermanent => 'Esto es permanente';
+
+  @override
+  String get r3bThisIsYourShop => 'Esta es tu propia tienda.';
+
+  @override
+  String get r3bTransactionSent => 'Transacción enviada.';
+
+  @override
+  String get r3bUnpublished => 'Sin publicar';
+
+  @override
+  String r3bUpdateShopBody(String cost) {
+    return 'Actualizar tu tienda en la red cuesta $cost VFX (más la comisión de transacción).';
+  }
+
+  @override
+  String get r3bUpdateShopTitle => '¿Actualizar tienda?';
+
+  @override
+  String get r3bWalletNotSyncedBody => 'Como tu billetera no está sincronizada, podría haber problemas al ver los datos de esta tienda. ¿Continuar de todos modos?';
+
+  @override
+  String get r3bWillNotBeNotified => 'No recibirás notificaciones. Puedes cambiar este ajuste en el panel si cambias de opinión.';
+
+  @override
+  String get r3bYouAreShopOwner => 'Eres el dueño de esta tienda.';
+
+  @override
+  String r3cCallbackFromDetails(String text, String amount, String address) {
+    return '$text [$amount VFX de $address]';
+  }
+
+  @override
+  String get r3cNoTransactionsFound => 'No se encontraron transacciones';
+
+  @override
+  String get r3cNoTransactionsFoundFiltered => 'No se encontraron transacciones\n[con los filtros actuales]';
+
+  @override
+  String get r3cPriceHistoryBtc => 'Historial de precios BTC';
+
+  @override
+  String get r3cPriceHistoryVfx => 'Historial de precios VFX';
+
+  @override
+  String get r3cStatusCalledBack => 'Retornado';
+
+  @override
+  String get r3cStatusFail => 'Fallido';
+
+  @override
+  String get r3cStatusRecovered => 'Recuperado';
+
+  @override
+  String get r3cTypeAdnr => 'ADNR';
+
+  @override
+  String get r3cTypeAdnrCreate => 'Crear ADNR';
+
+  @override
+  String get r3cTypeAdnrDelete => 'Eliminar ADNR';
+
+  @override
+  String get r3cTypeAdnrTransfer => 'Transferir ADNR';
+
+  @override
+  String get r3cTypeAuctionHouseCreate => 'Casa subastas P2P (crear)';
+
+  @override
+  String get r3cTypeAuctionHouseDelete => 'Casa subastas P2P (eliminar)';
+
+  @override
+  String get r3cTypeAuctionHouseUpdate => 'Casa subastas P2P (actualizar)';
+
+  @override
+  String get r3cTypeBtcAdnrCreate => 'Crear ADNR BTC';
+
+  @override
+  String get r3cTypeBtcAdnrDelete => 'Eliminar ADNR BTC';
+
+  @override
+  String get r3cTypeBtcAdnrTransfer => 'Transferir ADNR BTC';
+
+  @override
+  String get r3cTypeDstRegistration => 'Registro DST';
+
+  @override
+  String get r3cTypeFungibleBanAddress => 'Vetar dirección token';
+
+  @override
+  String get r3cTypeFungibleBurn => 'Quemar token';
+
+  @override
+  String get r3cTypeFungibleDeploy => 'Desplegar token';
+
+  @override
+  String get r3cTypeFungibleMint => 'Emitir token';
+
+  @override
+  String get r3cTypeFungibleOwnershipChange => 'Cambio dueño token';
+
+  @override
+  String get r3cTypeFungiblePause => 'Pausar token';
+
+  @override
+  String get r3cTypeFungibleResume => 'Reanudar token';
+
+  @override
+  String get r3cTypeFungibleTopicCreated => 'Tema de token creado';
+
+  @override
+  String get r3cTypeFungibleTransfer => 'Transferir token';
+
+  @override
+  String get r3cTypeFungibleTx => 'Tx de token';
+
+  @override
+  String get r3cTypeFungibleVoteCast => 'Voto de token';
+
+  @override
+  String get r3cTypeNftBurn => 'Quemar NFT';
+
+  @override
+  String get r3cTypeNftEvolution => 'Evolución NFT';
+
+  @override
+  String get r3cTypeNftMint => 'Emitir NFT';
+
+  @override
+  String get r3cTypeNftMintTokenized => 'Emitir NFT (tokenizado)';
+
+  @override
+  String get r3cTypeNftSale => 'Venta NFT';
+
+  @override
+  String get r3cTypeNftSaleComplete => 'Venta NFT completa';
+
+  @override
+  String get r3cTypeNftSaleCompleteManual => 'Venta NFT completa (manual)';
+
+  @override
+  String get r3cTypeNftSaleCompleteParen => 'Venta NFT (completa)';
+
+  @override
+  String get r3cTypeNftSaleStart => 'Inicio venta NFT';
+
+  @override
+  String get r3cTypeNftSaleStartManual => 'Inicio venta NFT (manual)';
+
+  @override
+  String get r3cTypeNftTransfer => 'Transferir NFT';
+
+  @override
+  String get r3cTypeNftTx => 'NFT Tx';
+
+  @override
+  String get r3cTypeNode => 'Nodo';
+
+  @override
+  String get r3cTypeSmartContractBurn => 'Quemar contrato int.';
+
+  @override
+  String get r3cTypeSmartContractMint => 'Emitir contrato int.';
+
+  @override
+  String get r3cTypeSmartContractTx => 'Tx contrato int.';
+
+  @override
+  String get r3cTypeTokenizationBurn => 'Tokenización: quemar';
+
+  @override
+  String get r3cTypeTokenizationMint => 'Tokenización: emitir';
+
+  @override
+  String get r3cTypeTokenizationTx => 'Tokenización: tx';
+
+  @override
+  String get r3cTypeTokenizationWithdrawalComplete => 'Retiro completo';
+
+  @override
+  String get r3cTypeTokenizationWithdrawalRequest => 'Solicitud de retiro';
+
+  @override
+  String get r3cTypeTopicCreate => 'Crear tema';
+
+  @override
+  String get r3cTypeTopicVote => 'Votar tema';
+
+  @override
+  String get r3cTypeTx => 'Tx';
+
+  @override
+  String get r3cTypeValidatorHeartbeat => 'Latido de validador';
+
+  @override
+  String get r3cTypeValidatorRegistration => 'Registro de validador';
+
+  @override
+  String get r3cTypeVault => 'Bóveda';
+
+  @override
+  String get r3cTypeVaultCallback => 'Bóveda (retorno)';
+
+  @override
+  String get r3cTypeVaultRecover => 'Bóveda (recuperar)';
+
+  @override
+  String get r3cTypeVaultRegister => 'Bóveda (registro)';
+
+  @override
+  String get r3cTypeVbtcBridgeLock => 'Bloqueo puente vBTC';
+
+  @override
+  String get r3cTypeVbtcBridgeUnlock => 'Desbloqueo puente vBTC';
+
+  @override
+  String get r3cTypeVbtcBulkTransfer => 'Transf. masiva vBTC';
+
+  @override
+  String get r3cTypeVbtcBurn => 'Quemar vBTC';
+
+  @override
+  String get r3cTypeVbtcContractCreate => 'Crear contrato vBTC';
+
+  @override
+  String get r3cTypeVbtcContractMint => 'Emitir contrato vBTC';
+
+  @override
+  String get r3cTypeVbtcMint => 'Emitir vBTC';
+
+  @override
+  String get r3cTypeVbtcPrivateTransfer => 'Transf. privada vBTC';
+
+  @override
+  String get r3cTypeVbtcShield => 'Blindar vBTC';
+
+  @override
+  String get r3cTypeVbtcTokenOwnershipTransfer => 'Transf. dueño token vBTC';
+
+  @override
+  String get r3cTypeVbtcTransfer => 'Transferir vBTC';
+
+  @override
+  String get r3cTypeVbtcTransferCoin => 'Transf. moneda vBTC';
+
+  @override
+  String get r3cTypeVbtcTx => 'Tx vBTC';
+
+  @override
+  String get r3cTypeVbtcUnshield => 'Desblindar vBTC';
+
+  @override
+  String get r3cTypeVbtcValidatorExit => 'Salida validador vBTC';
+
+  @override
+  String get r3cTypeVbtcValidatorHeartbeat => 'Latido validador vBTC';
+
+  @override
+  String get r3cTypeVbtcValidatorRegister => 'Registrar validador vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalArb => 'Retiro vBTC (árb.)';
+
+  @override
+  String get r3cTypeVbtcWithdrawalCancel => 'Cancelar retiro vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalComplete => 'Retiro vBTC completo';
+
+  @override
+  String get r3cTypeVbtcWithdrawalOwner => 'Retiro vBTC (dueño)';
+
+  @override
+  String get r3cTypeVbtcWithdrawalRequest => 'Solicitud retiro vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalVote => 'Votar retiro vBTC';
+
+  @override
+  String get r3cTypeVfxPrivateTransfer => 'Transf. privada VFX';
+
+  @override
+  String get r3cTypeVfxShield => 'Blindar VFX';
+
+  @override
+  String get r3cTypeVfxUnshield => 'Desblindar VFX';
+
+  @override
+  String get r3dActivate => 'Activar';
+
+  @override
+  String r3dActivateVaultBody(String cost) {
+    return 'Hay un costo de $cost VFX para activar tu cuenta de bóveda, que se quema.\n\n¿Continuar?';
+  }
+
+  @override
+  String get r3dActivateVaultTitle => '¿Activar cuenta de bóveda?';
+
+  @override
+  String get r3dActivationTxBroadcasted => 'Transacción de activación transmitida';
+
+  @override
+  String get r3dActivity => 'Actividad';
+
+  @override
+  String get r3dAddressRequired => 'Dirección requerida.';
+
+  @override
+  String get r3dAttemptingSaleCompleteTx => 'Enviando TX de cierre de venta.';
+
+  @override
+  String get r3dAuctionAlreadyStarted => 'La subasta ya comenzó.';
+
+  @override
+  String get r3dAwaitingPayment => 'Esperando pago';
+
+  @override
+  String get r3dBackupAddress => 'Dirección:';
+
+  @override
+  String get r3dBackupPrivateKey => 'Clave privada:';
+
+  @override
+  String get r3dBackupRecoveryAddress => 'Dirección de recuperación:';
+
+  @override
+  String get r3dBackupRecoveryPrivateKey => 'Clave privada de recuperación:';
+
+  @override
+  String get r3dBackupRestoreCode => 'Código de restauración:';
+
+  @override
+  String get r3dBeingClaimed => 'Reclamándose';
+
+  @override
+  String get r3dBtcExplorer => 'Explorador BTC';
+
+  @override
+  String r3dBuyNowPriceLabel(String price) {
+    return 'Compra directa: $price VFX';
+  }
+
+  @override
+  String get r3dCantDeleteAuctionStarted => 'No puedes eliminar esta publicación porque la subasta ya comenzó.';
+
+  @override
+  String get r3dChat => 'Chat';
+
+  @override
+  String get r3dChooseNft => 'Elegir NFT';
+
+  @override
+  String get r3dClaimed => 'Reclamado';
+
+  @override
+  String get r3dCliRestartBody => 'Se requiere reiniciar la CLI para aplicar este cambio. ¿Quieres reiniciar ahora?';
+
+  @override
+  String get r3dCloseCollectionCreationConfirm => '¿Seguro que quieres cerrar la pantalla de creación de la colección?';
+
+  @override
+  String get r3dCloseCollectionEditingConfirm => '¿Seguro que quieres cerrar la pantalla de edición de la colección?';
+
+  @override
+  String get r3dCloseListingCreationConfirm => '¿Seguro que quieres cerrar la pantalla de creación de la publicación?';
+
+  @override
+  String get r3dCloseListingEditingConfirm => '¿Seguro que quieres cerrar la pantalla de edición de la publicación?';
+
+  @override
+  String get r3dCloseShopCreationConfirm => '¿Seguro que quieres cerrar la pantalla de creación de la tienda?';
+
+  @override
+  String get r3dCloseShopEditingConfirm => '¿Seguro que quieres cerrar la pantalla de edición de la tienda?';
+
+  @override
+  String get r3dCloseStoreCreationConfirm => '¿Seguro que quieres cerrar la pantalla de creación de la tienda?';
+
+  @override
+  String get r3dCloseStoreEditingConfirm => '¿Seguro que quieres cerrar la pantalla de edición de la tienda?';
+
+  @override
+  String get r3dCollectionLiveHelp => 'Cuando esto está habilitado, esta colección será visible para otros usuarios cuando se conecten a tu tienda';
+
+  @override
+  String get r3dConfirmDeleteListing => '¿Seguro que quieres eliminar esta publicación?';
+
+  @override
+  String r3dConfirmDeletePublishedShop(String cost) {
+    return '¿Seguro que quieres eliminar esta tienda de la red? Hay un costo de $cost VFX más la comisión de TX para realizar esta operación.';
+  }
+
+  @override
+  String get r3dConfirmDeleteUnpublishedShop => '¿Seguro que quieres eliminar tu tienda sin publicar?';
+
+  @override
+  String get r3dConfirmDetails => 'Confirmar detalles';
+
+  @override
+  String get r3dConfirmDiscardListing => '¿Seguro que quieres descartar la publicación?';
+
+  @override
+  String get r3dCopyLink => 'Copiar enlace';
+
+  @override
+  String get r3dCraftTime => 'Tiempo de creación';
+
+  @override
+  String get r3dCreate => 'Crear';
+
+  @override
+  String get r3dCreateAuctionHouse => 'Crear casa de subastas';
+
+  @override
+  String get r3dCreateCollectionsPrompt => 'Ahora puedes crear colecciones y luego agregarles publicaciones.';
+
+  @override
+  String get r3dCreateFirstListing => 'Crear primera publicación';
+
+  @override
+  String get r3dCreateLink => 'Crear enlace';
+
+  @override
+  String get r3dCreateListingsForNfts => 'Ahora puedes crear publicaciones para los NFT que tienes.';
+
+  @override
+  String get r3dCreateNewCollection => 'Crear colección';
+
+  @override
+  String get r3dCreatePaymentLink => 'Crear enlace de pago';
+
+  @override
+  String get r3dCreatingNewCollectionBody => 'Estás creando una nueva colección en tu casa de subastas.\nDespués de crearla podrás crear publicaciones.';
+
+  @override
+  String get r3dDeleteTxBroadcasted => 'TX de eliminación transmitida.';
+
+  @override
+  String get r3dEditAuctionHouse => 'Editar casa de subastas';
+
+  @override
+  String get r3dEnableAtLeastOneOption => 'Habilita al menos una opción (Galería, Compra directa o Subasta)';
+
+  @override
+  String get r3dEndDateAfterStartDate => 'La fecha de fin debe ser posterior a la de inicio';
+
+  @override
+  String get r3dEstimatedFee => 'Comisión estimada';
+
+  @override
+  String get r3dFailedCreatePaymentLink => 'No se pudo crear el enlace de pago. Inténtalo de nuevo.';
+
+  @override
+  String get r3dFailedParseFee => 'No se pudo procesar la comisión';
+
+  @override
+  String get r3dFailedParseHash => 'No se pudo procesar el hash';
+
+  @override
+  String get r3dFailedRetrieveNonce => 'No se pudo obtener el nonce';
+
+  @override
+  String get r3dFailedRetrieveTimestamp => 'No se pudo obtener la marca de tiempo';
+
+  @override
+  String get r3dFailedSendVfxEscrow => 'No se pudo enviar VFX al depósito en garantía. Inténtalo de nuevo.';
+
+  @override
+  String get r3dFloorPriceGreaterThanZero => 'El precio base debe ser mayor que cero.';
+
+  @override
+  String r3dFloorPriceValue(String price) {
+    return 'Base: $price VFX';
+  }
+
+  @override
+  String get r3dGalleryListing => 'Publicación de galería';
+
+  @override
+  String get r3dHdAccountRestored => 'Cuenta HD restaurada. Las claves se generarán de forma determinista según la frase.';
+
+  @override
+  String get r3dHidden => 'Oculta';
+
+  @override
+  String get r3dHideCollectionBody => '¿Seguro que quieres ocultar esta colección? No será visible para otros usuarios cuando se conecten a tu tienda.';
+
+  @override
+  String get r3dHideCollectionTitle => '¿Ocultar colección?';
+
+  @override
+  String get r3dInputRecoverPhrase => 'Ingresa la frase de recuperación';
+
+  @override
+  String get r3dInsufficientBalancePublish => 'Esta billetera no tiene el saldo mínimo para enviar una TX de publicación';
+
+  @override
+  String get r3dInsufficientBalanceUpdate => 'Esta billetera no tiene el saldo mínimo para enviar una TX de actualización';
+
+  @override
+  String get r3dLabelHash => 'Hash';
+
+  @override
+  String get r3dLinkCopiedClipboard => '¡Enlace copiado al portapapeles!';
+
+  @override
+  String get r3dLive => 'Activa';
+
+  @override
+  String get r3dLocalChangesSaved => '¡Cambios locales guardados!';
+
+  @override
+  String get r3dMakeCollectionLiveBody => '¿Seguro que quieres publicar esta colección? Será visible para otros usuarios cuando se conecten a tu tienda.';
+
+  @override
+  String get r3dMakeCollectionLiveTitle => '¿Publicar colección?';
+
+  @override
+  String get r3dMakeLive => 'Publicar';
+
+  @override
+  String get r3dMessage => 'Mensaje';
+
+  @override
+  String get r3dNftMustBeSet => 'Debes definir el NFT';
+
+  @override
+  String get r3dNftTransferStarted => 'Éxito: Se inició la transferencia del NFT.';
+
+  @override
+  String get r3dNotOneOfYourAddresses => 'Esta no es una de tus direcciones';
+
+  @override
+  String get r3dNumberOfTxs => 'N.º de TX';
+
+  @override
+  String get r3dOr => 'o';
+
+  @override
+  String get r3dPaymentCaptured => 'Pago capturado';
+
+  @override
+  String get r3dPaymentFromVfxWallet => 'Pago desde billetera VFX';
+
+  @override
+  String get r3dPaymentLinkCreatedSuccess => '¡Enlace de pago creado correctamente!';
+
+  @override
+  String get r3dPaymentLinkReady => '¡Enlace de pago listo!';
+
+  @override
+  String get r3dPaymentNotAvailable => 'Pago no disponible en este entorno';
+
+  @override
+  String get r3dPaymentProcessed => 'Pago procesado';
+
+  @override
+  String get r3dPendingDeposit => 'Depósito pendiente';
+
+  @override
+  String get r3dPriceGreaterThanZero => 'El precio debe ser mayor que cero';
+
+  @override
+  String get r3dPublish => 'Publicar';
+
+  @override
+  String get r3dPublishChanges => 'Publicar cambios';
+
+  @override
+  String get r3dPublishIpChange => 'Publicar cambio de IP';
+
+  @override
+  String r3dPublishShopCostBody(String cost) {
+    return 'Hay un costo de $cost VFX para publicar tu tienda en la red (más la comisión de la transacción).';
+  }
+
+  @override
+  String get r3dPublishTransactionSent => '¡Transacción de publicación enviada!';
+
+  @override
+  String r3dPublishUpdateCostBody(String cost) {
+    return 'Hay un costo de $cost VFX para publicar los cambios de tu tienda en la red (más la comisión de la transacción).';
+  }
+
+  @override
+  String get r3dPublishUpdatesBody => 'Tus cambios locales se guardaron correctamente. ¿Quieres publicarlos en la red?';
+
+  @override
+  String get r3dPublishUpdatesBodyWithCost => 'Tus cambios locales se guardaron correctamente. ¿Quieres publicarlos en la red?\n\nSe requiere 1 VFX porque ya publicaste en las últimas 24 horas.';
+
+  @override
+  String get r3dReadyToClaim => 'Listo para reclamar';
+
+  @override
+  String r3dRecipientWillReceive(String amount) {
+    return 'El destinatario recibirá $amount VFX cuando reclame el enlace.';
+  }
+
+  @override
+  String get r3dRecoveryInProgress => 'Recuperación en curso';
+
+  @override
+  String get r3dRefreshStatus => 'Actualizar estado';
+
+  @override
+  String get r3dRefreshingStatus => 'Actualizando estado...';
+
+  @override
+  String get r3dReservePriceGteFloor => 'El precio de reserva debe ser mayor o igual al precio base.';
+
+  @override
+  String r3dReservePriceValue(String price) {
+    return 'Reserva: $price VFX';
+  }
+
+  @override
+  String get r3dRestoreHdAccount => 'Restaurar cuenta HD';
+
+  @override
+  String get r3dSaleCompleteTxFailed => 'Falló la TX de cierre de venta';
+
+  @override
+  String get r3dSaveChanges => 'Guardar cambios';
+
+  @override
+  String r3dSecondsValue(String seconds) {
+    return '$seconds segundos';
+  }
+
+  @override
+  String get r3dSendingVfx => 'Enviando VFX';
+
+  @override
+  String get r3dSendingVfxEllipsis => 'Enviando VFX...';
+
+  @override
+  String get r3dSetOfflineBody => '¿Seguro que quieres poner esta tienda fuera de línea?';
+
+  @override
+  String get r3dSetOfflineTitle => '¿Poner fuera de línea?';
+
+  @override
+  String get r3dSetOnlineBody => '¿Seguro que quieres poner esta tienda en línea?';
+
+  @override
+  String get r3dSetOnlineTitle => '¿Poner en línea?';
+
+  @override
+  String get r3dSetupAuctionHouse => 'Configurar casa de subastas';
+
+  @override
+  String get r3dSetupAuctionHousePrompt => 'Primero, configura tu casa de subastas / galería.\nLuego podrás crear colecciones y agregarles publicaciones.';
+
+  @override
+  String get r3dShareLink => 'Compartir enlace';
+
+  @override
+  String get r3dShareLinkInstructions => 'Comparte este enlace con el destinatario.\nPuede reclamar los VFX sin necesidad de una billetera.';
+
+  @override
+  String get r3dShopDeleted => 'Tienda eliminada';
+
+  @override
+  String get r3dShopImported => 'Tienda importada';
+
+  @override
+  String get r3dShopOffline => 'Tienda fuera de línea';
+
+  @override
+  String get r3dShopOnline => 'Tienda en línea';
+
+  @override
+  String get r3dShopUrlCopied => 'URL de la tienda copiada';
+
+  @override
+  String r3dShopUrlLabel(String url) {
+    return 'URL: $url';
+  }
+
+  @override
+  String get r3dSignatureGenerationFailed => 'Falló la generación de la firma.';
+
+  @override
+  String get r3dSignatureNotValid => 'Firma no válida';
+
+  @override
+  String get r3dSize => 'Tamaño';
+
+  @override
+  String get r3dStartDateBeforeEndDate => 'La fecha de inicio debe ser anterior a la de fin.';
+
+  @override
+  String get r3dStatusInitialized => 'Inicializado';
+
+  @override
+  String get r3dStatusQuoted => 'Cotizado';
+
+  @override
+  String get r3dTimeoutDepositConfirmation => 'Tiempo agotado esperando la confirmación del depósito. El enlace se creó pero puede requerir verificación manual.';
+
+  @override
+  String get r3dTotalAmount => 'Monto total';
+
+  @override
+  String get r3dTotalReward => 'Recompensa total';
+
+  @override
+  String get r3dTransactionNotValid => 'Transacción no válida';
+
+  @override
+  String get r3dTransactionSettled => 'Transacción liquidada';
+
+  @override
+  String get r3dTryAgain => 'Reintentar';
+
+  @override
+  String get r3dValidatedBy => 'Validado por';
+
+  @override
+  String get r3dVaultAccountsIntroPost => '] son una función de almacenamiento en frío y depósito en garantía on-chain para mantener seguros tus fondos VFX y tus activos digitales.\n\n';
+
+  @override
+  String get r3dVaultAccountsIntroPre => 'Las cuentas de bóveda [';
+
+  @override
+  String get r3dVaultActivationNote => 'Nota: Activar esta función requiere un depósito de 5 VFX, 4 de los cuales se queman al activarla.';
+
+  @override
+  String get r3dVaultFeatureDescription => 'Esta función es independiente de tu dirección de liquidación instantánea VFX y habilita funciones de recuperación y de depósito en garantía on-chain con devolución de llamada que te permiten recuperar fondos y activos a tu cuenta de bóveda en caso de robo, extravío o de un destinatario que requiera un depósito en garantía sin confianza, dentro de las 24 horas del suceso o dentro de un tiempo definido por el usuario.\n\n';
+
+  @override
+  String get r3dVaultFeaturesOnChain => 'Todas estas funciones son on-chain y todos los pares conocen su estado actual.\n';
+
+  @override
+  String get r3dVaultNoFungibleTokens => 'Tu cuenta de bóveda no tiene tokens fungibles.';
+
+  @override
+  String get r3dVaultNoVbtcTokens => 'Tu cuenta de bóveda no tiene tokens vBTC.';
+
+  @override
+  String get r3dVaultNotActivatedWarning => 'Tu cuenta de bóveda aún no está activada. Para proteger tus fondos y activos de forma segura, actívala primero.';
+
+  @override
+  String get r3dVfxExplorer => 'Explorador VFX';
+
+  @override
+  String r3dVfxForUsd(String vfx, String usd) {
+    return '$vfx VFX por \$$usd USD';
+  }
+
+  @override
+  String get r3dViewTxs => 'Ver TX';
+
+  @override
+  String get r3dWaitingDepositConfirmation => 'Esperando la confirmación del depósito...\nEsto puede tardar hasta 20 segundos.';
+
+  @override
+  String get r3dWaitingForConfirmation => 'Esperando confirmación';
+
+  @override
+  String get r3eAccountRequiredExplanation => 'Se requiere una cuenta para continuar.\nCrea tu cuenta ahora con tu correo electrónico y una contraseña.';
+
+  @override
+  String get r3eAgree => 'Aceptar';
+
+  @override
+  String get r3eAgreeDisclaimer => 'He leído y acepto el aviso legal.';
+
+  @override
+  String r3eBlockLabel(String block) {
+    return 'Bloque: $block';
+  }
+
+  @override
+  String get r3eBtcDomainBroadcasted => 'La transacción del dominio BTC se ha transmitido. Consulta el hash en el registro.';
+
+  @override
+  String r3eBtcDomainValidBody(String domain, String amount, String fee, String total) {
+    return 'La transacción del dominio BTC es válida.\n¿Seguro que quieres continuar?\n\nDominio: $domain\nMonto: $amount VFX\nComisión: $fee VFX\nTotal: $total VFX';
+  }
+
+  @override
+  String get r3eBtcExplorer => 'Explorador de BTC';
+
+  @override
+  String get r3eButterflyDescDesktop => 'Butterfly hace que enviar pagos sea simple. Ahorra, gasta y paga a cualquiera, en cualquier lugar y momento. Al instante. Sin fronteras, sin restricciones, sin límites y sin cuentas… ¡Sé libre!\n\n¿Iniciar sesión automáticamente con esta cuenta?';
+
+  @override
+  String get r3eButterflyDescMobile => 'Butterfly hace que enviar pagos sea simple. Ahorra, gasta y paga a cualquiera, en cualquier lugar y momento. Al instante.\n\n¿Iniciar sesión automáticamente con esta cuenta?';
+
+  @override
+  String get r3eCannotLockWhileValidating => 'No puedes bloquear tu billetera mientras validas.';
+
+  @override
+  String get r3eCantFindPrivateKey => 'No se encuentra la clave privada';
+
+  @override
+  String get r3eCantFindPublicKey => 'No se encuentra la clave pública';
+
+  @override
+  String get r3eCloseWallet => 'Cerrar billetera';
+
+  @override
+  String get r3eCoinPrices => 'Precios de monedas';
+
+  @override
+  String get r3eCollapse => 'Contraer';
+
+  @override
+  String get r3eConfirmEncryptionPassword => 'Confirma tu contraseña de cifrado.';
+
+  @override
+  String get r3eCopySignature => 'Copiar firma';
+
+  @override
+  String r3eCostToDelete(String cost) {
+    return 'Eliminar un dominio BTC cuesta $cost VFX.';
+  }
+
+  @override
+  String get r3eCouldNotGenerateSignature => 'No se pudo generar la firma';
+
+  @override
+  String get r3eCouldNotImportMedia => 'No se pudo importar el multimedia';
+
+  @override
+  String get r3eCreateAccount => 'Crear cuenta';
+
+  @override
+  String get r3eCreateBtcDomainDesc => 'Crea un dominio BTC como alias de la dirección de tu cuenta para recibir fondos.';
+
+  @override
+  String get r3eDebugData => 'Datos de depuración';
+
+  @override
+  String get r3eDebugDataCopied => 'Datos de depuración copiados al portapapeles';
+
+  @override
+  String get r3eDecryptAccountPasswordBody => 'Ingresa la contraseña de esta cuenta para descifrar sus claves privadas.';
+
+  @override
+  String r3eDeleteBtcDomainBody(String costLine) {
+    return '¿Seguro que quieres eliminar este dominio BTC?\n$costLine\n\nUna vez eliminado, este ADNR ya no podrá recibir transacciones.';
+  }
+
+  @override
+  String get r3eDisclaimer => 'Aviso legal';
+
+  @override
+  String get r3eDoNotCloseWallet => 'Por favor no cierres tu billetera.';
+
+  @override
+  String r3eDoesNotOwnBody(String address, String scId) {
+    return '$address\nNO es propietario de\n$scId';
+  }
+
+  @override
+  String get r3eEmailPasswordSeedInfo => 'Tu correo y contraseña se usan para generar tu clave privada, que se procesa en este navegador y nunca se transmite por internet.';
+
+  @override
+  String get r3eEncryptAccountKeys => 'Cifrar claves de la cuenta';
+
+  @override
+  String get r3eEncryptAccountPasswordBody => 'Ingresa una contraseña para cifrar las claves privadas de esta cuenta.';
+
+  @override
+  String get r3eEncryptWallet => 'Cifrar billetera';
+
+  @override
+  String get r3eEncryptWalletBody => 'Esta función cifrará TODAS las claves privadas de esta billetera. Asegúrate de tener respaldadas TODAS las claves privadas antes de continuar.\n\nEsta acción es irreversible y la contraseña que crees será la única forma de acceder a esta billetera una vez completado el cifrado.\n\nTambién se recomienda respaldar tu contraseña además de tus claves privadas.';
+
+  @override
+  String get r3eEnterPasswordBackup => 'Ingresa tu contraseña para respaldar tus claves.';
+
+  @override
+  String get r3eExportNftMedia => 'Exportar multimedia del NFT';
+
+  @override
+  String get r3eFailedDecryptKeys => 'No se pudieron descifrar las claves. Revisa tu contraseña.';
+
+  @override
+  String r3eFailedDeleteDb(String path) {
+    return 'No se pudo eliminar $path: la carpeta sigue existiendo tras el borrado';
+  }
+
+  @override
+  String r3eFailedDownloadFile(String filename, String attempts) {
+    return 'No se pudo descargar $filename tras $attempts intentos';
+  }
+
+  @override
+  String get r3eFaucetIntro => 'La comunidad ha asignado algo de VFX para facilitar probar esta función. Para evitar abusos, se requiere un número de teléfono para una autorización por SMS. Solo se guardará un hash de tu número.';
+
+  @override
+  String r3eFaucetSuccess(String result) {
+    return '¡Listo! Los fondos están en camino. Hash de TX: $result';
+  }
+
+  @override
+  String r3eFilesOnDiskMismatch(String count, String total) {
+    return 'Solo $count de $total archivos en disco tras la descarga';
+  }
+
+  @override
+  String get r3eGetBtc => 'Obtener BTC';
+
+  @override
+  String get r3eImportMedia => 'Importar multimedia';
+
+  @override
+  String get r3eImportSnapshot => 'Importar snapshot';
+
+  @override
+  String get r3eIncorrectDecryptionPassword => 'Contraseña de descifrado incorrecta.';
+
+  @override
+  String get r3eIncorrectPassword => 'Contraseña incorrecta';
+
+  @override
+  String get r3eInvalidHexColor => 'Color hexadecimal no válido';
+
+  @override
+  String get r3eInvalidOwnershipSig => 'Firma de verificación de propiedad no válida';
+
+  @override
+  String get r3eJustTakeMeThere => 'Solo llévame allí';
+
+  @override
+  String get r3eLaunchButterfly => 'Abrir Butterfly';
+
+  @override
+  String get r3eLocalHeightAhead => 'Tu altura de bloque local está más adelantada que el snapshot.';
+
+  @override
+  String get r3eLockNow => 'Bloquear ahora';
+
+  @override
+  String get r3eLogin => 'Iniciar sesión';
+
+  @override
+  String get r3eLoginWithThisAccount => 'Iniciar sesión con esta cuenta';
+
+  @override
+  String r3eMaxAmount(String amount) {
+    return 'Monto máximo: $amount VFX';
+  }
+
+  @override
+  String get r3eMediaBackedUp => 'Contenido multimedia respaldado correctamente.';
+
+  @override
+  String get r3eMediaImported => 'Multimedia importado correctamente';
+
+  @override
+  String get r3eMustAgreeTerms => 'Debes aceptar los términos antes de continuar.';
+
+  @override
+  String get r3eNewPassword => 'Nueva contraseña';
+
+  @override
+  String get r3eNoAccountSelected => 'No hay cuenta seleccionada';
+
+  @override
+  String get r3eNoBtcTransactions => 'No se encontraron transacciones de BTC';
+
+  @override
+  String get r3eNoCostToDelete => 'No hay costo por eliminar un dominio BTC (aparte de la comisión de la TX).';
+
+  @override
+  String get r3eNoKeysToEncrypt => 'No hay claves para cifrar.';
+
+  @override
+  String get r3eNoNotValidating => 'NO, no estás validando';
+
+  @override
+  String get r3eNoVfxTransactions => 'No se encontraron transacciones de VFX';
+
+  @override
+  String get r3eNotValidatingTitle => 'Sin validar ❌';
+
+  @override
+  String get r3eOpenDbFolder => 'Abrir carpeta de BD';
+
+  @override
+  String get r3eOpenExplorer => 'Abrir explorador';
+
+  @override
+  String get r3eOpenLog => 'Abrir registro';
+
+  @override
+  String get r3eOwnershipNotVerified => 'Propiedad NO verificada';
+
+  @override
+  String get r3eOwnershipVerificationSignature => 'Firma de verificación de propiedad';
+
+  @override
+  String r3eOwnsBody(String address, String scId) {
+    return '$address\nES PROPIETARIO DE\n$scId';
+  }
+
+  @override
+  String get r3ePasswordConfirmFailed => 'Falló la confirmación de la contraseña';
+
+  @override
+  String get r3ePasswordEncryptKeys => 'Esta contraseña se usará para cifrar tus claves.';
+
+  @override
+  String get r3ePasswordsDoNotMatchRetry => 'Las contraseñas no coinciden. Inténtalo de nuevo.';
+
+  @override
+  String get r3ePasteSignature => 'Pega la firma que te dio el propietario para validar la propiedad.';
+
+  @override
+  String get r3ePhoneNumberRequired => 'El número de teléfono es obligatorio';
+
+  @override
+  String get r3ePrintAddresses => 'Imprimir direcciones';
+
+  @override
+  String get r3ePrintValidators => 'Imprimir validadores';
+
+  @override
+  String get r3eProblemLocalHeight => 'Problema al obtener la altura de bloque local. Inténtalo de nuevo.';
+
+  @override
+  String get r3eProblemSnapshotHeight => 'Problema al obtener la altura de bloque del snapshot. Inténtalo de nuevo.';
+
+  @override
+  String r3eProgressLabel(String percent) {
+    return 'Progreso: $percent';
+  }
+
+  @override
+  String get r3eReadLess => 'Ver menos';
+
+  @override
+  String get r3eReadMore => 'Ver más';
+
+  @override
+  String get r3eRecentTransactions => 'Transacciones recientes';
+
+  @override
+  String r3eRecoveryBody(String hash) {
+    return 'Tu cuenta de bóveda (protegida) se está recuperando a tu dirección de recuperación.\n\nHash de la transacción: $hash\n\nSe transferirán todas las transacciones no liquidadas de fondos y activos, además de tu saldo disponible actual.\n\nSe recomienda importar tu clave privada de recuperación en una máquina nueva. El contenido multimedia de los NFT no se transferirá, así que expórtalo con el botón de abajo e impórtalo en tu nuevo entorno.';
+  }
+
+  @override
+  String get r3eRecoveryStartedTitle => 'El proceso de recuperación ha comenzado';
+
+  @override
+  String get r3eRestart => 'Reiniciar';
+
+  @override
+  String get r3eRestartCliConfirm => '¿Seguro que quieres reiniciar la CLI?';
+
+  @override
+  String r3eSavedTo(String data) {
+    return 'Guardado en $data';
+  }
+
+  @override
+  String get r3eSendOwnershipSignature => 'Envía esta firma de validación de propiedad para probar que eres el propietario.';
+
+  @override
+  String get r3eSensitiveOperationPassword => 'Ingresa tu contraseña para continuar con esta operación sensible.';
+
+  @override
+  String get r3eSessionTimeoutBody => 'Tu sesión se bloqueará por inactividad. ¿Quieres seguir con la sesión iniciada?\n\nEste aviso se bloqueará automáticamente en 15 segundos.';
+
+  @override
+  String get r3eSessionTimeoutWarning => 'Aviso de sesión inactiva';
+
+  @override
+  String get r3eSetPassword => 'Establecer contraseña';
+
+  @override
+  String get r3eShowDebugData => 'Ver datos de depuración';
+
+  @override
+  String get r3eSignatureCopied => 'Firma de verificación copiada al portapapeles.';
+
+  @override
+  String get r3eSnapshotNoUrls => 'El snapshot no tiene URLs de descarga';
+
+  @override
+  String get r3eStatusLog => 'Registro de estado';
+
+  @override
+  String get r3eStayLoggedIn => 'Seguir conectado';
+
+  @override
+  String get r3eSyncingState => 'Sincronizando estado por un cierre incorrecto';
+
+  @override
+  String r3eUnexpectedError(String error) {
+    return 'Error inesperado: $error';
+  }
+
+  @override
+  String get r3eUnlockWallet => 'Desbloquear billetera';
+
+  @override
+  String get r3eValidatingCheckProblem => 'Ocurrió un problema al revisar tu estado de validación. Reinicia tu billetera e inténtalo de nuevo.';
+
+  @override
+  String get r3eValidatingTitle => 'Validando ✅';
+
+  @override
+  String get r3eValidatorCheck => 'Chequeo de validador';
+
+  @override
+  String get r3eValueRequired => 'El valor es obligatorio';
+
+  @override
+  String get r3eVerifyNftOwnership => 'Verificar propiedad de NFT';
+
+  @override
+  String r3eVfxAddress(String address) {
+    return 'Dirección VFX: $address';
+  }
+
+  @override
+  String r3eVfxDomainValidBody(String domain, String amount, String fee, String total) {
+    return 'La transacción del dominio VFX es válida.\n¿Seguro que quieres continuar?\n\nDominio: $domain\nMonto: $amount VFX\nComisión: $fee VFX\nTotal: $total VFX';
+  }
+
+  @override
+  String get r3eVfxExplorer => 'Explorador de VFX';
+
+  @override
+  String get r3eViewAll => 'Ver todo';
+
+  @override
+  String get r3eViewChart => 'Ver gráfico';
+
+  @override
+  String get r3eWalletEncrypted => 'Tu billetera ahora está cifrada.';
+
+  @override
+  String get r3eWalletLocked => 'Tu billetera ahora está bloqueada.';
+
+  @override
+  String get r3eWalletUnlocked => 'La billetera se ha desbloqueado.';
+
+  @override
+  String get r3eWalletUnlocked10Min => 'La billetera se ha desbloqueado por 10 minutos.';
+
+  @override
+  String get r3eWebWalletEncryptionBody => 'La billetera web ahora usa cifrado para proteger tus claves. Para agregar otra cuenta debes cerrar sesión por completo e iniciar sesión de nuevo. Asegúrate de respaldar todos tus datos de acceso y claves antes de continuar.';
+
+  @override
+  String get r3eWebWalletEncryptionTitle => 'La billetera web ahora usa cifrado';
+
+  @override
+  String get r3eWhichVfxManageDomain => '¿Qué dirección VFX administrará este dominio BTC?';
+
+  @override
+  String get r3eYesValidating => '¡SÍ, estás validando!';
+
+  @override
+  String get r3fAProblemOccurred => 'Ocurrió un problema';
+
+  @override
+  String r3fAddressCopied(String address) {
+    return 'Dirección $address copiada al portapapeles';
+  }
+
+  @override
+  String get r3fAnErrorOccurred => 'Ocurrió un error';
+
+  @override
+  String get r3fAutoActivateBody => '¿Quieres activar la cuenta automáticamente cuando se complete el fondeo?';
+
+  @override
+  String get r3fBridgeHistoryUnavailable => 'El historial del puente no está disponible.';
+
+  @override
+  String get r3fBridgeStatusAwaitingSignatures => 'Esperando firmas';
+
+  @override
+  String get r3fBridgeStatusExiting => 'Saliendo';
+
+  @override
+  String get r3fBridgeStatusExpired => 'Expirado';
+
+  @override
+  String get r3fBridgeStatusLocking => 'Bloqueando';
+
+  @override
+  String get r3fBridgeStatusMinted => 'Emitido';
+
+  @override
+  String get r3fBridgeStatusMinting => 'Emitiendo';
+
+  @override
+  String get r3fBridgeStatusReturned => 'Devuelto';
+
+  @override
+  String get r3fBridgeStatusUnknown => 'Desconocido';
+
+  @override
+  String get r3fBridgeUnreachable => 'No se pudo conectar al servicio del puente.';
+
+  @override
+  String r3fBulkConfirmBody(String amount, String address) {
+    return '¿Quieres enviar un total de $amount vBTC a $address?';
+  }
+
+  @override
+  String get r3fBulkMinTwoTokens => 'Se requieren al menos dos tokens para una transacción vBTC masiva';
+
+  @override
+  String r3fBulkSentToast(String amount, String address) {
+    return 'Se enviaron $amount vBTC a $address.';
+  }
+
+  @override
+  String get r3fCliRestartRequired => 'Se requiere reiniciar el CLI para aplicar los cambios.';
+
+  @override
+  String get r3fConfirmingBalance => 'Confirmando saldo...';
+
+  @override
+  String r3fCopiedToClipboard(String value) {
+    return '\'$value\' copiado al portapapeles';
+  }
+
+  @override
+  String r3fErrorColon(String msg) {
+    return 'Error: $msg';
+  }
+
+  @override
+  String get r3fErrorHasOccurred => 'Ocurrió un error';
+
+  @override
+  String get r3fFailedCancelWithdrawal => 'No se pudo cancelar el retiro.';
+
+  @override
+  String get r3fFailedCeremonyStatus => 'No se pudo obtener el estado de la ceremonia.';
+
+  @override
+  String get r3fFailedCompleteWithdrawal => 'No se pudo completar el retiro.';
+
+  @override
+  String get r3fFailedCreateContract => 'No se pudo crear el contrato.';
+
+  @override
+  String get r3fFailedInitiateCeremony => 'No se pudo iniciar la ceremonia.';
+
+  @override
+  String get r3fFailedParseFee => 'No se pudo procesar la comisión';
+
+  @override
+  String get r3fFailedParseHash => 'No se pudo procesar el hash';
+
+  @override
+  String get r3fFailedRequestWithdrawal => 'No se pudo solicitar el retiro.';
+
+  @override
+  String get r3fFailedRetrieveNonce => 'No se pudo obtener el nonce';
+
+  @override
+  String get r3fFailedRetrieveTimestamp => 'No se pudo obtener la marca de tiempo';
+
+  @override
+  String get r3fFailedTransferOwnership => 'No se pudo transferir la propiedad.';
+
+  @override
+  String get r3fFailedTransferVbtc => 'No se pudo transferir vBTC.';
+
+  @override
+  String get r3fFeePresetCustom => 'Personalizada';
+
+  @override
+  String get r3fFeePresetEconomy => 'Económica';
+
+  @override
+  String get r3fFeePresetFastest => 'Más rápida';
+
+  @override
+  String get r3fFeePresetHalfHour => 'Media hora';
+
+  @override
+  String get r3fFeePresetHour => 'Hora';
+
+  @override
+  String get r3fFeePresetMinimum => 'Mínima';
+
+  @override
+  String r3fFundConfirmBody(String address) {
+    return '¿Quieres enviar 5 VFX desde $address?';
+  }
+
+  @override
+  String r3fFundSentToast(String address) {
+    return 'Se enviaron 5 VFX a $address';
+  }
+
+  @override
+  String get r3fInputAmountsPerToken => 'Ingresa los montos de cada token:';
+
+  @override
+  String get r3fInsufficientVfxBalance => 'La cuenta VFX seleccionada no tiene saldo suficiente';
+
+  @override
+  String r3fMaxAmountIs(String amount) {
+    return 'El monto máximo es $amount vBTC';
+  }
+
+  @override
+  String r3fMaxLabel(String amount) {
+    return '(MÁX: $amount vBTC)';
+  }
+
+  @override
+  String r3fMyBalanceLabel(String balance, String usd) {
+    return 'Mi saldo: $balance vBTC$usd';
+  }
+
+  @override
+  String get r3fNftNotTransferred => 'Los activos NFT no se transfirieron a la cuenta web VFX.';
+
+  @override
+  String get r3fNoAdditionalMedia => 'Este token no contiene medios adicionales.';
+
+  @override
+  String get r3fNoBtcTransactions => 'Sin transacciones BTC';
+
+  @override
+  String get r3fNoRequestHash => 'La solicitud de retiro no devolvió un hash.';
+
+  @override
+  String get r3fNotGenerated => 'No generado';
+
+  @override
+  String get r3fOnboardFaucetDetails => 'La comunidad ofrece un faucet para retirar una cantidad mínima de VFX y probar esta función. Se requiere un número de teléfono para verificación y para reducir el abuso. Solo se guarda un hash del número. También puedes comprar VFX en un exchange u on-ramp si prefieres.';
+
+  @override
+  String get r3fOnboardTokenizeDetails => 'Hora de tokenizar un token vBTC. ¡Los siguientes campos son opcionales!';
+
+  @override
+  String get r3fOnboardTransferBtcDetails => 'Parece que esta cuenta no tiene BTC. Transfiere BTC a esta cuenta para continuar.';
+
+  @override
+  String get r3fOnboardTransferToVbtcDetails => 'Ya puedes transferir BTC a tu token vBTC. Elige el monto y la comisión abajo.';
+
+  @override
+  String r3fPrivateKeyImportedSync(String time) {
+    return '¡Clave privada importada! Espera hasta $time para que se sincronice el saldo.';
+  }
+
+  @override
+  String get r3fProblemRecoverySigScript => 'Problema al generar RecoverySigScript';
+
+  @override
+  String get r3fQrScannerUnavailable => 'Escáner QR no disponible en esta plataforma';
+
+  @override
+  String r3fRecoverBody(String address) {
+    return 'Esta función destructiva revertirá todas las transacciones y activos pendientes y moverá todo a esta dirección de recuperación:\n\n$address';
+  }
+
+  @override
+  String get r3fRestartNow => 'Reiniciar ahora';
+
+  @override
+  String get r3fRestoreBody => 'Importar una cuenta de bóveda existente reemplazará la actual vinculada a tu sesión. Para revertir, cierra sesión y vuelve a entrar.\n\n¿Continuar?';
+
+  @override
+  String get r3fRestoreCodePrompt => 'Pega tu CÓDIGO DE RESTAURACIÓN para importar tu cuenta de bóveda existente.';
+
+  @override
+  String get r3fRevealPrivateKeyBody => '¿Seguro que quieres revelar tu clave privada?';
+
+  @override
+  String get r3fSelectTokensToTransfer => 'Selecciona los tokens desde los que quieres transferir:';
+
+  @override
+  String get r3fTokenMedia => 'Medios del token';
+
+  @override
+  String r3fTokenTotalBalanceTooltip(String balance, String usd) {
+    return 'Saldo total del token: $balance vBTC$usd';
+  }
+
+  @override
+  String r3fTransactionCompleted(String txHash) {
+    return 'Transacción completada: $txHash';
+  }
+
+  @override
+  String get r3fTxTypeMultiSig => 'Multifirma';
+
+  @override
+  String get r3fTxTypeReplace => 'Reemplazar';
+
+  @override
+  String get r3fTxTypeSameAccount => 'TX misma cuenta';
+
+  @override
+  String get r3fWaitingTokenization => 'Esperando a que se compile la tokenización vBTC.';
+
+  @override
+  String get r3gAccountUnlocked => 'Cuenta desbloqueada.';
+
+  @override
+  String get r3gAccountUnlocked10Min => 'Cuenta desbloqueada por 10 minutos.';
+
+  @override
+  String get r3gActiveColon => 'Activa:';
+
+  @override
+  String get r3gAdditionalAssetsColon => 'Recursos adicionales:';
+
+  @override
+  String get r3gAddressCopiedDot => 'Dirección copiada al portapapeles.';
+
+  @override
+  String r3gAdnrCreateConfirmBody(String currency, String domain, String amount, String fee, String total) {
+    return 'La transacción de dominio $currency es válida.\n¿Seguro que quieres continuar?\n\nDominio: $domain\nMonto: $amount VFX\nComisión: $fee VFX\nTotal: $total VFX';
+  }
+
+  @override
+  String r3gAdnrDeleteBody(String costLine) {
+    return '¿Seguro que quieres eliminar este dominio VFX?\n$costLine\n\nUna vez eliminado, este ADNR ya no podrá recibir transacciones.';
+  }
+
+  @override
+  String get r3gAdnrDeleteNoCost => 'Eliminar un dominio VFX no tiene costo (aparte de la comisión de TX).';
+
+  @override
+  String r3gAdnrDeleteWithCost(String cost) {
+    return 'Eliminar un dominio RBX tiene un costo de $cost RBX.';
+  }
+
+  @override
+  String r3gAssetListedInAuctionHouse(String assetType) {
+    return 'Este $assetType está listado en tu casa de subastas. Quita la publicación antes de transferir.';
+  }
+
+  @override
+  String r3gAssetTransferSentSuccess(String assetType, String address) {
+    return '¡Transferencia de $assetType enviada con éxito a $address!';
+  }
+
+  @override
+  String r3gAuctionBegins(String date, String time) {
+    return 'Comienza: $date $time';
+  }
+
+  @override
+  String get r3gAuctionEnds => 'Fin de subasta';
+
+  @override
+  String get r3gAuctionHasEnded => 'La subasta terminó';
+
+  @override
+  String get r3gAuctionStarts => 'Inicio de subasta';
+
+  @override
+  String get r3gAuctionUpcoming => 'Subasta próxima';
+
+  @override
+  String get r3gBackupUrlRequired => 'URL de respaldo requerida';
+
+  @override
+  String r3gBackupUrlTitle(String optional) {
+    return 'URL de respaldo $optional';
+  }
+
+  @override
+  String get r3gBaselineAsset => 'Recurso base';
+
+  @override
+  String get r3gBidAmount => 'Monto de oferta';
+
+  @override
+  String r3gBidGreaterThanHighest(String price) {
+    return 'Tu oferta debe superar la oferta más alta actual ($price VFX)';
+  }
+
+  @override
+  String get r3gBidResent => '¡Oferta reenviada!';
+
+  @override
+  String get r3gBidSent => 'Oferta enviada. Revisa el historial de ofertas para ver si fue aceptada o rechazada.';
+
+  @override
+  String get r3gBurnSentSuccess => '¡Transacción de quema enviada con éxito!';
+
+  @override
+  String get r3gBuyNowSentSuccess => 'Transacción de compra enviada con éxito. Espera la confirmación.';
+
+  @override
+  String get r3gChain => 'Cadena';
+
+  @override
+  String get r3gCollectionError => 'Error de colección';
+
+  @override
+  String r3gConfirmBurnName(String name) {
+    return '¿Seguro que quieres quemar $name?';
+  }
+
+  @override
+  String r3gConfirmBuyNowBody(String price) {
+    return '¿Seguro que quieres comprar ahora por $price VFX?';
+  }
+
+  @override
+  String get r3gConfirmDevolveOneStage => '¿Seguro que quieres retroceder este NFT una etapa?';
+
+  @override
+  String get r3gConfirmEvolveOneStage => '¿Seguro que quieres evolucionar este NFT una etapa?';
+
+  @override
+  String r3gConfirmEvolveToStage(String index) {
+    return '¿Seguro que quieres evolucionar a la etapa $index?';
+  }
+
+  @override
+  String r3gConfirmPlaceBidBody(String amount, String maxSuffix) {
+    return '¿Seguro que quieres ofertar $amount VFX$maxSuffix?';
+  }
+
+  @override
+  String r3gConfirmSellNftBody(String address, String amount) {
+    return 'Confirma que quieres vender el NFT a \"$address\" por $amount VFX.';
+  }
+
+  @override
+  String r3gConfirmSendAssetBody(String assetType, String address, String warning) {
+    return 'Confirma que quieres enviar el $assetType a \"$address\".$warning';
+  }
+
+  @override
+  String get r3gConnect => 'Conectar';
+
+  @override
+  String get r3gConnectToAuctionHouseTitle => '¿Conectar a la casa de subastas?';
+
+  @override
+  String r3gConnectToShopBody(String name, String url) {
+    return '¿Quieres conectarte a $name ($url)?';
+  }
+
+  @override
+  String r3gConnectedFetchingData(String url) {
+    return 'Conectado a $url. Obteniendo datos...';
+  }
+
+  @override
+  String get r3gConnectingToShop => 'Conectando a la tienda...';
+
+  @override
+  String get r3gCopyMessage => 'Copiar mensaje';
+
+  @override
+  String get r3gCouldNotConnectOffline => 'No se pudo conectar a la tienda porque está desconectada.';
+
+  @override
+  String r3gCouldNotFindShop(String url) {
+    return 'No se encontró la casa de subastas con la URL $url';
+  }
+
+  @override
+  String get r3gCurrentBidPrice => 'Precio de oferta actual:';
+
+  @override
+  String get r3gCurrentBids => 'Ofertas actuales';
+
+  @override
+  String r3gCurrentStage(String name) {
+    return 'Etapa actual: $name';
+  }
+
+  @override
+  String get r3gDevolve => 'Retroceder';
+
+  @override
+  String get r3gEncryptionPasswordRequired => 'Se requiere contraseña de cifrado para seguir validando.';
+
+  @override
+  String get r3gEndsIn => 'Termina en';
+
+  @override
+  String get r3gEvolution => 'Evolución';
+
+  @override
+  String r3gEvolveBlockHeightLabel(String blockHeight, String description) {
+    return 'Altura de bloque de evolución: $blockHeight\n$description';
+  }
+
+  @override
+  String r3gEvolveDateLabel(String date, String time, String tz, String description) {
+    return 'Fecha de evolución: $date $time $tz \n$description';
+  }
+
+  @override
+  String get r3gEvolveSyncBody => 'Esta pantalla reflejará el cambio cuando el bloque se genere y la altura de bloque se sincronice con esta transacción.';
+
+  @override
+  String r3gFeeRateEstimateCustom(String fee, String feeBtc, String feeEstimate, String feeEstimateBtc) {
+    return 'Tarifa: $fee SATS /byte [$feeBtc BTC /byte]\nEstimado: $feeEstimate SATS [~$feeEstimateBtc BTC]';
+  }
+
+  @override
+  String r3gFeeRateEstimatePreset(String fee, String feeBtc, String feeEstimate, String feeEstimateBtc) {
+    return 'Tarifa: $fee SATS /byte [$feeBtc BTC /byte]\nEstimado: ~$feeEstimate SATS [~$feeEstimateBtc BTC]    ';
+  }
+
+  @override
+  String get r3gGettingCollections => 'Obteniendo colecciones y publicaciones...';
+
+  @override
+  String get r3gIncorrectDecryptionPassword => 'Contraseña de descifrado incorrecta.';
+
+  @override
+  String get r3gIncrementAmount => 'Monto de incremento:';
+
+  @override
+  String r3gLabelCopiedToClipboard(String label) {
+    return '$label copiado al portapapeles';
+  }
+
+  @override
+  String get r3gManageEvolution => 'Gestionar evolución';
+
+  @override
+  String r3gManagingName(String name) {
+    return 'Gestionando $name';
+  }
+
+  @override
+  String r3gMaxBidSuffix(String max) {
+    return ' con una oferta máxima de $max VFX';
+  }
+
+  @override
+  String get r3gMediaFilesNotFound => 'No se encontraron los archivos multimedia en esta máquina.';
+
+  @override
+  String get r3gMessageCopied => 'Mensaje copiado al portapapeles.';
+
+  @override
+  String r3gMinIncrementAmount(String increment, String minBid) {
+    return 'El incremento mínimo es $increment VFX. Se requiere una oferta mayor a $minBid VFX.';
+  }
+
+  @override
+  String get r3gMinted => 'Acuñado';
+
+  @override
+  String get r3gMintedBy => 'Acuñado por';
+
+  @override
+  String r3gMintedByName(String name) {
+    return 'Acuñado por: $name';
+  }
+
+  @override
+  String get r3gMinting => 'Acuñando...';
+
+  @override
+  String r3gMustBeGreaterThanBid(String minBid) {
+    return 'Debe ser mayor a $minBid VFX';
+  }
+
+  @override
+  String get r3gNextOwner => 'Próximo dueño';
+
+  @override
+  String get r3gNftAssetsNotTransferred => 'Los recursos del NFT no se han transferido a la billetera web VFX.';
+
+  @override
+  String get r3gNftFeaturesColon => 'Funciones del NFT:';
+
+  @override
+  String get r3gNftListedBeforeBurning => 'Este NFT está listado en tu casa de subastas. Quita la publicación antes de quemarlo.';
+
+  @override
+  String get r3gNoBids => 'Sin ofertas.';
+
+  @override
+  String get r3gNoFeatures => 'Sin funciones';
+
+  @override
+  String get r3gNoMintedNfts => 'No hay NFT acuñados con capacidad de gestión.';
+
+  @override
+  String get r3gNoNftsFound => 'No se encontraron NFT.';
+
+  @override
+  String r3gNoRecoveryWarning(String assetType) {
+    return '\n\nSi esta dirección no es correcta, no habrá forma de recuperar la propiedad del $assetType.';
+  }
+
+  @override
+  String get r3gNotEnoughBalanceDot => 'Saldo insuficiente.';
+
+  @override
+  String get r3gNotEnoughBalanceValidating => 'Saldo insuficiente porque estás validando.';
+
+  @override
+  String get r3gOptionalParenthetical => '(Opcional)';
+
+  @override
+  String get r3gPasteZipfileUrl => 'Pega una URL pública a un archivo zip alojado con los recursos.';
+
+  @override
+  String get r3gPropertiesColon => 'Propiedades:';
+
+  @override
+  String get r3gPropertySingular => 'Propiedad';
+
+  @override
+  String get r3gPurchasedBy => 'Comprado por: ';
+
+  @override
+  String get r3gPurchasedFor => 'por ';
+
+  @override
+  String r3gRemoveShopBody(String url) {
+    return '¿Seguro que quieres quitar $url de tus tiendas guardadas?';
+  }
+
+  @override
+  String get r3gRemoveShopTitle => '¿Quitar tienda?';
+
+  @override
+  String get r3gResendMessage => 'Reenviar mensaje';
+
+  @override
+  String get r3gReserveMet => 'Reserva alcanzada:';
+
+  @override
+  String get r3gSellNftPrompt => '¿Por cuánto vendes este NFT?';
+
+  @override
+  String get r3gShopCurrentlyOffline => 'Esta tienda está desconectada.';
+
+  @override
+  String get r3gShopError => 'Error de tienda';
+
+  @override
+  String get r3gShopIsOffline => 'La tienda está desconectada.';
+
+  @override
+  String get r3gShopOfflineWarning => 'Aviso: esta tienda está desconectada, así que la información podría no estar actualizada.';
+
+  @override
+  String get r3gSmartContractIdCopied => 'Identificador del contrato inteligente copiado al portapapeles';
+
+  @override
+  String get r3gStartSale => 'Iniciar venta';
+
+  @override
+  String get r3gStepAmountAddressDesc => 'Ingresa el porcentaje a pagar a la dirección VFX definida en el siguiente campo.';
+
+  @override
+  String get r3gStepAmountAddressTitle => 'Monto y dirección';
+
+  @override
+  String get r3gStepEvolutionModeDesc => 'Decide si quieres que la evolución la controle el emisor o el dueño del NFT.';
+
+  @override
+  String get r3gStepEvolutionModeTitle => 'Modo de evolución';
+
+  @override
+  String get r3gStepEvolutionStagesDesc => 'Crea varias etapas de evolución según las variables previas. Da a cada etapa un nombre y una descripción y, opcionalmente, cambia el recurso.';
+
+  @override
+  String get r3gStepEvolutionStagesTitle => 'Etapas de evolución';
+
+  @override
+  String get r3gStepEvolutionTypeDesc => 'Configura si el NFT evoluciona automáticamente por fecha/hora, altura de bloque o solo manualmente.';
+
+  @override
+  String get r3gStepEvolutionTypeTitle => 'Tipo de evolución';
+
+  @override
+  String get r3gStepMetadataDesc => 'Comienza dando el nombre, el emisor y la descripción del contrato inteligente.';
+
+  @override
+  String get r3gStepMetadataTitle => 'Metadatos';
+
+  @override
+  String get r3gStepMintDesc => 'Haz clic en compilar para generar el código Trilliam del contrato inteligente y luego en emitir para desplegarlo en la cadena.';
+
+  @override
+  String get r3gStepMintTitle => 'Emitir';
+
+  @override
+  String get r3gStepPrimaryAssetDesc => 'Elige el recurso principal del contrato inteligente. Puede ser una imagen, audio, video o cualquier archivo digital.';
+
+  @override
+  String get r3gStepRoyaltyFeeDesc => 'La comisión se calcula sobre las ganancias de la venta y se liquida al finalizar la transacción. Con tarifa fija, el NFT no puede venderse por menos de la regalía aplicada.';
+
+  @override
+  String get r3gStepRoyaltyFeeTitle => 'Regalía';
+
+  @override
+  String get r3gStepRoyaltyTypeDesc => 'Elige una regalía de tarifa fija o por porcentaje aplicada en la cadena en cada intercambio.';
+
+  @override
+  String get r3gTplBaselineDesc => 'Crea un contrato inteligente base con un recurso y metadatos y emítelo en la cadena';
+
+  @override
+  String get r3gTplBaselineName => 'Contrato inteligente base';
+
+  @override
+  String get r3gTplEvolvingDesc => 'Genera un contrato inteligente que evoluciona según el tiempo o variables en cadena';
+
+  @override
+  String get r3gTplEvolvingName => 'Contrato inteligente evolutivo';
+
+  @override
+  String get r3gTplRoyaltyDesc => 'Crea un contrato inteligente con una regalía aplicada en cadena en cada intercambio';
+
+  @override
+  String get r3gTplRoyaltyName => 'Contrato inteligente con regalías';
+
+  @override
+  String r3gTransferAssetTitle(String assetType) {
+    return 'Transferir $assetType';
+  }
+
+  @override
+  String get r3gTransferInProgress => 'Transferencia en curso';
+
+  @override
+  String r3gTransferInProgressBody(String assetType) {
+    return 'Mantén tu billetera abierta hasta que esta transferencia de $assetType aparezca en tu lista de transacciones.\n\nPara seguir el progreso, abre tu \'sclog.txt\' en la carpeta de bases de datos.';
+  }
+
+  @override
+  String get r3gUnlockAccount => 'Desbloquear cuenta';
+
+  @override
+  String r3gUrlOptionalLabel(String optional) {
+    return 'URL $optional';
+  }
+
+  @override
+  String r3gValueCopiedToClipboard(String value) {
+    return '$value copiado al portapapeles';
+  }
+
+  @override
+  String get r3gVaultCannotBurnNfts => 'Las cuentas de bóveda no pueden quemar NFT';
+
+  @override
+  String get r3hAccountIsValidating => 'Esta cuenta está validando';
+
+  @override
+  String r3hActiveValidators(String count) {
+    return 'Validadores activos: $count';
+  }
+
+  @override
+  String get r3hAdditionalLinksOptional => 'Enlaces adicionales (opcional)';
+
+  @override
+  String get r3hAddressInvalid => 'Dirección inválida.';
+
+  @override
+  String get r3hAddressOrDomainRequired => 'Dirección o dominio VFX requerido';
+
+  @override
+  String get r3hAddressRequired => 'Dirección requerida';
+
+  @override
+  String get r3hAddressToBan => 'Dirección a banear';
+
+  @override
+  String get r3hAdjVoteInDetails => 'Detalles del voto de adj.';
+
+  @override
+  String get r3hAdjVoteInTooLong => 'El envío \'Voto de adjudicador\' es muy largo. Reduce el contenido.';
+
+  @override
+  String get r3hAllowVotingLabel => 'Permitir votación:';
+
+  @override
+  String r3hAvailableBalance(String balance) {
+    return 'Disponible: $balance VFX';
+  }
+
+  @override
+  String get r3hBalanceRequired => 'Se requiere un saldo';
+
+  @override
+  String get r3hBandwidthHint => '0 para ilimitado';
+
+  @override
+  String get r3hBandwidthTb => 'Ancho de banda (en TB)';
+
+  @override
+  String get r3hCannotHideValidating => 'No puedes ocultar una cuenta que está validando';
+
+  @override
+  String get r3hCompileMintBody => '¿Seguro que quieres continuar?\nUna vez compilado no podrás hacer cambios\ny el contrato inteligente/token se desplegará en la cadena.';
+
+  @override
+  String get r3hConfirmVoteNoBody => '¿Seguro que quieres votar NO en este tema?';
+
+  @override
+  String get r3hConfirmVoteNoTitle => 'Confirmar voto [NO]';
+
+  @override
+  String get r3hConfirmVoteYesBody => '¿Seguro que quieres votar SÍ en este tema?';
+
+  @override
+  String get r3hConfirmVoteYesTitle => 'Confirmar voto [SÍ]';
+
+  @override
+  String r3hCopiedToClipboard(String label) {
+    return '$label copiado al portapapeles';
+  }
+
+  @override
+  String get r3hCpu => 'CPU';
+
+  @override
+  String get r3hCpuCores => 'Núcleos de CPU';
+
+  @override
+  String get r3hCpuHint => 'ej. Intel';
+
+  @override
+  String get r3hCpuThreads => 'Hilos de CPU';
+
+  @override
+  String get r3hDecimalPlacesLabel => 'Decimales:';
+
+  @override
+  String get r3hDescRequired => 'La descripción es requerida';
+
+  @override
+  String get r3hDescTooLong => 'La descripción supera el máximo de caracteres';
+
+  @override
+  String get r3hDescTooManyWords => 'La descripción supera el máximo de palabras';
+
+  @override
+  String get r3hDescriptionColon => 'Descripción:';
+
+  @override
+  String get r3hDescriptionOptionalLabel => 'Descripción (opcional):';
+
+  @override
+  String get r3hDnrAlphaNumeric => 'Un DNR solo puede tener letras y números.';
+
+  @override
+  String get r3hEmailInvalid => 'Correo inválido.';
+
+  @override
+  String get r3hEmailRequired => 'Correo requerido.';
+
+  @override
+  String get r3hErrorBanning => 'Error al banear la dirección';
+
+  @override
+  String get r3hErrorBurning => 'Error al quemar el token';
+
+  @override
+  String get r3hErrorChangingOwnership => 'Error al cambiar la propiedad';
+
+  @override
+  String get r3hErrorCreatingTopic => 'Error al crear el tema';
+
+  @override
+  String get r3hErrorMinting => 'Error al emitir el token';
+
+  @override
+  String get r3hErrorPausing => 'Error al pausar/reanudar el token';
+
+  @override
+  String get r3hErrorTransferring => 'Error al transferir el token';
+
+  @override
+  String r3hFieldInvalid(String label) {
+    return '$label inválido.';
+  }
+
+  @override
+  String r3hFieldRequired(String label) {
+    return '$label es requerido.';
+  }
+
+  @override
+  String get r3hGithubLinkOptional => 'Enlace de Github (opcional)';
+
+  @override
+  String get r3hHdSize => 'Tamaño de HD';
+
+  @override
+  String get r3hHdSizeSpecifier => 'Unidad de tamaño HD';
+
+  @override
+  String get r3hHours24Minimum => 'Horas (mínimo 24)';
+
+  @override
+  String get r3hInsufficientBalanceForTopic => 'El saldo no alcanzará para validar por el costo de crear un tema (1 VFX + comisión)';
+
+  @override
+  String get r3hInternetSpeedDown => 'Bajada de internet (Gbps)';
+
+  @override
+  String get r3hInternetSpeedUp => 'Subida de internet (Gbps)';
+
+  @override
+  String get r3hInvalid => 'Inválido';
+
+  @override
+  String get r3hIsBurnableLabel => 'Quemable:';
+
+  @override
+  String get r3hLabelMinTokenRequirement => 'Requisito mínimo de tokens';
+
+  @override
+  String get r3hLogoutConfirmBody => '¿Seguro que quieres cerrar sesión de la Billetera Web VFX?';
+
+  @override
+  String get r3hMachineOs => 'SO de máquina';
+
+  @override
+  String get r3hMachineProvider => 'Proveedor de máquina';
+
+  @override
+  String get r3hMachineType => 'Tipo de máquina';
+
+  @override
+  String get r3hMachineTypeHint => 'ej. servidor, escritorio, laptop, etc.';
+
+  @override
+  String get r3hManageToken => 'Gestionar token';
+
+  @override
+  String get r3hMaxPercent => 'No puede superar 100%';
+
+  @override
+  String get r3hMinPercent => 'Debe ser mayor a 0%';
+
+  @override
+  String get r3hMintBroadcastedBody => 'La transacción de emisión del contrato del token fue transmitida.\n\nLa pantalla del token fungible reflejará el cambio cuando el bloque se cree y la altura se sincronice con esta transacción.';
+
+  @override
+  String r3hMintedByBody(String address) {
+    return 'Esto será emitido por $address';
+  }
+
+  @override
+  String get r3hMustBeValidatorToCreateTopic => 'Tu cuenta activa debe ser validador para crear un tema.';
+
+  @override
+  String get r3hMustSelectAccountToVote => 'Debes seleccionar una cuenta para votar.';
+
+  @override
+  String get r3hNameRequired => 'El nombre es requerido';
+
+  @override
+  String get r3hNameTooLong => 'El nombre supera el máximo de caracteres';
+
+  @override
+  String get r3hNewOwnerAddress => 'Dirección del nuevo dueño';
+
+  @override
+  String get r3hNoActiveTopics => 'Sin temas activos';
+
+  @override
+  String get r3hNoCreatedTopics => 'No has creado ningún tema.';
+
+  @override
+  String get r3hNoInactiveTopics => 'Sin temas inactivos';
+
+  @override
+  String get r3hNoTokensInAccounts => 'No hay tokens en ninguna de tus cuentas.';
+
+  @override
+  String get r3hNoUpper => 'NO';
+
+  @override
+  String get r3hNoVotingTopics => 'Sin temas de votación';
+
+  @override
+  String get r3hNodeNameTaken => 'Ese nombre de nodo ya está en uso.';
+
+  @override
+  String get r3hNotAuthorizedAddress => 'No autorizado (dirección incorrecta).';
+
+  @override
+  String get r3hNotAuthorizedToken => 'No autorizado (token inválido).';
+
+  @override
+  String get r3hNotVotedAnyTopics => 'No has votado en ningún tema.';
+
+  @override
+  String get r3hOneActiveTopicPerAddress => 'Solo se permite un tema activo por dirección.';
+
+  @override
+  String get r3hOptional => 'Opcional';
+
+  @override
+  String get r3hPasswordRequired => 'Contraseña requerida.';
+
+  @override
+  String get r3hPasswordWeak => 'Contraseña muy débil.';
+
+  @override
+  String get r3hPause => 'Pausar';
+
+  @override
+  String get r3hPauseTokenTransactions => 'Pausar transacciones del token';
+
+  @override
+  String get r3hPauseTokenTxConfirmBody => '¿Seguro que quieres pausar las transacciones del token? Impedirá transferencias y quemas hasta reanudar.';
+
+  @override
+  String get r3hPauseTransactions => 'Pausar transacciones';
+
+  @override
+  String get r3hPauseTxConfirmBody => '¿Seguro que quieres pausar todas las transacciones de este token?';
+
+  @override
+  String get r3hPauseTxs => 'Pausar TXs';
+
+  @override
+  String get r3hPendingPause => 'Pausa pendiente';
+
+  @override
+  String get r3hPendingResume => 'Reanudación pendiente';
+
+  @override
+  String get r3hPhoneInvalid => 'Teléfono inválido.';
+
+  @override
+  String get r3hPhoneRequired => 'Teléfono requerido.';
+
+  @override
+  String get r3hProblemOccurred => 'Ocurrió un problema.';
+
+  @override
+  String get r3hRamGb => 'RAM (en GB)';
+
+  @override
+  String get r3hReasonToBecomeAdj => 'Motivo para ser adjudicador';
+
+  @override
+  String get r3hReplaceTokenIcon => 'Reemplazar ícono del token';
+
+  @override
+  String get r3hRequired => 'Requerido';
+
+  @override
+  String get r3hResume => 'Reanudar';
+
+  @override
+  String get r3hResumeTokenTransactions => 'Reanudar transacciones del token';
+
+  @override
+  String get r3hResumeTokenTxConfirmBody => '¿Seguro que quieres reanudar las transacciones del token?';
+
+  @override
+  String get r3hResumeTransactions => 'Reanudar transacciones';
+
+  @override
+  String get r3hResumeTxConfirmBody => '¿Seguro que quieres reanudar las transacciones de este token?';
+
+  @override
+  String get r3hResumeTxs => 'Reanudar TXs';
+
+  @override
+  String get r3hSeparateWithCommas => 'Separa varios con comas';
+
+  @override
+  String get r3hTechnicalBackground => 'Experiencia técnica';
+
+  @override
+  String get r3hTokenAccounts => 'Cuentas del token';
+
+  @override
+  String get r3hTokenHasFixedSupply => 'Token con suministro fijo:';
+
+  @override
+  String get r3hTokenIconUrlLabel => 'URL del ícono:';
+
+  @override
+  String get r3hTokenNameFieldLabel => 'Nombre del token:';
+
+  @override
+  String get r3hTokenNameHelper => 'El nombre de este nuevo token.';
+
+  @override
+  String get r3hTokenOwnerLabel => 'Dueño del token: ';
+
+  @override
+  String get r3hTokenPauseBroadcasted => 'Transacción de pausa transmitida';
+
+  @override
+  String get r3hTokenResumeBroadcasted => 'Transacción de reanudación transmitida';
+
+  @override
+  String get r3hTokenTickerFieldLabel => 'Ticker del token:';
+
+  @override
+  String get r3hTokenTickerHelper => 'El ticker de este nuevo token.';
+
+  @override
+  String get r3hTotalSupplyLabel => 'Suministro total:';
+
+  @override
+  String get r3hUploadTokenIcon => 'Subir ícono del token';
+
+  @override
+  String get r3hUseZeroForInfinite => 'Usa 0 para infinito (permite emitir)';
+
+  @override
+  String get r3hUsernameInvalid => 'Usuario no válido.';
+
+  @override
+  String get r3hUsernameRequired => 'Usuario requerido.';
+
+  @override
+  String get r3hVaultActionNotAllowedBody => 'Los tokens de una cuenta de bóveda no pueden hacer esta acción. Cambia la propiedad a una cuenta VFX estándar para continuar.';
+
+  @override
+  String r3hVaultKeypairNotFound(String address) {
+    return 'No se encontró el par de claves de bóveda para $address.';
+  }
+
+  @override
+  String get r3hVfxAddressToNominate => 'Dirección VFX a nominar';
+
+  @override
+  String get r3hVoteNoUpper => 'Votar NO';
+
+  @override
+  String get r3hVoteYesUpper => 'Votar SÍ';
+
+  @override
+  String get r3hVotedAllTopics => 'Has votado en todos los temas.';
+
+  @override
+  String r3hVotingEndedOn(String date) {
+    return 'La votación terminó el $date.';
+  }
+
+  @override
+  String r3hVotingEndsOn(String date) {
+    return 'La votación termina el $date.';
+  }
+
+  @override
+  String get r3hWalletSyncWait => 'Espera a que tu billetera se sincronice con la red';
+
+  @override
+  String get r3hWalletSynced => 'Billetera sincronizada';
+
+  @override
+  String get r3hYesUpper => 'SÍ';
+
+  @override
+  String r3hYouVotedOnBlock(String vote, String block) {
+    return 'Votaste $vote en el bloque $block';
+  }
+
+  @override
+  String r3hYouVotedPending(String vote) {
+    return 'Votaste $vote. Transacción pendiente.';
+  }
+
+  @override
+  String get r3aAccountUnlockTime => 'Tiempo de desbloqueo de cuenta';
+
+  @override
+  String get r3aAddRarity => 'Agregar rareza';
+
+  @override
+  String get r3aAdditionalAsset => 'Activo adicional';
+
+  @override
+  String get r3aAdditionalAssets => 'Activos adicionales';
+
+  @override
+  String get r3aAllowedAssetExtensionTypes => 'Tipos de extensión de activo permitidos';
+
+  @override
+  String get r3aAutoDownloadNftAsset => 'Descarga automática de activo NFT';
+
+  @override
+  String get r3aBackupUrlBody => 'Pega una URL pública de un archivo zip alojado que contenga los activos.';
+
+  @override
+  String get r3aBlockHeightVariable => 'Variable de altura de bloque';
+
+  @override
+  String get r3aBurnNft => 'Quemar NFT';
+
+  @override
+  String get r3aChooseFile => 'Elegir archivo';
+
+  @override
+  String get r3aCompile => 'Compilar';
+
+  @override
+  String get r3aCompileMintBodySimple => '¿Seguro que deseas continuar?\nUna vez compilado no podrás hacer cambios\ny el contrato se desplegará en la cadena.';
+
+  @override
+  String get r3aCompilingMinting => 'Compilando y emitiendo';
+
+  @override
+  String get r3aCompilingMintingEllipsis => 'Compilando y emitiendo…';
+
+  @override
+  String get r3aConfiguration => 'Configuración';
+
+  @override
+  String get r3aCreateBlueprint => 'Crear plantilla';
+
+  @override
+  String get r3aCreateCollectionBlueprint => 'Crear plantilla de colección';
+
+  @override
+  String get r3aCreateFirstInstance => 'Crear primera instancia';
+
+  @override
+  String get r3aDateTimeVariable => 'Variable de fecha/hora';
+
+  @override
+  String get r3aDeleteDraft => 'Eliminar borrador';
+
+  @override
+  String get r3aDeleteDraftConfirm => '¿Seguro que deseas eliminar este borrador de contrato inteligente?';
+
+  @override
+  String get r3aDeleteQuestion => '¿Eliminar?';
+
+  @override
+  String get r3aDeleteThisConfirm => '¿Seguro que deseas eliminar esto?';
+
+  @override
+  String get r3aDraftDeleted => 'Borrador eliminado';
+
+  @override
+  String get r3aDraftSaved => '¡Borrador guardado!';
+
+  @override
+  String get r3aDuplicate => 'Duplicar';
+
+  @override
+  String get r3aEditInstance => 'Editar instancia';
+
+  @override
+  String get r3aEvolutionMode => 'Modo de evolución';
+
+  @override
+  String get r3aEvolvePhase => 'Fase de evolución';
+
+  @override
+  String get r3aEvolvePhases => 'Fases de evolución';
+
+  @override
+  String get r3aEvolveStagesInPast => 'Etapas de evolución en el pasado';
+
+  @override
+  String get r3aEvolveStagesInPastBody => 'Una o más de tus etapas de evolución ya habrán evolucionado al momento de la emisión.\n\n¿Seguro que deseas continuar?';
+
+  @override
+  String get r3aFeatures => 'Funciones';
+
+  @override
+  String get r3aHelpBodyAllowedExt => 'Quita tipos de extensión de la lista ya definida y permitirá descargar cualquier activo NFT con estos tipos de extensión conocidos \nEj: pdf,doc,xls \n\nValor predeterminado: (dejar en blanco)';
+
+  @override
+  String get r3aHelpBodyApiCallUrl => 'Esta URL se usa para enviar transacciones entrantes a una URL externa. Se usa para depósitos entrantes u otros servicios de notificación. \n\nValor predeterminado: null';
+
+  @override
+  String get r3aHelpBodyApiPort => 'Este es el puerto para llamar a la API. Puedes cambiarlo por el que quieras. \n\nValor predeterminado: 7292';
+
+  @override
+  String get r3aHelpBodyAutoDownload => 'Controla si el activo de un NFT se descarga automáticamente o no \n\nValor predeterminado: true';
+
+  @override
+  String get r3aHelpBodyBaseline => 'Completa la información básica requerida por todos los contratos inteligentes. Elige un nombre, el nombre del emisor (opcional) y la cuenta que quieres usar. Luego, da a tu contrato inteligente/NFT una descripción detallada.';
+
+  @override
+  String get r3aHelpBodyBurn => 'Quema (destruye) este NFT de forma permanente.';
+
+  @override
+  String get r3aHelpBodyCompile => 'Compila el código Trilliam según los parámetros configurados y luego emítelo cuando esté listo.';
+
+  @override
+  String get r3aHelpBodyConfiguration => 'Estos valores modificarán el archivo config.txt ubicado en la base de datos de la CLI; para que los cambios surtan efecto, la CLI debe reiniciarse';
+
+  @override
+  String get r3aHelpBodyDelete => 'Elimina tu contrato inteligente';
+
+  @override
+  String get r3aHelpBodyDescription => 'Proporciona una descripción de texto de tu contrato inteligente/NFT. Este campo es obligatorio y será visible públicamente.';
+
+  @override
+  String get r3aHelpBodyEvolveAsset => 'Reemplaza el activo cuando el contrato evolucione a esta etapa. Este campo es opcional.';
+
+  @override
+  String get r3aHelpBodyEvolveBlockHeight => 'El contrato inteligente evolucionará cuando la cadena VFX alcance esta altura de bloque.';
+
+  @override
+  String get r3aHelpBodyEvolveDatetime => 'La fecha y hora en que el contrato evolucionará (UTC).';
+
+  @override
+  String get r3aHelpBodyEvolveMode => 'Tú decides cómo se controlará la evolución.\n\nPor emisor/creador: el emisor podrá evolucionar/revertir el contrato en cualquier momento.\n\nAutomático/por la app: evoluciona automáticamente según fecha/hora, variables en cadena y/o variables inducidas por la aplicación.';
+
+  @override
+  String get r3aHelpBodyEvolveStageDescription => 'Proporciona una descripción para esta etapa de evolución.';
+
+  @override
+  String get r3aHelpBodyEvolveStageName => 'Proporciona un nombre para esta etapa de evolución.';
+
+  @override
+  String get r3aHelpBodyEvolveType => 'Elige el tipo de variable que puede afectar dinámicamente el estado de evolución.\n\nFecha/Hora: el contrato evolucionará automáticamente en un momento determinado.\n\nAltura de bloque: el contrato evolucionará cuando la cadena alcance cierta altura de bloque.\n\nManual: el contrato no evolucionará salvo que lo indique manualmente el emisor o el usuario/aplicación (según el modo seleccionado).';
+
+  @override
+  String get r3aHelpBodyFeatures => 'Agrega una función a tu contrato inteligente, como regalías o funcionalidad evolutiva.';
+
+  @override
+  String get r3aHelpBodyIgnoreIncoming => 'Controla si los NFT entrantes se procesan o solo se agregan como registro de TX \n\nValor predeterminado: false';
+
+  @override
+  String get r3aHelpBodyManageProperties => 'Crea pares de etiqueta y valor.\nPor ejemplo:\n\nEtiqueta: Color\nValor: Azul';
+
+  @override
+  String get r3aHelpBodyMint => 'Emite y despliega el contrato inteligente en la cadena.';
+
+  @override
+  String get r3aHelpBodyMintQuantity => 'La cantidad de contratos inteligentes / NFT que quieres emitir desde esta plantilla.';
+
+  @override
+  String get r3aHelpBodyMinterName => 'Este campo es opcional pero se mostrará públicamente si se completa. Puede ser tu nombre/persona, o déjalo en blanco.';
+
+  @override
+  String get r3aHelpBodyMinting => 'Esta acción ocurre después de compilar y emitir con éxito, pero requiere que la red autentique la transacción, lo que toma unos 30 segundos para su finalidad, además de que tu billetera esté sincronizada con el bloque que incluye esta transacción.';
+
+  @override
+  String get r3aHelpBodyMotherAddress => 'La dirección IP de la billetera HOST. \n\n Valor predeterminado: (dejar en blanco)';
+
+  @override
+  String get r3aHelpBodyMotherPassword => 'La contraseña definida en tu billetera HOST al configurar MOTHER.\n\n Valor predeterminado: (dejar en blanco)';
+
+  @override
+  String get r3aHelpBodyNftTimeout => 'Controla el tiempo de espera para procesar un NFT entrante \n\nValor predeterminado: 15';
+
+  @override
+  String get r3aHelpBodyOwnerAddress => 'Debe ser la dirección de la cuenta que se usará para compilar y emitir el contrato inteligente.';
+
+  @override
+  String get r3aHelpBodyPasswordClearTime => 'Controla el tiempo para borrar la contraseña de una billetera cifrada \n\nValor predeterminado: 10';
+
+  @override
+  String get r3aHelpBodyPrimaryAsset => 'Este es el activo de archivo principal del contrato inteligente/NFT. Puede ser una imagen, audio, video o cualquier archivo.';
+
+  @override
+  String get r3aHelpBodyProperties => 'Define y asigna valores a los activos de tu contrato inteligente. Por ejemplo, puede ser un rasgo poco común.';
+
+  @override
+  String get r3aHelpBodyPropertyTypes => 'Define el tipo de valor que tendrá tu propiedad \nLos tipos son: \n- Texto: valor alfanumérico \n- Número: valor numérico \n- Color: valor hexadecimal de un color de tu elección';
+
+  @override
+  String r3aHelpBodyRejectExt(String exts) {
+    return 'Agrega tipos de extensión a la lista ya definida y rechazará cualquier activo NFT con estos tipos de extensión conocidos \nEj: exe,zip,pdf... (no dejes espacios entre tipos) \n\nValor predeterminado: (dejar en blanco)\n\nSi se deja en blanco, este es el predeterminado:\n$exts';
+  }
+
+  @override
+  String get r3aHelpBodyRoyaltyAddress => 'Indica la dirección pública VFX a la que se pagará la regalía al finalizar la transacción.';
+
+  @override
+  String get r3aHelpBodyRoyaltyFlat => 'Escribe el monto de VFX que se pagará a la dirección indicada y que se aplica en cadena en cada intercambio. Esta comisión se envía al titular de la regalía al finalizar la transacción.';
+
+  @override
+  String get r3aHelpBodyRoyaltyPercent => 'Escribe el porcentaje que se pagará a la dirección indicada y que se aplica en cadena en cada intercambio. Esta comisión se envía al titular de la regalía al finalizar la transacción.';
+
+  @override
+  String get r3aHelpBodySaveAsDraft => 'Guarda tu contrato inteligente como borrador local para retomarlo más tarde.';
+
+  @override
+  String get r3aHelpBodyScName => 'Nombra tu contrato inteligente. Este campo es obligatorio y es visible públicamente.';
+
+  @override
+  String get r3aHelpBodySetEvolution => 'Con un NFT que tiene más de 2 fases, el usuario puede ir directamente de una etapa a otra con el botón “Fijar evolución” en lugar de evolucionar y revertir etapa por etapa';
+
+  @override
+  String get r3aHelpBodySmartContract => 'Configura los parámetros de tu contrato inteligente y luego compílalo y emítelo.';
+
+  @override
+  String get r3aHelpBodyTransfer => 'Transfiere este NFT a otra cuenta.';
+
+  @override
+  String get r3aHelpBodyWalletUnlockTime => 'Es el tiempo durante el cual, tras ingresar una contraseña, la billetera permanece desbloqueada sin volver a pedirla \n\nValor predeterminado: 15';
+
+  @override
+  String get r3aIgnoreIncomingNfts => 'Ignorar NFT entrantes';
+
+  @override
+  String r3aMaxMintAtOnce(String max) {
+    return 'El número máximo que puedes emitir a la vez es $max.';
+  }
+
+  @override
+  String get r3aMintBroadcastedBody => 'Se transmitió la transacción de emisión del contrato inteligente.\n\nLa pantalla de NFT reflejará el cambio una vez que se cree el bloque y la altura de bloque se sincronice con esta transacción.';
+
+  @override
+  String get r3aMintTxSent => 'Transacción de emisión enviada con éxito. Espera hasta que el contrato se emita en la cadena.';
+
+  @override
+  String get r3aMinterCreatorName => 'Nombre del emisor/creador';
+
+  @override
+  String get r3aMinterName => 'Nombre del emisor';
+
+  @override
+  String get r3aMinting => 'Emitiendo';
+
+  @override
+  String get r3aMintingEllipsis => 'Emitiendo…';
+
+  @override
+  String get r3aMotherAddress => 'Dirección MOTHER';
+
+  @override
+  String get r3aMotherPassword => 'Contraseña MOTHER';
+
+  @override
+  String get r3aNftSaleTransferStarted => 'Listo: se inició la transferencia de venta del NFT.';
+
+  @override
+  String get r3aNftTimeout => 'Espera de NFT';
+
+  @override
+  String get r3aNftTransferStarted => 'Listo: se inició la transferencia del NFT.';
+
+  @override
+  String get r3aPasswordClearTime => 'Tiempo para borrar contraseña';
+
+  @override
+  String get r3aPayeeAddress => 'Dir. beneficiario';
+
+  @override
+  String get r3aProblemCompilingSc => 'Ocurrió un problema al compilar este contrato inteligente.';
+
+  @override
+  String get r3aProblemMintingSc => 'Ocurrió un problema al emitir este contrato inteligente.';
+
+  @override
+  String get r3aProperty => 'Propiedad';
+
+  @override
+  String get r3aPropertyTypes => 'Tipos de propiedad';
+
+  @override
+  String get r3aRarities => 'Rarezas';
+
+  @override
+  String get r3aRejectAssetExtensionTypes => 'Rechazar tipos de extensión de activo';
+
+  @override
+  String get r3aRoyaltyFlatFeeAmount => 'Regalía fija';
+
+  @override
+  String get r3aRoyaltyPercentageFeeAmount => 'Regalía porcentual';
+
+  @override
+  String get r3aRoyaltyTo => 'Regalía a';
+
+  @override
+  String get r3aSaleCompleteTxSent => 'TX de venta completa enviada';
+
+  @override
+  String get r3aSaveAsDraft => 'Guardar borrador';
+
+  @override
+  String get r3aScMintedSuccessfully => 'Contrato inteligente emitido con éxito.';
+
+  @override
+  String get r3aSetEvolution => 'Fijar evolución';
+
+  @override
+  String get r3aSmartContract => 'Contrato inteligente';
+
+  @override
+  String get r3aSmartContractName => 'Nombre del contrato inteligente';
+
+  @override
+  String get r3aStat => 'Estadística';
+
+  @override
+  String get r3aStatType => 'Tipo de estadística';
+
+  @override
+  String get r3aTransferNft => 'Transferir NFT';
+
+  @override
+  String get r3aUntitled => 'Sin título';
+
+  @override
+  String get r3aValue => 'Valor';
 }

@@ -5,6 +5,7 @@ import '../../../core/base_component.dart';
 import '../providers/web_shop_full_list_provider.dart';
 import '../providers/web_shop_search_provider.dart';
 import 'web_shop_list_tile.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebShopListContainer extends ConsumerStatefulWidget {
   const WebShopListContainer({
@@ -38,6 +39,7 @@ class WebShopList extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final shops = ref.watch(webShopFullListProvider);
 
     final searchQuery = ref.watch(webShopSearchProvider).toLowerCase();
@@ -72,7 +74,7 @@ class WebShopList extends BaseComponent {
                     Icons.search,
                     color: Colors.white70,
                   ),
-                  hintText: "Search for auction house...",
+                  hintText: l10n.shopSearchAuctionHouseHint,
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.clear,

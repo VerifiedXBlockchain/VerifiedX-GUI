@@ -13970,6 +13970,5928 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{amount} VFX has been sent to {address}. See dashboard for TX ID.'**
   String svcVfxSentToAddressDashboard(String amount, String address);
+
+  /// No description provided for @r3aActivatingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Activating soon...'**
+  String get r3aActivatingSoon;
+
+  /// No description provided for @r3aAdditionalOwners.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Owners'**
+  String get r3aAdditionalOwners;
+
+  /// No description provided for @r3aAssetIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset is required'**
+  String get r3aAssetIsRequired;
+
+  /// No description provided for @r3aAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets'**
+  String get r3aAssets;
+
+  /// No description provided for @r3aAutomatedAppControlled.
+  ///
+  /// In en, this message translates to:
+  /// **'Automated/Application Controlled'**
+  String get r3aAutomatedAppControlled;
+
+  /// No description provided for @r3aBlockHeightMustBeGreaterThan.
+  ///
+  /// In en, this message translates to:
+  /// **'Block height must be greater than {currentBh}.'**
+  String r3aBlockHeightMustBeGreaterThan(String currentBh);
+
+  /// No description provided for @r3aBtcTokenization.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Tokenization'**
+  String get r3aBtcTokenization;
+
+  /// No description provided for @r3aChooseAFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a File'**
+  String get r3aChooseAFile;
+
+  /// No description provided for @r3aClearNftWizardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear NFT Collection Wizard?'**
+  String get r3aClearNftWizardTitle;
+
+  /// No description provided for @r3aCloseNftWizardConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the NFT collection Wizard?'**
+  String get r3aCloseNftWizardConfirm;
+
+  /// No description provided for @r3aCloseScCreatorConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the smart contract creator?'**
+  String get r3aCloseScCreatorConfirm;
+
+  /// No description provided for @r3aCompileMintScConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Compile & Mint Smart Contract?'**
+  String get r3aCompileMintScConfirm;
+
+  /// No description provided for @r3aConfirmMintBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to proceed minting {amount} Smart Contract(s)?\n\nOnce compiled you will not be able to make any changes\nand the smart contract will be deployed to the chain.'**
+  String r3aConfirmMintBody(String amount);
+
+  /// No description provided for @r3aConsumable.
+  ///
+  /// In en, this message translates to:
+  /// **'Consumable'**
+  String get r3aConsumable;
+
+  /// No description provided for @r3aCreateInstance.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Instance'**
+  String get r3aCreateInstance;
+
+  /// No description provided for @r3aCreateNewInstance.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Instance'**
+  String get r3aCreateNewInstance;
+
+  /// No description provided for @r3aCreateNewPhase.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Phase'**
+  String get r3aCreateNewPhase;
+
+  /// No description provided for @r3aCreateRarity.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Rarity'**
+  String get r3aCreateRarity;
+
+  /// No description provided for @r3aCreatorRetainedOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Creator Retained Ownership'**
+  String get r3aCreatorRetainedOwnership;
+
+  /// No description provided for @r3aDateMustBeInFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Date must be in the future.'**
+  String get r3aDateMustBeInFuture;
+
+  /// No description provided for @r3aDateTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Date/Time'**
+  String get r3aDateTime;
+
+  /// No description provided for @r3aDeleteInstanceConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this instance?'**
+  String get r3aDeleteInstanceConfirm;
+
+  /// No description provided for @r3aDeleteInstanceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Instance?'**
+  String get r3aDeleteInstanceTitle;
+
+  /// No description provided for @r3aDeleteStage.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Stage'**
+  String get r3aDeleteStage;
+
+  /// No description provided for @r3aDeleteThisStageConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this stage?'**
+  String get r3aDeleteThisStageConfirm;
+
+  /// No description provided for @r3aDescriptionIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Description is required'**
+  String get r3aDescriptionIsRequired;
+
+  /// No description provided for @r3aEditRarity.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Rarity'**
+  String get r3aEditRarity;
+
+  /// No description provided for @r3aEvolutionTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Time ({tz})'**
+  String r3aEvolutionTime(String tz);
+
+  /// No description provided for @r3aEvolutionType.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Type'**
+  String get r3aEvolutionType;
+
+  /// No description provided for @r3aEvolveStageNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Stage {number}'**
+  String r3aEvolveStageNumber(String number);
+
+  /// No description provided for @r3aEvolvingMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolving Mode'**
+  String get r3aEvolvingMode;
+
+  /// No description provided for @r3aFeatureDescBtcTokenization.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenize BTC within a smart contract'**
+  String get r3aFeatureDescBtcTokenization;
+
+  /// No description provided for @r3aFeatureDescEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow the smart contract to evolve based on time or network variables'**
+  String get r3aFeatureDescEvolution;
+
+  /// No description provided for @r3aFeatureDescFractional.
+  ///
+  /// In en, this message translates to:
+  /// **'Share ownership between multiple wallets and support voting'**
+  String get r3aFeatureDescFractional;
+
+  /// No description provided for @r3aFeatureDescMultiAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow multiple assets to be compiled into the smart contract'**
+  String get r3aFeatureDescMultiAsset;
+
+  /// No description provided for @r3aFeatureDescPair.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair/Wrap this smart contract with an existing NFT on or off this network'**
+  String get r3aFeatureDescPair;
+
+  /// No description provided for @r3aFeatureDescRoyalty.
+  ///
+  /// In en, this message translates to:
+  /// **'Include a royalty that is enforced on-chain upon any trade'**
+  String get r3aFeatureDescRoyalty;
+
+  /// No description provided for @r3aFeatureDescSoulBound.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a non-transferrable smart contract bound to a perminent address'**
+  String get r3aFeatureDescSoulBound;
+
+  /// No description provided for @r3aFeatureDescTokenization.
+  ///
+  /// In en, this message translates to:
+  /// **'Pair this smart contract with a physical/digital good'**
+  String get r3aFeatureDescTokenization;
+
+  /// No description provided for @r3aFeatureNameEvolving.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolving'**
+  String get r3aFeatureNameEvolving;
+
+  /// No description provided for @r3aInvalidHexColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid hex color'**
+  String get r3aInvalidHexColor;
+
+  /// No description provided for @r3aInvalidSmartContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Smart Contract'**
+  String get r3aInvalidSmartContract;
+
+  /// No description provided for @r3aInvalidValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid value'**
+  String get r3aInvalidValue;
+
+  /// No description provided for @r3aIssuerMinterControlled.
+  ///
+  /// In en, this message translates to:
+  /// **'Issuer/Minter Controlled'**
+  String get r3aIssuerMinterControlled;
+
+  /// No description provided for @r3aLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get r3aLabel;
+
+  /// No description provided for @r3aMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get r3aMint;
+
+  /// No description provided for @r3aMintPhysicalRwa.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint a physical or Real World Asset'**
+  String get r3aMintPhysicalRwa;
+
+  /// No description provided for @r3aMinterAddressColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Minter Address:'**
+  String get r3aMinterAddressColon;
+
+  /// No description provided for @r3aMinterNameIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Minter name is required'**
+  String get r3aMinterNameIsRequired;
+
+  /// No description provided for @r3aMultiAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi Asset'**
+  String get r3aMultiAsset;
+
+  /// No description provided for @r3aMusicRelease.
+  ///
+  /// In en, this message translates to:
+  /// **'Music Release'**
+  String get r3aMusicRelease;
+
+  /// No description provided for @r3aNameIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Name is required'**
+  String get r3aNameIsRequired;
+
+  /// No description provided for @r3aNewInstance.
+  ///
+  /// In en, this message translates to:
+  /// **'New Instance'**
+  String get r3aNewInstance;
+
+  /// No description provided for @r3aNftAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Address'**
+  String get r3aNftAddress;
+
+  /// No description provided for @r3aNftCollectionWizard.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Collection Wizard'**
+  String get r3aNftCollectionWizard;
+
+  /// No description provided for @r3aNotEnoughVfxToMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough VFX balance to mint a smart contract.'**
+  String get r3aNotEnoughVfxToMint;
+
+  /// No description provided for @r3aNotImplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Not implemented'**
+  String get r3aNotImplemented;
+
+  /// No description provided for @r3aOnlineEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Online Event'**
+  String get r3aOnlineEvent;
+
+  /// No description provided for @r3aPhysicalEvent.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical Event'**
+  String get r3aPhysicalEvent;
+
+  /// No description provided for @r3aPrimaryAssetIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Asset is required'**
+  String get r3aPrimaryAssetIsRequired;
+
+  /// No description provided for @r3aPrimaryAssetOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary Asset Override'**
+  String get r3aPrimaryAssetOverride;
+
+  /// No description provided for @r3aRareness.
+  ///
+  /// In en, this message translates to:
+  /// **'Rareness'**
+  String get r3aRareness;
+
+  /// No description provided for @r3aReason.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason'**
+  String get r3aReason;
+
+  /// No description provided for @r3aRemoveEverythingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove everything?'**
+  String get r3aRemoveEverythingConfirm;
+
+  /// No description provided for @r3aRequiredForBlockHeightEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Required for Block Height evolution.'**
+  String get r3aRequiredForBlockHeightEvolution;
+
+  /// No description provided for @r3aRequiredForDateTimeEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Required for Date/Time evolution.'**
+  String get r3aRequiredForDateTimeEvolution;
+
+  /// No description provided for @r3aSaveAndClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Save and Close'**
+  String get r3aSaveAndClose;
+
+  /// No description provided for @r3aSaveClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Save & Close'**
+  String get r3aSaveClose;
+
+  /// No description provided for @r3aSelfDestructive.
+  ///
+  /// In en, this message translates to:
+  /// **'Self Destructive'**
+  String get r3aSelfDestructive;
+
+  /// No description provided for @r3aStatsOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats Override'**
+  String get r3aStatsOverride;
+
+  /// No description provided for @r3aThumbnailOverride.
+  ///
+  /// In en, this message translates to:
+  /// **'Thumbnail Override'**
+  String get r3aThumbnailOverride;
+
+  /// No description provided for @r3aTicketing.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticketing'**
+  String get r3aTicketing;
+
+  /// No description provided for @r3aTimeMustBeInFuture.
+  ///
+  /// In en, this message translates to:
+  /// **'Time must be in the future.'**
+  String get r3aTimeMustBeInFuture;
+
+  /// No description provided for @r3aToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Token'**
+  String get r3aToken;
+
+  /// No description provided for @r3aTokenizationPhysicalDigital.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenization of Physical/Digital Good'**
+  String get r3aTokenizationPhysicalDigital;
+
+  /// No description provided for @r3aValueIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Value is required'**
+  String get r3aValueIsRequired;
+
+  /// No description provided for @r3aViewCompiledSmartContract.
+  ///
+  /// In en, this message translates to:
+  /// **'View Compiled Smart Contract'**
+  String get r3aViewCompiledSmartContract;
+
+  /// No description provided for @r3aWillBeMintedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'This will be minted by {name}'**
+  String r3aWillBeMintedBy(String name);
+
+  /// No description provided for @r3aWrap.
+  ///
+  /// In en, this message translates to:
+  /// **'Wrap'**
+  String get r3aWrap;
+
+  /// No description provided for @r3bActionCreation.
+  ///
+  /// In en, this message translates to:
+  /// **'creation'**
+  String get r3bActionCreation;
+
+  /// No description provided for @r3bActionEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'editing'**
+  String get r3bActionEditing;
+
+  /// No description provided for @r3bActionPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
+  String get r3bActionPublish;
+
+  /// No description provided for @r3bActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active:'**
+  String get r3bActive;
+
+  /// No description provided for @r3bAddBeaconDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an existing beacon to foreign nodes to use that relay instead of default ones on the VFX network. Configure your wallet to use a remote beacon for media transferring rather than using the default VFX network beacons. You will need to know the IP address of the remote beacon. If that beacon is using the non-default port, provide that as well. The beacon name is a friendly name visible only to you.'**
+  String get r3bAddBeaconDescription;
+
+  /// No description provided for @r3bAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Required.'**
+  String get r3bAddressRequired;
+
+  /// No description provided for @r3bAlreadyOwnerNft.
+  ///
+  /// In en, this message translates to:
+  /// **'You are already the owner of this NFT.'**
+  String get r3bAlreadyOwnerNft;
+
+  /// No description provided for @r3bAmountValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount: {amount}'**
+  String r3bAmountValue(String amount);
+
+  /// No description provided for @r3bApproveSaleStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Please approve the Sale Start TX for your shop purchase.'**
+  String get r3bApproveSaleStart;
+
+  /// No description provided for @r3bAssetCache.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset Cache'**
+  String get r3bAssetCache;
+
+  /// No description provided for @r3bAuctionEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Ends'**
+  String get r3bAuctionEnds;
+
+  /// No description provided for @r3bAutoDeleteAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Delete Assets'**
+  String get r3bAutoDeleteAssets;
+
+  /// No description provided for @r3bBaselineAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Baseline Asset'**
+  String get r3bBaselineAsset;
+
+  /// No description provided for @r3bBeaconUploadSigFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t produce beacon upload signature'**
+  String get r3bBeaconUploadSigFailed;
+
+  /// No description provided for @r3bBidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid Amount'**
+  String get r3bBidAmount;
+
+  /// No description provided for @r3bBidNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: Bid not found.'**
+  String get r3bBidNotFound;
+
+  /// No description provided for @r3bBuyNowTag.
+  ///
+  /// In en, this message translates to:
+  /// **'[Buy Now]'**
+  String get r3bBuyNowTag;
+
+  /// No description provided for @r3bBuyerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer: {address}'**
+  String r3bBuyerLabel(String address);
+
+  /// No description provided for @r3bChain.
+  ///
+  /// In en, this message translates to:
+  /// **'Chain'**
+  String get r3bChain;
+
+  /// No description provided for @r3bCloseCollectionConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the collection {action} screen?'**
+  String r3bCloseCollectionConfirm(String action);
+
+  /// No description provided for @r3bCloseShopConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the shop {action} screen?'**
+  String r3bCloseShopConfirm(String action);
+
+  /// No description provided for @r3bCloseStoreConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the store {action} screen?'**
+  String r3bCloseStoreConfirm(String action);
+
+  /// No description provided for @r3bCollectionCreatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Created'**
+  String get r3bCollectionCreatedToast;
+
+  /// No description provided for @r3bCollectionUpdatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Updated!'**
+  String get r3bCollectionUpdatedToast;
+
+  /// No description provided for @r3bCollections.
+  ///
+  /// In en, this message translates to:
+  /// **'Collections'**
+  String get r3bCollections;
+
+  /// No description provided for @r3bCouldNotCreateThread.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create or get thread'**
+  String get r3bCouldNotCreateThread;
+
+  /// No description provided for @r3bCouldNotLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not login'**
+  String get r3bCouldNotLogin;
+
+  /// No description provided for @r3bCouldNotVerifyTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not verify transaction.'**
+  String get r3bCouldNotVerifyTx;
+
+  /// No description provided for @r3bCreateAuctionHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Auction House'**
+  String get r3bCreateAuctionHouse;
+
+  /// No description provided for @r3bCreateCollectionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you can create collections and then add listings to them.'**
+  String get r3bCreateCollectionsHint;
+
+  /// No description provided for @r3bCreateListingsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you can create listings for the NFTs you own.'**
+  String get r3bCreateListingsHint;
+
+  /// No description provided for @r3bCreateNewCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Collection'**
+  String get r3bCreateNewCollection;
+
+  /// No description provided for @r3bCurrentBidPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Bid Price:'**
+  String get r3bCurrentBidPrice;
+
+  /// No description provided for @r3bCurrentBids.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Bids'**
+  String get r3bCurrentBids;
+
+  /// No description provided for @r3bDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Day'**
+  String get r3bDay;
+
+  /// No description provided for @r3bDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days'**
+  String get r3bDays;
+
+  /// No description provided for @r3bDeleteListingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this listing?'**
+  String get r3bDeleteListingConfirm;
+
+  /// No description provided for @r3bDeleteShopConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this shop?'**
+  String get r3bDeleteShopConfirm;
+
+  /// No description provided for @r3bDeleteShopConfirmPublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this shop? There is a cost of {cost} VFX to delete this from the network.'**
+  String r3bDeleteShopConfirmPublished(String cost);
+
+  /// No description provided for @r3bEditAuctionHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Auction House'**
+  String get r3bEditAuctionHouse;
+
+  /// No description provided for @r3bEnableOneOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable at least one of the options (Gallery, Buy Now, or Auction)'**
+  String get r3bEnableOneOption;
+
+  /// No description provided for @r3bEndDateAfterStart.
+  ///
+  /// In en, this message translates to:
+  /// **'End date must be after the start date'**
+  String get r3bEndDateAfterStart;
+
+  /// No description provided for @r3bEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends in'**
+  String get r3bEndsIn;
+
+  /// No description provided for @r3bErrorGeneratingScData.
+  ///
+  /// In en, this message translates to:
+  /// **'Error generating smart contract data'**
+  String get r3bErrorGeneratingScData;
+
+  /// No description provided for @r3bFailedParseFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse fee'**
+  String get r3bFailedParseFee;
+
+  /// No description provided for @r3bFailedParseHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse hash'**
+  String get r3bFailedParseHash;
+
+  /// No description provided for @r3bFailedRetrieveNonce.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve nonce'**
+  String get r3bFailedRetrieveNonce;
+
+  /// No description provided for @r3bFailedRetrieveTimestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve timestamp'**
+  String get r3bFailedRetrieveTimestamp;
+
+  /// No description provided for @r3bIdentifier.
+  ///
+  /// In en, this message translates to:
+  /// **'Identifier'**
+  String get r3bIdentifier;
+
+  /// No description provided for @r3bImportAndPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Import & Publish'**
+  String get r3bImportAndPublish;
+
+  /// No description provided for @r3bImportShopBroadcastBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Once the transaction relects on chain, your shop will appear here.'**
+  String get r3bImportShopBroadcastBody;
+
+  /// No description provided for @r3bImportShopConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to import this shop? A {cost} VFX fee will be charged to publish this change to the network.\n\nThis is a destructive action and will not carry over your collections and listings.'**
+  String r3bImportShopConfirmBody(String cost);
+
+  /// No description provided for @r3bIncorrectLoginDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect login details for {address}.'**
+  String r3bIncorrectLoginDetails(String address);
+
+  /// No description provided for @r3bIncrementAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Increment Amount:'**
+  String get r3bIncrementAmount;
+
+  /// No description provided for @r3bInfinite.
+  ///
+  /// In en, this message translates to:
+  /// **'Infinite'**
+  String get r3bInfinite;
+
+  /// No description provided for @r3bLabelCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} copied to clipboard'**
+  String r3bLabelCopied(String label);
+
+  /// No description provided for @r3bLoggedInSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged in successfully'**
+  String get r3bLoggedInSuccess;
+
+  /// No description provided for @r3bMintedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted By'**
+  String get r3bMintedBy;
+
+  /// No description provided for @r3bMinterAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Minter Address'**
+  String get r3bMinterAddress;
+
+  /// No description provided for @r3bMyShopSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' [My Shop]'**
+  String get r3bMyShopSuffix;
+
+  /// No description provided for @r3bNftFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Features:'**
+  String get r3bNftFeatures;
+
+  /// No description provided for @r3bNftMustBeSet.
+  ///
+  /// In en, this message translates to:
+  /// **'The NFT must be set'**
+  String get r3bNftMustBeSet;
+
+  /// No description provided for @r3bNoAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'No address.'**
+  String get r3bNoAddress;
+
+  /// No description provided for @r3bNoAuctionHouses.
+  ///
+  /// In en, this message translates to:
+  /// **'No Auction Houses'**
+  String get r3bNoAuctionHouses;
+
+  /// No description provided for @r3bNoBids.
+  ///
+  /// In en, this message translates to:
+  /// **'No bids.'**
+  String get r3bNoBids;
+
+  /// No description provided for @r3bNoCollections.
+  ///
+  /// In en, this message translates to:
+  /// **'No Collections'**
+  String get r3bNoCollections;
+
+  /// No description provided for @r3bNoListings.
+  ///
+  /// In en, this message translates to:
+  /// **'No Listings'**
+  String get r3bNoListings;
+
+  /// No description provided for @r3bNoPrivateKey.
+  ///
+  /// In en, this message translates to:
+  /// **'No private key.'**
+  String get r3bNoPrivateKey;
+
+  /// No description provided for @r3bNoPublicKey.
+  ///
+  /// In en, this message translates to:
+  /// **'No public key.'**
+  String get r3bNoPublicKey;
+
+  /// No description provided for @r3bNotAuthorized.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Authorized'**
+  String get r3bNotAuthorized;
+
+  /// No description provided for @r3bNotOwnerLoginAs.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not the owner of this shop. Please login as {address}'**
+  String r3bNotOwnerLoginAs(String address);
+
+  /// No description provided for @r3bOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get r3bOffline;
+
+  /// No description provided for @r3bOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get r3bOnline;
+
+  /// No description provided for @r3bOr.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get r3bOr;
+
+  /// No description provided for @r3bOwnedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Owned by'**
+  String get r3bOwnedBy;
+
+  /// No description provided for @r3bPrivateTag.
+  ///
+  /// In en, this message translates to:
+  /// **'[Private]'**
+  String get r3bPrivateTag;
+
+  /// No description provided for @r3bPublishShopBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} VFX to publish your shop to the network (plus the transaction fee).'**
+  String r3bPublishShopBody(String cost);
+
+  /// No description provided for @r3bReadyToImport.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to Import'**
+  String get r3bReadyToImport;
+
+  /// No description provided for @r3bReserveGteFloor.
+  ///
+  /// In en, this message translates to:
+  /// **'The reserve price must be greater or equal to the floor price.'**
+  String get r3bReserveGteFloor;
+
+  /// No description provided for @r3bReserveMet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve Met:'**
+  String get r3bReserveMet;
+
+  /// No description provided for @r3bSaleCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale has Completed'**
+  String get r3bSaleCompleted;
+
+  /// No description provided for @r3bSalePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale is Pending'**
+  String get r3bSalePending;
+
+  /// No description provided for @r3bSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get r3bSaveChanges;
+
+  /// No description provided for @r3bSetupAuctionHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Auction House'**
+  String get r3bSetupAuctionHouse;
+
+  /// No description provided for @r3bSetupAuctionHousePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'First, setup your auction house / gallery.\nThen you\'ll be able to create collections and add listings to them.'**
+  String get r3bSetupAuctionHousePrompt;
+
+  /// No description provided for @r3bShareListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Listing'**
+  String get r3bShareListing;
+
+  /// No description provided for @r3bShareUrlCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Share url copied to clipboard'**
+  String get r3bShareUrlCopied;
+
+  /// No description provided for @r3bShopDeleteBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Delete transaction broadcasted to the network'**
+  String get r3bShopDeleteBroadcast;
+
+  /// No description provided for @r3bShopIsOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop is offline.'**
+  String get r3bShopIsOffline;
+
+  /// No description provided for @r3bShopNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Not Found'**
+  String get r3bShopNotFound;
+
+  /// No description provided for @r3bShopPublishBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Publish transaction broadcasted to the network'**
+  String get r3bShopPublishBroadcast;
+
+  /// No description provided for @r3bShopUpdateBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Update transaction broadcasted to the network'**
+  String get r3bShopUpdateBroadcast;
+
+  /// No description provided for @r3bShopUrlImportPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'What is the shop URL you\'d like to import?'**
+  String get r3bShopUrlImportPrompt;
+
+  /// No description provided for @r3bShopUrlNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop URL is not available.'**
+  String get r3bShopUrlNotAvailable;
+
+  /// No description provided for @r3bSignInToAuthorize.
+  ///
+  /// In en, this message translates to:
+  /// **'To authorize this transaction, you must sign in as'**
+  String get r3bSignInToAuthorize;
+
+  /// No description provided for @r3bSignatureNotValidPrimary.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature not valid (primary)'**
+  String get r3bSignatureNotValidPrimary;
+
+  /// No description provided for @r3bSmartContractId.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract ID: {id}'**
+  String r3bSmartContractId(String id);
+
+  /// No description provided for @r3bStartBeforeEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'The start date must be before the end date.'**
+  String get r3bStartBeforeEnd;
+
+  /// No description provided for @r3bSubscribeUpdatesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'In order for the web wallet to provide notifications about bids/purchases for you to sign the transactions, an email address is required.'**
+  String get r3bSubscribeUpdatesBody;
+
+  /// No description provided for @r3bThisIsPermanent.
+  ///
+  /// In en, this message translates to:
+  /// **'This is permanent'**
+  String get r3bThisIsPermanent;
+
+  /// No description provided for @r3bThisIsYourShop.
+  ///
+  /// In en, this message translates to:
+  /// **'This is your own shop.'**
+  String get r3bThisIsYourShop;
+
+  /// No description provided for @r3bTransactionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Sent.'**
+  String get r3bTransactionSent;
+
+  /// No description provided for @r3bUnpublished.
+  ///
+  /// In en, this message translates to:
+  /// **'Unpublished'**
+  String get r3bUnpublished;
+
+  /// No description provided for @r3bUpdateShopBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} VFX to update your shop on the network (plus the transaction fee).'**
+  String r3bUpdateShopBody(String cost);
+
+  /// No description provided for @r3bUpdateShopTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Update Shop?'**
+  String get r3bUpdateShopTitle;
+
+  /// No description provided for @r3bWalletNotSyncedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Since your wallet is not synced there may be some issues viewing the data in this shop. Continue anyway?'**
+  String get r3bWalletNotSyncedBody;
+
+  /// No description provided for @r3bWillNotBeNotified.
+  ///
+  /// In en, this message translates to:
+  /// **'You will not be notified. You can update this setting on the dashboard if you change your mind.'**
+  String get r3bWillNotBeNotified;
+
+  /// No description provided for @r3bYouAreShopOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'You are the owner of this shop.'**
+  String get r3bYouAreShopOwner;
+
+  /// No description provided for @r3cCallbackFromDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'{text} [{amount} VFX from {address}]'**
+  String r3cCallbackFromDetails(String text, String amount, String address);
+
+  /// No description provided for @r3cNoTransactionsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No Transactions Found'**
+  String get r3cNoTransactionsFound;
+
+  /// No description provided for @r3cNoTransactionsFoundFiltered.
+  ///
+  /// In en, this message translates to:
+  /// **'No Transactions Found\n[with current filters]'**
+  String get r3cNoTransactionsFoundFiltered;
+
+  /// No description provided for @r3cPriceHistoryBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Price History'**
+  String get r3cPriceHistoryBtc;
+
+  /// No description provided for @r3cPriceHistoryVfx.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Price History'**
+  String get r3cPriceHistoryVfx;
+
+  /// No description provided for @r3cStatusCalledBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Called Back'**
+  String get r3cStatusCalledBack;
+
+  /// No description provided for @r3cStatusFail.
+  ///
+  /// In en, this message translates to:
+  /// **'Fail'**
+  String get r3cStatusFail;
+
+  /// No description provided for @r3cStatusRecovered.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovered'**
+  String get r3cStatusRecovered;
+
+  /// No description provided for @r3cTypeAdnr.
+  ///
+  /// In en, this message translates to:
+  /// **'ADNR'**
+  String get r3cTypeAdnr;
+
+  /// No description provided for @r3cTypeAdnrCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'ADNR Create'**
+  String get r3cTypeAdnrCreate;
+
+  /// No description provided for @r3cTypeAdnrDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'ADNR Delete'**
+  String get r3cTypeAdnrDelete;
+
+  /// No description provided for @r3cTypeAdnrTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'ADNR Transfer'**
+  String get r3cTypeAdnrTransfer;
+
+  /// No description provided for @r3cTypeAuctionHouseCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'P2P Auction House (Create)'**
+  String get r3cTypeAuctionHouseCreate;
+
+  /// No description provided for @r3cTypeAuctionHouseDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'P2P Auction House (Delete)'**
+  String get r3cTypeAuctionHouseDelete;
+
+  /// No description provided for @r3cTypeAuctionHouseUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'P2P Auction House (Update)'**
+  String get r3cTypeAuctionHouseUpdate;
+
+  /// No description provided for @r3cTypeBtcAdnrCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC ADNR Create'**
+  String get r3cTypeBtcAdnrCreate;
+
+  /// No description provided for @r3cTypeBtcAdnrDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC ADNR Delete'**
+  String get r3cTypeBtcAdnrDelete;
+
+  /// No description provided for @r3cTypeBtcAdnrTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC ADNR Transfer'**
+  String get r3cTypeBtcAdnrTransfer;
+
+  /// No description provided for @r3cTypeDstRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'DST Registration'**
+  String get r3cTypeDstRegistration;
+
+  /// No description provided for @r3cTypeFungibleBanAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Ban Address'**
+  String get r3cTypeFungibleBanAddress;
+
+  /// No description provided for @r3cTypeFungibleBurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Burn'**
+  String get r3cTypeFungibleBurn;
+
+  /// No description provided for @r3cTypeFungibleDeploy.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Deploy'**
+  String get r3cTypeFungibleDeploy;
+
+  /// No description provided for @r3cTypeFungibleMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Mint'**
+  String get r3cTypeFungibleMint;
+
+  /// No description provided for @r3cTypeFungibleOwnershipChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Ownership Change'**
+  String get r3cTypeFungibleOwnershipChange;
+
+  /// No description provided for @r3cTypeFungiblePause.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Pause'**
+  String get r3cTypeFungiblePause;
+
+  /// No description provided for @r3cTypeFungibleResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Resume'**
+  String get r3cTypeFungibleResume;
+
+  /// No description provided for @r3cTypeFungibleTopicCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Topic Created'**
+  String get r3cTypeFungibleTopicCreated;
+
+  /// No description provided for @r3cTypeFungibleTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Transfer'**
+  String get r3cTypeFungibleTransfer;
+
+  /// No description provided for @r3cTypeFungibleTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token TX'**
+  String get r3cTypeFungibleTx;
+
+  /// No description provided for @r3cTypeFungibleVoteCast.
+  ///
+  /// In en, this message translates to:
+  /// **'Fungible Token Vote Cast'**
+  String get r3cTypeFungibleVoteCast;
+
+  /// No description provided for @r3cTypeNftBurn.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Burn'**
+  String get r3cTypeNftBurn;
+
+  /// No description provided for @r3cTypeNftEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Evolution'**
+  String get r3cTypeNftEvolution;
+
+  /// No description provided for @r3cTypeNftMint.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Mint'**
+  String get r3cTypeNftMint;
+
+  /// No description provided for @r3cTypeNftMintTokenized.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Mint (Tokenized)'**
+  String get r3cTypeNftMintTokenized;
+
+  /// No description provided for @r3cTypeNftSale.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Sale'**
+  String get r3cTypeNftSale;
+
+  /// No description provided for @r3cTypeNftSaleComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Sale Complete'**
+  String get r3cTypeNftSaleComplete;
+
+  /// No description provided for @r3cTypeNftSaleCompleteManual.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Sale Complete (Manual)'**
+  String get r3cTypeNftSaleCompleteManual;
+
+  /// No description provided for @r3cTypeNftSaleCompleteParen.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Sale (Complete)'**
+  String get r3cTypeNftSaleCompleteParen;
+
+  /// No description provided for @r3cTypeNftSaleStart.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Sale Start'**
+  String get r3cTypeNftSaleStart;
+
+  /// No description provided for @r3cTypeNftSaleStartManual.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Sale Start (Manual)'**
+  String get r3cTypeNftSaleStartManual;
+
+  /// No description provided for @r3cTypeNftTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Transfer'**
+  String get r3cTypeNftTransfer;
+
+  /// No description provided for @r3cTypeNftTx.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Tx'**
+  String get r3cTypeNftTx;
+
+  /// No description provided for @r3cTypeNode.
+  ///
+  /// In en, this message translates to:
+  /// **'Node'**
+  String get r3cTypeNode;
+
+  /// No description provided for @r3cTypeSmartContractBurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract Burn'**
+  String get r3cTypeSmartContractBurn;
+
+  /// No description provided for @r3cTypeSmartContractMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract Mint'**
+  String get r3cTypeSmartContractMint;
+
+  /// No description provided for @r3cTypeSmartContractTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract TX'**
+  String get r3cTypeSmartContractTx;
+
+  /// No description provided for @r3cTypeTokenizationBurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenization Burn'**
+  String get r3cTypeTokenizationBurn;
+
+  /// No description provided for @r3cTypeTokenizationMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenization Mint'**
+  String get r3cTypeTokenizationMint;
+
+  /// No description provided for @r3cTypeTokenizationTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenization TX'**
+  String get r3cTypeTokenizationTx;
+
+  /// No description provided for @r3cTypeTokenizationWithdrawalComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenization Withdrawal Complete'**
+  String get r3cTypeTokenizationWithdrawalComplete;
+
+  /// No description provided for @r3cTypeTokenizationWithdrawalRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenization Withdrawal Request'**
+  String get r3cTypeTokenizationWithdrawalRequest;
+
+  /// No description provided for @r3cTypeTopicCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic Create'**
+  String get r3cTypeTopicCreate;
+
+  /// No description provided for @r3cTypeTopicVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic Vote'**
+  String get r3cTypeTopicVote;
+
+  /// No description provided for @r3cTypeTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Tx'**
+  String get r3cTypeTx;
+
+  /// No description provided for @r3cTypeValidatorHeartbeat.
+  ///
+  /// In en, this message translates to:
+  /// **'Validator Heartbeat'**
+  String get r3cTypeValidatorHeartbeat;
+
+  /// No description provided for @r3cTypeValidatorRegistration.
+  ///
+  /// In en, this message translates to:
+  /// **'Validator Registration'**
+  String get r3cTypeValidatorRegistration;
+
+  /// No description provided for @r3cTypeVault.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault'**
+  String get r3cTypeVault;
+
+  /// No description provided for @r3cTypeVaultCallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault (Callback)'**
+  String get r3cTypeVaultCallback;
+
+  /// No description provided for @r3cTypeVaultRecover.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault (Recover)'**
+  String get r3cTypeVaultRecover;
+
+  /// No description provided for @r3cTypeVaultRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault (Register)'**
+  String get r3cTypeVaultRegister;
+
+  /// No description provided for @r3cTypeVbtcBridgeLock.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Bridge Lock'**
+  String get r3cTypeVbtcBridgeLock;
+
+  /// No description provided for @r3cTypeVbtcBridgeUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Bridge Unlock'**
+  String get r3cTypeVbtcBridgeUnlock;
+
+  /// No description provided for @r3cTypeVbtcBulkTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Bulk Transfer'**
+  String get r3cTypeVbtcBulkTransfer;
+
+  /// No description provided for @r3cTypeVbtcBurn.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Burn'**
+  String get r3cTypeVbtcBurn;
+
+  /// No description provided for @r3cTypeVbtcContractCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Contract Create'**
+  String get r3cTypeVbtcContractCreate;
+
+  /// No description provided for @r3cTypeVbtcContractMint.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Contract Mint'**
+  String get r3cTypeVbtcContractMint;
+
+  /// No description provided for @r3cTypeVbtcMint.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Mint'**
+  String get r3cTypeVbtcMint;
+
+  /// No description provided for @r3cTypeVbtcPrivateTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Private Transfer'**
+  String get r3cTypeVbtcPrivateTransfer;
+
+  /// No description provided for @r3cTypeVbtcShield.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Shield'**
+  String get r3cTypeVbtcShield;
+
+  /// No description provided for @r3cTypeVbtcTokenOwnershipTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Token Ownership Transfer'**
+  String get r3cTypeVbtcTokenOwnershipTransfer;
+
+  /// No description provided for @r3cTypeVbtcTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Transfer'**
+  String get r3cTypeVbtcTransfer;
+
+  /// No description provided for @r3cTypeVbtcTransferCoin.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Transfer Coin'**
+  String get r3cTypeVbtcTransferCoin;
+
+  /// No description provided for @r3cTypeVbtcTx.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC TX'**
+  String get r3cTypeVbtcTx;
+
+  /// No description provided for @r3cTypeVbtcUnshield.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Unshield'**
+  String get r3cTypeVbtcUnshield;
+
+  /// No description provided for @r3cTypeVbtcValidatorExit.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Validator Exit'**
+  String get r3cTypeVbtcValidatorExit;
+
+  /// No description provided for @r3cTypeVbtcValidatorHeartbeat.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Validator Heartbeat'**
+  String get r3cTypeVbtcValidatorHeartbeat;
+
+  /// No description provided for @r3cTypeVbtcValidatorRegister.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Validator Register'**
+  String get r3cTypeVbtcValidatorRegister;
+
+  /// No description provided for @r3cTypeVbtcWithdrawalArb.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal (Arb)'**
+  String get r3cTypeVbtcWithdrawalArb;
+
+  /// No description provided for @r3cTypeVbtcWithdrawalCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Cancel'**
+  String get r3cTypeVbtcWithdrawalCancel;
+
+  /// No description provided for @r3cTypeVbtcWithdrawalComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Complete'**
+  String get r3cTypeVbtcWithdrawalComplete;
+
+  /// No description provided for @r3cTypeVbtcWithdrawalOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal (Owner)'**
+  String get r3cTypeVbtcWithdrawalOwner;
+
+  /// No description provided for @r3cTypeVbtcWithdrawalRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Request'**
+  String get r3cTypeVbtcWithdrawalRequest;
+
+  /// No description provided for @r3cTypeVbtcWithdrawalVote.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Vote'**
+  String get r3cTypeVbtcWithdrawalVote;
+
+  /// No description provided for @r3cTypeVfxPrivateTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Private Transfer'**
+  String get r3cTypeVfxPrivateTransfer;
+
+  /// No description provided for @r3cTypeVfxShield.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Shield'**
+  String get r3cTypeVfxShield;
+
+  /// No description provided for @r3cTypeVfxUnshield.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Unshield'**
+  String get r3cTypeVfxUnshield;
+
+  /// No description provided for @r3dActivate.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate'**
+  String get r3dActivate;
+
+  /// No description provided for @r3dActivateVaultBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} VFX to activate your Vault Account which is burned.\n\nContinue?'**
+  String r3dActivateVaultBody(String cost);
+
+  /// No description provided for @r3dActivateVaultTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Vault Account?'**
+  String get r3dActivateVaultTitle;
+
+  /// No description provided for @r3dActivationTxBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'Activation transaction broadcasted'**
+  String get r3dActivationTxBroadcasted;
+
+  /// No description provided for @r3dActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity'**
+  String get r3dActivity;
+
+  /// No description provided for @r3dAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address Required.'**
+  String get r3dAddressRequired;
+
+  /// No description provided for @r3dAttemptingSaleCompleteTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Attempting to send sale complete TX.'**
+  String get r3dAttemptingSaleCompleteTx;
+
+  /// No description provided for @r3dAuctionAlreadyStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'The auction has already started.'**
+  String get r3dAuctionAlreadyStarted;
+
+  /// No description provided for @r3dAwaitingPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting Payment'**
+  String get r3dAwaitingPayment;
+
+  /// No description provided for @r3dBackupAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address:'**
+  String get r3dBackupAddress;
+
+  /// No description provided for @r3dBackupPrivateKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Private Key:'**
+  String get r3dBackupPrivateKey;
+
+  /// No description provided for @r3dBackupRecoveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery Address:'**
+  String get r3dBackupRecoveryAddress;
+
+  /// No description provided for @r3dBackupRecoveryPrivateKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery Private Key:'**
+  String get r3dBackupRecoveryPrivateKey;
+
+  /// No description provided for @r3dBackupRestoreCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Code:'**
+  String get r3dBackupRestoreCode;
+
+  /// No description provided for @r3dBeingClaimed.
+  ///
+  /// In en, this message translates to:
+  /// **'Being Claimed'**
+  String get r3dBeingClaimed;
+
+  /// No description provided for @r3dBtcExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Explorer'**
+  String get r3dBtcExplorer;
+
+  /// No description provided for @r3dBuyNowPriceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now: {price} VFX'**
+  String r3dBuyNowPriceLabel(String price);
+
+  /// No description provided for @r3dCantDeleteAuctionStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t delete this listing because the auction has already started.'**
+  String get r3dCantDeleteAuctionStarted;
+
+  /// No description provided for @r3dChat.
+  ///
+  /// In en, this message translates to:
+  /// **'Chat'**
+  String get r3dChat;
+
+  /// No description provided for @r3dChooseNft.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose NFT'**
+  String get r3dChooseNft;
+
+  /// No description provided for @r3dClaimed.
+  ///
+  /// In en, this message translates to:
+  /// **'Claimed'**
+  String get r3dClaimed;
+
+  /// No description provided for @r3dCliRestartBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A CLI restart is required for this change to take effect. Would you like to restart now?'**
+  String get r3dCliRestartBody;
+
+  /// No description provided for @r3dCloseCollectionCreationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the collection creation screen?'**
+  String get r3dCloseCollectionCreationConfirm;
+
+  /// No description provided for @r3dCloseCollectionEditingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the collection editing screen?'**
+  String get r3dCloseCollectionEditingConfirm;
+
+  /// No description provided for @r3dCloseListingCreationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the listing creation screen?'**
+  String get r3dCloseListingCreationConfirm;
+
+  /// No description provided for @r3dCloseListingEditingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the listing editing screen?'**
+  String get r3dCloseListingEditingConfirm;
+
+  /// No description provided for @r3dCloseShopCreationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the shop creation screen?'**
+  String get r3dCloseShopCreationConfirm;
+
+  /// No description provided for @r3dCloseShopEditingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the shop editing screen?'**
+  String get r3dCloseShopEditingConfirm;
+
+  /// No description provided for @r3dCloseStoreCreationConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the store creation screen?'**
+  String get r3dCloseStoreCreationConfirm;
+
+  /// No description provided for @r3dCloseStoreEditingConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close the store editing screen?'**
+  String get r3dCloseStoreEditingConfirm;
+
+  /// No description provided for @r3dCollectionLiveHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'When this is enabled, this collection will be visible to other users when they connect to your shop'**
+  String get r3dCollectionLiveHelp;
+
+  /// No description provided for @r3dConfirmDeleteListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this listing?'**
+  String get r3dConfirmDeleteListing;
+
+  /// No description provided for @r3dConfirmDeletePublishedShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this shop from the network? There is a cost of {cost} VFX plus TX fee to perform this operation.'**
+  String r3dConfirmDeletePublishedShop(String cost);
+
+  /// No description provided for @r3dConfirmDeleteUnpublishedShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete your unpublished shop?'**
+  String get r3dConfirmDeleteUnpublishedShop;
+
+  /// No description provided for @r3dConfirmDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Details'**
+  String get r3dConfirmDetails;
+
+  /// No description provided for @r3dConfirmDiscardListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to discard the listing?'**
+  String get r3dConfirmDiscardListing;
+
+  /// No description provided for @r3dCopyLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Link'**
+  String get r3dCopyLink;
+
+  /// No description provided for @r3dCraftTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Craft Time'**
+  String get r3dCraftTime;
+
+  /// No description provided for @r3dCreate.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get r3dCreate;
+
+  /// No description provided for @r3dCreateAuctionHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Auction House'**
+  String get r3dCreateAuctionHouse;
+
+  /// No description provided for @r3dCreateCollectionsPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you can create collections and then add listings to them.'**
+  String get r3dCreateCollectionsPrompt;
+
+  /// No description provided for @r3dCreateFirstListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Create First Listing'**
+  String get r3dCreateFirstListing;
+
+  /// No description provided for @r3dCreateLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Link'**
+  String get r3dCreateLink;
+
+  /// No description provided for @r3dCreateListingsForNfts.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you can create listings for the NFTs you own.'**
+  String get r3dCreateListingsForNfts;
+
+  /// No description provided for @r3dCreateNewCollection.
+  ///
+  /// In en, this message translates to:
+  /// **'Create New Collection'**
+  String get r3dCreateNewCollection;
+
+  /// No description provided for @r3dCreatePaymentLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Payment Link'**
+  String get r3dCreatePaymentLink;
+
+  /// No description provided for @r3dCreatingNewCollectionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are creating a new collection in your auction house.\nAfter creating the new collection you will be able to create listings.'**
+  String get r3dCreatingNewCollectionBody;
+
+  /// No description provided for @r3dDeleteTxBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete TX broadcasted.'**
+  String get r3dDeleteTxBroadcasted;
+
+  /// No description provided for @r3dEditAuctionHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Auction House'**
+  String get r3dEditAuctionHouse;
+
+  /// No description provided for @r3dEnableAtLeastOneOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable at least one of the options (Gallery, Buy Now, or Auction)'**
+  String get r3dEnableAtLeastOneOption;
+
+  /// No description provided for @r3dEndDateAfterStartDate.
+  ///
+  /// In en, this message translates to:
+  /// **'End date must be after start date'**
+  String get r3dEndDateAfterStartDate;
+
+  /// No description provided for @r3dEstimatedFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Fee'**
+  String get r3dEstimatedFee;
+
+  /// No description provided for @r3dFailedCreatePaymentLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create payment link. Please try again.'**
+  String get r3dFailedCreatePaymentLink;
+
+  /// No description provided for @r3dFailedParseFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse fee'**
+  String get r3dFailedParseFee;
+
+  /// No description provided for @r3dFailedParseHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse hash'**
+  String get r3dFailedParseHash;
+
+  /// No description provided for @r3dFailedRetrieveNonce.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve nonce'**
+  String get r3dFailedRetrieveNonce;
+
+  /// No description provided for @r3dFailedRetrieveTimestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve timestamp'**
+  String get r3dFailedRetrieveTimestamp;
+
+  /// No description provided for @r3dFailedSendVfxEscrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send VFX to escrow. Please try again.'**
+  String get r3dFailedSendVfxEscrow;
+
+  /// No description provided for @r3dFloorPriceGreaterThanZero.
+  ///
+  /// In en, this message translates to:
+  /// **'The floor price must be greater than zero.'**
+  String get r3dFloorPriceGreaterThanZero;
+
+  /// No description provided for @r3dFloorPriceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Floor: {price} VFX'**
+  String r3dFloorPriceValue(String price);
+
+  /// No description provided for @r3dGalleryListing.
+  ///
+  /// In en, this message translates to:
+  /// **'Gallery Listing'**
+  String get r3dGalleryListing;
+
+  /// No description provided for @r3dHdAccountRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'HD Account restored. Keys will now be generated deterministically based on phrase.'**
+  String get r3dHdAccountRestored;
+
+  /// No description provided for @r3dHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden'**
+  String get r3dHidden;
+
+  /// No description provided for @r3dHideCollectionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to hide this collection? It won\'t be visible to other users when they connect to your shop.'**
+  String get r3dHideCollectionBody;
+
+  /// No description provided for @r3dHideCollectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Collection?'**
+  String get r3dHideCollectionTitle;
+
+  /// No description provided for @r3dInputRecoverPhrase.
+  ///
+  /// In en, this message translates to:
+  /// **'Input Recover Phrase'**
+  String get r3dInputRecoverPhrase;
+
+  /// No description provided for @r3dInsufficientBalancePublish.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet doesn\'t have the minimmun balance send a publish tx'**
+  String get r3dInsufficientBalancePublish;
+
+  /// No description provided for @r3dInsufficientBalanceUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet doesn\'t have the minimmun balance send an update tx'**
+  String get r3dInsufficientBalanceUpdate;
+
+  /// No description provided for @r3dLabelHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Hash'**
+  String get r3dLabelHash;
+
+  /// No description provided for @r3dLinkCopiedClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Link copied to clipboard!'**
+  String get r3dLinkCopiedClipboard;
+
+  /// No description provided for @r3dLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get r3dLive;
+
+  /// No description provided for @r3dLocalChangesSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Local changes saved!'**
+  String get r3dLocalChangesSaved;
+
+  /// No description provided for @r3dMakeCollectionLiveBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to make this collection live? This collection will be visible to other users when they connect to your shop.'**
+  String get r3dMakeCollectionLiveBody;
+
+  /// No description provided for @r3dMakeCollectionLiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make Collection Live?'**
+  String get r3dMakeCollectionLiveTitle;
+
+  /// No description provided for @r3dMakeLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Make Live'**
+  String get r3dMakeLive;
+
+  /// No description provided for @r3dMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get r3dMessage;
+
+  /// No description provided for @r3dNftMustBeSet.
+  ///
+  /// In en, this message translates to:
+  /// **'The NFT must be set'**
+  String get r3dNftMustBeSet;
+
+  /// No description provided for @r3dNftTransferStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Success: NFT Transfer has been started.'**
+  String get r3dNftTransferStarted;
+
+  /// No description provided for @r3dNotOneOfYourAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not one of your addresses'**
+  String get r3dNotOneOfYourAddresses;
+
+  /// No description provided for @r3dNumberOfTxs.
+  ///
+  /// In en, this message translates to:
+  /// **'# of Txs'**
+  String get r3dNumberOfTxs;
+
+  /// No description provided for @r3dOr.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get r3dOr;
+
+  /// No description provided for @r3dPaymentCaptured.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Captured'**
+  String get r3dPaymentCaptured;
+
+  /// No description provided for @r3dPaymentFromVfxWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment from VFX Wallet'**
+  String get r3dPaymentFromVfxWallet;
+
+  /// No description provided for @r3dPaymentLinkCreatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment link created successfully!'**
+  String get r3dPaymentLinkCreatedSuccess;
+
+  /// No description provided for @r3dPaymentLinkReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Link Ready!'**
+  String get r3dPaymentLinkReady;
+
+  /// No description provided for @r3dPaymentNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment not available in this environment'**
+  String get r3dPaymentNotAvailable;
+
+  /// No description provided for @r3dPaymentProcessed.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment Processed'**
+  String get r3dPaymentProcessed;
+
+  /// No description provided for @r3dPendingDeposit.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Deposit'**
+  String get r3dPendingDeposit;
+
+  /// No description provided for @r3dPriceGreaterThanZero.
+  ///
+  /// In en, this message translates to:
+  /// **'Price must be greater than zero'**
+  String get r3dPriceGreaterThanZero;
+
+  /// No description provided for @r3dPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish'**
+  String get r3dPublish;
+
+  /// No description provided for @r3dPublishChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish Changes'**
+  String get r3dPublishChanges;
+
+  /// No description provided for @r3dPublishIpChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish IP Change'**
+  String get r3dPublishIpChange;
+
+  /// No description provided for @r3dPublishShopCostBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} VFX to publish your shop to the network (plus the transaction fee).'**
+  String r3dPublishShopCostBody(String cost);
+
+  /// No description provided for @r3dPublishTransactionSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish Transaction Sent!'**
+  String get r3dPublishTransactionSent;
+
+  /// No description provided for @r3dPublishUpdateCostBody.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} VFX to publish your shop changes to the network (plus the transaction fee).'**
+  String r3dPublishUpdateCostBody(String cost);
+
+  /// No description provided for @r3dPublishUpdatesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your local changes were saved successfully. Would you like to publish this to the network?'**
+  String get r3dPublishUpdatesBody;
+
+  /// No description provided for @r3dPublishUpdatesBodyWithCost.
+  ///
+  /// In en, this message translates to:
+  /// **'Your local changes were saved successfully. Would you like to publish this to the network?\n\n1 VFX is required since you have already published within the past 24 hours.'**
+  String get r3dPublishUpdatesBodyWithCost;
+
+  /// No description provided for @r3dReadyToClaim.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to Claim'**
+  String get r3dReadyToClaim;
+
+  /// No description provided for @r3dRecipientWillReceive.
+  ///
+  /// In en, this message translates to:
+  /// **'The recipient will receive {amount} VFX when they claim the link.'**
+  String r3dRecipientWillReceive(String amount);
+
+  /// No description provided for @r3dRecoveryInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery In Progress'**
+  String get r3dRecoveryInProgress;
+
+  /// No description provided for @r3dRefreshStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Status'**
+  String get r3dRefreshStatus;
+
+  /// No description provided for @r3dRefreshingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Refreshing status...'**
+  String get r3dRefreshingStatus;
+
+  /// No description provided for @r3dReservePriceGteFloor.
+  ///
+  /// In en, this message translates to:
+  /// **'The reserve price must be greater or equal to the floor price.'**
+  String get r3dReservePriceGteFloor;
+
+  /// No description provided for @r3dReservePriceValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve: {price} VFX'**
+  String r3dReservePriceValue(String price);
+
+  /// No description provided for @r3dRestoreHdAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore HD Account'**
+  String get r3dRestoreHdAccount;
+
+  /// No description provided for @r3dSaleCompleteTxFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Complete TX Failed'**
+  String get r3dSaleCompleteTxFailed;
+
+  /// No description provided for @r3dSaveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get r3dSaveChanges;
+
+  /// No description provided for @r3dSecondsValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} seconds'**
+  String r3dSecondsValue(String seconds);
+
+  /// No description provided for @r3dSendingVfx.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending VFX'**
+  String get r3dSendingVfx;
+
+  /// No description provided for @r3dSendingVfxEllipsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending VFX...'**
+  String get r3dSendingVfxEllipsis;
+
+  /// No description provided for @r3dSetOfflineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to set this store offline?'**
+  String get r3dSetOfflineBody;
+
+  /// No description provided for @r3dSetOfflineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Offline?'**
+  String get r3dSetOfflineTitle;
+
+  /// No description provided for @r3dSetOnlineBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to set this store online?'**
+  String get r3dSetOnlineBody;
+
+  /// No description provided for @r3dSetOnlineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Online?'**
+  String get r3dSetOnlineTitle;
+
+  /// No description provided for @r3dSetupAuctionHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup Auction House'**
+  String get r3dSetupAuctionHouse;
+
+  /// No description provided for @r3dSetupAuctionHousePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'First, setup your auction house / gallery.\nThen you\'ll be able to create collections and add listings to them.'**
+  String get r3dSetupAuctionHousePrompt;
+
+  /// No description provided for @r3dShareLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Share Link'**
+  String get r3dShareLink;
+
+  /// No description provided for @r3dShareLinkInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this link with the recipient.\nThey can claim the VFX without needing a wallet.'**
+  String get r3dShareLinkInstructions;
+
+  /// No description provided for @r3dShopDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Deleted'**
+  String get r3dShopDeleted;
+
+  /// No description provided for @r3dShopImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Imported'**
+  String get r3dShopImported;
+
+  /// No description provided for @r3dShopOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Offline'**
+  String get r3dShopOffline;
+
+  /// No description provided for @r3dShopOnline.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Online'**
+  String get r3dShopOnline;
+
+  /// No description provided for @r3dShopUrlCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop URL copied to clipboard'**
+  String get r3dShopUrlCopied;
+
+  /// No description provided for @r3dShopUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'URL: {url}'**
+  String r3dShopUrlLabel(String url);
+
+  /// No description provided for @r3dSignatureGenerationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature generation failed.'**
+  String get r3dSignatureGenerationFailed;
+
+  /// No description provided for @r3dSignatureNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature not valid'**
+  String get r3dSignatureNotValid;
+
+  /// No description provided for @r3dSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Size'**
+  String get r3dSize;
+
+  /// No description provided for @r3dStartDateBeforeEndDate.
+  ///
+  /// In en, this message translates to:
+  /// **'The start date must be before the end date.'**
+  String get r3dStartDateBeforeEndDate;
+
+  /// No description provided for @r3dStatusInitialized.
+  ///
+  /// In en, this message translates to:
+  /// **'Initialized'**
+  String get r3dStatusInitialized;
+
+  /// No description provided for @r3dStatusQuoted.
+  ///
+  /// In en, this message translates to:
+  /// **'Quoted'**
+  String get r3dStatusQuoted;
+
+  /// No description provided for @r3dTimeoutDepositConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeout waiting for deposit confirmation. The link was created but may need manual verification.'**
+  String get r3dTimeoutDepositConfirmation;
+
+  /// No description provided for @r3dTotalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Amount'**
+  String get r3dTotalAmount;
+
+  /// No description provided for @r3dTotalReward.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Reward'**
+  String get r3dTotalReward;
+
+  /// No description provided for @r3dTransactionNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction not valid'**
+  String get r3dTransactionNotValid;
+
+  /// No description provided for @r3dTransactionSettled.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Settled'**
+  String get r3dTransactionSettled;
+
+  /// No description provided for @r3dTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get r3dTryAgain;
+
+  /// No description provided for @r3dValidatedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Validated By'**
+  String get r3dValidatedBy;
+
+  /// No description provided for @r3dVaultAccountsIntroPost.
+  ///
+  /// In en, this message translates to:
+  /// **'] is a Cold Storage and On-Chain Escrow Feature to keep your VFX Funds and your Digital Assets Safe.\n\n'**
+  String get r3dVaultAccountsIntroPost;
+
+  /// No description provided for @r3dVaultAccountsIntroPre.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Accounts ['**
+  String get r3dVaultAccountsIntroPre;
+
+  /// No description provided for @r3dVaultActivationNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Note: Activating this feature requires a 5 VFX deposit, 4 of which will be burned upon activation.'**
+  String get r3dVaultActivationNote;
+
+  /// No description provided for @r3dVaultFeatureDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature is separate from your VFX instant settlement address and enables both recovery and call-back on-chain escrow features that allows you to be able to recover funds and assets back to your Vault Account in the event of theft, misplacement, or from a recipient that requires trustless escrow within 24 hours of occurrence or within a user pre-set defined time.\n\n'**
+  String get r3dVaultFeatureDescription;
+
+  /// No description provided for @r3dVaultFeaturesOnChain.
+  ///
+  /// In en, this message translates to:
+  /// **'These features are all on-chain and all peers are aware of their current state.\n'**
+  String get r3dVaultFeaturesOnChain;
+
+  /// No description provided for @r3dVaultNoFungibleTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Vault Account has no Fungible Tokens.'**
+  String get r3dVaultNoFungibleTokens;
+
+  /// No description provided for @r3dVaultNoVbtcTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Vault Account has no vBTC Tokens.'**
+  String get r3dVaultNoVbtcTokens;
+
+  /// No description provided for @r3dVaultNotActivatedWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Your vault account is not activated yet. To protect funds and assets securely, please activate first.'**
+  String get r3dVaultNotActivatedWarning;
+
+  /// No description provided for @r3dVfxExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Explorer'**
+  String get r3dVfxExplorer;
+
+  /// No description provided for @r3dVfxForUsd.
+  ///
+  /// In en, this message translates to:
+  /// **'{vfx} VFX for \${usd} USD'**
+  String r3dVfxForUsd(String vfx, String usd);
+
+  /// No description provided for @r3dViewTxs.
+  ///
+  /// In en, this message translates to:
+  /// **'View Txs'**
+  String get r3dViewTxs;
+
+  /// No description provided for @r3dWaitingDepositConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for deposit confirmation...\nThis may take up to 20 seconds.'**
+  String get r3dWaitingDepositConfirmation;
+
+  /// No description provided for @r3dWaitingForConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for Confirmation'**
+  String get r3dWaitingForConfirmation;
+
+  /// No description provided for @r3eAccountRequiredExplanation.
+  ///
+  /// In en, this message translates to:
+  /// **'An account is required to continue.\nPlease create your account now with your email address and a password.'**
+  String get r3eAccountRequiredExplanation;
+
+  /// No description provided for @r3eAgree.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree'**
+  String get r3eAgree;
+
+  /// No description provided for @r3eAgreeDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'I have read and agree to the disclaimer.'**
+  String get r3eAgreeDisclaimer;
+
+  /// No description provided for @r3eBlockLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Block: {block}'**
+  String r3eBlockLabel(String block);
+
+  /// No description provided for @r3eBtcDomainBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain Transaction has been broadcasted. See log for hash.'**
+  String get r3eBtcDomainBroadcasted;
+
+  /// No description provided for @r3eBtcDomainValidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The BTC Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: {domain}\nAmount: {amount} VFX\nFee: {fee} VFX\nTotal: {total} VFX'**
+  String r3eBtcDomainValidBody(String domain, String amount, String fee, String total);
+
+  /// No description provided for @r3eBtcExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Explorer'**
+  String get r3eBtcExplorer;
+
+  /// No description provided for @r3eButterflyDescDesktop.
+  ///
+  /// In en, this message translates to:
+  /// **'Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly. No Borders, No Restrictions, No Limits, and No Accounts Needed… Be Free!\n\nAuto-login with this account?'**
+  String get r3eButterflyDescDesktop;
+
+  /// No description provided for @r3eButterflyDescMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly.\n\nAuto-login with this account?'**
+  String get r3eButterflyDescMobile;
+
+  /// No description provided for @r3eCannotLockWhileValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'You can not lock your wallet while validating.'**
+  String get r3eCannotLockWhileValidating;
+
+  /// No description provided for @r3eCantFindPrivateKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t find private key'**
+  String get r3eCantFindPrivateKey;
+
+  /// No description provided for @r3eCantFindPublicKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Can\'t find public key'**
+  String get r3eCantFindPublicKey;
+
+  /// No description provided for @r3eCloseWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Close Wallet'**
+  String get r3eCloseWallet;
+
+  /// No description provided for @r3eCoinPrices.
+  ///
+  /// In en, this message translates to:
+  /// **'Coin Prices'**
+  String get r3eCoinPrices;
+
+  /// No description provided for @r3eCollapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse'**
+  String get r3eCollapse;
+
+  /// No description provided for @r3eConfirmEncryptionPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your encryption password.'**
+  String get r3eConfirmEncryptionPassword;
+
+  /// No description provided for @r3eCopySignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Signature'**
+  String get r3eCopySignature;
+
+  /// No description provided for @r3eCostToDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} VFX to delete a BTC Domain.'**
+  String r3eCostToDelete(String cost);
+
+  /// No description provided for @r3eCouldNotGenerateSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not generate signature'**
+  String get r3eCouldNotGenerateSignature;
+
+  /// No description provided for @r3eCouldNotImportMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not import media'**
+  String get r3eCouldNotImportMedia;
+
+  /// No description provided for @r3eCreateAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get r3eCreateAccount;
+
+  /// No description provided for @r3eCreateBtcDomainDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a BTC Domain as an alias to your account\'s address for receiving funds.'**
+  String get r3eCreateBtcDomainDesc;
+
+  /// No description provided for @r3eDebugData.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug Data'**
+  String get r3eDebugData;
+
+  /// No description provided for @r3eDebugDataCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Debug data copied to clipboard'**
+  String get r3eDebugDataCopied;
+
+  /// No description provided for @r3eDecryptAccountPasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the password for this account to decrypt its private keys.'**
+  String get r3eDecryptAccountPasswordBody;
+
+  /// No description provided for @r3eDeleteBtcDomainBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this BTC Domain?\n{costLine}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.'**
+  String r3eDeleteBtcDomainBody(String costLine);
+
+  /// No description provided for @r3eDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Disclaimer'**
+  String get r3eDisclaimer;
+
+  /// No description provided for @r3eDoNotCloseWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Please do not close your wallet.'**
+  String get r3eDoNotCloseWallet;
+
+  /// No description provided for @r3eDoesNotOwnBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{address}\ndoes NOT own\n{scId}'**
+  String r3eDoesNotOwnBody(String address, String scId);
+
+  /// No description provided for @r3eEmailPasswordSeedInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Your email and password is used to seed your private key which is processed in this browser and will never be transmitted across the internet.'**
+  String get r3eEmailPasswordSeedInfo;
+
+  /// No description provided for @r3eEncryptAccountKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt Account Keys'**
+  String get r3eEncryptAccountKeys;
+
+  /// No description provided for @r3eEncryptAccountPasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a password to encrypt this account\'s private keys.'**
+  String get r3eEncryptAccountPasswordBody;
+
+  /// No description provided for @r3eEncryptWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Encrypt Wallet'**
+  String get r3eEncryptWallet;
+
+  /// No description provided for @r3eEncryptWalletBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.'**
+  String get r3eEncryptWalletBody;
+
+  /// No description provided for @r3eEnterPasswordBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to backup your keys.'**
+  String get r3eEnterPasswordBackup;
+
+  /// No description provided for @r3eExportNftMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Export NFT Media'**
+  String get r3eExportNftMedia;
+
+  /// No description provided for @r3eFailedDecryptKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to decrypt account keys. Check your password.'**
+  String get r3eFailedDecryptKeys;
+
+  /// No description provided for @r3eFailedDeleteDb.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete {path} — folder still exists after delete'**
+  String r3eFailedDeleteDb(String path);
+
+  /// No description provided for @r3eFailedDownloadFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to download {filename} after {attempts} attempts'**
+  String r3eFailedDownloadFile(String filename, String attempts);
+
+  /// No description provided for @r3eFaucetIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.'**
+  String get r3eFaucetIntro;
+
+  /// No description provided for @r3eFaucetSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Success! Funds are on their way. TX Hash: {result}'**
+  String r3eFaucetSuccess(String result);
+
+  /// No description provided for @r3eFilesOnDiskMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Only {count} of {total} files on disk after download'**
+  String r3eFilesOnDiskMismatch(String count, String total);
+
+  /// No description provided for @r3eGetBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get BTC'**
+  String get r3eGetBtc;
+
+  /// No description provided for @r3eImportMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Media'**
+  String get r3eImportMedia;
+
+  /// No description provided for @r3eImportSnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Snapshot'**
+  String get r3eImportSnapshot;
+
+  /// No description provided for @r3eIncorrectDecryptionPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect decryption password.'**
+  String get r3eIncorrectDecryptionPassword;
+
+  /// No description provided for @r3eIncorrectPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect password'**
+  String get r3eIncorrectPassword;
+
+  /// No description provided for @r3eInvalidHexColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid hex color'**
+  String get r3eInvalidHexColor;
+
+  /// No description provided for @r3eInvalidOwnershipSig.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid ownership verification signature'**
+  String get r3eInvalidOwnershipSig;
+
+  /// No description provided for @r3eJustTakeMeThere.
+  ///
+  /// In en, this message translates to:
+  /// **'Just Take Me There'**
+  String get r3eJustTakeMeThere;
+
+  /// No description provided for @r3eLaunchButterfly.
+  ///
+  /// In en, this message translates to:
+  /// **'Launch Butterfly'**
+  String get r3eLaunchButterfly;
+
+  /// No description provided for @r3eLocalHeightAhead.
+  ///
+  /// In en, this message translates to:
+  /// **'Your local blockheight is further along than the snapshot.'**
+  String get r3eLocalHeightAhead;
+
+  /// No description provided for @r3eLockNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock Now'**
+  String get r3eLockNow;
+
+  /// No description provided for @r3eLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get r3eLogin;
+
+  /// No description provided for @r3eLoginWithThisAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Login with this Account'**
+  String get r3eLoginWithThisAccount;
+
+  /// No description provided for @r3eMaxAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Amount: {amount} VFX'**
+  String r3eMaxAmount(String amount);
+
+  /// No description provided for @r3eMediaBackedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Media backed up successfully.'**
+  String get r3eMediaBackedUp;
+
+  /// No description provided for @r3eMediaImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Media Imported Successfully'**
+  String get r3eMediaImported;
+
+  /// No description provided for @r3eMustAgreeTerms.
+  ///
+  /// In en, this message translates to:
+  /// **'You must agree to the terms before proceeding.'**
+  String get r3eMustAgreeTerms;
+
+  /// No description provided for @r3eNewPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'New Password'**
+  String get r3eNewPassword;
+
+  /// No description provided for @r3eNoAccountSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No Account Selected'**
+  String get r3eNoAccountSelected;
+
+  /// No description provided for @r3eNoBtcTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No BTC Transactions Found'**
+  String get r3eNoBtcTransactions;
+
+  /// No description provided for @r3eNoCostToDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no cost to delete and BTC Domain (aside from the TX fee).'**
+  String get r3eNoCostToDelete;
+
+  /// No description provided for @r3eNoKeysToEncrypt.
+  ///
+  /// In en, this message translates to:
+  /// **'No keys to encrypt.'**
+  String get r3eNoKeysToEncrypt;
+
+  /// No description provided for @r3eNoNotValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'NO you are NOT Validating'**
+  String get r3eNoNotValidating;
+
+  /// No description provided for @r3eNoVfxTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No VFX Transactions Found'**
+  String get r3eNoVfxTransactions;
+
+  /// No description provided for @r3eNotValidatingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Validating ❌'**
+  String get r3eNotValidatingTitle;
+
+  /// No description provided for @r3eOpenDbFolder.
+  ///
+  /// In en, this message translates to:
+  /// **'Open DB Folder'**
+  String get r3eOpenDbFolder;
+
+  /// No description provided for @r3eOpenExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Explorer'**
+  String get r3eOpenExplorer;
+
+  /// No description provided for @r3eOpenLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Log'**
+  String get r3eOpenLog;
+
+  /// No description provided for @r3eOwnershipNotVerified.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership NOT Verified'**
+  String get r3eOwnershipNotVerified;
+
+  /// No description provided for @r3eOwnershipVerificationSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership Verification Signature'**
+  String get r3eOwnershipVerificationSignature;
+
+  /// No description provided for @r3eOwnsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{address}\nOWNS\n{scId}'**
+  String r3eOwnsBody(String address, String scId);
+
+  /// No description provided for @r3ePasswordConfirmFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Password confirmation failed'**
+  String get r3ePasswordConfirmFailed;
+
+  /// No description provided for @r3ePasswordEncryptKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'This password will be used to encrypt your keys.'**
+  String get r3ePasswordEncryptKeys;
+
+  /// No description provided for @r3ePasswordsDoNotMatchRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Your passwords do not match. Please try again.'**
+  String get r3ePasswordsDoNotMatchRetry;
+
+  /// No description provided for @r3ePasteSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste in the signature provided by the owner to validate its ownership.'**
+  String get r3ePasteSignature;
+
+  /// No description provided for @r3ePhoneNumberRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number is required'**
+  String get r3ePhoneNumberRequired;
+
+  /// No description provided for @r3ePrintAddresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Print Addresses'**
+  String get r3ePrintAddresses;
+
+  /// No description provided for @r3ePrintValidators.
+  ///
+  /// In en, this message translates to:
+  /// **'Print Validators'**
+  String get r3ePrintValidators;
+
+  /// No description provided for @r3eProblemLocalHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem fetching local block height. Please try again.'**
+  String get r3eProblemLocalHeight;
+
+  /// No description provided for @r3eProblemSnapshotHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem fetching snapshot block height. Please try again.'**
+  String get r3eProblemSnapshotHeight;
+
+  /// No description provided for @r3eProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress: {percent}'**
+  String r3eProgressLabel(String percent);
+
+  /// No description provided for @r3eReadLess.
+  ///
+  /// In en, this message translates to:
+  /// **'Read Less'**
+  String get r3eReadLess;
+
+  /// No description provided for @r3eReadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Read More'**
+  String get r3eReadMore;
+
+  /// No description provided for @r3eRecentTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Transactions'**
+  String get r3eRecentTransactions;
+
+  /// No description provided for @r3eRecoveryBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Reserve (Protected) Account is being recovered to your recovery address.\n\nTransaction Hash: {hash}\n\nAll non-settled transactions for funds and assets will be transferred as well as your current available balance. \n\nIt is recommended you import your recovery private key into a new machine. NFT media will not be transferred over so please export them by clicking the button below and import them to your new environment.'**
+  String r3eRecoveryBody(String hash);
+
+  /// No description provided for @r3eRecoveryStartedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recovery process has started'**
+  String get r3eRecoveryStartedTitle;
+
+  /// No description provided for @r3eRestart.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart'**
+  String get r3eRestart;
+
+  /// No description provided for @r3eRestartCliConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to restart the CLI?'**
+  String get r3eRestartCliConfirm;
+
+  /// No description provided for @r3eSavedTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved to {data}'**
+  String r3eSavedTo(String data);
+
+  /// No description provided for @r3eSendOwnershipSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Send this ownership validation signature to prove you are the owner.'**
+  String get r3eSendOwnershipSignature;
+
+  /// No description provided for @r3eSensitiveOperationPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your password to continue with this sensitive operation.'**
+  String get r3eSensitiveOperationPassword;
+
+  /// No description provided for @r3eSessionTimeoutBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your session will be locked due to inactivity. Do you want to stay logged in?\n\nThis dialog will auto-lock in 15 seconds.'**
+  String get r3eSessionTimeoutBody;
+
+  /// No description provided for @r3eSessionTimeoutWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Session Timeout Warning'**
+  String get r3eSessionTimeoutWarning;
+
+  /// No description provided for @r3eSetPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Password'**
+  String get r3eSetPassword;
+
+  /// No description provided for @r3eShowDebugData.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Debug Data'**
+  String get r3eShowDebugData;
+
+  /// No description provided for @r3eSignatureCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature Verification copied to clipboard.'**
+  String get r3eSignatureCopied;
+
+  /// No description provided for @r3eSnapshotNoUrls.
+  ///
+  /// In en, this message translates to:
+  /// **'Snapshot has no download URLs'**
+  String get r3eSnapshotNoUrls;
+
+  /// No description provided for @r3eStatusLog.
+  ///
+  /// In en, this message translates to:
+  /// **'Status Log'**
+  String get r3eStatusLog;
+
+  /// No description provided for @r3eStayLoggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay Logged In'**
+  String get r3eStayLoggedIn;
+
+  /// No description provided for @r3eSyncingState.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing state treis due to improper shutdown'**
+  String get r3eSyncingState;
+
+  /// No description provided for @r3eUnexpectedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexpected error: {error}'**
+  String r3eUnexpectedError(String error);
+
+  /// No description provided for @r3eUnlockWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Wallet'**
+  String get r3eUnlockWallet;
+
+  /// No description provided for @r3eValidatingCheckProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred checking your validating status. Please restart your wallet and try again.'**
+  String get r3eValidatingCheckProblem;
+
+  /// No description provided for @r3eValidatingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating ✅'**
+  String get r3eValidatingTitle;
+
+  /// No description provided for @r3eValidatorCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'Validator Check'**
+  String get r3eValidatorCheck;
+
+  /// No description provided for @r3eValueRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Value is required'**
+  String get r3eValueRequired;
+
+  /// No description provided for @r3eVerifyNftOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify NFT Ownership'**
+  String get r3eVerifyNftOwnership;
+
+  /// No description provided for @r3eVfxAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Address: {address}'**
+  String r3eVfxAddress(String address);
+
+  /// No description provided for @r3eVfxDomainValidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: {domain}\nAmount: {amount} VFX\nFee: {fee} VFX\nTotal: {total} VFX'**
+  String r3eVfxDomainValidBody(String domain, String amount, String fee, String total);
+
+  /// No description provided for @r3eVfxExplorer.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Explorer'**
+  String get r3eVfxExplorer;
+
+  /// No description provided for @r3eViewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get r3eViewAll;
+
+  /// No description provided for @r3eViewChart.
+  ///
+  /// In en, this message translates to:
+  /// **'View Chart'**
+  String get r3eViewChart;
+
+  /// No description provided for @r3eWalletEncrypted.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet is now encrypted.'**
+  String get r3eWalletEncrypted;
+
+  /// No description provided for @r3eWalletLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet is now locked.'**
+  String get r3eWalletLocked;
+
+  /// No description provided for @r3eWalletUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet has been unlocked.'**
+  String get r3eWalletUnlocked;
+
+  /// No description provided for @r3eWalletUnlocked10Min.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet has been unlocked for 10 minutes.'**
+  String get r3eWalletUnlocked10Min;
+
+  /// No description provided for @r3eWebWalletEncryptionBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The web wallet now uses encryption to protect your keys. In order to add an additional account you must fully sign out of the wallet and login again. Please make sure all your existing login details / keys are backed up before proceeding.'**
+  String get r3eWebWalletEncryptionBody;
+
+  /// No description provided for @r3eWebWalletEncryptionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Web Wallet Now Uses Encryption'**
+  String get r3eWebWalletEncryptionTitle;
+
+  /// No description provided for @r3eWhichVfxManageDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'What VFX address will manage this BTC domain?'**
+  String get r3eWhichVfxManageDomain;
+
+  /// No description provided for @r3eYesValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'YES you are Validating!'**
+  String get r3eYesValidating;
+
+  /// No description provided for @r3fAProblemOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'A Problem Occurred'**
+  String get r3fAProblemOccurred;
+
+  /// No description provided for @r3fAddressCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Address {address} copied to clipboard'**
+  String r3fAddressCopied(String address);
+
+  /// No description provided for @r3fAnErrorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'And error occurred'**
+  String get r3fAnErrorOccurred;
+
+  /// No description provided for @r3fAutoActivateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to activate the account automatically once the funding is complete?'**
+  String get r3fAutoActivateBody;
+
+  /// No description provided for @r3fBridgeHistoryUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge history is unavailable.'**
+  String get r3fBridgeHistoryUnavailable;
+
+  /// No description provided for @r3fBridgeStatusAwaitingSignatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting signatures'**
+  String get r3fBridgeStatusAwaitingSignatures;
+
+  /// No description provided for @r3fBridgeStatusExiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Exiting'**
+  String get r3fBridgeStatusExiting;
+
+  /// No description provided for @r3fBridgeStatusExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'Expired'**
+  String get r3fBridgeStatusExpired;
+
+  /// No description provided for @r3fBridgeStatusLocking.
+  ///
+  /// In en, this message translates to:
+  /// **'Locking'**
+  String get r3fBridgeStatusLocking;
+
+  /// No description provided for @r3fBridgeStatusMinted.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted'**
+  String get r3fBridgeStatusMinted;
+
+  /// No description provided for @r3fBridgeStatusMinting.
+  ///
+  /// In en, this message translates to:
+  /// **'Minting'**
+  String get r3fBridgeStatusMinting;
+
+  /// No description provided for @r3fBridgeStatusReturned.
+  ///
+  /// In en, this message translates to:
+  /// **'Returned'**
+  String get r3fBridgeStatusReturned;
+
+  /// No description provided for @r3fBridgeStatusUnknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get r3fBridgeStatusUnknown;
+
+  /// No description provided for @r3fBridgeUnreachable.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach the bridge service.'**
+  String get r3fBridgeUnreachable;
+
+  /// No description provided for @r3fBulkConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to send a total of {amount} vBTC to {address}'**
+  String r3fBulkConfirmBody(String amount, String address);
+
+  /// No description provided for @r3fBulkMinTwoTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'At least two tokens are required to do a bulk vBTC transaction'**
+  String get r3fBulkMinTwoTokens;
+
+  /// No description provided for @r3fBulkSentToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} vBTC has been sent to {address}.'**
+  String r3fBulkSentToast(String amount, String address);
+
+  /// No description provided for @r3fCliRestartRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'CLI restart required for changes to take effect.'**
+  String get r3fCliRestartRequired;
+
+  /// No description provided for @r3fConfirmingBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirming Balance...'**
+  String get r3fConfirmingBalance;
+
+  /// No description provided for @r3fCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'\'{value}\' Copied to clipboard'**
+  String r3fCopiedToClipboard(String value);
+
+  /// No description provided for @r3fErrorColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {msg}'**
+  String r3fErrorColon(String msg);
+
+  /// No description provided for @r3fErrorHasOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An error has occurred'**
+  String get r3fErrorHasOccurred;
+
+  /// No description provided for @r3fFailedCancelWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel withdrawal.'**
+  String get r3fFailedCancelWithdrawal;
+
+  /// No description provided for @r3fFailedCeremonyStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to get ceremony status.'**
+  String get r3fFailedCeremonyStatus;
+
+  /// No description provided for @r3fFailedCompleteWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to complete withdrawal.'**
+  String get r3fFailedCompleteWithdrawal;
+
+  /// No description provided for @r3fFailedCreateContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create contract.'**
+  String get r3fFailedCreateContract;
+
+  /// No description provided for @r3fFailedInitiateCeremony.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to initiate ceremony.'**
+  String get r3fFailedInitiateCeremony;
+
+  /// No description provided for @r3fFailedParseFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse fee'**
+  String get r3fFailedParseFee;
+
+  /// No description provided for @r3fFailedParseHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse hash'**
+  String get r3fFailedParseHash;
+
+  /// No description provided for @r3fFailedRequestWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to request withdrawal.'**
+  String get r3fFailedRequestWithdrawal;
+
+  /// No description provided for @r3fFailedRetrieveNonce.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve nonce'**
+  String get r3fFailedRetrieveNonce;
+
+  /// No description provided for @r3fFailedRetrieveTimestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve timestamp'**
+  String get r3fFailedRetrieveTimestamp;
+
+  /// No description provided for @r3fFailedTransferOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to transfer ownership.'**
+  String get r3fFailedTransferOwnership;
+
+  /// No description provided for @r3fFailedTransferVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to transfer vBTC.'**
+  String get r3fFailedTransferVbtc;
+
+  /// No description provided for @r3fFeePresetCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get r3fFeePresetCustom;
+
+  /// No description provided for @r3fFeePresetEconomy.
+  ///
+  /// In en, this message translates to:
+  /// **'Economy'**
+  String get r3fFeePresetEconomy;
+
+  /// No description provided for @r3fFeePresetFastest.
+  ///
+  /// In en, this message translates to:
+  /// **'Fastest'**
+  String get r3fFeePresetFastest;
+
+  /// No description provided for @r3fFeePresetHalfHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Half Hour'**
+  String get r3fFeePresetHalfHour;
+
+  /// No description provided for @r3fFeePresetHour.
+  ///
+  /// In en, this message translates to:
+  /// **'Hour'**
+  String get r3fFeePresetHour;
+
+  /// No description provided for @r3fFeePresetMinimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum'**
+  String get r3fFeePresetMinimum;
+
+  /// No description provided for @r3fFundConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to send 5 VFX from {address}?'**
+  String r3fFundConfirmBody(String address);
+
+  /// No description provided for @r3fFundSentToast.
+  ///
+  /// In en, this message translates to:
+  /// **'5 VFX sent to {address}'**
+  String r3fFundSentToast(String address);
+
+  /// No description provided for @r3fInputAmountsPerToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Input Amounts for each token:'**
+  String get r3fInputAmountsPerToken;
+
+  /// No description provided for @r3fInsufficientVfxBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected VFX account doesn\'t have enough balance'**
+  String get r3fInsufficientVfxBalance;
+
+  /// No description provided for @r3fMaxAmountIs.
+  ///
+  /// In en, this message translates to:
+  /// **'Maximum amount is {amount} vBTC'**
+  String r3fMaxAmountIs(String amount);
+
+  /// No description provided for @r3fMaxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'(MAX: {amount} vBTC)'**
+  String r3fMaxLabel(String amount);
+
+  /// No description provided for @r3fMyBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'My Balance: {balance} vBTC{usd}'**
+  String r3fMyBalanceLabel(String balance, String usd);
+
+  /// No description provided for @r3fNftNotTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT assets have not been transferred to the VFX Web Account.'**
+  String get r3fNftNotTransferred;
+
+  /// No description provided for @r3fNoAdditionalMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'This token does not contain any additional media.'**
+  String get r3fNoAdditionalMedia;
+
+  /// No description provided for @r3fNoBtcTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'No BTC Transactions'**
+  String get r3fNoBtcTransactions;
+
+  /// No description provided for @r3fNoRequestHash.
+  ///
+  /// In en, this message translates to:
+  /// **'No request hash returned from withdrawal request.'**
+  String get r3fNoRequestHash;
+
+  /// No description provided for @r3fNotGenerated.
+  ///
+  /// In en, this message translates to:
+  /// **'Not Generated'**
+  String get r3fNotGenerated;
+
+  /// No description provided for @r3fOnboardFaucetDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'The community has provided a faucet to withdraw a minimal amount of VFX from in order to try out this feature. A phone number is required for verification purposes and to reduce the chance of abuse. Please note that only a hash of the phone number is stored with the faucet. Alternatively, you are welcome to purchase VFX via an exchange on on-ramp if you like.'**
+  String get r3fOnboardFaucetDetails;
+
+  /// No description provided for @r3fOnboardTokenizeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to tokenize a vBTC token. The following fields are all optional!'**
+  String get r3fOnboardTokenizeDetails;
+
+  /// No description provided for @r3fOnboardTransferBtcDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like this account doesn\'t have any BTC. Please transfer BTC to this account to continue.'**
+  String get r3fOnboardTransferBtcDetails;
+
+  /// No description provided for @r3fOnboardTransferToVbtcDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you are ready to transfer BTC to your vBTC token. Select the amount and Fee Rate below'**
+  String get r3fOnboardTransferToVbtcDetails;
+
+  /// No description provided for @r3fPrivateKeyImportedSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Private Key Imported! Please wait until {time} for the balance to sync.'**
+  String r3fPrivateKeyImportedSync(String time);
+
+  /// No description provided for @r3fProblemRecoverySigScript.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem generating RecoverySigScript'**
+  String get r3fProblemRecoverySigScript;
+
+  /// No description provided for @r3fQrScannerUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'QR Scanner not available on this platform'**
+  String get r3fQrScannerUnavailable;
+
+  /// No description provided for @r3fRecoverBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a destructive function that will callback all pending transactions and assets and move everything to this recovery address:\n\n{address}'**
+  String r3fRecoverBody(String address);
+
+  /// No description provided for @r3fRestartNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Restart Now'**
+  String get r3fRestartNow;
+
+  /// No description provided for @r3fRestoreBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Importing an existing Vault Account will replace the current one tied to your login. To revert you can logout and login again.\n\nContinue?'**
+  String get r3fRestoreBody;
+
+  /// No description provided for @r3fRestoreCodePrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste in your RESTORE CODE to import your existing Vault Account.'**
+  String get r3fRestoreCodePrompt;
+
+  /// No description provided for @r3fRevealPrivateKeyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to reveal your private key?'**
+  String get r3fRevealPrivateKeyBody;
+
+  /// No description provided for @r3fSelectTokensToTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the tokens you\'d like to transfer from:'**
+  String get r3fSelectTokensToTransfer;
+
+  /// No description provided for @r3fTokenMedia.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Media'**
+  String get r3fTokenMedia;
+
+  /// No description provided for @r3fTokenTotalBalanceTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Total Balance: {balance} vBTC{usd}'**
+  String r3fTokenTotalBalanceTooltip(String balance, String usd);
+
+  /// No description provided for @r3fTransactionCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction completed: {txHash}'**
+  String r3fTransactionCompleted(String txHash);
+
+  /// No description provided for @r3fTxTypeMultiSig.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-signature'**
+  String get r3fTxTypeMultiSig;
+
+  /// No description provided for @r3fTxTypeReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get r3fTxTypeReplace;
+
+  /// No description provided for @r3fTxTypeSameAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Same Account TX'**
+  String get r3fTxTypeSameAccount;
+
+  /// No description provided for @r3fWaitingTokenization.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for vBTC Tokenization to compile.'**
+  String get r3fWaitingTokenization;
+
+  /// No description provided for @r3gAccountUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Account unlocked.'**
+  String get r3gAccountUnlocked;
+
+  /// No description provided for @r3gAccountUnlocked10Min.
+  ///
+  /// In en, this message translates to:
+  /// **'Account unlocked for 10 minutes.'**
+  String get r3gAccountUnlocked10Min;
+
+  /// No description provided for @r3gActiveColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Active:'**
+  String get r3gActiveColon;
+
+  /// No description provided for @r3gAdditionalAssetsColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Assets:'**
+  String get r3gAdditionalAssetsColon;
+
+  /// No description provided for @r3gAddressCopiedDot.
+  ///
+  /// In en, this message translates to:
+  /// **'Address copied to clipboard.'**
+  String get r3gAddressCopiedDot;
+
+  /// No description provided for @r3gAdnrCreateConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The {currency} Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: {domain}\nAmount: {amount} VFX\nFee: {fee} VFX\nTotal: {total} VFX'**
+  String r3gAdnrCreateConfirmBody(String currency, String domain, String amount, String fee, String total);
+
+  /// No description provided for @r3gAdnrDeleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this VFX Domain?\n{costLine}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.'**
+  String r3gAdnrDeleteBody(String costLine);
+
+  /// No description provided for @r3gAdnrDeleteNoCost.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no cost to delete and VFX Domain (aside from the TX fee).'**
+  String get r3gAdnrDeleteNoCost;
+
+  /// No description provided for @r3gAdnrDeleteWithCost.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} RBX to delete an RBX Domain.'**
+  String r3gAdnrDeleteWithCost(String cost);
+
+  /// No description provided for @r3gAssetListedInAuctionHouse.
+  ///
+  /// In en, this message translates to:
+  /// **'This {assetType} is listed in your auction house. Please remove the listing before transferring.'**
+  String r3gAssetListedInAuctionHouse(String assetType);
+
+  /// No description provided for @r3gAssetTransferSentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'{assetType} Transfer sent successfully to {address}!'**
+  String r3gAssetTransferSentSuccess(String assetType, String address);
+
+  /// No description provided for @r3gAuctionBegins.
+  ///
+  /// In en, this message translates to:
+  /// **'Begins: {date} {time}'**
+  String r3gAuctionBegins(String date, String time);
+
+  /// No description provided for @r3gAuctionEnds.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Ends'**
+  String get r3gAuctionEnds;
+
+  /// No description provided for @r3gAuctionHasEnded.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Has Ended'**
+  String get r3gAuctionHasEnded;
+
+  /// No description provided for @r3gAuctionStarts.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Starts'**
+  String get r3gAuctionStarts;
+
+  /// No description provided for @r3gAuctionUpcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction Upcoming'**
+  String get r3gAuctionUpcoming;
+
+  /// No description provided for @r3gBackupUrlRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup URL required'**
+  String get r3gBackupUrlRequired;
+
+  /// No description provided for @r3gBackupUrlTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Backup URL {optional}'**
+  String r3gBackupUrlTitle(String optional);
+
+  /// No description provided for @r3gBaselineAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Baseline Asset'**
+  String get r3gBaselineAsset;
+
+  /// No description provided for @r3gBidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid Amount'**
+  String get r3gBidAmount;
+
+  /// No description provided for @r3gBidGreaterThanHighest.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bid must be greater than the current highest bid ({price} VFX)'**
+  String r3gBidGreaterThanHighest(String price);
+
+  /// No description provided for @r3gBidResent.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid Resent!'**
+  String get r3gBidResent;
+
+  /// No description provided for @r3gBidSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid sent. Please check the Bid History to see if it\'s been accepted or rejected.'**
+  String get r3gBidSent;
+
+  /// No description provided for @r3gBurnSentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Burn transaction sent successfully!'**
+  String get r3gBurnSentSuccess;
+
+  /// No description provided for @r3gBuyNowSentSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Now transaction sent successfully. Please wait for confirmation.'**
+  String get r3gBuyNowSentSuccess;
+
+  /// No description provided for @r3gChain.
+  ///
+  /// In en, this message translates to:
+  /// **'Chain'**
+  String get r3gChain;
+
+  /// No description provided for @r3gCollectionError.
+  ///
+  /// In en, this message translates to:
+  /// **'Collection Error'**
+  String get r3gCollectionError;
+
+  /// No description provided for @r3gConfirmBurnName.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to burn {name}'**
+  String r3gConfirmBurnName(String name);
+
+  /// No description provided for @r3gConfirmBuyNowBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to buy now for {price} VFX?'**
+  String r3gConfirmBuyNowBody(String price);
+
+  /// No description provided for @r3gConfirmDevolveOneStage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to devolve this NFT one stage?'**
+  String get r3gConfirmDevolveOneStage;
+
+  /// No description provided for @r3gConfirmEvolveOneStage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to evolve this NFT one stage?'**
+  String get r3gConfirmEvolveOneStage;
+
+  /// No description provided for @r3gConfirmEvolveToStage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to evolve to stage {index}?'**
+  String r3gConfirmEvolveToStage(String index);
+
+  /// No description provided for @r3gConfirmPlaceBidBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to place a bid of {amount} VFX{maxSuffix}?'**
+  String r3gConfirmPlaceBidBody(String amount, String maxSuffix);
+
+  /// No description provided for @r3gConfirmSellNftBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm you want to sell the NFT to \"{address}\" for {amount} VFX.'**
+  String r3gConfirmSellNftBody(String address, String amount);
+
+  /// No description provided for @r3gConfirmSendAssetBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm you want to send the {assetType} to \"{address}\".{warning}'**
+  String r3gConfirmSendAssetBody(String assetType, String address, String warning);
+
+  /// No description provided for @r3gConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect'**
+  String get r3gConnect;
+
+  /// No description provided for @r3gConnectToAuctionHouseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to Auction House?'**
+  String get r3gConnectToAuctionHouseTitle;
+
+  /// No description provided for @r3gConnectToShopBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Would you like to connect to {name} ({url})?'**
+  String r3gConnectToShopBody(String name, String url);
+
+  /// No description provided for @r3gConnectedFetchingData.
+  ///
+  /// In en, this message translates to:
+  /// **'Connected to {url}. Fetching data...'**
+  String r3gConnectedFetchingData(String url);
+
+  /// No description provided for @r3gConnectingToShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to shop...'**
+  String get r3gConnectingToShop;
+
+  /// No description provided for @r3gCopyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Message'**
+  String get r3gCopyMessage;
+
+  /// No description provided for @r3gCouldNotConnectOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect to shop because it\'s offline.'**
+  String get r3gCouldNotConnectOffline;
+
+  /// No description provided for @r3gCouldNotFindShop.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not find auction house with url of {url}'**
+  String r3gCouldNotFindShop(String url);
+
+  /// No description provided for @r3gCurrentBidPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Bid Price:'**
+  String get r3gCurrentBidPrice;
+
+  /// No description provided for @r3gCurrentBids.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Bids'**
+  String get r3gCurrentBids;
+
+  /// No description provided for @r3gCurrentStage.
+  ///
+  /// In en, this message translates to:
+  /// **'Current Stage: {name}'**
+  String r3gCurrentStage(String name);
+
+  /// No description provided for @r3gDevolve.
+  ///
+  /// In en, this message translates to:
+  /// **'Devolve'**
+  String get r3gDevolve;
+
+  /// No description provided for @r3gEncryptionPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Encryption Password Required to continue validating.'**
+  String get r3gEncryptionPasswordRequired;
+
+  /// No description provided for @r3gEndsIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends in'**
+  String get r3gEndsIn;
+
+  /// No description provided for @r3gEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution'**
+  String get r3gEvolution;
+
+  /// No description provided for @r3gEvolveBlockHeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Block Height: {blockHeight}\n{description}'**
+  String r3gEvolveBlockHeightLabel(String blockHeight, String description);
+
+  /// No description provided for @r3gEvolveDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Date: {date} {time} {tz} \n{description}'**
+  String r3gEvolveDateLabel(String date, String time, String tz, String description);
+
+  /// No description provided for @r3gEvolveSyncBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This screen will reflect the change once the block is crafted and block height has synced with this transaction.'**
+  String get r3gEvolveSyncBody;
+
+  /// No description provided for @r3gFeeRateEstimateCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee Rate: {fee} SATS /byte [{feeBtc} BTC /byte]\nFee Estimate: {feeEstimate} SATS [~{feeEstimateBtc} BTC]'**
+  String r3gFeeRateEstimateCustom(String fee, String feeBtc, String feeEstimate, String feeEstimateBtc);
+
+  /// No description provided for @r3gFeeRateEstimatePreset.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee Rate: {fee} SATS /byte [{feeBtc} BTC /byte]\nFee Estimate: ~{feeEstimate} SATS [~{feeEstimateBtc} BTC]    '**
+  String r3gFeeRateEstimatePreset(String fee, String feeBtc, String feeEstimate, String feeEstimateBtc);
+
+  /// No description provided for @r3gGettingCollections.
+  ///
+  /// In en, this message translates to:
+  /// **'Getting collections and listings...'**
+  String get r3gGettingCollections;
+
+  /// No description provided for @r3gIncorrectDecryptionPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect decryption password.'**
+  String get r3gIncorrectDecryptionPassword;
+
+  /// No description provided for @r3gIncrementAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Increment Amount:'**
+  String get r3gIncrementAmount;
+
+  /// No description provided for @r3gLabelCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} copied to clipboard'**
+  String r3gLabelCopiedToClipboard(String label);
+
+  /// No description provided for @r3gManageEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Evolution'**
+  String get r3gManageEvolution;
+
+  /// No description provided for @r3gManagingName.
+  ///
+  /// In en, this message translates to:
+  /// **'Managing {name}'**
+  String r3gManagingName(String name);
+
+  /// No description provided for @r3gMaxBidSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **' with a max bid of {max} VFX'**
+  String r3gMaxBidSuffix(String max);
+
+  /// No description provided for @r3gMediaFilesNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Media files not found on this machine.'**
+  String get r3gMediaFilesNotFound;
+
+  /// No description provided for @r3gMessageCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Message copied to clipboard.'**
+  String get r3gMessageCopied;
+
+  /// No description provided for @r3gMinIncrementAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum increment amount is {increment} VFX. A bid grater than {minBid} VFX is required.'**
+  String r3gMinIncrementAmount(String increment, String minBid);
+
+  /// No description provided for @r3gMinted.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted'**
+  String get r3gMinted;
+
+  /// No description provided for @r3gMintedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted By'**
+  String get r3gMintedBy;
+
+  /// No description provided for @r3gMintedByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted By: {name}'**
+  String r3gMintedByName(String name);
+
+  /// No description provided for @r3gMinting.
+  ///
+  /// In en, this message translates to:
+  /// **'Minting...'**
+  String get r3gMinting;
+
+  /// No description provided for @r3gMustBeGreaterThanBid.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be greater than {minBid} VFX'**
+  String r3gMustBeGreaterThanBid(String minBid);
+
+  /// No description provided for @r3gNextOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Owner'**
+  String get r3gNextOwner;
+
+  /// No description provided for @r3gNftAssetsNotTransferred.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT assets have not been transferred to the VFX Web Wallet.'**
+  String get r3gNftAssetsNotTransferred;
+
+  /// No description provided for @r3gNftFeaturesColon.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Features:'**
+  String get r3gNftFeaturesColon;
+
+  /// No description provided for @r3gNftListedBeforeBurning.
+  ///
+  /// In en, this message translates to:
+  /// **'This NFT is listed in your auction house. Please remove the listing before burning.'**
+  String get r3gNftListedBeforeBurning;
+
+  /// No description provided for @r3gNoBids.
+  ///
+  /// In en, this message translates to:
+  /// **'No bids.'**
+  String get r3gNoBids;
+
+  /// No description provided for @r3gNoFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'No features'**
+  String get r3gNoFeatures;
+
+  /// No description provided for @r3gNoMintedNfts.
+  ///
+  /// In en, this message translates to:
+  /// **'No minted NFTs with management capabilities.'**
+  String get r3gNoMintedNfts;
+
+  /// No description provided for @r3gNoNftsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No NFTs found.'**
+  String get r3gNoNftsFound;
+
+  /// No description provided for @r3gNoRecoveryWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'\n\nIf this address is not correct, there will be no way to recover the ownership of the {assetType}.'**
+  String r3gNoRecoveryWarning(String assetType);
+
+  /// No description provided for @r3gNotEnoughBalanceDot.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance.'**
+  String get r3gNotEnoughBalanceDot;
+
+  /// No description provided for @r3gNotEnoughBalanceValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance since you are validating.'**
+  String get r3gNotEnoughBalanceValidating;
+
+  /// No description provided for @r3gOptionalParenthetical.
+  ///
+  /// In en, this message translates to:
+  /// **'(Optional)'**
+  String get r3gOptionalParenthetical;
+
+  /// No description provided for @r3gPasteZipfileUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste in a public URL to a hosted zipfile containing the assets.'**
+  String get r3gPasteZipfileUrl;
+
+  /// No description provided for @r3gPropertiesColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Properties:'**
+  String get r3gPropertiesColon;
+
+  /// No description provided for @r3gPropertySingular.
+  ///
+  /// In en, this message translates to:
+  /// **'Property'**
+  String get r3gPropertySingular;
+
+  /// No description provided for @r3gPurchasedBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchased by: '**
+  String get r3gPurchasedBy;
+
+  /// No description provided for @r3gPurchasedFor.
+  ///
+  /// In en, this message translates to:
+  /// **'for '**
+  String get r3gPurchasedFor;
+
+  /// No description provided for @r3gRemoveShopBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to remove {url} from your saved shops?'**
+  String r3gRemoveShopBody(String url);
+
+  /// No description provided for @r3gRemoveShopTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove shop?'**
+  String get r3gRemoveShopTitle;
+
+  /// No description provided for @r3gResendMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Message'**
+  String get r3gResendMessage;
+
+  /// No description provided for @r3gReserveMet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve Met:'**
+  String get r3gReserveMet;
+
+  /// No description provided for @r3gSellNftPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'How much are you selling this NFT for?'**
+  String get r3gSellNftPrompt;
+
+  /// No description provided for @r3gShopCurrentlyOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'This shop is currently offline.'**
+  String get r3gShopCurrentlyOffline;
+
+  /// No description provided for @r3gShopError.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Error'**
+  String get r3gShopError;
+
+  /// No description provided for @r3gShopIsOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop is offline.'**
+  String get r3gShopIsOffline;
+
+  /// No description provided for @r3gShopOfflineWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: This shop is currently offline so the information may not be up to date.'**
+  String get r3gShopOfflineWarning;
+
+  /// No description provided for @r3gSmartContractIdCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract Identifier copied to clipboard'**
+  String get r3gSmartContractIdCopied;
+
+  /// No description provided for @r3gStartSale.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Sale'**
+  String get r3gStartSale;
+
+  /// No description provided for @r3gStepAmountAddressDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Input the percentage amount to be paid to the VFX address defined in the next field.'**
+  String get r3gStepAmountAddressDesc;
+
+  /// No description provided for @r3gStepAmountAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount & Address'**
+  String get r3gStepAmountAddressTitle;
+
+  /// No description provided for @r3gStepEvolutionModeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Decide whether you want the evolution to be controlled by the issuer or by the owner of the NFT.'**
+  String get r3gStepEvolutionModeDesc;
+
+  /// No description provided for @r3gStepEvolutionModeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Mode'**
+  String get r3gStepEvolutionModeTitle;
+
+  /// No description provided for @r3gStepEvolutionStagesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Create multiple evolution stages based on the variables provided previously. Give each stage a name, description and optionally override the asset.'**
+  String get r3gStepEvolutionStagesDesc;
+
+  /// No description provided for @r3gStepEvolutionStagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Stages'**
+  String get r3gStepEvolutionStagesTitle;
+
+  /// No description provided for @r3gStepEvolutionTypeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure whether you want the NFT to evolve automatically by date/time, block height, or only manually.'**
+  String get r3gStepEvolutionTypeDesc;
+
+  /// No description provided for @r3gStepEvolutionTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Type'**
+  String get r3gStepEvolutionTypeTitle;
+
+  /// No description provided for @r3gStepMetadataDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Start by providing the name, minter, and description of the smart contract.'**
+  String get r3gStepMetadataDesc;
+
+  /// No description provided for @r3gStepMetadataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Metadata'**
+  String get r3gStepMetadataTitle;
+
+  /// No description provided for @r3gStepMintDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Click the compile button to generate the Trilliam code that represents the smart contract then click mint to deploy it to the chain.'**
+  String get r3gStepMintDesc;
+
+  /// No description provided for @r3gStepMintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get r3gStepMintTitle;
+
+  /// No description provided for @r3gStepPrimaryAssetDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the primary asset for the smart contract. This can be an image, audio file, video, or any digital file.'**
+  String get r3gStepPrimaryAssetDesc;
+
+  /// No description provided for @r3gStepRoyaltyFeeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The fee is calculated from the sale proceeds and settled on transaction finality. For flat fees, the NFT can\'t be sold for less than the enforced royalty.'**
+  String get r3gStepRoyaltyFeeDesc;
+
+  /// No description provided for @r3gStepRoyaltyFeeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty Fee'**
+  String get r3gStepRoyaltyFeeTitle;
+
+  /// No description provided for @r3gStepRoyaltyTypeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose either a flat fee or percentage based royalty enforced by the on the chain upon any trade.'**
+  String get r3gStepRoyaltyTypeDesc;
+
+  /// No description provided for @r3gTplBaselineDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a baseline smart contract with an asset and metadata and mint it to the chain'**
+  String get r3gTplBaselineDesc;
+
+  /// No description provided for @r3gTplBaselineName.
+  ///
+  /// In en, this message translates to:
+  /// **'Baseline Smart Contract'**
+  String get r3gTplBaselineName;
+
+  /// No description provided for @r3gTplEvolvingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate a smart contract that can evolve based on time or on-chain variables'**
+  String get r3gTplEvolvingDesc;
+
+  /// No description provided for @r3gTplEvolvingName.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolving Smart Contract'**
+  String get r3gTplEvolvingName;
+
+  /// No description provided for @r3gTplRoyaltyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a smart contract that includes a royalty that is enforced on-chain upon any trade'**
+  String get r3gTplRoyaltyDesc;
+
+  /// No description provided for @r3gTplRoyaltyName.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty Smart Contract'**
+  String get r3gTplRoyaltyName;
+
+  /// No description provided for @r3gTransferAssetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer {assetType}'**
+  String r3gTransferAssetTitle(String assetType);
+
+  /// No description provided for @r3gTransferInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer in Progress'**
+  String get r3gTransferInProgress;
+
+  /// No description provided for @r3gTransferInProgressBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Please ensure to keep your wallet open until this {assetType} transfer transaction appears in your transaction list.\n\nTo monitor the asset transfer progress, open your \'sclog.txt\' in your databases folder.'**
+  String r3gTransferInProgressBody(String assetType);
+
+  /// No description provided for @r3gUnlockAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Account'**
+  String get r3gUnlockAccount;
+
+  /// No description provided for @r3gUrlOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'URL {optional}'**
+  String r3gUrlOptionalLabel(String optional);
+
+  /// No description provided for @r3gValueCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} copied to clipboard'**
+  String r3gValueCopiedToClipboard(String value);
+
+  /// No description provided for @r3gVaultCannotBurnNfts.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Accounts cannot burn NFTs'**
+  String get r3gVaultCannotBurnNfts;
+
+  /// No description provided for @r3hAccountIsValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is validating'**
+  String get r3hAccountIsValidating;
+
+  /// No description provided for @r3hActiveValidators.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Validators: {count}'**
+  String r3hActiveValidators(String count);
+
+  /// No description provided for @r3hAdditionalLinksOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Link(s) (Optional)'**
+  String get r3hAdditionalLinksOptional;
+
+  /// No description provided for @r3hAddressInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Address.'**
+  String get r3hAddressInvalid;
+
+  /// No description provided for @r3hAddressOrDomainRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address or VFX domain required'**
+  String get r3hAddressOrDomainRequired;
+
+  /// No description provided for @r3hAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address required'**
+  String get r3hAddressRequired;
+
+  /// No description provided for @r3hAddressToBan.
+  ///
+  /// In en, this message translates to:
+  /// **'Address to Ban'**
+  String get r3hAddressToBan;
+
+  /// No description provided for @r3hAdjVoteInDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Adj Vote In Details'**
+  String get r3hAdjVoteInDetails;
+
+  /// No description provided for @r3hAdjVoteInTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'The \'Vote Adjudicator In\' submission is too long. Please reduce the content.'**
+  String get r3hAdjVoteInTooLong;
+
+  /// No description provided for @r3hAllowVotingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Voting:'**
+  String get r3hAllowVotingLabel;
+
+  /// No description provided for @r3hAvailableBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Available: {balance} VFX'**
+  String r3hAvailableBalance(String balance);
+
+  /// No description provided for @r3hBalanceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'A balance is required'**
+  String get r3hBalanceRequired;
+
+  /// No description provided for @r3hBandwidthHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0 for unlimited'**
+  String get r3hBandwidthHint;
+
+  /// No description provided for @r3hBandwidthTb.
+  ///
+  /// In en, this message translates to:
+  /// **'Bandwidth (in TB)'**
+  String get r3hBandwidthTb;
+
+  /// No description provided for @r3hCannotHideValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'You can\'t hide an account that is validating'**
+  String get r3hCannotHideValidating;
+
+  /// No description provided for @r3hCompileMintBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to proceed?\nOnce compiled you will not be able to make any changes\nand the smart contract/token will be deployed to the chain.'**
+  String get r3hCompileMintBody;
+
+  /// No description provided for @r3hConfirmVoteNoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to vote NO on this topic?'**
+  String get r3hConfirmVoteNoBody;
+
+  /// No description provided for @r3hConfirmVoteNoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Vote [NO]'**
+  String get r3hConfirmVoteNoTitle;
+
+  /// No description provided for @r3hConfirmVoteYesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to vote YES on this topic?'**
+  String get r3hConfirmVoteYesBody;
+
+  /// No description provided for @r3hConfirmVoteYesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Vote [YES]'**
+  String get r3hConfirmVoteYesTitle;
+
+  /// No description provided for @r3hCopiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} copied to clipboard'**
+  String r3hCopiedToClipboard(String label);
+
+  /// No description provided for @r3hCpu.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU'**
+  String get r3hCpu;
+
+  /// No description provided for @r3hCpuCores.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU Cores'**
+  String get r3hCpuCores;
+
+  /// No description provided for @r3hCpuHint.
+  ///
+  /// In en, this message translates to:
+  /// **'ie. Intel'**
+  String get r3hCpuHint;
+
+  /// No description provided for @r3hCpuThreads.
+  ///
+  /// In en, this message translates to:
+  /// **'CPU Threads'**
+  String get r3hCpuThreads;
+
+  /// No description provided for @r3hDecimalPlacesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Decimal Places:'**
+  String get r3hDecimalPlacesLabel;
+
+  /// No description provided for @r3hDescRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'The description is required'**
+  String get r3hDescRequired;
+
+  /// No description provided for @r3hDescTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'The description exceeds the maximum character length'**
+  String get r3hDescTooLong;
+
+  /// No description provided for @r3hDescTooManyWords.
+  ///
+  /// In en, this message translates to:
+  /// **'The description exceeds the maximum word count'**
+  String get r3hDescTooManyWords;
+
+  /// No description provided for @r3hDescriptionColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Description:'**
+  String get r3hDescriptionColon;
+
+  /// No description provided for @r3hDescriptionOptionalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description (Optional):'**
+  String get r3hDescriptionOptionalLabel;
+
+  /// No description provided for @r3hDnrAlphaNumeric.
+  ///
+  /// In en, this message translates to:
+  /// **'A DNR may only contain letters and numbers.'**
+  String get r3hDnrAlphaNumeric;
+
+  /// No description provided for @r3hEmailInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid email.'**
+  String get r3hEmailInvalid;
+
+  /// No description provided for @r3hEmailRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Email required.'**
+  String get r3hEmailRequired;
+
+  /// No description provided for @r3hErrorBanning.
+  ///
+  /// In en, this message translates to:
+  /// **'Error banning address'**
+  String get r3hErrorBanning;
+
+  /// No description provided for @r3hErrorBurning.
+  ///
+  /// In en, this message translates to:
+  /// **'Error burning token'**
+  String get r3hErrorBurning;
+
+  /// No description provided for @r3hErrorChangingOwnership.
+  ///
+  /// In en, this message translates to:
+  /// **'Error changing ownership'**
+  String get r3hErrorChangingOwnership;
+
+  /// No description provided for @r3hErrorCreatingTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Error creating topic'**
+  String get r3hErrorCreatingTopic;
+
+  /// No description provided for @r3hErrorMinting.
+  ///
+  /// In en, this message translates to:
+  /// **'Error minting token'**
+  String get r3hErrorMinting;
+
+  /// No description provided for @r3hErrorPausing.
+  ///
+  /// In en, this message translates to:
+  /// **'Error pausing/unpausing token'**
+  String get r3hErrorPausing;
+
+  /// No description provided for @r3hErrorTransferring.
+  ///
+  /// In en, this message translates to:
+  /// **'Error transferring token'**
+  String get r3hErrorTransferring;
+
+  /// No description provided for @r3hFieldInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid {label}.'**
+  String r3hFieldInvalid(String label);
+
+  /// No description provided for @r3hFieldRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} is required.'**
+  String r3hFieldRequired(String label);
+
+  /// No description provided for @r3hGithubLinkOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Github Link (Optional)'**
+  String get r3hGithubLinkOptional;
+
+  /// No description provided for @r3hHdSize.
+  ///
+  /// In en, this message translates to:
+  /// **'HD Size'**
+  String get r3hHdSize;
+
+  /// No description provided for @r3hHdSizeSpecifier.
+  ///
+  /// In en, this message translates to:
+  /// **'HD Size Specifier'**
+  String get r3hHdSizeSpecifier;
+
+  /// No description provided for @r3hHours24Minimum.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours (24 Minimum)'**
+  String get r3hHours24Minimum;
+
+  /// No description provided for @r3hInsufficientBalanceForTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)'**
+  String get r3hInsufficientBalanceForTopic;
+
+  /// No description provided for @r3hInternetSpeedDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet Speed Down (in Gbps)'**
+  String get r3hInternetSpeedDown;
+
+  /// No description provided for @r3hInternetSpeedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Internet Speed Up (in Gbps)'**
+  String get r3hInternetSpeedUp;
+
+  /// No description provided for @r3hInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid'**
+  String get r3hInvalid;
+
+  /// No description provided for @r3hIsBurnableLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Is Burnable:'**
+  String get r3hIsBurnableLabel;
+
+  /// No description provided for @r3hLabelMinTokenRequirement.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum Token Requirement'**
+  String get r3hLabelMinTokenRequirement;
+
+  /// No description provided for @r3hLogoutConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout of the VFX Web Wallet?'**
+  String get r3hLogoutConfirmBody;
+
+  /// No description provided for @r3hMachineOs.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine OS'**
+  String get r3hMachineOs;
+
+  /// No description provided for @r3hMachineProvider.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine Provider'**
+  String get r3hMachineProvider;
+
+  /// No description provided for @r3hMachineType.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine Type'**
+  String get r3hMachineType;
+
+  /// No description provided for @r3hMachineTypeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'ie. Server, Desktop, Laptop, etc.'**
+  String get r3hMachineTypeHint;
+
+  /// No description provided for @r3hManageToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Token'**
+  String get r3hManageToken;
+
+  /// No description provided for @r3hMaxPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Can not be more than 100%'**
+  String get r3hMaxPercent;
+
+  /// No description provided for @r3hMinPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be more than 0%'**
+  String get r3hMinPercent;
+
+  /// No description provided for @r3hMintBroadcastedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Smart Contract mint transaction has been broadcasted.\n\nThe Fungible Token screen will reflect the change once the block is crafted and block height has synced with this transaction.'**
+  String get r3hMintBroadcastedBody;
+
+  /// No description provided for @r3hMintedByBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will be minted by {address}'**
+  String r3hMintedByBody(String address);
+
+  /// No description provided for @r3hMustBeValidatorToCreateTopic.
+  ///
+  /// In en, this message translates to:
+  /// **'Your active account must be a validator to create a topic.'**
+  String get r3hMustBeValidatorToCreateTopic;
+
+  /// No description provided for @r3hMustSelectAccountToVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Must have an account selected to vote.'**
+  String get r3hMustSelectAccountToVote;
+
+  /// No description provided for @r3hNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'The name is required'**
+  String get r3hNameRequired;
+
+  /// No description provided for @r3hNameTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'The name exceeds the maximum character length'**
+  String get r3hNameTooLong;
+
+  /// No description provided for @r3hNewOwnerAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'New Owner\'s Address'**
+  String get r3hNewOwnerAddress;
+
+  /// No description provided for @r3hNoActiveTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'No Active Topics'**
+  String get r3hNoActiveTopics;
+
+  /// No description provided for @r3hNoCreatedTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t created any topics.'**
+  String get r3hNoCreatedTopics;
+
+  /// No description provided for @r3hNoInactiveTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'No Inactive Topics'**
+  String get r3hNoInactiveTopics;
+
+  /// No description provided for @r3hNoTokensInAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'No tokens in any of your accounts.'**
+  String get r3hNoTokensInAccounts;
+
+  /// No description provided for @r3hNoUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'NO'**
+  String get r3hNoUpper;
+
+  /// No description provided for @r3hNoVotingTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'No Voting Topics'**
+  String get r3hNoVotingTopics;
+
+  /// No description provided for @r3hNodeNameTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'Node name already taken.'**
+  String get r3hNodeNameTaken;
+
+  /// No description provided for @r3hNotAuthorizedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Not authorized (incorrect address).'**
+  String get r3hNotAuthorizedAddress;
+
+  /// No description provided for @r3hNotAuthorizedToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Not authorized (token invalid).'**
+  String get r3hNotAuthorizedToken;
+
+  /// No description provided for @r3hNotVotedAnyTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t voted on any topics.'**
+  String get r3hNotVotedAnyTopics;
+
+  /// No description provided for @r3hOneActiveTopicPerAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Only one active topic per address is allowed.'**
+  String get r3hOneActiveTopicPerAddress;
+
+  /// No description provided for @r3hOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional'**
+  String get r3hOptional;
+
+  /// No description provided for @r3hPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Password required.'**
+  String get r3hPasswordRequired;
+
+  /// No description provided for @r3hPasswordWeak.
+  ///
+  /// In en, this message translates to:
+  /// **'Password not strong enough.'**
+  String get r3hPasswordWeak;
+
+  /// No description provided for @r3hPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get r3hPause;
+
+  /// No description provided for @r3hPauseTokenTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Token Transactions'**
+  String get r3hPauseTokenTransactions;
+
+  /// No description provided for @r3hPauseTokenTxConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to pause token transactions? This will prevent transfers and burning of this token until resumed.'**
+  String get r3hPauseTokenTxConfirmBody;
+
+  /// No description provided for @r3hPauseTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Transactions'**
+  String get r3hPauseTransactions;
+
+  /// No description provided for @r3hPauseTxConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to pause all transactions with this token?'**
+  String get r3hPauseTxConfirmBody;
+
+  /// No description provided for @r3hPauseTxs.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause TXs'**
+  String get r3hPauseTxs;
+
+  /// No description provided for @r3hPendingPause.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Pause'**
+  String get r3hPendingPause;
+
+  /// No description provided for @r3hPendingResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Resume'**
+  String get r3hPendingResume;
+
+  /// No description provided for @r3hPhoneInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Phone Number.'**
+  String get r3hPhoneInvalid;
+
+  /// No description provided for @r3hPhoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number required.'**
+  String get r3hPhoneRequired;
+
+  /// No description provided for @r3hProblemOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred.'**
+  String get r3hProblemOccurred;
+
+  /// No description provided for @r3hRamGb.
+  ///
+  /// In en, this message translates to:
+  /// **'RAM (in GB)'**
+  String get r3hRamGb;
+
+  /// No description provided for @r3hReasonToBecomeAdj.
+  ///
+  /// In en, this message translates to:
+  /// **'Reason To Become Adjudicator'**
+  String get r3hReasonToBecomeAdj;
+
+  /// No description provided for @r3hReplaceTokenIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace Token Icon'**
+  String get r3hReplaceTokenIcon;
+
+  /// No description provided for @r3hRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get r3hRequired;
+
+  /// No description provided for @r3hResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume'**
+  String get r3hResume;
+
+  /// No description provided for @r3hResumeTokenTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume Token Transactions'**
+  String get r3hResumeTokenTransactions;
+
+  /// No description provided for @r3hResumeTokenTxConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to resume token transactions?'**
+  String get r3hResumeTokenTxConfirmBody;
+
+  /// No description provided for @r3hResumeTransactions.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume Transactions'**
+  String get r3hResumeTransactions;
+
+  /// No description provided for @r3hResumeTxConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want resume transactions with this token?'**
+  String get r3hResumeTxConfirmBody;
+
+  /// No description provided for @r3hResumeTxs.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume TXs'**
+  String get r3hResumeTxs;
+
+  /// No description provided for @r3hSeparateWithCommas.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate multiple with commas'**
+  String get r3hSeparateWithCommas;
+
+  /// No description provided for @r3hTechnicalBackground.
+  ///
+  /// In en, this message translates to:
+  /// **'Technical Background'**
+  String get r3hTechnicalBackground;
+
+  /// No description provided for @r3hTokenAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Accounts'**
+  String get r3hTokenAccounts;
+
+  /// No description provided for @r3hTokenHasFixedSupply.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Has Fixed Supply:'**
+  String get r3hTokenHasFixedSupply;
+
+  /// No description provided for @r3hTokenIconUrlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Icon URL:'**
+  String get r3hTokenIconUrlLabel;
+
+  /// No description provided for @r3hTokenNameFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Name:'**
+  String get r3hTokenNameFieldLabel;
+
+  /// No description provided for @r3hTokenNameHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'The name of this new token.'**
+  String get r3hTokenNameHelper;
+
+  /// No description provided for @r3hTokenOwnerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Owner: '**
+  String get r3hTokenOwnerLabel;
+
+  /// No description provided for @r3hTokenPauseBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'Token pause transaction broadcasted'**
+  String get r3hTokenPauseBroadcasted;
+
+  /// No description provided for @r3hTokenResumeBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'Token resume transaction broadcasted'**
+  String get r3hTokenResumeBroadcasted;
+
+  /// No description provided for @r3hTokenTickerFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Ticker:'**
+  String get r3hTokenTickerFieldLabel;
+
+  /// No description provided for @r3hTokenTickerHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'The ticker for this new token.'**
+  String get r3hTokenTickerHelper;
+
+  /// No description provided for @r3hTotalSupplyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Supply:'**
+  String get r3hTotalSupplyLabel;
+
+  /// No description provided for @r3hUploadTokenIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Upload Token Icon'**
+  String get r3hUploadTokenIcon;
+
+  /// No description provided for @r3hUseZeroForInfinite.
+  ///
+  /// In en, this message translates to:
+  /// **'Use 0 for Infinite (allows minting)'**
+  String get r3hUseZeroForInfinite;
+
+  /// No description provided for @r3hUsernameInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Username not valid.'**
+  String get r3hUsernameInvalid;
+
+  /// No description provided for @r3hUsernameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Username required.'**
+  String get r3hUsernameRequired;
+
+  /// No description provided for @r3hVaultActionNotAllowedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Account owned tokens can not perform this action. Please change the ownership to a standard VFX account to continue.'**
+  String get r3hVaultActionNotAllowedBody;
+
+  /// No description provided for @r3hVaultKeypairNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not locate vault keypair for address {address}.'**
+  String r3hVaultKeypairNotFound(String address);
+
+  /// No description provided for @r3hVfxAddressToNominate.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Address to Nominate'**
+  String get r3hVfxAddressToNominate;
+
+  /// No description provided for @r3hVoteNoUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote NO'**
+  String get r3hVoteNoUpper;
+
+  /// No description provided for @r3hVoteYesUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote YES'**
+  String get r3hVoteYesUpper;
+
+  /// No description provided for @r3hVotedAllTopics.
+  ///
+  /// In en, this message translates to:
+  /// **'You have voted on all topics.'**
+  String get r3hVotedAllTopics;
+
+  /// No description provided for @r3hVotingEndedOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Voting Ended on {date}.'**
+  String r3hVotingEndedOn(String date);
+
+  /// No description provided for @r3hVotingEndsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Voting ends {date}.'**
+  String r3hVotingEndsOn(String date);
+
+  /// No description provided for @r3hWalletSyncWait.
+  ///
+  /// In en, this message translates to:
+  /// **'Please wait until your wallet is synced with the network'**
+  String get r3hWalletSyncWait;
+
+  /// No description provided for @r3hWalletSynced.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet Synced'**
+  String get r3hWalletSynced;
+
+  /// No description provided for @r3hYesUpper.
+  ///
+  /// In en, this message translates to:
+  /// **'YES'**
+  String get r3hYesUpper;
+
+  /// No description provided for @r3hYouVotedOnBlock.
+  ///
+  /// In en, this message translates to:
+  /// **'You voted {vote} on block {block}'**
+  String r3hYouVotedOnBlock(String vote, String block);
+
+  /// No description provided for @r3hYouVotedPending.
+  ///
+  /// In en, this message translates to:
+  /// **'You voted {vote}. Transaction is pending.'**
+  String r3hYouVotedPending(String vote);
+
+  /// No description provided for @r3aAccountUnlockTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Unlock Time'**
+  String get r3aAccountUnlockTime;
+
+  /// No description provided for @r3aAddRarity.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Rarity'**
+  String get r3aAddRarity;
+
+  /// No description provided for @r3aAdditionalAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Asset'**
+  String get r3aAdditionalAsset;
+
+  /// No description provided for @r3aAdditionalAssets.
+  ///
+  /// In en, this message translates to:
+  /// **'Additional Assets'**
+  String get r3aAdditionalAssets;
+
+  /// No description provided for @r3aAllowedAssetExtensionTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Allowed Asset Extension Types'**
+  String get r3aAllowedAssetExtensionTypes;
+
+  /// No description provided for @r3aAutoDownloadNftAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Download NFT Asset'**
+  String get r3aAutoDownloadNftAsset;
+
+  /// No description provided for @r3aBackupUrlBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste in a public URL to a hosted zipfile containing the assets.'**
+  String get r3aBackupUrlBody;
+
+  /// No description provided for @r3aBlockHeightVariable.
+  ///
+  /// In en, this message translates to:
+  /// **'Block Height Variable'**
+  String get r3aBlockHeightVariable;
+
+  /// No description provided for @r3aBurnNft.
+  ///
+  /// In en, this message translates to:
+  /// **'Burn NFT'**
+  String get r3aBurnNft;
+
+  /// No description provided for @r3aChooseFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose File'**
+  String get r3aChooseFile;
+
+  /// No description provided for @r3aCompile.
+  ///
+  /// In en, this message translates to:
+  /// **'Compile'**
+  String get r3aCompile;
+
+  /// No description provided for @r3aCompileMintBodySimple.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to proceed?\nOnce compiled you will not be able to make any changes\nand the smart contract will be deployed to the chain.'**
+  String get r3aCompileMintBodySimple;
+
+  /// No description provided for @r3aCompilingMinting.
+  ///
+  /// In en, this message translates to:
+  /// **'Compiling & Minting'**
+  String get r3aCompilingMinting;
+
+  /// No description provided for @r3aCompilingMintingEllipsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Compiling & Minting…'**
+  String get r3aCompilingMintingEllipsis;
+
+  /// No description provided for @r3aConfiguration.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration'**
+  String get r3aConfiguration;
+
+  /// No description provided for @r3aCreateBlueprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Blueprint'**
+  String get r3aCreateBlueprint;
+
+  /// No description provided for @r3aCreateCollectionBlueprint.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Collection Blueprint'**
+  String get r3aCreateCollectionBlueprint;
+
+  /// No description provided for @r3aCreateFirstInstance.
+  ///
+  /// In en, this message translates to:
+  /// **'Create First Instance'**
+  String get r3aCreateFirstInstance;
+
+  /// No description provided for @r3aDateTimeVariable.
+  ///
+  /// In en, this message translates to:
+  /// **'Date/Time Variable'**
+  String get r3aDateTimeVariable;
+
+  /// No description provided for @r3aDeleteDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Draft'**
+  String get r3aDeleteDraft;
+
+  /// No description provided for @r3aDeleteDraftConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you wan\'t to delete this smart contract draft?'**
+  String get r3aDeleteDraftConfirm;
+
+  /// No description provided for @r3aDeleteQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete?'**
+  String get r3aDeleteQuestion;
+
+  /// No description provided for @r3aDeleteThisConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this?'**
+  String get r3aDeleteThisConfirm;
+
+  /// No description provided for @r3aDraftDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft Delete'**
+  String get r3aDraftDeleted;
+
+  /// No description provided for @r3aDraftSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft saved!'**
+  String get r3aDraftSaved;
+
+  /// No description provided for @r3aDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get r3aDuplicate;
+
+  /// No description provided for @r3aEditInstance.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Instance'**
+  String get r3aEditInstance;
+
+  /// No description provided for @r3aEvolutionMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolution Mode'**
+  String get r3aEvolutionMode;
+
+  /// No description provided for @r3aEvolvePhase.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Phase'**
+  String get r3aEvolvePhase;
+
+  /// No description provided for @r3aEvolvePhases.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve Phases'**
+  String get r3aEvolvePhases;
+
+  /// No description provided for @r3aEvolveStagesInPast.
+  ///
+  /// In en, this message translates to:
+  /// **'Evolve stage(s) in the past'**
+  String get r3aEvolveStagesInPast;
+
+  /// No description provided for @r3aEvolveStagesInPastBody.
+  ///
+  /// In en, this message translates to:
+  /// **'One or more of your evolve stages will have already evolved at the time of minting.\n\nAre your sure you want to proceed?'**
+  String get r3aEvolveStagesInPastBody;
+
+  /// No description provided for @r3aFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Features'**
+  String get r3aFeatures;
+
+  /// No description provided for @r3aHelpBodyAllowedExt.
+  ///
+  /// In en, this message translates to:
+  /// **'This will remove extension types to the already defined list and will allow any NFT assets with these known extension types to be downloaded \nEx: pdf,doc,xls \n\nDefault value: (leave blank)'**
+  String get r3aHelpBodyAllowedExt;
+
+  /// No description provided for @r3aHelpBodyApiCallUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'This URL is used to send incoming transactions to an outside URL. This is something used for like incoming deposits or other notification. services. \n\nDefault value: null'**
+  String get r3aHelpBodyApiCallUrl;
+
+  /// No description provided for @r3aHelpBodyApiPort.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the port to call the API. This may be changed to whatever you want. \n\nDefault value: 7292'**
+  String get r3aHelpBodyApiPort;
+
+  /// No description provided for @r3aHelpBodyAutoDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'This will control whether or not an NFT\'s asset is automatically downloaded \n\nDefault value: true'**
+  String get r3aHelpBodyAutoDownload;
+
+  /// No description provided for @r3aHelpBodyBaseline.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill out the baseline info required by all smart contracts. Choose a name, the minter\'s name (optional), and the account you want to use. Then, give your smart contract/NFT a detailed description.'**
+  String get r3aHelpBodyBaseline;
+
+  /// No description provided for @r3aHelpBodyBurn.
+  ///
+  /// In en, this message translates to:
+  /// **'Burn (destroy) this NFT permanently.'**
+  String get r3aHelpBodyBurn;
+
+  /// No description provided for @r3aHelpBodyCompile.
+  ///
+  /// In en, this message translates to:
+  /// **'Compile the Trilliam code based on the parameters you\'ve configured and then mint when ready.'**
+  String get r3aHelpBodyCompile;
+
+  /// No description provided for @r3aHelpBodyConfiguration.
+  ///
+  /// In en, this message translates to:
+  /// **'This values will modify the config.txt file located in the CLIs database, for this changes to take effect the CLI needs to be restarted'**
+  String get r3aHelpBodyConfiguration;
+
+  /// No description provided for @r3aHelpBodyDelete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your smart contract'**
+  String get r3aHelpBodyDelete;
+
+  /// No description provided for @r3aHelpBodyDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide a text-based description of your smart contract/NFT. This field is required and will be publicly visible.'**
+  String get r3aHelpBodyDescription;
+
+  /// No description provided for @r3aHelpBodyEvolveAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Overide the asset when the smart contract evolves to this stage. This field is optional.'**
+  String get r3aHelpBodyEvolveAsset;
+
+  /// No description provided for @r3aHelpBodyEvolveBlockHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'The smart contract will evolve when the VFX chain reaches this block height.'**
+  String get r3aHelpBodyEvolveBlockHeight;
+
+  /// No description provided for @r3aHelpBodyEvolveDatetime.
+  ///
+  /// In en, this message translates to:
+  /// **'The date and time the smart contract will evolve (UTC).'**
+  String get r3aHelpBodyEvolveDatetime;
+
+  /// No description provided for @r3aHelpBodyEvolveMode.
+  ///
+  /// In en, this message translates to:
+  /// **'You decide how the evolution will be controlled.\n\nIssuer/Minter Controlled: The minter will be able to evolve/devolve the smart contract at any point.\n\nAutomated/Application Controlled: Automatically evolves based on time/date, on-chain variables, and/or application induced variables.'**
+  String get r3aHelpBodyEvolveMode;
+
+  /// No description provided for @r3aHelpBodyEvolveStageDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide a description for this evolution stage.'**
+  String get r3aHelpBodyEvolveStageDescription;
+
+  /// No description provided for @r3aHelpBodyEvolveStageName.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide a name for this evolution stage.'**
+  String get r3aHelpBodyEvolveStageName;
+
+  /// No description provided for @r3aHelpBodyEvolveType.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the variable type that can dynamically affect the evolution state.\n\nDate/Time: The smart contract will automatically evolve at a certain point of time.\n\nBlock Height: The smart contract will evolve when the chain reaches a particular block height.\n\nManual Only: The smart contract will not evolve unless manually told to by the issuer or user/application (depending on which mode is selected).'**
+  String get r3aHelpBodyEvolveType;
+
+  /// No description provided for @r3aHelpBodyFeatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a feature to your smart contract such as royalties or evolving functionality.'**
+  String get r3aHelpBodyFeatures;
+
+  /// No description provided for @r3aHelpBodyIgnoreIncoming.
+  ///
+  /// In en, this message translates to:
+  /// **'This will control whether or not incoming NFTs are processed or just added as a TX record \n\nDefault value: false'**
+  String get r3aHelpBodyIgnoreIncoming;
+
+  /// No description provided for @r3aHelpBodyManageProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'Create label & value pairs.\nFor example:\n\nLabel: Color\nValue: Blue'**
+  String get r3aHelpBodyManageProperties;
+
+  /// No description provided for @r3aHelpBodyMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint and deploy the smart contract to the chain.'**
+  String get r3aHelpBodyMint;
+
+  /// No description provided for @r3aHelpBodyMintQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'The number of Smart Contracts / NFTs you want to mint from this template.'**
+  String get r3aHelpBodyMintQuantity;
+
+  /// No description provided for @r3aHelpBodyMinterName.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is optional but will be displayed publicly if set. This can be your name/persona, or just leave it blank.'**
+  String get r3aHelpBodyMinterName;
+
+  /// No description provided for @r3aHelpBodyMinting.
+  ///
+  /// In en, this message translates to:
+  /// **'This action occurs after you have successfully compiled and minted but requires the transaction to be authenticated by the network which takes approximately 30 seconds for finality as well as your wallet to be synced with the block that includes this transaction.'**
+  String get r3aHelpBodyMinting;
+
+  /// No description provided for @r3aHelpBodyMotherAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'The IP address of the HOST wallet. \n\n Default value: (leave blank)'**
+  String get r3aHelpBodyMotherAddress;
+
+  /// No description provided for @r3aHelpBodyMotherPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'The password set in your HOST wallet when configuring MOTHER.\n\n Default value: (leave blank)'**
+  String get r3aHelpBodyMotherPassword;
+
+  /// No description provided for @r3aHelpBodyNftTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'This will control the timeout for processing an incoming NFT \n\nDefault value: 15'**
+  String get r3aHelpBodyNftTimeout;
+
+  /// No description provided for @r3aHelpBodyOwnerAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'This should be the account address that will be used to compile and mint the smart contract.'**
+  String get r3aHelpBodyOwnerAddress;
+
+  /// No description provided for @r3aHelpBodyPasswordClearTime.
+  ///
+  /// In en, this message translates to:
+  /// **'This will control the clear time for an ecrypted wallets password \n\nDefault value: 10'**
+  String get r3aHelpBodyPasswordClearTime;
+
+  /// No description provided for @r3aHelpBodyPrimaryAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the primary file asset contained in the smart contract/NFT. It can be an image, audio, video or any file.'**
+  String get r3aHelpBodyPrimaryAsset;
+
+  /// No description provided for @r3aHelpBodyProperties.
+  ///
+  /// In en, this message translates to:
+  /// **'Define and assign values to assets in your smart contract. This can be a rare trait as an example.'**
+  String get r3aHelpBodyProperties;
+
+  /// No description provided for @r3aHelpBodyPropertyTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Define the kind of value that your property will have \nThis types are: \n- Text: alphanumeric value \n- Number: numerical value \n- Color: Hexadecimal value of a color of your choice'**
+  String get r3aHelpBodyPropertyTypes;
+
+  /// No description provided for @r3aHelpBodyRejectExt.
+  ///
+  /// In en, this message translates to:
+  /// **'This will add extension types to the already defined list and will reject any NFT assets with these known extension types \nEx: exe,zip,pdf... (ensure there are no spaces between types) \n\nDefault value: (leave blank)\n\nIf left blank, this is the default:\n{exts}'**
+  String r3aHelpBodyRejectExt(String exts);
+
+  /// No description provided for @r3aHelpBodyRoyaltyAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Provide the VFX public address that the royalty will be paid to upon transaction finality.'**
+  String get r3aHelpBodyRoyaltyAddress;
+
+  /// No description provided for @r3aHelpBodyRoyaltyFlat.
+  ///
+  /// In en, this message translates to:
+  /// **'Type in the amount of VFX that will be paid to the address provided and is enforced on-chain upon any trade. This fee is remitted to the royalty holder upon transaction finality.'**
+  String get r3aHelpBodyRoyaltyFlat;
+
+  /// No description provided for @r3aHelpBodyRoyaltyPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Type in the percent that will be paid to the address provided and is enforced on-chain upon any trade. This fee is remitted to the royalty holder upon transaction finality.'**
+  String get r3aHelpBodyRoyaltyPercent;
+
+  /// No description provided for @r3aHelpBodySaveAsDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save your smart contract as a draft locally to come back and work on it later.'**
+  String get r3aHelpBodySaveAsDraft;
+
+  /// No description provided for @r3aHelpBodyScName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name your smart contract. This field is required and is publicly visible.'**
+  String get r3aHelpBodyScName;
+
+  /// No description provided for @r3aHelpBodySetEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'With an NFT that has more than 2 phases the user can go directly from one stage to another with the “Set Evolution” button instead of evolving and devolving stage by stage'**
+  String get r3aHelpBodySetEvolution;
+
+  /// No description provided for @r3aHelpBodySmartContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure the parameters of your smart contract then compile and mint it.'**
+  String get r3aHelpBodySmartContract;
+
+  /// No description provided for @r3aHelpBodyTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer this NFT to another account.'**
+  String get r3aHelpBodyTransfer;
+
+  /// No description provided for @r3aHelpBodyWalletUnlockTime.
+  ///
+  /// In en, this message translates to:
+  /// **'This is the amount of time once a password has been entered the wallet will remain unlocked and not need password again \n\nDefault value: 15'**
+  String get r3aHelpBodyWalletUnlockTime;
+
+  /// No description provided for @r3aIgnoreIncomingNfts.
+  ///
+  /// In en, this message translates to:
+  /// **'Ignore Incoming NFTs'**
+  String get r3aIgnoreIncomingNfts;
+
+  /// No description provided for @r3aMaxMintAtOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'The maxium number you can mint at one time is {max}.'**
+  String r3aMaxMintAtOnce(String max);
+
+  /// No description provided for @r3aMintBroadcastedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract mint transaction has been broadcasted.\n\nThe NFTs screen will reflect the change once the block is crafted and block height has synced with this transaction.'**
+  String get r3aMintBroadcastedBody;
+
+  /// No description provided for @r3aMintTxSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.'**
+  String get r3aMintTxSent;
+
+  /// No description provided for @r3aMinterCreatorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Minter/Creator Name'**
+  String get r3aMinterCreatorName;
+
+  /// No description provided for @r3aMinterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Minter Name'**
+  String get r3aMinterName;
+
+  /// No description provided for @r3aMinting.
+  ///
+  /// In en, this message translates to:
+  /// **'Minting'**
+  String get r3aMinting;
+
+  /// No description provided for @r3aMintingEllipsis.
+  ///
+  /// In en, this message translates to:
+  /// **'Minting…'**
+  String get r3aMintingEllipsis;
+
+  /// No description provided for @r3aMotherAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Mother Address'**
+  String get r3aMotherAddress;
+
+  /// No description provided for @r3aMotherPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Mother Password'**
+  String get r3aMotherPassword;
+
+  /// No description provided for @r3aNftSaleTransferStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Success: NFT Sale Transfer has been started.'**
+  String get r3aNftSaleTransferStarted;
+
+  /// No description provided for @r3aNftTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Nft Timeout'**
+  String get r3aNftTimeout;
+
+  /// No description provided for @r3aNftTransferStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Success: NFT Transfer has been started.'**
+  String get r3aNftTransferStarted;
+
+  /// No description provided for @r3aPasswordClearTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Password Clear Time'**
+  String get r3aPasswordClearTime;
+
+  /// No description provided for @r3aPayeeAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Payee Address'**
+  String get r3aPayeeAddress;
+
+  /// No description provided for @r3aProblemCompilingSc.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred compiling this smart contract.'**
+  String get r3aProblemCompilingSc;
+
+  /// No description provided for @r3aProblemMintingSc.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred minting this smart contract.'**
+  String get r3aProblemMintingSc;
+
+  /// No description provided for @r3aProperty.
+  ///
+  /// In en, this message translates to:
+  /// **'Property'**
+  String get r3aProperty;
+
+  /// No description provided for @r3aPropertyTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Property Types'**
+  String get r3aPropertyTypes;
+
+  /// No description provided for @r3aRarities.
+  ///
+  /// In en, this message translates to:
+  /// **'Rarities'**
+  String get r3aRarities;
+
+  /// No description provided for @r3aRejectAssetExtensionTypes.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject Asset Extension Types'**
+  String get r3aRejectAssetExtensionTypes;
+
+  /// No description provided for @r3aRoyaltyFlatFeeAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty Flat Fee Amount'**
+  String get r3aRoyaltyFlatFeeAmount;
+
+  /// No description provided for @r3aRoyaltyPercentageFeeAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty Percentage Fee Amount'**
+  String get r3aRoyaltyPercentageFeeAmount;
+
+  /// No description provided for @r3aRoyaltyTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty to'**
+  String get r3aRoyaltyTo;
+
+  /// No description provided for @r3aSaleCompleteTxSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Complete TX Sent'**
+  String get r3aSaleCompleteTxSent;
+
+  /// No description provided for @r3aSaveAsDraft.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as Draft'**
+  String get r3aSaveAsDraft;
+
+  /// No description provided for @r3aScMintedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract minted successfully.'**
+  String get r3aScMintedSuccessfully;
+
+  /// No description provided for @r3aSetEvolution.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Evolution'**
+  String get r3aSetEvolution;
+
+  /// No description provided for @r3aSmartContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract'**
+  String get r3aSmartContract;
+
+  /// No description provided for @r3aSmartContractName.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract Name'**
+  String get r3aSmartContractName;
+
+  /// No description provided for @r3aStat.
+  ///
+  /// In en, this message translates to:
+  /// **'Stat'**
+  String get r3aStat;
+
+  /// No description provided for @r3aStatType.
+  ///
+  /// In en, this message translates to:
+  /// **'Stat Type'**
+  String get r3aStatType;
+
+  /// No description provided for @r3aTransferNft.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer NFT'**
+  String get r3aTransferNft;
+
+  /// No description provided for @r3aUntitled.
+  ///
+  /// In en, this message translates to:
+  /// **'Untitled'**
+  String get r3aUntitled;
+
+  /// No description provided for @r3aValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Value'**
+  String get r3aValue;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

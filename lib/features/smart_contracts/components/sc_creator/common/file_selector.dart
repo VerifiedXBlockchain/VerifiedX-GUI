@@ -17,6 +17,7 @@ import '../../../../../core/components/buttons.dart';
 import '../../../../../core/dialogs.dart';
 import '../../../../../utils/files.dart';
 import '../../../../../utils/validation.dart';
+import '../../../../../l10n/l10n_helper.dart';
 import '../../../../asset/asset.dart';
 import '../../../../config/providers/config_provider.dart';
 import 'package:image/image.dart' as IMG;
@@ -140,11 +141,11 @@ class FileSelector extends BaseComponent {
       );
       if (withAuthorName) {
         final authorName = await PromptModal.show(
-            title: "Creator Name",
-            validator: (value) => formValidatorNotEmpty(value, "Name"),
-            labelText: "Name",
+            title: globalL10n.scwCreatorName,
+            validator: (value) => formValidatorNotEmpty(value, globalL10n.walletNameLabel),
+            labelText: globalL10n.walletNameLabel,
             allowCancel: false,
-            confirmText: "Save");
+            confirmText: globalL10n.actionSave);
 
         if (authorName != null) {
           asset = asset.copyWith(authorName: authorName);
@@ -283,7 +284,7 @@ class FileSelector extends BaseComponent {
 
   AppButton buildChooseFileButton(WidgetRef ref) {
     return AppButton(
-      label: "Choose File",
+      label: globalL10n.r3aChooseFile,
       icon: Icons.upload,
       onPressed: readOnly
           ? null

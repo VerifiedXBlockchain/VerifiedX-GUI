@@ -45,25 +45,25 @@ class TopicListScreen extends BaseScreen {
               variant: AppColorVariant.Light,
               onPressed: () async {
                 if (!currentWalletIsValidating(ref)) {
-                  Toast.error("Your active account must be a validator to create a topic.");
+                  Toast.error(AppLocalizations.of(context).r3hMustBeValidatorToCreateTopic);
                   return;
                 }
 
                 final myTopics = await TopicService().mine();
                 final activeTopics = myTopics.where((t) => t.isActive).toList();
                 if (activeTopics.isNotEmpty) {
-                  Toast.error("Only one active topic per address is allowed.");
+                  Toast.error(AppLocalizations.of(context).r3hOneActiveTopicPerAddress);
                   return;
                 }
 
                 final balance = ref.read(sessionProvider).currentWallet?.balance;
                 if (balance == null) {
-                  Toast.error("A balance is required");
+                  Toast.error(AppLocalizations.of(context).r3hBalanceRequired);
                   return;
                 }
 
                 if (balance < 1002) {
-                  Toast.error("Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)");
+                  Toast.error(AppLocalizations.of(context).r3hInsufficientBalanceForTopic);
                   return;
                 }
 

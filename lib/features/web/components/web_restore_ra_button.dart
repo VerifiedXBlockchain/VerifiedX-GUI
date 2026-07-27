@@ -12,6 +12,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../keygen/models/ra_keypair.dart';
 import 'package:rbx_wallet/features/keygen/services/keygen_service.dart'
     if (dart.library.io) 'package:rbx_wallet/features/keygen/services/keygen_service_mock.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'package:rbx_wallet/utils/toast.dart';
 
 class WebRestoreRaButton extends BaseComponent {
@@ -21,16 +22,16 @@ class WebRestoreRaButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Restore Vault Account",
+      label: l10n.reserveRestoreVaultAccount,
       icon: Icons.refresh,
       type: AppButtonType.Text,
       variant: AppColorVariant.Light,
       onPressed: () async {
         final confirmed = await ConfirmDialog.show(
-          title: "Restore Vault Account",
-          body:
-              "Importing an existing Vault Account will replace the current one tied to your login. To revert you can logout and login again.\n\nContinue?",
+          title: l10n.reserveRestoreVaultAccount,
+          body: l10n.r3fRestoreBody,
         );
 
         if (confirmed != true) {
@@ -39,11 +40,10 @@ class WebRestoreRaButton extends BaseComponent {
 
         final restoreCode = await PromptModal.show(
           contextOverride: context,
-          title: "Restore Code",
-          body:
-              "Paste in your RESTORE CODE to import your existing Vault Account.",
+          title: l10n.walletRestoreCodeLabel,
+          body: l10n.r3fRestoreCodePrompt,
           validator: (v) => null,
-          labelText: "Restore Code",
+          labelText: l10n.walletRestoreCodeLabel,
         );
 
         if (restoreCode == null) {
@@ -80,7 +80,7 @@ class WebRestoreRaButton extends BaseComponent {
           storage.setMap(Storage.WEB_RA_KEYPAIR, raKeypair.toJson());
         }
 
-        Toast.message("Vault Account restored");
+        Toast.message(l10n.webVaultRestoredToast);
       },
     );
   }

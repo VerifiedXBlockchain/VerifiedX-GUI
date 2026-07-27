@@ -204,11 +204,11 @@ class RecoverDialog {
   static alert(BuildContext context, {required String hash}) {
     return Consumer(builder: (context, ref, child) {
       return AlertDialog(
-        title: Text("Recovery process has started"),
+        title: Text(AppLocalizations.of(context).r3eRecoveryStartedTitle),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 500),
           child: SelectableText(
-            "Your Reserve (Protected) Account is being recovered to your recovery address.\n\nTransaction Hash: $hash\n\nAll non-settled transactions for funds and assets will be transferred as well as your current available balance. \n\nIt is recommended you import your recovery private key into a new machine. NFT media will not be transferred over so please export them by clicking the button below and import them to your new environment.",
+            AppLocalizations.of(context).r3eRecoveryBody(hash),
           ),
         ),
         actions: [
@@ -224,14 +224,14 @@ class RecoverDialog {
               if (success == true) {
                 // Navigator.of(context).pop();
                 if (Platform.isMacOS) {
-                  Toast.message("Media backed up successfully.");
+                  Toast.message(AppLocalizations.of(context).r3eMediaBackedUp);
                 }
               } else {
                 Toast.error();
               }
             },
             child: Text(
-              "Export NFT Media",
+              AppLocalizations.of(context).r3eExportNftMedia,
               style: TextStyle(color: Theme.of(context).colorScheme.info),
             ),
           ),
@@ -248,7 +248,7 @@ class RecoverDialog {
               FlutterWindowClose.closeWindow();
             },
             child: Text(
-              "Close Wallet",
+              AppLocalizations.of(context).r3eCloseWallet,
               style: TextStyle(
                 color: Colors.red.shade600,
               ),
@@ -540,7 +540,7 @@ class AuthModal {
 
       if (forCreate &&
           _passwordController.text != _confirmPasswordController.text) {
-        Toast.error("Passwords do not match");
+        Toast.error(AppLocalizations.of(context).prvPasswordsDoNotMatch);
         return;
       }
 
@@ -558,7 +558,10 @@ class AuthModal {
       barrierDismissible: true,
       builder: (context) {
         return AlertDialog(
-          title: Text(forCreate ? "Create Account" : "Login",
+          title: Text(
+              forCreate
+                  ? AppLocalizations.of(context).r3eCreateAccount
+                  : AppLocalizations.of(context).r3eLogin,
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -577,11 +580,11 @@ class AuthModal {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     if (withExplanation)
-                      const Text(
-                          "An account is required to continue.\nPlease create your account now with your email address and a password."),
-                    const Text(
-                      "Your email and password is used to seed your private key which is processed in this browser and will never be transmitted across the internet.",
-                      style: TextStyle(
+                      Text(AppLocalizations.of(context)
+                          .r3eAccountRequiredExplanation),
+                    Text(
+                      AppLocalizations.of(context).r3eEmailPasswordSeedInfo,
+                      style: const TextStyle(
                         fontSize: 13,
                         color: Colors.white70,
                       ),
@@ -589,8 +592,9 @@ class AuthModal {
                     TextFormField(
                       controller: _emailController,
                       autofocus: true,
-                      decoration: const InputDecoration(
-                        hintText: "Email Address",
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)
+                            .keygenEmailAddressTitle,
                       ),
                       validator: formValidatorEmail,
                       keyboardType: TextInputType.emailAddress,
@@ -602,8 +606,8 @@ class AuthModal {
                             child: TextFormField(
                               controller: _passwordController,
                               obscureText: obscuringPassword,
-                              decoration: const InputDecoration(
-                                hintText: "Password",
+                              decoration: InputDecoration(
+                                hintText: AppLocalizations.of(context).tkbPassword,
                               ),
                               validator: formValidatorPassword,
                               keyboardType: TextInputType.emailAddress,
@@ -633,8 +637,8 @@ class AuthModal {
                       TextFormField(
                         controller: _confirmPasswordController,
                         obscureText: true,
-                        decoration: const InputDecoration(
-                          hintText: "Confirm Password",
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context).txpConfirmPassword,
                         ),
                         validator: formValidatorPassword,
                         keyboardType: TextInputType.emailAddress,
@@ -672,7 +676,7 @@ class AuthModal {
               onPressed: () {
                 submit(context);
               },
-              child: Text("Login",
+              child: Text(AppLocalizations.of(context).r3eLogin,
                   style: TextStyle(color: Theme.of(context).colorScheme.info)),
             )
           ],
@@ -693,7 +697,7 @@ class PaymentTermsDialog {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: Text("Disclaimer"),
+              title: Text(AppLocalizations.of(context).r3eDisclaimer),
               content: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 600),
                 child: Column(
@@ -710,7 +714,7 @@ class PaymentTermsDialog {
                           });
                         }
                       },
-                      title: Text("I have read and agree to the disclaimer."),
+                      title: Text(AppLocalizations.of(context).r3eAgreeDisclaimer),
                       controlAffinity: ListTileControlAffinity.leading,
                       contentPadding: EdgeInsets.zero,
                       checkColor: Colors.white,
@@ -735,8 +739,8 @@ class PaymentTermsDialog {
                           Navigator.of(context).pop(true);
                         }
                       : () {
-                          Toast.error(
-                              "You must agree to the terms before proceeding.");
+                          Toast.error(AppLocalizations.of(context)
+                              .r3eMustAgreeTerms);
                         },
                   child: Text(
                     AppLocalizations.of(context).actionConfirm,
@@ -899,7 +903,7 @@ class ButterflyOptionsDialog {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Launch Butterfly"),
+              Text(AppLocalizations.of(context).r3eLaunchButterfly),
               IconButton(
                 onPressed: () => Navigator.of(context).pop(null),
                 icon: const Icon(Icons.close, size: 20),
@@ -912,21 +916,21 @@ class ButterflyOptionsDialog {
           content: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
             child: Text(BreakPoints.useMobileLayout(context)
-                ? "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly.\n\nAuto-login with this account?"
-                : "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly. No Borders, No Restrictions, No Limits, and No Accounts Needed… Be Free!\n\nAuto-login with this account?"),
+                ? AppLocalizations.of(context).r3eButterflyDescMobile
+                : AppLocalizations.of(context).r3eButterflyDescDesktop),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop("visit"),
               child: Text(
-                "Just Take Me There",
+                AppLocalizations.of(context).r3eJustTakeMeThere,
                 style: TextStyle(color: Colors.white70),
               ),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop("login"),
               child: Text(
-                "Login with this Account",
+                AppLocalizations.of(context).r3eLoginWithThisAccount,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.bold,

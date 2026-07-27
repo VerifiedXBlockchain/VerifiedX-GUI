@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/minted_nft_list_provider.dart';
 import '../providers/nft_list_provider.dart';
 import 'nft_list_tile.dart';
@@ -15,6 +16,7 @@ class NftList extends BaseComponent {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final _model = ref.watch(minted ? mintedNftListProvider : nftListProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       children: [
@@ -26,7 +28,7 @@ class NftList extends BaseComponent {
           child: Builder(builder: (context) {
             if (_model.data.results.isEmpty) {
               return Center(
-                child: Text(minted ? "No minted NFTs with management capabilities." : "No NFTs found."),
+                child: Text(minted ? l10n.r3gNoMintedNfts : l10n.r3gNoNftsFound),
               );
             }
             return Padding(

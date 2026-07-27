@@ -9,6 +9,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/base_service.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/files.dart';
 import '../../../utils/formatting.dart';
 
@@ -84,7 +85,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       }
 
       if (await Directory(_dbPath).exists()) {
-        _fail('Failed to delete $_dbPath — folder still exists after delete');
+        _fail(globalL10n.r3eFailedDeleteDb(_dbPath));
         return;
       }
 
@@ -98,7 +99,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       print('[Snapshot] === STEP 4: DOWNLOAD ${urls.length} FILES ===');
 
       if (urls.isEmpty) {
-        _fail('Snapshot has no download URLs');
+        _fail(globalL10n.r3eSnapshotNoUrls);
         return;
       }
 
@@ -127,7 +128,8 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
         );
 
         if (fileSize == null) {
-          _fail('Failed to download $filename after $_maxRetries attempts');
+          _fail(globalL10n.r3eFailedDownloadFile(
+              filename, _maxRetries.toString()));
           return;
         }
 
@@ -156,8 +158,8 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
           '[Snapshot] Total on disk: ${(totalDiskBytes / 1073741824).toStringAsFixed(2)} GB (expected: ${(totalBytes / 1073741824).toStringAsFixed(2)} GB)');
 
       if (entries.length < urls.length) {
-        _fail(
-            'Only ${entries.length} of ${urls.length} files on disk after download');
+        _fail(globalL10n.r3eFilesOnDiskMismatch(
+            entries.length.toString(), urls.length.toString()));
         return;
       }
 
@@ -166,7 +168,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       await _completeImport(dbFolder, sep);
     } catch (e, st) {
       print('[Snapshot] FATAL: $e\n$st');
-      _fail('Unexpected error: $e');
+      _fail(globalL10n.r3eUnexpectedError(e.toString()));
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/providers/session_provider.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class ReserveAccountsButton extends BaseComponent {
   const ReserveAccountsButton({
@@ -15,7 +16,7 @@ class ReserveAccountsButton extends BaseComponent {
     final cliStarted = ref.watch(sessionProvider.select((v) => v.cliStarted));
 
     return AppButton(
-      label: "Vault Accounts",
+      label: AppLocalizations.of(context).navMenuVaultAccounts,
       icon: Icons.security,
       onPressed: !cliStarted
           ? null

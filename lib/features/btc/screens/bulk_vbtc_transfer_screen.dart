@@ -54,7 +54,7 @@ class BulkVbtcTransferScreen extends BaseScreen {
     return Column(
       children: [
         Text(
-          "Select the tokens you'd like to transfer from:",
+          AppLocalizations.of(context).r3fSelectTokensToTransfer,
           style: TextStyle(
             fontSize: 16,
           ),
@@ -272,7 +272,7 @@ class BulkVbtcTransferScreen extends BaseScreen {
 
                   if (inputs.length < 2) {
                     Toast.message(
-                        "At least two tokens are required to do a bulk vBTC transaction");
+                        AppLocalizations.of(context).r3fBulkMinTwoTokens);
                     return;
                   }
                   provider.setAllToZero();
@@ -321,7 +321,7 @@ class _ConfirmBottomSheet extends BaseComponent {
     return ModalContainer(
       children: [
         Text(
-          "Input Amounts for each token:",
+          AppLocalizations.of(context).r3fInputAmountsPerToken,
           style: TextStyle(fontSize: 18),
         ),
         SizedBox(
@@ -354,21 +354,23 @@ class _ConfirmBottomSheet extends BaseComponent {
                                   controller: provider.controllers[index],
                                   validator: (value) {
                                     if (value == null) {
-                                      return "Amount required";
+                                      return AppLocalizations.of(context).svcAmountRequired;
                                     }
                                     final d = double.tryParse(value);
                                     if (d == null) {
-                                      return "Invalid Amount";
+                                      return AppLocalizations.of(context).btcInvalidAmountToast;
                                     }
 
                                     if (d > token.globalBalance) {
-                                      return "Maximum amount is ${token.globalBalance} vBTC";
+                                      return AppLocalizations.of(context)
+                                          .r3fMaxAmountIs(token.globalBalance.toString());
                                     }
 
                                     return null;
                                   },
                                   decoration: InputDecoration(
-                                      hintText: "Amount", suffixText: "vBTC"),
+                                      hintText: AppLocalizations.of(context).btcBulkAmountHint,
+                                      suffixText: "vBTC"),
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                           decimal: true),
@@ -390,7 +392,8 @@ class _ConfirmBottomSheet extends BaseComponent {
                                 width: 8,
                               ),
                               AppButton(
-                                label: "(MAX: ${token.globalBalance} vBTC)",
+                                label: AppLocalizations.of(context)
+                                    .r3fMaxLabel(token.globalBalance.toString()),
                                 type: AppButtonType.Text,
                                 underlined: true,
                                 onPressed: () {
@@ -430,21 +433,23 @@ class _ConfirmBottomSheet extends BaseComponent {
                                   controller: provider.controllers[index],
                                   validator: (value) {
                                     if (value == null) {
-                                      return "Amount required";
+                                      return AppLocalizations.of(context).svcAmountRequired;
                                     }
                                     final d = double.tryParse(value);
                                     if (d == null) {
-                                      return "Invalid Amount";
+                                      return AppLocalizations.of(context).btcInvalidAmountToast;
                                     }
 
                                     if (d > token.myBalance) {
-                                      return "Maximum amount is ${token.myBalance} vBTC";
+                                      return AppLocalizations.of(context)
+                                          .r3fMaxAmountIs(token.myBalance.toString());
                                     }
 
                                     return null;
                                   },
                                   decoration: InputDecoration(
-                                      hintText: "Amount", suffixText: "vBTC"),
+                                      hintText: AppLocalizations.of(context).btcBulkAmountHint,
+                                      suffixText: "vBTC"),
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                           decimal: true),
@@ -466,7 +471,8 @@ class _ConfirmBottomSheet extends BaseComponent {
                                 width: 8,
                               ),
                               AppButton(
-                                label: "(MAX: ${token.myBalance} vBTC)",
+                                label: AppLocalizations.of(context)
+                                    .r3fMaxLabel(token.myBalance.toString()),
                                 type: AppButtonType.Text,
                                 underlined: true,
                                 onPressed: () {
@@ -532,14 +538,14 @@ class _ConfirmBottomSheet extends BaseComponent {
 
                 if (validInputs.length < 2) {
                   Toast.message(
-                      "At least two tokens are required to do a bulk vBTC transaction");
+                      AppLocalizations.of(context).r3fBulkMinTwoTokens);
                   return;
                 }
 
                 final toAddress = provider.addressController.text.trim();
 
-                final message =
-                    "Would you like to send a total of $totalAmount vBTC to $toAddress";
+                final message = AppLocalizations.of(context)
+                    .r3fBulkConfirmBody(totalAmount.toString(), toAddress);
 
                 final confirmed = await ConfirmDialog.show(
                     title: AppLocalizations.of(context).btcBulkConfirmTxTitle,
@@ -561,7 +567,7 @@ class _ConfirmBottomSheet extends BaseComponent {
                   }
                   if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
                     Toast.error(
-                        "Selected VFX account doesn't have enough balance");
+                        AppLocalizations.of(context).r3fInsufficientVfxBalance);
                     return;
                   }
 
@@ -595,8 +601,8 @@ class _ConfirmBottomSheet extends BaseComponent {
                     provider.addressController.clear();
                     ref.invalidate(bulkVbtcTransferProvider);
 
-                    Toast.message(
-                        "$totalAmount vBTC has been sent to $toAddress.");
+                    Toast.message(AppLocalizations.of(context)
+                        .r3fBulkSentToast(totalAmount.toString(), toAddress));
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
                   }

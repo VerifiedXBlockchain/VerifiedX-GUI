@@ -14,6 +14,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/files.dart';
 import '../../../utils/toast.dart';
 import '../../asset/asset_thumbnail.dart';
@@ -36,7 +37,7 @@ class NftMangementModal extends BaseComponent {
     final l10n = AppLocalizations.of(context);
     final confirmed = await ConfirmDialog.show(
       title: l10n.nftEvolveTitle,
-      body: "Are you sure you want to evolve this NFT one stage?",
+      body: l10n.r3gConfirmEvolveOneStage,
       confirmText: l10n.nftEvolve,
       cancelText: l10n.actionCancel,
     );
@@ -56,8 +57,8 @@ class NftMangementModal extends BaseComponent {
     final l10n = AppLocalizations.of(context);
     final confirmed = await ConfirmDialog.show(
       title: l10n.nftDevolveTitle,
-      body: "Are you sure you want to devolve this NFT one stage?",
-      confirmText: "Devolve",
+      body: l10n.r3gConfirmDevolveOneStage,
+      confirmText: l10n.r3gDevolve,
       cancelText: l10n.actionCancel,
     );
     if (confirmed == true) {
@@ -90,15 +91,16 @@ class NftMangementModal extends BaseComponent {
   }
 
   Future<void> showEvolveMessage([BuildContext? context]) async {
-    final title = context != null ? AppLocalizations.of(context).nftEvolveSentTitle : "Evolve transaction sent successfully";
+    final l10n = context != null ? AppLocalizations.of(context) : globalL10n;
     await InfoDialog.show(
-      title: title,
-      body: "This screen will reflect the change once the block is crafted and block height has synced with this transaction.",
+      title: l10n.nftEvolveSentTitle,
+      body: l10n.r3gEvolveSyncBody,
     );
   }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +148,7 @@ class NftMangementModal extends BaseComponent {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Managing ${nft.name}",
+                l10n.r3gManagingName(nft.name),
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
               ),
               Builder(builder: (context) {
@@ -172,7 +174,7 @@ class NftMangementModal extends BaseComponent {
             height: 6,
           ),
           Text(
-            "Current Stage: ${nft.currentEvolvePhase.name}",
+            l10n.r3gCurrentStage(nft.currentEvolvePhase.name),
             style: const TextStyle(fontSize: 18),
           ),
           // if (nft.canEvolve)
@@ -201,7 +203,7 @@ class NftMangementModal extends BaseComponent {
               children: [
                 const Divider(),
                 Text(
-                  nft.evolveIsDynamic ? "Evolution" : "Manage Evolution",
+                  nft.evolveIsDynamic ? l10n.r3gEvolution : l10n.r3gManageEvolution,
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 EvolutionStateRow(
@@ -255,20 +257,25 @@ class EvolutionStateRow extends BaseComponent {
 
   Future<void> showEvolveMessage() async {
     InfoDialog.show(
-      title: "Evolve transaction sent successfully",
-      body: "This screen will reflect the change once the block is crafted and block height has synced with this transaction.",
+      title: globalL10n.nftEvolveSentTitle,
+      body: globalL10n.r3gEvolveSyncBody,
     );
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     String descriptionText = phase.description;
 
     if (phase.dateTime != null) {
-      descriptionText =
-          "Evolve Date: ${phase.dateLabelLocalized} ${phase.timeLabelLocalized} ${DateTime.now().timeZoneName.toString()} \n${phase.description}";
+      descriptionText = l10n.r3gEvolveDateLabel(
+        phase.dateLabelLocalized,
+        phase.timeLabelLocalized,
+        DateTime.now().timeZoneName.toString(),
+        phase.description,
+      );
     } else if (phase.blockHeight != null) {
-      descriptionText = "Evolve Block Height: ${phase.blockHeight}\n${phase.description}";
+      descriptionText = l10n.r3gEvolveBlockHeightLabel(phase.blockHeight.toString(), phase.description);
     }
 
     // final isCurrent = nft.currentEvolvePhase.evolutionState + 1 == index;
@@ -459,7 +466,7 @@ class EvolutionStateRow extends BaseComponent {
                                       }
                                     : null,
                                 child: Text(
-                                  "${phase.properties.length} ${phase.properties.length == 1 ? 'Property' : 'Properties'}",
+                                  "${phase.properties.length} ${phase.properties.length == 1 ? l10n.r3gPropertySingular : l10n.scwProperties}",
                                   style: TextStyle(
                                     color: Colors.white,
                                     decoration: showMedia ? TextDecoration.underline : TextDecoration.none,
@@ -481,7 +488,7 @@ class EvolutionStateRow extends BaseComponent {
                                   final l10n = AppLocalizations.of(context);
                                   final confirmed = await ConfirmDialog.show(
                                     title: l10n.nftEvolveTitle,
-                                    body: "Are you sure you want to evolve to stage $index?",
+                                    body: l10n.r3gConfirmEvolveToStage(index.toString()),
                                     confirmText: l10n.nftEvolve,
                                     cancelText: l10n.actionCancel,
                                   );

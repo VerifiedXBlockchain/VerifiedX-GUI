@@ -248,7 +248,7 @@ class ScWizedCard extends BaseComponent {
                         final value = await PromptModal.show(
                           contextOverride: context,
                           title: entry.creatorName.isEmpty ? l10n.scwAddCreatorName : l10n.scwEditCreatorName,
-                          validator: (value) => formValidatorNotEmpty(value, "Creator Name"),
+                          validator: (value) => formValidatorNotEmpty(value, l10n.scwCreatorName),
                           labelText: l10n.scwCreatorName,
                           initialValue: entry.creatorName,
                         );

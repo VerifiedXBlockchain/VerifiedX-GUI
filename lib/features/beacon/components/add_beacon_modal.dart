@@ -23,7 +23,7 @@ class AddBeaconModal extends BaseComponent {
       children: [
         Text(l10n.beaconAddTitle),
         Text(
-          "Add an existing beacon to foreign nodes to use that relay instead of default ones on the VFX network. Configure your wallet to use a remote beacon for media transferring rather than using the default VFX network beacons. You will need to know the IP address of the remote beacon. If that beacon is using the non-default port, provide that as well. The beacon name is a friendly name visible only to you.",
+          l10n.r3bAddBeaconDescription,
           style: Theme.of(context).textTheme.bodySmall,
         ),
         Form(
@@ -49,8 +49,8 @@ class AddBeaconModal extends BaseComponent {
                 child: TextFormField(
                   controller: provider.ipController,
                   validator: provider.ipAddressValidator,
-                  decoration: const InputDecoration(
-                    label: Text("IP Address"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.beaconIpLabel),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
@@ -64,7 +64,7 @@ class AddBeaconModal extends BaseComponent {
                 width: 240,
                 child: TextFormField(
                   controller: provider.portController,
-                  decoration: const InputDecoration(label: Text("Port (leave blank for default)")),
+                  decoration: InputDecoration(label: Text(l10n.beaconPortLabel)),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
               ),
@@ -78,7 +78,7 @@ class AddBeaconModal extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppButton(
-              label: "Cancel",
+              label: l10n.actionCancel,
               type: AppButtonType.Text,
               variant: AppColorVariant.Light,
               onPressed: () {
@@ -87,7 +87,7 @@ class AddBeaconModal extends BaseComponent {
               },
             ),
             AppButton(
-              label: "Add",
+              label: l10n.beaconAdd,
               variant: AppColorVariant.Success,
               onPressed: () async {
                 final success = await provider.submit();

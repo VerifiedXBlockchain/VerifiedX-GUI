@@ -378,7 +378,7 @@ class VaultAccountInfoContent extends StatelessWidget {
           ),
           children: [
             TextSpan(
-              text: "Vault Accounts [",
+              text: AppLocalizations.of(context).r3dVaultAccountsIntroPre,
             ),
             TextSpan(
                 text: "xRBX",
@@ -387,19 +387,18 @@ class VaultAccountInfoContent extends StatelessWidget {
                   color: AppColors.getReserve(),
                 )),
             TextSpan(
-              text: "] is a Cold Storage and On-Chain Escrow Feature to keep your VFX Funds and your Digital Assets Safe.\n\n",
+              text: AppLocalizations.of(context).r3dVaultAccountsIntroPost,
             ),
             TextSpan(
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal),
-              text:
-                  "This feature is separate from your VFX instant settlement address and enables both recovery and call-back on-chain escrow features that allows you to be able to recover funds and assets back to your Vault Account in the event of theft, misplacement, or from a recipient that requires trustless escrow within 24 hours of occurrence or within a user pre-set defined time.\n\n",
+              text: AppLocalizations.of(context).r3dVaultFeatureDescription,
             ),
             TextSpan(
-              text: "These features are all on-chain and all peers are aware of their current state.\n",
+              text: AppLocalizations.of(context).r3dVaultFeaturesOnChain,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             TextSpan(
-              text: "Note: Activating this feature requires a 5 VFX deposit, 4 of which will be burned upon activation.",
+              text: AppLocalizations.of(context).r3dVaultActivationNote,
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ],

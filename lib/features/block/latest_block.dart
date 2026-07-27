@@ -11,6 +11,7 @@ import '../../utils/formatting.dart';
 import '../bridge/providers/wallet_info_provider.dart';
 import 'block.dart';
 import 'block_transaction_list_bottom_sheet.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 class LatestBlock extends BaseComponent {
   final Block? blockOverride;
@@ -62,12 +63,13 @@ class LatestBlockContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _DetailItem(
-          label: "Hash",
+          label: l10n.r3dLabelHash,
           value: latestBlock.hash,
           trailing: Text(
             timeago.format(
@@ -82,13 +84,13 @@ class LatestBlockContent extends StatelessWidget {
           children: [
             Expanded(
               child: _DetailItem(
-                label: "Craft Time",
-                value: "${(latestBlock.craftTime / 1000)} seconds",
+                label: l10n.r3dCraftTime,
+                value: l10n.r3dSecondsValue((latestBlock.craftTime / 1000).toString()),
               ),
             ),
             Expanded(
               child: _DetailItem(
-                label: "Size",
+                label: l10n.r3dSize,
                 value: formatIntWithCommas(latestBlock.size),
               ),
             ),
@@ -99,7 +101,7 @@ class LatestBlockContent extends StatelessWidget {
           children: [
             Expanded(
               child: _DetailItem(
-                label: "# of Txs",
+                label: l10n.r3dNumberOfTxs,
                 value: "${latestBlock.numberOfTransactions}",
               ),
             ),
@@ -116,7 +118,7 @@ class LatestBlockContent extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 4.0),
                     child: Text(
-                      "View Txs",
+                      l10n.r3dViewTxs,
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
@@ -131,20 +133,20 @@ class LatestBlockContent extends StatelessWidget {
           children: [
             Expanded(
               child: _DetailItem(
-                label: "Total Amount",
+                label: l10n.r3dTotalAmount,
                 value: "${latestBlock.totalAmount} VFX",
               ),
             ),
             Expanded(
               child: _DetailItem(
-                label: "Total Reward",
+                label: l10n.r3dTotalReward,
                 value: "${latestBlock.totalReward} VFX",
               ),
             ),
           ],
         ),
         _DetailItem(
-          label: "Validated By",
+          label: l10n.r3dValidatedBy,
           value: latestBlock.validator,
           mono: true,
         ),
@@ -162,7 +164,7 @@ class LatestBlockContent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "VFX Explorer",
+                    l10n.r3dVfxExplorer,
                     style: TextStyle(
                       fontSize: 11,
                       color: Theme.of(context).colorScheme.secondary,
@@ -195,7 +197,7 @@ class LatestBlockContent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "BTC Explorer",
+                    l10n.r3dBtcExplorer,
                     style: TextStyle(
                       fontSize: 11,
                       color: Theme.of(context).colorScheme.btcOrange,

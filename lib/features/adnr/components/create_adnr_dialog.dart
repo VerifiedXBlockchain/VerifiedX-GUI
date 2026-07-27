@@ -209,8 +209,13 @@ class CreateAdnrDialog extends BaseComponent {
 
                       final confirmed = await ConfirmDialog.show(
                         title: l10n.btcValidTxTitle,
-                        body:
-                            "The ${isBtc ? 'BTC' : 'VFX'} Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $domain\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
+                        body: l10n.r3gAdnrCreateConfirmBody(
+                          isBtc ? 'BTC' : 'VFX',
+                          domain,
+                          ADNR_COST.toString(),
+                          txFee.toString(),
+                          (ADNR_COST + txFee).toString(),
+                        ),
                         confirmText: l10n.actionSend,
                         cancelText: l10n.actionCancel,
                       );

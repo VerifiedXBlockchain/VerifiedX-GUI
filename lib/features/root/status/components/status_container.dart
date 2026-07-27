@@ -120,7 +120,7 @@ class StatusContainer extends BaseComponent {
                         alignment: Alignment.centerLeft,
                         child: InkWell(
                           child: Text(
-                            "View Metrics",
+                            AppLocalizations.of(context).operationsViewMetrics,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               decoration: TextDecoration.underline,
@@ -143,7 +143,7 @@ class StatusContainer extends BaseComponent {
                                   );
 
                                   return AlertDialog(
-                                    title: const Text("Network Metrics"),
+                                    title: Text(AppLocalizations.of(context).statusNetworkMetrics),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,7 +153,7 @@ class StatusContainer extends BaseComponent {
                                         Text("Block Last Delay: ${metrics.blockLastDelay}", style: style),
                                         Text("Time Since Last Block: ${metrics.timeSinceLastBlockSeconds}s", style: style),
                                         Text("Blocks Averaged: ${metrics.blocksAveraged}", style: style),
-                                        if (validatorCount != null) Text("Active Validators: $validatorCount", style: style),
+                                        if (validatorCount != null) Text(AppLocalizations.of(context).r3hActiveValidators(validatorCount.toString()), style: style),
                                       ],
                                     ),
                                     actions: [
@@ -161,9 +161,9 @@ class StatusContainer extends BaseComponent {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text(
-                                          "Close",
-                                          style: TextStyle(
+                                        child: Text(
+                                          AppLocalizations.of(context).actionClose,
+                                          style: const TextStyle(
                                             color: Colors.white70,
                                           ),
                                         ),
@@ -218,12 +218,12 @@ class _BlockStatus extends BaseComponent {
           final walletInfo = ref.watch(walletInfoProvider);
 
           if (!ref.watch(sessionProvider.select((v) => v.cliStarted))) {
-            return const SizedBox(
+            return SizedBox(
               width: 16,
               height: 16,
               child: Text(
-                "CLI Inactive",
-                style: TextStyle(fontSize: 11),
+                AppLocalizations.of(context).statusCliInactive,
+                style: const TextStyle(fontSize: 11),
               ),
             );
           }
@@ -325,7 +325,7 @@ class _BlockStatus extends BaseComponent {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Wallet Synced",
+                  AppLocalizations.of(context).r3hWalletSynced,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(

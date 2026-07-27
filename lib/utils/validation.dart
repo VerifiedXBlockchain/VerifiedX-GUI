@@ -1,6 +1,7 @@
 import '../features/config/constants.dart';
 
 import '../core/env.dart';
+import '../l10n/l10n_helper.dart';
 
 bool isInt(String number) {
   return int.tryParse(number) == null ? false : true;
@@ -67,10 +68,10 @@ bool isValidPhoneNumber(String value) {
 
 String? formValidatorEmail(String? value) {
   if (value == null || value.isEmpty) {
-    return "Email required.";
+    return globalL10n.r3hEmailRequired;
   }
   if (!isValidEmail(value)) {
-    return "Invalid email.";
+    return globalL10n.r3hEmailInvalid;
   }
   return null;
 }
@@ -81,18 +82,18 @@ String? formValidatorEmailOrEmpty(String? value) {
   }
 
   if (!isValidEmail(value)) {
-    return "Invalid email.";
+    return globalL10n.r3hEmailInvalid;
   }
   return null;
 }
 
 String? formValidatorUsername(String? value) {
   if (value == null || value.isEmpty) {
-    return "Username required.";
+    return globalL10n.r3hUsernameRequired;
   }
 
   if (!isValidUsername(value)) {
-    return "Username not valid.";
+    return globalL10n.r3hUsernameInvalid;
   }
 
   return null;
@@ -100,21 +101,21 @@ String? formValidatorUsername(String? value) {
 
 String? formValidatorPhoneNumber(String? value) {
   if (value == null || value.isEmpty) {
-    return "Phone Number required.";
+    return globalL10n.r3hPhoneRequired;
   }
   if (!isValidPhoneNumber(value)) {
-    return "Invalid Phone Number.";
+    return globalL10n.r3hPhoneInvalid;
   }
   return null;
 }
 
 String? formValidatorPassword(String? value) {
   if (value == null || value.isEmpty) {
-    return "Password required.";
+    return globalL10n.r3hPasswordRequired;
   }
 
   if (!isValidPassword(value)) {
-    return "Password not strong enough.";
+    return globalL10n.r3hPasswordWeak;
   }
 
   return null;
@@ -122,7 +123,7 @@ String? formValidatorPassword(String? value) {
 
 String? formValidatorNotEmpty(String? value, String label) {
   if (value == null || value.isEmpty) {
-    return "$label is required.";
+    return globalL10n.r3hFieldRequired(label);
   }
 
   return null;
@@ -130,30 +131,30 @@ String? formValidatorNotEmpty(String? value, String label) {
 
 String? formValidatorDecDescription(String? value) {
   if (value == null || value.isEmpty) {
-    return 'The description is required';
+    return globalL10n.r3hDescRequired;
   }
   if (value.length > MAX_DEC_SHOP_COLLECTION_DESCRIPTION_LENGTH) {
-    return 'The description exceeds the maximum character length';
+    return globalL10n.r3hDescTooLong;
   }
   if (value.split(' ').length > MAX_DEC_SHOP_COLLECTION_DESCRIPTION_WORDS) {
-    return 'The description exceeds the maximum word count';
+    return globalL10n.r3hDescTooManyWords;
   }
   return null;
 }
 
 String? formValidatorDecName(String? value) {
   if (value == null || value.isEmpty) {
-    return 'The name is required';
+    return globalL10n.r3hNameRequired;
   }
   if (value.length > MAX_DEC_SHOP_COLLECTION_NAME_LENGTH) {
-    return 'The name exceeds the maximum character length';
+    return globalL10n.r3hNameTooLong;
   }
   return null;
 }
 
 String? formValidatorRbxAddress(String? value, [bool allowAdnr = false]) {
   if (value == null || value.isEmpty) {
-    return allowAdnr ? "Address or VFX domain required" : "Address required";
+    return allowAdnr ? globalL10n.r3hAddressOrDomainRequired : globalL10n.r3hAddressRequired;
   }
 
   if (allowAdnr && value.contains(".vfx")) {
@@ -161,7 +162,7 @@ String? formValidatorRbxAddress(String? value, [bool allowAdnr = false]) {
   }
 
   if (!isValidRbxAddress(value)) {
-    return "Invalid Address.";
+    return globalL10n.r3hAddressInvalid;
   }
 
   return null;
@@ -173,7 +174,7 @@ String? formValidatorRbxAddressOrEmpty(String? value) {
   }
 
   if (!isValidRbxAddress(value)) {
-    return "Invalid Address.";
+    return globalL10n.r3hAddressInvalid;
   }
 
   return null;
@@ -181,19 +182,19 @@ String? formValidatorRbxAddressOrEmpty(String? value) {
 
 String? formPercentValidator(String? val) {
   if (val == null || val.isEmpty) {
-    return "Required";
+    return globalL10n.r3hRequired;
   }
   final amount = double.tryParse(val);
   if (amount == null) {
-    return "Invalid";
+    return globalL10n.r3hInvalid;
   }
 
   if (amount > 100) {
-    return "Can not be more than 100%";
+    return globalL10n.r3hMaxPercent;
   }
 
   if (amount <= 0) {
-    return "Must be more than 0%";
+    return globalL10n.r3hMinPercent;
   }
 
   return null;
@@ -201,11 +202,11 @@ String? formPercentValidator(String? val) {
 
 String? formValidatorNumber(String? value, String label) {
   if (value == null || value.isEmpty) {
-    return "$label is required.";
+    return globalL10n.r3hFieldRequired(label);
   }
 
   if (!isNumber(value)) {
-    return "Invalid $label.";
+    return globalL10n.r3hFieldInvalid(label);
   }
 
   return null;
@@ -213,11 +214,11 @@ String? formValidatorNumber(String? value, String label) {
 
 String? formValidatorInteger(String? value, String label) {
   if (value == null || value.isEmpty) {
-    return "$label is required.";
+    return globalL10n.r3hFieldRequired(label);
   }
 
   if (!isInt(value)) {
-    return "Invalid $label.";
+    return globalL10n.r3hFieldInvalid(label);
   }
 
   return null;
@@ -225,8 +226,8 @@ String? formValidatorInteger(String? value, String label) {
 
 String? formValidatorAlphaNumeric(String? value, String label) {
   if (value == null || value.isEmpty) {
-    return "$label is required.";
+    return globalL10n.r3hFieldRequired(label);
   }
 
-  return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(value) ? null : "A DNR may only contain letters and numbers.";
+  return RegExp(r"^[a-zA-Z0-9]+$").hasMatch(value) ? null : globalL10n.r3hDnrAlphaNumeric;
 }

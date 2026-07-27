@@ -6,6 +6,7 @@ import '../../core/app_constants.dart';
 import '../../core/env.dart';
 import '../../core/services/base_service.dart';
 import '../../utils/toast.dart';
+import '../../l10n/l10n_helper.dart';
 import '../keygen/models/keypair.dart';
 import '../nft/models/nft.dart';
 import '../nft/models/web_nft.dart';
@@ -147,7 +148,7 @@ class RawService extends BaseService {
         response = await postJson('/smart-contract-data/', params: updatedPayload, responseIsJson: true);
       } catch (e) {
         print(e);
-        Toast.error("Error generating smart contract data");
+        Toast.error(globalL10n.r3bErrorGeneratingScData);
         return false;
       }
       final data = response['data'];
@@ -161,7 +162,7 @@ class RawService extends BaseService {
       );
 
       if (txData == null) {
-        Toast.error("Invalid transaction data.");
+        Toast.error(globalL10n.btcInvalidTxData);
         return false;
       }
 
@@ -192,7 +193,7 @@ class RawService extends BaseService {
         response = await postJson('/smart-contract-data/', params: updatedPayload, responseIsJson: true);
       } catch (e) {
         print(e);
-        Toast.error("Error generating smart contract data");
+        Toast.error(globalL10n.r3bErrorGeneratingScData);
         return null;
       }
       final data = response['data'];
@@ -206,7 +207,7 @@ class RawService extends BaseService {
       );
 
       if (txData == null) {
-        Toast.error("Invalid transaction data.");
+        Toast.error(globalL10n.btcInvalidTxData);
         return null;
       }
 

@@ -312,8 +312,11 @@ class _VfxDomain extends BaseComponent {
 
                         final confirmed = await ConfirmDialog.show(
                           title: AppLocalizations.of(context).adnrDeleteTitle,
-                          body:
-                              "Are you sure you want to delete this VFX Domain?\n${ADNR_DELETE_COST == 0 ? 'There is no cost to delete and VFX Domain (aside from the TX fee).' : 'There is a cost of $ADNR_DELETE_COST RBX to delete an RBX Domain.'}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+                          body: AppLocalizations.of(context).r3gAdnrDeleteBody(
+                            ADNR_DELETE_COST == 0
+                                ? AppLocalizations.of(context).r3gAdnrDeleteNoCost
+                                : AppLocalizations.of(context).r3gAdnrDeleteWithCost(ADNR_DELETE_COST.toString()),
+                          ),
                           destructive: true,
                           cancelText: AppLocalizations.of(context).actionCancel,
                           confirmText: AppLocalizations.of(context).adnrDelete,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../btc/models/btc_transaction.dart';
 import 'transaction_list_tile.dart';
 import '../models/transaction.dart';
@@ -18,7 +19,7 @@ class CombinedTransactionsList extends BaseComponent {
     if (transactions.isEmpty) {
       return Center(
         child: Text(
-          "No Transactions Found",
+          AppLocalizations.of(context).r3cNoTransactionsFound,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       );

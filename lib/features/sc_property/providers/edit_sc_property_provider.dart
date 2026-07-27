@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/sc_property.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/validation.dart';
 
 class EditScPropertyProvider extends StateNotifier<ScProperty> {
@@ -11,16 +12,16 @@ class EditScPropertyProvider extends StateNotifier<ScProperty> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController valueController = TextEditingController();
 
-  String? nameValidator(value) => formValidatorNotEmpty(value, "Name");
+  String? nameValidator(value) => formValidatorNotEmpty(value, globalL10n.scwName);
 
   String? valueValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return "Value is required";
+      return globalL10n.r3eValueRequired;
     }
 
     if (state.type == ScPropertyType.color) {
       if (!value.contains("#") || value.length != 7) {
-        return "Invalid hex color";
+        return globalL10n.r3eInvalidHexColor;
       }
     }
 

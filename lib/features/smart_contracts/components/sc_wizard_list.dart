@@ -10,6 +10,7 @@ import '../screens/sc_wizard_edit_item_screen.dart';
 
 import '../../../core/base_component.dart';
 import '../providers/sc_wizard_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardList extends BaseComponent {
   const ScWizardList({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class ScWizardList extends BaseComponent {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ScWizardEditItemScreen(
-          title: "Create Instance",
+          title: AppLocalizations.of(context).r3aCreateInstance,
           index: index,
         ),
       ),
@@ -44,11 +45,12 @@ class ScWizardList extends BaseComponent {
     final provider = ref.read(scWizardProvider.notifier);
     final items = ref.watch(scWizardProvider);
     final isMobile = BreakPoints.useMobileLayout(context);
+    final l10n = AppLocalizations.of(context);
 
     if (items.isEmpty) {
       return Center(
         child: AppButton(
-          label: "Create First Instance",
+          label: l10n.r3aCreateFirstInstance,
           onPressed: () {
             createNew(context: context, provider: provider, index: 0, x: 0, y: 0, item: ScWizardItem.empty());
           },
@@ -66,21 +68,21 @@ class ScWizardList extends BaseComponent {
         String description = entry.description;
         if (entry.royalty != null || entry.additionalAssets.isNotEmpty) {
           if (entry.royalty != null) {
-            description = "${entry.royalty!.amountWithSuffix} Royalty to ${entry.royalty!.address}";
+            description = "${entry.royalty!.amountWithSuffix} ${l10n.r3aRoyaltyTo} ${entry.royalty!.address}";
             if (entry.additionalAssets.isNotEmpty) {
-              description = "$description | ${entry.additionalAssets.length} Additional Asset${entry.additionalAssets.length == 1 ? '' : 's'}";
+              description = "$description | ${entry.additionalAssets.length} ${entry.additionalAssets.length == 1 ? l10n.r3aAdditionalAsset : l10n.r3aAdditionalAssets}";
             }
           } else if (entry.additionalAssets.isNotEmpty) {
-            description = "${entry.additionalAssets.length} Additional Asset${entry.additionalAssets.length == 1 ? '' : 's'}";
+            description = "${entry.additionalAssets.length} ${entry.additionalAssets.length == 1 ? l10n.r3aAdditionalAsset : l10n.r3aAdditionalAssets}";
           }
         }
 
         if (item.entry.evolve.phases.isNotEmpty) {
-          description = "$description | ${item.entry.evolve.phases.length} Evolve Phase${item.entry.evolve.phases.length == 1 ? '' : 's'}";
+          description = "$description | ${item.entry.evolve.phases.length} ${item.entry.evolve.phases.length == 1 ? l10n.r3aEvolvePhase : l10n.r3aEvolvePhases}";
         }
 
         if (item.entry.properties.isNotEmpty) {
-          description = "$description | ${item.entry.properties.length} ${item.entry.properties.length == 1 ? 'Property' : 'Properties'}";
+          description = "$description | ${item.entry.properties.length} ${item.entry.properties.length == 1 ? l10n.r3aProperty : l10n.scwProperties}";
         }
 
         return Container(
@@ -123,28 +125,28 @@ class ScWizardList extends BaseComponent {
                               Navigator.of(context).pop();
                             },
                             child: Text(
-                              "Duplicate",
+                              l10n.r3aDuplicate,
                             )),
                         PopupMenuItem(
                             onTap: () {
                               Navigator.of(rootNavigatorKey.currentContext!).push(
                                 MaterialPageRoute(
                                   builder: (context) => ScWizardEditItemScreen(
-                                    title: "Edit Instance",
+                                    title: l10n.r3aEditInstance,
                                     index: index,
                                   ),
                                 ),
                               );
                             },
                             child: Text(
-                              "Edit",
+                              l10n.scwEdit,
                             )),
                         PopupMenuItem(
                             onTap: () async {
                               final confirmed = await ConfirmDialog.show(
-                                title: "Delete Instance?",
-                                body: "Are you sure you want to delete this instance?",
-                                confirmText: "Delete",
+                                title: l10n.r3aDeleteInstanceTitle,
+                                body: l10n.r3aDeleteInstanceConfirm,
+                                confirmText: l10n.actionDelete,
                                 destructive: true,
                               );
                               if (confirmed == true) {
@@ -152,7 +154,7 @@ class ScWizardList extends BaseComponent {
                               }
                             },
                             child: Text(
-                              "Delete",
+                              l10n.actionDelete,
                             )),
                       ];
                     }))
@@ -160,7 +162,7 @@ class ScWizardList extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         AppButton(
-                          label: "Duplicate",
+                          label: l10n.r3aDuplicate,
                           icon: Icons.copy,
                           onPressed: () {
                             createNew(context: context, provider: provider, index: items.length, x: 0, y: 0, item: item.copyWith());
@@ -169,13 +171,13 @@ class ScWizardList extends BaseComponent {
                         ),
                         const SizedBox(width: 6),
                         AppButton(
-                          label: "Edit",
+                          label: l10n.scwEdit,
                           icon: Icons.edit,
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => ScWizardEditItemScreen(
-                                  title: "Edit Instance",
+                                  title: l10n.r3aEditInstance,
                                   index: index,
                                 ),
                               ),
@@ -184,14 +186,14 @@ class ScWizardList extends BaseComponent {
                         ),
                         const SizedBox(width: 6),
                         AppButton(
-                          label: "Delete",
+                          label: l10n.actionDelete,
                           icon: Icons.delete,
                           variant: AppColorVariant.Danger,
                           onPressed: () async {
                             final confirmed = await ConfirmDialog.show(
-                              title: "Delete Instance?",
-                              body: "Are you sure you want to delete this instance?",
-                              confirmText: "Delete",
+                              title: l10n.r3aDeleteInstanceTitle,
+                              body: l10n.r3aDeleteInstanceConfirm,
+                              confirmText: l10n.actionDelete,
                               destructive: true,
                             );
                             if (confirmed == true) {
@@ -205,7 +207,7 @@ class ScWizardList extends BaseComponent {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => ScWizardEditItemScreen(
-                      title: "Edit Instance",
+                      title: l10n.r3aEditInstance,
                       index: index,
                     ),
                   ),

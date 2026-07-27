@@ -780,7 +780,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       final amountStr = await PromptModal.show(
         contextOverride: context,
         title: globalL10n.mktPlaceBid,
-        validator: (val) => formValidatorNumber(val, "Bid Amount"),
+        validator: (val) => formValidatorNumber(val, globalL10n.r3bBidAmount),
         labelText: globalL10n.mktBidAmountLabel,
         footer: globalL10n.mktBidMustBeGreaterFooter(minimumBid.toString()),
         confirmText: globalL10n.actionContinue,

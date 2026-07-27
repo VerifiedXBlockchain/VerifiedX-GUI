@@ -41,7 +41,7 @@ class WebTokenManagementActions extends BaseComponent {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Manage Token",
+          AppLocalizations.of(context).r3hManageToken,
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         SizedBox(
@@ -117,7 +117,7 @@ class WebTokenTopicBottomSheet extends BaseComponent {
       return ModalContainer(
         children: [
           Center(
-            child: Text("No Voting Topics"),
+            child: Text(AppLocalizations.of(context).r3hNoVotingTopics),
           )
         ],
       );
@@ -215,7 +215,7 @@ class WebTokenBanAddressButton extends BaseComponent {
         if (!manager.verifyBalance()) {
           return;
         }
-        final address = await manager.promptForAddress(title: "Address to Ban");
+        final address = await manager.promptForAddress(title: AppLocalizations.of(context).r3hAddressToBan);
         if (address == null) {
           return;
         }
@@ -236,8 +236,9 @@ class WebPauseTokenButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: token.isPaused ? 'Resume TXs' : 'Pause Txs',
+      label: token.isPaused ? l10n.r3hResumeTxs : l10n.r3hPauseTxs,
       variant: AppColorVariant.Light,
       onPressed: () async {
         final manager = ref.read(webTokenActionsManager);
@@ -250,12 +251,12 @@ class WebPauseTokenButton extends BaseComponent {
         }
 
         final confirmed = await ConfirmDialog.show(
-          title: token.isPaused ? "Resume Transactions" : "Pause Transactions",
+          title: token.isPaused ? l10n.r3hResumeTransactions : l10n.r3hPauseTransactions,
           body: token.isPaused
-              ? "Are you sure you want resume transactions with this token?"
-              : "Are you sure you want to pause all transactions with this token?",
-          confirmText: "Yes",
-          cancelText: "No",
+              ? l10n.r3hResumeTxConfirmBody
+              : l10n.r3hPauseTxConfirmBody,
+          confirmText: l10n.actionYes,
+          cancelText: l10n.actionNo,
         );
         if (confirmed == true) {
           final success = await manager.pause(token, token.ownerAddress, !token.isPaused);
@@ -275,8 +276,9 @@ class WebChangeTokenOwnershipButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Change Ownership",
+      label: l10n.tokenChangeOwnership,
       variant: AppColorVariant.Secondary,
       onPressed: () async {
         final manager = ref.read(webTokenActionsManager);
@@ -288,7 +290,7 @@ class WebChangeTokenOwnershipButton extends BaseComponent {
         if (!manager.verifyBalance(isRa: token.ownerAddress.startsWith('xRBX'))) {
           return;
         }
-        final address = await manager.promptForAddress(title: "New Owner's Address");
+        final address = await manager.promptForAddress(title: l10n.r3hNewOwnerAddress);
         if (address == null) {
           return;
         }
@@ -297,14 +299,14 @@ class WebChangeTokenOwnershipButton extends BaseComponent {
           final raKeypair = ref.read(webSessionProvider).raKeypair;
 
           if (raKeypair == null || raKeypair.address != token.ownerAddress) {
-            Toast.error("Could not locate vault keypair for address ${token.ownerAddress}.");
+            Toast.error(l10n.r3hVaultKeypairNotFound(token.ownerAddress));
             return;
           }
 
           final hoursString = await PromptModal.show(
-            title: "Timelock Duration",
+            title: l10n.svcTimelockDuration,
             validator: (_) => null,
-            labelText: "Hours (24 Minimum)",
+            labelText: l10n.r3hHours24Minimum,
             initialValue: "24",
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           );
@@ -344,8 +346,9 @@ class WebMintTokenButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Mint Tokens",
+      label: l10n.tokenMintTokens,
       variant: AppColorVariant.Success,
       onPressed: () async {
         final manager = ref.read(webTokenActionsManager);
@@ -358,7 +361,7 @@ class WebMintTokenButton extends BaseComponent {
           return;
         }
 
-        final amount = await manager.promptForAmount(title: "Amount to Mint");
+        final amount = await manager.promptForAmount(title: l10n.tokenAmountToMintTitle);
 
         if (amount == null) {
           return;

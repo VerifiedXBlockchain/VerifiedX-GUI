@@ -10,6 +10,7 @@ import '../../../utils/toast.dart';
 import '../../price/providers/price_detail_providers.dart';
 import '../models/butterfly_link.dart';
 import '../providers/butterfly_creation_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ButterflyCreateLinkDialog extends ConsumerStatefulWidget {
   final double amount;
@@ -100,11 +101,11 @@ class _ButterflyCreateLinkDialogState
         return _buildConfirmContent(state);
 
       case ButterflyCreationStep.sendingTx:
-        return _buildProcessingContent('Sending VFX...');
+        return _buildProcessingContent(AppLocalizations.of(context).r3dSendingVfxEllipsis);
 
       case ButterflyCreationStep.waitingForFund:
         return _buildProcessingContent(
-          'Waiting for deposit confirmation...\nThis may take up to 20 seconds.',
+          AppLocalizations.of(context).r3dWaitingDepositConfirmation,
         );
 
       case ButterflyCreationStep.complete:
@@ -123,26 +124,27 @@ class _ButterflyCreateLinkDialogState
     final estimatedFee = vfxPrice != null && vfxPrice > 0
         ? feeInUsd / vfxPrice
         : 0.01; // Fallback if price not available
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildDetailRow('Amount', '${state.amount.toStringAsFixed(8)} VFX'),
+        _buildDetailRow(l10n.labelAmount, '${state.amount.toStringAsFixed(8)} VFX'),
         const SizedBox(height: 8),
-        _buildDetailRow('Estimated Fee',
+        _buildDetailRow(l10n.r3dEstimatedFee,
             '~${estimatedFee.toStringAsFixed(8)} VFX (\$$feeInUsd)'),
         const Divider(),
         _buildDetailRow(
-          'Total',
+          l10n.labelTotal,
           '~${(state.amount + estimatedFee).toStringAsFixed(8)} VFX',
           bold: true,
         ),
         const SizedBox(height: 16),
         if (state.message.isNotEmpty) ...[
-          _buildDetailRow('Message', state.message),
+          _buildDetailRow(l10n.r3dMessage, state.message),
           const SizedBox(height: 8),
         ],
-        _buildDetailRow('From', _truncateAddress(widget.walletAddress)),
+        _buildDetailRow(l10n.labelFrom, _truncateAddress(widget.walletAddress)),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(12),
@@ -157,7 +159,7 @@ class _ButterflyCreateLinkDialogState
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'The recipient will receive ${state.amount} VFX when they claim the link.',
+                  AppLocalizations.of(context).r3dRecipientWillReceive(state.amount.toString()),
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.blue[300],
@@ -211,7 +213,7 @@ class _ButterflyCreateLinkDialogState
               ),
               const SizedBox(height: 12),
               Text(
-                'Payment link created successfully!',
+                AppLocalizations.of(context).r3dPaymentLinkCreatedSuccess,
                 style: TextStyle(
                   color: Colors.green[300],
                   fontWeight: FontWeight.bold,
@@ -239,19 +241,19 @@ class _ButterflyCreateLinkDialogState
               const SizedBox(height: 8),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 AppButton(
-                  label: 'Copy Link',
+                  label: AppLocalizations.of(context).r3dCopyLink,
                   type: AppButtonType.Outlined,
                   variant: AppColorVariant.Secondary,
                   onPressed: () {
                     Clipboard.setData(ClipboardData(text: link.fullUrl));
-                    Toast.message('Link copied to clipboard!');
+                    Toast.message(AppLocalizations.of(context).r3dLinkCopiedClipboard);
                   },
                 ),
                 SizedBox(
                   width: 8,
                 ),
                 AppButton(
-                  label: 'Share Link',
+                  label: AppLocalizations.of(context).r3dShareLink,
                   type: AppButtonType.Outlined,
                   variant: AppColorVariant.Secondary,
                   onPressed: () {
@@ -264,7 +266,7 @@ class _ButterflyCreateLinkDialogState
         ),
         const SizedBox(height: 12),
         Text(
-          'Share this link with the recipient.\nThey can claim the VFX without needing a wallet.',
+          AppLocalizations.of(context).r3dShareLinkInstructions,
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 14, color: Colors.white70),
         ),
@@ -291,7 +293,7 @@ class _ButterflyCreateLinkDialogState
               ),
               const SizedBox(height: 12),
               Text(
-                state.errorMessage ?? 'An error occurred',
+                state.errorMessage ?? AppLocalizations.of(context).txpErrorOccurred,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.red[300],
@@ -344,13 +346,13 @@ class _ButterflyCreateLinkDialogState
               ref.read(butterflyCreationProvider.notifier).reset();
               Navigator.of(context).pop();
             },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.white70),
+            child: Text(
+              AppLocalizations.of(context).actionCancel,
+              style: const TextStyle(color: Colors.white70),
             ),
           ),
           AppButton(
-            label: 'Create Link',
+            label: AppLocalizations.of(context).r3dCreateLink,
             icon: Icons.check,
             onPressed: _onConfirm,
             variant: AppColorVariant.Success,
@@ -364,7 +366,7 @@ class _ButterflyCreateLinkDialogState
       case ButterflyCreationStep.complete:
         return [
           AppButton(
-            label: 'Done',
+            label: AppLocalizations.of(context).actionDone,
             variant: AppColorVariant.Success,
             onPressed: () {
               ref.read(butterflyCreationProvider.notifier).reset();
@@ -381,10 +383,10 @@ class _ButterflyCreateLinkDialogState
               ref.read(butterflyCreationProvider.notifier).reset();
               Navigator.of(context).pop();
             },
-            child: const Text('Close'),
+            child: Text(AppLocalizations.of(context).actionClose),
           ),
           AppButton(
-            label: 'Try Again',
+            label: AppLocalizations.of(context).r3dTryAgain,
             icon: Icons.refresh,
             onPressed: () {
               ref.read(butterflyCreationProvider.notifier).setInput(

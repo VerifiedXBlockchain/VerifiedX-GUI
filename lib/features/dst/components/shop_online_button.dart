@@ -7,16 +7,17 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/dec_shop_provider.dart';
 import '../services/dst_service.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class ShopOnlineButton extends BaseComponent {
   const ShopOnlineButton({super.key});
 
   Future<void> promptForRestart(WidgetRef ref) async {
     final confirmed = await ConfirmDialog.show(
-      title: "CLI Restart Required",
-      body: "A CLI restart is required for this change to take affect. Would you like to restart now?",
-      confirmText: "Restart",
-      cancelText: "Cancel",
+      title: globalL10n.dstCliRestartTitle,
+      body: globalL10n.r3dCliRestartBody,
+      confirmText: globalL10n.validatorRestartCliConfirm,
+      cancelText: globalL10n.actionCancel,
       destructive: true,
     );
 
@@ -43,11 +44,11 @@ class ShopOnlineButton extends BaseComponent {
 
         if (shop.isOffline) {
           return AppButton(
-            label: "Shop Offline",
+            label: globalL10n.r3dShopOffline,
             variant: AppColorVariant.Danger,
             icon: Icons.offline_bolt_outlined,
             onPressed: () async {
-              final confirm = await ConfirmDialog.show(title: "Set Online?", body: "Are you sure you want to set this store online?");
+              final confirm = await ConfirmDialog.show(title: globalL10n.r3dSetOnlineTitle, body: globalL10n.r3dSetOnlineBody);
               if (confirm == true) {
                 final success = await DstService().toggleOnlineOffline();
                 if (success) {
@@ -59,11 +60,11 @@ class ShopOnlineButton extends BaseComponent {
           );
         } else {
           return AppButton(
-            label: "Shop Online",
+            label: globalL10n.r3dShopOnline,
             variant: AppColorVariant.Success,
             icon: Icons.offline_bolt,
             onPressed: () async {
-              final confirm = await ConfirmDialog.show(title: "Set Offline?", body: "Are you sure you want to set this store offline?");
+              final confirm = await ConfirmDialog.show(title: globalL10n.r3dSetOfflineTitle, body: globalL10n.r3dSetOfflineBody);
               if (confirm == true) {
                 final success = await DstService().toggleOnlineOffline();
                 if (success) {

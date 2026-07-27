@@ -15,6 +15,7 @@ import '../../../core/web_router.gr.dart';
 import '../../auth/auth_utils.dart';
 import '../../btc_web/services/btc_web_service.dart';
 import '../../keygen/models/keypair.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 
@@ -207,7 +208,7 @@ class WebWalletTypeSwitcher extends BaseComponent {
                     SizedBox(width: 6),
                     Expanded(
                       child: Text(
-                        "Add BTC Account",
+                        AppLocalizations.of(context).webAddBtcAccount,
                         style: TextStyle(
                             color: Color(0xfff7931a), fontSize: fontSize),
                       ),
@@ -253,13 +254,13 @@ class WebWalletTypeSwitcher extends BaseComponent {
 
                   if (option == NewBtcWalletOption.import) {
                     final wif = await PromptModal.show(
-                        title: "Import BTC WIF Private Key",
-                        labelText: "WIF Private Key",
-                        confirmText: "Import",
-                        cancelText: "Cancel",
+                        title: AppLocalizations.of(context).webImportBtcWifTitle,
+                        labelText: AppLocalizations.of(context).webWifPrivateKey,
+                        confirmText: AppLocalizations.of(context).actionImport,
+                        cancelText: AppLocalizations.of(context).actionCancel,
                         labelColor: Theme.of(context).colorScheme.btcOrange,
-                        validator: (val) =>
-                            formValidatorNotEmpty(val, "WIF Private Key"));
+                        validator: (val) => formValidatorNotEmpty(
+                            val, AppLocalizations.of(context).webWifPrivateKey));
 
                     if (wif == null) {
                       return;
@@ -277,7 +278,8 @@ class WebWalletTypeSwitcher extends BaseComponent {
                         .read(webSessionProvider.notifier)
                         .updateBtcKeypair(account, true);
 
-                    Toast.message("BTC Account Imported");
+                    Toast.message(
+                        AppLocalizations.of(context).webBtcAccountImported);
                   }
                 },
               ));
@@ -290,7 +292,7 @@ class WebWalletTypeSwitcher extends BaseComponent {
                 PopupMenuItem(
                   child: Center(
                     child: AppButton(
-                      label: "Manage Accounts",
+                      label: AppLocalizations.of(context).walletManageAccounts,
                       type: AppButtonType.Text,
                       variant: AppColorVariant.Light,
                       onPressed: () {
@@ -395,11 +397,10 @@ class _ManageAccountRow extends StatelessWidget {
       IconButton(
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
-            title: "Reveal Private Key?",
-            body:
-                "Are you sure you want to reveal your private key for this account?",
-            confirmText: "Reveal",
-            cancelText: "Cancel",
+            title: AppLocalizations.of(context).webRevealPrivateKeyTitle,
+            body: AppLocalizations.of(context).webRevealPrivateKeyAccountBody,
+            confirmText: AppLocalizations.of(context).webReveal,
+            cancelText: AppLocalizations.of(context).actionCancel,
           );
 
           if (confirmed != true) {

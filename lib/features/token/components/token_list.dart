@@ -39,7 +39,7 @@ class TokenList extends BaseComponent {
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 8),
-            Text("You have no fungible tokens with supply in any of your accounts."),
+            Text(AppLocalizations.of(context).tkbNoFungibleTokensBody),
             SizedBox(height: 16),
             AppButton(
               label: AppLocalizations.of(context).tokenCreateButton,

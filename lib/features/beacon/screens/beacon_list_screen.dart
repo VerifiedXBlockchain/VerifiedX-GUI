@@ -56,7 +56,7 @@ class BeaconListScreen extends BaseScreen {
           variant: AppColorVariant.Light,
           onPressed: () async {
             if (myBeacons.isNotEmpty) {
-              Toast.error("Only one beacon per wallet allowed.");
+              Toast.error(AppLocalizations.of(context).beaconErrorOnePerWallet);
               return;
             }
             showModalBottomSheet(

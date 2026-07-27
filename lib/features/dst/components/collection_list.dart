@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../providers/collection_list_provider.dart';
 
 import '../providers/collection_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CollectionList extends BaseComponent {
   const CollectionList({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class CollectionList extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(collectionListProvider.notifier);
     final collections = ref.watch(collectionListProvider);
+    final l10n = AppLocalizations.of(context);
 
     return ListView.builder(
       itemCount: collections.length,
@@ -35,7 +37,7 @@ class CollectionList extends BaseComponent {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     AppBadge(
-                      label: collection.isLive ? 'Live' : 'Hidden',
+                      label: collection.isLive ? l10n.r3dLive : l10n.r3dHidden,
                       variant: collection.isLive ? AppColorVariant.Success : AppColorVariant.Danger,
                     ),
                     SizedBox(

@@ -7780,5 +7780,1868 @@
         "type": "String"
       }
     }
-  }
+  },
+  "r3aActivatingSoon": "Activating soon...",
+  "r3aAdditionalOwners": "Additional Owners",
+  "r3aAssetIsRequired": "Asset is required",
+  "r3aAssets": "Assets",
+  "r3aAutomatedAppControlled": "Automated/Application Controlled",
+  "r3aBlockHeightMustBeGreaterThan": "Block height must be greater than {currentBh}.",
+  "@r3aBlockHeightMustBeGreaterThan": {
+    "placeholders": {
+      "currentBh": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aBtcTokenization": "BTC Tokenization",
+  "r3aChooseAFile": "Choose a File",
+  "r3aClearNftWizardTitle": "Clear NFT Collection Wizard?",
+  "r3aCloseNftWizardConfirm": "Are you sure you want to close the NFT collection Wizard?",
+  "r3aCloseScCreatorConfirm": "Are you sure you want to close the smart contract creator?",
+  "r3aCompileMintScConfirm": "Compile & Mint Smart Contract?",
+  "r3aConfirmMintBody": "Are you sure you want to proceed minting {amount} Smart Contract(s)?\n\nOnce compiled you will not be able to make any changes\nand the smart contract will be deployed to the chain.",
+  "@r3aConfirmMintBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aConsumable": "Consumable",
+  "r3aCreateInstance": "Create Instance",
+  "r3aCreateNewInstance": "Create New Instance",
+  "r3aCreateNewPhase": "Create New Phase",
+  "r3aCreateRarity": "Create Rarity",
+  "r3aCreatorRetainedOwnership": "Creator Retained Ownership",
+  "r3aDateMustBeInFuture": "Date must be in the future.",
+  "r3aDateTime": "Date/Time",
+  "r3aDeleteInstanceConfirm": "Are you sure you want to delete this instance?",
+  "r3aDeleteInstanceTitle": "Delete Instance?",
+  "r3aDeleteStage": "Delete Stage",
+  "r3aDeleteThisStageConfirm": "Are you sure you want to delete this stage?",
+  "r3aDescriptionIsRequired": "Description is required",
+  "r3aEditRarity": "Edit Rarity",
+  "r3aEvolutionTime": "Evolution Time ({tz})",
+  "@r3aEvolutionTime": {
+    "placeholders": {
+      "tz": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aEvolutionType": "Evolution Type",
+  "r3aEvolveStageNumber": "Evolve Stage {number}",
+  "@r3aEvolveStageNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aEvolvingMode": "Evolving Mode",
+  "r3aFeatureDescBtcTokenization": "Tokenize BTC within a smart contract",
+  "r3aFeatureDescEvolution": "Allow the smart contract to evolve based on time or network variables",
+  "r3aFeatureDescFractional": "Share ownership between multiple wallets and support voting",
+  "r3aFeatureDescMultiAsset": "Allow multiple assets to be compiled into the smart contract",
+  "r3aFeatureDescPair": "Pair/Wrap this smart contract with an existing NFT on or off this network",
+  "r3aFeatureDescRoyalty": "Include a royalty that is enforced on-chain upon any trade",
+  "r3aFeatureDescSoulBound": "Create a non-transferrable smart contract bound to a perminent address",
+  "r3aFeatureDescTokenization": "Pair this smart contract with a physical/digital good",
+  "r3aFeatureNameEvolving": "Evolving",
+  "r3aInvalidHexColor": "Invalid hex color",
+  "r3aInvalidSmartContract": "Invalid Smart Contract",
+  "r3aInvalidValue": "Invalid value",
+  "r3aIssuerMinterControlled": "Issuer/Minter Controlled",
+  "r3aLabel": "Label",
+  "r3aMint": "Mint",
+  "r3aMintPhysicalRwa": "Mint a physical or Real World Asset",
+  "r3aMinterAddressColon": "Minter Address:",
+  "r3aMinterNameIsRequired": "Minter name is required",
+  "r3aMultiAsset": "Multi Asset",
+  "r3aMusicRelease": "Music Release",
+  "r3aNameIsRequired": "Name is required",
+  "r3aNewInstance": "New Instance",
+  "r3aNftAddress": "NFT Address",
+  "r3aNftCollectionWizard": "NFT Collection Wizard",
+  "r3aNotEnoughVfxToMint": "Not enough VFX balance to mint a smart contract.",
+  "r3aNotImplemented": "Not implemented",
+  "r3aOnlineEvent": "Online Event",
+  "r3aPhysicalEvent": "Physical Event",
+  "r3aPrimaryAssetIsRequired": "Primary Asset is required",
+  "r3aPrimaryAssetOverride": "Primary Asset Override",
+  "r3aRareness": "Rareness",
+  "r3aReason": "Reason",
+  "r3aRemoveEverythingConfirm": "Are you sure you want to remove everything?",
+  "r3aRequiredForBlockHeightEvolution": "Required for Block Height evolution.",
+  "r3aRequiredForDateTimeEvolution": "Required for Date/Time evolution.",
+  "r3aSaveAndClose": "Save and Close",
+  "r3aSaveClose": "Save & Close",
+  "r3aSelfDestructive": "Self Destructive",
+  "r3aStatsOverride": "Stats Override",
+  "r3aThumbnailOverride": "Thumbnail Override",
+  "r3aTicketing": "Ticketing",
+  "r3aTimeMustBeInFuture": "Time must be in the future.",
+  "r3aToken": "Token",
+  "r3aTokenizationPhysicalDigital": "Tokenization of Physical/Digital Good",
+  "r3aValueIsRequired": "Value is required",
+  "r3aViewCompiledSmartContract": "View Compiled Smart Contract",
+  "r3aWillBeMintedBy": "This will be minted by {name}",
+  "@r3aWillBeMintedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aWrap": "Wrap",
+  "r3bActionCreation": "creation",
+  "r3bActionEditing": "editing",
+  "r3bActionPublish": "Publish",
+  "r3bActive": "Active:",
+  "r3bAddBeaconDescription": "Add an existing beacon to foreign nodes to use that relay instead of default ones on the VFX network. Configure your wallet to use a remote beacon for media transferring rather than using the default VFX network beacons. You will need to know the IP address of the remote beacon. If that beacon is using the non-default port, provide that as well. The beacon name is a friendly name visible only to you.",
+  "r3bAddressRequired": "Address Required.",
+  "r3bAlreadyOwnerNft": "You are already the owner of this NFT.",
+  "r3bAmountValue": "Amount: {amount}",
+  "@r3bAmountValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bApproveSaleStart": "Please approve the Sale Start TX for your shop purchase.",
+  "r3bAssetCache": "Asset Cache",
+  "r3bAuctionEnds": "Auction Ends",
+  "r3bAutoDeleteAssets": "Auto Delete Assets",
+  "r3bBaselineAsset": "Baseline Asset",
+  "r3bBeaconUploadSigFailed": "Couldn't produce beacon upload signature",
+  "r3bBidAmount": "Bid Amount",
+  "r3bBidNotFound": "Error: Bid not found.",
+  "r3bBuyNowTag": "[Buy Now]",
+  "r3bBuyerLabel": "Buyer: {address}",
+  "@r3bBuyerLabel": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bChain": "Chain",
+  "r3bCloseCollectionConfirm": "Are you sure you want to close the collection {action} screen?",
+  "@r3bCloseCollectionConfirm": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bCloseShopConfirm": "Are you sure you want to close the shop {action} screen?",
+  "@r3bCloseShopConfirm": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bCloseStoreConfirm": "Are you sure you want to close the store {action} screen?",
+  "@r3bCloseStoreConfirm": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bCollectionCreatedToast": "Collection Created",
+  "r3bCollectionUpdatedToast": "Collection Updated!",
+  "r3bCollections": "Collections",
+  "r3bCouldNotCreateThread": "Could not create or get thread",
+  "r3bCouldNotLogin": "Could not login",
+  "r3bCouldNotVerifyTx": "Could not verify transaction.",
+  "r3bCreateAuctionHouse": "Create Auction House",
+  "r3bCreateCollectionsHint": "Now you can create collections and then add listings to them.",
+  "r3bCreateListingsHint": "Now you can create listings for the NFTs you own.",
+  "r3bCreateNewCollection": "Create New Collection",
+  "r3bCurrentBidPrice": "Current Bid Price:",
+  "r3bCurrentBids": "Current Bids",
+  "r3bDay": "Day",
+  "r3bDays": "Days",
+  "r3bDeleteListingConfirm": "Are you sure you want to delete this listing?",
+  "r3bDeleteShopConfirm": "Are you sure you want to delete this shop?",
+  "r3bDeleteShopConfirmPublished": "Are you sure you want to delete this shop? There is a cost of {cost} VFX to delete this from the network.",
+  "@r3bDeleteShopConfirmPublished": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bEditAuctionHouse": "Edit Auction House",
+  "r3bEnableOneOption": "Enable at least one of the options (Gallery, Buy Now, or Auction)",
+  "r3bEndDateAfterStart": "End date must be after the start date",
+  "r3bEndsIn": "Ends in",
+  "r3bErrorGeneratingScData": "Error generating smart contract data",
+  "r3bFailedParseFee": "Failed to parse fee",
+  "r3bFailedParseHash": "Failed to parse hash",
+  "r3bFailedRetrieveNonce": "Failed to retrieve nonce",
+  "r3bFailedRetrieveTimestamp": "Failed to retrieve timestamp",
+  "r3bIdentifier": "Identifier",
+  "r3bImportAndPublish": "Import & Publish",
+  "r3bImportShopBroadcastBody": "Once the transaction relects on chain, your shop will appear here.",
+  "r3bImportShopConfirmBody": "Are you sure you want to import this shop? A {cost} VFX fee will be charged to publish this change to the network.\n\nThis is a destructive action and will not carry over your collections and listings.",
+  "@r3bImportShopConfirmBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bIncorrectLoginDetails": "Incorrect login details for {address}.",
+  "@r3bIncorrectLoginDetails": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bIncrementAmount": "Increment Amount:",
+  "r3bInfinite": "Infinite",
+  "r3bLabelCopied": "{label} copied to clipboard",
+  "@r3bLabelCopied": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bLoggedInSuccess": "Logged in successfully",
+  "r3bMintedBy": "Minted By",
+  "r3bMinterAddress": "Minter Address",
+  "r3bMyShopSuffix": " [My Shop]",
+  "r3bNftFeatures": "NFT Features:",
+  "r3bNftMustBeSet": "The NFT must be set",
+  "r3bNoAddress": "No address.",
+  "r3bNoAuctionHouses": "No Auction Houses",
+  "r3bNoBids": "No bids.",
+  "r3bNoCollections": "No Collections",
+  "r3bNoListings": "No Listings",
+  "r3bNoPrivateKey": "No private key.",
+  "r3bNoPublicKey": "No public key.",
+  "r3bNotAuthorized": "Not Authorized",
+  "r3bNotOwnerLoginAs": "You are not the owner of this shop. Please login as {address}",
+  "@r3bNotOwnerLoginAs": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bOffline": "Offline",
+  "r3bOnline": "Online",
+  "r3bOr": "or",
+  "r3bOwnedBy": "Owned by",
+  "r3bPrivateTag": "[Private]",
+  "r3bPublishShopBody": "There is a cost of {cost} VFX to publish your shop to the network (plus the transaction fee).",
+  "@r3bPublishShopBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bReadyToImport": "Ready to Import",
+  "r3bReserveGteFloor": "The reserve price must be greater or equal to the floor price.",
+  "r3bReserveMet": "Reserve Met:",
+  "r3bSaleCompleted": "Sale has Completed",
+  "r3bSalePending": "Sale is Pending",
+  "r3bSaveChanges": "Save Changes",
+  "r3bSetupAuctionHouse": "Setup Auction House",
+  "r3bSetupAuctionHousePrompt": "First, setup your auction house / gallery.\nThen you'll be able to create collections and add listings to them.",
+  "r3bShareListing": "Share Listing",
+  "r3bShareUrlCopied": "Share url copied to clipboard",
+  "r3bShopDeleteBroadcast": "Shop Delete transaction broadcasted to the network",
+  "r3bShopIsOffline": "Shop is offline.",
+  "r3bShopNotFound": "Shop Not Found",
+  "r3bShopPublishBroadcast": "Shop Publish transaction broadcasted to the network",
+  "r3bShopUpdateBroadcast": "Shop Update transaction broadcasted to the network",
+  "r3bShopUrlImportPrompt": "What is the shop URL you'd like to import?",
+  "r3bShopUrlNotAvailable": "Shop URL is not available.",
+  "r3bSignInToAuthorize": "To authorize this transaction, you must sign in as",
+  "r3bSignatureNotValidPrimary": "Signature not valid (primary)",
+  "r3bSmartContractId": "Smart Contract ID: {id}",
+  "@r3bSmartContractId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bStartBeforeEnd": "The start date must be before the end date.",
+  "r3bSubscribeUpdatesBody": "In order for the web wallet to provide notifications about bids/purchases for you to sign the transactions, an email address is required.",
+  "r3bThisIsPermanent": "This is permanent",
+  "r3bThisIsYourShop": "This is your own shop.",
+  "r3bTransactionSent": "Transaction Sent.",
+  "r3bUnpublished": "Unpublished",
+  "r3bUpdateShopBody": "There is a cost of {cost} VFX to update your shop on the network (plus the transaction fee).",
+  "@r3bUpdateShopBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bUpdateShopTitle": "Update Shop?",
+  "r3bWalletNotSyncedBody": "Since your wallet is not synced there may be some issues viewing the data in this shop. Continue anyway?",
+  "r3bWillNotBeNotified": "You will not be notified. You can update this setting on the dashboard if you change your mind.",
+  "r3bYouAreShopOwner": "You are the owner of this shop.",
+  "r3cCallbackFromDetails": "{text} [{amount} VFX from {address}]",
+  "@r3cCallbackFromDetails": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3cNoTransactionsFound": "No Transactions Found",
+  "r3cNoTransactionsFoundFiltered": "No Transactions Found\n[with current filters]",
+  "r3cPriceHistoryBtc": "BTC Price History",
+  "r3cPriceHistoryVfx": "VFX Price History",
+  "r3cStatusCalledBack": "Called Back",
+  "r3cStatusFail": "Fail",
+  "r3cStatusRecovered": "Recovered",
+  "r3cTypeAdnr": "ADNR",
+  "r3cTypeAdnrCreate": "ADNR Create",
+  "r3cTypeAdnrDelete": "ADNR Delete",
+  "r3cTypeAdnrTransfer": "ADNR Transfer",
+  "r3cTypeAuctionHouseCreate": "P2P Auction House (Create)",
+  "r3cTypeAuctionHouseDelete": "P2P Auction House (Delete)",
+  "r3cTypeAuctionHouseUpdate": "P2P Auction House (Update)",
+  "r3cTypeBtcAdnrCreate": "BTC ADNR Create",
+  "r3cTypeBtcAdnrDelete": "BTC ADNR Delete",
+  "r3cTypeBtcAdnrTransfer": "BTC ADNR Transfer",
+  "r3cTypeDstRegistration": "DST Registration",
+  "r3cTypeFungibleBanAddress": "Fungible Token Ban Address",
+  "r3cTypeFungibleBurn": "Fungible Token Burn",
+  "r3cTypeFungibleDeploy": "Fungible Token Deploy",
+  "r3cTypeFungibleMint": "Fungible Token Mint",
+  "r3cTypeFungibleOwnershipChange": "Fungible Token Ownership Change",
+  "r3cTypeFungiblePause": "Fungible Token Pause",
+  "r3cTypeFungibleResume": "Fungible Token Resume",
+  "r3cTypeFungibleTopicCreated": "Fungible Token Topic Created",
+  "r3cTypeFungibleTransfer": "Fungible Token Transfer",
+  "r3cTypeFungibleTx": "Fungible Token TX",
+  "r3cTypeFungibleVoteCast": "Fungible Token Vote Cast",
+  "r3cTypeNftBurn": "NFT Burn",
+  "r3cTypeNftEvolution": "NFT Evolution",
+  "r3cTypeNftMint": "NFT Mint",
+  "r3cTypeNftMintTokenized": "NFT Mint (Tokenized)",
+  "r3cTypeNftSale": "NFT Sale",
+  "r3cTypeNftSaleComplete": "NFT Sale Complete",
+  "r3cTypeNftSaleCompleteManual": "NFT Sale Complete (Manual)",
+  "r3cTypeNftSaleCompleteParen": "NFT Sale (Complete)",
+  "r3cTypeNftSaleStart": "NFT Sale Start",
+  "r3cTypeNftSaleStartManual": "NFT Sale Start (Manual)",
+  "r3cTypeNftTransfer": "NFT Transfer",
+  "r3cTypeNftTx": "NFT Tx",
+  "r3cTypeNode": "Node",
+  "r3cTypeSmartContractBurn": "Smart Contract Burn",
+  "r3cTypeSmartContractMint": "Smart Contract Mint",
+  "r3cTypeSmartContractTx": "Smart Contract TX",
+  "r3cTypeTokenizationBurn": "Tokenization Burn",
+  "r3cTypeTokenizationMint": "Tokenization Mint",
+  "r3cTypeTokenizationTx": "Tokenization TX",
+  "r3cTypeTokenizationWithdrawalComplete": "Tokenization Withdrawal Complete",
+  "r3cTypeTokenizationWithdrawalRequest": "Tokenization Withdrawal Request",
+  "r3cTypeTopicCreate": "Topic Create",
+  "r3cTypeTopicVote": "Topic Vote",
+  "r3cTypeTx": "Tx",
+  "r3cTypeValidatorHeartbeat": "Validator Heartbeat",
+  "r3cTypeValidatorRegistration": "Validator Registration",
+  "r3cTypeVault": "Vault",
+  "r3cTypeVaultCallback": "Vault (Callback)",
+  "r3cTypeVaultRecover": "Vault (Recover)",
+  "r3cTypeVaultRegister": "Vault (Register)",
+  "r3cTypeVbtcBridgeLock": "vBTC Bridge Lock",
+  "r3cTypeVbtcBridgeUnlock": "vBTC Bridge Unlock",
+  "r3cTypeVbtcBulkTransfer": "vBTC Bulk Transfer",
+  "r3cTypeVbtcBurn": "vBTC Burn",
+  "r3cTypeVbtcContractCreate": "vBTC Contract Create",
+  "r3cTypeVbtcContractMint": "vBTC Contract Mint",
+  "r3cTypeVbtcMint": "vBTC Mint",
+  "r3cTypeVbtcPrivateTransfer": "vBTC Private Transfer",
+  "r3cTypeVbtcShield": "vBTC Shield",
+  "r3cTypeVbtcTokenOwnershipTransfer": "vBTC Token Ownership Transfer",
+  "r3cTypeVbtcTransfer": "vBTC Transfer",
+  "r3cTypeVbtcTransferCoin": "vBTC Transfer Coin",
+  "r3cTypeVbtcTx": "vBTC TX",
+  "r3cTypeVbtcUnshield": "vBTC Unshield",
+  "r3cTypeVbtcValidatorExit": "vBTC Validator Exit",
+  "r3cTypeVbtcValidatorHeartbeat": "vBTC Validator Heartbeat",
+  "r3cTypeVbtcValidatorRegister": "vBTC Validator Register",
+  "r3cTypeVbtcWithdrawalArb": "vBTC Withdrawal (Arb)",
+  "r3cTypeVbtcWithdrawalCancel": "vBTC Withdrawal Cancel",
+  "r3cTypeVbtcWithdrawalComplete": "vBTC Withdrawal Complete",
+  "r3cTypeVbtcWithdrawalOwner": "vBTC Withdrawal (Owner)",
+  "r3cTypeVbtcWithdrawalRequest": "vBTC Withdrawal Request",
+  "r3cTypeVbtcWithdrawalVote": "vBTC Withdrawal Vote",
+  "r3cTypeVfxPrivateTransfer": "VFX Private Transfer",
+  "r3cTypeVfxShield": "VFX Shield",
+  "r3cTypeVfxUnshield": "VFX Unshield",
+  "r3dActivate": "Activate",
+  "r3dActivateVaultBody": "There is a cost of {cost} VFX to activate your Vault Account which is burned.\n\nContinue?",
+  "@r3dActivateVaultBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dActivateVaultTitle": "Activate Vault Account?",
+  "r3dActivationTxBroadcasted": "Activation transaction broadcasted",
+  "r3dActivity": "Activity",
+  "r3dAddressRequired": "Address Required.",
+  "r3dAttemptingSaleCompleteTx": "Attempting to send sale complete TX.",
+  "r3dAuctionAlreadyStarted": "The auction has already started.",
+  "r3dAwaitingPayment": "Awaiting Payment",
+  "r3dBackupAddress": "Address:",
+  "r3dBackupPrivateKey": "Private Key:",
+  "r3dBackupRecoveryAddress": "Recovery Address:",
+  "r3dBackupRecoveryPrivateKey": "Recovery Private Key:",
+  "r3dBackupRestoreCode": "Restore Code:",
+  "r3dBeingClaimed": "Being Claimed",
+  "r3dBtcExplorer": "BTC Explorer",
+  "r3dBuyNowPriceLabel": "Buy Now: {price} VFX",
+  "@r3dBuyNowPriceLabel": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dCantDeleteAuctionStarted": "You can't delete this listing because the auction has already started.",
+  "r3dChat": "Chat",
+  "r3dChooseNft": "Choose NFT",
+  "r3dClaimed": "Claimed",
+  "r3dCliRestartBody": "A CLI restart is required for this change to take effect. Would you like to restart now?",
+  "r3dCloseCollectionCreationConfirm": "Are you sure you want to close the collection creation screen?",
+  "r3dCloseCollectionEditingConfirm": "Are you sure you want to close the collection editing screen?",
+  "r3dCloseListingCreationConfirm": "Are you sure you want to close the listing creation screen?",
+  "r3dCloseListingEditingConfirm": "Are you sure you want to close the listing editing screen?",
+  "r3dCloseShopCreationConfirm": "Are you sure you want to close the shop creation screen?",
+  "r3dCloseShopEditingConfirm": "Are you sure you want to close the shop editing screen?",
+  "r3dCloseStoreCreationConfirm": "Are you sure you want to close the store creation screen?",
+  "r3dCloseStoreEditingConfirm": "Are you sure you want to close the store editing screen?",
+  "r3dCollectionLiveHelp": "When this is enabled, this collection will be visible to other users when they connect to your shop",
+  "r3dConfirmDeleteListing": "Are you sure you want to delete this listing?",
+  "r3dConfirmDeletePublishedShop": "Are you sure you want to delete this shop from the network? There is a cost of {cost} VFX plus TX fee to perform this operation.",
+  "@r3dConfirmDeletePublishedShop": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dConfirmDeleteUnpublishedShop": "Are you sure you want to delete your unpublished shop?",
+  "r3dConfirmDetails": "Confirm Details",
+  "r3dConfirmDiscardListing": "Are you sure you want to discard the listing?",
+  "r3dCopyLink": "Copy Link",
+  "r3dCraftTime": "Craft Time",
+  "r3dCreate": "Create",
+  "r3dCreateAuctionHouse": "Create Auction House",
+  "r3dCreateCollectionsPrompt": "Now you can create collections and then add listings to them.",
+  "r3dCreateFirstListing": "Create First Listing",
+  "r3dCreateLink": "Create Link",
+  "r3dCreateListingsForNfts": "Now you can create listings for the NFTs you own.",
+  "r3dCreateNewCollection": "Create New Collection",
+  "r3dCreatePaymentLink": "Create Payment Link",
+  "r3dCreatingNewCollectionBody": "You are creating a new collection in your auction house.\nAfter creating the new collection you will be able to create listings.",
+  "r3dDeleteTxBroadcasted": "Delete TX broadcasted.",
+  "r3dEditAuctionHouse": "Edit Auction House",
+  "r3dEnableAtLeastOneOption": "Enable at least one of the options (Gallery, Buy Now, or Auction)",
+  "r3dEndDateAfterStartDate": "End date must be after start date",
+  "r3dEstimatedFee": "Estimated Fee",
+  "r3dFailedCreatePaymentLink": "Failed to create payment link. Please try again.",
+  "r3dFailedParseFee": "Failed to parse fee",
+  "r3dFailedParseHash": "Failed to parse hash",
+  "r3dFailedRetrieveNonce": "Failed to retrieve nonce",
+  "r3dFailedRetrieveTimestamp": "Failed to retrieve timestamp",
+  "r3dFailedSendVfxEscrow": "Failed to send VFX to escrow. Please try again.",
+  "r3dFloorPriceGreaterThanZero": "The floor price must be greater than zero.",
+  "r3dFloorPriceValue": "Floor: {price} VFX",
+  "@r3dFloorPriceValue": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dGalleryListing": "Gallery Listing",
+  "r3dHdAccountRestored": "HD Account restored. Keys will now be generated deterministically based on phrase.",
+  "r3dHidden": "Hidden",
+  "r3dHideCollectionBody": "Are you sure you want to hide this collection? It won't be visible to other users when they connect to your shop.",
+  "r3dHideCollectionTitle": "Hide Collection?",
+  "r3dInputRecoverPhrase": "Input Recover Phrase",
+  "r3dInsufficientBalancePublish": "This wallet doesn't have the minimmun balance send a publish tx",
+  "r3dInsufficientBalanceUpdate": "This wallet doesn't have the minimmun balance send an update tx",
+  "r3dLabelHash": "Hash",
+  "r3dLinkCopiedClipboard": "Link copied to clipboard!",
+  "r3dLive": "Live",
+  "r3dLocalChangesSaved": "Local changes saved!",
+  "r3dMakeCollectionLiveBody": "Are you sure you want to make this collection live? This collection will be visible to other users when they connect to your shop.",
+  "r3dMakeCollectionLiveTitle": "Make Collection Live?",
+  "r3dMakeLive": "Make Live",
+  "r3dMessage": "Message",
+  "r3dNftMustBeSet": "The NFT must be set",
+  "r3dNftTransferStarted": "Success: NFT Transfer has been started.",
+  "r3dNotOneOfYourAddresses": "This is not one of your addresses",
+  "r3dNumberOfTxs": "# of Txs",
+  "r3dOr": "or",
+  "r3dPaymentCaptured": "Payment Captured",
+  "r3dPaymentFromVfxWallet": "Payment from VFX Wallet",
+  "r3dPaymentLinkCreatedSuccess": "Payment link created successfully!",
+  "r3dPaymentLinkReady": "Payment Link Ready!",
+  "r3dPaymentNotAvailable": "Payment not available in this environment",
+  "r3dPaymentProcessed": "Payment Processed",
+  "r3dPendingDeposit": "Pending Deposit",
+  "r3dPriceGreaterThanZero": "Price must be greater than zero",
+  "r3dPublish": "Publish",
+  "r3dPublishChanges": "Publish Changes",
+  "r3dPublishIpChange": "Publish IP Change",
+  "r3dPublishShopCostBody": "There is a cost of {cost} VFX to publish your shop to the network (plus the transaction fee).",
+  "@r3dPublishShopCostBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dPublishTransactionSent": "Publish Transaction Sent!",
+  "r3dPublishUpdateCostBody": "There is a cost of {cost} VFX to publish your shop changes to the network (plus the transaction fee).",
+  "@r3dPublishUpdateCostBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dPublishUpdatesBody": "Your local changes were saved successfully. Would you like to publish this to the network?",
+  "r3dPublishUpdatesBodyWithCost": "Your local changes were saved successfully. Would you like to publish this to the network?\n\n1 VFX is required since you have already published within the past 24 hours.",
+  "r3dReadyToClaim": "Ready to Claim",
+  "r3dRecipientWillReceive": "The recipient will receive {amount} VFX when they claim the link.",
+  "@r3dRecipientWillReceive": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dRecoveryInProgress": "Recovery In Progress",
+  "r3dRefreshStatus": "Refresh Status",
+  "r3dRefreshingStatus": "Refreshing status...",
+  "r3dReservePriceGteFloor": "The reserve price must be greater or equal to the floor price.",
+  "r3dReservePriceValue": "Reserve: {price} VFX",
+  "@r3dReservePriceValue": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dRestoreHdAccount": "Restore HD Account",
+  "r3dSaleCompleteTxFailed": "Sale Complete TX Failed",
+  "r3dSaveChanges": "Save Changes",
+  "r3dSecondsValue": "{seconds} seconds",
+  "@r3dSecondsValue": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dSendingVfx": "Sending VFX",
+  "r3dSendingVfxEllipsis": "Sending VFX...",
+  "r3dSetOfflineBody": "Are you sure you want to set this store offline?",
+  "r3dSetOfflineTitle": "Set Offline?",
+  "r3dSetOnlineBody": "Are you sure you want to set this store online?",
+  "r3dSetOnlineTitle": "Set Online?",
+  "r3dSetupAuctionHouse": "Setup Auction House",
+  "r3dSetupAuctionHousePrompt": "First, setup your auction house / gallery.\nThen you'll be able to create collections and add listings to them.",
+  "r3dShareLink": "Share Link",
+  "r3dShareLinkInstructions": "Share this link with the recipient.\nThey can claim the VFX without needing a wallet.",
+  "r3dShopDeleted": "Shop Deleted",
+  "r3dShopImported": "Shop Imported",
+  "r3dShopOffline": "Shop Offline",
+  "r3dShopOnline": "Shop Online",
+  "r3dShopUrlCopied": "Shop URL copied to clipboard",
+  "r3dShopUrlLabel": "URL: {url}",
+  "@r3dShopUrlLabel": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dSignatureGenerationFailed": "Signature generation failed.",
+  "r3dSignatureNotValid": "Signature not valid",
+  "r3dSize": "Size",
+  "r3dStartDateBeforeEndDate": "The start date must be before the end date.",
+  "r3dStatusInitialized": "Initialized",
+  "r3dStatusQuoted": "Quoted",
+  "r3dTimeoutDepositConfirmation": "Timeout waiting for deposit confirmation. The link was created but may need manual verification.",
+  "r3dTotalAmount": "Total Amount",
+  "r3dTotalReward": "Total Reward",
+  "r3dTransactionNotValid": "Transaction not valid",
+  "r3dTransactionSettled": "Transaction Settled",
+  "r3dTryAgain": "Try Again",
+  "r3dValidatedBy": "Validated By",
+  "r3dVaultAccountsIntroPost": "] is a Cold Storage and On-Chain Escrow Feature to keep your VFX Funds and your Digital Assets Safe.\n\n",
+  "r3dVaultAccountsIntroPre": "Vault Accounts [",
+  "r3dVaultActivationNote": "Note: Activating this feature requires a 5 VFX deposit, 4 of which will be burned upon activation.",
+  "r3dVaultFeatureDescription": "This feature is separate from your VFX instant settlement address and enables both recovery and call-back on-chain escrow features that allows you to be able to recover funds and assets back to your Vault Account in the event of theft, misplacement, or from a recipient that requires trustless escrow within 24 hours of occurrence or within a user pre-set defined time.\n\n",
+  "r3dVaultFeaturesOnChain": "These features are all on-chain and all peers are aware of their current state.\n",
+  "r3dVaultNoFungibleTokens": "Your Vault Account has no Fungible Tokens.",
+  "r3dVaultNoVbtcTokens": "Your Vault Account has no vBTC Tokens.",
+  "r3dVaultNotActivatedWarning": "Your vault account is not activated yet. To protect funds and assets securely, please activate first.",
+  "r3dVfxExplorer": "VFX Explorer",
+  "r3dVfxForUsd": "{vfx} VFX for ${usd} USD",
+  "@r3dVfxForUsd": {
+    "placeholders": {
+      "vfx": {
+        "type": "String"
+      },
+      "usd": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dViewTxs": "View Txs",
+  "r3dWaitingDepositConfirmation": "Waiting for deposit confirmation...\nThis may take up to 20 seconds.",
+  "r3dWaitingForConfirmation": "Waiting for Confirmation",
+  "r3eAccountRequiredExplanation": "An account is required to continue.\nPlease create your account now with your email address and a password.",
+  "r3eAgree": "Agree",
+  "r3eAgreeDisclaimer": "I have read and agree to the disclaimer.",
+  "r3eBlockLabel": "Block: {block}",
+  "@r3eBlockLabel": {
+    "placeholders": {
+      "block": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eBtcDomainBroadcasted": "BTC Domain Transaction has been broadcasted. See log for hash.",
+  "r3eBtcDomainValidBody": "The BTC Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: {domain}\nAmount: {amount} VFX\nFee: {fee} VFX\nTotal: {total} VFX",
+  "@r3eBtcDomainValidBody": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eBtcExplorer": "BTC Explorer",
+  "r3eButterflyDescDesktop": "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly. No Borders, No Restrictions, No Limits, and No Accounts Needed… Be Free!\n\nAuto-login with this account?",
+  "r3eButterflyDescMobile": "Butterfly makes sending payments simple. Save, Spend, and Pay Anyone, Anywhere, Anytime. Instantly.\n\nAuto-login with this account?",
+  "r3eCannotLockWhileValidating": "You can not lock your wallet while validating.",
+  "r3eCantFindPrivateKey": "Can't find private key",
+  "r3eCantFindPublicKey": "Can't find public key",
+  "r3eCloseWallet": "Close Wallet",
+  "r3eCoinPrices": "Coin Prices",
+  "r3eCollapse": "Collapse",
+  "r3eConfirmEncryptionPassword": "Please confirm your encryption password.",
+  "r3eCopySignature": "Copy Signature",
+  "r3eCostToDelete": "There is a cost of {cost} VFX to delete a BTC Domain.",
+  "@r3eCostToDelete": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eCouldNotGenerateSignature": "Could not generate signature",
+  "r3eCouldNotImportMedia": "Could not import media",
+  "r3eCreateAccount": "Create Account",
+  "r3eCreateBtcDomainDesc": "Create a BTC Domain as an alias to your account's address for receiving funds.",
+  "r3eDebugData": "Debug Data",
+  "r3eDebugDataCopied": "Debug data copied to clipboard",
+  "r3eDecryptAccountPasswordBody": "Enter the password for this account to decrypt its private keys.",
+  "r3eDeleteBtcDomainBody": "Are you sure you want to delete this BTC Domain?\n{costLine}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+  "@r3eDeleteBtcDomainBody": {
+    "placeholders": {
+      "costLine": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eDisclaimer": "Disclaimer",
+  "r3eDoNotCloseWallet": "Please do not close your wallet.",
+  "r3eDoesNotOwnBody": "{address}\ndoes NOT own\n{scId}",
+  "@r3eDoesNotOwnBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "scId": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eEmailPasswordSeedInfo": "Your email and password is used to seed your private key which is processed in this browser and will never be transmitted across the internet.",
+  "r3eEncryptAccountKeys": "Encrypt Account Keys",
+  "r3eEncryptAccountPasswordBody": "Enter a password to encrypt this account's private keys.",
+  "r3eEncryptWallet": "Encrypt Wallet",
+  "r3eEncryptWalletBody": "This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.",
+  "r3eEnterPasswordBackup": "Enter your password to backup your keys.",
+  "r3eExportNftMedia": "Export NFT Media",
+  "r3eFailedDecryptKeys": "Failed to decrypt account keys. Check your password.",
+  "r3eFailedDeleteDb": "Failed to delete {path} — folder still exists after delete",
+  "@r3eFailedDeleteDb": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eFailedDownloadFile": "Failed to download {filename} after {attempts} attempts",
+  "@r3eFailedDownloadFile": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      },
+      "attempts": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eFaucetIntro": "The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.",
+  "r3eFaucetSuccess": "Success! Funds are on their way. TX Hash: {result}",
+  "@r3eFaucetSuccess": {
+    "placeholders": {
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eFilesOnDiskMismatch": "Only {count} of {total} files on disk after download",
+  "@r3eFilesOnDiskMismatch": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eGetBtc": "Get BTC",
+  "r3eImportMedia": "Import Media",
+  "r3eImportSnapshot": "Import Snapshot",
+  "r3eIncorrectDecryptionPassword": "Incorrect decryption password.",
+  "r3eIncorrectPassword": "Incorrect password",
+  "r3eInvalidHexColor": "Invalid hex color",
+  "r3eInvalidOwnershipSig": "Invalid ownership verification signature",
+  "r3eJustTakeMeThere": "Just Take Me There",
+  "r3eLaunchButterfly": "Launch Butterfly",
+  "r3eLocalHeightAhead": "Your local blockheight is further along than the snapshot.",
+  "r3eLockNow": "Lock Now",
+  "r3eLogin": "Login",
+  "r3eLoginWithThisAccount": "Login with this Account",
+  "r3eMaxAmount": "Max Amount: {amount} VFX",
+  "@r3eMaxAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eMediaBackedUp": "Media backed up successfully.",
+  "r3eMediaImported": "Media Imported Successfully",
+  "r3eMustAgreeTerms": "You must agree to the terms before proceeding.",
+  "r3eNewPassword": "New Password",
+  "r3eNoAccountSelected": "No Account Selected",
+  "r3eNoBtcTransactions": "No BTC Transactions Found",
+  "r3eNoCostToDelete": "There is no cost to delete and BTC Domain (aside from the TX fee).",
+  "r3eNoKeysToEncrypt": "No keys to encrypt.",
+  "r3eNoNotValidating": "NO you are NOT Validating",
+  "r3eNoVfxTransactions": "No VFX Transactions Found",
+  "r3eNotValidatingTitle": "Not Validating ❌",
+  "r3eOpenDbFolder": "Open DB Folder",
+  "r3eOpenExplorer": "Open Explorer",
+  "r3eOpenLog": "Open Log",
+  "r3eOwnershipNotVerified": "Ownership NOT Verified",
+  "r3eOwnershipVerificationSignature": "Ownership Verification Signature",
+  "r3eOwnsBody": "{address}\nOWNS\n{scId}",
+  "@r3eOwnsBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "scId": {
+        "type": "String"
+      }
+    }
+  },
+  "r3ePasswordConfirmFailed": "Password confirmation failed",
+  "r3ePasswordEncryptKeys": "This password will be used to encrypt your keys.",
+  "r3ePasswordsDoNotMatchRetry": "Your passwords do not match. Please try again.",
+  "r3ePasteSignature": "Paste in the signature provided by the owner to validate its ownership.",
+  "r3ePhoneNumberRequired": "Phone Number is required",
+  "r3ePrintAddresses": "Print Addresses",
+  "r3ePrintValidators": "Print Validators",
+  "r3eProblemLocalHeight": "Problem fetching local block height. Please try again.",
+  "r3eProblemSnapshotHeight": "Problem fetching snapshot block height. Please try again.",
+  "r3eProgressLabel": "Progress: {percent}",
+  "@r3eProgressLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eReadLess": "Read Less",
+  "r3eReadMore": "Read More",
+  "r3eRecentTransactions": "Recent Transactions",
+  "r3eRecoveryBody": "Your Reserve (Protected) Account is being recovered to your recovery address.\n\nTransaction Hash: {hash}\n\nAll non-settled transactions for funds and assets will be transferred as well as your current available balance. \n\nIt is recommended you import your recovery private key into a new machine. NFT media will not be transferred over so please export them by clicking the button below and import them to your new environment.",
+  "@r3eRecoveryBody": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eRecoveryStartedTitle": "Recovery process has started",
+  "r3eRestart": "Restart",
+  "r3eRestartCliConfirm": "Are you sure you want to restart the CLI?",
+  "r3eSavedTo": "Saved to {data}",
+  "@r3eSavedTo": {
+    "placeholders": {
+      "data": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eSendOwnershipSignature": "Send this ownership validation signature to prove you are the owner.",
+  "r3eSensitiveOperationPassword": "Enter your password to continue with this sensitive operation.",
+  "r3eSessionTimeoutBody": "Your session will be locked due to inactivity. Do you want to stay logged in?\n\nThis dialog will auto-lock in 15 seconds.",
+  "r3eSessionTimeoutWarning": "Session Timeout Warning",
+  "r3eSetPassword": "Set Password",
+  "r3eShowDebugData": "Show Debug Data",
+  "r3eSignatureCopied": "Signature Verification copied to clipboard.",
+  "r3eSnapshotNoUrls": "Snapshot has no download URLs",
+  "r3eStatusLog": "Status Log",
+  "r3eStayLoggedIn": "Stay Logged In",
+  "r3eSyncingState": "Syncing state treis due to improper shutdown",
+  "r3eUnexpectedError": "Unexpected error: {error}",
+  "@r3eUnexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eUnlockWallet": "Unlock Wallet",
+  "r3eValidatingCheckProblem": "A problem occurred checking your validating status. Please restart your wallet and try again.",
+  "r3eValidatingTitle": "Validating ✅",
+  "r3eValidatorCheck": "Validator Check",
+  "r3eValueRequired": "Value is required",
+  "r3eVerifyNftOwnership": "Verify NFT Ownership",
+  "r3eVfxAddress": "VFX Address: {address}",
+  "@r3eVfxAddress": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eVfxDomainValidBody": "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: {domain}\nAmount: {amount} VFX\nFee: {fee} VFX\nTotal: {total} VFX",
+  "@r3eVfxDomainValidBody": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eVfxExplorer": "VFX Explorer",
+  "r3eViewAll": "View All",
+  "r3eViewChart": "View Chart",
+  "r3eWalletEncrypted": "Your wallet is now encrypted.",
+  "r3eWalletLocked": "Your wallet is now locked.",
+  "r3eWalletUnlocked": "Wallet has been unlocked.",
+  "r3eWalletUnlocked10Min": "Wallet has been unlocked for 10 minutes.",
+  "r3eWebWalletEncryptionBody": "The web wallet now uses encryption to protect your keys. In order to add an additional account you must fully sign out of the wallet and login again. Please make sure all your existing login details / keys are backed up before proceeding.",
+  "r3eWebWalletEncryptionTitle": "Web Wallet Now Uses Encryption",
+  "r3eWhichVfxManageDomain": "What VFX address will manage this BTC domain?",
+  "r3eYesValidating": "YES you are Validating!",
+  "r3fAProblemOccurred": "A Problem Occurred",
+  "r3fAddressCopied": "Address {address} copied to clipboard",
+  "@r3fAddressCopied": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fAnErrorOccurred": "And error occurred",
+  "r3fAutoActivateBody": "Would you like to activate the account automatically once the funding is complete?",
+  "r3fBridgeHistoryUnavailable": "Bridge history is unavailable.",
+  "r3fBridgeStatusAwaitingSignatures": "Awaiting signatures",
+  "r3fBridgeStatusExiting": "Exiting",
+  "r3fBridgeStatusExpired": "Expired",
+  "r3fBridgeStatusLocking": "Locking",
+  "r3fBridgeStatusMinted": "Minted",
+  "r3fBridgeStatusMinting": "Minting",
+  "r3fBridgeStatusReturned": "Returned",
+  "r3fBridgeStatusUnknown": "Unknown",
+  "r3fBridgeUnreachable": "Couldn't reach the bridge service.",
+  "r3fBulkConfirmBody": "Would you like to send a total of {amount} vBTC to {address}",
+  "@r3fBulkConfirmBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fBulkMinTwoTokens": "At least two tokens are required to do a bulk vBTC transaction",
+  "r3fBulkSentToast": "{amount} vBTC has been sent to {address}.",
+  "@r3fBulkSentToast": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fCliRestartRequired": "CLI restart required for changes to take effect.",
+  "r3fConfirmingBalance": "Confirming Balance...",
+  "r3fCopiedToClipboard": "'{value}' Copied to clipboard",
+  "@r3fCopiedToClipboard": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fErrorColon": "Error: {msg}",
+  "@r3fErrorColon": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fErrorHasOccurred": "An error has occurred",
+  "r3fFailedCancelWithdrawal": "Failed to cancel withdrawal.",
+  "r3fFailedCeremonyStatus": "Failed to get ceremony status.",
+  "r3fFailedCompleteWithdrawal": "Failed to complete withdrawal.",
+  "r3fFailedCreateContract": "Failed to create contract.",
+  "r3fFailedInitiateCeremony": "Failed to initiate ceremony.",
+  "r3fFailedParseFee": "Failed to parse fee",
+  "r3fFailedParseHash": "Failed to parse hash",
+  "r3fFailedRequestWithdrawal": "Failed to request withdrawal.",
+  "r3fFailedRetrieveNonce": "Failed to retrieve nonce",
+  "r3fFailedRetrieveTimestamp": "Failed to retrieve timestamp",
+  "r3fFailedTransferOwnership": "Failed to transfer ownership.",
+  "r3fFailedTransferVbtc": "Failed to transfer vBTC.",
+  "r3fFeePresetCustom": "Custom",
+  "r3fFeePresetEconomy": "Economy",
+  "r3fFeePresetFastest": "Fastest",
+  "r3fFeePresetHalfHour": "Half Hour",
+  "r3fFeePresetHour": "Hour",
+  "r3fFeePresetMinimum": "Minimum",
+  "r3fFundConfirmBody": "Would you like to send 5 VFX from {address}?",
+  "@r3fFundConfirmBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fFundSentToast": "5 VFX sent to {address}",
+  "@r3fFundSentToast": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fInputAmountsPerToken": "Input Amounts for each token:",
+  "r3fInsufficientVfxBalance": "Selected VFX account doesn't have enough balance",
+  "r3fMaxAmountIs": "Maximum amount is {amount} vBTC",
+  "@r3fMaxAmountIs": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fMaxLabel": "(MAX: {amount} vBTC)",
+  "@r3fMaxLabel": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fMyBalanceLabel": "My Balance: {balance} vBTC{usd}",
+  "@r3fMyBalanceLabel": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "usd": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fNftNotTransferred": "NFT assets have not been transferred to the VFX Web Account.",
+  "r3fNoAdditionalMedia": "This token does not contain any additional media.",
+  "r3fNoBtcTransactions": "No BTC Transactions",
+  "r3fNoRequestHash": "No request hash returned from withdrawal request.",
+  "r3fNotGenerated": "Not Generated",
+  "r3fOnboardFaucetDetails": "The community has provided a faucet to withdraw a minimal amount of VFX from in order to try out this feature. A phone number is required for verification purposes and to reduce the chance of abuse. Please note that only a hash of the phone number is stored with the faucet. Alternatively, you are welcome to purchase VFX via an exchange on on-ramp if you like.",
+  "r3fOnboardTokenizeDetails": "Time to tokenize a vBTC token. The following fields are all optional!",
+  "r3fOnboardTransferBtcDetails": "Looks like this account doesn't have any BTC. Please transfer BTC to this account to continue.",
+  "r3fOnboardTransferToVbtcDetails": "Now you are ready to transfer BTC to your vBTC token. Select the amount and Fee Rate below",
+  "r3fPrivateKeyImportedSync": "Private Key Imported! Please wait until {time} for the balance to sync.",
+  "@r3fPrivateKeyImportedSync": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fProblemRecoverySigScript": "Problem generating RecoverySigScript",
+  "r3fQrScannerUnavailable": "QR Scanner not available on this platform",
+  "r3fRecoverBody": "This is a destructive function that will callback all pending transactions and assets and move everything to this recovery address:\n\n{address}",
+  "@r3fRecoverBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fRestartNow": "Restart Now",
+  "r3fRestoreBody": "Importing an existing Vault Account will replace the current one tied to your login. To revert you can logout and login again.\n\nContinue?",
+  "r3fRestoreCodePrompt": "Paste in your RESTORE CODE to import your existing Vault Account.",
+  "r3fRevealPrivateKeyBody": "Are you sure you want to reveal your private key?",
+  "r3fSelectTokensToTransfer": "Select the tokens you'd like to transfer from:",
+  "r3fTokenMedia": "Token Media",
+  "r3fTokenTotalBalanceTooltip": "Token Total Balance: {balance} vBTC{usd}",
+  "@r3fTokenTotalBalanceTooltip": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "usd": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fTransactionCompleted": "Transaction completed: {txHash}",
+  "@r3fTransactionCompleted": {
+    "placeholders": {
+      "txHash": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fTxTypeMultiSig": "Multi-signature",
+  "r3fTxTypeReplace": "Replace",
+  "r3fTxTypeSameAccount": "Same Account TX",
+  "r3fWaitingTokenization": "Waiting for vBTC Tokenization to compile.",
+  "r3gAccountUnlocked": "Account unlocked.",
+  "r3gAccountUnlocked10Min": "Account unlocked for 10 minutes.",
+  "r3gActiveColon": "Active:",
+  "r3gAdditionalAssetsColon": "Additional Assets:",
+  "r3gAddressCopiedDot": "Address copied to clipboard.",
+  "r3gAdnrCreateConfirmBody": "The {currency} Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: {domain}\nAmount: {amount} VFX\nFee: {fee} VFX\nTotal: {total} VFX",
+  "@r3gAdnrCreateConfirmBody": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "domain": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAdnrDeleteBody": "Are you sure you want to delete this VFX Domain?\n{costLine}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+  "@r3gAdnrDeleteBody": {
+    "placeholders": {
+      "costLine": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAdnrDeleteNoCost": "There is no cost to delete and VFX Domain (aside from the TX fee).",
+  "r3gAdnrDeleteWithCost": "There is a cost of {cost} RBX to delete an RBX Domain.",
+  "@r3gAdnrDeleteWithCost": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAssetListedInAuctionHouse": "This {assetType} is listed in your auction house. Please remove the listing before transferring.",
+  "@r3gAssetListedInAuctionHouse": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAssetTransferSentSuccess": "{assetType} Transfer sent successfully to {address}!",
+  "@r3gAssetTransferSentSuccess": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAuctionBegins": "Begins: {date} {time}",
+  "@r3gAuctionBegins": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAuctionEnds": "Auction Ends",
+  "r3gAuctionHasEnded": "Auction Has Ended",
+  "r3gAuctionStarts": "Auction Starts",
+  "r3gAuctionUpcoming": "Auction Upcoming",
+  "r3gBackupUrlRequired": "Backup URL required",
+  "r3gBackupUrlTitle": "Backup URL {optional}",
+  "@r3gBackupUrlTitle": {
+    "placeholders": {
+      "optional": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gBaselineAsset": "Baseline Asset",
+  "r3gBidAmount": "Bid Amount",
+  "r3gBidGreaterThanHighest": "Your bid must be greater than the current highest bid ({price} VFX)",
+  "@r3gBidGreaterThanHighest": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gBidResent": "Bid Resent!",
+  "r3gBidSent": "Bid sent. Please check the Bid History to see if it's been accepted or rejected.",
+  "r3gBurnSentSuccess": "Burn transaction sent successfully!",
+  "r3gBuyNowSentSuccess": "Buy Now transaction sent successfully. Please wait for confirmation.",
+  "r3gChain": "Chain",
+  "r3gCollectionError": "Collection Error",
+  "r3gConfirmBurnName": "Are you sure you want to burn {name}",
+  "@r3gConfirmBurnName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmBuyNowBody": "Are you sure you want to buy now for {price} VFX?",
+  "@r3gConfirmBuyNowBody": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmDevolveOneStage": "Are you sure you want to devolve this NFT one stage?",
+  "r3gConfirmEvolveOneStage": "Are you sure you want to evolve this NFT one stage?",
+  "r3gConfirmEvolveToStage": "Are you sure you want to evolve to stage {index}?",
+  "@r3gConfirmEvolveToStage": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmPlaceBidBody": "Are you sure you want to place a bid of {amount} VFX{maxSuffix}?",
+  "@r3gConfirmPlaceBidBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "maxSuffix": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmSellNftBody": "Please confirm you want to sell the NFT to \"{address}\" for {amount} VFX.",
+  "@r3gConfirmSellNftBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmSendAssetBody": "Please confirm you want to send the {assetType} to \"{address}\".{warning}",
+  "@r3gConfirmSendAssetBody": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      },
+      "warning": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConnect": "Connect",
+  "r3gConnectToAuctionHouseTitle": "Connect to Auction House?",
+  "r3gConnectToShopBody": "Would you like to connect to {name} ({url})?",
+  "@r3gConnectToShopBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConnectedFetchingData": "Connected to {url}. Fetching data...",
+  "@r3gConnectedFetchingData": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConnectingToShop": "Connecting to shop...",
+  "r3gCopyMessage": "Copy Message",
+  "r3gCouldNotConnectOffline": "Could not connect to shop because it's offline.",
+  "r3gCouldNotFindShop": "Could not find auction house with url of {url}",
+  "@r3gCouldNotFindShop": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gCurrentBidPrice": "Current Bid Price:",
+  "r3gCurrentBids": "Current Bids",
+  "r3gCurrentStage": "Current Stage: {name}",
+  "@r3gCurrentStage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gDevolve": "Devolve",
+  "r3gEncryptionPasswordRequired": "Encryption Password Required to continue validating.",
+  "r3gEndsIn": "Ends in",
+  "r3gEvolution": "Evolution",
+  "r3gEvolveBlockHeightLabel": "Evolve Block Height: {blockHeight}\n{description}",
+  "@r3gEvolveBlockHeightLabel": {
+    "placeholders": {
+      "blockHeight": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gEvolveDateLabel": "Evolve Date: {date} {time} {tz} \n{description}",
+  "@r3gEvolveDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "tz": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gEvolveSyncBody": "This screen will reflect the change once the block is crafted and block height has synced with this transaction.",
+  "r3gFeeRateEstimateCustom": "Fee Rate: {fee} SATS /byte [{feeBtc} BTC /byte]\nFee Estimate: {feeEstimate} SATS [~{feeEstimateBtc} BTC]",
+  "@r3gFeeRateEstimateCustom": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "feeBtc": {
+        "type": "String"
+      },
+      "feeEstimate": {
+        "type": "String"
+      },
+      "feeEstimateBtc": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gFeeRateEstimatePreset": "Fee Rate: {fee} SATS /byte [{feeBtc} BTC /byte]\nFee Estimate: ~{feeEstimate} SATS [~{feeEstimateBtc} BTC]    ",
+  "@r3gFeeRateEstimatePreset": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "feeBtc": {
+        "type": "String"
+      },
+      "feeEstimate": {
+        "type": "String"
+      },
+      "feeEstimateBtc": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gGettingCollections": "Getting collections and listings...",
+  "r3gIncorrectDecryptionPassword": "Incorrect decryption password.",
+  "r3gIncrementAmount": "Increment Amount:",
+  "r3gLabelCopiedToClipboard": "{label} copied to clipboard",
+  "@r3gLabelCopiedToClipboard": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gManageEvolution": "Manage Evolution",
+  "r3gManagingName": "Managing {name}",
+  "@r3gManagingName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMaxBidSuffix": " with a max bid of {max} VFX",
+  "@r3gMaxBidSuffix": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMediaFilesNotFound": "Media files not found on this machine.",
+  "r3gMessageCopied": "Message copied to clipboard.",
+  "r3gMinIncrementAmount": "The minimum increment amount is {increment} VFX. A bid grater than {minBid} VFX is required.",
+  "@r3gMinIncrementAmount": {
+    "placeholders": {
+      "increment": {
+        "type": "String"
+      },
+      "minBid": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMinted": "Minted",
+  "r3gMintedBy": "Minted By",
+  "r3gMintedByName": "Minted By: {name}",
+  "@r3gMintedByName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMinting": "Minting...",
+  "r3gMustBeGreaterThanBid": "Must be greater than {minBid} VFX",
+  "@r3gMustBeGreaterThanBid": {
+    "placeholders": {
+      "minBid": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gNextOwner": "Next Owner",
+  "r3gNftAssetsNotTransferred": "NFT assets have not been transferred to the VFX Web Wallet.",
+  "r3gNftFeaturesColon": "NFT Features:",
+  "r3gNftListedBeforeBurning": "This NFT is listed in your auction house. Please remove the listing before burning.",
+  "r3gNoBids": "No bids.",
+  "r3gNoFeatures": "No features",
+  "r3gNoMintedNfts": "No minted NFTs with management capabilities.",
+  "r3gNoNftsFound": "No NFTs found.",
+  "r3gNoRecoveryWarning": "\n\nIf this address is not correct, there will be no way to recover the ownership of the {assetType}.",
+  "@r3gNoRecoveryWarning": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gNotEnoughBalanceDot": "Not enough balance.",
+  "r3gNotEnoughBalanceValidating": "Not enough balance since you are validating.",
+  "r3gOptionalParenthetical": "(Optional)",
+  "r3gPasteZipfileUrl": "Paste in a public URL to a hosted zipfile containing the assets.",
+  "r3gPropertiesColon": "Properties:",
+  "r3gPropertySingular": "Property",
+  "r3gPurchasedBy": "Purchased by: ",
+  "r3gPurchasedFor": "for ",
+  "r3gRemoveShopBody": "Are you sure you want to remove {url} from your saved shops?",
+  "@r3gRemoveShopBody": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gRemoveShopTitle": "Remove shop?",
+  "r3gResendMessage": "Resend Message",
+  "r3gReserveMet": "Reserve Met:",
+  "r3gSellNftPrompt": "How much are you selling this NFT for?",
+  "r3gShopCurrentlyOffline": "This shop is currently offline.",
+  "r3gShopError": "Shop Error",
+  "r3gShopIsOffline": "Shop is offline.",
+  "r3gShopOfflineWarning": "Warning: This shop is currently offline so the information may not be up to date.",
+  "r3gSmartContractIdCopied": "Smart Contract Identifier copied to clipboard",
+  "r3gStartSale": "Start Sale",
+  "r3gStepAmountAddressDesc": "Input the percentage amount to be paid to the VFX address defined in the next field.",
+  "r3gStepAmountAddressTitle": "Amount & Address",
+  "r3gStepEvolutionModeDesc": "Decide whether you want the evolution to be controlled by the issuer or by the owner of the NFT.",
+  "r3gStepEvolutionModeTitle": "Evolution Mode",
+  "r3gStepEvolutionStagesDesc": "Create multiple evolution stages based on the variables provided previously. Give each stage a name, description and optionally override the asset.",
+  "r3gStepEvolutionStagesTitle": "Evolution Stages",
+  "r3gStepEvolutionTypeDesc": "Configure whether you want the NFT to evolve automatically by date/time, block height, or only manually.",
+  "r3gStepEvolutionTypeTitle": "Evolution Type",
+  "r3gStepMetadataDesc": "Start by providing the name, minter, and description of the smart contract.",
+  "r3gStepMetadataTitle": "Metadata",
+  "r3gStepMintDesc": "Click the compile button to generate the Trilliam code that represents the smart contract then click mint to deploy it to the chain.",
+  "r3gStepMintTitle": "Mint",
+  "r3gStepPrimaryAssetDesc": "Choose the primary asset for the smart contract. This can be an image, audio file, video, or any digital file.",
+  "r3gStepRoyaltyFeeDesc": "The fee is calculated from the sale proceeds and settled on transaction finality. For flat fees, the NFT can't be sold for less than the enforced royalty.",
+  "r3gStepRoyaltyFeeTitle": "Royalty Fee",
+  "r3gStepRoyaltyTypeDesc": "Choose either a flat fee or percentage based royalty enforced by the on the chain upon any trade.",
+  "r3gTplBaselineDesc": "Create a baseline smart contract with an asset and metadata and mint it to the chain",
+  "r3gTplBaselineName": "Baseline Smart Contract",
+  "r3gTplEvolvingDesc": "Generate a smart contract that can evolve based on time or on-chain variables",
+  "r3gTplEvolvingName": "Evolving Smart Contract",
+  "r3gTplRoyaltyDesc": "Create a smart contract that includes a royalty that is enforced on-chain upon any trade",
+  "r3gTplRoyaltyName": "Royalty Smart Contract",
+  "r3gTransferAssetTitle": "Transfer {assetType}",
+  "@r3gTransferAssetTitle": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gTransferInProgress": "Transfer in Progress",
+  "r3gTransferInProgressBody": "Please ensure to keep your wallet open until this {assetType} transfer transaction appears in your transaction list.\n\nTo monitor the asset transfer progress, open your 'sclog.txt' in your databases folder.",
+  "@r3gTransferInProgressBody": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gUnlockAccount": "Unlock Account",
+  "r3gUrlOptionalLabel": "URL {optional}",
+  "@r3gUrlOptionalLabel": {
+    "placeholders": {
+      "optional": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gValueCopiedToClipboard": "{value} copied to clipboard",
+  "@r3gValueCopiedToClipboard": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gVaultCannotBurnNfts": "Vault Accounts cannot burn NFTs",
+  "r3hAccountIsValidating": "This account is validating",
+  "r3hActiveValidators": "Active Validators: {count}",
+  "@r3hActiveValidators": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hAdditionalLinksOptional": "Additional Link(s) (Optional)",
+  "r3hAddressInvalid": "Invalid Address.",
+  "r3hAddressOrDomainRequired": "Address or VFX domain required",
+  "r3hAddressRequired": "Address required",
+  "r3hAddressToBan": "Address to Ban",
+  "r3hAdjVoteInDetails": "Adj Vote In Details",
+  "r3hAdjVoteInTooLong": "The 'Vote Adjudicator In' submission is too long. Please reduce the content.",
+  "r3hAllowVotingLabel": "Allow Voting:",
+  "r3hAvailableBalance": "Available: {balance} VFX",
+  "@r3hAvailableBalance": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hBalanceRequired": "A balance is required",
+  "r3hBandwidthHint": "0 for unlimited",
+  "r3hBandwidthTb": "Bandwidth (in TB)",
+  "r3hCannotHideValidating": "You can't hide an account that is validating",
+  "r3hCompileMintBody": "Are you sure you want to proceed?\nOnce compiled you will not be able to make any changes\nand the smart contract/token will be deployed to the chain.",
+  "r3hConfirmVoteNoBody": "Are you sure you want to vote NO on this topic?",
+  "r3hConfirmVoteNoTitle": "Confirm Vote [NO]",
+  "r3hConfirmVoteYesBody": "Are you sure you want to vote YES on this topic?",
+  "r3hConfirmVoteYesTitle": "Confirm Vote [YES]",
+  "r3hCopiedToClipboard": "{label} copied to clipboard",
+  "@r3hCopiedToClipboard": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hCpu": "CPU",
+  "r3hCpuCores": "CPU Cores",
+  "r3hCpuHint": "ie. Intel",
+  "r3hCpuThreads": "CPU Threads",
+  "r3hDecimalPlacesLabel": "Decimal Places:",
+  "r3hDescRequired": "The description is required",
+  "r3hDescTooLong": "The description exceeds the maximum character length",
+  "r3hDescTooManyWords": "The description exceeds the maximum word count",
+  "r3hDescriptionColon": "Description:",
+  "r3hDescriptionOptionalLabel": "Description (Optional):",
+  "r3hDnrAlphaNumeric": "A DNR may only contain letters and numbers.",
+  "r3hEmailInvalid": "Invalid email.",
+  "r3hEmailRequired": "Email required.",
+  "r3hErrorBanning": "Error banning address",
+  "r3hErrorBurning": "Error burning token",
+  "r3hErrorChangingOwnership": "Error changing ownership",
+  "r3hErrorCreatingTopic": "Error creating topic",
+  "r3hErrorMinting": "Error minting token",
+  "r3hErrorPausing": "Error pausing/unpausing token",
+  "r3hErrorTransferring": "Error transferring token",
+  "r3hFieldInvalid": "Invalid {label}.",
+  "@r3hFieldInvalid": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hFieldRequired": "{label} is required.",
+  "@r3hFieldRequired": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hGithubLinkOptional": "Github Link (Optional)",
+  "r3hHdSize": "HD Size",
+  "r3hHdSizeSpecifier": "HD Size Specifier",
+  "r3hHours24Minimum": "Hours (24 Minimum)",
+  "r3hInsufficientBalanceForTopic": "Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)",
+  "r3hInternetSpeedDown": "Internet Speed Down (in Gbps)",
+  "r3hInternetSpeedUp": "Internet Speed Up (in Gbps)",
+  "r3hInvalid": "Invalid",
+  "r3hIsBurnableLabel": "Is Burnable:",
+  "r3hLabelMinTokenRequirement": "Minimum Token Requirement",
+  "r3hLogoutConfirmBody": "Are you sure you want to logout of the VFX Web Wallet?",
+  "r3hMachineOs": "Machine OS",
+  "r3hMachineProvider": "Machine Provider",
+  "r3hMachineType": "Machine Type",
+  "r3hMachineTypeHint": "ie. Server, Desktop, Laptop, etc.",
+  "r3hManageToken": "Manage Token",
+  "r3hMaxPercent": "Can not be more than 100%",
+  "r3hMinPercent": "Must be more than 0%",
+  "r3hMintBroadcastedBody": "Token Smart Contract mint transaction has been broadcasted.\n\nThe Fungible Token screen will reflect the change once the block is crafted and block height has synced with this transaction.",
+  "r3hMintedByBody": "This will be minted by {address}",
+  "@r3hMintedByBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hMustBeValidatorToCreateTopic": "Your active account must be a validator to create a topic.",
+  "r3hMustSelectAccountToVote": "Must have an account selected to vote.",
+  "r3hNameRequired": "The name is required",
+  "r3hNameTooLong": "The name exceeds the maximum character length",
+  "r3hNewOwnerAddress": "New Owner's Address",
+  "r3hNoActiveTopics": "No Active Topics",
+  "r3hNoCreatedTopics": "You haven't created any topics.",
+  "r3hNoInactiveTopics": "No Inactive Topics",
+  "r3hNoTokensInAccounts": "No tokens in any of your accounts.",
+  "r3hNoUpper": "NO",
+  "r3hNoVotingTopics": "No Voting Topics",
+  "r3hNodeNameTaken": "Node name already taken.",
+  "r3hNotAuthorizedAddress": "Not authorized (incorrect address).",
+  "r3hNotAuthorizedToken": "Not authorized (token invalid).",
+  "r3hNotVotedAnyTopics": "You haven't voted on any topics.",
+  "r3hOneActiveTopicPerAddress": "Only one active topic per address is allowed.",
+  "r3hOptional": "Optional",
+  "r3hPasswordRequired": "Password required.",
+  "r3hPasswordWeak": "Password not strong enough.",
+  "r3hPause": "Pause",
+  "r3hPauseTokenTransactions": "Pause Token Transactions",
+  "r3hPauseTokenTxConfirmBody": "Are you sure you want to pause token transactions? This will prevent transfers and burning of this token until resumed.",
+  "r3hPauseTransactions": "Pause Transactions",
+  "r3hPauseTxConfirmBody": "Are you sure you want to pause all transactions with this token?",
+  "r3hPauseTxs": "Pause TXs",
+  "r3hPendingPause": "Pending Pause",
+  "r3hPendingResume": "Pending Resume",
+  "r3hPhoneInvalid": "Invalid Phone Number.",
+  "r3hPhoneRequired": "Phone Number required.",
+  "r3hProblemOccurred": "A problem occurred.",
+  "r3hRamGb": "RAM (in GB)",
+  "r3hReasonToBecomeAdj": "Reason To Become Adjudicator",
+  "r3hReplaceTokenIcon": "Replace Token Icon",
+  "r3hRequired": "Required",
+  "r3hResume": "Resume",
+  "r3hResumeTokenTransactions": "Resume Token Transactions",
+  "r3hResumeTokenTxConfirmBody": "Are you sure you want to resume token transactions?",
+  "r3hResumeTransactions": "Resume Transactions",
+  "r3hResumeTxConfirmBody": "Are you sure you want resume transactions with this token?",
+  "r3hResumeTxs": "Resume TXs",
+  "r3hSeparateWithCommas": "Separate multiple with commas",
+  "r3hTechnicalBackground": "Technical Background",
+  "r3hTokenAccounts": "Token Accounts",
+  "r3hTokenHasFixedSupply": "Token Has Fixed Supply:",
+  "r3hTokenIconUrlLabel": "Token Icon URL:",
+  "r3hTokenNameFieldLabel": "Token Name:",
+  "r3hTokenNameHelper": "The name of this new token.",
+  "r3hTokenOwnerLabel": "Token Owner: ",
+  "r3hTokenPauseBroadcasted": "Token pause transaction broadcasted",
+  "r3hTokenResumeBroadcasted": "Token resume transaction broadcasted",
+  "r3hTokenTickerFieldLabel": "Token Ticker:",
+  "r3hTokenTickerHelper": "The ticker for this new token.",
+  "r3hTotalSupplyLabel": "Total Supply:",
+  "r3hUploadTokenIcon": "Upload Token Icon",
+  "r3hUseZeroForInfinite": "Use 0 for Infinite (allows minting)",
+  "r3hUsernameInvalid": "Username not valid.",
+  "r3hUsernameRequired": "Username required.",
+  "r3hVaultActionNotAllowedBody": "Vault Account owned tokens can not perform this action. Please change the ownership to a standard VFX account to continue.",
+  "r3hVaultKeypairNotFound": "Could not locate vault keypair for address {address}.",
+  "@r3hVaultKeypairNotFound": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hVfxAddressToNominate": "VFX Address to Nominate",
+  "r3hVoteNoUpper": "Vote NO",
+  "r3hVoteYesUpper": "Vote YES",
+  "r3hVotedAllTopics": "You have voted on all topics.",
+  "r3hVotingEndedOn": "Voting Ended on {date}.",
+  "@r3hVotingEndedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hVotingEndsOn": "Voting ends {date}.",
+  "@r3hVotingEndsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hWalletSyncWait": "Please wait until your wallet is synced with the network",
+  "r3hWalletSynced": "Wallet Synced",
+  "r3hYesUpper": "YES",
+  "r3hYouVotedOnBlock": "You voted {vote} on block {block}",
+  "@r3hYouVotedOnBlock": {
+    "placeholders": {
+      "vote": {
+        "type": "String"
+      },
+      "block": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hYouVotedPending": "You voted {vote}. Transaction is pending.",
+  "@r3hYouVotedPending": {
+    "placeholders": {
+      "vote": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aAccountUnlockTime": "Account Unlock Time",
+  "r3aAddRarity": "Add Rarity",
+  "r3aAdditionalAsset": "Additional Asset",
+  "r3aAdditionalAssets": "Additional Assets",
+  "r3aAllowedAssetExtensionTypes": "Allowed Asset Extension Types",
+  "r3aAutoDownloadNftAsset": "Auto Download NFT Asset",
+  "r3aBackupUrlBody": "Paste in a public URL to a hosted zipfile containing the assets.",
+  "r3aBlockHeightVariable": "Block Height Variable",
+  "r3aBurnNft": "Burn NFT",
+  "r3aChooseFile": "Choose File",
+  "r3aCompile": "Compile",
+  "r3aCompileMintBodySimple": "Are you sure you want to proceed?\nOnce compiled you will not be able to make any changes\nand the smart contract will be deployed to the chain.",
+  "r3aCompilingMinting": "Compiling & Minting",
+  "r3aCompilingMintingEllipsis": "Compiling & Minting…",
+  "r3aConfiguration": "Configuration",
+  "r3aCreateBlueprint": "Create Blueprint",
+  "r3aCreateCollectionBlueprint": "Create Collection Blueprint",
+  "r3aCreateFirstInstance": "Create First Instance",
+  "r3aDateTimeVariable": "Date/Time Variable",
+  "r3aDeleteDraft": "Delete Draft",
+  "r3aDeleteDraftConfirm": "Are you sure you wan't to delete this smart contract draft?",
+  "r3aDeleteQuestion": "Delete?",
+  "r3aDeleteThisConfirm": "Are you sure you want to delete this?",
+  "r3aDraftDeleted": "Draft Delete",
+  "r3aDraftSaved": "Draft saved!",
+  "r3aDuplicate": "Duplicate",
+  "r3aEditInstance": "Edit Instance",
+  "r3aEvolutionMode": "Evolution Mode",
+  "r3aEvolvePhase": "Evolve Phase",
+  "r3aEvolvePhases": "Evolve Phases",
+  "r3aEvolveStagesInPast": "Evolve stage(s) in the past",
+  "r3aEvolveStagesInPastBody": "One or more of your evolve stages will have already evolved at the time of minting.\n\nAre your sure you want to proceed?",
+  "r3aFeatures": "Features",
+  "r3aHelpBodyAllowedExt": "This will remove extension types to the already defined list and will allow any NFT assets with these known extension types to be downloaded \nEx: pdf,doc,xls \n\nDefault value: (leave blank)",
+  "r3aHelpBodyApiCallUrl": "This URL is used to send incoming transactions to an outside URL. This is something used for like incoming deposits or other notification. services. \n\nDefault value: null",
+  "r3aHelpBodyApiPort": "This is the port to call the API. This may be changed to whatever you want. \n\nDefault value: 7292",
+  "r3aHelpBodyAutoDownload": "This will control whether or not an NFT's asset is automatically downloaded \n\nDefault value: true",
+  "r3aHelpBodyBaseline": "Fill out the baseline info required by all smart contracts. Choose a name, the minter's name (optional), and the account you want to use. Then, give your smart contract/NFT a detailed description.",
+  "r3aHelpBodyBurn": "Burn (destroy) this NFT permanently.",
+  "r3aHelpBodyCompile": "Compile the Trilliam code based on the parameters you've configured and then mint when ready.",
+  "r3aHelpBodyConfiguration": "This values will modify the config.txt file located in the CLIs database, for this changes to take effect the CLI needs to be restarted",
+  "r3aHelpBodyDelete": "Delete your smart contract",
+  "r3aHelpBodyDescription": "Provide a text-based description of your smart contract/NFT. This field is required and will be publicly visible.",
+  "r3aHelpBodyEvolveAsset": "Overide the asset when the smart contract evolves to this stage. This field is optional.",
+  "r3aHelpBodyEvolveBlockHeight": "The smart contract will evolve when the VFX chain reaches this block height.",
+  "r3aHelpBodyEvolveDatetime": "The date and time the smart contract will evolve (UTC).",
+  "r3aHelpBodyEvolveMode": "You decide how the evolution will be controlled.\n\nIssuer/Minter Controlled: The minter will be able to evolve/devolve the smart contract at any point.\n\nAutomated/Application Controlled: Automatically evolves based on time/date, on-chain variables, and/or application induced variables.",
+  "r3aHelpBodyEvolveStageDescription": "Provide a description for this evolution stage.",
+  "r3aHelpBodyEvolveStageName": "Provide a name for this evolution stage.",
+  "r3aHelpBodyEvolveType": "Choose the variable type that can dynamically affect the evolution state.\n\nDate/Time: The smart contract will automatically evolve at a certain point of time.\n\nBlock Height: The smart contract will evolve when the chain reaches a particular block height.\n\nManual Only: The smart contract will not evolve unless manually told to by the issuer or user/application (depending on which mode is selected).",
+  "r3aHelpBodyFeatures": "Add a feature to your smart contract such as royalties or evolving functionality.",
+  "r3aHelpBodyIgnoreIncoming": "This will control whether or not incoming NFTs are processed or just added as a TX record \n\nDefault value: false",
+  "r3aHelpBodyManageProperties": "Create label & value pairs.\nFor example:\n\nLabel: Color\nValue: Blue",
+  "r3aHelpBodyMint": "Mint and deploy the smart contract to the chain.",
+  "r3aHelpBodyMintQuantity": "The number of Smart Contracts / NFTs you want to mint from this template.",
+  "r3aHelpBodyMinterName": "This field is optional but will be displayed publicly if set. This can be your name/persona, or just leave it blank.",
+  "r3aHelpBodyMinting": "This action occurs after you have successfully compiled and minted but requires the transaction to be authenticated by the network which takes approximately 30 seconds for finality as well as your wallet to be synced with the block that includes this transaction.",
+  "r3aHelpBodyMotherAddress": "The IP address of the HOST wallet. \n\n Default value: (leave blank)",
+  "r3aHelpBodyMotherPassword": "The password set in your HOST wallet when configuring MOTHER.\n\n Default value: (leave blank)",
+  "r3aHelpBodyNftTimeout": "This will control the timeout for processing an incoming NFT \n\nDefault value: 15",
+  "r3aHelpBodyOwnerAddress": "This should be the account address that will be used to compile and mint the smart contract.",
+  "r3aHelpBodyPasswordClearTime": "This will control the clear time for an ecrypted wallets password \n\nDefault value: 10",
+  "r3aHelpBodyPrimaryAsset": "This is the primary file asset contained in the smart contract/NFT. It can be an image, audio, video or any file.",
+  "r3aHelpBodyProperties": "Define and assign values to assets in your smart contract. This can be a rare trait as an example.",
+  "r3aHelpBodyPropertyTypes": "Define the kind of value that your property will have \nThis types are: \n- Text: alphanumeric value \n- Number: numerical value \n- Color: Hexadecimal value of a color of your choice",
+  "r3aHelpBodyRejectExt": "This will add extension types to the already defined list and will reject any NFT assets with these known extension types \nEx: exe,zip,pdf... (ensure there are no spaces between types) \n\nDefault value: (leave blank)\n\nIf left blank, this is the default:\n{exts}",
+  "@r3aHelpBodyRejectExt": {
+    "placeholders": {
+      "exts": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aHelpBodyRoyaltyAddress": "Provide the VFX public address that the royalty will be paid to upon transaction finality.",
+  "r3aHelpBodyRoyaltyFlat": "Type in the amount of VFX that will be paid to the address provided and is enforced on-chain upon any trade. This fee is remitted to the royalty holder upon transaction finality.",
+  "r3aHelpBodyRoyaltyPercent": "Type in the percent that will be paid to the address provided and is enforced on-chain upon any trade. This fee is remitted to the royalty holder upon transaction finality.",
+  "r3aHelpBodySaveAsDraft": "Save your smart contract as a draft locally to come back and work on it later.",
+  "r3aHelpBodyScName": "Name your smart contract. This field is required and is publicly visible.",
+  "r3aHelpBodySetEvolution": "With an NFT that has more than 2 phases the user can go directly from one stage to another with the “Set Evolution” button instead of evolving and devolving stage by stage",
+  "r3aHelpBodySmartContract": "Configure the parameters of your smart contract then compile and mint it.",
+  "r3aHelpBodyTransfer": "Transfer this NFT to another account.",
+  "r3aHelpBodyWalletUnlockTime": "This is the amount of time once a password has been entered the wallet will remain unlocked and not need password again \n\nDefault value: 15",
+  "r3aIgnoreIncomingNfts": "Ignore Incoming NFTs",
+  "r3aMaxMintAtOnce": "The maxium number you can mint at one time is {max}.",
+  "@r3aMaxMintAtOnce": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aMintBroadcastedBody": "Smart Contract mint transaction has been broadcasted.\n\nThe NFTs screen will reflect the change once the block is crafted and block height has synced with this transaction.",
+  "r3aMintTxSent": "Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.",
+  "r3aMinterCreatorName": "Minter/Creator Name",
+  "r3aMinterName": "Minter Name",
+  "r3aMinting": "Minting",
+  "r3aMintingEllipsis": "Minting…",
+  "r3aMotherAddress": "Mother Address",
+  "r3aMotherPassword": "Mother Password",
+  "r3aNftSaleTransferStarted": "Success: NFT Sale Transfer has been started.",
+  "r3aNftTimeout": "Nft Timeout",
+  "r3aNftTransferStarted": "Success: NFT Transfer has been started.",
+  "r3aPasswordClearTime": "Password Clear Time",
+  "r3aPayeeAddress": "Payee Address",
+  "r3aProblemCompilingSc": "A problem occurred compiling this smart contract.",
+  "r3aProblemMintingSc": "A problem occurred minting this smart contract.",
+  "r3aProperty": "Property",
+  "r3aPropertyTypes": "Property Types",
+  "r3aRarities": "Rarities",
+  "r3aRejectAssetExtensionTypes": "Reject Asset Extension Types",
+  "r3aRoyaltyFlatFeeAmount": "Royalty Flat Fee Amount",
+  "r3aRoyaltyPercentageFeeAmount": "Royalty Percentage Fee Amount",
+  "r3aRoyaltyTo": "Royalty to",
+  "r3aSaleCompleteTxSent": "Sale Complete TX Sent",
+  "r3aSaveAsDraft": "Save as Draft",
+  "r3aScMintedSuccessfully": "Smart Contract minted successfully.",
+  "r3aSetEvolution": "Set Evolution",
+  "r3aSmartContract": "Smart Contract",
+  "r3aSmartContractName": "Smart Contract Name",
+  "r3aStat": "Stat",
+  "r3aStatType": "Stat Type",
+  "r3aTransferNft": "Transfer NFT",
+  "r3aUntitled": "Untitled",
+  "r3aValue": "Value"
 }

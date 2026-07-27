@@ -117,11 +117,14 @@ class ListingDetails extends BaseComponent {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Auction Upcoming",
+                            AppLocalizations.of(context).r3gAuctionUpcoming,
                             style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                           ),
                           Text(
-                            "Begins: ${DateFormat.yMd().format(listing.startDate)} ${DateFormat("HH:mm").format(listing.startDate)}",
+                            AppLocalizations.of(context).r3gAuctionBegins(
+                              DateFormat.yMd().format(listing.startDate),
+                              DateFormat("HH:mm").format(listing.startDate),
+                            ),
                             style: TextStyle(fontSize: 16),
                           ),
                         ],
@@ -132,7 +135,7 @@ class ListingDetails extends BaseComponent {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Auction Has Ended",
+                            AppLocalizations.of(context).r3gAuctionHasEnded,
                             style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                           ),
                           if (listing.auction!.currentWinningAddress.isNotEmpty &&
@@ -165,14 +168,14 @@ class ListingDetails extends BaseComponent {
                                       children: [
                                         RichText(
                                           text: TextSpan(style: TextStyle(fontSize: 16), children: [
-                                            TextSpan(text: "Purchased by: "),
+                                            TextSpan(text: AppLocalizations.of(context).r3gPurchasedBy),
                                             TextSpan(
                                               text: "${listing.auction!.currentWinningAddress} ",
                                               style: TextStyle(
                                                 color: Theme.of(context).colorScheme.secondary,
                                               ),
                                             ),
-                                            TextSpan(text: "for "),
+                                            TextSpan(text: AppLocalizations.of(context).r3gPurchasedFor),
                                             TextSpan(
                                               text: "${listing.auction!.currentBidPrice} VFX",
                                               style: TextStyle(
@@ -186,7 +189,7 @@ class ListingDetails extends BaseComponent {
                                         InkWell(
                                           onTap: () async {
                                             await Clipboard.setData(ClipboardData(text: listing.auction!.currentWinningAddress));
-                                            Toast.message("Address copied to clipboard");
+                                            Toast.message(AppLocalizations.of(context).messageAddressCopied);
                                           },
                                           child: Icon(
                                             Icons.copy,
@@ -449,7 +452,7 @@ class _Features extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "NFT Features:",
+            AppLocalizations.of(context).r3gNftFeaturesColon,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Colors.white,
                 ),
@@ -461,17 +464,17 @@ class _Features extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.cancel,
                         size: 16,
                         color: Colors.white54,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 4.0),
+                        padding: const EdgeInsets.only(left: 4.0),
                         child: Text(
-                          "Baseline Asset",
-                          style: TextStyle(fontSize: 14, color: Colors.white54),
+                          AppLocalizations.of(context).r3gBaselineAsset,
+                          style: const TextStyle(fontSize: 14, color: Colors.white54),
                         ),
                       ),
                     ],
@@ -601,7 +604,7 @@ class _NftData extends StatelessWidget {
                     onTap: () async {
                       await Clipboard.setData(ClipboardData(text: value));
 
-                      Toast.message("$label copied to clipboard");
+                      Toast.message(AppLocalizations.of(context).r3gLabelCopiedToClipboard(label));
                     },
                     child: const Icon(Icons.copy, size: 12)),
             ],
@@ -618,9 +621,9 @@ class _NftData extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Details",
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).btcDetailsLabel,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
               color: Colors.white,
@@ -636,12 +639,12 @@ class _NftData extends StatelessWidget {
             )),
             defaultColumnWidth: const IntrinsicColumnWidth(),
             children: [
-              buildDetailRow(context, "Identifier", nft.id, true),
-              buildDetailRow(context, "Owner Address", nft.currentOwner, true),
+              buildDetailRow(context, AppLocalizations.of(context).nftImportFieldLabel, nft.id, true),
+              buildDetailRow(context, AppLocalizations.of(context).scwOwnerAddress, nft.currentOwner, true),
               // buildDetailRow(context, "Minted On", nft.mintedAt),
-              buildDetailRow(context, "Minted By", nft.minterName),
-              buildDetailRow(context, "Minter Address", nft.minterAddress, true),
-              buildDetailRow(context, "Chain", "VFX"),
+              buildDetailRow(context, AppLocalizations.of(context).r3gMintedBy, nft.minterName),
+              buildDetailRow(context, AppLocalizations.of(context).nftMinterAddressLabel, nft.minterAddress, true),
+              buildDetailRow(context, AppLocalizations.of(context).r3gChain, "VFX"),
             ],
           ),
         ],
@@ -666,9 +669,9 @@ class _BuyNow extends BaseComponent {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          "Buy Now",
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context).shopBuyNow,
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
             color: Colors.white,
@@ -688,7 +691,7 @@ class _BuyNow extends BaseComponent {
           size: AppSizeVariant.Lg,
           onPressed: () async {
             if (!ref.read(connectedShopProvider).isConnected) {
-              Toast.error("This shop is currently offline.");
+              Toast.error(AppLocalizations.of(context).r3gShopCurrentlyOffline);
               return;
             }
             // showDialog(
@@ -702,7 +705,7 @@ class _BuyNow extends BaseComponent {
             final success = await provider.buyNow(context, listing);
 
             if (success == true) {
-              Toast.message("Buy Now transaction sent successfully. Please wait for confirmation.");
+              Toast.message(AppLocalizations.of(context).r3gBuyNowSentSuccess);
             } else {
               Toast.error();
             }
@@ -770,9 +773,9 @@ class _Auction extends BaseComponent {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Auction",
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context).mktAuction,
+            style: const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
               color: Colors.white,
@@ -798,13 +801,13 @@ class _Auction extends BaseComponent {
                   size: AppSizeVariant.Lg,
                   onPressed: () async {
                     if (!ref.read(connectedShopProvider).isConnected) {
-                      Toast.error("This shop is currently offline.");
+                      Toast.error(AppLocalizations.of(context).r3gShopCurrentlyOffline);
                       return;
                     }
 
                     final success = await provider.sendBid(context, listing);
                     if (success == true) {
-                      Toast.message("Bid sent. Please check the Bid History to see if it's been accepted or rejected.");
+                      Toast.message(AppLocalizations.of(context).r3gBidSent);
                     }
                   }),
               const SizedBox(width: 8),
@@ -817,7 +820,7 @@ class _Auction extends BaseComponent {
                   size: AppSizeVariant.Lg,
                   onPressed: () async {
                     if (!ref.read(connectedShopProvider).isConnected) {
-                      Toast.error("Warning: This shop is currently offline so the information may not be up to date.");
+                      Toast.error(AppLocalizations.of(context).r3gShopOfflineWarning);
                     }
                     final auction = listing.auction!;
 
@@ -855,7 +858,7 @@ class BidHistoryButton extends BaseComponent {
       size: AppSizeVariant.Lg,
       onPressed: () async {
         if (!ref.read(connectedShopProvider).isConnected) {
-          Toast.error("Warning: This shop is currently offline so the information may not be up to date.");
+          Toast.error(AppLocalizations.of(context).r3gShopOfflineWarning);
           await Future.delayed(Duration(seconds: 3));
         }
 
@@ -865,7 +868,7 @@ class BidHistoryButton extends BaseComponent {
         ref.read(globalLoadingProvider.notifier).complete();
 
         if (bids.isEmpty) {
-          Toast.message("No bids.");
+          Toast.message(AppLocalizations.of(context).r3gNoBids);
           return;
         }
 
@@ -906,7 +909,7 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Current Bid Price:",
+                AppLocalizations.of(context).r3gCurrentBidPrice,
                 style: labelStyle,
               ),
               Text(
@@ -930,7 +933,7 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Increment Amount:",
+                AppLocalizations.of(context).r3gIncrementAmount,
                 style: labelStyle,
               ),
               Text(
@@ -942,11 +945,11 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Reserve Met:",
+                AppLocalizations.of(context).r3gReserveMet,
                 style: labelStyle,
               ),
               Text(
-                auction.isReserveMet ? "Yes" : "No",
+                auction.isReserveMet ? AppLocalizations.of(context).actionYes : AppLocalizations.of(context).actionNo,
                 style: valueStyle,
               )
             ],
@@ -954,11 +957,11 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Active:",
+                AppLocalizations.of(context).r3gActiveColon,
                 style: labelStyle,
               ),
               Text(
-                auction.isAuctionOver ? "Completed" : "Yes",
+                auction.isAuctionOver ? AppLocalizations.of(context).dstCompleted : AppLocalizations.of(context).actionYes,
                 style: valueStyle,
               )
             ],
@@ -984,7 +987,7 @@ class _Countdown extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: AppCountdown(
               dueDate: listing.endDate,
-              prefix: listing.floorPrice != null ? "Auction Ends" : "Ends in",
+              prefix: listing.floorPrice != null ? AppLocalizations.of(context).r3gAuctionEnds : AppLocalizations.of(context).r3gEndsIn,
             ),
           ),
         if (!listing.hasStarted)
@@ -992,7 +995,7 @@ class _Countdown extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: AppCountdown(
               dueDate: listing.startDate,
-              prefix: "Auction Starts",
+              prefix: AppLocalizations.of(context).r3gAuctionStarts,
             ),
           ),
       ],
@@ -1168,7 +1171,7 @@ class _Properties extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Properties:",
+            AppLocalizations.of(context).r3gPropertiesColon,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Colors.white,
                 ),

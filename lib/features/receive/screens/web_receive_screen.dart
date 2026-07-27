@@ -16,6 +16,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/html_helpers.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -53,7 +54,7 @@ class WebReceiveScreen extends BaseScreen {
 
   Future<void> copyToClipboard(String value, [String? message]) async {
     await Clipboard.setData(ClipboardData(text: value));
-    Toast.message(message ?? "'$value' Copied to clipboard");
+    Toast.message(message ?? globalL10n.r3fCopiedToClipboard(value));
   }
 
   String generateLink(String address, double amount) {
@@ -67,16 +68,17 @@ class WebReceiveScreen extends BaseScreen {
     required String address,
     required Function(String str) onValidSubmission,
   }) async {
+    final l10n = AppLocalizations.of(context);
     PromptModal.show(
       contextOverride: context,
       tightPadding: true,
-      title: "Request Funds",
-      body: "Generate a URL to send to another user.",
-      labelText: "Amount to request",
-      validator: (value) => formValidatorNumber(value, "Amount"),
+      title: l10n.webRequestFunds,
+      body: l10n.webRequestFundsBody,
+      labelText: l10n.webAmountToRequest,
+      validator: (value) => formValidatorNumber(value, l10n.labelAmount),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      confirmText: "Generate Link",
+      confirmText: l10n.webGenerateLink,
       onValidSubmission: onValidSubmission,
     );
   }

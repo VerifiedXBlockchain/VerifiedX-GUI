@@ -67,7 +67,7 @@ class WebShopDetailScreen extends BaseScreen {
                     type: AppButtonType.Text,
                     variant: AppColorVariant.Light,
                     icon: Icons.chat_bubble_outline,
-                    label: 'Chat',
+                    label: AppLocalizations.of(context).chatTitleSingle,
                     onPressed: () async {
                       if (shop.isOwner(ref)) {
                         AutoRouter.of(context).push(web_router.WebSellerChatThreadListScreenRoute(shopId: shop.id));
@@ -78,7 +78,7 @@ class WebShopDetailScreen extends BaseScreen {
                           isThirdParty: true,
                         );
                         if (thread == null) {
-                          Toast.error("Could not create or get thread");
+                          Toast.error(AppLocalizations.of(context).r3bCouldNotCreateThread);
                           return;
                         }
 
@@ -97,7 +97,7 @@ class WebShopDetailScreen extends BaseScreen {
                   type: AppButtonType.Text,
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: "${Env.appBaseUrl}/#dashboard/p2p/shop/${shop.id}"));
-                    Toast.message("Share url copied to clipboard");
+                    Toast.message(AppLocalizations.of(context).r3bShareUrlCopied);
                   },
                 ),
                 IconButton(
@@ -119,7 +119,7 @@ class WebShopDetailScreen extends BaseScreen {
         centerTitle: true,
         backgroundColor: Colors.black12,
         shadowColor: Colors.transparent,
-        title: const Text("Error"),
+        title: Text(AppLocalizations.of(context).shopErrorTitle),
       ),
       loading: () => AppBar(
         centerTitle: true,
@@ -167,7 +167,7 @@ class WebShopDetailScreen extends BaseScreen {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Collections",
+                        AppLocalizations.of(context).r3bCollections,
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                       ),
                       if (shop.isOwner(ref) && ref.read(webSessionProvider).keypair != null)
@@ -186,7 +186,7 @@ class WebShopDetailScreen extends BaseScreen {
                                 final l10n = AppLocalizations.of(context);
                                 final confirmed = await ConfirmDialog.show(
                                   title: l10n.shopPublishShopTitle,
-                                  body: "There is a cost of $SHOP_PUBLISH_COST VFX to publish your shop to the network (plus the transaction fee).",
+                                  body: l10n.r3bPublishShopBody(SHOP_PUBLISH_COST.toString()),
                                   confirmText: l10n.shopPublishShop,
                                   cancelText: l10n.actionCancel,
                                 );
@@ -230,13 +230,13 @@ class WebShopDetailScreen extends BaseScreen {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           AppButton(
-                            label: isMobile ? 'Delete' : 'Delete shop',
+                            label: isMobile ? AppLocalizations.of(context).actionDelete : AppLocalizations.of(context).dstDeleteShop,
                             icon: Icons.delete,
                             variant: AppColorVariant.Danger,
                             onPressed: () async {
                               final message = shop.isPublished
-                                  ? "Are you sure you want to delete this shop? There is a cost of $SHOP_DELETE_COST VFX to delete this from the network."
-                                  : "Are you sure you want to delete this shop?";
+                                  ? AppLocalizations.of(context).r3bDeleteShopConfirmPublished(SHOP_DELETE_COST.toString())
+                                  : AppLocalizations.of(context).r3bDeleteShopConfirm;
 
                               final confirmed = await ConfirmDialog.show(
                                 title: AppLocalizations.of(context).shopDeleteShopTitle,
@@ -261,7 +261,7 @@ class WebShopDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
-                            label: isMobile ? "Edit" : "Edit Auction House",
+                            label: isMobile ? AppLocalizations.of(context).scwEdit : AppLocalizations.of(context).r3bEditAuctionHouse,
                             icon: Icons.edit,
                             variant: AppColorVariant.Light,
                             onPressed: () {

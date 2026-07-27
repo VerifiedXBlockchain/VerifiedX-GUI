@@ -77,9 +77,9 @@ class _UnlockWalletState extends State<UnlockWallet> {
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              "Encryption Password Required to continue validating.",
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).r3gEncryptionPasswordRequired,
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 12,
               ),

@@ -302,7 +302,7 @@
   "@receiveActionImportKey": {
     "description": "Two-line vertical button label on the receive screen. Newline must be preserved."
   },
-  "receiveRescanDialogTitle": "¿Volver a escanear bloques?",
+  "receiveRescanDialogTitle": "¿Reescanear bloques?",
   "@receiveRescanDialogTitle": {
     "description": "Confirmation dialog title asking whether to rescan the chain after importing a key."
   },
@@ -422,7 +422,7 @@
   "@settingsLanguageSection": {
     "description": "Section header in settings for the UI language / locale picker."
   },
-  "settingsLanguageSystemDefault": "Predeterminado del sistema",
+  "settingsLanguageSystemDefault": "Idioma del sistema",
   "@settingsLanguageSystemDefault": {
     "description": "Language-picker option that follows the OS / browser locale."
   },
@@ -480,7 +480,7 @@
       }
     }
   },
-  "walletRescanBlocksTitle": "¿Volver a escanear bloques?",
+  "walletRescanBlocksTitle": "¿Reescanear bloques?",
   "@walletRescanBlocksTitle": {
     "description": "Confirm dialog title asking whether to rescan the chain after import."
   },
@@ -1170,7 +1170,7 @@
   "@btcDetailScOwnerLabel": {
     "description": "Token detail field label for smart contract owner."
   },
-  "btcDetailScOwnerAddressLabel": "Dirección del propietario del contrato inteligente",
+  "btcDetailScOwnerAddressLabel": "Dirección del dueño del contrato",
   "@btcDetailScOwnerAddressLabel": {
     "description": "Token detail field label for smart contract owner address (web variant)."
   },
@@ -2410,7 +2410,7 @@
   "@nftViewCode": {
     "description": "Button to view the smart-contract code for an NFT."
   },
-  "nftSyncMedia": "Sincronizar contenido",
+  "nftSyncMedia": "Sincronizar medios",
   "@nftSyncMedia": {
     "description": "Button to sync remote NFT media."
   },
@@ -3006,7 +3006,7 @@
   "@shopUrlPromptTitle": {
     "description": "Prompt title for entering a shop URL."
   },
-  "shopUrlRequired": "Se requiere la URL de la tienda",
+  "shopUrlRequired": "URL de tienda requerida",
   "@shopUrlRequired": {
     "description": "Validation message when no shop URL is entered."
   },
@@ -4266,7 +4266,7 @@
   "@beaconLater": {
     "description": "Cancel button label to defer the action."
   },
-  "beaconAutoDeleteAssets": "Eliminar archivos automáticamente",
+  "beaconAutoDeleteAssets": "Autoeliminar archivos",
   "@beaconAutoDeleteAssets": {
     "description": "Subtitle label describing whether assets are auto-deleted."
   },
@@ -4601,7 +4601,7 @@
   "@webBackupKeys": {
     "description": "Button: backup account keys."
   },
-  "webSetActive": "Establecer como activa",
+  "webSetActive": "Activar",
   "@webSetActive": {
     "description": "Button: set account as active."
   },
@@ -4695,7 +4695,7 @@
   "@motherChildNo": {
     "description": "Negative answer in child cards."
   },
-  "motherUpdateHostInfo": "Actualizar información del Host",
+  "motherUpdateHostInfo": "Actualizar datos del host",
   "@motherUpdateHostInfo": {
     "description": "Action: update host info."
   },
@@ -4805,7 +4805,7 @@
   "@homeVisitWebsite": {
     "description": "Get Help option: visit the VerifiedX website."
   },
-  "homeReadDocs": "Leer documentación",
+  "homeReadDocs": "Ver docs",
   "@homeReadDocs": {
     "description": "Get Help option: open the documentation."
   },
@@ -5045,7 +5045,7 @@
       }
     }
   },
-  "hnavBackupLabel": "Copia de seguridad",
+  "hnavBackupLabel": "Respaldo",
   "hnavBackupMediaSubtitle": "Comprime y exporta los archivos multimedia de tus NFT.",
   "hnavBlockNumber": "Bloque {height}",
   "@hnavBlockNumber": {
@@ -5065,9 +5065,9 @@
   "hnavCloseRecoveryPhraseTitle": "¿Cerrar la frase de recuperación?",
   "hnavConfigAccountUnlockTime": "Tiempo de desbloqueo de la cuenta",
   "hnavConfigAllowedExtensionTypes": "Tipos de extensión permitidos",
-  "hnavConfigApiCallUrl": "URL de llamada a la API",
+  "hnavConfigApiCallUrl": "URL de la API",
   "hnavConfigApiPort": "Puerto de la API",
-  "hnavConfigAutoDownloadNft": "Descargar automáticamente los archivos de NFT",
+  "hnavConfigAutoDownloadNft": "Autodescargar archivos NFT",
   "hnavConfigHeader": "Configuración",
   "hnavConfigIgnoreIncomingNfts": "Ignorar NFTs entrantes",
   "hnavConfigMotherAddress": "Dirección Mother",
@@ -5282,7 +5282,7 @@
     }
   },
   "mktBuyNowPriceLabel": "Precio de compra inmediata",
-  "mktBuyNowTxBroadcastedTitle": "Transacción de compra inmediata transmitida.",
+  "mktBuyNowTxBroadcastedTitle": "TX de compra inmediata transmitida.",
   "mktBuyNowTxBroadcastedToast": "Transacción de compra inmediata transmitida. Espera a que el dueño de la tienda la acepte",
   "mktChooseAddressTitle": "Elige una dirección",
   "mktCloseCreateListingTitle": "¿Seguro que quieres cerrar la pantalla de creación de la publicación?",
@@ -5441,7 +5441,7 @@
   "scwEvolveOnRedeem": "¿Evolucionar al canjear?",
   "scwEvolveStageAsset": "Activo de la etapa de evolución",
   "scwEvolveStageDescription": "Descripción de la etapa de evolución",
-  "scwEvolveStageName": "Nombre de la etapa de evolución",
+  "scwEvolveStageName": "Nombre de la etapa",
   "scwEvolveType": "Tipo de evolución",
   "scwEvolveTypeBlockHeight": "Altura de bloque",
   "scwEvolveTypeDateTime": "Fecha/Hora",
@@ -6016,7 +6016,7 @@
   "txpAutoActivate": "¿Activar automáticamente?",
   "txpAutoActivateBody": "¿Te gustaría activar automáticamente esta cuenta una vez que se reciban los fondos?",
   "txpAutoActivateQueued": "Activación automática en cola.",
-  "txpBlockDiffAvg": "Promedio de diferencia de bloques: {value}",
+  "txpBlockDiffAvg": "Dif. media de bloques: {value}",
   "@txpBlockDiffAvg": {
     "placeholders": {
       "value": {
@@ -6139,7 +6139,7 @@
     }
   },
   "txpGetBtcNow": "Obtén $BTC ahora",
-  "txpGetQuote": "Obtener cotización",
+  "txpGetQuote": "Cotizar",
   "txpGetVfxNow": "Obtén $VFX ahora",
   "txpImportBtcKeySub": "Importa una clave privada BTC existente",
   "txpImportVfxKeySub": "Importa una clave privada VFX existente",
@@ -6528,7 +6528,7 @@
   "bw2MpcCeremonyCompletedSuccess": "La ceremonia MPC se completó correctamente.",
   "bw2MpcCeremonyFailedToast": "La ceremonia MPC falló.",
   "bw2MpcCeremonyInProgress": "Ceremonia MPC en progreso",
-  "bw2MpcCeremonyTimedOutToast": "La ceremonia MPC agotó el tiempo de espera.",
+  "bw2MpcCeremonyTimedOutToast": "La ceremonia MPC expiró.",
   "bw2MultiSigHigherFee": "Esta es una transacción multifirma, por lo que se recomienda una tasa de comisión más alta.",
   "bw2MyBalanceVbtc": "Mi saldo: {balance} vBTC",
   "@bw2MyBalanceVbtc": {
@@ -6543,8 +6543,8 @@
   "bw2NoBtcAddressInToken": "El token no tiene dirección BTC",
   "bw2NoBtcTokenSelected": "No se seleccionó ningún token BTC",
   "bw2NoInitialIssuance": "Sin emisión inicial",
-  "bw2NoKeypairFound": "No se encontró un par de claves",
-  "bw2NoKeypairFoundPeriod": "No se encontró un par de claves.",
+  "bw2NoKeypairFound": "Par de claves no encontrado",
+  "bw2NoKeypairFoundPeriod": "Par de claves no encontrado.",
   "bw2NoKeypairToSign": "No se encontró un par de claves para firmar la transacción",
   "bw2NoVbtcToBridge": "No hay vBTC disponible para puentear",
   "bw2NoVfxAccountFound": "No se encontró una cuenta VFX",
@@ -6813,7 +6813,7 @@
       }
     }
   },
-  "prvBridgeAboutTo": "Estás a punto de transferir mediante el puente",
+  "prvBridgeAboutTo": "Vas a transferir por el puente",
   "prvBridgeAmountRequired": "El monto es obligatorio",
   "prvBridgeAmountToBridge": "Monto a transferir",
   "prvBridgeAmountToDest": "{amount} vBTC → {dest}",
@@ -7007,7 +7007,7 @@
     }
   },
   "prvBridgeSuccessTitle": "Transferido a Base",
-  "prvBridgeThisWill": "Esto hará lo siguiente:",
+  "prvBridgeThisWill": "Esto hará:",
   "prvBridgeToBaseTitle": "Transferir a Base",
   "prvBridgeToDestOnBase": "a {dest} en Base",
   "@prvBridgeToDestOnBase": {
@@ -7166,7 +7166,7 @@
   "prvNoAccountsFound": "No se encontraron cuentas",
   "prvNoShieldedAddress": "No se encontró una dirección blindada",
   "prvNoVbtcTokens": "No se encontraron tokens de vBTC",
-  "prvNoWalletSelected": "No hay ninguna billetera seleccionada",
+  "prvNoWalletSelected": "Ninguna billetera seleccionada",
   "prvNoteCount": "{count, plural, =1{{count} nota} other{{count} notas}}",
   "@prvNoteCount": {
     "placeholders": {
@@ -7421,7 +7421,7 @@
   "svcGuiUpdateAvailableTitle": "Actualización de GUI disponible",
   "svcGuiUpdateLaunchBody": "La descarga de la GUI de VFX se abrirá en tu navegador. Una vez iniciada, la CLI se apagará y tu billetera se cerrará para garantizar una actualización segura.",
   "svcGuiUpdateTitle": "Actualización de GUI",
-  "svcImBackedUp": "Tengo copia de seguridad",
+  "svcImBackedUp": "Ya tengo respaldo",
   "svcImportSnapshotBody": "Solo estás en la altura de bloque {blockHeight} localmente. La red tiene un snapshot en la altura de bloque {snapshotHeight} que te ayudará a sincronizar más rápido. \n\n¿Quieres importarlo ahora?",
   "@svcImportSnapshotBody": {
     "placeholders": {
@@ -7723,5 +7723,1868 @@
         "type": "String"
       }
     }
-  }
+  },
+  "r3aActivatingSoon": "Activándose pronto...",
+  "r3aAdditionalOwners": "Propietarios adicionales",
+  "r3aAssetIsRequired": "Se requiere un activo",
+  "r3aAssets": "Activos",
+  "r3aAutomatedAppControlled": "Automático/por la app",
+  "r3aBlockHeightMustBeGreaterThan": "La altura de bloque debe ser mayor que {currentBh}.",
+  "@r3aBlockHeightMustBeGreaterThan": {
+    "placeholders": {
+      "currentBh": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aBtcTokenization": "Tokenización de BTC",
+  "r3aChooseAFile": "Elegir un archivo",
+  "r3aClearNftWizardTitle": "¿Vaciar el asistente de colección NFT?",
+  "r3aCloseNftWizardConfirm": "¿Seguro que deseas cerrar el asistente de colección NFT?",
+  "r3aCloseScCreatorConfirm": "¿Seguro que deseas cerrar el creador de contratos?",
+  "r3aCompileMintScConfirm": "¿Compilar y emitir el contrato inteligente?",
+  "r3aConfirmMintBody": "¿Seguro que deseas emitir {amount} contrato(s) inteligente(s)?\n\nUna vez compilado no podrás hacer cambios\ny el contrato se desplegará en la cadena.",
+  "@r3aConfirmMintBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aConsumable": "Consumible",
+  "r3aCreateInstance": "Crear instancia",
+  "r3aCreateNewInstance": "Crear nueva instancia",
+  "r3aCreateNewPhase": "Crear nueva fase",
+  "r3aCreateRarity": "Crear rareza",
+  "r3aCreatorRetainedOwnership": "Propiedad retenida por creador",
+  "r3aDateMustBeInFuture": "La fecha debe ser futura.",
+  "r3aDateTime": "Fecha/Hora",
+  "r3aDeleteInstanceConfirm": "¿Seguro que deseas eliminar esta instancia?",
+  "r3aDeleteInstanceTitle": "¿Eliminar instancia?",
+  "r3aDeleteStage": "Eliminar etapa",
+  "r3aDeleteThisStageConfirm": "¿Seguro que deseas eliminar esta etapa?",
+  "r3aDescriptionIsRequired": "La descripción es obligatoria",
+  "r3aEditRarity": "Editar rareza",
+  "r3aEvolutionTime": "Hora de evolución ({tz})",
+  "@r3aEvolutionTime": {
+    "placeholders": {
+      "tz": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aEvolutionType": "Tipo de evolución",
+  "r3aEvolveStageNumber": "Etapa de evolución {number}",
+  "@r3aEvolveStageNumber": {
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aEvolvingMode": "Modo de evolución",
+  "r3aFeatureDescBtcTokenization": "Tokeniza BTC dentro de un contrato inteligente",
+  "r3aFeatureDescEvolution": "Permite que el contrato evolucione según el tiempo o variables de red",
+  "r3aFeatureDescFractional": "Comparte la propiedad entre varias billeteras con votación",
+  "r3aFeatureDescMultiAsset": "Permite compilar varios activos en el contrato inteligente",
+  "r3aFeatureDescPair": "Vincula/envuelve este contrato con un NFT existente dentro o fuera de esta red",
+  "r3aFeatureDescRoyalty": "Incluye una regalía aplicada en cadena en cada intercambio",
+  "r3aFeatureDescSoulBound": "Crea un contrato no transferible ligado a una dirección permanente",
+  "r3aFeatureDescTokenization": "Vincula este contrato con un bien físico/digital",
+  "r3aFeatureNameEvolving": "Evolutivo",
+  "r3aInvalidHexColor": "Color hex inválido",
+  "r3aInvalidSmartContract": "Contrato inteligente inválido",
+  "r3aInvalidValue": "Valor inválido",
+  "r3aIssuerMinterControlled": "Por emisor/creador",
+  "r3aLabel": "Etiqueta",
+  "r3aMint": "Emitir",
+  "r3aMintPhysicalRwa": "Emitir un activo físico o del mundo real",
+  "r3aMinterAddressColon": "Dirección del emisor:",
+  "r3aMinterNameIsRequired": "El nombre del emisor es obligatorio",
+  "r3aMultiAsset": "Multiactivo",
+  "r3aMusicRelease": "Lanzamiento musical",
+  "r3aNameIsRequired": "El nombre es obligatorio",
+  "r3aNewInstance": "Nueva instancia",
+  "r3aNftAddress": "Dirección del NFT",
+  "r3aNftCollectionWizard": "Asistente de colección NFT",
+  "r3aNotEnoughVfxToMint": "Saldo VFX insuficiente para emitir un contrato inteligente.",
+  "r3aNotImplemented": "No implementado",
+  "r3aOnlineEvent": "Evento en línea",
+  "r3aPhysicalEvent": "Evento físico",
+  "r3aPrimaryAssetIsRequired": "El activo principal es obligatorio",
+  "r3aPrimaryAssetOverride": "Anular activo principal",
+  "r3aRareness": "Rareza",
+  "r3aReason": "Motivo",
+  "r3aRemoveEverythingConfirm": "¿Seguro que deseas eliminar todo?",
+  "r3aRequiredForBlockHeightEvolution": "Requerido para evolución por altura de bloque.",
+  "r3aRequiredForDateTimeEvolution": "Requerido para evolución por fecha/hora.",
+  "r3aSaveAndClose": "Guardar y cerrar",
+  "r3aSaveClose": "Guardar y cerrar",
+  "r3aSelfDestructive": "Autodestructivo",
+  "r3aStatsOverride": "Anular estadísticas",
+  "r3aThumbnailOverride": "Anular miniatura",
+  "r3aTicketing": "Entradas",
+  "r3aTimeMustBeInFuture": "La hora debe ser futura.",
+  "r3aToken": "Token",
+  "r3aTokenizationPhysicalDigital": "Tokenización de bien físico/digital",
+  "r3aValueIsRequired": "Se requiere un valor",
+  "r3aViewCompiledSmartContract": "Ver contrato inteligente compilado",
+  "r3aWillBeMintedBy": "Esto será emitido por {name}",
+  "@r3aWillBeMintedBy": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aWrap": "Envolver",
+  "r3bActionCreation": "creación",
+  "r3bActionEditing": "edición",
+  "r3bActionPublish": "Publicar",
+  "r3bActive": "Activo:",
+  "r3bAddBeaconDescription": "Agrega un beacon existente a los nodos externos para usar ese relay en vez de los predeterminados de la red VFX. Configura tu billetera para usar un beacon remoto en la transferencia de medios en lugar de los beacons predeterminados de la red VFX. Necesitarás la dirección IP del beacon remoto. Si ese beacon usa un puerto no predeterminado, indícalo también. El nombre del beacon es un alias visible solo para ti.",
+  "r3bAddressRequired": "Dirección obligatoria.",
+  "r3bAlreadyOwnerNft": "Ya eres el dueño de este NFT.",
+  "r3bAmountValue": "Monto: {amount}",
+  "@r3bAmountValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bApproveSaleStart": "Aprueba la transacción de inicio de venta para tu compra en la tienda.",
+  "r3bAssetCache": "Caché de activos",
+  "r3bAuctionEnds": "La subasta termina",
+  "r3bAutoDeleteAssets": "Autoeliminar activos",
+  "r3bBaselineAsset": "Activo base",
+  "r3bBeaconUploadSigFailed": "No se pudo generar la firma de subida al beacon",
+  "r3bBidAmount": "Monto de oferta",
+  "r3bBidNotFound": "Error: oferta no encontrada.",
+  "r3bBuyNowTag": "[Comprar ya]",
+  "r3bBuyerLabel": "Comprador: {address}",
+  "@r3bBuyerLabel": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bChain": "Cadena",
+  "r3bCloseCollectionConfirm": "¿Seguro que quieres cerrar la pantalla de {action} de la colección?",
+  "@r3bCloseCollectionConfirm": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bCloseShopConfirm": "¿Seguro que quieres cerrar la pantalla de {action} de la tienda?",
+  "@r3bCloseShopConfirm": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bCloseStoreConfirm": "¿Seguro que quieres cerrar la pantalla de {action} de la tienda?",
+  "@r3bCloseStoreConfirm": {
+    "placeholders": {
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bCollectionCreatedToast": "Colección creada",
+  "r3bCollectionUpdatedToast": "¡Colección actualizada!",
+  "r3bCollections": "Colecciones",
+  "r3bCouldNotCreateThread": "No se pudo crear u obtener el chat",
+  "r3bCouldNotLogin": "No se pudo iniciar sesión",
+  "r3bCouldNotVerifyTx": "No se pudo verificar la transacción.",
+  "r3bCreateAuctionHouse": "Crear casa de subastas",
+  "r3bCreateCollectionsHint": "Ahora puedes crear colecciones y agregarles publicaciones.",
+  "r3bCreateListingsHint": "Ahora puedes crear publicaciones para los NFT que tienes.",
+  "r3bCreateNewCollection": "Crear colección nueva",
+  "r3bCurrentBidPrice": "Precio de oferta actual:",
+  "r3bCurrentBids": "Ofertas actuales",
+  "r3bDay": "día",
+  "r3bDays": "días",
+  "r3bDeleteListingConfirm": "¿Seguro que quieres eliminar esta publicación?",
+  "r3bDeleteShopConfirm": "¿Seguro que quieres eliminar esta tienda?",
+  "r3bDeleteShopConfirmPublished": "¿Seguro que quieres eliminar esta tienda? Eliminarla de la red cuesta {cost} VFX.",
+  "@r3bDeleteShopConfirmPublished": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bEditAuctionHouse": "Editar casa de subastas",
+  "r3bEnableOneOption": "Activa al menos una opción (Galería, Comprar ya o Subasta)",
+  "r3bEndDateAfterStart": "La fecha de fin debe ser posterior a la de inicio",
+  "r3bEndsIn": "Termina en",
+  "r3bErrorGeneratingScData": "Error al generar los datos del contrato inteligente",
+  "r3bFailedParseFee": "No se pudo procesar la comisión",
+  "r3bFailedParseHash": "No se pudo procesar el hash",
+  "r3bFailedRetrieveNonce": "No se pudo obtener el nonce",
+  "r3bFailedRetrieveTimestamp": "No se pudo obtener la marca de tiempo",
+  "r3bIdentifier": "Identificador",
+  "r3bImportAndPublish": "Importar y publicar",
+  "r3bImportShopBroadcastBody": "Cuando la transacción se refleje en la cadena, tu tienda aparecerá aquí.",
+  "r3bImportShopConfirmBody": "¿Seguro que quieres importar esta tienda? Se cobrará una comisión de {cost} VFX para publicar este cambio en la red.\n\nEsta es una acción destructiva y no conservará tus colecciones ni publicaciones.",
+  "@r3bImportShopConfirmBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bIncorrectLoginDetails": "Datos de acceso incorrectos para {address}.",
+  "@r3bIncorrectLoginDetails": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bIncrementAmount": "Monto de incremento:",
+  "r3bInfinite": "Infinito",
+  "r3bLabelCopied": "{label} copiado al portapapeles",
+  "@r3bLabelCopied": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bLoggedInSuccess": "Sesión iniciada con éxito",
+  "r3bMintedBy": "Emitido por",
+  "r3bMinterAddress": "Dirección del emisor",
+  "r3bMyShopSuffix": " [Mi tienda]",
+  "r3bNftFeatures": "Características del NFT:",
+  "r3bNftMustBeSet": "Debes definir el NFT",
+  "r3bNoAddress": "No hay dirección.",
+  "r3bNoAuctionHouses": "Sin casas de subastas",
+  "r3bNoBids": "Sin ofertas.",
+  "r3bNoCollections": "Sin colecciones",
+  "r3bNoListings": "Sin publicaciones",
+  "r3bNoPrivateKey": "No hay clave privada.",
+  "r3bNoPublicKey": "No hay clave pública.",
+  "r3bNotAuthorized": "No autorizado",
+  "r3bNotOwnerLoginAs": "No eres el dueño de esta tienda. Inicia sesión como {address}",
+  "@r3bNotOwnerLoginAs": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bOffline": "Desconectada",
+  "r3bOnline": "Conectada",
+  "r3bOr": "o",
+  "r3bOwnedBy": "Propiedad de",
+  "r3bPrivateTag": "[Privado]",
+  "r3bPublishShopBody": "Publicar tu tienda en la red cuesta {cost} VFX (más la comisión de transacción).",
+  "@r3bPublishShopBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bReadyToImport": "Listo para importar",
+  "r3bReserveGteFloor": "El precio de reserva debe ser mayor o igual al precio mínimo.",
+  "r3bReserveMet": "Reserva alcanzada:",
+  "r3bSaleCompleted": "Venta completada",
+  "r3bSalePending": "Venta pendiente",
+  "r3bSaveChanges": "Guardar cambios",
+  "r3bSetupAuctionHouse": "Configurar casa de subastas",
+  "r3bSetupAuctionHousePrompt": "Primero configura tu casa de subastas / galería.\nLuego podrás crear colecciones y agregarles publicaciones.",
+  "r3bShareListing": "Compartir publicación",
+  "r3bShareUrlCopied": "URL copiada al portapapeles",
+  "r3bShopDeleteBroadcast": "Transacción de eliminación de tienda enviada a la red",
+  "r3bShopIsOffline": "La tienda está desconectada.",
+  "r3bShopNotFound": "Tienda no encontrada",
+  "r3bShopPublishBroadcast": "Transacción de publicación de tienda enviada a la red",
+  "r3bShopUpdateBroadcast": "Transacción de actualización de tienda enviada a la red",
+  "r3bShopUrlImportPrompt": "¿Qué URL de tienda quieres importar?",
+  "r3bShopUrlNotAvailable": "La URL de la tienda no está disponible.",
+  "r3bSignInToAuthorize": "Para autorizar esta transacción, inicia sesión como",
+  "r3bSignatureNotValidPrimary": "Firma no válida (primaria)",
+  "r3bSmartContractId": "ID del contrato inteligente: {id}",
+  "@r3bSmartContractId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bStartBeforeEnd": "La fecha de inicio debe ser anterior a la de fin.",
+  "r3bSubscribeUpdatesBody": "Para que la billetera web te envíe notificaciones sobre ofertas y compras que debas firmar, se necesita un correo electrónico.",
+  "r3bThisIsPermanent": "Esto es permanente",
+  "r3bThisIsYourShop": "Esta es tu propia tienda.",
+  "r3bTransactionSent": "Transacción enviada.",
+  "r3bUnpublished": "Sin publicar",
+  "r3bUpdateShopBody": "Actualizar tu tienda en la red cuesta {cost} VFX (más la comisión de transacción).",
+  "@r3bUpdateShopBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3bUpdateShopTitle": "¿Actualizar tienda?",
+  "r3bWalletNotSyncedBody": "Como tu billetera no está sincronizada, podría haber problemas al ver los datos de esta tienda. ¿Continuar de todos modos?",
+  "r3bWillNotBeNotified": "No recibirás notificaciones. Puedes cambiar este ajuste en el panel si cambias de opinión.",
+  "r3bYouAreShopOwner": "Eres el dueño de esta tienda.",
+  "r3cCallbackFromDetails": "{text} [{amount} VFX de {address}]",
+  "@r3cCallbackFromDetails": {
+    "placeholders": {
+      "text": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3cNoTransactionsFound": "No se encontraron transacciones",
+  "r3cNoTransactionsFoundFiltered": "No se encontraron transacciones\n[con los filtros actuales]",
+  "r3cPriceHistoryBtc": "Historial de precios BTC",
+  "r3cPriceHistoryVfx": "Historial de precios VFX",
+  "r3cStatusCalledBack": "Retornado",
+  "r3cStatusFail": "Fallido",
+  "r3cStatusRecovered": "Recuperado",
+  "r3cTypeAdnr": "ADNR",
+  "r3cTypeAdnrCreate": "Crear ADNR",
+  "r3cTypeAdnrDelete": "Eliminar ADNR",
+  "r3cTypeAdnrTransfer": "Transferir ADNR",
+  "r3cTypeAuctionHouseCreate": "Casa subastas P2P (crear)",
+  "r3cTypeAuctionHouseDelete": "Casa subastas P2P (eliminar)",
+  "r3cTypeAuctionHouseUpdate": "Casa subastas P2P (actualizar)",
+  "r3cTypeBtcAdnrCreate": "Crear ADNR BTC",
+  "r3cTypeBtcAdnrDelete": "Eliminar ADNR BTC",
+  "r3cTypeBtcAdnrTransfer": "Transferir ADNR BTC",
+  "r3cTypeDstRegistration": "Registro DST",
+  "r3cTypeFungibleBanAddress": "Vetar dirección token",
+  "r3cTypeFungibleBurn": "Quemar token",
+  "r3cTypeFungibleDeploy": "Desplegar token",
+  "r3cTypeFungibleMint": "Emitir token",
+  "r3cTypeFungibleOwnershipChange": "Cambio dueño token",
+  "r3cTypeFungiblePause": "Pausar token",
+  "r3cTypeFungibleResume": "Reanudar token",
+  "r3cTypeFungibleTopicCreated": "Tema de token creado",
+  "r3cTypeFungibleTransfer": "Transferir token",
+  "r3cTypeFungibleTx": "Tx de token",
+  "r3cTypeFungibleVoteCast": "Voto de token",
+  "r3cTypeNftBurn": "Quemar NFT",
+  "r3cTypeNftEvolution": "Evolución NFT",
+  "r3cTypeNftMint": "Emitir NFT",
+  "r3cTypeNftMintTokenized": "Emitir NFT (tokenizado)",
+  "r3cTypeNftSale": "Venta NFT",
+  "r3cTypeNftSaleComplete": "Venta NFT completa",
+  "r3cTypeNftSaleCompleteManual": "Venta NFT completa (manual)",
+  "r3cTypeNftSaleCompleteParen": "Venta NFT (completa)",
+  "r3cTypeNftSaleStart": "Inicio venta NFT",
+  "r3cTypeNftSaleStartManual": "Inicio venta NFT (manual)",
+  "r3cTypeNftTransfer": "Transferir NFT",
+  "r3cTypeNftTx": "NFT Tx",
+  "r3cTypeNode": "Nodo",
+  "r3cTypeSmartContractBurn": "Quemar contrato int.",
+  "r3cTypeSmartContractMint": "Emitir contrato int.",
+  "r3cTypeSmartContractTx": "Tx contrato int.",
+  "r3cTypeTokenizationBurn": "Tokenización: quemar",
+  "r3cTypeTokenizationMint": "Tokenización: emitir",
+  "r3cTypeTokenizationTx": "Tokenización: tx",
+  "r3cTypeTokenizationWithdrawalComplete": "Retiro completo",
+  "r3cTypeTokenizationWithdrawalRequest": "Solicitud de retiro",
+  "r3cTypeTopicCreate": "Crear tema",
+  "r3cTypeTopicVote": "Votar tema",
+  "r3cTypeTx": "Tx",
+  "r3cTypeValidatorHeartbeat": "Latido de validador",
+  "r3cTypeValidatorRegistration": "Registro de validador",
+  "r3cTypeVault": "Bóveda",
+  "r3cTypeVaultCallback": "Bóveda (retorno)",
+  "r3cTypeVaultRecover": "Bóveda (recuperar)",
+  "r3cTypeVaultRegister": "Bóveda (registro)",
+  "r3cTypeVbtcBridgeLock": "Bloqueo puente vBTC",
+  "r3cTypeVbtcBridgeUnlock": "Desbloqueo puente vBTC",
+  "r3cTypeVbtcBulkTransfer": "Transf. masiva vBTC",
+  "r3cTypeVbtcBurn": "Quemar vBTC",
+  "r3cTypeVbtcContractCreate": "Crear contrato vBTC",
+  "r3cTypeVbtcContractMint": "Emitir contrato vBTC",
+  "r3cTypeVbtcMint": "Emitir vBTC",
+  "r3cTypeVbtcPrivateTransfer": "Transf. privada vBTC",
+  "r3cTypeVbtcShield": "Blindar vBTC",
+  "r3cTypeVbtcTokenOwnershipTransfer": "Transf. dueño token vBTC",
+  "r3cTypeVbtcTransfer": "Transferir vBTC",
+  "r3cTypeVbtcTransferCoin": "Transf. moneda vBTC",
+  "r3cTypeVbtcTx": "Tx vBTC",
+  "r3cTypeVbtcUnshield": "Desblindar vBTC",
+  "r3cTypeVbtcValidatorExit": "Salida validador vBTC",
+  "r3cTypeVbtcValidatorHeartbeat": "Latido validador vBTC",
+  "r3cTypeVbtcValidatorRegister": "Registrar validador vBTC",
+  "r3cTypeVbtcWithdrawalArb": "Retiro vBTC (árb.)",
+  "r3cTypeVbtcWithdrawalCancel": "Cancelar retiro vBTC",
+  "r3cTypeVbtcWithdrawalComplete": "Retiro vBTC completo",
+  "r3cTypeVbtcWithdrawalOwner": "Retiro vBTC (dueño)",
+  "r3cTypeVbtcWithdrawalRequest": "Solicitud retiro vBTC",
+  "r3cTypeVbtcWithdrawalVote": "Votar retiro vBTC",
+  "r3cTypeVfxPrivateTransfer": "Transf. privada VFX",
+  "r3cTypeVfxShield": "Blindar VFX",
+  "r3cTypeVfxUnshield": "Desblindar VFX",
+  "r3dActivate": "Activar",
+  "r3dActivateVaultBody": "Hay un costo de {cost} VFX para activar tu cuenta de bóveda, que se quema.\n\n¿Continuar?",
+  "@r3dActivateVaultBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dActivateVaultTitle": "¿Activar cuenta de bóveda?",
+  "r3dActivationTxBroadcasted": "Transacción de activación transmitida",
+  "r3dActivity": "Actividad",
+  "r3dAddressRequired": "Dirección requerida.",
+  "r3dAttemptingSaleCompleteTx": "Enviando TX de cierre de venta.",
+  "r3dAuctionAlreadyStarted": "La subasta ya comenzó.",
+  "r3dAwaitingPayment": "Esperando pago",
+  "r3dBackupAddress": "Dirección:",
+  "r3dBackupPrivateKey": "Clave privada:",
+  "r3dBackupRecoveryAddress": "Dirección de recuperación:",
+  "r3dBackupRecoveryPrivateKey": "Clave privada de recuperación:",
+  "r3dBackupRestoreCode": "Código de restauración:",
+  "r3dBeingClaimed": "Reclamándose",
+  "r3dBtcExplorer": "Explorador BTC",
+  "r3dBuyNowPriceLabel": "Compra directa: {price} VFX",
+  "@r3dBuyNowPriceLabel": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dCantDeleteAuctionStarted": "No puedes eliminar esta publicación porque la subasta ya comenzó.",
+  "r3dChat": "Chat",
+  "r3dChooseNft": "Elegir NFT",
+  "r3dClaimed": "Reclamado",
+  "r3dCliRestartBody": "Se requiere reiniciar la CLI para aplicar este cambio. ¿Quieres reiniciar ahora?",
+  "r3dCloseCollectionCreationConfirm": "¿Seguro que quieres cerrar la pantalla de creación de la colección?",
+  "r3dCloseCollectionEditingConfirm": "¿Seguro que quieres cerrar la pantalla de edición de la colección?",
+  "r3dCloseListingCreationConfirm": "¿Seguro que quieres cerrar la pantalla de creación de la publicación?",
+  "r3dCloseListingEditingConfirm": "¿Seguro que quieres cerrar la pantalla de edición de la publicación?",
+  "r3dCloseShopCreationConfirm": "¿Seguro que quieres cerrar la pantalla de creación de la tienda?",
+  "r3dCloseShopEditingConfirm": "¿Seguro que quieres cerrar la pantalla de edición de la tienda?",
+  "r3dCloseStoreCreationConfirm": "¿Seguro que quieres cerrar la pantalla de creación de la tienda?",
+  "r3dCloseStoreEditingConfirm": "¿Seguro que quieres cerrar la pantalla de edición de la tienda?",
+  "r3dCollectionLiveHelp": "Cuando esto está habilitado, esta colección será visible para otros usuarios cuando se conecten a tu tienda",
+  "r3dConfirmDeleteListing": "¿Seguro que quieres eliminar esta publicación?",
+  "r3dConfirmDeletePublishedShop": "¿Seguro que quieres eliminar esta tienda de la red? Hay un costo de {cost} VFX más la comisión de TX para realizar esta operación.",
+  "@r3dConfirmDeletePublishedShop": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dConfirmDeleteUnpublishedShop": "¿Seguro que quieres eliminar tu tienda sin publicar?",
+  "r3dConfirmDetails": "Confirmar detalles",
+  "r3dConfirmDiscardListing": "¿Seguro que quieres descartar la publicación?",
+  "r3dCopyLink": "Copiar enlace",
+  "r3dCraftTime": "Tiempo de creación",
+  "r3dCreate": "Crear",
+  "r3dCreateAuctionHouse": "Crear casa de subastas",
+  "r3dCreateCollectionsPrompt": "Ahora puedes crear colecciones y luego agregarles publicaciones.",
+  "r3dCreateFirstListing": "Crear primera publicación",
+  "r3dCreateLink": "Crear enlace",
+  "r3dCreateListingsForNfts": "Ahora puedes crear publicaciones para los NFT que tienes.",
+  "r3dCreateNewCollection": "Crear colección",
+  "r3dCreatePaymentLink": "Crear enlace de pago",
+  "r3dCreatingNewCollectionBody": "Estás creando una nueva colección en tu casa de subastas.\nDespués de crearla podrás crear publicaciones.",
+  "r3dDeleteTxBroadcasted": "TX de eliminación transmitida.",
+  "r3dEditAuctionHouse": "Editar casa de subastas",
+  "r3dEnableAtLeastOneOption": "Habilita al menos una opción (Galería, Compra directa o Subasta)",
+  "r3dEndDateAfterStartDate": "La fecha de fin debe ser posterior a la de inicio",
+  "r3dEstimatedFee": "Comisión estimada",
+  "r3dFailedCreatePaymentLink": "No se pudo crear el enlace de pago. Inténtalo de nuevo.",
+  "r3dFailedParseFee": "No se pudo procesar la comisión",
+  "r3dFailedParseHash": "No se pudo procesar el hash",
+  "r3dFailedRetrieveNonce": "No se pudo obtener el nonce",
+  "r3dFailedRetrieveTimestamp": "No se pudo obtener la marca de tiempo",
+  "r3dFailedSendVfxEscrow": "No se pudo enviar VFX al depósito en garantía. Inténtalo de nuevo.",
+  "r3dFloorPriceGreaterThanZero": "El precio base debe ser mayor que cero.",
+  "r3dFloorPriceValue": "Base: {price} VFX",
+  "@r3dFloorPriceValue": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dGalleryListing": "Publicación de galería",
+  "r3dHdAccountRestored": "Cuenta HD restaurada. Las claves se generarán de forma determinista según la frase.",
+  "r3dHidden": "Oculta",
+  "r3dHideCollectionBody": "¿Seguro que quieres ocultar esta colección? No será visible para otros usuarios cuando se conecten a tu tienda.",
+  "r3dHideCollectionTitle": "¿Ocultar colección?",
+  "r3dInputRecoverPhrase": "Ingresa la frase de recuperación",
+  "r3dInsufficientBalancePublish": "Esta billetera no tiene el saldo mínimo para enviar una TX de publicación",
+  "r3dInsufficientBalanceUpdate": "Esta billetera no tiene el saldo mínimo para enviar una TX de actualización",
+  "r3dLabelHash": "Hash",
+  "r3dLinkCopiedClipboard": "¡Enlace copiado al portapapeles!",
+  "r3dLive": "Activa",
+  "r3dLocalChangesSaved": "¡Cambios locales guardados!",
+  "r3dMakeCollectionLiveBody": "¿Seguro que quieres publicar esta colección? Será visible para otros usuarios cuando se conecten a tu tienda.",
+  "r3dMakeCollectionLiveTitle": "¿Publicar colección?",
+  "r3dMakeLive": "Publicar",
+  "r3dMessage": "Mensaje",
+  "r3dNftMustBeSet": "Debes definir el NFT",
+  "r3dNftTransferStarted": "Éxito: Se inició la transferencia del NFT.",
+  "r3dNotOneOfYourAddresses": "Esta no es una de tus direcciones",
+  "r3dNumberOfTxs": "N.º de TX",
+  "r3dOr": "o",
+  "r3dPaymentCaptured": "Pago capturado",
+  "r3dPaymentFromVfxWallet": "Pago desde billetera VFX",
+  "r3dPaymentLinkCreatedSuccess": "¡Enlace de pago creado correctamente!",
+  "r3dPaymentLinkReady": "¡Enlace de pago listo!",
+  "r3dPaymentNotAvailable": "Pago no disponible en este entorno",
+  "r3dPaymentProcessed": "Pago procesado",
+  "r3dPendingDeposit": "Depósito pendiente",
+  "r3dPriceGreaterThanZero": "El precio debe ser mayor que cero",
+  "r3dPublish": "Publicar",
+  "r3dPublishChanges": "Publicar cambios",
+  "r3dPublishIpChange": "Publicar cambio de IP",
+  "r3dPublishShopCostBody": "Hay un costo de {cost} VFX para publicar tu tienda en la red (más la comisión de la transacción).",
+  "@r3dPublishShopCostBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dPublishTransactionSent": "¡Transacción de publicación enviada!",
+  "r3dPublishUpdateCostBody": "Hay un costo de {cost} VFX para publicar los cambios de tu tienda en la red (más la comisión de la transacción).",
+  "@r3dPublishUpdateCostBody": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dPublishUpdatesBody": "Tus cambios locales se guardaron correctamente. ¿Quieres publicarlos en la red?",
+  "r3dPublishUpdatesBodyWithCost": "Tus cambios locales se guardaron correctamente. ¿Quieres publicarlos en la red?\n\nSe requiere 1 VFX porque ya publicaste en las últimas 24 horas.",
+  "r3dReadyToClaim": "Listo para reclamar",
+  "r3dRecipientWillReceive": "El destinatario recibirá {amount} VFX cuando reclame el enlace.",
+  "@r3dRecipientWillReceive": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dRecoveryInProgress": "Recuperación en curso",
+  "r3dRefreshStatus": "Actualizar estado",
+  "r3dRefreshingStatus": "Actualizando estado...",
+  "r3dReservePriceGteFloor": "El precio de reserva debe ser mayor o igual al precio base.",
+  "r3dReservePriceValue": "Reserva: {price} VFX",
+  "@r3dReservePriceValue": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dRestoreHdAccount": "Restaurar cuenta HD",
+  "r3dSaleCompleteTxFailed": "Falló la TX de cierre de venta",
+  "r3dSaveChanges": "Guardar cambios",
+  "r3dSecondsValue": "{seconds} segundos",
+  "@r3dSecondsValue": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dSendingVfx": "Enviando VFX",
+  "r3dSendingVfxEllipsis": "Enviando VFX...",
+  "r3dSetOfflineBody": "¿Seguro que quieres poner esta tienda fuera de línea?",
+  "r3dSetOfflineTitle": "¿Poner fuera de línea?",
+  "r3dSetOnlineBody": "¿Seguro que quieres poner esta tienda en línea?",
+  "r3dSetOnlineTitle": "¿Poner en línea?",
+  "r3dSetupAuctionHouse": "Configurar casa de subastas",
+  "r3dSetupAuctionHousePrompt": "Primero, configura tu casa de subastas / galería.\nLuego podrás crear colecciones y agregarles publicaciones.",
+  "r3dShareLink": "Compartir enlace",
+  "r3dShareLinkInstructions": "Comparte este enlace con el destinatario.\nPuede reclamar los VFX sin necesidad de una billetera.",
+  "r3dShopDeleted": "Tienda eliminada",
+  "r3dShopImported": "Tienda importada",
+  "r3dShopOffline": "Tienda fuera de línea",
+  "r3dShopOnline": "Tienda en línea",
+  "r3dShopUrlCopied": "URL de la tienda copiada",
+  "r3dShopUrlLabel": "URL: {url}",
+  "@r3dShopUrlLabel": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dSignatureGenerationFailed": "Falló la generación de la firma.",
+  "r3dSignatureNotValid": "Firma no válida",
+  "r3dSize": "Tamaño",
+  "r3dStartDateBeforeEndDate": "La fecha de inicio debe ser anterior a la de fin.",
+  "r3dStatusInitialized": "Inicializado",
+  "r3dStatusQuoted": "Cotizado",
+  "r3dTimeoutDepositConfirmation": "Tiempo agotado esperando la confirmación del depósito. El enlace se creó pero puede requerir verificación manual.",
+  "r3dTotalAmount": "Monto total",
+  "r3dTotalReward": "Recompensa total",
+  "r3dTransactionNotValid": "Transacción no válida",
+  "r3dTransactionSettled": "Transacción liquidada",
+  "r3dTryAgain": "Reintentar",
+  "r3dValidatedBy": "Validado por",
+  "r3dVaultAccountsIntroPost": "] son una función de almacenamiento en frío y depósito en garantía on-chain para mantener seguros tus fondos VFX y tus activos digitales.\n\n",
+  "r3dVaultAccountsIntroPre": "Las cuentas de bóveda [",
+  "r3dVaultActivationNote": "Nota: Activar esta función requiere un depósito de 5 VFX, 4 de los cuales se queman al activarla.",
+  "r3dVaultFeatureDescription": "Esta función es independiente de tu dirección de liquidación instantánea VFX y habilita funciones de recuperación y de depósito en garantía on-chain con devolución de llamada que te permiten recuperar fondos y activos a tu cuenta de bóveda en caso de robo, extravío o de un destinatario que requiera un depósito en garantía sin confianza, dentro de las 24 horas del suceso o dentro de un tiempo definido por el usuario.\n\n",
+  "r3dVaultFeaturesOnChain": "Todas estas funciones son on-chain y todos los pares conocen su estado actual.\n",
+  "r3dVaultNoFungibleTokens": "Tu cuenta de bóveda no tiene tokens fungibles.",
+  "r3dVaultNoVbtcTokens": "Tu cuenta de bóveda no tiene tokens vBTC.",
+  "r3dVaultNotActivatedWarning": "Tu cuenta de bóveda aún no está activada. Para proteger tus fondos y activos de forma segura, actívala primero.",
+  "r3dVfxExplorer": "Explorador VFX",
+  "r3dVfxForUsd": "{vfx} VFX por ${usd} USD",
+  "@r3dVfxForUsd": {
+    "placeholders": {
+      "vfx": {
+        "type": "String"
+      },
+      "usd": {
+        "type": "String"
+      }
+    }
+  },
+  "r3dViewTxs": "Ver TX",
+  "r3dWaitingDepositConfirmation": "Esperando la confirmación del depósito...\nEsto puede tardar hasta 20 segundos.",
+  "r3dWaitingForConfirmation": "Esperando confirmación",
+  "r3eAccountRequiredExplanation": "Se requiere una cuenta para continuar.\nCrea tu cuenta ahora con tu correo electrónico y una contraseña.",
+  "r3eAgree": "Aceptar",
+  "r3eAgreeDisclaimer": "He leído y acepto el aviso legal.",
+  "r3eBlockLabel": "Bloque: {block}",
+  "@r3eBlockLabel": {
+    "placeholders": {
+      "block": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eBtcDomainBroadcasted": "La transacción del dominio BTC se ha transmitido. Consulta el hash en el registro.",
+  "r3eBtcDomainValidBody": "La transacción del dominio BTC es válida.\n¿Seguro que quieres continuar?\n\nDominio: {domain}\nMonto: {amount} VFX\nComisión: {fee} VFX\nTotal: {total} VFX",
+  "@r3eBtcDomainValidBody": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eBtcExplorer": "Explorador de BTC",
+  "r3eButterflyDescDesktop": "Butterfly hace que enviar pagos sea simple. Ahorra, gasta y paga a cualquiera, en cualquier lugar y momento. Al instante. Sin fronteras, sin restricciones, sin límites y sin cuentas… ¡Sé libre!\n\n¿Iniciar sesión automáticamente con esta cuenta?",
+  "r3eButterflyDescMobile": "Butterfly hace que enviar pagos sea simple. Ahorra, gasta y paga a cualquiera, en cualquier lugar y momento. Al instante.\n\n¿Iniciar sesión automáticamente con esta cuenta?",
+  "r3eCannotLockWhileValidating": "No puedes bloquear tu billetera mientras validas.",
+  "r3eCantFindPrivateKey": "No se encuentra la clave privada",
+  "r3eCantFindPublicKey": "No se encuentra la clave pública",
+  "r3eCloseWallet": "Cerrar billetera",
+  "r3eCoinPrices": "Precios de monedas",
+  "r3eCollapse": "Contraer",
+  "r3eConfirmEncryptionPassword": "Confirma tu contraseña de cifrado.",
+  "r3eCopySignature": "Copiar firma",
+  "r3eCostToDelete": "Eliminar un dominio BTC cuesta {cost} VFX.",
+  "@r3eCostToDelete": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eCouldNotGenerateSignature": "No se pudo generar la firma",
+  "r3eCouldNotImportMedia": "No se pudo importar el multimedia",
+  "r3eCreateAccount": "Crear cuenta",
+  "r3eCreateBtcDomainDesc": "Crea un dominio BTC como alias de la dirección de tu cuenta para recibir fondos.",
+  "r3eDebugData": "Datos de depuración",
+  "r3eDebugDataCopied": "Datos de depuración copiados al portapapeles",
+  "r3eDecryptAccountPasswordBody": "Ingresa la contraseña de esta cuenta para descifrar sus claves privadas.",
+  "r3eDeleteBtcDomainBody": "¿Seguro que quieres eliminar este dominio BTC?\n{costLine}\n\nUna vez eliminado, este ADNR ya no podrá recibir transacciones.",
+  "@r3eDeleteBtcDomainBody": {
+    "placeholders": {
+      "costLine": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eDisclaimer": "Aviso legal",
+  "r3eDoNotCloseWallet": "Por favor no cierres tu billetera.",
+  "r3eDoesNotOwnBody": "{address}\nNO es propietario de\n{scId}",
+  "@r3eDoesNotOwnBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "scId": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eEmailPasswordSeedInfo": "Tu correo y contraseña se usan para generar tu clave privada, que se procesa en este navegador y nunca se transmite por internet.",
+  "r3eEncryptAccountKeys": "Cifrar claves de la cuenta",
+  "r3eEncryptAccountPasswordBody": "Ingresa una contraseña para cifrar las claves privadas de esta cuenta.",
+  "r3eEncryptWallet": "Cifrar billetera",
+  "r3eEncryptWalletBody": "Esta función cifrará TODAS las claves privadas de esta billetera. Asegúrate de tener respaldadas TODAS las claves privadas antes de continuar.\n\nEsta acción es irreversible y la contraseña que crees será la única forma de acceder a esta billetera una vez completado el cifrado.\n\nTambién se recomienda respaldar tu contraseña además de tus claves privadas.",
+  "r3eEnterPasswordBackup": "Ingresa tu contraseña para respaldar tus claves.",
+  "r3eExportNftMedia": "Exportar multimedia del NFT",
+  "r3eFailedDecryptKeys": "No se pudieron descifrar las claves. Revisa tu contraseña.",
+  "r3eFailedDeleteDb": "No se pudo eliminar {path}: la carpeta sigue existiendo tras el borrado",
+  "@r3eFailedDeleteDb": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eFailedDownloadFile": "No se pudo descargar {filename} tras {attempts} intentos",
+  "@r3eFailedDownloadFile": {
+    "placeholders": {
+      "filename": {
+        "type": "String"
+      },
+      "attempts": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eFaucetIntro": "La comunidad ha asignado algo de VFX para facilitar probar esta función. Para evitar abusos, se requiere un número de teléfono para una autorización por SMS. Solo se guardará un hash de tu número.",
+  "r3eFaucetSuccess": "¡Listo! Los fondos están en camino. Hash de TX: {result}",
+  "@r3eFaucetSuccess": {
+    "placeholders": {
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eFilesOnDiskMismatch": "Solo {count} de {total} archivos en disco tras la descarga",
+  "@r3eFilesOnDiskMismatch": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eGetBtc": "Obtener BTC",
+  "r3eImportMedia": "Importar multimedia",
+  "r3eImportSnapshot": "Importar snapshot",
+  "r3eIncorrectDecryptionPassword": "Contraseña de descifrado incorrecta.",
+  "r3eIncorrectPassword": "Contraseña incorrecta",
+  "r3eInvalidHexColor": "Color hexadecimal no válido",
+  "r3eInvalidOwnershipSig": "Firma de verificación de propiedad no válida",
+  "r3eJustTakeMeThere": "Solo llévame allí",
+  "r3eLaunchButterfly": "Abrir Butterfly",
+  "r3eLocalHeightAhead": "Tu altura de bloque local está más adelantada que el snapshot.",
+  "r3eLockNow": "Bloquear ahora",
+  "r3eLogin": "Iniciar sesión",
+  "r3eLoginWithThisAccount": "Iniciar sesión con esta cuenta",
+  "r3eMaxAmount": "Monto máximo: {amount} VFX",
+  "@r3eMaxAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eMediaBackedUp": "Contenido multimedia respaldado correctamente.",
+  "r3eMediaImported": "Multimedia importado correctamente",
+  "r3eMustAgreeTerms": "Debes aceptar los términos antes de continuar.",
+  "r3eNewPassword": "Nueva contraseña",
+  "r3eNoAccountSelected": "No hay cuenta seleccionada",
+  "r3eNoBtcTransactions": "No se encontraron transacciones de BTC",
+  "r3eNoCostToDelete": "No hay costo por eliminar un dominio BTC (aparte de la comisión de la TX).",
+  "r3eNoKeysToEncrypt": "No hay claves para cifrar.",
+  "r3eNoNotValidating": "NO, no estás validando",
+  "r3eNoVfxTransactions": "No se encontraron transacciones de VFX",
+  "r3eNotValidatingTitle": "Sin validar ❌",
+  "r3eOpenDbFolder": "Abrir carpeta de BD",
+  "r3eOpenExplorer": "Abrir explorador",
+  "r3eOpenLog": "Abrir registro",
+  "r3eOwnershipNotVerified": "Propiedad NO verificada",
+  "r3eOwnershipVerificationSignature": "Firma de verificación de propiedad",
+  "r3eOwnsBody": "{address}\nES PROPIETARIO DE\n{scId}",
+  "@r3eOwnsBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "scId": {
+        "type": "String"
+      }
+    }
+  },
+  "r3ePasswordConfirmFailed": "Falló la confirmación de la contraseña",
+  "r3ePasswordEncryptKeys": "Esta contraseña se usará para cifrar tus claves.",
+  "r3ePasswordsDoNotMatchRetry": "Las contraseñas no coinciden. Inténtalo de nuevo.",
+  "r3ePasteSignature": "Pega la firma que te dio el propietario para validar la propiedad.",
+  "r3ePhoneNumberRequired": "El número de teléfono es obligatorio",
+  "r3ePrintAddresses": "Imprimir direcciones",
+  "r3ePrintValidators": "Imprimir validadores",
+  "r3eProblemLocalHeight": "Problema al obtener la altura de bloque local. Inténtalo de nuevo.",
+  "r3eProblemSnapshotHeight": "Problema al obtener la altura de bloque del snapshot. Inténtalo de nuevo.",
+  "r3eProgressLabel": "Progreso: {percent}",
+  "@r3eProgressLabel": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eReadLess": "Ver menos",
+  "r3eReadMore": "Ver más",
+  "r3eRecentTransactions": "Transacciones recientes",
+  "r3eRecoveryBody": "Tu cuenta de bóveda (protegida) se está recuperando a tu dirección de recuperación.\n\nHash de la transacción: {hash}\n\nSe transferirán todas las transacciones no liquidadas de fondos y activos, además de tu saldo disponible actual.\n\nSe recomienda importar tu clave privada de recuperación en una máquina nueva. El contenido multimedia de los NFT no se transferirá, así que expórtalo con el botón de abajo e impórtalo en tu nuevo entorno.",
+  "@r3eRecoveryBody": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eRecoveryStartedTitle": "El proceso de recuperación ha comenzado",
+  "r3eRestart": "Reiniciar",
+  "r3eRestartCliConfirm": "¿Seguro que quieres reiniciar la CLI?",
+  "r3eSavedTo": "Guardado en {data}",
+  "@r3eSavedTo": {
+    "placeholders": {
+      "data": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eSendOwnershipSignature": "Envía esta firma de validación de propiedad para probar que eres el propietario.",
+  "r3eSensitiveOperationPassword": "Ingresa tu contraseña para continuar con esta operación sensible.",
+  "r3eSessionTimeoutBody": "Tu sesión se bloqueará por inactividad. ¿Quieres seguir con la sesión iniciada?\n\nEste aviso se bloqueará automáticamente en 15 segundos.",
+  "r3eSessionTimeoutWarning": "Aviso de sesión inactiva",
+  "r3eSetPassword": "Establecer contraseña",
+  "r3eShowDebugData": "Ver datos de depuración",
+  "r3eSignatureCopied": "Firma de verificación copiada al portapapeles.",
+  "r3eSnapshotNoUrls": "El snapshot no tiene URLs de descarga",
+  "r3eStatusLog": "Registro de estado",
+  "r3eStayLoggedIn": "Seguir conectado",
+  "r3eSyncingState": "Sincronizando estado por un cierre incorrecto",
+  "r3eUnexpectedError": "Error inesperado: {error}",
+  "@r3eUnexpectedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eUnlockWallet": "Desbloquear billetera",
+  "r3eValidatingCheckProblem": "Ocurrió un problema al revisar tu estado de validación. Reinicia tu billetera e inténtalo de nuevo.",
+  "r3eValidatingTitle": "Validando ✅",
+  "r3eValidatorCheck": "Chequeo de validador",
+  "r3eValueRequired": "El valor es obligatorio",
+  "r3eVerifyNftOwnership": "Verificar propiedad de NFT",
+  "r3eVfxAddress": "Dirección VFX: {address}",
+  "@r3eVfxAddress": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eVfxDomainValidBody": "La transacción del dominio VFX es válida.\n¿Seguro que quieres continuar?\n\nDominio: {domain}\nMonto: {amount} VFX\nComisión: {fee} VFX\nTotal: {total} VFX",
+  "@r3eVfxDomainValidBody": {
+    "placeholders": {
+      "domain": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eVfxExplorer": "Explorador de VFX",
+  "r3eViewAll": "Ver todo",
+  "r3eViewChart": "Ver gráfico",
+  "r3eWalletEncrypted": "Tu billetera ahora está cifrada.",
+  "r3eWalletLocked": "Tu billetera ahora está bloqueada.",
+  "r3eWalletUnlocked": "La billetera se ha desbloqueado.",
+  "r3eWalletUnlocked10Min": "La billetera se ha desbloqueado por 10 minutos.",
+  "r3eWebWalletEncryptionBody": "La billetera web ahora usa cifrado para proteger tus claves. Para agregar otra cuenta debes cerrar sesión por completo e iniciar sesión de nuevo. Asegúrate de respaldar todos tus datos de acceso y claves antes de continuar.",
+  "r3eWebWalletEncryptionTitle": "La billetera web ahora usa cifrado",
+  "r3eWhichVfxManageDomain": "¿Qué dirección VFX administrará este dominio BTC?",
+  "r3eYesValidating": "¡SÍ, estás validando!",
+  "r3fAProblemOccurred": "Ocurrió un problema",
+  "r3fAddressCopied": "Dirección {address} copiada al portapapeles",
+  "@r3fAddressCopied": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fAnErrorOccurred": "Ocurrió un error",
+  "r3fAutoActivateBody": "¿Quieres activar la cuenta automáticamente cuando se complete el fondeo?",
+  "r3fBridgeHistoryUnavailable": "El historial del puente no está disponible.",
+  "r3fBridgeStatusAwaitingSignatures": "Esperando firmas",
+  "r3fBridgeStatusExiting": "Saliendo",
+  "r3fBridgeStatusExpired": "Expirado",
+  "r3fBridgeStatusLocking": "Bloqueando",
+  "r3fBridgeStatusMinted": "Emitido",
+  "r3fBridgeStatusMinting": "Emitiendo",
+  "r3fBridgeStatusReturned": "Devuelto",
+  "r3fBridgeStatusUnknown": "Desconocido",
+  "r3fBridgeUnreachable": "No se pudo conectar al servicio del puente.",
+  "r3fBulkConfirmBody": "¿Quieres enviar un total de {amount} vBTC a {address}?",
+  "@r3fBulkConfirmBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fBulkMinTwoTokens": "Se requieren al menos dos tokens para una transacción vBTC masiva",
+  "r3fBulkSentToast": "Se enviaron {amount} vBTC a {address}.",
+  "@r3fBulkSentToast": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fCliRestartRequired": "Se requiere reiniciar el CLI para aplicar los cambios.",
+  "r3fConfirmingBalance": "Confirmando saldo...",
+  "r3fCopiedToClipboard": "'{value}' copiado al portapapeles",
+  "@r3fCopiedToClipboard": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fErrorColon": "Error: {msg}",
+  "@r3fErrorColon": {
+    "placeholders": {
+      "msg": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fErrorHasOccurred": "Ocurrió un error",
+  "r3fFailedCancelWithdrawal": "No se pudo cancelar el retiro.",
+  "r3fFailedCeremonyStatus": "No se pudo obtener el estado de la ceremonia.",
+  "r3fFailedCompleteWithdrawal": "No se pudo completar el retiro.",
+  "r3fFailedCreateContract": "No se pudo crear el contrato.",
+  "r3fFailedInitiateCeremony": "No se pudo iniciar la ceremonia.",
+  "r3fFailedParseFee": "No se pudo procesar la comisión",
+  "r3fFailedParseHash": "No se pudo procesar el hash",
+  "r3fFailedRequestWithdrawal": "No se pudo solicitar el retiro.",
+  "r3fFailedRetrieveNonce": "No se pudo obtener el nonce",
+  "r3fFailedRetrieveTimestamp": "No se pudo obtener la marca de tiempo",
+  "r3fFailedTransferOwnership": "No se pudo transferir la propiedad.",
+  "r3fFailedTransferVbtc": "No se pudo transferir vBTC.",
+  "r3fFeePresetCustom": "Personalizada",
+  "r3fFeePresetEconomy": "Económica",
+  "r3fFeePresetFastest": "Más rápida",
+  "r3fFeePresetHalfHour": "Media hora",
+  "r3fFeePresetHour": "Hora",
+  "r3fFeePresetMinimum": "Mínima",
+  "r3fFundConfirmBody": "¿Quieres enviar 5 VFX desde {address}?",
+  "@r3fFundConfirmBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fFundSentToast": "Se enviaron 5 VFX a {address}",
+  "@r3fFundSentToast": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fInputAmountsPerToken": "Ingresa los montos de cada token:",
+  "r3fInsufficientVfxBalance": "La cuenta VFX seleccionada no tiene saldo suficiente",
+  "r3fMaxAmountIs": "El monto máximo es {amount} vBTC",
+  "@r3fMaxAmountIs": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fMaxLabel": "(MÁX: {amount} vBTC)",
+  "@r3fMaxLabel": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fMyBalanceLabel": "Mi saldo: {balance} vBTC{usd}",
+  "@r3fMyBalanceLabel": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "usd": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fNftNotTransferred": "Los activos NFT no se transfirieron a la cuenta web VFX.",
+  "r3fNoAdditionalMedia": "Este token no contiene medios adicionales.",
+  "r3fNoBtcTransactions": "Sin transacciones BTC",
+  "r3fNoRequestHash": "La solicitud de retiro no devolvió un hash.",
+  "r3fNotGenerated": "No generado",
+  "r3fOnboardFaucetDetails": "La comunidad ofrece un faucet para retirar una cantidad mínima de VFX y probar esta función. Se requiere un número de teléfono para verificación y para reducir el abuso. Solo se guarda un hash del número. También puedes comprar VFX en un exchange u on-ramp si prefieres.",
+  "r3fOnboardTokenizeDetails": "Hora de tokenizar un token vBTC. ¡Los siguientes campos son opcionales!",
+  "r3fOnboardTransferBtcDetails": "Parece que esta cuenta no tiene BTC. Transfiere BTC a esta cuenta para continuar.",
+  "r3fOnboardTransferToVbtcDetails": "Ya puedes transferir BTC a tu token vBTC. Elige el monto y la comisión abajo.",
+  "r3fPrivateKeyImportedSync": "¡Clave privada importada! Espera hasta {time} para que se sincronice el saldo.",
+  "@r3fPrivateKeyImportedSync": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fProblemRecoverySigScript": "Problema al generar RecoverySigScript",
+  "r3fQrScannerUnavailable": "Escáner QR no disponible en esta plataforma",
+  "r3fRecoverBody": "Esta función destructiva revertirá todas las transacciones y activos pendientes y moverá todo a esta dirección de recuperación:\n\n{address}",
+  "@r3fRecoverBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fRestartNow": "Reiniciar ahora",
+  "r3fRestoreBody": "Importar una cuenta de bóveda existente reemplazará la actual vinculada a tu sesión. Para revertir, cierra sesión y vuelve a entrar.\n\n¿Continuar?",
+  "r3fRestoreCodePrompt": "Pega tu CÓDIGO DE RESTAURACIÓN para importar tu cuenta de bóveda existente.",
+  "r3fRevealPrivateKeyBody": "¿Seguro que quieres revelar tu clave privada?",
+  "r3fSelectTokensToTransfer": "Selecciona los tokens desde los que quieres transferir:",
+  "r3fTokenMedia": "Medios del token",
+  "r3fTokenTotalBalanceTooltip": "Saldo total del token: {balance} vBTC{usd}",
+  "@r3fTokenTotalBalanceTooltip": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "usd": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fTransactionCompleted": "Transacción completada: {txHash}",
+  "@r3fTransactionCompleted": {
+    "placeholders": {
+      "txHash": {
+        "type": "String"
+      }
+    }
+  },
+  "r3fTxTypeMultiSig": "Multifirma",
+  "r3fTxTypeReplace": "Reemplazar",
+  "r3fTxTypeSameAccount": "TX misma cuenta",
+  "r3fWaitingTokenization": "Esperando a que se compile la tokenización vBTC.",
+  "r3gAccountUnlocked": "Cuenta desbloqueada.",
+  "r3gAccountUnlocked10Min": "Cuenta desbloqueada por 10 minutos.",
+  "r3gActiveColon": "Activa:",
+  "r3gAdditionalAssetsColon": "Recursos adicionales:",
+  "r3gAddressCopiedDot": "Dirección copiada al portapapeles.",
+  "r3gAdnrCreateConfirmBody": "La transacción de dominio {currency} es válida.\n¿Seguro que quieres continuar?\n\nDominio: {domain}\nMonto: {amount} VFX\nComisión: {fee} VFX\nTotal: {total} VFX",
+  "@r3gAdnrCreateConfirmBody": {
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "domain": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAdnrDeleteBody": "¿Seguro que quieres eliminar este dominio VFX?\n{costLine}\n\nUna vez eliminado, este ADNR ya no podrá recibir transacciones.",
+  "@r3gAdnrDeleteBody": {
+    "placeholders": {
+      "costLine": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAdnrDeleteNoCost": "Eliminar un dominio VFX no tiene costo (aparte de la comisión de TX).",
+  "r3gAdnrDeleteWithCost": "Eliminar un dominio RBX tiene un costo de {cost} RBX.",
+  "@r3gAdnrDeleteWithCost": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAssetListedInAuctionHouse": "Este {assetType} está listado en tu casa de subastas. Quita la publicación antes de transferir.",
+  "@r3gAssetListedInAuctionHouse": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAssetTransferSentSuccess": "¡Transferencia de {assetType} enviada con éxito a {address}!",
+  "@r3gAssetTransferSentSuccess": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAuctionBegins": "Comienza: {date} {time}",
+  "@r3gAuctionBegins": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gAuctionEnds": "Fin de subasta",
+  "r3gAuctionHasEnded": "La subasta terminó",
+  "r3gAuctionStarts": "Inicio de subasta",
+  "r3gAuctionUpcoming": "Subasta próxima",
+  "r3gBackupUrlRequired": "URL de respaldo requerida",
+  "r3gBackupUrlTitle": "URL de respaldo {optional}",
+  "@r3gBackupUrlTitle": {
+    "placeholders": {
+      "optional": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gBaselineAsset": "Recurso base",
+  "r3gBidAmount": "Monto de oferta",
+  "r3gBidGreaterThanHighest": "Tu oferta debe superar la oferta más alta actual ({price} VFX)",
+  "@r3gBidGreaterThanHighest": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gBidResent": "¡Oferta reenviada!",
+  "r3gBidSent": "Oferta enviada. Revisa el historial de ofertas para ver si fue aceptada o rechazada.",
+  "r3gBurnSentSuccess": "¡Transacción de quema enviada con éxito!",
+  "r3gBuyNowSentSuccess": "Transacción de compra enviada con éxito. Espera la confirmación.",
+  "r3gChain": "Cadena",
+  "r3gCollectionError": "Error de colección",
+  "r3gConfirmBurnName": "¿Seguro que quieres quemar {name}?",
+  "@r3gConfirmBurnName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmBuyNowBody": "¿Seguro que quieres comprar ahora por {price} VFX?",
+  "@r3gConfirmBuyNowBody": {
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmDevolveOneStage": "¿Seguro que quieres retroceder este NFT una etapa?",
+  "r3gConfirmEvolveOneStage": "¿Seguro que quieres evolucionar este NFT una etapa?",
+  "r3gConfirmEvolveToStage": "¿Seguro que quieres evolucionar a la etapa {index}?",
+  "@r3gConfirmEvolveToStage": {
+    "placeholders": {
+      "index": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmPlaceBidBody": "¿Seguro que quieres ofertar {amount} VFX{maxSuffix}?",
+  "@r3gConfirmPlaceBidBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "maxSuffix": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmSellNftBody": "Confirma que quieres vender el NFT a \"{address}\" por {amount} VFX.",
+  "@r3gConfirmSellNftBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConfirmSendAssetBody": "Confirma que quieres enviar el {assetType} a \"{address}\".{warning}",
+  "@r3gConfirmSendAssetBody": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      },
+      "warning": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConnect": "Conectar",
+  "r3gConnectToAuctionHouseTitle": "¿Conectar a la casa de subastas?",
+  "r3gConnectToShopBody": "¿Quieres conectarte a {name} ({url})?",
+  "@r3gConnectToShopBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConnectedFetchingData": "Conectado a {url}. Obteniendo datos...",
+  "@r3gConnectedFetchingData": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gConnectingToShop": "Conectando a la tienda...",
+  "r3gCopyMessage": "Copiar mensaje",
+  "r3gCouldNotConnectOffline": "No se pudo conectar a la tienda porque está desconectada.",
+  "r3gCouldNotFindShop": "No se encontró la casa de subastas con la URL {url}",
+  "@r3gCouldNotFindShop": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gCurrentBidPrice": "Precio de oferta actual:",
+  "r3gCurrentBids": "Ofertas actuales",
+  "r3gCurrentStage": "Etapa actual: {name}",
+  "@r3gCurrentStage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gDevolve": "Retroceder",
+  "r3gEncryptionPasswordRequired": "Se requiere contraseña de cifrado para seguir validando.",
+  "r3gEndsIn": "Termina en",
+  "r3gEvolution": "Evolución",
+  "r3gEvolveBlockHeightLabel": "Altura de bloque de evolución: {blockHeight}\n{description}",
+  "@r3gEvolveBlockHeightLabel": {
+    "placeholders": {
+      "blockHeight": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gEvolveDateLabel": "Fecha de evolución: {date} {time} {tz} \n{description}",
+  "@r3gEvolveDateLabel": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "tz": {
+        "type": "String"
+      },
+      "description": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gEvolveSyncBody": "Esta pantalla reflejará el cambio cuando el bloque se genere y la altura de bloque se sincronice con esta transacción.",
+  "r3gFeeRateEstimateCustom": "Tarifa: {fee} SATS /byte [{feeBtc} BTC /byte]\nEstimado: {feeEstimate} SATS [~{feeEstimateBtc} BTC]",
+  "@r3gFeeRateEstimateCustom": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "feeBtc": {
+        "type": "String"
+      },
+      "feeEstimate": {
+        "type": "String"
+      },
+      "feeEstimateBtc": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gFeeRateEstimatePreset": "Tarifa: {fee} SATS /byte [{feeBtc} BTC /byte]\nEstimado: ~{feeEstimate} SATS [~{feeEstimateBtc} BTC]    ",
+  "@r3gFeeRateEstimatePreset": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "feeBtc": {
+        "type": "String"
+      },
+      "feeEstimate": {
+        "type": "String"
+      },
+      "feeEstimateBtc": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gGettingCollections": "Obteniendo colecciones y publicaciones...",
+  "r3gIncorrectDecryptionPassword": "Contraseña de descifrado incorrecta.",
+  "r3gIncrementAmount": "Monto de incremento:",
+  "r3gLabelCopiedToClipboard": "{label} copiado al portapapeles",
+  "@r3gLabelCopiedToClipboard": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gManageEvolution": "Gestionar evolución",
+  "r3gManagingName": "Gestionando {name}",
+  "@r3gManagingName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMaxBidSuffix": " con una oferta máxima de {max} VFX",
+  "@r3gMaxBidSuffix": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMediaFilesNotFound": "No se encontraron los archivos multimedia en esta máquina.",
+  "r3gMessageCopied": "Mensaje copiado al portapapeles.",
+  "r3gMinIncrementAmount": "El incremento mínimo es {increment} VFX. Se requiere una oferta mayor a {minBid} VFX.",
+  "@r3gMinIncrementAmount": {
+    "placeholders": {
+      "increment": {
+        "type": "String"
+      },
+      "minBid": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMinted": "Acuñado",
+  "r3gMintedBy": "Acuñado por",
+  "r3gMintedByName": "Acuñado por: {name}",
+  "@r3gMintedByName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gMinting": "Acuñando...",
+  "r3gMustBeGreaterThanBid": "Debe ser mayor a {minBid} VFX",
+  "@r3gMustBeGreaterThanBid": {
+    "placeholders": {
+      "minBid": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gNextOwner": "Próximo dueño",
+  "r3gNftAssetsNotTransferred": "Los recursos del NFT no se han transferido a la billetera web VFX.",
+  "r3gNftFeaturesColon": "Funciones del NFT:",
+  "r3gNftListedBeforeBurning": "Este NFT está listado en tu casa de subastas. Quita la publicación antes de quemarlo.",
+  "r3gNoBids": "Sin ofertas.",
+  "r3gNoFeatures": "Sin funciones",
+  "r3gNoMintedNfts": "No hay NFT acuñados con capacidad de gestión.",
+  "r3gNoNftsFound": "No se encontraron NFT.",
+  "r3gNoRecoveryWarning": "\n\nSi esta dirección no es correcta, no habrá forma de recuperar la propiedad del {assetType}.",
+  "@r3gNoRecoveryWarning": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gNotEnoughBalanceDot": "Saldo insuficiente.",
+  "r3gNotEnoughBalanceValidating": "Saldo insuficiente porque estás validando.",
+  "r3gOptionalParenthetical": "(Opcional)",
+  "r3gPasteZipfileUrl": "Pega una URL pública a un archivo zip alojado con los recursos.",
+  "r3gPropertiesColon": "Propiedades:",
+  "r3gPropertySingular": "Propiedad",
+  "r3gPurchasedBy": "Comprado por: ",
+  "r3gPurchasedFor": "por ",
+  "r3gRemoveShopBody": "¿Seguro que quieres quitar {url} de tus tiendas guardadas?",
+  "@r3gRemoveShopBody": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gRemoveShopTitle": "¿Quitar tienda?",
+  "r3gResendMessage": "Reenviar mensaje",
+  "r3gReserveMet": "Reserva alcanzada:",
+  "r3gSellNftPrompt": "¿Por cuánto vendes este NFT?",
+  "r3gShopCurrentlyOffline": "Esta tienda está desconectada.",
+  "r3gShopError": "Error de tienda",
+  "r3gShopIsOffline": "La tienda está desconectada.",
+  "r3gShopOfflineWarning": "Aviso: esta tienda está desconectada, así que la información podría no estar actualizada.",
+  "r3gSmartContractIdCopied": "Identificador del contrato inteligente copiado al portapapeles",
+  "r3gStartSale": "Iniciar venta",
+  "r3gStepAmountAddressDesc": "Ingresa el porcentaje a pagar a la dirección VFX definida en el siguiente campo.",
+  "r3gStepAmountAddressTitle": "Monto y dirección",
+  "r3gStepEvolutionModeDesc": "Decide si quieres que la evolución la controle el emisor o el dueño del NFT.",
+  "r3gStepEvolutionModeTitle": "Modo de evolución",
+  "r3gStepEvolutionStagesDesc": "Crea varias etapas de evolución según las variables previas. Da a cada etapa un nombre y una descripción y, opcionalmente, cambia el recurso.",
+  "r3gStepEvolutionStagesTitle": "Etapas de evolución",
+  "r3gStepEvolutionTypeDesc": "Configura si el NFT evoluciona automáticamente por fecha/hora, altura de bloque o solo manualmente.",
+  "r3gStepEvolutionTypeTitle": "Tipo de evolución",
+  "r3gStepMetadataDesc": "Comienza dando el nombre, el emisor y la descripción del contrato inteligente.",
+  "r3gStepMetadataTitle": "Metadatos",
+  "r3gStepMintDesc": "Haz clic en compilar para generar el código Trilliam del contrato inteligente y luego en emitir para desplegarlo en la cadena.",
+  "r3gStepMintTitle": "Emitir",
+  "r3gStepPrimaryAssetDesc": "Elige el recurso principal del contrato inteligente. Puede ser una imagen, audio, video o cualquier archivo digital.",
+  "r3gStepRoyaltyFeeDesc": "La comisión se calcula sobre las ganancias de la venta y se liquida al finalizar la transacción. Con tarifa fija, el NFT no puede venderse por menos de la regalía aplicada.",
+  "r3gStepRoyaltyFeeTitle": "Regalía",
+  "r3gStepRoyaltyTypeDesc": "Elige una regalía de tarifa fija o por porcentaje aplicada en la cadena en cada intercambio.",
+  "r3gTplBaselineDesc": "Crea un contrato inteligente base con un recurso y metadatos y emítelo en la cadena",
+  "r3gTplBaselineName": "Contrato inteligente base",
+  "r3gTplEvolvingDesc": "Genera un contrato inteligente que evoluciona según el tiempo o variables en cadena",
+  "r3gTplEvolvingName": "Contrato inteligente evolutivo",
+  "r3gTplRoyaltyDesc": "Crea un contrato inteligente con una regalía aplicada en cadena en cada intercambio",
+  "r3gTplRoyaltyName": "Contrato inteligente con regalías",
+  "r3gTransferAssetTitle": "Transferir {assetType}",
+  "@r3gTransferAssetTitle": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gTransferInProgress": "Transferencia en curso",
+  "r3gTransferInProgressBody": "Mantén tu billetera abierta hasta que esta transferencia de {assetType} aparezca en tu lista de transacciones.\n\nPara seguir el progreso, abre tu 'sclog.txt' en la carpeta de bases de datos.",
+  "@r3gTransferInProgressBody": {
+    "placeholders": {
+      "assetType": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gUnlockAccount": "Desbloquear cuenta",
+  "r3gUrlOptionalLabel": "URL {optional}",
+  "@r3gUrlOptionalLabel": {
+    "placeholders": {
+      "optional": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gValueCopiedToClipboard": "{value} copiado al portapapeles",
+  "@r3gValueCopiedToClipboard": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "r3gVaultCannotBurnNfts": "Las cuentas de bóveda no pueden quemar NFT",
+  "r3hAccountIsValidating": "Esta cuenta está validando",
+  "r3hActiveValidators": "Validadores activos: {count}",
+  "@r3hActiveValidators": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hAdditionalLinksOptional": "Enlaces adicionales (opcional)",
+  "r3hAddressInvalid": "Dirección inválida.",
+  "r3hAddressOrDomainRequired": "Dirección o dominio VFX requerido",
+  "r3hAddressRequired": "Dirección requerida",
+  "r3hAddressToBan": "Dirección a banear",
+  "r3hAdjVoteInDetails": "Detalles del voto de adj.",
+  "r3hAdjVoteInTooLong": "El envío 'Voto de adjudicador' es muy largo. Reduce el contenido.",
+  "r3hAllowVotingLabel": "Permitir votación:",
+  "r3hAvailableBalance": "Disponible: {balance} VFX",
+  "@r3hAvailableBalance": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hBalanceRequired": "Se requiere un saldo",
+  "r3hBandwidthHint": "0 para ilimitado",
+  "r3hBandwidthTb": "Ancho de banda (en TB)",
+  "r3hCannotHideValidating": "No puedes ocultar una cuenta que está validando",
+  "r3hCompileMintBody": "¿Seguro que quieres continuar?\nUna vez compilado no podrás hacer cambios\ny el contrato inteligente/token se desplegará en la cadena.",
+  "r3hConfirmVoteNoBody": "¿Seguro que quieres votar NO en este tema?",
+  "r3hConfirmVoteNoTitle": "Confirmar voto [NO]",
+  "r3hConfirmVoteYesBody": "¿Seguro que quieres votar SÍ en este tema?",
+  "r3hConfirmVoteYesTitle": "Confirmar voto [SÍ]",
+  "r3hCopiedToClipboard": "{label} copiado al portapapeles",
+  "@r3hCopiedToClipboard": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hCpu": "CPU",
+  "r3hCpuCores": "Núcleos de CPU",
+  "r3hCpuHint": "ej. Intel",
+  "r3hCpuThreads": "Hilos de CPU",
+  "r3hDecimalPlacesLabel": "Decimales:",
+  "r3hDescRequired": "La descripción es requerida",
+  "r3hDescTooLong": "La descripción supera el máximo de caracteres",
+  "r3hDescTooManyWords": "La descripción supera el máximo de palabras",
+  "r3hDescriptionColon": "Descripción:",
+  "r3hDescriptionOptionalLabel": "Descripción (opcional):",
+  "r3hDnrAlphaNumeric": "Un DNR solo puede tener letras y números.",
+  "r3hEmailInvalid": "Correo inválido.",
+  "r3hEmailRequired": "Correo requerido.",
+  "r3hErrorBanning": "Error al banear la dirección",
+  "r3hErrorBurning": "Error al quemar el token",
+  "r3hErrorChangingOwnership": "Error al cambiar la propiedad",
+  "r3hErrorCreatingTopic": "Error al crear el tema",
+  "r3hErrorMinting": "Error al emitir el token",
+  "r3hErrorPausing": "Error al pausar/reanudar el token",
+  "r3hErrorTransferring": "Error al transferir el token",
+  "r3hFieldInvalid": "{label} inválido.",
+  "@r3hFieldInvalid": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hFieldRequired": "{label} es requerido.",
+  "@r3hFieldRequired": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hGithubLinkOptional": "Enlace de Github (opcional)",
+  "r3hHdSize": "Tamaño de HD",
+  "r3hHdSizeSpecifier": "Unidad de tamaño HD",
+  "r3hHours24Minimum": "Horas (mínimo 24)",
+  "r3hInsufficientBalanceForTopic": "El saldo no alcanzará para validar por el costo de crear un tema (1 VFX + comisión)",
+  "r3hInternetSpeedDown": "Bajada de internet (Gbps)",
+  "r3hInternetSpeedUp": "Subida de internet (Gbps)",
+  "r3hInvalid": "Inválido",
+  "r3hIsBurnableLabel": "Quemable:",
+  "r3hLabelMinTokenRequirement": "Requisito mínimo de tokens",
+  "r3hLogoutConfirmBody": "¿Seguro que quieres cerrar sesión de la Billetera Web VFX?",
+  "r3hMachineOs": "SO de máquina",
+  "r3hMachineProvider": "Proveedor de máquina",
+  "r3hMachineType": "Tipo de máquina",
+  "r3hMachineTypeHint": "ej. servidor, escritorio, laptop, etc.",
+  "r3hManageToken": "Gestionar token",
+  "r3hMaxPercent": "No puede superar 100%",
+  "r3hMinPercent": "Debe ser mayor a 0%",
+  "r3hMintBroadcastedBody": "La transacción de emisión del contrato del token fue transmitida.\n\nLa pantalla del token fungible reflejará el cambio cuando el bloque se cree y la altura se sincronice con esta transacción.",
+  "r3hMintedByBody": "Esto será emitido por {address}",
+  "@r3hMintedByBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hMustBeValidatorToCreateTopic": "Tu cuenta activa debe ser validador para crear un tema.",
+  "r3hMustSelectAccountToVote": "Debes seleccionar una cuenta para votar.",
+  "r3hNameRequired": "El nombre es requerido",
+  "r3hNameTooLong": "El nombre supera el máximo de caracteres",
+  "r3hNewOwnerAddress": "Dirección del nuevo dueño",
+  "r3hNoActiveTopics": "Sin temas activos",
+  "r3hNoCreatedTopics": "No has creado ningún tema.",
+  "r3hNoInactiveTopics": "Sin temas inactivos",
+  "r3hNoTokensInAccounts": "No hay tokens en ninguna de tus cuentas.",
+  "r3hNoUpper": "NO",
+  "r3hNoVotingTopics": "Sin temas de votación",
+  "r3hNodeNameTaken": "Ese nombre de nodo ya está en uso.",
+  "r3hNotAuthorizedAddress": "No autorizado (dirección incorrecta).",
+  "r3hNotAuthorizedToken": "No autorizado (token inválido).",
+  "r3hNotVotedAnyTopics": "No has votado en ningún tema.",
+  "r3hOneActiveTopicPerAddress": "Solo se permite un tema activo por dirección.",
+  "r3hOptional": "Opcional",
+  "r3hPasswordRequired": "Contraseña requerida.",
+  "r3hPasswordWeak": "Contraseña muy débil.",
+  "r3hPause": "Pausar",
+  "r3hPauseTokenTransactions": "Pausar transacciones del token",
+  "r3hPauseTokenTxConfirmBody": "¿Seguro que quieres pausar las transacciones del token? Impedirá transferencias y quemas hasta reanudar.",
+  "r3hPauseTransactions": "Pausar transacciones",
+  "r3hPauseTxConfirmBody": "¿Seguro que quieres pausar todas las transacciones de este token?",
+  "r3hPauseTxs": "Pausar TXs",
+  "r3hPendingPause": "Pausa pendiente",
+  "r3hPendingResume": "Reanudación pendiente",
+  "r3hPhoneInvalid": "Teléfono inválido.",
+  "r3hPhoneRequired": "Teléfono requerido.",
+  "r3hProblemOccurred": "Ocurrió un problema.",
+  "r3hRamGb": "RAM (en GB)",
+  "r3hReasonToBecomeAdj": "Motivo para ser adjudicador",
+  "r3hReplaceTokenIcon": "Reemplazar ícono del token",
+  "r3hRequired": "Requerido",
+  "r3hResume": "Reanudar",
+  "r3hResumeTokenTransactions": "Reanudar transacciones del token",
+  "r3hResumeTokenTxConfirmBody": "¿Seguro que quieres reanudar las transacciones del token?",
+  "r3hResumeTransactions": "Reanudar transacciones",
+  "r3hResumeTxConfirmBody": "¿Seguro que quieres reanudar las transacciones de este token?",
+  "r3hResumeTxs": "Reanudar TXs",
+  "r3hSeparateWithCommas": "Separa varios con comas",
+  "r3hTechnicalBackground": "Experiencia técnica",
+  "r3hTokenAccounts": "Cuentas del token",
+  "r3hTokenHasFixedSupply": "Token con suministro fijo:",
+  "r3hTokenIconUrlLabel": "URL del ícono:",
+  "r3hTokenNameFieldLabel": "Nombre del token:",
+  "r3hTokenNameHelper": "El nombre de este nuevo token.",
+  "r3hTokenOwnerLabel": "Dueño del token: ",
+  "r3hTokenPauseBroadcasted": "Transacción de pausa transmitida",
+  "r3hTokenResumeBroadcasted": "Transacción de reanudación transmitida",
+  "r3hTokenTickerFieldLabel": "Ticker del token:",
+  "r3hTokenTickerHelper": "El ticker de este nuevo token.",
+  "r3hTotalSupplyLabel": "Suministro total:",
+  "r3hUploadTokenIcon": "Subir ícono del token",
+  "r3hUseZeroForInfinite": "Usa 0 para infinito (permite emitir)",
+  "r3hUsernameInvalid": "Usuario no válido.",
+  "r3hUsernameRequired": "Usuario requerido.",
+  "r3hVaultActionNotAllowedBody": "Los tokens de una cuenta de bóveda no pueden hacer esta acción. Cambia la propiedad a una cuenta VFX estándar para continuar.",
+  "r3hVaultKeypairNotFound": "No se encontró el par de claves de bóveda para {address}.",
+  "@r3hVaultKeypairNotFound": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hVfxAddressToNominate": "Dirección VFX a nominar",
+  "r3hVoteNoUpper": "Votar NO",
+  "r3hVoteYesUpper": "Votar SÍ",
+  "r3hVotedAllTopics": "Has votado en todos los temas.",
+  "r3hVotingEndedOn": "La votación terminó el {date}.",
+  "@r3hVotingEndedOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hVotingEndsOn": "La votación termina el {date}.",
+  "@r3hVotingEndsOn": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hWalletSyncWait": "Espera a que tu billetera se sincronice con la red",
+  "r3hWalletSynced": "Billetera sincronizada",
+  "r3hYesUpper": "SÍ",
+  "r3hYouVotedOnBlock": "Votaste {vote} en el bloque {block}",
+  "@r3hYouVotedOnBlock": {
+    "placeholders": {
+      "vote": {
+        "type": "String"
+      },
+      "block": {
+        "type": "String"
+      }
+    }
+  },
+  "r3hYouVotedPending": "Votaste {vote}. Transacción pendiente.",
+  "@r3hYouVotedPending": {
+    "placeholders": {
+      "vote": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aAccountUnlockTime": "Tiempo de desbloqueo de cuenta",
+  "r3aAddRarity": "Agregar rareza",
+  "r3aAdditionalAsset": "Activo adicional",
+  "r3aAdditionalAssets": "Activos adicionales",
+  "r3aAllowedAssetExtensionTypes": "Tipos de extensión de activo permitidos",
+  "r3aAutoDownloadNftAsset": "Descarga automática de activo NFT",
+  "r3aBackupUrlBody": "Pega una URL pública de un archivo zip alojado que contenga los activos.",
+  "r3aBlockHeightVariable": "Variable de altura de bloque",
+  "r3aBurnNft": "Quemar NFT",
+  "r3aChooseFile": "Elegir archivo",
+  "r3aCompile": "Compilar",
+  "r3aCompileMintBodySimple": "¿Seguro que deseas continuar?\nUna vez compilado no podrás hacer cambios\ny el contrato se desplegará en la cadena.",
+  "r3aCompilingMinting": "Compilando y emitiendo",
+  "r3aCompilingMintingEllipsis": "Compilando y emitiendo…",
+  "r3aConfiguration": "Configuración",
+  "r3aCreateBlueprint": "Crear plantilla",
+  "r3aCreateCollectionBlueprint": "Crear plantilla de colección",
+  "r3aCreateFirstInstance": "Crear primera instancia",
+  "r3aDateTimeVariable": "Variable de fecha/hora",
+  "r3aDeleteDraft": "Eliminar borrador",
+  "r3aDeleteDraftConfirm": "¿Seguro que deseas eliminar este borrador de contrato inteligente?",
+  "r3aDeleteQuestion": "¿Eliminar?",
+  "r3aDeleteThisConfirm": "¿Seguro que deseas eliminar esto?",
+  "r3aDraftDeleted": "Borrador eliminado",
+  "r3aDraftSaved": "¡Borrador guardado!",
+  "r3aDuplicate": "Duplicar",
+  "r3aEditInstance": "Editar instancia",
+  "r3aEvolutionMode": "Modo de evolución",
+  "r3aEvolvePhase": "Fase de evolución",
+  "r3aEvolvePhases": "Fases de evolución",
+  "r3aEvolveStagesInPast": "Etapas de evolución en el pasado",
+  "r3aEvolveStagesInPastBody": "Una o más de tus etapas de evolución ya habrán evolucionado al momento de la emisión.\n\n¿Seguro que deseas continuar?",
+  "r3aFeatures": "Funciones",
+  "r3aHelpBodyAllowedExt": "Quita tipos de extensión de la lista ya definida y permitirá descargar cualquier activo NFT con estos tipos de extensión conocidos \nEj: pdf,doc,xls \n\nValor predeterminado: (dejar en blanco)",
+  "r3aHelpBodyApiCallUrl": "Esta URL se usa para enviar transacciones entrantes a una URL externa. Se usa para depósitos entrantes u otros servicios de notificación. \n\nValor predeterminado: null",
+  "r3aHelpBodyApiPort": "Este es el puerto para llamar a la API. Puedes cambiarlo por el que quieras. \n\nValor predeterminado: 7292",
+  "r3aHelpBodyAutoDownload": "Controla si el activo de un NFT se descarga automáticamente o no \n\nValor predeterminado: true",
+  "r3aHelpBodyBaseline": "Completa la información básica requerida por todos los contratos inteligentes. Elige un nombre, el nombre del emisor (opcional) y la cuenta que quieres usar. Luego, da a tu contrato inteligente/NFT una descripción detallada.",
+  "r3aHelpBodyBurn": "Quema (destruye) este NFT de forma permanente.",
+  "r3aHelpBodyCompile": "Compila el código Trilliam según los parámetros configurados y luego emítelo cuando esté listo.",
+  "r3aHelpBodyConfiguration": "Estos valores modificarán el archivo config.txt ubicado en la base de datos de la CLI; para que los cambios surtan efecto, la CLI debe reiniciarse",
+  "r3aHelpBodyDelete": "Elimina tu contrato inteligente",
+  "r3aHelpBodyDescription": "Proporciona una descripción de texto de tu contrato inteligente/NFT. Este campo es obligatorio y será visible públicamente.",
+  "r3aHelpBodyEvolveAsset": "Reemplaza el activo cuando el contrato evolucione a esta etapa. Este campo es opcional.",
+  "r3aHelpBodyEvolveBlockHeight": "El contrato inteligente evolucionará cuando la cadena VFX alcance esta altura de bloque.",
+  "r3aHelpBodyEvolveDatetime": "La fecha y hora en que el contrato evolucionará (UTC).",
+  "r3aHelpBodyEvolveMode": "Tú decides cómo se controlará la evolución.\n\nPor emisor/creador: el emisor podrá evolucionar/revertir el contrato en cualquier momento.\n\nAutomático/por la app: evoluciona automáticamente según fecha/hora, variables en cadena y/o variables inducidas por la aplicación.",
+  "r3aHelpBodyEvolveStageDescription": "Proporciona una descripción para esta etapa de evolución.",
+  "r3aHelpBodyEvolveStageName": "Proporciona un nombre para esta etapa de evolución.",
+  "r3aHelpBodyEvolveType": "Elige el tipo de variable que puede afectar dinámicamente el estado de evolución.\n\nFecha/Hora: el contrato evolucionará automáticamente en un momento determinado.\n\nAltura de bloque: el contrato evolucionará cuando la cadena alcance cierta altura de bloque.\n\nManual: el contrato no evolucionará salvo que lo indique manualmente el emisor o el usuario/aplicación (según el modo seleccionado).",
+  "r3aHelpBodyFeatures": "Agrega una función a tu contrato inteligente, como regalías o funcionalidad evolutiva.",
+  "r3aHelpBodyIgnoreIncoming": "Controla si los NFT entrantes se procesan o solo se agregan como registro de TX \n\nValor predeterminado: false",
+  "r3aHelpBodyManageProperties": "Crea pares de etiqueta y valor.\nPor ejemplo:\n\nEtiqueta: Color\nValor: Azul",
+  "r3aHelpBodyMint": "Emite y despliega el contrato inteligente en la cadena.",
+  "r3aHelpBodyMintQuantity": "La cantidad de contratos inteligentes / NFT que quieres emitir desde esta plantilla.",
+  "r3aHelpBodyMinterName": "Este campo es opcional pero se mostrará públicamente si se completa. Puede ser tu nombre/persona, o déjalo en blanco.",
+  "r3aHelpBodyMinting": "Esta acción ocurre después de compilar y emitir con éxito, pero requiere que la red autentique la transacción, lo que toma unos 30 segundos para su finalidad, además de que tu billetera esté sincronizada con el bloque que incluye esta transacción.",
+  "r3aHelpBodyMotherAddress": "La dirección IP de la billetera HOST. \n\n Valor predeterminado: (dejar en blanco)",
+  "r3aHelpBodyMotherPassword": "La contraseña definida en tu billetera HOST al configurar MOTHER.\n\n Valor predeterminado: (dejar en blanco)",
+  "r3aHelpBodyNftTimeout": "Controla el tiempo de espera para procesar un NFT entrante \n\nValor predeterminado: 15",
+  "r3aHelpBodyOwnerAddress": "Debe ser la dirección de la cuenta que se usará para compilar y emitir el contrato inteligente.",
+  "r3aHelpBodyPasswordClearTime": "Controla el tiempo para borrar la contraseña de una billetera cifrada \n\nValor predeterminado: 10",
+  "r3aHelpBodyPrimaryAsset": "Este es el activo de archivo principal del contrato inteligente/NFT. Puede ser una imagen, audio, video o cualquier archivo.",
+  "r3aHelpBodyProperties": "Define y asigna valores a los activos de tu contrato inteligente. Por ejemplo, puede ser un rasgo poco común.",
+  "r3aHelpBodyPropertyTypes": "Define el tipo de valor que tendrá tu propiedad \nLos tipos son: \n- Texto: valor alfanumérico \n- Número: valor numérico \n- Color: valor hexadecimal de un color de tu elección",
+  "r3aHelpBodyRejectExt": "Agrega tipos de extensión a la lista ya definida y rechazará cualquier activo NFT con estos tipos de extensión conocidos \nEj: exe,zip,pdf... (no dejes espacios entre tipos) \n\nValor predeterminado: (dejar en blanco)\n\nSi se deja en blanco, este es el predeterminado:\n{exts}",
+  "@r3aHelpBodyRejectExt": {
+    "placeholders": {
+      "exts": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aHelpBodyRoyaltyAddress": "Indica la dirección pública VFX a la que se pagará la regalía al finalizar la transacción.",
+  "r3aHelpBodyRoyaltyFlat": "Escribe el monto de VFX que se pagará a la dirección indicada y que se aplica en cadena en cada intercambio. Esta comisión se envía al titular de la regalía al finalizar la transacción.",
+  "r3aHelpBodyRoyaltyPercent": "Escribe el porcentaje que se pagará a la dirección indicada y que se aplica en cadena en cada intercambio. Esta comisión se envía al titular de la regalía al finalizar la transacción.",
+  "r3aHelpBodySaveAsDraft": "Guarda tu contrato inteligente como borrador local para retomarlo más tarde.",
+  "r3aHelpBodyScName": "Nombra tu contrato inteligente. Este campo es obligatorio y es visible públicamente.",
+  "r3aHelpBodySetEvolution": "Con un NFT que tiene más de 2 fases, el usuario puede ir directamente de una etapa a otra con el botón “Fijar evolución” en lugar de evolucionar y revertir etapa por etapa",
+  "r3aHelpBodySmartContract": "Configura los parámetros de tu contrato inteligente y luego compílalo y emítelo.",
+  "r3aHelpBodyTransfer": "Transfiere este NFT a otra cuenta.",
+  "r3aHelpBodyWalletUnlockTime": "Es el tiempo durante el cual, tras ingresar una contraseña, la billetera permanece desbloqueada sin volver a pedirla \n\nValor predeterminado: 15",
+  "r3aIgnoreIncomingNfts": "Ignorar NFT entrantes",
+  "r3aMaxMintAtOnce": "El número máximo que puedes emitir a la vez es {max}.",
+  "@r3aMaxMintAtOnce": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "r3aMintBroadcastedBody": "Se transmitió la transacción de emisión del contrato inteligente.\n\nLa pantalla de NFT reflejará el cambio una vez que se cree el bloque y la altura de bloque se sincronice con esta transacción.",
+  "r3aMintTxSent": "Transacción de emisión enviada con éxito. Espera hasta que el contrato se emita en la cadena.",
+  "r3aMinterCreatorName": "Nombre del emisor/creador",
+  "r3aMinterName": "Nombre del emisor",
+  "r3aMinting": "Emitiendo",
+  "r3aMintingEllipsis": "Emitiendo…",
+  "r3aMotherAddress": "Dirección MOTHER",
+  "r3aMotherPassword": "Contraseña MOTHER",
+  "r3aNftSaleTransferStarted": "Listo: se inició la transferencia de venta del NFT.",
+  "r3aNftTimeout": "Espera de NFT",
+  "r3aNftTransferStarted": "Listo: se inició la transferencia del NFT.",
+  "r3aPasswordClearTime": "Tiempo para borrar contraseña",
+  "r3aPayeeAddress": "Dir. beneficiario",
+  "r3aProblemCompilingSc": "Ocurrió un problema al compilar este contrato inteligente.",
+  "r3aProblemMintingSc": "Ocurrió un problema al emitir este contrato inteligente.",
+  "r3aProperty": "Propiedad",
+  "r3aPropertyTypes": "Tipos de propiedad",
+  "r3aRarities": "Rarezas",
+  "r3aRejectAssetExtensionTypes": "Rechazar tipos de extensión de activo",
+  "r3aRoyaltyFlatFeeAmount": "Regalía fija",
+  "r3aRoyaltyPercentageFeeAmount": "Regalía porcentual",
+  "r3aRoyaltyTo": "Regalía a",
+  "r3aSaleCompleteTxSent": "TX de venta completa enviada",
+  "r3aSaveAsDraft": "Guardar borrador",
+  "r3aScMintedSuccessfully": "Contrato inteligente emitido con éxito.",
+  "r3aSetEvolution": "Fijar evolución",
+  "r3aSmartContract": "Contrato inteligente",
+  "r3aSmartContractName": "Nombre del contrato inteligente",
+  "r3aStat": "Estadística",
+  "r3aStatType": "Tipo de estadística",
+  "r3aTransferNft": "Transferir NFT",
+  "r3aUntitled": "Sin título",
+  "r3aValue": "Valor"
 }

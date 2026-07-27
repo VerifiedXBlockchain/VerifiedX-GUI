@@ -27,6 +27,7 @@ class PauseTokenButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(nftDetailWatcher(scId));
 
     return data.when(
@@ -41,7 +42,7 @@ class PauseTokenButton extends BaseComponent {
 
           if (ref.watch(pendingTokenPauseProvider).contains(nft.id)) {
             return AppButton(
-              label: isPaused ? "Pending Resume" : "Pending Pause",
+              label: isPaused ? l10n.r3hPendingResume : l10n.r3hPendingPause,
               processing: true,
               variant: AppColorVariant.Light,
               onPressed: () {
@@ -51,7 +52,7 @@ class PauseTokenButton extends BaseComponent {
           }
 
           return AppButton(
-            label: isPaused ? "Resume TXs" : "Pause TXs",
+            label: isPaused ? l10n.r3hResumeTxs : l10n.r3hPauseTxs,
             variant: isOwnedByRa ? AppColorVariant.Primary : AppColorVariant.Light,
             useDisabledColor: isOwnedByRa,
             onPressed: () async {
@@ -60,12 +61,12 @@ class PauseTokenButton extends BaseComponent {
                 return;
               }
               final confirmed = await ConfirmDialog.show(
-                title: isPaused ? "Resume Token Transactions" : "Pause Token Transactions",
+                title: isPaused ? l10n.r3hResumeTokenTransactions : l10n.r3hPauseTokenTransactions,
                 body: isPaused
-                    ? "Are you sure you want to resume token transactions?"
-                    : "Are you sure you want to pause token transactions? This will prevent transfers and burning of this token until resumed.",
-                confirmText: isPaused ? "Resume" : "Pause",
-                cancelText: "Cancel",
+                    ? l10n.r3hResumeTokenTxConfirmBody
+                    : l10n.r3hPauseTokenTxConfirmBody,
+                confirmText: isPaused ? l10n.r3hResume : l10n.r3hPause,
+                cancelText: l10n.actionCancel,
               );
 
               if (confirmed != true) {
@@ -82,7 +83,7 @@ class PauseTokenButton extends BaseComponent {
               if (success) {
                 ref.read(pendingTokenPauseProvider.notifier).addId(scId);
 
-                Toast.message(isPaused ? "Token resume transaction broadcasted" : "Token pause transaction broadcasted");
+                Toast.message(isPaused ? l10n.r3hTokenResumeBroadcasted : l10n.r3hTokenPauseBroadcasted);
               }
             },
           );

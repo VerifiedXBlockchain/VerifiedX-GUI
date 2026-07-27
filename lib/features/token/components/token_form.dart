@@ -35,6 +35,7 @@ class TokenForm extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(tokenFormProvider.notifier);
     final model = ref.watch(tokenFormProvider);
+    final l10n = AppLocalizations.of(context);
     return AppCard(
       child: Form(
         key: provider.formKey,
@@ -46,7 +47,7 @@ class TokenForm extends BaseComponent {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text("Token Owner: "),
+                  Text(l10n.r3hTokenOwnerLabel),
                   WalletSelector(
                     includeRbx: true,
                     includeBtc: false,
@@ -62,11 +63,11 @@ class TokenForm extends BaseComponent {
               validator: provider.nameValidator,
               decoration: InputDecoration(
                 label: Text(
-                  "Token Name:",
+                  l10n.r3hTokenNameFieldLabel,
                   style: TextStyle(color: Colors.white),
                 ),
                 hintText: AppLocalizations.of(context).tokenFormNameHint,
-                helperText: "The name of this new token.",
+                helperText: l10n.r3hTokenNameHelper,
               ),
             ),
             TextFormField(
@@ -74,11 +75,11 @@ class TokenForm extends BaseComponent {
               validator: provider.tickerValidator,
               decoration: InputDecoration(
                 label: Text(
-                  "Token Ticker:",
+                  l10n.r3hTokenTickerFieldLabel,
                   style: TextStyle(color: Colors.white),
                 ),
                 hintText: AppLocalizations.of(context).tokenFormTickerHint,
-                helperText: "The ticker for this new token.",
+                helperText: l10n.r3hTokenTickerHelper,
               ),
               inputFormatters: [UpperCaseTextFormatter(), FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]"))],
               textCapitalization: TextCapitalization.characters,
@@ -88,7 +89,7 @@ class TokenForm extends BaseComponent {
               controller: provider.descriptionController,
               decoration: InputDecoration(
                 label: Text(
-                  "Description (Optional):",
+                  l10n.r3hDescriptionOptionalLabel,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -117,7 +118,7 @@ class TokenForm extends BaseComponent {
                         }),
                   ),
                   Text(
-                    "Token Has Fixed Supply:",
+                    l10n.r3hTokenHasFixedSupply,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 12,
@@ -132,11 +133,11 @@ class TokenForm extends BaseComponent {
                 validator: provider.supplyValidator,
                 decoration: InputDecoration(
                   label: Text(
-                    "Total Supply:",
+                    l10n.r3hTotalSupplyLabel,
                     style: TextStyle(color: Colors.white),
                   ),
                   hintText: "0",
-                  helperText: "Use 0 for Infinite (allows minting)",
+                  helperText: l10n.r3hUseZeroForInfinite,
                 ),
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
               ),
@@ -148,7 +149,7 @@ class TokenForm extends BaseComponent {
                   Row(
                     children: [
                       Text(
-                        "Decimal Places:",
+                        l10n.r3hDecimalPlacesLabel,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -188,7 +189,7 @@ class TokenForm extends BaseComponent {
                   Row(
                     children: [
                       Text(
-                        "Is Burnable:",
+                        l10n.r3hIsBurnableLabel,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -204,7 +205,7 @@ class TokenForm extends BaseComponent {
                       ),
                       SizedBox(width: 16),
                       Text(
-                        "Allow Voting:",
+                        l10n.r3hAllowVotingLabel,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -242,7 +243,7 @@ class TokenForm extends BaseComponent {
                     ),
                   ),
                 AppButton(
-                  label: model.imageBase64 == null ? "Upload Token Icon" : "Replace Token Icon",
+                  label: model.imageBase64 == null ? l10n.r3hUploadTokenIcon : l10n.r3hReplaceTokenIcon,
                   onPressed: () async {
                     FilePickerResult? result;
 
@@ -310,11 +311,11 @@ class TokenForm extends BaseComponent {
                     controller: provider.imageUrlController,
                     decoration: InputDecoration(
                       label: Text(
-                        "Token Icon URL:",
+                        l10n.r3hTokenIconUrlLabel,
                         style: TextStyle(color: Colors.white),
                       ),
                       hintText: "https://domain.com/image.jpg",
-                      helperText: "Optional",
+                      helperText: l10n.r3hOptional,
                     ),
                   ),
                 ),
@@ -369,8 +370,7 @@ class TokenForm extends BaseComponent {
 
                     final confirmed = await ConfirmDialog.show(
                       title: l10n.tokenFormCompileMintTitle,
-                      body:
-                          "Are you sure you want to proceed?\nOnce compiled you will not be able to make any changes\nand the smart contract/token will be deployed to the chain.",
+                      body: l10n.r3hCompileMintBody,
                       confirmText: l10n.actionContinue,
                       cancelText: l10n.actionCancel,
                     );
@@ -381,8 +381,7 @@ class TokenForm extends BaseComponent {
 
                     final extraConfirm = await ConfirmDialog.show(
                       title: l10n.tokenFormConfirmAddressTitle,
-                      body:
-                          "This will be minted by ${kIsWeb ? ref.read(webSessionProvider.select((value) => value.keypair))!.address : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation}",
+                      body: l10n.r3hMintedByBody(kIsWeb ? ref.read(webSessionProvider.select((value) => value.keypair))!.address : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation),
                       confirmText: l10n.btcCompileMint,
                       cancelText: l10n.actionCancel,
                     );
@@ -396,8 +395,7 @@ class TokenForm extends BaseComponent {
                     if (success == true) {
                       await InfoDialog.show(
                         title: l10n.tokenFormStandByTitle,
-                        body:
-                            "Token Smart Contract mint transaction has been broadcasted.\n\nThe Fungible Token screen will reflect the change once the block is crafted and block height has synced with this transaction.",
+                        body: l10n.r3hMintBroadcastedBody,
                       );
 
                       provider.clear();

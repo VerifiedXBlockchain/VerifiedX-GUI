@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
+import '../../../l10n/l10n_helper.dart';
 import 'btc_utxo.dart';
 
 part 'btc_transaction.freezed.dart';
@@ -48,19 +49,19 @@ class BtcTransaction with _$BtcTransaction {
   String get typeLabel {
     switch (type) {
       case BTCTransactionType.send:
-        return "Send";
+        return globalL10n.actionSend;
 
       case BTCTransactionType.recieve:
-        return "Receive";
+        return globalL10n.actionReceive;
 
       case BTCTransactionType.replaced:
-        return "Replace";
+        return globalL10n.r3fTxTypeReplace;
 
       case BTCTransactionType.multiSigSend:
-        return "Multi-signature";
+        return globalL10n.r3fTxTypeMultiSig;
 
       case BTCTransactionType.sameWalletTx:
-        return "Same Account TX";
+        return globalL10n.r3fTxTypeSameAccount;
     }
   }
 }

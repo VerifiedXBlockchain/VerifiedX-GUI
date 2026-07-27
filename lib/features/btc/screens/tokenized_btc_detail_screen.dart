@@ -88,9 +88,10 @@ class TokenizedBtcDetailScreen extends BaseScreen {
           child: Align(
             alignment: Alignment.centerRight,
             child: Builder(builder: (context) {
+              final l10n = AppLocalizations.of(context);
               if (nft.currentOwner != token.rbxAddress && token.myBalance == 0) {
                 return Text(
-                  "Confirming Balance...",
+                  l10n.r3fConfirmingBalance,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
@@ -99,9 +100,11 @@ class TokenizedBtcDetailScreen extends BaseScreen {
               final totalUsd = _formatUsd(token.balance, btcPrice);
               final myUsd = _formatUsd(token.myBalance, btcPrice);
               return Tooltip(
-                message: "Token Total Balance: ${token.balance} vBTC${totalUsd != null ? ' ($totalUsd USD)' : ''}",
+                message: l10n.r3fTokenTotalBalanceTooltip(token.balance.toString(),
+                    totalUsd != null ? ' ($totalUsd USD)' : ''),
                 child: Text(
-                  "My Balance: ${token.myBalance} vBTC${myUsd != null ? ' ($myUsd USD)' : ''}",
+                  l10n.r3fMyBalanceLabel(token.myBalance.toString(),
+                      myUsd != null ? ' ($myUsd USD)' : ''),
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -194,7 +197,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                         ),
                       _DetailRow(
                         label: AppLocalizations.of(context).btcDetailDepositAddressLabel,
-                        value: token.btcAddress ?? 'Not Generated',
+                        value: token.btcAddress ?? AppLocalizations.of(context).r3fNotGenerated,
                         withCopy: token.btcAddress != null,
                       ),
                       _DetailRow(
@@ -205,7 +208,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                       _DetailRow(
                         label: AppLocalizations.of(context).btcDetailMyBalanceLabel,
                         value: scOwner != token.rbxAddress && token.myBalance == 0
-                            ? "Confirming Balance..."
+                            ? AppLocalizations.of(context).r3fConfirmingBalance
                             : "${token.myBalance} vBTC${_formatUsd(token.myBalance, btcPrice) != null ? ' (${_formatUsd(token.myBalance, btcPrice)} USD)' : ''}",
                       ),
                       if (scOwner == token.rbxAddress)
@@ -224,7 +227,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
           ),
           if (nft.additionalAssets.isNotEmpty) ...[
             Text(
-              "Token Media",
+              AppLocalizations.of(context).r3fTokenMedia,
               style: TextStyle(
                 decoration: TextDecoration.underline,
                 fontSize: 18,
@@ -267,7 +270,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "BTC Transactions",
+                  AppLocalizations.of(context).txAppBarBtc,
                   style: TextStyle(decoration: TextDecoration.underline, fontSize: 18, color: AppColors.getBtc()),
                 ),
                 SizedBox(
@@ -275,7 +278,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                 ),
                 if (transactions.isEmpty)
                   Text(
-                    "No BTC Transactions",
+                    AppLocalizations.of(context).r3fNoBtcTransactions,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 SizedBox(
@@ -387,7 +390,7 @@ class _BtcTokenMedia extends BaseComponent {
 
     if (nft.additionalAssets.isEmpty) {
       return Text(
-        "This token does not contain any additional media.",
+        AppLocalizations.of(context).r3fNoAdditionalMedia,
         style: Theme.of(context).textTheme.bodySmall,
       );
     }
@@ -444,8 +447,8 @@ class _BtcTokenMedia extends BaseComponent {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "NFT assets have not been transferred to the VFX Web Account.",
+                Text(
+                  AppLocalizations.of(context).r3fNftNotTransferred,
                   textAlign: TextAlign.center,
                 ),
                 if (includeButton)
