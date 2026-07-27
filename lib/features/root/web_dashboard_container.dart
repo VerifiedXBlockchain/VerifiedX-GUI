@@ -218,7 +218,7 @@ class _ContentWrapper extends BaseComponent {
                     child: AnimatedContainer(
                       duration: ROOT_CONTAINER_TRANSITION_DURATION,
                       width: sideNavExpanded
-                          ? SIDE_NAV_WIDTH_EXPANDED
+                          ? sideNavExpandedWidth(context)
                           : SIDE_NAV_WIDTH_CONTRACTED,
                       curve: ROOT_CONTAINER_TRANSITION_CURVE,
                       child: Column(
@@ -248,7 +248,7 @@ class _ContentWrapper extends BaseComponent {
                   curve: ROOT_CONTAINER_TRANSITION_CURVE,
                   padding: EdgeInsets.only(
                       left: sideNavExpanded
-                          ? SIDE_NAV_WIDTH_EXPANDED
+                          ? sideNavExpandedWidth(context)
                           : SIDE_NAV_WIDTH_CONTRACTED),
                   child: Stack(
                     children: [

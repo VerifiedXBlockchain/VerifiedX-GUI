@@ -3735,7 +3735,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hnavConfigPasswordClearTime => 'Tiempo para borrar la contraseña';
 
   @override
-  String get hnavConfigRejectedExtensionTypes => 'Tipos de extensión de activos rechazados';
+  String get hnavConfigRejectedExtensionTypes => 'Tipos de extensión de archivo rechazados';
 
   @override
   String get hnavConfirmCreateMnemonicBody => '¿Seguro que quieres crear una cuenta con mnemónico?';
@@ -4328,7 +4328,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwAddStat => 'Agregar estadística';
 
   @override
-  String get scwAdditionalAssets => 'Activos adicionales';
+  String get scwAdditionalAssets => 'Archivos adicionales';
 
   @override
   String get scwAllowVoting => 'Permitir votación';
@@ -4346,10 +4346,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwCantAddEvolveTitle => 'No se puede agregar evolución';
 
   @override
-  String get scwCantAddMultiAssetBody => 'Ya tienes una función de multiactivo en este contrato inteligente. Edita la función de multiactivo existente para agregar más activos.';
+  String get scwCantAddMultiAssetBody => 'Ya tienes una función multiarchivo en este contrato inteligente. Edita la función multiarchivo existente para agregar más archivos.';
 
   @override
-  String get scwCantAddMultiAssetTitle => 'No se puede agregar multiactivo';
+  String get scwCantAddMultiAssetTitle => 'No se puede agregar Multiarchivo';
 
   @override
   String get scwCantAddRoyaltyBody => 'Ya tienes una función de regalía en este contrato inteligente.';
@@ -4405,10 +4405,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get scwDeletePrimaryAssetBody => '¿Estás seguro de que quieres eliminar el activo principal?';
+  String get scwDeletePrimaryAssetBody => '¿Estás seguro de que quieres eliminar el archivo principal?';
 
   @override
-  String get scwDeletePrimaryAssetTitle => '¿Eliminar activo principal?';
+  String get scwDeletePrimaryAssetTitle => '¿Eliminar archivo principal?';
 
   @override
   String get scwDescription => 'Descripción';
@@ -4470,7 +4470,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwEvolveOnRedeem => '¿Evolucionar al canjear?';
 
   @override
-  String get scwEvolveStageAsset => 'Activo de la etapa de evolución';
+  String get scwEvolveStageAsset => 'Archivo de la etapa de evolución';
 
   @override
   String get scwEvolveStageDescription => 'Descripción de la etapa de evolución';
@@ -4593,7 +4593,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwPhysicalDigitalGoodName => 'Nombre del bien físico/digital';
 
   @override
-  String get scwPrimaryAsset => 'Activo principal';
+  String get scwPrimaryAsset => 'Archivo principal';
 
   @override
   String get scwProperties => 'Propiedades';
@@ -4640,10 +4640,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwRemove => 'Eliminar';
 
   @override
-  String get scwRemoveAssetBody => '¿Estás seguro de que quieres eliminar este activo adicional?';
+  String get scwRemoveAssetBody => '¿Estás seguro de que quieres quitar este archivo adicional?';
 
   @override
-  String get scwRemoveAssetTitle => '¿Eliminar activo?';
+  String get scwRemoveAssetTitle => '¿Quitar archivo?';
 
   @override
   String get scwRemovePhaseBody => '¿Estás seguro de que quieres eliminar esta fase de evolución?';
@@ -7172,7 +7172,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcAmountRequired => 'Monto requerido';
 
   @override
-  String get svcAssetsRequestFailed => 'Falló la solicitud de activos.';
+  String get svcAssetsRequestFailed => 'Falló la solicitud de archivos.';
 
   @override
   String svcBalanceRowFromTo(String from, String to) {
@@ -7560,10 +7560,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aAdditionalOwners => 'Propietarios adicionales';
 
   @override
-  String get r3aAssetIsRequired => 'Se requiere un activo';
+  String get r3aAssetIsRequired => 'Se requiere un archivo';
 
   @override
-  String get r3aAssets => 'Activos';
+  String get r3aAssets => 'Archivos';
 
   @override
   String get r3aAutomatedAppControlled => 'Automático/por la app';
@@ -7664,7 +7664,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aFeatureDescFractional => 'Comparte la propiedad entre varias billeteras con votación';
 
   @override
-  String get r3aFeatureDescMultiAsset => 'Permite compilar varios activos en el contrato inteligente';
+  String get r3aFeatureDescMultiAsset => 'Permite compilar varios archivos en el contrato inteligente';
 
   @override
   String get r3aFeatureDescPair => 'Vincula/envuelve este contrato con un NFT existente dentro o fuera de esta red';
@@ -7709,7 +7709,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aMinterNameIsRequired => 'El nombre del emisor es obligatorio';
 
   @override
-  String get r3aMultiAsset => 'Multiactivo';
+  String get r3aMultiAsset => 'Multiarchivo';
 
   @override
   String get r3aMusicRelease => 'Lanzamiento musical';
@@ -7739,10 +7739,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aPhysicalEvent => 'Evento físico';
 
   @override
-  String get r3aPrimaryAssetIsRequired => 'El activo principal es obligatorio';
+  String get r3aPrimaryAssetIsRequired => 'El archivo principal es obligatorio';
 
   @override
-  String get r3aPrimaryAssetOverride => 'Anular activo principal';
+  String get r3aPrimaryAssetOverride => 'Reemplazo del archivo principal';
 
   @override
   String get r3aRareness => 'Rareza';
@@ -7830,16 +7830,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3bApproveSaleStart => 'Aprueba la transacción de inicio de venta para tu compra en la tienda.';
 
   @override
-  String get r3bAssetCache => 'Caché de activos';
+  String get r3bAssetCache => 'Caché de archivos';
 
   @override
   String get r3bAuctionEnds => 'La subasta termina';
 
   @override
-  String get r3bAutoDeleteAssets => 'Autoeliminar activos';
+  String get r3bAutoDeleteAssets => 'Autoeliminar archivos';
 
   @override
-  String get r3bBaselineAsset => 'Activo base';
+  String get r3bBaselineAsset => 'Archivo base';
 
   @override
   String get r3bBeaconUploadSigFailed => 'No se pudo generar la firma de subida al beacon';
@@ -9444,7 +9444,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get r3fNftNotTransferred => 'Los activos NFT no se transfirieron a la cuenta web VFX.';
+  String get r3fNftNotTransferred => 'Los archivos NFT no se transfirieron a la cuenta web VFX.';
 
   @override
   String get r3fNoAdditionalMedia => 'Este token no contiene medios adicionales.';
@@ -10403,19 +10403,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aAddRarity => 'Agregar rareza';
 
   @override
-  String get r3aAdditionalAsset => 'Activo adicional';
+  String get r3aAdditionalAsset => 'Archivo adicional';
 
   @override
-  String get r3aAdditionalAssets => 'Activos adicionales';
+  String get r3aAdditionalAssets => 'Archivos adicionales';
 
   @override
-  String get r3aAllowedAssetExtensionTypes => 'Tipos de extensión de activo permitidos';
+  String get r3aAllowedAssetExtensionTypes => 'Tipos de extensión de archivo permitidos';
 
   @override
-  String get r3aAutoDownloadNftAsset => 'Descarga automática de activo NFT';
+  String get r3aAutoDownloadNftAsset => 'Autodescargar archivo NFT';
 
   @override
-  String get r3aBackupUrlBody => 'Pega una URL pública de un archivo zip alojado que contenga los activos.';
+  String get r3aBackupUrlBody => 'Pega una URL pública de un zip alojado que contenga los archivos.';
 
   @override
   String get r3aBlockHeightVariable => 'Variable de altura de bloque';
@@ -10496,7 +10496,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aFeatures => 'Funciones';
 
   @override
-  String get r3aHelpBodyAllowedExt => 'Quita tipos de extensión de la lista ya definida y permitirá descargar cualquier activo NFT con estos tipos de extensión conocidos \nEj: pdf,doc,xls \n\nValor predeterminado: (dejar en blanco)';
+  String get r3aHelpBodyAllowedExt => 'Quita tipos de extensión de la lista ya definida y permitirá descargar cualquier archivo NFT con estos tipos de extensión conocidos \nEj: pdf,doc,xls \n\nValor predeterminado: (dejar en blanco)';
 
   @override
   String get r3aHelpBodyApiCallUrl => 'Esta URL se usa para enviar transacciones entrantes a una URL externa. Se usa para depósitos entrantes u otros servicios de notificación. \n\nValor predeterminado: null';
@@ -10505,7 +10505,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aHelpBodyApiPort => 'Este es el puerto para llamar a la API. Puedes cambiarlo por el que quieras. \n\nValor predeterminado: 7292';
 
   @override
-  String get r3aHelpBodyAutoDownload => 'Controla si el activo de un NFT se descarga automáticamente o no \n\nValor predeterminado: true';
+  String get r3aHelpBodyAutoDownload => 'Controla si el archivo de un NFT se descarga automáticamente o no \n\nValor predeterminado: true';
 
   @override
   String get r3aHelpBodyBaseline => 'Completa la información básica requerida por todos los contratos inteligentes. Elige un nombre, el nombre del emisor (opcional) y la cuenta que quieres usar. Luego, da a tu contrato inteligente/NFT una descripción detallada.';
@@ -10526,7 +10526,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aHelpBodyDescription => 'Proporciona una descripción de texto de tu contrato inteligente/NFT. Este campo es obligatorio y será visible públicamente.';
 
   @override
-  String get r3aHelpBodyEvolveAsset => 'Reemplaza el activo cuando el contrato evolucione a esta etapa. Este campo es opcional.';
+  String get r3aHelpBodyEvolveAsset => 'Reemplaza el archivo cuando el contrato evolucione a esta etapa. Este campo es opcional.';
 
   @override
   String get r3aHelpBodyEvolveBlockHeight => 'El contrato inteligente evolucionará cuando la cadena VFX alcance esta altura de bloque.';
@@ -10583,17 +10583,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aHelpBodyPasswordClearTime => 'Controla el tiempo para borrar la contraseña de una billetera cifrada \n\nValor predeterminado: 10';
 
   @override
-  String get r3aHelpBodyPrimaryAsset => 'Este es el activo de archivo principal del contrato inteligente/NFT. Puede ser una imagen, audio, video o cualquier archivo.';
+  String get r3aHelpBodyPrimaryAsset => 'Este es el archivo principal del contrato inteligente/NFT. Puede ser una imagen, audio, video o cualquier archivo.';
 
   @override
-  String get r3aHelpBodyProperties => 'Define y asigna valores a los activos de tu contrato inteligente. Por ejemplo, puede ser un rasgo poco común.';
+  String get r3aHelpBodyProperties => 'Define y asigna atributos a tu contrato inteligente. Por ejemplo, un rasgo poco común.';
 
   @override
   String get r3aHelpBodyPropertyTypes => 'Define el tipo de valor que tendrá tu propiedad \nLos tipos son: \n- Texto: valor alfanumérico \n- Número: valor numérico \n- Color: valor hexadecimal de un color de tu elección';
 
   @override
   String r3aHelpBodyRejectExt(String exts) {
-    return 'Agrega tipos de extensión a la lista ya definida y rechazará cualquier activo NFT con estos tipos de extensión conocidos \nEj: exe,zip,pdf... (no dejes espacios entre tipos) \n\nValor predeterminado: (dejar en blanco)\n\nSi se deja en blanco, este es el predeterminado:\n$exts';
+    return 'Agrega tipos de extensión a la lista ya definida y rechazará cualquier archivo NFT con estos tipos de extensión conocidos \nEj: exe,zip,pdf... (no dejes espacios entre tipos) \n\nValor predeterminado: (dejar en blanco)\n\nSi se deja en blanco, este es el predeterminado:\n$exts';
   }
 
   @override
@@ -10686,7 +10686,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aRarities => 'Rarezas';
 
   @override
-  String get r3aRejectAssetExtensionTypes => 'Rechazar tipos de extensión de activo';
+  String get r3aRejectAssetExtensionTypes => 'Rechazar tipos de extensión de archivo';
 
   @override
   String get r3aRoyaltyFlatFeeAmount => 'Regalía fija';
@@ -10731,7 +10731,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3aValue => 'Valor';
 
   @override
-  String get scwAsset => 'Activo';
+  String get scwAsset => 'Archivo';
 
   @override
   String get scwAddFeature => 'Agregar función';
