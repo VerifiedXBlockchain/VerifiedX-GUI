@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rbx_wallet/core/env.dart';
+import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
 
 import '../../../core/dialogs.dart';
 import '../../../core/theme/components.dart';
@@ -27,16 +28,17 @@ Future<void> showRequestPrompt({
   required String address,
   required Function(String str) onValidSubmission,
 }) async {
+  final l10n = AppLocalizations.of(context);
   PromptModal.show(
     contextOverride: context,
     tightPadding: true,
-    title: "Request Funds",
-    body: "Generate a URL to send to another user.",
-    labelText: "Amount to request",
-    validator: (value) => formValidatorNumber(value, "Amount"),
+    title: l10n.webRequestFunds,
+    body: l10n.webRequestFundsBody,
+    labelText: l10n.webAmountToRequest,
+    validator: (value) => formValidatorNumber(value, l10n.labelAmount),
     inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-    confirmText: "Generate Link",
+    confirmText: l10n.webGenerateLink,
     onValidSubmission: onValidSubmission,
   );
 }
@@ -54,8 +56,9 @@ class RecieveCopyLinkButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppVerticalIconButton(
-      label: "Copy\nLink",
+      label: l10n.webCopyLink,
       icon: Icons.link,
       prettyIconType: PrettyIconType.custom,
       onPressed: () async {
@@ -68,10 +71,9 @@ class RecieveCopyLinkButton extends StatelessWidget {
                     domain != null && domain!.isNotEmpty ? domain! : address;
                 final url = generateLink(currency, value, double.parse(amount));
 
-                await copyToClipboard(
-                    url, "Request funds link copied to clipboard");
+                await copyToClipboard(url, l10n.webRequestLinkCopied);
               } else {
-                Toast.error("Invalid amount");
+                Toast.error(l10n.webInvalidAmount);
               }
             });
       },
@@ -93,8 +95,9 @@ class RecieveGenerateQrCode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppVerticalIconButton(
-      label: "QR\nCode",
+      label: l10n.webQrCode,
       icon: Icons.qr_code_rounded,
       prettyIconType: PrettyIconType.custom,
       onPressed: () async {
@@ -119,7 +122,7 @@ class RecieveGenerateQrCode extends StatelessWidget {
                       );
                     });
               } else {
-                Toast.error("Invalid amount");
+                Toast.error(l10n.webInvalidAmount);
               }
             });
       },

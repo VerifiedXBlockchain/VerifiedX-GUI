@@ -11,6 +11,7 @@ import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../smart_contracts/components/sc_creator/common/file_selector.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 
 import '../../../utils/files.dart';
@@ -25,7 +26,7 @@ class TokenizeBtcScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
       backgroundColor: Colors.black,
-      title: Text("Tokenize BTC (vBTC)"),
+      title: Text(AppLocalizations.of(context).btcTokenizeTitle),
     );
   }
 
@@ -86,7 +87,7 @@ class TokenizeBtcForm extends BaseComponent {
                     color: Colors.white,
                   ),
                 ),
-                hintText: "vBTC Token",
+                hintText: AppLocalizations.of(context).btcVbtcTokenHint,
               ),
             ),
             TextFormField(
@@ -101,7 +102,7 @@ class TokenizeBtcForm extends BaseComponent {
                     color: Colors.white,
                   ),
                 ),
-                hintText: "vBTC Token",
+                hintText: AppLocalizations.of(context).btcVbtcTokenHint,
               ),
               minLines: 3,
               maxLines: 3,
@@ -118,7 +119,7 @@ class TokenizeBtcForm extends BaseComponent {
                     color: Colors.white,
                   ),
                 ),
-                hintText: "vBTC",
+                hintText: AppLocalizations.of(context).btcVbtcHint,
               ),
             ),
             SizedBox(
@@ -211,7 +212,7 @@ class TokenizeBtcForm extends BaseComponent {
     // If a ceremony is in progress, show "View Progress" button
     if (!ceremonyState.isIdle && !ceremonyState.isFailed && !ceremonyState.isContractCreated) {
       return VBtcButton(
-        label: "View Progress",
+        label: AppLocalizations.of(context).btcViewProgress,
         icon: Icons.visibility,
         onPressed: () {
           MpcCeremonyProgressModal.show(context);
@@ -222,7 +223,7 @@ class TokenizeBtcForm extends BaseComponent {
     // Web flow — unchanged
     if (kIsWeb) {
       return VBtcButton(
-        label: "Compile & Mint",
+        label: AppLocalizations.of(context).btcCompileMint,
         onPressed: () async {
           if (formState.isProcessing) return;
 
@@ -242,7 +243,7 @@ class TokenizeBtcForm extends BaseComponent {
             await Future.delayed(const Duration(seconds: 3));
             Navigator.pop(completedDialogContext);
             await InfoDialog.show(
-              title: "Transaction Broadcasted",
+              title: AppLocalizations.of(context).btcTransactionBroadcastedTitle,
               body: "Once this transaction reflects on chain, you'll be able to deposit BTC funds in this vBTC token.",
             );
 
@@ -256,19 +257,19 @@ class TokenizeBtcForm extends BaseComponent {
 
     // Desktop V2 flow
     return VBtcButton(
-      label: "Mint & Deploy",
+      label: AppLocalizations.of(context).btcMintAndDeploy,
       onPressed: () async {
         if (formState.isProcessing) return;
 
         if (formState.vfxAddress == null) {
-          Toast.error("A VFX address is required");
+          Toast.error(AppLocalizations.of(context).btcVfxAddressRequired);
           return;
         }
 
         final confirmed = await ConfirmDialog.show(
-          title: "Create vBTC Token?",
-          cancelText: "Cancel",
-          confirmText: "Mint & Deploy",
+          title: AppLocalizations.of(context).btcCreateVbtcTitle,
+          cancelText: AppLocalizations.of(context).actionCancel,
+          confirmText: AppLocalizations.of(context).btcMintAndDeploy,
           content: Consumer(builder: (context, ref, child) {
             final formState = ref.watch(tokenizeBtcFormProvider);
             final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
@@ -281,16 +282,16 @@ class TokenizeBtcForm extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("This will start an MPC ceremony to create your vBTC token."),
-                  Text("A network fee of ~0.000028 VFX is required."),
-                  if (wallets.length == 1) Text("VFX Account: ${formState.vfxAddress}"),
+                  Text(AppLocalizations.of(context).btcMpcStartBody),
+                  Text(AppLocalizations.of(context).btcNetworkFeeBody),
+                  if (wallets.length == 1) Text(AppLocalizations.of(context).btcVfxAccountLabel(formState.vfxAddress ?? '')),
                   if (wallets.length > 1)
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 12),
-                        Text("Change Account:"),
+                        Text(AppLocalizations.of(context).btcChangeAccountLabel),
                         Row(
                           children: [
                             PopupMenuButton<String>(
@@ -305,7 +306,7 @@ class TokenizeBtcForm extends BaseComponent {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("VFX Address:"),
+                                  Text(AppLocalizations.of(context).btcVfxAddressLabel),
                                   SizedBox(width: 4),
                                   Text(
                                     formState.vfxAddress ?? "None",
@@ -343,7 +344,7 @@ class TokenizeBtcForm extends BaseComponent {
                       ],
                     ),
                   SizedBox(height: 12),
-                  Text("Continue?"),
+                  Text(AppLocalizations.of(context).btcContinueQuestion),
                 ],
               ),
             );

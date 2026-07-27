@@ -13,6 +13,7 @@ import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/files.dart';
 import '../../../utils/toast.dart';
 import '../../asset/asset_thumbnail.dart';
@@ -32,17 +33,18 @@ class NftMangementModal extends BaseComponent {
   const NftMangementModal(this.id, this.nft, {Key? key, this.showViewNft = true}) : super(key: key);
 
   void evolve(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await ConfirmDialog.show(
-      title: "Evolve?",
+      title: l10n.nftEvolveTitle,
       body: "Are you sure you want to evolve this NFT one stage?",
-      confirmText: "Evolve",
-      cancelText: "Cancel",
+      confirmText: l10n.nftEvolve,
+      cancelText: l10n.actionCancel,
     );
     if (confirmed == true) {
       final _provider = ref.read(nftDetailProvider(id).notifier);
       final success = await _provider.evolve();
       if (success) {
-        Toast.message("Evolve transaction sent successfully!");
+        Toast.message(l10n.nftEvolveSentToast);
         showEvolveMessage();
       } else {
         Toast.error();
@@ -51,18 +53,19 @@ class NftMangementModal extends BaseComponent {
   }
 
   void devolve(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await ConfirmDialog.show(
-      title: "Devolve?",
+      title: l10n.nftDevolveTitle,
       body: "Are you sure you want to devolve this NFT one stage?",
       confirmText: "Devolve",
-      cancelText: "Cancel",
+      cancelText: l10n.actionCancel,
     );
     if (confirmed == true) {
       final _provider = ref.read(nftDetailProvider(id).notifier);
       final success = await _provider.devolve();
       if (success) {
-        Toast.message("Devolve transaction sent successfully!");
-        showEvolveMessage();
+        Toast.message(AppLocalizations.of(context).nftDevolveSentToast);
+        showEvolveMessage(context);
       } else {
         Toast.error();
       }
@@ -78,17 +81,18 @@ class NftMangementModal extends BaseComponent {
     final _model = ref.read(nftDetailProvider(id));
     final success = await _provider.setEvolve(stage, _model!.currentOwner);
     if (success) {
-      Toast.message("Evolve transaction sent successfully!");
-      await showEvolveMessage();
+      Toast.message(AppLocalizations.of(context).nftEvolveSentToast);
+      await showEvolveMessage(context);
       Navigator.of(context).pop();
     } else {
       Toast.error();
     }
   }
 
-  Future<void> showEvolveMessage() async {
+  Future<void> showEvolveMessage([BuildContext? context]) async {
+    final title = context != null ? AppLocalizations.of(context).nftEvolveSentTitle : "Evolve transaction sent successfully";
     await InfoDialog.show(
-      title: "Evolve transaction sent successfully",
+      title: title,
       body: "This screen will reflect the change once the block is crafted and block height has synced with this transaction.",
     );
   }
@@ -121,14 +125,14 @@ class NftMangementModal extends BaseComponent {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppButton(
-                label: "Close",
+                label: AppLocalizations.of(context).nftClose,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
               ),
               if (showViewNft)
                 AppButton(
-                  label: "View NFT",
+                  label: AppLocalizations.of(context).nftViewLabel,
                   onPressed: () {
                     Navigator.of(context).pop();
                     // AutoRouter.of(context).push(NftDetailScreenRoute(id: nft.id));
@@ -149,14 +153,14 @@ class NftMangementModal extends BaseComponent {
                 final nftIds = ref.watch(nftListProvider).data.results.map((n) => n.id).toList();
 
                 if (nftIds.contains(nft.id)) {
-                  return const AppBadge(
-                    label: "Owned by Me",
+                  return AppBadge(
+                    label: AppLocalizations.of(context).nftOwnedByMe,
                     variant: AppColorVariant.Success,
                   );
                 }
 
-                return const AppBadge(
-                  label: "Transferred",
+                return AppBadge(
+                  label: AppLocalizations.of(context).nftBadgeTransferred,
                   variant: AppColorVariant.Danger,
                 );
               })
@@ -380,7 +384,7 @@ class EvolutionStateRow extends BaseComponent {
                               ),
                               if (phase.asset != null && phase.asset!.localPath == null && !kIsWeb)
                                 AppButton(
-                                  label: "Associate",
+                                  label: AppLocalizations.of(context).nftAssociate,
                                   type: AppButtonType.Text,
                                   variant: AppColorVariant.Light,
                                   onPressed: () {
@@ -404,7 +408,7 @@ class EvolutionStateRow extends BaseComponent {
                                 ),
                               if (phase.asset?.localPath != null)
                                 AppButton(
-                                  label: "Open File",
+                                  label: AppLocalizations.of(context).nftOpenFile,
                                   type: AppButtonType.Text,
                                   variant: AppColorVariant.Light,
                                   onPressed: () async {
@@ -425,7 +429,7 @@ class EvolutionStateRow extends BaseComponent {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Name: ${phase.name}", style: Theme.of(context).textTheme.headlineMedium),
+                            Text(AppLocalizations.of(context).nftPhaseNameLabel(phase.name), style: Theme.of(context).textTheme.headlineMedium),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 4.0),
                               child: Text(
@@ -470,15 +474,16 @@ class EvolutionStateRow extends BaseComponent {
                       SizedBox(
                         width: 100,
                         child: AppButton(
-                          label: "Evolve",
+                          label: AppLocalizations.of(context).nftEvolve,
                           onPressed: isCurrent
                               ? null
                               : () async {
+                                  final l10n = AppLocalizations.of(context);
                                   final confirmed = await ConfirmDialog.show(
-                                    title: "Evolve?",
+                                    title: l10n.nftEvolveTitle,
                                     body: "Are you sure you want to evolve to stage $index?",
-                                    confirmText: "Evolve",
-                                    cancelText: "Cancel",
+                                    confirmText: l10n.nftEvolve,
+                                    cancelText: l10n.actionCancel,
                                   );
                                   if (confirmed == true) {
                                     final _provider = ref.read(nftDetailProvider(nftId).notifier);
@@ -487,7 +492,7 @@ class EvolutionStateRow extends BaseComponent {
                                     final success = await _provider.setEvolve(index, _model!.currentOwner);
 
                                     if (success) {
-                                      Toast.message("Evolve transaction sent successfully!");
+                                      Toast.message(l10n.nftEvolveSentToast);
                                       await showEvolveMessage();
                                       Navigator.of(context).pop();
                                     } else {

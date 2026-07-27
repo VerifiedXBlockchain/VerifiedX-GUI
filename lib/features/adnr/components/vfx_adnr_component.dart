@@ -11,6 +11,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -33,8 +34,9 @@ class VfxAdnrCard extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Builder(builder: (context) {
+      final l10n = AppLocalizations.of(context);
       final adnrVerified = wallet.adnr != null;
-      final adnrLabel = wallet.adnr == null ? "No Domain" : "@${wallet.adnr!}";
+      final adnrLabel = wallet.adnr == null ? l10n.adnrNoDomain : "@${wallet.adnr!}";
       final isPendingCreate = ref.watch(adnrPendingProvider).contains("${wallet.address}.create.${wallet.adnr ?? 'null'}");
 
       final isPendingBurn = ref.watch(adnrPendingProvider).contains("${wallet.address}.burn.${wallet.adnr ?? 'null'}");
@@ -59,34 +61,34 @@ class VfxAdnrCard extends BaseComponent {
                     ),
                   ],
                 )
-              : Text("No Domain"),
+              : Text(l10n.adnrNoDomain),
           isThreeLine: false,
           trailing: Builder(
             builder: (context) {
               if (isPendingBurn) {
-                return const AppBadge(
-                  label: "Delete Pending",
+                return AppBadge(
+                  label: l10n.adnrDeletePending,
                   variant: AppColorVariant.Danger,
                 );
               }
 
               if (isPendingTransfer) {
-                return const AppBadge(
-                  label: "Transfer Pending",
+                return AppBadge(
+                  label: l10n.adnrTransferPending,
                   variant: AppColorVariant.Dark,
                 );
               }
 
               if (isPendingCreate) {
-                return const AppBadge(
-                  label: "Creation Pending",
+                return AppBadge(
+                  label: l10n.adnrCreatePending,
                   variant: AppColorVariant.Warning,
                 );
               }
 
               if (wallet.adnr == null) {
                 return AppButton(
-                  label: "Create Domain",
+                  label: l10n.adnrCreateDomain,
                   // type: AppButtonType.Text,
                   variant: AppColorVariant.Success,
                   onPressed: () async {
@@ -114,7 +116,7 @@ class VfxAdnrCard extends BaseComponent {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     AppButton(
-                      label: "Transfer",
+                      label: l10n.adnrTransfer,
                       onPressed: !adnrVerified
                           ? null
                           : () async {
@@ -123,25 +125,25 @@ class VfxAdnrCard extends BaseComponent {
                                 return;
                               }
                               if (wallet.balance < (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
-                                Toast.error("Not enough VFX in this wallet to transfer a VFX domain. $ADNR_COST VFX required (plus TX fee).");
+                                Toast.error(l10n.adnrInsufficientFundsCreateInWallet(ADNR_COST.toString()));
                                 return;
                               }
 
                               PromptModal.show(
                                   contextOverride: context,
-                                  title: "Transfer VFX Domain",
-                                  body: "There is a cost of $ADNR_TRANSFER_COST VFX to transfer a VFX Domain.",
+                                  title: l10n.adnrTransferDomainTitle,
+                                  body: l10n.adnrTransferDomainBody(ADNR_TRANSFER_COST.toString()),
                                   validator: (value) => formValidatorRbxAddress(value, false),
-                                  labelText: "Address",
+                                  labelText: l10n.adnrAddressFieldLabel,
                                   onValidSubmission: (toAddress) async {
                                     final result = await AdnrService().transferAdnr(wallet.address, toAddress);
                                     if (result.success) {
-                                      Toast.message("VFX domain transfer transaction has been broadcasted. Check logs for tx hash");
+                                      Toast.message(l10n.adnrTransferTxBroadcastedToast);
 
                                       if (result.hash != null) {
                                         ref.read(logProvider.notifier).append(
                                               LogEntry(
-                                                  message: "VFX domain transfer transaction broadcasted. Tx Hash: ${result.hash}",
+                                                  message: l10n.adnrLogTransferEntry(result.hash!),
                                                   textToCopy: result.hash,
                                                   variant: AppColorVariant.Success),
                                             );
@@ -160,7 +162,7 @@ class VfxAdnrCard extends BaseComponent {
                       width: 8,
                     ),
                     AppButton(
-                      label: "Delete",
+                      label: l10n.adnrDelete,
                       // type: AppButtonType.Text,
                       variant: AppColorVariant.Danger,
                       onPressed: () async {
@@ -170,29 +172,29 @@ class VfxAdnrCard extends BaseComponent {
                         }
 
                         if (wallet.balance < (ADNR_DELETE_COST + MIN_RBX_FOR_SC_ACTION)) {
-                          Toast.error("Not enough VFX in this wallet to delete a VFX domain.");
+                          Toast.error(l10n.adnrInsufficientFundsDeleteInWallet);
 
                           return;
                         }
 
                         final confirmed = await ConfirmDialog.show(
-                          title: "Delete VFX Domain?",
+                          title: l10n.adnrDeleteTitle,
                           body:
                               "Are you sure you want to delete this VFX Domain?\n${ADNR_DELETE_COST == 0 ? 'There is no cost to delete and VFX Domain (aside from the TX fee).' : 'There is a cost of $ADNR_DELETE_COST RBX to delete an RBX Domain.'}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
                           destructive: true,
-                          cancelText: "Cancel",
-                          confirmText: "Delete",
+                          cancelText: l10n.actionCancel,
+                          confirmText: l10n.adnrDelete,
                         );
 
                         if (confirmed == true) {
                           final result = await AdnrService().deleteAdnr(wallet.address);
                           if (result.success) {
-                            Toast.message("VFX domain delete transaction has been broadcasted. Check logs for tx hash");
+                            Toast.message(l10n.adnrDeleteTxBroadcastedToast);
 
                             if (result.hash != null) {
                               ref.read(logProvider.notifier).append(
                                     LogEntry(
-                                        message: "VFX domain delete transaction broadcasted. Tx Hash: ${result.hash}",
+                                        message: l10n.adnrLogDeleteEntry(result.hash!),
                                         textToCopy: result.hash,
                                         variant: AppColorVariant.Success),
                                   );
@@ -213,11 +215,12 @@ class VfxAdnrCard extends BaseComponent {
   }
 
   Future<void> fundWallet(BuildContext context, String walletAddress, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final funders = ref.read(walletListProvider).where((w) => !w.isReserved && w.balance > (w.isValidating ? 50006 : 6)).toList();
     final fundingWallet = funders.isNotEmpty ? funders.first : null;
     if (fundingWallet != null) {
       final shouldSendFunds = await ConfirmDialog.show(
-        title: "Fund Account",
+        title: l10n.adnrFundAccountTitle,
         content: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 600),
           child: Column(
@@ -233,18 +236,18 @@ class VfxAdnrCard extends BaseComponent {
             ],
           ),
         ),
-        confirmText: "Send",
-        cancelText: "Cancel",
+        confirmText: l10n.actionSend,
+        cancelText: l10n.actionCancel,
       );
 
       if (shouldSendFunds == true) {
         const amount = 6.0;
 
         final confirmed = await ConfirmDialog.show(
-          title: "Please Confirm",
+          title: l10n.btcPleaseConfirmTitle,
           body: "Sending:\n$amount VFX\n\nTo:\n$walletAddress\n\nFrom:\n${fundingWallet.address}",
-          confirmText: "Send",
-          cancelText: "Cancel",
+          confirmText: l10n.actionSend,
+          cancelText: l10n.actionCancel,
         );
 
         if (confirmed != true) {
@@ -264,15 +267,15 @@ class VfxAdnrCard extends BaseComponent {
               );
           await InfoDialog.show(
             contextOverride: context,
-            title: "Funds Sent",
-            body: "$amount VFX has been sent to $walletAddress.\n\nPlease wait for transaction to reflect and then you can get your domain.",
+            title: l10n.adnrFundsSentTitle,
+            body: l10n.adnrFundsSentBody(amount.toString(), walletAddress),
           );
         }
       }
     } else {
       InfoDialog.show(
           contextOverride: context,
-          title: "Fund Account",
+          title: l10n.adnrFundAccountTitle,
           content: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600),
             child: Column(
@@ -284,11 +287,11 @@ class VfxAdnrCard extends BaseComponent {
                 Text("Please send funds to $walletAddress"),
                 Divider(),
                 AppButton(
-                  label: "Copy Address",
+                  label: l10n.adnrFundCopyAddress,
                   icon: Icons.copy,
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: walletAddress));
-                    Toast.message("Address copied to clipboard.");
+                    Toast.message(l10n.adnrAddressCopiedToast);
                   },
                 )
               ],

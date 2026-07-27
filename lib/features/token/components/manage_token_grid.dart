@@ -9,6 +9,7 @@ import '../providers/token_list_provider.dart';
 import '../../../core/app_router.gr.dart';
 import '../../../core/base_component.dart';
 import '../../../core/breakpoints.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'manage_token_navigator.dart';
 
 class ManageTokenGrid extends BaseComponent {
@@ -36,14 +37,14 @@ class ManageTokenGrid extends BaseComponent {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "No Fungible Tokens",
+                      AppLocalizations.of(context).tokenListTitle,
                       style: TextStyle(fontSize: 18),
                     ),
                     SizedBox(
                       height: 8,
                     ),
                     AppButton(
-                      label: "Create Token",
+                      label: AppLocalizations.of(context).tokenCreateButton,
                       variant: AppColorVariant.Success,
                       onPressed: () {
                         AutoRouter.of(context).push(TokenCreateScreenRoute());

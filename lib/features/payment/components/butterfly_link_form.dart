@@ -6,6 +6,7 @@ import 'package:rbx_wallet/features/payment/providers/current_vfx_balance_provid
 
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/butterfly_link.dart';
 import '../providers/butterfly_links_provider.dart';
 import 'butterfly_create_link_dialog.dart';
@@ -43,20 +44,21 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
   }
 
   String? _validateAmount(String? value) {
+    final l10n = AppLocalizations.of(context);
     if (value == null || value.isEmpty) {
-      return 'Amount is required';
+      return l10n.paymentAmountRequired;
     }
     final amount = double.tryParse(value);
     if (amount == null || amount <= 0) {
-      return 'Please enter a valid amount';
+      return l10n.paymentValidAmount;
     }
 
     if (amount > ref.read(currentVfxBalanceProvider)) {
-      return 'Insufficient balance';
+      return l10n.paymentInsufficientBalance;
     }
     // Minimum amount check (0.01 VFX + fee)
     if (amount < 0.0001) {
-      return 'Minimum amount is 0.0001 VFX';
+      return l10n.paymentMinimumAmount;
     }
     return null;
   }
@@ -116,8 +118,8 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    const Text(
-                      'Payment Link History',
+                    Text(
+                      AppLocalizations.of(context).paymentLinkHistory,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -150,7 +152,7 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'No payment links yet',
+                              AppLocalizations.of(context).paymentLinkNoneYet,
                               style: TextStyle(
                                 color: Colors.grey[500],
                                 fontSize: 16,
@@ -194,7 +196,7 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'Use Butterfly to create a payment link, claimable by anyone you send the link to.',
+            AppLocalizations.of(context).paymentLinkIntro,
             style: TextStyle(fontSize: 16),
             textAlign: TextAlign.center,
           ),
@@ -202,12 +204,12 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
           TextFormField(
             controller: _amountController,
             decoration: InputDecoration(
-              labelText: 'Amount (VFX)',
-              hintText: 'Enter amount',
+              labelText: AppLocalizations.of(context).paymentAmountLabel,
+              hintText: AppLocalizations.of(context).paymentAmountHint,
               border: const OutlineInputBorder(),
               suffixText: 'VFX',
               helperText:
-                  'Available: ${ref.watch(currentVfxBalanceProvider)} VFX',
+                  AppLocalizations.of(context).paymentAvailableLabel(ref.watch(currentVfxBalanceProvider).toString()),
             ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
@@ -218,10 +220,10 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
           const SizedBox(height: 16),
           TextFormField(
             controller: _messageController,
-            decoration: const InputDecoration(
-              labelText: 'Message (Optional)',
-              hintText: 'What\'s this payment for?',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: AppLocalizations.of(context).paymentMessageLabel,
+              hintText: AppLocalizations.of(context).paymentMessageHint,
+              border: const OutlineInputBorder(),
               counterText: '',
             ),
             maxLength: 100,
@@ -238,7 +240,7 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
           ),
           const SizedBox(height: 24),
           AppButton(
-            label: 'Create Payment Link',
+            label: AppLocalizations.of(context).paymentCreateLinkLabel,
             onPressed: _onSubmit,
             variant: AppColorVariant.Success,
           ),

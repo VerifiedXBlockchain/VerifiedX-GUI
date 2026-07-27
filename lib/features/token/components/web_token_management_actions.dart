@@ -11,6 +11,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../models/web_fungible_token.dart';
@@ -61,7 +62,7 @@ class WebTokenManagementActions extends BaseComponent {
               if (isOwner && token.bannedAddresses.isNotEmpty) WebTokenListBannedAddressesButton(token: token),
               if (isOwner)
                 AppButton(
-                  label: "Prove Ownership",
+                  label: AppLocalizations.of(context).tokenProveOwnership,
                   variant: AppColorVariant.Primary,
                   icon: Icons.verified_user,
                   onPressed: () async {
@@ -70,7 +71,7 @@ class WebTokenManagementActions extends BaseComponent {
                 ),
               if (isOwner)
                 AppButton(
-                  label: "Voting",
+                  label: AppLocalizations.of(context).tokenVoting,
                   variant: AppColorVariant.Dark,
                   onPressed: () {
                     showModalBottomSheet(
@@ -131,8 +132,8 @@ class WebTokenTopicBottomSheet extends BaseComponent {
             child: AppCard(
                 padding: 0,
                 child: ListTile(
-                  title: Text("Create New Voting Topic"),
-                  subtitle: Text("As the token owner, you can create topics for other holders to vote on."),
+                  title: Text(AppLocalizations.of(context).tokenCreateNewVotingTopic),
+                  subtitle: Text(AppLocalizations.of(context).tokenCreateNewVotingTopicBody),
                   trailing: Icon(Icons.add),
                   onTap: () {
                     AutoRouter.of(context).push(CreateTokenTopicScreenRoute(scId: token.smartContractId, address: address));
@@ -180,13 +181,13 @@ class WebTokenListBannedAddressesButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppButton(
-      label: "List Bans (${token.bannedAddresses.length})",
+      label: AppLocalizations.of(context).tokenListBansWithCount(token.bannedAddresses.length.toString()),
       variant: AppColorVariant.Primary,
       onPressed: () {
         InfoDialog.show(
-          title: "Banned Addresses",
+          title: AppLocalizations.of(context).tokenBannedAddressesTitle,
           body: token.bannedAddresses.join("\n"),
-          closeText: "Close",
+          closeText: AppLocalizations.of(context).actionClose,
         );
       },
     );
@@ -204,7 +205,7 @@ class WebTokenBanAddressButton extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppButton(
-      label: "Ban Address",
+      label: AppLocalizations.of(context).tokenBanAddress,
       variant: AppColorVariant.Danger,
       onPressed: () async {
         final manager = ref.read(webTokenActionsManager);

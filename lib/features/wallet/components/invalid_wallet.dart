@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import 'wallet_selector.dart';
 
 class InvalidWallet extends StatelessWidget {
@@ -23,7 +24,7 @@ class InvalidWallet extends StatelessWidget {
           const SizedBox(height: 24),
           const Divider(),
           Text(
-            "Change Account:",
+            AppLocalizations.of(context).walletChangeAccount,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           WalletSelector(

@@ -13,6 +13,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../asset/polling_image_preview.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
@@ -156,10 +157,10 @@ class NftCard extends BaseComponent {
                           return const SizedBox.shrink();
                         }
 
-                        return const Padding(
-                          padding: EdgeInsets.all(8.0),
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: AppBadge(
-                            label: "Transferred",
+                            label: AppLocalizations.of(context).nftBadgeTransferred,
                             variant: AppColorVariant.Danger,
                           ),
                         );
@@ -175,7 +176,7 @@ class NftCard extends BaseComponent {
                       Padding(
                         padding: const EdgeInsets.only(left: 4.0),
                         child: AppBadge(
-                          label: "Listed",
+                          label: AppLocalizations.of(context).nftBadgeListed,
                         ),
                       ),
                   ],
@@ -185,10 +186,10 @@ class NftCard extends BaseComponent {
             if (isBurned)
               Container(
                 color: Colors.black54,
-                child: const Center(
+                child: Center(
                     child: Text(
-                  "Burned",
-                  style: TextStyle(
+                  AppLocalizations.of(context).nftBurnedOverlay,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -203,7 +204,7 @@ class NftCard extends BaseComponent {
               TransferingOverlay(
                 nft,
                 withLog: true,
-                label: "Sale in Progress...",
+                label: AppLocalizations.of(context).nftSaleInProgress,
               ),
             if (nft.isLocked)
               Align(
@@ -228,8 +229,8 @@ class NftCard extends BaseComponent {
                               width: 4,
                             ),
                             Text(
-                              "NFT Locked",
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              AppLocalizations.of(context).nftLockedBadge,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
                             )
                           ],
                         ),
@@ -352,7 +353,7 @@ class _UploadProgressModalState extends State<UploadProgressModal> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Media Upload Progress"),
+      title: Text(AppLocalizations.of(context).nftMediaUploadProgress),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 900),
         child: Container(

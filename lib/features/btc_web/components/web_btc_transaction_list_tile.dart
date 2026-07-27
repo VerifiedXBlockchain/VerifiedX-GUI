@@ -11,6 +11,7 @@ import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../generated/assets.gen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/providers/all_btc_addresses_provider.dart';
 import '../models/btc_web_transaction.dart';
 import '../../../utils/toast.dart';
@@ -204,14 +205,14 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                   child: ListTile(
                     title: widget.tx.status.confirmed
                         ? Text(
-                            "Confirmed",
+                            AppLocalizations.of(context).btcConfirmedLabel,
                             style: TextStyle(color: Theme.of(context).colorScheme.success, fontWeight: FontWeight.bold),
                           )
                         : Text(
-                            "Pending",
+                            AppLocalizations.of(context).btcPendingLabel,
                             style: TextStyle(color: Theme.of(context).colorScheme.warning, fontWeight: FontWeight.bold),
                           ),
-                    subtitle: Text("Status"),
+                    subtitle: Text(AppLocalizations.of(context).btcStatusLabel),
                   ),
                 ),
               ),
@@ -225,7 +226,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                   glowOpacity: 0,
                   child: ListTile(
                     title: Text("${widget.tx.fee} SATS | ${widget.tx.feeBtc} BTC"),
-                    subtitle: Text("Fee"),
+                    subtitle: Text(AppLocalizations.of(context).btcFeeLabel),
                   ),
                 ),
               ),
@@ -239,7 +240,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                   glowOpacity: 0,
                   child: ListTile(
                     title: Text(widget.tx.blockTimeLabel),
-                    subtitle: Text("Block Time"),
+                    subtitle: Text(AppLocalizations.of(context).btcBlockTimeLabel),
                   ),
                 ),
               ),
@@ -253,7 +254,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                   glowOpacity: 0,
                   child: ListTile(
                     title: Text(widget.tx.blockHeightLabel),
-                    subtitle: Text("Block Height"),
+                    subtitle: Text(AppLocalizations.of(context).btcBlockHeightLabel),
                   ),
                 ),
               ),
@@ -309,7 +310,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                     child: InkWell(
                                       onTap: () async {
                                         await Clipboard.setData(ClipboardData(text: input.prevout.scriptpubkeyAddress));
-                                        Toast.message("Address copied to clipboard");
+                                        Toast.message(AppLocalizations.of(context).messageAddressCopied);
                                       },
                                       child: Icon(
                                         Icons.copy,

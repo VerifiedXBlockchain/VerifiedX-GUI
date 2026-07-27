@@ -16,6 +16,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/singletons.dart';
 import '../../../core/storage.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../encrypt/utils.dart';
 import '../providers/wallet_detail_provider.dart';
@@ -164,7 +165,7 @@ class ManageWalletBtcListTile extends BaseComponent {
                 await Clipboard.setData(
                   ClipboardData(text: account.address),
                 );
-                Toast.message("Address copied to clipboard");
+                Toast.message(AppLocalizations.of(context).messageAddressCopied);
               },
             ),
           ),
@@ -172,7 +173,7 @@ class ManageWalletBtcListTile extends BaseComponent {
       ),
       trailing: AppButton(
         type: AppButtonType.Text,
-        label: "Reveal Private Key",
+        label: AppLocalizations.of(context).walletRevealPrivateKey,
         variant: AppColorVariant.Info,
         onPressed: () async {
           if (!await passwordRequiredGuard(context, ref)) return;
@@ -187,7 +188,7 @@ class ManageWalletBtcListTile extends BaseComponent {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text("Private Key"),
+                title: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -197,8 +198,8 @@ class ManageWalletBtcListTile extends BaseComponent {
                         width: 500,
                         child: TextFormField(
                           initialValue: a.privateKey,
-                          decoration: const InputDecoration(
-                            label: Text("Private Key"),
+                          decoration: InputDecoration(
+                            label: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
                           ),
                           style: const TextStyle(fontSize: 12),
                           readOnly: true,
@@ -208,13 +209,13 @@ class ManageWalletBtcListTile extends BaseComponent {
                         icon: const Icon(Icons.copy),
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(text: a.privateKey));
-                          Toast.message("Private Key copied to clipboard");
+                          Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
                         },
                       ),
                     ),
                     const Divider(),
                     AppButton(
-                      label: "Close",
+                      label: AppLocalizations.of(context).actionClose,
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -315,7 +316,7 @@ class ManageWalletListTile extends BaseComponent {
                 await Clipboard.setData(
                   ClipboardData(text: wallet.address),
                 );
-                Toast.message("Address copied to clipboard");
+                Toast.message(AppLocalizations.of(context).messageAddressCopied);
               },
             ),
           ),
@@ -326,7 +327,7 @@ class ManageWalletListTile extends BaseComponent {
         children: [
           if (wallet.isReserved && wallet.isNetworkProtected)
             Text(
-              "Activated",
+              AppLocalizations.of(context).walletStatusActivated,
               style: TextStyle(color: color),
             ),
           // if (wallet.isReserved && !wallet.isNetworkProtected)
@@ -352,7 +353,7 @@ class ManageWalletListTile extends BaseComponent {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Text("Private Key"),
+                        title: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -362,8 +363,8 @@ class ManageWalletListTile extends BaseComponent {
                                 width: 500,
                                 child: TextFormField(
                                   initialValue: decryptedWallet.privateKey,
-                                  decoration: const InputDecoration(
-                                    label: Text("Private Key"),
+                                  decoration: InputDecoration(
+                                    label: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
                                   ),
                                   style: const TextStyle(fontSize: 12),
                                   readOnly: true,
@@ -373,13 +374,13 @@ class ManageWalletListTile extends BaseComponent {
                                 icon: const Icon(Icons.copy),
                                 onPressed: () async {
                                   await Clipboard.setData(ClipboardData(text: decryptedWallet.privateKey));
-                                  Toast.message("Private Key copied to clipboard");
+                                  Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
                                 },
                               ),
                             ),
                             const Divider(),
                             AppButton(
-                              label: "Close",
+                              label: AppLocalizations.of(context).actionClose,
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -396,11 +397,12 @@ class ManageWalletListTile extends BaseComponent {
                 )),
           IconButton(
               onPressed: () async {
+                final l10n = AppLocalizations.of(context);
                 final confirmed = await ConfirmDialog.show(
-                  title: "Hide Account",
-                  body: "Are you sure you want to hide this account?",
-                  confirmText: "Hide",
-                  cancelText: "Cancel",
+                  title: l10n.walletHideAccountTitle,
+                  body: l10n.walletHideAccountBody,
+                  confirmText: l10n.walletHideLabel,
+                  cancelText: l10n.actionCancel,
                   destructive: true,
                 );
 
@@ -473,7 +475,7 @@ class _Header extends BaseComponent {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           AppButton(
-            label: "Restore Hidden Accounts",
+            label: AppLocalizations.of(context).walletRestoreHidden,
             type: AppButtonType.Text,
             variant: AppColorVariant.Info,
             onPressed: () {
@@ -485,7 +487,7 @@ class _Header extends BaseComponent {
             },
           ),
           AppButton(
-            label: "Close",
+            label: AppLocalizations.of(context).actionClose,
             type: AppButtonType.Text,
             variant: AppColorVariant.Info,
             onPressed: () {
@@ -521,17 +523,18 @@ class _WalletRestorerState extends State<WalletRestorer> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return hiddenWallets.isEmpty
         ? AlertDialog(
-            content: Text('You have no hidden accounts.'),
-            title: Text("No Accounts to Restore"),
+            content: Text(l10n.walletNoHiddenAccounts),
+            title: Text(l10n.walletNoHiddenAccountsTitle),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  "Okay",
+                  l10n.walletOkay,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
                   ),
@@ -546,11 +549,11 @@ class _WalletRestorerState extends State<WalletRestorer> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Select Account(s) to Restore",
+                    l10n.walletSelectToRestore,
                     style: const TextStyle(color: Colors.white),
                   ),
                   AppButton(
-                    label: 'Restore All',
+                    label: l10n.walletRestoreAll,
                     onPressed: () {
                       restoreWallets([], context, ref);
                     },
@@ -587,7 +590,7 @@ class _WalletRestorerState extends State<WalletRestorer> {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    "Cancel",
+                    l10n.actionCancel,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.light,
                     ),
@@ -604,7 +607,7 @@ class _WalletRestorerState extends State<WalletRestorer> {
                     restoreWallets(nonRestoredWallets, context, ref);
                   },
                   child: Text(
-                    "Restore Selected",
+                    l10n.walletRestoreSelected,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                     ),

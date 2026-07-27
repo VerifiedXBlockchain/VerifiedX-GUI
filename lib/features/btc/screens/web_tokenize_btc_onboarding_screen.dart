@@ -11,6 +11,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/btc_address_type.dart';
 import '../models/btc_fee_rate_preset.dart';
 import '../models/btc_recommended_fees.dart';
@@ -31,9 +32,10 @@ class WebTokenizeBtcOnboardingScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
       backgroundColor: Colors.black,
-      title: Text("vBTC Onboard"),
+      title: Text(l10n.btcVbtcOnboardTitle),
       leadingWidth: 100,
       leading: IconButton(
         icon: Icon(
@@ -42,10 +44,10 @@ class WebTokenizeBtcOnboardingScreen extends BaseScreen {
         ),
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
-            title: "Exit vBTC Onboarding?",
-            body: "Are you sure you want to cancel setting up your account with Tokenized Bitcoin?",
-            confirmText: "Yes",
-            cancelText: "No",
+            title: l10n.btcExitOnboardingTitle,
+            body: l10n.btcExitOnboardingBody,
+            confirmText: l10n.actionYes,
+            cancelText: l10n.actionNo,
             destructive: true,
           );
           if (confirmed == true) {
@@ -58,6 +60,7 @@ class WebTokenizeBtcOnboardingScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webVBtcOnboardProvider.notifier);
     final state = ref.watch(webVBtcOnboardProvider);
 
@@ -67,7 +70,7 @@ class WebTokenizeBtcOnboardingScreen extends BaseScreen {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "All Done!",
+              l10n.btcDoneExclamation,
               style: TextStyle(
                 fontSize: 24,
                 color: Theme.of(context).colorScheme.btcOrange,
@@ -77,17 +80,17 @@ class WebTokenizeBtcOnboardingScreen extends BaseScreen {
             SizedBox(
               height: 6,
             ),
-            Text("Your vBTC token is ready and funded."),
+            Text(l10n.btcVbtcReady),
             SizedBox(
               height: 24,
             ),
             AppButton(
-              label: "View Token",
+              label: l10n.btcViewToken,
               variant: AppColorVariant.Btc,
               onPressed: () {
                 final token = state.tokenizedBtc;
                 if (token == null) {
-                  Toast.error("Token not found");
+                  Toast.error(l10n.btcTokenNotFoundToast);
                   return;
                 }
 

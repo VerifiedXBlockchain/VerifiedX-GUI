@@ -6,6 +6,7 @@ import '../../../core/components/big_button.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 
 class WebShopLandingScreen extends BaseScreen {
@@ -23,7 +24,7 @@ class WebShopLandingScreen extends BaseScreen {
 
     return AppBar(
       leading: isMobile ? WebMobileDrawerButton() : null,
-      title: const Text("P2P Auctions"),
+      title: Text(AppLocalizations.of(context).dstAuctionsTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
     );
@@ -56,17 +57,17 @@ class WebShopLandingScreen extends BaseScreen {
               mainAxisSize: MainAxisSize.min,
               children: [
                 BigButton(
-                  title: "Connect to Auction House",
+                  title: AppLocalizations.of(context).dstConnectToAuctionHouse,
                   iconData: Icons.connect_without_contact,
-                  body: "Connect to a remote auction house to trade NFTs.",
+                  body: AppLocalizations.of(context).dstConnectToAuctionHouseBody,
                   onPressed: () async {
                     AutoRouter.of(context).push(WebShopListScreenRoute());
                   },
                 ),
                 BigButton(
-                  title: "Manage my Auction House",
+                  title: AppLocalizations.of(context).dstManageMyAuctionHouse,
                   iconData: Icons.house,
-                  body: "Manage your wallet's auction house and trade NFTs.",
+                  body: AppLocalizations.of(context).dstManageMyAuctionHouseBodyWeb,
                   onPressed: () async {
                     AutoRouter.of(context).push(MyWebShopListScreenRoute());
                   },

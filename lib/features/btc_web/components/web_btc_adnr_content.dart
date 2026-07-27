@@ -9,6 +9,7 @@ import '../../adnr/components/create_adnr_dialog.dart';
 import '../../adnr/providers/adnr_pending_provider.dart';
 import '../models/btc_web_account.dart';
 import '../../global_loader/global_loading_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 
@@ -42,27 +43,27 @@ class WebBtcAdnrContent extends BaseComponent {
         .contains("$address.transfer.${adnr ?? 'null'}");
 
     if (isPendingCreate) {
-      return const Center(
+      return Center(
         child: AppBadge(
-          label: "BTC Domain Pending",
+          label: AppLocalizations.of(context).btcDomainPending,
           variant: AppColorVariant.Success,
         ),
       );
     }
 
     if (isPendingTransfer) {
-      return const Center(
+      return Center(
         child: AppBadge(
-          label: "BTC Domain Transfer Pending",
+          label: AppLocalizations.of(context).btcDomainTransferPending,
           variant: AppColorVariant.Primary,
         ),
       );
     }
 
     if (isPendingBurn) {
-      return const Center(
+      return Center(
         child: AppBadge(
-          label: "BTC Domain Delete Pending",
+          label: AppLocalizations.of(context).btcDomainDeletePending,
           variant: AppColorVariant.Danger,
         ),
       );
@@ -95,7 +96,7 @@ class WebBtcAdnrContent extends BaseComponent {
                   child: const Divider(),
                 ),
                 AppButton(
-                  label: "Create Domain",
+                  label: AppLocalizations.of(context).btcCreateDomain,
                   variant: AppColorVariant.Btc,
                   onPressed: () async {
                     if (!ALLOW_FAUCET_FOR_BTC_DOMAINS) {
@@ -158,7 +159,7 @@ class WebBtcAdnrContent extends BaseComponent {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     AppButton(
-                      label: "Transfer",
+                      label: AppLocalizations.of(context).btcTransferLabel,
                       onPressed: () async {
                         if (balance <
                             (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
@@ -169,23 +170,23 @@ class WebBtcAdnrContent extends BaseComponent {
 
                         final btcToAddress = await PromptModal.show(
                           contextOverride: context,
-                          title: "Transfer BTC Domain",
+                          title: AppLocalizations.of(context).btcTransferBtcDomain,
                           body:
                               "There is a cost of $ADNR_TRANSFER_COST VFX to transfer a BTC Domain.",
                           validator: (value) =>
-                              formValidatorNotEmpty(value, "BTC Address"),
-                          labelText: "BTC Address",
+                              formValidatorNotEmpty(value, AppLocalizations.of(context).btcAddressLabel),
+                          labelText: AppLocalizations.of(context).btcAddressLabel,
                         );
                         if (btcToAddress == null) return;
 
                         final vfxToAddress = await PromptModal.show(
                             contextOverride: context,
-                            title: "VFX Owner",
+                            title: AppLocalizations.of(context).btcVfxOwnerTitle,
                             body:
                                 "What VFX address will manage this BTC domain?",
                             validator: (value) =>
                                 formValidatorRbxAddress(value, false),
-                            labelText: "VFX Address,");
+                            labelText: AppLocalizations.of(context).btcVfxAddressLabelComma);
                         if (vfxToAddress == null) return;
 
                         ref.read(globalLoadingProvider.notifier).start();
@@ -205,22 +206,22 @@ class WebBtcAdnrContent extends BaseComponent {
                         ref.read(globalLoadingProvider.notifier).complete();
 
                         if (txData == null) {
-                          Toast.error("Invalid transaction data.");
+                          Toast.error(AppLocalizations.of(context).btcInvalidTxData);
                           return;
                         }
 
                         final txFee = txData['Fee'];
 
                         final confirmed = await ConfirmDialog.show(
-                          title: "Valid Transaction",
+                          title: AppLocalizations.of(context).btcValidTxTitle,
                           body:
                               "The BTC Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
-                          confirmText: "Send",
-                          cancelText: "Cancel",
+                          confirmText: AppLocalizations.of(context).actionSend,
+                          cancelText: AppLocalizations.of(context).actionCancel,
                         );
 
                         if (confirmed != true) {
-                          Toast.message("Transaction Cancelled");
+                          Toast.message(AppLocalizations.of(context).btcTxCancelledToast);
                           return;
                         }
 
@@ -249,7 +250,7 @@ class WebBtcAdnrContent extends BaseComponent {
                       },
                     ),
                     AppButton(
-                      label: "Delete",
+                      label: AppLocalizations.of(context).walletDelete,
                       variant: AppColorVariant.Danger,
                       onPressed: () async {
                         if (balance <
@@ -260,12 +261,12 @@ class WebBtcAdnrContent extends BaseComponent {
                         }
 
                         final confirmed = await ConfirmDialog.show(
-                          title: "Delete BTC Domain?",
+                          title: AppLocalizations.of(context).btcDeleteDomainTitle,
                           body:
                               "Are you sure you want to delete this BTC Domain?\n${ADNR_DELETE_COST == 0 ? 'There is no cost to delete and BTC Domain (aside from the TX fee).' : 'There is a cost of $ADNR_DELETE_COST VFX to delete a BTC Domain.'}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
                           destructive: true,
-                          cancelText: "Cancel",
-                          confirmText: "Delete",
+                          cancelText: AppLocalizations.of(context).actionCancel,
+                          confirmText: AppLocalizations.of(context).walletDelete,
                         );
 
                         if (confirmed == true) {
@@ -283,7 +284,7 @@ class WebBtcAdnrContent extends BaseComponent {
 
                           ref.read(globalLoadingProvider.notifier).complete();
                           if (txData == null) {
-                            Toast.error("Invalid transaction data.");
+                            Toast.error(AppLocalizations.of(context).btcInvalidTxData);
 
                             return;
                           }
@@ -291,15 +292,15 @@ class WebBtcAdnrContent extends BaseComponent {
                           final txFee = txData['Fee'];
 
                           final confirmed = await ConfirmDialog.show(
-                            title: "Valid Transaction",
+                            title: AppLocalizations.of(context).btcValidTxTitle,
                             body:
                                 "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.btc\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
-                            confirmText: "Send",
-                            cancelText: "Cancel",
+                            confirmText: AppLocalizations.of(context).actionSend,
+                            cancelText: AppLocalizations.of(context).actionCancel,
                           );
 
                           if (confirmed != true) {
-                            Toast.message("Transaction Cancelled");
+                            Toast.message(AppLocalizations.of(context).btcTxCancelledToast);
                             return;
                           }
 

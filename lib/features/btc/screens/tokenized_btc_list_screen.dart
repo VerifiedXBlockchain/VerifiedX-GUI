@@ -13,6 +13,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/components/back_to_home_button.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/tokenized_btc_onboard_provider.dart';
@@ -45,7 +46,7 @@ class TokenizeBtcListScreen extends BaseScreen {
       return AppBar(
         leading: WebMobileDrawerButton(),
         backgroundColor: Colors.black,
-        title: Text("Tokenized Bitcoin (vBTC)"),
+        title: Text(AppLocalizations.of(context).btcVbtcListTitle),
       );
     }
 
@@ -93,17 +94,17 @@ class TokenizeBtcListScreen extends BaseScreen {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: AppButton(
-                  label: "Bulk vBTC Transfer",
+                  label: AppLocalizations.of(context).btcBulkTransferLabel,
                   onPressed: () {
                     final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
                     final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
 
                     if (!kIsWeb && tokens.isEmpty) {
-                      Toast.error("No vBTC tokens with a balance");
+                      Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
                       return;
                     }
                     if (kIsWeb && webTokens.isEmpty) {
-                      Toast.error("No vBTC tokens with a balance");
+                      Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
                       return;
                     }
 
@@ -125,7 +126,7 @@ class TokenizeBtcListScreen extends BaseScreen {
             mainAxisSize: MainAxisSize.min,
             children: [
               VBtcButton(
-                label: "Create Verified BTC Token",
+                label: AppLocalizations.of(context).btcCreateVerifiedToken,
                 icon: FontAwesomeIcons.bitcoin,
                 onPressed: () async {
                   if (kIsWeb) {
@@ -141,10 +142,10 @@ class TokenizeBtcListScreen extends BaseScreen {
 
                   if (wallet == null) {
                     final confirmContinue = await ConfirmDialog.show(
-                      title: "VFX Address with Balance Required",
+                      title: AppLocalizations.of(context).btcVfxBalanceRequiredTitle,
                       body: "A VFX address with a balance is required to proceed. Would you like to set this up now?",
-                      confirmText: "Yes",
-                      cancelText: "No",
+                      confirmText: AppLocalizations.of(context).actionYes,
+                      cancelText: AppLocalizations.of(context).actionNo,
                     );
                     if (confirmContinue != true) {
                       return;
@@ -170,7 +171,7 @@ class TokenizeBtcListScreen extends BaseScreen {
 
                     if (wallet == null) {
                       InfoDialog.show(
-                        title: "VFX Address with Balance Required",
+                        title: AppLocalizations.of(context).btcVfxBalanceRequiredTitle,
                         body: "A VFX address with a balance is required to proceed.",
                       );
                       return;
@@ -190,7 +191,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: AppButton(
-                    label: "Use Wizard",
+                    label: AppLocalizations.of(context).btcUseWizard,
                     type: AppButtonType.Text,
                     onPressed: () async {
                       ref.read(vBtcOnboardProvider.notifier).reset();
@@ -223,7 +224,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                   SpecialDialog().show(
                     context,
                     content: VbtcInfo(),
-                    title: "vBTC",
+                    title: AppLocalizations.of(context).btcVbtcLabel,
                     maxWidth: 800,
                   );
                 },
@@ -274,7 +275,7 @@ class TokenizeBtcListScreen extends BaseScreen {
             child: groupedTokens.isEmpty
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("No Tokenized Bitcoin found in account."),
+                    child: Text(AppLocalizations.of(context).btcNoTokenizedBtc),
                   )
                 : ListView.builder(
                     itemCount: groupedTokens.length,
@@ -506,7 +507,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
                                     ],
                                   ),
                                   AppButton(
-                                    label: "Details",
+                                    label: AppLocalizations.of(context).btcDetailsLabel,
                                     variant: AppColorVariant.Btc,
                                     icon: Icons.chevron_right,
                                     type: AppButtonType.Text,

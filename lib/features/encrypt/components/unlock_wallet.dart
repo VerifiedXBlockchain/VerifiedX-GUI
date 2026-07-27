@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/session_provider.dart';
 import '../../../generated/assets.gen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../providers/password_required_provider.dart';
 import '../providers/startup_password_required_provider.dart';
@@ -23,14 +24,15 @@ class _UnlockWalletState extends State<UnlockWallet> {
   String password = "";
 
   Future<void> submit() async {
+    final l10n = AppLocalizations.of(context);
     final success = await widget.ref.read(passwordRequiredProvider.notifier).unlock(password);
     if (success == true) {
-      Toast.message("Account unlocked!");
+      Toast.message(l10n.encryptUnlockedToast);
       widget.ref.read(startupPasswordRequiredProvider.notifier).set(false);
       widget.ref.read(sessionProvider.notifier).finishSetup(true);
       await widget.ref.read(sessionProvider.notifier).loadWallets();
     } else {
-      Toast.error("Incorrect account decryption password");
+      Toast.error(l10n.encryptIncorrectPasswordToast);
     }
   }
 
@@ -103,8 +105,8 @@ class _UnlockWalletState extends State<UnlockWallet> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
                     obscureText: true,
-                    decoration: const InputDecoration(
-                      hintText: "Account Password",
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context).encryptPasswordHint,
                       border: InputBorder.none,
                       errorBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,

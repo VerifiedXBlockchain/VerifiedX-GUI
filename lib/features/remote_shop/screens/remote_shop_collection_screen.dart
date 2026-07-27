@@ -6,6 +6,7 @@ import '../../../core/base_component.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/empty_placeholder.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/listing_details_list_tile.dart';
 import '../components/shop_connected_indicator.dart';
 import '../models/shop_data.dart';
@@ -112,7 +113,7 @@ class RemoteShopCollectionScreen extends BaseScreen {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _Header(collection: collection),
-          EmptyPlaceholder(title: "No Active Listings"),
+          EmptyPlaceholder(title: AppLocalizations.of(context).shopNoActiveListings),
         ],
       );
     }

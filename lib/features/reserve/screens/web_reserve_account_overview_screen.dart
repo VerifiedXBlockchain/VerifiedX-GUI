@@ -15,6 +15,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../core/web_router.gr.dart';
 import '../../auth/auth_utils.dart';
@@ -50,7 +51,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
     final isMobile = BreakPoints.useMobileLayout(context);
 
     return AppBar(
-      title: Text("Your Vault Account"),
+      title: Text(AppLocalizations.of(context).reserveWebTitle),
       backgroundColor: Colors.black,
       actions: [
         Padding(
@@ -68,7 +69,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          "Close",
+                          AppLocalizations.of(context).actionClose,
                           style: TextStyle(color: AppColors.getReserve()),
                         ),
                       )
@@ -83,7 +84,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
               color: AppColors.getReserve(),
             ),
             label: Text(
-              "What are Vault Accounts?",
+              AppLocalizations.of(context).reserveWhatIsVault,
               style: TextStyle(
                 color: AppColors.getReserve(),
                 decoration: TextDecoration.underline,
@@ -103,7 +104,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
     final balance =
         ref.watch(webSessionProvider.select((v) => v.raBalance)) ?? 0.0;
     if (keypair == null) {
-      return Center(child: Text("No Vault Account Found"));
+      return Center(child: Text(AppLocalizations.of(context).reserveWebNoAccount));
     }
 
     if (ref.watch(webSessionProvider.select((v) => v.raDeactivated))) {
@@ -188,7 +189,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                         onTap: () async {
                           await Clipboard.setData(
                               ClipboardData(text: keypair.address));
-                          Toast.message("Address copied to clipboard");
+                          Toast.message(AppLocalizations.of(context).messageAddressCopied);
                         },
                         child: Icon(
                           Icons.copy,
@@ -204,7 +205,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                   Row(
                     children: [
                       Text(
-                        "Available Balance:",
+                        AppLocalizations.of(context).reserveAvailableBalanceColon,
                         style: TextStyle(color: Colors.white.withOpacity(0.8)),
                       ),
                       SizedBox(
@@ -222,7 +223,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           final body =
                               "Available: ${session.raBalance} VFX\nLocked: ${session.raBalanceLocked} VFX\nTotal: ${session.raBalanceTotal} VFX";
                           InfoDialog.show(
-                              title: "Vault Account Balance", body: body);
+                              title: AppLocalizations.of(context).reserveWebVaultBalanceTitle, body: body);
                         },
                         child: Icon(
                           Icons.help,
@@ -239,7 +240,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Status:",
+                        AppLocalizations.of(context).reserveStatusColon,
                         style: TextStyle(color: Colors.white.withOpacity(0.8)),
                       ),
                       SizedBox(
@@ -273,7 +274,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                   height: 12,
                                 ),
                                 AppButton(
-                                  label: "Reveal Keys",
+                                  label: AppLocalizations.of(context).reserveWebRevealKeys,
                                   onPressed: () {
                                     showRaKeys(context, keypair);
                                   },
@@ -285,7 +286,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           if (ref.watch(webSessionProvider
                               .select((v) => v.raActivated))) {
                             return AppBadge(
-                              label: "Activated",
+                              label: AppLocalizations.of(context).reserveActivated,
                               variant: AppColorVariant.Success,
                             );
                           }
@@ -294,7 +295,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                             return Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Text("Awaiting Funds"),
+                                Text(AppLocalizations.of(context).reserveAwaitingFunds),
                                 SizedBox(
                                   width: 6,
                                 ),
@@ -320,7 +321,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       runSpacing: 12,
                       children: [
                         AppButton(
-                          label: "Send Funds",
+                          label: AppLocalizations.of(context).reserveSendFunds,
                           variant: AppColorVariant.Light,
                           icon: Icons.arrow_upward,
                           // variant: AppColorVariant.Light,
@@ -334,7 +335,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           },
                         ),
                         AppButton(
-                          label: "Manage Assets",
+                          label: AppLocalizations.of(context).reserveManageAssets,
                           icon: Icons.toll,
                           variant: AppColorVariant.Light,
                           onPressed: () async {
@@ -347,7 +348,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                       AppCard(
                                         padding: 0,
                                         child: ListTile(
-                                          title: Text("NFTs"),
+                                          title: Text(AppLocalizations.of(context).reserveAssetsNfts),
                                           leading:
                                               Icon(Icons.lightbulb_outline),
                                           trailing: Icon(Icons.chevron_right),
@@ -360,7 +361,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                       AppCard(
                                         padding: 0,
                                         child: ListTile(
-                                          title: Text("Fungible Tokens"),
+                                          title: Text(AppLocalizations.of(context).reserveAssetsTokens),
                                           leading: Icon(Icons.toll),
                                           trailing: Icon(Icons.chevron_right),
                                           onTap: () {
@@ -372,7 +373,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                       AppCard(
                                         padding: 0,
                                         child: ListTile(
-                                          title: Text("Bitcoin (vBTC)"),
+                                          title: Text(AppLocalizations.of(context).reserveAssetsBtc),
                                           leading:
                                               Icon(FontAwesomeIcons.bitcoin),
                                           trailing: Icon(Icons.chevron_right),
@@ -395,7 +396,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                               // final nfts = await ExplorerService().listNfts("xMjrfrzkrNC2g3KJidbwF21gB7R3m46B9w");
 
                               if (nfts.isEmpty) {
-                                Toast.error("Your Vault Account has no NFTS.");
+                                Toast.error(AppLocalizations.of(context).reserveWebNoNftsToast);
                                 return;
                               }
 
@@ -624,7 +625,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           },
                         ),
                         AppButton(
-                          label: "Receive Assets",
+                          label: AppLocalizations.of(context).reserveReceiveAssets,
                           icon: Icons.arrow_downward,
                           variant: AppColorVariant.Light,
                           onPressed: () {

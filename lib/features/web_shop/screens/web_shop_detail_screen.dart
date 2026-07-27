@@ -24,6 +24,7 @@ import '../utils/shop_publishing.dart';
 import '../../../core/breakpoints.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../providers/web_collection_list_provider.dart';
 import '../providers/web_collection_full_list_provider.dart';
@@ -90,7 +91,7 @@ class WebShopDetailScreen extends BaseScreen {
                     },
                   ),
                 AppButton(
-                  label: "Share Shop",
+                  label: AppLocalizations.of(context).shopShareShop,
                   icon: Icons.ios_share_rounded,
                   variant: AppColorVariant.Light,
                   type: AppButtonType.Text,
@@ -112,7 +113,7 @@ class WebShopDetailScreen extends BaseScreen {
               centerTitle: true,
               backgroundColor: Colors.black12,
               shadowColor: Colors.transparent,
-              title: const Text("Error"),
+              title: Text(AppLocalizations.of(context).shopErrorTitle),
             ),
       error: (_, __) => AppBar(
         centerTitle: true,
@@ -174,19 +175,20 @@ class WebShopDetailScreen extends BaseScreen {
                           builder: (context) {
                             if (shop.isPublished) {
                               return AppBadge(
-                                label: "Published",
+                                label: AppLocalizations.of(context).shopPublished,
                                 variant: AppColorVariant.Success,
                               );
                             }
 
                             return AppButton(
-                              label: "Publish Shop",
+                              label: AppLocalizations.of(context).shopPublishShop,
                               onPressed: () async {
+                                final l10n = AppLocalizations.of(context);
                                 final confirmed = await ConfirmDialog.show(
-                                  title: "Publish Shop?",
+                                  title: l10n.shopPublishShopTitle,
                                   body: "There is a cost of $SHOP_PUBLISH_COST VFX to publish your shop to the network (plus the transaction fee).",
-                                  confirmText: "Publish",
-                                  cancelText: "Cancel",
+                                  confirmText: l10n.shopPublishShop,
+                                  cancelText: l10n.actionCancel,
                                 );
 
                                 if (confirmed == true) {
@@ -237,10 +239,10 @@ class WebShopDetailScreen extends BaseScreen {
                                   : "Are you sure you want to delete this shop?";
 
                               final confirmed = await ConfirmDialog.show(
-                                title: "Delete shop?",
+                                title: AppLocalizations.of(context).shopDeleteShopTitle,
                                 body: message,
-                                cancelText: "Cancel",
-                                confirmText: "Delete",
+                                cancelText: AppLocalizations.of(context).actionCancel,
+                                confirmText: AppLocalizations.of(context).adnrDelete,
                               );
 
                               if (confirmed == true) {
@@ -270,7 +272,7 @@ class WebShopDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
-                            label: "Create Collection",
+                            label: AppLocalizations.of(context).shopCreateCollection,
                             icon: Icons.add,
                             variant: AppColorVariant.Success,
                             onPressed: () {

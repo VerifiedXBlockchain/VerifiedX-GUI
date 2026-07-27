@@ -9,6 +9,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/base_component.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../generated/assets.gen.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/toast.dart';
 
 import '../../../../features/btc/providers/btc_balance_provider.dart';
@@ -177,7 +178,7 @@ class MainMenu extends BaseComponent {
                     ),
                   ),
                   _NavButton(
-                    title: "Dashboard",
+                    title: AppLocalizations.of(context).navMenuDashboard,
                     icon: Icons.dashboard,
                     onPressed: () {
                       if (tabsRouter.activeIndex == 0) {
@@ -189,7 +190,7 @@ class MainMenu extends BaseComponent {
                     isActive: tabsRouter.activeIndex == 0,
                   ),
                   _NavButton(
-                    title: "Vault Accounts",
+                    title: AppLocalizations.of(context).navMenuVaultAccounts,
                     icon: Icons.security,
                     onPressed: () {
                       tabsRouter.setActiveIndex(14);
@@ -197,7 +198,7 @@ class MainMenu extends BaseComponent {
                     isActive: tabsRouter.activeIndex == 14,
                   ),
                   _NavButton(
-                    title: "Send",
+                    title: AppLocalizations.of(context).navMenuSend,
                     icon: Icons.outbox,
                     onPressed: () {
                       tabsRouter.setActiveIndex(1);
@@ -205,7 +206,7 @@ class MainMenu extends BaseComponent {
                     isActive: tabsRouter.activeIndex == 1,
                   ),
                   _NavButton(
-                    title: "Receive",
+                    title: AppLocalizations.of(context).navMenuReceive,
                     icon: Icons.move_to_inbox,
                     onPressed: () {
                       tabsRouter.setActiveIndex(2);
@@ -213,7 +214,7 @@ class MainMenu extends BaseComponent {
                     isActive: tabsRouter.activeIndex == 2,
                   ),
                   _NavButton(
-                    title: "Transactions",
+                    title: AppLocalizations.of(context).navMenuTransactions,
                     icon: Icons.paid,
                     onPressed: () {
                       tabsRouter.setActiveIndex(3);
@@ -222,7 +223,7 @@ class MainMenu extends BaseComponent {
                   ),
                   if (!kIsWeb)
                     _NavButton(
-                      title: "Validator",
+                      title: AppLocalizations.of(context).navMenuValidator,
                       icon: Icons.check_circle,
                       onPressed: () {
                         tabsRouter.setActiveIndex(4);
@@ -258,7 +259,7 @@ class MainMenu extends BaseComponent {
                   // ),
 
                   _NavButton(
-                    title: "VFX/BTC Domains",
+                    title: AppLocalizations.of(context).navMenuDomains,
                     icon: Icons.link,
                     onPressed: () {
                       tabsRouter.setActiveIndex(10);
@@ -266,7 +267,7 @@ class MainMenu extends BaseComponent {
                     isActive: tabsRouter.activeIndex == 10,
                   ),
                   _NavButton(
-                    title: "Tokenize Bitcoin",
+                    title: AppLocalizations.of(context).navMenuTokenizeBitcoin,
                     icon: FontAwesomeIcons.bitcoin,
                     activeColorOverride: Theme.of(context).colorScheme.btcOrange,
                     onPressed: () {
@@ -275,11 +276,11 @@ class MainMenu extends BaseComponent {
                     isActive: tabsRouter.activeIndex == 15,
                   ),
                   _NavButton(
-                    title: "Smart Contracts",
+                    title: AppLocalizations.of(context).navMenuSmartContracts,
                     icon: Icons.receipt_long,
                     onPressed: () {
                       if (ref.read(sessionProvider).currentWallet == null) {
-                        Toast.error("An account is required to access this section.");
+                        Toast.error(AppLocalizations.of(context).navMenuAccountRequiredToast);
                         return;
                       }
                       tabsRouter.setActiveIndex(8);
@@ -288,7 +289,7 @@ class MainMenu extends BaseComponent {
                     isActive: tabsRouter.activeIndex == 8,
                   ),
                   _NavButton(
-                    title: "Fungible Tokens",
+                    title: AppLocalizations.of(context).navMenuFungibleTokens,
                     icon: Icons.toll,
                     onPressed: () {
                       if (tabsRouter.activeIndex == 13) {
@@ -310,11 +311,11 @@ class MainMenu extends BaseComponent {
                   //     isActive: tabsRouter.activeIndex == 5,
                   //   ),
                   _NavButton(
-                    title: "NFTs",
+                    title: AppLocalizations.of(context).navMenuNfts,
                     icon: Icons.lightbulb_outline,
                     onPressed: () {
                       if (ref.read(sessionProvider).currentWallet == null) {
-                        Toast.error("An account is required to access this section.");
+                        Toast.error(AppLocalizations.of(context).navMenuAccountRequiredToast);
                         return;
                       }
                       tabsRouter.setActiveIndex(7);
@@ -324,7 +325,7 @@ class MainMenu extends BaseComponent {
                   ),
 
                   _NavButton(
-                    title: "P2P Auctions",
+                    title: AppLocalizations.of(context).navMenuP2PAuctions,
                     icon: Icons.leak_add,
                     onPressed: () {
                       if (tabsRouter.activeIndex == 9) {

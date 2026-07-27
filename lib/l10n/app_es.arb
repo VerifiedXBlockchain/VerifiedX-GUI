@@ -1,117 +1,5011 @@
 {
   "@@locale": "es",
-
   "appTitle": "VFX Wallet",
+  "@appTitle": {
+    "description": "Application title shown in window titles and browser tab."
+  },
   "navDashboard": "Panel",
+  "@navDashboard": {
+    "description": "Primary navigation label for the dashboard / home screen."
+  },
   "navTransactions": "Transacciones",
+  "@navTransactions": {
+    "description": "Primary navigation label for the transactions list."
+  },
   "navWallet": "Billetera",
+  "@navWallet": {
+    "description": "Primary navigation label for the wallet section."
+  },
   "navNfts": "NFTs",
+  "@navNfts": {
+    "description": "Primary navigation label for the NFTs section."
+  },
   "navDomains": "Dominios",
+  "@navDomains": {
+    "description": "Primary navigation label for VFX domains (ADNR)."
+  },
   "navSettings": "Configuración",
-
+  "@navSettings": {
+    "description": "Primary navigation label for settings."
+  },
   "actionSend": "Enviar",
+  "@actionSend": {
+    "description": "Send funds / send transaction button."
+  },
   "actionReceive": "Recibir",
+  "@actionReceive": {
+    "description": "Receive funds button."
+  },
   "actionCopy": "Copiar",
+  "@actionCopy": {
+    "description": "Generic copy-to-clipboard action."
+  },
   "actionPaste": "Pegar",
+  "@actionPaste": {
+    "description": "Generic paste-from-clipboard action."
+  },
   "actionConfirm": "Confirmar",
+  "@actionConfirm": {
+    "description": "Confirm action — submits or approves the current step."
+  },
   "actionCancel": "Cancelar",
+  "@actionCancel": {
+    "description": "Cancel action — dismisses the current action."
+  },
   "actionClose": "Cerrar",
+  "@actionClose": {
+    "description": "Close action — closes a dialog or panel."
+  },
   "actionSave": "Guardar",
+  "@actionSave": {
+    "description": "Save action — persists current form state."
+  },
   "actionDelete": "Eliminar",
+  "@actionDelete": {
+    "description": "Delete action — destructive, removes an item."
+  },
   "actionSearch": "Buscar",
+  "@actionSearch": {
+    "description": "Search action or search field placeholder."
+  },
   "actionContinue": "Continuar",
+  "@actionContinue": {
+    "description": "Continue action — proceeds past a confirmation prompt."
+  },
   "actionClear": "Limpiar",
+  "@actionClear": {
+    "description": "Clear action — resets a form."
+  },
   "actionDone": "Listo",
+  "@actionDone": {
+    "description": "Done action — dismisses a completion dialog."
+  },
   "actionImport": "Importar",
+  "@actionImport": {
+    "description": "Import action — imports a wallet or key."
+  },
   "actionYes": "Sí",
+  "@actionYes": {
+    "description": "Affirmative response in a confirmation dialog."
+  },
   "actionNo": "No",
-
+  "@actionNo": {
+    "description": "Negative response in a confirmation dialog."
+  },
   "statusLoading": "Cargando...",
+  "@statusLoading": {
+    "description": "Generic loading indicator text."
+  },
   "statusPending": "Pendiente",
+  "@statusPending": {
+    "description": "Pending status for transactions or operations."
+  },
   "statusConfirmed": "Confirmada",
+  "@statusConfirmed": {
+    "description": "Confirmed status for a transaction."
+  },
   "statusFailed": "Fallida",
+  "@statusFailed": {
+    "description": "Failed status for a transaction."
+  },
   "statusSuccessful": "Exitosa",
-
+  "@statusSuccessful": {
+    "description": "Successful status — used in the transactions tab label."
+  },
   "labelAmount": "Monto",
+  "@labelAmount": {
+    "description": "Form label for an amount field."
+  },
   "labelAddress": "Dirección",
+  "@labelAddress": {
+    "description": "Form label for a wallet address field."
+  },
   "labelBalance": "Saldo",
+  "@labelBalance": {
+    "description": "Wallet balance label."
+  },
   "labelAvailable": "Disponible",
+  "@labelAvailable": {
+    "description": "Available (spendable) balance label."
+  },
   "labelTotal": "Total",
+  "@labelTotal": {
+    "description": "Generic total label."
+  },
   "labelLocked": "Bloqueado",
+  "@labelLocked": {
+    "description": "Locked balance label in the send form."
+  },
   "labelFee": "Comisión",
+  "@labelFee": {
+    "description": "Transaction or network fee label."
+  },
   "labelFrom": "De",
+  "@labelFrom": {
+    "description": "From address label in a transaction."
+  },
   "labelTo": "Para",
-
+  "@labelTo": {
+    "description": "To address label in a transaction."
+  },
   "walletCreate": "Crear billetera",
+  "@walletCreate": {
+    "description": "Create a new wallet call-to-action."
+  },
   "walletImport": "Importar billetera",
+  "@walletImport": {
+    "description": "Import an existing wallet call-to-action."
+  },
   "walletPrivateKey": "Clave privada",
+  "@walletPrivateKey": {
+    "description": "Label for a private key field."
+  },
   "walletRecoveryPhrase": "Frase de recuperación",
-
+  "@walletRecoveryPhrase": {
+    "description": "Label for a wallet recovery / seed phrase."
+  },
   "messageNoResults": "No se encontraron resultados",
+  "@messageNoResults": {
+    "description": "Empty state for search or list views."
+  },
   "messageCopiedToClipboard": "Copiado al portapapeles",
+  "@messageCopiedToClipboard": {
+    "description": "Transient toast shown after a copy action."
+  },
   "messageAddressCopied": "Dirección copiada al portapapeles",
+  "@messageAddressCopied": {
+    "description": "Transient toast shown after copying a wallet address."
+  },
   "messagePrivateKeyCopied": "Clave privada copiada al portapapeles",
+  "@messagePrivateKeyCopied": {
+    "description": "Transient toast shown after copying a private key."
+  },
   "messageNoAccountSelected": "No se seleccionó ninguna cuenta",
+  "@messageNoAccountSelected": {
+    "description": "Empty-state message shown when the user has no wallet/account selected."
+  },
   "messageClipboardInvalid": "El texto del portapapeles no es válido",
-
+  "@messageClipboardInvalid": {
+    "description": "Error toast shown when clipboard contents cannot be pasted as an address."
+  },
   "sentAmount": "Se enviaron {amount} VFX",
-
+  "@sentAmount": {
+    "description": "Toast shown after a successful send transaction, with the sent amount.",
+    "placeholders": {
+      "amount": {
+        "type": "String",
+        "example": "1.25"
+      }
+    }
+  },
   "sendAppBarTitle": "Enviar {currency}",
+  "@sendAppBarTitle": {
+    "description": "Send screen app bar title — currency is VFX or BTC.",
+    "placeholders": {
+      "currency": {
+        "type": "String",
+        "example": "VFX"
+      }
+    }
+  },
   "sendFormLabelTo": "Para:",
+  "@sendFormLabelTo": {
+    "description": "Recipient label (with colon) in the send form."
+  },
   "sendFormLabelFrom": "De:",
+  "@sendFormLabelFrom": {
+    "description": "Sender label (with colon) in the send form."
+  },
   "sendFormLabelAmount": "Monto:",
+  "@sendFormLabelAmount": {
+    "description": "Amount label (with colon) in the send form."
+  },
   "sendFormLabelFeeRate": "Comisión:",
+  "@sendFormLabelFeeRate": {
+    "description": "Fee rate label (with colon) in the BTC send form."
+  },
   "sendRecipientHint": "Dirección de la cuenta del destinatario",
+  "@sendRecipientHint": {
+    "description": "Placeholder text for the recipient address field in the send form."
+  },
   "sendAmountHint": "Monto de {currency} a enviar",
+  "@sendAmountHint": {
+    "description": "Placeholder for the amount field in the send form.",
+    "placeholders": {
+      "currency": {
+        "type": "String",
+        "example": "VFX"
+      }
+    }
+  },
   "sendBadgeNotActivated": "No activada",
+  "@sendBadgeNotActivated": {
+    "description": "Warning badge shown when a Vault account is not yet activated."
+  },
   "sendChooseAddressTitle": "Elige una dirección",
+  "@sendChooseAddressTitle": {
+    "description": "Title of the dialog used to pick one of the user's own addresses as recipient."
+  },
   "sendPaymentLinkCta": "Crear enlace de pago",
+  "@sendPaymentLinkCta": {
+    "description": "Call-to-action that opens the Butterfly payment-link flow."
+  },
   "sendPasteHelperCtrl": "Usa ctrl+v para pegar o haz clic ",
+  "@sendPasteHelperCtrl": {
+    "description": "Helper text beneath the recipient address field on non-macOS platforms. Intentionally ends with a trailing space — followed inline by 'here' link and period."
+  },
   "sendPasteHelperCmd": "Usa cmd+v para pegar o haz clic ",
+  "@sendPasteHelperCmd": {
+    "description": "Helper text beneath the recipient address field on macOS. Intentionally ends with a trailing space."
+  },
   "sendPasteHelperHereLink": "aquí",
-
+  "@sendPasteHelperHereLink": {
+    "description": "Inline clickable link in the paste helper text (reads as 'click here')."
+  },
   "receiveAppBarTitle": "Recibir {currency}",
+  "@receiveAppBarTitle": {
+    "description": "Receive screen app bar title — currency is VFX or BTC.",
+    "placeholders": {
+      "currency": {
+        "type": "String",
+        "example": "VFX"
+      }
+    }
+  },
   "receiveSelectedVfxAddress": "Tu dirección VFX{vaultSuffix} seleccionada",
+  "@receiveSelectedVfxAddress": {
+    "description": "Subtitle above the currently selected VFX receive address. vaultSuffix is either empty or ' Vault Account'.",
+    "placeholders": {
+      "vaultSuffix": {
+        "type": "String",
+        "example": " Vault Account"
+      }
+    }
+  },
   "receiveSelectedBtcAddress": "Tu dirección BTC seleccionada",
+  "@receiveSelectedBtcAddress": {
+    "description": "Subtitle above the currently selected BTC receive address."
+  },
   "receiveVaultNotActivatedToast": "Esta cuenta de bóveda aún no ha sido activada.",
+  "@receiveVaultNotActivatedToast": {
+    "description": "Error toast when attempting to copy an inactive Vault account address."
+  },
   "receiveActionCopyAddress": "Copiar\nDirección",
+  "@receiveActionCopyAddress": {
+    "description": "Two-line vertical button label on the receive screen. Newline must be preserved."
+  },
   "receiveActionNewAccount": "Cuenta\nNueva",
+  "@receiveActionNewAccount": {
+    "description": "Two-line vertical button label on the receive screen. Newline must be preserved."
+  },
   "receiveActionImportKey": "Importar\nClave",
+  "@receiveActionImportKey": {
+    "description": "Two-line vertical button label on the receive screen. Newline must be preserved."
+  },
   "receiveRescanDialogTitle": "¿Volver a escanear bloques?",
+  "@receiveRescanDialogTitle": {
+    "description": "Confirmation dialog title asking whether to rescan the chain after importing a key."
+  },
   "receiveRescanDialogBody": "¿Quieres volver a escanear la cadena para incluir las transacciones relevantes a esta clave?",
+  "@receiveRescanDialogBody": {
+    "description": "Confirmation dialog body explaining the rescan prompt."
+  },
   "receiveBtcAccountCreatedTitle": "Cuenta BTC creada",
+  "@receiveBtcAccountCreatedTitle": {
+    "description": "Dialog title shown after a new BTC account is generated."
+  },
   "receiveBtcAccountCreatedBody": "Aquí están los detalles de tu cuenta BTC. Asegúrate de respaldar tu clave privada en un lugar seguro.",
+  "@receiveBtcAccountCreatedBody": {
+    "description": "Body text urging the user to back up the newly generated BTC private key."
+  },
   "receiveBtcImportKeyDialogTitle": "Importar clave privada BTC",
+  "@receiveBtcImportKeyDialogTitle": {
+    "description": "Dialog title for the BTC private key import form."
+  },
   "receiveBtcImportKeyDialogBody": "Pega tu clave privada BTC para importar tu cuenta.",
-
+  "@receiveBtcImportKeyDialogBody": {
+    "description": "Instruction in the BTC private key import dialog."
+  },
   "txAppBarAll": "Todas las transacciones",
+  "@txAppBarAll": {
+    "description": "Transactions screen title when viewing both VFX and BTC."
+  },
   "txAppBarVfx": "Transacciones VFX",
+  "@txAppBarVfx": {
+    "description": "Transactions screen title when filtered to VFX."
+  },
   "txAppBarBtc": "Transacciones BTC",
+  "@txAppBarBtc": {
+    "description": "Transactions screen title when filtered to BTC."
+  },
   "txTabAll": "Todas",
+  "@txTabAll": {
+    "description": "Transactions tab label for the full list."
+  },
   "txTabPending": "Pendientes",
+  "@txTabPending": {
+    "description": "Transactions tab label for pending transactions."
+  },
   "txTabSuccessful": "Exitosas",
+  "@txTabSuccessful": {
+    "description": "Transactions tab label for successful transactions."
+  },
   "txTabFailed": "Fallidas",
+  "@txTabFailed": {
+    "description": "Transactions tab label for failed transactions."
+  },
   "txTabVaulted": "En bóveda",
+  "@txTabVaulted": {
+    "description": "Transactions tab label for Vault-account transactions."
+  },
   "txTabTransactions": "Transacciones",
+  "@txTabTransactions": {
+    "description": "BTC transactions tab label (sibling of 'Inputs')."
+  },
   "txTabInputs": "Entradas",
-
+  "@txTabInputs": {
+    "description": "BTC inputs (UTXO) tab label."
+  },
   "homeKeysHeading": "Claves",
+  "@homeKeysHeading": {
+    "description": "Web-only section heading above the keygen CTA on the dashboard."
+  },
   "homeActionSendCoin": "Enviar\nMoneda",
+  "@homeActionSendCoin": {
+    "description": "Two-line vertical button label on the dashboard common actions. Newline must be preserved."
+  },
   "homeActionReceiveCoin": "Recibir\nMoneda",
+  "@homeActionReceiveCoin": {
+    "description": "Two-line vertical button label on the dashboard common actions. Newline must be preserved."
+  },
   "homeActionTxs": "TXs",
+  "@homeActionTxs": {
+    "description": "Abbreviated label for the transactions shortcut tile on the dashboard. Kept short to fit a tight tile."
+  },
   "homeGetVfxBtcCta": "Obtén $VFX/$BTC",
+  "@homeGetVfxBtcCta": {
+    "description": "Call-to-action button on the dashboard that opens the buy/faucet options."
+  },
   "homeGetVfxCta": "Obtén $VFX",
-
+  "@homeGetVfxCta": {
+    "description": "Shortened CTA variant for the dashboard (VFX only)."
+  },
   "configAppBarTitle": "Configuración del CLI",
+  "@configAppBarTitle": {
+    "description": "App bar title for the advanced CLI configuration screen."
+  },
   "configCloseDialogTitle": "¿Cerrar la pantalla de configuración?",
+  "@configCloseDialogTitle": {
+    "description": "Confirm dialog title when the user tries to close the config screen with unsaved changes."
+  },
   "configCloseDialogBody": "Se perderán todos los cambios sin guardar.",
+  "@configCloseDialogBody": {
+    "description": "Confirm dialog body warning that unsaved config changes are lost on close."
+  },
   "configButtonOpenConfig": "Abrir config",
+  "@configButtonOpenConfig": {
+    "description": "App bar action to open the raw config file in the OS file viewer."
+  },
   "configButtonViewDocs": "Ver documentación",
+  "@configButtonViewDocs": {
+    "description": "App bar action to open the external config documentation URL."
+  },
   "configWarningAdvanced": "Advertencia: Estas son opciones avanzadas. Procede con precaución.",
+  "@configWarningAdvanced": {
+    "description": "Warning banner above the advanced CLI config form."
+  },
   "configRestartRequiredToast": "Se requiere reiniciar el CLI para aplicar los cambios.",
-
+  "@configRestartRequiredToast": {
+    "description": "Toast shown after saving config changes that require a CLI restart."
+  },
   "settingsLanguageSection": "Idioma",
+  "@settingsLanguageSection": {
+    "description": "Section header in settings for the UI language / locale picker."
+  },
   "settingsLanguageSystemDefault": "Predeterminado del sistema",
+  "@settingsLanguageSystemDefault": {
+    "description": "Language-picker option that follows the OS / browser locale."
+  },
   "settingsLanguageEnglish": "English",
-  "settingsLanguageSpanish": "Español"
+  "@settingsLanguageEnglish": {
+    "description": "English language option in the language picker. Shown in the locale's own script — NOT translated."
+  },
+  "settingsLanguageSpanish": "Español",
+  "@settingsLanguageSpanish": {
+    "description": "Spanish language option in the language picker. Shown in the locale's own script — NOT translated."
+  },
+  "walletAccountsTitle": "Mis cuentas",
+  "@walletAccountsTitle": {
+    "description": "App bar title for the accounts management screen."
+  },
+  "walletChangeAccount": "Cambiar cuenta:",
+  "@walletChangeAccount": {
+    "description": "Label above the wallet selector when prompting the user to choose a different account."
+  },
+  "walletPrivateKeyLabel": "Clave privada",
+  "@walletPrivateKeyLabel": {
+    "description": "Field label for the private key input/display."
+  },
+  "walletImportLabel": "Importar",
+  "@walletImportLabel": {
+    "description": "Generic Import button label in wallet flows."
+  },
+  "walletBulkImportTitle": "Importador masivo de cuentas",
+  "@walletBulkImportTitle": {
+    "description": "Heading for the bulk private-key import modal."
+  },
+  "walletBulkImportHint": "Pega tus claves privadas. Cada clave debe ir en una línea.",
+  "@walletBulkImportHint": {
+    "description": "Hint inside the bulk-import textarea."
+  },
+  "walletConfirmImportTitle": "Confirmar importación",
+  "@walletConfirmImportTitle": {
+    "description": "Confirm dialog title before importing private keys in bulk."
+  },
+  "walletConfirmImportBody": "¿Quieres continuar con la importación de {label}?",
+  "@walletConfirmImportBody": {
+    "description": "Confirm dialog body for bulk private-key import.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "walletKeypairsLabel": "{count, plural, =1{1 par de claves} other{{count} pares de claves}}",
+  "@walletKeypairsLabel": {
+    "description": "Pluralized count of keypairs being imported.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "walletRescanBlocksTitle": "¿Volver a escanear bloques?",
+  "@walletRescanBlocksTitle": {
+    "description": "Confirm dialog title asking whether to rescan the chain after import."
+  },
+  "walletRescanBlocksBodyKeys": "¿Quieres volver a escanear la cadena para incluir las transacciones relevantes a estas claves?",
+  "@walletRescanBlocksBodyKeys": {
+    "description": "Bulk-import variant of the rescan confirmation body."
+  },
+  "walletRescanBlocksBodyKey": "¿Quieres volver a escanear la cadena para incluir las transacciones relevantes a esta clave?",
+  "@walletRescanBlocksBodyKey": {
+    "description": "Single-import variant of the rescan confirmation body."
+  },
+  "walletImportedToast": "¡{label} importado!",
+  "@walletImportedToast": {
+    "description": "Toast confirming a private key import.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "walletAddressCopiedToast": "{address} copiado al portapapeles",
+  "@walletAddressCopiedToast": {
+    "description": "Toast shown after copying a specific address to the clipboard.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "walletPrivateKeyCopiedToast": "Clave privada copiada al portapapeles",
+  "@walletPrivateKeyCopiedToast": {
+    "description": "Toast confirming a private key was copied to the clipboard."
+  },
+  "walletCopyVfxAddressTooltip": "Copiar dirección VFX",
+  "@walletCopyVfxAddressTooltip": {
+    "description": "Tooltip on the copy icon next to the active VFX address in the wallet selector."
+  },
+  "walletCopyBtcAddressTooltip": "Copiar dirección BTC",
+  "@walletCopyBtcAddressTooltip": {
+    "description": "Tooltip on the copy icon next to the active BTC address in the wallet selector."
+  },
+  "walletAddressesPlaceholder": "Direcciones de cuentas VFX/BTC",
+  "@walletAddressesPlaceholder": {
+    "description": "Placeholder shown in the wallet selector when no account is currently active."
+  },
+  "walletImportTitle": "Importar billetera",
+  "@walletImportTitle": {
+    "description": "Title of the prompt-modal used to import a wallet via private key."
+  },
+  "walletBulkImportLabel": "Importación masiva",
+  "@walletBulkImportLabel": {
+    "description": "Inline link in the import-wallet modal to switch to bulk import."
+  },
+  "walletNewAccount": "Cuenta nueva",
+  "@walletNewAccount": {
+    "description": "Menu item to create a new VFX account."
+  },
+  "walletImportBtcWallet": "Importar billetera BTC",
+  "@walletImportBtcWallet": {
+    "description": "Menu item to import a BTC private key (WIF)."
+  },
+  "walletImportBtcDialogTitle": "Importar clave privada BTC",
+  "@walletImportBtcDialogTitle": {
+    "description": "Dialog title for the BTC private-key import flow."
+  },
+  "walletImportBtcDialogBody": "Pega tu clave privada BTC para importar tu cuenta.",
+  "@walletImportBtcDialogBody": {
+    "description": "Dialog body for the BTC private-key import flow."
+  },
+  "walletNewBtcAccount": "Cuenta BTC nueva",
+  "@walletNewBtcAccount": {
+    "description": "Menu item to create a new BTC account."
+  },
+  "walletBtcAccountCreatedTitle": "Cuenta BTC creada",
+  "@walletBtcAccountCreatedTitle": {
+    "description": "Dialog title shown after a new BTC account is generated."
+  },
+  "walletBtcAccountCreatedBody": "Aquí están los detalles de tu cuenta BTC. Asegúrate de respaldar tu clave privada en un lugar seguro.",
+  "@walletBtcAccountCreatedBody": {
+    "description": "Dialog body shown after a new BTC account is generated."
+  },
+  "walletAddressLabel": "Dirección",
+  "@walletAddressLabel": {
+    "description": "Field label for an address input/display."
+  },
+  "walletManageAccounts": "Administrar cuentas",
+  "@walletManageAccounts": {
+    "description": "Menu item to open the manage-wallets bottom sheet."
+  },
+  "walletPrivateKeyImportedToast": "¡Clave privada importada!",
+  "@walletPrivateKeyImportedToast": {
+    "description": "Toast confirming a BTC private key was imported."
+  },
+  "walletPrivateKeyImportedSyncToast": "¡Clave privada importada! Espera hasta {nextSync} para que el saldo se sincronice.",
+  "@walletPrivateKeyImportedSyncToast": {
+    "description": "Toast for BTC private key import when account balance is still syncing.",
+    "placeholders": {
+      "nextSync": {
+        "type": "String"
+      }
+    }
+  },
+  "walletRevealPrivateKey": "Revelar clave privada",
+  "@walletRevealPrivateKey": {
+    "description": "Button to reveal the private key for an account."
+  },
+  "walletHideAccountTitle": "Ocultar cuenta",
+  "@walletHideAccountTitle": {
+    "description": "Confirm dialog title when hiding an account from the GUI."
+  },
+  "walletHideAccountBody": "¿Seguro que quieres ocultar esta cuenta?",
+  "@walletHideAccountBody": {
+    "description": "Confirm dialog body when hiding an account from the GUI."
+  },
+  "walletHideLabel": "Ocultar",
+  "@walletHideLabel": {
+    "description": "Button label confirming the hide-account action."
+  },
+  "walletStatusActivated": "Activada",
+  "@walletStatusActivated": {
+    "description": "Status label shown next to a Vault account that is network-protected."
+  },
+  "walletRestoreHidden": "Restaurar cuentas ocultas",
+  "@walletRestoreHidden": {
+    "description": "Header button that opens the hidden-accounts restorer."
+  },
+  "walletNoHiddenAccounts": "No tienes cuentas ocultas.",
+  "@walletNoHiddenAccounts": {
+    "description": "Empty-state message in the hidden-accounts restore dialog."
+  },
+  "walletNoHiddenAccountsTitle": "No hay cuentas para restaurar",
+  "@walletNoHiddenAccountsTitle": {
+    "description": "Title of the hidden-accounts restore dialog when there are none."
+  },
+  "walletOkay": "Entendido",
+  "@walletOkay": {
+    "description": "Generic acknowledgment button label."
+  },
+  "walletSelectToRestore": "Selecciona las cuentas a restaurar",
+  "@walletSelectToRestore": {
+    "description": "Title of the restore dialog when hidden accounts exist."
+  },
+  "walletRestoreAll": "Restaurar todas",
+  "@walletRestoreAll": {
+    "description": "Button to restore every hidden account."
+  },
+  "walletRestoreSelected": "Restaurar seleccionadas",
+  "@walletRestoreSelected": {
+    "description": "Button to restore the checked hidden accounts."
+  },
+  "walletNameLabel": "Nombre",
+  "@walletNameLabel": {
+    "description": "Label for the friendly-name input when renaming a wallet."
+  },
+  "walletRenameTitle": "Renombrar {label}",
+  "@walletRenameTitle": {
+    "description": "Title of the rename-wallet prompt.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "walletRename": "Renombrar",
+  "@walletRename": {
+    "description": "Wallet context-menu item to rename the wallet."
+  },
+  "walletDelete": "Eliminar",
+  "@walletDelete": {
+    "description": "Wallet context-menu item to delete the wallet."
+  },
+  "walletPrivateKeyValidatorLabel": "Clave privada",
+  "@walletPrivateKeyValidatorLabel": {
+    "description": "Form-validator name passed to formValidatorNotEmpty for the private-key field."
+  },
+  "walletDoneLabel": "Listo",
+  "@walletDoneLabel": {
+    "description": "Generic Done button label used in wallet flows."
+  },
+  "walletVaultAccountCreatedTitle": "Cuenta de bóveda creada",
+  "@walletVaultAccountCreatedTitle": {
+    "description": "Title of the dialog shown after a Vault (reserve) account is created."
+  },
+  "walletRestoreCodeWarning": "🚨 Asegúrate de respaldar tu CÓDIGO DE RESTAURACIÓN en un lugar seguro. 🚨",
+  "@walletRestoreCodeWarning": {
+    "description": "Banner inside the Vault Account Created dialog about backing up the restore code."
+  },
+  "walletRestoreCodeLabel": "Código de restauración",
+  "@walletRestoreCodeLabel": {
+    "description": "Field label for the Vault account restore code."
+  },
+  "walletCopyAll": "Copiar todo",
+  "@walletCopyAll": {
+    "description": "Button label to copy all Vault-account backup data."
+  },
+  "walletSaveAsFile": "Guardar como archivo",
+  "@walletSaveAsFile": {
+    "description": "Button label to export Vault-account backup data as a file."
+  },
+  "walletVaultDataCopiedToast": "Datos de la cuenta de bóveda copiados al portapapeles",
+  "@walletVaultDataCopiedToast": {
+    "description": "Toast shown after copying the full Vault-account backup data."
+  },
+  "walletSavedToToast": "Guardado en {path}",
+  "@walletSavedToToast": {
+    "description": "Toast shown after saving Vault-account backup as a file.",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "walletRestoreCodeCopiedToast": "Código de restauración copiado al portapapeles",
+  "@walletRestoreCodeCopiedToast": {
+    "description": "Toast shown after copying the Vault-account restore code."
+  },
+  "walletRecoveryAddressLabel": "Dirección de recuperación",
+  "@walletRecoveryAddressLabel": {
+    "description": "Field label for the Vault account recovery address."
+  },
+  "walletRecoveryAddressCopiedToast": "Dirección de recuperación copiada al portapapeles",
+  "@walletRecoveryAddressCopiedToast": {
+    "description": "Toast shown after copying the Vault-account recovery address."
+  },
+  "walletRecoveryPrivateKeyLabel": "Clave privada de recuperación",
+  "@walletRecoveryPrivateKeyLabel": {
+    "description": "Field label for the Vault account recovery private key."
+  },
+  "walletRecoveryPrivateKeyCopiedToast": "Clave privada de recuperación copiada al portapapeles",
+  "@walletRecoveryPrivateKeyCopiedToast": {
+    "description": "Toast shown after copying the Vault-account recovery private key."
+  },
+  "walletBackupConfirmTitle": "¿Respaldado?",
+  "@walletBackupConfirmTitle": {
+    "description": "Confirm dialog title asking the user to confirm they have backed up their codes."
+  },
+  "walletBackupConfirmBody": "Confirma que has respaldado tu CÓDIGO DE RESTAURACIÓN así como tu CONTRASEÑA.",
+  "@walletBackupConfirmBody": {
+    "description": "Confirm dialog body for the backup confirmation."
+  },
+  "walletBackupConfirmYes": "Respaldado",
+  "@walletBackupConfirmYes": {
+    "description": "Confirm button label for the backup confirmation dialog."
+  },
+  "walletRestoreCodeNote": "Necesitarás el Código de restauración y la Contraseña para recuperar cualquier transacción. Te recomendamos copiar todo y guardarlo de forma segura, como cualquier clave privada.",
+  "@walletRestoreCodeNote": {
+    "description": "Helper note inside the Vault Account Created dialog."
+  },
+  "authWelcomeTitle": "¡Bienvenido a la Web Wallet de VerifiedX!",
+  "@authWelcomeTitle": {
+    "description": "Title of the welcome dialog shown to new web-wallet users."
+  },
+  "authWelcomeBodyOne": "La red NO almacena tu correo/contraseña ni tu mnemónico. Se usan como semillas para generar los pares de claves de tus cuentas.",
+  "@authWelcomeBodyOne": {
+    "description": "First paragraph of the welcome dialog."
+  },
+  "authWelcomeBodyTwo": "Esto incluye tu cuenta VFX, tu cuenta de bóveda y tu cuenta de Bitcoin.",
+  "@authWelcomeBodyTwo": {
+    "description": "Second paragraph of the welcome dialog."
+  },
+  "authWelcomeBodyThree": "Recomendamos respaldar todas las claves privadas; sin embargo, al generarlas con correo/contraseña o mnemónico, tu clave privada VFX restaurará las tres cuentas.",
+  "@authWelcomeBodyThree": {
+    "description": "Third paragraph of the welcome dialog."
+  },
+  "authBackupKeys": "Respaldar claves",
+  "@authBackupKeys": {
+    "description": "Welcome dialog action that opens the backup keys flow."
+  },
+  "authUnlockWalletFor": "Desbloquear billetera para:",
+  "@authUnlockWalletFor": {
+    "description": "Caption above the address being unlocked on the auth screen."
+  },
+  "authUnknownAddress": "Dirección desconocida",
+  "@authUnknownAddress": {
+    "description": "Fallback shown when the stored primary address is missing."
+  },
+  "authEnterPassword": "Ingresa la contraseña",
+  "@authEnterPassword": {
+    "description": "Button and prompt-title to enter the wallet password."
+  },
+  "authEnterPasswordBody": "Ingresa tu contraseña para descifrar tus claves almacenadas.",
+  "@authEnterPasswordBody": {
+    "description": "Body text shown in the password prompt to decrypt stored keys."
+  },
+  "authDecryptFailed": "No se pudieron descifrar las claves",
+  "@authDecryptFailed": {
+    "description": "Toast shown when key decryption fails on the auth screen."
+  },
+  "authLogout": "Cerrar sesión",
+  "@authLogout": {
+    "description": "Logout button on the web auth screen."
+  },
+  "authLoginCreateAccount": "Iniciar sesión / Crear cuenta",
+  "@authLoginCreateAccount": {
+    "description": "Primary CTA on the web auth screen to log in or create an account."
+  },
+  "authResumeSession": "Reanudar sesión",
+  "@authResumeSession": {
+    "description": "Button to resume an in-memory session on the web auth screen."
+  },
+  "authWebWalletSubtitle": "Web Wallet {version}",
+  "@authWebWalletSubtitle": {
+    "description": "Subtitle under the VerifiedX wordmark on the auth screen.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "authTypeEmailPassword": "Correo y contraseña",
+  "@authTypeEmailPassword": {
+    "description": "Auth-type modal option for email + password login."
+  },
+  "authTypeMnemonic": "Mnemónico (cuenta HD)",
+  "@authTypeMnemonic": {
+    "description": "Auth-type modal option for mnemonic / HD wallet login."
+  },
+  "authTypeVfxPrivateKey": "Clave privada VFX",
+  "@authTypeVfxPrivateKey": {
+    "description": "Auth-type modal option for VFX private-key login."
+  },
+  "authTypeBtcPrivateKey": "Clave privada de Bitcoin / Clave WIF",
+  "@authTypeBtcPrivateKey": {
+    "description": "Auth-type modal option for BTC private-key login."
+  },
+  "authTypeVfxExtension": "Extensión VFX",
+  "@authTypeVfxExtension": {
+    "description": "Auth-type modal option for the VerifiedX browser extension."
+  },
+  "btcVbtcOnboardTitle": "Onboarding vBTC",
+  "@btcVbtcOnboardTitle": {
+    "description": "App bar title on the vBTC onboarding screens."
+  },
+  "btcExitOnboardingTitle": "¿Salir del onboarding de vBTC?",
+  "@btcExitOnboardingTitle": {
+    "description": "Confirm dialog title when leaving the vBTC onboarding flow."
+  },
+  "btcExitOnboardingBody": "¿Seguro que quieres cancelar la configuración de tu cuenta con Bitcoin Tokenizado?",
+  "@btcExitOnboardingBody": {
+    "description": "Confirm dialog body when leaving the vBTC onboarding flow."
+  },
+  "btcVbtcReady": "Tu token vBTC está listo y financiado.",
+  "@btcVbtcReady": {
+    "description": "Status text on the final onboarding step when vBTC token is funded."
+  },
+  "btcViewToken": "Ver token",
+  "@btcViewToken": {
+    "description": "Button to navigate to the newly minted vBTC token detail."
+  },
+  "btcTokenNotFoundToast": "Token no encontrado",
+  "@btcTokenNotFoundToast": {
+    "description": "Toast when the requested vBTC token cannot be located."
+  },
+  "btcNoBtcAccountOrToken": "No se encontró cuenta BTC ni token.",
+  "@btcNoBtcAccountOrToken": {
+    "description": "Empty-state shown when neither a BTC account nor a token is available."
+  },
+  "btcStartOver": "Comenzar de nuevo",
+  "@btcStartOver": {
+    "description": "Button to reset the onboarding flow."
+  },
+  "btcFromAddress": "De: {address}",
+  "@btcFromAddress": {
+    "description": "Label showing the sending BTC address.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "btcToAddress": "Para: {address}",
+  "@btcToAddress": {
+    "description": "Label showing the receiving BTC address.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "btcAmountToSendLabel": "Monto a enviar (BTC)",
+  "@btcAmountToSendLabel": {
+    "description": "Field label for the amount of BTC to send during onboarding."
+  },
+  "btcFeeRateLabel": "Comisión:",
+  "@btcFeeRateLabel": {
+    "description": "Inline label for the fee-rate selector in BTC flows."
+  },
+  "btcInitiateTransfer": "Iniciar transferencia",
+  "@btcInitiateTransfer": {
+    "description": "Button to start a BTC transfer during onboarding."
+  },
+  "btcInvalidAmountToast": "Monto inválido",
+  "@btcInvalidAmountToast": {
+    "description": "Toast shown when the entered BTC amount is invalid."
+  },
+  "btcAddressLabel": "Dirección BTC",
+  "@btcAddressLabel": {
+    "description": "Field label for a BTC address input/display."
+  },
+  "btcAddressCopiedToast": "¡Dirección copiada al portapapeles!",
+  "@btcAddressCopiedToast": {
+    "description": "Toast confirming a BTC deposit address was copied."
+  },
+  "btcSentManually": "¡Lo envié manualmente!",
+  "@btcSentManually": {
+    "description": "Confirmation button when the user sent BTC manually."
+  },
+  "btcNoBtcAccount": "No se encontró cuenta BTC.",
+  "@btcNoBtcAccount": {
+    "description": "Empty-state shown when the user has no BTC account."
+  },
+  "btcWifCopiedToast": "Clave privada WIF copiada al portapapeles",
+  "@btcWifCopiedToast": {
+    "description": "Toast confirming a WIF private key was copied."
+  },
+  "btcDoneExclamation": "¡Listo!",
+  "@btcDoneExclamation": {
+    "description": "Final-step button label on BTC onboarding flows."
+  },
+  "btcImportExisting": "Importar existente",
+  "@btcImportExisting": {
+    "description": "Button to import an existing wallet/account during onboarding."
+  },
+  "btcCreateNew": "Crear nueva",
+  "@btcCreateNew": {
+    "description": "Button to create a new account during onboarding."
+  },
+  "btcBalanceFoundTitle": "¡Saldo encontrado!",
+  "@btcBalanceFoundTitle": {
+    "description": "Info dialog title when a balance is detected on imported VFX account."
+  },
+  "btcVfxAccountImportedToast": "Cuenta VFX importada exitosamente",
+  "@btcVfxAccountImportedToast": {
+    "description": "Toast confirming a VFX account import succeeded."
+  },
+  "btcVfxAccountCreatedToast": "Cuenta VFX creada exitosamente",
+  "@btcVfxAccountCreatedToast": {
+    "description": "Toast confirming a VFX account was created."
+  },
+  "btcUseExistingVfxAccount": "O usa una de tus cuentas VFX existentes:",
+  "@btcUseExistingVfxAccount": {
+    "description": "Helper text above the VFX account picker during onboarding."
+  },
+  "btcUseExistingBtcAccount": "O usa una de tus cuentas BTC existentes:",
+  "@btcUseExistingBtcAccount": {
+    "description": "Helper text above the BTC account picker during onboarding."
+  },
+  "btcNoVfxAccount": "No se encontró cuenta VFX.",
+  "@btcNoVfxAccount": {
+    "description": "Empty-state shown when the user has no VFX account."
+  },
+  "btcUseFaucet": "Usar faucet",
+  "@btcUseFaucet": {
+    "description": "Button to request VFX from the testnet faucet during onboarding."
+  },
+  "btcPhoneNumberTitle": "Número de teléfono",
+  "@btcPhoneNumberTitle": {
+    "description": "Prompt title asking for the user's phone number for the faucet."
+  },
+  "btcPhoneNumberLabel": "Tu número de teléfono",
+  "@btcPhoneNumberLabel": {
+    "description": "Phone-number field label for the faucet."
+  },
+  "btcInvalidPhoneToast": "Número de teléfono inválido",
+  "@btcInvalidPhoneToast": {
+    "description": "Toast shown when the entered phone number is invalid."
+  },
+  "btcVerificationCodeTitle": "Ingresa el código de verificación enviado a {phone}",
+  "@btcVerificationCodeTitle": {
+    "description": "Prompt title for the SMS verification code.",
+    "placeholders": {
+      "phone": {
+        "type": "String"
+      }
+    }
+  },
+  "btcVerificationCodeLabel": "Código de verificación",
+  "@btcVerificationCodeLabel": {
+    "description": "Field label for the SMS verification code."
+  },
+  "btcManualSendBody": "Como alternativa, puedes enviar el BTC manualmente a la dirección de depósito de tu token.",
+  "@btcManualSendBody": {
+    "description": "Helper text introducing the manual-send option in onboarding."
+  },
+  "btcNotEnoughBalance": "No hay suficiente saldo en la cuenta BTC para enviar {amount} BTC",
+  "@btcNotEnoughBalance": {
+    "description": "Toast shown when the BTC account does not have enough balance.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "btcFundsSuccessToast": "¡Éxito! Los fondos están en camino. Hash de TX: {hash}",
+  "@btcFundsSuccessToast": {
+    "description": "Toast shown when faucet funds were broadcast.",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "btcTransferManually": "Transferir manualmente",
+  "@btcTransferManually": {
+    "description": "Button to switch the user to the manual transfer flow."
+  },
+  "btcBulkTransferTitle": "Transferencia masiva de vBTC",
+  "@btcBulkTransferTitle": {
+    "description": "App bar title for the bulk vBTC transfer screen."
+  },
+  "btcBulkMaxTransferAmount": "Monto máximo de transferencia:",
+  "@btcBulkMaxTransferAmount": {
+    "description": "Label for the maximum transferable vBTC amount."
+  },
+  "btcBulkContinue": "Continuar",
+  "@btcBulkContinue": {
+    "description": "Button to continue from the bulk vBTC selection step."
+  },
+  "btcBulkNoTokensSelected": "No se seleccionaron tokens.",
+  "@btcBulkNoTokensSelected": {
+    "description": "Toast when the user tries to continue without selecting any tokens."
+  },
+  "btcBulkAmountHint": "Monto",
+  "@btcBulkAmountHint": {
+    "description": "Hint for the per-token amount field in the bulk transfer screen."
+  },
+  "btcBulkMaxLabel": "(MÁX: {amount} vBTC)",
+  "@btcBulkMaxLabel": {
+    "description": "Helper label showing the maximum transferable amount for a token.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "btcBulkTotalLabel": "Total: {amount} vBTC",
+  "@btcBulkTotalLabel": {
+    "description": "Total transfer amount label.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "btcBulkTransferToLabel": "Transferir a dirección VFX",
+  "@btcBulkTransferToLabel": {
+    "description": "Field label for the VFX recipient in the bulk transfer screen."
+  },
+  "btcBulkTransferToHint": "Dirección de la cuenta VFX del destinatario",
+  "@btcBulkTransferToHint": {
+    "description": "Hint for the VFX recipient field in the bulk transfer screen."
+  },
+  "btcBulkConfirmTxTitle": "Confirmar TX masiva",
+  "@btcBulkConfirmTxTitle": {
+    "description": "Confirm dialog title for the bulk vBTC transfer."
+  },
+  "btcBulkBroadcastedToast": "TX de transferencia masiva de vBTC transmitida",
+  "@btcBulkBroadcastedToast": {
+    "description": "Toast confirming the bulk vBTC transfer was broadcast."
+  },
+  "btcBulkNoVfxSelectedToast": "No se seleccionó ninguna cuenta VFX",
+  "@btcBulkNoVfxSelectedToast": {
+    "description": "Toast shown when the user has not selected a VFX account."
+  },
+  "btcTokenizeTitle": "Tokenizar BTC (vBTC)",
+  "@btcTokenizeTitle": {
+    "description": "App bar title for the manual vBTC mint screen."
+  },
+  "btcVbtcTokenHint": "Token vBTC",
+  "@btcVbtcTokenHint": {
+    "description": "Hint shown in the vBTC token name fields."
+  },
+  "btcVbtcHint": "vBTC",
+  "@btcVbtcHint": {
+    "description": "Hint shown in the vBTC ticker field."
+  },
+  "btcViewProgress": "Ver progreso",
+  "@btcViewProgress": {
+    "description": "Button to view the in-progress MPC ceremony."
+  },
+  "btcCompileMint": "Compilar y emitir",
+  "@btcCompileMint": {
+    "description": "Button label that compiles and mints the vBTC token contract."
+  },
+  "btcTransactionBroadcastedTitle": "Transacción transmitida",
+  "@btcTransactionBroadcastedTitle": {
+    "description": "Info dialog title shown after a vBTC transaction is broadcast."
+  },
+  "btcMintAndDeploy": "Emitir y desplegar",
+  "@btcMintAndDeploy": {
+    "description": "Button label to mint and deploy the vBTC contract."
+  },
+  "btcVfxAddressRequired": "Se requiere una dirección VFX",
+  "@btcVfxAddressRequired": {
+    "description": "Toast shown when no VFX address is selected during mint."
+  },
+  "btcCreateVbtcTitle": "¿Crear token vBTC?",
+  "@btcCreateVbtcTitle": {
+    "description": "Confirm dialog title for creating the vBTC token."
+  },
+  "btcMpcStartBody": "Esto iniciará una ceremonia MPC para crear tu token vBTC.",
+  "@btcMpcStartBody": {
+    "description": "Confirm dialog body line about the MPC ceremony."
+  },
+  "btcNetworkFeeBody": "Se requiere una comisión de red de ~0,000028 VFX.",
+  "@btcNetworkFeeBody": {
+    "description": "Confirm dialog body line about the network fee for vBTC mint."
+  },
+  "btcVfxAccountLabel": "Cuenta VFX: {address}",
+  "@btcVfxAccountLabel": {
+    "description": "Confirm dialog label showing the chosen VFX account.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "btcChangeAccountLabel": "Cambiar cuenta:",
+  "@btcChangeAccountLabel": {
+    "description": "Inline label above the wallet selector in the mint dialog."
+  },
+  "btcVfxAddressLabel": "Dirección VFX:",
+  "@btcVfxAddressLabel": {
+    "description": "Inline label for the chosen VFX address in the mint dialog."
+  },
+  "btcContinueQuestion": "¿Continuar?",
+  "@btcContinueQuestion": {
+    "description": "Confirm dialog body asking whether to continue."
+  },
+  "btcVbtcListTitle": "Bitcoin tokenizado (vBTC)",
+  "@btcVbtcListTitle": {
+    "description": "App bar title for the tokenized BTC list screen."
+  },
+  "btcBulkTransferLabel": "Transferencia masiva de vBTC",
+  "@btcBulkTransferLabel": {
+    "description": "Button to open the bulk vBTC transfer screen."
+  },
+  "btcNoVbtcWithBalance": "No hay tokens vBTC con saldo",
+  "@btcNoVbtcWithBalance": {
+    "description": "Toast shown when no vBTC tokens have a balance for transfer."
+  },
+  "btcCreateVerifiedToken": "Crear token Verified BTC",
+  "@btcCreateVerifiedToken": {
+    "description": "Button to start creating a vBTC token."
+  },
+  "btcVfxBalanceRequiredTitle": "Se requiere una dirección VFX con saldo",
+  "@btcVfxBalanceRequiredTitle": {
+    "description": "Info dialog title when a funded VFX address is required."
+  },
+  "btcUseWizard": "Usar asistente",
+  "@btcUseWizard": {
+    "description": "Button to launch the guided vBTC wizard."
+  },
+  "btcVbtcLabel": "vBTC",
+  "@btcVbtcLabel": {
+    "description": "Generic vBTC label used as a list-tile title in the tokenized BTC list."
+  },
+  "btcNoTokenizedBtc": "No se encontró Bitcoin tokenizado en la cuenta.",
+  "@btcNoTokenizedBtc": {
+    "description": "Empty-state for the tokenized-BTC list."
+  },
+  "btcDetailsLabel": "Detalles",
+  "@btcDetailsLabel": {
+    "description": "Button label to open the details view of a token."
+  },
+  "btcNoTransactions": "Sin transacciones",
+  "@btcNoTransactions": {
+    "description": "Empty-state for the BTC transactions list."
+  },
+  "btcTokenNotFoundLabel": "Token no encontrado",
+  "@btcTokenNotFoundLabel": {
+    "description": "Inline message shown when a vBTC token is missing."
+  },
+  "btcDetailNameLabel": "Nombre",
+  "@btcDetailNameLabel": {
+    "description": "Token detail field label for name."
+  },
+  "btcDetailDescriptionLabel": "Descripción",
+  "@btcDetailDescriptionLabel": {
+    "description": "Token detail field label for description."
+  },
+  "btcDetailOwnerLabel": "Propietario",
+  "@btcDetailOwnerLabel": {
+    "description": "Token detail field label for owner."
+  },
+  "btcDetailScOwnerLabel": "Propietario del contrato inteligente",
+  "@btcDetailScOwnerLabel": {
+    "description": "Token detail field label for smart contract owner."
+  },
+  "btcDetailScOwnerAddressLabel": "Dirección del propietario del contrato inteligente",
+  "@btcDetailScOwnerAddressLabel": {
+    "description": "Token detail field label for smart contract owner address (web variant)."
+  },
+  "btcDetailDepositAddressLabel": "Dirección de depósito BTC",
+  "@btcDetailDepositAddressLabel": {
+    "description": "Token detail field label for the BTC deposit address."
+  },
+  "btcDetailScIdLabel": "ID del contrato inteligente",
+  "@btcDetailScIdLabel": {
+    "description": "Token detail field label for smart contract id."
+  },
+  "btcDetailMyBalanceLabel": "Mi saldo",
+  "@btcDetailMyBalanceLabel": {
+    "description": "Token detail field label for the current account's vBTC balance."
+  },
+  "btcDetailTotalBalanceLabel": "Saldo total del token",
+  "@btcDetailTotalBalanceLabel": {
+    "description": "Token detail field label for the global token balance."
+  },
+  "btcDetailOwnerOnlyMedia": "Solo el propietario del token puede ver el contenido adicional.",
+  "@btcDetailOwnerOnlyMedia": {
+    "description": "Helper text shown to non-owners viewing token media."
+  },
+  "btcDetailTransferNow": "Transferir ahora",
+  "@btcDetailTransferNow": {
+    "description": "Button to broadcast a transfer-now call on a vBTC token."
+  },
+  "btcTransferNowToast": "La solicitud de transferencia se ha transmitido. Tus activos deberían estar disponibles pronto.",
+  "@btcTransferNowToast": {
+    "description": "Toast shown after broadcasting a vBTC transfer-now call."
+  },
+  "btcLabelCopiedToast": "{label} copiado al portapapeles",
+  "@btcLabelCopiedToast": {
+    "description": "Toast confirming a labelled value was copied to the clipboard.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "btcRetry": "Reintentar",
+  "@btcRetry": {
+    "description": "Generic retry button label used in BTC flows."
+  },
+  "btcConfirmedLabel": "Confirmada",
+  "@btcConfirmedLabel": {
+    "description": "Status badge shown for a confirmed BTC transaction."
+  },
+  "btcPendingLabel": "Pendiente",
+  "@btcPendingLabel": {
+    "description": "Status badge shown for a pending BTC transaction."
+  },
+  "btcReplaceByFee": "Reemplazar por comisión",
+  "@btcReplaceByFee": {
+    "description": "Button to bump fee on a pending BTC transaction."
+  },
+  "btcRbfFeeRateTitle": "Comisión",
+  "@btcRbfFeeRateTitle": {
+    "description": "Prompt title for the replace-by-fee fee-rate input."
+  },
+  "btcRbfFeeRateLabel": "Comisión (SATS/byte)",
+  "@btcRbfFeeRateLabel": {
+    "description": "Field label for the replace-by-fee fee-rate input."
+  },
+  "btcCopyDepositAddress": "Copiar dirección de depósito",
+  "@btcCopyDepositAddress": {
+    "description": "Button to copy the vBTC deposit address."
+  },
+  "btcAddressCopiedShort": "Dirección BTC copiada al portapapeles",
+  "@btcAddressCopiedShort": {
+    "description": "Toast shown after copying a BTC address."
+  },
+  "btcFundLabel": "Financiar",
+  "@btcFundLabel": {
+    "description": "Button to fund a vBTC token."
+  },
+  "btcAmountWithBalanceTitle": "Monto (saldo: {balance} BTC)",
+  "@btcAmountWithBalanceTitle": {
+    "description": "Prompt title for an amount entry that exposes current balance.",
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "btcPleaseConfirmTitle": "Confirma por favor",
+  "@btcPleaseConfirmTitle": {
+    "description": "Generic confirm dialog title used in vBTC flows."
+  },
+  "btcOpenInExplorer": "Abrir en el explorador BTC",
+  "@btcOpenInExplorer": {
+    "description": "Button to open a transaction in the BTC explorer."
+  },
+  "btcManualSendTitle": "Envío manual",
+  "@btcManualSendTitle": {
+    "description": "Modal title for the manual-send option in vBTC flows."
+  },
+  "btcWithdrawLabel": "Retirar",
+  "@btcWithdrawLabel": {
+    "description": "Button to withdraw vBTC back to BTC."
+  },
+  "btcWithdrawAmountLabel": "Monto del retiro",
+  "@btcWithdrawAmountLabel": {
+    "description": "Field label for the withdrawal amount."
+  },
+  "btcReceivingAddressLabel": "Dirección receptora",
+  "@btcReceivingAddressLabel": {
+    "description": "Field label for the receiving address on a withdrawal."
+  },
+  "btcResponseTitle": "Respuesta",
+  "@btcResponseTitle": {
+    "description": "Generic info-dialog title for a response."
+  },
+  "btcTransferOwnership": "Transferir propiedad",
+  "@btcTransferOwnership": {
+    "description": "Button to transfer ownership of a vBTC token."
+  },
+  "btcVbtcNoBalanceTransfer": "Los tokens vBTC sin saldo no se pueden transferir",
+  "@btcVbtcNoBalanceTransfer": {
+    "description": "Toast shown when attempting to transfer a token with zero balance."
+  },
+  "btcTransferToTitle": "Transferir a",
+  "@btcTransferToTitle": {
+    "description": "Prompt title for entering a transfer-to address."
+  },
+  "btcTransferLabel": "Transferir",
+  "@btcTransferLabel": {
+    "description": "Generic Transfer button label used in vBTC flows."
+  },
+  "btcProveOwnership": "Probar propiedad",
+  "@btcProveOwnership": {
+    "description": "Button to prove ownership of a vBTC token."
+  },
+  "btcBorrowLend": "Pedir/Prestar",
+  "@btcBorrowLend": {
+    "description": "Button label for borrow/lend feature."
+  },
+  "btcActionNotAvailable": "Acción aún no disponible.",
+  "@btcActionNotAvailable": {
+    "description": "Toast shown when an unavailable action is attempted."
+  },
+  "btcCancelLabel": "Cancelar",
+  "@btcCancelLabel": {
+    "description": "Cancel button used in BTC flows."
+  },
+  "btcInvalidAmount": "Monto inválido",
+  "@btcInvalidAmount": {
+    "description": "Toast shown when an entered amount is invalid."
+  },
+  "btcNotEnoughBalanceShort": "Saldo insuficiente",
+  "@btcNotEnoughBalanceShort": {
+    "description": "Toast shown when the account has insufficient balance."
+  },
+  "btcAddBtcAccount": "Agregar cuenta BTC (Segwit)",
+  "@btcAddBtcAccount": {
+    "description": "Modal title for adding a BTC account."
+  },
+  "btcGenerateKeypair": "Generar par de claves",
+  "@btcGenerateKeypair": {
+    "description": "Modal option to generate a random BTC keypair."
+  },
+  "btcGenerateKeypairSubtitle": "Genera un par de claves BTC aleatorio.",
+  "@btcGenerateKeypairSubtitle": {
+    "description": "Subtitle for the generate-keypair option."
+  },
+  "btcImportWifTitle": "Importar clave privada WIF",
+  "@btcImportWifTitle": {
+    "description": "Modal option to import a BTC WIF private key."
+  },
+  "btcImportWifSubtitle": "Importa tu clave privada WIF de BTC",
+  "@btcImportWifSubtitle": {
+    "description": "Subtitle for the import-WIF option."
+  },
+  "btcDomainPending": "Dominio BTC pendiente",
+  "@btcDomainPending": {
+    "description": "Badge label for a pending BTC domain creation."
+  },
+  "btcDomainTransferPending": "Transferencia de dominio BTC pendiente",
+  "@btcDomainTransferPending": {
+    "description": "Badge label for a pending BTC domain transfer."
+  },
+  "btcDomainDeletePending": "Eliminación de dominio BTC pendiente",
+  "@btcDomainDeletePending": {
+    "description": "Badge label for a pending BTC domain deletion."
+  },
+  "btcCreateDomain": "Crear dominio",
+  "@btcCreateDomain": {
+    "description": "Button to create a new BTC domain."
+  },
+  "btcTransferBtcDomain": "Transferir dominio BTC",
+  "@btcTransferBtcDomain": {
+    "description": "Prompt title for transferring a BTC domain."
+  },
+  "btcVfxOwnerTitle": "Propietario VFX",
+  "@btcVfxOwnerTitle": {
+    "description": "Prompt title for the VFX owner step in BTC domain transfer."
+  },
+  "btcVfxAddressLabelComma": "Dirección VFX,",
+  "@btcVfxAddressLabelComma": {
+    "description": "VFX address field label as used in the BTC domain transfer prompt (preserves trailing comma)."
+  },
+  "btcInvalidTxData": "Datos de transacción inválidos.",
+  "@btcInvalidTxData": {
+    "description": "Toast shown when transaction data is invalid."
+  },
+  "btcValidTxTitle": "Transacción válida",
+  "@btcValidTxTitle": {
+    "description": "Confirm dialog title shown when a transaction is valid."
+  },
+  "btcTxCancelledToast": "Transacción cancelada",
+  "@btcTxCancelledToast": {
+    "description": "Toast shown when a transaction is cancelled by the user."
+  },
+  "btcDeleteDomainTitle": "¿Eliminar dominio BTC?",
+  "@btcDeleteDomainTitle": {
+    "description": "Confirm dialog title for deleting a BTC domain."
+  },
+  "btcStatusLabel": "Estado",
+  "@btcStatusLabel": {
+    "description": "Generic Status field label used in BTC tx tile."
+  },
+  "btcFeeLabel": "Comisión",
+  "@btcFeeLabel": {
+    "description": "Generic Fee field label used in BTC tx tile."
+  },
+  "btcBlockTimeLabel": "Hora del bloque",
+  "@btcBlockTimeLabel": {
+    "description": "Block-time field label in BTC tx tile."
+  },
+  "btcBlockHeightLabel": "Altura del bloque",
+  "@btcBlockHeightLabel": {
+    "description": "Block-height field label in BTC tx tile."
+  },
+  "btcWebNoBtcAddress": "Sin dirección BTC",
+  "@btcWebNoBtcAddress": {
+    "description": "Empty-state shown when no BTC address is available on the web wallet."
+  },
+  "btcWebNoTransactionsForAddress": "No se encontraron transacciones para {address}.",
+  "@btcWebNoTransactionsForAddress": {
+    "description": "Empty-state for the transactions list of a specific BTC address.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "btcWebError": "Error",
+  "@btcWebError": {
+    "description": "Inline error label used on the BTC web detail screen."
+  },
+  "reserveManageTitle": "Administrar cuentas de bóveda",
+  "@reserveManageTitle": {
+    "description": "App bar title for the manage Vault accounts screen."
+  },
+  "reserveSetupNewAccount": "Configurar cuenta nueva",
+  "@reserveSetupNewAccount": {
+    "description": "Button to set up a new Vault account."
+  },
+  "reserveRestoreVaultAccount": "Restaurar cuenta de bóveda",
+  "@reserveRestoreVaultAccount": {
+    "description": "Button to restore a previously created Vault account."
+  },
+  "reserveNoVaultAccounts": "No hay cuentas de bóveda",
+  "@reserveNoVaultAccounts": {
+    "description": "Empty-state on the manage Vault accounts screen."
+  },
+  "reserveAddressColon": "Dirección:",
+  "@reserveAddressColon": {
+    "description": "Inline label for the Vault account address row."
+  },
+  "reserveAvailableBalanceColon": "Saldo disponible:",
+  "@reserveAvailableBalanceColon": {
+    "description": "Inline label for the available-balance row."
+  },
+  "reserveStatusColon": "Estado:",
+  "@reserveStatusColon": {
+    "description": "Inline label for the status row."
+  },
+  "reserveSendFunds": "Enviar fondos",
+  "@reserveSendFunds": {
+    "description": "Button to send funds from a Vault account."
+  },
+  "reserveManageAssets": "Administrar activos",
+  "@reserveManageAssets": {
+    "description": "Button/title for the manage-assets sheet."
+  },
+  "reserveAssetsNfts": "NFTs",
+  "@reserveAssetsNfts": {
+    "description": "Manage-assets option label for NFTs."
+  },
+  "reserveAssetsTokens": "Tokens fungibles",
+  "@reserveAssetsTokens": {
+    "description": "Manage-assets option label for fungible tokens."
+  },
+  "reserveAssetsBtc": "Bitcoin (vBTC)",
+  "@reserveAssetsBtc": {
+    "description": "Manage-assets option label for vBTC."
+  },
+  "reserveNoAssetsToast": "Esta cuenta no tiene activos/NFTs.",
+  "@reserveNoAssetsToast": {
+    "description": "Toast shown when the Vault account has no assets/NFTs."
+  },
+  "reserveTransferLabel": "Transferir",
+  "@reserveTransferLabel": {
+    "description": "Transfer button label inside the manage-assets sheet."
+  },
+  "reserveViewDetailsLabel": "Ver detalles",
+  "@reserveViewDetailsLabel": {
+    "description": "View-details button label inside the manage-assets sheet."
+  },
+  "reserveNoVbtcTokens": "Esta cuenta no tiene tokens vBTC",
+  "@reserveNoVbtcTokens": {
+    "description": "Toast shown when the Vault account has no vBTC tokens."
+  },
+  "reserveReceiveAssets": "Recibir activos",
+  "@reserveReceiveAssets": {
+    "description": "Button to switch to the receive tab for a Vault account."
+  },
+  "reserveActivateAccountAction": "Activar\nCuenta",
+  "@reserveActivateAccountAction": {
+    "description": "Two-line vertical icon-button label for activating a Vault account. Newline must be preserved."
+  },
+  "reserveOverviewTitle": "Cuentas de bóveda",
+  "@reserveOverviewTitle": {
+    "description": "App bar title for the Vault accounts overview screen."
+  },
+  "reserveWhatIsVault": "¿Qué son las cuentas de bóveda?",
+  "@reserveWhatIsVault": {
+    "description": "Inline help link in the app-bar of the Vault overview screen."
+  },
+  "reserveAvailableLabel": "Disponible: {amount} VFX",
+  "@reserveAvailableLabel": {
+    "description": "Subtitle showing available VFX for a Vault account.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "reserveActivated": "Activada",
+  "@reserveActivated": {
+    "description": "Status badge for an activated Vault account."
+  },
+  "reserveActivationPending": "Activación pendiente",
+  "@reserveActivationPending": {
+    "description": "Status badge for a pending activation."
+  },
+  "reserveAwaitingFunds": "Esperando fondos",
+  "@reserveAwaitingFunds": {
+    "description": "Status button shown when a Vault account is below the activation minimum."
+  },
+  "reserveActivateNow": "Activar ahora",
+  "@reserveActivateNow": {
+    "description": "Button to activate a Vault account now."
+  },
+  "reserveRecoverLabel": "Recuperar",
+  "@reserveRecoverLabel": {
+    "description": "Button to start the Vault account recovery flow."
+  },
+  "reserveRecoverTitle": "Recuperar fondos y NFTs",
+  "@reserveRecoverTitle": {
+    "description": "Confirm dialog title for the Vault recovery flow."
+  },
+  "reserveRecoverBody": "Esta es una función destructiva que devolverá todas las transacciones y activos pendientes a esta cuenta de recuperación:\n\n{address}",
+  "@reserveRecoverBody": {
+    "description": "Confirm dialog body for the Vault recovery flow.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "reserveRecoverProceed": "Continuar",
+  "@reserveRecoverProceed": {
+    "description": "Confirm button label for the Vault recovery flow."
+  },
+  "reserveBackupMediaTitle": "Respaldar contenido",
+  "@reserveBackupMediaTitle": {
+    "description": "Confirm dialog title asking whether to back up NFT media."
+  },
+  "reserveBackupMediaBody": "El contenido de los NFT no se transferirá en este proceso. ¿Quieres exportar un respaldo ahora para importarlo en tu nuevo entorno?",
+  "@reserveBackupMediaBody": {
+    "description": "Confirm dialog body for backing up NFT media."
+  },
+  "reserveBackupAction": "Respaldar",
+  "@reserveBackupAction": {
+    "description": "Confirm button label for the backup-media dialog."
+  },
+  "reserveManageVaultAccounts": "Administrar cuentas de bóveda",
+  "@reserveManageVaultAccounts": {
+    "description": "Button on the overview screen to navigate to the manage screen."
+  },
+  "reserveExistingAccounts": "Cuentas existentes",
+  "@reserveExistingAccounts": {
+    "description": "Section title above the list of existing Vault accounts."
+  },
+  "reserveWebTitle": "Tu cuenta de bóveda",
+  "@reserveWebTitle": {
+    "description": "App bar title for the web Vault overview screen."
+  },
+  "reserveWebNoAccount": "No se encontró cuenta de bóveda",
+  "@reserveWebNoAccount": {
+    "description": "Empty-state on the web Vault overview screen."
+  },
+  "reserveWebRevealKeys": "Revelar claves",
+  "@reserveWebRevealKeys": {
+    "description": "Button on the web Vault overview screen to reveal the account keys."
+  },
+  "reserveWebVaultBalanceTitle": "Saldo de la cuenta de bóveda",
+  "@reserveWebVaultBalanceTitle": {
+    "description": "Info dialog title for the web Vault balance breakdown."
+  },
+  "reserveWebNoNftsToast": "Tu cuenta de bóveda no tiene NFTs.",
+  "@reserveWebNoNftsToast": {
+    "description": "Toast shown when the web Vault account has no NFTs to manage."
+  },
+  "reserveCallbackLabel": "Devolver",
+  "@reserveCallbackLabel": {
+    "description": "Button to call back a transaction from a Vault account."
+  },
+  "reserveCallbackTitle": "Devolver transacción",
+  "@reserveCallbackTitle": {
+    "description": "Prompt title for the callback action."
+  },
+  "reserveCallbackBody": "Las devoluciones (callbacks) se pueden usar para devolver los fondos/activos a la misma cuenta con fines de custodia. Ingresa tu contraseña para devolver esta transacción.",
+  "@reserveCallbackBody": {
+    "description": "Prompt body for the callback action."
+  },
+  "reservePasswordLabel": "Contraseña",
+  "@reservePasswordLabel": {
+    "description": "Field label for password entry in the callback flow."
+  },
+  "reserveCallbackSentToast": "TX de devolución enviada con hash {hash}",
+  "@reserveCallbackSentToast": {
+    "description": "Toast shown after a callback transaction is broadcast.",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "nodePoolTitle": "Pool de validadores",
+  "@nodePoolTitle": {
+    "description": "App bar title for the validator pool / node list screen."
+  },
+  "nodeSearchHint": "Busca por nombre del validador...",
+  "@nodeSearchHint": {
+    "description": "Hint inside the validator-name search field."
+  },
+  "nodeSearchExactNote": "* El nombre debe coincidir exactamente",
+  "@nodeSearchExactNote": {
+    "description": "Helper note under the validator search field."
+  },
+  "nodeValidatorHeading": "Validador",
+  "@nodeValidatorHeading": {
+    "description": "Section heading above the user's own validator entries."
+  },
+  "nodeStatusActive": "Activo",
+  "@nodeStatusActive": {
+    "description": "Badge label for an active validator/masternode."
+  },
+  "nodeStatusInactive": "Inactivo",
+  "@nodeStatusInactive": {
+    "description": "Badge label for an inactive validator/masternode."
+  },
+  "nodePeerInfoHeading": "Información de pares",
+  "@nodePeerInfoHeading": {
+    "description": "Section heading above the peer info list."
+  },
+  "nodeIpLabel": "IP:",
+  "@nodeIpLabel": {
+    "description": "Field label for a peer's IP address."
+  },
+  "nodeHeightLabel": "Altura:",
+  "@nodeHeightLabel": {
+    "description": "Field label for a peer's block height."
+  },
+  "nodeLatencyLabel": "Latencia:",
+  "@nodeLatencyLabel": {
+    "description": "Field label for a peer's latency."
+  },
+  "nodeLastCheckedLabel": "Última verificación:",
+  "@nodeLastCheckedLabel": {
+    "description": "Field label for the last-checked timestamp in node info."
+  },
+  "nodeConnectedLabel": "Conectado: {date}",
+  "@nodeConnectedLabel": {
+    "description": "Connection-date label for a node card.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nodeWalletVersionLabel": "Versión de billetera: {version}",
+  "@nodeWalletVersionLabel": {
+    "description": "Wallet-version label for a node card.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "nodeConnectionDateLabel": "Fecha de conexión: {date}",
+  "@nodeConnectionDateLabel": {
+    "description": "Connection-date label for a masternode card.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "nodeBlocksLabel": "Bloques: {count}",
+  "@nodeBlocksLabel": {
+    "description": "Block count label for a masternode card.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorTitle": "Validador",
+  "@validatorTitle": {
+    "description": "App bar title for the validator screen."
+  },
+  "validatorNoAccountSelected": "No se seleccionó ninguna cuenta",
+  "@validatorNoAccountSelected": {
+    "description": "Empty-state shown when no wallet is selected on the validator screen."
+  },
+  "validatorCannotValidate": "{label} no puede validar.",
+  "@validatorCannotValidate": {
+    "description": "Warning shown when the chosen account is not eligible to validate.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorOnlyOneAccount": "Solo puedes validar con una cuenta.",
+  "@validatorOnlyOneAccount": {
+    "description": "Helper note explaining that only one account can validate at a time."
+  },
+  "validatorRequirementHint": "Validar requiere {amount} VFX.",
+  "@validatorRequirementHint": {
+    "description": "Card body explaining the minimum balance required to validate.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorChooseAccount": "Elige otra cuenta:",
+  "@validatorChooseAccount": {
+    "description": "Helper note above the wallet selector when current account is below the validator threshold."
+  },
+  "validatorTransferHint": "O transfiere {amount} VFX a {address}.",
+  "@validatorTransferHint": {
+    "description": "Helper note suggesting topping up the current account.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorPortInstructions": "Debes tener los puertos {port}, {port2} y {port3} abiertos a redes externas con un saldo de {amount} VFX para validar.",
+  "@validatorPortInstructions": {
+    "description": "Card body describing the validator port and balance requirements.",
+    "placeholders": {
+      "port": {
+        "type": "String"
+      },
+      "port2": {
+        "type": "String"
+      },
+      "port3": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorStartValidating": "Iniciar validación",
+  "@validatorStartValidating": {
+    "description": "Button to start validating with the current account."
+  },
+  "validatorBalanceInsufficient": "Saldo insuficiente para validar. Se requieren {amount} VFX.",
+  "@validatorBalanceInsufficient": {
+    "description": "Toast shown when the current balance falls below the validator threshold.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorNamePromptTitle": "Nombra tu validador",
+  "@validatorNamePromptTitle": {
+    "description": "Prompt title for naming a validator."
+  },
+  "validatorNameLabel": "Nombre del validador",
+  "@validatorNameLabel": {
+    "description": "Field label for the validator name."
+  },
+  "validatorNowValidating": "{name} [{label}] ahora está validando.",
+  "@validatorNowValidating": {
+    "description": "Toast confirming validation has started.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorNotValidating": "{label} NO está validando...",
+  "@validatorNotValidating": {
+    "description": "Heading shown when the current account is not actively validating.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorCheckAgain": "Verificar de nuevo",
+  "@validatorCheckAgain": {
+    "description": "Button to refresh the validating-status check."
+  },
+  "validatorActive": "Validando...",
+  "@validatorActive": {
+    "description": "Active-validator headline shown beside the rotating gear."
+  },
+  "validatorAddressLabel": "Dirección: {label}",
+  "@validatorAddressLabel": {
+    "description": "Address row in the active-validator card.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorRenameTooltip": "Renombrar validador",
+  "@validatorRenameTooltip": {
+    "description": "Tooltip on the rename-validator icon button."
+  },
+  "validatorNamePromptTitleAlt": "Nombre del validador",
+  "@validatorNamePromptTitleAlt": {
+    "description": "Prompt title used when renaming a validator."
+  },
+  "validatorNameField": "Nombre",
+  "@validatorNameField": {
+    "description": "Form-validator name passed to formValidatorNotEmpty for the validator-name field."
+  },
+  "validatorNewNameLabel": "Nuevo nombre del validador",
+  "@validatorNewNameLabel": {
+    "description": "Field label for the rename-validator input."
+  },
+  "validatorRenamedToast": "El nombre del validador se cambió a {name}.",
+  "@validatorRenamedToast": {
+    "description": "Toast confirming a validator was renamed.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorRestartCliTitle": "Reiniciar CLI",
+  "@validatorRestartCliTitle": {
+    "description": "Confirm dialog title asking whether to restart the CLI."
+  },
+  "validatorRestartCliBody": "Para que el nombre se aplique,\nse requiere reiniciar el CLI.\n\n¿Reiniciar ahora?",
+  "@validatorRestartCliBody": {
+    "description": "Confirm dialog body for the CLI-restart prompt."
+  },
+  "validatorRestartCliConfirm": "Reiniciar",
+  "@validatorRestartCliConfirm": {
+    "description": "Confirm button label for the CLI-restart prompt."
+  },
+  "validatorRestartingToast": "Reiniciando CLI...",
+  "@validatorRestartingToast": {
+    "description": "Toast shown while the CLI restart is in progress."
+  },
+  "validatorStopValidating": "Detener validación",
+  "@validatorStopValidating": {
+    "description": "Button to stop validating."
+  },
+  "validatorStopValidatingBody": "¿Seguro que quieres detener la validación?",
+  "@validatorStopValidatingBody": {
+    "description": "Confirm dialog body for stopping validation."
+  },
+  "validatorStopLabel": "Detener",
+  "@validatorStopLabel": {
+    "description": "Confirm button label when stopping validation."
+  },
+  "validatorStoppedToast": "{label} ha dejado de validar.",
+  "@validatorStoppedToast": {
+    "description": "Toast confirming validation has stopped.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorBlocksValidatedHeading": "Bloques validados ({count})",
+  "@validatorBlocksValidatedHeading": {
+    "description": "Section heading showing the number of blocks the validator has produced.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "validatorNoValidatedBlocks": "Sin bloques validados",
+  "@validatorNoValidatedBlocks": {
+    "description": "Empty-state shown when the validator has not produced any blocks yet."
+  },
+  "validatorBlockTitle": "Bloque {height}",
+  "@validatorBlockTitle": {
+    "description": "Title for the block detail dialog opened from a validated-block tile.",
+    "placeholders": {
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrTitleAny": "Dominios",
+  "@adnrTitleAny": {
+    "description": "App bar title for the combined domains screen (any currency)."
+  },
+  "adnrTitleVfx": "Dominios VFX",
+  "@adnrTitleVfx": {
+    "description": "App bar title when filtered to VFX domains."
+  },
+  "adnrTitleBtc": "Dominios BTC",
+  "@adnrTitleBtc": {
+    "description": "App bar title when filtered to BTC domains."
+  },
+  "adnrCreateAnyHeading": "Crea un dominio como alias de tu dirección para recibir fondos.",
+  "@adnrCreateAnyHeading": {
+    "description": "Marketing copy on the all-domains tab."
+  },
+  "adnrCreateVfxHeading": "Crea un dominio VFX como alias de tu dirección para recibir fondos.",
+  "@adnrCreateVfxHeading": {
+    "description": "Marketing copy on the VFX-domains tab."
+  },
+  "adnrCreateBtcHeading": "Crea un dominio BTC como alias de tu dirección BTC para recibir fondos.",
+  "@adnrCreateBtcHeading": {
+    "description": "Marketing copy on the BTC-domains tab."
+  },
+  "adnrCostNoteAny": "Los dominios cuestan {cost} VFX más la comisión de la transacción.",
+  "@adnrCostNoteAny": {
+    "description": "Cost note on the all-domains tab.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrCostNoteVfx": "Los dominios VFX cuestan {cost} VFX más la comisión de la transacción.",
+  "@adnrCostNoteVfx": {
+    "description": "Cost note on the VFX-domains tab.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrCostNoteBtc": "Los dominios BTC cuestan {cost} VFX más la comisión de la transacción.",
+  "@adnrCostNoteBtc": {
+    "description": "Cost note on the BTC-domains tab.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrNoDomain": "Sin dominio",
+  "@adnrNoDomain": {
+    "description": "Subtitle shown when an account has no domain registered."
+  },
+  "adnrCreateDomain": "Crear dominio",
+  "@adnrCreateDomain": {
+    "description": "Button to create a new domain."
+  },
+  "adnrTransfer": "Transferir",
+  "@adnrTransfer": {
+    "description": "Button to transfer a domain."
+  },
+  "adnrDelete": "Eliminar",
+  "@adnrDelete": {
+    "description": "Button to delete a domain."
+  },
+  "adnrCreatePending": "Creación pendiente",
+  "@adnrCreatePending": {
+    "description": "Badge for a pending VFX domain creation."
+  },
+  "adnrTransferPending": "Transferencia pendiente",
+  "@adnrTransferPending": {
+    "description": "Badge for a pending VFX domain transfer."
+  },
+  "adnrDeletePending": "Eliminación pendiente",
+  "@adnrDeletePending": {
+    "description": "Badge for a pending VFX domain deletion."
+  },
+  "adnrVfxDomainBadge": "Dominio VFX",
+  "@adnrVfxDomainBadge": {
+    "description": "Section heading on the web ADNR screen for VFX domains."
+  },
+  "adnrBtcDomainBadge": "Dominio BTC",
+  "@adnrBtcDomainBadge": {
+    "description": "Section heading on the web ADNR screen for BTC domains."
+  },
+  "adnrVfxDomainPending": "Dominio VFX pendiente",
+  "@adnrVfxDomainPending": {
+    "description": "Badge for a pending VFX domain creation on the web."
+  },
+  "adnrVfxDomainTransferPending": "Transferencia de dominio VFX pendiente",
+  "@adnrVfxDomainTransferPending": {
+    "description": "Badge for a pending VFX domain transfer on the web."
+  },
+  "adnrVfxDomainDeletePending": "Eliminación de dominio VFX pendiente",
+  "@adnrVfxDomainDeletePending": {
+    "description": "Badge for a pending VFX domain deletion on the web."
+  },
+  "adnrCreateVfxOnAccount": "Crea un dominio VFX como alias de la dirección de tu cuenta para recibir fondos.",
+  "@adnrCreateVfxOnAccount": {
+    "description": "Marketing copy on the web ADNR VFX section."
+  },
+  "adnrTransferDomainTitle": "Transferir dominio VFX",
+  "@adnrTransferDomainTitle": {
+    "description": "Prompt title for transferring a VFX domain."
+  },
+  "adnrTransferDomainBody": "Transferir un dominio VFX cuesta {cost} VFX.",
+  "@adnrTransferDomainBody": {
+    "description": "Prompt body for transferring a VFX domain.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrAddressFieldLabel": "Dirección",
+  "@adnrAddressFieldLabel": {
+    "description": "Field label for the destination VFX address in the transfer prompt."
+  },
+  "adnrInsufficientFundsTransfer": "No hay suficiente VFX en esta cuenta para crear una transacción.",
+  "@adnrInsufficientFundsTransfer": {
+    "description": "Toast when the account does not have enough VFX to broadcast a domain transfer."
+  },
+  "adnrInsufficientFundsCreateBtc": "No hay suficiente VFX en tu cuenta para crear un dominio BTC. Se requieren {cost} VFX (más la comisión de TX).",
+  "@adnrInsufficientFundsCreateBtc": {
+    "description": "Toast when the account does not have enough VFX to create a BTC domain.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrInsufficientFundsCreateVfx": "No hay suficiente VFX en esta cuenta para crear un dominio VFX. Se requieren {cost} VFX (más la comisión de TX).",
+  "@adnrInsufficientFundsCreateVfx": {
+    "description": "Toast when the account does not have enough VFX to create a VFX domain.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrInsufficientFundsCreateInWallet": "No hay suficiente VFX en esta billetera para transferir un dominio VFX. Se requieren {cost} VFX (más la comisión de TX).",
+  "@adnrInsufficientFundsCreateInWallet": {
+    "description": "Toast when the wallet does not have enough VFX to transfer a VFX domain.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrInsufficientFundsDeleteInWallet": "No hay suficiente VFX en esta billetera para eliminar un dominio VFX.",
+  "@adnrInsufficientFundsDeleteInWallet": {
+    "description": "Toast when the wallet does not have enough VFX to delete a VFX domain."
+  },
+  "adnrTxBroadcastedToast": "Transacción de dominio VFX transmitida. Revisa el registro para ver el hash.",
+  "@adnrTxBroadcastedToast": {
+    "description": "Toast confirming a VFX domain transaction was broadcast."
+  },
+  "adnrBtcTxBroadcastedToast": "Transacción de dominio BTC transmitida. Revisa el registro para ver el hash.",
+  "@adnrBtcTxBroadcastedToast": {
+    "description": "Toast confirming a BTC domain transaction was broadcast."
+  },
+  "adnrTransferTxBroadcastedToast": "Transacción de transferencia de dominio VFX transmitida. Revisa los registros para el hash de tx",
+  "@adnrTransferTxBroadcastedToast": {
+    "description": "Toast confirming a VFX domain transfer was broadcast."
+  },
+  "adnrDeleteTxBroadcastedToast": "Transacción de eliminación de dominio VFX transmitida. Revisa los registros para el hash de tx",
+  "@adnrDeleteTxBroadcastedToast": {
+    "description": "Toast confirming a VFX domain delete was broadcast."
+  },
+  "adnrDeleteTitle": "¿Eliminar dominio VFX?",
+  "@adnrDeleteTitle": {
+    "description": "Confirm dialog title for deleting a VFX domain."
+  },
+  "adnrFundAccountTitle": "Financiar cuenta",
+  "@adnrFundAccountTitle": {
+    "description": "Title of the fund-account dialog used in the ADNR card."
+  },
+  "adnrFundCopyAddress": "Copiar dirección",
+  "@adnrFundCopyAddress": {
+    "description": "Button to copy the address shown in the fund-account dialog."
+  },
+  "adnrAddressCopiedToast": "Dirección copiada al portapapeles.",
+  "@adnrAddressCopiedToast": {
+    "description": "Toast confirming the address was copied (with trailing period; matches existing copy in this dialog)."
+  },
+  "adnrFundsSentTitle": "Fondos enviados",
+  "@adnrFundsSentTitle": {
+    "description": "Info dialog title shown after auto-sending funds to enable a domain creation."
+  },
+  "adnrFundsSentBody": "Se enviaron {amount} VFX a {address}.\n\nEspera a que la transacción se refleje y luego podrás obtener tu dominio.",
+  "@adnrFundsSentBody": {
+    "description": "Info dialog body shown after auto-sending funds to enable a domain creation.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrCreateDialogTitleVfx": "Nuevo dominio VFX",
+  "@adnrCreateDialogTitleVfx": {
+    "description": "Title for the create-VFX-domain dialog."
+  },
+  "adnrCreateDialogTitleBtc": "Nuevo dominio BTC",
+  "@adnrCreateDialogTitleBtc": {
+    "description": "Title for the create-BTC-domain dialog."
+  },
+  "adnrCreateDialogCostVfx": "Los dominios VFX cuestan {cost} VFX.",
+  "@adnrCreateDialogCostVfx": {
+    "description": "Cost line in the create-domain dialog (VFX).",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrCreateDialogCostBtc": "Los dominios BTC cuestan {cost} VFX.",
+  "@adnrCreateDialogCostBtc": {
+    "description": "Cost line in the create-domain dialog (BTC).",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrCreateDialogSuffixHelpVfx": "Tu dominio solo debe contener letras y números, y se le agregará automáticamente \".vfx\" al verificarse",
+  "@adnrCreateDialogSuffixHelpVfx": {
+    "description": "Helper line under the input describing automatic .vfx suffix."
+  },
+  "adnrCreateDialogSuffixHelpBtc": "Tu dominio solo debe contener letras y números, y se le agregará automáticamente \".btc\" al verificarse",
+  "@adnrCreateDialogSuffixHelpBtc": {
+    "description": "Helper line under the input describing automatic .btc suffix."
+  },
+  "adnrDomainNameLabel": "Nombre del dominio",
+  "@adnrDomainNameLabel": {
+    "description": "Field label for the domain-name input."
+  },
+  "adnrCreateButton": "Crear",
+  "@adnrCreateButton": {
+    "description": "Confirm button label in the create-domain dialog."
+  },
+  "adnrFaucetRequiredTitle": "Se requieren {cost} VFX",
+  "@adnrFaucetRequiredTitle": {
+    "description": "Title of the faucet-required dialog when creating a BTC domain.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrFaucetRequiredBody": "Crear un dominio BTC tiene un costo de {cost} VFX (más la comisión de TX).\n\nLa comunidad ha asignado algo de VFX para reducir la barrera de entrada y probar esta función. Para evitar abusos, se requiere un número de teléfono para una autorización por SMS. Solo se almacenará un hash de tu número de teléfono.\n\n¿Quieres continuar?",
+  "@adnrFaucetRequiredBody": {
+    "description": "Body of the faucet-required dialog. Preserves original typo 'Woud' to match existing copy.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrFaucetContinue": "Continuar",
+  "@adnrFaucetContinue": {
+    "description": "Confirm button on the faucet-required dialog."
+  },
+  "adnrFaucetNoThanks": "No, gracias",
+  "@adnrFaucetNoThanks": {
+    "description": "Cancel button on the faucet-required dialog."
+  },
+  "adnrFaucetTitle": "Faucet de VFX",
+  "@adnrFaucetTitle": {
+    "description": "Title of the faucet form modal opened from the create-domain dialog."
+  },
+  "adnrFaucetWaitToast": "Espera a que llegue tu saldo antes de continuar.",
+  "@adnrFaucetWaitToast": {
+    "description": "Toast shown after a faucet request, asking the user to wait for funds."
+  },
+  "adnrMaxLengthToast": "El máximo de caracteres del dominio es 65",
+  "@adnrMaxLengthToast": {
+    "description": "Toast shown when the entered domain name exceeds the maximum length."
+  },
+  "adnrAlreadyExistsToast": "Este dominio {currency} ya existe",
+  "@adnrAlreadyExistsToast": {
+    "description": "Toast shown when the entered domain is already registered.",
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrNoBtcAddress": "No se encontró dirección BTC",
+  "@adnrNoBtcAddress": {
+    "description": "Toast shown when no BTC address is available during BTC domain creation."
+  },
+  "adnrNoBtcWif": "No se encontró clave privada WIF de BTC",
+  "@adnrNoBtcWif": {
+    "description": "Toast shown when no BTC WIF key is available during BTC domain creation."
+  },
+  "adnrNoAccountToast": "Sin cuenta",
+  "@adnrNoAccountToast": {
+    "description": "Toast shown when no VFX account is available during a domain action."
+  },
+  "adnrLogTransferEntry": "Transacción de transferencia de dominio VFX transmitida. Hash de TX: {hash}",
+  "@adnrLogTransferEntry": {
+    "description": "Log entry written when a VFX domain transfer is broadcast.",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrLogDeleteEntry": "Transacción de eliminación de dominio VFX transmitida. Hash de TX: {hash}",
+  "@adnrLogDeleteEntry": {
+    "description": "Log entry written when a VFX domain delete is broadcast.",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "adnrLogCreateEntry": "Transacción de creación de ADNR transmitida. Hash de TX: {hash}",
+  "@adnrLogCreateEntry": {
+    "description": "Log entry written when an ADNR create is broadcast.",
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "nftListTitle": "NFTs",
+  "@nftListTitle": {
+    "description": "App bar title for the NFTs list screen."
+  },
+  "nftImportLabel": "Importar NFT",
+  "@nftImportLabel": {
+    "description": "Button to import an NFT by smart-contract identifier."
+  },
+  "nftImportPromptTitle": "Identificador del contrato inteligente",
+  "@nftImportPromptTitle": {
+    "description": "Prompt title for entering a smart-contract identifier."
+  },
+  "nftImportPromptBody": "Pega el identificador único del contrato inteligente.",
+  "@nftImportPromptBody": {
+    "description": "Prompt body for entering a smart-contract identifier."
+  },
+  "nftImportFieldLabel": "Identificador",
+  "@nftImportFieldLabel": {
+    "description": "Field label for the smart-contract-identifier input."
+  },
+  "nftImportedToast": "Contrato inteligente importado de la red",
+  "@nftImportedToast": {
+    "description": "Toast confirming a smart contract was imported from the network."
+  },
+  "nftTabMyNfts": "Mis NFTs",
+  "@nftTabMyNfts": {
+    "description": "Tab label for the user's NFTs list."
+  },
+  "nftTabManageMinted": "Administrar NFTs emitidos",
+  "@nftTabManageMinted": {
+    "description": "Tab label for managing minted NFTs."
+  },
+  "nftBadgeTransferred": "Transferido",
+  "@nftBadgeTransferred": {
+    "description": "Badge shown on an NFT card when the NFT has been transferred away."
+  },
+  "nftBadgeListed": "Listado",
+  "@nftBadgeListed": {
+    "description": "Badge shown on an NFT card when the NFT is listed for sale."
+  },
+  "nftSaleInProgress": "Venta en curso...",
+  "@nftSaleInProgress": {
+    "description": "Overlay text shown over an NFT being sold."
+  },
+  "nftBurnedOverlay": "Quemado",
+  "@nftBurnedOverlay": {
+    "description": "Overlay text shown over a burned NFT."
+  },
+  "nftLockedBadge": "NFT bloqueado",
+  "@nftLockedBadge": {
+    "description": "Badge shown on a locked NFT."
+  },
+  "nftTransferringDefault": "Transfiriendo...",
+  "@nftTransferringDefault": {
+    "description": "Default label used by the TransferingOverlay widget."
+  },
+  "nftMediaUploadProgress": "Progreso de carga de contenido",
+  "@nftMediaUploadProgress": {
+    "description": "Title of the media-upload-progress modal."
+  },
+  "nftCopyUrl": "Copiar URL",
+  "@nftCopyUrl": {
+    "description": "Button to copy a media-backup URL."
+  },
+  "nftUrlCopiedToast": "URL copiada al portapapeles",
+  "@nftUrlCopiedToast": {
+    "description": "Toast confirming a URL was copied to the clipboard."
+  },
+  "nftQrSave": "Guardar",
+  "@nftQrSave": {
+    "description": "Button to save the QR code image."
+  },
+  "nftQrOpen": "Abrir",
+  "@nftQrOpen": {
+    "description": "Button to open the QR code's link in a browser."
+  },
+  "nftLearnMoreCancel": "Cancelar",
+  "@nftLearnMoreCancel": {
+    "description": "Cancel button in the learn-more-content modal."
+  },
+  "nftLearnMoreCreate": "Crear",
+  "@nftLearnMoreCreate": {
+    "description": "Create button in the learn-more-content modal."
+  },
+  "nftDetailFallback": "NFT",
+  "@nftDetailFallback": {
+    "description": "App bar title fallback for the NFT detail screen when no NFT is loaded yet."
+  },
+  "nftMinterAddressLabel": "Dirección del emisor",
+  "@nftMinterAddressLabel": {
+    "description": "Field label for the minter address row on the NFT detail screen."
+  },
+  "nftPropertiesHeading": "Propiedades:",
+  "@nftPropertiesHeading": {
+    "description": "Section heading for NFT properties."
+  },
+  "nftFeaturesHeading": "Características:",
+  "@nftFeaturesHeading": {
+    "description": "Section heading for NFT features."
+  },
+  "nftRevealEvolveStages": "Revelar etapas de evolución",
+  "@nftRevealEvolveStages": {
+    "description": "Button to reveal the evolve stages of an NFT."
+  },
+  "nftProveOwnership": "Probar propiedad",
+  "@nftProveOwnership": {
+    "description": "Button to prove ownership of an NFT."
+  },
+  "nftTransfer": "Transferir",
+  "@nftTransfer": {
+    "description": "Generic Transfer button label on NFT detail."
+  },
+  "nftSell": "Vender",
+  "@nftSell": {
+    "description": "Button to start selling an NFT."
+  },
+  "nftActivatingSoonToast": "¡Próximamente!",
+  "@nftActivatingSoonToast": {
+    "description": "Toast shown when an action is coming soon."
+  },
+  "nftNoAccountSelectedToast": "No se seleccionó ninguna cuenta",
+  "@nftNoAccountSelectedToast": {
+    "description": "Toast shown when no account is selected."
+  },
+  "nftVaultCannotSellToast": "Las cuentas de bóveda no pueden vender NFTs.",
+  "@nftVaultCannotSellToast": {
+    "description": "Toast shown when a vault account attempts to sell an NFT."
+  },
+  "nftNotEnoughBalanceToast": "Saldo insuficiente para la transacción",
+  "@nftNotEnoughBalanceToast": {
+    "description": "Toast shown when the account has insufficient balance for an NFT transaction."
+  },
+  "nftMediaNotFoundToast": "No se encontraron los archivos de contenido en este equipo.",
+  "@nftMediaNotFoundToast": {
+    "description": "Toast shown when local NFT media files cannot be found."
+  },
+  "nftSellTitle": "Vender NFT",
+  "@nftSellTitle": {
+    "description": "Prompt title for the sell-NFT flow."
+  },
+  "nftSellAddressLabel": "Dirección VFX",
+  "@nftSellAddressLabel": {
+    "description": "Field label for the buyer's VFX address."
+  },
+  "nftInvalidAddressToast": "Dirección inválida",
+  "@nftInvalidAddressToast": {
+    "description": "Toast shown when an invalid VFX address is entered."
+  },
+  "nftSellAmountTitle": "Monto de venta",
+  "@nftSellAmountTitle": {
+    "description": "Prompt title for the sale amount."
+  },
+  "nftSellAmountLabel": "Monto VFX)",
+  "@nftSellAmountLabel": {
+    "description": "Field label for the sale amount (preserves stray closing parenthesis from existing copy)."
+  },
+  "nftSellInvalidAmountToast": "Monto inválido",
+  "@nftSellInvalidAmountToast": {
+    "description": "Toast shown when the sale amount is invalid."
+  },
+  "nftBackupUrlTitle": "URL de respaldo (opcional)",
+  "@nftBackupUrlTitle": {
+    "description": "Prompt title for the optional backup URL."
+  },
+  "nftBackupUrlLabel": "URL (opcional)",
+  "@nftBackupUrlLabel": {
+    "description": "Field label for the optional backup URL."
+  },
+  "nftConfirmSaleStartTitle": "Confirmar inicio de venta",
+  "@nftConfirmSaleStartTitle": {
+    "description": "Confirm dialog title before starting an NFT sale."
+  },
+  "nftManage": "Administrar",
+  "@nftManage": {
+    "description": "Manage button on the NFT detail screen."
+  },
+  "nftViewCode": "Ver código",
+  "@nftViewCode": {
+    "description": "Button to view the smart-contract code for an NFT."
+  },
+  "nftSyncMedia": "Sincronizar contenido",
+  "@nftSyncMedia": {
+    "description": "Button to sync remote NFT media."
+  },
+  "nftBurn": "Quemar",
+  "@nftBurn": {
+    "description": "Button to burn an NFT."
+  },
+  "nftBurnTitle": "¿Quemar NFT?",
+  "@nftBurnTitle": {
+    "description": "Confirm dialog title before burning an NFT."
+  },
+  "nftTransferNow": "Transferir ahora",
+  "@nftTransferNow": {
+    "description": "Button to broadcast a web NFT transfer-now."
+  },
+  "nftDecrypt": "Descifrar",
+  "@nftDecrypt": {
+    "description": "Button to decrypt encrypted NFT data."
+  },
+  "nftDecrypted": "Descifrado",
+  "@nftDecrypted": {
+    "description": "Status text shown when NFT data is decrypted."
+  },
+  "nftMediaBackupUrl": "URL de respaldo de contenido",
+  "@nftMediaBackupUrl": {
+    "description": "Inline label for the media backup URL on the NFT detail screen."
+  },
+  "nftEvolveTitle": "¿Evolucionar?",
+  "@nftEvolveTitle": {
+    "description": "Confirm dialog title before evolving an NFT."
+  },
+  "nftDevolveTitle": "¿Devolucionar?",
+  "@nftDevolveTitle": {
+    "description": "Confirm dialog title before devolving an NFT."
+  },
+  "nftEvolveSentToast": "¡Transacción de evolución enviada exitosamente!",
+  "@nftEvolveSentToast": {
+    "description": "Toast confirming an evolve transaction was broadcast."
+  },
+  "nftDevolveSentToast": "¡Transacción de devolución enviada exitosamente!",
+  "@nftDevolveSentToast": {
+    "description": "Toast confirming a devolve transaction was broadcast."
+  },
+  "nftEvolveSentTitle": "Transacción de evolución enviada exitosamente",
+  "@nftEvolveSentTitle": {
+    "description": "Info dialog title shown after an evolve transaction is broadcast."
+  },
+  "nftClose": "Cerrar",
+  "@nftClose": {
+    "description": "Close button used on the NFT-management modal."
+  },
+  "nftViewLabel": "Ver NFT",
+  "@nftViewLabel": {
+    "description": "Button to view the NFT detail."
+  },
+  "nftOwnedByMe": "De mi propiedad",
+  "@nftOwnedByMe": {
+    "description": "Badge shown on the NFT-management modal when the user owns the NFT."
+  },
+  "nftAssociate": "Asociar",
+  "@nftAssociate": {
+    "description": "Button to associate a media file with an evolve phase."
+  },
+  "nftOpenFile": "Abrir archivo",
+  "@nftOpenFile": {
+    "description": "Button to open the associated media file."
+  },
+  "nftPhaseNameLabel": "Nombre: {name}",
+  "@nftPhaseNameLabel": {
+    "description": "Phase name label inside the NFT management modal.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "nftEvolve": "Evolucionar",
+  "@nftEvolve": {
+    "description": "Button to evolve an NFT phase."
+  },
+  "scTitle": "Contratos inteligentes",
+  "@scTitle": {
+    "description": "App bar title for the Smart Contracts screen."
+  },
+  "scMyTitle": "Mis contratos inteligentes",
+  "@scMyTitle": {
+    "description": "App bar title for the My Smart Contracts screen."
+  },
+  "scTemplatesTitle": "Plantillas de contratos inteligentes",
+  "@scTemplatesTitle": {
+    "description": "App bar title for the templates chooser."
+  },
+  "scTabCompiled": "Compilados",
+  "@scTabCompiled": {
+    "description": "Tab label for compiled smart contracts."
+  },
+  "scTabDrafts": "Borradores",
+  "@scTabDrafts": {
+    "description": "Tab label for smart-contract drafts."
+  },
+  "scNoDrafts": "No se encontraron borradores de contratos inteligentes",
+  "@scNoDrafts": {
+    "description": "Empty-state for the smart-contract drafts list."
+  },
+  "scNoCompiled": "No se encontraron contratos inteligentes",
+  "@scNoCompiled": {
+    "description": "Empty-state for the compiled-smart-contracts list."
+  },
+  "scCreateAndMintTitle": "Crear un contrato inteligente y emitir",
+  "@scCreateAndMintTitle": {
+    "description": "Big-button title to start creating and minting a smart contract."
+  },
+  "scCreateAndMintBody": "Comienza con un contrato inteligente base y agrega características personalizadas",
+  "@scCreateAndMintBody": {
+    "description": "Big-button body for the create-and-mint action."
+  },
+  "scMintCollectionTitle": "Emitir colección de NFTs",
+  "@scMintCollectionTitle": {
+    "description": "Big-button title to mint an NFT collection."
+  },
+  "scMintCollectionBody": "Emite varios contratos inteligentes en una colección",
+  "@scMintCollectionBody": {
+    "description": "Big-button body for the mint-collection action."
+  },
+  "scLaunchIdeTitle": "Abrir IDE",
+  "@scLaunchIdeTitle": {
+    "description": "Big-button title to launch the Trillium IDE."
+  },
+  "scLaunchIdeBody": "Abre el IDE en línea para escribir tu propio código Trillium para tu contrato inteligente",
+  "@scLaunchIdeBody": {
+    "description": "Big-button body for the launch-IDE action."
+  },
+  "scChooseVfxToast": "Elige una cuenta VFX para comenzar a crear un contrato inteligente.",
+  "@scChooseVfxToast": {
+    "description": "Toast shown when a BTC account is selected when starting to create a contract."
+  },
+  "scVaultCannotMintToast": "Las cuentas de bóveda no pueden emitir contratos inteligentes",
+  "@scVaultCannotMintToast": {
+    "description": "Toast shown when a vault account attempts to mint a smart contract."
+  },
+  "scTemplatesHeading": "Elige un contrato inteligente y agrega características",
+  "@scTemplatesHeading": {
+    "description": "Heading on the smart-contract templates chooser."
+  },
+  "scCreateButton": "Crear",
+  "@scCreateButton": {
+    "description": "Create button on a template card."
+  },
+  "scLearnMore": "Más información",
+  "@scLearnMore": {
+    "description": "Button to open the learn-more modal for a template."
+  },
+  "tokenListTitle": "Tokens fungibles",
+  "@tokenListTitle": {
+    "description": "App bar title for the fungible tokens list."
+  },
+  "tokenCreateNew": "Crear token nuevo",
+  "@tokenCreateNew": {
+    "description": "Button to create a new fungible token."
+  },
+  "tokenCreateTitle": "Crear token fungible",
+  "@tokenCreateTitle": {
+    "description": "App bar title for the create-token screen."
+  },
+  "tokenTopicCreateTitle": "Crear tema del token",
+  "@tokenTopicCreateTitle": {
+    "description": "App bar title for the token topic creation screen."
+  },
+  "tokenNotSupportedByVault": "No compatible con cuenta de bóveda",
+  "@tokenNotSupportedByVault": {
+    "description": "Title shown when a token operation is not supported on a vault account."
+  },
+  "tokenProveOwnership": "Probar propiedad",
+  "@tokenProveOwnership": {
+    "description": "Button to prove ownership of a fungible token."
+  },
+  "tokenVoting": "Votación",
+  "@tokenVoting": {
+    "description": "Button/section header for the voting feature on a token."
+  },
+  "tokenViewTopics": "Ver temas",
+  "@tokenViewTopics": {
+    "description": "List option to view existing voting topics."
+  },
+  "tokenNoTopicsTitle": "Sin temas",
+  "@tokenNoTopicsTitle": {
+    "description": "Info dialog title when a token has no voting topics."
+  },
+  "tokenNoTopicsBody": "Este token aún no tiene temas de votación.",
+  "@tokenNoTopicsBody": {
+    "description": "Info dialog body when a token has no voting topics. Apostrophe escaped per ICU."
+  },
+  "tokenListBans": "Listar bloqueos",
+  "@tokenListBans": {
+    "description": "Button to list banned addresses on a token."
+  },
+  "tokenBannedAddressesTitle": "Direcciones bloqueadas",
+  "@tokenBannedAddressesTitle": {
+    "description": "Info dialog title showing banned token addresses."
+  },
+  "tokenScUidLabel": "UID del contrato inteligente",
+  "@tokenScUidLabel": {
+    "description": "Field label for the smart contract UID in token management."
+  },
+  "tokenNameLabel": "Nombre del token",
+  "@tokenNameLabel": {
+    "description": "Field label for a token's name."
+  },
+  "tokenLifetimeCapLabel": "Suministro histórico",
+  "@tokenLifetimeCapLabel": {
+    "description": "Field label for a token's lifetime supply cap."
+  },
+  "tokenMintableLabel": "Emitible",
+  "@tokenMintableLabel": {
+    "description": "Field label indicating whether the token is mintable."
+  },
+  "tokenOwnerLabel": "Propietario",
+  "@tokenOwnerLabel": {
+    "description": "Field label for the token owner."
+  },
+  "tokenTickerLabel": "Ticker del token",
+  "@tokenTickerLabel": {
+    "description": "Field label for the token ticker."
+  },
+  "tokenCirculatingSupplyLabel": "Suministro circulante",
+  "@tokenCirculatingSupplyLabel": {
+    "description": "Field label for the token's circulating supply."
+  },
+  "tokenBurnedLabel": "Quemado",
+  "@tokenBurnedLabel": {
+    "description": "Field label for the burned token amount."
+  },
+  "tokenBurnableLabel": "Quemable",
+  "@tokenBurnableLabel": {
+    "description": "Field label indicating whether the token can be burned."
+  },
+  "tokenTopicCreatedLabel": "Tema creado",
+  "@tokenTopicCreatedLabel": {
+    "description": "Field label showing when a voting topic was created."
+  },
+  "tokenVotingEndsLabel": "Finaliza la votación",
+  "@tokenVotingEndsLabel": {
+    "description": "Field label showing when voting on a topic ends."
+  },
+  "tokenVoteYes": "Votar sí",
+  "@tokenVoteYes": {
+    "description": "Button to vote yes on a token topic."
+  },
+  "tokenVoteNo": "Votar no",
+  "@tokenVoteNo": {
+    "description": "Button to vote no on a token topic."
+  },
+  "tokenConfirmVoteYes": "Confirmar voto [SÍ]",
+  "@tokenConfirmVoteYes": {
+    "description": "Confirm dialog title before casting a YES vote."
+  },
+  "tokenConfirmVoteNo": "Confirmar voto [NO]",
+  "@tokenConfirmVoteNo": {
+    "description": "Confirm dialog title before casting a NO vote."
+  },
+  "tokenNoOwnerToast": "No se pudo obtener el propietario del token",
+  "@tokenNoOwnerToast": {
+    "description": "Toast shown when the token's owner could not be determined."
+  },
+  "tokenVoteCastedToast": "Voto registrado",
+  "@tokenVoteCastedToast": {
+    "description": "Toast confirming a vote was cast."
+  },
+  "tokenVoteHistory": "Historial de votos",
+  "@tokenVoteHistory": {
+    "description": "Button to open the voting history view."
+  },
+  "tokenNoVotesToast": "Sin votos",
+  "@tokenNoVotesToast": {
+    "description": "Toast shown when there are no votes to display."
+  },
+  "tokenVoteBlockSubtitle": "Bloque {height}",
+  "@tokenVoteBlockSubtitle": {
+    "description": "Subtitle showing the block height for a vote.",
+    "placeholders": {
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "tokenBanAddress": "Bloquear dirección",
+  "@tokenBanAddress": {
+    "description": "Button to ban an address from holding a token."
+  },
+  "tokenBanAddressTitle": "Dirección a bloquear",
+  "@tokenBanAddressTitle": {
+    "description": "Prompt title when banning a token address."
+  },
+  "tokenAddressFieldLabel": "Dirección",
+  "@tokenAddressFieldLabel": {
+    "description": "Generic Address field label used in token flows."
+  },
+  "tokenBanBroadcastedToast": "Transacción de bloqueo de dirección transmitida",
+  "@tokenBanBroadcastedToast": {
+    "description": "Toast confirming a ban transaction was broadcast."
+  },
+  "tokenBurn": "Quemar",
+  "@tokenBurn": {
+    "description": "Button to burn tokens."
+  },
+  "tokenNotBurnableToast": "Este token no se puede quemar",
+  "@tokenNotBurnableToast": {
+    "description": "Toast shown when burning is attempted on a non-burnable token."
+  },
+  "tokenAmountToBurnTitle": "Monto a quemar",
+  "@tokenAmountToBurnTitle": {
+    "description": "Prompt title for the burn amount."
+  },
+  "tokenAmountLabel": "Monto",
+  "@tokenAmountLabel": {
+    "description": "Generic Amount field label used in token flows."
+  },
+  "tokenInvalidAmountToast": "Monto inválido",
+  "@tokenInvalidAmountToast": {
+    "description": "Toast shown when the entered token amount is invalid."
+  },
+  "tokenInsufficientBalanceToast": "Saldo insuficiente para realizar esta transacción",
+  "@tokenInsufficientBalanceToast": {
+    "description": "Toast shown when balance is insufficient for a token transaction."
+  },
+  "tokenBurnBroadcastedToast": "Transacción de quema de tokens transmitida",
+  "@tokenBurnBroadcastedToast": {
+    "description": "Toast confirming a token burn was broadcast."
+  },
+  "tokenChangeOwnership": "Cambiar propiedad",
+  "@tokenChangeOwnership": {
+    "description": "Button to change token ownership."
+  },
+  "tokenTransferToAddressTitle": "Transferir a dirección",
+  "@tokenTransferToAddressTitle": {
+    "description": "Prompt title for the destination address when changing token ownership."
+  },
+  "tokenToAddressLabel": "Dirección destino",
+  "@tokenToAddressLabel": {
+    "description": "Field label for the destination address in token transfers."
+  },
+  "tokenOwnershipBroadcastedToast": "Transacción de cambio de propiedad transmitida",
+  "@tokenOwnershipBroadcastedToast": {
+    "description": "Toast confirming an ownership change was broadcast."
+  },
+  "tokenCreateButton": "Crear token",
+  "@tokenCreateButton": {
+    "description": "Button to start creating a fungible token."
+  },
+  "tokenSearchHint": "Buscar...",
+  "@tokenSearchHint": {
+    "description": "Hint inside the manage-tokens search field."
+  },
+  "tokenPrevPage": "Anterior",
+  "@tokenPrevPage": {
+    "description": "Pagination button: previous page."
+  },
+  "tokenNextPage": "Siguiente",
+  "@tokenNextPage": {
+    "description": "Pagination button: next page."
+  },
+  "tokenMintTokens": "Emitir tokens",
+  "@tokenMintTokens": {
+    "description": "Button to mint additional tokens."
+  },
+  "tokenAmountToMintTitle": "Monto a emitir",
+  "@tokenAmountToMintTitle": {
+    "description": "Prompt title for the mint amount."
+  },
+  "tokenMintBroadcastedToast": "Transacción de emisión de tokens transmitida",
+  "@tokenMintBroadcastedToast": {
+    "description": "Toast confirming a mint transaction was broadcast."
+  },
+  "tokenStateChangePendingToast": "El cambio de estado del token está pendiente. Espera",
+  "@tokenStateChangePendingToast": {
+    "description": "Toast shown when a token pause/state change is pending."
+  },
+  "tokenAddressCopiedToast": "Dirección copiada al portapapeles ({address})",
+  "@tokenAddressCopiedToast": {
+    "description": "Toast confirming an address was copied to the clipboard.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "tokenFormNameHint": "MyToken",
+  "@tokenFormNameHint": {
+    "description": "Hint shown in the token name field."
+  },
+  "tokenFormTickerHint": "ABC",
+  "@tokenFormTickerHint": {
+    "description": "Hint shown in the token ticker field."
+  },
+  "tokenFormCreate": "Crear",
+  "@tokenFormCreate": {
+    "description": "Confirm button label in the token create form."
+  },
+  "tokenFormCancel": "Cancelar",
+  "@tokenFormCancel": {
+    "description": "Cancel button label in the token create form."
+  },
+  "tokenFormNoAccountSelectedToast": "No se seleccionó ninguna cuenta",
+  "@tokenFormNoAccountSelectedToast": {
+    "description": "Toast shown when no account is selected during token creation."
+  },
+  "tokenFormIconRequiredToast": "Se requiere imagen del ícono",
+  "@tokenFormIconRequiredToast": {
+    "description": "Toast shown when no icon image was selected during token creation."
+  },
+  "tokenFormCompileMintTitle": "¿Compilar y emitir contrato inteligente del token?",
+  "@tokenFormCompileMintTitle": {
+    "description": "Confirm dialog title before compiling and minting a token contract."
+  },
+  "tokenFormConfirmAddressTitle": "Confirmar dirección",
+  "@tokenFormConfirmAddressTitle": {
+    "description": "Confirm dialog title shown to verify the deploy address."
+  },
+  "tokenFormStandByTitle": "Espera un momento",
+  "@tokenFormStandByTitle": {
+    "description": "Title shown while a token transaction is being processed."
+  },
+  "tokenTransfer": "Transferir",
+  "@tokenTransfer": {
+    "description": "Button to transfer tokens."
+  },
+  "tokenAmountToTransferTitle": "Monto a transferir",
+  "@tokenAmountToTransferTitle": {
+    "description": "Prompt title for the transfer amount."
+  },
+  "tokenTransferBroadcastedToast": "Transacción de transferencia de tokens transmitida",
+  "@tokenTransferBroadcastedToast": {
+    "description": "Toast confirming a token transfer was broadcast."
+  },
+  "tokenTransferTo": "Transferir a",
+  "@tokenTransferTo": {
+    "description": "Prompt title for entering a destination address."
+  },
+  "tokenWebInsufficient": "El saldo de {ticker} de esta dirección ({address}) es insuficiente.",
+  "@tokenWebInsufficient": {
+    "description": "Toast shown when the web account does not have enough tokens to perform an action. Apostrophe escaped per ICU.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      },
+      "ticker": {
+        "type": "String"
+      }
+    }
+  },
+  "tokenCreateNewVotingTopic": "Crear nuevo tema de votación",
+  "@tokenCreateNewVotingTopic": {
+    "description": "Modal title for creating a new voting topic."
+  },
+  "tokenCreateNewVotingTopicBody": "Como propietario del token, puedes crear temas para que otros holders voten.",
+  "@tokenCreateNewVotingTopicBody": {
+    "description": "Modal body text for the create-voting-topic option."
+  },
+  "tokenListBansWithCount": "Listar bloqueos ({count})",
+  "@tokenListBansWithCount": {
+    "description": "Button to list banned addresses, showing the count.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dstAuctionsTitle": "Subastas P2P",
+  "@dstAuctionsTitle": {
+    "description": "App bar title for the P2P auctions / dst landing screen."
+  },
+  "dstConnectToAuctionHouse": "Conectar a casa de subastas",
+  "@dstConnectToAuctionHouse": {
+    "description": "Big-button title to connect to a remote auction house."
+  },
+  "dstConnectToAuctionHouseBody": "Conéctate a una casa de subastas remota para intercambiar NFTs.",
+  "@dstConnectToAuctionHouseBody": {
+    "description": "Big-button body text for connecting to an auction house."
+  },
+  "dstManageMyAuctionHouse": "Administrar mi casa de subastas",
+  "@dstManageMyAuctionHouse": {
+    "description": "Big-button title to manage the user's own auction house."
+  },
+  "dstManageMyAuctionHouseBody": "Administra la casa de subastas de tu cuenta e intercambia NFTs.",
+  "@dstManageMyAuctionHouseBody": {
+    "description": "Big-button body for the manage-my-auction-house action. Apostrophe escaped per ICU."
+  },
+  "dstManageMyAuctionHouseBodyWeb": "Administra la casa de subastas de tu billetera e intercambia NFTs.",
+  "@dstManageMyAuctionHouseBodyWeb": {
+    "description": "Big-button body for the manage-my-auction-house action on the web wallet. Apostrophe escaped per ICU."
+  },
+  "dstMyAuctionHouseTitle": "Mi casa de subastas",
+  "@dstMyAuctionHouseTitle": {
+    "description": "App bar title for the user's auction house screen."
+  },
+  "dstEditDetails": "Editar detalles",
+  "@dstEditDetails": {
+    "description": "Button to edit auction-house details."
+  },
+  "dstDeleteShop": "Eliminar tienda",
+  "@dstDeleteShop": {
+    "description": "Button to delete an auction house."
+  },
+  "dstDeleteCollection": "Eliminar colección",
+  "@dstDeleteCollection": {
+    "description": "Confirm dialog title for deleting a collection."
+  },
+  "dstImportShop": "Importar tienda",
+  "@dstImportShop": {
+    "description": "Button to import an auction house by VFX address."
+  },
+  "dstImportShopAddressLabel": "Tu dirección VFX",
+  "@dstImportShopAddressLabel": {
+    "description": "Field label for the VFX address when importing an auction house."
+  },
+  "dstDiscardChanges": "Descartar cambios",
+  "@dstDiscardChanges": {
+    "description": "Button to discard unsaved changes."
+  },
+  "dstPublishUpdatesTitle": "¿Publicar actualizaciones?",
+  "@dstPublishUpdatesTitle": {
+    "description": "Confirm dialog title before publishing shop updates."
+  },
+  "dstCliRestartTitle": "Se requiere reiniciar el CLI",
+  "@dstCliRestartTitle": {
+    "description": "Confirm dialog title shown when the CLI must be restarted."
+  },
+  "dstAuctionActivity": "Actividad de la subasta",
+  "@dstAuctionActivity": {
+    "description": "Section heading for the auction activity tab."
+  },
+  "dstCompleted": "Completada",
+  "@dstCompleted": {
+    "description": "Status label for a completed auction."
+  },
+  "dstCloseShopEditConfirm": "¿Seguro que quieres cerrar la pantalla de {mode} de la tienda?",
+  "@dstCloseShopEditConfirm": {
+    "description": "Confirm-close dialog title for the shop create/edit container.",
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "dstCloseStoreEditConfirm": "¿Seguro que quieres cerrar la pantalla de {mode} de la tienda?",
+  "@dstCloseStoreEditConfirm": {
+    "description": "Confirm-close dialog title for the store create/edit container.",
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "dstCloseCollectionEditConfirm": "¿Seguro que quieres cerrar la pantalla de {mode} de la colección?",
+  "@dstCloseCollectionEditConfirm": {
+    "description": "Confirm-close dialog title for the collection create/edit container.",
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "dstCloseListingEditConfirm": "¿Seguro que quieres cerrar la pantalla de {mode} del listado?",
+  "@dstCloseListingEditConfirm": {
+    "description": "Confirm-close dialog title for the listing create/edit container.",
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "dstDiscardListingTitle": "¿Seguro que quieres descartar el listado?",
+  "@dstDiscardListingTitle": {
+    "description": "Confirm dialog title for discarding listing changes."
+  },
+  "dstModeEditing": "edición",
+  "@dstModeEditing": {
+    "description": "Inline word inserted into close-confirm titles when editing existing items."
+  },
+  "dstModeCreation": "creación",
+  "@dstModeCreation": {
+    "description": "Inline word inserted into close-confirm titles when creating new items."
+  },
+  "shopAuctionHousesTitle": "Casas de subastas",
+  "@shopAuctionHousesTitle": {
+    "description": "App bar title for the auction houses list."
+  },
+  "shopMyAuctionHousesTitle": "Mis casas de subastas",
+  "@shopMyAuctionHousesTitle": {
+    "description": "App bar title for the user's auction houses list."
+  },
+  "shopUrlPromptTitle": "URL de la tienda",
+  "@shopUrlPromptTitle": {
+    "description": "Prompt title for entering a shop URL."
+  },
+  "shopUrlRequired": "Se requiere la URL de la tienda",
+  "@shopUrlRequired": {
+    "description": "Validation message when no shop URL is entered."
+  },
+  "shopUrlLabel": "Ingresa solo el nombre de la tienda",
+  "@shopUrlLabel": {
+    "description": "Field label for the shop URL input."
+  },
+  "shopWalletNotSyncedTitle": "Billetera no sincronizada",
+  "@shopWalletNotSyncedTitle": {
+    "description": "Confirm dialog title shown when the wallet is not synced."
+  },
+  "shopWalletNotSyncedBody": "Como tu billetera no está sincronizada, puede haber problemas para ver los datos de esta tienda. ¿Continuar de todos modos?",
+  "@shopWalletNotSyncedBody": {
+    "description": "Confirm dialog body for the wallet-not-synced warning."
+  },
+  "shopConnectToShop": "Conectar a una tienda",
+  "@shopConnectToShop": {
+    "description": "Button to connect to a remote shop."
+  },
+  "shopShareShop": "Compartir tienda",
+  "@shopShareShop": {
+    "description": "Button to share a shop URL."
+  },
+  "shopShareCollection": "Compartir colección",
+  "@shopShareCollection": {
+    "description": "Button to share a collection URL."
+  },
+  "shopCreateListing": "Crear listado",
+  "@shopCreateListing": {
+    "description": "Button to create a new listing."
+  },
+  "shopCreateCollection": "Crear colección",
+  "@shopCreateCollection": {
+    "description": "Button to create a new collection."
+  },
+  "shopPublished": "Publicada",
+  "@shopPublished": {
+    "description": "Status label for a published shop."
+  },
+  "shopPublishShop": "Publicar tienda",
+  "@shopPublishShop": {
+    "description": "Button to publish a shop."
+  },
+  "shopPublishShopTitle": "¿Publicar tienda?",
+  "@shopPublishShopTitle": {
+    "description": "Confirm dialog title before publishing a shop."
+  },
+  "shopDeleteShopTitle": "¿Eliminar tienda?",
+  "@shopDeleteShopTitle": {
+    "description": "Confirm dialog title before deleting a shop."
+  },
+  "shopDeleteCollectionConfirm": "¿Seguro que quieres eliminar esta colección?",
+  "@shopDeleteCollectionConfirm": {
+    "description": "Confirm dialog body for deleting a collection."
+  },
+  "shopErrorTitle": "Error",
+  "@shopErrorTitle": {
+    "description": "Generic Error placeholder used in shop screens."
+  },
+  "shopLoading": "Cargando...",
+  "@shopLoading": {
+    "description": "Loading placeholder used in shop screens."
+  },
+  "shopNoActiveListings": "Sin listados activos",
+  "@shopNoActiveListings": {
+    "description": "Empty-state for the listings list."
+  },
+  "shopNoActiveCollections": "Sin colecciones activas",
+  "@shopNoActiveCollections": {
+    "description": "Empty-state for the collections list."
+  },
+  "shopSendSaleStartTx": "Enviar TX de inicio de venta",
+  "@shopSendSaleStartTx": {
+    "description": "App bar title for the build-sale-start-tx screen."
+  },
+  "shopSignIn": "Iniciar sesión",
+  "@shopSignIn": {
+    "description": "Button to sign in for the build-sale-start-tx screen."
+  },
+  "shopStartTransaction": "Iniciar transacción",
+  "@shopStartTransaction": {
+    "description": "Button to start a sale transaction."
+  },
+  "shopSearchAuctionHouseHint": "Busca casas de subastas...",
+  "@shopSearchAuctionHouseHint": {
+    "description": "Hint inside the auction-house search field."
+  },
+  "shopBidSent": "Enviada",
+  "@shopBidSent": {
+    "description": "Status label for a sent bid."
+  },
+  "shopBidReceived": "Recibida",
+  "@shopBidReceived": {
+    "description": "Status label for a received bid."
+  },
+  "shopBidPurchased": "Comprado",
+  "@shopBidPurchased": {
+    "description": "Status label for a purchased item."
+  },
+  "shopBidAccepted": "Aceptada",
+  "@shopBidAccepted": {
+    "description": "Status label for an accepted bid."
+  },
+  "shopBidRejected": "Rechazada",
+  "@shopBidRejected": {
+    "description": "Status label for a rejected bid."
+  },
+  "shopResendBid": "Reenviar oferta",
+  "@shopResendBid": {
+    "description": "Button to resend a previously sent bid."
+  },
+  "shopPriceLabel": "Precio",
+  "@shopPriceLabel": {
+    "description": "Label for the listing price column."
+  },
+  "shopBuyNow": "Comprar ahora",
+  "@shopBuyNow": {
+    "description": "Button to buy the listing immediately."
+  },
+  "shopFloorPriceLabel": "Precio mínimo",
+  "@shopFloorPriceLabel": {
+    "description": "Label for the floor-price column."
+  },
+  "shopHighestBidLabel": "Oferta más alta",
+  "@shopHighestBidLabel": {
+    "description": "Label for the highest-bid column."
+  },
+  "shopBidNow": "Ofertar ahora",
+  "@shopBidNow": {
+    "description": "Button to place a bid."
+  },
+  "shopDetailsLabel": "Detalles",
+  "@shopDetailsLabel": {
+    "description": "Button label to open auction-detail dialog."
+  },
+  "shopAuctionDetailsTitle": "Detalles de la subasta",
+  "@shopAuctionDetailsTitle": {
+    "description": "Dialog title for auction details."
+  },
+  "shopBidHistory": "Historial de ofertas",
+  "@shopBidHistory": {
+    "description": "Button to open the bid-history modal."
+  },
+  "paymentLinkTitle": "Enlace de pago",
+  "@paymentLinkTitle": {
+    "description": "App bar title for the Butterfly payment link screen."
+  },
+  "paymentLinkHistory": "Historial de enlaces de pago",
+  "@paymentLinkHistory": {
+    "description": "Section heading for past payment links."
+  },
+  "paymentLinkNoneYet": "Aún no hay enlaces de pago",
+  "@paymentLinkNoneYet": {
+    "description": "Empty-state for the payment links list."
+  },
+  "paymentLinkIntro": "Usa Butterfly para crear un enlace de pago, reclamable por cualquiera a quien le envíes el enlace.",
+  "@paymentLinkIntro": {
+    "description": "Helper text introducing Butterfly payment links."
+  },
+  "paymentAmountLabel": "Monto (VFX)",
+  "@paymentAmountLabel": {
+    "description": "Field label for the payment amount."
+  },
+  "paymentAmountHint": "Ingresa el monto",
+  "@paymentAmountHint": {
+    "description": "Hint inside the payment amount field."
+  },
+  "paymentMessageLabel": "Mensaje (opcional)",
+  "@paymentMessageLabel": {
+    "description": "Field label for the optional message attached to a payment link."
+  },
+  "paymentMessageHint": "¿Para qué es este pago?",
+  "@paymentMessageHint": {
+    "description": "Hint inside the optional message field. Apostrophe escaped per ICU."
+  },
+  "paymentCreateLinkLabel": "Crear enlace de pago",
+  "@paymentCreateLinkLabel": {
+    "description": "Button to create a payment link."
+  },
+  "paymentAmountRequired": "Se requiere el monto",
+  "@paymentAmountRequired": {
+    "description": "Validation message when amount is empty."
+  },
+  "paymentValidAmount": "Ingresa un monto válido",
+  "@paymentValidAmount": {
+    "description": "Validation message when amount is not a number."
+  },
+  "paymentInsufficientBalance": "Saldo insuficiente",
+  "@paymentInsufficientBalance": {
+    "description": "Validation message when amount exceeds the available balance."
+  },
+  "paymentMinimumAmount": "El monto mínimo es 0.0001 VFX",
+  "@paymentMinimumAmount": {
+    "description": "Validation message for the minimum payment amount."
+  },
+  "paymentAvailableLabel": "Disponible: {amount} VFX",
+  "@paymentAvailableLabel": {
+    "description": "Helper showing the available VFX balance.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "paymentPayWithCryptoCom": "Pagar con Crypto.com",
+  "@paymentPayWithCryptoCom": {
+    "description": "Button to pay using Crypto.com onramp."
+  },
+  "paymentPayWithCard": "Pagar con tarjeta de crédito",
+  "@paymentPayWithCard": {
+    "description": "Button to pay using a credit card onramp."
+  },
+  "paymentCancel": "Cancelar",
+  "@paymentCancel": {
+    "description": "Cancel button label inside the on-ramp initializer."
+  },
+  "navMenuDashboard": "Panel",
+  "@navMenuDashboard": {
+    "description": "Side-nav label for the dashboard."
+  },
+  "navMenuVaultAccounts": "Cuentas de bóveda",
+  "@navMenuVaultAccounts": {
+    "description": "Side-nav label for the Vault accounts screen."
+  },
+  "navMenuSend": "Enviar",
+  "@navMenuSend": {
+    "description": "Side-nav label for the send screen."
+  },
+  "navMenuReceive": "Recibir",
+  "@navMenuReceive": {
+    "description": "Side-nav label for the receive screen."
+  },
+  "navMenuTransactions": "Transacciones",
+  "@navMenuTransactions": {
+    "description": "Side-nav label for the transactions screen."
+  },
+  "navMenuValidator": "Validador",
+  "@navMenuValidator": {
+    "description": "Side-nav label for the validator screen."
+  },
+  "navMenuDomains": "Dominios VFX/BTC",
+  "@navMenuDomains": {
+    "description": "Side-nav label for the domains screen."
+  },
+  "navMenuTokenizeBitcoin": "Tokenizar Bitcoin",
+  "@navMenuTokenizeBitcoin": {
+    "description": "Side-nav label for the tokenize-Bitcoin (vBTC) section."
+  },
+  "navMenuSmartContracts": "Contratos inteligentes",
+  "@navMenuSmartContracts": {
+    "description": "Side-nav label for the smart contracts section."
+  },
+  "navMenuFungibleTokens": "Tokens fungibles",
+  "@navMenuFungibleTokens": {
+    "description": "Side-nav label for the fungible tokens section."
+  },
+  "navMenuNfts": "NFTs",
+  "@navMenuNfts": {
+    "description": "Side-nav label for the NFTs section."
+  },
+  "navMenuP2PAuctions": "Subastas P2P",
+  "@navMenuP2PAuctions": {
+    "description": "Side-nav label for the P2P auctions section."
+  },
+  "navMenuAccountRequiredToast": "Se requiere una cuenta para acceder a esta sección.",
+  "@navMenuAccountRequiredToast": {
+    "description": "Toast shown when navigation is attempted without a selected account."
+  },
+  "navMenuLogout": "Cerrar sesión",
+  "@navMenuLogout": {
+    "description": "Drawer item to logout of the web wallet."
+  },
+  "navAddAccount": "Agregar cuenta",
+  "@navAddAccount": {
+    "description": "Button to add a new account in the wallet selector list."
+  },
+  "statusUpdateAvailable": "Actualización disponible",
+  "@statusUpdateAvailable": {
+    "description": "Badge label shown when a wallet update is available."
+  },
+  "statusBlockchainVersion": "Versión de blockchain",
+  "@statusBlockchainVersion": {
+    "description": "Status row label for the blockchain version."
+  },
+  "statusCliVersion": "Versión de CLI",
+  "@statusCliVersion": {
+    "description": "Status row label for the CLI version."
+  },
+  "statusBlockHeight": "Altura del bloque",
+  "@statusBlockHeight": {
+    "description": "Status row label for the current block height."
+  },
+  "statusPeers": "Pares (Entrada / Salida)",
+  "@statusPeers": {
+    "description": "Status row label for peer count (incoming / outgoing)."
+  },
+  "statusWalletStarted": "Billetera iniciada",
+  "@statusWalletStarted": {
+    "description": "Status row label for the wallet startup time."
+  },
+  "statusNetworkMetrics": "Métricas de red",
+  "@statusNetworkMetrics": {
+    "description": "Status row label for the network metrics dialog button."
+  },
+  "statusCliInactive": "CLI inactivo",
+  "@statusCliInactive": {
+    "description": "Status badge shown when the CLI is not running."
+  },
+  "statusLoadingLabel": "Cargando",
+  "@statusLoadingLabel": {
+    "description": "Status badge shown while connection is initializing."
+  },
+  "statusVfxOnline": "VFX en línea",
+  "@statusVfxOnline": {
+    "description": "Status badge shown when VFX is online."
+  },
+  "statusVfxOffline": "VFX fuera de línea",
+  "@statusVfxOffline": {
+    "description": "Status badge shown when VFX is offline."
+  },
+  "statusBtcLoading": "BTC cargando",
+  "@statusBtcLoading": {
+    "description": "Status badge shown while BTC node is connecting."
+  },
+  "statusBtcOnline": "BTC en línea",
+  "@statusBtcOnline": {
+    "description": "Status badge shown when BTC node is online."
+  },
+  "statusBtcOffline": "BTC fuera de línea",
+  "@statusBtcOffline": {
+    "description": "Status badge shown when BTC node is offline."
+  },
+  "webNoWalletDetected": "No se detectó billetera.",
+  "@webNoWalletDetected": {
+    "description": "Empty-state shown on web when no wallet is loaded."
+  },
+  "webSetupWallet": "Configurar billetera",
+  "@webSetupWallet": {
+    "description": "Button to start the web wallet setup flow."
+  },
+  "webPendingActivation": "Activación pendiente",
+  "@webPendingActivation": {
+    "description": "Badge for a Vault account whose activation is in progress on the web."
+  },
+  "webActivateNow": "Activar ahora",
+  "@webActivateNow": {
+    "description": "Button to activate the Vault account on the web."
+  },
+  "webRestoreVaultAccount": "Restaurar cuenta de bóveda",
+  "@webRestoreVaultAccount": {
+    "description": "Button to restore a Vault account on the web."
+  },
+  "webRestoreCodeLabel": "Código de restauración",
+  "@webRestoreCodeLabel": {
+    "description": "Field label for the Vault restore code input on the web."
+  },
+  "webVaultRestoredToast": "Cuenta de bóveda restaurada",
+  "@webVaultRestoredToast": {
+    "description": "Toast confirming a Vault account was restored on the web."
+  },
+  "webRecover": "Recuperar",
+  "@webRecover": {
+    "description": "Button to recover a Vault account on the web."
+  },
+  "webRecoverFundsTitle": "Recuperar fondos y NFTs",
+  "@webRecoverFundsTitle": {
+    "description": "Confirm dialog title for the web Vault recovery flow."
+  },
+  "webRecoveryBroadcasted": "Transacción de recuperación transmitida.",
+  "@webRecoveryBroadcasted": {
+    "description": "Toast confirming a recovery transaction was broadcast on the web."
+  },
+  "webCallback": "Devolver",
+  "@webCallback": {
+    "description": "Button to call back a transaction on the web."
+  },
+  "webCallbackTitle": "Devolver transacción",
+  "@webCallbackTitle": {
+    "description": "Prompt title for the web callback flow."
+  },
+  "webCallbackBroadcasted": "TX de devolución transmitida",
+  "@webCallbackBroadcasted": {
+    "description": "Toast confirming a callback transaction was broadcast on the web."
+  },
+  "webRevealPrivateKeyTitle": "¿Revelar clave privada?",
+  "@webRevealPrivateKeyTitle": {
+    "description": "Confirm dialog title before revealing a private key on the web wallet details."
+  },
+  "webAddressCopiedToast": "Dirección {address} copiada al portapapeles",
+  "@webAddressCopiedToast": {
+    "description": "Toast confirming a wallet address was copied on the web wallet details.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "webCurrencyAll": "Todas",
+  "@webCurrencyAll": {
+    "description": "Currency selector label for All."
+  },
+  "webCurrencyVfx": "VFX",
+  "@webCurrencyVfx": {
+    "description": "Currency selector label for VFX."
+  },
+  "webCurrencyVault": "Bóveda",
+  "@webCurrencyVault": {
+    "description": "Currency selector label for Vault."
+  },
+  "webCurrencyBtc": "BTC",
+  "@webCurrencyBtc": {
+    "description": "Currency selector label for BTC."
+  },
+  "webFundAccount": "Financiar cuenta",
+  "@webFundAccount": {
+    "description": "Button to fund a Vault account on the web."
+  },
+  "webFundVaultTitle": "Financia tu cuenta de bóveda",
+  "@webFundVaultTitle": {
+    "description": "Dialog title for funding the Vault account on the web."
+  },
+  "webAutoActivateTitle": "¿Activar automáticamente?",
+  "@webAutoActivateTitle": {
+    "description": "Dialog title asking whether to auto-activate after funding."
+  },
+  "keygenImportWalletTitle": "Importar billetera",
+  "@keygenImportWalletTitle": {
+    "description": "Prompt title for importing a wallet via private key on the web keygen flow."
+  },
+  "keygenPrivateKeyLabel": "Clave privada",
+  "@keygenPrivateKeyLabel": {
+    "description": "Field label for the private key input."
+  },
+  "keygenEmailAddressTitle": "Correo electrónico",
+  "@keygenEmailAddressTitle": {
+    "description": "Prompt title for the email-address step of the keygen flow."
+  },
+  "keygenEmailLabel": "Correo",
+  "@keygenEmailLabel": {
+    "description": "Field label for the email input."
+  },
+  "keygenRecoveryMnemonicTitle": "Ingresa el mnemónico de recuperación",
+  "@keygenRecoveryMnemonicTitle": {
+    "description": "Prompt title for entering a recovery mnemonic."
+  },
+  "keygenRecoveryMnemonicLabel": "Mnemónico de recuperación",
+  "@keygenRecoveryMnemonicLabel": {
+    "description": "Field label for the recovery mnemonic input."
+  },
+  "keygenKeyGeneratedTitle": "Clave generada",
+  "@keygenKeyGeneratedTitle": {
+    "description": "Dialog title shown after a key is generated."
+  },
+  "keygenKeyGeneratedBody": "Aquí están los detalles de tu cuenta. Asegúrate de respaldar tu clave privada en un lugar seguro.",
+  "@keygenKeyGeneratedBody": {
+    "description": "Dialog body shown after a key is generated."
+  },
+  "keygenAddressLabel": "Dirección",
+  "@keygenAddressLabel": {
+    "description": "Field label for the generated address."
+  },
+  "keygenMnemonicCopiedToast": "Mnemónico copiado al portapapeles",
+  "@keygenMnemonicCopiedToast": {
+    "description": "Toast confirming the mnemonic was copied."
+  },
+  "keygenPublicKeyCopiedToast": "Clave pública copiada al portapapeles",
+  "@keygenPublicKeyCopiedToast": {
+    "description": "Toast confirming the public key was copied."
+  },
+  "keygenPrivateKeyCopiedToast": "Clave privada copiada al portapapeles",
+  "@keygenPrivateKeyCopiedToast": {
+    "description": "Toast confirming the private key was copied."
+  },
+  "keygenDone": "Listo",
+  "@keygenDone": {
+    "description": "Done button label on the keygen result dialog."
+  },
+  "keygenImportPrivateKey": "Importar clave privada",
+  "@keygenImportPrivateKey": {
+    "description": "Button to import a private key from the keygen CTA."
+  },
+  "keygenGenerateKeypair": "Generar par de claves",
+  "@keygenGenerateKeypair": {
+    "description": "Button to generate a new keypair from the keygen CTA."
+  },
+  "keygenRecoverAccount": "Recuperar cuenta",
+  "@keygenRecoverAccount": {
+    "description": "Button to recover an account via mnemonic from the keygen CTA."
+  },
+  "votingTitle": "Temas de votación de validadores",
+  "@votingTitle": {
+    "description": "App bar title for the validator voting topics list."
+  },
+  "votingCreateTopic": "Crear tema",
+  "@votingCreateTopic": {
+    "description": "Button to create a new validator voting topic."
+  },
+  "votingTabActive": "Activos",
+  "@votingTabActive": {
+    "description": "Tab label for active topics."
+  },
+  "votingTabInactive": "Inactivos",
+  "@votingTabInactive": {
+    "description": "Tab label for inactive topics."
+  },
+  "votingTabVoted": "Votados",
+  "@votingTabVoted": {
+    "description": "Tab label for topics the user has voted on."
+  },
+  "votingTabNotVoted": "No votados",
+  "@votingTabNotVoted": {
+    "description": "Tab label for topics the user has not voted on."
+  },
+  "votingTabAll": "Todos",
+  "@votingTabAll": {
+    "description": "Tab label showing all topics."
+  },
+  "votingTabMyTopics": "Mis temas",
+  "@votingTabMyTopics": {
+    "description": "Tab label for topics the user has created."
+  },
+  "votingCreateTopicTitle": "Crear tema",
+  "@votingCreateTopicTitle": {
+    "description": "App bar title for the create-topic screen."
+  },
+  "votingError": "Error",
+  "@votingError": {
+    "description": "Generic Error placeholder for the voting topic detail."
+  },
+  "chatTitle": "Chats",
+  "@chatTitle": {
+    "description": "App bar title for the chats list."
+  },
+  "chatTitleSingle": "Chat",
+  "@chatTitleSingle": {
+    "description": "App bar title for a single chat."
+  },
+  "chatChattingWith": "Chateando con {name}",
+  "@chatChattingWith": {
+    "description": "App bar title showing the chat counterparty.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "chatWithAddress": "Chat con {address}",
+  "@chatWithAddress": {
+    "description": "Web seller chat title showing the buyer address.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "chatNoChats": "Sin chats",
+  "@chatNoChats": {
+    "description": "Empty-state for the chats list."
+  },
+  "chatSendHint": "Enviar mensaje...",
+  "@chatSendHint": {
+    "description": "Hint inside the message-compose field."
+  },
+  "chatDeleteThread": "Eliminar hilo de chat",
+  "@chatDeleteThread": {
+    "description": "Confirm dialog title for deleting a chat thread."
+  },
+  "chatErrorTitle": "Error",
+  "@chatErrorTitle": {
+    "description": "Generic Error placeholder used in chat screens."
+  },
+  "beaconTitle": "Beacons",
+  "@beaconTitle": {
+    "description": "App bar title for the beacons list."
+  },
+  "beaconAddRemote": "Agregar beacon remoto",
+  "@beaconAddRemote": {
+    "description": "Button to add a remote beacon."
+  },
+  "beaconCreateHost": "Crear / Hospedar beacon",
+  "@beaconCreateHost": {
+    "description": "Button to create or host a local beacon."
+  },
+  "beaconAddTitle": "Agregar beacon",
+  "@beaconAddTitle": {
+    "description": "Heading for the add-beacon modal."
+  },
+  "beaconCreateTitle": "Crear beacon",
+  "@beaconCreateTitle": {
+    "description": "Heading for the create-beacon modal."
+  },
+  "beaconCreatedTitle": "Beacon creado",
+  "@beaconCreatedTitle": {
+    "description": "Confirm dialog title shown after a beacon is created."
+  },
+  "beaconNameLabel": "Nombre del beacon",
+  "@beaconNameLabel": {
+    "description": "Field label for the beacon name input."
+  },
+  "beaconIpLabel": "Dirección IP",
+  "@beaconIpLabel": {
+    "description": "Field label for the beacon IP address input."
+  },
+  "beaconPortLabel": "Puerto (deja en blanco para usar el predeterminado)",
+  "@beaconPortLabel": {
+    "description": "Field label for the beacon port input."
+  },
+  "beaconRetainDaysLabel": "Días para retener archivos (0 para ilimitado)",
+  "@beaconRetainDaysLabel": {
+    "description": "Field label for retention days in the create-beacon modal."
+  },
+  "beaconMakePrivate": "Hacer privado",
+  "@beaconMakePrivate": {
+    "description": "Switch label to make the beacon private."
+  },
+  "beaconAutoDelete": "Eliminar automáticamente tras la descarga",
+  "@beaconAutoDelete": {
+    "description": "Switch label to auto-delete files after download."
+  },
+  "beaconCancel": "Cancelar",
+  "@beaconCancel": {
+    "description": "Cancel button label in the beacon modals."
+  },
+  "beaconAdd": "Agregar",
+  "@beaconAdd": {
+    "description": "Confirm button to add a remote beacon."
+  },
+  "beaconCreate": "Crear",
+  "@beaconCreate": {
+    "description": "Confirm button to create a beacon."
+  },
+  "beaconRemove": "Eliminar",
+  "@beaconRemove": {
+    "description": "Context-menu item to remove a beacon."
+  },
+  "beaconRemoveTitle": "Eliminar beacon",
+  "@beaconRemoveTitle": {
+    "description": "Confirm dialog title for removing a beacon."
+  },
+  "beaconNoBeacons": "Sin beacons",
+  "@beaconNoBeacons": {
+    "description": "Empty-state for the beacons list."
+  },
+  "beaconRemoteBadge": "Remoto",
+  "@beaconRemoteBadge": {
+    "description": "Badge label shown on a remote beacon list tile."
+  },
+  "faucetTitle": "Faucet de VFX",
+  "@faucetTitle": {
+    "description": "App bar title for the VFX faucet screen."
+  },
+  "faucetChooseAccount": "Elige una cuenta VFX para continuar",
+  "@faucetChooseAccount": {
+    "description": "Empty-state shown when no VFX account is selected on the faucet screen."
+  },
+  "faucetVerificationCodeLabel": "Código de verificación",
+  "@faucetVerificationCodeLabel": {
+    "description": "Field label for the SMS verification code input."
+  },
+  "faucetVerify": "Verificar",
+  "@faucetVerify": {
+    "description": "Button to verify the faucet SMS code."
+  },
+  "faucetAmountLabel": "Monto",
+  "@faucetAmountLabel": {
+    "description": "Field label for the faucet amount input."
+  },
+  "faucetAmountSuffix": "Monto: {amount} VFX",
+  "@faucetAmountSuffix": {
+    "description": "Inline label showing the forced faucet amount when fixed.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "faucetPhoneLabel": "Número de teléfono",
+  "@faucetPhoneLabel": {
+    "description": "Field label for the faucet phone number input."
+  },
+  "faucetCancel": "Cancelar",
+  "@faucetCancel": {
+    "description": "Cancel button label inside the faucet form."
+  },
+  "faucetRequestVfx": "Solicitar VFX",
+  "@faucetRequestVfx": {
+    "description": "Button to submit a faucet request."
+  },
+  "encryptUnlockedToast": "¡Cuenta desbloqueada!",
+  "@encryptUnlockedToast": {
+    "description": "Toast confirming the account was unlocked."
+  },
+  "encryptIncorrectPasswordToast": "Contraseña de descifrado de cuenta incorrecta",
+  "@encryptIncorrectPasswordToast": {
+    "description": "Toast shown when the entered password is incorrect."
+  },
+  "encryptPasswordHint": "Contraseña de la cuenta",
+  "@encryptPasswordHint": {
+    "description": "Hint inside the unlock-wallet password field."
+  },
+  "motherDashboardTitle": "Panel de MOTHER",
+  "@motherDashboardTitle": {
+    "description": "App bar title for the MOTHER dashboard."
+  },
+  "motherAddHostTitle": "Agregar host",
+  "@motherAddHostTitle": {
+    "description": "Dialog title for adding a MOTHER host."
+  },
+  "motherAddHostBody": "Configura la dirección IP y la contraseña de tu HOST de MOTHER.",
+  "@motherAddHostBody": {
+    "description": "Dialog body for adding a MOTHER host."
+  },
+  "motherIpHostLabel": "Dirección IP del HOST",
+  "@motherIpHostLabel": {
+    "description": "Field label for the MOTHER host IP address."
+  },
+  "motherPasswordHostLabel": "Contraseña del HOST",
+  "@motherPasswordHostLabel": {
+    "description": "Field label for the password set on the MOTHER host."
+  },
+  "motherHostNameLabel": "Nombre del host",
+  "@motherHostNameLabel": {
+    "description": "Field label for the MOTHER host name."
+  },
+  "motherCreatePasswordLabel": "Crear contraseña",
+  "@motherCreatePasswordLabel": {
+    "description": "Field label for creating a password when launching a MOTHER host."
+  },
+  "motherCliRestartTitle": "Se requiere reiniciar el CLI",
+  "@motherCliRestartTitle": {
+    "description": "Confirm dialog title shown when MOTHER setup requires a CLI restart."
+  },
+  "motherChildBalance": "Saldo",
+  "@motherChildBalance": {
+    "description": "Detail row label for child balance on the MOTHER dashboard."
+  },
+  "motherChildIpAddress": "Dirección IP",
+  "@motherChildIpAddress": {
+    "description": "Detail row label for child IP address."
+  },
+  "motherChildBlockHeight": "Altura del bloque",
+  "@motherChildBlockHeight": {
+    "description": "Detail row label for child block height."
+  },
+  "motherChildIsValidating": "¿Está validando?",
+  "@motherChildIsValidating": {
+    "description": "Detail row label asking whether the child is validating."
+  },
+  "motherChildIsConnected": "¿Conectado a Mother?",
+  "@motherChildIsConnected": {
+    "description": "Detail row label for connection status to MOTHER."
+  },
+  "motherOpenInExplorer": "Abrir en el explorador",
+  "@motherOpenInExplorer": {
+    "description": "Button to open the child wallet in an explorer."
+  },
+  "motherClose": "Cerrar",
+  "@motherClose": {
+    "description": "Close button label in MOTHER modal."
+  },
+  "motherLaunchHost": "Iniciar MOTHER",
+  "@motherLaunchHost": {
+    "description": "List-tile title to launch the MOTHER host."
+  },
+  "motherStopHost": "Detener host",
+  "@motherStopHost": {
+    "description": "List-tile title to stop the MOTHER host."
+  },
+  "motherStopHostConfirmTitle": "¿Detener host de MOTHER?",
+  "@motherStopHostConfirmTitle": {
+    "description": "Confirm dialog title for stopping the MOTHER host."
+  },
+  "motherSetWalletRemote": "Establecer billetera como remota",
+  "@motherSetWalletRemote": {
+    "description": "List-tile title to set the wallet as remote."
+  },
+  "motherStopRemote": "Detener remoto",
+  "@motherStopRemote": {
+    "description": "List-tile title to stop using the wallet as remote."
+  },
+  "adjudicatorTitle": "Adjudicator",
+  "@adjudicatorTitle": {
+    "description": "AppBar title for the adjudicator screen."
+  },
+  "adjudicatorNoAccountSelected": "Ninguna cuenta seleccionada",
+  "@adjudicatorNoAccountSelected": {
+    "description": "Empty state shown on the adjudicator screen when no account is selected."
+  },
+  "adjudicatorStart": "Iniciar adjudicación",
+  "@adjudicatorStart": {
+    "description": "Button label to start adjudicating."
+  },
+  "adjudicatorStop": "Detener adjudicación",
+  "@adjudicatorStop": {
+    "description": "Button label to stop adjudicating."
+  },
+  "adjudicatorIsAdjudicating": "{label}  está adjudicando...",
+  "@adjudicatorIsAdjudicating": {
+    "description": "Status text shown while a wallet is adjudicating.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "adjudicatorPortOpen": "¡El puerto {port} está abierto!",
+  "@adjudicatorPortOpen": {
+    "description": "Toast shown when the adjudicator port is reachable.",
+    "placeholders": {
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "adjudicatorPortClosed": "El puerto {port} NO está abierto. Configura tu firewall.",
+  "@adjudicatorPortClosed": {
+    "description": "Toast shown when the adjudicator port is not reachable.",
+    "placeholders": {
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "datanodeTitle": "Datanode",
+  "@datanodeTitle": {
+    "description": "AppBar title for the data node screen."
+  },
+  "datanodeActivatingSoon": "Activación próxima.",
+  "@datanodeActivatingSoon": {
+    "description": "Body text shown on the data node placeholder screen."
+  },
+  "operationsTitle": "Operaciones",
+  "@operationsTitle": {
+    "description": "AppBar title for the operations screen."
+  },
+  "operationsActivityLog": "Registro de actividad",
+  "@operationsActivityLog": {
+    "description": "Heading for the activity log column on the operations screen."
+  },
+  "operationsStatus": "Estado",
+  "@operationsStatus": {
+    "description": "Heading for the status column on the operations screen."
+  },
+  "operationsDocs": "Documentación",
+  "@operationsDocs": {
+    "description": "Link label to the docs site."
+  },
+  "operationsBlockchainVersion": "Versión de blockchain",
+  "@operationsBlockchainVersion": {
+    "description": "Status item label: blockchain version."
+  },
+  "operationsCliVersion": "Versión del CLI",
+  "@operationsCliVersion": {
+    "description": "Status item label: CLI version."
+  },
+  "operationsBlockHeight": "Altura de bloque",
+  "@operationsBlockHeight": {
+    "description": "Status item label: block height."
+  },
+  "operationsPeers": "Pares (Entrada / Salida)",
+  "@operationsPeers": {
+    "description": "Status item label: peer counts."
+  },
+  "operationsWalletStarted": "Billetera iniciada",
+  "@operationsWalletStarted": {
+    "description": "Status item label: wallet start time."
+  },
+  "operationsNetworkMetrics": "Métricas de red",
+  "@operationsNetworkMetrics": {
+    "description": "Status item label and dialog title for network metrics."
+  },
+  "operationsViewMetrics": "Ver métricas",
+  "@operationsViewMetrics": {
+    "description": "Inline action to open the network metrics dialog."
+  },
+  "operationsActiveValidators": "Validadores activos: {value}",
+  "@operationsActiveValidators": {
+    "description": "Network metrics row showing active validator count.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "votingMustBeValidatorToCreate": "Tu cuenta activa debe ser un validador para crear un tema.",
+  "@votingMustBeValidatorToCreate": {
+    "description": "Error shown when a non-validator tries to create a topic."
+  },
+  "votingOnlyOneActive": "Solo se permite un tema activo por dirección.",
+  "@votingOnlyOneActive": {
+    "description": "Error shown when an address already has an active topic."
+  },
+  "votingBalanceRequired": "Se requiere un saldo",
+  "@votingBalanceRequired": {
+    "description": "Error shown when balance is missing for topic creation."
+  },
+  "votingInsufficientForValidate": "El saldo no será suficiente para validar debido al costo de crear un tema (1 VFX + comisión)",
+  "@votingInsufficientForValidate": {
+    "description": "Error shown when balance won't cover the topic-creation cost."
+  },
+  "votingCategoryLabel": "Categoría",
+  "@votingCategoryLabel": {
+    "description": "Field label for voting topic category."
+  },
+  "votingEndsLabel": "Fin de votación",
+  "@votingEndsLabel": {
+    "description": "Field label for voting end-date selector."
+  },
+  "votingTopicNameLabel": "Nombre del tema",
+  "@votingTopicNameLabel": {
+    "description": "Input label for the topic name."
+  },
+  "votingTopicDescriptionLabel": "Descripción del tema",
+  "@votingTopicDescriptionLabel": {
+    "description": "Input label for the topic description."
+  },
+  "votingCharLimit128": "Límite de 128 caracteres",
+  "@votingCharLimit128": {
+    "description": "Helper text indicating a 128-character maximum."
+  },
+  "votingCharLimit1600": "Límite de 1600 caracteres incluidos los enlaces proporcionados",
+  "@votingCharLimit1600": {
+    "description": "Helper text for the topic description length limit."
+  },
+  "votingDiscardTitle": "Descartar",
+  "@votingDiscardTitle": {
+    "description": "Title of the discard-topic confirmation dialog."
+  },
+  "votingDiscardBody": "¿Seguro que quieres descartar este nuevo tema?",
+  "@votingDiscardBody": {
+    "description": "Body for the discard topic confirmation dialog."
+  },
+  "votingCreateTopicConfirmBody": "Hay un costo de {cost} VFX para crear un tema.",
+  "@votingCreateTopicConfirmBody": {
+    "description": "Body of the create-topic confirmation dialog.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "votingCreateAction": "Crear",
+  "@votingCreateAction": {
+    "description": "Confirm button label to create a topic."
+  },
+  "votingTopicCreatedToast": "Tema creado",
+  "@votingTopicCreatedToast": {
+    "description": "Toast shown after successfully creating a topic."
+  },
+  "votingSearchHint": "Buscar...",
+  "@votingSearchHint": {
+    "description": "Hint text for the topic search input."
+  },
+  "votingEndedOn": "La votación finalizó el {date}.",
+  "@votingEndedOn": {
+    "description": "Message shown when a vote has ended.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "votingMustHaveAccountToVote": "Debes tener una cuenta seleccionada para votar.",
+  "@votingMustHaveAccountToVote": {
+    "description": "Error shown when no account is selected for voting."
+  },
+  "votingMustBeValidatorToVote": "Debes ser un validador para votar.",
+  "@votingMustBeValidatorToVote": {
+    "description": "Error shown when a non-validator tries to vote."
+  },
+  "votingAlreadyVotedPending": "Votaste {label}. La transacción está pendiente.",
+  "@votingAlreadyVotedPending": {
+    "description": "Message shown when the user already voted and the tx is pending.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "votingAlreadyVoted": "Votaste {label} en el bloque {block}",
+  "@votingAlreadyVoted": {
+    "description": "Message shown when the user already voted on a topic.",
+    "placeholders": {
+      "label": {
+        "type": "String"
+      },
+      "block": {
+        "type": "String"
+      }
+    }
+  },
+  "votingPendingTx": "Transacción de voto pendiente.",
+  "@votingPendingTx": {
+    "description": "Message shown when a vote transaction is pending."
+  },
+  "votingCastYourVote": "Emite tu voto",
+  "@votingCastYourVote": {
+    "description": "Heading prompting the user to cast their vote."
+  },
+  "votingVoteYes": "Votar Sí",
+  "@votingVoteYes": {
+    "description": "Button to vote Yes."
+  },
+  "votingVoteNo": "Votar No",
+  "@votingVoteNo": {
+    "description": "Button to vote No."
+  },
+  "votingConfirmYesTitle": "Confirmar voto [SÍ]",
+  "@votingConfirmYesTitle": {
+    "description": "Title of the confirm-Yes-vote dialog."
+  },
+  "votingConfirmYesBody": "¿Seguro que quieres votar SÍ en este tema?",
+  "@votingConfirmYesBody": {
+    "description": "Body of the confirm-Yes-vote dialog."
+  },
+  "votingConfirmYesAction": "Votar SÍ",
+  "@votingConfirmYesAction": {
+    "description": "Confirm button label to cast a Yes vote."
+  },
+  "votingConfirmNoTitle": "Confirmar voto [NO]",
+  "@votingConfirmNoTitle": {
+    "description": "Title of the confirm-No-vote dialog."
+  },
+  "votingConfirmNoBody": "¿Seguro que quieres votar NO en este tema?",
+  "@votingConfirmNoBody": {
+    "description": "Body of the confirm-No-vote dialog."
+  },
+  "votingConfirmNoAction": "Votar NO",
+  "@votingConfirmNoAction": {
+    "description": "Confirm button label to cast a No vote."
+  },
+  "votingEndsAt": "La votación finaliza el {date}.",
+  "@votingEndsAt": {
+    "description": "Footnote indicating when voting ends.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "votingNoVotesYet": "Aún no hay votos.",
+  "@votingNoVotesYet": {
+    "description": "Empty state on a topic with no votes."
+  },
+  "votingVoteCounts": "Conteo de votos",
+  "@votingVoteCounts": {
+    "description": "Heading for the vote counts table."
+  },
+  "votingVotesYes": "Votos Sí",
+  "@votingVotesYes": {
+    "description": "Label for Yes vote count."
+  },
+  "votingVotesNo": "Votos No",
+  "@votingVotesNo": {
+    "description": "Label for No vote count."
+  },
+  "votingTotalVotes": "Votos totales",
+  "@votingTotalVotes": {
+    "description": "Label for total vote count."
+  },
+  "votingPercentages": "Porcentajes",
+  "@votingPercentages": {
+    "description": "Heading for vote percentages table."
+  },
+  "votingResult": "Resultado",
+  "@votingResult": {
+    "description": "Label for the result row in the percentages table."
+  },
+  "votingInProgress": "En curso",
+  "@votingInProgress": {
+    "description": "Result label when a vote is still active."
+  },
+  "votingPass": "Aprobada",
+  "@votingPass": {
+    "description": "Result label when a vote passed."
+  },
+  "votingFail": "Rechazada",
+  "@votingFail": {
+    "description": "Result label when a vote failed."
+  },
+  "votingShowHistory": "Mostrar historial",
+  "@votingShowHistory": {
+    "description": "Button to show vote history."
+  },
+  "votingTopicCreatedLabel": "Tema creado",
+  "@votingTopicCreatedLabel": {
+    "description": "Card label for the date the topic was created."
+  },
+  "votingBlockHeightDetail": "Altura de bloque: {value}",
+  "@votingBlockHeightDetail": {
+    "description": "Selectable detail showing block height.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "votingTopicOwner": "Propietario del tema: {address}",
+  "@votingTopicOwner": {
+    "description": "Detail label showing the topic owner's address.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "votingUid": "UID: {uid}",
+  "@votingUid": {
+    "description": "Selectable detail showing the topic UID.",
+    "placeholders": {
+      "uid": {
+        "type": "String"
+      }
+    }
+  },
+  "votingCatGeneral": "General",
+  "@votingCatGeneral": {
+    "description": "Voting topic category: General."
+  },
+  "votingCatCodeChange": "Cambio de código",
+  "@votingCatCodeChange": {
+    "description": "Voting topic category: Code Change."
+  },
+  "votingCatAddDeveloper": "Agregar desarrollador",
+  "@votingCatAddDeveloper": {
+    "description": "Voting topic category: Add Developer."
+  },
+  "votingCatRemoveDeveloper": "Eliminar desarrollador",
+  "@votingCatRemoveDeveloper": {
+    "description": "Voting topic category: Remove Developer."
+  },
+  "votingCatNetworkChange": "Cambio de red",
+  "@votingCatNetworkChange": {
+    "description": "Voting topic category: Network Change."
+  },
+  "votingCatAdjVoteIn": "Voto a favor de Adj",
+  "@votingCatAdjVoteIn": {
+    "description": "Voting topic category: Adjudicator Vote In."
+  },
+  "votingCatAdjVoteOut": "Voto en contra de Adj",
+  "@votingCatAdjVoteOut": {
+    "description": "Voting topic category: Adjudicator Vote Out."
+  },
+  "votingCatValidatorChange": "Cambio de validador",
+  "@votingCatValidatorChange": {
+    "description": "Voting topic category: Validator Change."
+  },
+  "votingCatBlockModify": "Modificar bloque",
+  "@votingCatBlockModify": {
+    "description": "Voting topic category: Block Modify."
+  },
+  "votingCatTransactionModify": "Modificar transacción",
+  "@votingCatTransactionModify": {
+    "description": "Voting topic category: Transaction Modify."
+  },
+  "votingCatBalanceCorrection": "Corrección de saldo",
+  "@votingCatBalanceCorrection": {
+    "description": "Voting topic category: Balance Correction."
+  },
+  "votingCatHackOrExploit": "Corrección de hackeo o exploit",
+  "@votingCatHackOrExploit": {
+    "description": "Voting topic category: Hack or Exploit Correction."
+  },
+  "votingCatOther": "Otro",
+  "@votingCatOther": {
+    "description": "Voting topic category: Other."
+  },
+  "votingDays30": "30 días",
+  "@votingDays30": {
+    "description": "Voting duration option: 30 days."
+  },
+  "votingDays60": "60 días",
+  "@votingDays60": {
+    "description": "Voting duration option: 60 days."
+  },
+  "votingDays90": "90 días",
+  "@votingDays90": {
+    "description": "Voting duration option: 90 days."
+  },
+  "votingDays180": "180 días",
+  "@votingDays180": {
+    "description": "Voting duration option: 180 days."
+  },
+  "votingProviderOnlineCloud": "VPS en la nube",
+  "@votingProviderOnlineCloud": {
+    "description": "Adjudicator provider option: cloud VPS."
+  },
+  "votingProviderOnlineDedicated": "Dedicada en línea",
+  "@votingProviderOnlineDedicated": {
+    "description": "Adjudicator provider option: dedicated server."
+  },
+  "votingProviderLocalDedicated": "Dedicada local",
+  "@votingProviderLocalDedicated": {
+    "description": "Adjudicator provider option: local dedicated machine."
+  },
+  "votingProviderHomeMachine": "Máquina de hogar",
+  "@votingProviderHomeMachine": {
+    "description": "Adjudicator provider option: home machine."
+  },
+  "votingProviderOfficeMachine": "Máquina de oficina",
+  "@votingProviderOfficeMachine": {
+    "description": "Adjudicator provider option: office machine."
+  },
+  "votingOsLinux": "Linux",
+  "@votingOsLinux": {
+    "description": "Operating system option: Linux."
+  },
+  "votingOsWindows": "Windows",
+  "@votingOsWindows": {
+    "description": "Operating system option: Windows."
+  },
+  "votingOsMac": "Mac",
+  "@votingOsMac": {
+    "description": "Operating system option: Mac."
+  },
+  "beaconRemoveBody": "¿Seguro que quieres eliminar este beacon?",
+  "@beaconRemoveBody": {
+    "description": "Confirmation body for removing a remote beacon."
+  },
+  "beaconRemoveSelfBody": "¿Seguro que quieres eliminar este beacon?\n\nSe requiere reiniciar el CLI.",
+  "@beaconRemoveSelfBody": {
+    "description": "Confirmation body for removing a self-hosted beacon."
+  },
+  "beaconRemoveAndRestart": "Eliminar y reiniciar CLI",
+  "@beaconRemoveAndRestart": {
+    "description": "Confirm button label to remove a beacon and restart the CLI."
+  },
+  "beaconCreateBodyExplanation": "Crea un beacon si quieres ser propietario del relay de archivos. Configura tu billetera como un beacon para participar en la transferencia de archivos en la red VFX. El nombre es un nombre amigable visible solo para ti. Puedes configurar un puerto específico o usar la configuración predeterminada. También puedes configurar si tu beacon es privado y por cuánto tiempo deben permanecer en caché los archivos.",
+  "@beaconCreateBodyExplanation": {
+    "description": "Explanation text for the create-beacon modal."
+  },
+  "beaconAddBodyExplanation": "Agrega un beacon existente a los nodos externos para usar ese relay en lugar de los predeterminados en la red VFX. Configura tu billetera para usar un beacon remoto para la transferencia de archivos en lugar de los beacons predeterminados de la red VFX. Necesitarás conocer la dirección IP del beacon remoto. Si ese beacon usa un puerto distinto al predeterminado, también deberás indicarlo. El nombre del beacon es un nombre amigable visible solo para ti.",
+  "@beaconAddBodyExplanation": {
+    "description": "Explanation text for the add-beacon modal."
+  },
+  "beaconCreatedBody": "Se requiere reiniciar el CLI para que esto tenga efecto.\n\n¿Reiniciar ahora?",
+  "@beaconCreatedBody": {
+    "description": "Body text after a beacon is created, prompting CLI restart."
+  },
+  "beaconActiveBadge": "Activo",
+  "@beaconActiveBadge": {
+    "description": "Status badge: beacon active."
+  },
+  "beaconInactiveBadge": "Inactivo",
+  "@beaconInactiveBadge": {
+    "description": "Status badge: beacon inactive."
+  },
+  "beaconErrorOnePerWallet": "Solo se permite un beacon por billetera.",
+  "@beaconErrorOnePerWallet": {
+    "description": "Error when trying to create more than one beacon per wallet."
+  },
+  "beaconRestartNow": "Reiniciar",
+  "@beaconRestartNow": {
+    "description": "Confirm button label to restart the CLI now."
+  },
+  "beaconLater": "Más tarde",
+  "@beaconLater": {
+    "description": "Cancel button label to defer the action."
+  },
+  "beaconAutoDeleteAssets": "Eliminar archivos automáticamente",
+  "@beaconAutoDeleteAssets": {
+    "description": "Subtitle label describing whether assets are auto-deleted."
+  },
+  "beaconAssetCache": "Caché de archivos",
+  "@beaconAssetCache": {
+    "description": "Subtitle label describing the asset cache duration."
+  },
+  "beaconCacheInfinite": "Infinito",
+  "@beaconCacheInfinite": {
+    "description": "Cache duration label meaning no expiration."
+  },
+  "beaconPrivateLabel": "[Privado]",
+  "@beaconPrivateLabel": {
+    "description": "Suffix shown next to a beacon name when private."
+  },
+  "navMenuPayWithButterfly": "Pagar con Butterfly",
+  "@navMenuPayWithButterfly": {
+    "description": "Side nav label for Butterfly payments."
+  },
+  "navMenuCryptoCom": "Crypto.com",
+  "@navMenuCryptoCom": {
+    "description": "Side nav label for Crypto.com onramp."
+  },
+  "navMenuOperations": "Operaciones",
+  "@navMenuOperations": {
+    "description": "Side nav label for Operations."
+  },
+  "navMenuSignOut": "Cerrar sesión",
+  "@navMenuSignOut": {
+    "description": "Side nav label for sign out (web)."
+  },
+  "navMenuVaultAccountSingular": "Cuenta de bóveda",
+  "@navMenuVaultAccountSingular": {
+    "description": "Side nav label for vault account (web, single)."
+  },
+  "navSignOutTitle": "Cerrar sesión",
+  "@navSignOutTitle": {
+    "description": "Confirmation dialog title for signing out."
+  },
+  "navSignOutBody": "¿Seguro que quieres cerrar sesión en la VFX Web Wallet?",
+  "@navSignOutBody": {
+    "description": "Body for the sign-out confirmation dialog."
+  },
+  "navLatestTx": "Última TX:",
+  "@navLatestTx": {
+    "description": "Label above the latest transaction widget."
+  },
+  "navViewAllTxs": "Ver todas las Txs",
+  "@navViewAllTxs": {
+    "description": "Inline action to view all transactions."
+  },
+  "navNoTransactions": "Sin transacciones",
+  "@navNoTransactions": {
+    "description": "Empty state when there are no transactions."
+  },
+  "navConfirmedStatus": "Confirmada",
+  "@navConfirmedStatus": {
+    "description": "Status label for confirmed transactions."
+  },
+  "navPendingStatus": "Pendiente",
+  "@navPendingStatus": {
+    "description": "Status label for pending transactions."
+  },
+  "navViewAddress": "Ver\ndirección",
+  "@navViewAddress": {
+    "description": "Vertical icon button label: view current address."
+  },
+  "navViewAddresses": "Ver\ndirecciones",
+  "@navViewAddresses": {
+    "description": "Vertical icon button label: view all addresses."
+  },
+  "navNewAddress": "Nueva\ndirección",
+  "@navNewAddress": {
+    "description": "Vertical icon button label: create new address."
+  },
+  "navGetVfx": "Obtener\nVFX",
+  "@navGetVfx": {
+    "description": "Vertical icon button label: acquire VFX."
+  },
+  "navGetBtc": "Obtener\nBTC",
+  "@navGetBtc": {
+    "description": "Vertical icon button label: acquire BTC."
+  },
+  "navAddressSingular": "{count} dirección",
+  "@navAddressSingular": {
+    "description": "Address count (singular).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "navAddressPlural": "{count} direcciones",
+  "@navAddressPlural": {
+    "description": "Address count (plural).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "navVaultAddressSingular": "{count} dirección de bóveda",
+  "@navVaultAddressSingular": {
+    "description": "Vault address count (singular).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "navVaultAddressPlural": "{count} direcciones de bóveda",
+  "@navVaultAddressPlural": {
+    "description": "Vault address count (plural).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "navAccountSingular": "{count} cuenta",
+  "@navAccountSingular": {
+    "description": "Account count (singular).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "navAccountPlural": "{count} cuentas",
+  "@navAccountPlural": {
+    "description": "Account count (plural).",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "navNoVfxAccounts": "Sin cuentas VFX",
+  "@navNoVfxAccounts": {
+    "description": "Empty state when no VFX accounts exist."
+  },
+  "navNoBtcAccounts": "Sin cuentas BTC",
+  "@navNoBtcAccounts": {
+    "description": "Empty state when no BTC accounts exist."
+  },
+  "navNoAccounts": "Sin cuentas",
+  "@navNoAccounts": {
+    "description": "Empty state when no accounts exist."
+  },
+  "navNew": "NUEVO",
+  "@navNew": {
+    "description": "Badge shown next to brand-new menu items."
+  },
+  "webRevealPrivateKeyBody": "¿Seguro que quieres revelar tu clave privada?",
+  "@webRevealPrivateKeyBody": {
+    "description": "Confirmation body before revealing a private key."
+  },
+  "webRevealPrivateKeyAccountBody": "¿Seguro que quieres revelar tu clave privada de esta cuenta?",
+  "@webRevealPrivateKeyAccountBody": {
+    "description": "Confirmation body before revealing the key for a specific account."
+  },
+  "webReveal": "Revelar",
+  "@webReveal": {
+    "description": "Confirm button to reveal a key."
+  },
+  "webFundVaultBody": "¿Quieres enviar 5 VFX desde {address}?",
+  "@webFundVaultBody": {
+    "description": "Body asking the user to confirm sending 5 VFX from an address.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "webAutoActivateBody": "¿Quieres activar la cuenta automáticamente una vez que se complete el financiamiento?",
+  "@webAutoActivateBody": {
+    "description": "Body asking whether to auto-activate after funding."
+  },
+  "webSent5Vfx": "Se enviaron 5 VFX a {address}",
+  "@webSent5Vfx": {
+    "description": "Toast confirming 5 VFX were sent.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "webRecoverFundsBody": "Esta es una función destructiva que revertirá todas las transacciones y archivos pendientes y moverá todo a esta dirección de recuperación:\n\n{address}",
+  "@webRecoverFundsBody": {
+    "description": "Body explaining the recovery process.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "webProceed": "Continuar",
+  "@webProceed": {
+    "description": "Confirm button: proceed."
+  },
+  "webRestoreVaultBody": "Importar una cuenta de bóveda existente reemplazará la actual vinculada a tu inicio de sesión. Para revertir, puedes cerrar sesión y volver a iniciarla.\n\n¿Continuar?",
+  "@webRestoreVaultBody": {
+    "description": "Body for the restore Vault account dialog."
+  },
+  "webRestoreCodeBody": "Pega tu CÓDIGO DE RESTAURACIÓN para importar tu cuenta de bóveda existente.",
+  "@webRestoreCodeBody": {
+    "description": "Body for the restore code prompt."
+  },
+  "webCalledBack": "Revertida",
+  "@webCalledBack": {
+    "description": "Status label for a transaction that has been called back."
+  },
+  "webCallbackBody": "¿Seguro que quieres revertir esta transacción?",
+  "@webCallbackBody": {
+    "description": "Body for the callback confirmation dialog."
+  },
+  "webErrorTimestamp": "Error al obtener la marca de tiempo",
+  "@webErrorTimestamp": {
+    "description": "Error: timestamp retrieval failed."
+  },
+  "webErrorNonce": "Error al obtener el nonce",
+  "@webErrorNonce": {
+    "description": "Error: nonce retrieval failed."
+  },
+  "webErrorFee": "Error al procesar la comisión",
+  "@webErrorFee": {
+    "description": "Error: fee parsing failed."
+  },
+  "webErrorHash": "Error al procesar el hash",
+  "@webErrorHash": {
+    "description": "Error: hash parsing failed."
+  },
+  "webErrorSignatureGen": "Falló la generación de la firma.",
+  "@webErrorSignatureGen": {
+    "description": "Error: signature generation failed."
+  },
+  "webErrorSignatureInvalid": "Firma no válida",
+  "@webErrorSignatureInvalid": {
+    "description": "Error: signature invalid."
+  },
+  "webErrorTxInvalid": "Transacción no válida",
+  "@webErrorTxInvalid": {
+    "description": "Error: transaction invalid."
+  },
+  "webErrorRecoverySig": "Problema al generar RecoverySigScript",
+  "@webErrorRecoverySig": {
+    "description": "Error: recovery sig script generation failed."
+  },
+  "webSelectAccount": "Seleccionar cuenta",
+  "@webSelectAccount": {
+    "description": "Placeholder when no account is selected."
+  },
+  "webAddBtcAccount": "Agregar cuenta BTC",
+  "@webAddBtcAccount": {
+    "description": "Menu item: add a BTC account."
+  },
+  "webImportBtcWifTitle": "Importar clave privada BTC WIF",
+  "@webImportBtcWifTitle": {
+    "description": "Title for import-BTC-WIF dialog."
+  },
+  "webWifPrivateKey": "Clave privada WIF",
+  "@webWifPrivateKey": {
+    "description": "Input label for a BTC WIF private key."
+  },
+  "webImport": "Importar",
+  "@webImport": {
+    "description": "Confirm button: import."
+  },
+  "webBtcAccountImported": "Cuenta BTC importada",
+  "@webBtcAccountImported": {
+    "description": "Toast: BTC account imported."
+  },
+  "webManageAccounts": "Administrar cuentas",
+  "@webManageAccounts": {
+    "description": "Title and button: manage accounts."
+  },
+  "webDefaultAccount": "Cuenta predeterminada",
+  "@webDefaultAccount": {
+    "description": "Default name for a single account."
+  },
+  "webAccountN": "Cuenta {id}",
+  "@webAccountN": {
+    "description": "Default account name template.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "webRenameAccountTitle": "Renombrar cuenta",
+  "@webRenameAccountTitle": {
+    "description": "Title for rename-account dialog."
+  },
+  "webAccountName": "Nombre de la cuenta",
+  "@webAccountName": {
+    "description": "Input label for account name."
+  },
+  "webRenameAccountBody": "¿Cómo quieres llamar a esta cuenta?",
+  "@webRenameAccountBody": {
+    "description": "Body for the rename-account dialog."
+  },
+  "webLockWallet": "Bloquear billetera",
+  "@webLockWallet": {
+    "description": "Menu item: lock the wallet."
+  },
+  "webForgetTitle": "Olvidar cuenta {id}",
+  "@webForgetTitle": {
+    "description": "Title for forget-account confirmation dialog.",
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "webForgetBody": "¿Seguro que quieres eliminar esta cuenta de tu billetera?",
+  "@webForgetBody": {
+    "description": "Body for forget-account confirmation dialog."
+  },
+  "webForgetBodyLastAccount": "¿Seguro que quieres eliminar esta cuenta de tu billetera? Como no tienes otras cuentas, se cerrará tu sesión.",
+  "@webForgetBodyLastAccount": {
+    "description": "Body for forget-account dialog when this is the last account."
+  },
+  "webForget": "Olvidar",
+  "@webForget": {
+    "description": "Confirm button: forget account."
+  },
+  "webForgetAndLogout": "Olvidar y cerrar sesión",
+  "@webForgetAndLogout": {
+    "description": "Confirm button: forget last account and log out."
+  },
+  "webBackupKeys": "Respaldar claves",
+  "@webBackupKeys": {
+    "description": "Button: backup account keys."
+  },
+  "webSetActive": "Establecer como activa",
+  "@webSetActive": {
+    "description": "Button: set account as active."
+  },
+  "webScanCameraError": "Error de cámara",
+  "@webScanCameraError": {
+    "description": "Heading shown when the camera fails."
+  },
+  "webScanRetry": "Reintentar",
+  "@webScanRetry": {
+    "description": "Button: retry camera scan."
+  },
+  "webScanScanning": "Escaneando...",
+  "@webScanScanning": {
+    "description": "Status while scanning a QR code."
+  },
+  "webScanCameraRequired": "Se requiere acceso a la cámara para escanear códigos QR",
+  "@webScanCameraRequired": {
+    "description": "Error: camera access required."
+  },
+  "webScanInstruction": "Coloca el código QR dentro del marco para escanear",
+  "@webScanInstruction": {
+    "description": "Instruction to align a QR code."
+  },
+  "webBalanceTooltip": "Disponible: {available} VFX\nBloqueado: {locked} VFX \nTotal: {total} RBX",
+  "@webBalanceTooltip": {
+    "description": "Tooltip showing wallet balance breakdown.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "locked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "motherTitle": "Monitor Of The Roster",
+  "@motherTitle": {
+    "description": "Section title for the MOTHER feature."
+  },
+  "motherDescription": "MOTHER es una herramienta para monitorear el estado de tus validadores remotos.",
+  "@motherDescription": {
+    "description": "Short description of MOTHER."
+  },
+  "motherStatusHeading": "Estado",
+  "@motherStatusHeading": {
+    "description": "Status section heading in MOTHER modal."
+  },
+  "motherIsHostRow": "Es Host: {value}",
+  "@motherIsHostRow": {
+    "description": "Status row indicating host state.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "motherIsRemoteRow": "Es Remote: {value}",
+  "@motherIsRemoteRow": {
+    "description": "Status row indicating remote state.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "motherChildrenRow": "Hijos: {count}",
+  "@motherChildrenRow": {
+    "description": "Status row showing child node count.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "motherYes": "SÍ",
+  "@motherYes": {
+    "description": "Affirmative status value (uppercase)."
+  },
+  "motherNo": "NO",
+  "@motherNo": {
+    "description": "Negative status value (uppercase)."
+  },
+  "motherChildYes": "Sí",
+  "@motherChildYes": {
+    "description": "Affirmative answer in child cards."
+  },
+  "motherChildNo": "No",
+  "@motherChildNo": {
+    "description": "Negative answer in child cards."
+  },
+  "motherUpdateHostInfo": "Actualizar información del Host",
+  "@motherUpdateHostInfo": {
+    "description": "Action: update host info."
+  },
+  "motherSetWalletHost": "Establecer billetera como Host",
+  "@motherSetWalletHost": {
+    "description": "Action: make this wallet the host."
+  },
+  "motherStop": "Detener",
+  "@motherStop": {
+    "description": "Confirm button: stop."
+  },
+  "motherStopHostBody": "¿Seguro que quieres detener esta billetera como host de MOTHER?",
+  "@motherStopHostBody": {
+    "description": "Body of the stop-host confirmation dialog."
+  },
+  "motherCliRestartBody": "¿Quieres reiniciar ahora?",
+  "@motherCliRestartBody": {
+    "description": "Body asking whether to restart the CLI now."
+  },
+  "motherStopRemoteBody": "¿Seguro que quieres eliminar este nodo como REMOTE?\n\nSe requerirá reiniciar el CLI.",
+  "@motherStopRemoteBody": {
+    "description": "Body asking the user to confirm stopping the remote node."
+  },
+  "motherStopRemoteAction": "Detener Remote y reiniciar CLI",
+  "@motherStopRemoteAction": {
+    "description": "Confirm button: stop remote and restart CLI."
+  },
+  "motherRemoteRemoved": "El nodo REMOTE se eliminó de MOTHER",
+  "@motherRemoteRemoved": {
+    "description": "Toast: remote node removed from MOTHER."
+  },
+  "motherWhatIs": "¿Qué es MOTHER?",
+  "@motherWhatIs": {
+    "description": "Action: open the info dialog about MOTHER."
+  },
+  "motherInfoBody": "MOTHER es una herramienta para monitorear el estado de tus validadores remotos.\n\nPrimero debes configurar una de tus billeteras como HOST y luego agregar tu nodo adicional como REMOTE.\n\nAl agregar un nodo REMOTE, necesitarás conocer la dirección IP y la contraseña del HOST.\n\nUna vez completado, podrás ver un panel que rastrea toda la actividad de tus nodos desde una sola billetera.\n\nNota: debes tener el puerto '{port}' abierto en la máquina HOST.",
+  "@motherInfoBody": {
+    "description": "Long explanation of the MOTHER feature.",
+    "placeholders": {
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "motherIpRequired": "Dirección IP requerida",
+  "@motherIpRequired": {
+    "description": "Validation: IP address required."
+  },
+  "motherPasswordRequired": "Contraseña requerida",
+  "@motherPasswordRequired": {
+    "description": "Validation: password required."
+  },
+  "motherNameRequired": "Nombre requerido",
+  "@motherNameRequired": {
+    "description": "Validation: name required."
+  },
+  "motherPortNote": "Debes tener el puerto '{port}' abierto en la máquina HOST.",
+  "@motherPortNote": {
+    "description": "Note: required port must be open on host.",
+    "placeholders": {
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "motherHostCreated": "Host creado",
+  "@motherHostCreated": {
+    "description": "Toast: host successfully created."
+  },
+  "motherOpenInBrowser": "Abrir en el navegador",
+  "@motherOpenInBrowser": {
+    "description": "Action: open MOTHER dashboard in browser."
+  },
+  "homeActionTokens": "Tokens",
+  "@homeActionTokens": {
+    "description": "Dashboard shortcut button for the Tokens screen."
+  },
+  "homeActionTutorials": "Tutoriales",
+  "@homeActionTutorials": {
+    "description": "Dashboard shortcut button that opens video tutorials."
+  },
+  "homeActionGetHelp": "Obtener\nAyuda",
+  "@homeActionGetHelp": {
+    "description": "Two-line vertical button label on the dashboard. Newline must be preserved."
+  },
+  "homeActionOpenExplorer": "Abrir\nExplorador",
+  "@homeActionOpenExplorer": {
+    "description": "Two-line vertical button label on the dashboard. Newline must be preserved."
+  },
+  "homeActionVerifyOwner": "Verificar\nPropietario",
+  "@homeActionVerifyOwner": {
+    "description": "Two-line vertical button label on the dashboard. Newline must be preserved."
+  },
+  "homeActionSignOut": "Cerrar\nSesión",
+  "@homeActionSignOut": {
+    "description": "Two-line vertical button label on the dashboard. Newline must be preserved."
+  },
+  "homeGetHelpTitle": "Obtener ayuda",
+  "@homeGetHelpTitle": {
+    "description": "Title for the Get Help bottom sheet."
+  },
+  "homeJoinDiscord": "Unirse a Discord",
+  "@homeJoinDiscord": {
+    "description": "Get Help option: join the Discord server."
+  },
+  "homeVisitWebsite": "Visitar sitio web",
+  "@homeVisitWebsite": {
+    "description": "Get Help option: visit the VerifiedX website."
+  },
+  "homeReadDocs": "Leer documentación",
+  "@homeReadDocs": {
+    "description": "Get Help option: open the documentation."
+  },
+  "homeValidateOwnership": "Validar propiedad",
+  "@homeValidateOwnership": {
+    "description": "Title for the verify-ownership prompt dialog."
+  },
+  "homeValidateOwnershipBody": "Pega la firma proporcionada por el propietario para validar su propiedad.",
+  "@homeValidateOwnershipBody": {
+    "description": "Body for the verify-ownership prompt dialog."
+  },
+  "homeSignatureLabel": "Firma",
+  "@homeSignatureLabel": {
+    "description": "Input label and validator name for the ownership signature."
+  },
+  "homeInvalidSignature": "Firma de verificación de propiedad inválida",
+  "@homeInvalidSignature": {
+    "description": "Toast shown when the ownership verification signature is malformed."
+  },
+  "homeVerified": "Verificado",
+  "@homeVerified": {
+    "description": "Dialog title when ownership is verified."
+  },
+  "homeNotVerified": "No verificado",
+  "@homeNotVerified": {
+    "description": "Dialog title when ownership is NOT verified."
+  },
+  "homeOwnershipVerified": "Propiedad verificada",
+  "@homeOwnershipVerified": {
+    "description": "Subtitle when ownership is verified."
+  },
+  "homeOwnershipNotVerified": "Propiedad NO verificada",
+  "@homeOwnershipNotVerified": {
+    "description": "Subtitle when ownership is NOT verified."
+  },
+  "homeOwns": "POSEE",
+  "@homeOwns": {
+    "description": "Connector word between address and smartContractId when ownership is verified."
+  },
+  "homeDoesNotOwn": "NO posee",
+  "@homeDoesNotOwn": {
+    "description": "Connector phrase between address and smartContractId when ownership is NOT verified."
+  },
+  "webAddressesLabel": "Direcciones",
+  "@webAddressesLabel": {
+    "description": "Tab label for the addresses panel at the bottom-left of the web dashboard."
+  },
+  "webVaultLabel": "Bóveda",
+  "@webVaultLabel": {
+    "description": "Short label for a Vault address row."
+  },
+  "webRecoveredDeactivated": "Recuperada y desactivada",
+  "@webRecoveredDeactivated": {
+    "description": "Status text shown when a Vault account has been recovered and deactivated."
+  },
+  "webCopyAddressPopup": "Copiar dirección",
+  "@webCopyAddressPopup": {
+    "description": "Popup menu item to copy an address."
+  },
+  "webRevealPrivateKeyPopup": "Revelar clave privada",
+  "@webRevealPrivateKeyPopup": {
+    "description": "Popup menu item to reveal a private key."
+  },
+  "webBlockHeight": "Bloque {height}",
+  "@webBlockHeight": {
+    "description": "Label showing the latest block height in the bottom-right corner.",
+    "placeholders": {
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "webTokensCount": "{count} Tokens",
+  "@webTokensCount": {
+    "description": "Label showing the number of tokens.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "dashCopyAddress": "Copiar\nDirección",
+  "@dashCopyAddress": {
+    "description": "Two-line vertical button label on the dashboard balance card. Newline must be preserved."
+  },
+  "dashVaultAddress": "Dirección\nde bóveda",
+  "@dashVaultAddress": {
+    "description": "Two-line vertical button label to copy the Vault address. Newline must be preserved."
+  },
+  "dashGetVfx": "Obtener\nVFX",
+  "@dashGetVfx": {
+    "description": "Two-line vertical button label to buy VFX. Newline must be preserved."
+  },
+  "dashGetBtc": "Obtener\nBTC",
+  "@dashGetBtc": {
+    "description": "Two-line vertical button label to buy BTC. Newline must be preserved."
+  },
+  "dashOffRampBtc": "Vender\nBTC",
+  "@dashOffRampBtc": {
+    "description": "Two-line vertical button label to sell BTC. Newline must be preserved."
+  },
+  "dashVbtcTokens": "Tokens\nvBTC",
+  "@dashVbtcTokens": {
+    "description": "Two-line vertical button label to view vBTC tokens. Newline must be preserved."
+  },
+  "dashWhatsVbtc": "¿Qué es\nvBTC?",
+  "@dashWhatsVbtc": {
+    "description": "Two-line vertical button label to learn about vBTC. Newline must be preserved."
+  },
+  "statusSuccess": "Éxito",
+  "@statusSuccess": {
+    "description": "Success status for a completed transaction."
+  },
+  "txFromColonAddress": "De: {address}",
+  "@txFromColonAddress": {
+    "description": "From label with colon and address for transaction display.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "txToColonAddress": "Para: {address}",
+  "@txToColonAddress": {
+    "description": "To label with colon and address for transaction display.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "webAddressesAddressCopiedDot": "Dirección copiada al portapapeles.",
+  "@webAddressesAddressCopiedDot": {
+    "description": "Toast shown after copying an address from the addresses panel (with period)."
+  },
+  "butterflyCreatePassword": "Crear contraseña de Butterfly",
+  "@butterflyCreatePassword": {
+    "description": "Title for the Butterfly password creation dialog."
+  },
+  "butterflyPasswordMessage": "Crea una contraseña para transferir tus credenciales a Butterfly de forma segura. Necesitarás ingresar esta misma contraseña en el sitio web de Butterfly.",
+  "@butterflyPasswordMessage": {
+    "description": "Body text for the Butterfly password creation dialog."
+  },
+  "butterflyLoginTitle": "Iniciar sesión en Butterfly",
+  "@butterflyLoginTitle": {
+    "description": "Confirmation dialog title for Butterfly login."
+  },
+  "butterflyLoginBody": "Estás a punto de abrir Butterfly e iniciar sesión con:\n\n{address}\n\n¿Continuar?",
+  "@butterflyLoginBody": {
+    "description": "Confirmation dialog body for Butterfly login.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "butterflyOpenButton": "Abrir Butterfly",
+  "@butterflyOpenButton": {
+    "description": "Confirm button to open Butterfly."
+  },
+  "butterflyNoWalletError": "No se seleccionó ninguna billetera. Crea o importa una billetera primero.",
+  "@butterflyNoWalletError": {
+    "description": "Error toast when no wallet is selected for Butterfly login."
+  },
+  "butterflyLoginUrlError": "Error al generar la URL de inicio de sesión: {error}",
+  "@butterflyLoginUrlError": {
+    "description": "Error toast when Butterfly login URL generation fails.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "navPrivateKeyNotAvailable": "Clave privada no disponible.",
+  "@navPrivateKeyNotAvailable": {
+    "description": "Error toast when private key is not available."
+  },
+  "webAddAccount": "Agregar cuenta",
+  "@webAddAccount": {
+    "description": "Button label to add a new account."
+  },
+  "webLanguageLabel": "Idioma",
+  "@webLanguageLabel": {
+    "description": "Menu item label for the language picker."
+  },
+  "webYourAddress": "Tu dirección",
+  "webYourDomain": "Tu dominio",
+  "webCopyLink": "Copiar\nEnlace",
+  "webQrCode": "Código\nQR",
+  "webRequestFunds": "Solicitar fondos",
+  "webRequestFundsBody": "Genera un enlace para enviar a otro usuario.",
+  "webAmountToRequest": "Monto a solicitar",
+  "webGenerateLink": "Generar enlace",
+  "webRequestLinkCopied": "Enlace de solicitud copiado al portapapeles",
+  "webCopiedToClipboard": "'{value}' copiado al portapapeles",
+  "webInvalidAmount": "Monto inválido",
+  "segmentAll": "Todas",
+  "segmentVault": "Bóveda",
+  "dialogClose": "Cerrar",
+  "dialogYes": "Sí",
+  "dialogNo": "No",
+  "dialogSubmit": "Enviar"
 }

@@ -18,6 +18,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/pending_activation_provider.dart';
 
 import '../providers/reserve_account_provider.dart';
@@ -33,7 +34,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
       title: Text(
-        "Vault Accounts",
+        AppLocalizations.of(context).reserveOverviewTitle,
         style: TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.black,
@@ -54,7 +55,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          "Close",
+                          AppLocalizations.of(context).actionClose,
                           style: TextStyle(color: AppColors.getReserve()),
                         ),
                       )
@@ -69,7 +70,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
               color: AppColors.getReserve(),
             ),
             label: Text(
-              "What are Vault Accounts?",
+              AppLocalizations.of(context).reserveWhatIsVault,
               style: TextStyle(
                 color: AppColors.getReserve(),
                 decoration: TextDecoration.underline,
@@ -134,7 +135,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
                                       IconButton(
                                           onPressed: () async {
                                             await Clipboard.setData(ClipboardData(text: wallet.address));
-                                            Toast.message("Address copied to clipboard");
+                                            Toast.message(AppLocalizations.of(context).messageAddressCopied);
                                           },
                                           icon: Icon(
                                             Icons.copy,
@@ -144,7 +145,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
                                     ],
                                   ),
                                   subtitle: Row(mainAxisSize: MainAxisSize.min, children: [
-                                    Text("Available: ${wallet.availableBalance} VFX"),
+                                    Text(AppLocalizations.of(context).reserveAvailableLabel(wallet.availableBalance.toString())),
                                     SizedBox(width: 4),
                                     InkWell(
                                       onTap: () {
@@ -169,7 +170,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
                 ),
               ),
               AppButton(
-                label: "Restore Vault Account",
+                label: AppLocalizations.of(context).reserveRestoreVaultAccount,
                 icon: Icons.refresh,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
@@ -202,7 +203,7 @@ class ReserveAccountStatusBadge extends BaseComponent {
         children: [
           if (withRecoverButton) ReserveAccountRecoverButton(wallet: wallet),
           AppBadge(
-            label: "Activated",
+            label: AppLocalizations.of(context).reserveActivated,
             variant: AppColorVariant.Success,
           ),
         ],
@@ -211,14 +212,14 @@ class ReserveAccountStatusBadge extends BaseComponent {
 
     if (ref.watch(pendingActivationProvider).contains(wallet.address)) {
       return AppBadge(
-        label: "Activation Pending",
+        label: AppLocalizations.of(context).reserveActivationPending,
         variant: AppColorVariant.Warning,
       );
     }
 
     if (wallet.balance < 5) {
       return AppButton(
-        label: "Awaiting Funds",
+        label: AppLocalizations.of(context).reserveAwaitingFunds,
         variant: AppColorVariant.Danger,
         onPressed: () async {
           // await InfoDialog.show(
@@ -232,7 +233,7 @@ class ReserveAccountStatusBadge extends BaseComponent {
     }
 
     return AppButton(
-      label: "Activate Now",
+      label: AppLocalizations.of(context).reserveActivateNow,
       variant: AppColorVariant.Light,
       onPressed: () {
         provider.activate(context, wallet);
@@ -256,17 +257,17 @@ class ReserveAccountRecoverButton extends BaseComponent {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AppButton(
-        label: "Recover",
+        label: AppLocalizations.of(context).reserveRecoverLabel,
         icon: FontAwesomeIcons.triangleExclamation,
         type: AppButtonType.Elevated,
         variant: AppColorVariant.Warning,
         onPressed: () async {
+          final l10n = AppLocalizations.of(context);
           final confirmed = await ConfirmDialog.show(
-            title: "Recover Funds & NFTs",
-            body:
-                "This is a destructive function that will callback all pending transactions and assets and move everything to this recovery account:\n\n${wallet.recoveryAddress}",
-            confirmText: "Proceed",
-            cancelText: "Cancel",
+            title: l10n.reserveRecoverTitle,
+            body: l10n.reserveRecoverBody(wallet.recoveryAddress ?? ''),
+            confirmText: l10n.reserveRecoverProceed,
+            cancelText: l10n.actionCancel,
             destructive: true,
           );
 
@@ -275,11 +276,10 @@ class ReserveAccountRecoverButton extends BaseComponent {
           }
 
           final backup = await ConfirmDialog.show(
-            title: "Backup Media",
-            body:
-                "NFT Media will not be transferred in this process. Would you like to export a backup now now so you can import into your new environment?",
-            confirmText: "Backup",
-            cancelText: "No",
+            title: l10n.reserveBackupMediaTitle,
+            body: l10n.reserveBackupMediaBody,
+            confirmText: l10n.reserveBackupAction,
+            cancelText: l10n.actionNo,
           );
 
           if (backup == true) {
@@ -316,7 +316,7 @@ class _Top extends BaseComponent {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: AppButton(
-                label: "Manage Vault Accounts",
+                label: AppLocalizations.of(context).reserveManageVaultAccounts,
                 icon: Icons.settings,
                 variant: AppColorVariant.Reserve,
                 onPressed: () {
@@ -325,7 +325,7 @@ class _Top extends BaseComponent {
               ),
             ),
           AppButton(
-            label: "Setup New Account",
+            label: AppLocalizations.of(context).reserveSetupNewAccount,
             icon: Icons.add,
             variant: AppColorVariant.Success,
             onPressed: () {
@@ -342,14 +342,14 @@ class _Top extends BaseComponent {
         height: 16,
       ),
       Text(
-        "Existing Accounts",
+        AppLocalizations.of(context).reserveExistingAccounts,
         style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white),
       ),
       SizedBox(height: 3),
-      if (wallets.isEmpty) Text("No Vault Accounts"),
+      if (wallets.isEmpty) Text(AppLocalizations.of(context).reserveNoVaultAccounts),
       if (wallets.isEmpty)
         AppButton(
-          label: "Restore Vault Account",
+          label: AppLocalizations.of(context).reserveRestoreVaultAccount,
           icon: Icons.refresh,
           type: AppButtonType.Text,
           variant: AppColorVariant.Light,

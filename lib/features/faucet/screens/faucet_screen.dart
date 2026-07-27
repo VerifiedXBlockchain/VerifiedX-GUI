@@ -8,6 +8,7 @@ import '../../../core/base_screen.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/services/explorer_service.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/faucet_form.dart';
 
 class FaucetScreen extends BaseScreen {
@@ -16,7 +17,7 @@ class FaucetScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: Text("VFX Faucet"),
+      title: Text(AppLocalizations.of(context).faucetTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // actions: const [WalletSelector()],
@@ -33,7 +34,7 @@ class FaucetScreen extends BaseScreen {
 
     if (!showFaucet) {
       return Center(
-        child: Text("Please choose a VFX account to continue"),
+        child: Text(AppLocalizations.of(context).faucetChooseAccount),
       );
     }
     return FutureBuilder<double>(

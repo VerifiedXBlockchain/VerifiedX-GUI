@@ -14,6 +14,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/providers/cached_memory_image_provider.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../nft/models/nft.dart';
 import '../../nft/services/nft_service.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
@@ -165,9 +166,12 @@ class TokenManagementScreen extends BaseScreen {
     );
   }
 
-  void showRaErrorMessage() {
+  void showRaErrorMessage([BuildContext? context]) {
+    final title = context != null
+        ? AppLocalizations.of(context).tokenNotSupportedByVault
+        : "Not Supported by Vault Account";
     InfoDialog.show(
-      title: "Not Supported by Vault Account",
+      title: title,
       body: "Vault Account owned tokens can not perform this action. Please change hte ownership to a standard VFX account to continue.",
     );
   }
@@ -219,7 +223,7 @@ class TokenManagementScreen extends BaseScreen {
                     isOwnedByRa: isOwnedByRA,
                   ),
                   AppButton(
-                    label: "Prove Ownership",
+                    label: AppLocalizations.of(context).tokenProveOwnership,
                     variant: AppColorVariant.Primary,
                     icon: Icons.verified_user,
                     onPressed: () async {
@@ -228,22 +232,23 @@ class TokenManagementScreen extends BaseScreen {
                   ),
                   if (token.voting)
                     AppButton(
-                      label: "Voting",
+                      label: AppLocalizations.of(context).tokenVoting,
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
                           builder: (context) {
+                            final l10n = AppLocalizations.of(context);
                             return ModalContainer(
                               color: Colors.black,
                               withDecor: false,
                               withClose: true,
                               children: [
                                 ListTile(
-                                  title: Text("Create Token Topic"),
+                                  title: Text(l10n.tokenTopicCreateTitle),
                                   leading: Icon(Icons.new_label),
                                   onTap: () {
                                     if (isOwnedByRA) {
-                                      showRaErrorMessage();
+                                      showRaErrorMessage(context);
                                       return;
                                     }
                                     Navigator.of(context).pop();
@@ -251,14 +256,14 @@ class TokenManagementScreen extends BaseScreen {
                                   },
                                 ),
                                 ListTile(
-                                  title: Text("View Topics"),
+                                  title: Text(l10n.tokenViewTopics),
                                   leading: Icon(Icons.remove_red_eye),
                                   onTap: () async {
                                     final nft = await NftService().getNftData(nftId);
 
                                     if (nft != null && nft.tokenStateDetails != null) {
                                       if (nft.tokenStateDetails!.topicList.isEmpty) {
-                                        InfoDialog.show(title: "No Topics", body: "This token doesn't have any voting topics yet.");
+                                        InfoDialog.show(title: l10n.tokenNoTopicsTitle, body: l10n.tokenNoTopicsBody);
                                         return;
                                       }
 
@@ -335,12 +340,12 @@ class TokenManagementScreen extends BaseScreen {
                       nft.tokenStateDetails!.addressBlackList != null &&
                       nft.tokenStateDetails!.addressBlackList!.isNotEmpty)
                     AppButton(
-                      label: "List Bans",
+                      label: AppLocalizations.of(context).tokenListBans,
                       variant: AppColorVariant.Light,
                       type: AppButtonType.Text,
                       onPressed: () {
                         final content = nft.tokenStateDetails!.addressBlackList!.join("\n");
-                        InfoDialog.show(title: "Banned Addresses", body: content);
+                        InfoDialog.show(title: AppLocalizations.of(context).tokenBannedAddressesTitle, body: content);
                       },
                     ),
                 ],
@@ -426,13 +431,13 @@ class TokenDetailsContent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TokenDetailRow(
-                    label: "Smart Contract UID",
+                    label: AppLocalizations.of(context).tokenScUidLabel,
                     value: tokenAccount.smartContractId,
                     copyable: true,
                   ),
 
                   TokenDetailRow(
-                    label: "Token Name",
+                    label: AppLocalizations.of(context).tokenNameLabel,
                     value: token.name,
                     copyable: true,
                   ),
@@ -444,13 +449,13 @@ class TokenDetailsContent extends StatelessWidget {
                   // if (token.currentSupply > 0)
 
                   TokenDetailRow(
-                    label: "Lifetime Cap",
+                    label: AppLocalizations.of(context).tokenLifetimeCapLabel,
                     value: token.mintable ? 'Infinite' : (min(token.currentSupply, token.startingSupply)).toString(),
                   ),
 
                   if (nft.tokenDetails != null)
                     TokenDetailRow(
-                      label: "Mintable",
+                      label: AppLocalizations.of(context).tokenMintableLabel,
                       value: nft.tokenDetails!.mintable ? "YES" : "NO",
                       dividerBelow: false,
                     ),
@@ -462,33 +467,33 @@ class TokenDetailsContent extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TokenDetailRow(
-                    label: "Owner",
+                    label: AppLocalizations.of(context).tokenOwnerLabel,
                     value: owner,
                     copyable: true,
                     showReserveColor: isOwnedByRA,
                   ),
                   TokenDetailRow(
-                    label: "Token Ticker",
+                    label: AppLocalizations.of(context).tokenTickerLabel,
                     value: token.ticker,
                     copyable: true,
                   ),
                   TokenDetailRow(
-                    label: "Circulating Supply",
+                    label: AppLocalizations.of(context).tokenCirculatingSupplyLabel,
                     value: token.currentSupply.toString(),
                   ),
                   if (!token.mintable && token.currentSupply < token.startingSupply)
                     TokenDetailRow(
-                      label: "Burned",
+                      label: AppLocalizations.of(context).tokenBurnedLabel,
                       value: "${token.startingSupply - token.currentSupply}",
                     ),
                   if (nft.tokenDetails != null)
                     TokenDetailRow(
-                      label: "Burnable",
+                      label: AppLocalizations.of(context).tokenBurnableLabel,
                       value: nft.tokenDetails!.burnable ? "YES" : "NO",
                     ),
                   if (nft.tokenDetails != null)
                     TokenDetailRow(
-                      label: "Voting",
+                      label: AppLocalizations.of(context).tokenVoting,
                       value: nft.tokenDetails!.voting ? "YES" : "NO",
                       dividerBelow: false,
                     ),

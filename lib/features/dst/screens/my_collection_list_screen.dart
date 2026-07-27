@@ -12,6 +12,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/publish_shop_button.dart';
 import '../components/shop_online_button.dart';
 import '../components/collection_list.dart';
@@ -30,7 +31,7 @@ class MyCollectionsListScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: Text("My Auction House"),
+      title: Text(AppLocalizations.of(context).dstMyAuctionHouseTitle),
       backgroundColor: Colors.black,
       actions: [
         AppButton(
@@ -122,7 +123,7 @@ class MyCollectionsListScreen extends BaseScreen {
                             if (shop.isPublished) ShopOnlineButton(),
                             AppButton(
                               variant: AppColorVariant.Primary,
-                              label: "Edit Details",
+                              label: AppLocalizations.of(context).dstEditDetails,
                               icon: Icons.edit,
                               onPressed: () {
                                 ref.read(decShopFormProvider.notifier).load(shop);
@@ -133,15 +134,16 @@ class MyCollectionsListScreen extends BaseScreen {
                             if (!shop.isPublished)
                               AppButton(
                                 variant: AppColorVariant.Danger,
-                                label: "Delete Shop",
+                                label: AppLocalizations.of(context).dstDeleteShop,
                                 icon: Icons.delete,
                                 onPressed: () async {
+                                  final l10n = AppLocalizations.of(context);
                                   final confirmed = await ConfirmDialog.show(
-                                    title: "Delete Shop",
+                                    title: l10n.dstDeleteShop,
                                     body: "Are you sure you want to delete your unpublished shop?",
                                     destructive: true,
-                                    confirmText: "Delete",
-                                    cancelText: "Cancel",
+                                    confirmText: l10n.adnrDelete,
+                                    cancelText: l10n.actionCancel,
                                   );
 
                                   if (confirmed == true) {
@@ -164,16 +166,17 @@ class MyCollectionsListScreen extends BaseScreen {
                             if (shop.isPublished)
                               AppButton(
                                 variant: AppColorVariant.Danger,
-                                label: "Delete Shop",
+                                label: AppLocalizations.of(context).dstDeleteShop,
                                 icon: Icons.delete,
                                 onPressed: () async {
+                                  final l10n = AppLocalizations.of(context);
                                   final confirmed = await ConfirmDialog.show(
-                                    title: "Delete Shop",
+                                    title: l10n.dstDeleteShop,
                                     body:
                                         "Are you sure you want to delete this shop from the network? There is a cost of $SHOP_DELETE_COST VFX plus TX fee to perform this operation.",
                                     destructive: true,
-                                    confirmText: "Delete",
-                                    cancelText: "Cancel",
+                                    confirmText: l10n.adnrDelete,
+                                    cancelText: l10n.actionCancel,
                                   );
 
                                   if (confirmed == true) {
@@ -346,12 +349,13 @@ class DecShopButton extends BaseComponent {
                 ),
               ),
               AppButton(
-                label: "Import Shop",
+                label: AppLocalizations.of(context).dstImportShop,
                 onPressed: () async {
+                  final l10n = AppLocalizations.of(context);
                   final address = await PromptModal.show(
-                    title: "Import Shop",
+                    title: l10n.dstImportShop,
                     validator: formValidatorRbxAddress,
-                    labelText: "Your VFX Address",
+                    labelText: l10n.dstImportShopAddressLabel,
                   );
 
                   if (address != null) {

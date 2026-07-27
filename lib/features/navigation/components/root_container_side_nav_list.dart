@@ -19,6 +19,7 @@ import '../../root/web_dashboard_container.dart';
 import '../../../core/base_component.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/pretty_icons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import 'root_container_side_nav_item.dart';
 
@@ -38,12 +39,14 @@ class RootContainerSideNavList extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final tabsRouter = AutoTabsRouter.of(context);
 
+    final l10n = AppLocalizations.of(context);
+
     return Builder(builder: (context) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           RootContainerSideNavItem(
-            title: "Dashboard",
+            title: l10n.navDashboard,
             iconType: PrettyIconType.dashboard,
             onPressed: () {
               if (tabsRouter.activeIndex == 0) {
@@ -61,7 +64,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Vault Account${kIsWeb ? '' : 's'}",
+            title: kIsWeb ? l10n.navMenuVaultAccountSingular : l10n.navMenuVaultAccounts,
             iconType: PrettyIconType.lock,
             onPressed: () {
               tabsRouter.setActiveIndex(kIsWeb ? WebRouteIndex.reserve : 14);
@@ -74,7 +77,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Domains",
+            title: l10n.navDomains,
             iconType: PrettyIconType.domain,
             onPressed: () {
               tabsRouter.setActiveIndex(kIsWeb ? WebRouteIndex.adnrs : 10);
@@ -87,7 +90,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Send",
+            title: l10n.actionSend,
             iconType: PrettyIconType.send,
             onPressed: () {
               tabsRouter.setActiveIndex(1);
@@ -99,7 +102,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Receive",
+            title: l10n.actionReceive,
             iconType: PrettyIconType.receive,
             onPressed: () {
               tabsRouter.setActiveIndex(2);
@@ -112,7 +115,7 @@ class RootContainerSideNavList extends BaseComponent {
           ),
           if (BUTTERFLY_ENABLED)
             RootContainerSideNavItem(
-              title: "Pay /w Butterfly",
+              title: l10n.navMenuPayWithButterfly,
               iconType: PrettyIconType.butterfly,
               onPressed: () async {
                 if (inDrawer) {
@@ -131,7 +134,7 @@ class RootContainerSideNavList extends BaseComponent {
               isExpanded: isExpanded,
             ),
           RootContainerSideNavItem(
-            title: "Crypto.com",
+            title: l10n.navMenuCryptoCom,
             iconType: PrettyIconType.custom,
             customIconWidget: Image.asset(
               "assets/images/crypto_dot_com_icon.png",
@@ -150,7 +153,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Transactions",
+            title: l10n.navTransactions,
             iconType: PrettyIconType.transactions,
             onPressed: () {
               tabsRouter.setActiveIndex(3);
@@ -162,7 +165,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Tokenize BTC",
+            title: l10n.navMenuTokenizeBitcoin,
             iconType: PrettyIconType.bitcoin,
             textColorOverrideIdle: AppColors.getBtc().withOpacity(0.8),
             textColorOverrideHover: AppColors.getBtc().withOpacity(1),
@@ -185,7 +188,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Fungible Tokens",
+            title: l10n.navMenuFungibleTokens,
             iconType: PrettyIconType.fungibleToken,
             onPressed: () {
               if (kIsWeb) {
@@ -211,7 +214,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Smart Contracts",
+            title: l10n.navMenuSmartContracts,
             iconType: PrettyIconType.smartContract,
             onPressed: () {
               if (kIsWeb) {
@@ -225,7 +228,7 @@ class RootContainerSideNavList extends BaseComponent {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
               if (ref.read(sessionProvider).currentWallet == null) {
-                Toast.error("An account is required to access this section.");
+                Toast.error(l10n.navMenuAccountRequiredToast);
                 return;
               }
               tabsRouter.setActiveIndex(8);
@@ -236,7 +239,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "Manage NFTs",
+            title: l10n.navMenuNfts,
             iconType: PrettyIconType.nft,
             onPressed: () {
               if (kIsWeb) {
@@ -250,7 +253,7 @@ class RootContainerSideNavList extends BaseComponent {
                 rootScaffoldKey.currentState!.closeDrawer();
               }
               if (ref.read(sessionProvider).currentWallet == null) {
-                Toast.error("An account is required to access this section.");
+                Toast.error(l10n.navMenuAccountRequiredToast);
                 return;
               }
               tabsRouter.setActiveIndex(7);
@@ -261,7 +264,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
-            title: "P2P Auctions",
+            title: l10n.navMenuP2PAuctions,
             iconType: PrettyIconType.p2p,
             onPressed: () {
               if (kIsWeb) {
@@ -288,7 +291,7 @@ class RootContainerSideNavList extends BaseComponent {
           ),
           if (!kIsWeb)
             RootContainerSideNavItem(
-              title: "Validator",
+              title: l10n.navMenuValidator,
               iconType: PrettyIconType.validator,
               onPressed: () {
                 tabsRouter.setActiveIndex(4);
@@ -301,7 +304,7 @@ class RootContainerSideNavList extends BaseComponent {
             ),
           if (!kIsWeb)
             RootContainerSideNavItem(
-              title: "Operations",
+              title: l10n.navMenuOperations,
               iconType: PrettyIconType.operations,
               onPressed: () {
                 if (tabsRouter.activeIndex == 16) {
@@ -320,17 +323,16 @@ class RootContainerSideNavList extends BaseComponent {
             ),
           if (kIsWeb)
             RootContainerSideNavItem(
-              title: "Sign Out",
+              title: l10n.navMenuSignOut,
               iconType: PrettyIconType.custom,
               icon: Icons.logout,
               onPressed: () async {
                 final confirmed = await ConfirmDialog.show(
-                  title: "Sign Out",
-                  body:
-                      "Are you sure you want to logout of the VFX Web Wallet?",
+                  title: l10n.navSignOutTitle,
+                  body: l10n.navSignOutBody,
                   destructive: true,
-                  confirmText: "Logout",
-                  cancelText: "Cancel",
+                  confirmText: l10n.navMenuLogout,
+                  cancelText: l10n.actionCancel,
                 );
                 if (confirmed == true) {
                   await ref.read(webSessionProvider.notifier).logout();
@@ -348,6 +350,8 @@ class RootContainerSideNavList extends BaseComponent {
 }
 
 Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
+  final l10n = AppLocalizations.of(context);
+
   // Get wallet keys based on platform
   String? privateKey;
   String? publicKey;
@@ -356,8 +360,7 @@ Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
   if (kIsWeb) {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error(
-          "No wallet selected. Please create or import a wallet first.");
+      Toast.error(l10n.butterflyNoWalletError);
       return;
     }
     privateKey = keypair.privateCorrected;
@@ -366,11 +369,11 @@ Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
   } else {
     final wallet = ref.read(sessionProvider).currentWallet;
     if (wallet == null) {
-      Toast.error("No Account Selected");
+      Toast.error(l10n.messageNoAccountSelected);
       return;
     }
     if (wallet.privateKey == null) {
-      Toast.error("Private key not available.");
+      Toast.error(l10n.navPrivateKeyNotAvailable);
       return;
     }
     privateKey = wallet.privateKey!;
@@ -381,20 +384,18 @@ Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
   // Prompt for password
   final password = await PasswordPromptService.promptNewPassword(
     rootNavigatorKey.currentContext!,
-    title: "Create Butterfly Password",
-    customMessage:
-        "Create a password to securely transfer your credentials to Butterfly. You will need to enter this same password on the Butterfly website.",
+    title: l10n.butterflyCreatePassword,
+    customMessage: l10n.butterflyPasswordMessage,
   );
 
   if (password == null) return;
 
   // Confirmation dialog
   final confirmed = await ConfirmDialog.show(
-    title: "Login to Butterfly",
-    body:
-        "You are about to open Butterfly and log in with:\n\n$address\n\nContinue?",
-    confirmText: "Open Butterfly",
-    cancelText: "Cancel",
+    title: l10n.butterflyLoginTitle,
+    body: l10n.butterflyLoginBody(address!),
+    confirmText: l10n.butterflyOpenButton,
+    cancelText: l10n.actionCancel,
   );
 
   if (confirmed != true) return;
@@ -414,6 +415,6 @@ Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
     await launchUrlString(url, mode: LaunchMode.externalApplication);
   } catch (e) {
     ref.read(globalLoadingProvider.notifier).complete();
-    Toast.error("Failed to generate login URL: $e");
+    Toast.error(l10n.butterflyLoginUrlError(e.toString()));
   }
 }

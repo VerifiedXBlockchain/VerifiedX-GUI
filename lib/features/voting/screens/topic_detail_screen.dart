@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/components/centered_loader.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../components/topic_detail.dart';
 import '../providers/topic_detail_provider.dart';
@@ -24,7 +25,7 @@ class TopicDetailScreen extends BaseScreen {
               backgroundColor: Colors.black,
             )
           : AppBar(
-              title: const Text("Error"),
+              title: Text(AppLocalizations.of(context).votingError),
             ),
       error: (_, __) => AppBar(
         title: const Text("Error"),
@@ -39,8 +40,8 @@ class TopicDetailScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     final data = ref.watch(topicDetailProvider(topicUid));
     return data.when(
-      data: (topic) => topic != null ? TopicDetail(topic) : const Center(child: Text("Error")),
-      error: (_, __) => const Text("Error"),
+      data: (topic) => topic != null ? TopicDetail(topic) : Center(child: Text(AppLocalizations.of(context).votingError)),
+      error: (_, __) => Text(AppLocalizations.of(context).votingError),
       loading: () => const CenteredLoader(),
     );
   }

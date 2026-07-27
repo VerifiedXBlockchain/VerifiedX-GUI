@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/mpc_ceremony.dart';
 import '../providers/mpc_ceremony_provider.dart';
 
@@ -290,7 +291,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         AppButton(
-          label: "Retry",
+          label: AppLocalizations.of(context).btcRetry,
           variant: AppColorVariant.Danger,
           onPressed: () {
             ref.read(mpcCeremonyProvider.notifier).reset();

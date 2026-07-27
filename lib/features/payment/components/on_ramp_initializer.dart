@@ -6,6 +6,7 @@ import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../core/app_constants.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/onramp_quote_response.dart';
 import '../payment_utils.dart';
 import '../services/butterfly_service.dart';
@@ -65,7 +66,7 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
             height: 16,
           ),
           AppButton(
-            label: "Pay with Crypto.com",
+            label: AppLocalizations.of(context).paymentPayWithCryptoCom,
             icon: Icons.token,
             onPressed: () async {
               if (kIsWeb) {
@@ -82,7 +83,7 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
               height: 8,
             ),
             AppButton(
-              label: "Pay with Credit Card",
+              label: AppLocalizations.of(context).paymentPayWithCard,
               icon: Icons.credit_card,
               onPressed: () {
                 //Stripe does not allow for iframe embed
@@ -95,7 +96,7 @@ class _OnRampInitializerState extends State<OnRampInitializer> {
             height: 8,
           ),
           AppButton(
-            label: "Cancel",
+            label: AppLocalizations.of(context).paymentCancel,
             type: AppButtonType.Text,
             variant: AppColorVariant.Secondary,
             onPressed: () {

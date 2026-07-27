@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 import '../../navigation/root_container.dart';
 
@@ -10,7 +11,7 @@ class AccountsScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: Text("My Accounts"),
+      title: Text(AppLocalizations.of(context).walletAccountsTitle),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
     );

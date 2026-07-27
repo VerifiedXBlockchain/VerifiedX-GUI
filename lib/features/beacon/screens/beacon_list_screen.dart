@@ -5,6 +5,7 @@ import '../../../core/components/back_to_home_button.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../components/add_beacon_modal.dart';
 import '../components/beacon_list.dart';
@@ -26,7 +27,7 @@ class BeaconListScreen extends BaseScreen {
     final myBeacons = beacons.where((b) => b.selfBeacon);
 
     return AppBar(
-      title: const Text("Beacons"),
+      title: Text(AppLocalizations.of(context).beaconTitle),
       backgroundColor: Colors.black54,
       // leading: IconButton(
       //   onPressed: () {
@@ -37,7 +38,7 @@ class BeaconListScreen extends BaseScreen {
       leading: BackToHomeButton(),
       actions: [
         AppButton(
-          label: "Add Remote Beacon",
+          label: AppLocalizations.of(context).beaconAddRemote,
           variant: AppColorVariant.Light,
           onPressed: () async {
             showModalBottomSheet(
@@ -51,7 +52,7 @@ class BeaconListScreen extends BaseScreen {
           width: 8,
         ),
         AppButton(
-          label: "Create / Host Beacon",
+          label: AppLocalizations.of(context).beaconCreateHost,
           variant: AppColorVariant.Light,
           onPressed: () async {
             if (myBeacons.isNotEmpty) {

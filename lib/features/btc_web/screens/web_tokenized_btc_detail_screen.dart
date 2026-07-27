@@ -21,6 +21,7 @@ import '../../../utils/toast.dart';
 
 import '../../../core/theme/components.dart';
 import '../../../generated/assets.gen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/web_btc_tokenized_action_buttons.dart';
 import '../components/web_btc_transaction_list_tile.dart';
 import '../models/btc_web_vbtc_token.dart';
@@ -106,7 +107,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         );
       },
       error: (_, __) => AppBar(
-        title: Text("error"),
+        title: Text(AppLocalizations.of(context).btcWebError),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.black,
       ),
@@ -122,7 +123,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         data: (token) {
           if (token == null) {
             return Center(
-              child: Text("Token Not Found"),
+              child: Text(AppLocalizations.of(context).btcTokenNotFoundLabel),
             );
           }
 
@@ -214,7 +215,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                     ),
                   ),
                 ),
-                if (btcTxs.isEmpty) Text("No Transactions"),
+                if (btcTxs.isEmpty) Text(AppLocalizations.of(context).btcNoTransactions),
                 ListView.builder(
                   itemCount: btcTxs.length,
                   shrinkWrap: true,
@@ -232,7 +233,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
             ),
           );
         },
-        error: (_, __) => const Text("Error"),
+        error: (_, __) => Text(AppLocalizations.of(context).btcWebError),
         loading: () => const CenteredLoader());
   }
 }
@@ -319,46 +320,46 @@ class _VBTCDetails extends StatelessWidget {
             address: address,
           ),
           _DetailRow(
-            label: "Name",
+            label: AppLocalizations.of(context).btcDetailNameLabel,
             value: token.name,
           ),
           _DetailRow(
-            label: "Owner",
+            label: AppLocalizations.of(context).btcDetailOwnerLabel,
             value: address,
             isReserve: address.startsWith("xRBX"),
           ),
           _DetailRow(
-            label: "My Balance",
+            label: AppLocalizations.of(context).btcDetailMyBalanceLabel,
             value: "$balance vBTC",
           ),
           _DetailRow(
-            label: "Description",
+            label: AppLocalizations.of(context).btcDetailDescriptionLabel,
             value: token.description,
             inExpanded: true,
             withMaxLines: BreakPoints.useMobileLayout(context),
           ),
           _DetailRow(
-            label: "Smart Contract ID",
+            label: AppLocalizations.of(context).btcDetailScIdLabel,
             value: token.scIdentifier,
             inExpanded: true,
             withCopy: true,
           ),
           _DetailRow(
-            label: "SmartContract Owner Address",
+            label: AppLocalizations.of(context).btcDetailScOwnerAddressLabel,
             value: token.ownerAddress,
             isReserve: token.ownerAddress.startsWith("xRBX"),
             withCopy: true,
           ),
           if (isOwner)
             _DetailRow(
-              label: "BTC Deposit Address",
+              label: AppLocalizations.of(context).btcDetailDepositAddressLabel,
               value: token.depositAddress,
               inExpanded: true,
               withCopy: true,
             ),
           if (isOwner)
             _DetailRow(
-              label: "Token Total Balance",
+              label: AppLocalizations.of(context).btcDetailTotalBalanceLabel,
               value: "${token.globalBalance} vBTC",
             ),
         ],
@@ -554,7 +555,7 @@ class _DetailRow extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: value));
-                  Toast.message("$label copied to clipboard");
+                  Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
                 },
                 child: Icon(
                   Icons.copy,

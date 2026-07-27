@@ -27,6 +27,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../asset/asset_card.dart';
@@ -71,7 +72,7 @@ class NftDetailScreen extends BaseScreen {
     final nft = ref.watch(nftDetailProvider(id));
 
     return AppBar(
-      title: nft != null ? Text(nft.currentEvolveName) : const Text("NFT"),
+      title: nft != null ? Text(nft.currentEvolveName) : Text(AppLocalizations.of(context).nftDetailFallback),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // leading: AutoRouter.of(context).canPopSelfOrChildren
@@ -117,7 +118,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: AppBadge(
-                      label: "Listed",
+                      label: AppLocalizations.of(context).nftBadgeListed,
                     ),
                   ),
                 SizedBox(
@@ -303,7 +304,7 @@ class NftDetailScreen extends BaseScreen {
                                   color: AppColors.getBlue(ColorShade.s50),
                                 ),
                               ),
-                              subtitle: const Text("Minter Address"),
+                              subtitle: Text(AppLocalizations.of(context).nftMinterAddressLabel),
                               trailing: IconButton(
                                 icon: const Icon(Icons.copy),
                                 iconSize: 16,
@@ -478,7 +479,7 @@ class NftDetailScreen extends BaseScreen {
                 ),
                 if (nft.currentEvolveProperties.isNotEmpty) ...[
                   const Divider(),
-                  Text("Properties:",
+                  Text(AppLocalizations.of(context).nftPropertiesHeading,
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall!
@@ -491,7 +492,7 @@ class NftDetailScreen extends BaseScreen {
                   )
                 ],
                 const Divider(),
-                Text("Features:",
+                Text(AppLocalizations.of(context).nftFeaturesHeading,
                     style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                           color: Colors.white,
                         )),
@@ -530,7 +531,7 @@ class NftDetailScreen extends BaseScreen {
                               subtitle: Text(f.description),
                               trailing: f.type == FeatureType.evolution
                                   ? AppButton(
-                                      label: "Reveal Evolve Stages",
+                                      label: AppLocalizations.of(context).nftRevealEvolveStages,
                                       variant: AppColorVariant.Dark,
                                       onPressed: () {
                                         showModalBottomSheet(
@@ -616,7 +617,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
-                      label: "Prove Ownership",
+                      label: AppLocalizations.of(context).nftProveOwnership,
                       icon: Icons.security,
                       variant: AppColorVariant.Primary,
                       onPressed: () {
@@ -628,7 +629,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
-                      label: "Transfer",
+                      label: AppLocalizations.of(context).nftTransfer,
                       // helpType: HelpType.transfer,
                       icon: Icons.send,
                       onPressed: nft.isPublished
@@ -641,12 +642,13 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
-                      label: "Sell",
+                      label: AppLocalizations.of(context).nftSell,
                       // helpType: HelpType.transfer,
                       icon: Icons.attach_money,
                       onPressed: () async {
+                        final l10n = AppLocalizations.of(context);
                         if (kIsWeb) {
-                          Toast.message("Activating soon!");
+                          Toast.message(l10n.nftActivatingSoonToast);
                           return;
                         }
                         if (!await passwordRequiredGuard(context, ref)) {
@@ -657,17 +659,17 @@ class NftDetailScreen extends BaseScreen {
                             .firstWhereOrNull(
                                 (w) => w.address == nft.currentOwner);
                         if (wallet == null) {
-                          Toast.error("No account selected");
+                          Toast.error(l10n.nftNoAccountSelectedToast);
                           return;
                         }
 
                         if (wallet.isReserved) {
-                          Toast.error("Vault Accounts can not sell NFTs.");
+                          Toast.error(l10n.nftVaultCannotSellToast);
                           return;
                         }
 
                         if (wallet.balance < MIN_RBX_FOR_SC_ACTION) {
-                          Toast.error("Not enough balance for transaction");
+                          Toast.error(l10n.nftNotEnoughBalanceToast);
                           return;
                         }
 
@@ -676,16 +678,16 @@ class NftDetailScreen extends BaseScreen {
                         final filesReady = await _nft.areFilesReady();
 
                         if (!filesReady) {
-                          Toast.error("Media files not found on this machine.");
+                          Toast.error(l10n.nftMediaNotFoundToast);
                           return;
                         }
                         String? address = await PromptModal.show(
                           contextOverride: context,
-                          title: "Sell NFT",
+                          title: l10n.nftSellTitle,
                           validator: (value) =>
                               formValidatorRbxAddress(value, true),
-                          labelText: "VFX Address",
-                          confirmText: "Continue",
+                          labelText: l10n.nftSellAddressLabel,
+                          confirmText: l10n.actionContinue,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
                                 RegExp('[a-zA-Z0-9.]')),
@@ -702,16 +704,16 @@ class NftDetailScreen extends BaseScreen {
                         final isValid = await BridgeService()
                             .validateSendToAddress(address);
                         if (!isValid) {
-                          Toast.error("Invalid Address");
+                          Toast.error(l10n.nftInvalidAddressToast);
                           return;
                         }
 
                         final String? amountString = await PromptModal.show(
                           contextOverride: context,
-                          title: "Sale Amount",
+                          title: l10n.nftSellAmountTitle,
                           body: "How much are you selling this NFT for?",
-                          labelText: "VFX Amount)",
-                          confirmText: "Continue",
+                          labelText: l10n.nftSellAmountLabel,
+                          confirmText: l10n.actionContinue,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
                           ],
@@ -741,24 +743,24 @@ class NftDetailScreen extends BaseScreen {
                         final amount = double.tryParse(amountString);
 
                         if (amount == null) {
-                          Toast.error("Invalid Amount");
+                          Toast.error(l10n.nftSellInvalidAmountToast);
                           return;
                         }
 
                         final String? backupUrl = await PromptModal.show(
                           contextOverride: context,
-                          title: "Backup URL (Optional)",
+                          title: l10n.nftBackupUrlTitle,
                           body:
                               "Paste in a public URL to a hosted zipfile containing the assets.",
                           validator: (value) {
                             return null;
                           },
-                          labelText: "URL (Optional)",
-                          confirmText: "Continue",
+                          labelText: l10n.nftBackupUrlLabel,
+                          confirmText: l10n.actionContinue,
                         );
 
                         final confirmed = await ConfirmDialog.show(
-                          title: "Confirm Sale Start",
+                          title: l10n.nftConfirmSaleStartTitle,
                           body:
                               "Please confirm you want to sell the NFT to \"$address\" for $amount VFX.",
                           confirmText: "Start Sale",
@@ -788,7 +790,7 @@ class NftDetailScreen extends BaseScreen {
                       return Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: AppButton(
-                          label: "Manage",
+                          label: AppLocalizations.of(context).nftManage,
                           icon: Icons.settings,
                           onPressed: () {
                             showModalBottomSheet(
@@ -826,7 +828,7 @@ class NftDetailScreen extends BaseScreen {
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: AppButton(
-                        label: "View Code",
+                        label: AppLocalizations.of(context).nftViewCode,
                         icon: Icons.code,
                         variant: AppColorVariant.Primary,
                         onPressed: () {
@@ -844,7 +846,7 @@ class NftDetailScreen extends BaseScreen {
                     Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: AppButton(
-                        label: "Sync Media",
+                        label: AppLocalizations.of(context).nftSyncMedia,
                         icon: Icons.sync,
                         variant: AppColorVariant.Primary,
                         onPressed: () async {
@@ -870,7 +872,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
-                      label: "Burn",
+                      label: AppLocalizations.of(context).nftBurn,
                       icon: Icons.fire_hydrant,
                       // helpType: HelpType.burn,
                       variant: AppColorVariant.Danger,
@@ -900,12 +902,12 @@ class NftDetailScreen extends BaseScreen {
                               }
 
                               final confirmed = await ConfirmDialog.show(
-                                title: "Burn NFT?",
+                                title: AppLocalizations.of(context).nftBurnTitle,
                                 body:
                                     "Are you sure you want to burn ${nft.name}",
                                 destructive: true,
-                                confirmText: "Burn",
-                                cancelText: "Cancel",
+                                confirmText: AppLocalizations.of(context).nftBurn,
+                                cancelText: AppLocalizations.of(context).actionCancel,
                               );
 
                               if (confirmed == true) {
@@ -948,7 +950,7 @@ class NftDetailScreen extends BaseScreen {
 
   Widget buildAssetsNotAvailable(NftDetailProvider _provider,
       [bool includeButton = true]) {
-    return Center(
+    return Builder(builder: (context) => Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
@@ -966,13 +968,12 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: AppButton(
-                      label: "Transfer Now",
+                      label: AppLocalizations.of(context).nftTransferNow,
                       onPressed: () async {
                         final success = await _provider.transferWebIn();
 
                         if (success == true) {
-                          Toast.message(
-                              "Transfer request has been broadcasted. Your assets should be available soon.");
+                          Toast.message(AppLocalizations.of(context).btcTransferNowToast);
                         }
                       },
                       variant: AppColorVariant.Success,
@@ -983,7 +984,7 @@ class NftDetailScreen extends BaseScreen {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildDescriptionWithDecrypt(
@@ -1024,7 +1025,7 @@ class NftDetailScreen extends BaseScreen {
           const SizedBox(height: 8),
           Center(
             child: AppButton(
-              label: "Decrypt",
+              label: AppLocalizations.of(context).nftDecrypt,
               icon: Icons.lock_open,
               variant: AppColorVariant.Success,
               onPressed: () async {
@@ -1039,7 +1040,7 @@ class NftDetailScreen extends BaseScreen {
         if (decryptedMessage != null) ...[
           const SizedBox(height: 8),
           AppBadge(
-            label: "Decrypted",
+            label: AppLocalizations.of(context).nftDecrypted,
             variant: AppColorVariant.Success,
           ),
         ],
@@ -1109,7 +1110,7 @@ class NftPropertiesWrap extends StatelessWidget {
               }),
               subtitle: Builder(builder: (context) {
                 if (p.name == BACKUP_URL_PROPERTY_NAME) {
-                  return Text("Media Backup URL");
+                  return Text(AppLocalizations.of(context).nftMediaBackupUrl);
                 }
                 return Text(p.name);
               }),

@@ -7,6 +7,7 @@ import '../../../core/components/centered_loader.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../auth/auth_utils.dart';
 import '../../auth/components/auth_type_modal.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -32,7 +33,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: Text("Send Sale Start TX"),
+      title: Text(AppLocalizations.of(context).shopSendSaleStartTx),
       backgroundColor: Colors.black,
     );
   }
@@ -66,7 +67,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                   height: 8,
                 ),
                 AppButton(
-                  label: "Sign In",
+                  label: AppLocalizations.of(context).shopSignIn,
                   onPressed: () {
                     showModalBottomSheet(
                       backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
@@ -194,7 +195,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                             height: 16,
                           ),
                           AppButton(
-                            label: "Start Transaction",
+                            label: AppLocalizations.of(context).shopStartTransaction,
                             variant: AppColorVariant.Success,
                             onPressed: () async {
                               ref.read(globalLoadingProvider.notifier).start();

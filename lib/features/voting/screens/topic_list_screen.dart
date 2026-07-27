@@ -8,6 +8,7 @@ import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../components/topic_grid.dart';
 import '../components/topic_list.dart';
@@ -32,7 +33,7 @@ class TopicListScreen extends BaseScreen {
     final provider = ref.read(topicListViewProvider.notifier);
     final isGrid = ref.watch(topicListViewProvider);
     return AppBar(
-      title: const Text("Validator Voting Topics"),
+      title: Text(AppLocalizations.of(context).votingTitle),
       backgroundColor: Colors.black54,
       leading: BackToHomeButton(),
       actions: [
@@ -40,7 +41,7 @@ class TopicListScreen extends BaseScreen {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              label: "Create Topic",
+              label: AppLocalizations.of(context).votingCreateTopic,
               variant: AppColorVariant.Light,
               onPressed: () async {
                 if (!currentWalletIsValidating(ref)) {
@@ -106,29 +107,30 @@ class TopicListScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     final isGrid = ref.watch(topicListViewProvider);
 
+    final l10n = AppLocalizations.of(context);
     return DefaultTabController(
       length: 6,
       child: Column(
         children: [
-          const TabBar(
+          TabBar(
             tabs: [
               Tab(
-                child: Text("Active"),
+                child: Text(l10n.votingTabActive),
               ),
               Tab(
-                child: Text("Inactive"),
+                child: Text(l10n.votingTabInactive),
               ),
               Tab(
-                child: Text("Voted"),
+                child: Text(l10n.votingTabVoted),
               ),
               Tab(
-                child: Text("Not Voted"),
+                child: Text(l10n.votingTabNotVoted),
               ),
               Tab(
-                child: Text("All"),
+                child: Text(l10n.votingTabAll),
               ),
               Tab(
-                child: Text("My Topics"),
+                child: Text(l10n.votingTabMyTopics),
               ),
             ],
           ),

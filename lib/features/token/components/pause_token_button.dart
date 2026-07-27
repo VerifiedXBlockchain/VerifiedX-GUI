@@ -4,6 +4,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/providers/nft_detail_watcher.dart';
 import '../providers/pending_token_pause_provider.dart';
@@ -44,7 +45,7 @@ class PauseTokenButton extends BaseComponent {
               processing: true,
               variant: AppColorVariant.Light,
               onPressed: () {
-                Toast.message("Token state change is pending. Please wait");
+                Toast.message(AppLocalizations.of(context).tokenStateChangePendingToast);
               },
             );
           }

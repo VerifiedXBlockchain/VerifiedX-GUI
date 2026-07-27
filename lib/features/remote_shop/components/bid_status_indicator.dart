@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../dst/models/bid.dart';
 
 class BidStatusIndicator extends StatelessWidget {
@@ -14,16 +15,17 @@ class BidStatusIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
+        final l10n = AppLocalizations.of(context);
         if (bid.bidStatus == BidStatus.Sent) {
           return AppBadge(
-            label: "Sent",
+            label: l10n.shopBidSent,
             variant: AppColorVariant.Primary,
           );
         }
 
         if (bid.bidStatus == BidStatus.Received) {
           return AppBadge(
-            label: "Received",
+            label: l10n.shopBidReceived,
             variant: AppColorVariant.Primary,
           );
         }
@@ -35,7 +37,7 @@ class BidStatusIndicator extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBadge(
-                  label: "Purchased",
+                  label: l10n.shopBidPurchased,
                   variant: AppColorVariant.Success,
                 ),
                 SizedBox(height: 4),
@@ -45,14 +47,14 @@ class BidStatusIndicator extends StatelessWidget {
           }
 
           return AppBadge(
-            label: "Accepted",
+            label: l10n.shopBidAccepted,
             variant: AppColorVariant.Success,
           );
         }
 
         if (bid.bidStatus == BidStatus.Rejected) {
           return AppBadge(
-            label: "Rejected",
+            label: l10n.shopBidRejected,
             variant: AppColorVariant.Danger,
           );
         }

@@ -15,6 +15,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/html_helpers.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -41,8 +42,9 @@ class WebReceiveScreen extends BaseScreen {
     final isBtc =
         ref.watch(webCurrencySegementedButtonProvider) == WebCurrencyType.btc;
 
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: isBtc ? Text("Receive BTC") : Text("Receive VFX"),
+      title: Text(l10n.receiveAppBarTitle(isBtc ? "BTC" : "VFX")),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       leading: isMobile ? WebMobileDrawerButton() : null,
@@ -152,7 +154,7 @@ class WebReceiveScreen extends BaseScreen {
                             selectedAccount.address,
                             style: TextStyle(color: selectedAccount.color),
                           ),
-                          subtitle: Text("Your Address"),
+                          subtitle: Text(AppLocalizations.of(context).webYourAddress),
                           leading: Icon(Icons.wallet),
                           trailing: IconButton(
                             icon: const Icon(Icons.copy),
@@ -173,7 +175,7 @@ class WebReceiveScreen extends BaseScreen {
                               selectedAccount.domain!,
                               style: TextStyle(color: selectedAccount.color),
                             ),
-                            subtitle: Text("Your Domain"),
+                            subtitle: Text(AppLocalizations.of(context).webYourDomain),
                             leading: Icon(Icons.link),
                             trailing: IconButton(
                               icon: const Icon(Icons.copy),

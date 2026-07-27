@@ -18,6 +18,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../asset/asset.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../wallet/components/wallet_selector.dart';
@@ -64,7 +65,7 @@ class TokenForm extends BaseComponent {
                   "Token Name:",
                   style: TextStyle(color: Colors.white),
                 ),
-                hintText: "MyToken",
+                hintText: AppLocalizations.of(context).tokenFormNameHint,
                 helperText: "The name of this new token.",
               ),
             ),
@@ -76,7 +77,7 @@ class TokenForm extends BaseComponent {
                   "Token Ticker:",
                   style: TextStyle(color: Colors.white),
                 ),
-                hintText: "ABC",
+                hintText: AppLocalizations.of(context).tokenFormTickerHint,
                 helperText: "The ticker for this new token.",
               ),
               inputFormatters: [UpperCaseTextFormatter(), FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]"))],
@@ -323,11 +324,13 @@ class TokenForm extends BaseComponent {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Divider(),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+            Builder(builder: (context) {
+              final l10n = AppLocalizations.of(context);
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                 AppButton(
-                  label: "Cancel",
+                  label: l10n.tokenFormCancel,
                   variant: AppColorVariant.Danger,
                   onPressed: () {
                     provider.clear();
@@ -338,25 +341,25 @@ class TokenForm extends BaseComponent {
                   width: 64,
                 ),
                 AppButton(
-                  label: "Create",
+                  label: l10n.tokenFormCreate,
                   onPressed: () async {
                     if (kIsWeb) {
                       final keypair = ref.read(webSessionProvider.select((value) => value.keypair));
                       if (keypair == null) {
-                        Toast.error("No account selected");
+                        Toast.error(l10n.tokenFormNoAccountSelectedToast);
                         return;
                       }
                     } else {
                       final currentWallet = ref.read(sessionProvider).currentWallet;
 
                       if (currentWallet == null) {
-                        Toast.error("No account selected");
+                        Toast.error(l10n.tokenFormNoAccountSelectedToast);
                         return null;
                       }
                     }
 
                     if (model.imageBase64 == null) {
-                      Toast.error("Icon Image Required");
+                      Toast.error(l10n.tokenFormIconRequiredToast);
                       return;
                     }
 
@@ -365,11 +368,11 @@ class TokenForm extends BaseComponent {
                     }
 
                     final confirmed = await ConfirmDialog.show(
-                      title: "Compile & Mint Token Smart Contract?",
+                      title: l10n.tokenFormCompileMintTitle,
                       body:
                           "Are you sure you want to proceed?\nOnce compiled you will not be able to make any changes\nand the smart contract/token will be deployed to the chain.",
-                      confirmText: "Continue",
-                      cancelText: "Cancel",
+                      confirmText: l10n.actionContinue,
+                      cancelText: l10n.actionCancel,
                     );
 
                     if (confirmed != true) {
@@ -377,11 +380,11 @@ class TokenForm extends BaseComponent {
                     }
 
                     final extraConfirm = await ConfirmDialog.show(
-                      title: "Confirm Address",
+                      title: l10n.tokenFormConfirmAddressTitle,
                       body:
                           "This will be minted by ${kIsWeb ? ref.read(webSessionProvider.select((value) => value.keypair))!.address : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation}",
-                      confirmText: "Compile & Mint",
-                      cancelText: "Cancel",
+                      confirmText: l10n.btcCompileMint,
+                      cancelText: l10n.actionCancel,
                     );
 
                     if (extraConfirm != true) {
@@ -392,7 +395,7 @@ class TokenForm extends BaseComponent {
 
                     if (success == true) {
                       await InfoDialog.show(
-                        title: "Stand by",
+                        title: l10n.tokenFormStandByTitle,
                         body:
                             "Token Smart Contract mint transaction has been broadcasted.\n\nThe Fungible Token screen will reflect the change once the block is crafted and block height has synced with this transaction.",
                       );
@@ -404,7 +407,8 @@ class TokenForm extends BaseComponent {
                   },
                 )
               ],
-            )
+            );
+            })
           ],
         ),
       ),

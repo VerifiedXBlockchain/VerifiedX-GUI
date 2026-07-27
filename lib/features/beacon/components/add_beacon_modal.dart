@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../providers/add_beacon_form_provider.dart';
 import '../providers/beacon_list_provider.dart';
@@ -15,11 +16,12 @@ class AddBeaconModal extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(addBeaconFormProvider.notifier);
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       withClose: true,
       withDecor: false,
       children: [
-        const Text("Add Beacon"),
+        Text(l10n.beaconAddTitle),
         Text(
           "Add an existing beacon to foreign nodes to use that relay instead of default ones on the VFX network. Configure your wallet to use a remote beacon for media transferring rather than using the default VFX network beacons. You will need to know the IP address of the remote beacon. If that beacon is using the non-default port, provide that as well. The beacon name is a friendly name visible only to you.",
           style: Theme.of(context).textTheme.bodySmall,
@@ -32,8 +34,8 @@ class AddBeaconModal extends BaseComponent {
                 child: TextFormField(
                   controller: provider.nameController,
                   validator: provider.nameValidator,
-                  decoration: const InputDecoration(
-                    label: Text("Beacon Name"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.beaconNameLabel),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),

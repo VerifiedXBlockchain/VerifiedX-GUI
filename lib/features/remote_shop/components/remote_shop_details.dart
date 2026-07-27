@@ -5,6 +5,7 @@ import '../../../core/app_router.gr.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/empty_placeholder.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/connected_shop_provider.dart';
 
 class RemoteShopDetails extends BaseComponent {
@@ -53,7 +54,7 @@ class RemoteShopDetails extends BaseComponent {
           ),
         Expanded(
           child: shop.collections.isEmpty
-              ? EmptyPlaceholder(title: "No Active Collections")
+              ? EmptyPlaceholder(title: AppLocalizations.of(context).shopNoActiveCollections)
               : ListView.builder(
                   itemCount: shop.collections.length,
                   itemBuilder: (context, index) {

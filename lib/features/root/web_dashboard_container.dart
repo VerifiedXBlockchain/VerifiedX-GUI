@@ -46,6 +46,7 @@ import '../chat/components/web_chat_notifier.dart';
 import '../../core/base_component.dart';
 import '../../core/env.dart';
 import '../../core/web_router.gr.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../keygen/models/keypair.dart';
 import '../keygen/models/ra_keypair.dart';
 import '../navigation/components/root_container_balance_row.dart';
@@ -342,7 +343,7 @@ class _ContentWrapper extends BaseComponent {
                                               : Colors.white.withOpacity(0.75),
                                           fontSize: 14,
                                         ),
-                                        child: Text("Addresses"),
+                                        child: Text(AppLocalizations.of(context).webAddressesLabel),
                                       ),
                                       SizedBox(
                                         width: 4,
@@ -430,7 +431,7 @@ class _ContentWrapper extends BaseComponent {
                                               const EdgeInsets.only(top: 16.0),
                                           child: _WalletListItem(
                                             address: raKeypair.address,
-                                            label: "Vault",
+                                            label: AppLocalizations.of(context).webVaultLabel,
                                             balance: "${raBalance ?? 0} VFX",
                                             color: AppColors.getReserve(),
                                             deactivated: ref.watch(
@@ -483,17 +484,16 @@ class _ContentWrapper extends BaseComponent {
                                               width: 8,
                                             ),
                                             AppButton(
-                                              label: "Sign Out",
+                                              label: AppLocalizations.of(context).navMenuSignOut,
                                               icon: Icons.logout,
                                               onPressed: () async {
                                                 final confirmed =
                                                     await ConfirmDialog.show(
-                                                  title: "Sign Out",
-                                                  body:
-                                                      "Are you sure you want to logout of the VFX Web Wallet?",
+                                                  title: AppLocalizations.of(context).navSignOutTitle,
+                                                  body: AppLocalizations.of(context).navSignOutBody,
                                                   destructive: true,
-                                                  confirmText: "Logout",
-                                                  cancelText: "Cancel",
+                                                  confirmText: AppLocalizations.of(context).navMenuLogout,
+                                                  cancelText: AppLocalizations.of(context).actionCancel,
                                                 );
                                                 if (confirmed == true) {
                                                   await ref
@@ -576,7 +576,7 @@ class _ContentWrapper extends BaseComponent {
                                           fontSize: 14,
                                         ),
                                         child: Text(
-                                          "Block ${block.height}",
+                                          AppLocalizations.of(context).webBlockHeight(block.height.toString()),
                                         ),
                                       ),
                                     ]),
@@ -778,7 +778,7 @@ class WebAccountInfoBtc extends BaseComponent {
                           ),
                         ),
                         Text(
-                          "From: ${latestBtcTx.fromAddress()}\nTo: ${latestBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                          "${AppLocalizations.of(context).labelFrom}: ${latestBtcTx.fromAddress()}\n${AppLocalizations.of(context).labelTo}: ${latestBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
                           maxLines: 2,
                           overflow: TextOverflow.fade,
                           style: TextStyle(
@@ -792,14 +792,14 @@ class WebAccountInfoBtc extends BaseComponent {
                         ),
                         latestBtcTx.status.confirmed
                             ? Text(
-                                "Confirmed",
+                                AppLocalizations.of(context).statusConfirmed,
                                 style: TextStyle(
                                   color: AppColors.getSpringGreen(),
                                   fontWeight: FontWeight.w600,
                                 ),
                               )
                             : Text(
-                                "Pending",
+                                AppLocalizations.of(context).statusPending,
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.warning,
                                   fontWeight: FontWeight.w600,
@@ -817,10 +817,10 @@ class WebAccountInfoBtc extends BaseComponent {
               onPressed: () async {
                 await Clipboard.setData(
                     ClipboardData(text: sessionModel.btcKeypair!.address));
-                Toast.message("Address copied to clipboard");
+                Toast.message(AppLocalizations.of(context).messageAddressCopied);
               },
               icon: Icons.copy,
-              label: "Copy\nAddress",
+              label: AppLocalizations.of(context).dashCopyAddress,
               prettyIconType: PrettyIconType.topCards,
             ),
           AppVerticalIconButton(
@@ -829,7 +829,7 @@ class WebAccountInfoBtc extends BaseComponent {
             },
             icon: FontAwesomeIcons.coins,
             iconScale: 0.7,
-            label: "Get\nBTC",
+            label: AppLocalizations.of(context).dashGetBtc,
             prettyIconType: PrettyIconType.topCards,
           ),
           AppVerticalIconButton(
@@ -838,7 +838,7 @@ class WebAccountInfoBtc extends BaseComponent {
             },
             icon: FontAwesomeIcons.coins,
             iconScale: 0.7,
-            label: "Off Ramp\nBTC",
+            label: AppLocalizations.of(context).dashOffRampBtc,
             prettyIconType: PrettyIconType.bitcoin,
           ),
         ]);
@@ -902,7 +902,7 @@ class WebAccountInfoVbtc extends BaseComponent {
       forceExpand: forceExpand,
       heading: "${sum.toStringAsFixed(8)} vBTC",
       headingColor: AppColors.getWhite(),
-      accountCount: "${vbtcTokens.length} Tokens",
+      accountCount: AppLocalizations.of(context).webTokensCount(vbtcTokens.length.toString()),
       handleViewAllTxs: () {
         AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
       },
@@ -936,7 +936,7 @@ class WebAccountInfoVbtc extends BaseComponent {
                         ),
                       ),
                       Text(
-                        "From: ${latestVbtcBtcTx.fromAddress()}\nTo: ${latestVbtcBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                        "${AppLocalizations.of(context).labelFrom}: ${latestVbtcBtcTx.fromAddress()}\n${AppLocalizations.of(context).labelTo}: ${latestVbtcBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
                         maxLines: 2,
                         overflow: TextOverflow.fade,
                         style: TextStyle(
@@ -950,14 +950,14 @@ class WebAccountInfoVbtc extends BaseComponent {
                       ),
                       latestVbtcBtcTx.status.confirmed
                           ? Text(
-                              "Confirmed",
+                              AppLocalizations.of(context).statusConfirmed,
                               style: TextStyle(
                                 color: AppColors.getSpringGreen(),
                                 fontWeight: FontWeight.w600,
                               ),
                             )
                           : Text(
-                              "Pending",
+                              AppLocalizations.of(context).statusPending,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.warning,
                                 fontWeight: FontWeight.w600,
@@ -978,7 +978,7 @@ class WebAccountInfoVbtc extends BaseComponent {
           },
           icon: FontAwesomeIcons.bitcoin,
           prettyIconType: PrettyIconType.topCards,
-          label: "vBTC\nTokens",
+          label: AppLocalizations.of(context).dashVbtcTokens,
         ),
         AppVerticalIconButton(
           onPressed: () {
@@ -991,7 +991,7 @@ class WebAccountInfoVbtc extends BaseComponent {
           },
           prettyIconType: PrettyIconType.topCards,
           icon: Icons.help,
-          label: "What's\nvBTC",
+          label: AppLocalizations.of(context).dashWhatsVbtc,
         ),
       ],
     );
@@ -1051,10 +1051,10 @@ class WebAccountInfoVfx extends BaseComponent {
             onPressed: () async {
               await Clipboard.setData(
                   ClipboardData(text: sessionModel.keypair!.address));
-              Toast.message("Address copied to clipboard");
+              Toast.message(AppLocalizations.of(context).messageAddressCopied);
             },
             icon: Icons.copy,
-            label: "Copy\nAddress",
+            label: AppLocalizations.of(context).dashCopyAddress,
             prettyIconType: PrettyIconType.topCards,
           ),
         if (sessionModel.raKeypair != null)
@@ -1062,10 +1062,10 @@ class WebAccountInfoVfx extends BaseComponent {
             onPressed: () async {
               await Clipboard.setData(
                   ClipboardData(text: sessionModel.raKeypair!.address));
-              Toast.message("Address copied to clipboard");
+              Toast.message(AppLocalizations.of(context).messageAddressCopied);
             },
             icon: Icons.copy,
-            label: "Vault\nAddress",
+            label: AppLocalizations.of(context).dashVaultAddress,
             prettyIconType: PrettyIconType.topCards,
           ),
         AppVerticalIconButton(
@@ -1073,7 +1073,7 @@ class WebAccountInfoVfx extends BaseComponent {
             AccountUtils.getCoin(context, ref, VfxOrBtcOption.vfx);
           },
           icon: FontAwesomeIcons.coins,
-          label: "Get\nVFX",
+          label: AppLocalizations.of(context).dashGetVfx,
           prettyIconType: PrettyIconType.topCards,
           iconScale: 0.75,
         ),
@@ -1134,7 +1134,7 @@ class _LatestVfxTx extends BaseComponent {
                   ),
                 ),
               Text(
-                "From: ${latestVfxTx.fromAddress}",
+                "${AppLocalizations.of(context).labelFrom}: ${latestVfxTx.fromAddress}",
                 style: TextStyle(
                   fontSize: 11,
                   color: latestVfxTx.fromAddress.startsWith('xRBX')
@@ -1144,7 +1144,7 @@ class _LatestVfxTx extends BaseComponent {
                 textAlign: TextAlign.center,
               ),
               Text(
-                "To: ${latestVfxTx.toAddress}",
+                "${AppLocalizations.of(context).labelTo}: ${latestVfxTx.toAddress}",
                 style: TextStyle(
                   fontSize: 11,
                   color: latestVfxTx.toAddress.startsWith('xRBX')
@@ -1157,7 +1157,7 @@ class _LatestVfxTx extends BaseComponent {
                 height: 2,
               ),
               Text(
-                latestVfxTx.isPending ? "Pending" : "Success",
+                latestVfxTx.isPending ? AppLocalizations.of(context).statusPending : AppLocalizations.of(context).statusSuccess,
                 style: TextStyle(
                   color: latestVfxTx.isPending
                       ? Theme.of(context).colorScheme.warning
@@ -1200,13 +1200,15 @@ class _WalletListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     if (deactivated) {
       return AppCard(
         fullWidth: true,
         padding: 0,
         child: ListTile(
           title: Text(
-            "Recovered & Deactivated",
+            l10n.webRecoveredDeactivated,
             style: Theme.of(context).textTheme.caption,
           ),
           leading: _LeadingIcon(color: color, label: label),
@@ -1229,7 +1231,7 @@ class _WalletListItem extends StatelessWidget {
             InkWell(
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: address));
-                Toast.message("Address copied to clipboard.");
+                Toast.message(l10n.webAddressesAddressCopiedDot);
               },
               child: Icon(
                 Icons.copy,
@@ -1259,16 +1261,15 @@ class _WalletListItem extends StatelessWidget {
             switch (i) {
               case 0:
                 await Clipboard.setData(ClipboardData(text: address));
-                Toast.message("Address copied to clipboard.");
+                Toast.message(l10n.webAddressesAddressCopiedDot);
                 break;
 
               case 1:
                 final confirmed = await ConfirmDialog.show(
-                  title: "Reveal Private Key?",
-                  body:
-                      "Are you sure you want to reveal your private key for this account?",
-                  confirmText: "Reveal",
-                  cancelText: "Cancel",
+                  title: l10n.webRevealPrivateKeyTitle,
+                  body: l10n.webRevealPrivateKeyAccountBody,
+                  confirmText: l10n.webReveal,
+                  cancelText: l10n.actionCancel,
                 );
                 if (confirmed != true) {
                   return;

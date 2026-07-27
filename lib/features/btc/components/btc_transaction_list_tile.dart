@@ -13,6 +13,7 @@ import '../../../core/base_component.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/btc_transaction.dart';
 import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -37,7 +38,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
     await Clipboard.setData(
       ClipboardData(text: value),
     );
-    Toast.message("$name copied to clipboard");
+    Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(name));
   }
 
   @override
@@ -168,7 +169,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                           Tooltip(
                             message: "Block ${widget.transaction.confirmedHeight}",
                             child: AppBadge(
-                              label: "Confirmed",
+                              label: AppLocalizations.of(context).btcConfirmedLabel,
                               variant: AppColorVariant.Success,
                             ),
                           ),
@@ -183,7 +184,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                             //   ),
                             // ),
                             child: AppBadge(
-                              label: "Pending",
+                              label: AppLocalizations.of(context).btcPendingLabel,
                               variant: AppColorVariant.Warning,
                             ),
                           ),
@@ -191,13 +192,13 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                           Padding(
                             padding: const EdgeInsets.only(right: 4.0),
                             child: AppButton(
-                              label: "Replace By Fee",
+                              label: AppLocalizations.of(context).btcReplaceByFee,
                               onPressed: () async {
                                 final feeRateStr = await PromptModal.show(
-                                    title: "Fee Rate",
+                                    title: AppLocalizations.of(context).btcRbfFeeRateTitle,
                                     body: "Input your desired fee rate (SATS /byte) for this transaction.",
-                                    validator: (v) => formValidatorInteger(v, "Fee Rate"),
-                                    labelText: "Fee Rate (SATS /byte)",
+                                    validator: (v) => formValidatorInteger(v, AppLocalizations.of(context).btcRbfFeeRateTitle),
+                                    labelText: AppLocalizations.of(context).btcRbfFeeRateLabel,
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                                     lines: 1,
                                     obscureText: false);

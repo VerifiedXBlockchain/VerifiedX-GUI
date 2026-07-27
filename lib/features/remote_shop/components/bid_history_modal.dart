@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../dst/models/bid.dart';
 import 'bid_status_indicator.dart';
 import '../services/remote_shop_service.dart';
@@ -47,7 +48,7 @@ class BidHistoryModal extends BaseComponent {
 
                   if (isBidder && bid.bidStatus == BidStatus.Sent) {
                     return AppButton(
-                      label: "Resend Bid",
+                      label: AppLocalizations.of(context).shopResendBid,
                       onPressed: () async {
                         final success = await RemoteShopService().resendBid(bid.id);
                         if (success) {

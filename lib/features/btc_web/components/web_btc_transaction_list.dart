@@ -4,6 +4,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/centered_loader.dart';
 
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import 'web_btc_transaction_list_tile.dart';
 
@@ -14,7 +15,7 @@ class WebBtcTransactionList extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (address == null) {
-      return Center(child: Text("No BTC Address"));
+      return Center(child: Text(AppLocalizations.of(context).btcWebNoBtcAddress));
     }
     // final provider = ref.read(btcWebTransactionListProvider(address!).notifier);
     // final transactions = ref.watch(btcWebTransactionListProvider(address!));
@@ -22,7 +23,7 @@ class WebBtcTransactionList extends BaseComponent {
 
     if (transactions.isEmpty) {
       return Center(
-        child: Text("No Transactions found for $address."),
+        child: Text(AppLocalizations.of(context).btcWebNoTransactionsForAddress(address ?? '')),
       );
     }
 

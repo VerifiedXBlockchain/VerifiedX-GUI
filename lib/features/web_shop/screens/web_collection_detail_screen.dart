@@ -17,6 +17,7 @@ import '../providers/web_listing_full_list_provider.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../web/components/web_wallet_details.dart';
 import '../models/web_listing.dart';
@@ -75,7 +76,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                     },
                   ),
                 AppButton(
-                  label: "Share Collection",
+                  label: AppLocalizations.of(context).shopShareCollection,
                   icon: Icons.ios_share_rounded,
                   variant: AppColorVariant.Light,
                   type: AppButtonType.Text,
@@ -94,13 +95,13 @@ class WebCollectionDetailScreen extends BaseScreen {
               ],
             )
           : AppBar(
-              title: const Text("Error"),
+              title: Text(AppLocalizations.of(context).shopErrorTitle),
               centerTitle: true,
               backgroundColor: Colors.black12,
               shadowColor: Colors.transparent,
             ),
       error: (_, __) => AppBar(
-        title: const Text("Error"),
+        title: Text(AppLocalizations.of(context).shopErrorTitle),
         centerTitle: true,
         backgroundColor: Colors.black12,
         shadowColor: Colors.transparent,
@@ -151,10 +152,10 @@ class WebCollectionDetailScreen extends BaseScreen {
                             variant: AppColorVariant.Danger,
                             onPressed: () async {
                               final confirmed = await ConfirmDialog.show(
-                                title: "Are you sure you want to delete this collection?",
+                                title: AppLocalizations.of(context).shopDeleteCollectionConfirm,
                                 body: "This is permanent",
-                                cancelText: "Cancel",
-                                confirmText: "Delete",
+                                cancelText: AppLocalizations.of(context).actionCancel,
+                                confirmText: AppLocalizations.of(context).adnrDelete,
                               );
                               if (confirmed == true) {
                                 ref.read(webCollectionFormProvider.notifier).delete(context, collection);
@@ -171,7 +172,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
-                            label: "Create Listing",
+                            label: AppLocalizations.of(context).shopCreateListing,
                             icon: Icons.add,
                             variant: AppColorVariant.Success,
                             onPressed: () {

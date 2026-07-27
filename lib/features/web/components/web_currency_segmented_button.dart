@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/base_component.dart';
+import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
 
 import '../../../core/theme/colors.dart';
 import '../providers/web_currency_segmented_button_provider.dart';
@@ -63,7 +64,7 @@ class WebCurrencySegementedButton extends BaseComponent {
         if (withAny)
           ButtonSegment(
             value: WebCurrencyType.any,
-            label: Text("All"),
+            label: Text(AppLocalizations.of(context).segmentAll),
           ),
         ButtonSegment(
           value: WebCurrencyType.vfx,
@@ -72,7 +73,7 @@ class WebCurrencySegementedButton extends BaseComponent {
         if (withVault)
           ButtonSegment(
             value: WebCurrencyType.vault,
-            label: Text("Vault"),
+            label: Text(AppLocalizations.of(context).segmentVault),
           ),
         ButtonSegment(
           value: WebCurrencyType.btc,

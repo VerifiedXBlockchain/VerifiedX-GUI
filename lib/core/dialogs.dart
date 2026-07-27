@@ -8,6 +8,7 @@ import 'package:flutter_window_close/flutter_window_close.dart';
 
 import '../app.dart';
 import '../core/providers/currency_segmented_button_provider.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../features/bridge/services/bridge_service.dart';
 import '../features/global_loader/global_loading_provider.dart';
 import '../features/payment/components/payment_disclaimer.dart';
@@ -78,7 +79,7 @@ class InfoDialog {
             Navigator.of(context).pop(true);
           },
           child: Text(
-            closeText ?? "Close",
+            closeText ?? AppLocalizations.of(context).dialogClose,
             style: TextStyle(
               color: buttonColorOverride ??
                   Theme.of(context).colorScheme.secondary,
@@ -148,7 +149,7 @@ class ConfirmDialog {
             Navigator.of(context).pop(false);
           },
           child: Text(
-            cancelText ?? "No",
+            cancelText ?? AppLocalizations.of(context).dialogNo,
             style: TextStyle(color: Theme.of(context).colorScheme.info),
           ),
         ),
@@ -163,7 +164,7 @@ class ConfirmDialog {
             Navigator.of(context).pop(true);
           },
           child: Text(
-            confirmText ?? "Yes",
+            confirmText ?? AppLocalizations.of(context).dialogYes,
             style: TextStyle(
               color: destructive ? Colors.red.shade600 : Colors.white,
             ),
@@ -483,7 +484,7 @@ class PromptModal {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  cancelText ?? "Cancel",
+                  cancelText ?? AppLocalizations.of(context).actionCancel,
                   style: TextStyle(color: Theme.of(context).colorScheme.info),
                 ),
               ),
@@ -497,7 +498,7 @@ class PromptModal {
               onPressed: () {
                 _submit(context);
               },
-              child: Text(confirmText ?? "Submit",
+              child: Text(confirmText ?? AppLocalizations.of(context).dialogSubmit,
                   style: TextStyle(color: Theme.of(context).colorScheme.info)),
             )
           ],
@@ -658,7 +659,7 @@ class AuthModal {
                 Navigator.of(context).pop();
               },
               child: Text(
-                "Cancel",
+                AppLocalizations.of(context).actionCancel,
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.info.withOpacity(0.7)),
               ),
@@ -724,7 +725,7 @@ class PaymentTermsDialog {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    "Cancel",
+                    AppLocalizations.of(context).actionCancel,
                     style: TextStyle(color: Colors.white70),
                   ),
                 ),
@@ -738,7 +739,7 @@ class PaymentTermsDialog {
                               "You must agree to the terms before proceeding.");
                         },
                   child: Text(
-                    "Confirm",
+                    AppLocalizations.of(context).actionConfirm,
                     style: TextStyle(
                         color: hasAgreed ? Colors.white : Colors.white54),
                   ),
@@ -777,14 +778,14 @@ class SelectAddressDialog {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Choose an address"),
+          title: Text(AppLocalizations.of(context).sendChooseAddressTitle),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text(
-                "Cancel",
+              child: Text(
+                AppLocalizations.of(context).actionCancel,
                 style: TextStyle(color: Colors.white60),
               ),
             )

@@ -18,6 +18,7 @@ import '../../../core/components/countdown.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/components/nft_qr_code.dart';
 import '../../nft/models/nft.dart';
@@ -677,12 +678,12 @@ class _BuyNow extends BaseComponent {
         ),
         const SizedBox(height: 8),
         _Price(
-          label: "Price",
+          label: AppLocalizations.of(context).shopPriceLabel,
           amount: listing.buyNowPrice!,
         ),
         const SizedBox(height: 16),
         AppButton(
-          label: "Buy Now",
+          label: AppLocalizations.of(context).shopBuyNow,
           icon: Icons.money,
           size: AppSizeVariant.Lg,
           onPressed: () async {
@@ -782,9 +783,9 @@ class _Auction extends BaseComponent {
           const SizedBox(height: 8),
           if (listing.auction != null) ...[
             listing.floorPrice == listing.auction!.currentBidPrice
-                ? _Price(label: "Floor Price", amount: listing.floorPrice!)
+                ? _Price(label: AppLocalizations.of(context).shopFloorPriceLabel, amount: listing.floorPrice!)
                 : _Price(
-                    label: "Highest Bid",
+                    label: AppLocalizations.of(context).shopHighestBidLabel,
                     amount: listing.auction!.currentBidPrice,
                   )
           ],
@@ -792,7 +793,7 @@ class _Auction extends BaseComponent {
           Row(
             children: [
               AppButton(
-                  label: "Bid Now",
+                  label: AppLocalizations.of(context).shopBidNow,
                   icon: Icons.gavel,
                   size: AppSizeVariant.Lg,
                   onPressed: () async {
@@ -811,7 +812,7 @@ class _Auction extends BaseComponent {
               const SizedBox(width: 8),
               if (listing.auction != null)
                 AppButton(
-                  label: "Details",
+                  label: AppLocalizations.of(context).shopDetailsLabel,
                   icon: Icons.info,
                   size: AppSizeVariant.Lg,
                   onPressed: () async {
@@ -821,7 +822,7 @@ class _Auction extends BaseComponent {
                     final auction = listing.auction!;
 
                     InfoDialog.show(
-                      title: "Auction Details",
+                      title: AppLocalizations.of(context).shopAuctionDetailsTitle,
                       content: _AuctionInfoDialogContent(
                         auction: auction,
                       ),
@@ -849,7 +850,7 @@ class BidHistoryButton extends BaseComponent {
     final provider = ref.read(bidListProvider(listing.familyIdentifier).notifier);
 
     return AppButton(
-      label: "Bid History",
+      label: AppLocalizations.of(context).shopBidHistory,
       icon: Icons.punch_clock,
       size: AppSizeVariant.Lg,
       onPressed: () async {

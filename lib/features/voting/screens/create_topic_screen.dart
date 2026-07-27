@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/topic_form.dart';
 
 class CreateTopicScreen extends BaseScreen {
@@ -10,7 +11,7 @@ class CreateTopicScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Create Topic"),
+      title: Text(AppLocalizations.of(context).votingCreateTopicTitle),
       backgroundColor: Colors.black,
     );
   }
