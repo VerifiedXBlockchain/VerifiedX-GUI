@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/components/language_selector.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../hd/components/restore_hd_wallet_button.dart';
@@ -143,6 +144,7 @@ class _HomeButtonsState extends State<HomeButtons> {
                       tabsRouter.setActiveIndex(6);
                     },
                   ),
+                  const LanguageButton(),
                 ],
               );
             case HomeButtonSection.security:
