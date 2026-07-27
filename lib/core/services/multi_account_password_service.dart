@@ -6,6 +6,7 @@ import '../../features/web/providers/multi_account_provider.dart';
 import '../../utils/toast.dart';
 import '../../utils/validation.dart';
 import '../dialogs.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../singletons.dart';
 import '../storage.dart';
 import 'multi_account_encryption_service.dart';
@@ -34,12 +35,13 @@ class MultiAccountPasswordService {
 
       if (hasEncryptedKeys) {
         // Prompt for password without confirmation (since it's an existing password, not a new one)
+        final l10n = AppLocalizations.of(context);
         final password = await PromptModal.show(
           contextOverride: context,
-          title: "Enter Account Password",
-          labelText: "Account Password",
-          body: "Enter the password for this account to decrypt its private keys.",
-          validator: (value) => formValidatorNotEmpty(value, "Password"),
+          title: l10n.hnavEnterAccountPasswordTitle,
+          labelText: l10n.encryptPasswordHint,
+          body: l10n.r3eDecryptAccountPasswordBody,
+          validator: (value) => formValidatorNotEmpty(value, l10n.tkbPassword),
           obscureText: true,
           revealObscure: true,
           lines: 1,
@@ -59,7 +61,8 @@ class MultiAccountPasswordService {
       }
     } catch (e) {
       print("Error switching to account: $e");
-      Toast.error("Failed to decrypt account keys. Check your password.");
+      Toast.error(
+          AppLocalizations.of(context).r3eFailedDecryptKeys);
       return false;
     }
   }
@@ -82,11 +85,12 @@ class MultiAccountPasswordService {
 
   /// Prompts for password when adding a new account
   static Future<String?> promptForNewAccountPassword(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     return await PasswordPromptService.promptNewPassword(
       context,
-      title: "Encrypt Account Keys",
-      labelText: "Account Password",
-      customMessage: "Enter a password to encrypt this account's private keys.",
+      title: l10n.r3eEncryptAccountKeys,
+      labelText: l10n.encryptPasswordHint,
+      customMessage: l10n.r3eEncryptAccountPasswordBody,
     );
   }
 }

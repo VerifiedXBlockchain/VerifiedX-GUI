@@ -1,3 +1,4 @@
+import 'package:timeago/timeago.dart' as timeago;
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -23,6 +24,8 @@ late final Box rbxBox;
 final rootAppWindow = appWindow;
 
 void main(List<String> args) async {
+  timeago.setLocaleMessages('es', timeago.EsMessages());
+  timeago.setLocaleMessages('es_short', timeago.EsShortMessages());
   WidgetsFlutterBinding.ensureInitialized();
 
   // Parse command-line args for --testnet flag (desktop only)

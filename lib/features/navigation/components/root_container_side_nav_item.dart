@@ -113,7 +113,7 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                           children: [
                             Text(
                               widget.title,
-                              overflow: TextOverflow.visible,
+                              overflow: TextOverflow.ellipsis,
                               softWrap: false,
                               style: TextStyle(
                                 fontSize: 15,

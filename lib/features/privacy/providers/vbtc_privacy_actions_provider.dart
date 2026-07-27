@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
 import 'shielded_address_provider.dart';
@@ -54,12 +55,12 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
         recipientZfxAddress: recipientZfxAddress,
       );
 
-      Toast.message("vBTC shield transaction broadcast successfully");
+      Toast.message(globalL10n.prvVbtcShieldBroadcastSuccess);
       ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, vbtcAmount);
       _refreshTxList();
       return true;
     } catch (e) {
-      Toast.error("vBTC shield failed: $e");
+      Toast.error(globalL10n.prvVbtcShieldFailed(e.toString()));
       return false;
     } finally {
       state = false;
@@ -73,11 +74,11 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
     required double vbtcAmount,
   }) async {
     if (_password == null) {
-      Toast.error("Privacy wallet password required. Please unlock first.");
+      Toast.error(globalL10n.prvPasswordRequired);
       return false;
     }
     if (!_hasVfxFeeBalance()) {
-      Toast.error("Insufficient shielded VFX to cover the privacy transaction fee.");
+      Toast.error(globalL10n.prvInsufficientVfxFee);
       return false;
     }
     _resetTimer();
@@ -91,14 +92,14 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
         vbtcAmount: vbtcAmount,
       );
 
-      Toast.message("vBTC unshield transaction broadcast successfully");
+      Toast.message(globalL10n.prvVbtcUnshieldBroadcastSuccess);
       ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, -vbtcAmount);
       ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-PRIVACY_TX_FIXED_FEE);
       _refreshTxList();
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error("vBTC unshield failed: $e");
+      Toast.error(globalL10n.prvVbtcUnshieldFailed(e.toString()));
       return false;
     } finally {
       state = false;
@@ -112,11 +113,11 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
     required double amount,
   }) async {
     if (_password == null) {
-      Toast.error("Privacy wallet password required. Please unlock first.");
+      Toast.error(globalL10n.prvPasswordRequired);
       return false;
     }
     if (!_hasVfxFeeBalance()) {
-      Toast.error("Insufficient shielded VFX to cover the privacy transaction fee.");
+      Toast.error(globalL10n.prvInsufficientVfxFee);
       return false;
     }
     _resetTimer();
@@ -130,14 +131,14 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
         amount: amount,
       );
 
-      Toast.message("vBTC private transfer broadcast successfully");
+      Toast.message(globalL10n.prvVbtcTransferBroadcastSuccess);
       ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, -amount);
       ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-PRIVACY_TX_FIXED_FEE);
       _refreshTxList();
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error("vBTC private transfer failed: $e");
+      Toast.error(globalL10n.prvVbtcTransferFailed(e.toString()));
       return false;
     } finally {
       state = false;
@@ -149,11 +150,11 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
     required String vbtcContractUid,
   }) async {
     if (_password == null) {
-      Toast.error("Privacy wallet password required. Please unlock first.");
+      Toast.error(globalL10n.prvPasswordRequired);
       return false;
     }
     if (!_hasVfxFeeBalance()) {
-      Toast.error("Insufficient shielded VFX to cover the privacy transaction fee.");
+      Toast.error(globalL10n.prvInsufficientVfxFee);
       return false;
     }
     _resetTimer();
@@ -165,14 +166,14 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
         vbtcContractUid: vbtcContractUid,
       );
 
-      Toast.message("vBTC consolidation broadcast successfully");
+      Toast.message(globalL10n.prvVbtcConsolidationBroadcastSuccess);
       ref.read(shieldedVbtcBalanceProvider.notifier).optimisticAdjust(vbtcContractUid, 0);
       ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-PRIVACY_TX_FIXED_FEE);
       _refreshTxList();
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error("vBTC consolidation failed: $e");
+      Toast.error(globalL10n.prvVbtcConsolidationFailed(e.toString()));
       return false;
     } finally {
       state = false;

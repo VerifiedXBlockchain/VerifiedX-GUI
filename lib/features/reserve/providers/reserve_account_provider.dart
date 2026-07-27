@@ -24,6 +24,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../components/balance_indicator.dart';
 import 'package:collection/collection.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
   final Ref ref;
@@ -36,12 +37,13 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
   }
 
   Future<void> newAccount(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final password = await PromptModal.show(
       contextOverride: context,
-      title: "Setup Vault Account",
-      body: "Create a password to continue. You must remember this password as it will be required for any transaction with this Vault Account.",
-      validator: (value) => formValidatorNotEmpty(value, "Password"),
-      labelText: "Password",
+      title: l10n.txpSetupVaultAccount,
+      body: l10n.txpSetupVaultAccountBody,
+      validator: (value) => formValidatorNotEmpty(value, l10n.reservePasswordLabel),
+      labelText: l10n.reservePasswordLabel,
       obscureText: true,
       lines: 1,
       revealObscure: true,
@@ -53,22 +55,22 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
 
     final passwordConfirmation = await PromptModal.show(
       contextOverride: context,
-      title: "Confirm Password",
-      body: "Please confirm your password.",
-      validator: (value) => formValidatorNotEmpty(value, "Password"),
-      labelText: "Password",
+      title: l10n.txpConfirmPassword,
+      body: l10n.txpConfirmPasswordBody,
+      validator: (value) => formValidatorNotEmpty(value, l10n.reservePasswordLabel),
+      labelText: l10n.reservePasswordLabel,
       obscureText: true,
       lines: 1,
       revealObscure: true,
     );
 
     if (passwordConfirmation == null) {
-      Toast.error("You must confirm your password.");
+      Toast.error(l10n.txpMustConfirmPassword);
       return;
     }
 
     if (password != passwordConfirmation) {
-      Toast.error("Passwords do not match.");
+      Toast.error(l10n.txpPasswordsDoNotMatch);
       return;
     }
 
@@ -90,39 +92,41 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
   }
 
   Future<void> fundAccount(BuildContext context, String walletAddress) async {
+    final l10n = AppLocalizations.of(context);
     final funders = ref.read(walletListProvider).where((w) => !w.isReserved && w.balance > (w.isValidating ? 1006 : 6)).toList();
     final fundingWallet = funders.isNotEmpty ? funders.first : null;
 
     if (fundingWallet != null) {
       final shouldSendFunds = await ConfirmDialog.show(
-        title: "Fund Account",
+        title: l10n.txpFundAccount,
         content: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 600),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("You must now fund your Vault Account with a minimum of 5 VFX. 4 VFX will be burned upon activation."),
+              Text(l10n.txpFundVaultBody),
               Text(""),
-              SelectableText("Please send funds to $walletAddress"),
+              SelectableText(l10n.txpPleaseSendFundsTo(walletAddress)),
               Text(""),
-              Text(
-                  "You have an account with a sufficient balance.\n\nWould you like to send 5 VFX from:\n${fundingWallet.address}\n[Balance: ${fundingWallet.balance} VFX]?"),
+              Text(l10n.txpSufficientBalanceBody(
+                  fundingWallet.address, "${fundingWallet.balance}")),
             ],
           ),
         ),
-        confirmText: "Send",
-        cancelText: "Cancel",
+        confirmText: l10n.actionSend,
+        cancelText: l10n.actionCancel,
       );
 
       if (shouldSendFunds == true) {
         const amount = 5.0;
 
         final confirmed = await ConfirmDialog.show(
-          title: "Please Confirm",
-          body: "Sending:\n$amount VFX\n\nTo:\n$walletAddress\n\nFrom:\n${fundingWallet.address}",
-          confirmText: "Send",
-          cancelText: "Cancel",
+          title: l10n.btcPleaseConfirmTitle,
+          body: l10n.txpSendingConfirmBody(
+              "$amount", walletAddress, fundingWallet.address),
+          confirmText: l10n.actionSend,
+          cancelText: l10n.actionCancel,
         );
 
         if (confirmed != true) {
@@ -143,33 +147,33 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
           notifyTransactionSubmitted();
           await InfoDialog.show(
             contextOverride: context,
-            title: "Funds Sent",
-            body: "$amount VFX has been sent to $walletAddress.\n\nPlease wait for transaction to reflect and then activate your Vault Account.",
+            title: l10n.txpFundsSent,
+            body: l10n.txpFundsSentBody("$amount", walletAddress),
           );
           // Navigator.of(context).pop();
 
           final confirmed = await ConfirmDialog.show(
-            title: "Auto Activate?",
-            body: "Would you like to automatically activate this account once the funds are received?",
-            confirmText: "Yes",
-            cancelText: "No",
+            title: l10n.txpAutoActivate,
+            body: l10n.txpAutoActivateBody,
+            confirmText: l10n.actionYes,
+            cancelText: l10n.actionNo,
           );
 
           if (confirmed == true) {
             final password = await PromptModal.show(
               contextOverride: context,
-              title: "Password",
+              title: l10n.reservePasswordLabel,
               validator: (v) => null,
               lines: 1,
               obscureText: true,
-              labelText: "Password",
+              labelText: l10n.reservePasswordLabel,
               revealObscure: true,
             );
 
             if (password != null) {
               ref.read(reserveAccountAutoActivateProvider.notifier).add(txHash, walletAddress, password);
               ref.read(pendingActivationProvider.notifier).addId(walletAddress);
-              Toast.message("Auto activate queued.");
+              Toast.message(l10n.txpAutoActivateQueued);
             }
           }
         } else {
@@ -179,23 +183,23 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
     } else {
       InfoDialog.show(
           contextOverride: context,
-          title: "Fund Account",
+          title: l10n.txpFundAccount,
           content: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 600),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("You must now fund your Vault Account with a minimum of 5 VFX."),
+                Text(l10n.txpFundVaultBodyShort),
                 Text(""),
-                Text("Please send funds to $walletAddress"),
+                Text(l10n.txpPleaseSendFundsTo(walletAddress)),
                 Divider(),
                 AppButton(
-                  label: "Copy Address",
+                  label: l10n.txpCopyAddress,
                   icon: Icons.copy,
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: walletAddress));
-                    Toast.message("Address copied to clipboard.");
+                    Toast.message(l10n.txpAddressCopiedClipboard);
                   },
                 )
               ],
@@ -205,22 +209,23 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
   }
 
   Future<void> restoreAccount(BuildContext context) async {
+    final l10n = AppLocalizations.of(context);
     final restoreCode = await PromptModal.show(
       contextOverride: context,
-      title: "Restore Code",
-      body: "Paste in your RESTORE CODE to import your existing Vault Account.",
+      title: l10n.walletRestoreCodeLabel,
+      body: l10n.webRestoreCodeBody,
       validator: (v) => null,
-      labelText: "Restore Code",
+      labelText: l10n.walletRestoreCodeLabel,
     );
 
     if (restoreCode == null) return;
     final password = await PromptModal.show(
       contextOverride: context,
-      title: "Password",
+      title: l10n.reservePasswordLabel,
       validator: (v) => null,
       lines: 1,
       obscureText: true,
-      labelText: "Password",
+      labelText: l10n.reservePasswordLabel,
       revealObscure: true,
     );
     if (password == null) return;
@@ -240,23 +245,24 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
   }
 
   Future<void> recoverAccount(BuildContext context, String address) async {
+    final l10n = AppLocalizations.of(context);
     final recoveryPhrase = await PromptModal.show(
       contextOverride: context,
-      title: "Restore Code",
-      body: "Paste in your RESTORE CODE to import the recovery account for this Vault Account.",
+      title: l10n.walletRestoreCodeLabel,
+      body: l10n.txpRestoreCodeRecoveryBody,
       validator: (v) => null,
-      labelText: "Restore Code",
+      labelText: l10n.walletRestoreCodeLabel,
     );
 
     if (recoveryPhrase == null || recoveryPhrase.isEmpty) return;
 
     final password = await PromptModal.show(
       contextOverride: context,
-      title: "Password",
+      title: l10n.reservePasswordLabel,
       validator: (v) => null,
       lines: 1,
       obscureText: true,
-      labelText: "Password",
+      labelText: l10n.reservePasswordLabel,
       revealObscure: true,
     );
     if (password == null || password.isEmpty) return;
@@ -284,28 +290,29 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
   }
 
   void showBalanceInfo(BuildContext context, Wallet wallet) {
+    final l10n = AppLocalizations.of(context);
     if (wallet.isReserved) {
       InfoDialog.show(
         contextOverride: context,
-        title: "Vault Account Balance",
+        title: l10n.reserveWebVaultBalanceTitle,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             BalanceIndicator(
-              label: "Available",
+              label: l10n.labelAvailable,
               value: wallet.availableBalance,
               bgColor: Colors.deepPurple.shade400,
               fgColor: Colors.white,
             ),
             BalanceIndicator(
-              label: "Locked",
+              label: l10n.labelLocked,
               value: wallet.lockedBalance,
               bgColor: Colors.red.shade700,
               fgColor: Colors.white,
             ),
             BalanceIndicator(
-              label: "Total",
+              label: l10n.labelTotal,
               value: wallet.totalBalance,
               bgColor: Colors.green.shade700,
               fgColor: Colors.white,
@@ -316,25 +323,25 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
     } else {
       InfoDialog.show(
         contextOverride: context,
-        title: "Account Balance",
+        title: l10n.txpAccountBalance,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             BalanceIndicator(
-              label: "Available",
+              label: l10n.labelAvailable,
               value: wallet.balance,
               bgColor: Colors.white,
               fgColor: Colors.black,
             ),
             BalanceIndicator(
-              label: "Locked",
+              label: l10n.labelLocked,
               value: wallet.lockedBalance,
               bgColor: Colors.red.shade700,
               fgColor: Colors.white,
             ),
             BalanceIndicator(
-              label: "Total",
+              label: l10n.labelTotal,
               value: wallet.balance + wallet.lockedBalance,
               bgColor: Colors.green.shade700,
               fgColor: Colors.white,
@@ -349,32 +356,33 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
     BuildContext context,
     Wallet wallet,
   ) async {
+    final l10n = AppLocalizations.of(context);
     if (!wallet.isReserved) {
-      Toast.error("Not a Vault Account");
+      Toast.error(l10n.txpNotVaultAccount);
       return;
     }
 
     if (wallet.availableBalance < 5) {
-      Toast.error("A minimum balance of 5 VFX is required to activate.");
+      Toast.error(l10n.txpMinBalanceActivate);
       return;
     }
 
     final confirmed = await ConfirmDialog.show(
       context: context,
-      title: "Activate on Network?",
-      body: "There is a cost of 4 VFX (which is burned) plus TX fee to activate this Vault Account on the network.  Continue?",
-      confirmText: "Activate Now",
-      cancelText: "Cancel",
+      title: l10n.txpActivateOnNetwork,
+      body: l10n.txpActivateOnNetworkBody,
+      confirmText: l10n.reserveActivateNow,
+      cancelText: l10n.actionCancel,
     );
 
     if (confirmed == true) {
       final password = await PromptModal.show(
         contextOverride: context,
-        title: "Password",
+        title: l10n.reservePasswordLabel,
         validator: (v) => null,
         lines: 1,
         obscureText: true,
-        labelText: "Password",
+        labelText: l10n.reservePasswordLabel,
         revealObscure: true,
       );
       if (password == null) {
@@ -386,7 +394,7 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
       );
 
       if (success) {
-        OverlayToast.message(message: 'Vault Account activation transaction sent.\n\nPlease wait for it to reflect as "Activated".');
+        OverlayToast.message(message: l10n.txpVaultActivationSent);
         // Toast.message("Vault Account publish transaction sent.");
         ref.read(pendingActivationProvider.notifier).addId(wallet.address);
       }

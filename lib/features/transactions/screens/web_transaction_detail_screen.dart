@@ -14,6 +14,8 @@ import '../../../core/components/centered_loader.dart';
 import '../../../core/env.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/web_transaction.dart';
 import '../providers/web_transaction_detail_provider.dart';
 
@@ -32,8 +34,9 @@ class WebTransactionDetailScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: const Text("Transaction Detail"),
+      title: Text(l10n.txpTxDetailTitle),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       automaticallyImplyLeading: true,
@@ -51,11 +54,12 @@ class WebTransactionDetailScreen extends BaseScreen {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final data = ref.watch(webTransactionDetailProvider(hash));
+    final l10n = AppLocalizations.of(context);
 
     return data.when(
       loading: () => const CenteredLoader(),
-      error: (_, __) => const Text("An error occurred"),
-      data: (tx) => tx == null ? const Text("Error") : _TransactionDetails(tx),
+      error: (_, __) => Text(l10n.txpErrorOccurred),
+      data: (tx) => tx == null ? Text(l10n.btcWebError) : _TransactionDetails(tx),
     );
   }
 }
@@ -66,7 +70,7 @@ class _TransactionDetails extends BaseComponent {
 
   Future<void> copyToClipboard(String value) async {
     await Clipboard.setData(ClipboardData(text: value));
-    Toast.message("'$value' Copied to clipboard");
+    Toast.message(globalL10n.txpValueCopied(value));
   }
 
   @override
@@ -88,6 +92,7 @@ class _TransactionDetails extends BaseComponent {
   // }
 
   Padding buildContent(BuildContext context, String? address, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final DateFormat formatter = DateFormat('MM-dd-yyyy hh:mm a');
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -109,7 +114,7 @@ class _TransactionDetails extends BaseComponent {
               padding: 0,
               child: ListTile(
                 title: SelectableText(tx.hash),
-                subtitle: const Text("Tx Hash"),
+                subtitle: Text(l10n.txpTxHash),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () {
@@ -125,7 +130,7 @@ class _TransactionDetails extends BaseComponent {
               padding: 0,
               child: ListTile(
                 title: Text(formatter.format(tx.date)),
-                subtitle: const Text("Date"),
+                subtitle: Text(l10n.txpDate),
               ),
             ),
           ),
@@ -135,7 +140,7 @@ class _TransactionDetails extends BaseComponent {
               padding: 0,
               child: ListTile(
                 title: Text("${tx.height}"),
-                subtitle: const Text("Block Height"),
+                subtitle: Text(l10n.btcBlockHeightLabel),
               ),
             ),
           ),
@@ -145,7 +150,7 @@ class _TransactionDetails extends BaseComponent {
               padding: 0,
               child: ListTile(
                 title: Text(tx.typeLabel),
-                subtitle: const Text("Tx Type"),
+                subtitle: Text(l10n.txpTxType),
               ),
             ),
           ),
@@ -154,8 +159,8 @@ class _TransactionDetails extends BaseComponent {
             child: AppCard(
               padding: 0,
               child: ListTile(
-                title: SelectableText("${tx.toAddress} ${address == tx.toAddress ? '[ME]' : ''}"),
-                subtitle: const Text("To"),
+                title: SelectableText("${tx.toAddress} ${address == tx.toAddress ? l10n.txpMeMarker : ''}"),
+                subtitle: Text(l10n.labelTo),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () {
@@ -170,8 +175,8 @@ class _TransactionDetails extends BaseComponent {
             child: AppCard(
               padding: 0,
               child: ListTile(
-                title: SelectableText("${tx.fromAddress} ${address == tx.fromAddress ? '[ME]' : ''}"),
-                subtitle: const Text("From"),
+                title: SelectableText("${tx.fromAddress} ${address == tx.fromAddress ? l10n.txpMeMarker : ''}"),
+                subtitle: Text(l10n.labelFrom),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
                   onPressed: () {
@@ -187,7 +192,7 @@ class _TransactionDetails extends BaseComponent {
               padding: 0,
               child: ListTile(
                 title: Text("${tx.subTxAmount ?? tx.amount} VFX"),
-                subtitle: const Text("Amount"),
+                subtitle: Text(l10n.labelAmount),
               ),
             ),
           ),
@@ -197,7 +202,7 @@ class _TransactionDetails extends BaseComponent {
               padding: 0,
               child: ListTile(
                 title: Text("${tx.fee} VFX"),
-                subtitle: const Text("Fee"),
+                subtitle: Text(l10n.labelFee),
               ),
             ),
           ),

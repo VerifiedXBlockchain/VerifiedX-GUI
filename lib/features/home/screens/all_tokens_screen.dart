@@ -16,6 +16,7 @@ import 'package:rbx_wallet/features/token/providers/web_token_list_provider.dart
 
 import '../../../core/theme/components.dart';
 import '../../../core/theme/pretty_icons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../generated/assets.gen.dart';
 import '../../asset/polling_image_preview.dart';
@@ -37,6 +38,7 @@ class AllTokensScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final address = kIsWeb
         ? ref.watch(webSessionProvider.select((value) => value.keypair?.address))
         : ref.watch(sessionProvider.select((value) => value.currentWallet?.address));
@@ -109,7 +111,7 @@ class AllTokensScreen extends BaseScreen {
               },
             ),
             Text(
-              "All My Tokens",
+              l10n.hnavAllMyTokens,
               style: TextStyle(
                 fontSize: 20,
                 letterSpacing: 1,
@@ -133,7 +135,7 @@ class AllTokensScreen extends BaseScreen {
             if (tokens.isEmpty) {
               return Center(
                 child: Text(
-                  "You have no vBTC Tokens, Fungible Tokens, or Non-Fungible Tokens",
+                  l10n.hnavNoTokensEmptyState,
                   textAlign: TextAlign.center,
                 ),
               );
@@ -153,9 +155,9 @@ class AllTokensScreen extends BaseScreen {
                         final nft = token is WebNft ? token.smartContract : token;
                         final subtitle = token is Nft
                             ? token.isToken
-                                ? "Fungible Token"
-                                : "Non-Fungible Token"
-                            : "Non-Fungible Token";
+                                ? l10n.hnavFungibleToken
+                                : l10n.hnavNonFungibleToken
+                            : l10n.hnavNonFungibleToken;
 
                         return ListTile(
                           dense: true,
@@ -251,7 +253,7 @@ class AllTokensScreen extends BaseScreen {
                             AutoRouter.of(context).push(WebTokenDetailScreenRoute(scId: token.token.smartContractId));
                           },
                           title: Text(token.token.name),
-                          subtitle: Text("Fungible Token (${token.balance} ${token.token.ticker})"),
+                          subtitle: Text(l10n.hnavFungibleTokenWithBalance(token.balance.toString(), token.token.ticker)),
                           leading: token.token.imageUrl != null && token.token.imageUrl!.isNotEmpty
                               ? Container(
                                   width: 32,
@@ -273,7 +275,7 @@ class AllTokensScreen extends BaseScreen {
                             AutoRouter.of(context).push(WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address));
                           },
                           title: Text(token.name),
-                          subtitle: Text("vBTC Token (${token.balanceForAddress(address)} vBTC)"),
+                          subtitle: Text(l10n.hnavVbtcTokenWithBalance(token.balanceForAddress(address).toString())),
                           trailing: Icon(Icons.chevron_right),
                           leading: Container(
                             width: 32,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../nft/models/nft.dart';
 import '../../../utils/files.dart';
+import '../../../l10n/l10n_helper.dart';
 
 part 'listing.freezed.dart';
 part 'listing.g.dart';
@@ -119,17 +120,17 @@ class Listing with _$Listing {
 
   String get label {
     if (isGallery) {
-      return "Gallery Listing";
+      return globalL10n.r3dGalleryListing;
     }
 
     final List<String> components = [];
     if (isBuyNow) {
-      components.add("Buy Now: $buyNowPrice VFX");
+      components.add(globalL10n.r3dBuyNowPriceLabel(buyNowPrice.toString()));
     }
     if (isAuction) {
-      components.add("Floor: $floorPrice VFX");
+      components.add(globalL10n.r3dFloorPriceValue(floorPrice.toString()));
       if (floorPrice != reservePrice) {
-        components.add("Reserve: $reservePrice VFX");
+        components.add(globalL10n.r3dReservePriceValue(reservePrice.toString()));
       }
     }
 

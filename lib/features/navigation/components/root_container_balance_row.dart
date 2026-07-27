@@ -18,6 +18,7 @@ import 'package:collection/collection.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
@@ -41,6 +42,7 @@ class RootContainerBalanceRow extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final vfxBalance = ref.watch(sessionProvider.select((v) => v.totalBalance));
     final btcBalance = ref.watch(btcBalanceProvider);
 
@@ -103,8 +105,8 @@ class RootContainerBalanceRow extends BaseComponent {
                   heading: vfxBalance != null ? "$vfxBalance VFX" : "0.0 VFX",
                   headingColor: AppColors.getBlue(),
                   accountCount: raWallets.isNotEmpty && vfxWallets.isNotEmpty
-                      ? "${vfxWallets.length} Address${vfxWallets.length == 1 ? '' : 'es'}   ${raWallets.length} Vault Address${raWallets.length == 1 ? '' : 'es'}"
-                      : "${allVfxWallets.length} Address${allVfxWallets.length == 1 ? '' : 'es'}",
+                      ? "${vfxWallets.length == 1 ? l10n.navAddressSingular('${vfxWallets.length}') : l10n.navAddressPlural('${vfxWallets.length}')}   ${raWallets.length == 1 ? l10n.navVaultAddressSingular('${raWallets.length}') : l10n.navVaultAddressPlural('${raWallets.length}')}"
+                      : "${allVfxWallets.length == 1 ? l10n.navAddressSingular('${allVfxWallets.length}') : l10n.navAddressPlural('${allVfxWallets.length}')}",
                   handleViewAllTxs: () {
                     ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
                     RootContainerUtils.navigateToTab(context, RootTab.transactions);
@@ -121,7 +123,7 @@ class RootContainerBalanceRow extends BaseComponent {
                         );
                       },
                       icon: Icons.wallet,
-                      label: "View\nAddress",
+                      label: l10n.navViewAddress,
                       prettyIconType: PrettyIconType.topCards,
                     ),
                     AppVerticalIconButton(
@@ -129,7 +131,7 @@ class RootContainerBalanceRow extends BaseComponent {
                         AccountUtils.promptVfxNewOrImport(context, ref);
                       },
                       icon: Icons.add,
-                      label: "New\nAddress",
+                      label: l10n.navNewAddress,
                       prettyIconType: PrettyIconType.topCards,
                     ),
                     AppVerticalIconButton(
@@ -137,7 +139,7 @@ class RootContainerBalanceRow extends BaseComponent {
                         AccountUtils.getCoin(context, ref, VfxOrBtcOption.vfx);
                       },
                       icon: FontAwesomeIcons.coins,
-                      label: "Get\nVFX",
+                      label: l10n.navGetVfx,
                       prettyIconType: PrettyIconType.topCards,
                       iconScale: 0.75,
                     ),
@@ -211,7 +213,7 @@ class RootContainerBalanceRow extends BaseComponent {
                   forceExpand: forceExpand,
                   heading: "$btcBalance BTC",
                   headingColor: AppColors.getBtc(),
-                  accountCount: "${btcAccounts.length} Account${btcAccounts.length == 1 ? '' : 's'}",
+                  accountCount: btcAccounts.length == 1 ? l10n.navAccountSingular('${btcAccounts.length}') : l10n.navAccountPlural('${btcAccounts.length}'),
                   handleViewAllTxs: () {
                     ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
                     RootContainerUtils.navigateToTab(context, RootTab.transactions);
@@ -229,7 +231,7 @@ class RootContainerBalanceRow extends BaseComponent {
                       },
                       prettyIconType: PrettyIconType.topCards,
                       icon: Icons.wallet,
-                      label: "View\nAddresses",
+                      label: l10n.navViewAddresses,
                     ),
                     AppVerticalIconButton(
                       onPressed: () {
@@ -237,7 +239,7 @@ class RootContainerBalanceRow extends BaseComponent {
                       },
                       icon: Icons.add,
                       prettyIconType: PrettyIconType.topCards,
-                      label: "New\nAddress",
+                      label: l10n.navNewAddress,
                     ),
                     AppVerticalIconButton(
                       onPressed: () {
@@ -245,7 +247,7 @@ class RootContainerBalanceRow extends BaseComponent {
                       },
                       icon: FontAwesomeIcons.coins,
                       iconScale: 0.7,
-                      label: "Get\nBTC",
+                      label: l10n.navGetBtc,
                       prettyIconType: PrettyIconType.topCards,
                     ),
                   ],
@@ -304,6 +306,7 @@ class _LatestBtcTx extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -325,7 +328,7 @@ class _LatestBtcTx extends BaseComponent {
                 ),
               ),
               Text(
-                "From: ${tx.fromAddress}\nTo: ${tx.toAddress}",
+                l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
                 style: TextStyle(
                   fontSize: 10,
                   color: Colors.white.withOpacity(0.9),
@@ -338,7 +341,7 @@ class _LatestBtcTx extends BaseComponent {
               Builder(builder: (context) {
                 final isConfirmed = (kDebugMode && Env.isTestNet) ? true : tx.isConfirmed;
                 return Text(
-                  isConfirmed ? "Success" : "Pending",
+                  isConfirmed ? l10n.statusSuccess : l10n.statusPending,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     color: isConfirmed ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.warning,
@@ -362,6 +365,7 @@ class _LatestVfxTx extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
@@ -393,7 +397,7 @@ class _LatestVfxTx extends BaseComponent {
                   ),
                 ),
               Text(
-                "From: ${tx.fromAddress}\nTo: ${tx.toAddress}",
+                l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
                 style: TextStyle(
                   fontSize: 11,
                   color: Colors.white.withOpacity(0.9),

@@ -8,6 +8,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../encrypt/utils.dart';
 import '../models/new_topic.dart';
@@ -22,6 +23,7 @@ class TopicForm extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(topicFormProvider.notifier);
     final model = ref.watch(topicFormProvider);
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Form(
         key: provider.formKey,
@@ -36,7 +38,7 @@ class TopicForm extends BaseComponent {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Category",
+                        l10n.votingCategoryLabel,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                       ),
@@ -69,7 +71,7 @@ class TopicForm extends BaseComponent {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Voting Ends",
+                        l10n.votingEndsLabel,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                       ),
@@ -98,8 +100,8 @@ class TopicForm extends BaseComponent {
             TextFormField(
                 controller: provider.nameController,
                 validator: provider.nameValidator,
-                decoration: const InputDecoration(
-                  label: Text("Topic Name"),
+                decoration: InputDecoration(
+                  label: Text(l10n.votingTopicNameLabel),
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.deny(RegExp(
@@ -112,7 +114,7 @@ class TopicForm extends BaseComponent {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "128 character limit",
+                        l10n.votingCharLimit128,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Text(
@@ -131,8 +133,8 @@ class TopicForm extends BaseComponent {
               TextFormField(
                   controller: provider.descriptionController,
                   validator: provider.descriptionValidator,
-                  decoration: const InputDecoration(
-                    label: Text("Topic Description"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.votingTopicDescriptionLabel),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.deny(RegExp(
@@ -148,7 +150,7 @@ class TopicForm extends BaseComponent {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "1,600 character limit including provided links",
+                          l10n.votingCharLimit1600,
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                         Text(
@@ -165,14 +167,13 @@ class TopicForm extends BaseComponent {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
-                  label: "Cancel",
+                  label: l10n.actionCancel,
                   type: AppButtonType.Text,
                   variant: AppColorVariant.Light,
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                        title: "Discard",
-                        body:
-                            "Are you sure you want to discard this new topic?");
+                        title: l10n.votingDiscardTitle,
+                        body: l10n.votingDiscardBody);
 
                     if (confirmed == true) {
                       provider.clear();
@@ -181,15 +182,15 @@ class TopicForm extends BaseComponent {
                   },
                 ),
                 AppButton(
-                  label: "Create Topic",
+                  label: l10n.votingCreateTopic,
                   onPressed: () async {
                     if (!await passwordRequiredGuard(context, ref)) return;
                     final confirmed = await ConfirmDialog.show(
-                      title: "Create Topic",
-                      body:
-                          "There is a cost of $VOTE_TOPIC_COST VFX to create a topic.",
-                      confirmText: "Create",
-                      cancelText: "Cancel",
+                      title: l10n.votingCreateTopic,
+                      body: l10n
+                          .votingCreateTopicConfirmBody(VOTE_TOPIC_COST.toString()),
+                      confirmText: l10n.votingCreateAction,
+                      cancelText: l10n.actionCancel,
                     );
 
                     if (confirmed != true) {
@@ -199,7 +200,7 @@ class TopicForm extends BaseComponent {
                     if (success == null) return;
 
                     if (success == true) {
-                      Toast.message("Topic created");
+                      Toast.message(l10n.votingTopicCreatedToast);
                       AutoRouter.of(context).pop();
                     } else {
                       Toast.error();

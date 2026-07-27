@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/node_info_provider.dart';
 import 'node_info_card.dart';
 
@@ -23,7 +24,7 @@ class NodeInfoList extends BaseComponent {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Peer Info",
+          AppLocalizations.of(context).nodePeerInfoHeading,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
         const SizedBox(

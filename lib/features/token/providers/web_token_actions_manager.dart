@@ -12,6 +12,7 @@ import '../../web/utils/raw_transaction.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
@@ -41,7 +42,7 @@ class WebTokenActionsManager {
   }) async {
     final keypair = keypairOverride ?? ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No keypair found to sign transaction");
+      Toast.error(globalL10n.bw2NoKeypairToSign);
       return false;
     }
 
@@ -62,7 +63,7 @@ class WebTokenActionsManager {
     }
     if (txData == null) {
       if (showToasts) {
-        Toast.error("Invalid transaction data.");
+        Toast.error(globalL10n.btcInvalidTxData);
       }
       return false;
     }
@@ -71,11 +72,11 @@ class WebTokenActionsManager {
 
     if (showConfirmation) {
       final confirmed = await ConfirmDialog.show(
-        title: "Valid Transaction",
+        title: globalL10n.btcValidTxTitle,
         body:
-            "Transaction verified. There will be a fee of $txFee VFX. Would you like to proceed?",
-        confirmText: "Yes",
-        cancelText: "Cancel",
+            globalL10n.bw2TxVerifiedFeeBody(txFee.toString()),
+        confirmText: globalL10n.actionYes,
+        cancelText: globalL10n.actionCancel,
       );
 
       if (confirmed != true) {
@@ -94,7 +95,7 @@ class WebTokenActionsManager {
     }
     if (tx != null && tx['Result'] == "Success") {
       if (showToasts) {
-        Toast.message("Transaction broadcasted!");
+        Toast.message(globalL10n.bw2TransactionBroadcasted);
       }
       return true;
     }
@@ -301,7 +302,7 @@ class WebTokenActionsManager {
   }) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No VFX account found");
+      Toast.error(globalL10n.bw2NoVfxAccountFound);
       return false;
     }
 
@@ -312,7 +313,7 @@ class WebTokenActionsManager {
       publicKey: keypair.public,
     );
     if (beaconSig == null) {
-      Toast.error("Failed to sign beacon upload");
+      Toast.error(globalL10n.bw2FailedSignBeacon);
       return false;
     }
 
@@ -321,7 +322,7 @@ class WebTokenActionsManager {
     final locator = await RawService().beaconUpload(scIdentifier, toAddress, beaconSig);
     if (locator == null) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error("Beacon upload failed");
+      Toast.error(globalL10n.bw2BeaconUploadFailed);
       return false;
     }
 
@@ -336,7 +337,7 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (response['success'] != true || response['tx_data'] == null) {
-        Toast.error(response['message'] ?? "Failed to prepare ownership transfer");
+        Toast.error(response['message'] ?? globalL10n.bw2FailedPrepareOwnershipTransfer);
         return false;
       }
 
@@ -348,7 +349,7 @@ class WebTokenActionsManager {
       );
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error("Ownership transfer failed: $e");
+      Toast.error(globalL10n.bw2OwnershipTransferFailed(e.toString()));
       return false;
     }
   }
@@ -363,7 +364,7 @@ class WebTokenActionsManager {
   }) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No keypair found to sign transaction");
+      Toast.error(globalL10n.bw2NoKeypairToSign);
       return null;
     }
 
@@ -374,7 +375,7 @@ class WebTokenActionsManager {
     );
 
     if (signature == null) {
-      Toast.error("Failed to sign transaction");
+      Toast.error(globalL10n.bw2FailedSignTransaction);
       return null;
     }
 
@@ -385,7 +386,7 @@ class WebTokenActionsManager {
         publicKey: keypair.public,
       );
     } catch (e) {
-      Toast.error("Transaction failed: $e");
+      Toast.error(globalL10n.bw2TransactionFailed(e.toString()));
       return null;
     }
   }
@@ -409,15 +410,15 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (prepared['success'] != true || prepared['Hash'] == null) {
-        Toast.error(prepared['message'] ?? "Failed to prepare transfer");
+        Toast.error(prepared['message'] ?? globalL10n.bw2FailedPrepareTransfer);
         return false;
       }
 
       final confirmed = await ConfirmDialog.show(
-        title: "Confirm Transfer",
-        body: "Transfer $amount vBTC to $toAddress?",
-        confirmText: "Transfer",
-        cancelText: "Cancel",
+        title: globalL10n.bw2ConfirmTransfer,
+        body: globalL10n.bw2ConfirmTransferBody(amount.toString(), toAddress),
+        confirmText: globalL10n.btcTransferLabel,
+        cancelText: globalL10n.actionCancel,
       );
 
       if (confirmed != true) return null;
@@ -432,7 +433,7 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (result != null && result['success'] == true) {
-        Toast.message("vBTC transfer broadcasted successfully");
+        Toast.message(globalL10n.bw2VbtcTransferBroadcastedSuccess);
         ref.read(webTransactionListProvider(fromAddress).notifier).insertPendingTx(
           WebTransaction(
             hash: result['Hash'] ?? prepared['Hash'] ?? '',
@@ -448,11 +449,11 @@ class WebTokenActionsManager {
         return true;
       }
 
-      Toast.error(result?['message'] ?? "Transfer failed");
+      Toast.error(result?['message'] ?? globalL10n.bw2TransferFailed);
       return false;
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error("Transfer failed: $e");
+      Toast.error(globalL10n.bw2TransferFailedError(e.toString()));
       return false;
     }
   }
@@ -480,17 +481,17 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (prepared['success'] != true || prepared['Hash'] == null) {
-        return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare withdrawal request'};
+        return {'success': false, 'message': prepared['message'] ?? globalL10n.bw2FailedPrepareWithdrawalRequest};
       }
 
       final confirmed = await ConfirmDialog.show(
-        title: "Confirm Withdrawal Request",
-        body: "Withdraw $amount BTC to $btcAddress\nFee rate: $feeRate sats/byte\n\nProceed?",
-        confirmText: "Yes",
-        cancelText: "Cancel",
+        title: globalL10n.bw2ConfirmWithdrawalRequest,
+        body: globalL10n.bw2WithdrawalRequestBody(amount.toString(), btcAddress, feeRate.toString()),
+        confirmText: globalL10n.actionYes,
+        cancelText: globalL10n.actionCancel,
       );
 
-      if (confirmed != true) return {'success': false, 'message': 'Cancelled'};
+      if (confirmed != true) return {'success': false, 'message': globalL10n.bw2Cancelled};
 
       ref.read(globalLoadingProvider.notifier).start();
 
@@ -520,10 +521,10 @@ class WebTokenActionsManager {
         return {'success': true, 'hash': hash};
       }
 
-      return {'success': false, 'message': result?['message'] ?? 'Withdrawal request failed'};
+      return {'success': false, 'message': result?['message'] ?? globalL10n.bw2WithdrawalRequestFailed};
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      return {'success': false, 'message': 'Withdrawal request failed: $e'};
+      return {'success': false, 'message': globalL10n.bw2WithdrawalRequestFailedError(e.toString())};
     }
   }
 
@@ -534,7 +535,7 @@ class WebTokenActionsManager {
   }) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No keypair found");
+      Toast.error(globalL10n.bw2NoKeypairFound);
       return null;
     }
 
@@ -547,7 +548,7 @@ class WebTokenActionsManager {
       );
 
       if (prepared['success'] != true || prepared['StartMessage'] == null) {
-        return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare FROST signing'};
+        return {'success': false, 'message': prepared['message'] ?? globalL10n.bw2FailedPrepareFrost};
       }
 
       final startMessage = prepared['StartMessage'] as String;
@@ -570,7 +571,7 @@ class WebTokenActionsManager {
       );
 
       if (startSig == null || shareSig == null) {
-        return {'success': false, 'message': 'Failed to sign FROST messages'};
+        return {'success': false, 'message': globalL10n.bw2FailedSignFrost};
       }
 
       // Step 3: Execute — kicks off FROST signing asynchronously, returns job_id
@@ -590,7 +591,7 @@ class WebTokenActionsManager {
 
       final jobId = executeResult['job_id'] as String?;
       if (jobId == null) {
-        return {'success': false, 'message': 'Failed to start FROST signing'};
+        return {'success': false, 'message': globalL10n.bw2FailedStartFrost};
       }
 
       // Step 4: Poll for FROST signing result (up to 3 minutes)
@@ -604,12 +605,12 @@ class WebTokenActionsManager {
             signedBtcTxHex = status['signed_btc_tx_hex'] as String?;
             break;
           } else if (status['status'] == 'failed') {
-            return {'success': false, 'message': status['message'] ?? 'FROST signing failed'};
+            return {'success': false, 'message': status['message'] ?? globalL10n.bw2FrostSigningFailed};
           } else if (status['success'] == false) {
             notFoundCount++;
             // Job not registered yet (race) — tolerate a few misses, bail if persistent
             if (notFoundCount > 6) {
-              return {'success': false, 'message': status['message'] ?? 'FROST signing job not found'};
+              return {'success': false, 'message': status['message'] ?? globalL10n.bw2FrostJobNotFound};
             }
           } else {
             notFoundCount = 0; // reset if we get a valid pending response
@@ -620,7 +621,7 @@ class WebTokenActionsManager {
       }
 
       if (signedBtcTxHex == null || signedBtcTxHex.isEmpty) {
-        return {'success': false, 'message': 'FROST signing timed out. The withdrawal may still complete — check back shortly.'};
+        return {'success': false, 'message': globalL10n.bw2FrostTimedOut};
       }
 
       // Step 5: Broadcast the signed BTC TX
@@ -629,7 +630,7 @@ class WebTokenActionsManager {
       if (broadcastResult['success'] != true) {
         return {
           'success': false,
-          'message': broadcastResult['message'] ?? 'Failed to broadcast BTC transaction',
+          'message': broadcastResult['message'] ?? globalL10n.bw2FailedBroadcastBtc,
           'SignedBTCTxHex': signedBtcTxHex,
         };
       }
@@ -672,7 +673,7 @@ class WebTokenActionsManager {
         'btc_transaction_hash': btcTxHash,
       };
     } catch (e) {
-      return {'success': false, 'message': 'FROST signing failed: $e'};
+      return {'success': false, 'message': globalL10n.bw2FrostSigningFailedError(e.toString())};
     }
   }
 
@@ -690,7 +691,7 @@ class WebTokenActionsManager {
       );
 
       if (prepared['success'] != true || prepared['Hash'] == null) {
-        Toast.error(prepared['message'] ?? "Failed to prepare cancellation");
+        Toast.error(prepared['message'] ?? globalL10n.bw2FailedPrepareCancellation);
         return false;
       }
 
@@ -716,7 +717,7 @@ class WebTokenActionsManager {
       }
       return false;
     } catch (e) {
-      Toast.error("Cancellation failed: $e");
+      Toast.error(globalL10n.bw2CancellationFailedError(e.toString()));
       return false;
     }
   }
@@ -726,7 +727,7 @@ class WebTokenActionsManager {
       if ((ref.read(webSessionProvider).raBalance ?? 0) <
           MIN_RBX_FOR_SC_ACTION) {
         Toast.error(
-            "A balance on your Vault account is required to broadcast this transaction");
+            globalL10n.bw2VaultBalanceRequired);
 
         return false;
       }
@@ -735,7 +736,7 @@ class WebTokenActionsManager {
 
     if ((ref.read(webSessionProvider).balance ?? 0) < MIN_RBX_FOR_SC_ACTION) {
       Toast.error(
-          "A balance on your VFX account is required to broadcast this transaction");
+          globalL10n.bw2VfxBalanceRequiredBroadcast);
 
       return false;
     }
@@ -749,7 +750,7 @@ class WebTokenActionsManager {
         .contains(token.ownerAddress)) {
       return true;
     }
-    Toast.error("Only the owner of this token can perform this action");
+    Toast.error(globalL10n.bw2OnlyOwnerCanAction);
     return false;
   }
 
@@ -765,23 +766,23 @@ class WebTokenActionsManager {
     }
 
     Toast.error(
-        "Vault accounts cannot perform this action. Please transfer ownership to your standard VFX account first");
+        globalL10n.bw2VaultCannotActionTransferFirst);
     return false;
   }
 
   bool guardIsNotPaused(WebFungibleToken token) {
     if (token.isPaused) {
-      Toast.error("Transactions on this token are currently paused.");
+      Toast.error(globalL10n.bw2TokenPaused);
       return false;
     }
     return true;
   }
 
-  Future<String?> promptForAddress({String title = "Address"}) async {
+  Future<String?> promptForAddress({String? title}) async {
     final address = await PromptModal.show(
-      title: title,
+      title: title ?? globalL10n.labelAddress,
       validator: formValidatorRbxAddress,
-      labelText: "Address",
+      labelText: globalL10n.labelAddress,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
       ],
@@ -794,11 +795,11 @@ class WebTokenActionsManager {
     return address;
   }
 
-  Future<double?> promptForAmount({String title = "Amount"}) async {
+  Future<double?> promptForAmount({String? title}) async {
     final amount = await PromptModal.show(
-      title: title,
-      validator: (val) => formValidatorNumber(val, "Amount"),
-      labelText: "Amount",
+      title: title ?? globalL10n.labelAmount,
+      validator: (val) => formValidatorNumber(val, globalL10n.labelAmount),
+      labelText: globalL10n.labelAmount,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
     );
     if (amount == null || amount.isEmpty) {
@@ -808,7 +809,7 @@ class WebTokenActionsManager {
     final amountDouble = double.tryParse(amount);
 
     if (amountDouble == null) {
-      Toast.error("Invalid Amount");
+      Toast.error(globalL10n.btcInvalidAmount);
       return null;
     }
     return amountDouble;

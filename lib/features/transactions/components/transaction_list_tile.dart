@@ -12,6 +12,8 @@ import '../../reserve/components/callback_button.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
@@ -40,11 +42,12 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
     await Clipboard.setData(
       ClipboardData(text: value),
     );
-    Toast.message("$name copied to clipboard");
+    Toast.message(globalL10n.btcLabelCopiedToast(name));
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final Wallet? toWallet = ref.read(walletListProvider.notifier).getWallet(widget.transaction.toAddress);
 
     final Wallet? fromWallet = ref.read(walletListProvider.notifier).getWallet(widget.transaction.fromAddress);
@@ -108,7 +111,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Hash: ${widget.transaction.hash}",
+                          l10n.txpTileHashLabel(widget.transaction.hash),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
@@ -145,7 +148,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                         text: TextSpan(
                           style: Theme.of(context).textTheme.bodyMedium,
                           children: [
-                            const TextSpan(text: "Amount: "),
+                            TextSpan(text: l10n.txpTileAmountLabel),
                             TextSpan(
                               text: "${widget.transaction.amount} VFX",
                               style: TextStyle(
@@ -185,7 +188,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                               text: TextSpan(
                                 style: Theme.of(context).textTheme.bodyMedium,
                                 children: [
-                                  const TextSpan(text: "Amount: "),
+                                  TextSpan(text: l10n.txpTileAmountLabel),
                                   TextSpan(
                                     text: "$amountOverride ${ticker != null ? '[$ticker]' : ''}",
                                     style: TextStyle(
@@ -205,7 +208,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                       text: TextSpan(
                         style: Theme.of(context).textTheme.bodyMedium,
                         children: [
-                          const TextSpan(text: "Type: "),
+                          TextSpan(text: l10n.txpTileTypeLabel),
                           TextSpan(
                             text: widget.transaction.typeLabel,
                             style: const TextStyle(
@@ -221,7 +224,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                         text: TextSpan(
                           style: Theme.of(context).textTheme.bodyMedium,
                           children: [
-                            const TextSpan(text: "Status: "),
+                            TextSpan(text: l10n.txpTileStatusLabel),
                             TextSpan(
                               text: widget.transaction.statusLabel,
                               style: TextStyle(
@@ -241,33 +244,37 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SelectableText(
-                              "To: ${widget.transaction.toAddress}${toWallet != null && toWallet.friendlyName != null ? ' (${toWallet.friendlyName})' : ''}",
+                              l10n.btcToAddress(
+                                  "${widget.transaction.toAddress}${toWallet != null && toWallet.friendlyName != null ? ' (${toWallet.friendlyName})' : ''}"),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall!
                                   .copyWith(color: widget.transaction.isToReserveAccount ? Colors.deepPurple.shade200 : null),
                             ),
                             SelectableText(
-                              "From: ${widget.transaction.fromAddress}${fromWallet != null && fromWallet.friendlyName != null ? ' (${fromWallet.friendlyName})' : ''}",
+                              l10n.btcFromAddress(
+                                  "${widget.transaction.fromAddress}${fromWallet != null && fromWallet.friendlyName != null ? ' (${fromWallet.friendlyName})' : ''}"),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodySmall!
                                   .copyWith(color: widget.transaction.isFromReserveAccount ? Colors.deepPurple.shade200 : null),
                             ),
                             Text(
-                              "Date: ${widget.transaction.parseTimeStamp}",
+                              l10n.txpTileDateLabel(
+                                  widget.transaction.parseTimeStamp),
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             if (widget.transaction.callbackUntil != null)
                               Text(
-                                "Settlement Date: ${widget.transaction.parseUnlockTimeAsDate}",
+                                l10n.txpTileSettlementDateLabel(
+                                    widget.transaction.parseUnlockTimeAsDate),
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                           ],
                         )),
                         if (widget.transaction.nftData != null)
                           AppButton(
-                            label: "View Data",
+                            label: l10n.txpTileViewData,
                             onPressed: () {
                               showModalBottomSheet(
                                   context: context,
@@ -305,16 +312,17 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
                                   child: AppButton(
-                                    label: "Complete Sale",
+                                    label: l10n.txpCompleteSale,
                                     variant: AppColorVariant.Success,
                                     onPressed: canPress
                                         ? null
                                         : () async {
                                             final confirmed = await ConfirmDialog.show(
-                                              title: "Complete Sale",
-                                              body: "Are you sure you want to complete the sale of $scId for $amount VFX?",
-                                              confirmText: "Complete Sale",
-                                              cancelText: "Cancel",
+                                              title: l10n.txpCompleteSale,
+                                              body: l10n.txpCompleteSaleConfirmBody(
+                                                  "$scId", "$amount"),
+                                              confirmText: l10n.txpCompleteSale,
+                                              cancelText: l10n.actionCancel,
                                             );
 
                                             if (confirmed != true) {
@@ -356,7 +364,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 6.0),
                               child: AppButton(
-                                label: "Original TX",
+                                label: l10n.txpOriginalTx,
                                 variant: AppColorVariant.Warning,
                                 onPressed: () {
                                   showModalBottomSheet(
@@ -442,7 +450,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Block Number"),
+                              Text(l10n.txpBlockNumber),
                               Text("${widget.transaction.height}"),
                             ],
                           ),
@@ -450,7 +458,7 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Fee"),
+                              Text(l10n.labelFee),
                               Text("${widget.transaction.fee}"),
                             ],
                           ),
@@ -458,16 +466,16 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Nonce"),
+                              Text(l10n.txpNonce),
                               Text("${widget.transaction.nonce}"),
                             ],
                           ),
                           const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text("Data"),
-                              Text("-"),
+                            children: [
+                              Text(l10n.txpData),
+                              const Text("-"),
                             ],
                           ),
                           const Divider(),

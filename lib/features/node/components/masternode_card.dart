@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/components/badges.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/masternode.dart';
 
 class MasternodeCard extends StatelessWidget {
@@ -10,6 +11,7 @@ class MasternodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       color: Colors.black54,
       child: Padding(
@@ -21,7 +23,7 @@ class MasternodeCard extends StatelessWidget {
             Row(
               children: [
                 AppBadge(
-                  label: masternode.isActive ? "Active" : "Inactive",
+                  label: masternode.isActive ? l10n.nodeStatusActive : l10n.nodeStatusInactive,
                   variant: masternode.isActive ? AppColorVariant.Success : AppColorVariant.Danger,
                 ),
                 const SizedBox(width: 12),
@@ -48,11 +50,11 @@ class MasternodeCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Connection Date: ${masternode.dateTimeLabel}",
+                  l10n.nodeConnectionDateLabel(masternode.dateTimeLabel),
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
-                  "Blocks: ${masternode.blockCount}",
+                  l10n.nodeBlocksLabel(masternode.blockCount.toString()),
                   style: Theme.of(context).textTheme.bodySmall,
                 )
               ],

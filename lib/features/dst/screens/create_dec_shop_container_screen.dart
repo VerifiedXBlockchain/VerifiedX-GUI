@@ -17,6 +17,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../components/create_dec_shop_form_group.dart';
 import '../providers/dec_shop_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateDecShopContainerScreen extends BaseScreen {
   const CreateDecShopContainerScreen({Key? key}) : super(key: key, verticalPadding: 0, horizontalPadding: 0);
@@ -25,17 +26,18 @@ class CreateDecShopContainerScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final provider = ref.read(decShopFormProvider.notifier);
     final model = ref.read(decShopFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     return AppBar(
-      title: Text(model.id != 0 ? "Edit Auction House" : "Create Auction House"),
+      title: Text(model.id != 0 ? l10n.r3dEditAuctionHouse : l10n.r3dCreateAuctionHouse),
       backgroundColor: Colors.black,
       leading: IconButton(
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
-            title: "Are you sure you want to close the shop ${model.id != 0 ? 'editing' : 'creation'} screen?",
-            body: "All unsaved changes will be lost.",
-            cancelText: "Cancel",
-            confirmText: "Continue",
+            title: model.id != 0 ? l10n.r3dCloseShopEditingConfirm : l10n.r3dCloseShopCreationConfirm,
+            body: l10n.configCloseDialogBody,
+            cancelText: l10n.actionCancel,
+            confirmText: l10n.actionContinue,
           );
 
           if (confirmed == true) {
@@ -59,6 +61,7 @@ class CreateDecShopContainerScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(decShopFormProvider.notifier);
     final model = ref.read(decShopFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       children: [
@@ -82,14 +85,14 @@ class CreateDecShopContainerScreen extends BaseScreen {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
-                  label: "Discard Changes",
+                  label: l10n.dstDiscardChanges,
                   variant: AppColorVariant.Danger,
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                      title: "Are you sure you want to close the shop ${model.id != 0 ? 'editing' : 'creation'} screen?",
-                      body: "All unsaved changes will be lost.",
-                      cancelText: "Cancel",
-                      confirmText: "Continue",
+                      title: model.id != 0 ? l10n.r3dCloseShopEditingConfirm : l10n.r3dCloseShopCreationConfirm,
+                      body: l10n.configCloseDialogBody,
+                      cancelText: l10n.actionCancel,
+                      confirmText: l10n.actionContinue,
                     );
 
                     if (confirmed == true) {
@@ -101,16 +104,17 @@ class CreateDecShopContainerScreen extends BaseScreen {
                 ),
                 if (model.id != 0) DecPublishShopButton(),
                 AppButton(
-                  label: model.id != 0 ? 'Save Changes' : 'Create',
+                  label: model.id != 0 ? l10n.r3dSaveChanges : l10n.r3dCreate,
                   variant: AppColorVariant.Success,
                   onPressed: () async {
                     final success = await provider.complete(context);
 
                     if (success == true) {
                       final confirmed = await ConfirmDialog.show(
-                        title: "Publish Updates?",
-                        body:
-                            "Your local changes were saved successfully. Would you like to publish this to the network?${model.updateWillCost ? '\n\n1 VFX is required since you have already published within the past 24 hours.' : ''}",
+                        title: l10n.dstPublishUpdatesTitle,
+                        body: model.updateWillCost
+                            ? l10n.r3dPublishUpdatesBodyWithCost
+                            : l10n.r3dPublishUpdatesBody,
                       );
 
                       ref.invalidate(decShopProvider);
@@ -122,13 +126,13 @@ class CreateDecShopContainerScreen extends BaseScreen {
 
                           ref.read(dstTxPendingProvider.notifier).set(true);
                           ref.invalidate(decShopProvider);
-                          Toast.message("Publish Transaction Sent!");
+                          Toast.message(l10n.r3dPublishTransactionSent);
 
                           final confirmed = await ConfirmDialog.show(
-                            title: "CLI Restart Required",
-                            body: "A CLI restart is required for this change to take effect. Would you like to restart now?",
-                            confirmText: "Restart",
-                            cancelText: "Later",
+                            title: l10n.dstCliRestartTitle,
+                            body: l10n.r3dCliRestartBody,
+                            confirmText: l10n.validatorRestartCliConfirm,
+                            cancelText: l10n.beaconLater,
                           );
 
                           if (confirmed == true) {
@@ -143,7 +147,7 @@ class CreateDecShopContainerScreen extends BaseScreen {
                           Toast.error();
                         }
                       } else {
-                        Toast.message("Local changes saved!");
+                        Toast.message(l10n.r3dLocalChangesSaved);
 
                         AutoRouter.of(context).pop();
                       }

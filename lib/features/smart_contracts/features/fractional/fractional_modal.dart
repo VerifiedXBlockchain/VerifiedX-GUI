@@ -5,6 +5,7 @@ import '../../../../core/base_component.dart';
 import '../../components/sc_creator/common/form_group_header.dart';
 import '../../components/sc_creator/common/modal_bottom_actions.dart';
 import '../../components/sc_creator/common/modal_container.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'fractional_provider.dart';
 
 class FractionalModal extends BaseComponent {
@@ -14,21 +15,22 @@ class FractionalModal extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final _provider = ref.read(fractionalFormProvider.notifier);
     final _model = ref.watch(fractionalFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Form(
       key: _provider.formKey,
       child: ModalContainer(children: [
-        const FormGroupHeader(
-          "Fractionalization",
+        FormGroupHeader(
+          l10n.scwFractionalizationTitle,
         ),
         Row(
           children: [
             Expanded(
               child: TextFormField(
-                decoration: const InputDecoration(
-                  label: Text("Creator’s Retained Ownership"),
-                  suffixIcon: Text("%"),
-                  suffixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                decoration: InputDecoration(
+                  label: Text(l10n.scwCreatorRetainedOwnership),
+                  suffixIcon: const Text("%"),
+                  suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
                 validator: _provider.creatorRetainsValidator,
                 controller: _provider.creatorRetainsController,
@@ -40,10 +42,10 @@ class FractionalModal extends BaseComponent {
             ),
             Expanded(
               child: TextFormField(
-                decoration: const InputDecoration(
-                  label: Text("Fractional Interest"),
-                  suffixIcon: Text("%"),
-                  suffixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                decoration: InputDecoration(
+                  label: Text(l10n.scwFractionalInterest),
+                  suffixIcon: const Text("%"),
+                  suffixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
                 ),
                 validator: _provider.fractionalInterestValidator,
                 controller: _provider.fractionalInterestController,
@@ -70,13 +72,13 @@ class FractionalModal extends BaseComponent {
               onTap: () {
                 _provider.setAllowVoting(!_model.allowVoting);
               },
-              child: const Text("Allow Voting"),
+              child: Text(l10n.scwAllowVoting),
             ),
           ],
         ),
         if (_model.allowVoting) ...[
           TextFormField(
-            decoration: const InputDecoration(label: Text("Voting Description")),
+            decoration: InputDecoration(label: Text(l10n.scwVotingDescription)),
             controller: _provider.votingDescriptionController,
             minLines: 3,
             maxLines: 6,
@@ -85,7 +87,7 @@ class FractionalModal extends BaseComponent {
             children: [
               Expanded(
                 child: TextFormField(
-                  decoration: const InputDecoration(label: Text("Percentage Required for Voting Approval")),
+                  decoration: InputDecoration(label: Text(l10n.scwPercentageRequiredForVotingApproval)),
                 ),
               ),
               const SizedBox(
@@ -93,7 +95,7 @@ class FractionalModal extends BaseComponent {
               ),
               Expanded(
                 child: TextFormField(
-                  decoration: const InputDecoration(label: Text("Other Options")),
+                  decoration: InputDecoration(label: Text(l10n.scwOtherOptions)),
                 ),
               ),
             ],

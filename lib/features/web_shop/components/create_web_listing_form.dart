@@ -10,6 +10,7 @@ import '../../../core/components/buttons.dart';
 import '../../../utils/validation.dart';
 import '../../smart_contracts/components/sc_creator/common/form_group_container.dart';
 import '../providers/create_web_listing_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateListingFormGroup extends BaseComponent {
   final int collection;
@@ -22,6 +23,7 @@ class CreateListingFormGroup extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.watch(createWebListingProvider.notifier);
     final model = ref.watch(createWebListingProvider);
 
@@ -50,7 +52,7 @@ class CreateListingFormGroup extends BaseComponent {
                       padding: const EdgeInsets.all(8.0),
                       child: Center(
                           child: Text(
-                        "Auction has started so the dates & times can't be updated.",
+                        l10n.mktAuctionStartedDatesLocked,
                         style: Theme.of(context).textTheme.bodySmall,
                       )),
                     ),
@@ -73,7 +75,7 @@ class CreateListingFormGroup extends BaseComponent {
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
                             child: Text(
-                          "Auction has started so the pricing can't be updated.",
+                          l10n.mktAuctionStartedPricingLocked,
                           style: Theme.of(context).textTheme.bodySmall,
                         )),
                       ),
@@ -88,7 +90,7 @@ class CreateListingFormGroup extends BaseComponent {
             padding: const EdgeInsets.only(top: 16.0),
             child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               AppButton(
-                label: 'Save',
+                label: l10n.actionSave,
                 variant: AppColorVariant.Success,
                 onPressed: () {
                   provider.complete(context);
@@ -109,6 +111,7 @@ class _EnableBuyNow extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.watch(createWebListingProvider.select((v) => v.enableBuyNow));
 
@@ -125,7 +128,7 @@ class _EnableBuyNow extends BaseComponent {
           onTap: () {
             provider.updateEnableBuyOnly(!model);
           },
-          child: const Text("Enable Buy Now?"),
+          child: Text(l10n.mktEnableBuyNow),
         ),
       ],
     );
@@ -139,6 +142,7 @@ class _EnableAuction extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.watch(createWebListingProvider.select((v) => v.enableAuction));
 
@@ -155,7 +159,7 @@ class _EnableAuction extends BaseComponent {
           onTap: () {
             provider.updateEnableAuction(!model);
           },
-          child: const Text("Enable Auction?"),
+          child: Text(l10n.mktEnableAuction),
         ),
       ],
     );
@@ -169,6 +173,7 @@ class _BuyNow extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     return TextFormField(
       controller: provider.buyNowController,
@@ -176,9 +181,9 @@ class _BuyNow extends BaseComponent {
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
       validator: (value) => formValidatorNotEmpty(value, "Buy Now"),
       decoration: InputDecoration(
-        label: const Text(
-          "Buy Now Price",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktBuyNowPriceLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -192,6 +197,7 @@ class _EnableGallery extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.watch(createWebListingProvider.select((v) => v.galleryOnly));
 
@@ -208,7 +214,7 @@ class _EnableGallery extends BaseComponent {
           onTap: () {
             provider.updateGalleryOnly(!model);
           },
-          child: const Text("Gallery Only?"),
+          child: Text(l10n.mktGalleryOnly),
         ),
       ],
     );
@@ -222,6 +228,7 @@ class _EnableReservePrice extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.watch(createWebListingProvider.select((v) => v.enableReservePrice));
 
@@ -238,7 +245,7 @@ class _EnableReservePrice extends BaseComponent {
           onTap: () {
             provider.updateEnableReservePrice(!model);
           },
-          child: const Text("Add Reserve Price"),
+          child: Text(l10n.mktAddReservePrice),
         ),
       ],
     );
@@ -252,6 +259,7 @@ class _ReservePrice extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.read(createWebListingProvider);
     return TextFormField(
@@ -259,11 +267,11 @@ class _ReservePrice extends BaseComponent {
       controller: provider.reservePriceController,
       onChanged: provider.updateReservePrice,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-      validator: (value) => formValidatorNotEmpty(value, "Reserve Price"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.mktReservePriceLabel),
       decoration: InputDecoration(
-        label: const Text(
-          "Reserve Price",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktReservePriceLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -277,6 +285,7 @@ class _FloorPrice extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.read(createWebListingProvider);
 
@@ -285,11 +294,11 @@ class _FloorPrice extends BaseComponent {
       controller: provider.floorPriceController,
       onChanged: provider.updateFloorPrice,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-      validator: (value) => formValidatorNotEmpty(value, "Floor Price"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.shopFloorPriceLabel),
       decoration: InputDecoration(
-        label: const Text(
-          "Floor Price",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.shopFloorPriceLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -304,6 +313,7 @@ class _NFT extends BaseComponent {
   @override
   Widget build(BuildContext context, ref) {
     // return SizedBox();
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.watch(createWebListingProvider);
 
@@ -311,11 +321,11 @@ class _NFT extends BaseComponent {
 
     if (webNft == null) {
       return NftSelector(
-        labelOverride: "Select NFT",
+        labelOverride: l10n.mktSelectNft,
         disabled: model.exists,
         onSelect: (nft) {
           if (nft.isListed(ref)) {
-            Toast.error("This NFT is already listed. Please choose another");
+            Toast.error(l10n.mktNftAlreadyListedToast);
             provider.clearNft();
             return;
           }
@@ -364,7 +374,7 @@ class _NFT extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("NFT: ${webNft.name}"),
+                Text(l10n.mktNftNameLabel(webNft.name)),
                 Text(
                   webNft.smartContract.id,
                   style: Theme.of(context).textTheme.bodySmall,
@@ -373,11 +383,11 @@ class _NFT extends BaseComponent {
             ),
           ),
           NftSelector(
-            labelOverride: "Select NFT",
+            labelOverride: l10n.mktSelectNft,
             disabled: model.exists,
             onSelect: (nft) async {
               if (nft.isListed(ref)) {
-                Toast.error("This NFT is already listed. Please choose another");
+                Toast.error(l10n.mktNftAlreadyListedToast);
                 provider.clearNft();
                 return;
               }
@@ -391,11 +401,12 @@ class _NFT extends BaseComponent {
 }
 
 Future<void> _showDatePicker(BuildContext context, WidgetRef ref, bool isStartDate) async {
+  final l10n = AppLocalizations.of(context);
   final _provider = ref.read(createWebListingProvider.notifier);
   final _model = ref.read(createWebListingProvider);
 
   if (_model.isAuction && _model.isAuctionStarted && _model.exists) {
-    Toast.error('The auction has already started.');
+    Toast.error(l10n.mktAuctionAlreadyStartedToast);
     return;
   }
   final _d = await showDatePicker(
@@ -426,12 +437,13 @@ Future<void> _showDatePicker(BuildContext context, WidgetRef ref, bool isStartDa
 }
 
 Future<void> _showTimePicker(BuildContext context, WidgetRef ref, bool isStartDate) async {
+  final l10n = AppLocalizations.of(context);
   final _provider = ref.read(createWebListingProvider.notifier);
   final _model = ref.read(createWebListingProvider);
 
   final initialDateTime = isStartDate ? _model.startDate : _model.endDate;
   if (_model.isAuction && _model.isAuctionStarted && _model.exists) {
-    Toast.error('The auction has already started.');
+    Toast.error(l10n.mktAuctionAlreadyStartedToast);
     return;
   }
 
@@ -469,6 +481,7 @@ class _StartDate extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final _model = ref.read(createWebListingProvider);
 
@@ -487,9 +500,9 @@ class _StartDate extends BaseComponent {
                   _showDatePicker(context, ref, true);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "Start Date",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktStartDateLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -512,9 +525,9 @@ class _StartDate extends BaseComponent {
                   _showTimePicker(context, ref, true);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "Start Time",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktStartTimeLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -541,6 +554,7 @@ class _EndDate extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.read(createWebListingProvider);
     final disabled = model.isAuction && model.isAuctionStarted && model.exists;
@@ -561,9 +575,9 @@ class _EndDate extends BaseComponent {
                   _showDatePicker(context, ref, false);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "End Date",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktEndDateLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -586,9 +600,9 @@ class _EndDate extends BaseComponent {
                   _showTimePicker(context, ref, false);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "End Time",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktEndTimeLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),

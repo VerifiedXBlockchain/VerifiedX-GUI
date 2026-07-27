@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:rbx_wallet/core/theme/colors.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
+import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
 
 import 'package:flutter_web_qrcode_scanner/flutter_web_qrcode_scanner.dart'
     if (dart.library.io) 'web_qr_scanner_mock.dart';
@@ -97,7 +98,7 @@ class _WebQrScannerState extends State<WebQrScanner> {
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            'Camera Error',
+                            AppLocalizations.of(context).webScanCameraError,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -126,7 +127,7 @@ class _WebQrScannerState extends State<WebQrScanner> {
                               backgroundColor: AppColors.getBlue(),
                               foregroundColor: Colors.white,
                             ),
-                            child: const Text('Retry'),
+                            child: Text(AppLocalizations.of(context).btcRetry),
                           ),
                         ],
                       ),
@@ -197,9 +198,9 @@ class _WebQrScannerState extends State<WebQrScanner> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Text(
-                            'Scanning...',
-                            style: TextStyle(
+                          Text(
+                            AppLocalizations.of(context).webScanScanning,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -210,8 +211,8 @@ class _WebQrScannerState extends State<WebQrScanner> {
                     else
                       Text(
                         _errorMessage != null
-                            ? 'Camera access required to scan QR codes'
-                            : 'Position QR code within the frame to scan',
+                            ? AppLocalizations.of(context).webScanCameraRequired
+                            : AppLocalizations.of(context).webScanInstruction,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,

@@ -7,6 +7,7 @@ import '../../../asset/asset.dart';
 import '../../models/pair.dart';
 import '../../models/property.dart';
 import '../../providers/create_smart_contract_provider.dart';
+import '../../../../l10n/l10n_helper.dart';
 
 class PairFormProvider extends StateNotifier<Pair> {
   final Ref ref;
@@ -25,11 +26,11 @@ class PairFormProvider extends StateNotifier<Pair> {
   }
 
   String? nftAddressValidator(String? value) =>
-      formValidatorNotEmpty(value, "NFT Address");
+      formValidatorNotEmpty(value, globalL10n.r3aNftAddress);
   String? descriptionValidator(String? value) =>
-      formValidatorNotEmpty(value, "Description");
+      formValidatorNotEmpty(value, globalL10n.btcDetailDescriptionLabel);
   String? reasonValidator(String? value) =>
-      formValidatorNotEmpty(value, "Reason");
+      formValidatorNotEmpty(value, globalL10n.r3aReason);
 
   List<String> get networkOptions => [
         "VFX",

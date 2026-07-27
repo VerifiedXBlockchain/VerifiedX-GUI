@@ -17,6 +17,7 @@ import '../providers/web_listing_full_list_provider.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../web/components/web_wallet_details.dart';
 import '../models/web_listing.dart';
@@ -60,7 +61,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                     type: AppButtonType.Text,
                     variant: AppColorVariant.Light,
                     icon: Icons.chat_bubble_outline,
-                    label: 'Chat',
+                    label: AppLocalizations.of(context).chatTitleSingle,
                     onPressed: () async {
                       final thread = await WebChatService().getOrCreateThread(
                         shopUrl: collection.shop!.url,
@@ -68,21 +69,21 @@ class WebCollectionDetailScreen extends BaseScreen {
                         isThirdParty: true,
                       );
                       if (thread == null) {
-                        Toast.error("Could not create or get thread");
+                        Toast.error(AppLocalizations.of(context).r3bCouldNotCreateThread);
                         return;
                       }
                       AutoRouter.of(context).push(WebShopChatScreenRoute(identifier: thread.uuid));
                     },
                   ),
                 AppButton(
-                  label: "Share Collection",
+                  label: AppLocalizations.of(context).shopShareCollection,
                   icon: Icons.ios_share_rounded,
                   variant: AppColorVariant.Light,
                   type: AppButtonType.Text,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: "${Env.appBaseUrl}/#dashboard/p2p/shop/${collection.shop!.id}/collection/${collection.id}"));
-                    Toast.message("Share url copied to clipboard");
+                    Toast.message(AppLocalizations.of(context).r3bShareUrlCopied);
                   },
                 ),
                 IconButton(
@@ -94,13 +95,13 @@ class WebCollectionDetailScreen extends BaseScreen {
               ],
             )
           : AppBar(
-              title: const Text("Error"),
+              title: Text(AppLocalizations.of(context).shopErrorTitle),
               centerTitle: true,
               backgroundColor: Colors.black12,
               shadowColor: Colors.transparent,
             ),
       error: (_, __) => AppBar(
-        title: const Text("Error"),
+        title: Text(AppLocalizations.of(context).shopErrorTitle),
         centerTitle: true,
         backgroundColor: Colors.black12,
         shadowColor: Colors.transparent,
@@ -146,15 +147,15 @@ class WebCollectionDetailScreen extends BaseScreen {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           AppButton(
-                            label: isMobile ? "Delete" : "Delete collection",
+                            label: isMobile ? AppLocalizations.of(context).actionDelete : AppLocalizations.of(context).dstDeleteCollection,
                             icon: Icons.delete,
                             variant: AppColorVariant.Danger,
                             onPressed: () async {
                               final confirmed = await ConfirmDialog.show(
-                                title: "Are you sure you want to delete this collection?",
-                                body: "This is permanent",
-                                cancelText: "Cancel",
-                                confirmText: "Delete",
+                                title: AppLocalizations.of(context).shopDeleteCollectionConfirm,
+                                body: AppLocalizations.of(context).r3bThisIsPermanent,
+                                cancelText: AppLocalizations.of(context).actionCancel,
+                                confirmText: AppLocalizations.of(context).adnrDelete,
                               );
                               if (confirmed == true) {
                                 ref.read(webCollectionFormProvider.notifier).delete(context, collection);
@@ -162,7 +163,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
-                            label: isMobile ? "Edit" : "Edit Collection",
+                            label: isMobile ? AppLocalizations.of(context).scwEdit : AppLocalizations.of(context).mktEditCollection,
                             icon: Icons.edit,
                             variant: AppColorVariant.Primary,
                             onPressed: () {
@@ -171,7 +172,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
-                            label: "Create Listing",
+                            label: AppLocalizations.of(context).shopCreateListing,
                             icon: Icons.add,
                             variant: AppColorVariant.Success,
                             onPressed: () {

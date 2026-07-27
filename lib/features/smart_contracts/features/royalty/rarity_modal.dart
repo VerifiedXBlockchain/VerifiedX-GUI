@@ -10,6 +10,7 @@ import '../../components/sc_creator/common/form_group_header.dart';
 import '../../components/sc_creator/common/modal_container.dart';
 import '../../models/rarity.dart';
 import '../../providers/create_smart_contract_provider.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class RarityModal extends BaseComponent {
   final Rarity? initialRarity;
@@ -21,10 +22,11 @@ class RarityModal extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _model = ref.watch(createSmartContractProvider);
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(
       children: [
-        FormGroupHeader(initialRarity == null ? "Create Rarity" : "Edit Rarity"),
+        FormGroupHeader(initialRarity == null ? l10n.r3aCreateRarity : l10n.r3aEditRarity),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -33,27 +35,27 @@ class RarityModal extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       label: Text(
-                        "Label",
-                        style: TextStyle(color: Colors.white),
+                        l10n.r3aLabel,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       label: Text(
-                        "Rareness",
-                        style: TextStyle(color: Colors.white),
+                        l10n.r3aRareness,
+                        style: const TextStyle(color: Colors.white),
                       ),
-                      suffix: Text("%"),
+                      suffix: const Text("%"),
                     ),
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       label: Text(
-                        "Description",
-                        style: TextStyle(color: Colors.white),
+                        l10n.btcDetailDescriptionLabel,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                     minLines: 3,
@@ -70,9 +72,9 @@ class RarityModal extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Stats Override",
-                    style: TextStyle(fontSize: 16),
+                  Text(
+                    l10n.r3aStatsOverride,
+                    style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 8),
                   Container(
@@ -118,7 +120,7 @@ class RarityModal extends BaseComponent {
             Expanded(
               child: FileSelector(
                 transparentBackground: true,
-                title: "Primary Asset Override",
+                title: l10n.r3aPrimaryAssetOverride,
                 onChange: (Asset? asset) {},
               ),
             ),
@@ -126,7 +128,7 @@ class RarityModal extends BaseComponent {
             Expanded(
               child: FileSelector(
                 transparentBackground: true,
-                title: "Thumbnail Override",
+                title: l10n.r3aThumbnailOverride,
                 onChange: (Asset? asset) {},
               ),
             )
@@ -137,7 +139,7 @@ class RarityModal extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppButton(
-              label: "Cancel",
+              label: l10n.actionCancel,
               type: AppButtonType.Text,
               variant: AppColorVariant.Info,
               onPressed: () {
@@ -145,7 +147,7 @@ class RarityModal extends BaseComponent {
               },
             ),
             AppButton(
-              label: "Save",
+              label: l10n.actionSave,
               icon: Icons.check,
               onPressed: () {},
             ),

@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/components/language_selector.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../hd/components/restore_hd_wallet_button.dart';
 import 'home_buttons/backup_button.dart';
@@ -44,6 +46,7 @@ class _HomeButtonsState extends State<HomeButtons> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final tabsRouter = AutoTabsRouter.of(context);
     return Column(mainAxisSize: MainAxisSize.min, children: [
       SegmentedButton<HomeButtonSection>(
@@ -91,24 +94,24 @@ class _HomeButtonsState extends State<HomeButtons> {
         },
         segments: [
           ButtonSegment(
-            label: Text("General"),
+            label: Text(l10n.votingCatGeneral),
             value: HomeButtonSection.general,
           ),
           ButtonSegment(
-            label: Text("Account Security"),
+            label: Text(l10n.hnavSectionAccountSecurity),
             value: HomeButtonSection.security,
           ),
           ButtonSegment(
-            label: Text("Tokens / NFTs"),
+            label: Text(l10n.hnavSectionTokensNfts),
             value: HomeButtonSection.nft,
           ),
           if (VALIDATOR_NAV_ENABLED)
             ButtonSegment(
-              label: Text("Validator"),
+              label: Text(l10n.hnavSectionValidator),
               value: HomeButtonSection.validator,
             ),
           ButtonSegment(
-            label: Text("Diagnose"),
+            label: Text(l10n.hnavSectionDiagnose),
             value: HomeButtonSection.diagnose,
           ),
         ],
@@ -135,12 +138,13 @@ class _HomeButtonsState extends State<HomeButtons> {
                   const OpenDbFolderButton(),
                   ImportSnapshotButton(),
                   AppButton(
-                    label: "Validator Pool",
+                    label: l10n.nodePoolTitle,
                     icon: Icons.wifi,
                     onPressed: () {
                       tabsRouter.setActiveIndex(6);
                     },
                   ),
+                  const LanguageButton(),
                 ],
               );
             case HomeButtonSection.security:
@@ -166,7 +170,7 @@ class _HomeButtonsState extends State<HomeButtons> {
                   ImportMediaButton(),
                   // BackupButton(),
                   AppButton(
-                    label: "Beacons",
+                    label: l10n.beaconTitle,
                     icon: Icons.satellite_alt,
                     onPressed: () {
                       tabsRouter.setActiveIndex(12);
@@ -198,14 +202,14 @@ class _HomeButtonsState extends State<HomeButtons> {
                   // PrintValidatorsButton(),
                   ValidatingCheckButton(),
                   AppButton(
-                    label: "Validator Pool",
+                    label: l10n.nodePoolTitle,
                     icon: Icons.wifi,
                     onPressed: () {
                       tabsRouter.setActiveIndex(6);
                     },
                   ),
                   AppButton(
-                    label: "Proposals & Voting",
+                    label: l10n.hnavProposalsVoting,
                     icon: Icons.how_to_vote,
                     onPressed: () {
                       tabsRouter.setActiveIndex(11);
@@ -226,7 +230,7 @@ class _HomeButtonsState extends State<HomeButtons> {
                   ShowDebugDataButton(),
                   ValidatingCheckButton(),
                   AppButton(
-                    label: "Mempool",
+                    label: l10n.hnavMempool,
                     icon: Icons.info,
                     onPressed: () async {
                       final data = await BridgeService().getMempool();
@@ -244,13 +248,13 @@ class _HomeButtonsState extends State<HomeButtons> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                                   child: Text(
-                                    "Mempool",
+                                    l10n.hnavMempool,
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
                                 data == null
                                     ? Text(
-                                        "Mempool is empty.",
+                                        l10n.hnavMempoolEmpty,
                                         style: TextStyle(fontFamily: "RobotoMono"),
                                       )
                                     : TextFormField(

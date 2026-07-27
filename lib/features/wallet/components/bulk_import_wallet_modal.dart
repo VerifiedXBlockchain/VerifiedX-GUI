@@ -5,6 +5,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../providers/wallet_list_provider.dart';
@@ -16,6 +17,7 @@ class BulkImportWalletModal extends BaseComponent {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final TextEditingController controller = TextEditingController();
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(
       withDecor: false,
@@ -24,7 +26,7 @@ class BulkImportWalletModal extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Bulk Account Importer",
+              l10n.walletBulkImportTitle,
               style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                     color: Colors.white,
                   ),
@@ -33,9 +35,9 @@ class BulkImportWalletModal extends BaseComponent {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                l10n.actionCancel,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -45,13 +47,13 @@ class BulkImportWalletModal extends BaseComponent {
           controller: controller,
           minLines: 6,
           maxLines: 10,
-          decoration: const InputDecoration(hintText: "Paste in your private keys. Each key should be a separate line."),
+          decoration: InputDecoration(hintText: l10n.walletBulkImportHint),
         ),
         const SizedBox(height: 8),
         Align(
           alignment: Alignment.centerRight,
           child: AppButton(
-            label: "Import",
+            label: l10n.walletImportLabel,
             variant: AppColorVariant.Success,
             onPressed: () async {
               final value = controller.text;
@@ -72,30 +74,30 @@ class BulkImportWalletModal extends BaseComponent {
                 return null;
               }
 
-              final label = "${linesToImport.length} keypair${linesToImport.length == 1 ? '' : 's'}";
+              final label = l10n.walletKeypairsLabel(linesToImport.length);
 
               final confirmed = await ConfirmDialog.show(
-                title: "Confirm Import",
-                body: "Would you like to proceed with importing $label?",
-                confirmText: "Import",
-                cancelText: "Cancel",
+                title: l10n.walletConfirmImportTitle,
+                body: l10n.walletConfirmImportBody(label),
+                confirmText: l10n.walletImportLabel,
+                cancelText: l10n.actionCancel,
               );
               if (confirmed != true) {
                 return null;
               }
 
               final resync = await ConfirmDialog.show(
-                title: "Rescan Blocks?",
-                body: "Would you like to rescan the chain to include any transactions relevant to these keys?",
-                confirmText: "Yes",
-                cancelText: "No",
+                title: l10n.walletRescanBlocksTitle,
+                body: l10n.walletRescanBlocksBodyKeys,
+                confirmText: l10n.actionYes,
+                cancelText: l10n.actionNo,
               );
 
               for (final privateKey in linesToImport) {
                 await ref.read(walletListProvider.notifier).import(privateKey, false, resync == true);
               }
 
-              Toast.message("$label imported!");
+              Toast.message(l10n.walletImportedToast(label));
 
               ref.read(walletInfoProvider.notifier).infoLoop(false);
               ref.read(sessionProvider.notifier).mainLoop(false);

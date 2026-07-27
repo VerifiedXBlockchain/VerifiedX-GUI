@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
@@ -39,15 +41,16 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
   }
 
   void _showAddressPicker() {
+    final l10n = AppLocalizations.of(context);
     final wallets = ref.read(walletListProvider);
     if (wallets.isEmpty) {
-      Toast.error("No accounts found");
+      Toast.error(l10n.prvNoAccountsFound);
       return;
     }
     showModalBottomSheet(
       context: context,
       builder: (context) => ModalContainer(
-        title: "Select Account",
+        title: l10n.webSelectAccount,
         withClose: true,
         children: wallets.map((wallet) {
           return Padding(
@@ -64,7 +67,7 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
                   ? Text(wallet.address, style: const TextStyle(fontSize: 11, color: Colors.white38, fontFamily: 'monospace'))
                   : null,
               trailing: Text(
-                "${wallet.balance} VFX",
+                l10n.prvVfxAmountSuffix(wallet.balance.toString()),
                 style: const TextStyle(fontSize: 12, color: Colors.white54),
               ),
               onTap: () {
@@ -83,19 +86,19 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
 
     final toAddress = _toAddressController.text.trim();
     if (!isValidRbxAddress(toAddress)) {
-      Toast.error("Please enter a valid VFX address");
+      Toast.error(globalL10n.prvEnterValidVfxAddress);
       return;
     }
 
     final amount = double.tryParse(_amountController.text.trim());
     if (amount == null || amount <= 0) {
-      Toast.error("Please enter a valid amount");
+      Toast.error(globalL10n.prvEnterValidAmount);
       return;
     }
 
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
-      Toast.error("No shielded address found");
+      Toast.error(globalL10n.prvNoShieldedAddress);
       return;
     }
 
@@ -115,28 +118,29 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text("Unshield VFX"),
+      title: Text(l10n.prvUnshieldVfxTitle),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Move VFX from the shielded pool back to a transparent address.",
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+            Text(
+              l10n.prvUnshieldVfxBody,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _toAddressController,
               decoration: InputDecoration(
-                labelText: "To Address (transparent)",
-                hintText: "Enter VFX address",
+                labelText: l10n.prvToAddressLabel,
+                hintText: l10n.prvEnterVfxAddressHint,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.account_balance_wallet, size: 20),
-                  tooltip: "Select from my accounts",
+                  tooltip: l10n.prvSelectFromAccounts,
                   onPressed: _isSubmitting ? null : () => _showAddressPicker(),
                 ),
               ),
@@ -146,15 +150,15 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
             TextField(
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(
-                labelText: "Amount (VFX)",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.prvAmountVfxLabel,
+                border: const OutlineInputBorder(),
               ),
               enabled: !_isSubmitting,
             ),
             const SizedBox(height: 8),
             Text(
-              "$PRIVACY_TX_FIXED_FEE_LABEL fee deducted from shielded balance.",
+              l10n.prvFeeDeductedShieldedShort(PRIVACY_TX_FIXED_FEE_LABEL),
               style: const TextStyle(color: Colors.white38, fontSize: 11),
             ),
           ],
@@ -163,13 +167,13 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
+          child: Text(l10n.actionCancel),
         ),
         TextButton(
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : Text("Unshield", style: TextStyle(color: Theme.of(context).colorScheme.warning)),
+              : Text(l10n.prvUnshieldAction, style: TextStyle(color: Theme.of(context).colorScheme.warning)),
         ),
       ],
     );

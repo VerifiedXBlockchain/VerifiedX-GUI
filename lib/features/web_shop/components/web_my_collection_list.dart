@@ -11,6 +11,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/infinite_list.dart';
 import '../models/web_collection.dart';
 import '../providers/web_collection_list_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebMyCollectionList extends BaseComponent {
   final int shopId;
@@ -21,6 +22,7 @@ class WebMyCollectionList extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final listProvider = ref.read(webCollectionListProvider(shopId).notifier);
 
     return InfiniteList<WebCollection>(
@@ -28,13 +30,13 @@ class WebMyCollectionList extends BaseComponent {
       itemBuilder: (context, collection, index) => WebCollectionTile(
         collection,
       ),
-      emptyText: "No Collections",
+      emptyText: l10n.r3bNoCollections,
       emptyWidget: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Now you can create collections and then add listings to them.",
+              l10n.r3bCreateCollectionsHint,
               style: TextStyle(
                 fontSize: 18,
                 height: 1.5,
@@ -66,6 +68,7 @@ class _CreateCollectionButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final shop = ref.read(webShopDetailProvider(shopId)).value;
 
     if (shop == null) {
@@ -73,7 +76,7 @@ class _CreateCollectionButton extends BaseComponent {
     }
 
     return AppButton(
-      label: 'Create Collection',
+      label: l10n.shopCreateCollection,
       icon: Icons.add,
       type: buttonType,
       variant: AppColorVariant.Success,

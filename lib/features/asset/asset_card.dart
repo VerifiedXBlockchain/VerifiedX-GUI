@@ -3,6 +3,7 @@ import 'dart:io' as io;
 import 'package:flutter/material.dart';
 
 import '../../core/components/buttons.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../utils/files.dart';
 import '../smart_contracts/services/smart_contract_service.dart';
 import 'asset.dart';
@@ -29,6 +30,7 @@ class AssetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +43,7 @@ class AssetCard extends StatelessWidget {
                       const Icon(Icons.file_present_outlined),
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
-                        child: Text("File Name: ${asset.truncatedFileName()}"),
+                        child: Text(l10n.tkbFileNameLabel(asset.truncatedFileName())),
                       )
                     ],
                   )
@@ -60,7 +62,7 @@ class AssetCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(
-              "Filename: ${asset.fileName} | Creator: ${asset.authorName}",
+              l10n.tkbFilenameCreator(asset.fileName, asset.authorName!),
               style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 14),
             ),
           ),
@@ -72,7 +74,7 @@ class AssetCard extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 leading: Icon(asset.icon),
                 title: Text(asset.fileType),
-                subtitle: const Text("File Type"),
+                subtitle: Text(l10n.tkbFileType),
               ),
             ),
             SizedBox(
@@ -81,7 +83,7 @@ class AssetCard extends StatelessWidget {
                 leading: const Icon(Icons.line_weight),
                 contentPadding: EdgeInsets.zero,
                 title: Text(asset.filesizeLabel),
-                subtitle: const Text("File Size"),
+                subtitle: Text(l10n.tkbFileSize),
               ),
             ),
           ],
@@ -94,7 +96,7 @@ class AssetCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               AppButton(
-                label: "Open Folder",
+                label: l10n.tkbOpenFolder,
                 icon: Icons.folder_open,
                 onPressed: () async {
                   final path = await SmartContractService().getAssetPath(nftId, asset.name!);
@@ -105,7 +107,7 @@ class AssetCard extends StatelessWidget {
               ),
               const SizedBox(width: 4),
               AppButton(
-                label: "Open Asset",
+                label: l10n.tkbOpenAsset,
                 icon: Icons.file_open,
                 onPressed: () async {
                   final path = await SmartContractService().getAssetPath(nftId, asset.name!);

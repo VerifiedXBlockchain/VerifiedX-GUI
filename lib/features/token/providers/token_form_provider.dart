@@ -22,6 +22,7 @@ import 'package:path_provider/path_provider.dart' as syspaths;
 
 import '../../../core/app_constants.dart';
 import '../../../core/services/explorer_service.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../raw/raw_service.dart';
 import '../../../core/utils/tx_refresh.dart';
@@ -45,9 +46,9 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     imageUrlController = TextEditingController(text: model.imageUrl ?? '');
   }
 
-  String? nameValidator(String? val) => formValidatorNotEmpty(val, "Token Name");
-  String? tickerValidator(String? val) => formValidatorNotEmpty(val, "Token Ticker");
-  String? supplyValidator(String? val) => formValidatorNumber(val, "Supply Amount");
+  String? nameValidator(String? val) => formValidatorNotEmpty(val, globalL10n.tokenNameLabel);
+  String? tickerValidator(String? val) => formValidatorNotEmpty(val, globalL10n.tokenTickerLabel);
+  String? supplyValidator(String? val) => formValidatorNumber(val, globalL10n.bw2SupplyAmount);
 
   load(TokenScFeature model) {
     state = model;
@@ -100,13 +101,13 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     final currentWallet = ref.read(sessionProvider).currentWallet;
 
     if (currentWallet == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return null;
     }
 
     final supply = double.tryParse(supplyController.text);
     if (supply == null) {
-      Toast.error("Invalid Supply Amount");
+      Toast.error(globalL10n.bw2InvalidSupplyAmount);
       return null;
     }
 
@@ -176,13 +177,13 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
 
     if (state.mintable) {
       final premintAmount = await PromptModal.show(
-        title: "Pre Mint Initial Issuance?",
+        title: globalL10n.bw2PreMintTitle,
         validator: (v) {
           return null;
         },
-        labelText: "Supply",
+        labelText: globalL10n.bw2SupplyLabel,
         initialValue: "0",
-        cancelText: "No Initial Issuance",
+        cancelText: globalL10n.bw2NoInitialIssuance,
         inputFormatters: [
           FilteringTextInputFormatter.allow(
             RegExp("[0-9.]"),
@@ -217,13 +218,13 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
 
     final keypair = ref.read(webSessionProvider.select((value) => value.keypair));
     if (keypair == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return null;
     }
 
     final supply = double.tryParse(supplyController.text);
     if (supply == null) {
-      Toast.error("Invalid Supply Amount");
+      Toast.error(globalL10n.bw2InvalidSupplyAmount);
       return null;
     }
 
@@ -251,12 +252,12 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
 
     if (supplyController.text == '0' || state.mintable) {
       final premintAmount = await PromptModal.show(
-        title: "Pre Mint Initial Issuance? (Optional)",
+        title: globalL10n.bw2PreMintTitleOptional,
         validator: (v) {
           return null;
         },
-        labelText: "Supply",
-        cancelText: "No Initial Issuance",
+        labelText: globalL10n.bw2SupplyLabel,
+        cancelText: globalL10n.bw2NoInitialIssuance,
         initialValue: "0",
         inputFormatters: [
           FilteringTextInputFormatter.allow(

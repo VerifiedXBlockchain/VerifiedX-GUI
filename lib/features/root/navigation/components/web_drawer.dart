@@ -8,6 +8,7 @@ import '../../../../core/dialogs.dart';
 
 import '../../../../core/base_component.dart';
 import '../../../../generated/assets.gen.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../auth/auth_utils.dart';
 import '../../../auth/screens/web_auth_screen.dart';
 import '../../../navigation/components/root_container_side_nav.dart';
@@ -166,7 +167,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "VFX Domains",
+            AppLocalizations.of(context).adnrTitleVfx,
             style: TextStyle(
               color: tabsRouter.activeIndex == WebRouteIndex.adnrs ? activeColor : color,
             ),
@@ -182,7 +183,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "Smart Contracts",
+            AppLocalizations.of(context).scTitle,
             style: TextStyle(
               color: tabsRouter.activeIndex == WebRouteIndex.smartContracts ? activeColor : color,
             ),
@@ -222,7 +223,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "P2P Auctions",
+            AppLocalizations.of(context).dstAuctionsTitle,
             style: TextStyle(
               color: tabsRouter.activeIndex == WebRouteIndex.shop ? activeColor : color,
             ),
@@ -242,7 +243,7 @@ class WebMenu extends BaseComponent {
         ),
         ListTile(
           title: Text(
-            "Logout",
+            AppLocalizations.of(context).navMenuLogout,
             style: TextStyle(color: Colors.red.shade600),
           ),
           leading: Icon(
@@ -251,12 +252,13 @@ class WebMenu extends BaseComponent {
           ),
           trailing: Icon(Icons.chevron_right, color: Colors.red.shade600),
           onTap: () async {
+            final l10n = AppLocalizations.of(context);
             final confirmed = await ConfirmDialog.show(
-              title: "Logout",
-              body: "Are you sure you want to logout of the VFX Web Wallet?",
+              title: l10n.navMenuLogout,
+              body: l10n.r3hLogoutConfirmBody,
               destructive: true,
-              confirmText: "Logout",
-              cancelText: "Cancel",
+              confirmText: l10n.navMenuLogout,
+              cancelText: l10n.actionCancel,
             );
             if (confirmed == true) {
               await logout(context, ref);

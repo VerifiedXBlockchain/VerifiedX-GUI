@@ -4,6 +4,7 @@ import '../../raw/raw_service.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../models/web_shop.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/l10n_helper.dart';
 
 enum ShopPublishTxType { create, update, delete }
 
@@ -44,13 +45,13 @@ Future<bool> broadcastShopTx(
   final timestamp = await txService.getTimestamp();
 
   if (timestamp == null) {
-    Toast.error("Failed to retrieve timestamp");
+    Toast.error(globalL10n.r3bFailedRetrieveTimestamp);
     return false;
   }
 
   final nonce = await txService.getNonce(keypair.address);
   if (nonce == null) {
-    Toast.error("Failed to retrieve nonce");
+    Toast.error(globalL10n.r3bFailedRetrieveNonce);
     return false;
   }
 
@@ -76,7 +77,7 @@ Future<bool> broadcastShopTx(
 
   final fee = await txService.getFee(txData);
   if (fee == null) {
-    Toast.error("Failed to parse fee");
+    Toast.error(globalL10n.r3bFailedParseFee);
     return false;
   }
 
@@ -94,7 +95,7 @@ Future<bool> broadcastShopTx(
   final hash = (await txService.getHash(txData));
 
   if (hash == null) {
-    Toast.error("Failed to parse hash");
+    Toast.error(globalL10n.r3bFailedParseHash);
     return false;
   }
 
@@ -105,7 +106,7 @@ Future<bool> broadcastShopTx(
   );
 
   if (signature == null) {
-    Toast.error("Signature generation failed.");
+    Toast.error(globalL10n.svcSignatureGenerationFailed);
     return false;
   }
 
@@ -116,7 +117,7 @@ Future<bool> broadcastShopTx(
   );
 
   if (!isValid) {
-    Toast.error("Signature not valid");
+    Toast.error(globalL10n.svcSignatureNotValid);
     return false;
   }
 
@@ -138,7 +139,7 @@ Future<bool> broadcastShopTx(
     execute: false,
   ));
   if (verifyTransactionData == null) {
-    Toast.error("Could not verify transaction.");
+    Toast.error(globalL10n.r3bCouldNotVerifyTx);
     return false;
   }
   if (verifyTransactionData['Result'] != "Success") {
@@ -155,13 +156,13 @@ Future<bool> broadcastShopTx(
     if (tx['Result'] == "Success") {
       switch (type) {
         case ShopPublishTxType.create:
-          Toast.message("Shop Publish transaction broadcasted to the network");
+          Toast.message(globalL10n.r3bShopPublishBroadcast);
           break;
         case ShopPublishTxType.update:
-          Toast.message("Shop Update transaction broadcasted to the network");
+          Toast.message(globalL10n.r3bShopUpdateBroadcast);
           break;
         case ShopPublishTxType.delete:
-          Toast.message("Shop Delete transaction broadcasted to the network");
+          Toast.message(globalL10n.r3bShopDeleteBroadcast);
           break;
       }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/butterfly_link_form.dart';
 
 class ButterflyScreen extends BaseScreen {
@@ -18,7 +19,7 @@ class ButterflyScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text('Payment Link'),
+      title: Text(AppLocalizations.of(context).paymentLinkTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
     );

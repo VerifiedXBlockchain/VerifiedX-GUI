@@ -25,6 +25,7 @@ import '../../dst/providers/dec_shop_provider.dart';
 import '../../dst/providers/dst_tx_pending_provider.dart';
 import '../../token/providers/token_list_provider.dart';
 import 'web_transaction_list_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/app_constants.dart';
@@ -128,8 +129,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
           identifier: "${transaction.hash}_incoming",
           transaction: transaction,
-          title: "Funds Received",
-          body: "${transaction.amount} VFX from ${transaction.fromAddress}",
+          title: globalL10n.svcNotifFundsReceivedTitle,
+          body: globalL10n.svcNotifFundsReceivedBody('${transaction.amount}', transaction.fromAddress),
           icon: Icons.move_to_inbox,
         ),
       );
@@ -152,7 +153,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           if (address != null && password != null) {
             ReserveAccountService().publish(address: address, password: password).then((success) {
               if (success) {
-                Toast.message("Vault Account Auto Activation process initiated");
+                Toast.message(globalL10n.svcVaultAutoActivationInitiated);
               }
             });
           }
@@ -165,8 +166,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
           identifier: "${transaction.hash}_outgoing",
           transaction: transaction,
-          title: "Funds Sent",
-          body: "${transaction.amount.toString().replaceAll('-', '')} VFX to ${transaction.toAddress}",
+          title: globalL10n.txpFundsSent,
+          body: globalL10n.svcNotifFundsSentBody(transaction.amount.toString().replaceAll('-', ''), transaction.toAddress),
           icon: Icons.outbox,
         ),
       );
@@ -190,7 +191,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: transaction.hash,
             transaction: transaction,
-            title: "Token Deployed",
+            title: globalL10n.svcNotifTokenDeployedTitle,
             body: body,
             icon: Icons.toll,
           ),
@@ -218,13 +219,13 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
                       final success = await ref.read(webTokenActionsManager).mintTokens(token.token, fromAddress, amount, true);
 
                       if (success == true) {
-                        Toast.message("Token Auto Mint initiated. ($scId: $amount)");
+                        Toast.message(globalL10n.svcTokenAutoMintInitiated(scId, '$amount'));
                       }
                     }
                   } else {
                     TokenService().mint(scId: scId, fromAddress: fromAddress, amount: amount).then((success) {
                       if (success == true) {
-                        Toast.message("Token Auto Mint initiated. ($scId: $amount)");
+                        Toast.message(globalL10n.svcTokenAutoMintInitiated(scId, '$amount'));
                       }
                     });
                   }
@@ -243,7 +244,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
               color: AppColorVariant.Btc,
               identifier: transaction.hash,
               transaction: transaction,
-              title: "vBTC Tokenization Mint",
+              title: globalL10n.svcNotifVbtcTokenizationMintTitle,
               body: body,
               icon: Icons.lightbulb_outline,
             ),
@@ -257,7 +258,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
             TransactionNotification(
               identifier: transaction.hash,
               transaction: transaction,
-              title: "NFT Minted",
+              title: globalL10n.svcNotifNftMintedTitle,
               body: body,
               icon: Icons.lightbulb_outline,
             ),
@@ -275,9 +276,9 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
     if (nftData != null) {
       final name = _nftDataValue(nftData['Topic'], 'TopicName');
       if (name == null) return;
-      body = "Topic $name Created.";
+      body = globalL10n.svcNotifTopicCreatedBody(name);
       _broadcastNotification(
-        TransactionNotification(identifier: transaction.hash, transaction: transaction, title: "Topic Created", body: body, icon: Icons.how_to_vote),
+        TransactionNotification(identifier: transaction.hash, transaction: transaction, title: globalL10n.svcNotifTopicCreatedTitle, body: body, icon: Icons.how_to_vote),
       );
     }
   }
@@ -288,9 +289,9 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
     if (nftData != null) {
       final topic = _nftDataValue(nftData['Vote'], 'TopicUID');
       if (topic == null) return;
-      body = "Vote casted on $topic";
+      body = globalL10n.svcNotifVoteCastedBody(topic);
       _broadcastNotification(
-        TransactionNotification(identifier: transaction.hash, transaction: transaction, title: "Vote Casted", body: body, icon: Icons.how_to_vote),
+        TransactionNotification(identifier: transaction.hash, transaction: transaction, title: globalL10n.svcNotifVoteCastedTitle, body: body, icon: Icons.how_to_vote),
       );
     }
   }
@@ -313,7 +314,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Tokens Minted",
+            title: globalL10n.svcNotifTokensMintedTitle,
             body: "$amount ${ticker != null ? '[$ticker]' : ''}",
             icon: Icons.toll,
           ),
@@ -329,7 +330,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Token Transfer",
+            title: globalL10n.svcNotifTokenTransferTitle,
             body: "$amount ${ticker != null ? '[$ticker]' : ''}",
             icon: Icons.toll,
             color: AppColorVariant.Primary,
@@ -346,7 +347,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Token Burn",
+            title: globalL10n.svcNotifTokenBurnTitle,
             body: "$amount ${ticker != null ? '[$ticker]' : ''}",
             icon: Icons.toll,
             color: AppColorVariant.Danger,
@@ -362,8 +363,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Token Pause",
-            body: isPause ? "Paused" : "Resumed",
+            title: globalL10n.svcNotifTokenPauseTitle,
+            body: isPause ? globalL10n.svcNotifPaused : globalL10n.svcNotifResumed,
             icon: Icons.toll,
           ),
         );
@@ -384,7 +385,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Token Ban Address",
+            title: globalL10n.svcNotifTokenBanAddressTitle,
             body: address,
             icon: Icons.toll,
           ),
@@ -405,7 +406,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Token Change Ownership",
+            title: globalL10n.svcNotifTokenChangeOwnershipTitle,
             body: address,
             icon: Icons.toll,
           ),
@@ -426,7 +427,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Token Topic Created",
+            title: globalL10n.svcNotifTokenTopicCreatedTitle,
             icon: FontAwesomeIcons.gavel,
             color: AppColorVariant.Primary,
           ),
@@ -439,7 +440,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "Token Vote Cast",
+            title: globalL10n.svcNotifTokenVoteCastTitle,
             icon: FontAwesomeIcons.gavel,
             color: AppColorVariant.Primary,
           ),
@@ -453,8 +454,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
               identifier: "${transaction.hash}_evolve_$evoState",
               transaction: transaction,
-              title: "NFT Evolved",
-              body: "NFT evolved to state $evoState.",
+              title: globalL10n.svcNotifNftEvolvedTitle,
+              body: globalL10n.svcNotifNftEvolvedBody(evoState),
               icon: Icons.change_circle),
         );
         kIsWeb ? ref.read(webSessionProvider.notifier).getNfts() : ref.read(sessionProvider.notifier).smartContractLoop(false);
@@ -475,8 +476,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
             identifier: "${transaction.hash}_incoming",
             transaction: transaction,
-            title: "NFT Received",
-            body: "NFT from ${transaction.fromAddress}",
+            title: globalL10n.svcNotifNftReceivedTitle,
+            body: globalL10n.svcNotifNftReceivedBody(transaction.fromAddress),
             icon: Icons.markunread_mailbox_outlined),
       );
     }
@@ -486,8 +487,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: "NFT Sent",
-            body: "NFT to ${transaction.toAddress}",
+            title: globalL10n.svcNotifNftSentTitle,
+            body: globalL10n.svcNotifNftSentBody(transaction.toAddress),
             icon: Icons.send),
       );
     }
@@ -508,12 +509,12 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
 
-        body = "VFX Domain created for $name.vfx";
+        body = globalL10n.svcNotifVfxDomainCreatedBody(name);
         _broadcastNotification(
           TransactionNotification(
               identifier: transaction.hash,
               transaction: transaction,
-              title: "Domain Name Created",
+              title: globalL10n.svcNotifDomainCreatedTitle,
               body: body,
               color: AppColorVariant.Success,
               icon: Icons.link),
@@ -524,12 +525,12 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       if (function == 'AdnrDelete') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
-        body = "VFX Domain deleted for $name";
+        body = globalL10n.svcNotifVfxDomainDeletedBody(name);
         _broadcastNotification(
           TransactionNotification(
               identifier: transaction.hash,
               transaction: transaction,
-              title: "Domain Name Deleted",
+              title: globalL10n.svcNotifDomainDeletedTitle,
               body: body,
               color: AppColorVariant.Danger,
               icon: Icons.delete_forever),
@@ -539,12 +540,12 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       if (function == 'AdnrTransfer') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
-        body = "VFX Domain transfer for $name";
+        body = globalL10n.svcNotifVfxDomainTransferBody(name);
         _broadcastNotification(
           TransactionNotification(
             identifier: transaction.hash,
             transaction: transaction,
-            title: "Domain Name Transferred",
+            title: globalL10n.svcNotifDomainTransferredTitle,
             body: body,
             color: AppColorVariant.Warning,
             icon: Icons.move_down,
@@ -558,12 +559,12 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       if (function == 'BtcAdnrCreate') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
-        body = "BTC Domain created for $name.btc";
+        body = globalL10n.svcNotifBtcDomainCreatedBody(name);
         _broadcastNotification(
           TransactionNotification(
               identifier: transaction.hash,
               transaction: transaction,
-              title: "BTC Domain Name Created",
+              title: globalL10n.svcNotifBtcDomainCreatedTitle,
               body: body,
               color: AppColorVariant.Btc,
               icon: Icons.link),
@@ -573,12 +574,12 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       if (function == 'BtcAdnrDelete') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
-        body = "BTC Domain deleted for $name";
+        body = globalL10n.svcNotifBtcDomainDeletedBody(name);
         _broadcastNotification(
           TransactionNotification(
               identifier: transaction.hash,
               transaction: transaction,
-              title: "BTC Domain Name Deleted",
+              title: globalL10n.svcNotifBtcDomainDeletedTitle,
               body: body,
               color: AppColorVariant.Btc,
               icon: Icons.delete_forever),
@@ -588,12 +589,12 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       if (function == 'BtcAdnrTransfer') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
-        body = "VFX Domain transfer for $name";
+        body = globalL10n.svcNotifVfxDomainTransferBody(name);
         _broadcastNotification(
           TransactionNotification(
             identifier: transaction.hash,
             transaction: transaction,
-            title: "BTC Domain Name Transferred",
+            title: globalL10n.svcNotifBtcDomainTransferredTitle,
             body: body,
             color: AppColorVariant.Btc,
             icon: Icons.move_down,
@@ -614,7 +615,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       TransactionNotification(
         identifier: transaction.hash,
         transaction: transaction,
-        title: "NFT Burned",
+        title: globalL10n.svcNotifNftBurnedTitle,
         body: body,
         color: AppColorVariant.Danger,
       ),
@@ -635,7 +636,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
           identifier: transaction.hash,
           transaction: transaction,
-          title: "Sale Started",
+          title: globalL10n.svcNotifSaleStartedTitle,
           body: scId,
           color: AppColorVariant.Warning,
         ),
@@ -645,7 +646,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
           identifier: transaction.hash,
           transaction: transaction,
-          title: "Sale Completed",
+          title: globalL10n.svcNotifSaleCompletedTitle,
           body: scId,
           color: AppColorVariant.Success,
         ),
@@ -659,7 +660,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
           identifier: transaction.hash,
           transaction: transaction,
-          title: "Sale Started (Manual)",
+          title: globalL10n.svcNotifSaleStartedManualTitle,
           body: scId,
           color: AppColorVariant.Warning,
         ),
@@ -669,7 +670,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         TransactionNotification(
           identifier: transaction.hash,
           transaction: transaction,
-          title: "Sale Completed (Manual)",
+          title: globalL10n.svcNotifSaleCompletedManualTitle,
           body: scId,
           color: AppColorVariant.Success,
         ),
@@ -733,8 +734,8 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       TransactionNotification(
         identifier: transaction.hash,
         transaction: transaction,
-        title: "DecShop TX",
-        body: "DecShop TX Complete",
+        title: globalL10n.svcNotifDecShopTxTitle,
+        body: globalL10n.svcNotifDecShopTxBody,
         icon: Icons.store,
       ),
     );

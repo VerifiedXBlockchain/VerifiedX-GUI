@@ -8,6 +8,8 @@ import '../../../core/models/snapshot_info.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/services/base_service.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/files.dart';
 import '../../../utils/formatting.dart';
 
@@ -83,7 +85,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       }
 
       if (await Directory(_dbPath).exists()) {
-        _fail('Failed to delete $_dbPath — folder still exists after delete');
+        _fail(globalL10n.r3eFailedDeleteDb(_dbPath));
         return;
       }
 
@@ -97,7 +99,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       print('[Snapshot] === STEP 4: DOWNLOAD ${urls.length} FILES ===');
 
       if (urls.isEmpty) {
-        _fail('Snapshot has no download URLs');
+        _fail(globalL10n.r3eSnapshotNoUrls);
         return;
       }
 
@@ -126,7 +128,8 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
         );
 
         if (fileSize == null) {
-          _fail('Failed to download $filename after $_maxRetries attempts');
+          _fail(globalL10n.r3eFailedDownloadFile(
+              filename, _maxRetries.toString()));
           return;
         }
 
@@ -155,8 +158,8 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
           '[Snapshot] Total on disk: ${(totalDiskBytes / 1073741824).toStringAsFixed(2)} GB (expected: ${(totalBytes / 1073741824).toStringAsFixed(2)} GB)');
 
       if (entries.length < urls.length) {
-        _fail(
-            'Only ${entries.length} of ${urls.length} files on disk after download');
+        _fail(globalL10n.r3eFilesOnDiskMismatch(
+            entries.length.toString(), urls.length.toString()));
         return;
       }
 
@@ -165,7 +168,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       await _completeImport(dbFolder, sep);
     } catch (e, st) {
       print('[Snapshot] FATAL: $e\n$st');
-      _fail('Unexpected error: $e');
+      _fail(globalL10n.r3eUnexpectedError(e.toString()));
     }
   }
 
@@ -352,18 +355,19 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final double percent =
         totalBytes > 0 ? (bytesDownloaded / totalBytes).clamp(0.0, 1.0) : 0;
 
-    String title = "Initializing...";
+    String title = l10n.hnavSnapshotInitializing;
     if (isDownloading) {
-      title = "Downloading...";
+      title = l10n.hnavSnapshotDownloading;
     }
     if (isReady) {
-      title = "All done!";
+      title = l10n.hnavSnapshotAllDone;
     }
     if (hasFailed) {
-      title = "Import Failed";
+      title = l10n.svcSnapshotImportFailedTitle;
     }
 
     return AlertDialog(
@@ -372,7 +376,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
         width: 600,
         child: Builder(builder: (context) {
           if (isInitializing) {
-            return const Text("Shutting down CLI...");
+            return Text(l10n.hnavSnapshotShuttingDown);
           }
 
           if (isDownloading) {
@@ -403,7 +407,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      "Downloading: $currentFile ($filesDownloaded/$totalFiles)",
+                      l10n.hnavSnapshotDownloadingProgress(currentFile!, filesDownloaded, totalFiles),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.white54,
                           ),
@@ -423,7 +427,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   color: Colors.redAccent,
                 ),
                 const SizedBox(height: 8),
-                const Text("Snapshot import failed."),
+                Text(l10n.svcSnapshotImportFailedBody),
                 if (errorMessage != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -436,18 +440,18 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                     ),
                   ),
                 const SizedBox(height: 8),
-                const Text(
-                  "Please restart and try again.",
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  l10n.svcSnapshotRestartTryAgain,
+                  style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text(
-                    "Close",
-                    style: TextStyle(color: Colors.white70),
+                  child: Text(
+                    l10n.actionClose,
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ),
               ],
@@ -464,11 +468,11 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   color: Theme.of(context).colorScheme.success,
                 ),
                 const SizedBox(height: 8),
-                const Text("Database Snapshot Imported."),
+                Text(l10n.hnavSnapshotImported),
                 const SizedBox(height: 4),
-                const Text(
-                  "Starting up CLI now...",
-                  style: TextStyle(
+                Text(
+                  l10n.hnavSnapshotStartingUp,
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
                   ),
@@ -478,16 +482,16 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text(
-                    "Close",
-                    style: TextStyle(color: Colors.white70),
+                  child: Text(
+                    l10n.actionClose,
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ),
               ],
             );
           }
 
-          return const Text("An error occurred. Please restart and try again.");
+          return Text(l10n.hnavSnapshotError);
         }),
       ),
     );

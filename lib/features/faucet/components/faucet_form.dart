@@ -7,6 +7,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/faucet_form_provider.dart';
 
 class FaucetForm extends BaseComponent {
@@ -22,9 +23,10 @@ class FaucetForm extends BaseComponent {
         ? ref.watch(webSessionProvider.select((v) => v.keypair?.address))
         : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
+    final l10n = AppLocalizations.of(context);
     if (address == null) {
       return Center(
-        child: Text("Please choose a VFX account to continue"),
+        child: Text(l10n.faucetChooseAccount),
       );
     }
 
@@ -44,7 +46,7 @@ class FaucetForm extends BaseComponent {
                       controller: provider.verificationController,
                       validator: provider.verificationValidator,
                       decoration:
-                          InputDecoration(label: Text("Verification Code")),
+                          InputDecoration(label: Text(l10n.faucetVerificationCodeLabel)),
                     ),
                   ),
                   SizedBox(
@@ -58,7 +60,7 @@ class FaucetForm extends BaseComponent {
                       }
                     },
                     variant: AppColorVariant.Secondary,
-                    label: "Verify",
+                    label: l10n.faucetVerify,
                   ),
                 ],
               ),
@@ -75,7 +77,7 @@ class FaucetForm extends BaseComponent {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "VFX Address: $address",
+            l10n.r3eVfxAddress(address),
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
             ),
@@ -83,14 +85,14 @@ class FaucetForm extends BaseComponent {
           if (forceAmount != null)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text("Amount: $forceAmount VFX"),
+              child: Text(l10n.faucetAmountSuffix(forceAmount.toString())),
             ),
           if (forceAmount == null)
             TextFormField(
               controller: provider.amountController,
               validator: provider.amountValidator,
               decoration: InputDecoration(
-                label: Text("Amount"),
+                label: Text(l10n.faucetAmountLabel),
               ),
             ),
           PhoneFormField(
@@ -100,8 +102,8 @@ class FaucetForm extends BaseComponent {
               PhoneValidator.required(),
               PhoneValidator.valid(),
             ]),
-            decoration: const InputDecoration(
-              label: Text("Phone Number"),
+            decoration: InputDecoration(
+              label: Text(l10n.faucetPhoneLabel),
             ),
           ),
           Divider(),
@@ -112,14 +114,14 @@ class FaucetForm extends BaseComponent {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                label: "Cancel",
+                label: l10n.faucetCancel,
               ),
               AppButton(
                 onPressed: () {
                   provider.submitRequest(forceAmount);
                 },
                 variant: AppColorVariant.Secondary,
-                label: "Request VFX",
+                label: l10n.faucetRequestVfx,
               ),
             ],
           ),

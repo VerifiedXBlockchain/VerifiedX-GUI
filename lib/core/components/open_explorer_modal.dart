@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../features/smart_contracts/components/sc_creator/common/modal_container.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../base_component.dart';
 import '../env.dart';
 import 'buttons.dart';
@@ -14,6 +15,7 @@ class OpenExplorerModal extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       withClose: true,
       children: [
@@ -21,7 +23,7 @@ class OpenExplorerModal extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              "Open Explorer",
+              l10n.r3eOpenExplorer,
               style: TextStyle(fontSize: 18),
             ),
           ],
@@ -30,14 +32,14 @@ class OpenExplorerModal extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             AppButton(
-              label: "VFX Explorer",
+              label: l10n.r3eVfxExplorer,
               variant: AppColorVariant.Secondary,
               onPressed: () {
                 launchUrl(Uri.parse(Env.baseExplorerUrl));
               },
             ),
             AppButton(
-              label: "BTC Explorer",
+              label: l10n.r3eBtcExplorer,
               variant: AppColorVariant.Btc,
               onPressed: () {
                 if (Env.isTestNet) {

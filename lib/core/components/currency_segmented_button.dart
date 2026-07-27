@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../base_component.dart';
 import '../providers/session_provider.dart';
 import '../theme/app_theme.dart';
@@ -95,7 +96,7 @@ class CurrencySegementedButton extends BaseComponent {
       segments: [
         if (includeAny)
           ButtonSegment(
-            label: Text("All"),
+            label: Text(AppLocalizations.of(context).hnavCurrencyAll),
             value: CurrencyType.any,
           ),
         ButtonSegment(

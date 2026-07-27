@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/bridge_lock_record.dart';
 import 'bridge_format.dart';
 
@@ -45,16 +46,16 @@ class BridgeHistoryItem extends StatelessWidget {
     return "${addr.substring(0, 6)}…${addr.substring(addr.length - 4)}";
   }
 
-  static String _relativeTime(DateTime? createdAt) {
+  static String _relativeTime(AppLocalizations l10n, DateTime? createdAt) {
     if (createdAt == null) return "—";
     final now = DateTime.now().toUtc();
     final diff = now.difference(createdAt);
-    if (diff.inMinutes < 1) return "just now";
-    if (diff.inMinutes < 60) return "${diff.inMinutes}m ago";
-    if (diff.inHours < 24) return "${diff.inHours}h ago";
-    if (diff.inDays == 1) return "yesterday";
-    if (diff.inDays < 30) return "${diff.inDays}d ago";
-    return "${(diff.inDays / 30).floor()}mo ago";
+    if (diff.inMinutes < 1) return l10n.prvBridgeJustNow;
+    if (diff.inMinutes < 60) return l10n.prvBridgeMinutesAgo(diff.inMinutes);
+    if (diff.inHours < 24) return l10n.prvBridgeHoursAgo(diff.inHours);
+    if (diff.inDays == 1) return l10n.prvBridgeYesterday;
+    if (diff.inDays < 30) return l10n.prvBridgeDaysAgo(diff.inDays);
+    return l10n.prvBridgeMonthsAgo((diff.inDays / 30).floor());
   }
 
   static _StatusBadge _statusBadge(BridgeLockRecord r) {
@@ -72,6 +73,7 @@ class BridgeHistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final r = record;
     final _StatusBadge badge = _statusBadge(r);
 
@@ -88,12 +90,12 @@ class BridgeHistoryItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "${formatVbtc(r.amount)} vBTC → ${_shortDestination(r.evmDestination)}",
+                    l10n.prvBridgeAmountToDest(formatVbtc(r.amount), _shortDestination(r.evmDestination)),
                     style: const TextStyle(color: Colors.white, fontSize: 13),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    _relativeTime(r.createdAt),
+                    _relativeTime(l10n, r.createdAt),
                     style: const TextStyle(color: Colors.white54, fontSize: 11),
                   ),
                 ],
@@ -114,7 +116,7 @@ class BridgeHistoryItem extends StatelessWidget {
             if (onRetry != null) ...[
               const SizedBox(width: 8),
               AppButton(
-                label: "Retry",
+                label: l10n.prvRetry,
                 type: AppButtonType.Outlined,
                 variant: AppColorVariant.Warning,
                 size: AppSizeVariant.Sm,

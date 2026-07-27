@@ -22,6 +22,7 @@ import '../../../core/env.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -102,18 +103,18 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
   String? amountValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return "Amount required";
+      return globalL10n.svcAmountRequired;
     }
 
     double parsed = 0;
     try {
       parsed = double.parse(value);
     } catch (e) {
-      return "Not a valid amount";
+      return globalL10n.svcNotValidAmount;
     }
 
     if (parsed <= 0) {
-      return "The amount has to be a positive value";
+      return globalL10n.svcAmountPositive;
     }
 
     final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
@@ -122,34 +123,34 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       if (kIsWeb) {
         final account = ref.read(webSessionProvider).btcKeypair;
         if (account == null) {
-          return "No account selected";
+          return globalL10n.messageNoAccountSelected;
         }
 
         final btcBalance = ref.read(webSessionProvider).btcBalanceInfo?.btcBalance ?? 0;
 
         if (btcBalance < parsed) {
-          return "Not enough balance in BTC account";
+          return globalL10n.svcNotEnoughBalanceBtcAccount;
         }
 
         if (parsed < BTC_MINIMUM_TX_AMOUNT) {
-          return "The minimum transaction amount is $BTC_MINIMUM_TX_AMOUNT BTC";
+          return globalL10n.svcMinTxAmountBtc('$BTC_MINIMUM_TX_AMOUNT');
         }
         return null;
       } else {
         final account = ref.read(sessionProvider).currentBtcAccount;
         if (account == null) {
-          return "No account selected";
+          return globalL10n.messageNoAccountSelected;
         }
 
         final feeRateInt = getFeeRate();
 
         final btcFee = satashisToBtc(feeRateInt);
         if (account.balance < (parsed + btcFee)) {
-          return "Not enough balance in BTC account";
+          return globalL10n.svcNotEnoughBalanceBtcAccount;
         }
 
         if (parsed < BTC_MINIMUM_TX_AMOUNT) {
-          return "The minimum transaction amount is $BTC_MINIMUM_TX_AMOUNT BTC";
+          return globalL10n.svcMinTxAmountBtc('$BTC_MINIMUM_TX_AMOUNT');
         }
 
         return null;
@@ -160,19 +161,19 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       final account = ref.read(webSelectedAccountProvider);
 
       if (account == null) {
-        return "No account selected";
+        return globalL10n.messageNoAccountSelected;
       }
 
       if (account.balance < parsed) {
-        return "Not enough balance in account.";
+        return globalL10n.svcNotEnoughBalanceAccount;
       }
     } else {
       final currentWallet = ref.read(sessionProvider).currentWallet;
       if (currentWallet == null) {
-        return "No account selected";
+        return globalL10n.messageNoAccountSelected;
       }
       if (currentWallet.balance < parsed) {
-        return "Not enough balance in account.";
+        return globalL10n.svcNotEnoughBalanceAccount;
       }
     }
 
@@ -184,12 +185,12 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
     if (isBtc) {
       if (value == null || value.isEmpty) {
-        return "BTC Address required";
+        return globalL10n.svcBtcAddressRequired;
       }
       return null;
     } else {
       if (value == null || value.isEmpty) {
-        return "Address or VFX domain required";
+        return globalL10n.svcAddressOrDomainRequired;
       }
 
       return formValidatorRbxAddress(value, true);
@@ -198,11 +199,11 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
   String? btcCustomFeeRateValidator(String? value) {
     if (value == null) {
-      return "Fee Rate Required";
+      return globalL10n.tkbFeeRateRequired;
     }
 
     if ((int.tryParse(value) ?? 0) < 1) {
-      return "Invalid Fee Rate. Must be atleast 1 satoshi.";
+      return globalL10n.tkbInvalidFeeRate;
     }
 
     return null;
@@ -321,19 +322,19 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       if (kIsWeb) {
         final account = ref.read(webSessionProvider).btcKeypair;
         if (account == null) {
-          Toast.error("No BTC Account");
+          Toast.error(globalL10n.svcNoBtcAccount);
           return;
         }
 
         final amountDouble = double.tryParse(amount);
         if (amountDouble == null) {
-          Toast.error("Invalid amount");
+          Toast.error(globalL10n.webInvalidAmount);
           return;
         }
 
         final balance = ref.read(webSessionProvider).btcBalanceInfo?.btcBalance;
         if (balance == null || balance < amountDouble) {
-          Toast.error("Not enough balance");
+          Toast.error(globalL10n.btcNotEnoughBalanceShort);
           return;
         }
 
@@ -347,10 +348,10 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
 
         final confirmed = await ConfirmDialog.show(
-          title: "Please Confirm",
-          body: "Sending:\n$amount BTC\n\nTo:\n$address\n\nFrom:\n$senderAddress\n\nFeeRate:\n$feeRate SATS",
-          confirmText: "Send",
-          cancelText: "Cancel",
+          title: globalL10n.btcPleaseConfirmTitle,
+          body: globalL10n.svcSendingConfirmBtcFeeRate('$amount', address, senderAddress, '$feeRate'),
+          confirmText: globalL10n.actionSend,
+          cancelText: globalL10n.actionCancel,
         );
 
         if (confirmed != true) {
@@ -364,7 +365,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
           return;
         }
 
-        Toast.message("$amount BTC has been sent to $address.");
+        Toast.message(globalL10n.svcBtcSentToAddress('$amount', address));
 
         ref.invalidate(btcWebTransactionListProvider(senderAddress));
 
@@ -373,7 +374,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         });
 
         InfoDialog.show(
-            title: "Transaction Broadcasted",
+            title: globalL10n.btcTransactionBroadcastedTitle,
             buttonColorOverride: Color(0xfff7931a),
             content: ConstrainedBox(
               constraints: BoxConstraints(maxWidth: 600),
@@ -386,7 +387,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                     readOnly: true,
                     decoration: InputDecoration(
                       label: Text(
-                        "Transaction Hash",
+                        globalL10n.tkbTransactionHash,
                         style: TextStyle(
                           color: Color(0xfff7931a),
                         ),
@@ -395,7 +396,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                         icon: Icon(Icons.copy),
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(text: txHash));
-                          Toast.message("Transaction Hash copied to clipboard");
+                          Toast.message(globalL10n.tkbTransactionHashCopied);
                         },
                       ),
                     ),
@@ -404,7 +405,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                     height: 12,
                   ),
                   AppButton(
-                    label: "Open in BTC Explorer",
+                    label: globalL10n.btcOpenInExplorer,
                     variant: AppColorVariant.Btc,
                     type: AppButtonType.Text,
                     onPressed: () {
@@ -427,18 +428,18 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         final account = ref.read(sessionProvider).currentBtcAccount;
         if (account == null) {
-          Toast.error("No account selected");
+          Toast.error(globalL10n.messageNoAccountSelected);
           return;
         }
 
         final amountDouble = double.tryParse(amount);
         if (amountDouble == null) {
-          Toast.error("Invalid amount");
+          Toast.error(globalL10n.webInvalidAmount);
           return;
         }
 
         if (amountDouble < BTC_MINIMUM_TX_AMOUNT) {
-          Toast.error("The minimum transaction amount is $BTC_MINIMUM_TX_AMOUNT BTC");
+          Toast.error(globalL10n.svcMinTxAmountBtc('$BTC_MINIMUM_TX_AMOUNT'));
           return;
         }
 
@@ -452,15 +453,15 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         btcFee = calculatedFeeRate;
 
         if (account.balance < (amountDouble + btcFee)) {
-          Toast.error("Not enough balance in BTC account");
+          Toast.error(globalL10n.svcNotEnoughBalanceBtcAccount);
           return;
         }
 
         final confirmed = await ConfirmDialog.show(
-          title: "Please Confirm",
-          body: "Sending:\n$amount BTC\n\nTo:\n$address\n\nFrom:\n${account.address}\n\nFee:\n${btcFee.toStringAsFixed(8)} BTC",
-          confirmText: "Send",
-          cancelText: "Cancel",
+          title: globalL10n.btcPleaseConfirmTitle,
+          body: globalL10n.svcSendingConfirmBtcFee('$amount', address, account.address, btcFee.toStringAsFixed(8)),
+          confirmText: globalL10n.actionSend,
+          cancelText: globalL10n.actionCancel,
         );
 
         if (confirmed != true) {
@@ -486,12 +487,12 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                 ),
               );
 
-          Toast.message("$amount BTC has been sent to $address.");
+          Toast.message(globalL10n.svcBtcSentToAddress('$amount', address));
           notifyTransactionSubmitted();
           clear();
 
           InfoDialog.show(
-              title: "Transaction Broadcasted",
+              title: globalL10n.btcTransactionBroadcastedTitle,
               buttonColorOverride: Color(0xfff7931a),
               content: ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: 600),
@@ -504,7 +505,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                       readOnly: true,
                       decoration: InputDecoration(
                         label: Text(
-                          "Transaction Hash",
+                          globalL10n.tkbTransactionHash,
                           style: TextStyle(
                             color: Color(0xfff7931a),
                           ),
@@ -513,7 +514,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                           icon: Icon(Icons.copy),
                           onPressed: () async {
                             await Clipboard.setData(ClipboardData(text: txHash));
-                            Toast.message("Transaction Hash copied to clipboard");
+                            Toast.message(globalL10n.tkbTransactionHashCopied);
                           },
                         ),
                       ),
@@ -522,7 +523,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                       height: 12,
                     ),
                     AppButton(
-                      label: "Open in BTC Explorer",
+                      label: globalL10n.btcOpenInExplorer,
                       variant: AppColorVariant.Btc,
                       type: AppButtonType.Text,
                       onPressed: () {
@@ -547,12 +548,12 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     if (!kIsWeb) {
       currentWallet = ref.read(sessionProvider).currentWallet;
       if (currentWallet == null) {
-        Toast.error("No account selected");
+        Toast.error(globalL10n.messageNoAccountSelected);
         return;
       }
 
       if (currentWallet.isReserved && currentWallet.isNetworkProtected == false) {
-        Toast.error("You must activate your Vault Account before proceeding.");
+        Toast.error(globalL10n.svcActivateVaultBeforeProceeding);
         return;
       }
 
@@ -564,24 +565,24 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       final addressIsValid = await BridgeService().validateSendToAddress(address.trim().replaceAll("\n", ""));
 
       if (!addressIsValid) {
-        Toast.error("Invalid Address");
+        Toast.error(globalL10n.nftInvalidAddressToast);
         return;
       }
 
       final amountDouble = double.tryParse(amount);
       if (amountDouble == null) {
-        Toast.error("Invalid amount");
+        Toast.error(globalL10n.webInvalidAmount);
         return;
       }
 
       if (amountDouble > currentWallet.balance) {
-        Toast.error("Insufficient balance to send");
+        Toast.error(globalL10n.svcInsufficientBalanceToSend);
         return;
       }
 
       if (currentWallet.isValidating) {
         if (amountDouble > currentWallet.balance - ASSURED_AMOUNT_TO_VALIDATE) {
-          Toast.error("Insufficient balance since you are validating.");
+          Toast.error(globalL10n.mktNotEnoughBalanceValidatingToast);
           return;
         }
       }
@@ -589,18 +590,18 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       final selectedAccount = ref.read(webSelectedAccountProvider);
 
       if (selectedAccount == null) {
-        Toast.error("No account selected");
+        Toast.error(globalL10n.messageNoAccountSelected);
         return;
       }
 
       final amountDouble = double.tryParse(amount);
       if (amountDouble == null) {
-        Toast.error("Invalid amount");
+        Toast.error(globalL10n.webInvalidAmount);
         return;
       }
 
       if (selectedAccount.balance < amountDouble) {
-        Toast.error("Insufficient balance to send");
+        Toast.error(globalL10n.svcInsufficientBalanceToSend);
         return;
       }
 
@@ -608,10 +609,10 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     }
 
     final confirmed = await ConfirmDialog.show(
-      title: "Please Confirm",
-      body: "Sending:\n$amount VFX\n\nTo:\n$address\n\nFrom:\n$senderAddress",
-      confirmText: "Send",
-      cancelText: "Cancel",
+      title: globalL10n.btcPleaseConfirmTitle,
+      body: globalL10n.txpSendingConfirmBody('$amount', address, senderAddress),
+      confirmText: globalL10n.actionSend,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed != true) {
@@ -621,9 +622,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     if (!kIsWeb && currentWallet != null) {
       if (currentWallet.isReserved) {
         final password = await PromptModal.show(
-          title: "Vault Account Password",
+          title: globalL10n.tkbVaultAccountPassword,
           validator: (_) => null,
-          labelText: "Password",
+          labelText: globalL10n.reservePasswordLabel,
           lines: 1,
           obscureText: true,
           revealObscure: true,
@@ -633,9 +634,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
 
         final hoursString = await PromptModal.show(
-          title: "Timelock Duration",
+          title: globalL10n.svcTimelockDuration,
           validator: (_) => null,
-          labelText: "Hours (24 Minimum)",
+          labelText: globalL10n.svcTimelockHoursLabel,
           initialValue: "24",
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         );
@@ -657,7 +658,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         if (message != null) {
           final hash = message.replaceAll("Success! TX ID: ", "");
-          Toast.message("$amount VFX has been sent to $address. See dashboard for TX ID.");
+          Toast.message(globalL10n.svcVfxSentToAddressDashboard('$amount', address));
           ref.read(logProvider.notifier).append(
                 LogEntry(
                   message: message,
@@ -681,9 +682,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       int? unlockHours;
       if (senderAddress.startsWith("xRBX")) {
         final hoursString = await PromptModal.show(
-          title: "Timelock Duration",
+          title: globalL10n.svcTimelockDuration,
           validator: (_) => null,
-          labelText: "Hours (24 Minimum)",
+          labelText: globalL10n.svcTimelockHoursLabel,
           initialValue: "24",
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         );
@@ -714,11 +715,13 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         print("-----------");
 
         final confirmed = await ConfirmDialog.show(
-          title: "Valid Transaction",
-          body:
-              "This transaction is valid and is ready to send.\nAre you sure you want to proceed?\n\nTo: $address\n\nAmount: $amountDouble VFX${txFee != null ? '\nTX Fee: $txFee VFX\nTotal: ${amountDouble + txFee} VFX' : ''}",
-          confirmText: "Send",
-          cancelText: "Cancel",
+          title: globalL10n.btcValidTxTitle,
+          body: globalL10n.svcValidTxConfirmBody(address, '$amountDouble') +
+              (txFee != null
+                  ? globalL10n.svcValidTxFeeSuffix('$txFee', '${amountDouble + txFee}')
+                  : ''),
+          confirmText: globalL10n.actionSend,
+          cancelText: globalL10n.actionCancel,
         );
 
         if (confirmed == true) {
@@ -729,7 +732,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
           if (tx != null) {
             if (tx['Result'] == "Success") {
-              Toast.message("$amount VFX sent to $address");
+              Toast.message(globalL10n.svcVfxSentToAddress('$amount', address));
               clear();
               return;
             }
@@ -748,7 +751,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         state = state.copyWith(isProcessing: false);
 
         if (message != null) {
-          Toast.message("$amount VFX has been sent to $address. See dashboard for TX ID.");
+          Toast.message(globalL10n.svcVfxSentToAddressDashboard('$amount', address));
           ref.read(logProvider.notifier).append(
                 LogEntry(message: message, textToCopy: message.replaceAll("Success! TxId: ", ""), variant: AppColorVariant.Success),
               );

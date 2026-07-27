@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/base_component.dart';
 import 'package:rbx_wallet/core/components/buttons.dart';
 import 'package:rbx_wallet/core/dialogs.dart';
+import 'package:rbx_wallet/core/providers/locale_provider.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/core/theme/colors.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
 import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:rbx_wallet/features/web/models/multi_account_instance.dart';
 import 'package:rbx_wallet/features/web/providers/multi_account_provider.dart';
+import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
 import 'package:collection/collection.dart';
 import 'package:rbx_wallet/utils/validation.dart';
 
@@ -62,7 +64,7 @@ class WebMultiAccountSelector extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Select Account",
+                          AppLocalizations.of(context).webSelectAccount,
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.8),
                             height: 1,
@@ -120,6 +122,11 @@ class WebMultiAccountSelector extends BaseComponent {
             return;
           }
 
+          if (value == -3) {
+            _showLanguagePicker(context, ref);
+            return;
+          }
+
           if (value == selectedAccountId) {
             return;
           }
@@ -140,16 +147,16 @@ class WebMultiAccountSelector extends BaseComponent {
                 children: [
                   Icon(selected ? Icons.check_box : Icons.check_box_outline_blank),
                   SizedBox(width: 6),
-                  Text(account.name ?? (accounts.length == 1 ? "Default Account" : "Account ${account.id}")),
+                  Text(account.name ?? (accounts.length == 1 ? AppLocalizations.of(context).webDefaultAccount : AppLocalizations.of(context).webAccountN(account.id.toString()))),
                   if (accounts.length > 1) ...[
                     SizedBox(width: 6),
                     InkWell(
                       onTap: () async {
                         final newName = await PromptModal.show(
-                          title: "Rename Account",
-                          validator: (v) => formValidatorNotEmpty(v, "Account Name"),
-                          labelText: "Account Name",
-                          body: "What would you like to name this account?",
+                          title: AppLocalizations.of(context).webRenameAccountTitle,
+                          validator: (v) => formValidatorNotEmpty(v, AppLocalizations.of(context).webAccountName),
+                          labelText: AppLocalizations.of(context).webAccountName,
+                          body: AppLocalizations.of(context).webRenameAccountBody,
                           initialValue: account.name ?? "",
                         );
 
@@ -176,7 +183,7 @@ class WebMultiAccountSelector extends BaseComponent {
           items.add(
             PopupMenuItem(
               value: 0,
-              child: Text("Add Account"),
+              child: Text(AppLocalizations.of(context).webAddAccount),
             ),
           );
 
@@ -184,13 +191,42 @@ class WebMultiAccountSelector extends BaseComponent {
             items.add(
               PopupMenuItem(
                 value: -1,
-                child: Text("Manage Accounts"),
+                child: Text(AppLocalizations.of(context).webManageAccounts),
               ),
             );
           }
 
-          // Add Lock Wallet option
+          // Add Language and Lock Wallet options
           items.add(PopupMenuDivider());
+
+          final currentLocale = ref.read(localeProvider);
+          final langLabel = currentLocale == null
+              ? 'Auto'
+              : currentLocale.languageCode == 'es'
+                  ? 'ES'
+                  : 'EN';
+
+          items.add(
+            PopupMenuItem(
+              value: -3,
+              child: Row(
+                children: [
+                  Icon(Icons.language, size: 16),
+                  SizedBox(width: 8),
+                  Text(AppLocalizations.of(context).webLanguageLabel),
+                  Spacer(),
+                  Text(
+                    langLabel,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.5),
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+
           items.add(
             PopupMenuItem(
               value: -2,
@@ -198,7 +234,7 @@ class WebMultiAccountSelector extends BaseComponent {
                 children: [
                   Icon(Icons.lock, size: 16),
                   SizedBox(width: 8),
-                  Text("Lock Wallet"),
+                  Text(AppLocalizations.of(context).webLockWallet),
                 ],
               ),
             ),
@@ -207,6 +243,72 @@ class WebMultiAccountSelector extends BaseComponent {
           return items;
         });
   }
+}
+
+void _showLanguagePicker(BuildContext context, WidgetRef ref) {
+  final currentLocale = ref.read(localeProvider);
+  final l10n = AppLocalizations.of(context);
+
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return Container(
+        color: AppColors.getGray(ColorShade.s200),
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  l10n.settingsLanguageSection,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.check,
+                  color: currentLocale == null ? AppColors.getBlue() : Colors.transparent,
+                ),
+                title: Text(l10n.settingsLanguageSystemDefault),
+                onTap: () {
+                  ref.read(localeProvider.notifier).setLocale(null);
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.check,
+                  color: currentLocale?.languageCode == 'en' ? AppColors.getBlue() : Colors.transparent,
+                ),
+                title: Text(l10n.settingsLanguageEnglish),
+                onTap: () {
+                  ref.read(localeProvider.notifier).setLocale(const Locale('en'));
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.check,
+                  color: currentLocale?.languageCode == 'es' ? AppColors.getBlue() : Colors.transparent,
+                ),
+                title: Text(l10n.settingsLanguageSpanish),
+                onTap: () {
+                  ref.read(localeProvider.notifier).setLocale(const Locale('es'));
+                  Navigator.of(context).pop();
+                },
+              ),
+              SizedBox(height: 8),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
 
 class WebManageAccountsBottomSheet extends BaseComponent {
@@ -219,9 +321,11 @@ class WebManageAccountsBottomSheet extends BaseComponent {
     final accounts = ref.watch(multiAccountProvider);
     final selectedAccountId = ref.watch(selectedMultiAccountProvider);
 
+    final l10n = AppLocalizations.of(context);
+
     return ModalContainer(
       withClose: true,
-      title: "Manage Accounts",
+      title: l10n.webManageAccounts,
       children: [
         ...accounts.map((account) {
           final keypair = account.keypair;
@@ -270,7 +374,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       child: InkWell(
                                           onTap: () async {
                                             await Clipboard.setData(ClipboardData(text: keypair.address));
-                                            Toast.message("Address copied to clipboard");
+                                            Toast.message(l10n.messageAddressCopied);
                                           },
                                           child: Icon(
                                             Icons.copy,
@@ -314,7 +418,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       child: InkWell(
                                           onTap: () async {
                                             await Clipboard.setData(ClipboardData(text: raKeypair.address));
-                                            Toast.message("Address copied to clipboard");
+                                            Toast.message(l10n.messageAddressCopied);
                                           },
                                           child: Icon(
                                             Icons.copy,
@@ -358,7 +462,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                       child: InkWell(
                                           onTap: () async {
                                             await Clipboard.setData(ClipboardData(text: btcKeypair.address));
-                                            Toast.message("Address copied to clipboard");
+                                            Toast.message(l10n.messageAddressCopied);
                                           },
                                           child: Icon(
                                             Icons.copy,
@@ -404,7 +508,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                           children: [
                             if (!selected)
                               AppButton(
-                                label: "Set Active",
+                                label: l10n.webSetActive,
                                 variant: AppColorVariant.Light,
                                 type: AppButtonType.Outlined,
                                 onPressed: () {
@@ -415,7 +519,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                               width: 8,
                             ),
                             AppButton(
-                              label: "Backup Keys",
+                              label: l10n.webBackupKeys,
                               variant: AppColorVariant.Secondary,
                               type: AppButtonType.Outlined,
                               onPressed: () async {
@@ -426,7 +530,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                               width: 8,
                             ),
                             AppButton(
-                              label: "Forget",
+                              label: l10n.webForget,
                               type: AppButtonType.Outlined,
                               variant: AppColorVariant.Danger,
                               onPressed: () async {
@@ -437,11 +541,10 @@ class WebManageAccountsBottomSheet extends BaseComponent {
 
                                   if (otherAccount == null) {
                                     final confimed = await ConfirmDialog.show(
-                                      title: "Forget Account ${account.id}",
-                                      body:
-                                          "Are you sure you want to remove this account from your wallet? Since you have no other accounts, you will be logged out.",
+                                      title: l10n.webForgetTitle(account.id.toString()),
+                                      body: l10n.webForgetBodyLastAccount,
                                       destructive: true,
-                                      confirmText: "Forget & Logout",
+                                      confirmText: l10n.webForgetAndLogout,
                                     );
 
                                     if (confimed == true) {
@@ -453,10 +556,10 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                   }
                                 }
                                 final confimed = await ConfirmDialog.show(
-                                  title: "Forget Account ${account.id}",
-                                  body: "Are you sure you want to remove this account from your wallet?",
+                                  title: l10n.webForgetTitle(account.id.toString()),
+                                  body: l10n.webForgetBody,
                                   destructive: true,
-                                  confirmText: "Forget",
+                                  confirmText: l10n.webForget,
                                 );
                                 if (confimed == true) {
                                   ref.read(multiAccountProvider.notifier).remove(account.id);
@@ -478,7 +581,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: AppButton(
-              label: "Add Account",
+              label: l10n.webAddAccount,
               variant: AppColorVariant.Light,
               onPressed: () async {
                 final migrationRequired = await checkEncryptionMigrationRequired(context, ref);

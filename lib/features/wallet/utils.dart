@@ -39,6 +39,8 @@ import '../payment/components/payment_iframe_container_crypto_dot_com.dart'
 import '../payment/payment_utils.dart';
 import '../price/providers/price_detail_providers.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
+import '../../l10n/generated/app_localizations.dart';
+import '../../l10n/l10n_helper.dart';
 
 enum VfxOrBtcOption {
   vfx,
@@ -53,9 +55,10 @@ enum _NewOrImportOption {
 class AccountUtils {
   static Future<void> promptVfxOrBtc(
       BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final selection = await SpecialDialog<VfxOrBtcOption>().show(
       context,
-      title: "Add New Account",
+      title: l10n.txpAddNewAccount,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -66,7 +69,7 @@ class AccountUtils {
               "VFX",
               style: TextStyle(color: AppColors.getBlue()),
             ),
-            subtitle: Text("Setup a VerifiedX account"),
+            subtitle: Text(l10n.txpSetupVfxAccount),
             trailing: Icon(
               Icons.chevron_right,
               color: Colors.white54,
@@ -83,7 +86,7 @@ class AccountUtils {
               "BTC",
               style: TextStyle(color: AppColors.getBtc()),
             ),
-            subtitle: Text("Setup a Bitcoin account"),
+            subtitle: Text(l10n.txpSetupBtcAccount),
             trailing: Icon(
               Icons.chevron_right,
               color: Colors.white54,
@@ -109,17 +112,18 @@ class AccountUtils {
 
   static Future<void> promptVfxNewOrImport(
       BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final selection = await SpecialDialog<_NewOrImportOption>().show(
       context,
-      title: "Add VFX Account",
+      title: l10n.txpAddVfxAccount,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
             dense: true,
             leading: Icon(Icons.add, color: AppColors.getBlue()),
-            title: Text("Create"),
-            subtitle: Text("Create a new VFX account"),
+            title: Text(l10n.txpCreate),
+            subtitle: Text(l10n.txpCreateVfxAccountSub),
             trailing: Icon(
               Icons.chevron_right,
               color: Colors.white54,
@@ -132,8 +136,8 @@ class AccountUtils {
           ListTile(
             dense: true,
             leading: Icon(Icons.upload, color: AppColors.getBlue()),
-            title: Text("Import"),
-            subtitle: Text("Import an existing VFX private key"),
+            title: Text(l10n.actionImport),
+            subtitle: Text(l10n.txpImportVfxKeySub),
             trailing: Icon(
               Icons.chevron_right,
               color: Colors.white54,
@@ -158,9 +162,10 @@ class AccountUtils {
 
   static Future<void> promptBtcNewOrImport(
       BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final selection = await SpecialDialog<_NewOrImportOption>().show(
       context,
-      title: "Add BTC Account",
+      title: l10n.txpAddBtcAccount,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -170,8 +175,8 @@ class AccountUtils {
               Icons.add,
               color: AppColors.getBtc(),
             ),
-            title: Text("Create"),
-            subtitle: Text("Create a new BTC account"),
+            title: Text(l10n.txpCreate),
+            subtitle: Text(l10n.txpCreateBtcAccountSub),
             trailing: Icon(
               Icons.chevron_right,
               color: Colors.white54,
@@ -187,8 +192,8 @@ class AccountUtils {
               Icons.upload,
               color: AppColors.getBtc(),
             ),
-            title: Text("Import"),
-            subtitle: Text("Import an existing BTC private key"),
+            title: Text(l10n.actionImport),
+            subtitle: Text(l10n.txpImportBtcKeySub),
             trailing: Icon(
               Icons.chevron_right,
               color: Colors.white54,
@@ -222,12 +227,14 @@ class AccountUtils {
     if (!await passwordRequiredGuard(context, ref)) return;
     if (!widgetGuardWalletIsNotResyncing(ref)) return;
 
+    final l10n = AppLocalizations.of(context);
+
     PromptModal.show(
-      title: "Import Wallet",
+      title: l10n.walletImportTitle,
       titleTrailing: InkWell(
-        child: const Text(
-          "Bulk Import",
-          style: TextStyle(
+        child: Text(
+          l10n.walletBulkImportLabel,
+          style: const TextStyle(
             fontSize: 12,
             // decoration: TextDecoration.underline,
             color: Colors.white70,
@@ -243,18 +250,17 @@ class AccountUtils {
               });
         },
       ),
-      validator: (String? value) => formValidatorNotEmpty(value, "Private Key"),
-      labelText: "Private Key",
+      validator: (String? value) => formValidatorNotEmpty(value, l10n.walletPrivateKeyValidatorLabel),
+      labelText: l10n.walletPrivateKeyLabel,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))
       ],
       onValidSubmission: (value) async {
         final resync = await ConfirmDialog.show(
-          title: "Rescan Blocks?",
-          body:
-              "Would you like to rescan the chain to include any transactions relevant to this key?",
-          confirmText: "Yes",
-          cancelText: "No",
+          title: l10n.walletRescanBlocksTitle,
+          body: l10n.walletRescanBlocksBodyKey,
+          confirmText: l10n.actionYes,
+          cancelText: l10n.actionNo,
         );
 
         await ref
@@ -267,6 +273,8 @@ class AccountUtils {
   static Future<void> newBtcAccount(BuildContext context, WidgetRef ref) async {
     if (!await passwordRequiredGuard(context, ref)) return;
 
+    final l10n = AppLocalizations.of(context);
+
     final account = await ref.read(btcAccountListProvider.notifier).create();
     if (account == null) {
       Toast.error();
@@ -277,14 +285,13 @@ class AccountUtils {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("BTC Account Created"),
+          title: Text(l10n.walletBtcAccountCreatedTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                    "Here are your BTC account details. Please ensure to back up your private key in a safe place."),
+                child: Text(l10n.walletBtcAccountCreatedBody),
               ),
               ListTile(
                 leading: const Icon(Icons.account_balance_wallet),
@@ -292,7 +299,7 @@ class AccountUtils {
                   initialValue: account.address,
                   decoration: InputDecoration(
                       label: Text(
-                    "Address",
+                    l10n.walletAddressLabel,
                     style: TextStyle(color: AppColors.getBtc()),
                   )),
                   readOnly: true,
@@ -304,7 +311,7 @@ class AccountUtils {
                 title: TextFormField(
                   initialValue: account.privateKey,
                   decoration: InputDecoration(
-                    label: Text("Private Key",
+                    label: Text(l10n.walletPrivateKeyLabel,
                         style: TextStyle(color: AppColors.getBtc())),
                   ),
                   style: const TextStyle(
@@ -320,7 +327,7 @@ class AccountUtils {
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: account.privateKey));
-                    Toast.message("Private Key copied to clipboard");
+                    Toast.message(l10n.walletPrivateKeyCopiedToast);
                   },
                 ),
               ),
@@ -332,7 +339,7 @@ class AccountUtils {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  "Done",
+                  l10n.walletDoneLabel,
                   style: TextStyle(color: AppColors.getBtc()),
                 ))
           ],
@@ -343,19 +350,19 @@ class AccountUtils {
 
   static Future<void> importBtcAccount(
       BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context);
     final privateKeyController = TextEditingController();
     final List<String>? data = await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Import BTC Private Key"),
+          title: Text(l10n.walletImportBtcDialogTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                    "Paste in your BTC private key to import your account."),
+                child: Text(l10n.walletImportBtcDialogBody),
               ),
               ListTile(
                 leading: const Icon(Icons.security),
@@ -363,7 +370,7 @@ class AccountUtils {
                   controller: privateKeyController,
                   decoration: InputDecoration(
                       label: Text(
-                    "Private Key",
+                    l10n.walletPrivateKeyLabel,
                     style: TextStyle(color: AppColors.getBtc()),
                   )),
                   style: const TextStyle(fontSize: 13),
@@ -377,7 +384,7 @@ class AccountUtils {
                 Navigator.of(context).pop();
               },
               child: Text(
-                "Cancel",
+                l10n.actionCancel,
                 style: TextStyle(color: Colors.white),
               ),
             ),
@@ -386,7 +393,7 @@ class AccountUtils {
                 Navigator.of(context).pop([privateKeyController.text, "test"]);
               },
               child: Text(
-                "Import",
+                l10n.actionImport,
                 style: TextStyle(color: AppColors.getBtc()),
               ),
             )
@@ -406,10 +413,10 @@ class AccountUtils {
 
         if (success) {
           if (btcAccountSyncInfo != null) {
-            Toast.message(
-                "Private Key Imported! Please wait until ${btcAccountSyncInfo.nextSyncFormatted} for the balance to sync.");
+            Toast.message(l10n.walletPrivateKeyImportedSyncToast(
+                btcAccountSyncInfo.nextSyncFormatted));
           } else {
-            Toast.message("Private Key Imported!");
+            Toast.message(l10n.walletPrivateKeyImportedToast);
           }
         } else {
           Toast.error();
@@ -421,18 +428,19 @@ class AccountUtils {
   static Future<void> getCoin(
       BuildContext context, WidgetRef ref, VfxOrBtcOption? type,
       {String? btcAddressOverride}) async {
+    final l10n = AppLocalizations.of(context);
     type ??= await showModalBottomSheet(
         context: context,
         builder: (context) {
           return ModalContainer(
-            title: "Choose Coin Type",
+            title: l10n.txpChooseCoinType,
             withDecor: false,
             withClose: true,
             children: [
               AppCard(
                 padding: 0,
                 child: ListTile(
-                    title: Text("Get \$VFX Now"),
+                    title: Text(l10n.txpGetVfxNow),
                     onTap: () {
                       Navigator.of(context).pop(VfxOrBtcOption.vfx);
                     },
@@ -444,7 +452,7 @@ class AccountUtils {
               AppCard(
                 padding: 0,
                 child: ListTile(
-                    title: Text("Get \$BTC Now"),
+                    title: Text(l10n.txpGetBtcNow),
                     onTap: () {
                       Navigator.of(context).pop(VfxOrBtcOption.btc);
                     },
@@ -469,7 +477,7 @@ class AccountUtils {
     final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
     if (address == null) {
-      Toast.error("No address selected");
+      Toast.error(l10n.txpNoAddressSelected);
       return;
     }
 
@@ -477,7 +485,7 @@ class AccountUtils {
         context: context,
         builder: (context) {
           return ModalContainer(
-            title: "Choose Payment Gateway",
+            title: l10n.txpChoosePaymentGateway,
             withClose: true,
             children: [
               if (type == VfxOrBtcOption.vfx
@@ -526,7 +534,7 @@ class AccountUtils {
                 AppCard(
                   padding: 0,
                   child: ListTile(
-                      title: Text("Stripe (Credit Card)"),
+                      title: Text(l10n.txpStripeCreditCard),
                       onTap: () {
                         Navigator.of(context).pop(PaymentGateway.stripe);
                       },
@@ -540,7 +548,7 @@ class AccountUtils {
                 AppCard(
                   padding: 0,
                   child: ListTile(
-                      title: Text("Testnet Faucet"),
+                      title: Text(l10n.txpTestnetFaucet),
                       onTap: () {
                         Navigator.of(context).pop(PaymentGateway.testnetFaucet);
                       },
@@ -614,7 +622,7 @@ class AccountUtils {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        "Close",
+                        l10n.actionClose,
                         style: TextStyle(color: Colors.white),
                       ),
                     )
@@ -639,7 +647,7 @@ class AccountUtils {
           final amount = await promptForVfxPurchaseAmount(context, ref);
 
           if (amount == null) {
-            Toast.error("Invalid Amount");
+            Toast.error(l10n.btcInvalidAmount);
             return;
           }
           ref.read(globalLoadingProvider.notifier).start();
@@ -654,11 +662,11 @@ class AccountUtils {
           }
 
           final confirmed = await ConfirmDialog.show(
-              title: "VFX Quote",
-              body:
-                  "${result.amountVfx} VFX for \$${result.amountUsd.toStringAsFixed(2)} USD\nWould you like to continue?",
-              confirmText: "Continue",
-              cancelText: "Cancel");
+              title: l10n.txpVfxQuote,
+              body: l10n.txpVfxQuoteBody(
+                  "${result.amountVfx}", result.amountUsd.toStringAsFixed(2)),
+              confirmText: l10n.actionContinue,
+              cancelText: l10n.actionCancel);
           if (confirmed != true) {
             return;
           }
@@ -735,7 +743,7 @@ class AccountUtils {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        "Close",
+                        l10n.actionClose,
                         style: TextStyle(color: Colors.white),
                       ),
                     )
@@ -808,7 +816,7 @@ class AccountUtils {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          "Close",
+                          l10n.actionClose,
                           style: TextStyle(color: Colors.white),
                         ),
                       )
@@ -823,7 +831,7 @@ class AccountUtils {
 
           break;
         case PaymentGateway.stripe:
-          Toast.error("Not Activated");
+          Toast.error(l10n.sendBadgeNotActivated);
           break;
         case PaymentGateway.testnetFaucet:
           // launchUrlString("https://testnet.rbx.network/faucet");
@@ -835,18 +843,19 @@ class AccountUtils {
 
   static Future<void> sellCoin(
       BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
+    final l10n = AppLocalizations.of(context);
     type ??= await showModalBottomSheet(
         context: context,
         builder: (context) {
           return ModalContainer(
-            title: "Choose Coin Type",
+            title: l10n.txpChooseCoinType,
             withDecor: false,
             withClose: true,
             children: [
               AppCard(
                 padding: 0,
                 child: ListTile(
-                    title: Text("Get \$VFX Now"),
+                    title: Text(l10n.txpGetVfxNow),
                     onTap: () {
                       Navigator.of(context).pop(VfxOrBtcOption.vfx);
                     },
@@ -858,7 +867,7 @@ class AccountUtils {
               AppCard(
                 padding: 0,
                 child: ListTile(
-                    title: Text("Get \$BTC Now"),
+                    title: Text(l10n.txpGetBtcNow),
                     onTap: () {
                       Navigator.of(context).pop(VfxOrBtcOption.btc);
                     },
@@ -882,7 +891,7 @@ class AccountUtils {
     final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
     if (address == null) {
-      Toast.error("No address selected");
+      Toast.error(l10n.txpNoAddressSelected);
       return;
     }
 
@@ -894,7 +903,7 @@ class AccountUtils {
     }
 
     if (type == VfxOrBtcOption.vfx) {
-      Toast.message("VFX Off Ramp feature coming soon");
+      Toast.message(l10n.txpVfxOffRampSoon);
     }
 
     if (type == VfxOrBtcOption.btc) {
@@ -922,13 +931,13 @@ class AccountUtils {
 
                   if (balance == null || balance <= 0) {
                     print("❌ Balance check failed: balance is null or zero");
-                    Toast.error("BTC account has no balance");
+                    Toast.error(globalL10n.txpBtcNoBalance);
                     return null;
                   }
 
                   if (balance <= cryptoCurrencyAmount) {
                     print("❌ Balance check failed: insufficient balance");
-                    Toast.error("Not enough BTC to cover transaction + fee");
+                    Toast.error(globalL10n.txpNotEnoughBtcFee);
                     return null;
                   }
 
@@ -939,7 +948,7 @@ class AccountUtils {
                     barrierDismissible: false,
                     builder: (context) {
                       return AlertDialog(
-                        title: Text("Complete MoonPay Deposit"),
+                        title: Text(globalL10n.txpCompleteMoonpayDeposit),
                         content: ConstrainedBox(
                           constraints: const BoxConstraints(maxWidth: 600),
                           child: Column(
@@ -947,7 +956,7 @@ class AccountUtils {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "To complete this off-ramp, send the exact BTC amount to the deposit address below:",
+                                globalL10n.txpOffRampInstructions,
                                 style: TextStyle(color: Colors.white70),
                               ),
                               SizedBox(height: 16),
@@ -956,7 +965,7 @@ class AccountUtils {
                                 readOnly: true,
                                 decoration: InputDecoration(
                                   label: Text(
-                                    "Amount",
+                                    globalL10n.labelAmount,
                                     style: TextStyle(color: Color(0xfff7931a)),
                                   ),
                                   suffix: IconButton(
@@ -964,7 +973,7 @@ class AccountUtils {
                                     onPressed: () async {
                                       await Clipboard.setData(
                                           ClipboardData(text: cryptoCurrencyAmount.toString()));
-                                      Toast.message("Amount copied");
+                                      Toast.message(globalL10n.txpAmountCopied);
                                     },
                                   ),
                                 ),
@@ -975,7 +984,7 @@ class AccountUtils {
                                 readOnly: true,
                                 decoration: InputDecoration(
                                   label: Text(
-                                    "Deposit Address (MoonPay)",
+                                    globalL10n.txpDepositAddressMoonpay,
                                     style: TextStyle(color: Color(0xfff7931a)),
                                   ),
                                   suffix: IconButton(
@@ -983,7 +992,7 @@ class AccountUtils {
                                     onPressed: () async {
                                       await Clipboard.setData(
                                           ClipboardData(text: depositWalletAddress));
-                                      Toast.message("Address copied");
+                                      Toast.message(globalL10n.txpAddressCopied);
                                     },
                                   ),
                                 ),
@@ -999,7 +1008,7 @@ class AccountUtils {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Manual Deposit",
+                                      globalL10n.txpManualDeposit,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -1007,7 +1016,8 @@ class AccountUtils {
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      "You can send this from another wallet by sending the exact amount ($cryptoCurrencyAmount $cryptoCurrency) to the deposit address above.",
+                                      globalL10n.txpManualDepositBody(
+                                          "$cryptoCurrencyAmount", cryptoCurrency),
                                       style: TextStyle(
                                         fontSize: 13,
                                         color: Colors.white60,
@@ -1018,7 +1028,7 @@ class AccountUtils {
                               ),
                               SizedBox(height: 16),
                               Text(
-                                "From: ${btcKeypair.address}",
+                                globalL10n.btcFromAddress(btcKeypair.address),
                                 style: TextStyle(fontSize: 13, color: Colors.white54),
                               ),
                             ],
@@ -1030,7 +1040,7 @@ class AccountUtils {
                               Navigator.of(context).pop('cancel');
                             },
                             child: Text(
-                              "Cancel",
+                              globalL10n.actionCancel,
                               style: TextStyle(color: Theme.of(context).colorScheme.info),
                             ),
                           ),
@@ -1039,7 +1049,7 @@ class AccountUtils {
                               Navigator.of(context).pop('manual');
                             },
                             child: Text(
-                              "I have/will send manually",
+                              globalL10n.txpSendManually,
                               style: TextStyle(color: Colors.white70),
                             ),
                           ),
@@ -1048,7 +1058,7 @@ class AccountUtils {
                               Navigator.of(context).pop('send');
                             },
                             child: Text(
-                              "Send Now",
+                              globalL10n.txpSendNow,
                               style: TextStyle(color: Colors.white),
                             ),
                           ),
@@ -1066,7 +1076,7 @@ class AccountUtils {
 
                   if (choice == 'manual') {
                     print("✅ User chose manual send, returning 'manual' to MoonPay");
-                    Toast.message("MoonPay transaction marked as manual deposit");
+                    Toast.message(globalL10n.txpMoonpayManualMarked);
                     return 'manual';
                   }
 
@@ -1084,11 +1094,15 @@ class AccountUtils {
                   print("✅ Fee rate confirmed, showing final confirmation");
                   // Final confirmation with fee
                   final finalConfirmed = await ConfirmDialog.show(
-                    title: "Confirm Send",
-                    body:
-                        "Amount: $cryptoCurrencyAmount $cryptoCurrency\nTo: $depositWalletAddress\nFrom: ${btcKeypair.address}\nFee Rate: $feeRate sats/vB",
-                    confirmText: "Send",
-                    cancelText: "Cancel",
+                    title: globalL10n.txpConfirmSend,
+                    body: globalL10n.txpConfirmSendBody(
+                        "$cryptoCurrencyAmount",
+                        cryptoCurrency,
+                        depositWalletAddress,
+                        btcKeypair.address,
+                        "$feeRate"),
+                    confirmText: globalL10n.actionSend,
+                    cancelText: globalL10n.actionCancel,
                   );
 
                   print("Final confirmation result: $finalConfirmed");
@@ -1111,7 +1125,7 @@ class AccountUtils {
 
                   if (txHash == null) {
                     print("❌ Transaction failed");
-                    Toast.error("Transaction failed");
+                    Toast.error(globalL10n.txpTransactionFailed);
                     return null;
                   }
 
@@ -1123,11 +1137,12 @@ class AccountUtils {
                     ref.read(webSessionProvider.notifier).refreshBtcBalanceInfo();
                   });
 
-                  Toast.message("$cryptoCurrencyAmount $cryptoCurrency sent to $depositWalletAddress");
+                  Toast.message(globalL10n.txpSentToAddress(
+                      "$cryptoCurrencyAmount", cryptoCurrency, depositWalletAddress));
 
                   // Show tx details
                   InfoDialog.show(
-                    title: "Transaction Sent",
+                    title: globalL10n.txpTransactionSent,
                     buttonColorOverride: Color(0xfff7931a),
                     content: ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: 600),
@@ -1140,21 +1155,21 @@ class AccountUtils {
                             readOnly: true,
                             decoration: InputDecoration(
                               label: Text(
-                                "Transaction Hash",
+                                globalL10n.txpTransactionHashLabel,
                                 style: TextStyle(color: Color(0xfff7931a)),
                               ),
                               suffix: IconButton(
                                 icon: Icon(Icons.copy),
                                 onPressed: () async {
                                   await Clipboard.setData(ClipboardData(text: txHash));
-                                  Toast.message("Tx hash copied");
+                                  Toast.message(globalL10n.txpTxHashCopied);
                                 },
                               ),
                             ),
                           ),
                           SizedBox(height: 12),
                           AppButton(
-                            label: "Open in BTC Explorer",
+                            label: globalL10n.btcOpenInExplorer,
                             variant: AppColorVariant.Btc,
                             type: AppButtonType.Text,
                             onPressed: () {
@@ -1176,7 +1191,7 @@ class AccountUtils {
               : null,
         );
       } else {
-        Toast.error("Native Moonpay Integration Activating Soon.");
+        Toast.error(l10n.txpNativeMoonpaySoon);
       }
     }
   }
@@ -1185,11 +1200,12 @@ class AccountUtils {
     BuildContext context,
     WidgetRef ref,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final type = await showModalBottomSheet(
         context: context,
         builder: (context) {
           return ModalContainer(
-            title: "Crypto.com On-Ramp",
+            title: l10n.txpCryptoDotComOnRamp,
             withDecor: false,
             withClose: true,
             children: [
@@ -1199,7 +1215,7 @@ class AccountUtils {
               AppCard(
                 padding: 0,
                 child: ListTile(
-                    title: Text("Get \$VFX Now"),
+                    title: Text(l10n.txpGetVfxNow),
                     onTap: () {
                       Navigator.of(context).pop(VfxOrBtcOption.vfx);
                     },
@@ -1211,7 +1227,7 @@ class AccountUtils {
               AppCard(
                 padding: 0,
                 child: ListTile(
-                    title: Text("Get \$BTC Now"),
+                    title: Text(l10n.txpGetBtcNow),
                     onTap: () {
                       Navigator.of(context).pop(VfxOrBtcOption.btc);
                     },
@@ -1233,7 +1249,7 @@ class AccountUtils {
     final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
     if (address == null) {
-      Toast.error("No address selected");
+      Toast.error(l10n.txpNoAddressSelected);
       return;
     }
 
@@ -1262,11 +1278,11 @@ class AccountUtils {
       }
 
       final confirmed = await ConfirmDialog.show(
-          title: "VFX Quote",
-          body:
-              "${result.amountVfx} VFX for \$${result.amountUsd} USD\nWould you like to continue?",
-          confirmText: "Continue",
-          cancelText: "Cancel");
+          title: l10n.txpVfxQuote,
+          body: l10n.txpVfxQuoteBody(
+              "${result.amountVfx}", "${result.amountUsd}"),
+          confirmText: l10n.actionContinue,
+          cancelText: l10n.actionCancel);
       if (confirmed != true) {
         return;
       }
@@ -1328,7 +1344,7 @@ class AccountUtils {
                       Navigator.of(context).pop();
                     },
                     child: Text(
-                      "Close",
+                      l10n.actionClose,
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -1347,6 +1363,7 @@ class AccountUtils {
     BuildContext context,
     WidgetRef ref,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final TextEditingController _controller = TextEditingController();
     final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -1366,7 +1383,7 @@ class AccountUtils {
         String helpText = "";
 
         return AlertDialog(
-          title: Text("VFX Amount"),
+          title: Text(l10n.txpVfxAmount),
           content: Form(
             key: _formKey,
             child: StatefulBuilder(builder: (context, setState) {
@@ -1378,13 +1395,13 @@ class AccountUtils {
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
                       label: Text(
-                        "VFX Amount",
+                        l10n.txpVfxAmount,
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary),
                       ),
                       suffixText: "VFX",
                       helperText: helpText),
-                  validator: (v) => formValidatorNumber(v, "Amount"),
+                  validator: (v) => formValidatorNumber(v, l10n.labelAmount),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
                   ],
@@ -1422,7 +1439,7 @@ class AccountUtils {
                 Navigator.of(context).pop();
               },
               child: Text(
-                "Cancel",
+                l10n.actionCancel,
                 style: TextStyle(color: Theme.of(context).colorScheme.info),
               ),
             ),
@@ -1434,7 +1451,7 @@ class AccountUtils {
               onPressed: () {
                 _submit(context);
               },
-              child: Text("Get Quote",
+              child: Text(l10n.txpGetQuote,
                   style: TextStyle(color: Theme.of(context).colorScheme.info)),
             )
           ],
@@ -1449,7 +1466,7 @@ class AccountUtils {
     final amount = double.tryParse(valueStr);
 
     if (amount == null) {
-      Toast.error("Invalid Amount");
+      Toast.error(l10n.btcInvalidAmount);
       return null;
     }
 

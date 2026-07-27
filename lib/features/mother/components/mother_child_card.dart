@@ -5,6 +5,7 @@ import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/mother_child.dart';
 
 class MotherChildCard extends StatelessWidget {
@@ -17,6 +18,7 @@ class MotherChildCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       color: Colors.black45,
       child: Padding(
@@ -42,31 +44,31 @@ class MotherChildCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     _Row(
-                      label: "Balance",
+                      label: l10n.motherChildBalance,
                       value: "${child.balance} VFX",
                     ),
                     const Divider(),
                     _Row(
-                      label: "IP Address",
+                      label: l10n.motherChildIpAddress,
                       value: child.ipAddress,
                     ),
                     const Divider(),
                     _Row(
-                      label: "Block Height",
+                      label: l10n.motherChildBlockHeight,
                       value: "${child.blockHeight}",
                     ),
                     const Divider(),
                     _Row(
-                      label: "Is Validating?",
-                      value: child.activeWithValidating ? 'Yes' : 'No',
+                      label: l10n.motherChildIsValidating,
+                      value: child.activeWithValidating ? l10n.motherChildYes : l10n.motherChildNo,
                       color: child.activeWithValidating
                           ? AppColorVariant.Success
                           : AppColorVariant.Danger,
                     ),
                     const Divider(),
                     _Row(
-                      label: "Is Connected to Mother?",
-                      value: child.activeWithMother ? 'Yes' : 'No',
+                      label: l10n.motherChildIsConnected,
+                      value: child.activeWithMother ? l10n.motherChildYes : l10n.motherChildNo,
                       color: child.activeWithMother
                           ? AppColorVariant.Success
                           : AppColorVariant.Danger,
@@ -79,7 +81,7 @@ class MotherChildCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AppButton(
-                  label: "Open in Explorer",
+                  label: l10n.motherOpenInExplorer,
                   onPressed: () {
                     launchUrlString(
                         "${Env.baseExplorerUrl}/validators/${child.address}");

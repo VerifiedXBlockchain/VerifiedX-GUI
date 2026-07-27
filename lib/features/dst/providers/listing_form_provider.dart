@@ -11,6 +11,7 @@ import '../../nft/models/nft.dart';
 import '../../../utils/toast.dart';
 import '../models/listing.dart';
 import 'listing_list_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class ListingFormProvider extends StateNotifier<Listing> {
   final Ref ref;
@@ -142,7 +143,7 @@ class ListingFormProvider extends StateNotifier<Listing> {
   updateEnableAuction(bool enableAuction) {
     print("Auction started: ${state.isAuctionStarted} exists: ${state.exists}");
     if (state.isAuctionStarted && state.exists) {
-      Toast.error('The auction has already started.');
+      Toast.error(globalL10n.r3dAuctionAlreadyStarted);
       return;
     }
     state = state.copyWith(enableAuction: enableAuction);
@@ -160,7 +161,7 @@ class ListingFormProvider extends StateNotifier<Listing> {
 
   updateEnableReservePrice(bool enableReservePrice) {
     if (state.auctionStarted && state.exists) {
-      Toast.error('The auction has already started.');
+      Toast.error(globalL10n.r3dAuctionAlreadyStarted);
       return;
     }
     state = state.copyWith(enableReservePrice: enableReservePrice);
@@ -168,7 +169,7 @@ class ListingFormProvider extends StateNotifier<Listing> {
 
   updateGalleryOnly(bool value) {
     if (state.auctionStarted && state.exists) {
-      Toast.error('The auction has already started.');
+      Toast.error(globalL10n.r3dAuctionAlreadyStarted);
       return;
     }
 
@@ -211,32 +212,32 @@ class ListingFormProvider extends StateNotifier<Listing> {
 
     if (state.enableAuction && state.reservePrice != null && state.floorPrice != null) {
       if (state.floorPrice! <= 0) {
-        Toast.error("The floor price must be greater than zero.");
+        Toast.error(globalL10n.r3dFloorPriceGreaterThanZero);
         return;
       }
       if (state.reservePrice! < state.floorPrice!) {
-        Toast.error("The reserve price must be greater or equal to the floor price.");
+        Toast.error(globalL10n.r3dReservePriceGteFloor);
         return;
       }
     }
 
     if (state.startDate.isAfter(state.endDate)) {
-      Toast.error('The start date must be before the end date.');
+      Toast.error(globalL10n.r3dStartDateBeforeEndDate);
       return;
     }
 
     if (state.smartContractUid.isEmpty) {
-      Toast.error('The NFT must be set');
+      Toast.error(globalL10n.r3dNftMustBeSet);
       return;
     }
 
     if (!state.enableAuction && !state.enableBuyNow && !state.galleryOnly) {
-      Toast.error('Enable at least one of the options (Gallery, Buy Now, or Auction)');
+      Toast.error(globalL10n.r3dEnableAtLeastOneOption);
       return;
     }
 
     if (state.endDate.isBefore(state.startDate) || state.endDate.isAtSameMomentAs(state.startDate)) {
-      Toast.error("End date must be after start date");
+      Toast.error(globalL10n.r3dEndDateAfterStartDate);
       return;
     }
 
@@ -244,7 +245,7 @@ class ListingFormProvider extends StateNotifier<Listing> {
       state = state.copyWith(buyNowPrice: null);
     } else {
       if (state.buyNowPrice == null || state.buyNowPrice! <= 0) {
-        Toast.error("Price must be greater than zero");
+        Toast.error(globalL10n.r3dPriceGreaterThanZero);
         return;
       }
     }
@@ -280,16 +281,16 @@ class ListingFormProvider extends StateNotifier<Listing> {
 
   delete(BuildContext context, int storeId, Listing listing, [bool shouldPop = true]) async {
     if (state.auctionStarted && state.exists) {
-      Toast.error("You can't delete this listing because the auction has already started.");
+      Toast.error(globalL10n.r3dCantDeleteAuctionStarted);
       return;
     }
 
     final confirmed = await ConfirmDialog.show(
-      title: "Delete Listing",
-      body: "Are you sure you want to delete this listing?",
+      title: globalL10n.mktDeleteListing,
+      body: globalL10n.r3dConfirmDeleteListing,
       destructive: true,
-      confirmText: "Delete",
-      cancelText: "Cancel",
+      confirmText: globalL10n.actionDelete,
+      cancelText: globalL10n.actionCancel,
     );
     if (confirmed == true) {
       if (await DstService().deleteListing(listing)) {

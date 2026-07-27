@@ -9,6 +9,7 @@ import '../../../core/theme/app_theme.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../transactions/components/transaction_list_tile.dart';
 import '../../transactions/providers/transaction_list_provider.dart';
 
@@ -24,6 +25,7 @@ class TransactionWindow extends BaseComponent {
 
     final isBtc = ref.watch(sessionProvider.select((v) => v.btcSelected));
 
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,7 +34,7 @@ class TransactionWindow extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Recent Transactions",
+              l10n.r3eRecentTransactions,
               style: Theme.of(context).textTheme.titleSmall,
             ),
             CurrencySegementedButton(
@@ -52,7 +54,7 @@ class TransactionWindow extends BaseComponent {
                 child: recentBtcTranscations.isEmpty
                     ? Center(
                         child: Text(
-                          "No BTC Transactions Found",
+                          l10n.r3eNoBtcTransactions,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       )
@@ -77,7 +79,7 @@ class TransactionWindow extends BaseComponent {
                 child: recentTransactions.isEmpty
                     ? Center(
                         child: Text(
-                          "No VFX Transactions Found",
+                          l10n.r3eNoVfxTransactions,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                       )
@@ -97,7 +99,7 @@ class TransactionWindow extends BaseComponent {
           padding: const EdgeInsets.all(16.0),
           child: Center(
             child: AppButton(
-              label: "View All",
+              label: l10n.r3eViewAll,
               onPressed: () {
                 final tabsRouter = AutoTabsRouter.of(context);
                 tabsRouter.setActiveIndex(3);

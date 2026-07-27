@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../components/sc_wizard_card.dart';
 import '../providers/sc_wizard_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardEditItemScreen extends BaseScreen {
   final String title;
@@ -34,6 +35,7 @@ class ScWizardEditItemScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         Expanded(child: Center(child: ScWizedCard(index))),
@@ -45,13 +47,13 @@ class ScWizardEditItemScreen extends BaseScreen {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 AppButton(
-                  label: "Delete",
+                  label: l10n.actionDelete,
                   variant: AppColorVariant.Danger,
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                      title: "Delete Instance?",
-                      body: "Are you sure you want to delete this instance?",
-                      confirmText: "Delete",
+                      title: l10n.r3aDeleteInstanceTitle,
+                      body: l10n.r3aDeleteInstanceConfirm,
+                      confirmText: l10n.actionDelete,
                       destructive: true,
                     );
                     if (confirmed == true) {
@@ -61,7 +63,7 @@ class ScWizardEditItemScreen extends BaseScreen {
                   },
                 ),
                 AppButton(
-                  label: "Save & Close",
+                  label: l10n.r3aSaveClose,
                   onPressed: () async {
                     final item = ref.read(scWizardProvider.notifier).itemAtIndex(index);
                     if (item == null) {
@@ -73,26 +75,26 @@ class ScWizardEditItemScreen extends BaseScreen {
                     final List<String> errors = [];
 
                     if (entry.name.isEmpty) {
-                      errors.add("- Name is required");
+                      errors.add("- ${l10n.r3aNameIsRequired}");
                     }
 
                     if (entry.creatorName.isEmpty) {
-                      errors.add("- Minter name is required");
+                      errors.add("- ${l10n.r3aMinterNameIsRequired}");
                     }
 
                     if (entry.description.isEmpty) {
-                      errors.add("- Description is required");
+                      errors.add("- ${l10n.r3aDescriptionIsRequired}");
                     }
 
                     if (entry.primaryAsset == null) {
-                      errors.add("- Primary Asset is required");
+                      errors.add("- ${l10n.r3aPrimaryAssetIsRequired}");
                     }
 
                     if (errors.isNotEmpty) {
                       InfoDialog.show(
-                        title: "Invalid Smart Contract",
+                        title: l10n.r3aInvalidSmartContract,
                         body: errors.join("\n"),
-                        closeText: "Okay",
+                        closeText: l10n.walletOkay,
                       );
 
                       return;

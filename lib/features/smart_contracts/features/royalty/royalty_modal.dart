@@ -14,6 +14,7 @@ import '../../components/sc_creator/common/form_group_header.dart';
 import '../../components/sc_creator/common/help_button.dart';
 import '../../components/sc_creator/common/modal_bottom_actions.dart';
 import '../../components/sc_creator/common/modal_container.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'royalty.dart';
 import 'royalty_form_provider.dart';
 
@@ -29,15 +30,15 @@ class RoyaltyModal extends BaseComponent {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Choose an address"),
+            title: Text(AppLocalizations.of(context).scwChooseAnAddress),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(null);
                 },
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.white60),
+                child: Text(
+                  AppLocalizations.of(context).actionCancel,
+                  style: const TextStyle(color: Colors.white60),
                 ),
               )
             ],
@@ -74,7 +75,7 @@ class RoyaltyModal extends BaseComponent {
 
     return ModalContainer(
       children: [
-        buildHeader(),
+        buildHeader(context),
         Form(
           key: _formKey,
           child: Row(
@@ -82,7 +83,7 @@ class RoyaltyModal extends BaseComponent {
               // buildRoyaltyType(_model, _provider),
               // const SizedBox(width: 32),
               Expanded(
-                child: buildAmount(_provider, _model),
+                child: buildAmount(_provider, _model, context),
               ),
               const SizedBox(width: 8),
               Expanded(
@@ -105,7 +106,7 @@ class RoyaltyModal extends BaseComponent {
 
     return ModalContainer(
       children: [
-        buildHeader(),
+        buildHeader(context),
         const SizedBox(height: 16),
         Form(
           key: _formKey,
@@ -115,7 +116,7 @@ class RoyaltyModal extends BaseComponent {
             children: [
               // buildRoyaltyType(_model, _provider),
               // const SizedBox(height: 16),
-              buildAmount(_provider, _model),
+              buildAmount(_provider, _model, context),
               const SizedBox(width: 16),
               buildAddress(_provider, ref, context),
             ],
@@ -126,9 +127,9 @@ class RoyaltyModal extends BaseComponent {
     );
   }
 
-  FormGroupHeader buildHeader() {
-    return const FormGroupHeader(
-      "Royalty",
+  FormGroupHeader buildHeader(BuildContext context) {
+    return FormGroupHeader(
+      AppLocalizations.of(context).scwRoyaltyTitle,
     );
   }
 
@@ -147,11 +148,11 @@ class RoyaltyModal extends BaseComponent {
     return TextFormField(
       controller: _provider.addressController,
       decoration: InputDecoration(
-          label: const Text("Address"),
+          label: Text(AppLocalizations.of(context).labelAddress),
           labelStyle: const TextStyle(color: Colors.white),
           suffixIcon: kIsWeb
               ? AppButton(
-                  label: "Use My Address",
+                  label: AppLocalizations.of(context).scwUseMyAddress,
                   variant: AppColorVariant.Light,
                   type: AppButtonType.Text,
                   underlined: true,
@@ -178,11 +179,11 @@ class RoyaltyModal extends BaseComponent {
     );
   }
 
-  TextFormField buildAmount(RoyaltyFormProvider _provider, Royalty _model) {
+  TextFormField buildAmount(RoyaltyFormProvider _provider, Royalty _model, BuildContext context) {
     return TextFormField(
       controller: _provider.amountController,
       decoration: InputDecoration(
-          label: const Text("Percentage"),
+          label: Text(AppLocalizations.of(context).scwPercentage),
           labelStyle: const TextStyle(color: Colors.white),
           suffix: Text(_model.type == RoyaltyType.percent ? "%" : "VFX"),
           prefixIcon: HelpButton(_model.type == RoyaltyType.percent ? HelpType.royaltyPercent : HelpType.royaltyFlat, subtle: true)),

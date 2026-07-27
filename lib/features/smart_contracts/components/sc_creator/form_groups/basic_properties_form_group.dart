@@ -7,6 +7,7 @@ import '../../../models/smart_contract.dart';
 import '../../../providers/create_smart_contract_provider.dart';
 import '../common/form_group_container.dart';
 import '../common/help_button.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class BasicPropertiesFormGroup extends BaseComponent {
   const BasicPropertiesFormGroup({Key? key}) : super(key: key);
@@ -83,12 +84,12 @@ class _Description extends StatelessWidget {
     return TextFormField(
       readOnly: model.isCompiled,
       controller: provider.descriptionController,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         label: Text(
-          "Description",
-          style: TextStyle(color: Colors.white),
+          AppLocalizations.of(context).scwDescription,
+          style: const TextStyle(color: Colors.white),
         ),
-        suffixIcon: HelpButton(HelpType.description),
+        suffixIcon: const HelpButton(HelpType.description),
       ),
       minLines: 3,
       maxLines: 6,
@@ -111,16 +112,17 @@ class _CreatorName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return TextFormField(
       readOnly: model.isCompiled,
       controller: provider.minterNameController,
-      validator: (val) => formValidatorNotEmpty(val, "Minter/Creator Name"),
-      decoration: const InputDecoration(
+      validator: (val) => formValidatorNotEmpty(val, l10n.r3aMinterCreatorName),
+      decoration: InputDecoration(
         label: Text(
-          "Minter/Creator Name",
-          style: TextStyle(color: Colors.white),
+          l10n.r3aMinterCreatorName,
+          style: const TextStyle(color: Colors.white),
         ),
-        suffixIcon: HelpButton(HelpType.minterName),
+        suffixIcon: const HelpButton(HelpType.minterName),
       ),
       onChanged: (val) {
         provider.setName(val);
@@ -141,15 +143,16 @@ class _SmartContractName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return TextFormField(
       readOnly: model.isCompiled,
       controller: provider.nameController,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         label: Text(
-          "Smart Contract Name",
-          style: TextStyle(color: Colors.white),
+          l10n.r3aSmartContractName,
+          style: const TextStyle(color: Colors.white),
         ),
-        suffixIcon: HelpButton(HelpType.smartContractName),
+        suffixIcon: const HelpButton(HelpType.smartContractName),
       ),
       onChanged: (val) {
         provider.setName(val);

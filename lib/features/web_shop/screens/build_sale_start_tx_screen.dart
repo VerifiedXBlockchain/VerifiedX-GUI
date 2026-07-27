@@ -7,6 +7,7 @@ import '../../../core/components/centered_loader.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../auth/auth_utils.dart';
 import '../../auth/components/auth_type_modal.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -32,7 +33,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: Text("Send Sale Start TX"),
+      title: Text(AppLocalizations.of(context).shopSendSaleStartTx),
       backgroundColor: Colors.black,
     );
   }
@@ -50,7 +51,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "To to authorize this transaction, you must sign in as",
+                  AppLocalizations.of(context).r3bSignInToAuthorize,
                   style: TextStyle(
                     fontSize: 16,
                   ),
@@ -66,7 +67,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                   height: 8,
                 ),
                 AppButton(
-                  label: "Sign In",
+                  label: AppLocalizations.of(context).shopSignIn,
                   onPressed: () {
                     showModalBottomSheet(
                       backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
@@ -78,12 +79,12 @@ class BuildSaleStartTxScreen extends BaseScreen {
                             if (ref.read(webSessionProvider).isAuthenticated) {
                               // redirectToDashboard();
                               if (ownerAddress == ref.read(webSessionProvider).keypair?.address) {
-                                Toast.message("Logged in successfully");
+                                Toast.message(AppLocalizations.of(context).r3bLoggedInSuccess);
                               } else {
-                                Toast.error("Incorrect login details for $ownerAddress.");
+                                Toast.error(AppLocalizations.of(context).r3bIncorrectLoginDetails(ownerAddress));
                               }
                             } else {
-                              Toast.error("Could not login");
+                              Toast.error(AppLocalizations.of(context).r3bCouldNotLogin);
                             }
                             AutoRouter.of(context).pop();
                           },
@@ -97,12 +98,12 @@ class BuildSaleStartTxScreen extends BaseScreen {
                                 if (ref.read(webSessionProvider).isAuthenticated) {
                                   // redirectToDashboard();
                                   if (ownerAddress == ref.read(webSessionProvider).keypair?.address) {
-                                    Toast.message("Logged in successfully");
+                                    Toast.message(AppLocalizations.of(context).r3bLoggedInSuccess);
                                   } else {
-                                    Toast.error("Incorrect login details for $ownerAddress.");
+                                    Toast.error(AppLocalizations.of(context).r3bIncorrectLoginDetails(ownerAddress));
                                   }
                                 } else {
-                                  Toast.error("Could not login");
+                                  Toast.error(AppLocalizations.of(context).r3bCouldNotLogin);
                                 }
                                 AutoRouter.of(context).pop();
                               },
@@ -115,12 +116,12 @@ class BuildSaleStartTxScreen extends BaseScreen {
                               if (ref.read(webSessionProvider).isAuthenticated) {
                                 // redirectToDashboard();
                                 if (ownerAddress == ref.read(webSessionProvider).keypair?.address) {
-                                  Toast.message("Logged in successfully");
+                                  Toast.message(AppLocalizations.of(context).r3bLoggedInSuccess);
                                 } else {
-                                  Toast.error("Incorrect login details for $ownerAddress.");
+                                  Toast.error(AppLocalizations.of(context).r3bIncorrectLoginDetails(ownerAddress));
                                 }
                               } else {
-                                Toast.error("Could not login");
+                                Toast.error(AppLocalizations.of(context).r3bCouldNotLogin);
                               }
                               AutoRouter.of(context).pop();
                             });
@@ -139,11 +140,11 @@ class BuildSaleStartTxScreen extends BaseScreen {
         final data = ref.watch(webBidDetailProvider(bidId));
 
         return data.when(
-          error: (_, __) => Center(child: Text("Error: Bid not found.")),
+          error: (_, __) => Center(child: Text(AppLocalizations.of(context).r3bBidNotFound)),
           loading: () => CenteredLoader(),
           data: (bid) {
             if (bid == null) {
-              return Center(child: Text("Error: Bid not found."));
+              return Center(child: Text(AppLocalizations.of(context).r3bBidNotFound));
             }
 
             final toAddress = bid.address;
@@ -165,7 +166,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Transaction Sent.",
+                            AppLocalizations.of(context).r3bTransactionSent,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -178,7 +179,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Please approve the Sale Start TX for your shop purchase.",
+                            AppLocalizations.of(context).r3bApproveSaleStart,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -187,14 +188,14 @@ class BuildSaleStartTxScreen extends BaseScreen {
                           SizedBox(
                             height: 16,
                           ),
-                          Text("Smart Contract ID: $scId"),
-                          Text("Buyer: $toAddress"),
-                          Text("Amount: $amount"),
+                          Text(AppLocalizations.of(context).r3bSmartContractId(scId)),
+                          Text(AppLocalizations.of(context).r3bBuyerLabel(toAddress)),
+                          Text(AppLocalizations.of(context).r3bAmountValue(amount.toString())),
                           SizedBox(
                             height: 16,
                           ),
                           AppButton(
-                            label: "Start Transaction",
+                            label: AppLocalizations.of(context).shopStartTransaction,
                             variant: AppColorVariant.Success,
                             onPressed: () async {
                               ref.read(globalLoadingProvider.notifier).start();
@@ -211,7 +212,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                               );
 
                               if (beaconSignature == null) {
-                                Toast.error("Couldn't produce beacon upload signature");
+                                Toast.error(AppLocalizations.of(context).r3bBeaconUploadSigFailed);
                                 ref.read(globalLoadingProvider.notifier).complete();
 
                                 return false;
@@ -242,14 +243,14 @@ class BuildSaleStartTxScreen extends BaseScreen {
 
                               final timestamp = await txService.getTimestamp();
                               if (timestamp == null) {
-                                Toast.error("Could not get timestamp");
+                                Toast.error(AppLocalizations.of(context).mktCouldNotGetTimestampToast);
                                 ref.read(globalLoadingProvider.notifier).complete();
                                 return false;
                               }
 
                               final nonce = await txService.getNonce(keypair.address);
                               if (nonce == null) {
-                                Toast.error("Could not get nonce");
+                                Toast.error(AppLocalizations.of(context).mktCouldNotGetNonceToast);
                                 ref.read(globalLoadingProvider.notifier).complete();
                                 return false;
                               }
@@ -266,7 +267,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
 
                               final fee = await txService.getFee(txData);
                               if (fee == null) {
-                                Toast.error("Could not get fee");
+                                Toast.error(AppLocalizations.of(context).mktCouldNotGetFeeToast);
                                 ref.read(globalLoadingProvider.notifier).complete();
                                 return false;
                               }
@@ -284,7 +285,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
 
                               final hash = await txService.getHash(txData);
                               if (hash == null) {
-                                Toast.error("Could not generate hash");
+                                Toast.error(AppLocalizations.of(context).mktCouldNotGenerateHashToast);
                                 ref.read(globalLoadingProvider.notifier).complete();
                                 return false;
                               }
@@ -296,7 +297,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                               );
 
                               if (signature == null) {
-                                Toast.error("Signature generation failed.");
+                                Toast.error(AppLocalizations.of(context).svcSignatureGenerationFailed);
                                 ref.read(globalLoadingProvider.notifier).complete();
                                 return false;
                               }
@@ -308,7 +309,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                               );
 
                               if (!isValid) {
-                                Toast.error("Signature not valid (primary)");
+                                Toast.error(AppLocalizations.of(context).r3bSignatureNotValidPrimary);
                                 ref.read(globalLoadingProvider.notifier).complete();
                                 return false;
                               }
@@ -332,7 +333,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
                               ));
 
                               if (verifyTransactionData == null) {
-                                Toast.error("Could not verify transaction");
+                                Toast.error(AppLocalizations.of(context).r3bCouldNotVerifyTx);
                                 ref.read(globalLoadingProvider.notifier).complete();
                                 return false;
                               }
@@ -353,7 +354,7 @@ class BuildSaleStartTxScreen extends BaseScreen {
 
                               if (tx != null) {
                                 if (tx['Result'] == "Success") {
-                                  Toast.message("TX Broadcasted");
+                                  Toast.message(AppLocalizations.of(context).mktTxBroadcastedToast);
                                   ref.read(globalLoadingProvider.notifier).complete();
 
                                   setState(() {

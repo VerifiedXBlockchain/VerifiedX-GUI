@@ -19,6 +19,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -36,7 +37,7 @@ class ValidatorScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Validator"),
+      title: Text(AppLocalizations.of(context).validatorTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // leading: BackToHomeButton(),
@@ -49,10 +50,11 @@ class ValidatorScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final currentWallet = ref.watch(sessionProvider.select((v) => v.currentWallet));
 
     if (currentWallet == null) {
-      return const InvalidWallet(message: "No account selected");
+      return InvalidWallet(message: l10n.validatorNoAccountSelected);
     }
 
     // final validator = ref.watch(currentValidatorProvider);
@@ -79,13 +81,13 @@ class ValidatorScreen extends BaseScreen {
                 height: 8,
               ),
               Text(
-                "${currentWallet.label} can not validate.",
+                l10n.validatorCannotValidate(currentWallet.label),
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 8,
               ),
-              const Text("You can only validate with one account."),
+              Text(l10n.validatorOnlyOneAccount),
             ],
           ),
         );
@@ -101,7 +103,7 @@ class ValidatorScreen extends BaseScreen {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Validating requires ${formatIntWithCommas(ASSURED_AMOUNT_TO_VALIDATE.round())} VFX.",
+                    l10n.validatorRequirementHint(formatIntWithCommas(ASSURED_AMOUNT_TO_VALIDATE.round())),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.warning,
                       fontSize: 18,
@@ -111,7 +113,7 @@ class ValidatorScreen extends BaseScreen {
                     height: 8,
                   ),
                   Text(
-                    "Please choose another account:",
+                    l10n.validatorChooseAccount,
                     style: TextStyle(
                       height: 1.2,
                       color: Colors.white,
@@ -126,7 +128,7 @@ class ValidatorScreen extends BaseScreen {
                   ),
                   SizedBox(width: 380, child: Divider()),
                   SelectableText(
-                    "Or transfer ${formatIntWithCommas((ASSURED_AMOUNT_TO_VALIDATE - currentWallet.balance).ceil())} VFX to ${currentWallet.address}.",
+                    l10n.validatorTransferHint(formatIntWithCommas((ASSURED_AMOUNT_TO_VALIDATE - currentWallet.balance).ceil()), currentWallet.address),
                     style: TextStyle(
                       height: 1.2,
                       color: Colors.white.withOpacity(.8),
@@ -144,13 +146,12 @@ class ValidatorScreen extends BaseScreen {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                  "You must have port $port, ${Env.validatorSecondaryPort}, and ${Env.validatorTertiaryPort} open to external networks with a balance of ${formatIntWithCommas(ASSURED_AMOUNT_TO_VALIDATE.round())} VFX in order to validate."),
+              Text(l10n.validatorPortInstructions(port.toString(), Env.validatorSecondaryPort.toString(), Env.validatorTertiaryPort.toString(), formatIntWithCommas(ASSURED_AMOUNT_TO_VALIDATE.round()))),
               const SizedBox(
                 height: 16,
               ),
               AppButton(
-                label: "Start Validating",
+                label: l10n.validatorStartValidating,
                 icon: Icons.check,
                 variant: AppColorVariant.Success,
                 onPressed: () async {
@@ -159,7 +160,7 @@ class ValidatorScreen extends BaseScreen {
                   if (!await passwordRequiredGuard(context, ref, true, true)) return;
 
                   if (currentWallet.balance < ASSURED_AMOUNT_TO_VALIDATE) {
-                    Toast.error("Balance not currently sufficient to validate. $ASSURED_AMOUNT_TO_VALIDATE VFX required.");
+                    Toast.error(l10n.validatorBalanceInsufficient(ASSURED_AMOUNT_TO_VALIDATE.toString()));
                     return;
                   }
 
@@ -172,9 +173,9 @@ class ValidatorScreen extends BaseScreen {
                   }
 
                   PromptModal.show(
-                      title: "Name your validator",
-                      validator: (value) => formValidatorNotEmpty(value, "Validator Name"),
-                      labelText: "Validator Name",
+                      title: l10n.validatorNamePromptTitle,
+                      validator: (value) => formValidatorNotEmpty(value, l10n.validatorNameLabel),
+                      labelText: l10n.validatorNameLabel,
                       lines: 1,
                       onValidSubmission: (name) async {
                         ref.read(globalLoadingProvider.notifier).start();
@@ -183,7 +184,7 @@ class ValidatorScreen extends BaseScreen {
                         ref.read(globalLoadingProvider.notifier).complete();
 
                         if (success) {
-                          Toast.message("$name [${currentWallet.label}] is now validating.");
+                          Toast.message(l10n.validatorNowValidating(name, currentWallet.label));
                           ref.read(validatingStatusProvider.notifier).check(false);
                           await ref.read(sessionProvider.notifier).mainLoop(false);
                         } else {
@@ -204,12 +205,12 @@ class ValidatorScreen extends BaseScreen {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "${currentWallet.labelWithoutTruncation} is NOT Validating...",
+              l10n.validatorNotValidating(currentWallet.labelWithoutTruncation),
               style: Theme.of(context).textTheme.headlineSmall,
             ),
             const SizedBox(height: 8),
             AppButton(
-              label: "Check Again",
+              label: l10n.validatorCheckAgain,
               onPressed: () {
                 ref.read(validatingStatusProvider.notifier).check();
               },
@@ -237,7 +238,7 @@ class ValidatorScreen extends BaseScreen {
                     ),
                   ),
                   Text(
-                    "Validating...",
+                    l10n.validatorActive,
                     style: TextStyle(
                       fontSize: 24,
                       color: AppColors.getBlue(),
@@ -248,7 +249,7 @@ class ValidatorScreen extends BaseScreen {
                 ],
               ),
               Text(
-                "Address: ${currentWallet.labelWithoutTruncation}",
+                l10n.validatorAddressLabel(currentWallet.labelWithoutTruncation),
                 style: TextStyle(
                   color: Colors.white.withOpacity(0.8),
                   fontSize: 12,
@@ -284,31 +285,31 @@ class ValidatorScreen extends BaseScreen {
                               ),
                             ),
                             Tooltip(
-                              message: "Rename Validator",
+                              message: l10n.validatorRenameTooltip,
                               child: IconButton(
                                 onPressed: () async {
                                   final name = await PromptModal.show(
-                                    title: "Validator Name",
-                                    validator: (val) => formValidatorNotEmpty(val, "Name"),
-                                    labelText: "New Validator Name",
+                                    title: l10n.validatorNamePromptTitleAlt,
+                                    validator: (val) => formValidatorNotEmpty(val, l10n.validatorNameField),
+                                    labelText: l10n.validatorNewNameLabel,
                                     lines: 1,
                                   );
 
                                   if (name != null && name.isNotEmpty) {
                                     final success = await BridgeService().renameValidator(name.trim().replaceAll("\n", ""));
                                     if (success) {
-                                      Toast.message("Validator name changed to $name.");
+                                      Toast.message(l10n.validatorRenamedToast(name));
 
                                       final confirmed = await ConfirmDialog.show(
-                                        title: "Restart CLI",
-                                        body: "In order for the name to be reflected,\na restart of the CLI is required.\n\nRestart now?",
-                                        confirmText: "Restart",
-                                        cancelText: "Cancel",
+                                        title: l10n.validatorRestartCliTitle,
+                                        body: l10n.validatorRestartCliBody,
+                                        confirmText: l10n.validatorRestartCliConfirm,
+                                        cancelText: l10n.actionCancel,
                                       );
 
                                       if (confirmed == true) {
                                         ref.read(sessionProvider.notifier).restartCli();
-                                        Toast.message("Restarting CLI...");
+                                        Toast.message(l10n.validatorRestartingToast);
                                       }
                                     } else {
                                       Toast.error();
@@ -332,15 +333,15 @@ class ValidatorScreen extends BaseScreen {
                 height: 8,
               ),
               AppButton(
-                label: "Stop Validating",
+                label: l10n.validatorStopValidating,
                 icon: Icons.stop,
                 variant: AppColorVariant.Danger,
                 onPressed: () async {
                   final confirmed = await ConfirmDialog.show(
-                    title: "Stop Validating",
-                    body: "Are you sure you want to stop validating?",
-                    confirmText: "Stop",
-                    cancelText: "Cancel",
+                    title: l10n.validatorStopValidating,
+                    body: l10n.validatorStopValidatingBody,
+                    confirmText: l10n.validatorStopLabel,
+                    cancelText: l10n.actionCancel,
                     destructive: true,
                   );
 
@@ -352,7 +353,7 @@ class ValidatorScreen extends BaseScreen {
                   final success = await ref.read(currentValidatorProvider.notifier).stopValidating();
 
                   if (success) {
-                    Toast.message("${currentWallet.label} has stopped validating.");
+                    Toast.message(l10n.validatorStoppedToast(currentWallet.label));
                     ref.read(validatingStatusProvider.notifier).check(false);
                     await ref.read(sessionProvider.notifier).mainLoop(false);
                   } else {
@@ -371,7 +372,7 @@ class ValidatorScreen extends BaseScreen {
         Padding(
           padding: const EdgeInsets.only(bottom: 8.0),
           child: Text(
-            "Blocks Validated (${ref.watch(validatedBlocksProvider).length})",
+            l10n.validatorBlocksValidatedHeading(ref.watch(validatedBlocksProvider).length.toString()),
             style: TextStyle(
               fontSize: 16,
               decoration: TextDecoration.underline,
@@ -396,7 +397,7 @@ class ValidatedBlocksList extends BaseComponent {
     final blocks = ref.watch(validatedBlocksProvider);
 
     if (blocks.isEmpty) {
-      return Text("No Validated Blocks");
+      return Text(AppLocalizations.of(context).validatorNoValidatedBlocks);
     }
     return SizedBox(
       height: 212,
@@ -443,7 +444,7 @@ class _BlockPreview extends StatelessWidget {
           if (blockInfo != null) {
             SpecialDialog<void>().show(
               context,
-              title: "Block ${block.height}",
+              title: AppLocalizations.of(context).validatorBlockTitle(block.height.toString()),
               maxWidth: 320,
               content: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),

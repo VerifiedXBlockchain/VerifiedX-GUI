@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../models/beacon.dart';
 import '../providers/beacon_list_provider.dart';
@@ -15,27 +16,29 @@ class BeaconContextMenu extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return PopupMenuButton(
       padding: EdgeInsets.zero,
       icon: const Icon(Icons.more_vert),
       itemBuilder: (context) {
         return [
           PopupMenuItem(
-            child: const Text("Remove"),
+            child: Text(l10n.beaconRemove),
             onTap: () async {
               final isSelf = beacon.selfBeacon;
 
               final message = isSelf
-                  ? "Are you sure you want to remove this beacon?\n\nA CLI restart is required."
-                  : "Are you sure you want to remove this beacon?";
+                  ? l10n.beaconRemoveSelfBody
+                  : l10n.beaconRemoveBody;
 
-              final confirmText = isSelf ? "Remove & Restart CLI" : "Remove";
+              final confirmText =
+                  isSelf ? l10n.beaconRemoveAndRestart : l10n.beaconRemove;
 
               final confirmed = await ConfirmDialog.show(
-                title: "Remove Beacon",
+                title: l10n.beaconRemoveTitle,
                 body: message,
                 confirmText: confirmText,
-                cancelText: "Cancel",
+                cancelText: l10n.beaconCancel,
                 destructive: true,
               );
 

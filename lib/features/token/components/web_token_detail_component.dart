@@ -7,6 +7,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'web_token_balance_list_title.dart';
 import 'web_token_management_actions.dart';
 import '../../../utils/toast.dart';
@@ -98,6 +99,7 @@ class _Balances extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final balances = tokenDetail.holders.entries.where((e) => myAddresses.contains(e.key) && e.value > 0).toList();
 
     return Column(
@@ -106,14 +108,14 @@ class _Balances extends BaseComponent {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
-            "Token Balances",
+            l10n.tkbTokenBalances,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
         ),
         if (balances.isEmpty)
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text("None of your addresses are holding ${tokenDetail.token.ticker}"),
+            child: Text(l10n.tkbNoAddressesHolding(tokenDetail.token.ticker)),
           ),
         ListView.builder(
           shrinkWrap: true,
@@ -145,6 +147,7 @@ class _TokenInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final isOwnedByRA = token.ownerAddress.startsWith("xRBX");
 
     return AppCard(
@@ -160,31 +163,31 @@ class _TokenInfo extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TokenDetailRow(
-                      label: "Smart Contract UID",
+                      label: l10n.tokenScUidLabel,
                       value: token.smartContractId,
                       copyable: true,
                     ),
 
                     TokenDetailRow(
-                      label: "Token Name",
+                      label: l10n.tokenNameLabel,
                       value: token.name,
                       copyable: true,
                     ),
                     if (!token.canMint)
                       TokenDetailRow(
-                        label: 'Fixed Supply',
+                        label: l10n.tkbFixedSupply,
                         value: "${token.initialSupply}",
                       ),
                     // if (token.currentSupply > 0)
 
                     TokenDetailRow(
-                      label: "Lifetime Cap",
-                      value: token.canMint ? 'Infinite' : "${token.initialSupply}",
+                      label: l10n.tokenLifetimeCapLabel,
+                      value: token.canMint ? l10n.tkbInfinite : "${token.initialSupply}",
                     ),
 
                     TokenDetailRow(
-                      label: "Mintable",
-                      value: token.canMint ? "YES" : "NO",
+                      label: l10n.tokenMintableLabel,
+                      value: token.canMint ? l10n.tkbYesUpper : l10n.tkbNoUpper,
                       dividerBelow: false,
                     ),
                   ],
@@ -195,29 +198,29 @@ class _TokenInfo extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TokenDetailRow(
-                      label: "Owner",
+                      label: l10n.tokenOwnerLabel,
                       value: token.ownerAddress,
                       copyable: true,
                       showReserveColor: isOwnedByRA,
                     ),
                     TokenDetailRow(
-                      label: "Token Ticker",
+                      label: l10n.tokenTickerLabel,
                       value: token.ticker,
                       copyable: true,
                     ),
-                    TokenDetailRow(label: "Circulating Supply", value: "${token.circulatingSupply}"),
+                    TokenDetailRow(label: l10n.tokenCirculatingSupplyLabel, value: "${token.circulatingSupply}"),
                     if (!token.canMint && token.circulatingSupply < token.initialSupply)
                       TokenDetailRow(
-                        label: "Burned",
+                        label: l10n.tokenBurnedLabel,
                         value: "${token.initialSupply - token.circulatingSupply}",
                       ),
                     TokenDetailRow(
-                      label: "Burnable",
-                      value: token.canBurn ? "YES" : "NO",
+                      label: l10n.tokenBurnableLabel,
+                      value: token.canBurn ? l10n.tkbYesUpper : l10n.tkbNoUpper,
                     ),
                     TokenDetailRow(
-                      label: "Voting",
-                      value: token.canVote ? "YES" : "NO",
+                      label: l10n.tokenVoting,
+                      value: token.canVote ? l10n.tkbYesUpper : l10n.tkbNoUpper,
                       dividerBelow: false,
                     ),
                   ],
@@ -233,7 +236,7 @@ class _TokenInfo extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Text(
-                "Description:",
+                l10n.tkbDescriptionColon,
                 style: TextStyle(fontSize: 12, color: Colors.white70, fontWeight: FontWeight.w100),
               ),
             ),

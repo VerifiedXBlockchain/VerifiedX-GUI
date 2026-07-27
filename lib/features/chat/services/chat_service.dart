@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import '../models/chat_message.dart';
 import '../models/chat_payload.dart';
 import '../models/chat_thread.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/services/base_service.dart';
@@ -88,7 +89,7 @@ class ChatService extends BaseService {
         }
       }
 
-      Toast.error(response['data']['Message'] ?? "A problem occurred");
+      Toast.error(response['data']['Message'] ?? globalL10n.mktProblemOccurredToast);
 
       return false;
     } catch (e) {
@@ -107,7 +108,7 @@ class ChatService extends BaseService {
         }
       }
 
-      Toast.error(response['data']['Message'] ?? "A problem occurred");
+      Toast.error(response['data']['Message'] ?? globalL10n.mktProblemOccurredToast);
 
       return false;
     } catch (e) {

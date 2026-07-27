@@ -23,6 +23,7 @@ import '../../nft/services/nft_service.dart';
 import '../../token/providers/token_list_provider.dart';
 
 import '../../../core/theme/pretty_icons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'home_buttons/verify_nft_ownership_button.dart';
 
 class CommonActions extends BaseComponent {
@@ -66,7 +67,7 @@ class CommonActions extends BaseComponent {
               //   color: AppColors.getWhite(ColorShade.s200),
               // ),
               AppVerticalIconButton(
-                label: "Send\nCoin",
+                label: AppLocalizations.of(context).homeActionSendCoin,
                 prettyIconType: PrettyIconType.send,
                 icon: Icons.arrow_upward,
                 onPressed: () {
@@ -75,7 +76,7 @@ class CommonActions extends BaseComponent {
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
-                label: "Receive\nCoin",
+                label: AppLocalizations.of(context).homeActionReceiveCoin,
                 icon: Icons.arrow_downward,
                 prettyIconType: PrettyIconType.receive,
                 onPressed: () {
@@ -84,7 +85,7 @@ class CommonActions extends BaseComponent {
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
-                label: "TXs",
+                label: AppLocalizations.of(context).homeActionTxs,
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {
@@ -94,12 +95,12 @@ class CommonActions extends BaseComponent {
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
-                label: "Tokens",
+                label: AppLocalizations.of(context).homeActionTokens,
                 prettyIconType: PrettyIconType.fungibleToken,
                 icon: Icons.toll,
                 onPressed: () async {
                   if (ref.read(sessionProvider).currentWallet == null) {
-                    Toast.error("No Account Selected");
+                    Toast.error(AppLocalizations.of(context).messageNoAccountSelected);
                     return;
                   }
 
@@ -125,7 +126,7 @@ class CommonActions extends BaseComponent {
               //   },
               // ),
               AppVerticalIconButton(
-                label: "Tutorials",
+                label: AppLocalizations.of(context).homeActionTutorials,
                 prettyIconType: PrettyIconType.custom,
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
@@ -136,22 +137,21 @@ class CommonActions extends BaseComponent {
                 color: AppColors.getWhite(ColorShade.s200),
               ),
               AppVerticalIconButton(
-                label: "Verify\nOwner",
+                label: AppLocalizations.of(context).homeActionVerifyOwner,
                 prettyIconType: PrettyIconType.validator,
                 icon: Icons.check,
                 onPressed: () async {
                   final sig = await PromptModal.show(
-                    title: "Validate Ownership",
-                    body:
-                        "Paste in the signature provided by the owner to validate its ownership.",
-                    validator: (val) => formValidatorNotEmpty(val, "Signature"),
-                    labelText: "Signature",
+                    title: AppLocalizations.of(context).homeValidateOwnership,
+                    body: AppLocalizations.of(context).homeValidateOwnershipBody,
+                    validator: (val) => formValidatorNotEmpty(val, AppLocalizations.of(context).homeSignatureLabel),
+                    labelText: AppLocalizations.of(context).homeSignatureLabel,
                   );
 
                   if (sig != null && sig.isNotEmpty) {
                     final components = sig.split("<>");
                     if (components.length != 4) {
-                      Toast.error("Invalid ownership verification signature");
+                      Toast.error(AppLocalizations.of(context).homeInvalidSignature);
                       return;
                     }
 
@@ -167,13 +167,13 @@ class CommonActions extends BaseComponent {
                         ? Theme.of(context).colorScheme.success
                         : Theme.of(context).colorScheme.danger;
                     final iconData = verified ? Icons.check : Icons.close;
-                    final title = verified ? "Verified" : "Not Verified";
+                    final title = verified ? AppLocalizations.of(context).homeVerified : AppLocalizations.of(context).homeNotVerified;
                     final subtitle = verified
-                        ? "Ownership Verified"
-                        : "Ownership NOT Verified";
+                        ? AppLocalizations.of(context).homeOwnershipVerified
+                        : AppLocalizations.of(context).homeOwnershipNotVerified;
                     final body = verified
-                        ? "$address\nOWNS\n$scId"
-                        : "$address\ndoes NOT own\n$scId";
+                        ? "$address\n${AppLocalizations.of(context).homeOwns}\n$scId"
+                        : "$address\n${AppLocalizations.of(context).homeDoesNotOwn}\n$scId";
 
                     InfoDialog.show(
                       title: title,
@@ -188,7 +188,7 @@ class CommonActions extends BaseComponent {
               ),
 
               AppVerticalIconButton(
-                label: "Open\nExplorer",
+                label: AppLocalizations.of(context).homeActionOpenExplorer,
                 icon: Icons.open_in_browser,
                 prettyIconType: PrettyIconType.custom,
                 onPressed: () {

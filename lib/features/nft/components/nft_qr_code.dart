@@ -11,6 +11,7 @@ import '../../../core/theme/colors.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/files.dart';
 import '../../../utils/toast.dart';
 
@@ -119,7 +120,7 @@ class NftQrCode extends StatelessWidget {
                       },
                     )
                   : AppButton(
-                      label: "Save",
+                      label: AppLocalizations.of(context).nftQrSave,
                       onPressed: () async {
                         handleDownload();
                       },
@@ -128,7 +129,7 @@ class NftQrCode extends StatelessWidget {
               if (withOpen && !iconButtons)
                 AppButton(
                   icon: Icons.open_in_new,
-                  label: "Open",
+                  label: AppLocalizations.of(context).nftQrOpen,
                   onPressed: () {
                     print("OPEN: $data");
                     launchUrlString(data);
@@ -149,9 +150,9 @@ class NftQrCode extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text(
-                  "Close",
-                  style: TextStyle(color: Colors.white70),
+                child: Text(
+                  AppLocalizations.of(context).actionClose,
+                  style: const TextStyle(color: Colors.white70),
                 ))
         ],
       ),

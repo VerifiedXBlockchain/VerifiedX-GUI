@@ -22,6 +22,7 @@ import '../../nft/providers/nft_detail_provider.dart';
 import '../../nft/services/nft_service.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../generated/assets.gen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import 'package:collection/collection.dart';
 
@@ -87,9 +88,10 @@ class TokenizedBtcDetailScreen extends BaseScreen {
           child: Align(
             alignment: Alignment.centerRight,
             child: Builder(builder: (context) {
+              final l10n = AppLocalizations.of(context);
               if (nft.currentOwner != token.rbxAddress && token.myBalance == 0) {
                 return Text(
-                  "Confirming Balance...",
+                  l10n.r3fConfirmingBalance,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                   ),
@@ -98,9 +100,11 @@ class TokenizedBtcDetailScreen extends BaseScreen {
               final totalUsd = _formatUsd(token.balance, btcPrice);
               final myUsd = _formatUsd(token.myBalance, btcPrice);
               return Tooltip(
-                message: "Token Total Balance: ${token.balance} vBTC${totalUsd != null ? ' ($totalUsd USD)' : ''}",
+                message: l10n.r3fTokenTotalBalanceTooltip(token.balance.toString(),
+                    totalUsd != null ? ' ($totalUsd USD)' : ''),
                 child: Text(
-                  "My Balance: ${token.myBalance} vBTC${myUsd != null ? ' ($myUsd USD)' : ''}",
+                  l10n.r3fMyBalanceLabel(token.myBalance.toString(),
+                      myUsd != null ? ' ($myUsd USD)' : ''),
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -121,7 +125,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
 
     if (token == null) {
       return Center(
-        child: Text("Token Not Found"),
+        child: Text(AppLocalizations.of(context).btcTokenNotFoundLabel),
       );
     }
     final nft = ref.watch(nftDetailProvider(token.smartContractUid));
@@ -172,44 +176,44 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                       //   height: 8,
                       // ),
                       _DetailRow(
-                        label: "Name",
+                        label: AppLocalizations.of(context).btcDetailNameLabel,
                         value: token.tokenName,
                       ),
                       _DetailRow(
-                        label: "Description",
+                        label: AppLocalizations.of(context).btcDetailDescriptionLabel,
                         value: token.tokenDescription,
                         inExpanded: true,
                       ),
                       _DetailRow(
-                        label: "Owner",
+                        label: AppLocalizations.of(context).btcDetailOwnerLabel,
                         value: token.rbxAddress,
                         withCopy: true,
                       ),
                       if (scOwner != token.rbxAddress)
                         _DetailRow(
-                          label: "Smart Contract Owner",
+                          label: AppLocalizations.of(context).btcDetailScOwnerLabel,
                           value: scOwner,
                           withCopy: true,
                         ),
                       _DetailRow(
-                        label: "BTC Deposit Address",
-                        value: token.btcAddress ?? 'Not Generated',
+                        label: AppLocalizations.of(context).btcDetailDepositAddressLabel,
+                        value: token.btcAddress ?? AppLocalizations.of(context).r3fNotGenerated,
                         withCopy: token.btcAddress != null,
                       ),
                       _DetailRow(
-                        label: "Smart Contract ID",
+                        label: AppLocalizations.of(context).btcDetailScIdLabel,
                         value: token.smartContractUid,
                         withCopy: true,
                       ),
                       _DetailRow(
-                        label: "My Balance",
+                        label: AppLocalizations.of(context).btcDetailMyBalanceLabel,
                         value: scOwner != token.rbxAddress && token.myBalance == 0
-                            ? "Confirming Balance..."
+                            ? AppLocalizations.of(context).r3fConfirmingBalance
                             : "${token.myBalance} vBTC${_formatUsd(token.myBalance, btcPrice) != null ? ' (${_formatUsd(token.myBalance, btcPrice)} USD)' : ''}",
                       ),
                       if (scOwner == token.rbxAddress)
                         _DetailRow(
-                          label: "Token Total Balance",
+                          label: AppLocalizations.of(context).btcDetailTotalBalanceLabel,
                           value: "${token.balance} vBTC${_formatUsd(token.balance, btcPrice) != null ? ' (${_formatUsd(token.balance, btcPrice)} USD)' : ''}",
                         ),
                     ],
@@ -223,7 +227,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
           ),
           if (nft.additionalAssets.isNotEmpty) ...[
             Text(
-              "Token Media",
+              AppLocalizations.of(context).r3fTokenMedia,
               style: TextStyle(
                 decoration: TextDecoration.underline,
                 fontSize: 18,
@@ -266,7 +270,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  "BTC Transactions",
+                  AppLocalizations.of(context).txAppBarBtc,
                   style: TextStyle(decoration: TextDecoration.underline, fontSize: 18, color: AppColors.getBtc()),
                 ),
                 SizedBox(
@@ -274,7 +278,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                 ),
                 if (transactions.isEmpty)
                   Text(
-                    "No BTC Transactions",
+                    AppLocalizations.of(context).r3fNoBtcTransactions,
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 SizedBox(
@@ -386,13 +390,13 @@ class _BtcTokenMedia extends BaseComponent {
 
     if (nft.additionalAssets.isEmpty) {
       return Text(
-        "This token does not contain any additional media.",
+        AppLocalizations.of(context).r3fNoAdditionalMedia,
         style: Theme.of(context).textTheme.bodySmall,
       );
     }
 
     if (ref.watch(walletListProvider).firstWhereOrNull((element) => element.address == nft.currentOwner) == null) {
-      return Text("Only the token owner can view the additional media.");
+      return Text(AppLocalizations.of(context).btcDetailOwnerOnlyMedia);
     }
 
     return Padding(
@@ -433,7 +437,7 @@ class _BtcTokenMedia extends BaseComponent {
   }
 
   Widget buildAssetsNotAvailable(NftDetailProvider _provider, [bool includeButton = true]) {
-    return Center(
+    return Builder(builder: (context) => Center(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Card(
@@ -443,20 +447,20 @@ class _BtcTokenMedia extends BaseComponent {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "NFT assets have not been transferred to the VFX Web Account.",
+                Text(
+                  AppLocalizations.of(context).r3fNftNotTransferred,
                   textAlign: TextAlign.center,
                 ),
                 if (includeButton)
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: AppButton(
-                      label: "Transfer Now",
+                      label: AppLocalizations.of(context).btcDetailTransferNow,
                       onPressed: () async {
                         final success = await _provider.transferWebIn();
 
                         if (success == true) {
-                          Toast.message("Transfer request has been broadcasted. Your assets should be available soon.");
+                          Toast.message(AppLocalizations.of(context).btcTransferNowToast);
                         }
                       },
                       variant: AppColorVariant.Success,
@@ -467,7 +471,7 @@ class _BtcTokenMedia extends BaseComponent {
           ),
         ),
       ),
-    );
+    ));
   }
 }
 
@@ -509,7 +513,7 @@ class _DetailRow extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: value));
-                  Toast.message("$label copied to clipboard");
+                  Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
                 },
                 child: Icon(
                   Icons.copy,

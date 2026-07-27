@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../dst/models/bid.dart';
 import 'bid_status_indicator.dart';
 import '../services/remote_shop_service.dart';
@@ -22,9 +23,9 @@ class BidHistoryModal extends BaseComponent {
       withClose: true,
       withDecor: false,
       children: [
-        const Text(
-          "Current Bids",
-          style: TextStyle(
+        Text(
+          AppLocalizations.of(context).r3gCurrentBids,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -47,11 +48,11 @@ class BidHistoryModal extends BaseComponent {
 
                   if (isBidder && bid.bidStatus == BidStatus.Sent) {
                     return AppButton(
-                      label: "Resend Bid",
+                      label: AppLocalizations.of(context).shopResendBid,
                       onPressed: () async {
                         final success = await RemoteShopService().resendBid(bid.id);
                         if (success) {
-                          Toast.message("Bid Resent!");
+                          Toast.message(AppLocalizations.of(context).r3gBidResent);
                           Navigator.of(context).pop();
                         }
                       },

@@ -4,6 +4,7 @@ import '../../../core/components/buttons.dart';
 import '../../sc_property/models/sc_property.dart';
 import 'sc_creator/common/help_button.dart';
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardPropertyTypeDialog extends BaseComponent {
   const ScWizardPropertyTypeDialog({
@@ -12,10 +13,11 @@ class ScWizardPropertyTypeDialog extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [const Text("Property Type"), const HelpButton(HelpType.propertyTyes)],
+        children: [Text(l10n.scwPropertyType), const HelpButton(HelpType.propertyTyes)],
       ),
       actionsAlignment: MainAxisAlignment.start,
       content: SizedBox(
@@ -26,19 +28,19 @@ class ScWizardPropertyTypeDialog extends BaseComponent {
           runSpacing: 8.0,
           children: [
             AppButton(
-              label: "Text",
+              label: l10n.scwPropertyTypeText,
               onPressed: () {
                 Navigator.of(context).pop(ScPropertyType.text);
               },
             ),
             AppButton(
-              label: "Number",
+              label: l10n.scwPropertyTypeNumber,
               onPressed: () {
                 Navigator.of(context).pop(ScPropertyType.number);
               },
             ),
             AppButton(
-              label: "Color",
+              label: l10n.scwPropertyTypeColor,
               onPressed: () {
                 Navigator.of(context).pop(ScPropertyType.color);
               },
@@ -51,9 +53,9 @@ class ScWizardPropertyTypeDialog extends BaseComponent {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text(
-            "Cancel",
-            style: TextStyle(
+          child: Text(
+            l10n.actionCancel,
+            style: const TextStyle(
               color: Colors.white54,
             ),
           ),

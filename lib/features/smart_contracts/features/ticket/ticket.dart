@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
+import '../../../../l10n/l10n_helper.dart';
 
 part 'ticket.freezed.dart';
 part 'ticket.g.dart';
@@ -80,9 +81,9 @@ abstract class Ticket with _$Ticket {
   static typeToString(TicketType type) {
     switch (type) {
       case TicketType.physicalEvent:
-        return "Physical Event";
+        return globalL10n.r3aPhysicalEvent;
       case TicketType.onlineEvent:
-        return "Online Event";
+        return globalL10n.r3aOnlineEvent;
     }
   }
 

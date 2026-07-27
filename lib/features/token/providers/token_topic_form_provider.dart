@@ -6,6 +6,7 @@ import 'web_token_actions_manager.dart';
 import '../services/token_service.dart';
 
 import '../../../core/models/value_label.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/validation.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../utils.dart';
@@ -41,9 +42,9 @@ class TokenTopicFormProvider extends StateNotifier<NewTokenTopic> {
     descriptionController.text = topic.description;
   }
 
-  String? nameValidator(String? val) => formValidatorNotEmpty(val, "Name");
-  String? descriptionValidator(String? val) => formValidatorNotEmpty(val, "Description");
-  String? minimumVotesValidator(String? val) => formValidatorNumber(val, "Minimum Token Requirement");
+  String? nameValidator(String? val) => formValidatorNotEmpty(val, globalL10n.walletNameLabel);
+  String? descriptionValidator(String? val) => formValidatorNotEmpty(val, globalL10n.btcDetailDescriptionLabel);
+  String? minimumVotesValidator(String? val) => formValidatorNumber(val, globalL10n.r3hLabelMinTokenRequirement);
 
   List<ValueLabel> votingDaysOptions(BuildContext context) {
     return tokenVotingDaysValueLabels(context);

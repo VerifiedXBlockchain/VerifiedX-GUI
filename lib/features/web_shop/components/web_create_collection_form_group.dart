@@ -6,6 +6,7 @@ import '../providers/web_collection_form_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../utils/validation.dart';
 import '../../smart_contracts/components/sc_creator/common/form_group_container.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebCreateCollectionFormGroup extends BaseComponent {
   const WebCreateCollectionFormGroup({Key? key}) : super(key: key);
@@ -55,6 +56,7 @@ class _IsLiveCheckbox extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webCollectionFormProvider.notifier);
     final model = ref.watch(webCollectionFormProvider);
     return Row(
@@ -70,7 +72,7 @@ class _IsLiveCheckbox extends BaseComponent {
           onTap: () {
             provider.updateIsLive(!model.isLive);
           },
-          child: const Text("Publish Live"),
+          child: Text(l10n.mktPublishLive),
         ),
       ],
     );
@@ -84,6 +86,7 @@ class _CollectionName extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webCollectionFormProvider.notifier);
     return TextFormField(
       controller: provider.nameController,
@@ -91,9 +94,9 @@ class _CollectionName extends BaseComponent {
       onChanged: provider.updateName,
       validator: formValidatorDecName,
       decoration: InputDecoration(
-        label: const Text(
-          "Collection Name",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktCollectionNameLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -107,6 +110,7 @@ class _CollectionDescription extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webCollectionFormProvider.notifier);
     return TextFormField(
       controller: provider.descriptionController,
@@ -115,9 +119,9 @@ class _CollectionDescription extends BaseComponent {
       validator: formValidatorDecDescription,
       maxLines: 3,
       decoration: InputDecoration(
-        label: const Text(
-          "Collection Description",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktCollectionDescriptionLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );

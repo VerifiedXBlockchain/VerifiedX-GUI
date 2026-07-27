@@ -4,6 +4,7 @@ import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../bridge/models/log_entry.dart';
 import '../../../bridge/providers/log_provider.dart';
 import '../../../validator/providers/validator_list_provider.dart';
@@ -18,7 +19,7 @@ class PrintValidatorsButton extends BaseComponent {
     final cliStarted = ref.watch(sessionProvider.select((v) => v.cliStarted));
 
     return AppButton(
-      label: "Print Validators",
+      label: AppLocalizations.of(context).r3ePrintValidators,
       icon: Icons.wifi,
       onPressed: !cliStarted
           ? null

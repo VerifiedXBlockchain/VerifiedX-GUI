@@ -5,6 +5,7 @@ import '../../../../utils/generators.dart';
 import '../../../../utils/validation.dart';
 import '../../models/fractional.dart';
 import '../../providers/create_smart_contract_provider.dart';
+import '../../../../l10n/l10n_helper.dart';
 
 class FractionalFormProvider extends StateNotifier<Fractional> {
   final Ref ref;
@@ -20,8 +21,8 @@ class FractionalFormProvider extends StateNotifier<Fractional> {
     votingDescriptionController = TextEditingController(text: model.votingDescription);
   }
 
-  String? creatorRetainsValidator(String? value) => formValidatorNumber(value, "Creator Retained Ownership");
-  String? fractionalInterestValidator(String? value) => formValidatorNumber(value, "Fractional Interest");
+  String? creatorRetainsValidator(String? value) => formValidatorNumber(value, globalL10n.r3aCreatorRetainedOwnership);
+  String? fractionalInterestValidator(String? value) => formValidatorNumber(value, globalL10n.scwFractionalInterest);
 
   void setFractional(Fractional fractional) {
     state = fractional;

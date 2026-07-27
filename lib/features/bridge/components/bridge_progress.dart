@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../models/bridge_lock_record.dart';
 import '../providers/bridge_operation_provider.dart';
@@ -124,17 +125,17 @@ class _ReconnectingBanner extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const [
-          SizedBox(
+        children: [
+          const SizedBox(
             width: 14,
             height: 14,
             child: CircularProgressIndicator(strokeWidth: 2),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
-              "Reconnecting… the bridge service didn't respond to recent status checks. We'll keep retrying.",
-              style: TextStyle(color: Colors.white70, fontSize: 12),
+              AppLocalizations.of(context).prvBridgeReconnecting,
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
             ),
           ),
         ],
@@ -161,15 +162,13 @@ class _StalledWarning extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Icon(Icons.access_time, color: Colors.amberAccent, size: 16),
-          SizedBox(width: 8),
+        children: [
+          const Icon(Icons.access_time, color: Colors.amberAccent, size: 16),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
-              "Taking longer than expected. Validator signing can occasionally lag — "
-              "we'll keep watching. You can safely close this dialog; "
-              "Bridge History will surface the final result.",
-              style: TextStyle(color: Colors.amberAccent, fontSize: 12),
+              AppLocalizations.of(context).prvBridgeStalled,
+              style: const TextStyle(color: Colors.amberAccent, fontSize: 12),
             ),
           ),
         ],
@@ -184,16 +183,17 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "${formatVbtc(record.amount)} vBTC → ${_shortDest(record.evmDestination)}",
+          l10n.prvBridgeAmountToDest(formatVbtc(record.amount), _shortDest(record.evmDestination)),
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 2),
         Text(
-          "Lock ID: ${record.lockId}",
+          l10n.prvBridgeLockId(record.lockId),
           style: const TextStyle(color: Colors.white38, fontSize: 11, fontFamily: 'monospace'),
         ),
       ],
@@ -273,14 +273,15 @@ class _Stepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         _StageRow(
           state: _stage(0),
-          title: "VFX lock submitted",
+          title: l10n.prvBridgeStageLockSubmitted,
           subtitle: (record.vfxLockTxHash ?? '').isNotEmpty
               ? _TxRow(
-                  label: "Tx",
+                  label: l10n.prvBridgeTxLabel,
                   hash: record.vfxLockTxHash!,
                   explorerUrl: BridgeExplorerLinks.vfxTx(record.vfxLockTxHash!),
                 )
@@ -288,10 +289,10 @@ class _Stepper extends StatelessWidget {
         ),
         _StageRow(
           state: _stage(1),
-          title: "Confirmed on VFX",
+          title: l10n.prvBridgeStageConfirmed,
           subtitle: record.vfxLockBlockHeight > 0
               ? Text(
-                  "Block height: ${record.vfxLockBlockHeight}",
+                  l10n.prvBridgeBlockHeight(record.vfxLockBlockHeight.toString()),
                   style: const TextStyle(color: Colors.white54, fontSize: 11),
                 )
               : null,
@@ -299,21 +300,21 @@ class _Stepper extends StatelessWidget {
         _StageRow(
           state: _stage(2),
           title: _stage(2) == _StageState.inProgress
-              ? "Collecting validator signatures…"
-              : "Validator signatures collected",
+              ? l10n.prvBridgeStageCollectingSigs
+              : l10n.prvBridgeStageSigsCollected,
           subtitle: record.requiredSignatures > 0
               ? Text(
-                  "${record.signaturesCollected} / ${record.requiredSignatures} signatures collected",
+                  l10n.prvBridgeSigsProgress(record.signaturesCollected, record.requiredSignatures),
                   style: const TextStyle(color: Colors.white54, fontSize: 11),
                 )
               : null,
         ),
         _StageRow(
           state: _stage(3),
-          title: "Submitting mint on Base",
+          title: l10n.prvBridgeStageSubmittingMint,
           subtitle: (record.baseTxHash ?? '').isNotEmpty
               ? _TxRow(
-                  label: "Tx",
+                  label: l10n.prvBridgeTxLabel,
                   hash: record.baseTxHash!,
                   explorerUrl: BridgeExplorerLinks.baseTx(record.baseTxHash!),
                 )
@@ -321,7 +322,7 @@ class _Stepper extends StatelessWidget {
         ),
         _StageRow(
           state: _stage(4),
-          title: "Minted on Base",
+          title: l10n.prvBridgeStageMinted,
         ),
         if (record.isFailed) ...[
           const SizedBox(height: 12),
@@ -410,6 +411,7 @@ class _TxRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     // Use baseline alignment so the default-font label and the monospace hash
     // share the same text baseline instead of floating at slightly different
     // vertical positions (monospace fonts have different x-height metrics).
@@ -426,7 +428,7 @@ class _TxRow extends StatelessWidget {
         InkWell(
           onTap: () async {
             await Clipboard.setData(ClipboardData(text: hash));
-            Toast.message("Copied to clipboard");
+            Toast.message(l10n.messageCopiedToClipboard);
           },
           child: const Icon(Icons.copy, size: 12, color: Colors.white54),
         ),
@@ -460,7 +462,7 @@ class _FailureBox extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              record.errorMessage ?? "Bridge failed.",
+              record.errorMessage ?? AppLocalizations.of(context).prvBridgeFailedFallback,
               style: const TextStyle(color: Colors.redAccent, fontSize: 12),
             ),
           ),
@@ -484,13 +486,13 @@ class _SafeToCloseNote extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Icon(Icons.info_outline, size: 16, color: Colors.white54),
-          SizedBox(width: 8),
+        children: [
+          const Icon(Icons.info_outline, size: 16, color: Colors.white54),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
-              "Safe to close this dialog — your bridge will continue in the background. Track progress in Bridge History.",
-              style: TextStyle(color: Colors.white70, fontSize: 12),
+              AppLocalizations.of(context).prvBridgeSafeToClose,
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
             ),
           ),
         ],
@@ -508,10 +510,10 @@ class _ProgressLoading extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 32),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
-          SizedBox(width: 28, height: 28, child: CircularProgressIndicator(strokeWidth: 2)),
-          SizedBox(height: 16),
-          Text("Loading bridge status…", style: TextStyle(color: Colors.white70)),
+        children: [
+          const SizedBox(width: 28, height: 28, child: CircularProgressIndicator(strokeWidth: 2)),
+          const SizedBox(height: 16),
+          Text(AppLocalizations.of(context).prvBridgeLoadingStatus, style: const TextStyle(color: Colors.white70)),
         ],
       ),
     );

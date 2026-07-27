@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../transactions/models/transaction_notification.dart';
 import '../../transactions/providers/transaction_notification_provider.dart';
 import '../components/bridge_format.dart';
@@ -136,15 +137,15 @@ class BridgeOperationNotifier extends StateNotifier<BridgeLockRecord?> {
     final notification = record.isSuccessful
         ? TransactionNotification(
             identifier: "bridge_${record.lockId}_minted",
-            title: "Bridge complete",
-            body: "${formatVbtc(record.amount)} vBTC.b minted on Base.",
+            title: globalL10n.prvBridgeCompleteTitle,
+            body: globalL10n.prvBridgeMintedBody(formatVbtc(record.amount)),
             icon: Icons.check_circle,
             color: AppColorVariant.Success,
           )
         : TransactionNotification(
             identifier: "bridge_${record.lockId}_failed",
-            title: "Bridge failed",
-            body: record.errorMessage ?? "Open Bridge History for details.",
+            title: globalL10n.prvBridgeFailedTitle,
+            body: record.errorMessage ?? globalL10n.prvBridgeFailedBodyFallback,
             icon: Icons.error_outline,
             color: AppColorVariant.Danger,
           );

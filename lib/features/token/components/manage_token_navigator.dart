@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/token_list_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ManageTokenNavigator extends BaseComponent {
   const ManageTokenNavigator({
@@ -39,7 +40,7 @@ class ManageTokenNavigator extends BaseComponent {
             },
             style: TextStyle(color: _model.search == _model.currentSearch ? Colors.white : Colors.white70),
             decoration: InputDecoration(
-              hintText: "Search...",
+              hintText: AppLocalizations.of(context).tokenSearchHint,
               prefixIcon: const Icon(
                 Icons.search,
                 color: Colors.white,
@@ -78,7 +79,7 @@ class ManageTokenNavigator extends BaseComponent {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              label: "Prev Page",
+              label: AppLocalizations.of(context).tokenPrevPage,
               onPressed: hasPrevPage
                   ? () {
                       ref.read(tokenListProvider.notifier).load(_model.data.page - 1);
@@ -89,7 +90,7 @@ class ManageTokenNavigator extends BaseComponent {
               width: 8,
             ),
             AppButton(
-              label: "Next Page",
+              label: AppLocalizations.of(context).tokenNextPage,
               onPressed: hasNextPage
                   ? () {
                       ref.read(tokenListProvider.notifier).load(_model.data.page + 1);

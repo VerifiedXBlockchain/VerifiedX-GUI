@@ -11,6 +11,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/components/back_to_home_button.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/dialogs.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../utils/toast.dart';
@@ -28,16 +29,16 @@ class ReceiveScreen extends BaseScreen {
     final isBtc = ref.watch(sessionProvider.select((v) => v.btcSelected));
 
     return AppBar(
-      title: isBtc ? Text("Receive BTC") : Text("Receive VFX"),
+      title: Text(AppLocalizations.of(context).receiveAppBarTitle(isBtc ? 'BTC' : 'VFX')),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // leading: BackToHomeButton(),
     );
   }
 
-  Future<void> _handleCopyAddress(String address) async {
+  Future<void> _handleCopyAddress(BuildContext context, String address) async {
     await Clipboard.setData(ClipboardData(text: address));
-    Toast.message("Address copied to clipboard");
+    Toast.message(AppLocalizations.of(context).messageAddressCopied);
   }
 
   @override
@@ -48,7 +49,7 @@ class ReceiveScreen extends BaseScreen {
     final btcAccount = session.btcSelected ? session.currentBtcAccount : null;
 
     if (currentWallet == null && btcAccount == null) {
-      return const InvalidWallet(message: "No account selected");
+      return InvalidWallet(message: AppLocalizations.of(context).messageNoAccountSelected);
     }
 
     return Column(
@@ -69,7 +70,7 @@ class ReceiveScreen extends BaseScreen {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: AppBadge(
-                        label: 'Not Activated',
+                        label: AppLocalizations.of(context).sendBadgeNotActivated,
                         variant: AppColorVariant.Danger,
                       ),
                     ),
@@ -81,7 +82,7 @@ class ReceiveScreen extends BaseScreen {
                         ListTile(
                           leading: const Icon(Icons.account_balance_wallet),
                           subtitle: Text(
-                            "Your Selected VFX${currentWallet.isReserved ? ' Vault Account' : ''} Address",
+                            AppLocalizations.of(context).receiveSelectedVfxAddress(currentWallet.isReserved ? ' Vault Account' : ''),
                             style: TextStyle(
                               color: currentWallet.isReserved
                                   ? AppColors.getReserve()
@@ -109,10 +110,10 @@ class ReceiveScreen extends BaseScreen {
                                   if (currentWallet.isReserved &&
                                       !currentWallet.isNetworkProtected) {
                                     Toast.error(
-                                        "This Vault Account has not been activated yet.");
+                                        AppLocalizations.of(context).receiveVaultNotActivatedToast);
                                     return;
                                   }
-                                  _handleCopyAddress(currentWallet.address);
+                                  _handleCopyAddress(context, currentWallet.address);
                                 },
                               ),
                             ],
@@ -126,21 +127,21 @@ class ReceiveScreen extends BaseScreen {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             AppVerticalIconButton(
-                              label: "Copy\nAddress",
+                              label: AppLocalizations.of(context).receiveActionCopyAddress,
                               prettyIconType: PrettyIconType.custom,
                               icon: Icons.copy,
                               onPressed: () {
                                 if (currentWallet.isReserved &&
                                     !currentWallet.isNetworkProtected) {
                                   Toast.error(
-                                      "This Vault Account has not been activated yet.");
+                                      AppLocalizations.of(context).receiveVaultNotActivatedToast);
                                   return;
                                 }
-                                _handleCopyAddress(currentWallet.address);
+                                _handleCopyAddress(context, currentWallet.address);
                               },
                             ),
                             AppVerticalIconButton(
-                              label: "New\nAccount",
+                              label: AppLocalizations.of(context).receiveActionNewAccount,
                               prettyIconType: PrettyIconType.custom,
                               icon: Icons.add,
                               onPressed: () async {
@@ -152,7 +153,7 @@ class ReceiveScreen extends BaseScreen {
                               },
                             ),
                             AppVerticalIconButton(
-                              label: "Import\nKey",
+                              label: AppLocalizations.of(context).receiveActionImportKey,
                               prettyIconType: PrettyIconType.custom,
                               icon: Icons.upload,
                               onPressed: () async {
@@ -160,18 +161,18 @@ class ReceiveScreen extends BaseScreen {
                                   return;
 
                                 PromptModal.show(
-                                  title: "Import Wallet",
+                                  title: AppLocalizations.of(context).walletImport,
                                   validator: (String? value) =>
                                       formValidatorNotEmpty(
-                                          value, "Private Key"),
-                                  labelText: "Private Key",
+                                          value, AppLocalizations.of(context).walletPrivateKey),
+                                  labelText: AppLocalizations.of(context).walletPrivateKey,
                                   onValidSubmission: (value) async {
                                     final resync = await ConfirmDialog.show(
-                                      title: "Rescan Blocks?",
+                                      title: AppLocalizations.of(context).receiveRescanDialogTitle,
                                       body:
-                                          "Would you like to rescan the chain to include any transactions relevant to this key?",
-                                      confirmText: "Yes",
-                                      cancelText: "No",
+                                          AppLocalizations.of(context).receiveRescanDialogBody,
+                                      confirmText: AppLocalizations.of(context).actionYes,
+                                      cancelText: AppLocalizations.of(context).actionNo,
                                     );
 
                                     await ref
@@ -213,7 +214,7 @@ class ReceiveScreen extends BaseScreen {
                         ListTile(
                           leading: const Icon(Icons.account_balance_wallet),
                           subtitle: Text(
-                            "Your Selected BTC Address",
+                            AppLocalizations.of(context).receiveSelectedBtcAddress,
                             style: TextStyle(
                               color: AppColors.getBtc(),
                             ),
@@ -224,7 +225,7 @@ class ReceiveScreen extends BaseScreen {
                           trailing: IconButton(
                             icon: const Icon(Icons.copy),
                             onPressed: () async {
-                              _handleCopyAddress(btcAccount.address);
+                              _handleCopyAddress(context, btcAccount.address);
                             },
                           ),
                         ),
@@ -236,14 +237,14 @@ class ReceiveScreen extends BaseScreen {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             AppVerticalIconButton(
-                              label: "Copy\nAddress",
+                              label: AppLocalizations.of(context).receiveActionCopyAddress,
                               icon: Icons.copy,
                               onPressed: () {
-                                _handleCopyAddress(btcAccount.address);
+                                _handleCopyAddress(context, btcAccount.address);
                               },
                             ),
                             AppVerticalIconButton(
-                              label: "New\nAccount",
+                              label: AppLocalizations.of(context).receiveActionNewAccount,
                               icon: Icons.add,
                               onPressed: () async {
                                 if (!await passwordRequiredGuard(context, ref))
@@ -261,14 +262,14 @@ class ReceiveScreen extends BaseScreen {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: const Text("BTC Account Created"),
+                                      title: Text(AppLocalizations.of(context).receiveBtcAccountCreatedTitle),
                                       content: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          const Align(
+                                          Align(
                                             alignment: Alignment.centerLeft,
                                             child: Text(
-                                                "Here are your BTC account details. Please ensure to back up your private key in a safe place."),
+                                                AppLocalizations.of(context).receiveBtcAccountCreatedBody),
                                           ),
                                           ListTile(
                                             leading: const Icon(
@@ -277,7 +278,7 @@ class ReceiveScreen extends BaseScreen {
                                               initialValue: account.address,
                                               decoration: InputDecoration(
                                                   label: Text(
-                                                "Address",
+                                                AppLocalizations.of(context).labelAddress,
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .colorScheme
@@ -293,7 +294,7 @@ class ReceiveScreen extends BaseScreen {
                                             title: TextFormField(
                                               initialValue: account.privateKey,
                                               decoration: InputDecoration(
-                                                label: Text("Private Key",
+                                                label: Text(AppLocalizations.of(context).walletPrivateKey,
                                                     style: TextStyle(
                                                         color: Theme.of(context)
                                                             .colorScheme
@@ -317,7 +318,7 @@ class ReceiveScreen extends BaseScreen {
                                                         text: account
                                                             .privateKey));
                                                 Toast.message(
-                                                    "Private Key copied to clipboard");
+                                                    AppLocalizations.of(context).messagePrivateKeyCopied);
                                               },
                                             ),
                                           ),
@@ -329,7 +330,7 @@ class ReceiveScreen extends BaseScreen {
                                               Navigator.of(context).pop();
                                             },
                                             child: Text(
-                                              "Done",
+                                              AppLocalizations.of(context).actionDone,
                                               style: TextStyle(
                                                   color: Theme.of(context)
                                                       .colorScheme
@@ -342,7 +343,7 @@ class ReceiveScreen extends BaseScreen {
                               },
                             ),
                             AppVerticalIconButton(
-                              label: "Import\nKey",
+                              label: AppLocalizations.of(context).receiveActionImportKey,
                               icon: Icons.upload,
                               onPressed: () async {
                                 if (!await passwordRequiredGuard(context, ref))
@@ -354,14 +355,14 @@ class ReceiveScreen extends BaseScreen {
                                   builder: (context) {
                                     return AlertDialog(
                                       title:
-                                          const Text("Import BTC Private Key"),
+                                          Text(AppLocalizations.of(context).receiveBtcImportKeyDialogTitle),
                                       content: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          const Align(
+                                          Align(
                                             alignment: Alignment.centerLeft,
                                             child: Text(
-                                                "Paste in your BTC private key to import your account."),
+                                                AppLocalizations.of(context).receiveBtcImportKeyDialogBody),
                                           ),
                                           ListTile(
                                             leading: const Icon(Icons.security),
@@ -369,7 +370,7 @@ class ReceiveScreen extends BaseScreen {
                                               controller: privateKeyController,
                                               decoration: InputDecoration(
                                                   label: Text(
-                                                "Private Key",
+                                                AppLocalizations.of(context).walletPrivateKey,
                                                 style: TextStyle(
                                                     color: Theme.of(context)
                                                         .colorScheme
@@ -387,7 +388,7 @@ class ReceiveScreen extends BaseScreen {
                                             Navigator.of(context).pop();
                                           },
                                           child: Text(
-                                            "Cancel",
+                                            AppLocalizations.of(context).actionCancel,
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
@@ -400,7 +401,7 @@ class ReceiveScreen extends BaseScreen {
                                             ]);
                                           },
                                           child: Text(
-                                            "Import",
+                                            AppLocalizations.of(context).actionImport,
                                             style: TextStyle(
                                                 color: Theme.of(context)
                                                     .colorScheme
@@ -426,10 +427,12 @@ class ReceiveScreen extends BaseScreen {
 
                                     if (success) {
                                       if (btcAccountSyncInfo != null) {
-                                        Toast.message(
-                                            "Private Key Imported! Please wait until ${btcAccountSyncInfo.nextSyncFormatted} for the balance to sync.");
+                                        Toast.message(AppLocalizations.of(context)
+                                            .r3fPrivateKeyImportedSync(
+                                                btcAccountSyncInfo.nextSyncFormatted));
                                       } else {
-                                        Toast.message("Private Key Imported!");
+                                        Toast.message(AppLocalizations.of(context)
+                                            .walletPrivateKeyImportedToast);
                                       }
                                     } else {
                                       Toast.error();
@@ -447,7 +450,7 @@ class ReceiveScreen extends BaseScreen {
               );
             }
 
-            return const InvalidWallet(message: "No account selected");
+            return InvalidWallet(message: AppLocalizations.of(context).messageNoAccountSelected);
           },
         ),
       ],

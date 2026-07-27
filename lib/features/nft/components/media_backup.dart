@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../transactions/providers/transaction_list_provider.dart';
 import '../models/nft.dart';
@@ -60,7 +61,7 @@ class MediaBackup extends BaseComponent {
             height: 8,
           ),
           Text(
-            "Media Backup URL:",
+            "${AppLocalizations.of(context).nftMediaBackupUrl}:",
             style: Theme.of(context).textTheme.headlineSmall,
           ),
           SelectableText(backupUrl),
@@ -68,10 +69,10 @@ class MediaBackup extends BaseComponent {
             height: 6,
           ),
           AppButton(
-            label: "Copy URL",
+            label: AppLocalizations.of(context).nftCopyUrl,
             onPressed: () async {
               await Clipboard.setData(ClipboardData(text: backupUrl));
-              Toast.message("URL copied to clipboard");
+              Toast.message(AppLocalizations.of(context).nftUrlCopiedToast);
             },
             icon: Icons.copy,
           )

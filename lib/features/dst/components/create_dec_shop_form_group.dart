@@ -8,12 +8,14 @@ import '../../../utils/validation.dart';
 import '../../smart_contracts/components/sc_creator/common/form_group_container.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../providers/dec_shop_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateDecShopFormGroup extends BaseComponent {
   const CreateDecShopFormGroup({Key? key}) : super(key: key);
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(decShopFormProvider.notifier);
     final model = ref.watch(decShopFormProvider);
     return FormGroupContainer(
@@ -34,7 +36,7 @@ class CreateDecShopFormGroup extends BaseComponent {
                     if (model.id == 0)
                       Center(
                         child: Text(
-                          "Create your auction house / gallery and publish it to the network.\nThen you'll be able to create collections and add listings to them.",
+                          l10n.mktCreateAuctionHouseBody,
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -60,9 +62,9 @@ class CreateDecShopFormGroup extends BaseComponent {
                                 }
                               }
                             : null,
-                        title: Text("Owner's Address"),
+                        title: Text(l10n.mktOwnersAddressLabel),
                         subtitle: Text(model.ownerAddress == null || model.ownerAddress!.isEmpty
-                            ? "Select an address from the list to be the shop owner."
+                            ? l10n.mktSelectOwnerAddressHint
                             : model.ownerAddress!),
                         trailing: model.id == 0 ? Icon(Icons.folder_copy_outlined) : null,
                       ),
@@ -100,21 +102,22 @@ class CreateDecShopFormGroup extends BaseComponent {
   }
 
   Future<String?> chooseAddress(BuildContext context, WidgetRef ref, DecShopFormProvider formProvider) async {
+    final l10n = AppLocalizations.of(context);
     final wallets = ref.read(walletListProvider);
 
     final address = await showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Choose an address"),
+            title: Text(l10n.sendChooseAddressTitle),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(null);
                 },
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.white60),
+                child: Text(
+                  l10n.actionCancel,
+                  style: const TextStyle(color: Colors.white60),
                 ),
               )
             ],
@@ -153,15 +156,16 @@ class _DecShopName extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(decShopFormProvider.notifier);
     return TextFormField(
       controller: provider.nameController,
       onChanged: provider.updateName,
-      validator: (value) => formValidatorNotEmpty(value, "Shop Name"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.mktShopNameLabel),
       decoration: InputDecoration(
-        label: const Text(
-          "Shop Name",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktShopNameLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -175,6 +179,7 @@ class _DecUrl extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(decShopFormProvider.notifier);
     return TextFormField(
       maxLength: 62,
@@ -184,11 +189,11 @@ class _DecUrl extends BaseComponent {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp("^[A-Za-z][a-zA-Z0-9-.]{0,62}")),
       ],
-      validator: (value) => formValidatorNotEmpty(value, "Shop Identifier"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.mktShopIdentifierLabel),
       decoration: InputDecoration(
-        label: const Text(
-          "Shop Identifier",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktShopIdentifierLabel,
+          style: const TextStyle(color: Colors.white),
         ),
         prefixText: "vfx://",
         hintText: "MyShop",
@@ -204,16 +209,17 @@ class _DecShopDescription extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(decShopFormProvider.notifier);
     return TextFormField(
       controller: provider.descriptionController,
       onChanged: provider.updateDescription,
-      validator: (value) => formValidatorNotEmpty(value, "Shop Description"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.mktShopDescriptionLabel),
       maxLines: 3,
       decoration: InputDecoration(
-        label: const Text(
-          "Shop Description",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktShopDescriptionLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );

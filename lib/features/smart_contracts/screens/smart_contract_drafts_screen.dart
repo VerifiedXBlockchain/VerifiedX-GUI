@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/create_smart_contract_provider.dart';
 import '../providers/draft_smart_contracts_provider.dart';
 import '../providers/my_smart_contracts_provider.dart';
@@ -12,7 +13,7 @@ class SmartContractDraftsScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("My Smart Contracts"),
+      title: Text(AppLocalizations.of(context).scMyTitle),
       actions: [
         IconButton(
             onPressed: () {
@@ -29,8 +30,8 @@ class SmartContractDraftsScreen extends BaseScreen {
     final _model = ref.watch(draftsSmartContractProvider);
 
     if (_model.isEmpty) {
-      return const Center(
-        child: Text("No Smart Contracts Drafts Found"),
+      return Center(
+        child: Text(AppLocalizations.of(context).scNoDrafts),
       );
     }
     return ListView.builder(
