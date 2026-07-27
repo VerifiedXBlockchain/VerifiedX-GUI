@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/theme/components.dart';
 
@@ -28,8 +29,8 @@ class PrimaryAssetFormGroup extends BaseComponent {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 16.0),
-              child: const FormGroupHeader(
-                "Asset",
+              child: FormGroupHeader(
+                AppLocalizations.of(context).scwAsset,
                 helpType: HelpType.primaryAsset,
               ),
             ),
@@ -40,7 +41,7 @@ class PrimaryAssetFormGroup extends BaseComponent {
               readOnly: _model.isCompiled,
               asset: _model.primaryAsset,
               onChange: _provider.setPrimaryAsset,
-              title: "Asset",
+              title: AppLocalizations.of(context).scwAsset,
               transparentBackground: true,
 
               // withAuthorName: true,

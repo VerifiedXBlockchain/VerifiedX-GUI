@@ -9586,5 +9586,8 @@
   "r3aStatType": "Tipo de estadística",
   "r3aTransferNft": "Transferir NFT",
   "r3aUntitled": "Sin título",
-  "r3aValue": "Valor"
+  "r3aValue": "Valor",
+  "scwAsset": "Activo",
+  "scwAddFeature": "Agregar función",
+  "scwAddAnotherFeature": "Agregar otra función"
 }

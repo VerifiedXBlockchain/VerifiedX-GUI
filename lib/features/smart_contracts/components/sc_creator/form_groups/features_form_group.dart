@@ -52,8 +52,8 @@ class FeaturesFormGroup extends BaseComponent {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const FormGroupHeader(
-            "Features",
+          FormGroupHeader(
+            AppLocalizations.of(context).r3aFeatures,
             helpType: HelpType.features,
           ),
           SizedBox(
@@ -78,7 +78,9 @@ class FeaturesFormGroup extends BaseComponent {
             padding: const EdgeInsets.all(8.0).copyWith(right: 0),
             child: Center(
               child: AppButton(
-                label: "Add${_model.features.isNotEmpty ? ' Another ' : ' '}Feature",
+                label: _model.features.isNotEmpty
+                    ? AppLocalizations.of(context).scwAddAnotherFeature
+                    : AppLocalizations.of(context).scwAddFeature,
                 onPressed: _model.isCompiled
                     ? null
                     : () {

@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+import 'package:timeago/timeago.dart' as timeago;
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
@@ -99,12 +101,16 @@ class AppContainer extends ConsumerWidget {
 
     final router = Env.isWeb ? webRouter : appRouter;
 
+    final appLocale = ref.watch(localeProvider);
+    // Keep package-generated relative times ("about a year ago") in the app language.
+    timeago.setDefaultLocale((appLocale?.languageCode ?? PlatformDispatcher.instance.locale.languageCode) == 'es' ? 'es' : 'en');
+
     return MaterialApp.router(
       restorationScopeId: "app",
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       theme: AppTheme.dark().themeData,
-      locale: ref.watch(localeProvider),
+      locale: appLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),

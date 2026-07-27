@@ -19892,6 +19892,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Value'**
   String get r3aValue;
+
+  /// No description provided for @scwAsset.
+  ///
+  /// In en, this message translates to:
+  /// **'Asset'**
+  String get scwAsset;
+
+  /// No description provided for @scwAddFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Feature'**
+  String get scwAddFeature;
+
+  /// No description provided for @scwAddAnotherFeature.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Another Feature'**
+  String get scwAddAnotherFeature;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

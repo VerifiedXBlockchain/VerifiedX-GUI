@@ -84,12 +84,12 @@ class _Description extends StatelessWidget {
     return TextFormField(
       readOnly: model.isCompiled,
       controller: provider.descriptionController,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         label: Text(
-          "Description",
-          style: TextStyle(color: Colors.white),
+          AppLocalizations.of(context).scwDescription,
+          style: const TextStyle(color: Colors.white),
         ),
-        suffixIcon: HelpButton(HelpType.description),
+        suffixIcon: const HelpButton(HelpType.description),
       ),
       minLines: 3,
       maxLines: 6,

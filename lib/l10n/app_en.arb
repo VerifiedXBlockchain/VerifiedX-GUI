@@ -9643,5 +9643,8 @@
   "r3aStatType": "Stat Type",
   "r3aTransferNft": "Transfer NFT",
   "r3aUntitled": "Untitled",
-  "r3aValue": "Value"
+  "r3aValue": "Value",
+  "scwAsset": "Asset",
+  "scwAddFeature": "Add Feature",
+  "scwAddAnotherFeature": "Add Another Feature"
 }

@@ -30,6 +30,45 @@ import 'components/root_container_wallet_selector_list.dart';
 const ROOT_CONTAINER_TRANSITION_DURATION = Duration(milliseconds: 250);
 const ROOT_CONTAINER_TRANSITION_CURVE = Curves.ease;
 const SIDE_NAV_WIDTH_EXPANDED = 180.0;
+
+/// Expanded side-nav width sized to the longest localized menu label
+/// (Spanish labels overflow the fixed 180px). Measured with the item's
+/// largest text style, plus icon + paddings + badge slack; clamped so
+/// English keeps the original width and long locales stay reasonable.
+double sideNavExpandedWidth(BuildContext context) {
+  final l10n = AppLocalizations.of(context);
+  final labels = [
+    l10n.navDashboard,
+    l10n.navMenuVaultAccountSingular,
+    l10n.navMenuVaultAccounts,
+    l10n.navDomains,
+    l10n.actionSend,
+    l10n.actionReceive,
+    l10n.navMenuPayWithButterfly,
+    l10n.navMenuCryptoCom,
+    l10n.navTransactions,
+    l10n.navMenuTokenizeBitcoin,
+    l10n.svcNavPrivacyLabel,
+    l10n.navMenuFungibleTokens,
+    l10n.navMenuSmartContracts,
+    l10n.navMenuNfts,
+    l10n.navMenuP2PAuctions,
+    l10n.navMenuValidator,
+    l10n.navMenuOperations,
+    l10n.navMenuSignOut,
+  ];
+  final painter = TextPainter(textDirection: TextDirection.ltr);
+  double maxLabel = 0;
+  for (final label in labels) {
+    painter.text = TextSpan(
+      text: label,
+      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+    );
+    painter.layout();
+    if (painter.width > maxLabel) maxLabel = painter.width;
+  }
+  return (maxLabel + 84).clamp(SIDE_NAV_WIDTH_EXPANDED, 250.0);
+}
 const SIDE_NAV_WIDTH_CONTRACTED = 60.0;
 
 class RootContainer extends BaseComponent {
@@ -168,7 +207,7 @@ class _LayoutState extends State<_Layout> {
                     padding: const EdgeInsets.only(top: 56.0),
                     child: AnimatedContainer(
                       duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                      width: sideNavExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED,
+                      width: sideNavExpanded ? sideNavExpandedWidth(context) : SIDE_NAV_WIDTH_CONTRACTED,
                       curve: ROOT_CONTAINER_TRANSITION_CURVE,
                       child: RootContainerSideNav(
                           isExpanded: sideNavExpanded,
@@ -267,7 +306,7 @@ class _LayoutState extends State<_Layout> {
                 AnimatedPadding(
                   duration: ROOT_CONTAINER_TRANSITION_DURATION,
                   curve: ROOT_CONTAINER_TRANSITION_CURVE,
-                  padding: EdgeInsets.only(left: sideNavExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED),
+                  padding: EdgeInsets.only(left: sideNavExpanded ? sideNavExpandedWidth(context) : SIDE_NAV_WIDTH_CONTRACTED),
                   child: Stack(
                     children: [
                       Column(

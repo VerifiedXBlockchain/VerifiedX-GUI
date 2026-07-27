@@ -10729,4 +10729,13 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3aValue => 'Valor';
+
+  @override
+  String get scwAsset => 'Activo';
+
+  @override
+  String get scwAddFeature => 'Agregar función';
+
+  @override
+  String get scwAddAnotherFeature => 'Agregar otra función';
 }
