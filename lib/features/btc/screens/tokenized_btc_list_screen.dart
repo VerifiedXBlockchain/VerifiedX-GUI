@@ -69,7 +69,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Tokenized Bitcoin (vBTC)",
+                    AppLocalizations.of(context).btcVbtcListTitle,
                     style: TextStyle(
                       fontFamily: "Mukta",
                       fontSize: 20,
@@ -81,7 +81,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
                     child: Text(
-                      "1 vBTC = 1 BTC",
+                      AppLocalizations.of(context).bw2OneVbtcEqualsBtc,
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.9),
@@ -144,7 +144,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                   if (wallet == null) {
                     final confirmContinue = await ConfirmDialog.show(
                       title: AppLocalizations.of(context).btcVfxBalanceRequiredTitle,
-                      body: "A VFX address with a balance is required to proceed. Would you like to set this up now?",
+                      body: AppLocalizations.of(context).bw2VfxBalanceRequiredSetupBody,
                       confirmText: AppLocalizations.of(context).actionYes,
                       cancelText: AppLocalizations.of(context).actionNo,
                     );
@@ -173,7 +173,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                     if (wallet == null) {
                       InfoDialog.show(
                         title: AppLocalizations.of(context).btcVfxBalanceRequiredTitle,
-                        body: "A VFX address with a balance is required to proceed.",
+                        body: AppLocalizations.of(context).bw2VfxBalanceRequiredBody,
                       );
                       return;
                     }
@@ -235,7 +235,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                   color: AppColors.getWhite(),
                 ),
                 label: Text(
-                  "What is vBTC?",
+                  AppLocalizations.of(context).bw2WhatIsVbtc,
                   style: TextStyle(
                     color: AppColors.getWhite(),
                     decoration: TextDecoration.underline,
@@ -312,14 +312,14 @@ class VbtcInfo extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            "This wallet provides a specific smart contract that enables tokenizing actual Bitcoin! This will allow you to lock any denomination of Bitcoin you choose into a smart contract with or without media / documents.\n\nOnce minted, you will then hold a Verified Bitcoin Token that you may send to any other person at any time in whole or in part without moving it across the BTC network and without paying any BTC fees. Only you or the holder of a vBTC token may unlock the underlying BTC from the smart contract. You may also add additional BTC to your token at anytime without creating an additional one should you choose.\n\nAny and all vBTC tokens may also be stored in your registered Reserve (Protected) Account feature enabling full on-chain recovery and call-back options providing incredibly secure self-custodial vaulting.",
+            AppLocalizations.of(context).bw2VbtcInfoBody,
             textAlign: TextAlign.center,
           ),
           SizedBox(
             height: 12,
           ),
           Text(
-            "Welcome to true on-chain utility for your BTC!",
+            AppLocalizations.of(context).bw2VbtcInfoWelcome,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
@@ -373,7 +373,7 @@ class TokenizedBtcListTile extends StatelessWidget {
             ),
 
             trailing: Text(
-              "${token.myBalance} vBTC",
+              AppLocalizations.of(context).bw2VbtcAmount(token.myBalance.toString()),
               style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
             ),
             onTap: () {
@@ -460,11 +460,11 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
                         children: [
                           if (entry.addresses.length > 1)
                             Text(
-                              "My Total Balance:  ",
+                              "${AppLocalizations.of(context).bw2MyTotalBalance}  ",
                               style: TextStyle(color: Colors.white70),
                             ),
                           Text(
-                            "${entry.addresses.fold<double>(0.0, (previousValue, element) => previousValue + element.balance)} vBTC",
+                            AppLocalizations.of(context).bw2VbtcAmount(entry.addresses.fold<double>(0.0, (previousValue, element) => previousValue + element.balance).toString()),
                             style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
                           ),
                         ],
@@ -498,7 +498,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "${item.balance} vBTC  ",
+                                        "${AppLocalizations.of(context).bw2VbtcAmount(item.balance.toString())}  ",
                                         style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
                                       ),
                                       Text(

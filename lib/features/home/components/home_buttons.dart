@@ -137,7 +137,7 @@ class _HomeButtonsState extends State<HomeButtons> {
                   const OpenDbFolderButton(),
                   ImportSnapshotButton(),
                   AppButton(
-                    label: "Validator Pool",
+                    label: l10n.nodePoolTitle,
                     icon: Icons.wifi,
                     onPressed: () {
                       tabsRouter.setActiveIndex(6);

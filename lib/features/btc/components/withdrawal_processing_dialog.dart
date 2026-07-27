@@ -8,6 +8,7 @@ import '../../../app.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../models/withdrawal_result.dart';
 import '../services/vbtc_v2_service.dart';
@@ -97,9 +98,9 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
         if (!mounted) return;
         debugPrint('$_tag Confirmation poll timed out after $_maxConfirmationPolls attempts');
         setState(() {
-          _result = const WithdrawalResult(
+          _result = WithdrawalResult(
             success: false,
-            message: "Timed out waiting for withdrawal request to be confirmed. You can retry later.",
+            message: AppLocalizations.of(context).bw2WithdrawalTimedOut,
           );
           _state = _DialogState.failure;
         });
@@ -149,12 +150,13 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            _titleForState(),
+            _titleForState(l10n),
             style: const TextStyle(color: Colors.white),
           ),
           if (_state != _DialogState.processing && _state != _DialogState.waitingForBlock)
@@ -173,80 +175,80 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_state == _DialogState.waitingForBlock) _buildWaitingForBlockSection(),
-            if (_state == _DialogState.processing) _buildProcessingSection(),
-            if (_state == _DialogState.success) _buildSuccessSection(),
-            if (_state == _DialogState.failure) _buildFailureSection(),
+            if (_state == _DialogState.waitingForBlock) _buildWaitingForBlockSection(l10n),
+            if (_state == _DialogState.processing) _buildProcessingSection(l10n),
+            if (_state == _DialogState.success) _buildSuccessSection(l10n),
+            if (_state == _DialogState.failure) _buildFailureSection(l10n),
           ],
         ),
       ),
     );
   }
 
-  String _titleForState() {
+  String _titleForState(AppLocalizations l10n) {
     switch (_state) {
       case _DialogState.waitingForBlock:
-        return "Waiting for Confirmation";
+        return l10n.bw2WaitingForConfirmation;
       case _DialogState.processing:
-        return "Processing Withdrawal";
+        return l10n.bw2ProcessingWithdrawal;
       case _DialogState.success:
-        return "Withdrawal Complete";
+        return l10n.bw2WithdrawalComplete;
       case _DialogState.failure:
-        return "Withdrawal Failed";
+        return l10n.bw2WithdrawalFailed;
     }
   }
 
-  Widget _buildWaitingForBlockSection() {
+  Widget _buildWaitingForBlockSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(
+      children: [
+        const Center(
           child: SizedBox(
             width: 32,
             height: 32,
             child: CircularProgressIndicator(strokeWidth: 3),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Text(
-          "Waiting for the withdrawal request to be confirmed in a block...",
-          style: TextStyle(color: Colors.white70),
+          l10n.bw2WaitingForBlockBody,
+          style: const TextStyle(color: Colors.white70),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
-          "This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.",
-          style: TextStyle(color: Colors.white38, fontSize: 12),
+          l10n.bw2FrostConfirmHint,
+          style: const TextStyle(color: Colors.white38, fontSize: 12),
         ),
       ],
     );
   }
 
-  Widget _buildProcessingSection() {
+  Widget _buildProcessingSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(
+      children: [
+        const Center(
           child: SizedBox(
             width: 32,
             height: 32,
             child: CircularProgressIndicator(strokeWidth: 3),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         Text(
-          "Validators are signing the Bitcoin transaction...",
-          style: TextStyle(color: Colors.white70),
+          l10n.bw2ValidatorsSigningBtc,
+          style: const TextStyle(color: Colors.white70),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Text(
-          "This may take a minute. Please do not close the application.",
-          style: TextStyle(color: Colors.white38, fontSize: 12),
+          l10n.bw2DoNotCloseApp,
+          style: const TextStyle(color: Colors.white38, fontSize: 12),
         ),
       ],
     );
   }
 
-  Widget _buildSuccessSection() {
+  Widget _buildSuccessSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -254,16 +256,16 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           children: [
             Icon(Icons.check_circle, color: _successColor, size: 20),
             const SizedBox(width: 8),
-            const Text(
-              "Withdrawal completed successfully!",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+            Text(
+              l10n.bw2WithdrawalCompletedSuccess,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         if (_result?.vfxTransactionHash != null) ...[
           const SizedBox(height: 16),
           _buildHashRow(
-            "VFX Transaction:",
+            l10n.bw2VfxTransactionLabel,
             _result!.vfxTransactionHash!,
             explorerUrl: "${Env.baseExplorerUrl}/transaction/${_result!.vfxTransactionHash!}",
           ),
@@ -271,7 +273,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
         if (_result?.btcTransactionHash != null) ...[
           const SizedBox(height: 12),
           _buildHashRow(
-            "BTC Transaction:",
+            l10n.bw2BtcTransactionLabel,
             _result!.btcTransactionHash!,
             explorerUrl: Env.isTestNet
                 ? "https://mempool.space/testnet4/tx/${_result!.btcTransactionHash!}"
@@ -282,7 +284,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
         Align(
           alignment: Alignment.centerRight,
           child: AppButton(
-            label: "Done",
+            label: l10n.actionDone,
             variant: AppColorVariant.Success,
             onPressed: () => Navigator.of(context).pop(_result),
           ),
@@ -291,7 +293,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     );
   }
 
-  Widget _buildFailureSection() {
+  Widget _buildFailureSection(AppLocalizations l10n) {
     final canCancel = widget.ownerAddress != null && _result?.btcTransactionHash != null;
 
     return Column(
@@ -304,7 +306,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                _result?.message ?? "An error occurred during withdrawal.",
+                _result?.message ?? l10n.bw2WithdrawalError,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -315,21 +317,21 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             AppButton(
-              label: "Dismiss",
+              label: l10n.tkbDismiss,
               variant: AppColorVariant.Light,
               onPressed: () => Navigator.of(context).pop(_result),
             ),
             const SizedBox(width: 8),
             if (canCancel) ...[
               AppButton(
-                label: "Cancel Withdrawal",
+                label: l10n.bw2CancelWithdrawal,
                 variant: AppColorVariant.Danger,
                 onPressed: _cancelWithdrawal,
               ),
               const SizedBox(width: 8),
             ],
             AppButton(
-              label: "Retry",
+              label: l10n.btcRetry,
               variant: AppColorVariant.Warning,
               onPressed: _runCompleteWithdrawal,
             ),
@@ -360,7 +362,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
             InkWell(
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: hash));
-                Toast.message("Copied to clipboard");
+                Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
               },
               child: const Icon(Icons.copy, size: 16, color: Colors.white54),
             ),
@@ -395,7 +397,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
 
     debugPrint('$_tag Cancel result — success: $success');
     if (success) {
-      Toast.message("Cancellation request submitted. Awaiting validator votes.");
+      Toast.message(AppLocalizations.of(context).bw2CancellationSubmitted);
       Navigator.of(context).pop(null);
     } else {
       setState(() => _state = _DialogState.failure);

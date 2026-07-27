@@ -6409,5 +6409,1376 @@
     }
   },
   "tkbFundToken": "Fund Token",
-  "tkbManualSendExchangeSubtitle": "Send BTC from any exchange or wallet to this token's deposit address"
+  "tkbManualSendExchangeSubtitle": "Send BTC from any exchange or wallet to this token's deposit address",
+  "bw2AmountOfBtcToSend": "Amount of BTC to Send",
+  "bw2AnErrorOccurred": "An error occurred.",
+  "bw2BeaconUploadFailed": "Beacon upload failed",
+  "bw2BlockConfirmTimedOut": "Timed out waiting for block confirmation. You can retry later from the token detail screen.",
+  "bw2BlockWithValue": "Block {height}",
+  "@bw2BlockWithValue": {
+    "placeholders": {
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2BridgeToBase": "Bridge to Base",
+  "bw2BridgeVbtcToBase": "Bridge vBTC to Base (vBTC.b)",
+  "bw2BroadcastingRequest": "Broadcasting Request",
+  "bw2BroadcastingWithdrawal": "Broadcasting withdrawal request...",
+  "bw2BtcAccountNoBalance": "This BTC account doesn't have a balance",
+  "bw2BtcAddressTitle": "BTC Address",
+  "bw2BtcAmount": "{amount} BTC",
+  "@bw2BtcAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2BtcFundsReceived": "BTC Funds Received!",
+  "bw2BtcTransactionLabel": "BTC Transaction:",
+  "bw2BuyBtcOnRamp": "Buy BTC (On-Ramp)",
+  "bw2BuyBtcOnRampSubtitle": "Purchase BTC with fiat and send directly to this token",
+  "bw2CancelWithdrawal": "Cancel Withdrawal",
+  "bw2CancelWithdrawalBody": "Are you sure you want to cancel this withdrawal request?",
+  "bw2CancelWithdrawalQuestion": "Cancel Withdrawal?",
+  "bw2CancelWithdrawalTooltip": "Cancel withdrawal",
+  "bw2CancellationFailedError": "Cancellation failed: {error}",
+  "@bw2CancellationFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2CancellationSubmitted": "Cancellation request submitted. Awaiting validator votes.",
+  "bw2Cancelled": "Cancelled",
+  "bw2CeremonyCompleted": "Ceremony Completed",
+  "bw2CeremonyDismissHint": "You can dismiss this dialog. The ceremony will continue in the background.",
+  "bw2CeremonyFailed": "Ceremony Failed",
+  "bw2CeremonyFailedRetry": "Ceremony failed. Please try again.",
+  "bw2CeremonyTimedOut": "Ceremony timed out. Please try again.",
+  "bw2CeremonyTimedOutNetwork": "Ceremony timed out on the network. Please try again.",
+  "bw2ConfirmSendBtcBody": "Sending:\n{amount} BTC\n\nTo:\n{toAddress} (Token Deposit Address)\n\nFrom:\n{fromAddress}\n\nFeeRate:\n{feeRate} SATS",
+  "@bw2ConfirmSendBtcBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "toAddress": {
+        "type": "String"
+      },
+      "fromAddress": {
+        "type": "String"
+      },
+      "feeRate": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2ConfirmTransfer": "Confirm Transfer",
+  "bw2ConfirmTransferBody": "Transfer {amount} vBTC to {address}?",
+  "@bw2ConfirmTransferBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2ConfirmWithdrawalRequest": "Confirm Withdrawal Request",
+  "bw2ConfirmedWhenIndexed": "This will be confirmed once indexed by the explorer.",
+  "bw2ContractCreated": "Contract Created",
+  "bw2CouldNotConnectArbiter": "Could not connect to arbiter. Try again later",
+  "bw2CreatingContract": "Creating Contract",
+  "bw2CreatingVbtcContract": "Creating vBTC contract on-chain...",
+  "bw2DateLabel": "Date:",
+  "bw2DepositAddress": "Deposit Address",
+  "bw2DepositAddressCopied": "Deposit address copied to clipboard",
+  "bw2DepositAddressLabel": "Deposit Address:",
+  "bw2DepositAmount": "Deposit amount",
+  "bw2DkgStartHint": "This starts the distributed key generation process.",
+  "bw2DoNotCloseApp": "This may take a minute. Please do not close the application.",
+  "bw2DomainNameRequired": "Domain Name Required",
+  "bw2DomainTooLong": "Domain must be less than {max} charcters.",
+  "@bw2DomainTooLong": {
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2FailedBroadcastBtc": "Failed to broadcast BTC transaction",
+  "bw2FailedBroadcastWithdrawal": "Failed to broadcast withdrawal request.",
+  "bw2FailedCreateContract": "Failed to create contract. Please try again.",
+  "bw2FailedCreateContractShort": "Failed to create contract.",
+  "bw2FailedExecuteMpc": "Failed to execute MPC ceremony.",
+  "bw2FailedInitiateMpc": "Failed to initiate MPC ceremony.",
+  "bw2FailedPrepareCancellation": "Failed to prepare cancellation",
+  "bw2FailedPrepareContractCreation": "Failed to prepare contract creation.",
+  "bw2FailedPrepareFrost": "Failed to prepare FROST signing",
+  "bw2FailedPrepareMpc": "Failed to prepare MPC ceremony.",
+  "bw2FailedPrepareOwnershipTransfer": "Failed to prepare ownership transfer",
+  "bw2FailedPrepareTransfer": "Failed to prepare transfer",
+  "bw2FailedPrepareWithdrawalRequest": "Failed to prepare withdrawal request",
+  "bw2FailedSignBeacon": "Failed to sign beacon upload",
+  "bw2FailedSignCeremony": "Failed to sign ceremony messages.",
+  "bw2FailedSignContractTx": "Failed to sign contract creation transaction.",
+  "bw2FailedSignFrost": "Failed to sign FROST messages",
+  "bw2FailedSignOwnershipProof": "Failed to sign ownership proof.",
+  "bw2FailedSignTransaction": "Failed to sign transaction",
+  "bw2FailedStartFrost": "Failed to start FROST signing",
+  "bw2FrostConfirmHint": "This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.",
+  "bw2FrostConfirmHintWeb": "This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.",
+  "bw2FrostFailedOrTimedOut": "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.",
+  "bw2FrostGroupKey": "FROST Group Key",
+  "bw2FrostJobNotFound": "FROST signing job not found",
+  "bw2FrostSigning": "FROST Signing",
+  "bw2FrostSigningFailed": "FROST signing failed",
+  "bw2FrostSigningFailedError": "FROST signing failed: {error}",
+  "@bw2FrostSigningFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2FrostSigningInProgress": "FROST signing in progress...",
+  "bw2FrostTimedOut": "FROST signing timed out. The withdrawal may still complete — check back shortly.",
+  "bw2FrostValidatorsSigning": "Validators are signing the Bitcoin transaction. This may take a minute or two. Please do not close this window.",
+  "bw2FundVbtcToken": "Fund vBTC Token",
+  "bw2FundViaManualSend": "Fund via Manual Send",
+  "bw2HashWithValue": "Hash: {hash}",
+  "@bw2HashWithValue": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2HowMuchBtcWithdraw": "How much BTC do you want to withdraw?",
+  "bw2InitiatingMpc": "Initiating MPC ceremony...",
+  "bw2InsufficientBalanceAvailable": "Insufficient balance. Available: {available} vBTC",
+  "@bw2InsufficientBalanceAvailable": {
+    "placeholders": {
+      "available": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2InvalidDomainLetters": "Invalid domain. Must only contain letters and/or numbers.",
+  "bw2InvalidFeeRateWhole": "Invalid fee rate. Must be a whole number",
+  "bw2InvalidSupplyAmount": "Invalid Supply Amount",
+  "bw2LabelHash": "Hash",
+  "bw2LabelTransactionSignature": "Transaction Signature",
+  "bw2LabelVfxAddress": "VFX Address",
+  "bw2Loading": "Loading",
+  "bw2LostConnectionCeremony": "Lost connection while monitoring ceremony. Please try again.",
+  "bw2LostConnectionToast": "Lost connection to ceremony.",
+  "bw2ManualSendInstructions": "Send BTC from any exchange or external wallet to the deposit address below.",
+  "bw2MediaColon": "Media:",
+  "bw2MediaOptional": "Media (Optional)",
+  "bw2MpcCeremony": "MPC Ceremony",
+  "bw2MpcCeremonyCompletedSuccess": "MPC ceremony completed successfully.",
+  "bw2MpcCeremonyFailedToast": "MPC ceremony failed.",
+  "bw2MpcCeremonyInProgress": "MPC Ceremony in Progress",
+  "bw2MpcCeremonyTimedOutToast": "MPC ceremony timed out.",
+  "bw2MultiSigHigherFee": "This is a Multi-signature transaction so a higher fee rate is recommended.",
+  "bw2MyBalanceVbtc": "My Balance: {balance} vBTC",
+  "@bw2MyBalanceVbtc": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2MyTotalBalance": "My Total Balance:",
+  "bw2NoBtcAccountSelected": "No BTC Account selected",
+  "bw2NoBtcAddressInToken": "No BTC address in token",
+  "bw2NoBtcTokenSelected": "No BTC Token selected",
+  "bw2NoInitialIssuance": "No Initial Issuance",
+  "bw2NoKeypairFound": "No keypair found",
+  "bw2NoKeypairFoundPeriod": "No keypair found.",
+  "bw2NoKeypairToSign": "No keypair found to sign transaction",
+  "bw2NoVbtcToBridge": "No vBTC available to bridge",
+  "bw2NoVfxAccountFound": "No VFX account found",
+  "bw2NotEnoughBtcCoverFee": "Not enough BTC to cover this transaction + fee",
+  "bw2NotEnoughVfxDeleteDomain": "Not enough VFX in your controlling account to delete a VFX domain. [{address}]",
+  "@bw2NotEnoughVfxDeleteDomain": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2OnboardCreateVfxDetails": "First you'll need a VFX Wallet. You can either import an existing one or create one now.",
+  "bw2OnboardFaucetDetails": "The community has provided a faucet to withdraw a minimal amount of VFX from in order to try out this feature. A phone number is required for verification purposes and to reduce the chance of abuse. Please note that only a hash of the phone number is stored with the faucet. Alternatively, you are welcome to purchase VFX via an exchange or on-ramp if you like.",
+  "bw2OnboardImportBtcDetails": "Now you need a BTC account added to your wallet. You can either import a private key or generate a new one.",
+  "bw2OnboardTokenizeDetails": "Time to tokenize a vBTC token. The following fields are all optional!",
+  "bw2OnboardTransferBtcDetails": "Looks like this account doesn't have any BTC. Please transfer BTC to this account to continue.",
+  "bw2OnboardTransferToVbtcDetails": "Now you are ready to transfer BTC to your vBTC token. Select the amount and Fee Rate below",
+  "bw2OneVbtcEqualsBtc": "1 vBTC = 1 BTC",
+  "bw2OnlyOwnerCanAction": "Only the owner of this token can perform this action",
+  "bw2OwnershipTransferFailed": "Ownership transfer failed: {error}",
+  "@bw2OwnershipTransferFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2PendingTapResume": "Pending — tap to resume",
+  "bw2PendingWithdrawal": "Pending Withdrawal",
+  "bw2PercentComplete": "{percent}% complete",
+  "@bw2PercentComplete": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2PreMintTitle": "Pre Mint Initial Issuance?",
+  "bw2PreMintTitleOptional": "Pre Mint Initial Issuance? (Optional)",
+  "bw2ProcessingWithdrawal": "Processing Withdrawal",
+  "bw2RbfFeeRateBody": "Input your desired fee rate (SATS /byte) for this transaction.",
+  "bw2RebroadcastTx": "Rebroadcast TX",
+  "bw2RebroadcastTxBody": "Are you sure you want to rebroadcast this transaction?",
+  "bw2RebroadcastedTx": "Rebroadcasted TX. ({hash})",
+  "@bw2RebroadcastedTx": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2ReceivingBtcAddress": "Receiving BTC Address",
+  "bw2RecipientVfxAddress": "Recipient VFX Address",
+  "bw2ReplacedByFeeMessage": "Replaced by fee ({feeRate} SATS /byte) TX sent. Hash: {hash}",
+  "@bw2ReplacedByFeeMessage": {
+    "placeholders": {
+      "feeRate": {
+        "type": "String"
+      },
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2RetrySigning": "Retry Signing",
+  "bw2SatsAmount": "{amount} SATS",
+  "@bw2SatsAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2SelectBtcAddressRequired": "Selecting a BTC address is required.",
+  "bw2SelectVfxAddressRequired": "Selecting a VFX Address is required.",
+  "bw2SigningThreshold": "Signing Threshold",
+  "bw2SmartContractIdColon": "Smart Contract ID:",
+  "bw2StartingMpcCeremony": "Starting MPC Ceremony",
+  "bw2StatusWithValue": "Status: {status}",
+  "@bw2StatusWithValue": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2StepCompleted": "Completed",
+  "bw2StepCreateVfxAccount": "Create VFX Account",
+  "bw2StepGetVfx": "Get VFX",
+  "bw2StepImportBtcAccount": "Import BTC Account",
+  "bw2StepInitiated": "Initiated",
+  "bw2StepRound1": "Round 1",
+  "bw2StepRound2": "Round 2",
+  "bw2StepRound3": "Round 3",
+  "bw2StepTokenizedVbtc": "Tokenized vBTC",
+  "bw2StepTransferBtc": "Transfer BTC",
+  "bw2StepTransferBtcToVbtc": "Transfer BTC to vBTC Token",
+  "bw2StepValidating": "Validating",
+  "bw2SubmittingTxVfx": "Submitting a transaction to the VFX network.",
+  "bw2SupplyAmount": "Supply Amount",
+  "bw2SupplyLabel": "Supply",
+  "bw2ToBtcAddressRequired": "To BTC address required.",
+  "bw2ToVfxAddressRequired": "To VFX address required.",
+  "bw2TokenAppearWhenIndexed": "The token will appear in your list once indexed (typically a few seconds).",
+  "bw2TokenCreated": "Token Created",
+  "bw2TokenDeployed": "Token Deployed!",
+  "bw2TokenDescriptionOptional": "Token Description (Optional)",
+  "bw2TokenImageOptional": "Token Image (Optional)",
+  "bw2TokenNameOptional": "Token Name (Optional)",
+  "bw2TokenPaused": "Transactions on this token are currently paused.",
+  "bw2TokenTickerOptional": "Token Ticker (Optional)",
+  "bw2TransactionBroadcasted": "Transaction broadcasted!",
+  "bw2TransactionFailed": "Transaction failed: {error}",
+  "@bw2TransactionFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2TransactionHashColon": "Transaction Hash:",
+  "bw2TransactionsColon": "Transactions:",
+  "bw2TransferComplete": "Transfer Complete!",
+  "bw2TransferFailed": "Transfer failed",
+  "bw2TransferFailedError": "Transfer failed: {error}",
+  "@bw2TransferFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2TransferOwnershipConfirmBody": "Transfer ownership of this vBTC token to {address}?\n\nThis cannot be undone.",
+  "@bw2TransferOwnershipConfirmBody": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2TxVerifiedFeeBody": "Transaction verified. There will be a fee of {fee} VFX. Would you like to proceed?",
+  "@bw2TxVerifiedFeeBody": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2TypeLabel": "Type:",
+  "bw2UtxosLabel": "UTXOs:",
+  "bw2ValidatorsGeneratingKeys": "Validators are generating threshold signing keys. This typically takes 30-90 seconds.",
+  "bw2ValidatorsSigningBtc": "Validators are signing the Bitcoin transaction...",
+  "bw2ValidatorsThreshold": "Validators: {count} (threshold: {threshold})",
+  "@bw2ValidatorsThreshold": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "threshold": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2VaultBalanceRequired": "A balance on your Vault account is required to broadcast this transaction",
+  "bw2VaultCannotActionTransferFirst": "Vault accounts cannot perform this action. Please transfer ownership to your standard VFX account first",
+  "bw2VbtcAmount": "{amount} vBTC",
+  "@bw2VbtcAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2VbtcBalanceUpdateHint": "Once the BTC transaction is confirmed on-chain, your vBTC balance will update automatically.",
+  "bw2VbtcContractCreatedHash": "vBTC contract created. Hash: {hash}",
+  "@bw2VbtcContractCreatedHash": {
+    "placeholders": {
+      "hash": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2VbtcContractCreatedSuccess": "vBTC contract created successfully!",
+  "bw2VbtcInfoBody": "This wallet provides a specific smart contract that enables tokenizing actual Bitcoin! This will allow you to lock any denomination of Bitcoin you choose into a smart contract with or without media / documents.\n\nOnce minted, you will then hold a Verified Bitcoin Token that you may send to any other person at any time in whole or in part without moving it across the BTC network and without paying any BTC fees. Only you or the holder of a vBTC token may unlock the underlying BTC from the smart contract. You may also add additional BTC to your token at anytime without creating an additional one should you choose.\n\nAny and all vBTC tokens may also be stored in your registered Reserve (Protected) Account feature enabling full on-chain recovery and call-back options providing incredibly secure self-custodial vaulting.",
+  "bw2VbtcInfoWelcome": "Welcome to true on-chain utility for your BTC!",
+  "bw2VbtcTokenCreatedSuccess": "vBTC token created successfully!",
+  "bw2VbtcTransferBroadcastedSuccess": "vBTC transfer broadcasted successfully",
+  "bw2VfxAccountBalanceRequired": "A VFX account with a balance is required to proceed.",
+  "bw2VfxAccountBalanceRequiredShort": "A VFX account with a balance is required.",
+  "bw2VfxAccountRequired": "A VFX account is required to proceed.",
+  "bw2VfxBalanceRequiredBody": "A VFX address with a balance is required to proceed.",
+  "bw2VfxBalanceRequiredBroadcast": "A balance on your VFX account is required to broadcast this transaction",
+  "bw2VfxBalanceRequiredSetupBody": "A VFX address with a balance is required to proceed. Would you like to set this up now?",
+  "bw2VfxControllerNotFound": "The VFX account that controls this BTC domain was not found. [{address}]",
+  "@bw2VfxControllerNotFound": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2VfxFundsReceived": "VFX Funds Received!",
+  "bw2VfxTransactionLabel": "VFX Transaction:",
+  "bw2WaitingBlockConfirmation": "Waiting for block confirmation...",
+  "bw2WaitingBtcToVbtc": "Waiting for BTC to vBTC transaction to reflect on-chain.",
+  "bw2WaitingBtcTransfer": "Waiting for BTC transfer to reflect on-chain.",
+  "bw2WaitingForBlockBody": "Waiting for the withdrawal request to be confirmed in a block...",
+  "bw2WaitingForConfirmation": "Waiting for Confirmation",
+  "bw2WaitingTokenization": "MPC ceremony and contract creation in progress.",
+  "bw2WaitingVfxTransfer": "Waiting for VFX Transfer to reflect on-chain.",
+  "bw2WhatIsVbtc": "What is vBTC?",
+  "bw2WithdrawalAmount": "Withdrawal Amount",
+  "bw2WithdrawalComplete": "Withdrawal Complete",
+  "bw2WithdrawalCompletedSuccess": "Withdrawal completed successfully!",
+  "bw2WithdrawalError": "An error occurred during withdrawal.",
+  "bw2WithdrawalFailed": "Withdrawal Failed",
+  "bw2WithdrawalHistory": "Withdrawal History:",
+  "bw2WithdrawalRequestBody": "Withdraw {amount} BTC to {address}\nFee rate: {feeRate} sats/byte\n\nProceed?",
+  "@bw2WithdrawalRequestBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      },
+      "feeRate": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2WithdrawalRequestFailed": "Withdrawal request failed",
+  "bw2WithdrawalRequestFailedError": "Withdrawal request failed: {error}",
+  "@bw2WithdrawalRequestFailedError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2WithdrawalTimedOut": "Timed out waiting for withdrawal request to be confirmed. You can retry later.",
+  "bw2WithdrawalToLine": "{amount} vBTC → {address}",
+  "@bw2WithdrawalToLine": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "prvActivateWallet": "Activate Privacy Wallet",
+  "prvActivating": "Activating...",
+  "prvActivationDescription": "Activate your privacy wallet to shield VFX using zero-knowledge proofs. Shielded funds are hidden from the public ledger and can be transferred privately.",
+  "prvAddressCopied": "Address copied to clipboard",
+  "prvAmountVbtcLabel": "Amount (vBTC)",
+  "prvAmountVfxLabel": "Amount (VFX)",
+  "prvBack": "Back",
+  "prvBlockLabel": "Block {block}",
+  "@prvBlockLabel": {
+    "placeholders": {
+      "block": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeAboutTo": "You're about to bridge",
+  "prvBridgeAmountRequired": "Amount is required",
+  "prvBridgeAmountToBridge": "Amount to bridge",
+  "prvBridgeAmountToDest": "{amount} vBTC → {dest}",
+  "@prvBridgeAmountToDest": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "dest": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeAtDest": "at {dest}",
+  "@prvBridgeAtDest": {
+    "placeholders": {
+      "dest": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeAvailableAmount": "Available: {amount} vBTC",
+  "@prvBridgeAvailableAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeBaseAddressRequired": "Base address is required",
+  "prvBridgeBaseEvmAddress": "Base (EVM) Address",
+  "prvBridgeBlockHeight": "Block height: {height}",
+  "@prvBridgeBlockHeight": {
+    "placeholders": {
+      "height": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeBulletExit": "Exit back to vBTC on VFX or directly to BTC (whoever holds the vBTC.b initiates the exit; the network will detect it and credit you back automatically)",
+  "prvBridgeBulletTransfer": "Transfer to another Base address",
+  "prvBridgeBulletYield": "Earn yield via Base DeFi",
+  "prvBridgeCantLoadInfo": "Couldn't load bridge info.",
+  "prvBridgeCantReach": "Couldn't reach the bridge service. Check your connection and try again.",
+  "prvBridgeCantReadBalance": "Couldn't read your vBTC balance: {error}",
+  "@prvBridgeCantReadBalance": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeCheckingAccounts": "Checking your accounts…",
+  "prvBridgeCompleteTitle": "Bridge complete",
+  "prvBridgeConfirmAndBridge": "Confirm & Bridge",
+  "prvBridgeContractLabel": "Contract",
+  "prvBridgeCouldNotComplete": "The bridge could not complete.",
+  "prvBridgeCurrentBalance": "Current balance",
+  "prvBridgeDaysAgo": "{days}d ago",
+  "@prvBridgeDaysAgo": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "prvBridgeDetailsTitle": "Bridge details",
+  "prvBridgeEnterPositive": "Enter a positive amount",
+  "prvBridgeEstimatedTime": "Estimated time: 2–5 minutes once submitted.",
+  "prvBridgeEthAmount": "{amount} ETH",
+  "@prvBridgeEthAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeEthForGas": "ETH for gas",
+  "prvBridgeExceedsAvailable": "Exceeds available ({amount} vBTC)",
+  "@prvBridgeExceedsAvailable": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeFailedBodyFallback": "Open Bridge History for details.",
+  "prvBridgeFailedFallback": "Bridge failed.",
+  "prvBridgeFailedHelp": "Your vBTC may still be locked on VFX. Check Bridge History for details, or contact support if this persists.",
+  "prvBridgeFailedTitle": "Bridge failed",
+  "prvBridgeFailedToStart": "Failed to start bridge. Please try again.",
+  "prvBridgeFromVfx": "from VFX",
+  "prvBridgeGasLowBalance": "Low balance — gas costs vary. Top up the address above if the mint fails.",
+  "prvBridgeGasTitle": "Gas (paid on Base)",
+  "prvBridgeGasZeroEth": "This address pays the gas fee for the mint transaction on Base. Send a small amount of Base ETH (≈ 0.001 ETH) to the address above before bridging. You can fund it from any exchange or Base wallet that supports withdrawing to Base mainnet. Balance updates automatically every 10s — tap Refresh for an immediate check.",
+  "prvBridgeHideDetails": "Hide details",
+  "prvBridgeHistoryLoadError": "Couldn't load bridge history. Check your connection and try again.",
+  "prvBridgeHistoryLoading": "Loading bridge history…",
+  "prvBridgeHistoryTitle": "Bridge History",
+  "prvBridgeHoursAgo": "{hours}h ago",
+  "@prvBridgeHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "prvBridgeInvalidBaseAddress": "Must be a valid 0x Base address (40 hex chars)",
+  "prvBridgeJustNow": "just now",
+  "prvBridgeLoadingStatus": "Loading bridge status…",
+  "prvBridgeLockId": "Lock ID: {id}",
+  "@prvBridgeLockId": {
+    "placeholders": {
+      "id": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeMintedBody": "{amount} vBTC.b minted on Base.",
+  "@prvBridgeMintedBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeMinutesAgo": "{minutes}m ago",
+  "@prvBridgeMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "prvBridgeMonthsAgo": "{months}mo ago",
+  "@prvBridgeMonthsAgo": {
+    "placeholders": {
+      "months": {
+        "type": "int"
+      }
+    }
+  },
+  "prvBridgeNetworkInfo": "Network info",
+  "prvBridgeNetworkLabel": "Network",
+  "prvBridgeNoOperations": "No bridge operations yet.",
+  "prvBridgeNothingAvailable": "Nothing available to bridge yet.\n\nYour wallet may show a balance, but the chain doesn't see any confirmed vBTC for this contract yet. The most common cause is a BTC deposit that hasn't received enough Bitcoin confirmations. Bridge reservations from an earlier attempt could also be holding the balance.\n\nWait a few minutes and try again, or check Bridge History below for any in-flight operations.",
+  "prvBridgeOneWayDisclaimer": "Bridging is one-way from this app. Once vBTC.b is on Base, use your DeFi provider or another Base (EVM) wallet to manage, transfer, or exit.",
+  "prvBridgeOneWayReminder": "Reminder: this is one-way from this app. You'll use your DeFi provider or another Base (EVM) wallet for any further actions on vBTC.b.",
+  "prvBridgePasteDestination": "Paste the destination address from your DeFi provider or Base wallet.",
+  "prvBridgeReconnecting": "Reconnecting… the bridge service didn't respond to recent status checks. We'll keep retrying.",
+  "prvBridgeRetryFailedToast": "Retry failed. See history detail for status.",
+  "prvBridgeRetrySubmitted": "Retry submitted. Watching for status updates.",
+  "prvBridgeReviewBridge": "Review Bridge",
+  "prvBridgeSafeToClose": "Safe to close this dialog — your bridge will continue in the background. Track progress in Bridge History.",
+  "prvBridgeShowDetails": "Show details",
+  "prvBridgeSigsProgress": "{collected} / {required} signatures collected",
+  "@prvBridgeSigsProgress": {
+    "placeholders": {
+      "collected": {
+        "type": "int"
+      },
+      "required": {
+        "type": "int"
+      }
+    }
+  },
+  "prvBridgeStageCollectingSigs": "Collecting validator signatures…",
+  "prvBridgeStageConfirmed": "Confirmed on VFX",
+  "prvBridgeStageLockSubmitted": "VFX lock submitted",
+  "prvBridgeStageMinted": "Minted on Base",
+  "prvBridgeStageSigsCollected": "Validator signatures collected",
+  "prvBridgeStageSubmittingMint": "Submitting mint on Base",
+  "prvBridgeStalled": "Taking longer than expected. Validator signing can occasionally lag — we'll keep watching. You can safely close this dialog; Bridge History will surface the final result.",
+  "prvBridgeStateLost": "Bridge state lost. Close and try again.",
+  "prvBridgeStepLock": "Lock your {amount} vBTC on VFX",
+  "@prvBridgeStepLock": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeStepMint": "Submit a mintWithProof transaction on Base (paid from your derived Base address)",
+  "prvBridgeStepWaitSignatures": "Wait for validator signatures",
+  "prvBridgeSuccessAmount": "You now have {amount} vBTC.b on Base",
+  "@prvBridgeSuccessAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeSuccessTitle": "Bridged to Base",
+  "prvBridgeThisWill": "This will:",
+  "prvBridgeToBaseTitle": "Bridge to Base",
+  "prvBridgeToDestOnBase": "to {dest} on Base",
+  "@prvBridgeToDestOnBase": {
+    "placeholders": {
+      "dest": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeTxLabel": "Tx",
+  "prvBridgeUnavailableCli": "Bridging is currently unavailable. The CLI is not configured to talk to Base.",
+  "prvBridgeUnavailableNoAddress": "Bridge unavailable — your Base address couldn't be derived. This usually means the wallet is locked. Unlock your wallet and try again.",
+  "prvBridgeUseDefiTo": "Use your DeFi provider or another Base (EVM) wallet to:",
+  "prvBridgeVbtcbAmount": "{amount} vBTC.b",
+  "@prvBridgeVbtcbAmount": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvBridgeVbtcbBalanceLabel": "vBTC.b balance",
+  "prvBridgeViewDetails": "View Details",
+  "prvBridgeViewOnBasescan": "View on Basescan",
+  "prvBridgeWhatsNext": "What's next?",
+  "prvBridgeYesterday": "yesterday",
+  "prvBridgeYourBaseAddress": "Your Base address",
+  "prvBridgeYourGasAddress": "Your gas address",
+  "prvBridging": "Bridging…",
+  "prvCheckingStatus": "Checking privacy layer status...",
+  "prvChooseVbtcContract": "Choose which vBTC contract to resync.",
+  "prvConfirmPasswordLabel": "Confirm Password",
+  "prvConfirmPasswordTitle": "Confirm Password",
+  "prvConsolidateAction": "Consolidate",
+  "prvConsolidateMinNotes": "At least 2 unspent notes are required to consolidate.",
+  "prvConsolidateNotesBody": "Merge your 2 smallest notes into a single note. This reduces dust and improves privacy.",
+  "prvConsolidateNotesTitle": "Consolidate Notes",
+  "prvConsolidateVbtcNotesBody": "Merge your 2 smallest vBTC notes into a single note. This reduces dust and improves privacy.",
+  "prvConsolidateVbtcNotesTitle": "Consolidate vBTC Notes",
+  "prvConsolidationBroadcastSuccess": "Consolidation broadcast successfully",
+  "prvConsolidationFailed": "Consolidation failed: {error}",
+  "@prvConsolidationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvContractName": "Contract: {name}",
+  "@prvContractName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "prvCopyAddress": "Copy address",
+  "prvCreatePasswordBody": "Create a password to secure your shielded wallet's spending key. You'll need this password to unshield, transfer, or consolidate funds.",
+  "prvCreatePasswordTitle": "Create Privacy Password",
+  "prvCurrentNotes": "Current notes: {count}",
+  "@prvCurrentNotes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prvEnterValidAmount": "Please enter a valid amount",
+  "prvEnterValidVfxAddress": "Please enter a valid VFX address",
+  "prvEnterValidZfxAddress": "Please enter a valid zfx_ address",
+  "prvEnterVfxAddressHint": "Enter VFX address",
+  "prvEnterViewingKey": "Please enter the viewing key",
+  "prvErrorActivatingWallet": "Error activating privacy wallet: {error}",
+  "@prvErrorActivatingWallet": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvExportViewingKey": "Export Viewing Key",
+  "prvExportViewingKeyBody": "Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.",
+  "prvFailedExportViewingKey": "Failed to export viewing key",
+  "prvFailedGenerateShieldedAddress": "Failed to generate shielded address",
+  "prvFailedImportViewingKey": "Failed to import viewing key",
+  "prvFeeDeductedFromShielded": "Fee: {fee} (deducted from shielded balance)",
+  "@prvFeeDeductedFromShielded": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "prvFeeDeductedFromShieldedVfx": "Fee: {fee} (deducted from shielded VFX balance)",
+  "@prvFeeDeductedFromShieldedVfx": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "prvFeeDeductedShieldedShort": "{fee} fee deducted from shielded balance.",
+  "@prvFeeDeductedShieldedShort": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "prvFeeDeductedShieldedVfxLong": "A fee of {fee} will be deducted from your shielded VFX balance.",
+  "@prvFeeDeductedShieldedVfxLong": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "prvFromAddress": "From: {address}",
+  "@prvFromAddress": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "prvImportAction": "Import",
+  "prvImportViewingKey": "Import Viewing Key",
+  "prvImportViewingKeyBody": "Import a viewing key to create a view-only wallet. You can see balances but cannot spend.",
+  "prvInsufficientVfxFee": "Insufficient shielded VFX to cover the privacy transaction fee.",
+  "prvLayerStartingUp": "Privacy Layer Starting Up",
+  "prvMax": "Max",
+  "prvMinHint": "Min: {amount}",
+  "@prvMinHint": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvMinShieldAmountVbtc": "Minimum shield amount is {amount} vBTC",
+  "@prvMinShieldAmountVbtc": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvMinShieldAmountVfx": "Minimum shield amount is {amount} VFX",
+  "@prvMinShieldAmountVfx": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvNoAccountsFound": "No accounts found",
+  "prvNoShieldedAddress": "No shielded address found",
+  "prvNoVbtcTokens": "No vBTC tokens found",
+  "prvNoWalletSelected": "No wallet selected",
+  "prvNoteCount": "{count, plural, =1{{count} note} other{{count} notes}}",
+  "@prvNoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "prvPasswordConfirmationFailed": "Password confirmation failed",
+  "prvPasswordLabel": "Password",
+  "prvPasswordRequired": "Privacy wallet password required. Please unlock first.",
+  "prvPasswordsDoNotMatch": "Passwords do not match",
+  "prvPasteBase64Hint": "Paste Base64 key here",
+  "prvPlonkInitializing": "The PLONK proof system is initializing. This may take a moment\nwhile cryptographic parameters are loaded.",
+  "prvPrismLayerTitle": "PRISM Privacy Layer",
+  "prvPrivateTransferTitle": "Private Transfer",
+  "prvPrivateTransferVbtcBody": "Transfer shielded vBTC to another zfx_ address. Fully private.",
+  "prvPrivateTransferVbtcTitle": "Private Transfer vBTC",
+  "prvPrivateTransferVfxBody": "Transfer shielded VFX to another zfx_ address. Fully private.",
+  "prvRecipientInvalidZfx": "Recipient must be a valid zfx_ address",
+  "prvRecipientZfxLabel": "Recipient (zfx_ address)",
+  "prvRefresh": "Refresh",
+  "prvResetAction": "Reset",
+  "prvResetPrivacyWallet": "Reset Privacy Wallet",
+  "prvResetWalletBody": "This will clear your local privacy wallet state and return to the activation screen. Your shielded funds on the network are not affected — you can re-activate with the same account to recover them.\n\nContinue?",
+  "prvResyncAction": "Resync",
+  "prvResyncComplete": "Resync complete",
+  "prvResyncFailed": "Resync failed",
+  "prvResyncShieldedWalletBody": "This will wipe all cached notes and balances, then rescan from the beginning. This may take a while.\n\nContinue?",
+  "prvResyncShieldedWalletTitle": "Resync Shielded Wallet",
+  "prvResyncStarted": "Resync started...",
+  "prvResyncVbtcBody": "This will wipe cached notes and balances for \"{name}\" and rescan from the beginning. This may take a while.\n\nContinue?",
+  "@prvResyncVbtcBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "prvResyncVbtcWallet": "Resync vBTC Wallet",
+  "prvResyncWallet": "Resync Wallet",
+  "prvRetry": "Retry",
+  "prvScreenTitle": "PRISM Privacy",
+  "prvSelectFromAccounts": "Select from my accounts",
+  "prvSelectVbtcContract": "Select vBTC Contract",
+  "prvSettingsTooltip": "Privacy settings",
+  "prvShieldAction": "Shield",
+  "prvShieldBroadcastSuccess": "Shield transaction broadcast successfully",
+  "prvShieldFailed": "Shield failed: {error}",
+  "@prvShieldFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvShieldVbtcBody": "Move vBTC from your transparent wallet into the shielded pool.",
+  "prvShieldVbtcTitle": "Shield vBTC",
+  "prvShieldVfxBody": "Move VFX from your transparent wallet into the shielded pool.",
+  "prvShieldVfxTitle": "Shield VFX",
+  "prvShieldedAddressLabel": "Shielded Address",
+  "prvShieldedBalanceLabel": "Shielded Balance",
+  "prvShieldedVbtcHeading": "Shielded vBTC",
+  "prvShieldedVfxRequiredBody": "vBTC privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.",
+  "@prvShieldedVfxRequiredBody": {
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "prvShieldedVfxRequiredTitle": "Shielded VFX Required",
+  "prvToAddressLabel": "To Address (transparent)",
+  "prvTransferAction": "Transfer",
+  "prvTransferBroadcastSuccess": "Private transfer broadcast successfully",
+  "prvTransferFailed": "Private transfer failed: {error}",
+  "@prvTransferFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvTransparentFeeAutoCalc": "Transparent network fee will be auto-calculated.",
+  "prvTryAgain": "Try again",
+  "prvUnlockAction": "Unlock",
+  "prvUnlockBannerText": "Enter your privacy password to unlock spending operations.",
+  "prvUnlockWalletBody": "Enter your privacy wallet password to enable spending.",
+  "prvUnlockWalletTitle": "Unlock Privacy Wallet",
+  "prvUnshieldAction": "Unshield",
+  "prvUnshieldBroadcastSuccess": "Unshield transaction broadcast successfully",
+  "prvUnshieldFailed": "Unshield failed: {error}",
+  "@prvUnshieldFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvUnshieldVbtcBody": "Move vBTC from the shielded pool back to a transparent address.",
+  "prvUnshieldVbtcTitle": "Unshield vBTC",
+  "prvUnshieldVfxBody": "Move VFX from the shielded pool back to a transparent address.",
+  "prvUnshieldVfxTitle": "Unshield VFX",
+  "prvVbtcAmountSuffix": "{amount} vBTC",
+  "@prvVbtcAmountSuffix": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvVbtcConsolidationBroadcastSuccess": "vBTC consolidation broadcast successfully",
+  "prvVbtcConsolidationFailed": "vBTC consolidation failed: {error}",
+  "@prvVbtcConsolidationFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvVbtcResyncComplete": "vBTC resync complete",
+  "prvVbtcResyncFailed": "vBTC resync failed",
+  "prvVbtcResyncStarted": "vBTC resync started...",
+  "prvVbtcShieldBroadcastSuccess": "vBTC shield transaction broadcast successfully",
+  "prvVbtcShieldFailed": "vBTC shield failed: {error}",
+  "@prvVbtcShieldFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvVbtcTransferBroadcastSuccess": "vBTC private transfer broadcast successfully",
+  "prvVbtcTransferFailed": "vBTC private transfer failed: {error}",
+  "@prvVbtcTransferFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvVbtcUnshieldBroadcastSuccess": "vBTC unshield transaction broadcast successfully",
+  "prvVbtcUnshieldFailed": "vBTC unshield failed: {error}",
+  "@prvVbtcUnshieldFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "prvVfxAmountSuffix": "{amount} VFX",
+  "@prvVfxAmountSuffix": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "prvViewOnly": "VIEW ONLY",
+  "prvViewingKeyBase64Label": "Viewing Key (Base64)",
+  "prvViewingKeyCopied": "Viewing key copied to clipboard",
+  "prvViewingKeyImported": "Viewing key imported successfully",
+  "prvViewingKeyTitle": "Viewing Key",
+  "prvWalletActivated": "Privacy wallet activated: {address}",
+  "@prvWalletActivated": {
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "prvWalletReset": "Privacy wallet reset",
+  "prvWalletUnlocked": "Privacy wallet unlocked",
+  "prvZfxAddressLabel": "zfx_ Address",
+  "svcActionUpdate": "Update",
+  "svcActivateVaultBeforeProceeding": "You must activate your Vault Account before proceeding.",
+  "svcAddressOrDomainRequired": "Address or VFX domain required",
+  "svcAdnrDeleteConfirmBody": "Are you sure you want to delete this VFX Domain?\n{costLine}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+  "@svcAdnrDeleteConfirmBody": {
+    "placeholders": {
+      "costLine": {
+        "type": "String"
+      }
+    }
+  },
+  "svcAdnrDeleteNoCost": "There is no cost to delete a VFX Domain (aside from the TX fee).",
+  "svcAdnrDeleteWithCost": "There is a cost of {cost} RBX to delete an RBX Domain.",
+  "@svcAdnrDeleteWithCost": {
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "svcAdnrFundNeededBody": "You don't have the required funds to buy the domain in this account.",
+  "svcAdnrSufficientBalanceBody": "You have an account with a sufficient balance.\n\nWould you like to send 6 VFX from:\n{fromAddress}\n[Balance: {balance} VFX]?",
+  "@svcAdnrSufficientBalanceBody": {
+    "placeholders": {
+      "fromAddress": {
+        "type": "String"
+      },
+      "balance": {
+        "type": "String"
+      }
+    }
+  },
+  "svcAmountPositive": "The amount has to be a positive value",
+  "svcAmountRequired": "Amount required",
+  "svcAssetsRequestFailed": "Assets Request failed.",
+  "svcBalanceRowFromTo": "From: {from}\nTo: {to}",
+  "@svcBalanceRowFromTo": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "svcBeaconSignatureError": "Couldn't produce beacon upload signature",
+  "svcBeaconUploadRequestError": "Could not create beacon upload request.",
+  "svcBtcAddressRequired": "BTC Address required",
+  "svcBtcSentToAddress": "{amount} BTC has been sent to {address}.",
+  "@svcBtcSentToAddress": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "svcCliRestartRequiredBody": "A restart of the CLI is required. Restart Now?",
+  "svcCliUpdateAvailableBody": "A CLI update is available. Download and install now?",
+  "svcCliUpdateAvailableTitle": "CLI Update Available",
+  "svcCliUpdatedTitle": "CLI Updated",
+  "svcComplete": "Complete",
+  "svcCouldNotParseEncryptedMessage": "Could not parse encrypted message",
+  "svcCsvHeadersInvalid": "The CSV headers are not in the correct format, please check the example file",
+  "svcDecryptFailed": "Failed to decrypt message. Invalid key or corrupted data.",
+  "svcFailedParseFee": "Failed to parse fee",
+  "svcFailedParseHash": "Failed to parse hash",
+  "svcFailedRetrieveFee": "Failed to retrieve fee",
+  "svcFailedRetrieveNonce": "Failed to retrieve nonce",
+  "svcFailedRetrieveTimestamp": "Failed to retrieve timestamp",
+  "svcGuiUpdateAvailableBody": "A GUI update is available. Download now?",
+  "svcGuiUpdateAvailableTitle": "GUI Update Available",
+  "svcGuiUpdateLaunchBody": "The VFX GUI download will be launched in your browser. Once launched, the CLI will be shutdown and your wallet will be closed to ensure a safe update.",
+  "svcGuiUpdateTitle": "GUI Update",
+  "svcImBackedUp": "I'm Backed Up",
+  "svcImportSnapshotBody": "You are only at {blockHeight} block height locally. The network has a snapshot at {snapshotHeight} block height that will help you sync more quickly. \n\nWould you like to import it now?",
+  "@svcImportSnapshotBody": {
+    "placeholders": {
+      "blockHeight": {
+        "type": "String"
+      },
+      "snapshotHeight": {
+        "type": "String"
+      }
+    }
+  },
+  "svcImportSnapshotTitle": "Import Snapshot?",
+  "svcInsufficientBalanceToSend": "Insufficient balance to send",
+  "svcInvalidJson": "Invalid JSON",
+  "svcLocatorsRequestFailed": "Locators request failed.",
+  "svcMainMenuSyncTooltip": "Last Sync: {lastSync}\nNext Sync: {nextSync}",
+  "@svcMainMenuSyncTooltip": {
+    "placeholders": {
+      "lastSync": {
+        "type": "String"
+      },
+      "nextSync": {
+        "type": "String"
+      }
+    }
+  },
+  "svcMessageDecryptedSuccess": "Message decrypted successfully!",
+  "svcMinTxAmountBtc": "The minimum transaction amount is {amount} BTC",
+  "@svcMinTxAmountBtc": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "svcMintingProgress": "Minting {current}/{total}...",
+  "@svcMintingProgress": {
+    "placeholders": {
+      "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNavPrivacyLabel": "Privacy",
+  "svcNftNotEnoughVfxAction": "Not enough VFX to do this action",
+  "svcNftNotLoaded": "NFT not loaded",
+  "svcNftNotOwner": "You are not the owner of this NFT.",
+  "svcNftNotOwnerOrMinter": "You are not the owner or minter of this NFT.",
+  "svcNoAccountSelectedPeriod": "No account selected.",
+  "svcNoBtcAccount": "No BTC Account",
+  "svcNoEncryptedMessage": "No encrypted message found",
+  "svcNotEnoughBalanceAccount": "Not enough balance in account.",
+  "svcNotEnoughBalanceBtcAccount": "Not enough balance in BTC account",
+  "svcNotValidAmount": "Not a valid amount",
+  "svcNotifBtcDomainCreatedBody": "BTC Domain created for {name}.btc",
+  "@svcNotifBtcDomainCreatedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifBtcDomainCreatedTitle": "BTC Domain Name Created",
+  "svcNotifBtcDomainDeletedBody": "BTC Domain deleted for {name}",
+  "@svcNotifBtcDomainDeletedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifBtcDomainDeletedTitle": "BTC Domain Name Deleted",
+  "svcNotifBtcDomainTransferredTitle": "BTC Domain Name Transferred",
+  "svcNotifDecShopTxBody": "DecShop TX Complete",
+  "svcNotifDecShopTxTitle": "DecShop TX",
+  "svcNotifDomainCreatedTitle": "Domain Name Created",
+  "svcNotifDomainDeletedTitle": "Domain Name Deleted",
+  "svcNotifDomainTransferredTitle": "Domain Name Transferred",
+  "svcNotifFundsReceivedBody": "{amount} VFX from {fromAddress}",
+  "@svcNotifFundsReceivedBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "fromAddress": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifFundsReceivedTitle": "Funds Received",
+  "svcNotifFundsSentBody": "{amount} VFX to {toAddress}",
+  "@svcNotifFundsSentBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "toAddress": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifNftBurnedTitle": "NFT Burned",
+  "svcNotifNftEvolvedBody": "NFT evolved to state {state}.",
+  "@svcNotifNftEvolvedBody": {
+    "placeholders": {
+      "state": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifNftEvolvedTitle": "NFT Evolved",
+  "svcNotifNftMintedTitle": "NFT Minted",
+  "svcNotifNftReceivedBody": "NFT from {fromAddress}",
+  "@svcNotifNftReceivedBody": {
+    "placeholders": {
+      "fromAddress": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifNftReceivedTitle": "NFT Received",
+  "svcNotifNftSentBody": "NFT to {toAddress}",
+  "@svcNotifNftSentBody": {
+    "placeholders": {
+      "toAddress": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifNftSentTitle": "NFT Sent",
+  "svcNotifPaused": "Paused",
+  "svcNotifResumed": "Resumed",
+  "svcNotifSaleCompletedManualTitle": "Sale Completed (Manual)",
+  "svcNotifSaleCompletedTitle": "Sale Completed",
+  "svcNotifSaleStartedManualTitle": "Sale Started (Manual)",
+  "svcNotifSaleStartedTitle": "Sale Started",
+  "svcNotifTokenBanAddressTitle": "Token Ban Address",
+  "svcNotifTokenBurnTitle": "Token Burn",
+  "svcNotifTokenChangeOwnershipTitle": "Token Change Ownership",
+  "svcNotifTokenDeployedTitle": "Token Deployed",
+  "svcNotifTokenPauseTitle": "Token Pause",
+  "svcNotifTokenTopicCreatedTitle": "Token Topic Created",
+  "svcNotifTokenTransferTitle": "Token Transfer",
+  "svcNotifTokenVoteCastTitle": "Token Vote Cast",
+  "svcNotifTokensMintedTitle": "Tokens Minted",
+  "svcNotifTopicCreatedBody": "Topic {name} Created.",
+  "@svcNotifTopicCreatedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifTopicCreatedTitle": "Topic Created",
+  "svcNotifVbtcTokenizationMintTitle": "vBTC Tokenization Mint",
+  "svcNotifVfxDomainCreatedBody": "VFX Domain created for {name}.vfx",
+  "@svcNotifVfxDomainCreatedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifVfxDomainDeletedBody": "VFX Domain deleted for {name}",
+  "@svcNotifVfxDomainDeletedBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifVfxDomainTransferBody": "VFX Domain transfer for {name}",
+  "@svcNotifVfxDomainTransferBody": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifVoteCastedBody": "Vote casted on {topic}",
+  "@svcNotifVoteCastedBody": {
+    "placeholders": {
+      "topic": {
+        "type": "String"
+      }
+    }
+  },
+  "svcNotifVoteCastedTitle": "Vote Casted",
+  "svcPrivateKeyNotAvailableUnlock": "Private key not available. Please ensure wallet is unlocked.",
+  "svcPrivateKeyNotFoundRecipient": "Private key not found for recipient address",
+  "svcProblemDownloadingSkipping": "Problem downloading {url}. Skipping.",
+  "@svcProblemDownloadingSkipping": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "svcSendingConfirmBtcFee": "Sending:\n{amount} BTC\n\nTo:\n{toAddress}\n\nFrom:\n{fromAddress}\n\nFee:\n{fee} BTC",
+  "@svcSendingConfirmBtcFee": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "toAddress": {
+        "type": "String"
+      },
+      "fromAddress": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "svcSendingConfirmBtcFeeRate": "Sending:\n{amount} BTC\n\nTo:\n{toAddress}\n\nFrom:\n{fromAddress}\n\nFeeRate:\n{feeRate} SATS",
+  "@svcSendingConfirmBtcFeeRate": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "toAddress": {
+        "type": "String"
+      },
+      "fromAddress": {
+        "type": "String"
+      },
+      "feeRate": {
+        "type": "String"
+      }
+    }
+  },
+  "svcSignatureGenerationFailed": "Signature generation failed.",
+  "svcSignatureNotValid": "Signature not valid",
+  "svcSnapshotBackupWarningBody": "Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.",
+  "svcSnapshotDetermineStateError": "Could not determine latest snapshot state",
+  "svcSnapshotImportFailedBody": "Snapshot import failed.",
+  "svcSnapshotImportFailedTitle": "Import Failed",
+  "svcSnapshotRestartTryAgain": "Please restart and try again.",
+  "svcTimelockDuration": "Timelock Duration",
+  "svcTimelockHoursLabel": "Hours (24 Minimum)",
+  "svcTokenAutoMintInitiated": "Token Auto Mint initiated. ({scId}: {amount})",
+  "@svcTokenAutoMintInitiated": {
+    "placeholders": {
+      "scId": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "svcTransactionNotValid": "Transaction not valid",
+  "svcUnimplemented": "Unimplemented",
+  "svcValidTxConfirmBody": "This transaction is valid and is ready to send.\nAre you sure you want to proceed?\n\nTo: {toAddress}\n\nAmount: {amount} VFX",
+  "@svcValidTxConfirmBody": {
+    "placeholders": {
+      "toAddress": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "svcValidTxFeeSuffix": "\nTX Fee: {fee} VFX\nTotal: {total} VFX",
+  "@svcValidTxFeeSuffix": {
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "svcVaultAutoActivationInitiated": "Vault Account Auto Activation process initiated",
+  "svcVfxSentToAddress": "{amount} VFX sent to {address}",
+  "@svcVfxSentToAddress": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "svcVfxSentToAddressDashboard": "{amount} VFX has been sent to {address}. See dashboard for TX ID.",
+  "@svcVfxSentToAddressDashboard": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "address": {
+        "type": "String"
+      }
+    }
+  }
 }

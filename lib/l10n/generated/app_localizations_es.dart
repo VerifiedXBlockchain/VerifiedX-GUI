@@ -5631,4 +5631,1925 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tkbManualSendExchangeSubtitle => 'Envía BTC desde cualquier exchange o billetera a la dirección de depósito de este token';
+
+  @override
+  String get bw2AmountOfBtcToSend => 'Monto de BTC a enviar';
+
+  @override
+  String get bw2AnErrorOccurred => 'Ocurrió un error.';
+
+  @override
+  String get bw2BeaconUploadFailed => 'Falló la carga del beacon';
+
+  @override
+  String get bw2BlockConfirmTimedOut => 'Se agotó el tiempo de espera para la confirmación del bloque. Puedes volver a intentarlo más tarde desde la pantalla de detalles del token.';
+
+  @override
+  String bw2BlockWithValue(String height) {
+    return 'Bloque $height';
+  }
+
+  @override
+  String get bw2BridgeToBase => 'Puentear a Base';
+
+  @override
+  String get bw2BridgeVbtcToBase => 'Puentear vBTC a Base (vBTC.b)';
+
+  @override
+  String get bw2BroadcastingRequest => 'Transmitiendo solicitud';
+
+  @override
+  String get bw2BroadcastingWithdrawal => 'Transmitiendo la solicitud de retiro...';
+
+  @override
+  String get bw2BtcAccountNoBalance => 'Esta cuenta BTC no tiene saldo';
+
+  @override
+  String get bw2BtcAddressTitle => 'Dirección BTC';
+
+  @override
+  String bw2BtcAmount(String amount) {
+    return '$amount BTC';
+  }
+
+  @override
+  String get bw2BtcFundsReceived => '¡Fondos BTC recibidos!';
+
+  @override
+  String get bw2BtcTransactionLabel => 'Transacción BTC:';
+
+  @override
+  String get bw2BuyBtcOnRamp => 'Comprar BTC (On-Ramp)';
+
+  @override
+  String get bw2BuyBtcOnRampSubtitle => 'Compra BTC con moneda fiat y envíalo directamente a este token';
+
+  @override
+  String get bw2CancelWithdrawal => 'Cancelar retiro';
+
+  @override
+  String get bw2CancelWithdrawalBody => '¿Seguro que deseas cancelar esta solicitud de retiro?';
+
+  @override
+  String get bw2CancelWithdrawalQuestion => '¿Cancelar retiro?';
+
+  @override
+  String get bw2CancelWithdrawalTooltip => 'Cancelar retiro';
+
+  @override
+  String bw2CancellationFailedError(String error) {
+    return 'Falló la cancelación: $error';
+  }
+
+  @override
+  String get bw2CancellationSubmitted => 'Solicitud de cancelación enviada. Esperando los votos de los validadores.';
+
+  @override
+  String get bw2Cancelled => 'Cancelado';
+
+  @override
+  String get bw2CeremonyCompleted => 'Ceremonia completada';
+
+  @override
+  String get bw2CeremonyDismissHint => 'Puedes cerrar este cuadro de diálogo. La ceremonia continuará en segundo plano.';
+
+  @override
+  String get bw2CeremonyFailed => 'Ceremonia fallida';
+
+  @override
+  String get bw2CeremonyFailedRetry => 'La ceremonia falló. Inténtalo de nuevo.';
+
+  @override
+  String get bw2CeremonyTimedOut => 'La ceremonia agotó el tiempo de espera. Inténtalo de nuevo.';
+
+  @override
+  String get bw2CeremonyTimedOutNetwork => 'La ceremonia agotó el tiempo de espera en la red. Inténtalo de nuevo.';
+
+  @override
+  String bw2ConfirmSendBtcBody(String amount, String toAddress, String fromAddress, String feeRate) {
+    return 'Enviando:\n$amount BTC\n\nA:\n$toAddress (dirección de depósito del token)\n\nDesde:\n$fromAddress\n\nTasa de comisión:\n$feeRate SATS';
+  }
+
+  @override
+  String get bw2ConfirmTransfer => 'Confirmar transferencia';
+
+  @override
+  String bw2ConfirmTransferBody(String amount, String address) {
+    return '¿Transferir $amount vBTC a $address?';
+  }
+
+  @override
+  String get bw2ConfirmWithdrawalRequest => 'Confirmar solicitud de retiro';
+
+  @override
+  String get bw2ConfirmedWhenIndexed => 'Esto se confirmará una vez que el explorador lo indexe.';
+
+  @override
+  String get bw2ContractCreated => 'Contrato creado';
+
+  @override
+  String get bw2CouldNotConnectArbiter => 'No se pudo conectar con el árbitro. Inténtalo más tarde';
+
+  @override
+  String get bw2CreatingContract => 'Creando contrato';
+
+  @override
+  String get bw2CreatingVbtcContract => 'Creando el contrato vBTC en la cadena...';
+
+  @override
+  String get bw2DateLabel => 'Fecha:';
+
+  @override
+  String get bw2DepositAddress => 'Dirección de depósito';
+
+  @override
+  String get bw2DepositAddressCopied => 'Dirección de depósito copiada al portapapeles';
+
+  @override
+  String get bw2DepositAddressLabel => 'Dirección de depósito:';
+
+  @override
+  String get bw2DepositAmount => 'Monto del depósito';
+
+  @override
+  String get bw2DkgStartHint => 'Esto inicia el proceso de generación de claves distribuidas.';
+
+  @override
+  String get bw2DoNotCloseApp => 'Esto puede tardar un minuto. Por favor, no cierres la aplicación.';
+
+  @override
+  String get bw2DomainNameRequired => 'Nombre de dominio obligatorio';
+
+  @override
+  String bw2DomainTooLong(String max) {
+    return 'El dominio debe tener menos de $max caracteres.';
+  }
+
+  @override
+  String get bw2FailedBroadcastBtc => 'No se pudo transmitir la transacción de BTC';
+
+  @override
+  String get bw2FailedBroadcastWithdrawal => 'No se pudo transmitir la solicitud de retiro.';
+
+  @override
+  String get bw2FailedCreateContract => 'No se pudo crear el contrato. Inténtalo de nuevo.';
+
+  @override
+  String get bw2FailedCreateContractShort => 'No se pudo crear el contrato.';
+
+  @override
+  String get bw2FailedExecuteMpc => 'No se pudo ejecutar la ceremonia MPC.';
+
+  @override
+  String get bw2FailedInitiateMpc => 'No se pudo iniciar la ceremonia MPC.';
+
+  @override
+  String get bw2FailedPrepareCancellation => 'No se pudo preparar la cancelación';
+
+  @override
+  String get bw2FailedPrepareContractCreation => 'No se pudo preparar la creación del contrato.';
+
+  @override
+  String get bw2FailedPrepareFrost => 'No se pudo preparar la firma FROST';
+
+  @override
+  String get bw2FailedPrepareMpc => 'No se pudo preparar la ceremonia MPC.';
+
+  @override
+  String get bw2FailedPrepareOwnershipTransfer => 'No se pudo preparar la transferencia de propiedad';
+
+  @override
+  String get bw2FailedPrepareTransfer => 'No se pudo preparar la transferencia';
+
+  @override
+  String get bw2FailedPrepareWithdrawalRequest => 'No se pudo preparar la solicitud de retiro';
+
+  @override
+  String get bw2FailedSignBeacon => 'No se pudo firmar la carga del beacon';
+
+  @override
+  String get bw2FailedSignCeremony => 'No se pudieron firmar los mensajes de la ceremonia.';
+
+  @override
+  String get bw2FailedSignContractTx => 'No se pudo firmar la transacción de creación del contrato.';
+
+  @override
+  String get bw2FailedSignFrost => 'No se pudieron firmar los mensajes FROST';
+
+  @override
+  String get bw2FailedSignOwnershipProof => 'No se pudo firmar la prueba de propiedad.';
+
+  @override
+  String get bw2FailedSignTransaction => 'No se pudo firmar la transacción';
+
+  @override
+  String get bw2FailedStartFrost => 'No se pudo iniciar la firma FROST';
+
+  @override
+  String get bw2FrostConfirmHint => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
+
+  @override
+  String get bw2FrostConfirmHintWeb => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
+
+  @override
+  String get bw2FrostFailedOrTimedOut => 'La firma FROST falló o agotó el tiempo de espera. Es posible que el retiro aún se complete: vuelve a verificar en breve.';
+
+  @override
+  String get bw2FrostGroupKey => 'Clave de grupo FROST';
+
+  @override
+  String get bw2FrostJobNotFound => 'No se encontró el trabajo de firma FROST';
+
+  @override
+  String get bw2FrostSigning => 'Firma FROST';
+
+  @override
+  String get bw2FrostSigningFailed => 'La firma FROST falló';
+
+  @override
+  String bw2FrostSigningFailedError(String error) {
+    return 'La firma FROST falló: $error';
+  }
+
+  @override
+  String get bw2FrostSigningInProgress => 'Firma FROST en progreso...';
+
+  @override
+  String get bw2FrostTimedOut => 'La firma FROST agotó el tiempo de espera. Es posible que el retiro aún se complete: vuelve a verificar en breve.';
+
+  @override
+  String get bw2FrostValidatorsSigning => 'Los validadores están firmando la transacción de Bitcoin. Esto puede tardar uno o dos minutos. Por favor, no cierres esta ventana.';
+
+  @override
+  String get bw2FundVbtcToken => 'Financiar token vBTC';
+
+  @override
+  String get bw2FundViaManualSend => 'Financiar mediante envío manual';
+
+  @override
+  String bw2HashWithValue(String hash) {
+    return 'Hash: $hash';
+  }
+
+  @override
+  String get bw2HowMuchBtcWithdraw => '¿Cuánto BTC deseas retirar?';
+
+  @override
+  String get bw2InitiatingMpc => 'Iniciando la ceremonia MPC...';
+
+  @override
+  String bw2InsufficientBalanceAvailable(String available) {
+    return 'Saldo insuficiente. Disponible: $available vBTC';
+  }
+
+  @override
+  String get bw2InvalidDomainLetters => 'Dominio inválido. Solo debe contener letras y/o números.';
+
+  @override
+  String get bw2InvalidFeeRateWhole => 'Tasa de comisión inválida. Debe ser un número entero';
+
+  @override
+  String get bw2InvalidSupplyAmount => 'Cantidad de suministro inválida';
+
+  @override
+  String get bw2LabelHash => 'Hash';
+
+  @override
+  String get bw2LabelTransactionSignature => 'Firma de la transacción';
+
+  @override
+  String get bw2LabelVfxAddress => 'Dirección VFX';
+
+  @override
+  String get bw2Loading => 'Cargando';
+
+  @override
+  String get bw2LostConnectionCeremony => 'Se perdió la conexión mientras se monitoreaba la ceremonia. Inténtalo de nuevo.';
+
+  @override
+  String get bw2LostConnectionToast => 'Se perdió la conexión con la ceremonia.';
+
+  @override
+  String get bw2ManualSendInstructions => 'Envía BTC desde cualquier exchange o billetera externa a la dirección de depósito de abajo.';
+
+  @override
+  String get bw2MediaColon => 'Multimedia:';
+
+  @override
+  String get bw2MediaOptional => 'Multimedia (opcional)';
+
+  @override
+  String get bw2MpcCeremony => 'Ceremonia MPC';
+
+  @override
+  String get bw2MpcCeremonyCompletedSuccess => 'La ceremonia MPC se completó correctamente.';
+
+  @override
+  String get bw2MpcCeremonyFailedToast => 'La ceremonia MPC falló.';
+
+  @override
+  String get bw2MpcCeremonyInProgress => 'Ceremonia MPC en progreso';
+
+  @override
+  String get bw2MpcCeremonyTimedOutToast => 'La ceremonia MPC agotó el tiempo de espera.';
+
+  @override
+  String get bw2MultiSigHigherFee => 'Esta es una transacción multifirma, por lo que se recomienda una tasa de comisión más alta.';
+
+  @override
+  String bw2MyBalanceVbtc(String balance) {
+    return 'Mi saldo: $balance vBTC';
+  }
+
+  @override
+  String get bw2MyTotalBalance => 'Mi saldo total:';
+
+  @override
+  String get bw2NoBtcAccountSelected => 'No se seleccionó ninguna cuenta BTC';
+
+  @override
+  String get bw2NoBtcAddressInToken => 'El token no tiene dirección BTC';
+
+  @override
+  String get bw2NoBtcTokenSelected => 'No se seleccionó ningún token BTC';
+
+  @override
+  String get bw2NoInitialIssuance => 'Sin emisión inicial';
+
+  @override
+  String get bw2NoKeypairFound => 'No se encontró un par de claves';
+
+  @override
+  String get bw2NoKeypairFoundPeriod => 'No se encontró un par de claves.';
+
+  @override
+  String get bw2NoKeypairToSign => 'No se encontró un par de claves para firmar la transacción';
+
+  @override
+  String get bw2NoVbtcToBridge => 'No hay vBTC disponible para puentear';
+
+  @override
+  String get bw2NoVfxAccountFound => 'No se encontró una cuenta VFX';
+
+  @override
+  String get bw2NotEnoughBtcCoverFee => 'No hay suficiente BTC para cubrir esta transacción + comisión';
+
+  @override
+  String bw2NotEnoughVfxDeleteDomain(String address) {
+    return 'No hay suficiente VFX en tu cuenta controladora para eliminar un dominio VFX. [$address]';
+  }
+
+  @override
+  String get bw2OnboardCreateVfxDetails => 'Primero necesitarás una billetera VFX. Puedes importar una existente o crear una ahora.';
+
+  @override
+  String get bw2OnboardFaucetDetails => 'La comunidad ha proporcionado un faucet para retirar una cantidad mínima de VFX y así probar esta función. Se requiere un número de teléfono con fines de verificación y para reducir la posibilidad de abuso. Ten en cuenta que solo se almacena un hash del número de teléfono en el faucet. Como alternativa, si lo prefieres, puedes comprar VFX a través de un exchange o un on-ramp.';
+
+  @override
+  String get bw2OnboardImportBtcDetails => 'Ahora necesitas agregar una cuenta BTC a tu billetera. Puedes importar una clave privada o generar una nueva.';
+
+  @override
+  String get bw2OnboardTokenizeDetails => 'Es hora de tokenizar un token vBTC. ¡Todos los siguientes campos son opcionales!';
+
+  @override
+  String get bw2OnboardTransferBtcDetails => 'Parece que esta cuenta no tiene BTC. Transfiere BTC a esta cuenta para continuar.';
+
+  @override
+  String get bw2OnboardTransferToVbtcDetails => 'Ahora estás listo para transferir BTC a tu token vBTC. Selecciona el monto y la tasa de comisión a continuación';
+
+  @override
+  String get bw2OneVbtcEqualsBtc => '1 vBTC = 1 BTC';
+
+  @override
+  String get bw2OnlyOwnerCanAction => 'Solo el propietario de este token puede realizar esta acción';
+
+  @override
+  String bw2OwnershipTransferFailed(String error) {
+    return 'Falló la transferencia de propiedad: $error';
+  }
+
+  @override
+  String get bw2PendingTapResume => 'Pendiente: toca para reanudar';
+
+  @override
+  String get bw2PendingWithdrawal => 'Retiro pendiente';
+
+  @override
+  String bw2PercentComplete(String percent) {
+    return '$percent% completado';
+  }
+
+  @override
+  String get bw2PreMintTitle => '¿Preacuñar la emisión inicial?';
+
+  @override
+  String get bw2PreMintTitleOptional => '¿Preacuñar la emisión inicial? (opcional)';
+
+  @override
+  String get bw2ProcessingWithdrawal => 'Procesando retiro';
+
+  @override
+  String get bw2RbfFeeRateBody => 'Ingresa la tasa de comisión que deseas (SATS /byte) para esta transacción.';
+
+  @override
+  String get bw2RebroadcastTx => 'Retransmitir TX';
+
+  @override
+  String get bw2RebroadcastTxBody => '¿Seguro que deseas retransmitir esta transacción?';
+
+  @override
+  String bw2RebroadcastedTx(String hash) {
+    return 'TX retransmitida. ($hash)';
+  }
+
+  @override
+  String get bw2ReceivingBtcAddress => 'Dirección BTC receptora';
+
+  @override
+  String get bw2RecipientVfxAddress => 'Dirección VFX del destinatario';
+
+  @override
+  String bw2ReplacedByFeeMessage(String feeRate, String hash) {
+    return 'TX de reemplazo por comisión ($feeRate SATS /byte) enviada. Hash: $hash';
+  }
+
+  @override
+  String get bw2RetrySigning => 'Reintentar firma';
+
+  @override
+  String bw2SatsAmount(String amount) {
+    return '$amount SATS';
+  }
+
+  @override
+  String get bw2SelectBtcAddressRequired => 'Es obligatorio seleccionar una dirección BTC.';
+
+  @override
+  String get bw2SelectVfxAddressRequired => 'Es obligatorio seleccionar una dirección VFX.';
+
+  @override
+  String get bw2SigningThreshold => 'Umbral de firma';
+
+  @override
+  String get bw2SmartContractIdColon => 'ID del smart contract:';
+
+  @override
+  String get bw2StartingMpcCeremony => 'Iniciando la ceremonia MPC';
+
+  @override
+  String bw2StatusWithValue(String status) {
+    return 'Estado: $status';
+  }
+
+  @override
+  String get bw2StepCompleted => 'Completada';
+
+  @override
+  String get bw2StepCreateVfxAccount => 'Crear cuenta VFX';
+
+  @override
+  String get bw2StepGetVfx => 'Obtener VFX';
+
+  @override
+  String get bw2StepImportBtcAccount => 'Importar cuenta BTC';
+
+  @override
+  String get bw2StepInitiated => 'Iniciada';
+
+  @override
+  String get bw2StepRound1 => 'Ronda 1';
+
+  @override
+  String get bw2StepRound2 => 'Ronda 2';
+
+  @override
+  String get bw2StepRound3 => 'Ronda 3';
+
+  @override
+  String get bw2StepTokenizedVbtc => 'vBTC tokenizado';
+
+  @override
+  String get bw2StepTransferBtc => 'Transferir BTC';
+
+  @override
+  String get bw2StepTransferBtcToVbtc => 'Transferir BTC al token vBTC';
+
+  @override
+  String get bw2StepValidating => 'Validando';
+
+  @override
+  String get bw2SubmittingTxVfx => 'Enviando una transacción a la red VFX.';
+
+  @override
+  String get bw2SupplyAmount => 'Cantidad de suministro';
+
+  @override
+  String get bw2SupplyLabel => 'Suministro';
+
+  @override
+  String get bw2ToBtcAddressRequired => 'Dirección BTC de destino obligatoria.';
+
+  @override
+  String get bw2ToVfxAddressRequired => 'Dirección VFX de destino obligatoria.';
+
+  @override
+  String get bw2TokenAppearWhenIndexed => 'El token aparecerá en tu lista una vez indexado (normalmente unos segundos).';
+
+  @override
+  String get bw2TokenCreated => 'Token creado';
+
+  @override
+  String get bw2TokenDeployed => '¡Token desplegado!';
+
+  @override
+  String get bw2TokenDescriptionOptional => 'Descripción del token (opcional)';
+
+  @override
+  String get bw2TokenImageOptional => 'Imagen del token (opcional)';
+
+  @override
+  String get bw2TokenNameOptional => 'Nombre del token (opcional)';
+
+  @override
+  String get bw2TokenPaused => 'Las transacciones de este token están pausadas actualmente.';
+
+  @override
+  String get bw2TokenTickerOptional => 'Ticker del token (opcional)';
+
+  @override
+  String get bw2TransactionBroadcasted => '¡Transacción transmitida!';
+
+  @override
+  String bw2TransactionFailed(String error) {
+    return 'Falló la transacción: $error';
+  }
+
+  @override
+  String get bw2TransactionHashColon => 'Hash de la transacción:';
+
+  @override
+  String get bw2TransactionsColon => 'Transacciones:';
+
+  @override
+  String get bw2TransferComplete => '¡Transferencia completada!';
+
+  @override
+  String get bw2TransferFailed => 'Falló la transferencia';
+
+  @override
+  String bw2TransferFailedError(String error) {
+    return 'Falló la transferencia: $error';
+  }
+
+  @override
+  String bw2TransferOwnershipConfirmBody(String address) {
+    return '¿Transferir la propiedad de este token vBTC a $address?\n\nEsto no se puede deshacer.';
+  }
+
+  @override
+  String bw2TxVerifiedFeeBody(String fee) {
+    return 'Transacción verificada. Habrá una comisión de $fee VFX. ¿Deseas continuar?';
+  }
+
+  @override
+  String get bw2TypeLabel => 'Tipo:';
+
+  @override
+  String get bw2UtxosLabel => 'UTXOs:';
+
+  @override
+  String get bw2ValidatorsGeneratingKeys => 'Los validadores están generando las claves de firma de umbral. Esto suele tardar entre 30 y 90 segundos.';
+
+  @override
+  String get bw2ValidatorsSigningBtc => 'Los validadores están firmando la transacción de Bitcoin...';
+
+  @override
+  String bw2ValidatorsThreshold(String count, String threshold) {
+    return 'Validadores: $count (umbral: $threshold)';
+  }
+
+  @override
+  String get bw2VaultBalanceRequired => 'Se requiere saldo en tu cuenta de bóveda para transmitir esta transacción';
+
+  @override
+  String get bw2VaultCannotActionTransferFirst => 'Las cuentas de bóveda no pueden realizar esta acción. Primero transfiere la propiedad a tu cuenta VFX estándar';
+
+  @override
+  String bw2VbtcAmount(String amount) {
+    return '$amount vBTC';
+  }
+
+  @override
+  String get bw2VbtcBalanceUpdateHint => 'Una vez que la transacción de BTC se confirme en la cadena, tu saldo de vBTC se actualizará automáticamente.';
+
+  @override
+  String bw2VbtcContractCreatedHash(String hash) {
+    return 'Contrato vBTC creado. Hash: $hash';
+  }
+
+  @override
+  String get bw2VbtcContractCreatedSuccess => '¡Contrato vBTC creado correctamente!';
+
+  @override
+  String get bw2VbtcInfoBody => '¡Esta billetera ofrece un smart contract específico que permite tokenizar Bitcoin real! Esto te permitirá bloquear cualquier denominación de Bitcoin que elijas en un smart contract, con o sin multimedia / documentos.\n\nUna vez acuñado, tendrás un Token de Bitcoin Verificado que podrás enviar a cualquier otra persona en cualquier momento, en su totalidad o en parte, sin moverlo por la red de BTC y sin pagar comisiones de BTC. Solo tú o el titular de un token vBTC pueden desbloquear el BTC subyacente del smart contract. También puedes agregar BTC adicional a tu token en cualquier momento sin crear uno nuevo, si así lo deseas.\n\nTodos los tokens vBTC también se pueden almacenar en tu función de cuenta de bóveda (protegida) registrada, lo que habilita la recuperación total on-chain y opciones de revocación, brindando un resguardo autocustodiado increíblemente seguro.';
+
+  @override
+  String get bw2VbtcInfoWelcome => '¡Bienvenido a la verdadera utilidad on-chain para tu BTC!';
+
+  @override
+  String get bw2VbtcTokenCreatedSuccess => '¡Token vBTC creado correctamente!';
+
+  @override
+  String get bw2VbtcTransferBroadcastedSuccess => 'Transferencia de vBTC transmitida correctamente';
+
+  @override
+  String get bw2VfxAccountBalanceRequired => 'Se requiere una cuenta VFX con saldo para continuar.';
+
+  @override
+  String get bw2VfxAccountBalanceRequiredShort => 'Se requiere una cuenta VFX con saldo.';
+
+  @override
+  String get bw2VfxAccountRequired => 'Se requiere una cuenta VFX para continuar.';
+
+  @override
+  String get bw2VfxBalanceRequiredBody => 'Se requiere una dirección VFX con saldo para continuar.';
+
+  @override
+  String get bw2VfxBalanceRequiredBroadcast => 'Se requiere saldo en tu cuenta VFX para transmitir esta transacción';
+
+  @override
+  String get bw2VfxBalanceRequiredSetupBody => 'Se requiere una dirección VFX con saldo para continuar. ¿Quieres configurarla ahora?';
+
+  @override
+  String bw2VfxControllerNotFound(String address) {
+    return 'No se encontró la cuenta VFX que controla este dominio BTC. [$address]';
+  }
+
+  @override
+  String get bw2VfxFundsReceived => '¡Fondos VFX recibidos!';
+
+  @override
+  String get bw2VfxTransactionLabel => 'Transacción VFX:';
+
+  @override
+  String get bw2WaitingBlockConfirmation => 'Esperando la confirmación del bloque...';
+
+  @override
+  String get bw2WaitingBtcToVbtc => 'Esperando a que la transacción de BTC a vBTC se refleje en la cadena.';
+
+  @override
+  String get bw2WaitingBtcTransfer => 'Esperando a que la transferencia de BTC se refleje en la cadena.';
+
+  @override
+  String get bw2WaitingForBlockBody => 'Esperando a que la solicitud de retiro se confirme en un bloque...';
+
+  @override
+  String get bw2WaitingForConfirmation => 'Esperando confirmación';
+
+  @override
+  String get bw2WaitingTokenization => 'Ceremonia MPC y creación del contrato en progreso.';
+
+  @override
+  String get bw2WaitingVfxTransfer => 'Esperando a que la transferencia de VFX se refleje en la cadena.';
+
+  @override
+  String get bw2WhatIsVbtc => '¿Qué es vBTC?';
+
+  @override
+  String get bw2WithdrawalAmount => 'Monto del retiro';
+
+  @override
+  String get bw2WithdrawalComplete => 'Retiro completado';
+
+  @override
+  String get bw2WithdrawalCompletedSuccess => '¡Retiro completado correctamente!';
+
+  @override
+  String get bw2WithdrawalError => 'Ocurrió un error durante el retiro.';
+
+  @override
+  String get bw2WithdrawalFailed => 'Retiro fallido';
+
+  @override
+  String get bw2WithdrawalHistory => 'Historial de retiros:';
+
+  @override
+  String bw2WithdrawalRequestBody(String amount, String address, String feeRate) {
+    return 'Retirar $amount BTC a $address\nTasa de comisión: $feeRate sats/byte\n\n¿Continuar?';
+  }
+
+  @override
+  String get bw2WithdrawalRequestFailed => 'Falló la solicitud de retiro';
+
+  @override
+  String bw2WithdrawalRequestFailedError(String error) {
+    return 'Falló la solicitud de retiro: $error';
+  }
+
+  @override
+  String get bw2WithdrawalTimedOut => 'Se agotó el tiempo de espera para confirmar la solicitud de retiro. Puedes volver a intentarlo más tarde.';
+
+  @override
+  String bw2WithdrawalToLine(String amount, String address) {
+    return '$amount vBTC → $address';
+  }
+
+  @override
+  String get prvActivateWallet => 'Activar billetera privada';
+
+  @override
+  String get prvActivating => 'Activando...';
+
+  @override
+  String get prvActivationDescription => 'Activa tu billetera privada para blindar VFX usando pruebas de conocimiento cero. Los fondos blindados quedan ocultos del registro público y pueden transferirse de forma privada.';
+
+  @override
+  String get prvAddressCopied => 'Dirección copiada al portapapeles';
+
+  @override
+  String get prvAmountVbtcLabel => 'Monto (vBTC)';
+
+  @override
+  String get prvAmountVfxLabel => 'Monto (VFX)';
+
+  @override
+  String get prvBack => 'Atrás';
+
+  @override
+  String prvBlockLabel(String block) {
+    return 'Bloque $block';
+  }
+
+  @override
+  String get prvBridgeAboutTo => 'Estás a punto de transferir mediante el puente';
+
+  @override
+  String get prvBridgeAmountRequired => 'El monto es obligatorio';
+
+  @override
+  String get prvBridgeAmountToBridge => 'Monto a transferir';
+
+  @override
+  String prvBridgeAmountToDest(String amount, String dest) {
+    return '$amount vBTC → $dest';
+  }
+
+  @override
+  String prvBridgeAtDest(String dest) {
+    return 'en $dest';
+  }
+
+  @override
+  String prvBridgeAvailableAmount(String amount) {
+    return 'Disponible: $amount vBTC';
+  }
+
+  @override
+  String get prvBridgeBaseAddressRequired => 'La dirección de Base es obligatoria';
+
+  @override
+  String get prvBridgeBaseEvmAddress => 'Dirección de Base (EVM)';
+
+  @override
+  String prvBridgeBlockHeight(String height) {
+    return 'Altura del bloque: $height';
+  }
+
+  @override
+  String get prvBridgeBulletExit => 'Salir de vuelta a vBTC en VFX o directamente a BTC (quien tenga los vBTC.b inicia la salida; la red la detectará y te acreditará de vuelta automáticamente)';
+
+  @override
+  String get prvBridgeBulletTransfer => 'Transferir a otra dirección de Base';
+
+  @override
+  String get prvBridgeBulletYield => 'Generar rendimiento mediante DeFi en Base';
+
+  @override
+  String get prvBridgeCantLoadInfo => 'No se pudo cargar la información del puente.';
+
+  @override
+  String get prvBridgeCantReach => 'No se pudo contactar con el servicio de puente. Comprueba tu conexión e inténtalo de nuevo.';
+
+  @override
+  String prvBridgeCantReadBalance(String error) {
+    return 'No se pudo leer tu saldo de vBTC: $error';
+  }
+
+  @override
+  String get prvBridgeCheckingAccounts => 'Comprobando tus cuentas…';
+
+  @override
+  String get prvBridgeCompleteTitle => 'Puente completado';
+
+  @override
+  String get prvBridgeConfirmAndBridge => 'Confirmar y transferir';
+
+  @override
+  String get prvBridgeContractLabel => 'Contrato';
+
+  @override
+  String get prvBridgeCouldNotComplete => 'El puente no se pudo completar.';
+
+  @override
+  String get prvBridgeCurrentBalance => 'Saldo actual';
+
+  @override
+  String prvBridgeDaysAgo(int days) {
+    return 'hace $days d';
+  }
+
+  @override
+  String get prvBridgeDetailsTitle => 'Detalles del puente';
+
+  @override
+  String get prvBridgeEnterPositive => 'Ingresa un monto positivo';
+
+  @override
+  String get prvBridgeEstimatedTime => 'Tiempo estimado: de 2 a 5 minutos una vez enviada.';
+
+  @override
+  String prvBridgeEthAmount(String amount) {
+    return '$amount ETH';
+  }
+
+  @override
+  String get prvBridgeEthForGas => 'ETH para gas';
+
+  @override
+  String prvBridgeExceedsAvailable(String amount) {
+    return 'Supera lo disponible ($amount vBTC)';
+  }
+
+  @override
+  String get prvBridgeFailedBodyFallback => 'Abre el historial del puente para ver los detalles.';
+
+  @override
+  String get prvBridgeFailedFallback => 'El puente falló.';
+
+  @override
+  String get prvBridgeFailedHelp => 'Tus vBTC podrían seguir bloqueados en VFX. Consulta el historial del puente para ver los detalles, o contacta con soporte si esto persiste.';
+
+  @override
+  String get prvBridgeFailedTitle => 'El puente falló';
+
+  @override
+  String get prvBridgeFailedToStart => 'No se pudo iniciar el puente. Inténtalo de nuevo.';
+
+  @override
+  String get prvBridgeFromVfx => 'desde VFX';
+
+  @override
+  String get prvBridgeGasLowBalance => 'Saldo bajo: los costos de gas varían. Recarga la dirección de arriba si la acuñación falla.';
+
+  @override
+  String get prvBridgeGasTitle => 'Gas (pagado en Base)';
+
+  @override
+  String get prvBridgeGasZeroEth => 'Esta dirección paga la comisión de gas de la transacción de acuñación en Base. Envía una pequeña cantidad de ETH de Base (≈ 0.001 ETH) a la dirección de arriba antes de transferir. Puedes financiarla desde cualquier exchange o billetera Base que admita retiros a la red principal de Base. El saldo se actualiza automáticamente cada 10 s; toca Actualizar para comprobarlo de inmediato.';
+
+  @override
+  String get prvBridgeHideDetails => 'Ocultar detalles';
+
+  @override
+  String get prvBridgeHistoryLoadError => 'No se pudo cargar el historial del puente. Comprueba tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get prvBridgeHistoryLoading => 'Cargando el historial del puente…';
+
+  @override
+  String get prvBridgeHistoryTitle => 'Historial del puente';
+
+  @override
+  String prvBridgeHoursAgo(int hours) {
+    return 'hace $hours h';
+  }
+
+  @override
+  String get prvBridgeInvalidBaseAddress => 'Debe ser una dirección Base 0x válida (40 caracteres hexadecimales)';
+
+  @override
+  String get prvBridgeJustNow => 'ahora mismo';
+
+  @override
+  String get prvBridgeLoadingStatus => 'Cargando el estado del puente…';
+
+  @override
+  String prvBridgeLockId(String id) {
+    return 'ID de bloqueo: $id';
+  }
+
+  @override
+  String prvBridgeMintedBody(String amount) {
+    return 'Se acuñaron $amount vBTC.b en Base.';
+  }
+
+  @override
+  String prvBridgeMinutesAgo(int minutes) {
+    return 'hace $minutes min';
+  }
+
+  @override
+  String prvBridgeMonthsAgo(int months) {
+    return 'hace $months meses';
+  }
+
+  @override
+  String get prvBridgeNetworkInfo => 'Información de la red';
+
+  @override
+  String get prvBridgeNetworkLabel => 'Red';
+
+  @override
+  String get prvBridgeNoOperations => 'Aún no hay operaciones de puente.';
+
+  @override
+  String get prvBridgeNothingAvailable => 'Aún no hay nada disponible para transferir mediante el puente.\n\nTu billetera puede mostrar un saldo, pero la cadena todavía no ve ningún vBTC confirmado para este contrato. La causa más común es un depósito de BTC que aún no ha recibido suficientes confirmaciones de Bitcoin. Las reservas de puente de un intento anterior también podrían estar reteniendo el saldo.\n\nEspera unos minutos e inténtalo de nuevo, o consulta el historial del puente más abajo para ver operaciones en curso.';
+
+  @override
+  String get prvBridgeOneWayDisclaimer => 'El puente es unidireccional desde esta app. Una vez que vBTC.b esté en Base, usa tu proveedor DeFi u otra billetera Base (EVM) para gestionar, transferir o salir.';
+
+  @override
+  String get prvBridgeOneWayReminder => 'Recordatorio: esto es unidireccional desde esta app. Usarás tu proveedor DeFi u otra billetera Base (EVM) para cualquier acción adicional sobre vBTC.b.';
+
+  @override
+  String get prvBridgePasteDestination => 'Pega la dirección de destino de tu proveedor DeFi o billetera Base.';
+
+  @override
+  String get prvBridgeReconnecting => 'Reconectando… el servicio de puente no respondió a las comprobaciones de estado recientes. Seguiremos reintentando.';
+
+  @override
+  String get prvBridgeRetryFailedToast => 'El reintento falló. Consulta el detalle del historial para ver el estado.';
+
+  @override
+  String get prvBridgeRetrySubmitted => 'Reintento enviado. Vigilando las actualizaciones de estado.';
+
+  @override
+  String get prvBridgeReviewBridge => 'Revisar puente';
+
+  @override
+  String get prvBridgeSafeToClose => 'Puedes cerrar este diálogo de forma segura: tu puente continuará en segundo plano. Sigue el progreso en el historial del puente.';
+
+  @override
+  String get prvBridgeShowDetails => 'Mostrar detalles';
+
+  @override
+  String prvBridgeSigsProgress(int collected, int required) {
+    return '$collected / $required firmas recopiladas';
+  }
+
+  @override
+  String get prvBridgeStageCollectingSigs => 'Recopilando firmas de los validadores…';
+
+  @override
+  String get prvBridgeStageConfirmed => 'Confirmado en VFX';
+
+  @override
+  String get prvBridgeStageLockSubmitted => 'Bloqueo en VFX enviado';
+
+  @override
+  String get prvBridgeStageMinted => 'Acuñado en Base';
+
+  @override
+  String get prvBridgeStageSigsCollected => 'Firmas de los validadores recopiladas';
+
+  @override
+  String get prvBridgeStageSubmittingMint => 'Enviando la acuñación en Base';
+
+  @override
+  String get prvBridgeStalled => 'Está tardando más de lo esperado. La firma de los validadores a veces se retrasa; seguiremos vigilando. Puedes cerrar este diálogo de forma segura; el historial del puente mostrará el resultado final.';
+
+  @override
+  String get prvBridgeStateLost => 'Se perdió el estado del puente. Cierra e inténtalo de nuevo.';
+
+  @override
+  String prvBridgeStepLock(String amount) {
+    return 'Bloquear tus $amount vBTC en VFX';
+  }
+
+  @override
+  String get prvBridgeStepMint => 'Enviar una transacción mintWithProof en Base (pagada desde tu dirección Base derivada)';
+
+  @override
+  String get prvBridgeStepWaitSignatures => 'Esperar las firmas de los validadores';
+
+  @override
+  String prvBridgeSuccessAmount(String amount) {
+    return 'Ahora tienes $amount vBTC.b en Base';
+  }
+
+  @override
+  String get prvBridgeSuccessTitle => 'Transferido a Base';
+
+  @override
+  String get prvBridgeThisWill => 'Esto hará lo siguiente:';
+
+  @override
+  String get prvBridgeToBaseTitle => 'Transferir a Base';
+
+  @override
+  String prvBridgeToDestOnBase(String dest) {
+    return 'a $dest en Base';
+  }
+
+  @override
+  String get prvBridgeTxLabel => 'Tx';
+
+  @override
+  String get prvBridgeUnavailableCli => 'El puente no está disponible actualmente. La CLI no está configurada para comunicarse con Base.';
+
+  @override
+  String get prvBridgeUnavailableNoAddress => 'Puente no disponible: no se pudo derivar tu dirección de Base. Esto normalmente significa que la billetera está bloqueada. Desbloquéala e inténtalo de nuevo.';
+
+  @override
+  String get prvBridgeUseDefiTo => 'Usa tu proveedor DeFi u otra billetera Base (EVM) para:';
+
+  @override
+  String prvBridgeVbtcbAmount(String amount) {
+    return '$amount vBTC.b';
+  }
+
+  @override
+  String get prvBridgeVbtcbBalanceLabel => 'Saldo de vBTC.b';
+
+  @override
+  String get prvBridgeViewDetails => 'Ver detalles';
+
+  @override
+  String get prvBridgeViewOnBasescan => 'Ver en Basescan';
+
+  @override
+  String get prvBridgeWhatsNext => '¿Qué sigue?';
+
+  @override
+  String get prvBridgeYesterday => 'ayer';
+
+  @override
+  String get prvBridgeYourBaseAddress => 'Tu dirección de Base';
+
+  @override
+  String get prvBridgeYourGasAddress => 'Tu dirección de gas';
+
+  @override
+  String get prvBridging => 'Transfiriendo…';
+
+  @override
+  String get prvCheckingStatus => 'Comprobando el estado de la capa de privacidad...';
+
+  @override
+  String get prvChooseVbtcContract => 'Elige qué contrato de vBTC resincronizar.';
+
+  @override
+  String get prvConfirmPasswordLabel => 'Confirmar contraseña';
+
+  @override
+  String get prvConfirmPasswordTitle => 'Confirmar contraseña';
+
+  @override
+  String get prvConsolidateAction => 'Consolidar';
+
+  @override
+  String get prvConsolidateMinNotes => 'Se requieren al menos 2 notas no gastadas para consolidar.';
+
+  @override
+  String get prvConsolidateNotesBody => 'Combina tus 2 notas más pequeñas en una sola nota. Esto reduce el polvo y mejora la privacidad.';
+
+  @override
+  String get prvConsolidateNotesTitle => 'Consolidar notas';
+
+  @override
+  String get prvConsolidateVbtcNotesBody => 'Combina tus 2 notas de vBTC más pequeñas en una sola nota. Esto reduce el polvo y mejora la privacidad.';
+
+  @override
+  String get prvConsolidateVbtcNotesTitle => 'Consolidar notas de vBTC';
+
+  @override
+  String get prvConsolidationBroadcastSuccess => 'Consolidación transmitida correctamente';
+
+  @override
+  String prvConsolidationFailed(String error) {
+    return 'La consolidación falló: $error';
+  }
+
+  @override
+  String prvContractName(String name) {
+    return 'Contrato: $name';
+  }
+
+  @override
+  String get prvCopyAddress => 'Copiar dirección';
+
+  @override
+  String get prvCreatePasswordBody => 'Crea una contraseña para proteger la clave de gasto de tu billetera blindada. Necesitarás esta contraseña para desblindar, transferir o consolidar fondos.';
+
+  @override
+  String get prvCreatePasswordTitle => 'Crear contraseña de privacidad';
+
+  @override
+  String prvCurrentNotes(int count) {
+    return 'Notas actuales: $count';
+  }
+
+  @override
+  String get prvEnterValidAmount => 'Ingresa un monto válido';
+
+  @override
+  String get prvEnterValidVfxAddress => 'Ingresa una dirección VFX válida';
+
+  @override
+  String get prvEnterValidZfxAddress => 'Ingresa una dirección zfx_ válida';
+
+  @override
+  String get prvEnterVfxAddressHint => 'Ingresa la dirección VFX';
+
+  @override
+  String get prvEnterViewingKey => 'Ingresa la clave de visualización';
+
+  @override
+  String prvErrorActivatingWallet(String error) {
+    return 'Error al activar la billetera privada: $error';
+  }
+
+  @override
+  String get prvExportViewingKey => 'Exportar clave de visualización';
+
+  @override
+  String get prvExportViewingKeyBody => 'Copia esta clave para importar una billetera de solo lectura en otro dispositivo. Esta clave puede ver saldos pero no puede gastar.';
+
+  @override
+  String get prvFailedExportViewingKey => 'No se pudo exportar la clave de visualización';
+
+  @override
+  String get prvFailedGenerateShieldedAddress => 'No se pudo generar la dirección blindada';
+
+  @override
+  String get prvFailedImportViewingKey => 'No se pudo importar la clave de visualización';
+
+  @override
+  String prvFeeDeductedFromShielded(String fee) {
+    return 'Comisión: $fee (deducida del saldo blindado)';
+  }
+
+  @override
+  String prvFeeDeductedFromShieldedVfx(String fee) {
+    return 'Comisión: $fee (deducida del saldo de VFX blindado)';
+  }
+
+  @override
+  String prvFeeDeductedShieldedShort(String fee) {
+    return 'Se deduce una comisión de $fee del saldo blindado.';
+  }
+
+  @override
+  String prvFeeDeductedShieldedVfxLong(String fee) {
+    return 'Se deducirá una comisión de $fee de tu saldo de VFX blindado.';
+  }
+
+  @override
+  String prvFromAddress(String address) {
+    return 'Desde: $address';
+  }
+
+  @override
+  String get prvImportAction => 'Importar';
+
+  @override
+  String get prvImportViewingKey => 'Importar clave de visualización';
+
+  @override
+  String get prvImportViewingKeyBody => 'Importa una clave de visualización para crear una billetera de solo lectura. Puedes ver saldos pero no puedes gastar.';
+
+  @override
+  String get prvInsufficientVfxFee => 'VFX blindado insuficiente para cubrir la comisión de la transacción privada.';
+
+  @override
+  String get prvLayerStartingUp => 'La capa de privacidad se está iniciando';
+
+  @override
+  String get prvMax => 'Máx.';
+
+  @override
+  String prvMinHint(String amount) {
+    return 'Mín.: $amount';
+  }
+
+  @override
+  String prvMinShieldAmountVbtc(String amount) {
+    return 'El monto mínimo para blindar es de $amount vBTC';
+  }
+
+  @override
+  String prvMinShieldAmountVfx(String amount) {
+    return 'El monto mínimo para blindar es de $amount VFX';
+  }
+
+  @override
+  String get prvNoAccountsFound => 'No se encontraron cuentas';
+
+  @override
+  String get prvNoShieldedAddress => 'No se encontró una dirección blindada';
+
+  @override
+  String get prvNoVbtcTokens => 'No se encontraron tokens de vBTC';
+
+  @override
+  String get prvNoWalletSelected => 'No hay ninguna billetera seleccionada';
+
+  @override
+  String prvNoteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notas',
+      one: '$count nota',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get prvPasswordConfirmationFailed => 'La confirmación de la contraseña falló';
+
+  @override
+  String get prvPasswordLabel => 'Contraseña';
+
+  @override
+  String get prvPasswordRequired => 'Se requiere la contraseña de la billetera privada. Desbloquea primero.';
+
+  @override
+  String get prvPasswordsDoNotMatch => 'Las contraseñas no coinciden';
+
+  @override
+  String get prvPasteBase64Hint => 'Pega la clave Base64 aquí';
+
+  @override
+  String get prvPlonkInitializing => 'El sistema de pruebas PLONK se está inicializando. Esto puede tardar un momento\nmientras se cargan los parámetros criptográficos.';
+
+  @override
+  String get prvPrismLayerTitle => 'Capa de privacidad PRISM';
+
+  @override
+  String get prvPrivateTransferTitle => 'Transferencia privada';
+
+  @override
+  String get prvPrivateTransferVbtcBody => 'Transfiere vBTC blindado a otra dirección zfx_. Totalmente privado.';
+
+  @override
+  String get prvPrivateTransferVbtcTitle => 'Transferencia privada de vBTC';
+
+  @override
+  String get prvPrivateTransferVfxBody => 'Transfiere VFX blindado a otra dirección zfx_. Totalmente privado.';
+
+  @override
+  String get prvRecipientInvalidZfx => 'El destinatario debe ser una dirección zfx_ válida';
+
+  @override
+  String get prvRecipientZfxLabel => 'Destinatario (dirección zfx_)';
+
+  @override
+  String get prvRefresh => 'Actualizar';
+
+  @override
+  String get prvResetAction => 'Restablecer';
+
+  @override
+  String get prvResetPrivacyWallet => 'Restablecer billetera privada';
+
+  @override
+  String get prvResetWalletBody => 'Esto borrará el estado local de tu billetera privada y volverá a la pantalla de activación. Tus fondos blindados en la red no se ven afectados: puedes reactivar con la misma cuenta para recuperarlos.\n\n¿Continuar?';
+
+  @override
+  String get prvResyncAction => 'Resincronizar';
+
+  @override
+  String get prvResyncComplete => 'Resincronización completa';
+
+  @override
+  String get prvResyncFailed => 'La resincronización falló';
+
+  @override
+  String get prvResyncShieldedWalletBody => 'Esto borrará todas las notas y saldos en caché, y luego volverá a escanear desde el principio. Esto puede tardar un rato.\n\n¿Continuar?';
+
+  @override
+  String get prvResyncShieldedWalletTitle => 'Resincronizar billetera blindada';
+
+  @override
+  String get prvResyncStarted => 'Resincronización iniciada...';
+
+  @override
+  String prvResyncVbtcBody(String name) {
+    return 'Esto borrará las notas y saldos en caché de \"$name\" y volverá a escanear desde el principio. Esto puede tardar un rato.\n\n¿Continuar?';
+  }
+
+  @override
+  String get prvResyncVbtcWallet => 'Resincronizar billetera de vBTC';
+
+  @override
+  String get prvResyncWallet => 'Resincronizar billetera';
+
+  @override
+  String get prvRetry => 'Reintentar';
+
+  @override
+  String get prvScreenTitle => 'Privacidad PRISM';
+
+  @override
+  String get prvSelectFromAccounts => 'Seleccionar de mis cuentas';
+
+  @override
+  String get prvSelectVbtcContract => 'Seleccionar contrato de vBTC';
+
+  @override
+  String get prvSettingsTooltip => 'Configuración de privacidad';
+
+  @override
+  String get prvShieldAction => 'Blindar';
+
+  @override
+  String get prvShieldBroadcastSuccess => 'Transacción de blindaje transmitida correctamente';
+
+  @override
+  String prvShieldFailed(String error) {
+    return 'El blindaje falló: $error';
+  }
+
+  @override
+  String get prvShieldVbtcBody => 'Mueve vBTC desde tu billetera transparente al fondo blindado.';
+
+  @override
+  String get prvShieldVbtcTitle => 'Blindar vBTC';
+
+  @override
+  String get prvShieldVfxBody => 'Mueve VFX desde tu billetera transparente al fondo blindado.';
+
+  @override
+  String get prvShieldVfxTitle => 'Blindar VFX';
+
+  @override
+  String get prvShieldedAddressLabel => 'Dirección blindada';
+
+  @override
+  String get prvShieldedBalanceLabel => 'Saldo blindado';
+
+  @override
+  String get prvShieldedVbtcHeading => 'vBTC blindado';
+
+  @override
+  String prvShieldedVfxRequiredBody(String balance, String fee) {
+    return 'Las operaciones de privacidad de vBTC requieren una pequeña comisión que se paga con tu saldo de VFX blindado.\n\nActualmente tienes $balance VFX blindado.\nPrimero blinda al menos $fee.';
+  }
+
+  @override
+  String get prvShieldedVfxRequiredTitle => 'Se requiere VFX blindado';
+
+  @override
+  String get prvToAddressLabel => 'Dirección de destino (transparente)';
+
+  @override
+  String get prvTransferAction => 'Transferir';
+
+  @override
+  String get prvTransferBroadcastSuccess => 'Transferencia privada transmitida correctamente';
+
+  @override
+  String prvTransferFailed(String error) {
+    return 'La transferencia privada falló: $error';
+  }
+
+  @override
+  String get prvTransparentFeeAutoCalc => 'La comisión de red transparente se calculará automáticamente.';
+
+  @override
+  String get prvTryAgain => 'Intentar de nuevo';
+
+  @override
+  String get prvUnlockAction => 'Desbloquear';
+
+  @override
+  String get prvUnlockBannerText => 'Ingresa tu contraseña de privacidad para desbloquear las operaciones de gasto.';
+
+  @override
+  String get prvUnlockWalletBody => 'Ingresa la contraseña de tu billetera privada para habilitar el gasto.';
+
+  @override
+  String get prvUnlockWalletTitle => 'Desbloquear billetera privada';
+
+  @override
+  String get prvUnshieldAction => 'Desblindar';
+
+  @override
+  String get prvUnshieldBroadcastSuccess => 'Transacción de desblindaje transmitida correctamente';
+
+  @override
+  String prvUnshieldFailed(String error) {
+    return 'El desblindaje falló: $error';
+  }
+
+  @override
+  String get prvUnshieldVbtcBody => 'Mueve vBTC del fondo blindado de vuelta a una dirección transparente.';
+
+  @override
+  String get prvUnshieldVbtcTitle => 'Desblindar vBTC';
+
+  @override
+  String get prvUnshieldVfxBody => 'Mueve VFX del fondo blindado de vuelta a una dirección transparente.';
+
+  @override
+  String get prvUnshieldVfxTitle => 'Desblindar VFX';
+
+  @override
+  String prvVbtcAmountSuffix(String amount) {
+    return '$amount vBTC';
+  }
+
+  @override
+  String get prvVbtcConsolidationBroadcastSuccess => 'Consolidación de vBTC transmitida correctamente';
+
+  @override
+  String prvVbtcConsolidationFailed(String error) {
+    return 'La consolidación de vBTC falló: $error';
+  }
+
+  @override
+  String get prvVbtcResyncComplete => 'Resincronización de vBTC completa';
+
+  @override
+  String get prvVbtcResyncFailed => 'La resincronización de vBTC falló';
+
+  @override
+  String get prvVbtcResyncStarted => 'Resincronización de vBTC iniciada...';
+
+  @override
+  String get prvVbtcShieldBroadcastSuccess => 'Transacción de blindaje de vBTC transmitida correctamente';
+
+  @override
+  String prvVbtcShieldFailed(String error) {
+    return 'El blindaje de vBTC falló: $error';
+  }
+
+  @override
+  String get prvVbtcTransferBroadcastSuccess => 'Transferencia privada de vBTC transmitida correctamente';
+
+  @override
+  String prvVbtcTransferFailed(String error) {
+    return 'La transferencia privada de vBTC falló: $error';
+  }
+
+  @override
+  String get prvVbtcUnshieldBroadcastSuccess => 'Transacción de desblindaje de vBTC transmitida correctamente';
+
+  @override
+  String prvVbtcUnshieldFailed(String error) {
+    return 'El desblindaje de vBTC falló: $error';
+  }
+
+  @override
+  String prvVfxAmountSuffix(String amount) {
+    return '$amount VFX';
+  }
+
+  @override
+  String get prvViewOnly => 'SOLO LECTURA';
+
+  @override
+  String get prvViewingKeyBase64Label => 'Clave de visualización (Base64)';
+
+  @override
+  String get prvViewingKeyCopied => 'Clave de visualización copiada al portapapeles';
+
+  @override
+  String get prvViewingKeyImported => 'Clave de visualización importada correctamente';
+
+  @override
+  String get prvViewingKeyTitle => 'Clave de visualización';
+
+  @override
+  String prvWalletActivated(String address) {
+    return 'Billetera privada activada: $address';
+  }
+
+  @override
+  String get prvWalletReset => 'Billetera privada restablecida';
+
+  @override
+  String get prvWalletUnlocked => 'Billetera privada desbloqueada';
+
+  @override
+  String get prvZfxAddressLabel => 'Dirección zfx_';
+
+  @override
+  String get svcActionUpdate => 'Actualizar';
+
+  @override
+  String get svcActivateVaultBeforeProceeding => 'Debes activar tu cuenta de bóveda antes de continuar.';
+
+  @override
+  String get svcAddressOrDomainRequired => 'Se requiere una dirección o dominio VFX';
+
+  @override
+  String svcAdnrDeleteConfirmBody(String costLine) {
+    return '¿Seguro que quieres eliminar este dominio VFX?\n$costLine\n\nUna vez eliminado, este ADNR ya no podrá recibir transacciones.';
+  }
+
+  @override
+  String get svcAdnrDeleteNoCost => 'No hay costo por eliminar un dominio VFX (aparte de la comisión de transacción).';
+
+  @override
+  String svcAdnrDeleteWithCost(String cost) {
+    return 'Hay un costo de $cost RBX para eliminar un dominio RBX.';
+  }
+
+  @override
+  String get svcAdnrFundNeededBody => 'No tienes los fondos necesarios para comprar el dominio en esta cuenta.';
+
+  @override
+  String svcAdnrSufficientBalanceBody(String fromAddress, String balance) {
+    return 'Tienes una cuenta con saldo suficiente.\n\n¿Quieres enviar 6 VFX desde:\n$fromAddress\n[Saldo: $balance VFX]?';
+  }
+
+  @override
+  String get svcAmountPositive => 'El monto debe ser un valor positivo';
+
+  @override
+  String get svcAmountRequired => 'Monto requerido';
+
+  @override
+  String get svcAssetsRequestFailed => 'Falló la solicitud de activos.';
+
+  @override
+  String svcBalanceRowFromTo(String from, String to) {
+    return 'De: $from\nPara: $to';
+  }
+
+  @override
+  String get svcBeaconSignatureError => 'No se pudo generar la firma de subida al beacon';
+
+  @override
+  String get svcBeaconUploadRequestError => 'No se pudo crear la solicitud de subida al beacon.';
+
+  @override
+  String get svcBtcAddressRequired => 'Se requiere una dirección de BTC';
+
+  @override
+  String svcBtcSentToAddress(String amount, String address) {
+    return 'Se han enviado $amount BTC a $address.';
+  }
+
+  @override
+  String get svcCliRestartRequiredBody => 'Es necesario reiniciar la CLI. ¿Reiniciar ahora?';
+
+  @override
+  String get svcCliUpdateAvailableBody => 'Hay una actualización de CLI disponible. ¿Descargar e instalar ahora?';
+
+  @override
+  String get svcCliUpdateAvailableTitle => 'Actualización de CLI disponible';
+
+  @override
+  String get svcCliUpdatedTitle => 'CLI actualizada';
+
+  @override
+  String get svcComplete => 'Completado';
+
+  @override
+  String get svcCouldNotParseEncryptedMessage => 'No se pudo procesar el mensaje cifrado';
+
+  @override
+  String get svcCsvHeadersInvalid => 'Los encabezados del CSV no tienen el formato correcto, por favor revisa el archivo de ejemplo';
+
+  @override
+  String get svcDecryptFailed => 'No se pudo descifrar el mensaje. Clave inválida o datos corruptos.';
+
+  @override
+  String get svcFailedParseFee => 'No se pudo procesar la comisión';
+
+  @override
+  String get svcFailedParseHash => 'No se pudo procesar el hash';
+
+  @override
+  String get svcFailedRetrieveFee => 'No se pudo obtener la comisión';
+
+  @override
+  String get svcFailedRetrieveNonce => 'No se pudo obtener el nonce';
+
+  @override
+  String get svcFailedRetrieveTimestamp => 'No se pudo obtener la marca de tiempo';
+
+  @override
+  String get svcGuiUpdateAvailableBody => 'Hay una actualización de GUI disponible. ¿Descargar ahora?';
+
+  @override
+  String get svcGuiUpdateAvailableTitle => 'Actualización de GUI disponible';
+
+  @override
+  String get svcGuiUpdateLaunchBody => 'La descarga de la GUI de VFX se abrirá en tu navegador. Una vez iniciada, la CLI se apagará y tu billetera se cerrará para garantizar una actualización segura.';
+
+  @override
+  String get svcGuiUpdateTitle => 'Actualización de GUI';
+
+  @override
+  String get svcImBackedUp => 'Tengo copia de seguridad';
+
+  @override
+  String svcImportSnapshotBody(String blockHeight, String snapshotHeight) {
+    return 'Solo estás en la altura de bloque $blockHeight localmente. La red tiene un snapshot en la altura de bloque $snapshotHeight que te ayudará a sincronizar más rápido. \n\n¿Quieres importarlo ahora?';
+  }
+
+  @override
+  String get svcImportSnapshotTitle => '¿Importar snapshot?';
+
+  @override
+  String get svcInsufficientBalanceToSend => 'Saldo insuficiente para enviar';
+
+  @override
+  String get svcInvalidJson => 'JSON no válido';
+
+  @override
+  String get svcLocatorsRequestFailed => 'Falló la solicitud de localizadores.';
+
+  @override
+  String svcMainMenuSyncTooltip(String lastSync, String nextSync) {
+    return 'Última sincronización: $lastSync\nPróxima sincronización: $nextSync';
+  }
+
+  @override
+  String get svcMessageDecryptedSuccess => '¡Mensaje descifrado con éxito!';
+
+  @override
+  String svcMinTxAmountBtc(String amount) {
+    return 'El monto mínimo de transacción es $amount BTC';
+  }
+
+  @override
+  String svcMintingProgress(String current, String total) {
+    return 'Acuñando $current/$total...';
+  }
+
+  @override
+  String get svcNavPrivacyLabel => 'Privacidad';
+
+  @override
+  String get svcNftNotEnoughVfxAction => 'No tienes suficiente VFX para realizar esta acción';
+
+  @override
+  String get svcNftNotLoaded => 'NFT no cargado';
+
+  @override
+  String get svcNftNotOwner => 'No eres el propietario de este NFT.';
+
+  @override
+  String get svcNftNotOwnerOrMinter => 'No eres el propietario ni el emisor de este NFT.';
+
+  @override
+  String get svcNoAccountSelectedPeriod => 'No se seleccionó ninguna cuenta.';
+
+  @override
+  String get svcNoBtcAccount => 'Sin cuenta de BTC';
+
+  @override
+  String get svcNoEncryptedMessage => 'No se encontró ningún mensaje cifrado';
+
+  @override
+  String get svcNotEnoughBalanceAccount => 'Saldo insuficiente en la cuenta.';
+
+  @override
+  String get svcNotEnoughBalanceBtcAccount => 'Saldo insuficiente en la cuenta de BTC';
+
+  @override
+  String get svcNotValidAmount => 'No es un monto válido';
+
+  @override
+  String svcNotifBtcDomainCreatedBody(String name) {
+    return 'Dominio BTC creado para $name.btc';
+  }
+
+  @override
+  String get svcNotifBtcDomainCreatedTitle => 'Nombre de dominio BTC creado';
+
+  @override
+  String svcNotifBtcDomainDeletedBody(String name) {
+    return 'Dominio BTC eliminado para $name';
+  }
+
+  @override
+  String get svcNotifBtcDomainDeletedTitle => 'Nombre de dominio BTC eliminado';
+
+  @override
+  String get svcNotifBtcDomainTransferredTitle => 'Nombre de dominio BTC transferido';
+
+  @override
+  String get svcNotifDecShopTxBody => 'TX de DecShop completada';
+
+  @override
+  String get svcNotifDecShopTxTitle => 'TX de DecShop';
+
+  @override
+  String get svcNotifDomainCreatedTitle => 'Nombre de dominio creado';
+
+  @override
+  String get svcNotifDomainDeletedTitle => 'Nombre de dominio eliminado';
+
+  @override
+  String get svcNotifDomainTransferredTitle => 'Nombre de dominio transferido';
+
+  @override
+  String svcNotifFundsReceivedBody(String amount, String fromAddress) {
+    return '$amount VFX de $fromAddress';
+  }
+
+  @override
+  String get svcNotifFundsReceivedTitle => 'Fondos recibidos';
+
+  @override
+  String svcNotifFundsSentBody(String amount, String toAddress) {
+    return '$amount VFX para $toAddress';
+  }
+
+  @override
+  String get svcNotifNftBurnedTitle => 'NFT quemado';
+
+  @override
+  String svcNotifNftEvolvedBody(String state) {
+    return 'El NFT evolucionó al estado $state.';
+  }
+
+  @override
+  String get svcNotifNftEvolvedTitle => 'NFT evolucionado';
+
+  @override
+  String get svcNotifNftMintedTitle => 'NFT acuñado';
+
+  @override
+  String svcNotifNftReceivedBody(String fromAddress) {
+    return 'NFT de $fromAddress';
+  }
+
+  @override
+  String get svcNotifNftReceivedTitle => 'NFT recibido';
+
+  @override
+  String svcNotifNftSentBody(String toAddress) {
+    return 'NFT para $toAddress';
+  }
+
+  @override
+  String get svcNotifNftSentTitle => 'NFT enviado';
+
+  @override
+  String get svcNotifPaused => 'Pausado';
+
+  @override
+  String get svcNotifResumed => 'Reanudado';
+
+  @override
+  String get svcNotifSaleCompletedManualTitle => 'Venta completada (manual)';
+
+  @override
+  String get svcNotifSaleCompletedTitle => 'Venta completada';
+
+  @override
+  String get svcNotifSaleStartedManualTitle => 'Venta iniciada (manual)';
+
+  @override
+  String get svcNotifSaleStartedTitle => 'Venta iniciada';
+
+  @override
+  String get svcNotifTokenBanAddressTitle => 'Dirección de bloqueo de token';
+
+  @override
+  String get svcNotifTokenBurnTitle => 'Quema de token';
+
+  @override
+  String get svcNotifTokenChangeOwnershipTitle => 'Cambio de propiedad del token';
+
+  @override
+  String get svcNotifTokenDeployedTitle => 'Token desplegado';
+
+  @override
+  String get svcNotifTokenPauseTitle => 'Pausa de token';
+
+  @override
+  String get svcNotifTokenTopicCreatedTitle => 'Tema de token creado';
+
+  @override
+  String get svcNotifTokenTransferTitle => 'Transferencia de token';
+
+  @override
+  String get svcNotifTokenVoteCastTitle => 'Voto de token emitido';
+
+  @override
+  String get svcNotifTokensMintedTitle => 'Tokens acuñados';
+
+  @override
+  String svcNotifTopicCreatedBody(String name) {
+    return 'Tema $name creado.';
+  }
+
+  @override
+  String get svcNotifTopicCreatedTitle => 'Tema creado';
+
+  @override
+  String get svcNotifVbtcTokenizationMintTitle => 'Acuñación de tokenización vBTC';
+
+  @override
+  String svcNotifVfxDomainCreatedBody(String name) {
+    return 'Dominio VFX creado para $name.vfx';
+  }
+
+  @override
+  String svcNotifVfxDomainDeletedBody(String name) {
+    return 'Dominio VFX eliminado para $name';
+  }
+
+  @override
+  String svcNotifVfxDomainTransferBody(String name) {
+    return 'Transferencia de dominio VFX para $name';
+  }
+
+  @override
+  String svcNotifVoteCastedBody(String topic) {
+    return 'Voto emitido sobre $topic';
+  }
+
+  @override
+  String get svcNotifVoteCastedTitle => 'Voto emitido';
+
+  @override
+  String get svcPrivateKeyNotAvailableUnlock => 'Clave privada no disponible. Asegúrate de que la billetera esté desbloqueada.';
+
+  @override
+  String get svcPrivateKeyNotFoundRecipient => 'No se encontró la clave privada para la dirección del destinatario';
+
+  @override
+  String svcProblemDownloadingSkipping(String url) {
+    return 'Problema al descargar $url. Se omite.';
+  }
+
+  @override
+  String svcSendingConfirmBtcFee(String amount, String toAddress, String fromAddress, String fee) {
+    return 'Enviando:\n$amount BTC\n\nPara:\n$toAddress\n\nDe:\n$fromAddress\n\nComisión:\n$fee BTC';
+  }
+
+  @override
+  String svcSendingConfirmBtcFeeRate(String amount, String toAddress, String fromAddress, String feeRate) {
+    return 'Enviando:\n$amount BTC\n\nPara:\n$toAddress\n\nDe:\n$fromAddress\n\nComisión:\n$feeRate SATS';
+  }
+
+  @override
+  String get svcSignatureGenerationFailed => 'Falló la generación de la firma.';
+
+  @override
+  String get svcSignatureNotValid => 'Firma no válida';
+
+  @override
+  String get svcSnapshotBackupWarningBody => 'Asegúrate de tener una copia de seguridad de tus claves privadas, ya que este proceso borrará la carpeta de tu base de datos.\n\nSi NO tienes copia de seguridad, haz clic en cancelar ahora, haz la copia y luego reinicia tu billetera para que se te vuelva a preguntar.';
+
+  @override
+  String get svcSnapshotDetermineStateError => 'No se pudo determinar el estado del último snapshot';
+
+  @override
+  String get svcSnapshotImportFailedBody => 'Falló la importación del snapshot.';
+
+  @override
+  String get svcSnapshotImportFailedTitle => 'Error de importación';
+
+  @override
+  String get svcSnapshotRestartTryAgain => 'Por favor reinicia e inténtalo de nuevo.';
+
+  @override
+  String get svcTimelockDuration => 'Duración del bloqueo temporal';
+
+  @override
+  String get svcTimelockHoursLabel => 'Horas (mínimo 24)';
+
+  @override
+  String svcTokenAutoMintInitiated(String scId, String amount) {
+    return 'Acuñación automática de token iniciada. ($scId: $amount)';
+  }
+
+  @override
+  String get svcTransactionNotValid => 'Transacción no válida';
+
+  @override
+  String get svcUnimplemented => 'No implementado';
+
+  @override
+  String svcValidTxConfirmBody(String toAddress, String amount) {
+    return 'Esta transacción es válida y está lista para enviar.\n¿Seguro que quieres continuar?\n\nPara: $toAddress\n\nMonto: $amount VFX';
+  }
+
+  @override
+  String svcValidTxFeeSuffix(String fee, String total) {
+    return '\nComisión de TX: $fee VFX\nTotal: $total VFX';
+  }
+
+  @override
+  String get svcVaultAutoActivationInitiated => 'Se inició el proceso de activación automática de la cuenta de bóveda';
+
+  @override
+  String svcVfxSentToAddress(String amount, String address) {
+    return '$amount VFX enviados a $address';
+  }
+
+  @override
+  String svcVfxSentToAddressDashboard(String amount, String address) {
+    return 'Se han enviado $amount VFX a $address. Consulta el panel para ver el ID de la transacción.';
+  }
 }

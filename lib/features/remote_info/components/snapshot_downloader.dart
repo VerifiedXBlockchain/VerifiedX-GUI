@@ -365,7 +365,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       title = l10n.hnavSnapshotAllDone;
     }
     if (hasFailed) {
-      title = "Import Failed";
+      title = l10n.svcSnapshotImportFailedTitle;
     }
 
     return AlertDialog(
@@ -425,7 +425,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   color: Colors.redAccent,
                 ),
                 const SizedBox(height: 8),
-                const Text("Snapshot import failed."),
+                Text(l10n.svcSnapshotImportFailedBody),
                 if (errorMessage != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -438,18 +438,18 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                     ),
                   ),
                 const SizedBox(height: 8),
-                const Text(
-                  "Please restart and try again.",
-                  style: TextStyle(fontSize: 16),
+                Text(
+                  l10n.svcSnapshotRestartTryAgain,
+                  style: const TextStyle(fontSize: 16),
                 ),
                 const SizedBox(height: 16),
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text(
-                    "Close",
-                    style: TextStyle(color: Colors.white70),
+                  child: Text(
+                    l10n.actionClose,
+                    style: const TextStyle(color: Colors.white70),
                   ),
                 ),
               ],

@@ -10544,6 +10544,3432 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send BTC from any exchange or wallet to this token\'s deposit address'**
   String get tkbManualSendExchangeSubtitle;
+
+  /// No description provided for @bw2AmountOfBtcToSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount of BTC to Send'**
+  String get bw2AmountOfBtcToSend;
+
+  /// No description provided for @bw2AnErrorOccurred.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred.'**
+  String get bw2AnErrorOccurred;
+
+  /// No description provided for @bw2BeaconUploadFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Beacon upload failed'**
+  String get bw2BeaconUploadFailed;
+
+  /// No description provided for @bw2BlockConfirmTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Timed out waiting for block confirmation. You can retry later from the token detail screen.'**
+  String get bw2BlockConfirmTimedOut;
+
+  /// No description provided for @bw2BlockWithValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {height}'**
+  String bw2BlockWithValue(String height);
+
+  /// No description provided for @bw2BridgeToBase.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge to Base'**
+  String get bw2BridgeToBase;
+
+  /// No description provided for @bw2BridgeVbtcToBase.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge vBTC to Base (vBTC.b)'**
+  String get bw2BridgeVbtcToBase;
+
+  /// No description provided for @bw2BroadcastingRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcasting Request'**
+  String get bw2BroadcastingRequest;
+
+  /// No description provided for @bw2BroadcastingWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Broadcasting withdrawal request...'**
+  String get bw2BroadcastingWithdrawal;
+
+  /// No description provided for @bw2BtcAccountNoBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'This BTC account doesn\'t have a balance'**
+  String get bw2BtcAccountNoBalance;
+
+  /// No description provided for @bw2BtcAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Address'**
+  String get bw2BtcAddressTitle;
+
+  /// No description provided for @bw2BtcAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} BTC'**
+  String bw2BtcAmount(String amount);
+
+  /// No description provided for @bw2BtcFundsReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Funds Received!'**
+  String get bw2BtcFundsReceived;
+
+  /// No description provided for @bw2BtcTransactionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Transaction:'**
+  String get bw2BtcTransactionLabel;
+
+  /// No description provided for @bw2BuyBtcOnRamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy BTC (On-Ramp)'**
+  String get bw2BuyBtcOnRamp;
+
+  /// No description provided for @bw2BuyBtcOnRampSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Purchase BTC with fiat and send directly to this token'**
+  String get bw2BuyBtcOnRampSubtitle;
+
+  /// No description provided for @bw2CancelWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Withdrawal'**
+  String get bw2CancelWithdrawal;
+
+  /// No description provided for @bw2CancelWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel this withdrawal request?'**
+  String get bw2CancelWithdrawalBody;
+
+  /// No description provided for @bw2CancelWithdrawalQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Withdrawal?'**
+  String get bw2CancelWithdrawalQuestion;
+
+  /// No description provided for @bw2CancelWithdrawalTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel withdrawal'**
+  String get bw2CancelWithdrawalTooltip;
+
+  /// No description provided for @bw2CancellationFailedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation failed: {error}'**
+  String bw2CancellationFailedError(String error);
+
+  /// No description provided for @bw2CancellationSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancellation request submitted. Awaiting validator votes.'**
+  String get bw2CancellationSubmitted;
+
+  /// No description provided for @bw2Cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get bw2Cancelled;
+
+  /// No description provided for @bw2CeremonyCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Ceremony Completed'**
+  String get bw2CeremonyCompleted;
+
+  /// No description provided for @bw2CeremonyDismissHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can dismiss this dialog. The ceremony will continue in the background.'**
+  String get bw2CeremonyDismissHint;
+
+  /// No description provided for @bw2CeremonyFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Ceremony Failed'**
+  String get bw2CeremonyFailed;
+
+  /// No description provided for @bw2CeremonyFailedRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Ceremony failed. Please try again.'**
+  String get bw2CeremonyFailedRetry;
+
+  /// No description provided for @bw2CeremonyTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Ceremony timed out. Please try again.'**
+  String get bw2CeremonyTimedOut;
+
+  /// No description provided for @bw2CeremonyTimedOutNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'Ceremony timed out on the network. Please try again.'**
+  String get bw2CeremonyTimedOutNetwork;
+
+  /// No description provided for @bw2ConfirmSendBtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending:\n{amount} BTC\n\nTo:\n{toAddress} (Token Deposit Address)\n\nFrom:\n{fromAddress}\n\nFeeRate:\n{feeRate} SATS'**
+  String bw2ConfirmSendBtcBody(String amount, String toAddress, String fromAddress, String feeRate);
+
+  /// No description provided for @bw2ConfirmTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Transfer'**
+  String get bw2ConfirmTransfer;
+
+  /// No description provided for @bw2ConfirmTransferBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer {amount} vBTC to {address}?'**
+  String bw2ConfirmTransferBody(String amount, String address);
+
+  /// No description provided for @bw2ConfirmWithdrawalRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Withdrawal Request'**
+  String get bw2ConfirmWithdrawalRequest;
+
+  /// No description provided for @bw2ConfirmedWhenIndexed.
+  ///
+  /// In en, this message translates to:
+  /// **'This will be confirmed once indexed by the explorer.'**
+  String get bw2ConfirmedWhenIndexed;
+
+  /// No description provided for @bw2ContractCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract Created'**
+  String get bw2ContractCreated;
+
+  /// No description provided for @bw2CouldNotConnectArbiter.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not connect to arbiter. Try again later'**
+  String get bw2CouldNotConnectArbiter;
+
+  /// No description provided for @bw2CreatingContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating Contract'**
+  String get bw2CreatingContract;
+
+  /// No description provided for @bw2CreatingVbtcContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating vBTC contract on-chain...'**
+  String get bw2CreatingVbtcContract;
+
+  /// No description provided for @bw2DateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date:'**
+  String get bw2DateLabel;
+
+  /// No description provided for @bw2DepositAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit Address'**
+  String get bw2DepositAddress;
+
+  /// No description provided for @bw2DepositAddressCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit address copied to clipboard'**
+  String get bw2DepositAddressCopied;
+
+  /// No description provided for @bw2DepositAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit Address:'**
+  String get bw2DepositAddressLabel;
+
+  /// No description provided for @bw2DepositAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Deposit amount'**
+  String get bw2DepositAmount;
+
+  /// No description provided for @bw2DkgStartHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This starts the distributed key generation process.'**
+  String get bw2DkgStartHint;
+
+  /// No description provided for @bw2DoNotCloseApp.
+  ///
+  /// In en, this message translates to:
+  /// **'This may take a minute. Please do not close the application.'**
+  String get bw2DoNotCloseApp;
+
+  /// No description provided for @bw2DomainNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain Name Required'**
+  String get bw2DomainNameRequired;
+
+  /// No description provided for @bw2DomainTooLong.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain must be less than {max} charcters.'**
+  String bw2DomainTooLong(String max);
+
+  /// No description provided for @bw2FailedBroadcastBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to broadcast BTC transaction'**
+  String get bw2FailedBroadcastBtc;
+
+  /// No description provided for @bw2FailedBroadcastWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to broadcast withdrawal request.'**
+  String get bw2FailedBroadcastWithdrawal;
+
+  /// No description provided for @bw2FailedCreateContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create contract. Please try again.'**
+  String get bw2FailedCreateContract;
+
+  /// No description provided for @bw2FailedCreateContractShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to create contract.'**
+  String get bw2FailedCreateContractShort;
+
+  /// No description provided for @bw2FailedExecuteMpc.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to execute MPC ceremony.'**
+  String get bw2FailedExecuteMpc;
+
+  /// No description provided for @bw2FailedInitiateMpc.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to initiate MPC ceremony.'**
+  String get bw2FailedInitiateMpc;
+
+  /// No description provided for @bw2FailedPrepareCancellation.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to prepare cancellation'**
+  String get bw2FailedPrepareCancellation;
+
+  /// No description provided for @bw2FailedPrepareContractCreation.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to prepare contract creation.'**
+  String get bw2FailedPrepareContractCreation;
+
+  /// No description provided for @bw2FailedPrepareFrost.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to prepare FROST signing'**
+  String get bw2FailedPrepareFrost;
+
+  /// No description provided for @bw2FailedPrepareMpc.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to prepare MPC ceremony.'**
+  String get bw2FailedPrepareMpc;
+
+  /// No description provided for @bw2FailedPrepareOwnershipTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to prepare ownership transfer'**
+  String get bw2FailedPrepareOwnershipTransfer;
+
+  /// No description provided for @bw2FailedPrepareTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to prepare transfer'**
+  String get bw2FailedPrepareTransfer;
+
+  /// No description provided for @bw2FailedPrepareWithdrawalRequest.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to prepare withdrawal request'**
+  String get bw2FailedPrepareWithdrawalRequest;
+
+  /// No description provided for @bw2FailedSignBeacon.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sign beacon upload'**
+  String get bw2FailedSignBeacon;
+
+  /// No description provided for @bw2FailedSignCeremony.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sign ceremony messages.'**
+  String get bw2FailedSignCeremony;
+
+  /// No description provided for @bw2FailedSignContractTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sign contract creation transaction.'**
+  String get bw2FailedSignContractTx;
+
+  /// No description provided for @bw2FailedSignFrost.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sign FROST messages'**
+  String get bw2FailedSignFrost;
+
+  /// No description provided for @bw2FailedSignOwnershipProof.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sign ownership proof.'**
+  String get bw2FailedSignOwnershipProof;
+
+  /// No description provided for @bw2FailedSignTransaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to sign transaction'**
+  String get bw2FailedSignTransaction;
+
+  /// No description provided for @bw2FailedStartFrost.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start FROST signing'**
+  String get bw2FailedStartFrost;
+
+  /// No description provided for @bw2FrostConfirmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.'**
+  String get bw2FrostConfirmHint;
+
+  /// No description provided for @bw2FrostConfirmHintWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.'**
+  String get bw2FrostConfirmHintWeb;
+
+  /// No description provided for @bw2FrostFailedOrTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST signing failed or timed out. The withdrawal may still complete — check back shortly.'**
+  String get bw2FrostFailedOrTimedOut;
+
+  /// No description provided for @bw2FrostGroupKey.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST Group Key'**
+  String get bw2FrostGroupKey;
+
+  /// No description provided for @bw2FrostJobNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST signing job not found'**
+  String get bw2FrostJobNotFound;
+
+  /// No description provided for @bw2FrostSigning.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST Signing'**
+  String get bw2FrostSigning;
+
+  /// No description provided for @bw2FrostSigningFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST signing failed'**
+  String get bw2FrostSigningFailed;
+
+  /// No description provided for @bw2FrostSigningFailedError.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST signing failed: {error}'**
+  String bw2FrostSigningFailedError(String error);
+
+  /// No description provided for @bw2FrostSigningInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST signing in progress...'**
+  String get bw2FrostSigningInProgress;
+
+  /// No description provided for @bw2FrostTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'FROST signing timed out. The withdrawal may still complete — check back shortly.'**
+  String get bw2FrostTimedOut;
+
+  /// No description provided for @bw2FrostValidatorsSigning.
+  ///
+  /// In en, this message translates to:
+  /// **'Validators are signing the Bitcoin transaction. This may take a minute or two. Please do not close this window.'**
+  String get bw2FrostValidatorsSigning;
+
+  /// No description provided for @bw2FundVbtcToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund vBTC Token'**
+  String get bw2FundVbtcToken;
+
+  /// No description provided for @bw2FundViaManualSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund via Manual Send'**
+  String get bw2FundViaManualSend;
+
+  /// No description provided for @bw2HashWithValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Hash: {hash}'**
+  String bw2HashWithValue(String hash);
+
+  /// No description provided for @bw2HowMuchBtcWithdraw.
+  ///
+  /// In en, this message translates to:
+  /// **'How much BTC do you want to withdraw?'**
+  String get bw2HowMuchBtcWithdraw;
+
+  /// No description provided for @bw2InitiatingMpc.
+  ///
+  /// In en, this message translates to:
+  /// **'Initiating MPC ceremony...'**
+  String get bw2InitiatingMpc;
+
+  /// No description provided for @bw2InsufficientBalanceAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient balance. Available: {available} vBTC'**
+  String bw2InsufficientBalanceAvailable(String available);
+
+  /// No description provided for @bw2InvalidDomainLetters.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid domain. Must only contain letters and/or numbers.'**
+  String get bw2InvalidDomainLetters;
+
+  /// No description provided for @bw2InvalidFeeRateWhole.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid fee rate. Must be a whole number'**
+  String get bw2InvalidFeeRateWhole;
+
+  /// No description provided for @bw2InvalidSupplyAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Supply Amount'**
+  String get bw2InvalidSupplyAmount;
+
+  /// No description provided for @bw2LabelHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Hash'**
+  String get bw2LabelHash;
+
+  /// No description provided for @bw2LabelTransactionSignature.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Signature'**
+  String get bw2LabelTransactionSignature;
+
+  /// No description provided for @bw2LabelVfxAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Address'**
+  String get bw2LabelVfxAddress;
+
+  /// No description provided for @bw2Loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading'**
+  String get bw2Loading;
+
+  /// No description provided for @bw2LostConnectionCeremony.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost connection while monitoring ceremony. Please try again.'**
+  String get bw2LostConnectionCeremony;
+
+  /// No description provided for @bw2LostConnectionToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost connection to ceremony.'**
+  String get bw2LostConnectionToast;
+
+  /// No description provided for @bw2ManualSendInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Send BTC from any exchange or external wallet to the deposit address below.'**
+  String get bw2ManualSendInstructions;
+
+  /// No description provided for @bw2MediaColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Media:'**
+  String get bw2MediaColon;
+
+  /// No description provided for @bw2MediaOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Media (Optional)'**
+  String get bw2MediaOptional;
+
+  /// No description provided for @bw2MpcCeremony.
+  ///
+  /// In en, this message translates to:
+  /// **'MPC Ceremony'**
+  String get bw2MpcCeremony;
+
+  /// No description provided for @bw2MpcCeremonyCompletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'MPC ceremony completed successfully.'**
+  String get bw2MpcCeremonyCompletedSuccess;
+
+  /// No description provided for @bw2MpcCeremonyFailedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'MPC ceremony failed.'**
+  String get bw2MpcCeremonyFailedToast;
+
+  /// No description provided for @bw2MpcCeremonyInProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'MPC Ceremony in Progress'**
+  String get bw2MpcCeremonyInProgress;
+
+  /// No description provided for @bw2MpcCeremonyTimedOutToast.
+  ///
+  /// In en, this message translates to:
+  /// **'MPC ceremony timed out.'**
+  String get bw2MpcCeremonyTimedOutToast;
+
+  /// No description provided for @bw2MultiSigHigherFee.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a Multi-signature transaction so a higher fee rate is recommended.'**
+  String get bw2MultiSigHigherFee;
+
+  /// No description provided for @bw2MyBalanceVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'My Balance: {balance} vBTC'**
+  String bw2MyBalanceVbtc(String balance);
+
+  /// No description provided for @bw2MyTotalBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'My Total Balance:'**
+  String get bw2MyTotalBalance;
+
+  /// No description provided for @bw2NoBtcAccountSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No BTC Account selected'**
+  String get bw2NoBtcAccountSelected;
+
+  /// No description provided for @bw2NoBtcAddressInToken.
+  ///
+  /// In en, this message translates to:
+  /// **'No BTC address in token'**
+  String get bw2NoBtcAddressInToken;
+
+  /// No description provided for @bw2NoBtcTokenSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No BTC Token selected'**
+  String get bw2NoBtcTokenSelected;
+
+  /// No description provided for @bw2NoInitialIssuance.
+  ///
+  /// In en, this message translates to:
+  /// **'No Initial Issuance'**
+  String get bw2NoInitialIssuance;
+
+  /// No description provided for @bw2NoKeypairFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No keypair found'**
+  String get bw2NoKeypairFound;
+
+  /// No description provided for @bw2NoKeypairFoundPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'No keypair found.'**
+  String get bw2NoKeypairFoundPeriod;
+
+  /// No description provided for @bw2NoKeypairToSign.
+  ///
+  /// In en, this message translates to:
+  /// **'No keypair found to sign transaction'**
+  String get bw2NoKeypairToSign;
+
+  /// No description provided for @bw2NoVbtcToBridge.
+  ///
+  /// In en, this message translates to:
+  /// **'No vBTC available to bridge'**
+  String get bw2NoVbtcToBridge;
+
+  /// No description provided for @bw2NoVfxAccountFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No VFX account found'**
+  String get bw2NoVfxAccountFound;
+
+  /// No description provided for @bw2NotEnoughBtcCoverFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough BTC to cover this transaction + fee'**
+  String get bw2NotEnoughBtcCoverFee;
+
+  /// No description provided for @bw2NotEnoughVfxDeleteDomain.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough VFX in your controlling account to delete a VFX domain. [{address}]'**
+  String bw2NotEnoughVfxDeleteDomain(String address);
+
+  /// No description provided for @bw2OnboardCreateVfxDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'First you\'ll need a VFX Wallet. You can either import an existing one or create one now.'**
+  String get bw2OnboardCreateVfxDetails;
+
+  /// No description provided for @bw2OnboardFaucetDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'The community has provided a faucet to withdraw a minimal amount of VFX from in order to try out this feature. A phone number is required for verification purposes and to reduce the chance of abuse. Please note that only a hash of the phone number is stored with the faucet. Alternatively, you are welcome to purchase VFX via an exchange or on-ramp if you like.'**
+  String get bw2OnboardFaucetDetails;
+
+  /// No description provided for @bw2OnboardImportBtcDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you need a BTC account added to your wallet. You can either import a private key or generate a new one.'**
+  String get bw2OnboardImportBtcDetails;
+
+  /// No description provided for @bw2OnboardTokenizeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Time to tokenize a vBTC token. The following fields are all optional!'**
+  String get bw2OnboardTokenizeDetails;
+
+  /// No description provided for @bw2OnboardTransferBtcDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Looks like this account doesn\'t have any BTC. Please transfer BTC to this account to continue.'**
+  String get bw2OnboardTransferBtcDetails;
+
+  /// No description provided for @bw2OnboardTransferToVbtcDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Now you are ready to transfer BTC to your vBTC token. Select the amount and Fee Rate below'**
+  String get bw2OnboardTransferToVbtcDetails;
+
+  /// No description provided for @bw2OneVbtcEqualsBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'1 vBTC = 1 BTC'**
+  String get bw2OneVbtcEqualsBtc;
+
+  /// No description provided for @bw2OnlyOwnerCanAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the owner of this token can perform this action'**
+  String get bw2OnlyOwnerCanAction;
+
+  /// No description provided for @bw2OwnershipTransferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Ownership transfer failed: {error}'**
+  String bw2OwnershipTransferFailed(String error);
+
+  /// No description provided for @bw2PendingTapResume.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending — tap to resume'**
+  String get bw2PendingTapResume;
+
+  /// No description provided for @bw2PendingWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Withdrawal'**
+  String get bw2PendingWithdrawal;
+
+  /// No description provided for @bw2PercentComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}% complete'**
+  String bw2PercentComplete(String percent);
+
+  /// No description provided for @bw2PreMintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre Mint Initial Issuance?'**
+  String get bw2PreMintTitle;
+
+  /// No description provided for @bw2PreMintTitleOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Pre Mint Initial Issuance? (Optional)'**
+  String get bw2PreMintTitleOptional;
+
+  /// No description provided for @bw2ProcessingWithdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Processing Withdrawal'**
+  String get bw2ProcessingWithdrawal;
+
+  /// No description provided for @bw2RbfFeeRateBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Input your desired fee rate (SATS /byte) for this transaction.'**
+  String get bw2RbfFeeRateBody;
+
+  /// No description provided for @bw2RebroadcastTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Rebroadcast TX'**
+  String get bw2RebroadcastTx;
+
+  /// No description provided for @bw2RebroadcastTxBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to rebroadcast this transaction?'**
+  String get bw2RebroadcastTxBody;
+
+  /// No description provided for @bw2RebroadcastedTx.
+  ///
+  /// In en, this message translates to:
+  /// **'Rebroadcasted TX. ({hash})'**
+  String bw2RebroadcastedTx(String hash);
+
+  /// No description provided for @bw2ReceivingBtcAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiving BTC Address'**
+  String get bw2ReceivingBtcAddress;
+
+  /// No description provided for @bw2RecipientVfxAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient VFX Address'**
+  String get bw2RecipientVfxAddress;
+
+  /// No description provided for @bw2ReplacedByFeeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Replaced by fee ({feeRate} SATS /byte) TX sent. Hash: {hash}'**
+  String bw2ReplacedByFeeMessage(String feeRate, String hash);
+
+  /// No description provided for @bw2RetrySigning.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry Signing'**
+  String get bw2RetrySigning;
+
+  /// No description provided for @bw2SatsAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} SATS'**
+  String bw2SatsAmount(String amount);
+
+  /// No description provided for @bw2SelectBtcAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Selecting a BTC address is required.'**
+  String get bw2SelectBtcAddressRequired;
+
+  /// No description provided for @bw2SelectVfxAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Selecting a VFX Address is required.'**
+  String get bw2SelectVfxAddressRequired;
+
+  /// No description provided for @bw2SigningThreshold.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing Threshold'**
+  String get bw2SigningThreshold;
+
+  /// No description provided for @bw2SmartContractIdColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Contract ID:'**
+  String get bw2SmartContractIdColon;
+
+  /// No description provided for @bw2StartingMpcCeremony.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting MPC Ceremony'**
+  String get bw2StartingMpcCeremony;
+
+  /// No description provided for @bw2StatusWithValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Status: {status}'**
+  String bw2StatusWithValue(String status);
+
+  /// No description provided for @bw2StepCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get bw2StepCompleted;
+
+  /// No description provided for @bw2StepCreateVfxAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create VFX Account'**
+  String get bw2StepCreateVfxAccount;
+
+  /// No description provided for @bw2StepGetVfx.
+  ///
+  /// In en, this message translates to:
+  /// **'Get VFX'**
+  String get bw2StepGetVfx;
+
+  /// No description provided for @bw2StepImportBtcAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Import BTC Account'**
+  String get bw2StepImportBtcAccount;
+
+  /// No description provided for @bw2StepInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Initiated'**
+  String get bw2StepInitiated;
+
+  /// No description provided for @bw2StepRound1.
+  ///
+  /// In en, this message translates to:
+  /// **'Round 1'**
+  String get bw2StepRound1;
+
+  /// No description provided for @bw2StepRound2.
+  ///
+  /// In en, this message translates to:
+  /// **'Round 2'**
+  String get bw2StepRound2;
+
+  /// No description provided for @bw2StepRound3.
+  ///
+  /// In en, this message translates to:
+  /// **'Round 3'**
+  String get bw2StepRound3;
+
+  /// No description provided for @bw2StepTokenizedVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokenized vBTC'**
+  String get bw2StepTokenizedVbtc;
+
+  /// No description provided for @bw2StepTransferBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer BTC'**
+  String get bw2StepTransferBtc;
+
+  /// No description provided for @bw2StepTransferBtcToVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer BTC to vBTC Token'**
+  String get bw2StepTransferBtcToVbtc;
+
+  /// No description provided for @bw2StepValidating.
+  ///
+  /// In en, this message translates to:
+  /// **'Validating'**
+  String get bw2StepValidating;
+
+  /// No description provided for @bw2SubmittingTxVfx.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting a transaction to the VFX network.'**
+  String get bw2SubmittingTxVfx;
+
+  /// No description provided for @bw2SupplyAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Supply Amount'**
+  String get bw2SupplyAmount;
+
+  /// No description provided for @bw2SupplyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Supply'**
+  String get bw2SupplyLabel;
+
+  /// No description provided for @bw2ToBtcAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'To BTC address required.'**
+  String get bw2ToBtcAddressRequired;
+
+  /// No description provided for @bw2ToVfxAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'To VFX address required.'**
+  String get bw2ToVfxAddressRequired;
+
+  /// No description provided for @bw2TokenAppearWhenIndexed.
+  ///
+  /// In en, this message translates to:
+  /// **'The token will appear in your list once indexed (typically a few seconds).'**
+  String get bw2TokenAppearWhenIndexed;
+
+  /// No description provided for @bw2TokenCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Created'**
+  String get bw2TokenCreated;
+
+  /// No description provided for @bw2TokenDeployed.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Deployed!'**
+  String get bw2TokenDeployed;
+
+  /// No description provided for @bw2TokenDescriptionOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Description (Optional)'**
+  String get bw2TokenDescriptionOptional;
+
+  /// No description provided for @bw2TokenImageOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Image (Optional)'**
+  String get bw2TokenImageOptional;
+
+  /// No description provided for @bw2TokenNameOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Name (Optional)'**
+  String get bw2TokenNameOptional;
+
+  /// No description provided for @bw2TokenPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions on this token are currently paused.'**
+  String get bw2TokenPaused;
+
+  /// No description provided for @bw2TokenTickerOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Ticker (Optional)'**
+  String get bw2TokenTickerOptional;
+
+  /// No description provided for @bw2TransactionBroadcasted.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction broadcasted!'**
+  String get bw2TransactionBroadcasted;
+
+  /// No description provided for @bw2TransactionFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction failed: {error}'**
+  String bw2TransactionFailed(String error);
+
+  /// No description provided for @bw2TransactionHashColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction Hash:'**
+  String get bw2TransactionHashColon;
+
+  /// No description provided for @bw2TransactionsColon.
+  ///
+  /// In en, this message translates to:
+  /// **'Transactions:'**
+  String get bw2TransactionsColon;
+
+  /// No description provided for @bw2TransferComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer Complete!'**
+  String get bw2TransferComplete;
+
+  /// No description provided for @bw2TransferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed'**
+  String get bw2TransferFailed;
+
+  /// No description provided for @bw2TransferFailedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer failed: {error}'**
+  String bw2TransferFailedError(String error);
+
+  /// No description provided for @bw2TransferOwnershipConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer ownership of this vBTC token to {address}?\n\nThis cannot be undone.'**
+  String bw2TransferOwnershipConfirmBody(String address);
+
+  /// No description provided for @bw2TxVerifiedFeeBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction verified. There will be a fee of {fee} VFX. Would you like to proceed?'**
+  String bw2TxVerifiedFeeBody(String fee);
+
+  /// No description provided for @bw2TypeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Type:'**
+  String get bw2TypeLabel;
+
+  /// No description provided for @bw2UtxosLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'UTXOs:'**
+  String get bw2UtxosLabel;
+
+  /// No description provided for @bw2ValidatorsGeneratingKeys.
+  ///
+  /// In en, this message translates to:
+  /// **'Validators are generating threshold signing keys. This typically takes 30-90 seconds.'**
+  String get bw2ValidatorsGeneratingKeys;
+
+  /// No description provided for @bw2ValidatorsSigningBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Validators are signing the Bitcoin transaction...'**
+  String get bw2ValidatorsSigningBtc;
+
+  /// No description provided for @bw2ValidatorsThreshold.
+  ///
+  /// In en, this message translates to:
+  /// **'Validators: {count} (threshold: {threshold})'**
+  String bw2ValidatorsThreshold(String count, String threshold);
+
+  /// No description provided for @bw2VaultBalanceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'A balance on your Vault account is required to broadcast this transaction'**
+  String get bw2VaultBalanceRequired;
+
+  /// No description provided for @bw2VaultCannotActionTransferFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault accounts cannot perform this action. Please transfer ownership to your standard VFX account first'**
+  String get bw2VaultCannotActionTransferFirst;
+
+  /// No description provided for @bw2VbtcAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} vBTC'**
+  String bw2VbtcAmount(String amount);
+
+  /// No description provided for @bw2VbtcBalanceUpdateHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Once the BTC transaction is confirmed on-chain, your vBTC balance will update automatically.'**
+  String get bw2VbtcBalanceUpdateHint;
+
+  /// No description provided for @bw2VbtcContractCreatedHash.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC contract created. Hash: {hash}'**
+  String bw2VbtcContractCreatedHash(String hash);
+
+  /// No description provided for @bw2VbtcContractCreatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC contract created successfully!'**
+  String get bw2VbtcContractCreatedSuccess;
+
+  /// No description provided for @bw2VbtcInfoBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This wallet provides a specific smart contract that enables tokenizing actual Bitcoin! This will allow you to lock any denomination of Bitcoin you choose into a smart contract with or without media / documents.\n\nOnce minted, you will then hold a Verified Bitcoin Token that you may send to any other person at any time in whole or in part without moving it across the BTC network and without paying any BTC fees. Only you or the holder of a vBTC token may unlock the underlying BTC from the smart contract. You may also add additional BTC to your token at anytime without creating an additional one should you choose.\n\nAny and all vBTC tokens may also be stored in your registered Reserve (Protected) Account feature enabling full on-chain recovery and call-back options providing incredibly secure self-custodial vaulting.'**
+  String get bw2VbtcInfoBody;
+
+  /// No description provided for @bw2VbtcInfoWelcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to true on-chain utility for your BTC!'**
+  String get bw2VbtcInfoWelcome;
+
+  /// No description provided for @bw2VbtcTokenCreatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC token created successfully!'**
+  String get bw2VbtcTokenCreatedSuccess;
+
+  /// No description provided for @bw2VbtcTransferBroadcastedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC transfer broadcasted successfully'**
+  String get bw2VbtcTransferBroadcastedSuccess;
+
+  /// No description provided for @bw2VfxAccountBalanceRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'A VFX account with a balance is required to proceed.'**
+  String get bw2VfxAccountBalanceRequired;
+
+  /// No description provided for @bw2VfxAccountBalanceRequiredShort.
+  ///
+  /// In en, this message translates to:
+  /// **'A VFX account with a balance is required.'**
+  String get bw2VfxAccountBalanceRequiredShort;
+
+  /// No description provided for @bw2VfxAccountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'A VFX account is required to proceed.'**
+  String get bw2VfxAccountRequired;
+
+  /// No description provided for @bw2VfxBalanceRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A VFX address with a balance is required to proceed.'**
+  String get bw2VfxBalanceRequiredBody;
+
+  /// No description provided for @bw2VfxBalanceRequiredBroadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'A balance on your VFX account is required to broadcast this transaction'**
+  String get bw2VfxBalanceRequiredBroadcast;
+
+  /// No description provided for @bw2VfxBalanceRequiredSetupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A VFX address with a balance is required to proceed. Would you like to set this up now?'**
+  String get bw2VfxBalanceRequiredSetupBody;
+
+  /// No description provided for @bw2VfxControllerNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'The VFX account that controls this BTC domain was not found. [{address}]'**
+  String bw2VfxControllerNotFound(String address);
+
+  /// No description provided for @bw2VfxFundsReceived.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Funds Received!'**
+  String get bw2VfxFundsReceived;
+
+  /// No description provided for @bw2VfxTransactionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Transaction:'**
+  String get bw2VfxTransactionLabel;
+
+  /// No description provided for @bw2WaitingBlockConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for block confirmation...'**
+  String get bw2WaitingBlockConfirmation;
+
+  /// No description provided for @bw2WaitingBtcToVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for BTC to vBTC transaction to reflect on-chain.'**
+  String get bw2WaitingBtcToVbtc;
+
+  /// No description provided for @bw2WaitingBtcTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for BTC transfer to reflect on-chain.'**
+  String get bw2WaitingBtcTransfer;
+
+  /// No description provided for @bw2WaitingForBlockBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the withdrawal request to be confirmed in a block...'**
+  String get bw2WaitingForBlockBody;
+
+  /// No description provided for @bw2WaitingForConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for Confirmation'**
+  String get bw2WaitingForConfirmation;
+
+  /// No description provided for @bw2WaitingTokenization.
+  ///
+  /// In en, this message translates to:
+  /// **'MPC ceremony and contract creation in progress.'**
+  String get bw2WaitingTokenization;
+
+  /// No description provided for @bw2WaitingVfxTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for VFX Transfer to reflect on-chain.'**
+  String get bw2WaitingVfxTransfer;
+
+  /// No description provided for @bw2WhatIsVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'What is vBTC?'**
+  String get bw2WhatIsVbtc;
+
+  /// No description provided for @bw2WithdrawalAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Amount'**
+  String get bw2WithdrawalAmount;
+
+  /// No description provided for @bw2WithdrawalComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Complete'**
+  String get bw2WithdrawalComplete;
+
+  /// No description provided for @bw2WithdrawalCompletedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal completed successfully!'**
+  String get bw2WithdrawalCompletedSuccess;
+
+  /// No description provided for @bw2WithdrawalError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred during withdrawal.'**
+  String get bw2WithdrawalError;
+
+  /// No description provided for @bw2WithdrawalFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Failed'**
+  String get bw2WithdrawalFailed;
+
+  /// No description provided for @bw2WithdrawalHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal History:'**
+  String get bw2WithdrawalHistory;
+
+  /// No description provided for @bw2WithdrawalRequestBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw {amount} BTC to {address}\nFee rate: {feeRate} sats/byte\n\nProceed?'**
+  String bw2WithdrawalRequestBody(String amount, String address, String feeRate);
+
+  /// No description provided for @bw2WithdrawalRequestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal request failed'**
+  String get bw2WithdrawalRequestFailed;
+
+  /// No description provided for @bw2WithdrawalRequestFailedError.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal request failed: {error}'**
+  String bw2WithdrawalRequestFailedError(String error);
+
+  /// No description provided for @bw2WithdrawalTimedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Timed out waiting for withdrawal request to be confirmed. You can retry later.'**
+  String get bw2WithdrawalTimedOut;
+
+  /// No description provided for @bw2WithdrawalToLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} vBTC → {address}'**
+  String bw2WithdrawalToLine(String amount, String address);
+
+  /// No description provided for @prvActivateWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate Privacy Wallet'**
+  String get prvActivateWallet;
+
+  /// No description provided for @prvActivating.
+  ///
+  /// In en, this message translates to:
+  /// **'Activating...'**
+  String get prvActivating;
+
+  /// No description provided for @prvActivationDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Activate your privacy wallet to shield VFX using zero-knowledge proofs. Shielded funds are hidden from the public ledger and can be transferred privately.'**
+  String get prvActivationDescription;
+
+  /// No description provided for @prvAddressCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Address copied to clipboard'**
+  String get prvAddressCopied;
+
+  /// No description provided for @prvAmountVbtcLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (vBTC)'**
+  String get prvAmountVbtcLabel;
+
+  /// No description provided for @prvAmountVfxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount (VFX)'**
+  String get prvAmountVfxLabel;
+
+  /// No description provided for @prvBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get prvBack;
+
+  /// No description provided for @prvBlockLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Block {block}'**
+  String prvBlockLabel(String block);
+
+  /// No description provided for @prvBridgeAboutTo.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re about to bridge'**
+  String get prvBridgeAboutTo;
+
+  /// No description provided for @prvBridgeAmountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount is required'**
+  String get prvBridgeAmountRequired;
+
+  /// No description provided for @prvBridgeAmountToBridge.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to bridge'**
+  String get prvBridgeAmountToBridge;
+
+  /// No description provided for @prvBridgeAmountToDest.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} vBTC → {dest}'**
+  String prvBridgeAmountToDest(String amount, String dest);
+
+  /// No description provided for @prvBridgeAtDest.
+  ///
+  /// In en, this message translates to:
+  /// **'at {dest}'**
+  String prvBridgeAtDest(String dest);
+
+  /// No description provided for @prvBridgeAvailableAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Available: {amount} vBTC'**
+  String prvBridgeAvailableAmount(String amount);
+
+  /// No description provided for @prvBridgeBaseAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Base address is required'**
+  String get prvBridgeBaseAddressRequired;
+
+  /// No description provided for @prvBridgeBaseEvmAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Base (EVM) Address'**
+  String get prvBridgeBaseEvmAddress;
+
+  /// No description provided for @prvBridgeBlockHeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Block height: {height}'**
+  String prvBridgeBlockHeight(String height);
+
+  /// No description provided for @prvBridgeBulletExit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit back to vBTC on VFX or directly to BTC (whoever holds the vBTC.b initiates the exit; the network will detect it and credit you back automatically)'**
+  String get prvBridgeBulletExit;
+
+  /// No description provided for @prvBridgeBulletTransfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer to another Base address'**
+  String get prvBridgeBulletTransfer;
+
+  /// No description provided for @prvBridgeBulletYield.
+  ///
+  /// In en, this message translates to:
+  /// **'Earn yield via Base DeFi'**
+  String get prvBridgeBulletYield;
+
+  /// No description provided for @prvBridgeCantLoadInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load bridge info.'**
+  String get prvBridgeCantLoadInfo;
+
+  /// No description provided for @prvBridgeCantReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t reach the bridge service. Check your connection and try again.'**
+  String get prvBridgeCantReach;
+
+  /// No description provided for @prvBridgeCantReadBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read your vBTC balance: {error}'**
+  String prvBridgeCantReadBalance(String error);
+
+  /// No description provided for @prvBridgeCheckingAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking your accounts…'**
+  String get prvBridgeCheckingAccounts;
+
+  /// No description provided for @prvBridgeCompleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge complete'**
+  String get prvBridgeCompleteTitle;
+
+  /// No description provided for @prvBridgeConfirmAndBridge.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm & Bridge'**
+  String get prvBridgeConfirmAndBridge;
+
+  /// No description provided for @prvBridgeContractLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract'**
+  String get prvBridgeContractLabel;
+
+  /// No description provided for @prvBridgeCouldNotComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'The bridge could not complete.'**
+  String get prvBridgeCouldNotComplete;
+
+  /// No description provided for @prvBridgeCurrentBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Current balance'**
+  String get prvBridgeCurrentBalance;
+
+  /// No description provided for @prvBridgeDaysAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d ago'**
+  String prvBridgeDaysAgo(int days);
+
+  /// No description provided for @prvBridgeDetailsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge details'**
+  String get prvBridgeDetailsTitle;
+
+  /// No description provided for @prvBridgeEnterPositive.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a positive amount'**
+  String get prvBridgeEnterPositive;
+
+  /// No description provided for @prvBridgeEstimatedTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated time: 2–5 minutes once submitted.'**
+  String get prvBridgeEstimatedTime;
+
+  /// No description provided for @prvBridgeEthAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} ETH'**
+  String prvBridgeEthAmount(String amount);
+
+  /// No description provided for @prvBridgeEthForGas.
+  ///
+  /// In en, this message translates to:
+  /// **'ETH for gas'**
+  String get prvBridgeEthForGas;
+
+  /// No description provided for @prvBridgeExceedsAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Exceeds available ({amount} vBTC)'**
+  String prvBridgeExceedsAvailable(String amount);
+
+  /// No description provided for @prvBridgeFailedBodyFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Bridge History for details.'**
+  String get prvBridgeFailedBodyFallback;
+
+  /// No description provided for @prvBridgeFailedFallback.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge failed.'**
+  String get prvBridgeFailedFallback;
+
+  /// No description provided for @prvBridgeFailedHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Your vBTC may still be locked on VFX. Check Bridge History for details, or contact support if this persists.'**
+  String get prvBridgeFailedHelp;
+
+  /// No description provided for @prvBridgeFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge failed'**
+  String get prvBridgeFailedTitle;
+
+  /// No description provided for @prvBridgeFailedToStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to start bridge. Please try again.'**
+  String get prvBridgeFailedToStart;
+
+  /// No description provided for @prvBridgeFromVfx.
+  ///
+  /// In en, this message translates to:
+  /// **'from VFX'**
+  String get prvBridgeFromVfx;
+
+  /// No description provided for @prvBridgeGasLowBalance.
+  ///
+  /// In en, this message translates to:
+  /// **'Low balance — gas costs vary. Top up the address above if the mint fails.'**
+  String get prvBridgeGasLowBalance;
+
+  /// No description provided for @prvBridgeGasTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gas (paid on Base)'**
+  String get prvBridgeGasTitle;
+
+  /// No description provided for @prvBridgeGasZeroEth.
+  ///
+  /// In en, this message translates to:
+  /// **'This address pays the gas fee for the mint transaction on Base. Send a small amount of Base ETH (≈ 0.001 ETH) to the address above before bridging. You can fund it from any exchange or Base wallet that supports withdrawing to Base mainnet. Balance updates automatically every 10s — tap Refresh for an immediate check.'**
+  String get prvBridgeGasZeroEth;
+
+  /// No description provided for @prvBridgeHideDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide details'**
+  String get prvBridgeHideDetails;
+
+  /// No description provided for @prvBridgeHistoryLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t load bridge history. Check your connection and try again.'**
+  String get prvBridgeHistoryLoadError;
+
+  /// No description provided for @prvBridgeHistoryLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading bridge history…'**
+  String get prvBridgeHistoryLoading;
+
+  /// No description provided for @prvBridgeHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge History'**
+  String get prvBridgeHistoryTitle;
+
+  /// No description provided for @prvBridgeHoursAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h ago'**
+  String prvBridgeHoursAgo(int hours);
+
+  /// No description provided for @prvBridgeInvalidBaseAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Must be a valid 0x Base address (40 hex chars)'**
+  String get prvBridgeInvalidBaseAddress;
+
+  /// No description provided for @prvBridgeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get prvBridgeJustNow;
+
+  /// No description provided for @prvBridgeLoadingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading bridge status…'**
+  String get prvBridgeLoadingStatus;
+
+  /// No description provided for @prvBridgeLockId.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock ID: {id}'**
+  String prvBridgeLockId(String id);
+
+  /// No description provided for @prvBridgeMintedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} vBTC.b minted on Base.'**
+  String prvBridgeMintedBody(String amount);
+
+  /// No description provided for @prvBridgeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m ago'**
+  String prvBridgeMinutesAgo(int minutes);
+
+  /// No description provided for @prvBridgeMonthsAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{months}mo ago'**
+  String prvBridgeMonthsAgo(int months);
+
+  /// No description provided for @prvBridgeNetworkInfo.
+  ///
+  /// In en, this message translates to:
+  /// **'Network info'**
+  String get prvBridgeNetworkInfo;
+
+  /// No description provided for @prvBridgeNetworkLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Network'**
+  String get prvBridgeNetworkLabel;
+
+  /// No description provided for @prvBridgeNoOperations.
+  ///
+  /// In en, this message translates to:
+  /// **'No bridge operations yet.'**
+  String get prvBridgeNoOperations;
+
+  /// No description provided for @prvBridgeNothingAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing available to bridge yet.\n\nYour wallet may show a balance, but the chain doesn\'t see any confirmed vBTC for this contract yet. The most common cause is a BTC deposit that hasn\'t received enough Bitcoin confirmations. Bridge reservations from an earlier attempt could also be holding the balance.\n\nWait a few minutes and try again, or check Bridge History below for any in-flight operations.'**
+  String get prvBridgeNothingAvailable;
+
+  /// No description provided for @prvBridgeOneWayDisclaimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridging is one-way from this app. Once vBTC.b is on Base, use your DeFi provider or another Base (EVM) wallet to manage, transfer, or exit.'**
+  String get prvBridgeOneWayDisclaimer;
+
+  /// No description provided for @prvBridgeOneWayReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder: this is one-way from this app. You\'ll use your DeFi provider or another Base (EVM) wallet for any further actions on vBTC.b.'**
+  String get prvBridgeOneWayReminder;
+
+  /// No description provided for @prvBridgePasteDestination.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste the destination address from your DeFi provider or Base wallet.'**
+  String get prvBridgePasteDestination;
+
+  /// No description provided for @prvBridgeReconnecting.
+  ///
+  /// In en, this message translates to:
+  /// **'Reconnecting… the bridge service didn\'t respond to recent status checks. We\'ll keep retrying.'**
+  String get prvBridgeReconnecting;
+
+  /// No description provided for @prvBridgeRetryFailedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry failed. See history detail for status.'**
+  String get prvBridgeRetryFailedToast;
+
+  /// No description provided for @prvBridgeRetrySubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry submitted. Watching for status updates.'**
+  String get prvBridgeRetrySubmitted;
+
+  /// No description provided for @prvBridgeReviewBridge.
+  ///
+  /// In en, this message translates to:
+  /// **'Review Bridge'**
+  String get prvBridgeReviewBridge;
+
+  /// No description provided for @prvBridgeSafeToClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe to close this dialog — your bridge will continue in the background. Track progress in Bridge History.'**
+  String get prvBridgeSafeToClose;
+
+  /// No description provided for @prvBridgeShowDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Show details'**
+  String get prvBridgeShowDetails;
+
+  /// No description provided for @prvBridgeSigsProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{collected} / {required} signatures collected'**
+  String prvBridgeSigsProgress(int collected, int required);
+
+  /// No description provided for @prvBridgeStageCollectingSigs.
+  ///
+  /// In en, this message translates to:
+  /// **'Collecting validator signatures…'**
+  String get prvBridgeStageCollectingSigs;
+
+  /// No description provided for @prvBridgeStageConfirmed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirmed on VFX'**
+  String get prvBridgeStageConfirmed;
+
+  /// No description provided for @prvBridgeStageLockSubmitted.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX lock submitted'**
+  String get prvBridgeStageLockSubmitted;
+
+  /// No description provided for @prvBridgeStageMinted.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted on Base'**
+  String get prvBridgeStageMinted;
+
+  /// No description provided for @prvBridgeStageSigsCollected.
+  ///
+  /// In en, this message translates to:
+  /// **'Validator signatures collected'**
+  String get prvBridgeStageSigsCollected;
+
+  /// No description provided for @prvBridgeStageSubmittingMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitting mint on Base'**
+  String get prvBridgeStageSubmittingMint;
+
+  /// No description provided for @prvBridgeStalled.
+  ///
+  /// In en, this message translates to:
+  /// **'Taking longer than expected. Validator signing can occasionally lag — we\'ll keep watching. You can safely close this dialog; Bridge History will surface the final result.'**
+  String get prvBridgeStalled;
+
+  /// No description provided for @prvBridgeStateLost.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge state lost. Close and try again.'**
+  String get prvBridgeStateLost;
+
+  /// No description provided for @prvBridgeStepLock.
+  ///
+  /// In en, this message translates to:
+  /// **'Lock your {amount} vBTC on VFX'**
+  String prvBridgeStepLock(String amount);
+
+  /// No description provided for @prvBridgeStepMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit a mintWithProof transaction on Base (paid from your derived Base address)'**
+  String get prvBridgeStepMint;
+
+  /// No description provided for @prvBridgeStepWaitSignatures.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for validator signatures'**
+  String get prvBridgeStepWaitSignatures;
+
+  /// No description provided for @prvBridgeSuccessAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'You now have {amount} vBTC.b on Base'**
+  String prvBridgeSuccessAmount(String amount);
+
+  /// No description provided for @prvBridgeSuccessTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridged to Base'**
+  String get prvBridgeSuccessTitle;
+
+  /// No description provided for @prvBridgeThisWill.
+  ///
+  /// In en, this message translates to:
+  /// **'This will:'**
+  String get prvBridgeThisWill;
+
+  /// No description provided for @prvBridgeToBaseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge to Base'**
+  String get prvBridgeToBaseTitle;
+
+  /// No description provided for @prvBridgeToDestOnBase.
+  ///
+  /// In en, this message translates to:
+  /// **'to {dest} on Base'**
+  String prvBridgeToDestOnBase(String dest);
+
+  /// No description provided for @prvBridgeTxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tx'**
+  String get prvBridgeTxLabel;
+
+  /// No description provided for @prvBridgeUnavailableCli.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridging is currently unavailable. The CLI is not configured to talk to Base.'**
+  String get prvBridgeUnavailableCli;
+
+  /// No description provided for @prvBridgeUnavailableNoAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridge unavailable — your Base address couldn\'t be derived. This usually means the wallet is locked. Unlock your wallet and try again.'**
+  String get prvBridgeUnavailableNoAddress;
+
+  /// No description provided for @prvBridgeUseDefiTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your DeFi provider or another Base (EVM) wallet to:'**
+  String get prvBridgeUseDefiTo;
+
+  /// No description provided for @prvBridgeVbtcbAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} vBTC.b'**
+  String prvBridgeVbtcbAmount(String amount);
+
+  /// No description provided for @prvBridgeVbtcbBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC.b balance'**
+  String get prvBridgeVbtcbBalanceLabel;
+
+  /// No description provided for @prvBridgeViewDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'View Details'**
+  String get prvBridgeViewDetails;
+
+  /// No description provided for @prvBridgeViewOnBasescan.
+  ///
+  /// In en, this message translates to:
+  /// **'View on Basescan'**
+  String get prvBridgeViewOnBasescan;
+
+  /// No description provided for @prvBridgeWhatsNext.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s next?'**
+  String get prvBridgeWhatsNext;
+
+  /// No description provided for @prvBridgeYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'yesterday'**
+  String get prvBridgeYesterday;
+
+  /// No description provided for @prvBridgeYourBaseAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Base address'**
+  String get prvBridgeYourBaseAddress;
+
+  /// No description provided for @prvBridgeYourGasAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Your gas address'**
+  String get prvBridgeYourGasAddress;
+
+  /// No description provided for @prvBridging.
+  ///
+  /// In en, this message translates to:
+  /// **'Bridging…'**
+  String get prvBridging;
+
+  /// No description provided for @prvCheckingStatus.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking privacy layer status...'**
+  String get prvCheckingStatus;
+
+  /// No description provided for @prvChooseVbtcContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which vBTC contract to resync.'**
+  String get prvChooseVbtcContract;
+
+  /// No description provided for @prvConfirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get prvConfirmPasswordLabel;
+
+  /// No description provided for @prvConfirmPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get prvConfirmPasswordTitle;
+
+  /// No description provided for @prvConsolidateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Consolidate'**
+  String get prvConsolidateAction;
+
+  /// No description provided for @prvConsolidateMinNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'At least 2 unspent notes are required to consolidate.'**
+  String get prvConsolidateMinNotes;
+
+  /// No description provided for @prvConsolidateNotesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge your 2 smallest notes into a single note. This reduces dust and improves privacy.'**
+  String get prvConsolidateNotesBody;
+
+  /// No description provided for @prvConsolidateNotesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Consolidate Notes'**
+  String get prvConsolidateNotesTitle;
+
+  /// No description provided for @prvConsolidateVbtcNotesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge your 2 smallest vBTC notes into a single note. This reduces dust and improves privacy.'**
+  String get prvConsolidateVbtcNotesBody;
+
+  /// No description provided for @prvConsolidateVbtcNotesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Consolidate vBTC Notes'**
+  String get prvConsolidateVbtcNotesTitle;
+
+  /// No description provided for @prvConsolidationBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Consolidation broadcast successfully'**
+  String get prvConsolidationBroadcastSuccess;
+
+  /// No description provided for @prvConsolidationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Consolidation failed: {error}'**
+  String prvConsolidationFailed(String error);
+
+  /// No description provided for @prvContractName.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract: {name}'**
+  String prvContractName(String name);
+
+  /// No description provided for @prvCopyAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy address'**
+  String get prvCopyAddress;
+
+  /// No description provided for @prvCreatePasswordBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a password to secure your shielded wallet\'s spending key. You\'ll need this password to unshield, transfer, or consolidate funds.'**
+  String get prvCreatePasswordBody;
+
+  /// No description provided for @prvCreatePasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Privacy Password'**
+  String get prvCreatePasswordTitle;
+
+  /// No description provided for @prvCurrentNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'Current notes: {count}'**
+  String prvCurrentNotes(int count);
+
+  /// No description provided for @prvEnterValidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount'**
+  String get prvEnterValidAmount;
+
+  /// No description provided for @prvEnterValidVfxAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid VFX address'**
+  String get prvEnterValidVfxAddress;
+
+  /// No description provided for @prvEnterValidZfxAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid zfx_ address'**
+  String get prvEnterValidZfxAddress;
+
+  /// No description provided for @prvEnterVfxAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter VFX address'**
+  String get prvEnterVfxAddressHint;
+
+  /// No description provided for @prvEnterViewingKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter the viewing key'**
+  String get prvEnterViewingKey;
+
+  /// No description provided for @prvErrorActivatingWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Error activating privacy wallet: {error}'**
+  String prvErrorActivatingWallet(String error);
+
+  /// No description provided for @prvExportViewingKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Export Viewing Key'**
+  String get prvExportViewingKey;
+
+  /// No description provided for @prvExportViewingKeyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.'**
+  String get prvExportViewingKeyBody;
+
+  /// No description provided for @prvFailedExportViewingKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to export viewing key'**
+  String get prvFailedExportViewingKey;
+
+  /// No description provided for @prvFailedGenerateShieldedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to generate shielded address'**
+  String get prvFailedGenerateShieldedAddress;
+
+  /// No description provided for @prvFailedImportViewingKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to import viewing key'**
+  String get prvFailedImportViewingKey;
+
+  /// No description provided for @prvFeeDeductedFromShielded.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee: {fee} (deducted from shielded balance)'**
+  String prvFeeDeductedFromShielded(String fee);
+
+  /// No description provided for @prvFeeDeductedFromShieldedVfx.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee: {fee} (deducted from shielded VFX balance)'**
+  String prvFeeDeductedFromShieldedVfx(String fee);
+
+  /// No description provided for @prvFeeDeductedShieldedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{fee} fee deducted from shielded balance.'**
+  String prvFeeDeductedShieldedShort(String fee);
+
+  /// No description provided for @prvFeeDeductedShieldedVfxLong.
+  ///
+  /// In en, this message translates to:
+  /// **'A fee of {fee} will be deducted from your shielded VFX balance.'**
+  String prvFeeDeductedShieldedVfxLong(String fee);
+
+  /// No description provided for @prvFromAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'From: {address}'**
+  String prvFromAddress(String address);
+
+  /// No description provided for @prvImportAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get prvImportAction;
+
+  /// No description provided for @prvImportViewingKey.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Viewing Key'**
+  String get prvImportViewingKey;
+
+  /// No description provided for @prvImportViewingKeyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a viewing key to create a view-only wallet. You can see balances but cannot spend.'**
+  String get prvImportViewingKeyBody;
+
+  /// No description provided for @prvInsufficientVfxFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient shielded VFX to cover the privacy transaction fee.'**
+  String get prvInsufficientVfxFee;
+
+  /// No description provided for @prvLayerStartingUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Layer Starting Up'**
+  String get prvLayerStartingUp;
+
+  /// No description provided for @prvMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get prvMax;
+
+  /// No description provided for @prvMinHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Min: {amount}'**
+  String prvMinHint(String amount);
+
+  /// No description provided for @prvMinShieldAmountVbtc.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum shield amount is {amount} vBTC'**
+  String prvMinShieldAmountVbtc(String amount);
+
+  /// No description provided for @prvMinShieldAmountVfx.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum shield amount is {amount} VFX'**
+  String prvMinShieldAmountVfx(String amount);
+
+  /// No description provided for @prvNoAccountsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No accounts found'**
+  String get prvNoAccountsFound;
+
+  /// No description provided for @prvNoShieldedAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'No shielded address found'**
+  String get prvNoShieldedAddress;
+
+  /// No description provided for @prvNoVbtcTokens.
+  ///
+  /// In en, this message translates to:
+  /// **'No vBTC tokens found'**
+  String get prvNoVbtcTokens;
+
+  /// No description provided for @prvNoWalletSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No wallet selected'**
+  String get prvNoWalletSelected;
+
+  /// No description provided for @prvNoteCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{{count} note} other{{count} notes}}'**
+  String prvNoteCount(int count);
+
+  /// No description provided for @prvPasswordConfirmationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Password confirmation failed'**
+  String get prvPasswordConfirmationFailed;
+
+  /// No description provided for @prvPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get prvPasswordLabel;
+
+  /// No description provided for @prvPasswordRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy wallet password required. Please unlock first.'**
+  String get prvPasswordRequired;
+
+  /// No description provided for @prvPasswordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get prvPasswordsDoNotMatch;
+
+  /// No description provided for @prvPasteBase64Hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Paste Base64 key here'**
+  String get prvPasteBase64Hint;
+
+  /// No description provided for @prvPlonkInitializing.
+  ///
+  /// In en, this message translates to:
+  /// **'The PLONK proof system is initializing. This may take a moment\nwhile cryptographic parameters are loaded.'**
+  String get prvPlonkInitializing;
+
+  /// No description provided for @prvPrismLayerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PRISM Privacy Layer'**
+  String get prvPrismLayerTitle;
+
+  /// No description provided for @prvPrivateTransferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Private Transfer'**
+  String get prvPrivateTransferTitle;
+
+  /// No description provided for @prvPrivateTransferVbtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer shielded vBTC to another zfx_ address. Fully private.'**
+  String get prvPrivateTransferVbtcBody;
+
+  /// No description provided for @prvPrivateTransferVbtcTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Private Transfer vBTC'**
+  String get prvPrivateTransferVbtcTitle;
+
+  /// No description provided for @prvPrivateTransferVfxBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer shielded VFX to another zfx_ address. Fully private.'**
+  String get prvPrivateTransferVfxBody;
+
+  /// No description provided for @prvRecipientInvalidZfx.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient must be a valid zfx_ address'**
+  String get prvRecipientInvalidZfx;
+
+  /// No description provided for @prvRecipientZfxLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipient (zfx_ address)'**
+  String get prvRecipientZfxLabel;
+
+  /// No description provided for @prvRefresh.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get prvRefresh;
+
+  /// No description provided for @prvResetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get prvResetAction;
+
+  /// No description provided for @prvResetPrivacyWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Privacy Wallet'**
+  String get prvResetPrivacyWallet;
+
+  /// No description provided for @prvResetWalletBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will clear your local privacy wallet state and return to the activation screen. Your shielded funds on the network are not affected — you can re-activate with the same account to recover them.\n\nContinue?'**
+  String get prvResetWalletBody;
+
+  /// No description provided for @prvResyncAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Resync'**
+  String get prvResyncAction;
+
+  /// No description provided for @prvResyncComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Resync complete'**
+  String get prvResyncComplete;
+
+  /// No description provided for @prvResyncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Resync failed'**
+  String get prvResyncFailed;
+
+  /// No description provided for @prvResyncShieldedWalletBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will wipe all cached notes and balances, then rescan from the beginning. This may take a while.\n\nContinue?'**
+  String get prvResyncShieldedWalletBody;
+
+  /// No description provided for @prvResyncShieldedWalletTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Resync Shielded Wallet'**
+  String get prvResyncShieldedWalletTitle;
+
+  /// No description provided for @prvResyncStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Resync started...'**
+  String get prvResyncStarted;
+
+  /// No description provided for @prvResyncVbtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This will wipe cached notes and balances for \"{name}\" and rescan from the beginning. This may take a while.\n\nContinue?'**
+  String prvResyncVbtcBody(String name);
+
+  /// No description provided for @prvResyncVbtcWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Resync vBTC Wallet'**
+  String get prvResyncVbtcWallet;
+
+  /// No description provided for @prvResyncWallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Resync Wallet'**
+  String get prvResyncWallet;
+
+  /// No description provided for @prvRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get prvRetry;
+
+  /// No description provided for @prvScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'PRISM Privacy'**
+  String get prvScreenTitle;
+
+  /// No description provided for @prvSelectFromAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'Select from my accounts'**
+  String get prvSelectFromAccounts;
+
+  /// No description provided for @prvSelectVbtcContract.
+  ///
+  /// In en, this message translates to:
+  /// **'Select vBTC Contract'**
+  String get prvSelectVbtcContract;
+
+  /// No description provided for @prvSettingsTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy settings'**
+  String get prvSettingsTooltip;
+
+  /// No description provided for @prvShieldAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield'**
+  String get prvShieldAction;
+
+  /// No description provided for @prvShieldBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield transaction broadcast successfully'**
+  String get prvShieldBroadcastSuccess;
+
+  /// No description provided for @prvShieldFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield failed: {error}'**
+  String prvShieldFailed(String error);
+
+  /// No description provided for @prvShieldVbtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Move vBTC from your transparent wallet into the shielded pool.'**
+  String get prvShieldVbtcBody;
+
+  /// No description provided for @prvShieldVbtcTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield vBTC'**
+  String get prvShieldVbtcTitle;
+
+  /// No description provided for @prvShieldVfxBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Move VFX from your transparent wallet into the shielded pool.'**
+  String get prvShieldVfxBody;
+
+  /// No description provided for @prvShieldVfxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shield VFX'**
+  String get prvShieldVfxTitle;
+
+  /// No description provided for @prvShieldedAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shielded Address'**
+  String get prvShieldedAddressLabel;
+
+  /// No description provided for @prvShieldedBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shielded Balance'**
+  String get prvShieldedBalanceLabel;
+
+  /// No description provided for @prvShieldedVbtcHeading.
+  ///
+  /// In en, this message translates to:
+  /// **'Shielded vBTC'**
+  String get prvShieldedVbtcHeading;
+
+  /// No description provided for @prvShieldedVfxRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.'**
+  String prvShieldedVfxRequiredBody(String balance, String fee);
+
+  /// No description provided for @prvShieldedVfxRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shielded VFX Required'**
+  String get prvShieldedVfxRequiredTitle;
+
+  /// No description provided for @prvToAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'To Address (transparent)'**
+  String get prvToAddressLabel;
+
+  /// No description provided for @prvTransferAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer'**
+  String get prvTransferAction;
+
+  /// No description provided for @prvTransferBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Private transfer broadcast successfully'**
+  String get prvTransferBroadcastSuccess;
+
+  /// No description provided for @prvTransferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Private transfer failed: {error}'**
+  String prvTransferFailed(String error);
+
+  /// No description provided for @prvTransparentFeeAutoCalc.
+  ///
+  /// In en, this message translates to:
+  /// **'Transparent network fee will be auto-calculated.'**
+  String get prvTransparentFeeAutoCalc;
+
+  /// No description provided for @prvTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get prvTryAgain;
+
+  /// No description provided for @prvUnlockAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock'**
+  String get prvUnlockAction;
+
+  /// No description provided for @prvUnlockBannerText.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your privacy password to unlock spending operations.'**
+  String get prvUnlockBannerText;
+
+  /// No description provided for @prvUnlockWalletBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your privacy wallet password to enable spending.'**
+  String get prvUnlockWalletBody;
+
+  /// No description provided for @prvUnlockWalletTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Privacy Wallet'**
+  String get prvUnlockWalletTitle;
+
+  /// No description provided for @prvUnshieldAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Unshield'**
+  String get prvUnshieldAction;
+
+  /// No description provided for @prvUnshieldBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Unshield transaction broadcast successfully'**
+  String get prvUnshieldBroadcastSuccess;
+
+  /// No description provided for @prvUnshieldFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Unshield failed: {error}'**
+  String prvUnshieldFailed(String error);
+
+  /// No description provided for @prvUnshieldVbtcBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Move vBTC from the shielded pool back to a transparent address.'**
+  String get prvUnshieldVbtcBody;
+
+  /// No description provided for @prvUnshieldVbtcTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unshield vBTC'**
+  String get prvUnshieldVbtcTitle;
+
+  /// No description provided for @prvUnshieldVfxBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Move VFX from the shielded pool back to a transparent address.'**
+  String get prvUnshieldVfxBody;
+
+  /// No description provided for @prvUnshieldVfxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Unshield VFX'**
+  String get prvUnshieldVfxTitle;
+
+  /// No description provided for @prvVbtcAmountSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} vBTC'**
+  String prvVbtcAmountSuffix(String amount);
+
+  /// No description provided for @prvVbtcConsolidationBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC consolidation broadcast successfully'**
+  String get prvVbtcConsolidationBroadcastSuccess;
+
+  /// No description provided for @prvVbtcConsolidationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC consolidation failed: {error}'**
+  String prvVbtcConsolidationFailed(String error);
+
+  /// No description provided for @prvVbtcResyncComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC resync complete'**
+  String get prvVbtcResyncComplete;
+
+  /// No description provided for @prvVbtcResyncFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC resync failed'**
+  String get prvVbtcResyncFailed;
+
+  /// No description provided for @prvVbtcResyncStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC resync started...'**
+  String get prvVbtcResyncStarted;
+
+  /// No description provided for @prvVbtcShieldBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC shield transaction broadcast successfully'**
+  String get prvVbtcShieldBroadcastSuccess;
+
+  /// No description provided for @prvVbtcShieldFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC shield failed: {error}'**
+  String prvVbtcShieldFailed(String error);
+
+  /// No description provided for @prvVbtcTransferBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC private transfer broadcast successfully'**
+  String get prvVbtcTransferBroadcastSuccess;
+
+  /// No description provided for @prvVbtcTransferFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC private transfer failed: {error}'**
+  String prvVbtcTransferFailed(String error);
+
+  /// No description provided for @prvVbtcUnshieldBroadcastSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC unshield transaction broadcast successfully'**
+  String get prvVbtcUnshieldBroadcastSuccess;
+
+  /// No description provided for @prvVbtcUnshieldFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC unshield failed: {error}'**
+  String prvVbtcUnshieldFailed(String error);
+
+  /// No description provided for @prvVfxAmountSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} VFX'**
+  String prvVfxAmountSuffix(String amount);
+
+  /// No description provided for @prvViewOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'VIEW ONLY'**
+  String get prvViewOnly;
+
+  /// No description provided for @prvViewingKeyBase64Label.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewing Key (Base64)'**
+  String get prvViewingKeyBase64Label;
+
+  /// No description provided for @prvViewingKeyCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewing key copied to clipboard'**
+  String get prvViewingKeyCopied;
+
+  /// No description provided for @prvViewingKeyImported.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewing key imported successfully'**
+  String get prvViewingKeyImported;
+
+  /// No description provided for @prvViewingKeyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Viewing Key'**
+  String get prvViewingKeyTitle;
+
+  /// No description provided for @prvWalletActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy wallet activated: {address}'**
+  String prvWalletActivated(String address);
+
+  /// No description provided for @prvWalletReset.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy wallet reset'**
+  String get prvWalletReset;
+
+  /// No description provided for @prvWalletUnlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy wallet unlocked'**
+  String get prvWalletUnlocked;
+
+  /// No description provided for @prvZfxAddressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'zfx_ Address'**
+  String get prvZfxAddressLabel;
+
+  /// No description provided for @svcActionUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get svcActionUpdate;
+
+  /// No description provided for @svcActivateVaultBeforeProceeding.
+  ///
+  /// In en, this message translates to:
+  /// **'You must activate your Vault Account before proceeding.'**
+  String get svcActivateVaultBeforeProceeding;
+
+  /// No description provided for @svcAddressOrDomainRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Address or VFX domain required'**
+  String get svcAddressOrDomainRequired;
+
+  /// No description provided for @svcAdnrDeleteConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this VFX Domain?\n{costLine}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.'**
+  String svcAdnrDeleteConfirmBody(String costLine);
+
+  /// No description provided for @svcAdnrDeleteNoCost.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no cost to delete a VFX Domain (aside from the TX fee).'**
+  String get svcAdnrDeleteNoCost;
+
+  /// No description provided for @svcAdnrDeleteWithCost.
+  ///
+  /// In en, this message translates to:
+  /// **'There is a cost of {cost} RBX to delete an RBX Domain.'**
+  String svcAdnrDeleteWithCost(String cost);
+
+  /// No description provided for @svcAdnrFundNeededBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have the required funds to buy the domain in this account.'**
+  String get svcAdnrFundNeededBody;
+
+  /// No description provided for @svcAdnrSufficientBalanceBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have an account with a sufficient balance.\n\nWould you like to send 6 VFX from:\n{fromAddress}\n[Balance: {balance} VFX]?'**
+  String svcAdnrSufficientBalanceBody(String fromAddress, String balance);
+
+  /// No description provided for @svcAmountPositive.
+  ///
+  /// In en, this message translates to:
+  /// **'The amount has to be a positive value'**
+  String get svcAmountPositive;
+
+  /// No description provided for @svcAmountRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount required'**
+  String get svcAmountRequired;
+
+  /// No description provided for @svcAssetsRequestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Assets Request failed.'**
+  String get svcAssetsRequestFailed;
+
+  /// No description provided for @svcBalanceRowFromTo.
+  ///
+  /// In en, this message translates to:
+  /// **'From: {from}\nTo: {to}'**
+  String svcBalanceRowFromTo(String from, String to);
+
+  /// No description provided for @svcBeaconSignatureError.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t produce beacon upload signature'**
+  String get svcBeaconSignatureError;
+
+  /// No description provided for @svcBeaconUploadRequestError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not create beacon upload request.'**
+  String get svcBeaconUploadRequestError;
+
+  /// No description provided for @svcBtcAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Address required'**
+  String get svcBtcAddressRequired;
+
+  /// No description provided for @svcBtcSentToAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} BTC has been sent to {address}.'**
+  String svcBtcSentToAddress(String amount, String address);
+
+  /// No description provided for @svcCliRestartRequiredBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A restart of the CLI is required. Restart Now?'**
+  String get svcCliRestartRequiredBody;
+
+  /// No description provided for @svcCliUpdateAvailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A CLI update is available. Download and install now?'**
+  String get svcCliUpdateAvailableBody;
+
+  /// No description provided for @svcCliUpdateAvailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CLI Update Available'**
+  String get svcCliUpdateAvailableTitle;
+
+  /// No description provided for @svcCliUpdatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CLI Updated'**
+  String get svcCliUpdatedTitle;
+
+  /// No description provided for @svcComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get svcComplete;
+
+  /// No description provided for @svcCouldNotParseEncryptedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not parse encrypted message'**
+  String get svcCouldNotParseEncryptedMessage;
+
+  /// No description provided for @svcCsvHeadersInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'The CSV headers are not in the correct format, please check the example file'**
+  String get svcCsvHeadersInvalid;
+
+  /// No description provided for @svcDecryptFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to decrypt message. Invalid key or corrupted data.'**
+  String get svcDecryptFailed;
+
+  /// No description provided for @svcFailedParseFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse fee'**
+  String get svcFailedParseFee;
+
+  /// No description provided for @svcFailedParseHash.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to parse hash'**
+  String get svcFailedParseHash;
+
+  /// No description provided for @svcFailedRetrieveFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve fee'**
+  String get svcFailedRetrieveFee;
+
+  /// No description provided for @svcFailedRetrieveNonce.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve nonce'**
+  String get svcFailedRetrieveNonce;
+
+  /// No description provided for @svcFailedRetrieveTimestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to retrieve timestamp'**
+  String get svcFailedRetrieveTimestamp;
+
+  /// No description provided for @svcGuiUpdateAvailableBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A GUI update is available. Download now?'**
+  String get svcGuiUpdateAvailableBody;
+
+  /// No description provided for @svcGuiUpdateAvailableTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'GUI Update Available'**
+  String get svcGuiUpdateAvailableTitle;
+
+  /// No description provided for @svcGuiUpdateLaunchBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The VFX GUI download will be launched in your browser. Once launched, the CLI will be shutdown and your wallet will be closed to ensure a safe update.'**
+  String get svcGuiUpdateLaunchBody;
+
+  /// No description provided for @svcGuiUpdateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'GUI Update'**
+  String get svcGuiUpdateTitle;
+
+  /// No description provided for @svcImBackedUp.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'m Backed Up'**
+  String get svcImBackedUp;
+
+  /// No description provided for @svcImportSnapshotBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You are only at {blockHeight} block height locally. The network has a snapshot at {snapshotHeight} block height that will help you sync more quickly. \n\nWould you like to import it now?'**
+  String svcImportSnapshotBody(String blockHeight, String snapshotHeight);
+
+  /// No description provided for @svcImportSnapshotTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Snapshot?'**
+  String get svcImportSnapshotTitle;
+
+  /// No description provided for @svcInsufficientBalanceToSend.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient balance to send'**
+  String get svcInsufficientBalanceToSend;
+
+  /// No description provided for @svcInvalidJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid JSON'**
+  String get svcInvalidJson;
+
+  /// No description provided for @svcLocatorsRequestFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Locators request failed.'**
+  String get svcLocatorsRequestFailed;
+
+  /// No description provided for @svcMainMenuSyncTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Sync: {lastSync}\nNext Sync: {nextSync}'**
+  String svcMainMenuSyncTooltip(String lastSync, String nextSync);
+
+  /// No description provided for @svcMessageDecryptedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Message decrypted successfully!'**
+  String get svcMessageDecryptedSuccess;
+
+  /// No description provided for @svcMinTxAmountBtc.
+  ///
+  /// In en, this message translates to:
+  /// **'The minimum transaction amount is {amount} BTC'**
+  String svcMinTxAmountBtc(String amount);
+
+  /// No description provided for @svcMintingProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Minting {current}/{total}...'**
+  String svcMintingProgress(String current, String total);
+
+  /// No description provided for @svcNavPrivacyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy'**
+  String get svcNavPrivacyLabel;
+
+  /// No description provided for @svcNftNotEnoughVfxAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough VFX to do this action'**
+  String get svcNftNotEnoughVfxAction;
+
+  /// No description provided for @svcNftNotLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT not loaded'**
+  String get svcNftNotLoaded;
+
+  /// No description provided for @svcNftNotOwner.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not the owner of this NFT.'**
+  String get svcNftNotOwner;
+
+  /// No description provided for @svcNftNotOwnerOrMinter.
+  ///
+  /// In en, this message translates to:
+  /// **'You are not the owner or minter of this NFT.'**
+  String get svcNftNotOwnerOrMinter;
+
+  /// No description provided for @svcNoAccountSelectedPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'No account selected.'**
+  String get svcNoAccountSelectedPeriod;
+
+  /// No description provided for @svcNoBtcAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'No BTC Account'**
+  String get svcNoBtcAccount;
+
+  /// No description provided for @svcNoEncryptedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No encrypted message found'**
+  String get svcNoEncryptedMessage;
+
+  /// No description provided for @svcNotEnoughBalanceAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance in account.'**
+  String get svcNotEnoughBalanceAccount;
+
+  /// No description provided for @svcNotEnoughBalanceBtcAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance in BTC account'**
+  String get svcNotEnoughBalanceBtcAccount;
+
+  /// No description provided for @svcNotValidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Not a valid amount'**
+  String get svcNotValidAmount;
+
+  /// No description provided for @svcNotifBtcDomainCreatedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain created for {name}.btc'**
+  String svcNotifBtcDomainCreatedBody(String name);
+
+  /// No description provided for @svcNotifBtcDomainCreatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain Name Created'**
+  String get svcNotifBtcDomainCreatedTitle;
+
+  /// No description provided for @svcNotifBtcDomainDeletedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain deleted for {name}'**
+  String svcNotifBtcDomainDeletedBody(String name);
+
+  /// No description provided for @svcNotifBtcDomainDeletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain Name Deleted'**
+  String get svcNotifBtcDomainDeletedTitle;
+
+  /// No description provided for @svcNotifBtcDomainTransferredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain Name Transferred'**
+  String get svcNotifBtcDomainTransferredTitle;
+
+  /// No description provided for @svcNotifDecShopTxBody.
+  ///
+  /// In en, this message translates to:
+  /// **'DecShop TX Complete'**
+  String get svcNotifDecShopTxBody;
+
+  /// No description provided for @svcNotifDecShopTxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'DecShop TX'**
+  String get svcNotifDecShopTxTitle;
+
+  /// No description provided for @svcNotifDomainCreatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain Name Created'**
+  String get svcNotifDomainCreatedTitle;
+
+  /// No description provided for @svcNotifDomainDeletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain Name Deleted'**
+  String get svcNotifDomainDeletedTitle;
+
+  /// No description provided for @svcNotifDomainTransferredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Domain Name Transferred'**
+  String get svcNotifDomainTransferredTitle;
+
+  /// No description provided for @svcNotifFundsReceivedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} VFX from {fromAddress}'**
+  String svcNotifFundsReceivedBody(String amount, String fromAddress);
+
+  /// No description provided for @svcNotifFundsReceivedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Funds Received'**
+  String get svcNotifFundsReceivedTitle;
+
+  /// No description provided for @svcNotifFundsSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} VFX to {toAddress}'**
+  String svcNotifFundsSentBody(String amount, String toAddress);
+
+  /// No description provided for @svcNotifNftBurnedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Burned'**
+  String get svcNotifNftBurnedTitle;
+
+  /// No description provided for @svcNotifNftEvolvedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT evolved to state {state}.'**
+  String svcNotifNftEvolvedBody(String state);
+
+  /// No description provided for @svcNotifNftEvolvedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Evolved'**
+  String get svcNotifNftEvolvedTitle;
+
+  /// No description provided for @svcNotifNftMintedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Minted'**
+  String get svcNotifNftMintedTitle;
+
+  /// No description provided for @svcNotifNftReceivedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT from {fromAddress}'**
+  String svcNotifNftReceivedBody(String fromAddress);
+
+  /// No description provided for @svcNotifNftReceivedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Received'**
+  String get svcNotifNftReceivedTitle;
+
+  /// No description provided for @svcNotifNftSentBody.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT to {toAddress}'**
+  String svcNotifNftSentBody(String toAddress);
+
+  /// No description provided for @svcNotifNftSentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'NFT Sent'**
+  String get svcNotifNftSentTitle;
+
+  /// No description provided for @svcNotifPaused.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
+  String get svcNotifPaused;
+
+  /// No description provided for @svcNotifResumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Resumed'**
+  String get svcNotifResumed;
+
+  /// No description provided for @svcNotifSaleCompletedManualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Completed (Manual)'**
+  String get svcNotifSaleCompletedManualTitle;
+
+  /// No description provided for @svcNotifSaleCompletedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Completed'**
+  String get svcNotifSaleCompletedTitle;
+
+  /// No description provided for @svcNotifSaleStartedManualTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Started (Manual)'**
+  String get svcNotifSaleStartedManualTitle;
+
+  /// No description provided for @svcNotifSaleStartedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale Started'**
+  String get svcNotifSaleStartedTitle;
+
+  /// No description provided for @svcNotifTokenBanAddressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Ban Address'**
+  String get svcNotifTokenBanAddressTitle;
+
+  /// No description provided for @svcNotifTokenBurnTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Burn'**
+  String get svcNotifTokenBurnTitle;
+
+  /// No description provided for @svcNotifTokenChangeOwnershipTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Change Ownership'**
+  String get svcNotifTokenChangeOwnershipTitle;
+
+  /// No description provided for @svcNotifTokenDeployedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Deployed'**
+  String get svcNotifTokenDeployedTitle;
+
+  /// No description provided for @svcNotifTokenPauseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Pause'**
+  String get svcNotifTokenPauseTitle;
+
+  /// No description provided for @svcNotifTokenTopicCreatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Topic Created'**
+  String get svcNotifTokenTopicCreatedTitle;
+
+  /// No description provided for @svcNotifTokenTransferTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Transfer'**
+  String get svcNotifTokenTransferTitle;
+
+  /// No description provided for @svcNotifTokenVoteCastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Vote Cast'**
+  String get svcNotifTokenVoteCastTitle;
+
+  /// No description provided for @svcNotifTokensMintedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens Minted'**
+  String get svcNotifTokensMintedTitle;
+
+  /// No description provided for @svcNotifTopicCreatedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic {name} Created.'**
+  String svcNotifTopicCreatedBody(String name);
+
+  /// No description provided for @svcNotifTopicCreatedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Topic Created'**
+  String get svcNotifTopicCreatedTitle;
+
+  /// No description provided for @svcNotifVbtcTokenizationMintTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Tokenization Mint'**
+  String get svcNotifVbtcTokenizationMintTitle;
+
+  /// No description provided for @svcNotifVfxDomainCreatedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Domain created for {name}.vfx'**
+  String svcNotifVfxDomainCreatedBody(String name);
+
+  /// No description provided for @svcNotifVfxDomainDeletedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Domain deleted for {name}'**
+  String svcNotifVfxDomainDeletedBody(String name);
+
+  /// No description provided for @svcNotifVfxDomainTransferBody.
+  ///
+  /// In en, this message translates to:
+  /// **'VFX Domain transfer for {name}'**
+  String svcNotifVfxDomainTransferBody(String name);
+
+  /// No description provided for @svcNotifVoteCastedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote casted on {topic}'**
+  String svcNotifVoteCastedBody(String topic);
+
+  /// No description provided for @svcNotifVoteCastedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vote Casted'**
+  String get svcNotifVoteCastedTitle;
+
+  /// No description provided for @svcPrivateKeyNotAvailableUnlock.
+  ///
+  /// In en, this message translates to:
+  /// **'Private key not available. Please ensure wallet is unlocked.'**
+  String get svcPrivateKeyNotAvailableUnlock;
+
+  /// No description provided for @svcPrivateKeyNotFoundRecipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Private key not found for recipient address'**
+  String get svcPrivateKeyNotFoundRecipient;
+
+  /// No description provided for @svcProblemDownloadingSkipping.
+  ///
+  /// In en, this message translates to:
+  /// **'Problem downloading {url}. Skipping.'**
+  String svcProblemDownloadingSkipping(String url);
+
+  /// No description provided for @svcSendingConfirmBtcFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending:\n{amount} BTC\n\nTo:\n{toAddress}\n\nFrom:\n{fromAddress}\n\nFee:\n{fee} BTC'**
+  String svcSendingConfirmBtcFee(String amount, String toAddress, String fromAddress, String fee);
+
+  /// No description provided for @svcSendingConfirmBtcFeeRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending:\n{amount} BTC\n\nTo:\n{toAddress}\n\nFrom:\n{fromAddress}\n\nFeeRate:\n{feeRate} SATS'**
+  String svcSendingConfirmBtcFeeRate(String amount, String toAddress, String fromAddress, String feeRate);
+
+  /// No description provided for @svcSignatureGenerationFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature generation failed.'**
+  String get svcSignatureGenerationFailed;
+
+  /// No description provided for @svcSignatureNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Signature not valid'**
+  String get svcSignatureNotValid;
+
+  /// No description provided for @svcSnapshotBackupWarningBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.'**
+  String get svcSnapshotBackupWarningBody;
+
+  /// No description provided for @svcSnapshotDetermineStateError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not determine latest snapshot state'**
+  String get svcSnapshotDetermineStateError;
+
+  /// No description provided for @svcSnapshotImportFailedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Snapshot import failed.'**
+  String get svcSnapshotImportFailedBody;
+
+  /// No description provided for @svcSnapshotImportFailedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Import Failed'**
+  String get svcSnapshotImportFailedTitle;
+
+  /// No description provided for @svcSnapshotRestartTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Please restart and try again.'**
+  String get svcSnapshotRestartTryAgain;
+
+  /// No description provided for @svcTimelockDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Timelock Duration'**
+  String get svcTimelockDuration;
+
+  /// No description provided for @svcTimelockHoursLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours (24 Minimum)'**
+  String get svcTimelockHoursLabel;
+
+  /// No description provided for @svcTokenAutoMintInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Auto Mint initiated. ({scId}: {amount})'**
+  String svcTokenAutoMintInitiated(String scId, String amount);
+
+  /// No description provided for @svcTransactionNotValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Transaction not valid'**
+  String get svcTransactionNotValid;
+
+  /// No description provided for @svcUnimplemented.
+  ///
+  /// In en, this message translates to:
+  /// **'Unimplemented'**
+  String get svcUnimplemented;
+
+  /// No description provided for @svcValidTxConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This transaction is valid and is ready to send.\nAre you sure you want to proceed?\n\nTo: {toAddress}\n\nAmount: {amount} VFX'**
+  String svcValidTxConfirmBody(String toAddress, String amount);
+
+  /// No description provided for @svcValidTxFeeSuffix.
+  ///
+  /// In en, this message translates to:
+  /// **'\nTX Fee: {fee} VFX\nTotal: {total} VFX'**
+  String svcValidTxFeeSuffix(String fee, String total);
+
+  /// No description provided for @svcVaultAutoActivationInitiated.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault Account Auto Activation process initiated'**
+  String get svcVaultAutoActivationInitiated;
+
+  /// No description provided for @svcVfxSentToAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} VFX sent to {address}'**
+  String svcVfxSentToAddress(String amount, String address);
+
+  /// No description provided for @svcVfxSentToAddressDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} VFX has been sent to {address}. See dashboard for TX ID.'**
+  String svcVfxSentToAddressDashboard(String amount, String address);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

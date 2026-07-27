@@ -48,6 +48,7 @@ import '../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../app.dart';
+import '../../l10n/l10n_helper.dart';
 import '../../features/beacon/providers/beacon_list_provider.dart';
 import '../../features/bridge/models/log_entry.dart';
 import '../../features/bridge/providers/log_provider.dart';
@@ -310,10 +311,10 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
 
     final updateGui = await ConfirmDialog.show(
-      title: "GUI Update Available",
-      body: "A GUI update is available. Download now?",
-      confirmText: "Update",
-      cancelText: "No",
+      title: globalL10n.svcGuiUpdateAvailableTitle,
+      body: globalL10n.svcGuiUpdateAvailableBody,
+      confirmText: globalL10n.svcActionUpdate,
+      cancelText: globalL10n.actionNo,
     );
 
     if (updateGui != true) {
@@ -321,11 +322,10 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
 
     final confirmUpdate = await ConfirmDialog.show(
-      title: "GUI Update",
-      body:
-          "The VFX GUI download will be launched in your browser. Once launched, the CLI will be shutdown and your wallet will be closed to ensure a safe update.",
-      confirmText: "Update",
-      cancelText: "Cancel",
+      title: globalL10n.svcGuiUpdateTitle,
+      body: globalL10n.svcGuiUpdateLaunchBody,
+      confirmText: globalL10n.svcActionUpdate,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmUpdate != true) {
@@ -404,20 +404,20 @@ class SessionProvider extends StateNotifier<SessionModel> {
       final cliUpdateAvailable = await BridgeService().updateCli(false);
       if (cliUpdateAvailable == true) {
         final confirmed = await ConfirmDialog.show(
-          title: "CLI Update Available",
-          body: "A CLI update is available. Download and install now?",
-          confirmText: "Update",
-          cancelText: "No",
+          title: globalL10n.svcCliUpdateAvailableTitle,
+          body: globalL10n.svcCliUpdateAvailableBody,
+          confirmText: globalL10n.svcActionUpdate,
+          cancelText: globalL10n.actionNo,
         );
         if (confirmed == true) {
           final success = await BridgeService().updateCli(true);
 
           if (success == true) {
             final shouldRestart = await ConfirmDialog.show(
-              title: "CLI Updated",
-              body: "A restart of the CLI is required. Restart Now?",
-              confirmText: "Restart",
-              cancelText: "No",
+              title: globalL10n.svcCliUpdatedTitle,
+              body: globalL10n.svcCliRestartRequiredBody,
+              confirmText: globalL10n.validatorRestartCliConfirm,
+              cancelText: globalL10n.actionNo,
             );
             if (shouldRestart == true) {
               await restartCli();
@@ -433,17 +433,16 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     final blockHeight = ref.read(walletInfoProvider)!.blockHeight;
     if (snapshotInfo == null || !snapshotInfo.isAvailable) {
-      Toast.error("Could not determine latest snapshot state");
+      Toast.error(globalL10n.svcSnapshotDetermineStateError);
       return;
     }
     final snapshotHeight = snapshotInfo.height!;
 
     final confirmed = await ConfirmDialog.show(
-      title: "Import Snapshot?",
-      body:
-          "You are only at $blockHeight block height locally. The network has a snapshot at $snapshotHeight block height that will help you sync more quickly. \n\nWould you like to import it now?",
-      confirmText: "Import",
-      cancelText: "No",
+      title: globalL10n.svcImportSnapshotTitle,
+      body: globalL10n.svcImportSnapshotBody('$blockHeight', '$snapshotHeight'),
+      confirmText: globalL10n.actionImport,
+      cancelText: globalL10n.actionNo,
     );
 
     state = state.copyWith(snapshotRequested: true);
@@ -452,11 +451,10 @@ class SessionProvider extends StateNotifier<SessionModel> {
       bool? shouldContinue = true;
       if (ref.read(walletListProvider).isNotEmpty) {
         shouldContinue = await ConfirmDialog.show(
-          title: "Warning",
-          body:
-              "Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.",
-          confirmText: "I'm Backed Up",
-          cancelText: "Cancel",
+          title: globalL10n.hnavWarningTitle,
+          body: globalL10n.svcSnapshotBackupWarningBody,
+          confirmText: globalL10n.svcImBackedUp,
+          cancelText: globalL10n.actionCancel,
         );
       }
 

@@ -166,9 +166,9 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 padding: 0,
                                 margin: EdgeInsets.symmetric(vertical: 8),
                                 child: ListTile(
-                                  title: Text("Buy BTC (On-Ramp)"),
+                                  title: Text(l10n.bw2BuyBtcOnRamp),
                                   subtitle: Text(
-                                      "Purchase BTC with fiat and send directly to this token"),
+                                      l10n.bw2BuyBtcOnRampSubtitle),
                                   trailing: Icon(Icons.credit_card),
                                   onTap: () {
                                     Navigator.of(context).pop();
@@ -197,7 +197,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                       final amount = await PromptModal.show(
                                         title: l10n.tkbBtcAmount,
                                         validator: (v) =>
-                                            formValidatorNumber(v, "Amount"),
+                                            formValidatorNumber(v, l10n.labelAmount),
                                         labelText: l10n.labelAmount,
                                         inputFormatters: [
                                           FilteringTextInputFormatter.allow(
@@ -632,7 +632,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       title: l10n.btcTransferOwnership,
                       labelText: l10n.tkbToVfxAddress,
                       validator: (v) =>
-                          formValidatorNotEmpty(v, "VFX Address"),
+                          formValidatorNotEmpty(v, l10n.bw2LabelVfxAddress),
                     );
 
                     if (toAddress == null || toAddress.isEmpty) return;
@@ -833,10 +833,10 @@ class TokenizedBtcActionButtons extends BaseComponent {
             if (isOwner && token.version == 2)
               Tooltip(
                 message: token.balance > 0
-                    ? "Bridge vBTC to Base (vBTC.b)"
-                    : "No vBTC available to bridge",
+                    ? l10n.bw2BridgeVbtcToBase
+                    : l10n.bw2NoVbtcToBridge,
                 child: AppButton(
-                  label: "Bridge to Base",
+                  label: l10n.bw2BridgeToBase,
                   icon: Icons.swap_horiz,
                   disabled: token.balance <= 0,
                   onPressed: () {
@@ -970,12 +970,13 @@ void _showManualSendDialog(BuildContext context, String btcAddress) {
   showDialog(
     context: context,
     builder: (context) {
+      final l10n = AppLocalizations.of(context);
       return AlertDialog(
         title: Row(
           children: [
             Icon(Icons.send, color: Color(0xfff7931a)),
             SizedBox(width: 8),
-            Text("Fund via Manual Send"),
+            Text(l10n.bw2FundViaManualSend),
           ],
         ),
         content: ConstrainedBox(
@@ -985,12 +986,12 @@ void _showManualSendDialog(BuildContext context, String btcAddress) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Send BTC from any exchange or external wallet to the deposit address below.",
+                l10n.bw2ManualSendInstructions,
                 style: TextStyle(color: Colors.white70),
               ),
               SizedBox(height: 16),
               Text(
-                "Deposit Address",
+                l10n.bw2DepositAddress,
                 style: TextStyle(
                   fontSize: 12,
                   color: Color(0xfff7931a),
@@ -1020,10 +1021,10 @@ void _showManualSendDialog(BuildContext context, String btcAddress) {
                     SizedBox(width: 8),
                     IconButton(
                       icon: Icon(Icons.copy, size: 18, color: Color(0xfff7931a)),
-                      tooltip: "Copy address",
+                      tooltip: l10n.txpCopyAddress,
                       onPressed: () async {
                         await Clipboard.setData(ClipboardData(text: btcAddress));
-                        Toast.message("Address copied to clipboard");
+                        Toast.message(l10n.messageAddressCopied);
                       },
                     ),
                   ],
@@ -1031,7 +1032,7 @@ void _showManualSendDialog(BuildContext context, String btcAddress) {
               ),
               SizedBox(height: 12),
               Text(
-                "Once the BTC transaction is confirmed on-chain, your vBTC balance will update automatically.",
+                l10n.bw2VbtcBalanceUpdateHint,
                 style: TextStyle(color: Colors.white38, fontSize: 12),
               ),
             ],
@@ -1042,7 +1043,7 @@ void _showManualSendDialog(BuildContext context, String btcAddress) {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text("Close", style: TextStyle(color: Colors.white70)),
+            child: Text(l10n.actionClose, style: TextStyle(color: Colors.white70)),
           ),
         ],
       );

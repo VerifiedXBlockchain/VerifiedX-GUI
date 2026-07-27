@@ -13,6 +13,7 @@ import '../../../core/components/centered_loader.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../nft/components/web_asset_thumbnail.dart';
 import '../../nft/providers/nft_detail_provider.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
@@ -46,7 +47,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
 
     return data.when(
       loading: () => AppBar(
-        title: Text('loading'),
+        title: Text(AppLocalizations.of(context).bw2Loading),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.black,
       ),
@@ -96,7 +97,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                   // final balance = vfxBalance + raBalance;
 
                   return Text(
-                    "My Balance: $balance vBTC",
+                    AppLocalizations.of(context).bw2MyBalanceVbtc(balance.toString()),
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
@@ -109,7 +110,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         );
       },
       error: (_, __) => AppBar(
-        title: Text("error"),
+        title: Text(AppLocalizations.of(context).btcWebError),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.black,
       ),
@@ -125,7 +126,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         data: (token) {
           if (token == null) {
             return Center(
-              child: Text("Token Not Found"),
+              child: Text(AppLocalizations.of(context).btcTokenNotFoundLabel),
             );
           }
 
@@ -186,7 +187,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Media:",
+                      AppLocalizations.of(context).bw2MediaColon,
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontSize: 18,
@@ -219,7 +220,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Withdrawal History:",
+                      AppLocalizations.of(context).bw2WithdrawalHistory,
                       style: TextStyle(
                         decoration: TextDecoration.underline,
                         fontSize: 18,
@@ -241,8 +242,8 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                         child: AppCard(
                           padding: 8,
                           child: ListTile(
-                            title: Text("$amount vBTC → $btcAddr"),
-                            subtitle: Text(isRequested ? "Pending — tap to resume" : "Status: $status"),
+                            title: Text(AppLocalizations.of(context).bw2WithdrawalToLine(amount.toString(), btcAddr.toString())),
+                            subtitle: Text(isRequested ? AppLocalizations.of(context).bw2PendingTapResume : AppLocalizations.of(context).bw2StatusWithValue(status.toString())),
                             onTap: isRequested
                                 ? () {
                                     final requestHash = wr['request_transaction_hash'] as String?;
@@ -262,11 +263,11 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                             trailing: isRequested
                                 ? IconButton(
                                     icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 20),
-                                    tooltip: "Cancel withdrawal",
+                                    tooltip: AppLocalizations.of(context).bw2CancelWithdrawalTooltip,
                                     onPressed: () async {
                                       final confirmed = await ConfirmDialog.show(
-                                        title: "Cancel Withdrawal?",
-                                        body: "Are you sure you want to cancel this withdrawal request?",
+                                        title: AppLocalizations.of(context).bw2CancelWithdrawalQuestion,
+                                        body: AppLocalizations.of(context).bw2CancelWithdrawalBody,
                                       );
                                       if (confirmed == true) {
                                         final manager = ref.read(webTokenActionsManager);
@@ -292,14 +293,14 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Transactions:",
+                    AppLocalizations.of(context).bw2TransactionsColon,
                     style: TextStyle(
                       decoration: TextDecoration.underline,
                       fontSize: 18,
                     ),
                   ),
                 ),
-                if (btcTxs.isEmpty) Text("No Transactions"),
+                if (btcTxs.isEmpty) Text(AppLocalizations.of(context).btcNoTransactions),
                 ListView.builder(
                   itemCount: btcTxs.length,
                   shrinkWrap: true,
@@ -317,7 +318,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
             ),
           );
         },
-        error: (_, __) => const Text("Error"),
+        error: (_, __) => Text(AppLocalizations.of(context).btcWebError),
         loading: () => const CenteredLoader());
   }
 }
@@ -391,6 +392,7 @@ class _VBTCDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final balance = token.balanceForAddress(address);
 
     return Expanded(
@@ -404,65 +406,65 @@ class _VBTCDetails extends StatelessWidget {
             address: address,
           ),
           _DetailRow(
-            label: "Name",
+            label: l10n.btcDetailNameLabel,
             value: token.name,
           ),
           _DetailRow(
-            label: "Owner",
+            label: l10n.btcDetailOwnerLabel,
             value: token.ownerAddress,
             isReserve: token.ownerAddress.startsWith("xRBX"),
             withCopy: true,
           ),
           _DetailRow(
-            label: "My Balance",
-            value: "$balance vBTC",
+            label: l10n.btcDetailMyBalanceLabel,
+            value: l10n.bw2VbtcAmount(balance.toString()),
           ),
           _DetailRow(
-            label: "Description",
+            label: l10n.btcDetailDescriptionLabel,
             value: token.description,
             inExpanded: true,
             withMaxLines: BreakPoints.useMobileLayout(context),
           ),
           _DetailRow(
-            label: "Smart Contract ID",
+            label: l10n.btcDetailScIdLabel,
             value: token.scIdentifier,
             inExpanded: true,
             withCopy: true,
           ),
           _DetailRow(
-            label: "SmartContract Owner Address",
+            label: l10n.btcDetailScOwnerAddressLabel,
             value: token.ownerAddress,
             isReserve: token.ownerAddress.startsWith("xRBX"),
             withCopy: true,
           ),
           if (isOwner)
             _DetailRow(
-              label: "BTC Deposit Address",
+              label: l10n.btcDetailDepositAddressLabel,
               value: token.depositAddress,
               inExpanded: true,
               withCopy: true,
             ),
           if (isOwner)
             _DetailRow(
-              label: "Token Total Balance",
-              value: "${token.globalBalance} vBTC",
+              label: l10n.btcDetailTotalBalanceLabel,
+              value: l10n.bw2VbtcAmount(token.globalBalance.toString()),
             ),
           if (token.frostGroupPublicKey != null)
               _DetailRow(
-                label: "FROST Group Key",
+                label: l10n.bw2FrostGroupKey,
                 value: token.frostGroupPublicKey!,
                 inExpanded: true,
                 withCopy: true,
               ),
             if (token.requiredThreshold != null)
               _DetailRow(
-                label: "Signing Threshold",
+                label: l10n.bw2SigningThreshold,
                 value: "${token.requiredThreshold}",
               ),
           if (token.isPendingWithdrawal)
             _DetailRow(
-              label: "Status",
-              value: "Pending Withdrawal",
+              label: l10n.btcStatusLabel,
+              value: l10n.bw2PendingWithdrawal,
             ),
         ],
       ),
@@ -659,7 +661,7 @@ class _DetailRow extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: value));
-                  Toast.message("$label copied to clipboard");
+                  Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
                 },
                 child: Icon(
                   Icons.copy,

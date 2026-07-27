@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
 import '../../../core/dialogs.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../providers/shielded_address_provider.dart';
@@ -17,12 +18,13 @@ Future<void> requirePrivacyUnlock(WidgetRef ref, [VoidCallback? action]) async {
     return;
   }
 
+  final l10n = globalL10n;
   final password = await PromptModal.show(
     contextOverride: rootNavigatorKey.currentContext!,
-    title: "Unlock Privacy Wallet",
-    labelText: "Password",
-    body: "Enter your privacy wallet password to enable spending.",
-    validator: (value) => formValidatorNotEmpty(value, "Password"),
+    title: l10n.prvUnlockWalletTitle,
+    labelText: l10n.prvPasswordLabel,
+    body: l10n.prvUnlockWalletBody,
+    validator: (value) => formValidatorNotEmpty(value, l10n.prvPasswordLabel),
     obscureText: true,
     revealObscure: true,
     lines: 1,
@@ -30,7 +32,7 @@ Future<void> requirePrivacyUnlock(WidgetRef ref, [VoidCallback? action]) async {
 
   if (password != null) {
     ref.read(shieldedAddressProvider.notifier).setPassword(password);
-    Toast.message("Privacy wallet unlocked");
+    Toast.message(l10n.prvWalletUnlocked);
     action?.call();
   }
 }

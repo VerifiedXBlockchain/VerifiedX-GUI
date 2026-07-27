@@ -181,8 +181,9 @@ class VfxAdnrCard extends BaseComponent {
 
                         final confirmed = await ConfirmDialog.show(
                           title: l10n.adnrDeleteTitle,
-                          body:
-                              "Are you sure you want to delete this VFX Domain?\n${ADNR_DELETE_COST == 0 ? 'There is no cost to delete and VFX Domain (aside from the TX fee).' : 'There is a cost of $ADNR_DELETE_COST RBX to delete an RBX Domain.'}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+                          body: l10n.svcAdnrDeleteConfirmBody(ADNR_DELETE_COST == 0
+                              ? l10n.svcAdnrDeleteNoCost
+                              : l10n.svcAdnrDeleteWithCost('$ADNR_DELETE_COST')),
                           destructive: true,
                           cancelText: l10n.actionCancel,
                           confirmText: l10n.adnrDelete,
@@ -230,12 +231,12 @@ class VfxAdnrCard extends BaseComponent {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("You don't have the required funds to buy the domain in this account."),
+              Text(l10n.svcAdnrFundNeededBody),
               Text(""),
-              SelectableText("Please send funds to $walletAddress"),
+              SelectableText(l10n.txpPleaseSendFundsTo(walletAddress)),
               Text(""),
-              Text(
-                  "You have an account with a sufficient balance.\n\nWould you like to send 6 VFX from:\n${fundingWallet.address}\n[Balance: ${fundingWallet.balance} VFX]?"),
+              Text(l10n.svcAdnrSufficientBalanceBody(
+                  fundingWallet.address, '${fundingWallet.balance}')),
             ],
           ),
         ),
@@ -248,7 +249,7 @@ class VfxAdnrCard extends BaseComponent {
 
         final confirmed = await ConfirmDialog.show(
           title: l10n.btcPleaseConfirmTitle,
-          body: "Sending:\n$amount VFX\n\nTo:\n$walletAddress\n\nFrom:\n${fundingWallet.address}",
+          body: l10n.txpSendingConfirmBody('$amount', walletAddress, fundingWallet.address),
           confirmText: l10n.actionSend,
           cancelText: l10n.actionCancel,
         );
@@ -288,7 +289,7 @@ class VfxAdnrCard extends BaseComponent {
               children: [
                 // Text("You must now fund your Vault Account with a minimum of 5 VFX."),
                 // Text(""),
-                Text("Please send funds to $walletAddress"),
+                Text(l10n.txpPleaseSendFundsTo(walletAddress)),
                 Divider(),
                 AppButton(
                   label: l10n.adnrFundCopyAddress,

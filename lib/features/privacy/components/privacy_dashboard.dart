@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
 import '../models/shielded_address.dart';
@@ -39,6 +40,7 @@ class PrivacyDashboard extends ConsumerStatefulWidget {
 class _PrivacyDashboardState extends ConsumerState<PrivacyDashboard> {
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final balance = ref.watch(shieldedBalanceProvider);
     final isUnlocked = ref.watch(privacyUnlockedProvider);
     final allTokens = ref.watch(tokenizedBitcoinListProvider);
@@ -59,7 +61,7 @@ class _PrivacyDashboardState extends ConsumerState<PrivacyDashboard> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
-                "Shielded vBTC",
+                l10n.prvShieldedVbtcHeading,
                 style: TextStyle(
                   color: AppColors.getBtc(),
                   fontSize: 16,
@@ -93,6 +95,7 @@ class _AddressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       color: AppColors.getGray(ColorShade.s200),
       child: Padding(
@@ -105,9 +108,9 @@ class _AddressCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Shielded Address",
-                    style: TextStyle(
+                  Text(
+                    l10n.prvShieldedAddressLabel,
+                    style: const TextStyle(
                       color: Colors.white38,
                       fontSize: 12,
                     ),
@@ -127,10 +130,10 @@ class _AddressCard extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.copy, size: 18),
               color: Colors.white54,
-              tooltip: "Copy address",
+              tooltip: l10n.prvCopyAddress,
               onPressed: () {
                 Clipboard.setData(ClipboardData(text: address.zfxAddress));
-                Toast.message("Address copied to clipboard");
+                Toast.message(l10n.prvAddressCopied);
               },
             ),
             const PrivacySettingsMenu(),
@@ -148,6 +151,7 @@ class _BalanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       color: AppColors.getGray(ColorShade.s200),
       child: Padding(
@@ -158,9 +162,9 @@ class _BalanceCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Shielded Balance",
-                    style: TextStyle(
+                  Text(
+                    l10n.prvShieldedBalanceLabel,
+                    style: const TextStyle(
                       color: Colors.white38,
                       fontSize: 12,
                     ),
@@ -173,7 +177,7 @@ class _BalanceCard extends StatelessWidget {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : Text(
-                          "${balance!.vfxBalance} VFX",
+                          l10n.prvVfxAmountSuffix(balance!.vfxBalance.toString()),
                           style: TextStyle(
                             color: AppColors.getBlue(),
                             fontSize: 28,
@@ -188,7 +192,7 @@ class _BalanceCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    "${balance!.unspentCommitments} note${balance!.unspentCommitments == 1 ? '' : 's'}",
+                    l10n.prvNoteCount(balance!.unspentCommitments),
                     style: const TextStyle(
                       color: Colors.white54,
                       fontSize: 12,
@@ -196,7 +200,7 @@ class _BalanceCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    "Block ${balance!.lastScannedBlock}",
+                    l10n.prvBlockLabel(balance!.lastScannedBlock.toString()),
                     style: const TextStyle(
                       color: Colors.white38,
                       fontSize: 11,
@@ -211,9 +215,9 @@ class _BalanceCard extends StatelessWidget {
                           color: Colors.orange.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: const Text(
-                          "VIEW ONLY",
-                          style: TextStyle(
+                        child: Text(
+                          l10n.prvViewOnly,
+                          style: const TextStyle(
                             color: Colors.orange,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
@@ -233,6 +237,7 @@ class _BalanceCard extends StatelessWidget {
 class _UnlockBanner extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Card(
@@ -243,14 +248,14 @@ class _UnlockBanner extends ConsumerWidget {
             children: [
               const Icon(Icons.lock, color: Colors.orange, size: 20),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  "Enter your privacy password to unlock spending operations.",
-                  style: TextStyle(color: Colors.orange, fontSize: 13),
+                  l10n.prvUnlockBannerText,
+                  style: const TextStyle(color: Colors.orange, fontSize: 13),
                 ),
               ),
               AppButton(
-                label: "Unlock",
+                label: l10n.prvUnlockAction,
                 icon: Icons.lock_open,
                 variant: AppColorVariant.Warning,
                 onPressed: () => requirePrivacyUnlock(ref),
@@ -266,6 +271,7 @@ class _UnlockBanner extends ConsumerWidget {
 class _ActionButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       color: AppColors.getGray(ColorShade.s200),
       child: Padding(
@@ -274,7 +280,7 @@ class _ActionButtons extends ConsumerWidget {
           children: [
             Expanded(
               child: AppButton(
-                label: "Shield",
+                label: l10n.prvShieldAction,
                 icon: Icons.arrow_downward,
                 variant: AppColorVariant.Success,
                 onPressed: () => ShieldDialog.show(),
@@ -283,7 +289,7 @@ class _ActionButtons extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: AppButton(
-                label: "Unshield",
+                label: l10n.prvUnshieldAction,
                 icon: Icons.arrow_upward,
                 variant: AppColorVariant.Warning,
                 onPressed: () => requirePrivacyUnlock(ref, () => UnshieldDialog.show()),
@@ -292,7 +298,7 @@ class _ActionButtons extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: AppButton(
-                label: "Transfer",
+                label: l10n.prvTransferAction,
                 icon: Icons.send,
                 variant: AppColorVariant.Prism,
                 onPressed: () => requirePrivacyUnlock(ref, () => PrivateTransferDialog.show()),
@@ -301,7 +307,7 @@ class _ActionButtons extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: AppButton(
-                label: "Consolidate",
+                label: l10n.prvConsolidateAction,
                 icon: Icons.compress,
                 variant: AppColorVariant.Info,
                 onPressed: () => requirePrivacyUnlock(ref, () => ConsolidateDialog.show()),

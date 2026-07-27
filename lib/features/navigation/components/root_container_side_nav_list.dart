@@ -189,7 +189,7 @@ class RootContainerSideNavList extends BaseComponent {
           ),
           if (!kIsWeb)
             RootContainerSideNavItem(
-              title: "Privacy",
+              title: l10n.svcNavPrivacyLabel,
               iconType: PrettyIconType.custom,
               icon: Icons.shield,
               isNew: true,

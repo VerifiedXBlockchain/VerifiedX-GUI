@@ -129,7 +129,8 @@ class MainMenu extends BaseComponent {
                       child: Center(
                         child: Tooltip(
                           message: btcAccountSyncInfo != null
-                              ? "Last Sync: ${btcAccountSyncInfo.lastSyncFormatted}\nNext Sync: ${btcAccountSyncInfo.nextSyncFormatted}"
+                              ? AppLocalizations.of(context).svcMainMenuSyncTooltip(
+                                  btcAccountSyncInfo.lastSyncFormatted, btcAccountSyncInfo.nextSyncFormatted)
                               : "",
                           child: Text(
                             "${btcBalance.toStringAsFixed(9)} BTC",

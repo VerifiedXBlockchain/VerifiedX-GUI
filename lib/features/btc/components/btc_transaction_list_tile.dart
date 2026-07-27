@@ -43,6 +43,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     // In debug+testnet, force all txs to show as confirmed to hide stuck pending txs
     final isConfirmed = (kDebugMode && Env.isTestNet) ? true : widget.transaction.isConfirmed;
     final transaction = widget.transaction;
@@ -91,7 +92,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Hash: ${transaction.hash}",
+                          l10n.bw2HashWithValue(transaction.hash),
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                         const SizedBox(
@@ -99,7 +100,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                         ),
                         InkWell(
                           onTap: () {
-                            _copy(widget.transaction.hash, "Hash");
+                            _copy(widget.transaction.hash, l10n.bw2LabelHash);
                           },
                           child: const Icon(
                             Icons.copy,
@@ -129,9 +130,9 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                       text: TextSpan(
                         style: Theme.of(context).textTheme.bodyMedium,
                         children: [
-                          const TextSpan(text: "Amount: "),
+                          TextSpan(text: "${l10n.sendFormLabelAmount} "),
                           TextSpan(
-                            text: "${transaction.amount} BTC",
+                            text: l10n.bw2BtcAmount(transaction.amount.toString()),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.btcOrange,
                               fontWeight: FontWeight.w600,
@@ -148,20 +149,20 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              SelectableText("Type: ${transaction.typeLabel}", style: Theme.of(context).textTheme.bodySmall),
+                              SelectableText("${l10n.bw2TypeLabel} ${transaction.typeLabel}", style: Theme.of(context).textTheme.bodySmall),
                               const SizedBox(
                                 height: 4,
                               ),
-                              SelectableText("To: ${transaction.toAddress}", style: Theme.of(context).textTheme.bodySmall),
+                              SelectableText("${l10n.sendFormLabelTo} ${transaction.toAddress}", style: Theme.of(context).textTheme.bodySmall),
                               const SizedBox(
                                 height: 4,
                               ),
-                              SelectableText("From: ${transaction.fromAddress}", style: Theme.of(context).textTheme.bodySmall),
+                              SelectableText("${l10n.sendFormLabelFrom} ${transaction.fromAddress}", style: Theme.of(context).textTheme.bodySmall),
                               const SizedBox(
                                 height: 4,
                               ),
                               Text(
-                                isConfirmed ? "Date: ${widget.transaction.parseTimeStamp}" : "Date: Pending",
+                                isConfirmed ? "${l10n.bw2DateLabel} ${widget.transaction.parseTimeStamp}" : "${l10n.bw2DateLabel} ${l10n.statusPending}",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
@@ -169,7 +170,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                         ),
                         if (isConfirmed && widget.transaction.confirmedHeight != 0)
                           Tooltip(
-                            message: "Block ${widget.transaction.confirmedHeight}",
+                            message: l10n.bw2BlockWithValue(widget.transaction.confirmedHeight.toString()),
                             child: AppBadge(
                               label: AppLocalizations.of(context).btcConfirmedLabel,
                               variant: AppColorVariant.Success,
@@ -198,7 +199,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                               onPressed: () async {
                                 final feeRateStr = await PromptModal.show(
                                     title: AppLocalizations.of(context).btcRbfFeeRateTitle,
-                                    body: "Input your desired fee rate (SATS /byte) for this transaction.",
+                                    body: l10n.bw2RbfFeeRateBody,
                                     validator: (v) => formValidatorInteger(v, AppLocalizations.of(context).btcRbfFeeRateTitle),
                                     labelText: AppLocalizations.of(context).btcRbfFeeRateLabel,
                                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -212,14 +213,14 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                                 final feeRate = int.tryParse(feeRateStr);
 
                                 if (feeRate == null) {
-                                  Toast.error("Invalid fee rate. Must be a whole number");
+                                  Toast.error(l10n.bw2InvalidFeeRateWhole);
                                   return;
                                 }
 
                                 final hash = await BtcService().replaceByFee(widget.transaction.hash, feeRate);
 
                                 if (hash != null) {
-                                  final message = "Replaced by fee ($feeRate SATS /byte) TX sent. Hash: $hash";
+                                  final message = l10n.bw2ReplacedByFeeMessage(feeRate.toString(), hash);
                                   Toast.message(message);
 
                                   ref.read(logProvider.notifier).append(
@@ -237,17 +238,17 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                           ),
                         if (showReplaceAndRebroadcast)
                           AppButton(
-                            label: "Rebroadcast TX",
+                            label: l10n.bw2RebroadcastTx,
                             onPressed: () async {
                               final confirmed =
-                                  await ConfirmDialog.show(title: "Rebroadcast TX", body: "Are you sure you want to rebroadcast this transaction?");
+                                  await ConfirmDialog.show(title: l10n.bw2RebroadcastTx, body: l10n.bw2RebroadcastTxBody);
                               if (confirmed != true) {
                                 return;
                               }
                               final hash = await BtcService().rebroadcastTx(widget.transaction.hash);
 
                               if (hash != null) {
-                                final message = "Rebroadcasted TX. ($hash)";
+                                final message = l10n.bw2RebroadcastedTx(hash);
                                 Toast.message(message);
 
                                 ref.read(logProvider.notifier).append(
@@ -273,28 +274,28 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Fee Rate"),
-                              Text("${transaction.feeRate} SATS"),
+                              Text(l10n.btcRbfFeeRateTitle),
+                              Text(l10n.bw2SatsAmount(transaction.feeRate.toString())),
                             ],
                           ),
                           const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text("Fee"),
-                              Text("${transaction.fee} BTC"),
+                              Text(l10n.btcFeeLabel),
+                              Text(l10n.bw2BtcAmount(transaction.fee.toString())),
                             ],
                           ),
                           const Divider(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              const Text("Signature"),
+                              Text(l10n.homeSignatureLabel),
                               Transform.translate(
                                 offset: Offset(0, 3),
                                 child: IconButton(
                                   onPressed: () {
-                                    _copy(transaction.signature, "Transaction Signature");
+                                    _copy(transaction.signature, l10n.bw2LabelTransactionSignature);
                                   },
                                   icon: Icon(
                                     Icons.copy,
@@ -315,7 +316,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                             height: 6,
                           ),
                           Text(
-                            "UTXOs:",
+                            l10n.bw2UtxosLabel,
                             style: TextStyle(decoration: TextDecoration.underline),
                           ),
                           SizedBox(

@@ -82,7 +82,7 @@ class TokenizeBtcForm extends BaseComponent {
                   borderSide: BorderSide(color: AppColors.getWhite()),
                 ),
                 label: Text(
-                  "Token Name (Optional)",
+                  AppLocalizations.of(context).bw2TokenNameOptional,
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -97,7 +97,7 @@ class TokenizeBtcForm extends BaseComponent {
                   borderSide: BorderSide(color: AppColors.getWhite()),
                 ),
                 label: Text(
-                  "Token Description (Optional)",
+                  AppLocalizations.of(context).bw2TokenDescriptionOptional,
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -114,7 +114,7 @@ class TokenizeBtcForm extends BaseComponent {
                   borderSide: BorderSide(color: AppColors.getWhite()),
                 ),
                 label: Text(
-                  "Token Ticker (Optional)",
+                  AppLocalizations.of(context).bw2TokenTickerOptional,
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -126,7 +126,7 @@ class TokenizeBtcForm extends BaseComponent {
               height: 12,
             ),
             Text(
-              "Token Image (Optional)",
+              AppLocalizations.of(context).bw2TokenImageOptional,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -156,7 +156,7 @@ class TokenizeBtcForm extends BaseComponent {
               height: 12,
             ),
             Text(
-              "Media (Optional)",
+              AppLocalizations.of(context).bw2MediaOptional,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -229,13 +229,13 @@ class TokenizeBtcForm extends BaseComponent {
 
           final keypair = ref.read(webSessionProvider).keypair;
           if (keypair == null) {
-            Toast.error("A VFX account is required to proceed.");
+            Toast.error(AppLocalizations.of(context).bw2VfxAccountRequired);
             return;
           }
 
           final balance = ref.read(webSessionProvider).balance;
           if (balance == null || balance < MIN_RBX_FOR_SC_ACTION) {
-            Toast.error("A VFX account with a balance is required.");
+            Toast.error(AppLocalizations.of(context).bw2VfxAccountBalanceRequiredShort);
             return;
           }
 
