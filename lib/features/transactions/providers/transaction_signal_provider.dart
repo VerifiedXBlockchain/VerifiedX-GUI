@@ -103,6 +103,14 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       case TxType.nftSale:
         _handleNftSale(transaction);
         break;
+      case TxType.vfxShield:
+      case TxType.vfxUnshield:
+      case TxType.vfxPrivateTransfer:
+      case TxType.vbtcV2Shield:
+      case TxType.vbtcV2Unshield:
+      case TxType.vbtcV2PrivateTransfer:
+        _handlePrivacyTx(transaction);
+        break;
     }
   }
 
@@ -699,6 +707,18 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       print(e);
       return null;
     }
+  }
+
+  void _handlePrivacyTx(Transaction transaction) {
+    _broadcastNotification(
+      TransactionNotification(
+        identifier: transaction.hash,
+        transaction: transaction,
+        title: transaction.typeLabel,
+        body: "${transaction.amount} ${transaction.type >= TxType.vbtcV2Shield ? 'vBTC' : 'VFX'}",
+        icon: Icons.shield,
+      ),
+    );
   }
 
   void _handleDstShop(Transaction transaction) {

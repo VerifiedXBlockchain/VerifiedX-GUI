@@ -11,6 +11,7 @@ import '../../nft/services/nft_service.dart';
 import '../services/token_service.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class BurnTokensButton extends BaseComponent {
   final String scId;
@@ -82,6 +83,7 @@ class BurnTokensButton extends BaseComponent {
 
         if (success) {
           Toast.message(l10n.tokenBurnBroadcastedToast);
+          notifyTransactionSubmitted();
         }
       },
     );

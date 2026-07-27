@@ -19,6 +19,7 @@ import '../../web/utils/raw_transaction.dart';
 import '../models/nft.dart';
 import '../services/nft_service.dart';
 import '../services/vfx_shh_decryption_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 import 'burned_provider.dart';
 import 'transferred_provider.dart';
 import '../../web/providers/multi_account_provider.dart';
@@ -143,6 +144,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     ref.read(globalLoadingProvider.notifier).complete();
     if (success) {
       ref.read(transferredProvider.notifier).addId(id);
+      notifyTransactionSubmitted();
       return true;
     }
     return false;
@@ -620,6 +622,9 @@ class NftDetailProvider extends StateNotifier<Nft?> {
 
     final success = await SmartContractService().burn(id);
 
+    if (success) {
+      notifyTransactionSubmitted();
+    }
     ref.read(burnedProvider.notifier).addId(id);
     return success;
   }

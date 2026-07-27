@@ -49,11 +49,15 @@ class WebTokenizedBtcListTile extends BaseComponent {
         ),
         Expanded(
           child: ListTile(
-            title: Text(
-              "${token.name}${isOwner ? ' (Owner)' : ''}",
-              style: TextStyle(
-                fontSize: 22,
-              ),
+            title: Row(
+              children: [
+                Text(
+                  "${token.name}${isOwner ? ' (Owner)' : ''}",
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
+                ),
+              ],
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

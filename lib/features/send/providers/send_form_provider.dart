@@ -32,6 +32,7 @@ import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../../raw/raw_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 // import 'package:rbx_wallet/features/wallet/models/wallet.dart';
 
 class SendFormModel {
@@ -486,6 +487,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
               );
 
           Toast.message("$amount BTC has been sent to $address.");
+          notifyTransactionSubmitted();
           clear();
 
           InfoDialog.show(
@@ -750,6 +752,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
           ref.read(logProvider.notifier).append(
                 LogEntry(message: message, textToCopy: message.replaceAll("Success! TxId: ", ""), variant: AppColorVariant.Success),
               );
+          notifyTransactionSubmitted();
           clear();
         }
       } catch (e) {

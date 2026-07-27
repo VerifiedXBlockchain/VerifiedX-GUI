@@ -11,8 +11,8 @@ import '../providers/mpc_ceremony_provider.dart';
 class MpcCeremonyProgressModal extends ConsumerWidget {
   const MpcCeremonyProgressModal({super.key});
 
-  static Future<void> show([BuildContext? context]) {
-    return showDialog(
+  static Future<bool?> show([BuildContext? context]) {
+    return showDialog<bool>(
       context: context ?? rootNavigatorKey.currentContext!,
       barrierDismissible: true,
       builder: (_) => const MpcCeremonyProgressModal(),
@@ -63,7 +63,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
             ],
             if (state.phase == MpcCeremonyPhase.contractCreated) ...[
               const SizedBox(height: 16),
-              _buildContractCreatedSection(state),
+              _buildContractCreatedSection(state, context),
             ],
             if (state.phase == MpcCeremonyPhase.failed) ...[
               const SizedBox(height: 16),
@@ -242,7 +242,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
     );
   }
 
-  Widget _buildContractCreatedSection(MpcCeremonyState state) {
+  Widget _buildContractCreatedSection(MpcCeremonyState state, BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -268,6 +268,15 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
             style: const TextStyle(color: Colors.white, fontSize: 13),
           ),
         ],
+        const SizedBox(height: 16),
+        Align(
+          alignment: Alignment.centerRight,
+          child: AppButton(
+            label: "Done",
+            variant: AppColorVariant.Success,
+            onPressed: () => Navigator.of(context).pop(true),
+          ),
+        ),
       ],
     );
   }

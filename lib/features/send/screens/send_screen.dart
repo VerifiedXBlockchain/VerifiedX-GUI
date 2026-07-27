@@ -11,6 +11,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/guards.dart';
 import '../../bridge/services/bridge_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../../payment/components/butterfly_logo_lockup.dart';
 import '../../payment/screens/butterfly_screen.dart';
 import '../../wallet/components/invalid_wallet.dart';
@@ -96,6 +97,7 @@ class SendScreen extends BaseScreen {
                                       result.toLowerCase().contains('fail')) {
                                     return null;
                                   }
+                                  notifyTransactionSubmitted();
                                   return result;
                                 },
                               ),

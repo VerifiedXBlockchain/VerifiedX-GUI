@@ -27,15 +27,16 @@ import '../../../utils/toast.dart';
 import 'package:collection/collection.dart';
 
 import '../../../core/theme/components.dart';
+import '../../bridge/components/bridge_history_list.dart';
 import '../../price/providers/price_detail_providers.dart';
 
 class TokenizedBtcDetailScreen extends BaseScreen {
-  final double tokenId;
-  const TokenizedBtcDetailScreen({super.key, required this.tokenId});
+  final String tokenKey;
+  const TokenizedBtcDetailScreen({super.key, required this.tokenKey});
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
-    final token = ref.watch(tokenizedBtcDetailProvider(tokenId));
+    final token = ref.watch(tokenizedBtcDetailProvider(tokenKey));
 
     if (token == null) {
       return AppBar(
@@ -116,7 +117,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    final token = ref.watch(tokenizedBtcDetailProvider(tokenId));
+    final token = ref.watch(tokenizedBtcDetailProvider(tokenKey));
     final btcPrice = ref.watch(btcCurrentPriceDataDetailProvider);
 
     if (token == null) {
@@ -245,6 +246,19 @@ class TokenizedBtcDetailScreen extends BaseScreen {
           SizedBox(
             height: 16,
           ),
+          // Bridge history — v2 contracts only. Empty state handled inside
+          // the component, so it's safe to always render when the contract is
+          // v2 (no need to peek at the list contents here).
+          if (token.version == 2) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: BridgeHistoryList(
+                ownerAddress: scOwner,
+                scUid: token.smartContractUid,
+              ),
+            ),
+            SizedBox(height: 16),
+          ],
           Builder(builder: (context) {
             final transactions =
                 ref.watch(btcTransactionListProvider).where((tx) => tx.toAddress == token.btcAddress || tx.fromAddress == token.btcAddress).toList();

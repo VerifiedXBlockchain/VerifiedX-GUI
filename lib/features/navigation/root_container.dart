@@ -55,6 +55,7 @@ class RootContainer extends BaseComponent {
       const ReserveAccountsTabRouter(),
       const TokenizeBtcTabRouter(),
       const OperationsTabRouter(),
+      const PrivacyTabRouter(),
     ];
 
     return AutoTabsScaffold(

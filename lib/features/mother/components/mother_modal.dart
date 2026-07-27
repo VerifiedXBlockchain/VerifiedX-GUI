@@ -14,6 +14,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/files.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../models/mother_child.dart';
@@ -119,6 +120,7 @@ class MotherModal extends BaseComponent {
               if (confirmed == true) {
                 final success = await MotherService().stopHost();
                 if (success == true) {
+                  notifyTransactionSubmitted();
                   final restart = await ConfirmDialog.show(
                     title: l10n.motherCliRestartTitle,
                     body: l10n.motherCliRestartBody,

@@ -16,6 +16,7 @@ import '../../bridge/providers/log_provider.dart';
 import '../../bridge/services/bridge_service.dart';
 import 'pending_activation_provider.dart';
 import '../services/reserve_account_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
@@ -143,6 +144,7 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
           ref.read(logProvider.notifier).append(
                 LogEntry(message: message, textToCopy: txHash, variant: AppColorVariant.Success),
               );
+          notifyTransactionSubmitted();
           await InfoDialog.show(
             contextOverride: context,
             title: l10n.txpFundsSent,

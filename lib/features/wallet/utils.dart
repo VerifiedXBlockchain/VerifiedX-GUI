@@ -426,7 +426,8 @@ class AccountUtils {
   }
 
   static Future<void> getCoin(
-      BuildContext context, WidgetRef ref, VfxOrBtcOption? type) async {
+      BuildContext context, WidgetRef ref, VfxOrBtcOption? type,
+      {String? btcAddressOverride}) async {
     final l10n = AppLocalizations.of(context);
     type ??= await showModalBottomSheet(
         context: context,
@@ -468,9 +469,10 @@ class AccountUtils {
     final vfxAddress = kIsWeb
         ? ref.read(webSessionProvider).keypair?.address
         : ref.read(sessionProvider).currentWallet?.address;
-    final btcAddress = kIsWeb
-        ? ref.read(webSessionProvider).btcKeypair?.address
-        : ref.read(sessionProvider).currentBtcAccount?.address;
+    final btcAddress = btcAddressOverride ??
+        (kIsWeb
+            ? ref.read(webSessionProvider).btcKeypair?.address
+            : ref.read(sessionProvider).currentBtcAccount?.address);
 
     final address = type == VfxOrBtcOption.vfx ? vfxAddress : btcAddress;
 
@@ -486,13 +488,15 @@ class AccountUtils {
             title: l10n.txpChoosePaymentGateway,
             withClose: true,
             children: [
-              if (ALLOW_BIDS_WITHOUT_BALANCE || type == VfxOrBtcOption.btc) ...[
+              if (type == VfxOrBtcOption.vfx
+                      ? Env.moonpayEnabledVFX
+                      : Env.moonpayEnabled) ...[
                 AppCard(
                   padding: 0,
                   child: ListTile(
-                      title: Text(l10n.navMenuCryptoCom),
+                      title: Text("Moonpay"),
                       onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.cryptoDotCom);
+                        Navigator.of(context).pop(PaymentGateway.moonpay);
                       },
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
@@ -500,16 +504,13 @@ class AccountUtils {
                   height: 12,
                 ),
               ],
-              if (kIsWeb &&
-                  (type == VfxOrBtcOption.vfx
-                      ? Env.moonpayEnabledVFX
-                      : Env.moonpayEnabled)) ...[
+              if (ALLOW_BIDS_WITHOUT_BALANCE || type == VfxOrBtcOption.btc) ...[
                 AppCard(
                   padding: 0,
                   child: ListTile(
-                      title: Text("Moonpay"),
+                      title: Text("Crypto.com"),
                       onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.moonpay);
+                        Navigator.of(context).pop(PaymentGateway.cryptoDotCom);
                       },
                       trailing: Icon(Icons.chevron_right, size: 16)),
                 ),
@@ -638,13 +639,8 @@ class AccountUtils {
           }
           break;
         case PaymentGateway.moonpay:
-          if (kIsWeb) {
-            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production',
-                'btc', '100', address, true);
-          } else {
-            Toast.error(l10n.txpNativeMoonpaySoon);
-          }
-
+          MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production',
+              'btc', '100', address, true);
           break;
         case PaymentGateway.cryptoDotCom:
         case PaymentGateway.stripe:
@@ -764,12 +760,8 @@ class AccountUtils {
           }
           break;
         case PaymentGateway.moonpay:
-          if (kIsWeb) {
-            MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production',
-                'btc', '100', address, true);
-          } else {
-            Toast.error(l10n.txpNativeMoonpaySoon);
-          }
+          MoonpayService().buy(Env.isTestNet ? 'sandbox' : 'production',
+              'btc', '100', address, true);
           break;
 
         case PaymentGateway.cryptoDotCom:

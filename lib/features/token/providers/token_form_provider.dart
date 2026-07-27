@@ -24,6 +24,7 @@ import '../../../core/app_constants.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../raw/raw_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../../wallet/models/wallet.dart';
 
 class TokenFormProvider extends StateNotifier<TokenScFeature> {
@@ -205,6 +206,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
       return false;
     }
 
+    notifyTransactionSubmitted();
     return true;
   }
 
@@ -284,6 +286,7 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
       ref
           .read(nftListProvider.notifier)
           .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address]);
+      notifyTransactionSubmitted();
       return true;
     }
     return false;

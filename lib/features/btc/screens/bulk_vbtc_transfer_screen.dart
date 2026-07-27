@@ -27,6 +27,7 @@ import '../../global_loader/global_loading_provider.dart';
 import '../../token/providers/web_token_actions_manager.dart';
 import '../providers/bulk_vbtc_transfer_provider.dart';
 import '../services/btc_service.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class BulkVbtcTransferScreen extends BaseScreen {
   const BulkVbtcTransferScreen({super.key});
@@ -550,32 +551,8 @@ class _ConfirmBottomSheet extends BaseComponent {
                 }
 
                 if (kIsWeb) {
-                  final balance = ref.read(webSessionProvider).balance;
-
-                  if (balance == null || balance < MIN_RBX_FOR_SC_ACTION) {
-                    Toast.error(
-                        "Selected VFX account doesn't have enough balance");
-                    return;
-                  }
-
-                  final manager = ref.read(webTokenActionsManager);
-
-                  final success =
-                      await manager.transferVbtcMulti(toAddress, validInputs);
-
-                  if (success == true) {
-                    Toast.message(AppLocalizations.of(context).btcBulkBroadcastedToast);
-                    for (var element in provider.controllers) {
-                      element.clear();
-                    }
-                    provider.addressController.clear();
-                    ref.invalidate(bulkVbtcTransferProvider);
-
-                    Toast.message(
-                        "$totalAmount vBTC has been sent to $toAddress.");
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  }
+                  Toast.error(AppLocalizations.of(context).tkbBulkTransferUnavailableWeb);
+                  return;
                 } else {
                   final currentWallet = ref.read(sessionProvider).currentWallet;
                   if (currentWallet == null) {
@@ -609,6 +586,8 @@ class _ConfirmBottomSheet extends BaseComponent {
                             variant: AppColorVariant.Btc,
                           ),
                         );
+
+                    notifyTransactionSubmitted();
 
                     for (var element in provider.controllers) {
                       element.clear();

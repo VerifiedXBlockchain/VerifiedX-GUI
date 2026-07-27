@@ -12,6 +12,7 @@ import '../../transactions/models/transaction.dart';
 import '../../transactions/providers/transaction_list_provider.dart';
 import '../../wallet/models/wallet.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils/tx_refresh.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:collection/collection.dart';
 
@@ -417,6 +418,7 @@ class VBtcOnboard extends _$VBtcOnboard {
 
     if (result.success) {
       Toast.message(result.message);
+      notifyTransactionSubmitted();
       return true;
     }
 

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import '../../../core/app_constants.dart';
 import '../../../core/components/buttons.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/services/bridge_service.dart';
@@ -103,10 +104,11 @@ class _HomeButtonsState extends State<HomeButtons> {
             label: Text(l10n.hnavSectionTokensNfts),
             value: HomeButtonSection.nft,
           ),
-          ButtonSegment(
-            label: Text(l10n.hnavSectionValidator),
-            value: HomeButtonSection.validator,
-          ),
+          if (VALIDATOR_NAV_ENABLED)
+            ButtonSegment(
+              label: Text(l10n.hnavSectionValidator),
+              value: HomeButtonSection.validator,
+            ),
           ButtonSegment(
             label: Text(l10n.hnavSectionDiagnose),
             value: HomeButtonSection.diagnose,
@@ -134,18 +136,13 @@ class _HomeButtonsState extends State<HomeButtons> {
                   PrintAdressesButton(),
                   const OpenDbFolderButton(),
                   ImportSnapshotButton(),
-                  // AppButton(
-                  //   label: "Tokenize BTC",
-                  //   variant: AppColorVariant.Btc,
-                  //   icon: FontAwesomeIcons.bitcoin,
-                  //   onPressed: () {
-                  //     Navigator.of(context).push(
-                  //       MaterialPageRoute(
-                  //         builder: (context) => TokenizeBtcListScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // )
+                  AppButton(
+                    label: "Validator Pool",
+                    icon: Icons.wifi,
+                    onPressed: () {
+                      tabsRouter.setActiveIndex(6);
+                    },
+                  ),
                 ],
               );
             case HomeButtonSection.security:

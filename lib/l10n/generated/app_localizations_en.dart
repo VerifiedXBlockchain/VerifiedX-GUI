@@ -5614,4 +5614,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String tkbHashLabel(String hash) {
     return 'Hash: $hash';
   }
+
+  @override
+  String get tkbBulkTransferUnavailableWeb => 'Bulk transfer is not yet available on the web wallet.';
+
+  @override
+  String get tkbCreateVbtcToken => 'Create vBTC Token';
+
+  @override
+  String hnavSnapshotDownloadingProgress(String file, int done, int total) {
+    return 'Downloading: $file ($done/$total)';
+  }
+
+  @override
+  String get tkbFundToken => 'Fund Token';
+
+  @override
+  String get tkbManualSendExchangeSubtitle => 'Send BTC from any exchange or wallet to this token\'s deposit address';
 }

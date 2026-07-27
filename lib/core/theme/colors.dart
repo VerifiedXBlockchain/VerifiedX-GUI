@@ -132,6 +132,10 @@ class AppColors {
     return Colors.deepPurple.shade200;
   }
 
+  static Color getPrism() {
+    return Colors.deepPurple.shade200;
+  }
+
   static Color getVbtc() {
     return Colors.pinkAccent.shade400;
   }
@@ -167,6 +171,8 @@ class AppColors {
         return getReserve();
       case AppColorVariant.Vbtc:
         return getVbtc();
+      case AppColorVariant.Prism:
+        return getPrism();
     }
   }
 
@@ -202,6 +208,8 @@ class AppColors {
         return Colors.black;
       case AppColorVariant.Vbtc:
         return Colors.black;
+      case AppColorVariant.Prism:
+        return Colors.white;
     }
   }
 }

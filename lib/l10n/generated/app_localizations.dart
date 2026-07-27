@@ -10514,6 +10514,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hash: {hash}'**
   String tkbHashLabel(String hash);
+
+  /// No description provided for @tkbBulkTransferUnavailableWeb.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulk transfer is not yet available on the web wallet.'**
+  String get tkbBulkTransferUnavailableWeb;
+
+  /// No description provided for @tkbCreateVbtcToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Create vBTC Token'**
+  String get tkbCreateVbtcToken;
+
+  /// No description provided for @hnavSnapshotDownloadingProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Downloading: {file} ({done}/{total})'**
+  String hnavSnapshotDownloadingProgress(String file, int done, int total);
+
+  /// No description provided for @tkbFundToken.
+  ///
+  /// In en, this message translates to:
+  /// **'Fund Token'**
+  String get tkbFundToken;
+
+  /// No description provided for @tkbManualSendExchangeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Send BTC from any exchange or wallet to this token\'s deposit address'**
+  String get tkbManualSendExchangeSubtitle;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

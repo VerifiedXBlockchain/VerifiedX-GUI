@@ -3,13 +3,16 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "5.3.1";
+const APP_V = "6.0.5";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
 const ALLOW_PAYMENT = true;
 const BUTTERFLY_ENABLED = true;
+const VALIDATOR_NAV_ENABLED = false;
+const BULK_VBTC_TRANSFER_ENABLED = false;
+const WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED = true;
 
 const REFRESH_TIMEOUT_SECONDS = 30;
 const REFRESH_TIMEOUT_SECONDS_WEB_BTC = 90;
@@ -36,6 +39,16 @@ const SHOP_PUBLISH_COST = 10.0;
 const SHOP_DELETE_COST = 1.0;
 const SHOP_UPDATE_COST = 1.0;
 const RA_ACTIVATION_COST = 4.0;
+
+const PRIVACY_TX_FIXED_FEE = 0.000003;
+const PRIVACY_TX_FIXED_FEE_LABEL = "0.000003 VFX";
+const MIN_SHIELD_AMOUNT_VFX = 0.001;
+const MIN_SHIELD_AMOUNT_VBTC = 0.00001;
+
+/// Minimum ETH balance on the user's derived Base address required before we
+/// stop warning about gas. Used by the vBTC → Base bridge preflight check.
+/// Warning-only — bridging is not blocked, since real-world gas costs vary.
+const BRIDGE_MIN_ETH_FOR_GAS = 0.0005;
 
 const BTC_SATOSHI_MULTIPLIER = 0.00000001;
 const BTC_TX_EXPECTED_BYTES = 140;
@@ -66,6 +79,25 @@ class TxType {
   static const int tokenTx = 15;
   static const int tokenDeploy = 17;
   static const int tokenizeTx = 18;
+  static const int tokenizeWdArb = 20;
+  static const int tokenizeWdOwner = 21;
+  static const int vbtcV2ValidatorRegister = 22;
+  static const int vbtcV2ValidatorHeartbeat = 23;
+  static const int vbtcV2ValidatorExit = 24;
+  static const int vbtcV2ContractCreate = 25;
+  static const int vbtcV2Transfer = 26;
+  static const int vbtcV2WithdrawalRequest = 27;
+  static const int vbtcV2WithdrawalComplete = 28;
+  static const int vbtcV2WithdrawalCancel = 29;
+  static const int vbtcV2WithdrawalVote = 30;
+  static const int vfxShield = 31;
+  static const int vfxUnshield = 32;
+  static const int vfxPrivateTransfer = 33;
+  static const int vbtcV2Shield = 34;
+  static const int vbtcV2Unshield = 35;
+  static const int vbtcV2PrivateTransfer = 36;
+  static const int vbtcV2BridgeLock = 37;
+  static const int vbtcV2BridgeUnlock = 38;
 }
 
 const DEFAULT_REJECTED_EXTENIONS = [

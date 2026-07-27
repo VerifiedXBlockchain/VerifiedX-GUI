@@ -169,6 +169,17 @@ class AppButton extends StatelessWidget {
             height: 1,
           ),
         );
+      case AppColorVariant.Prism:
+        return ElevatedButton.styleFrom(
+          foregroundColor: Theme.of(context).colorScheme.onPrism, backgroundColor: disabled || useDisabledColor ? Theme.of(context).disabledColor : Theme.of(context).colorScheme.prism,
+          splashFactory: NoSplash.splashFactory,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          textStyle: TextStyle(
+            fontSize: size == AppSizeVariant.Lg && !isMobile ? 17 : null,
+            fontWeight: size == AppSizeVariant.Lg && !isMobile ? FontWeight.w500 : null,
+            height: 1,
+          ),
+        );
     }
   }
 
@@ -231,6 +242,11 @@ class AppButton extends StatelessWidget {
           foregroundColor: _colorScheme.vbtc, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
           splashFactory: NoSplash.splashFactory,
         );
+      case AppColorVariant.Prism:
+        return OutlinedButton.styleFrom(
+          foregroundColor: _colorScheme.prism, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
+          splashFactory: NoSplash.splashFactory,
+        );
     }
   }
 
@@ -281,6 +297,10 @@ class AppButton extends StatelessWidget {
         return OutlinedButton.styleFrom(
           foregroundColor: disabled || useDisabledColor ? Theme.of(context).disabledColor : _colorScheme.vbtc, splashFactory: NoSplash.splashFactory,
         );
+      case AppColorVariant.Prism:
+        return OutlinedButton.styleFrom(
+          foregroundColor: disabled || useDisabledColor ? Theme.of(context).disabledColor : _colorScheme.prism, splashFactory: NoSplash.splashFactory,
+        );
     }
   }
 
@@ -316,6 +336,8 @@ class AppButton extends StatelessWidget {
             return _colorScheme.onReserve;
           case AppColorVariant.Vbtc:
             return _colorScheme.onVbtc;
+          case AppColorVariant.Prism:
+            return _colorScheme.onPrism;
         }
       case AppButtonType.Text:
       case AppButtonType.Outlined:
@@ -342,6 +364,8 @@ class AppButton extends StatelessWidget {
             return _colorScheme.reserve;
           case AppColorVariant.Vbtc:
             return _colorScheme.vbtc;
+          case AppColorVariant.Prism:
+            return _colorScheme.prism;
         }
     }
   }

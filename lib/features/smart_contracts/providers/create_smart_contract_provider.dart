@@ -37,6 +37,7 @@ import '../models/tokenization.dart';
 import '../services/smart_contract_service.dart';
 import 'draft_smart_contracts_provider.dart';
 import 'my_smart_contracts_provider.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class CreateSmartContractProvider extends StateNotifier<SmartContract> {
   final Ref ref;
@@ -424,6 +425,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
       ref
           .read(nftListProvider.notifier)
           .reloadCurrentPage(address: [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address]);
+      notifyTransactionSubmitted();
       return true;
     }
     return false;
@@ -492,6 +494,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
 
     if (success) {
       saveMintedNft(state.id);
+      notifyTransactionSubmitted();
     }
 
     final details = await SmartContractService().retrieve(state.id);

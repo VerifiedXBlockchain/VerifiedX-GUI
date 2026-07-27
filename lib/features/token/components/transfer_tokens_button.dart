@@ -11,6 +11,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../global_loader/global_loading_provider.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../services/token_service.dart';
 
 class TransferTokensButton extends BaseComponent {
@@ -75,6 +76,7 @@ class TransferTokensButton extends BaseComponent {
 
         if (success) {
           Toast.message(l10n.tokenTransferBroadcastedToast);
+          notifyTransactionSubmitted();
         }
       },
     );

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/toast.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../models/mpc_ceremony.dart';
 import '../services/vbtc_v2_service.dart';
 
@@ -209,6 +210,7 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
         contractHash: hash,
       );
       Toast.message("vBTC contract created. Hash: $hash");
+      notifyTransactionSubmitted();
     } else {
       debugPrint('$_tag Contract creation FAILED');
       state = MpcCeremonyState(

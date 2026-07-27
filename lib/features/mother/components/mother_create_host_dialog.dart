@@ -7,6 +7,7 @@ import '../../../core/env.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../services/mother_service.dart';
 
 class MotherCreateHostDialog extends BaseComponent {
@@ -89,6 +90,7 @@ class MotherCreateHostDialog extends BaseComponent {
             }
 
             Toast.message(l10n.motherHostCreated);
+            notifyTransactionSubmitted();
 
             final restart = await ConfirmDialog.show(
               title: l10n.motherCliRestartTitle,

@@ -47,6 +47,16 @@ package_mac:
 
 
 
+redeploy_cli:
+	rm -rf ../Core-CLI/bin/Release
+	dotnet publish -c Release -r osx-arm64 -p:RuntimeIdentifier=osx-arm64 ../Core-Cli/ReserveBlockCore/ReserveBlockCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
+	rm -rf /Applications/VFXWallet.app/Contents/Resources/RBXCore
+	mkdir /Applications/VFXWallet.app/Contents/Resources/RBXCore
+	cp -r ../Core-CLI/ReserveBlockCore/bin/Release/net6.0/osx-arm64/publish/ /Applications/VFXWallet.app/Contents/Resources/RBXCore
+	@echo "CLI rebuilt and deployed to /Applications/VFXWallet.app"
+
+	
+
 build_win_cli:
 	dotnet publish -c Release -r win-x64 ../Core-Cli/ --output ../Core-Cli/rbxpublished --self-contained true -p:PublishSingleFile=true
 

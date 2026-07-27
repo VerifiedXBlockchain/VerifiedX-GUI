@@ -91,33 +91,34 @@ class TokenizeBtcListScreen extends BaseScreen {
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: AppButton(
-                  label: AppLocalizations.of(context).btcBulkTransferLabel,
-                  onPressed: () {
-                    final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
-                    final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
+              if (BULK_VBTC_TRANSFER_ENABLED)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: AppButton(
+                    label: AppLocalizations.of(context).btcBulkTransferLabel,
+                    onPressed: () {
+                      final tokens = ref.read(tokenizedBitcoinListProvider).where((element) => element.balance > 0);
+                      final webTokens = ref.read(btcWebVbtcTokenListProvider).where((element) => element.globalBalance > 0);
 
-                    if (!kIsWeb && tokens.isEmpty) {
-                      Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
-                      return;
-                    }
-                    if (kIsWeb && webTokens.isEmpty) {
-                      Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
-                      return;
-                    }
+                      if (!kIsWeb && tokens.isEmpty) {
+                        Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
+                        return;
+                      }
+                      if (kIsWeb && webTokens.isEmpty) {
+                        Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
+                        return;
+                      }
 
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => BulkVbtcTransferScreen(),
-                      ),
-                    );
-                  },
-                  variant: AppColorVariant.Btc,
-                  type: AppButtonType.Elevated,
-                ),
-              )
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BulkVbtcTransferScreen(),
+                        ),
+                      );
+                    },
+                    variant: AppColorVariant.Btc,
+                    type: AppButtonType.Elevated,
+                  ),
+                )
             ],
           ),
         AppCard(
@@ -161,7 +162,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                     if (token is TokenizedBitcoin) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                          builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                         ),
                       );
                       return;
@@ -205,7 +206,7 @@ class TokenizeBtcListScreen extends BaseScreen {
                       if (token is TokenizedBitcoin) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                            builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                           ),
                         );
                         return;
@@ -378,7 +379,7 @@ class TokenizedBtcListTile extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                  builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                 ),
               );
             },
@@ -406,7 +407,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
           ? () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => TokenizedBtcDetailScreen(tokenId: token.id),
+                  builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                 ),
               );
             }
@@ -479,7 +480,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (_) => TokenizedBtcDetailScreen(tokenId: item.token.id),
+                                builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
                               ),
                             );
                           },
@@ -516,7 +517,7 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
                                     onPressed: () {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
-                                          builder: (_) => TokenizedBtcDetailScreen(tokenId: item.token.id),
+                                          builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
                                         ),
                                       );
                                     },

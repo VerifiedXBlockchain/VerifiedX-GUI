@@ -43,12 +43,14 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
 
   @override
   Widget build(BuildContext context) {
+    // In debug+testnet, force all txs to show as confirmed to hide stuck pending txs
+    final isConfirmed = (kDebugMode && Env.isTestNet) ? true : widget.transaction.isConfirmed;
     final transaction = widget.transaction;
 
     final now = (DateTime.now().millisecondsSinceEpoch / 1000).round();
     final twentyMinAgo = now - 60 * 20;
 
-    final showReplaceAndRebroadcast = !widget.transaction.isConfirmed && widget.transaction.timestamp > twentyMinAgo;
+    final showReplaceAndRebroadcast = !isConfirmed && widget.transaction.timestamp > twentyMinAgo;
 
     return AppCard(
       padding: 8,
@@ -159,13 +161,13 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                                 height: 4,
                               ),
                               Text(
-                                transaction.isConfirmed ? "Date: ${widget.transaction.parseTimeStamp}" : "Date: Pending",
+                                isConfirmed ? "Date: ${widget.transaction.parseTimeStamp}" : "Date: Pending",
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                             ],
                           ),
                         ),
-                        if (widget.transaction.isConfirmed && widget.transaction.confirmedHeight != 0)
+                        if (isConfirmed && widget.transaction.confirmedHeight != 0)
                           Tooltip(
                             message: "Block ${widget.transaction.confirmedHeight}",
                             child: AppBadge(

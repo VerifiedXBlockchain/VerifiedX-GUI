@@ -32,6 +32,7 @@ enum AppColorVariant {
   Btc,
   Reserve,
   Vbtc,
+  Prism,
 }
 
 enum AppSizeVariant {
@@ -88,6 +89,9 @@ extension CustomColorScheme on ColorScheme {
 
   Color get vbtc => Colors.pinkAccent.shade400;
   Color get onVbtc => Colors.white;
+
+  Color get prism => AppColors.getPrism();
+  Color get onPrism => Colors.white;
 }
 
 class AppTheme {
@@ -249,6 +253,8 @@ class AppTheme {
         return _colors.reserve;
       case AppColorVariant.Vbtc:
         return _colors.vbtc;
+      case AppColorVariant.Prism:
+        return _colors.prism;
     }
   }
 }

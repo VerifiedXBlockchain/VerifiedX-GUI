@@ -187,6 +187,21 @@ class RootContainerSideNavList extends BaseComponent {
                 tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.vbtc : 15),
             isExpanded: isExpanded,
           ),
+          if (!kIsWeb)
+            RootContainerSideNavItem(
+              title: "Privacy",
+              iconType: PrettyIconType.custom,
+              icon: Icons.shield,
+              isNew: true,
+              onPressed: () {
+                tabsRouter.setActiveIndex(17);
+                if (inDrawer) {
+                  rootScaffoldKey.currentState!.closeDrawer();
+                }
+              },
+              isActive: tabsRouter.activeIndex == 17,
+              isExpanded: isExpanded,
+            ),
           RootContainerSideNavItem(
             title: l10n.navMenuFungibleTokens,
             iconType: PrettyIconType.fungibleToken,
@@ -289,7 +304,7 @@ class RootContainerSideNavList extends BaseComponent {
                 tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.shop : 9),
             isExpanded: isExpanded,
           ),
-          if (!kIsWeb)
+          if (!kIsWeb && VALIDATOR_NAV_ENABLED)
             RootContainerSideNavItem(
               title: l10n.navMenuValidator,
               iconType: PrettyIconType.validator,

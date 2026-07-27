@@ -7,6 +7,7 @@ import '../../../core/env.dart';
 import '../../../core/models/snapshot_info.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/services/base_service.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/files.dart';
 import '../../../utils/formatting.dart';
@@ -26,14 +27,20 @@ class SnapshotDownloader extends StatefulWidget {
 }
 
 class _SnapshotDownloaderState extends State<SnapshotDownloader> {
+  static const int _maxRetries = 3;
+  static const Duration _retryDelay = Duration(seconds: 3);
+
   int bytesDownloaded = 0;
   int totalBytes = 0;
   bool isInitializing = true;
   bool isDownloading = false;
   bool isReady = false;
+  bool hasFailed = false;
   String? currentFile;
+  String? errorMessage;
   int filesDownloaded = 0;
   int totalFiles = 0;
+  DateTime _lastProgressUpdate = DateTime.now();
 
   @override
   void initState() {
@@ -41,138 +48,307 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     totalBytes = widget.snapshotInfo.totalSizeBytes ?? 0;
     totalFiles = widget.snapshotInfo.urls?.length ?? 0;
 
-    print('[SnapshotDownloader] initState - totalSizeBytes from API: ${widget.snapshotInfo.totalSizeBytes}');
-    print('[SnapshotDownloader] initState - totalBytes set to: $totalBytes');
-
     Future.delayed(const Duration(milliseconds: 300)).then((_) {
-      init();
+      _start();
     });
   }
 
-  Future<void> init() async {
+  Future<void> _start() async {
+    BaseService.suppressErrors = true;
+    print('[Snapshot] === STEP 1: SHUTTING DOWN CLI ===');
     await widget.ref.read(sessionProvider.notifier).stopCli();
-    download();
+    print('[Snapshot] CLI stopped');
+    _download();
   }
 
-  Future<void> download() async {
+  Future<void> _download() async {
     setState(() {
       isInitializing = false;
       isDownloading = true;
     });
 
-    print('[SnapshotDownloader] Starting download...');
-    print('[SnapshotDownloader] snapshotInfo: ${widget.snapshotInfo}');
-    print('[SnapshotDownloader] urls: ${widget.snapshotInfo.urls}');
-    print('[SnapshotDownloader] totalBytes: $totalBytes, totalFiles: $totalFiles');
+    final _dbPath = await dbPath();
+    final sep = Platform.isWindows ? '\\' : '/';
+    final dbFolder =
+        "$_dbPath${sep}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
 
     try {
-      final _dbPath = await dbPath();
-      print('[SnapshotDownloader] dbPath: $_dbPath');
+      // --- Step 2: Delete existing folder ---
+      print('[Snapshot] === STEP 2: DELETE ~/rbx ===');
+      print('[Snapshot] dbPath: $_dbPath');
       final dir = Directory(_dbPath);
 
-      // Delete existing DB folder if it exists
       if (await dir.exists()) {
-        print('[SnapshotDownloader] Deleting existing folder: $_dbPath');
-        try {
-          await dir.delete(recursive: true);
-          print('[SnapshotDownloader] Deleted successfully');
-        } catch (e) {
-          print('[SnapshotDownloader] Delete failed: $e');
-          // Try to at least delete the Databases subfolder
-          try {
-            final fallbackSep = Platform.isWindows ? '\\' : '/';
-            final dbSubfolder = Directory("$_dbPath${fallbackSep}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}");
-            if (await dbSubfolder.exists()) {
-              await dbSubfolder.delete(recursive: true);
-              print('[SnapshotDownloader] Deleted Databases subfolder');
-            }
-          } catch (e2) {
-            print('[SnapshotDownloader] Subfolder delete also failed: $e2');
-          }
-        }
-      } else {
-        print('[SnapshotDownloader] No existing dir: $_dbPath');
+        await dir.delete(recursive: true);
+        print('[Snapshot] Deleted $_dbPath');
       }
 
-      // Create new DB folder
-      await Directory(_dbPath).create(recursive: true);
-      final sep = Platform.isWindows ? '\\' : '/';
-      final dbFolder = "$_dbPath${sep}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
-      await Directory(dbFolder).create(recursive: true);
-      print('[SnapshotDownloader] Created dbFolder: $dbFolder');
-
-      final urls = widget.snapshotInfo.urls ?? [];
-      print('[SnapshotDownloader] Downloading ${urls.length} files');
-
-      if (urls.isEmpty) {
-        print('[SnapshotDownloader] ERROR: No URLs to download!');
+      if (await Directory(_dbPath).exists()) {
+        _fail('Failed to delete $_dbPath — folder still exists after delete');
         return;
       }
 
-      final dio = Dio();
+      // --- Step 3: Create fresh folders ---
+      print('[Snapshot] === STEP 3: CREATE FRESH FOLDERS ===');
+      await Directory(dbFolder).create(recursive: true);
+      print('[Snapshot] Created $dbFolder');
+
+      // --- Step 4: Download files ---
+      final urls = widget.snapshotInfo.urls ?? [];
+      print('[Snapshot] === STEP 4: DOWNLOAD ${urls.length} FILES ===');
+
+      if (urls.isEmpty) {
+        _fail('Snapshot has no download URLs');
+        return;
+      }
+
+      final dio = Dio(BaseOptions(
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: Duration.zero, // No receive timeout for large files
+      ));
       int cumulativeBytes = 0;
 
-      for (final url in urls) {
+      for (int i = 0; i < urls.length; i++) {
+        final url = urls[i];
         final filename = url.split('/').last;
         final filePath = "$dbFolder$sep$filename";
-
-        print('[SnapshotDownloader] Downloading: $url -> $filePath');
 
         setState(() {
           currentFile = filename;
         });
 
-        try {
-          await dio.download(
-            url,
-            filePath,
-            onReceiveProgress: (received, fileTotal) {
-              setState(() {
-                bytesDownloaded = cumulativeBytes + received;
-              });
-            },
-          );
+        final fileSize = await _downloadFileWithRetry(
+          dio: dio,
+          url: url,
+          filePath: filePath,
+          fileIndex: i + 1,
+          fileCount: urls.length,
+          cumulativeBytes: cumulativeBytes,
+        );
 
-          // Get actual file size after download
-          final file = File(filePath);
-          if (await file.exists()) {
-            final fileSize = await file.length();
-            cumulativeBytes += fileSize;
-            setState(() {
-              bytesDownloaded = cumulativeBytes;
-            });
-          }
-
-          print('[SnapshotDownloader] Completed: $filename');
-        } catch (e) {
-          print('[SnapshotDownloader] Failed to download $filename: $e (skipping)');
-          // Continue to next file on error (404, network issue, etc)
+        if (fileSize == null) {
+          _fail('Failed to download $filename after $_maxRetries attempts');
+          return;
         }
 
+        cumulativeBytes += fileSize;
+        setState(() {
+          bytesDownloaded = cumulativeBytes;
+        });
         filesDownloaded++;
       }
 
-      // Adjust final bytesDownloaded to match totalBytes
-      setState(() {
-        bytesDownloaded = totalBytes;
-      });
+      // --- Verification ---
+      print('[Snapshot] === DOWNLOAD COMPLETE ===');
+      print('[Snapshot] All ${urls.length} files downloaded');
 
-      print('[SnapshotDownloader] All downloads complete');
-      downloadComplete();
+      final entries = Directory(dbFolder).listSync();
+      int totalDiskBytes = 0;
+      for (final f in entries) {
+        if (f is File) {
+          final size = await f.length();
+          totalDiskBytes += size;
+          print(
+              '[Snapshot]   ${f.path.split(sep).last} — ${(size / 1048576).toStringAsFixed(1)} MB');
+        }
+      }
+      print(
+          '[Snapshot] Total on disk: ${(totalDiskBytes / 1073741824).toStringAsFixed(2)} GB (expected: ${(totalBytes / 1073741824).toStringAsFixed(2)} GB)');
+
+      if (entries.length < urls.length) {
+        _fail(
+            'Only ${entries.length} of ${urls.length} files on disk after download');
+        return;
+      }
+
+      // --- Step 5: Restart CLI ---
+      print('[Snapshot] === STEP 5: STARTING CLI ===');
+      await _completeImport(dbFolder, sep);
     } catch (e, st) {
-      print('[SnapshotDownloader] ERROR: $e');
-      print('[SnapshotDownloader] Stack: $st');
+      print('[Snapshot] FATAL: $e\n$st');
+      _fail('Unexpected error: $e');
     }
   }
 
-  Future<void> downloadComplete() async {
+  /// Downloads a single file with retry + resume logic.
+  /// Returns file size on success, null on failure after all retries.
+  Future<int?> _downloadFileWithRetry({
+    required Dio dio,
+    required String url,
+    required String filePath,
+    required int fileIndex,
+    required int fileCount,
+    required int cumulativeBytes,
+  }) async {
+    final filename = url.split('/').last;
+
+    // Get expected file size via HEAD request
+    int? expectedSize;
+    try {
+      final head = await dio.head<void>(url);
+      expectedSize = int.tryParse(
+          head.headers.value(HttpHeaders.contentLengthHeader) ?? '');
+      if (expectedSize != null) {
+        print('[Snapshot] [$fileIndex/$fileCount] $filename — expected ${(expectedSize / 1048576).toStringAsFixed(1)} MB');
+      }
+    } catch (_) {
+      // HEAD failed — we can still download, just can't verify size
+    }
+
+    for (int attempt = 1; attempt <= _maxRetries; attempt++) {
+      if (attempt > 1) {
+        await Future.delayed(_retryDelay);
+      }
+
+      final file = File(filePath);
+      int existingBytes = 0;
+      if (await file.exists()) {
+        existingBytes = await file.length();
+      }
+
+      // If we already have the complete file from a previous attempt, skip
+      if (expectedSize != null && existingBytes == expectedSize && existingBytes > 0) {
+        print('[Snapshot] [$fileIndex/$fileCount] $filename — already complete on disk');
+        return existingBytes;
+      }
+
+      // Decide whether to resume or start fresh
+      final bool resuming = existingBytes > 0;
+      if (resuming) {
+        print('[Snapshot] [$fileIndex/$fileCount] Resuming $filename at ${(existingBytes / 1048576).toStringAsFixed(1)} MB (attempt $attempt)');
+      } else {
+        print('[Snapshot] [$fileIndex/$fileCount] Downloading: $filename'
+            '${attempt > 1 ? " (attempt $attempt)" : ""}');
+      }
+
+      try {
+        if (resuming) {
+          // Resume: request remaining bytes, append to existing file
+          final response = await dio.get<ResponseBody>(
+            url,
+            options: Options(
+              responseType: ResponseType.stream,
+              headers: {HttpHeaders.rangeHeader: 'bytes=$existingBytes-'},
+            ),
+          );
+
+          // If server doesn't support range (200 instead of 206), start over
+          if (response.statusCode == 200) {
+            print('[Snapshot]   Server returned 200 — restarting from scratch');
+            await file.delete();
+            existingBytes = 0;
+            // Fall through to fresh download below
+          } else if (response.statusCode == 206) {
+            final sink = file.openWrite(mode: FileMode.append);
+            int received = existingBytes;
+            try {
+              await for (final chunk in response.data!.stream) {
+                sink.add(chunk);
+                received += chunk.length;
+                final now = DateTime.now();
+                if (now.difference(_lastProgressUpdate).inMilliseconds > 250) {
+                  _lastProgressUpdate = now;
+                  setState(() {
+                    bytesDownloaded = cumulativeBytes + received;
+                  });
+                }
+              }
+            } finally {
+              await sink.flush();
+              await sink.close();
+            }
+
+            final finalSize = await file.length();
+            if (expectedSize != null && finalSize != expectedSize) {
+              print('[Snapshot]   Size mismatch: got $finalSize, expected $expectedSize — will retry');
+              await file.delete();
+              continue;
+            }
+            if (finalSize == 0) {
+              print('[Snapshot]   File is 0 bytes — will retry');
+              continue;
+            }
+
+            print('[Snapshot]   OK: $filename — ${(finalSize / 1048576).toStringAsFixed(1)} MB (resumed)');
+            return finalSize;
+          }
+        }
+
+        // Fresh download (no partial file, or resume wasn't possible)
+        if (await file.exists()) {
+          await file.delete();
+        }
+
+        await dio.download(
+          url,
+          filePath,
+          onReceiveProgress: (received, fileTotal) {
+            final now = DateTime.now();
+            if (now.difference(_lastProgressUpdate).inMilliseconds > 250) {
+              _lastProgressUpdate = now;
+              setState(() {
+                bytesDownloaded = cumulativeBytes + received;
+              });
+            }
+          },
+        );
+
+        final finalSize = await file.length();
+        if (expectedSize != null && finalSize != expectedSize) {
+          print('[Snapshot]   Size mismatch: got $finalSize, expected $expectedSize — will retry');
+          // Keep the partial file for resume on next attempt
+          continue;
+        }
+        if (finalSize == 0) {
+          print('[Snapshot]   File is 0 bytes — will retry');
+          continue;
+        }
+
+        print('[Snapshot]   OK: $filename — ${(finalSize / 1048576).toStringAsFixed(1)} MB');
+        return finalSize;
+      } catch (e) {
+        print('[Snapshot]   Error on attempt $attempt: $e');
+        // Keep partial file on disk for resume on next attempt
+        if (attempt == _maxRetries) {
+          print('[Snapshot]   All retries exhausted for $filename');
+          return null;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  void _fail(String message) {
+    print('[Snapshot] FAILED: $message');
+    BaseService.suppressErrors = false;
+    setState(() {
+      isDownloading = false;
+      hasFailed = true;
+      errorMessage = message;
+    });
+  }
+
+  Future<void> _completeImport(String dbFolder, String sep) async {
     setState(() {
       isDownloading = false;
       isReady = true;
     });
 
+    BaseService.suppressErrors = false;
     await widget.ref.read(sessionProvider.notifier).init(false);
     await widget.ref.read(sessionProvider.notifier).fetchConfig();
+
+    // Post-startup verification
+    final postDir = Directory(dbFolder);
+    if (await postDir.exists()) {
+      final files = postDir.listSync().whereType<File>().toList();
+      print('[Snapshot] Post-startup: ${files.length} files still in $dbFolder');
+    } else {
+      print(
+          '[Snapshot] WARNING: $dbFolder missing after CLI startup');
+    }
+    print('[Snapshot] === SNAPSHOT IMPORT COMPLETE ===');
   }
 
   @override
@@ -187,6 +363,9 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     }
     if (isReady) {
       title = l10n.hnavSnapshotAllDone;
+    }
+    if (hasFailed) {
+      title = "Import Failed";
     }
 
     return AlertDialog(
@@ -226,12 +405,53 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      l10n.hnavSnapshotDownloadingFile(currentFile!),
+                      l10n.hnavSnapshotDownloadingProgress(currentFile!, filesDownloaded, totalFiles),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color: Colors.white54,
                           ),
                     ),
                   ),
+              ],
+            );
+          }
+
+          if (hasFailed) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.error_outline,
+                  size: 40,
+                  color: Colors.redAccent,
+                ),
+                const SizedBox(height: 8),
+                const Text("Snapshot import failed."),
+                if (errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      errorMessage!,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.white54,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Please restart and try again.",
+                  style: TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text(
+                    "Close",
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ),
               ],
             );
           }

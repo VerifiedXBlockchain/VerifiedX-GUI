@@ -21,9 +21,11 @@ import '../../../utils/toast.dart';
 
 import '../../../core/theme/components.dart';
 import '../../../generated/assets.gen.dart';
-import '../../../l10n/generated/app_localizations.dart';
+import '../../../core/dialogs.dart';
+import '../../token/providers/web_token_actions_manager.dart';
 import '../components/web_btc_tokenized_action_buttons.dart';
 import '../components/web_btc_transaction_list_tile.dart';
+import '../components/web_v2_withdrawal_dialog.dart';
 import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_vbtc_token_detail_provider.dart';
 
@@ -107,7 +109,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         );
       },
       error: (_, __) => AppBar(
-        title: Text(AppLocalizations.of(context).btcWebError),
+        title: Text("error"),
         shadowColor: Colors.transparent,
         backgroundColor: Colors.black,
       ),
@@ -123,7 +125,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         data: (token) {
           if (token == null) {
             return Center(
-              child: Text(AppLocalizations.of(context).btcTokenNotFoundLabel),
+              child: Text("Token Not Found"),
             );
           }
 
@@ -205,6 +207,88 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                         .toList(),
                   )
                 ],
+                Builder(builder: (context) {
+                  final myAddr = ref.read(webSessionProvider).keypair?.address;
+                  final withdrawals = (token.withdrawalRequests ?? [])
+                      .where((wr) => wr['requestor_address'] == myAddr)
+                      .toList();
+                  if (withdrawals.isEmpty) return const SizedBox.shrink();
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Withdrawal History:",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  ListView.builder(
+                    itemCount: withdrawals.length,
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final wr = withdrawals[index];
+                      final status = wr['status'] ?? 'unknown';
+                      final amount = wr['amount'];
+                      final btcAddr = wr['btc_address'] ?? '';
+                      final isRequested = status == 'requested' || status == 'pending';
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: AppCard(
+                          padding: 8,
+                          child: ListTile(
+                            title: Text("$amount vBTC → $btcAddr"),
+                            subtitle: Text(isRequested ? "Pending — tap to resume" : "Status: $status"),
+                            onTap: isRequested
+                                ? () {
+                                    final requestHash = wr['request_transaction_hash'] as String?;
+                                    if (requestHash != null) {
+                                      WebV2WithdrawalDialog.show(
+                                        scIdentifier: token.scIdentifier,
+                                        requestorAddress: address,
+                                        btcAddress: btcAddr,
+                                        amount: (amount is num) ? amount.toDouble() : (double.tryParse(amount.toString()) ?? 0),
+                                        feeRate: 0,
+                                        ownerAddress: token.ownerAddress,
+                                        existingRequestHash: requestHash,
+                                      );
+                                    }
+                                  }
+                                : null,
+                            trailing: isRequested
+                                ? IconButton(
+                                    icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 20),
+                                    tooltip: "Cancel withdrawal",
+                                    onPressed: () async {
+                                      final confirmed = await ConfirmDialog.show(
+                                        title: "Cancel Withdrawal?",
+                                        body: "Are you sure you want to cancel this withdrawal request?",
+                                      );
+                                      if (confirmed == true) {
+                                        final manager = ref.read(webTokenActionsManager);
+                                        await manager.cancelV2Withdrawal(
+                                          scIdentifier: token.scIdentifier,
+                                          ownerAddress: token.ownerAddress,
+                                          requestHash: wr['request_transaction_hash'] ?? '',
+                                        );
+                                      }
+                                    },
+                                  )
+                                : status == 'completed'
+                                    ? const Icon(Icons.check_circle, color: Colors.green)
+                                    : const Icon(Icons.pending, color: Colors.orange),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                    ],
+                  );
+                }),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -215,7 +299,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                     ),
                   ),
                 ),
-                if (btcTxs.isEmpty) Text(AppLocalizations.of(context).btcNoTransactions),
+                if (btcTxs.isEmpty) Text("No Transactions"),
                 ListView.builder(
                   itemCount: btcTxs.length,
                   shrinkWrap: true,
@@ -233,7 +317,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
             ),
           );
         },
-        error: (_, __) => Text(AppLocalizations.of(context).btcWebError),
+        error: (_, __) => const Text("Error"),
         loading: () => const CenteredLoader());
   }
 }
@@ -320,47 +404,65 @@ class _VBTCDetails extends StatelessWidget {
             address: address,
           ),
           _DetailRow(
-            label: AppLocalizations.of(context).btcDetailNameLabel,
+            label: "Name",
             value: token.name,
           ),
           _DetailRow(
-            label: AppLocalizations.of(context).btcDetailOwnerLabel,
-            value: address,
-            isReserve: address.startsWith("xRBX"),
+            label: "Owner",
+            value: token.ownerAddress,
+            isReserve: token.ownerAddress.startsWith("xRBX"),
+            withCopy: true,
           ),
           _DetailRow(
-            label: AppLocalizations.of(context).btcDetailMyBalanceLabel,
+            label: "My Balance",
             value: "$balance vBTC",
           ),
           _DetailRow(
-            label: AppLocalizations.of(context).btcDetailDescriptionLabel,
+            label: "Description",
             value: token.description,
             inExpanded: true,
             withMaxLines: BreakPoints.useMobileLayout(context),
           ),
           _DetailRow(
-            label: AppLocalizations.of(context).btcDetailScIdLabel,
+            label: "Smart Contract ID",
             value: token.scIdentifier,
             inExpanded: true,
             withCopy: true,
           ),
           _DetailRow(
-            label: AppLocalizations.of(context).btcDetailScOwnerAddressLabel,
+            label: "SmartContract Owner Address",
             value: token.ownerAddress,
             isReserve: token.ownerAddress.startsWith("xRBX"),
             withCopy: true,
           ),
           if (isOwner)
             _DetailRow(
-              label: AppLocalizations.of(context).btcDetailDepositAddressLabel,
+              label: "BTC Deposit Address",
               value: token.depositAddress,
               inExpanded: true,
               withCopy: true,
             ),
           if (isOwner)
             _DetailRow(
-              label: AppLocalizations.of(context).btcDetailTotalBalanceLabel,
+              label: "Token Total Balance",
               value: "${token.globalBalance} vBTC",
+            ),
+          if (token.frostGroupPublicKey != null)
+              _DetailRow(
+                label: "FROST Group Key",
+                value: token.frostGroupPublicKey!,
+                inExpanded: true,
+                withCopy: true,
+              ),
+            if (token.requiredThreshold != null)
+              _DetailRow(
+                label: "Signing Threshold",
+                value: "${token.requiredThreshold}",
+              ),
+          if (token.isPendingWithdrawal)
+            _DetailRow(
+              label: "Status",
+              value: "Pending Withdrawal",
             ),
         ],
       ),
@@ -520,6 +622,8 @@ class _DetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final useExpanded = inExpanded || withCopy;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -534,12 +638,12 @@ class _DetailRow extends StatelessWidget {
           SizedBox(
             width: 6,
           ),
-          inExpanded
-              ? Expanded(
+          useExpanded
+              ? Flexible(
                   child: Text(
                   value,
-                  maxLines: withMaxLines ? 2 : null,
-                  overflow: withMaxLines ? TextOverflow.ellipsis : null,
+                  maxLines: withMaxLines ? 2 : 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: isReserve ? AppColors.getReserve() : null),
                 ))
               : Text(
@@ -555,7 +659,7 @@ class _DetailRow extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: value));
-                  Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
+                  Toast.message("$label copied to clipboard");
                 },
                 child: Icon(
                   Icons.copy,

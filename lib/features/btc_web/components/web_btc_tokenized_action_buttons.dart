@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../app.dart';
+import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
@@ -14,7 +13,6 @@ import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils.dart';
-import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc/utils.dart';
@@ -23,6 +21,7 @@ import '../../token/providers/web_token_actions_manager.dart';
 import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import '../services/btc_web_service.dart';
+import 'web_v2_withdrawal_dialog.dart';
 
 class WebTokenizedBtcActionButtons extends BaseComponent {
   final BtcWebVbtcToken token;
@@ -50,17 +49,17 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
       runSpacing: 8,
       children: [
         AppButton(
-          label: AppLocalizations.of(context).btcCopyDepositAddress,
+          label: "Copy Deposit Address",
           icon: Icons.copy,
           variant: AppColorVariant.Primary,
           onPressed: () async {
             await Clipboard.setData(ClipboardData(text: token.depositAddress));
-            Toast.message(AppLocalizations.of(context).btcAddressCopiedShort);
+            Toast.message("BTC Address copied to clipboard");
           },
         ),
         if (isOwner)
           AppButton(
-            label: AppLocalizations.of(context).btcFundLabel,
+            label: "Fund",
             icon: Icons.outbox,
             onPressed: () {
               showModalBottomSheet(
@@ -95,7 +94,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
 
                                 Navigator.of(context).pop();
                                 final amount = await PromptModal.show(
-                                  title: AppLocalizations.of(context).btcAmountWithBalanceTitle(balance.toString()),
+                                  title: "Amount (Balance: $balance BTC)",
                                   validator: (val) =>
                                       formValidatorNumber(val, "Amount"),
                                   labelText: 'Deposit amount',
@@ -133,11 +132,11 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                 }
 
                                 final confirmed = await ConfirmDialog.show(
-                                  title: AppLocalizations.of(context).btcPleaseConfirmTitle,
+                                  title: "Please Confirm",
                                   body:
                                       "Sending:\n$amount BTC\n\nTo:\n${token.depositAddress} (Token Deposit Address)\n\nFrom:\n${btcKeypair.address}\n\nFeeRate:\n$feeRate SATS",
-                                  confirmText: AppLocalizations.of(context).actionSend,
-                                  cancelText: AppLocalizations.of(context).actionCancel,
+                                  confirmText: "Send",
+                                  cancelText: "Cancel",
                                 );
 
                                 if (confirmed != true) {
@@ -169,7 +168,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                 });
 
                                 InfoDialog.show(
-                                    title: AppLocalizations.of(context).btcTransactionBroadcastedTitle,
+                                    title: "Transaction Broadcasted",
                                     buttonColorOverride: Color(0xfff7931a),
                                     content: ConstrainedBox(
                                       constraints:
@@ -205,7 +204,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                             height: 12,
                                           ),
                                           AppButton(
-                                            label: AppLocalizations.of(context).btcOpenInExplorer,
+                                            label: "Open in BTC Explorer",
                                             variant: AppColorVariant.Btc,
                                             type: AppButtonType.Text,
                                             onPressed: () {
@@ -225,7 +224,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                             );
                           }),
                         ListTile(
-                          title: Text(AppLocalizations.of(context).btcManualSendTitle),
+                          title: Text("Manual Send"),
                           subtitle: Text(
                               "Send coin manually to this token’s BTC deposit address"),
                           trailing: Icon(Icons.chevron_right),
@@ -244,7 +243,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             variant: AppColorVariant.Primary,
           ),
         AppButton(
-          label: AppLocalizations.of(context).btcWithdrawLabel,
+          label: "Withdraw",
           icon: Icons.download,
           variant: AppColorVariant.Primary,
           onPressed: () async {
@@ -252,73 +251,107 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             if (!manager.verifyBalance()) {
               return;
             }
-            final amount = await PromptModal.show(
-              title: AppLocalizations.of(context).btcBulkAmountHint,
-              validator: (val) => formValidatorNumber(val, AppLocalizations.of(context).btcBulkAmountHint),
-              body: 'How much BTC do you want to withdraw?',
-              labelText: AppLocalizations.of(context).btcWithdrawAmountLabel,
-            );
-            if (amount != null && double.tryParse(amount) != null) {
-              final address = await PromptModal.show(
-                title: AppLocalizations.of(context).btcAddressLabel,
-                validator: (val) => formValidatorNotEmpty(val, AppLocalizations.of(context).walletAddressLabel),
-                labelText: AppLocalizations.of(context).btcReceivingAddressLabel,
+
+            // Check for pending withdrawal to resume
+            if (token.isPendingWithdrawal && token.withdrawalRequests != null) {
+              final pending = token.withdrawalRequests!.where(
+                (wr) => wr['status'] == 'pending',
               );
-              if (address != null) {
-                // final feeRate = await PromptModal.show(
-                //   title: 'Fee Rate',
-                //   validator: (val) => formValidatorInteger(val, "Fee Rate"),
-                //   labelText: "Fee Rate",
-                // );
-                final feeRate = await promptForFeeRate(context);
-
-                if (feeRate != null) {
-                  final result = await manager.withdrawVbtc(
-                    scId: token.scIdentifier,
-                    amount: double.parse(amount),
-                    btcAddress: address,
-                    feeRate: (feeRate * 3),
+              if (pending.isNotEmpty) {
+                final requestHash = pending.first['request_transaction_hash'] as String?;
+                if (requestHash != null) {
+                  WebV2WithdrawalDialog.show(
+                    scIdentifier: token.scIdentifier,
+                    requestorAddress: myAddress!,
+                    btcAddress: pending.first['btc_address'] ?? '',
+                    amount: (pending.first['amount'] is num) ? (pending.first['amount'] as num).toDouble() : (double.tryParse(pending.first['amount'].toString()) ?? 0),
+                    feeRate: 0,
+                    ownerAddress: token.ownerAddress,
+                    existingRequestHash: requestHash,
                   );
-
-                  if (result == null) {
-                    Toast.error();
-                    return;
-                  }
-
-                  InfoDialog.show(
-                      title: AppLocalizations.of(context).btcResponseTitle,
-                      content: SelectableText(jsonEncode(result)));
+                  return;
                 }
               }
             }
-          },
-        ),
-        AppButton(
-          label: AppLocalizations.of(context).btcTransferOwnership,
-          icon: Icons.person,
-          variant: AppColorVariant.Primary,
-          onPressed: () async {
-            final manager = ref.read(webTokenActionsManager);
-            if (token.globalBalance <= 0) {
-              Toast.error(AppLocalizations.of(context).btcVbtcNoBalanceTransfer);
-              return;
-            }
-            if (!manager.verifyBalance()) {
+
+            // New withdrawal request
+            final amountStr = await PromptModal.show(
+              title: 'Amount',
+              validator: (val) => formValidatorNumber(val, "Amount"),
+              body: 'How much BTC do you want to withdraw?',
+              labelText: "Withdrawal Amount",
+            );
+            if (amountStr == null) return;
+            final withdrawAmount = double.tryParse(amountStr);
+            if (withdrawAmount == null || withdrawAmount <= 0) {
+              Toast.error("Invalid amount");
               return;
             }
 
-            final toAddress =
-                await manager.promptForAddress(title: AppLocalizations.of(context).btcTransferToTitle);
-            if (toAddress == null) {
+            final available = token.balanceForAddress(myAddress);
+            if (withdrawAmount > available) {
+              Toast.error("Insufficient balance. Available: $available vBTC");
               return;
             }
 
-            final success =
-                await manager.transferVbtcOwnership(token, toAddress);
+            final address = await PromptModal.show(
+              title: 'BTC Address',
+              validator: (val) => formValidatorNotEmpty(val, "Address"),
+              labelText: "Receiving BTC Address",
+            );
+            if (address == null) return;
+
+            final feeRate = await promptForFeeRate(context);
+            if (feeRate == null) return;
+
+            WebV2WithdrawalDialog.show(
+              scIdentifier: token.scIdentifier,
+              requestorAddress: myAddress!,
+              btcAddress: address,
+              amount: withdrawAmount,
+              feeRate: feeRate,
+              ownerAddress: token.ownerAddress,
+            );
           },
         ),
+        if (WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED && isOwner)
+          AppButton(
+            label: "Transfer Ownership",
+            icon: Icons.person,
+            variant: AppColorVariant.Primary,
+            onPressed: () async {
+              final manager = ref.read(webTokenActionsManager);
+              if (token.globalBalance <= 0) {
+                Toast.error("vBTC tokens with no balance can not be transferred");
+                return;
+              }
+              if (!manager.verifyBalance()) {
+                return;
+              }
+
+              final toAddress = await PromptModal.show(
+                title: "Transfer Ownership",
+                validator: (val) => formValidatorNotEmpty(val, "Address"),
+                labelText: "Recipient VFX Address",
+              );
+              if (toAddress == null || toAddress.isEmpty) return;
+
+              final confirmed = await ConfirmDialog.show(
+                title: "Transfer Ownership",
+                body: "Transfer ownership of this vBTC token to $toAddress?\n\nThis cannot be undone.",
+                confirmText: "Transfer",
+                cancelText: "Cancel",
+              );
+              if (confirmed != true) return;
+
+              await manager.transferVbtcOwnership(
+                scIdentifier: token.scIdentifier,
+                toAddress: toAddress,
+              );
+            },
+          ),
         AppButton(
-          label: AppLocalizations.of(context).btcTransferLabel,
+          label: "Transfer",
           variant: AppColorVariant.Primary,
           icon: Icons.send,
           onPressed: () async {
@@ -339,15 +372,19 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               );
 
               if (result is _TransferShareModalResponse) {
-                final success = await manager.transferVbtcAmount(
-                    token, result.toAddress, result.amount);
+                await manager.transferVbtcV2(
+                  token: token,
+                  toAddress: result.toAddress,
+                  fromAddress: myAddress,
+                  amount: result.amount,
+                );
               }
             }
           },
         ),
         if (isOwner)
           AppButton(
-            label: AppLocalizations.of(context).btcProveOwnership,
+            label: "Prove Ownership",
             icon: Icons.security,
             onPressed: () {
               proveSmartContractOwnership(
@@ -355,10 +392,10 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             },
           ),
         AppButton(
-          label: AppLocalizations.of(context).btcBorrowLend,
+          label: "Borrow/Lend",
           icon: Icons.people,
           onPressed: () {
-            Toast.message(AppLocalizations.of(context).btcActionNotAvailable);
+            Toast.message("Action Not Available Yet.");
           },
         ),
       ],
@@ -452,7 +489,7 @@ class _TransferSharesModal extends BaseComponent {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppButton(
-                    label: AppLocalizations.of(context).actionCancel,
+                    label: "Cancel",
                     type: AppButtonType.Text,
                     variant: AppColorVariant.Light,
                     onPressed: () {
@@ -460,7 +497,7 @@ class _TransferSharesModal extends BaseComponent {
                     },
                   ),
                   AppButton(
-                    label: forWithdrawl ? AppLocalizations.of(context).btcWithdrawLabel : AppLocalizations.of(context).btcTransferLabel,
+                    label: forWithdrawl ? "Withdraw" : "Transfer",
                     variant: forWithdrawl
                         ? AppColorVariant.Secondary
                         : AppColorVariant.Btc,
@@ -473,13 +510,13 @@ class _TransferSharesModal extends BaseComponent {
                       final amount = double.tryParse(amountControlller.text);
 
                       if (amount == null || amount <= 0) {
-                        Toast.error(AppLocalizations.of(context).btcInvalidAmount);
+                        Toast.error("Invalid Amount");
                         return;
                       }
                       print("-----");
 
                       if (amount > token.balanceForAddress(thisAddress)) {
-                        Toast.error(AppLocalizations.of(context).btcNotEnoughBalanceShort);
+                        Toast.error("Not enough balance");
                         return;
                       }
                       final result = _TransferShareModalResponse(

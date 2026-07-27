@@ -17,6 +17,7 @@ import '../../../core/utils.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../bridge/components/bridge_to_base_dialog.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../encrypt/utils.dart';
@@ -26,6 +27,7 @@ import '../../nft/utils.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
+import '../../wallet/utils.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/btc_account_list_provider.dart';
 import '../providers/btc_pending_tokenized_address_list_provider.dart';
@@ -38,6 +40,7 @@ import '../models/btc_recommended_fees.dart';
 import '../../../core/providers/session_provider.dart';
 import './withdrawal_processing_dialog.dart';
 import '../../price/providers/price_detail_providers.dart';
+import '../../../core/utils/tx_refresh.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -140,15 +143,17 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       .where((a) => a.balance > 0)
                       .toList();
 
+                  bool isSending = false;
+                  final parentContext = context;
                   showModalBottomSheet(
-                    context: context,
+                    context: parentContext,
                     builder: (context) {
                       return ModalContainer(
                         withDecor: false,
                         withClose: true,
                         children: [
                           Text(
-                            l10n.tkbChooseBtcAccount,
+                            l10n.tkbFundToken,
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall!
@@ -157,6 +162,25 @@ class TokenizedBtcActionButtons extends BaseComponent {
                           ListView(
                             shrinkWrap: true,
                             children: [
+                              AppCard(
+                                padding: 0,
+                                margin: EdgeInsets.symmetric(vertical: 8),
+                                child: ListTile(
+                                  title: Text("Buy BTC (On-Ramp)"),
+                                  subtitle: Text(
+                                      "Purchase BTC with fiat and send directly to this token"),
+                                  trailing: Icon(Icons.credit_card),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    AccountUtils.getCoin(
+                                      parentContext,
+                                      ref,
+                                      VfxOrBtcOption.btc,
+                                      btcAddressOverride: token.btcAddress!,
+                                    );
+                                  },
+                                ),
+                              ),
                               ...btcAccounts.map((account) {
                                 return AppCard(
                                   padding: 0,
@@ -166,6 +190,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                     subtitle: Text("${account.balance} BTC"),
                                     trailing: Icon(Icons.send),
                                     onTap: () async {
+                                      if (isSending) return;
+                                      isSending = true;
                                       Navigator.of(context).pop();
 
                                       final amount = await PromptModal.show(
@@ -277,6 +303,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                             );
                                         Toast.message(
                                             l10n.tkbBtcSentTo(amount, token.btcAddress!));
+                                        notifyTransactionSubmitted();
 
                                         InfoDialog.show(
                                             title: l10n.btcTransactionBroadcastedTitle,
@@ -346,13 +373,13 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 margin: EdgeInsets.symmetric(vertical: 8),
                                 child: ListTile(
                                   title: Text(l10n.btcManualSendTitle),
-                                  subtitle: Text(l10n.tkbManualSendSubtitle),
-                                  trailing: Icon(Icons.send),
-                                  onTap: () async {
-                                    await Clipboard.setData(
-                                        ClipboardData(text: token.btcAddress));
-                                    Toast.message(
-                                        l10n.tkbSendFundsTo(token.btcAddress!));
+                                  subtitle: Text(
+                                      l10n.tkbManualSendExchangeSubtitle),
+                                  trailing: Icon(Icons.content_copy),
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                    _showManualSendDialog(
+                                        parentContext, token.btcAddress!);
                                   },
                                 ),
                               ),
@@ -405,7 +432,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     if (dialogResult != null && dialogResult.success) {
                       ref.read(logProvider.notifier).append(
                             LogEntry(
-                              message: "vBTC V2 Withdrawal completed successfully.",
+                              message: "vBTC Withdrawal completed successfully.",
                               variant: AppColorVariant.Btc,
                             ),
                           );
@@ -436,6 +463,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                   if (token.version >= 2) {
                     // V2: request withdrawal first, then show processing dialog
+                    ref.read(globalLoadingProvider.notifier).start();
                     final withdrawResult = await VbtcV2Service().requestWithdrawal(
                       scUid: token.smartContractUid,
                       requestorAddress: token.rbxAddress,
@@ -443,6 +471,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       amount: result.amount,
                       feeRate: result.feeRate,
                     );
+                    ref.read(globalLoadingProvider.notifier).complete();
 
                     String? requestHash = withdrawResult.requestHash;
                     bool needsBlockConfirmation = withdrawResult.success;
@@ -484,7 +513,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
 
                     if (dialogResult != null && dialogResult.success) {
-                      final message = "vBTC V2 Withdrawal completed successfully.";
+                      final message = "vBTC Withdrawal completed successfully.";
                       ref.read(logProvider.notifier).append(
                             LogEntry(
                               message: message,
@@ -492,6 +521,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               textToCopy: dialogResult.btcTransactionHash,
                             ),
                           );
+                      notifyTransactionSubmitted();
                     }
                   } else {
                     // V1: existing flow
@@ -516,11 +546,15 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 variant: AppColorVariant.Btc,
                                 textToCopy: withdrawlHash),
                           );
+                      notifyTransactionSubmitted();
                     }
                   }
                 }
               },
             ),
+            // Force a line break after Withdraw — a full-width zero-height
+            // SizedBox makes the surrounding `Wrap` start a new run.
+            const SizedBox(width: double.infinity, height: 0),
             AppButton(
               label: l10n.btcTransferLabel,
               variant: AppColorVariant.Primary,
@@ -622,10 +656,11 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       ref.read(logProvider.notifier).append(
                             LogEntry(
                               message:
-                                  "vBTC V2 ownership transfer initiated to $toAddress",
+                                  "vBTC ownership transfer initiated to $toAddress",
                               variant: AppColorVariant.Btc,
                             ),
                           );
+                      notifyTransactionSubmitted();
                       ref.read(tokenizedBitcoinListProvider.notifier).refresh();
                     }
                   } else {
@@ -699,6 +734,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                 textToCopy: txHash,
                               ),
                             );
+                        notifyTransactionSubmitted();
                         ref.read(tokenizedBitcoinListProvider.notifier).refresh();
                       }
                     } else {
@@ -721,6 +757,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               LogEntry(
                                   message: message, variant: AppColorVariant.Btc),
                             );
+                        notifyTransactionSubmitted();
                       }
                     }
                   }
@@ -790,6 +827,23 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 }
               },
             ),
+            // Bridge to Base — v2 contracts only, owner only. Disabled (with
+            // tooltip) when the contract has no vBTC; the dialog itself
+            // handles the per-user `availableVbtc` refinement via preflight.
+            if (isOwner && token.version == 2)
+              Tooltip(
+                message: token.balance > 0
+                    ? "Bridge vBTC to Base (vBTC.b)"
+                    : "No vBTC available to bridge",
+                child: AppButton(
+                  label: "Bridge to Base",
+                  icon: Icons.swap_horiz,
+                  disabled: token.balance <= 0,
+                  onPressed: () {
+                    BridgeToBaseDialog.show(context, token, scOwner);
+                  },
+                ),
+              ),
             if (isOwner)
               AppButton(
                 label: l10n.btcProveOwnership,
@@ -910,6 +964,90 @@ class TokenizedBtcActionButtons extends BaseComponent {
       },
     );
   }
+}
+
+void _showManualSendDialog(BuildContext context, String btcAddress) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.send, color: Color(0xfff7931a)),
+            SizedBox(width: 8),
+            Text("Fund via Manual Send"),
+          ],
+        ),
+        content: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 500),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Send BTC from any exchange or external wallet to the deposit address below.",
+                style: TextStyle(color: Colors.white70),
+              ),
+              SizedBox(height: 16),
+              Text(
+                "Deposit Address",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Color(0xfff7931a),
+                ),
+              ),
+              SizedBox(height: 4),
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.black38,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.white12),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SelectableText(
+                        btcAddress,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: 'monospace',
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    IconButton(
+                      icon: Icon(Icons.copy, size: 18, color: Color(0xfff7931a)),
+                      tooltip: "Copy address",
+                      onPressed: () async {
+                        await Clipboard.setData(ClipboardData(text: btcAddress));
+                        Toast.message("Address copied to clipboard");
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 12),
+              Text(
+                "Once the BTC transaction is confirmed on-chain, your vBTC balance will update automatically.",
+                style: TextStyle(color: Colors.white38, fontSize: 12),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Close", style: TextStyle(color: Colors.white70)),
+          ),
+        ],
+      );
+    },
+  );
 }
 
 class _TransferShareModalResponse {

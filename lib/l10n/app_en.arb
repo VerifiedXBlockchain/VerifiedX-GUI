@@ -6391,5 +6391,23 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tkbBulkTransferUnavailableWeb": "Bulk transfer is not yet available on the web wallet.",
+  "tkbCreateVbtcToken": "Create vBTC Token",
+  "hnavSnapshotDownloadingProgress": "Downloading: {file} ({done}/{total})",
+  "@hnavSnapshotDownloadingProgress": {
+    "placeholders": {
+      "file": {
+        "type": "String"
+      },
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "tkbFundToken": "Fund Token",
+  "tkbManualSendExchangeSubtitle": "Send BTC from any exchange or wallet to this token's deposit address"
 }

@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 
 class Env {
   // Dynamic testnet flag - set from CLI args on desktop or dart-define
-  static bool _isTestnet = const String.fromEnvironment('TESTNET') == 'true' ||
-      const String.fromEnvironment('DEVNET') == 'true';
+  static bool _isTestnet = const String.fromEnvironment('TESTNET') ==
+      'true'; // TEMP: hardcoded for testnet archive build
   static bool _isDevnet = const String.fromEnvironment('DEVNET') == 'true';
 
   static void setTestnetFromArgs(List<String> args) {
@@ -167,7 +167,7 @@ class Env {
   }
 
   static bool get moonpayEnabled {
-    return kIsWeb; // Only enabled on web
+    return true;
   }
 
   static bool get moonpayEnabledVFX {

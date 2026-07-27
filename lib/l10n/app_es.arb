@@ -6334,5 +6334,23 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tkbBulkTransferUnavailableWeb": "La transferencia masiva aún no está disponible en la billetera web.",
+  "tkbCreateVbtcToken": "Crear token vBTC",
+  "hnavSnapshotDownloadingProgress": "Descargando: {file} ({done}/{total})",
+  "@hnavSnapshotDownloadingProgress": {
+    "placeholders": {
+      "file": {
+        "type": "String"
+      },
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "tkbFundToken": "Financiar token",
+  "tkbManualSendExchangeSubtitle": "Envía BTC desde cualquier exchange o billetera a la dirección de depósito de este token"
 }

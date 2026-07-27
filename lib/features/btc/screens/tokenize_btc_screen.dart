@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,8 +5,10 @@ import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/dialogs.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
+import '../../btc_web/components/web_mpc_ceremony_dialog.dart';
 import '../../smart_contracts/components/sc_creator/common/file_selector.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -220,36 +220,36 @@ class TokenizeBtcForm extends BaseComponent {
       );
     }
 
-    // Web flow — unchanged
+    // Web flow — V2 MPC ceremony
     if (kIsWeb) {
       return VBtcButton(
-        label: AppLocalizations.of(context).btcCompileMint,
+        label: AppLocalizations.of(context).tkbCreateVbtcToken,
         onPressed: () async {
           if (formState.isProcessing) return;
 
-          final compileAnimation = Completer<BuildContext>();
-          formProvider.showCompileAnimation(context, compileAnimation);
-          final dialogContext = await compileAnimation.future;
+          final keypair = ref.read(webSessionProvider).keypair;
+          if (keypair == null) {
+            Toast.error("A VFX account is required to proceed.");
+            return;
+          }
 
-          await Future.delayed(Duration(seconds: 2));
+          final balance = ref.read(webSessionProvider).balance;
+          if (balance == null || balance < MIN_RBX_FOR_SC_ACTION) {
+            Toast.error("A VFX account with a balance is required.");
+            return;
+          }
 
-          final success = await formProvider.submitWeb();
+          final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
+          final success = await WebMpcCeremonyDialog.show(
+            ownerAddress: keypair.address,
+            name: formProvider.tokenNameController.text.trim(),
+            description: formProvider.tokenDescriptionController.text.trim(),
+            ticker: formProvider.tokenTickerController.text.trim(),
+          );
 
           if (success == true) {
-            Navigator.pop(dialogContext);
-            final completeAnimation = Completer<BuildContext>();
-            formProvider.showCompileComplete(context, completeAnimation);
-            final completedDialogContext = await completeAnimation.future;
-            await Future.delayed(const Duration(seconds: 3));
-            Navigator.pop(completedDialogContext);
-            await InfoDialog.show(
-              title: AppLocalizations.of(context).btcTransactionBroadcastedTitle,
-              body: "Once this transaction reflects on chain, you'll be able to deposit BTC funds in this vBTC token.",
-            );
-
-            onSuccess();
-          } else {
-            Navigator.pop(dialogContext);
+            formProvider.clear();
+            if (context.mounted) Navigator.of(context).pop();
           }
         },
       );
@@ -356,7 +356,12 @@ class TokenizeBtcForm extends BaseComponent {
         final success = await formProvider.submit();
 
         if (success == true) {
-          MpcCeremonyProgressModal.show(context);
+          final created = await MpcCeremonyProgressModal.show(context);
+
+          if (created == true) {
+            formProvider.clear();
+            if (context.mounted) Navigator.of(context).pop();
+          }
         }
       },
     );

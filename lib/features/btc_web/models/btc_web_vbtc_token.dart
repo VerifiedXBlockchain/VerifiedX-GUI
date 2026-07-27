@@ -18,10 +18,15 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     @JsonKey(name: 'owner_address') required String ownerAddress,
     @JsonKey(name: 'image_url') required String imageUrl,
     @JsonKey(name: 'deposit_address') required String depositAddress,
-    @JsonKey(name: 'public_key_proofs') required String publicKeyProofs,
+    @JsonKey(name: 'public_key_proofs') String? publicKeyProofs,
     @JsonKey(name: 'global_balance') required double globalBalance,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     required WebNft nft,
+    @Default(1) int version,
+    @JsonKey(name: 'is_pending_withdrawal') @Default(false) bool isPendingWithdrawal,
+    @JsonKey(name: 'frost_group_public_key') String? frostGroupPublicKey,
+    @JsonKey(name: 'required_threshold') int? requiredThreshold,
+    @JsonKey(name: 'withdrawal_requests') List<Map<String, dynamic>>? withdrawalRequests,
   }) = _BtcWebVbtcToken;
 
   factory BtcWebVbtcToken.fromJson(Map<String, dynamic> json) => _$BtcWebVbtcTokenFromJson(json);
