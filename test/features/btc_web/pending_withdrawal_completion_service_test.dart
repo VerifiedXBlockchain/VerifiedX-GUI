@@ -98,15 +98,40 @@ void main() {
   });
 
   group('withdrawalIsResumable', () {
-    test('accepts both spellings the API has used', () {
-      expect(withdrawalIsResumable({'status': 'pending'}), isTrue);
+    test('accepts the explorer states that still need completing', () {
       expect(withdrawalIsResumable({'status': 'requested'}), isTrue);
+      // Signed by FROST but not settled on chain — the state the resume flow
+      // exists for.
+      expect(withdrawalIsResumable({'status': 'pending_btc'}), isTrue);
     });
 
-    test('rejects settled and unknown states', () {
+    test('rejects settled states', () {
       expect(withdrawalIsResumable({'status': 'completed'}), isFalse);
       expect(withdrawalIsResumable({'status': 'cancelled'}), isFalse);
+    });
+
+    test('rejects a contested withdrawal', () {
+      // Offering "tap to resume" on a withdrawal under a cancellation vote
+      // invites the user to push it through while it is being reversed.
+      expect(
+        withdrawalIsResumable({'status': 'cancellation_requested'}),
+        isFalse,
+      );
+    });
+
+    test('rejects unknown, missing and non-string states', () {
       expect(withdrawalIsResumable({}), isFalse);
+      expect(withdrawalIsResumable({'status': null}), isFalse);
+      expect(withdrawalIsResumable({'status': 3}), isFalse);
+      // Never emitted by any layer; it was in the set and matched nothing.
+      expect(withdrawalIsResumable({'status': 'pending'}), isFalse);
+    });
+
+    test('reads the status case-insensitively', () {
+      expect(withdrawalIsResumable({'status': 'Pending_BTC'}), isTrue);
+      expect(withdrawalIsResumable({'status': ' Requested '}), isTrue);
+      expect(withdrawalIsResumable({'status': 'Cancellation_Requested'}),
+          isFalse);
     });
   });
 
