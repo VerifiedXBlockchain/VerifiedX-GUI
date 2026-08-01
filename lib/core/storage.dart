@@ -39,6 +39,8 @@ abstract class Storage {
   static const BUTTERFLY_LINKS = "BUTTERFLY_LINKS";
   static const PENDING_VBTC_WITHDRAWAL_COMPLETIONS =
       "PENDING_VBTC_WITHDRAWAL_COMPLETIONS";
+  static const PENDING_VBTC_FROST_SIGNING_JOBS =
+      "PENDING_VBTC_FROST_SIGNING_JOBS";
   bool isInitialized = false;
 
   Future<void> init();
