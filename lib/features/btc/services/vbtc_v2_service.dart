@@ -51,8 +51,30 @@ class VbtcV2Service extends BaseService {
         return [];
       }
 
-      final List<TokenizedBitcoin> tokens = [];
+      final List<Map<String, dynamic>> parsed = [];
       for (final c in rawList) {
+        try {
+          parsed.add(Map<String, dynamic>.from(c));
+        } catch (e) {
+          _log(method, 'Failed to parse V2 contract: $e');
+        }
+      }
+
+      // GetContractList carries no per-address figure, so spendable balances
+      // are fetched alongside it. One request per contract against the local
+      // node.
+      final spendable = await Future.wait(
+        parsed.map(
+          (c) => getSpendableBalance(
+            address: address ?? c['OwnerAddress'] ?? c['RBXAddress'] ?? '',
+            scUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
+          ),
+        ),
+      );
+
+      final List<TokenizedBitcoin> tokens = [];
+      for (int i = 0; i < parsed.length; i++) {
+        final c = parsed[i];
         try {
           final token = TokenizedBitcoin(
             id: (c['Id'] ?? 0).toDouble(),
@@ -60,7 +82,10 @@ class VbtcV2Service extends BaseService {
             rbxAddress: c['OwnerAddress'] ?? c['RBXAddress'] ?? '',
             btcAddress: c['DepositAddress'],
             balance: (c['Balance'] ?? 0).toDouble(),
-            myBalance: (c['MyBalance'] ?? c['Balance'] ?? 0).toDouble(),
+            // 0 rather than the contract balance when the lookup failed:
+            // blocking a transfer is recoverable, offering a balance that is
+            // not there is not.
+            myBalance: spendable[i] ?? 0,
             tokenName: c['Name'] ?? c['TokenName'] ?? 'vBTC',
             tokenDescription: c['Description'] ?? c['TokenDescription'] ?? '',
             smartContractMainId: (c['SmartContractMainId'] ?? 0).toDouble(),
@@ -81,6 +106,52 @@ class VbtcV2Service extends BaseService {
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
       return [];
+    }
+  }
+
+  /// What [address] can actually spend of [scUid], or null if it could not be
+  /// determined.
+  ///
+  /// `GetContractList` reports only `Balance` — the confirmed BTC sitting in
+  /// the contract's Taproot deposit address. That is a property of the
+  /// contract, not of any one holder: it ignores the owner's own vBTC ledger
+  /// entries, counts nothing for a non-owner who was transferred vBTC, and
+  /// includes amounts already committed to a withdrawal in flight.
+  /// `GetVBTCBalance` is the endpoint that resolves all three per address.
+  Future<double?> getSpendableBalance({
+    required String address,
+    required String scUid,
+  }) async {
+    const method = 'GetVBTCBalance';
+
+    if (address.isEmpty || scUid.isEmpty) {
+      _log(method, 'Skipped: address or scUid missing');
+      return null;
+    }
+
+    try {
+      final result = await getJson(
+        "/GetVBTCBalance/$address/$scUid",
+        cleanPath: false,
+      );
+
+      if (result['Success'] != true) {
+        _log(method, 'FAILED for $address / $scUid: ${result['Message']}');
+        return null;
+      }
+
+      // AvailableBalance is the total less anything locked in an incomplete
+      // withdrawal request for this address.
+      final available = (result['AvailableBalance'] as num?)?.toDouble();
+      if (available == null) {
+        _log(method, 'No AvailableBalance in response for $address / $scUid');
+        return null;
+      }
+
+      return available;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      return null;
     }
   }
 
