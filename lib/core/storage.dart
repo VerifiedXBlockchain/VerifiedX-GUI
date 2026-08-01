@@ -37,6 +37,8 @@ abstract class Storage {
   static const WEB_PRIMARY_ADDRESS = "WEB_PRIMARY_ADDRESS";
   static const PENDING_REDIRECT_URL = "PENDING_REDIRECT_URL";
   static const BUTTERFLY_LINKS = "BUTTERFLY_LINKS";
+  static const PENDING_VBTC_WITHDRAWAL_COMPLETIONS =
+      "PENDING_VBTC_WITHDRAWAL_COMPLETIONS";
   bool isInitialized = false;
 
   Future<void> init();

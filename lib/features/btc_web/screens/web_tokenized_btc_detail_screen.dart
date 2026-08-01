@@ -28,6 +28,7 @@ import '../components/web_btc_transaction_list_tile.dart';
 import '../components/web_v2_withdrawal_dialog.dart';
 import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_vbtc_token_detail_provider.dart';
+import '../services/pending_withdrawal_completion_service.dart';
 
 class WebTokenizedBtcDetailScreen extends BaseScreen {
   final String scIdentifier;
@@ -235,15 +236,27 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                       final status = wr['status'] ?? 'unknown';
                       final amount = wr['amount'];
                       final btcAddr = wr['btc_address'] ?? '';
-                      final isRequested = status == 'requested' || status == 'pending';
+                      final isRequested = withdrawalIsResumable(wr);
+                      final unrecorded = PendingWithdrawalCompletionService().get(
+                        wr['request_transaction_hash'] ?? '',
+                      );
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: AppCard(
                           padding: 8,
                           child: ListTile(
                             title: Text("$amount vBTC → $btcAddr"),
-                            subtitle: Text(isRequested ? "Pending — tap to resume" : "Status: $status"),
-                            onTap: isRequested
+                            subtitle: Text(
+                              unrecorded != null
+                                  ? "BTC sent — tap to finish settling on VFX"
+                                  : isRequested
+                                      ? "Pending — tap to resume"
+                                      : "Status: $status",
+                              style: unrecorded != null
+                                  ? const TextStyle(color: Color(0xFFE0A32E))
+                                  : null,
+                            ),
+                            onTap: isRequested || unrecorded != null
                                 ? () {
                                     final requestHash = wr['request_transaction_hash'] as String?;
                                     if (requestHash != null) {
@@ -259,28 +272,32 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                                     }
                                   }
                                 : null,
-                            trailing: isRequested
-                                ? IconButton(
-                                    icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 20),
-                                    tooltip: "Cancel withdrawal",
-                                    onPressed: () async {
-                                      final confirmed = await ConfirmDialog.show(
-                                        title: "Cancel Withdrawal?",
-                                        body: "Are you sure you want to cancel this withdrawal request?",
-                                      );
-                                      if (confirmed == true) {
-                                        final manager = ref.read(webTokenActionsManager);
-                                        await manager.cancelV2Withdrawal(
-                                          scIdentifier: token.scIdentifier,
-                                          ownerAddress: token.ownerAddress,
-                                          requestHash: wr['request_transaction_hash'] ?? '',
-                                        );
-                                      }
-                                    },
-                                  )
-                                : status == 'completed'
-                                    ? const Icon(Icons.check_circle, color: Colors.green)
-                                    : const Icon(Icons.pending, color: Colors.orange),
+                            // Cancelling is only meaningful before the BTC goes
+                            // out; once it has, the request must be settled.
+                            trailing: unrecorded != null
+                                ? const Icon(Icons.warning_amber_rounded, color: Color(0xFFE0A32E))
+                                : isRequested
+                                    ? IconButton(
+                                        icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 20),
+                                        tooltip: "Cancel withdrawal",
+                                        onPressed: () async {
+                                          final confirmed = await ConfirmDialog.show(
+                                            title: "Cancel Withdrawal?",
+                                            body: "Are you sure you want to cancel this withdrawal request?",
+                                          );
+                                          if (confirmed == true) {
+                                            final manager = ref.read(webTokenActionsManager);
+                                            await manager.cancelV2Withdrawal(
+                                              scIdentifier: token.scIdentifier,
+                                              ownerAddress: token.ownerAddress,
+                                              requestHash: wr['request_transaction_hash'] ?? '',
+                                            );
+                                          }
+                                        },
+                                      )
+                                    : status == 'completed'
+                                        ? const Icon(Icons.check_circle, color: Colors.green)
+                                        : const Icon(Icons.pending, color: Colors.orange),
                           ),
                         ),
                       );

@@ -12,8 +12,19 @@ import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
 import '../../token/providers/web_token_actions_manager.dart';
+import '../services/pending_withdrawal_completion_service.dart';
 
-enum _DialogStep { broadcasting, waitingForBlock, frostSigning, success, failure }
+enum _DialogStep {
+  broadcasting,
+  waitingForBlock,
+  frostSigning,
+  recordingCompletion,
+  success,
+  /// BTC sent, but the Type 28 completion TX is not on chain yet. Retriable
+  /// without touching Bitcoin again.
+  completionPending,
+  failure,
+}
 
 class WebV2WithdrawalDialog extends ConsumerStatefulWidget {
   final String scIdentifier;
@@ -74,13 +85,23 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   int _pollCount = 0;
   static const _maxPollAttempts = 60; // 5 minutes at 5s intervals
 
+  /// Guards the retry buttons so a double tap cannot start two FROST sessions
+  /// or two completion sends.
+  bool _busy = false;
+
+  /// Set when the BTC broadcast returned no txid — retrying would re-sign
+  /// against spent inputs, so no retry is offered.
+  bool _btcBroadcastUnconfirmed = false;
+
   @override
   void initState() {
     super.initState();
     if (widget.existingRequestHash != null) {
       _requestHash = widget.existingRequestHash;
-      _step = _DialogStep.frostSigning;
-      Future(_runFrostSigning);
+      _step = PendingWithdrawalCompletionService().get(_requestHash!) != null
+          ? _DialogStep.recordingCompletion
+          : _DialogStep.frostSigning;
+      Future(_startCompletion);
     } else {
       Future(_broadcastRequest);
     }
@@ -153,8 +174,25 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     });
   }
 
+  /// Resume point for an existing request. If a previous attempt already
+  /// broadcast the Bitcoin transaction, only the completion TX is retried —
+  /// re-running FROST would sign against spent inputs.
+  Future<void> _startCompletion() async {
+    final stored = PendingWithdrawalCompletionService().get(_requestHash!);
+    if (stored != null) {
+      await _recordCompletion(stored);
+      return;
+    }
+    await _runFrostSigning();
+  }
+
   Future<void> _runFrostSigning() async {
-    setState(() => _step = _DialogStep.frostSigning);
+    if (_busy) return;
+    _busy = true;
+    setState(() {
+      _step = _DialogStep.frostSigning;
+      _errorMessage = null;
+    });
 
     final manager = ref.read(webTokenActionsManager);
     final result = await manager.completeV2Withdrawal(
@@ -162,19 +200,72 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
       requestHash: _requestHash!,
     );
 
+    _busy = false;
     if (!mounted) return;
 
     if (result != null && result['success'] == true) {
       setState(() {
-        _step = _DialogStep.success;
         _btcTxHash = result['btc_transaction_hash'];
+        if (result['completion_recorded'] == true) {
+          _step = _DialogStep.success;
+        } else {
+          _step = _DialogStep.completionPending;
+          _errorMessage = result['completion_message'];
+        }
       });
-    } else {
-      setState(() {
-        _step = _DialogStep.failure;
-        _errorMessage = result?['message'] ?? "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.";
-      });
+      return;
     }
+
+    setState(() {
+      _btcBroadcastUnconfirmed = result?['btc_broadcast_unconfirmed'] == true;
+      _step = _DialogStep.failure;
+      _errorMessage = result?['message'] ?? "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.";
+    });
+  }
+
+  Future<void> _recordCompletion(PendingWithdrawalCompletion pending) async {
+    if (_busy) return;
+    _busy = true;
+    setState(() {
+      _step = _DialogStep.recordingCompletion;
+      _btcTxHash = pending.btcTxHash;
+      _errorMessage = null;
+    });
+
+    final manager = ref.read(webTokenActionsManager);
+    final result = await manager.recordV2WithdrawalCompletion(
+      scIdentifier: pending.scIdentifier,
+      requestHash: pending.requestHash,
+      btcTxHash: pending.btcTxHash,
+      amount: pending.amount,
+      btcDestination: pending.btcDestination,
+    );
+
+    _busy = false;
+    if (!mounted) return;
+
+    setState(() {
+      if (result['success'] == true) {
+        _step = _DialogStep.success;
+      } else {
+        _step = _DialogStep.completionPending;
+        _errorMessage = result['message'];
+      }
+    });
+  }
+
+  Future<void> _retryCompletion() async {
+    final stored = PendingWithdrawalCompletionService().get(_requestHash!);
+    if (stored == null) {
+      // The record is cleared only once the completion TX is broadcast, so
+      // its absence means a prior attempt landed after all.
+      setState(() {
+        _step = _DialogStep.success;
+        _errorMessage = null;
+      });
+      return;
+    }
+    await _recordCompletion(stored);
   }
 
   @override
@@ -187,7 +278,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             _titleForStep(),
             style: const TextStyle(color: Colors.white),
           ),
-          if (_step == _DialogStep.success || _step == _DialogStep.failure)
+          if (_isTerminal)
             IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.close, size: 20),
@@ -206,13 +297,20 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             if (_step == _DialogStep.broadcasting) _buildBroadcastingSection(),
             if (_step == _DialogStep.waitingForBlock) _buildWaitingSection(),
             if (_step == _DialogStep.frostSigning) _buildFrostSigningSection(),
+            if (_step == _DialogStep.recordingCompletion) _buildRecordingSection(),
             if (_step == _DialogStep.success) _buildSuccessSection(),
+            if (_step == _DialogStep.completionPending) _buildCompletionPendingSection(),
             if (_step == _DialogStep.failure) _buildFailureSection(),
           ],
         ),
       ),
     );
   }
+
+  bool get _isTerminal =>
+      _step == _DialogStep.success ||
+      _step == _DialogStep.failure ||
+      _step == _DialogStep.completionPending;
 
   String _titleForStep() {
     switch (_step) {
@@ -222,8 +320,12 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         return "Waiting for Confirmation";
       case _DialogStep.frostSigning:
         return "FROST Signing";
+      case _DialogStep.recordingCompletion:
+        return "Recording Completion";
       case _DialogStep.success:
         return "Withdrawal Complete";
+      case _DialogStep.completionPending:
+        return "Action Required";
       case _DialogStep.failure:
         return "Withdrawal Failed";
     }
@@ -264,6 +366,78 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         Text("FROST signing in progress...", style: TextStyle(color: Colors.white70)),
         SizedBox(height: 8),
         Text("Validators are signing the Bitcoin transaction. This may take a minute or two. Please do not close this window.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      ],
+    );
+  }
+
+  Widget _buildRecordingSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        SizedBox(height: 16),
+        Text("Recording completion on the VFX chain...", style: TextStyle(color: Colors.white70)),
+        SizedBox(height: 8),
+        Text("The Bitcoin transaction has been broadcast. This final transaction settles the withdrawal on chain.",
+            style: TextStyle(color: Colors.white38, fontSize: 12)),
+      ],
+    );
+  }
+
+  Widget _buildCompletionPendingSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            Icon(Icons.warning_amber_rounded, color: Color(0xFFE0A32E), size: 20),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                "Your Bitcoin was sent, but the withdrawal has not been settled on the VFX chain yet.",
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        const Text(
+          "Retry below to finish. This only submits the completion transaction — your Bitcoin will not be sent again. "
+          "You can also come back to this from the token's withdrawal history.",
+          style: TextStyle(color: Colors.white38, fontSize: 12),
+        ),
+        if (_errorMessage != null) ...[
+          const SizedBox(height: 12),
+          Text(_errorMessage!, style: const TextStyle(color: Color(0xFFBA2121), fontSize: 12)),
+        ],
+        if (_btcTxHash != null) ...[
+          const SizedBox(height: 16),
+          _buildHashRow(
+            "BTC Transaction:",
+            _btcTxHash!,
+            explorerUrl: Env.btcIsTestNet
+                ? "https://mempool.space/testnet4/tx/$_btcTxHash"
+                : "https://mempool.space/tx/$_btcTxHash",
+          ),
+        ],
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            AppButton(
+              label: "Later",
+              variant: AppColorVariant.Light,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            const SizedBox(width: 8),
+            AppButton(
+              label: "Retry Completion",
+              variant: AppColorVariant.Warning,
+              onPressed: _busy ? null : _retryCompletion,
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -328,12 +502,14 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
               variant: AppColorVariant.Light,
               onPressed: () => Navigator.of(context).pop(),
             ),
-            if (_requestHash != null) ...[
+            // No retry when the BTC broadcast succeeded without returning a
+            // txid — signing again would spend inputs that are already gone.
+            if (_requestHash != null && !_btcBroadcastUnconfirmed) ...[
               const SizedBox(width: 8),
               AppButton(
                 label: "Retry Signing",
                 variant: AppColorVariant.Warning,
-                onPressed: _runFrostSigning,
+                onPressed: _busy ? null : _runFrostSigning,
               ),
             ],
           ],

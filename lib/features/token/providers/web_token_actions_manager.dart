@@ -15,6 +15,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../btc_web/services/pending_withdrawal_completion_service.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../keygen/models/keypair.dart';
 import '../../keygen/models/ra_keypair.dart';
@@ -527,7 +528,95 @@ class WebTokenActionsManager {
     }
   }
 
+  /// Records the Type 28 completion TX on the VFX chain for a withdrawal whose
+  /// Bitcoin transaction has already been broadcast.
+  ///
+  /// This is the transaction that actually settles the withdrawal on chain — if
+  /// it never lands, the BTC has left the vault but the contract still shows the
+  /// request as pending. It is therefore reported and retried independently of
+  /// the FROST signing, and must never be silently skipped.
+  Future<Map<String, dynamic>> recordV2WithdrawalCompletion({
+    required String scIdentifier,
+    required String requestHash,
+    required String btcTxHash,
+    required double amount,
+    required String btcDestination,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      return {'success': false, 'message': 'No keypair found to sign the completion transaction'};
+    }
+
+    try {
+      final prepared = await ExplorerService().prepareV2WithdrawalCompleteTx(
+        scIdentifier: scIdentifier,
+        fromAddress: keypair.address,
+        withdrawalRequestHash: requestHash,
+        btcTransactionHash: btcTxHash,
+        amount: amount,
+        btcDestination: btcDestination,
+      );
+
+      if (prepared['success'] != true || prepared['Hash'] == null) {
+        return {
+          'success': false,
+          'message': prepared['message'] ?? 'Failed to prepare the completion transaction',
+        };
+      }
+
+      final hash = prepared['Hash'] as String;
+
+      final signature = await RawTransaction.getSignature(
+        message: hash,
+        privateKey: keypair.private,
+        publicKey: keypair.public,
+      );
+
+      if (signature == null) {
+        return {'success': false, 'message': 'Failed to sign the completion transaction'};
+      }
+
+      final result = await ExplorerService().sendV2WithdrawalCompleteTx(
+        hash: hash,
+        signature: signature,
+        publicKey: keypair.public,
+      );
+
+      if (result['success'] != true) {
+        return {
+          'success': false,
+          'message': result['message'] ?? 'Failed to broadcast the completion transaction',
+        };
+      }
+
+      final completionHash = (result['Hash'] as String?) ?? hash;
+
+      ref.read(webTransactionListProvider(keypair.address).notifier).insertPendingTx(
+        WebTransaction(
+          hash: completionHash,
+          toAddress: keypair.address,
+          fromAddress: keypair.address,
+          type: TxType.vbtcV2WithdrawalComplete,
+          amount: 0,
+          fee: 0,
+          date: DateTime.now(),
+          height: 0,
+        ),
+      );
+
+      PendingWithdrawalCompletionService().clear(requestHash);
+
+      return {'success': true, 'hash': completionHash};
+    } catch (e) {
+      return {'success': false, 'message': 'Completion transaction failed: $e'};
+    }
+  }
+
   /// V2 withdrawal complete via prepare→sign two messages→execute→broadcast BTC.
+  ///
+  /// If a previous attempt already broadcast the Bitcoin transaction, this skips
+  /// FROST entirely and only retries the completion TX — re-running the ceremony
+  /// would sign against already-spent inputs.
   Future<Map<String, dynamic>?> completeV2Withdrawal({
     required String scIdentifier,
     required String requestHash,
@@ -536,6 +625,24 @@ class WebTokenActionsManager {
     if (keypair == null) {
       Toast.error("No keypair found");
       return null;
+    }
+
+    final alreadyBroadcast = PendingWithdrawalCompletionService().get(requestHash);
+    if (alreadyBroadcast != null) {
+      final recorded = await recordV2WithdrawalCompletion(
+        scIdentifier: scIdentifier,
+        requestHash: requestHash,
+        btcTxHash: alreadyBroadcast.btcTxHash,
+        amount: alreadyBroadcast.amount,
+        btcDestination: alreadyBroadcast.btcDestination,
+      );
+
+      return {
+        'success': true,
+        'btc_transaction_hash': alreadyBroadcast.btcTxHash,
+        'completion_recorded': recorded['success'] == true,
+        'completion_message': recorded['message'],
+      };
     }
 
     try {
@@ -555,6 +662,8 @@ class WebTokenActionsManager {
       final shareMessage = prepared['ShareDistributionMessage'] as String;
       final shareTimestamp = prepared['ShareDistributionTimestamp'] as int;
       final sessionId = prepared['SessionId'] as String;
+      final withdrawalAmount = (prepared['Amount'] as num?)?.toDouble() ?? 0;
+      final btcDestination = prepared['BTCDestination'] as String? ?? '';
 
       // Step 2: Sign both messages (same pattern as ceremony)
       final startSig = await RawTransaction.getSignature(
@@ -583,8 +692,8 @@ class WebTokenActionsManager {
         startTimestamp: startTimestamp,
         shareDistributionSignature: shareSig,
         shareDistributionTimestamp: shareTimestamp,
-        amount: (prepared['Amount'] as num?)?.toDouble() ?? 0,
-        btcDestination: prepared['BTCDestination'] as String? ?? '',
+        amount: withdrawalAmount,
+        btcDestination: btcDestination,
         feeRate: prepared['FeeRate'] as int? ?? 0,
       );
 
@@ -634,42 +743,51 @@ class WebTokenActionsManager {
         };
       }
 
-      final btcTxHash = broadcastResult['txid'] as String;
+      final btcTxHash = broadcastResult['txid'] as String?;
+
+      // The broadcast succeeded, so the BTC has left the vault even though we
+      // cannot name the transaction. Retrying FROST here would sign against
+      // spent inputs, so this gets its own terminal state rather than being
+      // reported as a signing failure.
+      if (btcTxHash == null || btcTxHash.isEmpty) {
+        return {
+          'success': false,
+          'btc_broadcast_unconfirmed': true,
+          'message': 'The Bitcoin transaction was broadcast but no transaction ID was returned. '
+              'Do not retry — check the destination address on a block explorer and contact support '
+              'so the withdrawal can be settled manually.',
+          'SignedBTCTxHex': signedBtcTxHex,
+        };
+      }
+
+      // Persist before attempting the completion TX. From here on the BTC is
+      // gone, so a closed tab or a failed send must still be recoverable.
+      PendingWithdrawalCompletionService().record(
+        PendingWithdrawalCompletion(
+          scIdentifier: scIdentifier,
+          requestHash: requestHash,
+          btcTxHash: btcTxHash,
+          amount: withdrawalAmount,
+          btcDestination: btcDestination,
+          fromAddress: keypair.address,
+          createdAt: DateTime.now(),
+        ),
+      );
 
       // Step 6: Record completion on VFX chain (Type 28 TX)
-      try {
-        final completePrepared = await ExplorerService().prepareV2WithdrawalCompleteTx(
-          scIdentifier: scIdentifier,
-          fromAddress: keypair.address,
-          withdrawalRequestHash: requestHash,
-          btcTransactionHash: btcTxHash,
-          amount: (prepared['Amount'] as num?)?.toDouble() ?? 0,
-          btcDestination: prepared['BTCDestination'] as String? ?? '',
-        );
-
-        if (completePrepared['success'] == true && completePrepared['Hash'] != null) {
-          final completeSig = await RawTransaction.getSignature(
-            message: completePrepared['Hash'] as String,
-            privateKey: keypair.private,
-            publicKey: keypair.public,
-          );
-
-          if (completeSig != null) {
-            await ExplorerService().sendV2WithdrawalCompleteTx(
-              hash: completePrepared['Hash'] as String,
-              signature: completeSig,
-              publicKey: keypair.public,
-            );
-          }
-        }
-      } catch (e) {
-        // Type 28 TX failed but BTC was already sent — not critical
-        print('Warning: Failed to record withdrawal completion on VFX chain: $e');
-      }
+      final recorded = await recordV2WithdrawalCompletion(
+        scIdentifier: scIdentifier,
+        requestHash: requestHash,
+        btcTxHash: btcTxHash,
+        amount: withdrawalAmount,
+        btcDestination: btcDestination,
+      );
 
       return {
         'success': true,
         'btc_transaction_hash': btcTxHash,
+        'completion_recorded': recorded['success'] == true,
+        'completion_message': recorded['message'],
       };
     } catch (e) {
       return {'success': false, 'message': 'FROST signing failed: $e'};
