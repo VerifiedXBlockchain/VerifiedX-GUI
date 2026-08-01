@@ -5,14 +5,27 @@ import '../../nft/models/web_nft.dart';
 part 'btc_web_vbtc_token.freezed.dart';
 part 'btc_web_vbtc_token.g.dart';
 
-/// Withdrawal request statuses that still need completing. The API has used
-/// both spellings, and treating only one as resumable strands the other in a
-/// state where the UI offers a fresh request instead of finishing the existing
-/// one.
-const kResumableWithdrawalStatuses = {'pending', 'requested'};
+/// Withdrawal request statuses that still need completing.
+///
+/// These are the explorer's values, not the CLI's: the web wallet reads
+/// `withdrawal_requests[].status` off `/btc/vbtc-v2/`, where
+/// `VbtcV2WithdrawalRequest.Status` is lowercase snake_case and the full set is
+/// `requested`, `pending_btc`, `completed`, `cancellation_requested`,
+/// `cancelled`. This mirrors the explorer's own `ACTIVE_STATUSES`.
+///
+/// `pending_btc` matters most: it is set once FROST has produced a signed
+/// Bitcoin transaction, which is exactly the state a user needs to be able to
+/// come back and finish. `cancellation_requested` is deliberately absent — a
+/// contested withdrawal must not be offered for resuming.
+const kResumableWithdrawalStatuses = {'requested', 'pending_btc'};
 
-bool withdrawalIsResumable(Map<String, dynamic> withdrawalRequest) =>
-    kResumableWithdrawalStatuses.contains(withdrawalRequest['status']);
+/// Read case-insensitively so a change of spelling upstream cannot silently
+/// make every withdrawal look settled.
+bool withdrawalIsResumable(Map<String, dynamic> withdrawalRequest) {
+  final status = withdrawalRequest['status'];
+  if (status is! String) return false;
+  return kResumableWithdrawalStatuses.contains(status.trim().toLowerCase());
+}
 
 @freezed
 class BtcWebVbtcToken with _$BtcWebVbtcToken {

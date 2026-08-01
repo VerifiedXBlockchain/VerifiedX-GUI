@@ -15,6 +15,8 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../btc_web/services/frost_resume_guard.dart';
+import '../../btc_web/services/pending_frost_signing_job_service.dart';
 import '../../btc_web/services/pending_withdrawal_completion_service.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../keygen/models/keypair.dart';
@@ -604,7 +606,7 @@ class WebTokenActionsManager {
         ),
       );
 
-      PendingWithdrawalCompletionService().clear(requestHash);
+      await PendingWithdrawalCompletionService().clear(requestHash);
 
       return {'success': true, 'hash': completionHash};
     } catch (e) {
@@ -612,11 +614,107 @@ class WebTokenActionsManager {
     }
   }
 
+  /// Asks the explorer whether signing has already run for [requestHash],
+  /// for the case where no local record survives to say so.
+  ///
+  /// Returns a result for the caller to hand straight back, or null to carry
+  /// on with a fresh ceremony. Only consulted once both local lookups have
+  /// missed — on the same browser the stored records are faster and better.
+  Future<Map<String, dynamic>?> _guardAgainstResigning({
+    required String scIdentifier,
+    required String requestHash,
+  }) async {
+    Map<String, dynamic>? row;
+
+    try {
+      final detail = await ExplorerService().getWebVbtcV2TokenDetail(scIdentifier);
+      for (final wr in detail.withdrawalRequests ?? <Map<String, dynamic>>[]) {
+        if (wr['request_transaction_hash'] == requestHash) {
+          row = wr;
+          break;
+        }
+      }
+    } catch (e) {
+      // Left null: see frostResumeActionFor, which reads an unreadable row as
+      // "carry on" so a transient explorer error cannot block a first-time
+      // withdrawal.
+      print("Could not read withdrawal state before signing: $e");
+    }
+
+    switch (frostResumeActionFor(row)) {
+      case FrostResumeAction.ceremony:
+        return null;
+
+      case FrostResumeAction.completionOnly:
+        final amount = (row!['amount'] as num?)?.toDouble() ?? 0;
+        final btcDestination = row['btc_address'] as String? ?? '';
+        final btcTxHash = row['btc_transaction_hash'] as String;
+
+        final recorded = await recordV2WithdrawalCompletion(
+          scIdentifier: scIdentifier,
+          requestHash: requestHash,
+          btcTxHash: btcTxHash,
+          amount: amount,
+          btcDestination: btcDestination,
+        );
+
+        return {
+          'success': true,
+          'btc_transaction_hash': btcTxHash,
+          'completion_recorded': recorded['success'] == true,
+          'completion_message': recorded['message'],
+          'completion_recoverable': true,
+          'withdrawal_amount': amount,
+          'btc_destination': btcDestination,
+        };
+
+      case FrostResumeAction.refuse:
+        return {
+          'success': false,
+          'signing_already_started': true,
+          'message': 'This withdrawal has already been signed, and the Bitcoin transaction '
+              'cannot be recovered from this browser. Do not start it again — signing a '
+              'second time can send the Bitcoin twice. Reopen the withdrawal in the browser '
+              'it was started from, or contact support so it can be settled manually.',
+        };
+    }
+  }
+
+  /// Watches a FROST signing job until it produces a Bitcoin transaction,
+  /// fails outright, or outlives the poll budget.
+  Future<_FrostSigningPollResult> _pollFrostSigningJob(String jobId) async {
+    int notFoundCount = 0;
+    for (int i = 0; i < 36; i++) {
+      await Future.delayed(const Duration(seconds: 5));
+      try {
+        final status = await ExplorerService().getV2WithdrawalCompleteStatus(jobId);
+        if (status['status'] == 'complete') {
+          return _FrostSigningPollResult.signed(status['signed_btc_tx_hex'] as String?);
+        } else if (status['status'] == 'failed') {
+          return _FrostSigningPollResult.failed(status['message'] ?? 'FROST signing failed');
+        } else if (status['success'] == false) {
+          notFoundCount++;
+          // Job not registered yet (race) — tolerate a few misses, bail if persistent
+          if (notFoundCount > 6) {
+            return _FrostSigningPollResult.failed(status['message'] ?? 'FROST signing job not found');
+          }
+        } else {
+          notFoundCount = 0; // reset if we get a valid pending response
+        }
+      } catch (_) {
+        // transient error — keep polling
+      }
+    }
+    return _FrostSigningPollResult.timedOut();
+  }
+
   /// V2 withdrawal complete via prepare→sign two messages→execute→broadcast BTC.
   ///
   /// If a previous attempt already broadcast the Bitcoin transaction, this skips
   /// FROST entirely and only retries the completion TX — re-running the ceremony
-  /// would sign against already-spent inputs.
+  /// would sign against already-spent inputs. If a previous attempt got as far
+  /// as starting a signing job, this resumes polling that job rather than asking
+  /// for a second ceremony the validators would refuse.
   Future<Map<String, dynamic>?> completeV2Withdrawal({
     required String scIdentifier,
     required String requestHash,
@@ -629,6 +727,10 @@ class WebTokenActionsManager {
 
     final alreadyBroadcast = PendingWithdrawalCompletionService().get(requestHash);
     if (alreadyBroadcast != null) {
+      // The signing job cannot tell us anything the broadcast has not already
+      // settled, so drop it rather than leave it to be resumed later.
+      await PendingFrostSigningJobService().clear(requestHash);
+
       final recorded = await recordV2WithdrawalCompletion(
         scIdentifier: scIdentifier,
         requestHash: requestHash,
@@ -649,90 +751,126 @@ class WebTokenActionsManager {
     }
 
     try {
-      // Step 1: Prepare — get messages to sign + withdrawal params
-      final prepared = await ExplorerService().prepareV2WithdrawalComplete(
-        scIdentifier: scIdentifier,
-        withdrawalRequestHash: requestHash,
-        ownerAddress: keypair.address,
-      );
+      final String jobId;
+      final double withdrawalAmount;
+      final String btcDestination;
+      // True when the job id only exists in memory, so nothing can pick this
+      // signing run back up if the page goes away.
+      bool signingRecoverable = true;
 
-      if (prepared['success'] != true || prepared['StartMessage'] == null) {
-        return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare FROST signing'};
-      }
+      // A job left over from an earlier attempt is resumed as-is. Starting a
+      // second ceremony for the same request is refused for 24 hours, so the
+      // stored id is the only way back to a signature that may already exist.
+      final pendingJob = PendingFrostSigningJobService().get(requestHash);
 
-      final startMessage = prepared['StartMessage'] as String;
-      final startTimestamp = prepared['StartTimestamp'] as int;
-      final shareMessage = prepared['ShareDistributionMessage'] as String;
-      final shareTimestamp = prepared['ShareDistributionTimestamp'] as int;
-      final sessionId = prepared['SessionId'] as String;
-      final withdrawalAmount = (prepared['Amount'] as num?)?.toDouble() ?? 0;
-      final btcDestination = prepared['BTCDestination'] as String? ?? '';
+      if (pendingJob != null) {
+        jobId = pendingJob.jobId;
+        withdrawalAmount = pendingJob.amount;
+        btcDestination = pendingJob.btcDestination;
+      } else {
+        // Nothing local accounts for this withdrawal. Before asking for a
+        // ceremony, check whether one has already run somewhere this browser
+        // cannot see.
+        final alreadySigned = await _guardAgainstResigning(
+          scIdentifier: scIdentifier,
+          requestHash: requestHash,
+        );
+        if (alreadySigned != null) return alreadySigned;
 
-      // Step 2: Sign both messages (same pattern as ceremony)
-      final startSig = await RawTransaction.getSignature(
-        message: startMessage,
-        privateKey: keypair.private,
-        publicKey: keypair.public,
-      );
+        // Step 1: Prepare — get messages to sign + withdrawal params
+        final prepared = await ExplorerService().prepareV2WithdrawalComplete(
+          scIdentifier: scIdentifier,
+          withdrawalRequestHash: requestHash,
+          ownerAddress: keypair.address,
+        );
 
-      final shareSig = await RawTransaction.getSignature(
-        message: shareMessage,
-        privateKey: keypair.private,
-        publicKey: keypair.public,
-      );
+        if (prepared['success'] != true || prepared['StartMessage'] == null) {
+          return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare FROST signing'};
+        }
 
-      if (startSig == null || shareSig == null) {
-        return {'success': false, 'message': 'Failed to sign FROST messages'};
-      }
+        final startMessage = prepared['StartMessage'] as String;
+        final startTimestamp = prepared['StartTimestamp'] as int;
+        final shareMessage = prepared['ShareDistributionMessage'] as String;
+        final shareTimestamp = prepared['ShareDistributionTimestamp'] as int;
+        final sessionId = prepared['SessionId'] as String;
+        withdrawalAmount = (prepared['Amount'] as num?)?.toDouble() ?? 0;
+        btcDestination = prepared['BTCDestination'] as String? ?? '';
 
-      // Step 3: Execute — kicks off FROST signing asynchronously, returns job_id
-      final executeResult = await ExplorerService().executeV2WithdrawalComplete(
-        scIdentifier: scIdentifier,
-        withdrawalRequestHash: requestHash,
-        ownerAddress: keypair.address,
-        sessionId: sessionId,
-        startSignature: startSig,
-        startTimestamp: startTimestamp,
-        shareDistributionSignature: shareSig,
-        shareDistributionTimestamp: shareTimestamp,
-        amount: withdrawalAmount,
-        btcDestination: btcDestination,
-        feeRate: prepared['FeeRate'] as int? ?? 0,
-      );
+        // Step 2: Sign both messages (same pattern as ceremony)
+        final startSig = await RawTransaction.getSignature(
+          message: startMessage,
+          privateKey: keypair.private,
+          publicKey: keypair.public,
+        );
 
-      final jobId = executeResult['job_id'] as String?;
-      if (jobId == null) {
-        return {'success': false, 'message': 'Failed to start FROST signing'};
+        final shareSig = await RawTransaction.getSignature(
+          message: shareMessage,
+          privateKey: keypair.private,
+          publicKey: keypair.public,
+        );
+
+        if (startSig == null || shareSig == null) {
+          return {'success': false, 'message': 'Failed to sign FROST messages'};
+        }
+
+        // Step 3: Execute — kicks off FROST signing asynchronously, returns job_id
+        final executeResult = await ExplorerService().executeV2WithdrawalComplete(
+          scIdentifier: scIdentifier,
+          withdrawalRequestHash: requestHash,
+          ownerAddress: keypair.address,
+          sessionId: sessionId,
+          startSignature: startSig,
+          startTimestamp: startTimestamp,
+          shareDistributionSignature: shareSig,
+          shareDistributionTimestamp: shareTimestamp,
+          amount: withdrawalAmount,
+          btcDestination: btcDestination,
+          feeRate: prepared['FeeRate'] as int? ?? 0,
+        );
+
+        final startedJobId = executeResult['job_id'] as String?;
+        if (startedJobId == null) {
+          return {'success': false, 'message': 'Failed to start FROST signing'};
+        }
+        jobId = startedJobId;
+
+        // Persist before polling. From here the validators are signing, and a
+        // job id that only lives in this tab strands the withdrawal if the tab
+        // closes — a fresh ceremony would be refused for 24 hours.
+        signingRecoverable = await PendingFrostSigningJobService().record(
+          PendingFrostSigningJob(
+            scIdentifier: scIdentifier,
+            requestHash: requestHash,
+            jobId: jobId,
+            amount: withdrawalAmount,
+            btcDestination: btcDestination,
+            fromAddress: keypair.address,
+            createdAt: DateTime.now(),
+          ),
+        );
       }
 
       // Step 4: Poll for FROST signing result (up to 3 minutes)
-      String? signedBtcTxHex;
-      int notFoundCount = 0;
-      for (int i = 0; i < 36; i++) {
-        await Future.delayed(const Duration(seconds: 5));
-        try {
-          final status = await ExplorerService().getV2WithdrawalCompleteStatus(jobId);
-          if (status['status'] == 'complete') {
-            signedBtcTxHex = status['signed_btc_tx_hex'] as String?;
-            break;
-          } else if (status['status'] == 'failed') {
-            return {'success': false, 'message': status['message'] ?? 'FROST signing failed'};
-          } else if (status['success'] == false) {
-            notFoundCount++;
-            // Job not registered yet (race) — tolerate a few misses, bail if persistent
-            if (notFoundCount > 6) {
-              return {'success': false, 'message': status['message'] ?? 'FROST signing job not found'};
-            }
-          } else {
-            notFoundCount = 0; // reset if we get a valid pending response
-          }
-        } catch (_) {
-          // transient error — keep polling
-        }
+      final poll = await _pollFrostSigningJob(jobId);
+
+      if (poll.failureMessage != null) {
+        // Signing will not produce anything and the id is now worthless, so it
+        // must not be resumed — that would report a dead job forever.
+        await PendingFrostSigningJobService().clear(requestHash);
+        return {'success': false, 'message': poll.failureMessage};
       }
 
+      final signedBtcTxHex = poll.signedBtcTxHex;
       if (signedBtcTxHex == null || signedBtcTxHex.isEmpty) {
-        return {'success': false, 'message': 'FROST signing timed out. The withdrawal may still complete — check back shortly.'};
+        // The job is kept: signing may still land, and the stored id is what
+        // lets a later session collect the result.
+        return {
+          'success': false,
+          'signing_recoverable': signingRecoverable,
+          'message': signingRecoverable
+              ? 'FROST signing timed out. The withdrawal may still complete — reopen it from the token\'s withdrawal history to check.'
+              : 'FROST signing timed out and could not be saved for later recovery. Do not close this page — reopening will not be able to pick the signing back up.',
+        };
       }
 
       // Step 5: Broadcast the signed BTC TX
@@ -767,7 +905,7 @@ class WebTokenActionsManager {
       // gone, so a closed tab or a failed send must still be recoverable.
       // A failed write is not recoverable later, so it is reported rather than
       // swallowed — the caller has to keep the user on this screen.
-      final persisted = PendingWithdrawalCompletionService().record(
+      final persisted = await PendingWithdrawalCompletionService().record(
         PendingWithdrawalCompletion(
           scIdentifier: scIdentifier,
           requestHash: requestHash,
@@ -778,6 +916,11 @@ class WebTokenActionsManager {
           createdAt: DateTime.now(),
         ),
       );
+
+      // Signing is done and its output is on the Bitcoin network, so the job
+      // is finished with. Cleared after the broadcast record lands so the two
+      // are never both missing.
+      await PendingFrostSigningJobService().clear(requestHash);
 
       // Step 6: Record completion on VFX chain (Type 28 TX)
       final recorded = await recordV2WithdrawalCompletion(
@@ -807,15 +950,21 @@ class WebTokenActionsManager {
   }
 
   /// V2 withdrawal cancel via prepare→sign→send.
+  ///
+  /// [requestorAddress] must be the address that made the withdrawal request,
+  /// not the token owner: the node rejects anyone else with "Only the original
+  /// requestor can cancel", and it builds the transaction from this address, so
+  /// it also has to match the key that signs. The explorer names the field
+  /// `owner_address` but forwards it as `RequestorAddress`.
   Future<bool> cancelV2Withdrawal({
     required String scIdentifier,
-    required String ownerAddress,
+    required String requestorAddress,
     required String requestHash,
   }) async {
     try {
       final prepared = await ExplorerService().prepareV2WithdrawalCancel(
         scIdentifier: scIdentifier,
-        ownerAddress: ownerAddress,
+        ownerAddress: requestorAddress,
         withdrawalRequestHash: requestHash,
       );
 
@@ -830,11 +979,11 @@ class WebTokenActionsManager {
       );
 
       if (result != null && result['success'] == true) {
-        ref.read(webTransactionListProvider(ownerAddress).notifier).insertPendingTx(
+        ref.read(webTransactionListProvider(requestorAddress).notifier).insertPendingTx(
           WebTransaction(
             hash: result['Hash'] ?? prepared['Hash'] ?? '',
-            toAddress: ownerAddress,
-            fromAddress: ownerAddress,
+            toAddress: requestorAddress,
+            fromAddress: requestorAddress,
             type: TxType.vbtcV2WithdrawalCancel,
             amount: 0,
             fee: 0,
@@ -948,3 +1097,25 @@ class WebTokenActionsManager {
 final webTokenActionsManager = Provider((ref) {
   return WebTokenActionsManager(ref);
 });
+
+/// How a FROST signing poll ended. The outcomes call for different handling of
+/// the stored job id: an outright failure finishes with it, a timeout does not
+/// — signing may still be running behind it.
+class _FrostSigningPollResult {
+  /// Set when signing finished and produced a Bitcoin transaction to broadcast.
+  final String? signedBtcTxHex;
+
+  /// Set when the job will never produce one — signing failed, or the API no
+  /// longer knows the id.
+  final String? failureMessage;
+
+  const _FrostSigningPollResult.signed(this.signedBtcTxHex)
+      : failureMessage = null;
+
+  const _FrostSigningPollResult.failed(this.failureMessage)
+      : signedBtcTxHex = null;
+
+  const _FrostSigningPollResult.timedOut()
+      : signedBtcTxHex = null,
+        failureMessage = null;
+}

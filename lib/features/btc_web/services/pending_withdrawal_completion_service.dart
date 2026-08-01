@@ -64,9 +64,12 @@ class PendingWithdrawalCompletionService {
     }
   }
 
-  bool _writeRaw(Map<String, dynamic> data) {
+  /// Awaits the write. Storage backends reject asynchronously — an IndexedDB
+  /// quota or private-browsing failure surfaces after `setMap` returns — so
+  /// without the await this reports success for a record that never landed.
+  Future<bool> _writeRaw(Map<String, dynamic> data) async {
     try {
-      singleton<Storage>().setMap(_key, data);
+      await singleton<Storage>().setMap(_key, data);
       return true;
     } catch (e) {
       print("Failed to persist pending withdrawal completions: $e");
@@ -82,7 +85,7 @@ class PendingWithdrawalCompletionService {
   /// ignore that: without it there is no durable reference to the broadcast
   /// Bitcoin transaction, so the withdrawal cannot be recovered in a later
   /// session and must be finished — or at least surfaced — now.
-  bool record(PendingWithdrawalCompletion entry) {
+  Future<bool> record(PendingWithdrawalCompletion entry) {
     final data = _readRaw();
     data[entry.requestHash] = entry.toJson();
     return _writeRaw(data);
@@ -121,10 +124,10 @@ class PendingWithdrawalCompletionService {
   }
 
   /// Drop the record once the completion TX is on chain.
-  void clear(String requestHash) {
+  Future<void> clear(String requestHash) async {
     final data = _readRaw();
     if (data.remove(requestHash) != null) {
-      _writeRaw(data);
+      await _writeRaw(data);
     }
   }
 }

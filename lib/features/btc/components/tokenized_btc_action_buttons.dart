@@ -402,7 +402,9 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 // V2: refresh token data and check for pending withdrawal before showing the form
                 if (token.version >= 2) {
                   // Fetch fresh V2 contract data to get current withdrawal state
-                  final freshContracts = await VbtcV2Service().getContractList();
+                  final freshContracts = await VbtcV2Service().getContractList(
+                    address: ref.read(sessionProvider).currentWallet?.address,
+                  );
                   final freshToken = freshContracts.firstWhereOrNull(
                     (t) => t.smartContractUid == token.smartContractUid,
                   );
@@ -1119,6 +1121,10 @@ class _TransferSharesModal extends BaseComponent {
             children: [
               TextFormField(
                 controller: toAddressController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: forWithdrawl
+                    ? formValidatorBtcAddress
+                    : (value) => formValidatorNotEmpty(value, "Address"),
                 decoration: InputDecoration(
                   suffix: !forWithdrawl
                       ? AddressChoosingIconButton(
@@ -1271,8 +1277,13 @@ class _TransferSharesModal extends BaseComponent {
                         : AppColorVariant.Btc,
                     onPressed: () {
                       final toAddress = toAddressController.text.trim();
-                      if (toAddress.isEmpty) {
-                        print("Invalid To Address");
+                      // Checked here rather than through the enclosing Form,
+                      // which has no key and is never validated.
+                      final addressError = forWithdrawl
+                          ? formValidatorBtcAddress(toAddress)
+                          : formValidatorNotEmpty(toAddress, "Address");
+                      if (addressError != null) {
+                        Toast.error(addressError);
                         return;
                       }
 

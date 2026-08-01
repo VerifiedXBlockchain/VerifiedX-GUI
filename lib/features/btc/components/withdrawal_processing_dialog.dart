@@ -162,8 +162,9 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     });
   }
 
-  /// Polls the contract until the request stops being the active withdrawal,
-  /// which means the CLI finished after our request timed out.
+  /// Polls the contract until this request shows up as settled, which means
+  /// the CLI finished after our request timed out. Anything short of that —
+  /// including a state the contract cannot account for — keeps polling.
   Future<void> _verifyWithdrawalSettled() async {
     debugPrint('$_tag Request timed out — verifying contract state for ${widget.requestHash}');
     setState(() => _state = _DialogState.verifying);
@@ -186,7 +187,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           _result = WithdrawalResult(
             success: true,
             requestHash: widget.requestHash,
-            message: "Withdrawal completed. It is no longer pending on the contract.",
+            message: "Withdrawal completed. The contract has recorded it as settled.",
           );
           _state = _DialogState.success;
         });
@@ -201,7 +202,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
       _result = WithdrawalResult(
         success: false,
         requestHash: widget.requestHash,
-        message: "The signing ceremony timed out and the withdrawal is still pending on the contract. "
+        message: "The signing ceremony timed out and the withdrawal has not been recorded as settled. "
             "It may yet complete on its own — re-check the token before retrying, as retrying can "
             "broadcast a second Bitcoin transaction.",
       );

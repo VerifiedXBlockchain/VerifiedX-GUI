@@ -35,7 +35,8 @@ class _FakeStorage extends Storage {
   @override
   Map<String, dynamic>? getMap(String key) => _data[key];
   @override
-  void setMap(String key, Map<String, dynamic> value) => _data[key] = value;
+  Future<void> setMap(String key, Map<String, dynamic> value) async =>
+      _data[key] = value;
 
   @override
   List<dynamic>? getList(String key) => _data[key];
@@ -48,11 +49,24 @@ class _FakeStorage extends Storage {
   void setStringList(String key, List<String> value) => _data[key] = value;
 }
 
-/// Storage whose writes fail, standing in for a full or unavailable quota.
+/// Storage that rejects the write synchronously.
 class _UnwritableStorage extends _FakeStorage {
   @override
-  void setMap(String key, Map<String, dynamic> value) {
+  Future<void> setMap(String key, Map<String, dynamic> value) {
     throw StateError('storage unavailable');
+  }
+}
+
+/// Storage that accepts the call and rejects afterwards, which is how
+/// IndexedDB reports a quota or private-browsing failure. Without an await on
+/// the write this rejection escapes unobserved and the record reads as saved.
+class _AsyncUnwritableStorage extends _FakeStorage {
+  @override
+  Future<void> setMap(String key, Map<String, dynamic> value) {
+    return Future.delayed(
+      const Duration(milliseconds: 1),
+      () => throw StateError('quota exceeded'),
+    );
   }
 }
 
@@ -84,15 +98,40 @@ void main() {
   });
 
   group('withdrawalIsResumable', () {
-    test('accepts both spellings the API has used', () {
-      expect(withdrawalIsResumable({'status': 'pending'}), isTrue);
+    test('accepts the explorer states that still need completing', () {
       expect(withdrawalIsResumable({'status': 'requested'}), isTrue);
+      // Signed by FROST but not settled on chain — the state the resume flow
+      // exists for.
+      expect(withdrawalIsResumable({'status': 'pending_btc'}), isTrue);
     });
 
-    test('rejects settled and unknown states', () {
+    test('rejects settled states', () {
       expect(withdrawalIsResumable({'status': 'completed'}), isFalse);
       expect(withdrawalIsResumable({'status': 'cancelled'}), isFalse);
+    });
+
+    test('rejects a contested withdrawal', () {
+      // Offering "tap to resume" on a withdrawal under a cancellation vote
+      // invites the user to push it through while it is being reversed.
+      expect(
+        withdrawalIsResumable({'status': 'cancellation_requested'}),
+        isFalse,
+      );
+    });
+
+    test('rejects unknown, missing and non-string states', () {
       expect(withdrawalIsResumable({}), isFalse);
+      expect(withdrawalIsResumable({'status': null}), isFalse);
+      expect(withdrawalIsResumable({'status': 3}), isFalse);
+      // Never emitted by any layer; it was in the set and matched nothing.
+      expect(withdrawalIsResumable({'status': 'pending'}), isFalse);
+    });
+
+    test('reads the status case-insensitively', () {
+      expect(withdrawalIsResumable({'status': 'Pending_BTC'}), isTrue);
+      expect(withdrawalIsResumable({'status': ' Requested '}), isTrue);
+      expect(withdrawalIsResumable({'status': 'Cancellation_Requested'}),
+          isFalse);
     });
   });
 
@@ -131,8 +170,8 @@ void main() {
       expect(service.get('nope'), isNull);
     });
 
-    test('records and reads back a broadcast BTC transaction', () {
-      service.record(_entry());
+    test('records and reads back a broadcast BTC transaction', () async {
+      await service.record(_entry());
 
       final stored = service.get('req-1');
       expect(stored, isNotNull);
@@ -140,30 +179,31 @@ void main() {
       expect(stored.amount, 0.5);
     });
 
-    test('clear removes only the settled request', () {
-      service.record(_entry(requestHash: 'req-1'));
-      service.record(_entry(requestHash: 'req-2', btcTxHash: 'btc-2'));
+    test('clear removes only the settled request', () async {
+      await service.record(_entry(requestHash: 'req-1'));
+      await service.record(_entry(requestHash: 'req-2', btcTxHash: 'btc-2'));
 
-      service.clear('req-1');
+      await service.clear('req-1');
 
       expect(service.get('req-1'), isNull);
       expect(service.get('req-2'), isNotNull);
     });
 
-    test('re-recording the same hash overwrites rather than duplicates', () {
-      service.record(_entry(btcTxHash: 'btc-old'));
-      service.record(_entry(btcTxHash: 'btc-new'));
+    test('re-recording the same hash overwrites rather than duplicates',
+        () async {
+      await service.record(_entry(btcTxHash: 'btc-old'));
+      await service.record(_entry(btcTxHash: 'btc-new'));
 
       expect(service.all().length, 1);
       expect(service.get('req-1')!.btcTxHash, 'btc-new');
     });
 
-    test('all() returns newest first', () {
-      service.record(_entry(
+    test('all() returns newest first', () async {
+      await service.record(_entry(
         requestHash: 'older',
         createdAt: DateTime(2026, 7, 30),
       ));
-      service.record(_entry(
+      await service.record(_entry(
         requestHash: 'newer',
         createdAt: DateTime(2026, 7, 31),
       ));
@@ -171,16 +211,16 @@ void main() {
       expect(service.all().map((e) => e.requestHash), ['newer', 'older']);
     });
 
-    test('forAddress filters to the signing wallet', () {
-      service.record(_entry(requestHash: 'mine', fromAddress: 'RMine'));
-      service.record(_entry(requestHash: 'theirs', fromAddress: 'RTheirs'));
+    test('forAddress filters to the signing wallet', () async {
+      await service.record(_entry(requestHash: 'mine', fromAddress: 'RMine'));
+      await service.record(_entry(requestHash: 'theirs', fromAddress: 'RTheirs'));
 
       expect(service.forAddress('RMine').map((e) => e.requestHash), ['mine']);
       expect(service.forAddress(null), isEmpty);
     });
 
-    test('record reports success when the write lands', () {
-      expect(service.record(_entry()), isTrue);
+    test('record reports success when the write lands', () async {
+      expect(await service.record(_entry()), isTrue);
     });
 
     test('record reports failure instead of swallowing a write error', () async {
@@ -191,12 +231,22 @@ void main() {
       // Must be false: the caller has to know there is no durable reference to
       // the broadcast BTC, otherwise a later resume re-runs FROST against
       // spent inputs or reports an unsettled withdrawal as complete.
-      expect(failing.record(_entry()), isFalse);
+      expect(await failing.record(_entry()), isFalse);
       expect(failing.get('req-1'), isNull);
     });
 
-    test('a malformed entry does not hide the valid ones', () {
-      singleton<Storage>().setMap(
+    test('record reports failure when the write rejects asynchronously',
+        () async {
+      await singleton.reset();
+      singleton.registerSingleton<Storage>(_AsyncUnwritableStorage());
+      final failing = PendingWithdrawalCompletionService();
+
+      expect(await failing.record(_entry()), isFalse);
+      expect(failing.get('req-1'), isNull);
+    });
+
+    test('a malformed entry does not hide the valid ones', () async {
+      await singleton<Storage>().setMap(
         Storage.PENDING_VBTC_WITHDRAWAL_COMPLETIONS,
         {
           'broken': 'not-a-map',

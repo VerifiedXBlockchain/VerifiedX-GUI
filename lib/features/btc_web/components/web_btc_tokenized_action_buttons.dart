@@ -292,7 +292,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
 
             final address = await PromptModal.show(
               title: 'BTC Address',
-              validator: (val) => formValidatorNotEmpty(val, "Address"),
+              validator: formValidatorBtcAddress,
               labelText: "Receiving BTC Address",
             );
             if (address == null) return;
