@@ -93,6 +93,14 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   /// against spent inputs, so no retry is offered.
   bool _btcBroadcastUnconfirmed = false;
 
+  /// The broadcast this dialog is trying to settle, held in memory so a retry
+  /// never depends on storage — which may be the thing that failed.
+  PendingWithdrawalCompletion? _pendingCompletion;
+
+  /// False when the recovery record could not be persisted, so this withdrawal
+  /// cannot be resumed after the page closes.
+  bool _completionRecoverable = true;
+
   @override
   void initState() {
     super.initState();
@@ -180,6 +188,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   Future<void> _startCompletion() async {
     final stored = PendingWithdrawalCompletionService().get(_requestHash!);
     if (stored != null) {
+      _pendingCompletion = stored;
       await _recordCompletion(stored);
       return;
     }
@@ -204,8 +213,25 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     if (!mounted) return;
 
     if (result != null && result['success'] == true) {
+      final btcTxHash = result['btc_transaction_hash'] as String?;
+
+      // Held in memory so Retry Completion works even when the recovery write
+      // failed. Storage is the fallback, not the source of truth.
+      if (btcTxHash != null) {
+        _pendingCompletion = PendingWithdrawalCompletion(
+          scIdentifier: widget.scIdentifier,
+          requestHash: _requestHash!,
+          btcTxHash: btcTxHash,
+          amount: (result['withdrawal_amount'] as num?)?.toDouble() ?? widget.amount,
+          btcDestination: result['btc_destination'] as String? ?? widget.btcAddress,
+          fromAddress: widget.requestorAddress,
+          createdAt: DateTime.now(),
+        );
+      }
+
       setState(() {
-        _btcTxHash = result['btc_transaction_hash'];
+        _btcTxHash = btcTxHash;
+        _completionRecoverable = result['completion_recoverable'] != false;
         if (result['completion_recorded'] == true) {
           _step = _DialogStep.success;
         } else {
@@ -226,6 +252,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   Future<void> _recordCompletion(PendingWithdrawalCompletion pending) async {
     if (_busy) return;
     _busy = true;
+    _pendingCompletion = pending;
     setState(() {
       _step = _DialogStep.recordingCompletion;
       _btcTxHash = pending.btcTxHash;
@@ -255,17 +282,25 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   }
 
   Future<void> _retryCompletion() async {
-    final stored = PendingWithdrawalCompletionService().get(_requestHash!);
-    if (stored == null) {
-      // The record is cleared only once the completion TX is broadcast, so
-      // its absence means a prior attempt landed after all.
+    // Prefer the in-memory broadcast. A missing storage record proves nothing:
+    // it means either the completion landed and cleared it, or the recovery
+    // write failed in the first place. Treating absence as settlement would
+    // report an unsettled withdrawal as complete.
+    final pending = _pendingCompletion ??
+        PendingWithdrawalCompletionService().get(_requestHash!);
+
+    if (pending == null) {
       setState(() {
-        _step = _DialogStep.success;
-        _errorMessage = null;
+        _step = _DialogStep.failure;
+        _errorMessage = "Could not determine the Bitcoin transaction for this withdrawal, "
+            "so it cannot be settled automatically. Check the destination address on a "
+            "block explorer and contact support before retrying — retrying may broadcast "
+            "a second Bitcoin transaction.";
       });
       return;
     }
-    await _recordCompletion(stored);
+
+    await _recordCompletion(pending);
   }
 
   @override
@@ -402,10 +437,17 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           ],
         ),
         const SizedBox(height: 12),
-        const Text(
-          "Retry below to finish. This only submits the completion transaction — your Bitcoin will not be sent again. "
-          "You can also come back to this from the token's withdrawal history.",
-          style: TextStyle(color: Colors.white38, fontSize: 12),
+        Text(
+          _completionRecoverable
+              ? "Retry below to finish. This only submits the completion transaction — your Bitcoin will not be sent again. "
+                  "You can also come back to this from the token's withdrawal history."
+              : "Retry below to finish. This only submits the completion transaction — your Bitcoin will not be sent again. "
+                  "This withdrawal could not be saved for later recovery, so do not close this page before it succeeds. "
+                  "Copy the Bitcoin transaction ID below first.",
+          style: TextStyle(
+            color: _completionRecoverable ? Colors.white38 : const Color(0xFFE0A32E),
+            fontSize: 12,
+          ),
         ),
         if (_errorMessage != null) ...[
           const SizedBox(height: 12),
@@ -425,12 +467,16 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            AppButton(
-              label: "Later",
-              variant: AppColorVariant.Light,
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            const SizedBox(width: 8),
+            // Deferring is only safe when the withdrawal can be picked up
+            // again later, so it is not offered when the record failed to save.
+            if (_completionRecoverable) ...[
+              AppButton(
+                label: "Later",
+                variant: AppColorVariant.Light,
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              const SizedBox(width: 8),
+            ],
             AppButton(
               label: "Retry Completion",
               variant: AppColorVariant.Warning,

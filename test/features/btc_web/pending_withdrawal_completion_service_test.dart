@@ -48,6 +48,14 @@ class _FakeStorage extends Storage {
   void setStringList(String key, List<String> value) => _data[key] = value;
 }
 
+/// Storage whose writes fail, standing in for a full or unavailable quota.
+class _UnwritableStorage extends _FakeStorage {
+  @override
+  void setMap(String key, Map<String, dynamic> value) {
+    throw StateError('storage unavailable');
+  }
+}
+
 PendingWithdrawalCompletion _entry({
   String requestHash = 'req-1',
   String btcTxHash = 'btc-1',
@@ -169,6 +177,22 @@ void main() {
 
       expect(service.forAddress('RMine').map((e) => e.requestHash), ['mine']);
       expect(service.forAddress(null), isEmpty);
+    });
+
+    test('record reports success when the write lands', () {
+      expect(service.record(_entry()), isTrue);
+    });
+
+    test('record reports failure instead of swallowing a write error', () async {
+      await singleton.reset();
+      singleton.registerSingleton<Storage>(_UnwritableStorage());
+      final failing = PendingWithdrawalCompletionService();
+
+      // Must be false: the caller has to know there is no durable reference to
+      // the broadcast BTC, otherwise a later resume re-runs FROST against
+      // spent inputs or reports an unsettled withdrawal as complete.
+      expect(failing.record(_entry()), isFalse);
+      expect(failing.get('req-1'), isNull);
     });
 
     test('a malformed entry does not hide the valid ones', () {

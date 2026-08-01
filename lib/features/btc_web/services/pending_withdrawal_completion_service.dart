@@ -64,21 +64,28 @@ class PendingWithdrawalCompletionService {
     }
   }
 
-  void _writeRaw(Map<String, dynamic> data) {
+  bool _writeRaw(Map<String, dynamic> data) {
     try {
       singleton<Storage>().setMap(_key, data);
+      return true;
     } catch (e) {
       print("Failed to persist pending withdrawal completions: $e");
+      return false;
     }
   }
 
   /// Record that [btcTxHash] was broadcast for [requestHash] but not yet
   /// settled on the VFX chain. Call this immediately after a successful BTC
   /// broadcast, before attempting the completion TX.
-  void record(PendingWithdrawalCompletion entry) {
+  ///
+  /// Returns false if the record could not be persisted. Callers must not
+  /// ignore that: without it there is no durable reference to the broadcast
+  /// Bitcoin transaction, so the withdrawal cannot be recovered in a later
+  /// session and must be finished — or at least surfaced — now.
+  bool record(PendingWithdrawalCompletion entry) {
     final data = _readRaw();
     data[entry.requestHash] = entry.toJson();
-    _writeRaw(data);
+    return _writeRaw(data);
   }
 
   PendingWithdrawalCompletion? get(String requestHash) {

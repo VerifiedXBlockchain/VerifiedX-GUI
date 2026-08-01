@@ -642,6 +642,9 @@ class WebTokenActionsManager {
         'btc_transaction_hash': alreadyBroadcast.btcTxHash,
         'completion_recorded': recorded['success'] == true,
         'completion_message': recorded['message'],
+        'completion_recoverable': true,
+        'withdrawal_amount': alreadyBroadcast.amount,
+        'btc_destination': alreadyBroadcast.btcDestination,
       };
     }
 
@@ -762,7 +765,9 @@ class WebTokenActionsManager {
 
       // Persist before attempting the completion TX. From here on the BTC is
       // gone, so a closed tab or a failed send must still be recoverable.
-      PendingWithdrawalCompletionService().record(
+      // A failed write is not recoverable later, so it is reported rather than
+      // swallowed — the caller has to keep the user on this screen.
+      final persisted = PendingWithdrawalCompletionService().record(
         PendingWithdrawalCompletion(
           scIdentifier: scIdentifier,
           requestHash: requestHash,
@@ -788,6 +793,13 @@ class WebTokenActionsManager {
         'btc_transaction_hash': btcTxHash,
         'completion_recorded': recorded['success'] == true,
         'completion_message': recorded['message'],
+        // False means no durable record exists, so this withdrawal cannot be
+        // resumed in a later session.
+        'completion_recoverable': persisted,
+        // Returned so a retry can be driven from memory rather than from
+        // storage, which may be exactly what failed.
+        'withdrawal_amount': withdrawalAmount,
+        'btc_destination': btcDestination,
       };
     } catch (e) {
       return {'success': false, 'message': 'FROST signing failed: $e'};
