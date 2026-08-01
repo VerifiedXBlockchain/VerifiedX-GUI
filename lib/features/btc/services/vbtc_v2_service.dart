@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../utils/toast.dart';
@@ -22,7 +23,10 @@ void _log(String method, String message, [Map<String, dynamic>? json]) {
 class VbtcV2Service extends BaseService {
   VbtcV2Service() : super(apiBasePathOverride: "/vbtcapi/vbtc");
 
-  static final _activeWithdrawalPattern = RegExp(r'Request Hash:\s*((?:0x)?[a-fA-F0-9]+)');
+  /// FROST signing is budgeted 180s on the web wallet. Anything shorter here
+  /// times out the client while the CLI is still legitimately signing, which
+  /// surfaces a successful withdrawal as a failure.
+  static const _completeWithdrawalTimeoutMs = 180000;
 
   /// Fetch V2 contracts from the CLI endpoint.
   /// Returns them as [TokenizedBitcoin] with version=2 so the UI
@@ -326,7 +330,7 @@ class VbtcV2Service extends BaseService {
       'WithdrawalRequestHash': withdrawalRequestHash,
     };
 
-    _log(method, 'REQUEST POST /CompleteWithdrawal (timeout: 120s)', params);
+    _log(method, 'REQUEST POST /CompleteWithdrawal (timeout: ${_completeWithdrawalTimeoutMs ~/ 1000}s)', params);
 
     try {
       final stopwatch = Stopwatch()..start();
@@ -335,7 +339,7 @@ class VbtcV2Service extends BaseService {
         params: params,
         cleanPath: false,
         inspect: true,
-        timeout: 120000,
+        timeout: _completeWithdrawalTimeoutMs,
       );
       stopwatch.stop();
 
@@ -362,11 +366,51 @@ class VbtcV2Service extends BaseService {
       );
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
+      final timedOut = _isTimeout(e);
       return WithdrawalResult(
         success: false,
-        message: e.toString(),
+        message: timedOut
+            ? "Timed out waiting for the signing ceremony to finish. The withdrawal may still be in progress."
+            : e.toString(),
         requestHash: withdrawalRequestHash,
+        timedOut: timedOut,
       );
+    }
+  }
+
+  static bool _isTimeout(Object e) {
+    if (e is! DioException) return false;
+    return e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.receiveTimeout;
+  }
+
+  /// Whether [withdrawalRequestHash] is still the contract's active withdrawal.
+  ///
+  /// Returns null when the contract state could not be read — callers must not
+  /// treat that as settled.
+  Future<bool?> isWithdrawalStillActive({
+    required String scUid,
+    required String withdrawalRequestHash,
+  }) async {
+    const method = 'IsWithdrawalStillActive';
+
+    try {
+      final contracts = await getContractList();
+      final match = contracts.where((c) => c.smartContractUid == scUid);
+
+      if (match.isEmpty) {
+        _log(method, 'Could not read contract state for scUid: $scUid');
+        return null;
+      }
+
+      final active = match.first.activeWithdrawalRequestHash;
+      final stillActive = active != null && active.isNotEmpty && active == withdrawalRequestHash;
+      _log(method, 'active: $active | checking: $withdrawalRequestHash | stillActive: $stillActive');
+      return stillActive;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      return null;
     }
   }
 
@@ -414,72 +458,5 @@ class VbtcV2Service extends BaseService {
       Toast.error(e.toString());
       return false;
     }
-  }
-
-  /// Combined withdraw helper: requests a withdrawal then completes it.
-  /// If an active withdrawal already exists, parses the request hash from
-  /// the error and proceeds to complete it.
-  Future<WithdrawalResult> withdraw({
-    required String scUid,
-    required String requestorAddress,
-    required String btcAddress,
-    required double amount,
-    required int feeRate,
-  }) async {
-    const method = 'Withdraw';
-    _log(method, 'Starting combined withdraw flow for scUid: $scUid, amount: $amount, feeRate: $feeRate');
-
-    // Step 1: Request withdrawal
-    final requestResult = await requestWithdrawal(
-      scUid: scUid,
-      requestorAddress: requestorAddress,
-      btcAddress: btcAddress,
-      amount: amount,
-      feeRate: feeRate,
-    );
-
-    String? requestHash = requestResult.requestHash;
-
-    if (!requestResult.success) {
-      // Check if there's an existing active withdrawal we can resume
-      final message = requestResult.message ?? "";
-      final match = _activeWithdrawalPattern.firstMatch(message);
-      if (match != null) {
-        requestHash = match.group(1);
-        _log(method, 'Detected active withdrawal — resuming with requestHash: $requestHash');
-      } else {
-        _log(method, 'Request failed with no active withdrawal to resume: $message');
-        Toast.error(requestResult.message ?? "Failed to request withdrawal.");
-        return requestResult;
-      }
-    }
-
-    if (requestHash == null) {
-      _log(method, 'No requestHash available — aborting');
-      return const WithdrawalResult(
-        success: false,
-        message: "No request hash returned from withdrawal request.",
-      );
-    }
-
-    _log(method, 'Step 2: Completing withdrawal via FROST signing — requestHash: $requestHash');
-
-    // Step 2: Complete withdrawal via FROST signing
-    final completeResult = await completeWithdrawal(
-      scUid: scUid,
-      withdrawalRequestHash: requestHash,
-    );
-
-    _log(method, 'Withdraw flow finished — success: ${completeResult.success}');
-
-    // Always include the requestHash in the result for retry support
-    return WithdrawalResult(
-      success: completeResult.success,
-      message: completeResult.message,
-      requestHash: requestHash,
-      vfxTransactionHash: completeResult.vfxTransactionHash,
-      btcTransactionHash: completeResult.btcTransactionHash,
-      status: completeResult.status,
-    );
   }
 }

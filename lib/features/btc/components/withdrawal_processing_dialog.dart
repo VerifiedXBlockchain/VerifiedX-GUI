@@ -57,7 +57,7 @@ class WithdrawalProcessingDialog extends StatefulWidget {
   State<WithdrawalProcessingDialog> createState() => _WithdrawalProcessingDialogState();
 }
 
-enum _DialogState { waitingForBlock, processing, success, failure }
+enum _DialogState { waitingForBlock, processing, verifying, success, failure }
 
 class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog> {
   _DialogState _state = _DialogState.processing;
@@ -66,6 +66,10 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   int _confirmationPollCount = 0;
   static const _maxConfirmationPolls = 60; // 60 * 5s = 5 minutes max
   static const _confirmationPollInterval = Duration(seconds: 5);
+  static const _maxVerificationPolls = 24; // 24 * 5s = 2 minutes max
+
+  /// Guards Retry against a double tap starting two signing ceremonies.
+  bool _busy = false;
 
   @override
   void initState() {
@@ -125,6 +129,8 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   }
 
   Future<void> _runCompleteWithdrawal() async {
+    if (_busy) return;
+    _busy = true;
     debugPrint('$_tag Calling completeWithdrawal — scUid: ${widget.scUid}, requestHash: ${widget.requestHash}');
     setState(() => _state = _DialogState.processing);
 
@@ -133,9 +139,18 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
       withdrawalRequestHash: widget.requestHash,
     );
 
+    _busy = false;
     if (!mounted) return;
 
     debugPrint('$_tag completeWithdrawal result — success: ${result.success}, vfxTx: ${result.vfxTransactionHash}, btcTx: ${result.btcTransactionHash}, message: ${result.message}');
+
+    // A client-side timeout does not mean the ceremony failed — the CLI may
+    // still be signing and broadcasting. Offering Retry here risks a second
+    // Bitcoin transaction, so confirm the contract state first.
+    if (!result.success && result.timedOut) {
+      await _verifyWithdrawalSettled();
+      return;
+    }
 
     if (result.success) {
       notifyTransactionSubmitted();
@@ -144,6 +159,53 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     setState(() {
       _result = result;
       _state = result.success ? _DialogState.success : _DialogState.failure;
+    });
+  }
+
+  /// Polls the contract until the request stops being the active withdrawal,
+  /// which means the CLI finished after our request timed out.
+  Future<void> _verifyWithdrawalSettled() async {
+    debugPrint('$_tag Request timed out — verifying contract state for ${widget.requestHash}');
+    setState(() => _state = _DialogState.verifying);
+
+    for (int i = 0; i < _maxVerificationPolls; i++) {
+      await Future.delayed(_confirmationPollInterval);
+      if (!mounted) return;
+
+      final stillActive = await VbtcV2Service().isWithdrawalStillActive(
+        scUid: widget.scUid,
+        withdrawalRequestHash: widget.requestHash,
+      );
+      if (!mounted) return;
+
+      debugPrint('$_tag Verification poll #${i + 1} — stillActive: $stillActive');
+
+      if (stillActive == false) {
+        notifyTransactionSubmitted();
+        setState(() {
+          _result = WithdrawalResult(
+            success: true,
+            requestHash: widget.requestHash,
+            message: "Withdrawal completed. It is no longer pending on the contract.",
+          );
+          _state = _DialogState.success;
+        });
+        return;
+      }
+    }
+
+    if (!mounted) return;
+
+    debugPrint('$_tag Verification exhausted — withdrawal still pending');
+    setState(() {
+      _result = WithdrawalResult(
+        success: false,
+        requestHash: widget.requestHash,
+        message: "The signing ceremony timed out and the withdrawal is still pending on the contract. "
+            "It may yet complete on its own — re-check the token before retrying, as retrying can "
+            "broadcast a second Bitcoin transaction.",
+      );
+      _state = _DialogState.failure;
     });
   }
 
@@ -157,7 +219,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
             _titleForState(),
             style: const TextStyle(color: Colors.white),
           ),
-          if (_state != _DialogState.processing && _state != _DialogState.waitingForBlock)
+          if (_isTerminal)
             IconButton(
               onPressed: () => Navigator.of(context).pop(_result),
               icon: const Icon(Icons.close, size: 20),
@@ -175,6 +237,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           children: [
             if (_state == _DialogState.waitingForBlock) _buildWaitingForBlockSection(),
             if (_state == _DialogState.processing) _buildProcessingSection(),
+            if (_state == _DialogState.verifying) _buildVerifyingSection(),
             if (_state == _DialogState.success) _buildSuccessSection(),
             if (_state == _DialogState.failure) _buildFailureSection(),
           ],
@@ -183,12 +246,17 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     );
   }
 
+  bool get _isTerminal =>
+      _state == _DialogState.success || _state == _DialogState.failure;
+
   String _titleForState() {
     switch (_state) {
       case _DialogState.waitingForBlock:
         return "Waiting for Confirmation";
       case _DialogState.processing:
         return "Processing Withdrawal";
+      case _DialogState.verifying:
+        return "Checking Withdrawal Status";
       case _DialogState.success:
         return "Withdrawal Complete";
       case _DialogState.failure:
@@ -240,6 +308,31 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
         SizedBox(height: 8),
         Text(
           "This may take a minute. Please do not close the application.",
+          style: TextStyle(color: Colors.white38, fontSize: 12),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVerifyingSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Center(
+          child: SizedBox(
+            width: 32,
+            height: 32,
+            child: CircularProgressIndicator(strokeWidth: 3),
+          ),
+        ),
+        SizedBox(height: 16),
+        Text(
+          "The request timed out. Checking whether the withdrawal completed anyway...",
+          style: TextStyle(color: Colors.white70),
+        ),
+        SizedBox(height: 8),
+        Text(
+          "Signing can outlast the request. Please wait rather than retrying — retrying can broadcast a second Bitcoin transaction.",
           style: TextStyle(color: Colors.white38, fontSize: 12),
         ),
       ],
@@ -331,7 +424,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
             AppButton(
               label: "Retry",
               variant: AppColorVariant.Warning,
-              onPressed: _runCompleteWithdrawal,
+              onPressed: _busy ? null : _runCompleteWithdrawal,
             ),
           ],
         ),
