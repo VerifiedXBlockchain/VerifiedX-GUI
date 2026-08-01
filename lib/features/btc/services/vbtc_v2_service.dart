@@ -456,10 +456,17 @@ class VbtcV2Service extends BaseService {
         e.type == DioExceptionType.receiveTimeout;
   }
 
-  /// Whether [withdrawalRequestHash] is still the contract's active withdrawal.
+  /// Whether [withdrawalRequestHash] is still awaiting settlement.
   ///
-  /// Returns null when the contract state could not be read — callers must not
-  /// treat that as settled.
+  /// Returns null when this particular request's fate could not be
+  /// established — callers must not treat that as settled.
+  ///
+  /// `ActiveWithdrawalRequestHash` alone cannot answer this. It is a single
+  /// contract-wide slot that any holder's new request overwrites, and a
+  /// cancellation clears it outright, so finding some other hash there says
+  /// nothing about this one. Completion is the only event that records the
+  /// request hash per request, in `WithdrawalHistory`, so that is what a
+  /// "settled" verdict is built on.
   Future<bool?> isWithdrawalStillActive({
     required String scUid,
     required String withdrawalRequestHash,
@@ -467,18 +474,41 @@ class VbtcV2Service extends BaseService {
     const method = 'IsWithdrawalStillActive';
 
     try {
-      final contracts = await getContractList();
-      final match = contracts.where((c) => c.smartContractUid == scUid);
+      final result = await getJson(
+        "/GetContractDetails/$scUid",
+        cleanPath: false,
+      );
 
-      if (match.isEmpty) {
-        _log(method, 'Could not read contract state for scUid: $scUid');
+      if (result['Success'] != true || result['Contract'] == null) {
+        _log(method, 'Could not read contract state for scUid: $scUid — ${result['Message']}');
         return null;
       }
 
-      final active = match.first.activeWithdrawalRequestHash;
-      final stillActive = active != null && active.isNotEmpty && active == withdrawalRequestHash;
-      _log(method, 'active: $active | checking: $withdrawalRequestHash | stillActive: $stillActive');
-      return stillActive;
+      final contract = Map<String, dynamic>.from(result['Contract']);
+
+      final history = contract['WithdrawalHistory'];
+      if (history is List) {
+        final completed = history.any(
+          (h) => h is Map && h['RequestHash'] == withdrawalRequestHash,
+        );
+        if (completed) {
+          _log(method, 'Request $withdrawalRequestHash is in the withdrawal history — settled');
+          return false;
+        }
+      }
+
+      final active = contract['ActiveWithdrawalRequestHash'];
+      if (active is String && active == withdrawalRequestHash) {
+        _log(method, 'Request $withdrawalRequestHash is still the active withdrawal');
+        return true;
+      }
+
+      // Not completed and not the active request: it was cancelled, or another
+      // holder's request took the slot. Either way this cannot be called
+      // settled, and reporting it as such would tell the user a withdrawal
+      // finished when it did not.
+      _log(method, 'Fate of $withdrawalRequestHash is unknown — active slot holds: $active');
+      return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
       return null;
