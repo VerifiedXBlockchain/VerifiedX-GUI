@@ -1119,6 +1119,10 @@ class _TransferSharesModal extends BaseComponent {
             children: [
               TextFormField(
                 controller: toAddressController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: forWithdrawl
+                    ? formValidatorBtcAddress
+                    : (value) => formValidatorNotEmpty(value, "Address"),
                 decoration: InputDecoration(
                   suffix: !forWithdrawl
                       ? AddressChoosingIconButton(
@@ -1271,8 +1275,13 @@ class _TransferSharesModal extends BaseComponent {
                         : AppColorVariant.Btc,
                     onPressed: () {
                       final toAddress = toAddressController.text.trim();
-                      if (toAddress.isEmpty) {
-                        print("Invalid To Address");
+                      // Checked here rather than through the enclosing Form,
+                      // which has no key and is never validated.
+                      final addressError = forWithdrawl
+                          ? formValidatorBtcAddress(toAddress)
+                          : formValidatorNotEmpty(toAddress, "Address");
+                      if (addressError != null) {
+                        Toast.error(addressError);
                         return;
                       }
 

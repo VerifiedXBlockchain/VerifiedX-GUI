@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart' show sha256;
 
 import '../../app.dart';
 import '../../core/app_constants.dart';
+import '../../core/env.dart';
 import 'models/btc_fee_rate_preset.dart';
 
 double satashisToBtc(int satashis) {
@@ -259,6 +260,26 @@ bool isBitcoinAddress(String input, {bool testnet = false}) {
   }
 
   return false;
+}
+
+/// Form validator for a Bitcoin destination address on whichever network the
+/// app is pointed at.
+///
+/// Worth validating at entry rather than trusting the backend: a vBTC V2
+/// withdrawal request is committed on chain before any Bitcoin moves, and a
+/// typo'd destination can only be undone by a 75% validator governance vote.
+String? formValidatorBtcAddress(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return "BTC address required.";
+  }
+
+  if (!isBitcoinAddress(value, testnet: Env.btcIsTestNet)) {
+    return Env.btcIsTestNet
+        ? "Invalid BTC address. A testnet address is required."
+        : "Invalid BTC address.";
+  }
+
+  return null;
 }
 
 /* ----------------------------- Bech32 helpers ----------------------------- */
