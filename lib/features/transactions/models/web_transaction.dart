@@ -249,6 +249,8 @@ class WebTransaction with _$WebTransaction {
         return "Validator Registration";
       case 23:
         return "Validator Heartbeat";
+      case 24:
+        return "Validator Exit";
       case 25:
         return "vBTC Contract Mint";
       case 26:
@@ -277,6 +279,14 @@ class WebTransaction with _$WebTransaction {
         return "vBTC Bridge Lock";
       case 38:
         return "vBTC Bridge Unlock";
+      case 39:
+        return "vBTC Bridge Pool Unlock";
+      case 40:
+        return "vBTC Bridge Exit to BTC";
+      case 41:
+        return "vBTC Bridge Exit to BTC Complete";
+      case 42:
+        return "vBTC Bridge Exit to BTC Failed";
       default:
         return type.toString();
     }
