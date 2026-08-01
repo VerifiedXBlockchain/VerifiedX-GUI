@@ -289,7 +289,7 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                                             final manager = ref.read(webTokenActionsManager);
                                             await manager.cancelV2Withdrawal(
                                               scIdentifier: token.scIdentifier,
-                                              ownerAddress: token.ownerAddress,
+                                              requestorAddress: wr['requestor_address'] ?? '',
                                               requestHash: wr['request_transaction_hash'] ?? '',
                                             );
                                           }

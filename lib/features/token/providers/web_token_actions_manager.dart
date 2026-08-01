@@ -874,15 +874,21 @@ class WebTokenActionsManager {
   }
 
   /// V2 withdrawal cancel via prepare→sign→send.
+  ///
+  /// [requestorAddress] must be the address that made the withdrawal request,
+  /// not the token owner: the node rejects anyone else with "Only the original
+  /// requestor can cancel", and it builds the transaction from this address, so
+  /// it also has to match the key that signs. The explorer names the field
+  /// `owner_address` but forwards it as `RequestorAddress`.
   Future<bool> cancelV2Withdrawal({
     required String scIdentifier,
-    required String ownerAddress,
+    required String requestorAddress,
     required String requestHash,
   }) async {
     try {
       final prepared = await ExplorerService().prepareV2WithdrawalCancel(
         scIdentifier: scIdentifier,
-        ownerAddress: ownerAddress,
+        ownerAddress: requestorAddress,
         withdrawalRequestHash: requestHash,
       );
 
@@ -897,11 +903,11 @@ class WebTokenActionsManager {
       );
 
       if (result != null && result['success'] == true) {
-        ref.read(webTransactionListProvider(ownerAddress).notifier).insertPendingTx(
+        ref.read(webTransactionListProvider(requestorAddress).notifier).insertPendingTx(
           WebTransaction(
             hash: result['Hash'] ?? prepared['Hash'] ?? '',
-            toAddress: ownerAddress,
-            fromAddress: ownerAddress,
+            toAddress: requestorAddress,
+            fromAddress: requestorAddress,
             type: TxType.vbtcV2WithdrawalCancel,
             amount: 0,
             fee: 0,
