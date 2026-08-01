@@ -54,7 +54,14 @@ abstract class Storage {
   void setInt(String key, int value);
 
   Map<String, dynamic>? getMap(String key);
-  void setMap(String key, Map<String, dynamic> value);
+
+  /// Persists [value] under [key].
+  ///
+  /// The returned future completes only once the write has actually landed.
+  /// Backends reject asynchronously — IndexedDB in particular fails a quota or
+  /// private-browsing write after the call returns — so callers that need to
+  /// know the value is durable must await this and handle the error.
+  Future<void> setMap(String key, Map<String, dynamic> value);
 
   List<dynamic>? getList(String key);
   void setList(String key, List<dynamic> value);
@@ -114,9 +121,12 @@ class StorageImplementation extends Storage {
   }
 
   @override
-  void setMap(String key, Map<String, dynamic> value) {
+  Future<void> setMap(String key, Map<String, dynamic> value) async {
     final str = jsonEncode(value);
-    _instance.setString(_buildKey(key), str);
+    final didWrite = await _instance.setString(_buildKey(key), str);
+    if (!didWrite) {
+      throw StateError("Shared preferences refused the write for '$key'.");
+    }
   }
 
   @override
@@ -200,8 +210,8 @@ class StorageWebImplementation extends Storage {
   }
 
   @override
-  void setMap(String key, Map<String, dynamic> value) {
-    _instance.put(_buildKey(key), value);
+  Future<void> setMap(String key, Map<String, dynamic> value) {
+    return _instance.put(_buildKey(key), value);
   }
 
   @override

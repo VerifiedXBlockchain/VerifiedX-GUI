@@ -604,7 +604,7 @@ class WebTokenActionsManager {
         ),
       );
 
-      PendingWithdrawalCompletionService().clear(requestHash);
+      await PendingWithdrawalCompletionService().clear(requestHash);
 
       return {'success': true, 'hash': completionHash};
     } catch (e) {
@@ -767,7 +767,7 @@ class WebTokenActionsManager {
       // gone, so a closed tab or a failed send must still be recoverable.
       // A failed write is not recoverable later, so it is reported rather than
       // swallowed — the caller has to keep the user on this screen.
-      final persisted = PendingWithdrawalCompletionService().record(
+      final persisted = await PendingWithdrawalCompletionService().record(
         PendingWithdrawalCompletion(
           scIdentifier: scIdentifier,
           requestHash: requestHash,
