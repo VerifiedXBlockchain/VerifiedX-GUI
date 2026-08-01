@@ -15,6 +15,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../btc_web/services/frost_resume_guard.dart';
 import '../../btc_web/services/pending_frost_signing_job_service.dart';
 import '../../btc_web/services/pending_withdrawal_completion_service.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -613,6 +614,72 @@ class WebTokenActionsManager {
     }
   }
 
+  /// Asks the explorer whether signing has already run for [requestHash],
+  /// for the case where no local record survives to say so.
+  ///
+  /// Returns a result for the caller to hand straight back, or null to carry
+  /// on with a fresh ceremony. Only consulted once both local lookups have
+  /// missed — on the same browser the stored records are faster and better.
+  Future<Map<String, dynamic>?> _guardAgainstResigning({
+    required String scIdentifier,
+    required String requestHash,
+  }) async {
+    Map<String, dynamic>? row;
+
+    try {
+      final detail = await ExplorerService().getWebVbtcV2TokenDetail(scIdentifier);
+      for (final wr in detail.withdrawalRequests ?? <Map<String, dynamic>>[]) {
+        if (wr['request_transaction_hash'] == requestHash) {
+          row = wr;
+          break;
+        }
+      }
+    } catch (e) {
+      // Left null: see frostResumeActionFor, which reads an unreadable row as
+      // "carry on" so a transient explorer error cannot block a first-time
+      // withdrawal.
+      print("Could not read withdrawal state before signing: $e");
+    }
+
+    switch (frostResumeActionFor(row)) {
+      case FrostResumeAction.ceremony:
+        return null;
+
+      case FrostResumeAction.completionOnly:
+        final amount = (row!['amount'] as num?)?.toDouble() ?? 0;
+        final btcDestination = row['btc_address'] as String? ?? '';
+        final btcTxHash = row['btc_transaction_hash'] as String;
+
+        final recorded = await recordV2WithdrawalCompletion(
+          scIdentifier: scIdentifier,
+          requestHash: requestHash,
+          btcTxHash: btcTxHash,
+          amount: amount,
+          btcDestination: btcDestination,
+        );
+
+        return {
+          'success': true,
+          'btc_transaction_hash': btcTxHash,
+          'completion_recorded': recorded['success'] == true,
+          'completion_message': recorded['message'],
+          'completion_recoverable': true,
+          'withdrawal_amount': amount,
+          'btc_destination': btcDestination,
+        };
+
+      case FrostResumeAction.refuse:
+        return {
+          'success': false,
+          'signing_already_started': true,
+          'message': 'This withdrawal has already been signed, and the Bitcoin transaction '
+              'cannot be recovered from this browser. Do not start it again — signing a '
+              'second time can send the Bitcoin twice. Reopen the withdrawal in the browser '
+              'it was started from, or contact support so it can be settled manually.',
+        };
+    }
+  }
+
   /// Watches a FROST signing job until it produces a Bitcoin transaction,
   /// fails outright, or outlives the poll budget.
   Future<_FrostSigningPollResult> _pollFrostSigningJob(String jobId) async {
@@ -701,6 +768,15 @@ class WebTokenActionsManager {
         withdrawalAmount = pendingJob.amount;
         btcDestination = pendingJob.btcDestination;
       } else {
+        // Nothing local accounts for this withdrawal. Before asking for a
+        // ceremony, check whether one has already run somewhere this browser
+        // cannot see.
+        final alreadySigned = await _guardAgainstResigning(
+          scIdentifier: scIdentifier,
+          requestHash: requestHash,
+        );
+        if (alreadySigned != null) return alreadySigned;
+
         // Step 1: Prepare — get messages to sign + withdrawal params
         final prepared = await ExplorerService().prepareV2WithdrawalComplete(
           scIdentifier: scIdentifier,

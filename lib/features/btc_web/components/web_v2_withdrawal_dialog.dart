@@ -93,6 +93,10 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   /// against spent inputs, so no retry is offered.
   bool _btcBroadcastUnconfirmed = false;
 
+  /// Set when the explorer says this withdrawal was already signed elsewhere.
+  /// Same reason to withhold retry: signing again can pay the withdrawal twice.
+  bool _signingAlreadyStarted = false;
+
   /// The broadcast this dialog is trying to settle, held in memory so a retry
   /// never depends on storage — which may be the thing that failed.
   PendingWithdrawalCompletion? _pendingCompletion;
@@ -244,6 +248,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
 
     setState(() {
       _btcBroadcastUnconfirmed = result?['btc_broadcast_unconfirmed'] == true;
+      _signingAlreadyStarted = result?['signing_already_started'] == true;
       _step = _DialogStep.failure;
       _errorMessage = result?['message'] ?? "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.";
     });
@@ -548,9 +553,13 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
               variant: AppColorVariant.Light,
               onPressed: () => Navigator.of(context).pop(),
             ),
-            // No retry when the BTC broadcast succeeded without returning a
-            // txid — signing again would spend inputs that are already gone.
-            if (_requestHash != null && !_btcBroadcastUnconfirmed) ...[
+            // No retry when signing has already produced a Bitcoin transaction
+            // this session cannot account for — whether the broadcast returned
+            // no txid, or the explorer says another device signed it. Either
+            // way, signing again can send the Bitcoin twice.
+            if (_requestHash != null &&
+                !_btcBroadcastUnconfirmed &&
+                !_signingAlreadyStarted) ...[
               const SizedBox(width: 8),
               AppButton(
                 label: "Retry Signing",
