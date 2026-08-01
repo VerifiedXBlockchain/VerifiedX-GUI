@@ -5,6 +5,15 @@ import '../../nft/models/web_nft.dart';
 part 'btc_web_vbtc_token.freezed.dart';
 part 'btc_web_vbtc_token.g.dart';
 
+/// Withdrawal request statuses that still need completing. The API has used
+/// both spellings, and treating only one as resumable strands the other in a
+/// state where the UI offers a fresh request instead of finishing the existing
+/// one.
+const kResumableWithdrawalStatuses = {'pending', 'requested'};
+
+bool withdrawalIsResumable(Map<String, dynamic> withdrawalRequest) =>
+    kResumableWithdrawalStatuses.contains(withdrawalRequest['status']);
+
 @freezed
 class BtcWebVbtcToken with _$BtcWebVbtcToken {
   const BtcWebVbtcToken._();
@@ -30,6 +39,9 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
   }) = _BtcWebVbtcToken;
 
   factory BtcWebVbtcToken.fromJson(Map<String, dynamic> json) => _$BtcWebVbtcTokenFromJson(json);
+
+  List<Map<String, dynamic>> get resumableWithdrawalRequests =>
+      (withdrawalRequests ?? []).where(withdrawalIsResumable).toList();
 
   double balanceForAddress(String? address) {
     if (address == null) {
