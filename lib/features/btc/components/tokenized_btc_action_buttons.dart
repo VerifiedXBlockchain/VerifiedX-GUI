@@ -402,7 +402,9 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 // V2: refresh token data and check for pending withdrawal before showing the form
                 if (token.version >= 2) {
                   // Fetch fresh V2 contract data to get current withdrawal state
-                  final freshContracts = await VbtcV2Service().getContractList();
+                  final freshContracts = await VbtcV2Service().getContractList(
+                    address: ref.read(sessionProvider).currentWallet?.address,
+                  );
                   final freshToken = freshContracts.firstWhereOrNull(
                     (t) => t.smartContractUid == token.smartContractUid,
                   );

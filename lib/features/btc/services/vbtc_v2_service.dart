@@ -63,14 +63,22 @@ class VbtcV2Service extends BaseService {
       // GetContractList carries no per-address figure, so spendable balances
       // are fetched alongside it. One request per contract against the local
       // node.
-      final spendable = await Future.wait(
-        parsed.map(
-          (c) => getSpendableBalance(
-            address: address ?? c['OwnerAddress'] ?? c['RBXAddress'] ?? '',
-            scUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
-          ),
-        ),
-      );
+      //
+      // Only ever for the address the caller named. Falling back to the
+      // contract's OwnerAddress would put the OWNER's spendable figure in
+      // `myBalance`, which is the current wallet's field — the same wrong-holder
+      // balance this lookup exists to fix, just sourced differently. With no
+      // address there is nothing correct to show, so it stays 0.
+      final List<double?> spendable = address == null
+          ? List<double?>.filled(parsed.length, null)
+          : await Future.wait(
+              parsed.map(
+                (c) => getSpendableBalance(
+                  address: address,
+                  scUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
+                ),
+              ),
+            );
 
       final List<TokenizedBitcoin> tokens = [];
       for (int i = 0; i < parsed.length; i++) {
