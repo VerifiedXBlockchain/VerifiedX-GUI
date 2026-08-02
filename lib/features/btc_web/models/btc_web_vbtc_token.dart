@@ -53,8 +53,29 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
 
   factory BtcWebVbtcToken.fromJson(Map<String, dynamic> json) => _$BtcWebVbtcTokenFromJson(json);
 
-  List<Map<String, dynamic>> get resumableWithdrawalRequests =>
-      (withdrawalRequests ?? []).where(withdrawalIsResumable).toList();
+  /// Outstanding withdrawals that `address` itself requested.
+  ///
+  /// Scoped to the requestor on purpose. A vBTC contract is shared — every
+  /// holder's withdrawals sit in the same list — and completing one signs the
+  /// FROST leader auth with whichever wallet is active. The node takes the
+  /// coordinator from the stored request's RequestorAddress, so acting on
+  /// somebody else's request makes the leader address and the signature
+  /// disagree, and every validator rejects the ceremony. It never starts, so
+  /// the caller sees a hang rather than an error.
+  ///
+  /// Returns nothing for a null address: with no wallet to compare against
+  /// there is no request this session can safely finish.
+  List<Map<String, dynamic>> resumableWithdrawalRequestsFor(String? address) {
+    if (address == null || address.isEmpty) return const [];
+    return (withdrawalRequests ?? [])
+        .where(withdrawalIsResumable)
+        .where((w) => w['requestor_address'] == address)
+        .toList();
+  }
+
+  /// True when `address` has a withdrawal of its own still to finish.
+  bool hasResumableWithdrawalFor(String? address) =>
+      resumableWithdrawalRequestsFor(address).isNotEmpty;
 
   double balanceForAddress(String? address) {
     if (address == null) {

@@ -252,8 +252,11 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               return;
             }
 
-            // Check for pending withdrawal to resume
-            final pending = token.resumableWithdrawalRequests;
+            // Only this wallet's own outstanding withdrawals. Resuming
+            // another holder's makes the FROST leader address and the
+            // signature disagree, which validators reject — and the ceremony
+            // then hangs rather than failing.
+            final pending = token.resumableWithdrawalRequestsFor(myAddress);
             if (pending.isNotEmpty) {
               final requestHash = pending.first['request_transaction_hash'] as String?;
               if (requestHash != null) {

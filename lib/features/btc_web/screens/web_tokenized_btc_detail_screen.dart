@@ -236,7 +236,15 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                       final status = wr['status'] ?? 'unknown';
                       final amount = wr['amount'];
                       final btcAddr = wr['btc_address'] ?? '';
-                      final isRequested = withdrawalIsResumable(wr);
+                      // Resumable AND ours. The list shows every holder's
+                      // withdrawals because the contract is shared, but only
+                      // the wallet that made a request can finish it: the node
+                      // takes the FROST coordinator from the stored
+                      // RequestorAddress while the signature comes from the
+                      // active wallet, so acting on someone else's request
+                      // makes validators reject a ceremony that then hangs.
+                      final isMine = wr['requestor_address'] == address;
+                      final isRequested = withdrawalIsResumable(wr) && isMine;
                       final unrecorded = PendingWithdrawalCompletionService().get(
                         wr['request_transaction_hash'] ?? '',
                       );
