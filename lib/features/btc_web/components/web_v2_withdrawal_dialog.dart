@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../app.dart';
+import '../services/withdrawal_in_progress_notice.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
 import '../../../core/services/explorer_service.dart';
@@ -140,9 +141,21 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     if (!mounted) return;
 
     if (result['success'] != true || result['hash'] == null) {
+      final message = result['message'] as String?;
+
+      // Not a failure — the contract simply has a withdrawal underway, and the
+      // holders share one Bitcoin deposit address so they run one at a time.
+      // Close out and explain it rather than leaving a red error on screen
+      // carrying the node's raw "verification failed" wording.
+      if (isWithdrawalAlreadyInProgress(message)) {
+        Navigator.of(context).pop();
+        await showWithdrawalInProgressNotice();
+        return;
+      }
+
       setState(() {
         _step = _DialogStep.failure;
-        _errorMessage = result['message'] ?? "Failed to broadcast withdrawal request.";
+        _errorMessage = message ?? "Failed to broadcast withdrawal request.";
       });
       return;
     }
