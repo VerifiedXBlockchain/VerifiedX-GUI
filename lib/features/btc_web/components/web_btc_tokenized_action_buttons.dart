@@ -256,7 +256,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             // another holder's makes the FROST leader address and the
             // signature disagree, which validators reject — and the ceremony
             // then hangs rather than failing.
-            final pending = token.resumableWithdrawalRequestsFor(myAddress);
+            final pending = token.liveResumableWithdrawalRequestsFor(myAddress);
             if (pending.isNotEmpty) {
               final requestHash = pending.first['request_transaction_hash'] as String?;
               if (requestHash != null) {

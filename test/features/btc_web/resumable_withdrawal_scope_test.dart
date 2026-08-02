@@ -102,4 +102,48 @@ void main() {
       expect(token.resumableWithdrawalRequestsFor(''), isEmpty);
     });
   });
+
+  group('a stale request stops capturing the withdraw button', () {
+    // The chain stops treating a request as the contract's active one after
+    // EXPIRY_BLOCKS (360, ~72 min) and lets the next request overwrite it. Until
+    // then resuming is the only way forward; after it, forcing resume traps the
+    // holder on a request that may never finish.
+    Map<String, dynamic> aged(Duration age) => {
+          ..._request(requestor: _holder),
+          'created_at': DateTime.utc(2026, 8, 2, 12, 0)
+              .subtract(age)
+              .toIso8601String()
+              .replaceFirst('.000', ''),
+        };
+    final now = DateTime.utc(2026, 8, 2, 12, 0);
+
+    test('a fresh request is still resumed', () {
+      final token = _token([aged(const Duration(minutes: 5))]);
+
+      expect(token.liveResumableWithdrawalRequestsFor(_holder, now: now), hasLength(1));
+    });
+
+    test('a request past the window no longer captures the button', () {
+      final token = _token([aged(const Duration(hours: 8))]);
+
+      expect(token.liveResumableWithdrawalRequestsFor(_holder, now: now), isEmpty);
+      // Still listed, so it is not hidden — only no longer forced.
+      expect(token.resumableWithdrawalRequestsFor(_holder), hasLength(1));
+    });
+
+    test('the boundary errs toward keeping it resumable', () {
+      // 72 min is the real chain window; the client waits longer so it can
+      // never refuse to resume a request the chain still considers live.
+      final token = _token([aged(const Duration(minutes: 75))]);
+
+      expect(token.liveResumableWithdrawalRequestsFor(_holder, now: now), hasLength(1));
+    });
+
+    test('a missing or unparseable created_at is treated as live', () {
+      for (final value in [null, 'not-a-date', 42]) {
+        final row = {..._request(requestor: _holder), 'created_at': value};
+        expect(withdrawalIsStale(row, now: now), isFalse, reason: '$value');
+      }
+    });
+  });
 }
