@@ -338,6 +338,16 @@ class WebTokenActionsManager {
     ref.read(globalLoadingProvider.notifier).start();
 
     var locator = await RawService().beaconUpload(scIdentifier, toAddress, beaconSig);
+
+    // A blank locator is as unusable as a missing one, and worse in practice: it
+    // survives a null check and then collapses the transfer-data URL to an empty
+    // path segment, which the explorer route cannot match and answers 404. A
+    // no-media upload reports success with nothing to locate, so this is the
+    // normal result for exactly the contracts that need the fallback.
+    if (locator != null && locator.trim().isEmpty) {
+      locator = null;
+    }
+
     if (locator == null) {
       // A contract with no media has nothing to ship, so a dead beacon should
       // not stop the transfer. The node reaches the same conclusion from the
