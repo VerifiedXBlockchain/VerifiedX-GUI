@@ -409,10 +409,16 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     (t) => t.smartContractUid == token.smartContractUid,
                   );
 
+                  // NOTE: `hasPendingWithdrawal` comes from the contract's
+                  // ActiveWithdrawal* fields, which are a single slot shared by
+                  // every holder — GetContractList carries no requestor, so
+                  // this cannot be scoped to the current wallet the way the web
+                  // build scopes it. The copy therefore does not claim the
+                  // withdrawal belongs to this account.
                   if (freshToken != null && freshToken.hasPendingWithdrawal) {
                     final shouldComplete = await ConfirmDialog.show(
                       title: "Pending Withdrawal Found",
-                      body: "You have a pending withdrawal of ${freshToken.activeWithdrawalAmount} vBTC to ${freshToken.activeWithdrawalBtcDestination}.\n\nWould you like to complete it?",
+                      body: "This token has a pending withdrawal of ${freshToken.activeWithdrawalAmount} vBTC to ${freshToken.activeWithdrawalBtcDestination}.\n\nIt may have been requested by another holder of this token. Only the account that requested it can complete it.\n\nWould you like to try to complete it?",
                       confirmText: "Complete",
                       cancelText: "Dismiss",
                     );
