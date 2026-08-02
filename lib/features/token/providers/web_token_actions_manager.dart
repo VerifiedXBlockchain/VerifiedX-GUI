@@ -16,6 +16,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
 import '../../btc_web/services/frost_resume_guard.dart';
+import '../../btc_web/services/vbtc_media_detection.dart';
 import '../../btc_web/services/pending_frost_signing_job_service.dart';
 import '../../btc_web/services/pending_withdrawal_completion_service.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -296,6 +297,21 @@ class WebTokenActionsManager {
     );
   }
 
+  /// Whether this vBTC contract has no media file to ship through a beacon.
+  ///
+  /// Returns false if the lookup fails: without positive evidence the transfer
+  /// keeps requiring a beacon rather than risking a token whose file never
+  /// reaches the recipient.
+  Future<bool> _contractHasNoMedia(String scIdentifier) async {
+    try {
+      final token = await ExplorerService().getWebVbtcV2TokenDetail(scIdentifier);
+      return vbtcContractHasNoMedia(token.nft);
+    } catch (e) {
+      print("Could not determine media for $scIdentifier: $e");
+      return false;
+    }
+  }
+
   /// Signs a hash and sends the signature to a "send" endpoint.
   /// Common pattern for all V2 two-step operations.
   Future<bool?> transferVbtcOwnership({
@@ -321,11 +337,25 @@ class WebTokenActionsManager {
 
     ref.read(globalLoadingProvider.notifier).start();
 
-    final locator = await RawService().beaconUpload(scIdentifier, toAddress, beaconSig);
+    var locator = await RawService().beaconUpload(scIdentifier, toAddress, beaconSig);
     if (locator == null) {
-      ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error("Beacon upload failed");
-      return false;
+      // A contract with no media has nothing to ship, so a dead beacon should
+      // not stop the transfer. The node reaches the same conclusion from the
+      // state trei and forces the "NA" locator itself; this stops the wallet
+      // aborting before the node is ever asked.
+      //
+      // Only checked once the upload has already failed, so the working path is
+      // untouched and this costs nothing when beacons are healthy.
+      if (await _contractHasNoMedia(scIdentifier)) {
+        locator = "NA";
+      } else {
+        ref.read(globalLoadingProvider.notifier).complete();
+        Toast.error(
+          "Beacon upload failed. This token has a media file that must be transferred with it, "
+          "so the transfer cannot continue until a beacon is reachable.",
+        );
+        return false;
+      }
     }
 
     // Step 2: Get transfer TX data
