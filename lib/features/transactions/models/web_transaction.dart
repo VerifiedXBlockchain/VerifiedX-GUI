@@ -251,6 +251,8 @@ class WebTransaction with _$WebTransaction {
         return l10n.r3cTypeValidatorRegistration;
       case 23:
         return l10n.r3cTypeValidatorHeartbeat;
+      case 24:
+        return l10n.r3cTypeValidatorExit;
       case 25:
         return l10n.r3cTypeVbtcContractMint;
       case 26:
@@ -279,6 +281,14 @@ class WebTransaction with _$WebTransaction {
         return l10n.r3cTypeVbtcBridgeLock;
       case 38:
         return l10n.r3cTypeVbtcBridgeUnlock;
+      case 39:
+        return l10n.r3cTypeVbtcBridgePoolUnlock;
+      case 40:
+        return l10n.r3cTypeVbtcBridgeExitToBtc;
+      case 41:
+        return l10n.r3cTypeVbtcBridgeExitToBtcComplete;
+      case 42:
+        return l10n.r3cTypeVbtcBridgeExitToBtcFailed;
       default:
         return type.toString();
     }

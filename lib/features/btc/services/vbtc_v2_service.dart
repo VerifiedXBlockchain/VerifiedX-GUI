@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../utils/toast.dart';
@@ -23,7 +24,10 @@ void _log(String method, String message, [Map<String, dynamic>? json]) {
 class VbtcV2Service extends BaseService {
   VbtcV2Service() : super(apiBasePathOverride: "/vbtcapi/vbtc");
 
-  static final _activeWithdrawalPattern = RegExp(r'Request Hash:\s*((?:0x)?[a-fA-F0-9]+)');
+  /// FROST signing is budgeted 180s on the web wallet. Anything shorter here
+  /// times out the client while the CLI is still legitimately signing, which
+  /// surfaces a successful withdrawal as a failure.
+  static const _completeWithdrawalTimeoutMs = 180000;
 
   /// Fetch V2 contracts from the CLI endpoint.
   /// Returns them as [TokenizedBitcoin] with version=2 so the UI
@@ -48,8 +52,38 @@ class VbtcV2Service extends BaseService {
         return [];
       }
 
-      final List<TokenizedBitcoin> tokens = [];
+      final List<Map<String, dynamic>> parsed = [];
       for (final c in rawList) {
+        try {
+          parsed.add(Map<String, dynamic>.from(c));
+        } catch (e) {
+          _log(method, 'Failed to parse V2 contract: $e');
+        }
+      }
+
+      // GetContractList carries no per-address figure, so spendable balances
+      // are fetched alongside it. One request per contract against the local
+      // node.
+      //
+      // Only ever for the address the caller named. Falling back to the
+      // contract's OwnerAddress would put the OWNER's spendable figure in
+      // `myBalance`, which is the current wallet's field — the same wrong-holder
+      // balance this lookup exists to fix, just sourced differently. With no
+      // address there is nothing correct to show, so it stays 0.
+      final List<double?> spendable = address == null
+          ? List<double?>.filled(parsed.length, null)
+          : await Future.wait(
+              parsed.map(
+                (c) => getSpendableBalance(
+                  address: address,
+                  scUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
+                ),
+              ),
+            );
+
+      final List<TokenizedBitcoin> tokens = [];
+      for (int i = 0; i < parsed.length; i++) {
+        final c = parsed[i];
         try {
           final token = TokenizedBitcoin(
             id: (c['Id'] ?? 0).toDouble(),
@@ -57,7 +91,10 @@ class VbtcV2Service extends BaseService {
             rbxAddress: c['OwnerAddress'] ?? c['RBXAddress'] ?? '',
             btcAddress: c['DepositAddress'],
             balance: (c['Balance'] ?? 0).toDouble(),
-            myBalance: (c['MyBalance'] ?? c['Balance'] ?? 0).toDouble(),
+            // 0 rather than the contract balance when the lookup failed:
+            // blocking a transfer is recoverable, offering a balance that is
+            // not there is not.
+            myBalance: spendable[i] ?? 0,
             tokenName: c['Name'] ?? c['TokenName'] ?? 'vBTC',
             tokenDescription: c['Description'] ?? c['TokenDescription'] ?? '',
             smartContractMainId: (c['SmartContractMainId'] ?? 0).toDouble(),
@@ -78,6 +115,52 @@ class VbtcV2Service extends BaseService {
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
       return [];
+    }
+  }
+
+  /// What [address] can actually spend of [scUid], or null if it could not be
+  /// determined.
+  ///
+  /// `GetContractList` reports only `Balance` — the confirmed BTC sitting in
+  /// the contract's Taproot deposit address. That is a property of the
+  /// contract, not of any one holder: it ignores the owner's own vBTC ledger
+  /// entries, counts nothing for a non-owner who was transferred vBTC, and
+  /// includes amounts already committed to a withdrawal in flight.
+  /// `GetVBTCBalance` is the endpoint that resolves all three per address.
+  Future<double?> getSpendableBalance({
+    required String address,
+    required String scUid,
+  }) async {
+    const method = 'GetVBTCBalance';
+
+    if (address.isEmpty || scUid.isEmpty) {
+      _log(method, 'Skipped: address or scUid missing');
+      return null;
+    }
+
+    try {
+      final result = await getJson(
+        "/GetVBTCBalance/$address/$scUid",
+        cleanPath: false,
+      );
+
+      if (result['Success'] != true) {
+        _log(method, 'FAILED for $address / $scUid: ${result['Message']}');
+        return null;
+      }
+
+      // AvailableBalance is the total less anything locked in an incomplete
+      // withdrawal request for this address.
+      final available = (result['AvailableBalance'] as num?)?.toDouble();
+      if (available == null) {
+        _log(method, 'No AvailableBalance in response for $address / $scUid');
+        return null;
+      }
+
+      return available;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      return null;
     }
   }
 
@@ -327,7 +410,7 @@ class VbtcV2Service extends BaseService {
       'WithdrawalRequestHash': withdrawalRequestHash,
     };
 
-    _log(method, 'REQUEST POST /CompleteWithdrawal (timeout: 120s)', params);
+    _log(method, 'REQUEST POST /CompleteWithdrawal (timeout: ${_completeWithdrawalTimeoutMs ~/ 1000}s)', params);
 
     try {
       final stopwatch = Stopwatch()..start();
@@ -336,7 +419,7 @@ class VbtcV2Service extends BaseService {
         params: params,
         cleanPath: false,
         inspect: true,
-        timeout: 120000,
+        timeout: _completeWithdrawalTimeoutMs,
       );
       stopwatch.stop();
 
@@ -363,11 +446,81 @@ class VbtcV2Service extends BaseService {
       );
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
+      final timedOut = _isTimeout(e);
       return WithdrawalResult(
         success: false,
-        message: e.toString(),
+        message: timedOut
+            ? "Timed out waiting for the signing ceremony to finish. The withdrawal may still be in progress."
+            : e.toString(),
         requestHash: withdrawalRequestHash,
+        timedOut: timedOut,
       );
+    }
+  }
+
+  static bool _isTimeout(Object e) {
+    if (e is! DioException) return false;
+    return e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.receiveTimeout;
+  }
+
+  /// Whether [withdrawalRequestHash] is still awaiting settlement.
+  ///
+  /// Returns null when this particular request's fate could not be
+  /// established — callers must not treat that as settled.
+  ///
+  /// `ActiveWithdrawalRequestHash` alone cannot answer this. It is a single
+  /// contract-wide slot that any holder's new request overwrites, and a
+  /// cancellation clears it outright, so finding some other hash there says
+  /// nothing about this one. Completion is the only event that records the
+  /// request hash per request, in `WithdrawalHistory`, so that is what a
+  /// "settled" verdict is built on.
+  Future<bool?> isWithdrawalStillActive({
+    required String scUid,
+    required String withdrawalRequestHash,
+  }) async {
+    const method = 'IsWithdrawalStillActive';
+
+    try {
+      final result = await getJson(
+        "/GetContractDetails/$scUid",
+        cleanPath: false,
+      );
+
+      if (result['Success'] != true || result['Contract'] == null) {
+        _log(method, 'Could not read contract state for scUid: $scUid — ${result['Message']}');
+        return null;
+      }
+
+      final contract = Map<String, dynamic>.from(result['Contract']);
+
+      final history = contract['WithdrawalHistory'];
+      if (history is List) {
+        final completed = history.any(
+          (h) => h is Map && h['RequestHash'] == withdrawalRequestHash,
+        );
+        if (completed) {
+          _log(method, 'Request $withdrawalRequestHash is in the withdrawal history — settled');
+          return false;
+        }
+      }
+
+      final active = contract['ActiveWithdrawalRequestHash'];
+      if (active is String && active == withdrawalRequestHash) {
+        _log(method, 'Request $withdrawalRequestHash is still the active withdrawal');
+        return true;
+      }
+
+      // Not completed and not the active request: it was cancelled, or another
+      // holder's request took the slot. Either way this cannot be called
+      // settled, and reporting it as such would tell the user a withdrawal
+      // finished when it did not.
+      _log(method, 'Fate of $withdrawalRequestHash is unknown — active slot holds: $active');
+      return null;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      return null;
     }
   }
 
@@ -415,72 +568,5 @@ class VbtcV2Service extends BaseService {
       Toast.error(e.toString());
       return false;
     }
-  }
-
-  /// Combined withdraw helper: requests a withdrawal then completes it.
-  /// If an active withdrawal already exists, parses the request hash from
-  /// the error and proceeds to complete it.
-  Future<WithdrawalResult> withdraw({
-    required String scUid,
-    required String requestorAddress,
-    required String btcAddress,
-    required double amount,
-    required int feeRate,
-  }) async {
-    const method = 'Withdraw';
-    _log(method, 'Starting combined withdraw flow for scUid: $scUid, amount: $amount, feeRate: $feeRate');
-
-    // Step 1: Request withdrawal
-    final requestResult = await requestWithdrawal(
-      scUid: scUid,
-      requestorAddress: requestorAddress,
-      btcAddress: btcAddress,
-      amount: amount,
-      feeRate: feeRate,
-    );
-
-    String? requestHash = requestResult.requestHash;
-
-    if (!requestResult.success) {
-      // Check if there's an existing active withdrawal we can resume
-      final message = requestResult.message ?? "";
-      final match = _activeWithdrawalPattern.firstMatch(message);
-      if (match != null) {
-        requestHash = match.group(1);
-        _log(method, 'Detected active withdrawal — resuming with requestHash: $requestHash');
-      } else {
-        _log(method, 'Request failed with no active withdrawal to resume: $message');
-        Toast.error(requestResult.message ?? globalL10n.r3fFailedRequestWithdrawal);
-        return requestResult;
-      }
-    }
-
-    if (requestHash == null) {
-      _log(method, 'No requestHash available — aborting');
-      return WithdrawalResult(
-        success: false,
-        message: globalL10n.r3fNoRequestHash,
-      );
-    }
-
-    _log(method, 'Step 2: Completing withdrawal via FROST signing — requestHash: $requestHash');
-
-    // Step 2: Complete withdrawal via FROST signing
-    final completeResult = await completeWithdrawal(
-      scUid: scUid,
-      withdrawalRequestHash: requestHash,
-    );
-
-    _log(method, 'Withdraw flow finished — success: ${completeResult.success}');
-
-    // Always include the requestHash in the result for retry support
-    return WithdrawalResult(
-      success: completeResult.success,
-      message: completeResult.message,
-      requestHash: requestHash,
-      vfxTransactionHash: completeResult.vfxTransactionHash,
-      btcTransactionHash: completeResult.btcTransactionHash,
-      status: completeResult.status,
-    );
   }
 }

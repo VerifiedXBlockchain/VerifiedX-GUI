@@ -255,25 +255,24 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               return;
             }
 
-            // Check for pending withdrawal to resume
-            if (token.isPendingWithdrawal && token.withdrawalRequests != null) {
-              final pending = token.withdrawalRequests!.where(
-                (wr) => wr['status'] == 'pending',
-              );
-              if (pending.isNotEmpty) {
-                final requestHash = pending.first['request_transaction_hash'] as String?;
-                if (requestHash != null) {
-                  WebV2WithdrawalDialog.show(
-                    scIdentifier: token.scIdentifier,
-                    requestorAddress: myAddress!,
-                    btcAddress: pending.first['btc_address'] ?? '',
-                    amount: (pending.first['amount'] is num) ? (pending.first['amount'] as num).toDouble() : (double.tryParse(pending.first['amount'].toString()) ?? 0),
-                    feeRate: 0,
-                    ownerAddress: token.ownerAddress,
-                    existingRequestHash: requestHash,
-                  );
-                  return;
-                }
+            // Only this wallet's own outstanding withdrawals. Resuming
+            // another holder's makes the FROST leader address and the
+            // signature disagree, which validators reject — and the ceremony
+            // then hangs rather than failing.
+            final pending = token.liveResumableWithdrawalRequestsFor(myAddress);
+            if (pending.isNotEmpty) {
+              final requestHash = pending.first['request_transaction_hash'] as String?;
+              if (requestHash != null) {
+                WebV2WithdrawalDialog.show(
+                  scIdentifier: token.scIdentifier,
+                  requestorAddress: myAddress!,
+                  btcAddress: pending.first['btc_address'] ?? '',
+                  amount: (pending.first['amount'] is num) ? (pending.first['amount'] as num).toDouble() : (double.tryParse(pending.first['amount'].toString()) ?? 0),
+                  feeRate: 0,
+                  ownerAddress: token.ownerAddress,
+                  existingRequestHash: requestHash,
+                );
+                return;
               }
             }
 
@@ -299,7 +298,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
 
             final address = await PromptModal.show(
               title: l10n.bw2BtcAddressTitle,
-              validator: (val) => formValidatorNotEmpty(val, l10n.labelAddress),
+              validator: formValidatorBtcAddress,
               labelText: l10n.bw2ReceivingBtcAddress,
             );
             if (address == null) return;

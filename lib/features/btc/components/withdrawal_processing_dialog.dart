@@ -58,7 +58,7 @@ class WithdrawalProcessingDialog extends StatefulWidget {
   State<WithdrawalProcessingDialog> createState() => _WithdrawalProcessingDialogState();
 }
 
-enum _DialogState { waitingForBlock, processing, success, failure }
+enum _DialogState { waitingForBlock, processing, verifying, success, failure }
 
 class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog> {
   _DialogState _state = _DialogState.processing;
@@ -67,6 +67,10 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   int _confirmationPollCount = 0;
   static const _maxConfirmationPolls = 60; // 60 * 5s = 5 minutes max
   static const _confirmationPollInterval = Duration(seconds: 5);
+  static const _maxVerificationPolls = 24; // 24 * 5s = 2 minutes max
+
+  /// Guards Retry against a double tap starting two signing ceremonies.
+  bool _busy = false;
 
   @override
   void initState() {
@@ -126,6 +130,8 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   }
 
   Future<void> _runCompleteWithdrawal() async {
+    if (_busy) return;
+    _busy = true;
     debugPrint('$_tag Calling completeWithdrawal — scUid: ${widget.scUid}, requestHash: ${widget.requestHash}');
     setState(() => _state = _DialogState.processing);
 
@@ -134,9 +140,18 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
       withdrawalRequestHash: widget.requestHash,
     );
 
+    _busy = false;
     if (!mounted) return;
 
     debugPrint('$_tag completeWithdrawal result — success: ${result.success}, vfxTx: ${result.vfxTransactionHash}, btcTx: ${result.btcTransactionHash}, message: ${result.message}');
+
+    // A client-side timeout does not mean the ceremony failed — the CLI may
+    // still be signing and broadcasting. Offering Retry here risks a second
+    // Bitcoin transaction, so confirm the contract state first.
+    if (!result.success && result.timedOut) {
+      await _verifyWithdrawalSettled();
+      return;
+    }
 
     if (result.success) {
       notifyTransactionSubmitted();
@@ -145,6 +160,54 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     setState(() {
       _result = result;
       _state = result.success ? _DialogState.success : _DialogState.failure;
+    });
+  }
+
+  /// Polls the contract until this request shows up as settled, which means
+  /// the CLI finished after our request timed out. Anything short of that —
+  /// including a state the contract cannot account for — keeps polling.
+  Future<void> _verifyWithdrawalSettled() async {
+    debugPrint('$_tag Request timed out — verifying contract state for ${widget.requestHash}');
+    setState(() => _state = _DialogState.verifying);
+
+    for (int i = 0; i < _maxVerificationPolls; i++) {
+      await Future.delayed(_confirmationPollInterval);
+      if (!mounted) return;
+
+      final stillActive = await VbtcV2Service().isWithdrawalStillActive(
+        scUid: widget.scUid,
+        withdrawalRequestHash: widget.requestHash,
+      );
+      if (!mounted) return;
+
+      debugPrint('$_tag Verification poll #${i + 1} — stillActive: $stillActive');
+
+      if (stillActive == false) {
+        notifyTransactionSubmitted();
+        setState(() {
+          _result = WithdrawalResult(
+            success: true,
+            requestHash: widget.requestHash,
+            message: "Withdrawal completed. The contract has recorded it as settled.",
+          );
+          _state = _DialogState.success;
+        });
+        return;
+      }
+    }
+
+    if (!mounted) return;
+
+    debugPrint('$_tag Verification exhausted — withdrawal still pending');
+    setState(() {
+      _result = WithdrawalResult(
+        success: false,
+        requestHash: widget.requestHash,
+        message: "The signing ceremony timed out and the withdrawal has not been recorded as settled. "
+            "It may yet complete on its own — re-check the token before retrying, as retrying can "
+            "broadcast a second Bitcoin transaction.",
+      );
+      _state = _DialogState.failure;
     });
   }
 
@@ -159,7 +222,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
             _titleForState(l10n),
             style: const TextStyle(color: Colors.white),
           ),
-          if (_state != _DialogState.processing && _state != _DialogState.waitingForBlock)
+          if (_isTerminal)
             IconButton(
               onPressed: () => Navigator.of(context).pop(_result),
               icon: const Icon(Icons.close, size: 20),
@@ -177,6 +240,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           children: [
             if (_state == _DialogState.waitingForBlock) _buildWaitingForBlockSection(l10n),
             if (_state == _DialogState.processing) _buildProcessingSection(l10n),
+            if (_state == _DialogState.verifying) _buildVerifyingSection(l10n),
             if (_state == _DialogState.success) _buildSuccessSection(l10n),
             if (_state == _DialogState.failure) _buildFailureSection(l10n),
           ],
@@ -185,12 +249,17 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     );
   }
 
+  bool get _isTerminal =>
+      _state == _DialogState.success || _state == _DialogState.failure;
+
   String _titleForState(AppLocalizations l10n) {
     switch (_state) {
       case _DialogState.waitingForBlock:
         return l10n.bw2WaitingForConfirmation;
       case _DialogState.processing:
         return l10n.bw2ProcessingWithdrawal;
+      case _DialogState.verifying:
+        return l10n.bw2CheckingWithdrawalStatus;
       case _DialogState.success:
         return l10n.bw2WithdrawalComplete;
       case _DialogState.failure:
@@ -242,6 +311,31 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
         const SizedBox(height: 8),
         Text(
           l10n.bw2DoNotCloseApp,
+          style: const TextStyle(color: Colors.white38, fontSize: 12),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildVerifyingSection(AppLocalizations l10n) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Center(
+          child: SizedBox(
+            width: 32,
+            height: 32,
+            child: CircularProgressIndicator(strokeWidth: 3),
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          l10n.bw2VerifyingWithdrawalBody,
+          style: const TextStyle(color: Colors.white70),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.bw2VerifyingWithdrawalHint,
           style: const TextStyle(color: Colors.white38, fontSize: 12),
         ),
       ],
@@ -333,7 +427,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
             AppButton(
               label: l10n.btcRetry,
               variant: AppColorVariant.Warning,
-              onPressed: _runCompleteWithdrawal,
+              onPressed: _busy ? null : _runCompleteWithdrawal,
             ),
           ],
         ),

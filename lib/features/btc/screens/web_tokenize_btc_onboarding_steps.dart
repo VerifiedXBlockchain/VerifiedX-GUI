@@ -147,7 +147,10 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                         return;
                       }
 
-                      if (amountParsed > (ref.read(webSessionProvider).btcBalanceInfo?.balance ?? 0)) {
+                      // btcBalance, not balance: the latter is satoshis, so
+                      // comparing a BTC amount against it lets a transfer of
+                      // up to 100,000,000x the actual balance through.
+                      if (amountParsed > (ref.read(webSessionProvider).btcBalanceInfo?.btcBalance ?? 0)) {
                         Toast.error(l10n.btcNotEnoughBalance(amountParsed.toString()));
                         return;
                       }

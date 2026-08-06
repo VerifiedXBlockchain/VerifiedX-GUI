@@ -406,11 +406,19 @@ class TokenizedBtcActionButtons extends BaseComponent {
                 // V2: refresh token data and check for pending withdrawal before showing the form
                 if (token.version >= 2) {
                   // Fetch fresh V2 contract data to get current withdrawal state
-                  final freshContracts = await VbtcV2Service().getContractList();
+                  final freshContracts = await VbtcV2Service().getContractList(
+                    address: ref.read(sessionProvider).currentWallet?.address,
+                  );
                   final freshToken = freshContracts.firstWhereOrNull(
                     (t) => t.smartContractUid == token.smartContractUid,
                   );
 
+                  // NOTE: `hasPendingWithdrawal` comes from the contract's
+                  // ActiveWithdrawal* fields, which are a single slot shared by
+                  // every holder — GetContractList carries no requestor, so
+                  // this cannot be scoped to the current wallet the way the web
+                  // build scopes it. The copy therefore does not claim the
+                  // withdrawal belongs to this account.
                   if (freshToken != null && freshToken.hasPendingWithdrawal) {
                     final shouldComplete = await ConfirmDialog.show(
                       title: l10n.tkbPendingWithdrawalFound,
@@ -1149,6 +1157,10 @@ class _TransferSharesModal extends BaseComponent {
             children: [
               TextFormField(
                 controller: toAddressController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: forWithdrawl
+                    ? formValidatorBtcAddress
+                    : (value) => formValidatorNotEmpty(value, "Address"),
                 decoration: InputDecoration(
                   suffix: !forWithdrawl
                       ? AddressChoosingIconButton(
@@ -1300,8 +1312,13 @@ class _TransferSharesModal extends BaseComponent {
                         : AppColorVariant.Btc,
                     onPressed: () {
                       final toAddress = toAddressController.text.trim();
-                      if (toAddress.isEmpty) {
-                        print("Invalid To Address");
+                      // Checked here rather than through the enclosing Form,
+                      // which has no key and is never validated.
+                      final addressError = forWithdrawl
+                          ? formValidatorBtcAddress(toAddress)
+                          : formValidatorNotEmpty(toAddress, "Address");
+                      if (addressError != null) {
+                        Toast.error(addressError);
                         return;
                       }
 
