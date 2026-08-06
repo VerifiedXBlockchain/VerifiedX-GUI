@@ -9,12 +9,10 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../btc_web/components/web_mpc_ceremony_dialog.dart';
-import '../../smart_contracts/components/sc_creator/common/file_selector.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 
-import '../../../utils/files.dart';
 import '../components/mpc_ceremony_progress_modal.dart';
 import '../providers/mpc_ceremony_provider.dart';
 import '../providers/tokenize_btc_form_provider.dart';
@@ -121,71 +119,6 @@ class TokenizeBtcForm extends BaseComponent {
                 ),
                 hintText: AppLocalizations.of(context).btcVbtcHint,
               ),
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              AppLocalizations.of(context).bw2TokenImageOptional,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-            FileSelector(
-              asset: formState.asset,
-              allowedExtensions: IMAGE_EXTENSIONS,
-              resizeToSquareWidth: 200,
-              transparentBackground: true,
-              onChange: (a) {
-                formProvider.setAsset(a);
-
-                if (kIsWeb) {
-                  if (a != null) {
-                    final base64 = resizeImageAndBase64FromBytes(a.bytes!, 64);
-                    if (base64 != null) {
-                      formProvider.setImageBase64(base64);
-                    }
-                  } else {
-                    formProvider.setImageBase64(null);
-                  }
-                }
-              },
-            ),
-            SizedBox(
-              height: 12,
-            ),
-            Text(
-              AppLocalizations.of(context).bw2MediaOptional,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-            ListView.builder(
-                shrinkWrap: true,
-                itemCount: formState.additionalAssets.length,
-                itemBuilder: (context, index) {
-                  final asset = formState.additionalAssets[index];
-                  return FileSelector(
-                    key: Key("${index}_${asset.location}"),
-                    asset: asset,
-                    onChange: (a) {
-                      if (a != null) {
-                        formProvider.replaceAdditionalAsset(index, a);
-                      } else {
-                        formProvider.removeAdditionalAsset(index);
-                      }
-                    },
-                  );
-                }),
-            FileSelector(
-              transparentBackground: true,
-              onChange: (a) {
-                if (a != null) {
-                  formProvider.addAdditonalAsset(a);
-                }
-              },
             ),
             SizedBox(
               height: 22,

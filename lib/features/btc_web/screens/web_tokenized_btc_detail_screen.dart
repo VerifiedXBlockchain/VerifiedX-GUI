@@ -14,7 +14,6 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../nft/components/web_asset_thumbnail.dart';
 import '../../nft/providers/nft_detail_provider.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import '../../transactions/providers/web_transaction_list_provider.dart';
@@ -184,31 +183,6 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                 //         ),
                 //       );
                 //     }),
-                if (token.nft.smartContract.additionalAssetsWeb != null && token.nft.smartContract.additionalAssetsWeb!.isNotEmpty) ...[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      AppLocalizations.of(context).bw2MediaColon,
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Wrap(
-                    children: (token.nft.smartContract.additionalAssetsWeb ?? [])
-                        .map(
-                          (a) => Padding(
-                            padding: const EdgeInsets.only(right: 6.0),
-                            child: WebAssetThumbnail(
-                              a,
-                              nft: token.nft.smartContract,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  )
-                ],
                 Builder(builder: (context) {
                   final myAddr = ref.read(webSessionProvider).keypair?.address;
                   final withdrawals = (token.withdrawalRequests ?? [])

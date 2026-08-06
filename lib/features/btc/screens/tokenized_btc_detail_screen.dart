@@ -1,30 +1,23 @@
 import 'dart:convert';
 
 import 'package:archive/archive_io.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/base_component.dart';
 import '../../../core/base_screen.dart';
-import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
-import '../../asset/asset_thumbnail.dart';
 import '../components/btc_transaction_list_tile.dart';
 import '../components/tokenized_btc_action_buttons.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/btc_transaction_list_provider.dart';
 import '../providers/tokenized_btc_detail_provider.dart';
-import '../../nft/components/web_asset_thumbnail.dart';
 import '../../nft/providers/nft_detail_provider.dart';
 import '../../nft/services/nft_service.dart';
-import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../generated/assets.gen.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
-import 'package:collection/collection.dart';
 
 import '../../../core/theme/components.dart';
 import '../../bridge/components/bridge_history_list.dart';
@@ -225,23 +218,6 @@ class TokenizedBtcDetailScreen extends BaseScreen {
           SizedBox(
             height: 16,
           ),
-          if (nft.additionalAssets.isNotEmpty) ...[
-            Text(
-              AppLocalizations.of(context).r3fTokenMedia,
-              style: TextStyle(
-                decoration: TextDecoration.underline,
-                fontSize: 18,
-                color: AppColors.getBlue(ColorShade.s50),
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            _BtcTokenMedia(token: token),
-            SizedBox(
-              height: 16,
-            ),
-          ],
           SizedBox(
             height: 8,
           ),
@@ -370,108 +346,6 @@ class _VbtcActionButtonsContainerState extends State<_VbtcActionButtonsContainer
             ),
           );
         });
-  }
-}
-
-class _BtcTokenMedia extends BaseComponent {
-  final TokenizedBitcoin token;
-  const _BtcTokenMedia({
-    required this.token,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.read(nftDetailProvider(token.smartContractUid).notifier);
-    final nft = ref.watch(nftDetailProvider(token.smartContractUid));
-
-    if (nft == null) {
-      return SizedBox();
-    }
-
-    if (nft.additionalAssets.isEmpty) {
-      return Text(
-        AppLocalizations.of(context).r3fNoAdditionalMedia,
-        style: Theme.of(context).textTheme.bodySmall,
-      );
-    }
-
-    if (ref.watch(walletListProvider).firstWhereOrNull((element) => element.address == nft.currentOwner) == null) {
-      return Text(AppLocalizations.of(context).btcDetailOwnerOnlyMedia);
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: kIsWeb && nft.additionalAssetsWeb == null
-          ? buildAssetsNotAvailable(provider, false)
-          : kIsWeb
-              ? Wrap(
-                  children: (nft.additionalAssetsWeb ?? [])
-                      .map(
-                        (a) => Padding(
-                          padding: const EdgeInsets.only(right: 6.0),
-                          child: WebAssetThumbnail(
-                            a,
-                            nft: nft,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                )
-              : Wrap(
-                  children: nft.additionalLocalAssets
-                      .map(
-                        (a) => Padding(
-                          padding: const EdgeInsets.only(right: 6.0),
-                          child: AssetThumbnail(
-                            a,
-                            nftId: nft.id,
-                            ownerAddress: nft.nextOwner ?? nft.currentOwner,
-                            isPrimaryAsset: false,
-                            size: 100,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-    );
-  }
-
-  Widget buildAssetsNotAvailable(NftDetailProvider _provider, [bool includeButton = true]) {
-    return Builder(builder: (context) => Center(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Card(
-          color: Colors.black12,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  AppLocalizations.of(context).r3fNftNotTransferred,
-                  textAlign: TextAlign.center,
-                ),
-                if (includeButton)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 16.0),
-                    child: AppButton(
-                      label: AppLocalizations.of(context).btcDetailTransferNow,
-                      onPressed: () async {
-                        final success = await _provider.transferWebIn();
-
-                        if (success == true) {
-                          Toast.message(AppLocalizations.of(context).btcTransferNowToast);
-                        }
-                      },
-                      variant: AppColorVariant.Success,
-                    ),
-                  )
-              ],
-            ),
-          ),
-        ),
-      ),
-    ));
   }
 }
 
