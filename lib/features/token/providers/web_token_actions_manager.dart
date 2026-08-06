@@ -97,14 +97,14 @@ class WebTokenActionsManager {
     if (showLoader) {
       ref.read(globalLoadingProvider.notifier).complete();
     }
-    if (tx != null && tx[globalL10n.votingResult] == globalL10n.statusSuccess) {
+    if (tx != null && tx['Result'] == 'Success') {
       if (showToasts) {
         Toast.message(globalL10n.bw2TransactionBroadcasted);
       }
       return true;
     }
     if (showToasts) {
-      Toast.error(tx?[globalL10n.r3dMessage]);
+      Toast.error(tx?['Message']);
     }
     return false;
   }
@@ -116,7 +116,7 @@ class WebTokenActionsManager {
       "Function": "TokenMint()",
       "ContractUID": token.smartContractId,
       "FromAddress": address,
-      globalL10n.labelAmount: amount,
+      "Amount": amount,
       "TokenTicker": token.ticker,
       "TokenName": token.name,
     };
@@ -136,7 +136,7 @@ class WebTokenActionsManager {
       "ContractUID": token.smartContractId,
       "FromAddress": fromAddress,
       "ToAddress": toAddress,
-      globalL10n.labelAmount: amount,
+      "Amount": amount,
       "TokenTicker": token.ticker,
       "TokenName": token.name,
     };
@@ -153,7 +153,7 @@ class WebTokenActionsManager {
       "Function": "TokenBurn()",
       "ContractUID": token.smartContractId,
       "FromAddress": address,
-      globalL10n.labelAmount: amount,
+      "Amount": amount,
       "TokenTicker": token.ticker,
       "TokenName": token.name,
     };
@@ -213,7 +213,7 @@ class WebTokenActionsManager {
       "Function": "TokenPause()",
       "ContractUID": token.smartContractId,
       "FromAddress": address,
-      globalL10n.r3hPause: pause,
+      "Pause": pause,
     };
 
     return await _verifyConfirmAndSendTx(
@@ -833,7 +833,7 @@ class WebTokenActionsManager {
         final shareMessage = prepared['ShareDistributionMessage'] as String;
         final shareTimestamp = prepared['ShareDistributionTimestamp'] as int;
         final sessionId = prepared['SessionId'] as String;
-        withdrawalAmount = (prepared[globalL10n.labelAmount] as num?)?.toDouble() ?? 0;
+        withdrawalAmount = (prepared['Amount'] as num?)?.toDouble() ?? 0;
         btcDestination = prepared['BTCDestination'] as String? ?? '';
 
         // Step 2: Sign both messages (same pattern as ceremony)
