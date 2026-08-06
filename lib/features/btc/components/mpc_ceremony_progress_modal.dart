@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/mpc_ceremony.dart';
 import '../providers/mpc_ceremony_provider.dart';
 
@@ -21,13 +22,14 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mpcCeremonyProvider);
+    final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            _titleForPhase(state.phase),
+            _titleForPhase(state.phase, l10n),
             style: const TextStyle(color: Colors.white),
           ),
           IconButton(
@@ -50,15 +52,15 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
               _buildStepIndicators(state, context),
             if (state.phase == MpcCeremonyPhase.ceremonyInProgress) ...[
               const SizedBox(height: 16),
-              _buildProgressSection(state),
+              _buildProgressSection(state, l10n),
             ],
             if (state.phase == MpcCeremonyPhase.ceremonyCompleted) ...[
               const SizedBox(height: 16),
-              _buildCompletedSection(state),
+              _buildCompletedSection(state, l10n),
             ],
             if (state.phase == MpcCeremonyPhase.creatingContract) ...[
               const SizedBox(height: 16),
-              _buildCreatingContractSection(),
+              _buildCreatingContractSection(l10n),
             ],
             if (state.phase == MpcCeremonyPhase.contractCreated) ...[
               const SizedBox(height: 16),
@@ -74,20 +76,20 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
     );
   }
 
-  String _titleForPhase(MpcCeremonyPhase phase) {
+  String _titleForPhase(MpcCeremonyPhase phase, AppLocalizations l10n) {
     switch (phase) {
       case MpcCeremonyPhase.idle:
-        return "MPC Ceremony";
+        return l10n.bw2MpcCeremony;
       case MpcCeremonyPhase.ceremonyInProgress:
-        return "MPC Ceremony in Progress";
+        return l10n.bw2MpcCeremonyInProgress;
       case MpcCeremonyPhase.ceremonyCompleted:
-        return "Ceremony Completed";
+        return l10n.bw2CeremonyCompleted;
       case MpcCeremonyPhase.creatingContract:
-        return "Creating Contract";
+        return l10n.bw2CreatingContract;
       case MpcCeremonyPhase.contractCreated:
-        return "Contract Created";
+        return l10n.bw2ContractCreated;
       case MpcCeremonyPhase.failed:
-        return "Ceremony Failed";
+        return l10n.bw2CeremonyFailed;
     }
   }
 
@@ -95,15 +97,16 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
     final ceremony = state.ceremony;
     if (ceremony == null) return const SizedBox.shrink();
 
+    final l10n = AppLocalizations.of(context);
     final currentStatus = ceremony.status;
 
     final steps = [
-      _CeremonyStep("Initiated", MpcCeremonyStatus.initiated),
-      _CeremonyStep("Validating", MpcCeremonyStatus.validatingValidators),
-      _CeremonyStep("Round 1", MpcCeremonyStatus.round1InProgress),
-      _CeremonyStep("Round 2", MpcCeremonyStatus.round2InProgress),
-      _CeremonyStep("Round 3", MpcCeremonyStatus.round3InProgress),
-      _CeremonyStep("Completed", MpcCeremonyStatus.completed),
+      _CeremonyStep(l10n.bw2StepInitiated, MpcCeremonyStatus.initiated),
+      _CeremonyStep(l10n.bw2StepValidating, MpcCeremonyStatus.validatingValidators),
+      _CeremonyStep(l10n.bw2StepRound1, MpcCeremonyStatus.round1InProgress),
+      _CeremonyStep(l10n.bw2StepRound2, MpcCeremonyStatus.round2InProgress),
+      _CeremonyStep(l10n.bw2StepRound3, MpcCeremonyStatus.round3InProgress),
+      _CeremonyStep(l10n.bw2StepCompleted, MpcCeremonyStatus.completed),
     ];
 
     return Row(
@@ -158,7 +161,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
     );
   }
 
-  Widget _buildProgressSection(MpcCeremonyState state) {
+  Widget _buildProgressSection(MpcCeremonyState state, AppLocalizations l10n) {
     final ceremony = state.ceremony;
     if (ceremony == null) return const SizedBox.shrink();
 
@@ -172,26 +175,26 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          "${ceremony.progressPercentage}% complete",
+          l10n.bw2PercentComplete(ceremony.progressPercentage.toString()),
           style: const TextStyle(color: Colors.white70, fontSize: 13),
         ),
         if (ceremony.validatorCount != null) ...[
           const SizedBox(height: 4),
           Text(
-            "Validators: ${ceremony.validatorCount} (threshold: ${ceremony.requiredThreshold ?? '-'})",
+            l10n.bw2ValidatorsThreshold(ceremony.validatorCount.toString(), (ceremony.requiredThreshold ?? '-').toString()),
             style: const TextStyle(color: Colors.white54, fontSize: 12),
           ),
         ],
         const SizedBox(height: 12),
-        const Text(
-          "You can dismiss this dialog. The ceremony will continue in the background.",
-          style: TextStyle(color: Colors.white38, fontSize: 11),
+        Text(
+          l10n.bw2CeremonyDismissHint,
+          style: const TextStyle(color: Colors.white38, fontSize: 11),
         ),
       ],
     );
   }
 
-  Widget _buildCompletedSection(MpcCeremonyState state) {
+  Widget _buildCompletedSection(MpcCeremonyState state, AppLocalizations l10n) {
     final ceremony = state.ceremony;
     if (ceremony == null) return const SizedBox.shrink();
 
@@ -202,17 +205,17 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
           children: [
             Icon(Icons.check_circle, color: _successColor, size: 20),
             const SizedBox(width: 8),
-            const Text(
-              "MPC ceremony completed successfully.",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+            Text(
+              l10n.bw2MpcCeremonyCompletedSuccess,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         if (ceremony.depositAddress != null) ...[
           const SizedBox(height: 12),
-          const Text(
-            "Deposit Address:",
-            style: TextStyle(color: Colors.white70, fontSize: 12),
+          Text(
+            l10n.bw2DepositAddressLabel,
+            style: const TextStyle(color: Colors.white70, fontSize: 12),
           ),
           const SizedBox(height: 4),
           SelectableText(
@@ -224,7 +227,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
     );
   }
 
-  Widget _buildCreatingContractSection() {
+  Widget _buildCreatingContractSection(AppLocalizations l10n) {
     return Row(
       children: [
         const SizedBox(
@@ -233,15 +236,16 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
           child: CircularProgressIndicator(strokeWidth: 2),
         ),
         const SizedBox(width: 12),
-        const Text(
-          "Creating vBTC contract on-chain...",
-          style: TextStyle(color: Colors.white70),
+        Text(
+          l10n.bw2CreatingVbtcContract,
+          style: const TextStyle(color: Colors.white70),
         ),
       ],
     );
   }
 
   Widget _buildContractCreatedSection(MpcCeremonyState state, BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -249,17 +253,17 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
           children: [
             Icon(Icons.check_circle, color: _successColor, size: 20),
             const SizedBox(width: 8),
-            const Text(
-              "vBTC contract created successfully!",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+            Text(
+              l10n.bw2VbtcContractCreatedSuccess,
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         if (state.contractHash != null) ...[
           const SizedBox(height: 12),
-          const Text(
-            "Transaction Hash:",
-            style: TextStyle(color: Colors.white70, fontSize: 12),
+          Text(
+            l10n.bw2TransactionHashColon,
+            style: const TextStyle(color: Colors.white70, fontSize: 12),
           ),
           const SizedBox(height: 4),
           SelectableText(
@@ -271,7 +275,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
         Align(
           alignment: Alignment.centerRight,
           child: AppButton(
-            label: "Done",
+            label: l10n.actionDone,
             variant: AppColorVariant.Success,
             onPressed: () => Navigator.of(context).pop(true),
           ),
@@ -291,7 +295,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                state.errorMessage ?? "An error occurred.",
+                state.errorMessage ?? AppLocalizations.of(context).bw2AnErrorOccurred,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -299,7 +303,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
         ),
         const SizedBox(height: 16),
         AppButton(
-          label: "Retry",
+          label: AppLocalizations.of(context).btcRetry,
           variant: AppColorVariant.Danger,
           onPressed: () {
             ref.read(mpcCeremonyProvider.notifier).reset();

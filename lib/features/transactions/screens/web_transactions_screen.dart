@@ -23,6 +23,7 @@ import '../components/web_transaction_card.dart';
 import '../models/web_transaction.dart';
 import '../providers/vfx_transaction_filter_provider.dart';
 import '../providers/web_transaction_list_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebTransactionScreen extends BaseScreen {
   const WebTransactionScreen({Key? key})
@@ -39,9 +40,10 @@ class WebTransactionScreen extends BaseScreen {
     final session = ref.watch(webSessionProvider);
 
     final isMobile = BreakPoints.useMobileLayout(context);
+    final l10n = AppLocalizations.of(context);
 
     return AppBar(
-      title: const Text("Transactions"),
+      title: Text(l10n.navTransactions),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       leading: isMobile ? WebMobileDrawerButton() : null,
@@ -79,6 +81,7 @@ class WebTransactionScreen extends BaseScreen {
     final session = ref.watch(webSessionProvider);
 
     final filters = ref.watch(vfxTransactionFilterProvider);
+    final l10n = AppLocalizations.of(context);
 
     return DefaultTabController(
       length: 4,
@@ -88,13 +91,13 @@ class WebTransactionScreen extends BaseScreen {
             indicatorColor: AppColors.getBlue(),
             tabs: [
               Tab(
-                child: Text("All"),
+                child: Text(l10n.txTabAll),
               ),
               Tab(
                 child: Text("VFX"),
               ),
               Tab(
-                child: Text("Vault"),
+                child: Text(l10n.segmentVault),
               ),
               Tab(
                 child: Text("BTC"),
@@ -133,10 +136,11 @@ class WebTransactionsVfxList extends BaseComponent {
       return const WebNotWallet();
     }
 
+    final l10n = AppLocalizations.of(context);
     final model = ref.watch(webTransactionListProvider(address!));
     if (model.transactions.isEmpty) {
       return Center(
-        child: Text("No Transactions found for $address."),
+        child: Text(l10n.btcWebNoTransactionsForAddress(address!)),
       );
     }
 
@@ -178,6 +182,7 @@ class WebTransactionsCombinedList extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(webSessionProvider);
+    final l10n = AppLocalizations.of(context);
 
     final combinedIdentifier = "${session.keypair?.address}:${session.raKeypair?.address}";
 
@@ -187,7 +192,7 @@ class WebTransactionsCombinedList extends BaseComponent {
       skipLoadingOnReload: true,
       skipLoadingOnRefresh: true,
       loading: () => CenteredLoader(),
-      error: (e, _) => Text("Error"),
+      error: (e, _) => Text(l10n.btcWebError),
       data: (transactions) {
         return ListView.builder(
           itemCount: transactions.length,

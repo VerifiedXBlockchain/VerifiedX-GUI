@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/topic.dart';
 import '../services/topic_service.dart';
 
@@ -53,19 +54,20 @@ class TopicListProvider extends StateNotifier<List<Topic>> {
   }
 
   String emptyMessage(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     switch (listType) {
       case TopicListType.All:
-        return "No Topics";
+        return l10n.tokenNoTopicsTitle;
       case TopicListType.Active:
-        return "No Active Topics";
+        return l10n.r3hNoActiveTopics;
       case TopicListType.Inactive:
-        return "No Inactive Topics";
+        return l10n.r3hNoInactiveTopics;
       case TopicListType.VotedOn:
-        return "You haven't voted on any topics.";
+        return l10n.r3hNotVotedAnyTopics;
       case TopicListType.NotVotedOn:
-        return "You have voted on all topics.";
+        return l10n.r3hVotedAllTopics;
       case TopicListType.Mine:
-        return "You haven't created any topics.";
+        return l10n.r3hNoCreatedTopics;
     }
   }
 }

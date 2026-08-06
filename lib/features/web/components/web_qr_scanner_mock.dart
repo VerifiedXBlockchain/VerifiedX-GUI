@@ -1,6 +1,8 @@
 // Mock implementation for non-web platforms
 import 'package:flutter/material.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
+
 // Mock CameraController for non-web platforms
 class CameraController {
   final bool autoPlay;
@@ -47,10 +49,10 @@ class FlutterWebQrcodeScanner extends StatelessWidget {
       width: width ?? 300,
       height: height ?? 300,
       color: Colors.grey[800],
-      child: const Center(
+      child: Center(
         child: Text(
-          'QR Scanner not available on this platform',
-          style: TextStyle(color: Colors.white),
+          AppLocalizations.of(context).r3fQrScannerUnavailable,
+          style: const TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),
       ),

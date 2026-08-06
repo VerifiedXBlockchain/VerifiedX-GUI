@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/providers/session_provider.dart';
 import '../../../generated/assets.gen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../smart_contracts/features/evolve/evolve.dart';
 import '../../smart_contracts/features/evolve/evolve_phase.dart';
 import '../../smart_contracts/features/royalty/royalty.dart';
@@ -13,6 +14,7 @@ import '../components/learn_more_content.dart';
 
 List<SmartContractTemplate> getSmartContractTemplates(
     BuildContext context, WidgetRef ref) {
+  final l10n = AppLocalizations.of(context);
   final _provider = ref.read(createSmartContractProvider.notifier);
 
   void _createBaseline() {
@@ -59,10 +61,9 @@ List<SmartContractTemplate> getSmartContractTemplates(
 
   final templates = [
     SmartContractTemplate(
-      name: "Baseline Smart Contract",
+      name: l10n.r3gTplBaselineName,
       color: Theme.of(context).colorScheme.primary,
-      description:
-          "Create a baseline smart contract with an asset and metadata and mint it to the chain",
+      description: l10n.r3gTplBaselineDesc,
       images: [
         Assets.images.templateBasic1a.path,
         Assets.images.templateBasic2a.path,
@@ -73,30 +74,26 @@ List<SmartContractTemplate> getSmartContractTemplates(
         onCreate: _createBaseline,
         steps: [
           LearnMoreStep(
-            title: "Metadata",
-            description:
-                "Start by providing the name, minter, and description of the smart contract.",
+            title: l10n.r3gStepMetadataTitle,
+            description: l10n.r3gStepMetadataDesc,
             imagePath: Assets.images.tutBasic1.path,
           ),
           LearnMoreStep(
-            title: "Primary Asset",
-            description:
-                "Choose the primary asset for the smart contract. This can be an image, audio file, video, or any digital file.",
+            title: l10n.scwPrimaryAsset,
+            description: l10n.r3gStepPrimaryAssetDesc,
             imagePath: Assets.images.tutBasic2.path,
           ),
           LearnMoreStep(
-            title: "Mint",
-            description:
-                "Click the compile button to generate the Trilliam code that represents the smart contract then click mint to deploy it to the chain.",
+            title: l10n.r3gStepMintTitle,
+            description: l10n.r3gStepMintDesc,
             imagePath: Assets.images.tutBasic3.path,
           ),
         ],
       ),
     ),
     SmartContractTemplate(
-      name: "Evolving Smart Contract",
-      description:
-          "Generate a smart contract that can evolve based on time or on-chain variables",
+      name: l10n.r3gTplEvolvingName,
+      description: l10n.r3gTplEvolvingDesc,
       images: [
         Assets.images.templateEvolving1a.path,
         Assets.images.templateEvolving2a.path,
@@ -106,21 +103,18 @@ List<SmartContractTemplate> getSmartContractTemplates(
         onCreate: _createEvolving,
         steps: [
           LearnMoreStep(
-            title: "Evolution Mode",
-            description:
-                "Decide whether you want the evolution to be controlled by the issuer or by the owner of the NFT.",
+            title: l10n.r3gStepEvolutionModeTitle,
+            description: l10n.r3gStepEvolutionModeDesc,
             imagePath: Assets.images.tutEvolve1.path,
           ),
           LearnMoreStep(
-            title: "Evolution Type",
-            description:
-                "Configure whether you want the NFT to evolve automatically by date/time, block height, or only manually.",
+            title: l10n.r3gStepEvolutionTypeTitle,
+            description: l10n.r3gStepEvolutionTypeDesc,
             imagePath: Assets.images.tutEvolve2.path,
           ),
           LearnMoreStep(
-            title: "Evolution Stages",
-            description:
-                "Create multiple evolution stages based on the variables provided previously. Give each stage a name, description and optionally override the asset.",
+            title: l10n.r3gStepEvolutionStagesTitle,
+            description: l10n.r3gStepEvolutionStagesDesc,
             imagePath: Assets.images.tutEvolve3.path,
           ),
         ],
@@ -129,9 +123,8 @@ List<SmartContractTemplate> getSmartContractTemplates(
       init: _createEvolving,
     ),
     SmartContractTemplate(
-      name: "Royalty Smart Contract",
-      description:
-          "Create a smart contract that includes a royalty that is enforced on-chain upon any trade",
+      name: l10n.r3gTplRoyaltyName,
+      description: l10n.r3gTplRoyaltyDesc,
       color: Theme.of(context).colorScheme.primary,
       images: [
         Assets.images.templateRoyalty1a.path,
@@ -142,21 +135,18 @@ List<SmartContractTemplate> getSmartContractTemplates(
         onCreate: _createRoyalty,
         steps: [
           LearnMoreStep(
-            title: "Royalty Type",
-            description:
-                "Choose either a flat fee or percentage based royalty enforced by the on the chain upon any trade.",
+            title: l10n.scwRoyaltyType,
+            description: l10n.r3gStepRoyaltyTypeDesc,
             imagePath: Assets.images.tutRoyalty1.path,
           ),
           LearnMoreStep(
-            title: "Amount & Address",
-            description:
-                "Input the percentage amount to be paid to the VFX address defined in the next field.",
+            title: l10n.r3gStepAmountAddressTitle,
+            description: l10n.r3gStepAmountAddressDesc,
             imagePath: Assets.images.tutRoyalty2.path,
           ),
           LearnMoreStep(
-            title: "Royalty Fee",
-            description:
-                "The fee is calculated from the sale proceeds and settled on transaction finality. For flat fees, the NFT can't be sold for less than the enforced royalty.",
+            title: l10n.r3gStepRoyaltyFeeTitle,
+            description: l10n.r3gStepRoyaltyFeeDesc,
             imagePath: Assets.images.tutRoyalty3.path,
           ),
         ],

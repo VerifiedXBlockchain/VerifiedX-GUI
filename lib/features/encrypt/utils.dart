@@ -5,6 +5,7 @@ import '../reserve/services/reserve_account_service.dart';
 
 import '../../core/dialogs.dart';
 import '../../core/providers/session_provider.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../utils/toast.dart';
 import '../../utils/validation.dart';
 import 'providers/password_required_provider.dart';
@@ -36,7 +37,7 @@ Future<bool> passwordRequiredGuard(
     await ref.read(sessionProvider.notifier).loadWallets();
 
     if (success == false) {
-      Toast.error("Incorrect decryption password.");
+      Toast.error(AppLocalizations.of(context).r3gIncorrectDecryptionPassword);
       return false;
     }
     return true;
@@ -60,11 +61,12 @@ Future<bool> passwordRequiredGuardV2(
     return true;
   }
 
+  final l10n = AppLocalizations.of(context);
   final password = await PromptModal.show(
-    title: "Unlock Account",
+    title: l10n.r3gUnlockAccount,
     contextOverride: context,
-    validator: (value) => formValidatorNotEmpty(value, "Password"),
-    labelText: "Password",
+    validator: (value) => formValidatorNotEmpty(value, l10n.reservePasswordLabel),
+    labelText: l10n.reservePasswordLabel,
     obscureText: true,
     revealObscure: true,
     lines: 1,
@@ -79,17 +81,18 @@ Future<bool> passwordRequiredGuardV2(
     return true;
   }
 
-  Toast.error("Incorrect decryption password.");
+  Toast.error(l10n.r3gIncorrectDecryptionPassword);
 
   return false;
 }
 
 Future<bool?> promptForPassword(BuildContext context, WidgetRef ref, [bool forValidating = false]) async {
+  final l10n = AppLocalizations.of(context);
   final password = await PromptModal.show(
-    title: "Unlock Account",
+    title: l10n.r3gUnlockAccount,
     contextOverride: context,
-    validator: (value) => formValidatorNotEmpty(value, "Password"),
-    labelText: "Password",
+    validator: (value) => formValidatorNotEmpty(value, l10n.reservePasswordLabel),
+    labelText: l10n.reservePasswordLabel,
     obscureText: true,
     revealObscure: true,
     lines: 1,
@@ -103,9 +106,9 @@ Future<bool?> promptForPassword(BuildContext context, WidgetRef ref, [bool forVa
     final success = await ref.read(passwordRequiredProvider.notifier).unlock(password);
     if (success) {
       if (forValidating) {
-        Toast.message("Account unlocked.");
+        Toast.message(l10n.r3gAccountUnlocked);
       } else {
-        Toast.message("Account unlocked for 10 minutes.");
+        Toast.message(l10n.r3gAccountUnlocked10Min);
       }
       return true;
     }

@@ -10,6 +10,7 @@ import '../../reserve/services/reserve_account_service.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../smart_contracts/services/smart_contract_service.dart';
@@ -115,7 +116,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       Wallet? wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == state!.currentOwner);
 
       if (wallet == null && mustBeOwner) {
-        Toast.error("You are not the owner of this NFT.");
+        Toast.error(globalL10n.svcNftNotOwner);
 
         return false;
       }
@@ -123,12 +124,12 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       wallet ??= ref.read(walletListProvider).firstWhereOrNull((w) => w.address == state!.minterAddress);
 
       if (wallet == null) {
-        Toast.error("You are not the owner or minter of this NFT.");
+        Toast.error(globalL10n.svcNftNotOwnerOrMinter);
         return false;
       }
 
       if (wallet.balance < MIN_RBX_FOR_SC_ACTION) {
-        Toast.error("Not enough VFX do this action");
+        Toast.error(globalL10n.svcNftNotEnoughVfxAction);
         return false;
       }
     }
@@ -159,7 +160,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     bool isToken = false,
   }) async {
     if (isToken) {
-      Toast.error("Unimplemented");
+      Toast.error(globalL10n.svcUnimplemented);
       return false;
     }
     // if (!canTransact()) return false;
@@ -192,7 +193,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final public = !usingRa ? keyPair?.public : raKeypair?.public;
 
     if (address == null || private == null || public == null) {
-      Toast.error("No account");
+      Toast.error(globalL10n.adnrNoAccountToast);
       return null;
     }
 
@@ -217,14 +218,14 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       );
 
       if (beaconSignature == null) {
-        Toast.error("Couldn't produce beacon upload signature");
+        Toast.error(globalL10n.svcBeaconSignatureError);
         return false;
       }
 
       locator = await RawService().beaconUpload(id, toAddress, beaconSignature);
 
       if (locator == null) {
-        Toast.error("Could not create beacon upload request.");
+        Toast.error(globalL10n.svcBeaconUploadRequestError);
         return false;
       }
     }
@@ -234,13 +235,13 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final timestamp = await txService.getTimestamp();
 
     if (timestamp == null) {
-      Toast.error("Failed to retrieve timestamp");
+      Toast.error(globalL10n.svcFailedRetrieveTimestamp);
       return false;
     }
 
     final nonce = await txService.getNonce(address);
     if (nonce == null) {
-      Toast.error("Failed to retrieve nonce");
+      Toast.error(globalL10n.svcFailedRetrieveNonce);
       return false;
     }
 
@@ -262,7 +263,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final fee = await txService.getFee(txData);
 
     if (fee == null) {
-      Toast.error("Failed to retrieve fee");
+      Toast.error(globalL10n.svcFailedRetrieveFee);
       return false;
     }
 
@@ -281,13 +282,13 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final hash = await txService.getHash(txData);
 
     if (hash == null) {
-      Toast.error("Failed to parse hash");
+      Toast.error(globalL10n.svcFailedParseHash);
       return null;
     }
 
     final signature = await RawTransaction.getSignature(message: hash, privateKey: private, publicKey: public);
     if (signature == null) {
-      Toast.error("Signature generation failed.");
+      Toast.error(globalL10n.svcSignatureGenerationFailed);
       return false;
     }
 
@@ -298,7 +299,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     );
 
     if (!isValid) {
-      Toast.error("Signature not valid");
+      Toast.error(globalL10n.svcSignatureNotValid);
       return false;
     }
 
@@ -322,7 +323,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     );
 
     if (verifyTransactionData == null) {
-      Toast.error("Transaction not valid");
+      Toast.error(globalL10n.svcTransactionNotValid);
       return false;
     }
 
@@ -351,7 +352,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final locators = await RawService().getLocators(id);
     print("locators: $locators");
     if (locators == null) {
-      Toast.error("Locators request failed.");
+      Toast.error(globalL10n.svcLocatorsRequestFailed);
       return false;
     }
 
@@ -366,21 +367,21 @@ class NftDetailProvider extends StateNotifier<Nft?> {
 
     final signature = await RawTransaction.getSignature(message: message, privateKey: keypair.private, publicKey: keypair.public);
     if (signature == null) {
-      Toast.error("Signature generation failed.");
+      Toast.error(globalL10n.svcSignatureGenerationFailed);
       return false;
     }
 
     final isValid = await RawService().validateSignature(message, keypair.address, signature);
 
     if (!isValid) {
-      Toast.error("Signature not valid");
+      Toast.error(globalL10n.svcSignatureNotValid);
       return false;
     }
 
     final beaconAssets = await RawService().beaconAssets(id, locators, keypair.address, signature);
 
     if (beaconAssets != true) {
-      Toast.error("Assets Request failed.");
+      Toast.error(globalL10n.svcAssetsRequestFailed);
       return false;
     }
 
@@ -402,13 +403,13 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       final timestamp = await txService.getTimestamp();
 
       if (timestamp == null) {
-        Toast.error("Failed to retrieve timestamp");
+        Toast.error(globalL10n.svcFailedRetrieveTimestamp);
         return false;
       }
 
       final nonce = await txService.getNonce(keypair.address);
       if (nonce == null) {
-        Toast.error("Failed to retrieve nonce");
+        Toast.error(globalL10n.svcFailedRetrieveNonce);
         return false;
       }
 
@@ -426,7 +427,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       final fee = await txService.getFee(txData);
 
       if (fee == null) {
-        Toast.error("Failed to parse fee");
+        Toast.error(globalL10n.svcFailedParseFee);
         return false;
       }
 
@@ -444,13 +445,13 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       final hash = (await txService.getHash(txData));
 
       if (hash == null) {
-        Toast.error("Failed to parse hash");
+        Toast.error(globalL10n.svcFailedParseHash);
         return false;
       }
 
       final signature = await RawTransaction.getSignature(message: hash, privateKey: keypair.private, publicKey: keypair.public);
       if (signature == null) {
-        Toast.error("Signature generation failed.");
+        Toast.error(globalL10n.svcSignatureGenerationFailed);
         return false;
       }
 
@@ -461,7 +462,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       );
 
       if (!isValid) {
-        Toast.error("Signature not valid");
+        Toast.error(globalL10n.svcSignatureNotValid);
         return false;
       }
 
@@ -484,7 +485,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
       ));
 
       if (verifyTransactionData == null) {
-        Toast.error("Transaction not valid");
+        Toast.error(globalL10n.svcTransactionNotValid);
         return false;
       }
 
@@ -529,13 +530,13 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final timestamp = await txService.getTimestamp();
 
     if (timestamp == null) {
-      Toast.error("Failed to retrieve timestamp");
+      Toast.error(globalL10n.svcFailedRetrieveTimestamp);
       return false;
     }
 
     final nonce = await txService.getNonce(keypair.address);
     if (nonce == null) {
-      Toast.error("Failed to retrieve nonce");
+      Toast.error(globalL10n.svcFailedRetrieveNonce);
       return false;
     }
 
@@ -556,7 +557,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final fee = await txService.getFee(txData);
 
     if (fee == null) {
-      Toast.error("Failed to parse fee");
+      Toast.error(globalL10n.svcFailedParseFee);
       return false;
     }
 
@@ -574,13 +575,13 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     final hash = (await txService.getHash(txData));
 
     if (hash == null) {
-      Toast.error("Failed to parse hash");
+      Toast.error(globalL10n.svcFailedParseHash);
       return false;
     }
 
     final signature = await RawTransaction.getSignature(message: hash, privateKey: keypair.private, publicKey: keypair.public);
     if (signature == null) {
-      Toast.error("Signature generation failed.");
+      Toast.error(globalL10n.svcSignatureGenerationFailed);
       return false;
     }
 
@@ -591,7 +592,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     );
 
     if (!isValid) {
-      Toast.error("Signature not valid");
+      Toast.error(globalL10n.svcSignatureNotValid);
       return false;
     }
 
@@ -614,7 +615,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     ));
 
     if (verifyTransactionData == null) {
-      Toast.error("Transaction not valid");
+      Toast.error(globalL10n.svcTransactionNotValid);
       return false;
     }
 
@@ -653,18 +654,18 @@ class NftDetailProvider extends StateNotifier<Nft?> {
   /// Returns true if decryption was successful
   Future<bool> decryptMessage() async {
     if (state == null) {
-      Toast.error("NFT not loaded");
+      Toast.error(globalL10n.svcNftNotLoaded);
       return false;
     }
 
     if (!state!.hasEncryptedMessage) {
-      Toast.error("No encrypted message found");
+      Toast.error(globalL10n.svcNoEncryptedMessage);
       return false;
     }
 
     final encryptedMsg = state!.encryptedMessage;
     if (encryptedMsg == null) {
-      Toast.error("Could not parse encrypted message");
+      Toast.error(globalL10n.svcCouldNotParseEncryptedMessage);
       return false;
     }
 
@@ -697,14 +698,14 @@ class NftDetailProvider extends StateNotifier<Nft?> {
           privateKey = wallet.privateKey;
         } else {
           // Need to request from CLI - this requires the wallet to be unlocked
-          Toast.error("Private key not available. Please ensure wallet is unlocked.");
+          Toast.error(globalL10n.svcPrivateKeyNotAvailableUnlock);
           return false;
         }
       }
     }
 
     if (privateKey == null || privateKey.isEmpty) {
-      Toast.error("Private key not found for recipient address");
+      Toast.error(globalL10n.svcPrivateKeyNotFoundRecipient);
       return false;
     }
 
@@ -715,7 +716,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     );
 
     if (plaintext == null) {
-      Toast.error("Failed to decrypt message. Invalid key or corrupted data.");
+      Toast.error(globalL10n.svcDecryptFailed);
       return false;
     }
 
@@ -741,7 +742,7 @@ class NftDetailProvider extends StateNotifier<Nft?> {
     // Update state with decrypted description (triggers UI rebuild)
     state = state!.copyWith(description: updatedDescription);
 
-    Toast.message("Message decrypted successfully!");
+    Toast.message(globalL10n.svcMessageDecryptedSuccess);
     return true;
   }
 

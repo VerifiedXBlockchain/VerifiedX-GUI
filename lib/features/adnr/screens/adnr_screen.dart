@@ -7,6 +7,7 @@ import '../../../core/components/back_to_home_button.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../btc/components/btc_adnr_card.dart';
 import '../../btc/components/btc_adnr_list.dart';
 import '../../btc/providers/btc_account_list_provider.dart';
@@ -22,17 +23,18 @@ class AdnrScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(currencySegementedButtonProvider);
+    final l10n = AppLocalizations.of(context);
 
     late final String title;
     switch (mode) {
       case CurrencyType.any:
-        title = "Domains";
+        title = l10n.adnrTitleAny;
         break;
       case CurrencyType.vfx:
-        title = "VFX Domains";
+        title = l10n.adnrTitleVfx;
         break;
       case CurrencyType.btc:
-        title = "BTC Domains";
+        title = l10n.adnrTitleBtc;
         break;
     }
 
@@ -76,9 +78,9 @@ class AdnrScreen extends BaseScreen {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
-                              "Create a domain as an alias to your address for receiving funds.",
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context).adnrCreateAnyHeading,
+                              style: const TextStyle(
                                 fontSize: 17,
                               ),
                               textAlign: TextAlign.center,
@@ -86,8 +88,8 @@ class AdnrScreen extends BaseScreen {
                             const SizedBox(
                               height: 4,
                             ),
-                            const Text(
-                              "Domains cost $ADNR_COST VFX plus the transaction fee.",
+                            Text(
+                              AppLocalizations.of(context).adnrCostNoteAny(ADNR_COST.toString()),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -147,9 +149,9 @@ class AdnrScreen extends BaseScreen {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
-                              "Create a VFX domain as an alias to your address for receiving funds.",
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context).adnrCreateVfxHeading,
+                              style: const TextStyle(
                                 fontSize: 17,
                               ),
                               textAlign: TextAlign.center,
@@ -157,8 +159,8 @@ class AdnrScreen extends BaseScreen {
                             const SizedBox(
                               height: 4,
                             ),
-                            const Text(
-                              "VFX domains cost $ADNR_COST VFX plus the transaction fee.",
+                            Text(
+                              AppLocalizations.of(context).adnrCostNoteVfx(ADNR_COST.toString()),
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -182,9 +184,9 @@ class AdnrScreen extends BaseScreen {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
-                              "Create a BTC domain as an alias to your BTC address for receiving funds.",
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context).adnrCreateBtcHeading,
+                              style: const TextStyle(
                                 fontSize: 17,
                               ),
                               textAlign: TextAlign.center,
@@ -192,8 +194,8 @@ class AdnrScreen extends BaseScreen {
                             const SizedBox(
                               height: 4,
                             ),
-                            const Text(
-                              "BTC domains cost $ADNR_COST VFX plus the transaction fee.",
+                            Text(
+                              AppLocalizations.of(context).adnrCostNoteBtc(ADNR_COST.toString()),
                               textAlign: TextAlign.center,
                             ),
                           ],

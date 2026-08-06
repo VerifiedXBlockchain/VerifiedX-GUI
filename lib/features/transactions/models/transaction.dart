@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 import '../../../core/utils.dart';
+import '../../../l10n/l10n_helper.dart';
 
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
@@ -53,137 +54,138 @@ class Transaction with _$Transaction {
   }
 
   String get typeLabel {
+    final l10n = globalL10n;
     switch (type) {
       case 0:
-        return "Tx";
+        return l10n.r3cTypeTx;
       case 1:
-        return "Node";
+        return l10n.r3cTypeNode;
       case 2:
         final data = parseNftData(this);
         if (data != null) {
           if (nftDataValue(data, 'Function') == "TokenDeploy()") {
-            return "NFT Mint (Tokenized)";
+            return l10n.r3cTypeNftMintTokenized;
           }
         }
-        return "NFT Mint";
+        return l10n.r3cTypeNftMint;
       case 3:
         final data = parseNftData(this);
         if (data != null) {
           if (nftDataValue(data, 'Function') == "Transfer()") {
-            return "NFT Transfer";
+            return l10n.r3cTypeNftTransfer;
           }
         }
 
-        return "NFT Tx";
+        return l10n.r3cTypeNftTx;
       case 4:
-        return "NFT Burn";
+        return l10n.r3cTypeNftBurn;
       case 5:
         final data = parseNftData(this);
         if (data != null) {
           if (nftDataValue(data, 'Function') == "Sale_Start()") {
-            return "NFT Sale Start";
+            return l10n.r3cTypeNftSaleStart;
           } else if (nftDataValue(data, 'Function') == "M_Sale_Start()") {
-            return "NFT Sale Start (Manual)";
+            return l10n.r3cTypeNftSaleStartManual;
           } else if (nftDataValue(data, 'Function') == "Sale_Complete()") {
-            return "NFT Sale Complete";
+            return l10n.r3cTypeNftSaleComplete;
           } else if (nftDataValue(data, 'Function') == "M_Sale_Complete()") {
-            return "NFT Sale Complete (Manual)";
+            return l10n.r3cTypeNftSaleCompleteManual;
           }
         }
-        return "NFT Sale";
+        return l10n.r3cTypeNftSale;
       case 6:
         final data = parseNftData(this);
         if (data != null) {
           if (nftDataValue(data, "Function") == "AdnrCreate()") {
-            return "ADNR Create";
+            return l10n.r3cTypeAdnrCreate;
           }
           if (nftDataValue(data, "Function") == "AdnrTransfer()") {
-            return "ADNR Transfer";
+            return l10n.r3cTypeAdnrTransfer;
           }
 
           if (nftDataValue(data, "Function") == "AdnrDelete()") {
-            return "ADNR Delete";
+            return l10n.r3cTypeAdnrDelete;
           }
 
           if (nftDataValue(data, "Function") == "BTCAdnrCreate()") {
-            return "BTC ADNR Create";
+            return l10n.r3cTypeBtcAdnrCreate;
           }
           if (nftDataValue(data, "Function") == "BTCAdnrTransfer()") {
-            return "BTC ADNR Transfer";
+            return l10n.r3cTypeBtcAdnrTransfer;
           }
 
           if (nftDataValue(data, "Function") == "BTCAdnrDelete()") {
-            return "BTC ADNR Delete";
+            return l10n.r3cTypeBtcAdnrDelete;
           }
         }
-        return "ADNR";
+        return l10n.r3cTypeAdnr;
       case 7:
-        return "DST Registration";
+        return l10n.r3cTypeDstRegistration;
       case 8:
-        return "Topic Create";
+        return l10n.r3cTypeTopicCreate;
       case 9:
-        return "Topic Vote";
+        return l10n.r3cTypeTopicVote;
       case 10:
         final data = parseNftData(this);
         if (data != null) {
           if (nftDataValue(data, 'Function') == "CallBack()") {
-            return "Vault (Callback)";
+            return l10n.r3cTypeVaultCallback;
           } else if (nftDataValue(data, 'Function') == "Register()") {
-            return "Vault (Register)";
+            return l10n.r3cTypeVaultRegister;
           } else if (nftDataValue(data, 'Function') == "Recover()") {
-            return "Vault (Recover)";
+            return l10n.r3cTypeVaultRecover;
           }
         }
-        return "Vault";
+        return l10n.r3cTypeVault;
       case 11:
-        return "Smart Contract Mint";
+        return l10n.r3cTypeSmartContractMint;
       case 12:
-        return "Smart Contract TX";
+        return l10n.r3cTypeSmartContractTx;
       case 13:
-        return "Smart Contract Burn";
+        return l10n.r3cTypeSmartContractBurn;
       case 14:
-        return "Fungible Token Mint";
+        return l10n.r3cTypeFungibleMint;
       case 15:
         final data = parseNftData(this);
         if (data != null) {
           final amount = nftDataValue(data, 'Amount');
           final ticker = nftDataValue(data, 'TokenTicker');
           if (nftDataValue(data, 'Function') == "TokenMint()") {
-            return "Fungible Token Mint${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+            return "${l10n.r3cTypeFungibleMint}${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
           }
           if (nftDataValue(data, 'Function') == "TokenBurn()") {
-            return "Fungible Token Burn${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+            return "${l10n.r3cTypeFungibleBurn}${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
           }
 
           if (nftDataValue(data, 'Function') == "TokenTransfer()") {
-            return "Fungible Token Transfer${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+            return "${l10n.r3cTypeFungibleTransfer}${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
           }
 
           if (nftDataValue(data, 'Function') == "TokenBurn()") {
-            return "Fungible Token Burn${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+            return "${l10n.r3cTypeFungibleBurn}${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
           }
 
           if (nftDataValue(data, 'Function') == "TokenContractOwnerChange()") {
-            return "Fungible Token Ownership Change${ticker != null ? ' ($ticker)' : ''}";
+            return "${l10n.r3cTypeFungibleOwnershipChange}${ticker != null ? ' ($ticker)' : ''}";
           }
           if (nftDataValue(data, 'Function') == "TokenPause()") {
             final isPause = nftDataValue(data, 'Pause') == "true";
-            return "Fungible Token ${isPause ? 'Pause' : 'Resume'}${ticker != null ? ' ($ticker)' : ''}";
+            return "${isPause ? l10n.r3cTypeFungiblePause : l10n.r3cTypeFungibleResume}${ticker != null ? ' ($ticker)' : ''}";
           }
 
           if (nftDataValue(data, 'Function') == "TokenBanAddress()") {
-            return "Fungible Token Ban Address${ticker != null ? ' ($ticker)' : ''}";
+            return "${l10n.r3cTypeFungibleBanAddress}${ticker != null ? ' ($ticker)' : ''}";
           }
 
           if (nftDataValue(data, 'Function') == "TokenVoteTopicCast()") {
-            return "Fungible Token Vote Cast${ticker != null ? ' ($ticker)' : ''}";
+            return "${l10n.r3cTypeFungibleVoteCast}${ticker != null ? ' ($ticker)' : ''}";
           }
           if (nftDataValue(data, 'Function') == "TokenVoteTopicCreate()") {
-            return "Fungible Token Topic Created${ticker != null ? ' ($ticker)' : ''}";
+            return "${l10n.r3cTypeFungibleTopicCreated}${ticker != null ? ' ($ticker)' : ''}";
           }
         }
 
-        return "Fungible Token TX";
+        return l10n.r3cTypeFungibleTx;
 
       case 16:
         final data = parseNftData(this);
@@ -191,99 +193,99 @@ class Transaction with _$Transaction {
           final amount = nftDataValue(data, 'Amount');
           final ticker = nftDataValue(data, 'TokenTicker');
           if (nftDataValue(data, 'Function') == "TokenBurn()") {
-            return "Fungible Token Burn${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
+            return "${l10n.r3cTypeFungibleBurn}${amount != null ? ' ($amount${ticker != null ? ' $ticker' : ''})' : ''}";
           }
         }
-        return "Fungible Token Burn";
+        return l10n.r3cTypeFungibleBurn;
       case 17:
         final data = parseNftData(this);
         if (data != null) {
           if (nftDataValue(data, 'Function') == "TokenDeploy()") {
-            return "Fungible Token Deploy";
+            return l10n.r3cTypeFungibleDeploy;
           }
         }
-        return "Tokenization Mint";
+        return l10n.r3cTypeTokenizationMint;
       case 18:
         final data = parseNftData(this);
         if (data != null) {
           final function = nftDataValue(data, 'Function');
           final amount = nftDataValue(data, 'Amount');
           if (function == "TransferCoin()") {
-            return "vBTC Transfer Coin ($amount vBTC)";
+            return "${l10n.r3cTypeVbtcTransferCoin} ($amount vBTC)";
           }
 
           if (function == "Transfer()") {
-            return "vBTC Token Ownership Transfer";
+            return l10n.r3cTypeVbtcTokenOwnershipTransfer;
           }
 
           if (function == "TransferCoinMulti()") {
             if (amount != null) {
-              return "vBTC Bulk Transfer ($amount vBTC)";
+              return "${l10n.r3cTypeVbtcBulkTransfer} ($amount vBTC)";
             }
-            return "vBTC Bulk Transfer";
+            return l10n.r3cTypeVbtcBulkTransfer;
           }
         }
-        return "Tokenization TX";
+        return l10n.r3cTypeTokenizationTx;
 
       case 19:
-        return "Tokenization Burn";
+        return l10n.r3cTypeTokenizationBurn;
       case 20:
-        return "Tokenization Withdrawal Request";
+        return l10n.r3cTypeTokenizationWithdrawalRequest;
       case 21:
-        return "Tokenization Withdrawal Complete";
+        return l10n.r3cTypeTokenizationWithdrawalComplete;
       case 22:
-        return "Validator Registration";
+        return l10n.r3cTypeValidatorRegistration;
       case 23:
-        return "Validator Heartbeat";
+        return l10n.r3cTypeValidatorHeartbeat;
       case 25:
-        return "vBTC Contract Mint";
+        return l10n.r3cTypeVbtcContractMint;
       case 26:
         final data = parseNftData(this);
         if (data != null) {
           final amount = nftDataValue(data, 'Amount');
           if (amount != null) {
-            return "vBTC Transfer ($amount vBTC)";
+            return "${l10n.r3cTypeVbtcTransfer} ($amount vBTC)";
           }
         }
-        return "vBTC Transfer";
+        return l10n.r3cTypeVbtcTransfer;
       case 27:
         final data = parseNftData(this);
         if (data != null) {
           final amount = nftDataValue(data, 'Amount');
           if (amount != null) {
-            return "vBTC Withdrawal Request ($amount vBTC)";
+            return "${l10n.r3cTypeVbtcWithdrawalRequest} ($amount vBTC)";
           }
         }
-        return "vBTC Withdrawal Request";
+        return l10n.r3cTypeVbtcWithdrawalRequest;
       case 28:
         final data = parseNftData(this);
         if (data != null) {
           final amount = nftDataValue(data, 'Amount');
           if (amount != null) {
-            return "vBTC Withdrawal Complete ($amount vBTC)";
+            return "${l10n.r3cTypeVbtcWithdrawalComplete} ($amount vBTC)";
           }
         }
-        return "vBTC Withdrawal Complete";
+        return l10n.r3cTypeVbtcWithdrawalComplete;
       case 29:
-        return "vBTC Withdrawal Cancel";
+        return l10n.r3cTypeVbtcWithdrawalCancel;
       case 30:
-        return "vBTC Withdrawal Vote";
+        return l10n.r3cTypeVbtcWithdrawalVote;
       case 31:
-        return "VFX Shield";
+        return l10n.r3cTypeVfxShield;
       case 32:
-        return "VFX Unshield";
+        return l10n.r3cTypeVfxUnshield;
       case 33:
-        return "VFX Private Transfer";
+        return l10n.r3cTypeVfxPrivateTransfer;
       case 34:
-        return "vBTC Shield";
+        return l10n.r3cTypeVbtcShield;
       case 35:
-        return "vBTC Unshield";
+        return l10n.r3cTypeVbtcUnshield;
       case 36:
-        return "vBTC Private Transfer";
+        return l10n.r3cTypeVbtcPrivateTransfer;
       case 37:
-        return "vBTC Bridge Lock";
+        return l10n.r3cTypeVbtcBridgeLock;
       case 38:
-        return "vBTC Bridge Unlock";
+        return l10n.r3cTypeVbtcBridgeUnlock;
       default:
         return type.toString();
     }
@@ -331,19 +333,20 @@ class Transaction with _$Transaction {
   }
 
   String get statusLabel {
+    final l10n = globalL10n;
     switch (status) {
       case TransactionStatus.Success:
-        return "Success";
+        return l10n.statusSuccess;
       case TransactionStatus.Pending:
-        return "Pending";
+        return l10n.statusPending;
       case TransactionStatus.Fail:
-        return "Fail";
+        return l10n.r3cStatusFail;
       case TransactionStatus.Reserved:
-        return "Vault";
+        return l10n.r3cTypeVault;
       case TransactionStatus.CalledBack:
-        return "Called Back";
+        return l10n.r3cStatusCalledBack;
       case TransactionStatus.Recovered:
-        return "Recovered";
+        return l10n.r3cStatusRecovered;
       default:
         return "-";
     }

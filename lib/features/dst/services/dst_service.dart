@@ -8,6 +8,7 @@ import '../../../utils/toast.dart';
 
 import '../../../core/services/base_service.dart';
 import '../models/dec_shop.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class DstService extends BaseService {
   DstService() : super(apiBasePathOverride: "/dstapi/DSTV1");
@@ -305,7 +306,7 @@ class DstService extends BaseService {
         return true;
       }
 
-      Toast.error(data['Message'] ?? "A problem occurred");
+      Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
 
       return false;
     } catch (e) {
@@ -492,7 +493,7 @@ class DstService extends BaseService {
       final response = await getText("/RetrySale/$listingId");
       final data = jsonDecode(response);
       if (data['Success'] == true) {
-        Toast.message("Attempting to send sale complete TX.");
+        Toast.message(globalL10n.r3dAttemptingSaleCompleteTx);
         return true;
       }
 

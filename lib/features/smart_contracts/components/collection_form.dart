@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'sc_creator/common/file_selector.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CollectionForm extends StatelessWidget {
   const CollectionForm({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -13,21 +15,21 @@ class CollectionForm extends StatelessWidget {
           children: [
             Expanded(
               child: TextFormField(
-                decoration: const InputDecoration(label: Text("Collection Name")),
+                decoration: InputDecoration(label: Text(l10n.scwCollectionName)),
               ),
             ),
             Expanded(
               child: FileSelector(
                 transparentBackground: true,
-                title: "Collection Thumbnail",
+                title: l10n.scwCollectionThumbnail,
                 onChange: (val) {},
               ),
             ),
           ],
         ),
         TextFormField(
-          decoration: const InputDecoration(
-            label: Text("Collection Description"),
+          decoration: InputDecoration(
+            label: Text(l10n.scwCollectionDescription),
           ),
           minLines: 2,
           maxLines: 4,

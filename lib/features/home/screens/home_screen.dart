@@ -25,6 +25,7 @@ import 'package:rbx_wallet/features/wallet/providers/wallet_list_provider.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 import '../components/log_window.dart';
 import '../components/transaction_window.dart';
@@ -42,7 +43,7 @@ class HomeScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final address = ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
     return AppBar(
-      title: const Text("Dashboard"),
+      title: Text(AppLocalizations.of(context).navDashboard),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       leadingWidth: address == null || !ALLOW_PAYMENT ? null : 180,
@@ -78,7 +79,7 @@ class HomeScreen extends BaseScreen {
             children: [
               if (kIsWeb)
                 Text(
-                  "Keys",
+                  AppLocalizations.of(context).homeKeysHeading,
                   style: Theme.of(context).textTheme.titleSmall,
                 ),
               if (kIsWeb) const Divider(),
@@ -116,7 +117,7 @@ class GetVfxButton extends BaseComponent {
       onPressed: () async {
         AccountUtils.getCoin(context, ref, vfxOnly ? VfxOrBtcOption.vfx : null);
       },
-      label: vfxOnly ? "Get \$VFX" : "Get \$VFX/\$BTC Now",
+      label: vfxOnly ? AppLocalizations.of(context).homeGetVfxCta : AppLocalizations.of(context).homeGetVfxBtcCta,
       variant: AppColorVariant.Success,
     );
   }

@@ -8,6 +8,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../btc/providers/btc_account_list_provider.dart';
 import '../../transactions/components/combined_transactions_list.dart';
 import '../../wallet/components/manage_wallet_bottom_sheet.dart';
@@ -40,14 +41,14 @@ class RootContainerWalletSelectorList extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "No VFX Accounts",
+                  AppLocalizations.of(context).navNoVfxAccounts,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 AppButton(
-                  label: "Add Account",
+                  label: AppLocalizations.of(context).navAddAccount,
                   onPressed: () {
                     AccountUtils.promptVfxNewOrImport(context, ref);
                   },
@@ -80,14 +81,14 @@ class RootContainerWalletSelectorList extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "No BTC Accounts",
+                  AppLocalizations.of(context).navNoBtcAccounts,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 AppButton(
-                  label: "Add Account",
+                  label: AppLocalizations.of(context).navAddAccount,
                   onPressed: () {
                     AccountUtils.promptBtcNewOrImport(context, ref);
                   },
@@ -119,14 +120,14 @@ class RootContainerWalletSelectorList extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  "No Accounts",
+                  AppLocalizations.of(context).navNoAccounts,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(
                   height: 8,
                 ),
                 AppButton(
-                  label: "Add Account",
+                  label: AppLocalizations.of(context).navAddAccount,
                   onPressed: () {
                     AccountUtils.promptVfxOrBtc(context, ref);
                   },

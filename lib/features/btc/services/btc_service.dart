@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../../core/app_constants.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../../smart_contracts/models/multi_asset.dart';
 import '../../../utils/toast.dart';
@@ -198,7 +199,7 @@ class BtcService extends BaseService {
       }
       return BtcSendTxResult(
         success: false,
-        message: result['Message'] ?? "A Problem Occurred",
+        message: result['Message'] ?? globalL10n.r3fAProblemOccurred,
       );
     } catch (e) {
       print("SendTransaction");
@@ -606,7 +607,8 @@ class BtcService extends BaseService {
         return data['Hash'];
       }
 
-      Toast.error("Error: ${data['Message'] ?? "And error occurred"}");
+      Toast.error(globalL10n.r3fErrorColon(
+          data['Message'] ?? globalL10n.r3fAnErrorOccurred));
 
       return null;
     } catch (e) {

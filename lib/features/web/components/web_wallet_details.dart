@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../auth/auth_utils.dart';
 
@@ -16,6 +17,7 @@ class WebWalletDetails extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final session = ref.watch(webSessionProvider);
     final wallet = session.currentWallet;
     final usingRa = session.usingRa;
@@ -88,7 +90,7 @@ class WebWalletDetails extends BaseComponent {
             InkWell(
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: wallet.address));
-                  Toast.message("Address ${wallet.address} copied to clipboard");
+                  Toast.message(l10n.r3fAddressCopied(wallet.address));
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(4.0),
@@ -100,10 +102,10 @@ class WebWalletDetails extends BaseComponent {
             InkWell(
                 onTap: () async {
                   final confirmed = await ConfirmDialog.show(
-                    title: "Reveal Private Key?",
-                    body: "Are you sure you want to reveal your private key?",
-                    confirmText: "Reveal",
-                    cancelText: "Cancel",
+                    title: l10n.webRevealPrivateKeyTitle,
+                    body: l10n.r3fRevealPrivateKeyBody,
+                    confirmText: l10n.webReveal,
+                    cancelText: l10n.actionCancel,
                   );
                   if (confirmed == true) {
                     switch (session.selectedWalletType) {

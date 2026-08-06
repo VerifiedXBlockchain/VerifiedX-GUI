@@ -6,6 +6,7 @@ import '../../metrics/models/network_metrics.dart';
 
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../block/block.dart';
 import '../../genesis/models/genesis_block.dart';
@@ -51,7 +52,7 @@ class BridgeService extends BaseService {
         return response['Message'];
       }
 
-      return "A problem occurred";
+      return globalL10n.mktProblemOccurredToast;
     } catch (e) {
       print("Unlock Account Error");
       print(e);

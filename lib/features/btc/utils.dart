@@ -7,6 +7,7 @@ import 'package:crypto/crypto.dart' show sha256;
 
 import '../../app.dart';
 import '../../core/app_constants.dart';
+import '../../l10n/generated/app_localizations.dart';
 import 'models/btc_fee_rate_preset.dart';
 
 double satashisToBtc(int satashis) {
@@ -27,6 +28,7 @@ String btcTxFeeEstimateLabel(int satashis) {
 }
 
 Future<int?> promptForFeeRate(BuildContext context) async {
+  final l10n = AppLocalizations.of(context);
   final recommendedFees = await BtcFeeRateService().recommended();
 
   final int? feeRate = await showDialog(
@@ -41,7 +43,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
       return StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: Text("Fee Rate"),
+            title: Text(l10n.btcRbfFeeRateTitle),
             content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,11 +116,11 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                       },
                       validator: (value) {
                         if (value == null) {
-                          return "Fee Rate Required";
+                          return l10n.tkbFeeRateRequired;
                         }
 
                         if ((int.tryParse(value) ?? 0) < 1) {
-                          return "Invalid Fee Rate. Must be atleast 1 satoshi.";
+                          return l10n.tkbInvalidFeeRate;
                         }
 
                         return null;
@@ -127,7 +129,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                         FilteringTextInputFormatter.allow(RegExp("[0-9]"))
                       ],
                       decoration:
-                          InputDecoration(hintText: "Fee rate in satoshis"),
+                          InputDecoration(hintText: l10n.tkbFeeRateHint),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
                     ),
@@ -146,7 +148,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                   Navigator.of(context).pop(null);
                 },
                 child: Text(
-                  "Cancel",
+                  l10n.actionCancel,
                   style: TextStyle(color: Colors.white70),
                 ),
               ),
@@ -159,7 +161,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                   }
                 },
                 child: Text(
-                  "Continue",
+                  l10n.actionContinue,
                   style: TextStyle(color: Colors.white),
                 ),
               )

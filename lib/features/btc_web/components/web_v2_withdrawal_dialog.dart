@@ -10,6 +10,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../token/providers/web_token_actions_manager.dart';
 
@@ -109,7 +110,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     if (result['success'] != true || result['hash'] == null) {
       setState(() {
         _step = _DialogStep.failure;
-        _errorMessage = result['message'] ?? "Failed to broadcast withdrawal request.";
+        _errorMessage = result['message'] ?? AppLocalizations.of(context).bw2FailedBroadcastWithdrawal;
       });
       return;
     }
@@ -130,7 +131,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         if (!mounted) return;
         setState(() {
           _step = _DialogStep.failure;
-          _errorMessage = "Timed out waiting for block confirmation. You can retry later from the token detail screen.";
+          _errorMessage = AppLocalizations.of(context).bw2BlockConfirmTimedOut;
         });
         return;
       }
@@ -172,19 +173,20 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     } else {
       setState(() {
         _step = _DialogStep.failure;
-        _errorMessage = result?['message'] ?? "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.";
+        _errorMessage = result?['message'] ?? AppLocalizations.of(context).bw2FrostFailedOrTimedOut;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            _titleForStep(),
+            _titleForStep(l10n),
             style: const TextStyle(color: Colors.white),
           ),
           if (_step == _DialogStep.success || _step == _DialogStep.failure)
@@ -203,86 +205,86 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_step == _DialogStep.broadcasting) _buildBroadcastingSection(),
-            if (_step == _DialogStep.waitingForBlock) _buildWaitingSection(),
-            if (_step == _DialogStep.frostSigning) _buildFrostSigningSection(),
-            if (_step == _DialogStep.success) _buildSuccessSection(),
-            if (_step == _DialogStep.failure) _buildFailureSection(),
+            if (_step == _DialogStep.broadcasting) _buildBroadcastingSection(l10n),
+            if (_step == _DialogStep.waitingForBlock) _buildWaitingSection(l10n),
+            if (_step == _DialogStep.frostSigning) _buildFrostSigningSection(l10n),
+            if (_step == _DialogStep.success) _buildSuccessSection(l10n),
+            if (_step == _DialogStep.failure) _buildFailureSection(l10n),
           ],
         ),
       ),
     );
   }
 
-  String _titleForStep() {
+  String _titleForStep(AppLocalizations l10n) {
     switch (_step) {
       case _DialogStep.broadcasting:
-        return "Broadcasting Request";
+        return l10n.bw2BroadcastingRequest;
       case _DialogStep.waitingForBlock:
-        return "Waiting for Confirmation";
+        return l10n.bw2WaitingForConfirmation;
       case _DialogStep.frostSigning:
-        return "FROST Signing";
+        return l10n.bw2FrostSigning;
       case _DialogStep.success:
-        return "Withdrawal Complete";
+        return l10n.bw2WithdrawalComplete;
       case _DialogStep.failure:
-        return "Withdrawal Failed";
+        return l10n.bw2WithdrawalFailed;
     }
   }
 
-  Widget _buildBroadcastingSection() {
+  Widget _buildBroadcastingSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("Broadcasting withdrawal request...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("Submitting a transaction to the VFX network.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(l10n.bw2BroadcastingWithdrawal, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(l10n.bw2SubmittingTxVfx, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
 
-  Widget _buildWaitingSection() {
+  Widget _buildWaitingSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("Waiting for block confirmation...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(l10n.bw2WaitingBlockConfirmation, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(l10n.bw2FrostConfirmHintWeb, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
 
-  Widget _buildFrostSigningSection() {
+  Widget _buildFrostSigningSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("FROST signing in progress...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("Validators are signing the Bitcoin transaction. This may take a minute or two. Please do not close this window.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(l10n.bw2FrostSigningInProgress, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(l10n.bw2FrostValidatorsSigning, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
 
-  Widget _buildSuccessSection() {
+  Widget _buildSuccessSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          children: const [
-            Icon(Icons.check_circle, color: Color(0xFF43ae52), size: 20),
-            SizedBox(width: 8),
-            Text("Withdrawal completed successfully!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          children: [
+            const Icon(Icons.check_circle, color: Color(0xFF43ae52), size: 20),
+            const SizedBox(width: 8),
+            Text(l10n.bw2WithdrawalCompletedSuccess, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
           ],
         ),
         if (_btcTxHash != null) ...[
           const SizedBox(height: 16),
           _buildHashRow(
-            "BTC Transaction:",
+            l10n.bw2BtcTransactionLabel,
             _btcTxHash!,
             explorerUrl: Env.btcIsTestNet
                 ? "https://mempool.space/testnet4/tx/$_btcTxHash"
@@ -293,7 +295,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         Align(
           alignment: Alignment.centerRight,
           child: AppButton(
-            label: "Done",
+            label: l10n.actionDone,
             variant: AppColorVariant.Success,
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -302,7 +304,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     );
   }
 
-  Widget _buildFailureSection() {
+  Widget _buildFailureSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -313,7 +315,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                _errorMessage ?? "An error occurred during withdrawal.",
+                _errorMessage ?? l10n.bw2WithdrawalError,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -324,14 +326,14 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             AppButton(
-              label: "Dismiss",
+              label: l10n.tkbDismiss,
               variant: AppColorVariant.Light,
               onPressed: () => Navigator.of(context).pop(),
             ),
             if (_requestHash != null) ...[
               const SizedBox(width: 8),
               AppButton(
-                label: "Retry Signing",
+                label: l10n.bw2RetrySigning,
                 variant: AppColorVariant.Warning,
                 onPressed: _runFrostSigning,
               ),
@@ -357,7 +359,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             InkWell(
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: hash));
-                Toast.message("Copied to clipboard");
+                Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
               },
               child: const Icon(Icons.copy, size: 16, color: Colors.white54),
             ),

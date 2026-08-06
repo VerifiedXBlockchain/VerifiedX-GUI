@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import '../../../utils/toast.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../core/services/base_service.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../models/withdrawal_result.dart';
@@ -100,7 +101,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to initiate ceremony.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedInitiateCeremony);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -127,7 +128,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${result['Message']}');
-      Toast.error(result['Message'] ?? "Failed to get ceremony status.");
+      Toast.error(result['Message'] ?? globalL10n.r3fFailedCeremonyStatus);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -174,7 +175,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to create contract.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedCreateContract);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -218,7 +219,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to transfer vBTC.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedTransferVbtc);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -250,7 +251,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${result['Message']}');
-      Toast.error(result['Message'] ?? "Failed to transfer ownership.");
+      Toast.error(result['Message'] ?? globalL10n.r3fFailedTransferOwnership);
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -303,7 +304,7 @@ class VbtcV2Service extends BaseService {
       _log(method, 'FAILED: ${data['Message']}');
       return WithdrawalResult(
         success: false,
-        message: data['Message'] ?? "Failed to request withdrawal.",
+        message: data['Message'] ?? globalL10n.r3fFailedRequestWithdrawal,
       );
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -357,7 +358,7 @@ class VbtcV2Service extends BaseService {
       _log(method, 'FAILED: ${data['Message']}');
       return WithdrawalResult(
         success: false,
-        message: data['Message'] ?? "Failed to complete withdrawal.",
+        message: data['Message'] ?? globalL10n.r3fFailedCompleteWithdrawal,
         requestHash: withdrawalRequestHash,
       );
     } catch (e, st) {
@@ -407,7 +408,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to cancel withdrawal.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedCancelWithdrawal);
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -449,16 +450,16 @@ class VbtcV2Service extends BaseService {
         _log(method, 'Detected active withdrawal — resuming with requestHash: $requestHash');
       } else {
         _log(method, 'Request failed with no active withdrawal to resume: $message');
-        Toast.error(requestResult.message ?? "Failed to request withdrawal.");
+        Toast.error(requestResult.message ?? globalL10n.r3fFailedRequestWithdrawal);
         return requestResult;
       }
     }
 
     if (requestHash == null) {
       _log(method, 'No requestHash available — aborting');
-      return const WithdrawalResult(
+      return WithdrawalResult(
         success: false,
-        message: "No request hash returned from withdrawal request.",
+        message: globalL10n.r3fNoRequestHash,
       );
     }
 

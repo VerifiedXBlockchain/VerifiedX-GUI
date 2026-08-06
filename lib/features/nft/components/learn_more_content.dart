@@ -6,6 +6,7 @@ import '../../../core/app_router.gr.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../smart_contracts/providers/create_smart_contract_provider.dart';
 
 class LearnMoreStep {
@@ -152,7 +153,7 @@ class LearnMoreContent extends BaseComponent {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppButton(
-                label: "Cancel",
+                label: AppLocalizations.of(context).nftLearnMoreCancel,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -177,7 +178,7 @@ class LearnMoreContent extends BaseComponent {
 
                     AutoRouter.of(context).push(const SmartContractCreatorContainerScreenRoute());
                   },
-                  child: const Text("Create"),
+                  child: Text(AppLocalizations.of(context).nftLearnMoreCreate),
                 ),
               ),
             ],

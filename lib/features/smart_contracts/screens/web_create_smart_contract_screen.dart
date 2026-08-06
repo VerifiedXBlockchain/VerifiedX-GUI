@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_no_wallet.dart';
 import '../components/sc_creator/smart_contract_creator_main.dart';
 
@@ -19,7 +20,7 @@ class WebCreateSmartContractScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Create Smart Contract"),
+      title: Text(AppLocalizations.of(context).scwCreateSmartContractTitle),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
     );

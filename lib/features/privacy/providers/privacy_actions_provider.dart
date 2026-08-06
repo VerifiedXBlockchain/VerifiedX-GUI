@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
 import 'shielded_address_provider.dart';
@@ -45,12 +46,12 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
         recipientZfxAddress: recipientZfxAddress,
       );
 
-      Toast.message("Shield transaction broadcast successfully");
+      Toast.message(globalL10n.prvShieldBroadcastSuccess);
       ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(amount);
       _refreshTxList();
       return true;
     } catch (e) {
-      Toast.error("Shield failed: $e");
+      Toast.error(globalL10n.prvShieldFailed(e.toString()));
       return false;
     } finally {
       state = false;
@@ -63,7 +64,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     required double amount,
   }) async {
     if (_password == null) {
-      Toast.error("Privacy wallet password required. Please unlock first.");
+      Toast.error(globalL10n.prvPasswordRequired);
       return false;
     }
     _resetTimer();
@@ -76,13 +77,13 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
         walletPassword: _password!,
       );
 
-      Toast.message("Unshield transaction broadcast successfully");
+      Toast.message(globalL10n.prvUnshieldBroadcastSuccess);
       ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-(amount + PRIVACY_TX_FIXED_FEE));
       _refreshTxList();
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error("Unshield failed: $e");
+      Toast.error(globalL10n.prvUnshieldFailed(e.toString()));
       return false;
     } finally {
       state = false;
@@ -95,7 +96,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     required double amount,
   }) async {
     if (_password == null) {
-      Toast.error("Privacy wallet password required. Please unlock first.");
+      Toast.error(globalL10n.prvPasswordRequired);
       return false;
     }
     _resetTimer();
@@ -108,13 +109,13 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
         walletPassword: _password!,
       );
 
-      Toast.message("Private transfer broadcast successfully");
+      Toast.message(globalL10n.prvTransferBroadcastSuccess);
       ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(-(amount + PRIVACY_TX_FIXED_FEE));
       _refreshTxList();
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error("Private transfer failed: $e");
+      Toast.error(globalL10n.prvTransferFailed(e.toString()));
       return false;
     } finally {
       state = false;
@@ -125,7 +126,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
     required String zfxAddress,
   }) async {
     if (_password == null) {
-      Toast.error("Privacy wallet password required. Please unlock first.");
+      Toast.error(globalL10n.prvPasswordRequired);
       return false;
     }
     _resetTimer();
@@ -136,13 +137,13 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
         walletPassword: _password!,
       );
 
-      Toast.message("Consolidation broadcast successfully");
+      Toast.message(globalL10n.prvConsolidationBroadcastSuccess);
       ref.read(shieldedBalanceProvider.notifier).optimisticAdjust(0);
       _refreshTxList();
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error("Consolidation failed: $e");
+      Toast.error(globalL10n.prvConsolidationFailed(e.toString()));
       return false;
     } finally {
       state = false;

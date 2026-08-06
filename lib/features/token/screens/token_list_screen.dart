@@ -9,6 +9,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../components/token_list.dart';
 
@@ -34,13 +35,13 @@ class TokenListScreen extends BaseScreen {
       leading: isMobile ? WebMobileDrawerButton() : null,
       backgroundColor: Colors.black54,
       centerTitle: !isMobile,
-      title: Text("Fungible Tokens"),
+      title: Text(AppLocalizations.of(context).tokenListTitle),
       actions: [
         if (hasAccounts)
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: AppButton(
-              label: "Create New Token",
+              label: AppLocalizations.of(context).tokenCreateNew,
               variant: AppColorVariant.Success,
               onPressed: () {
                 if (kIsWeb) {

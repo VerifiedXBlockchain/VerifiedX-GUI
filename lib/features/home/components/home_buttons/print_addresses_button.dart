@@ -6,6 +6,7 @@ import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../bridge/models/log_entry.dart';
 import '../../../bridge/providers/log_provider.dart';
 import '../../../reserve/providers/reserve_account_provider.dart';
@@ -21,7 +22,7 @@ class PrintAdressesButton extends BaseComponent {
     final cliStarted = ref.watch(sessionProvider.select((v) => v.cliStarted));
 
     return AppButton(
-      label: "Print Addresses",
+      label: AppLocalizations.of(context).r3ePrintAddresses,
       icon: Icons.wallet,
       onPressed: !cliStarted
           ? null

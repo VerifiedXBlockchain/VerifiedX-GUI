@@ -8,6 +8,7 @@ import '../../../core/utils.dart';
 import '../models/auth_token.dart';
 import '../services/web_shop_service.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class WebAuthTokenProvider extends StateNotifier<AuthToken?> {
   final Ref ref;
@@ -19,19 +20,19 @@ class WebAuthTokenProvider extends StateNotifier<AuthToken?> {
 
     final address = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
     if (address == null) {
-      Toast.error("No address.");
+      Toast.error(globalL10n.r3bNoAddress);
       return null;
     }
 
     final privateKey = kIsWeb ? ref.read(webSessionProvider).keypair?.private : ref.read(sessionProvider).currentWallet?.privateKey;
     if (privateKey == null) {
-      Toast.error("No private key.");
+      Toast.error(globalL10n.r3bNoPrivateKey);
       return null;
     }
 
     final publicKey = kIsWeb ? ref.read(webSessionProvider).keypair?.public : ref.read(sessionProvider).currentWallet?.publicKey;
     if (publicKey == null) {
-      Toast.error("No public key.");
+      Toast.error(globalL10n.r3bNoPublicKey);
       return null;
     }
 

@@ -9,12 +9,14 @@ import '../../../core/base_component.dart';
 import '../../../utils/validation.dart';
 import '../../smart_contracts/components/sc_creator/common/form_group_container.dart';
 import '../providers/listing_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateListingFormGroup extends BaseComponent {
   const CreateListingFormGroup({Key? key}) : super(key: key);
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.watch(listingFormProvider.notifier);
     final model = ref.watch(listingFormProvider);
     return FormGroupContainer(
@@ -43,7 +45,7 @@ class CreateListingFormGroup extends BaseComponent {
                         padding: const EdgeInsets.all(8.0),
                         child: Center(
                             child: Text(
-                          "Auction has started so the dates & times can't be updated.",
+                          l10n.mktAuctionStartedDatesLocked,
                           style: Theme.of(context).textTheme.bodySmall,
                         )),
                       ),
@@ -63,7 +65,7 @@ class CreateListingFormGroup extends BaseComponent {
                           padding: const EdgeInsets.all(8.0),
                           child: Center(
                               child: Text(
-                            "Auction has started so the pricing can't be updated.",
+                            l10n.mktAuctionStartedPricingLocked,
                             style: Theme.of(context).textTheme.bodySmall,
                           )),
                         ),
@@ -88,6 +90,7 @@ class _EnableGallery extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.watch(listingFormProvider.select((v) => v.galleryOnly));
 
@@ -104,7 +107,7 @@ class _EnableGallery extends BaseComponent {
           onTap: () {
             provider.updateGalleryOnly(!model);
           },
-          child: const Text("Gallery Only?"),
+          child: Text(l10n.mktGalleryOnly),
         ),
       ],
     );
@@ -118,6 +121,7 @@ class _EnableBuyNow extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.watch(listingFormProvider.select((v) => v.enableBuyNow));
 
@@ -134,7 +138,7 @@ class _EnableBuyNow extends BaseComponent {
           onTap: () {
             provider.updateEnableBuyOnly(!model);
           },
-          child: const Text("Enable Buy Now?"),
+          child: Text(l10n.mktEnableBuyNow),
         ),
       ],
     );
@@ -148,6 +152,7 @@ class _EnableAuction extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.watch(listingFormProvider.select((v) => v.enableAuction));
 
@@ -164,7 +169,7 @@ class _EnableAuction extends BaseComponent {
           onTap: () {
             provider.updateEnableAuction(!model);
           },
-          child: const Text("Enable Auction?"),
+          child: Text(l10n.mktEnableAuction),
         ),
       ],
     );
@@ -178,6 +183,7 @@ class _EnableReservePrice extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.watch(listingFormProvider.select((v) => v.enableReservePrice));
 
@@ -194,7 +200,7 @@ class _EnableReservePrice extends BaseComponent {
           onTap: () {
             provider.updateEnableReservePrice(!model);
           },
-          child: const Text("Add Reserve Price"),
+          child: Text(l10n.mktAddReservePrice),
         ),
       ],
     );
@@ -208,6 +214,7 @@ class _BuyNow extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     return TextFormField(
       controller: provider.buyNowController,
@@ -216,9 +223,9 @@ class _BuyNow extends BaseComponent {
       validator: (value) => formValidatorNotEmpty(value, "Buy Now"),
       decoration: InputDecoration(
         suffixText: "VFX",
-        label: const Text(
-          "Buy Now Price",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktBuyNowPriceLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -232,6 +239,7 @@ class _FloorPrice extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.read(listingFormProvider);
     return TextFormField(
@@ -239,12 +247,12 @@ class _FloorPrice extends BaseComponent {
       controller: provider.floorPriceController,
       onChanged: provider.updateFloorPrice,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-      validator: (value) => formValidatorNotEmpty(value, "Floor Price"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.shopFloorPriceLabel),
       decoration: InputDecoration(
         suffixText: "VFX",
-        label: const Text(
-          "Floor Price",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.shopFloorPriceLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -258,6 +266,7 @@ class _ReservePrice extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.read(listingFormProvider);
     return TextFormField(
@@ -265,12 +274,12 @@ class _ReservePrice extends BaseComponent {
       controller: provider.reservePriceController,
       onChanged: provider.updateReservePrice,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
-      validator: (value) => formValidatorNotEmpty(value, "Reserve Price"),
+      validator: (value) => formValidatorNotEmpty(value, l10n.mktReservePriceLabel),
       decoration: InputDecoration(
         suffixText: "VFX",
-        label: const Text(
-          "Reserve Price",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktReservePriceLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -284,6 +293,7 @@ class _NFT extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.watch(listingFormProvider);
 
@@ -293,10 +303,10 @@ class _NFT extends BaseComponent {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("NFT:"),
+            Text(l10n.mktNftColonLabel),
             NftSelector(onSelect: (nft) {
               if (nft.isListed(ref)) {
-                Toast.error("This NFT is already listed. Please choose another");
+                Toast.error(l10n.mktNftAlreadyListedToast);
                 provider.clearNft();
 
                 return;
@@ -338,7 +348,7 @@ class _NFT extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("NFT: ${nft.name}"),
+                Text(l10n.mktNftNameLabel(nft.name)),
                 Text(
                   nft.id,
                   style: Theme.of(context).textTheme.bodySmall,
@@ -348,10 +358,10 @@ class _NFT extends BaseComponent {
           ),
           NftSelector(
             disabled: model.exists,
-            labelOverride: "Replace NFT",
+            labelOverride: l10n.mktReplaceNft,
             onSelect: (nft) {
               if (nft.isListed(ref)) {
-                Toast.error("This NFT is already listed. Please choose another");
+                Toast.error(l10n.mktNftAlreadyListedToast);
                 provider.clearNft();
                 return;
               }
@@ -365,11 +375,12 @@ class _NFT extends BaseComponent {
 }
 
 Future<void> _showDatePicker(BuildContext context, WidgetRef ref, bool isStartDate) async {
+  final l10n = AppLocalizations.of(context);
   final _provider = ref.read(listingFormProvider.notifier);
   final _model = ref.read(listingFormProvider);
 
   if (_model.isAuction && _model.auctionStarted && _model.exists) {
-    Toast.error('The auction has already started.');
+    Toast.error(l10n.mktAuctionAlreadyStartedToast);
     return;
   }
   final _d = await showDatePicker(
@@ -397,12 +408,13 @@ Future<void> _showDatePicker(BuildContext context, WidgetRef ref, bool isStartDa
 }
 
 Future<void> _showTimePicker(BuildContext context, WidgetRef ref, bool isStartDate) async {
+  final l10n = AppLocalizations.of(context);
   final _provider = ref.read(listingFormProvider.notifier);
   final _model = ref.read(listingFormProvider);
 
   final initialDateTime = isStartDate ? _model.startDate : _model.endDate;
   if (_model.isAuction && _model.auctionStarted && _model.exists) {
-    Toast.error('The auction has already started.');
+    Toast.error(l10n.mktAuctionAlreadyStartedToast);
     return;
   }
 
@@ -440,6 +452,7 @@ class _StartDate extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final _model = ref.read(listingFormProvider);
 
@@ -458,9 +471,9 @@ class _StartDate extends BaseComponent {
                   _showDatePicker(context, ref, true);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "Start Date",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktStartDateLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -483,9 +496,9 @@ class _StartDate extends BaseComponent {
                   _showTimePicker(context, ref, true);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "Start Time",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktStartTimeLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -512,6 +525,7 @@ class _EndDate extends BaseComponent {
 
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(listingFormProvider.notifier);
     final model = ref.read(listingFormProvider);
     final disabled = model.isAuction && model.auctionStarted && model.exists;
@@ -532,9 +546,9 @@ class _EndDate extends BaseComponent {
                   _showDatePicker(context, ref, false);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "End Date",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktEndDateLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -557,9 +571,9 @@ class _EndDate extends BaseComponent {
                   _showTimePicker(context, ref, false);
                 },
                 decoration: InputDecoration(
-                  label: const Text(
-                    "End Time",
-                    style: TextStyle(
+                  label: Text(
+                    l10n.mktEndTimeLabel,
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),

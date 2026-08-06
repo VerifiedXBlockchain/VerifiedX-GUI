@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 
 class AuthTypeModal extends StatelessWidget {
@@ -20,17 +21,15 @@ class AuthTypeModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       withDecor: false,
       withClose: false,
       padding: 16.0,
-      // color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
       children: [
         ListTile(
           leading: const Icon(Icons.email),
-          title: const Text(
-            "Email & Password",
-          ),
+          title: Text(l10n.authTypeEmailPassword),
           trailing: const Icon(
             Icons.chevron_right,
             size: 32,
@@ -40,9 +39,7 @@ class AuthTypeModal extends StatelessWidget {
         const Divider(height: 1),
         ListTile(
           leading: const Icon(FontAwesomeIcons.paragraph),
-          title: const Text(
-            "Mnemonic (HD account)",
-          ),
+          title: Text(l10n.authTypeMnemonic),
           trailing: const Icon(
             Icons.chevron_right,
             size: 32,
@@ -53,9 +50,7 @@ class AuthTypeModal extends StatelessWidget {
         if (handlePrivateKey != null)
           ListTile(
             leading: const Icon(FontAwesomeIcons.key),
-            title: const Text(
-              "VFX Private Key",
-            ),
+            title: Text(l10n.authTypeVfxPrivateKey),
             trailing: const Icon(
               Icons.chevron_right,
               size: 32,
@@ -68,9 +63,7 @@ class AuthTypeModal extends StatelessWidget {
         if (handleBtcPrivateKey != null)
           ListTile(
             leading: const Icon(FontAwesomeIcons.bitcoin),
-            title: const Text(
-              "Bitcoin Private Key / WIF Key",
-            ),
+            title: Text(l10n.authTypeBtcPrivateKey),
             trailing: const Icon(
               Icons.chevron_right,
               size: 32,
@@ -83,9 +76,7 @@ class AuthTypeModal extends StatelessWidget {
         if (handleExtension != null)
           ListTile(
             leading: const Icon(Icons.extension),
-            title: const Text(
-              "VFX Extension",
-            ),
+            title: Text(l10n.authTypeVfxExtension),
             trailing: const Icon(
               Icons.chevron_right,
               size: 32,

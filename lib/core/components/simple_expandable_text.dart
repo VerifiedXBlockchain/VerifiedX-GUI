@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 
+import '../../l10n/generated/app_localizations.dart';
+
 class SimpleExpandableText extends StatefulWidget {
   const SimpleExpandableText(this.text, {Key? key}) : super(key: key);
 
@@ -35,7 +37,9 @@ class _SimpleExpandableTextState extends State<SimpleExpandableText> {
           padding: const EdgeInsets.only(top: 6.0),
           child: InkWell(
               child: Text(
-                isExpanded ? "Read Less" : 'Read More',
+                isExpanded
+                    ? AppLocalizations.of(context).r3eReadLess
+                    : AppLocalizations.of(context).r3eReadMore,
                 style: const TextStyle(
                   fontSize: 18,
                   color: Colors.white70,

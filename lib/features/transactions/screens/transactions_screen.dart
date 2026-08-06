@@ -13,6 +13,7 @@ import 'package:rbx_wallet/core/components/back_to_home_button.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../btc/components/btc_transaction_list.dart';
 import '../components/combined_transactions_list.dart';
 import '../components/transaction_list.dart';
@@ -59,13 +60,13 @@ class TransactionsScreen extends BaseScreen {
     late final String title;
     switch (mode) {
       case CurrencyType.any:
-        title = "All Transactions";
+        title = AppLocalizations.of(context).txAppBarAll;
         break;
       case CurrencyType.vfx:
-        title = "VFX Transactions";
+        title = AppLocalizations.of(context).txAppBarVfx;
         break;
       case CurrencyType.btc:
-        title = "BTC Transactions";
+        title = AppLocalizations.of(context).txAppBarBtc;
         break;
     }
 
@@ -106,11 +107,11 @@ class TransactionsScreen extends BaseScreen {
               TabBar(
                 indicatorColor: btcColor,
                 tabs: [
-                  const Tab(
-                    child: Text("Transactions"),
+                  Tab(
+                    child: Text(AppLocalizations.of(context).txTabTransactions),
                   ),
-                  const Tab(
-                    child: Text("Inputs"),
+                  Tab(
+                    child: Text(AppLocalizations.of(context).txTabInputs),
                   ),
                 ],
               ),
@@ -133,24 +134,21 @@ class TransactionsScreen extends BaseScreen {
               TabBar(
                 indicatorColor: AppColors.getBlue(),
                 tabs: [
-                  const Tab(
-                    child: const Text("All"),
+                  Tab(
+                    child: Text(AppLocalizations.of(context).txTabAll),
                   ),
-                  const Tab(
-                    child: const Text("Pending"),
+                  Tab(
+                    child: Text(AppLocalizations.of(context).txTabPending),
                   ),
-                  const Tab(
-                    child: const Text("Successful"),
+                  Tab(
+                    child: Text(AppLocalizations.of(context).txTabSuccessful),
                   ),
-                  const Tab(
-                    child: Text("Failed"),
+                  Tab(
+                    child: Text(AppLocalizations.of(context).txTabFailed),
                   ),
-                  const Tab(
-                    child: const Text("Vaulted"),
+                  Tab(
+                    child: Text(AppLocalizations.of(context).txTabVaulted),
                   ),
-                  // const Tab(
-                  //   child: const Text("Validated"),
-                  // ),
                 ],
               ),
               Expanded(

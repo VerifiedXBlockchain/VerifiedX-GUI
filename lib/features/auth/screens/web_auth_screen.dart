@@ -23,6 +23,7 @@ import '../../../core/storage.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../generated/assets.gen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../auth_utils.dart';
 import '../components/auth_type_modal.dart';
 import '../services/verifiedx_extension_service.dart'
@@ -70,9 +71,10 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
     await showDialog(
         context: context,
         builder: (context) {
+          final l10n = AppLocalizations.of(context);
           return AlertDialog(
             title: Text(
-              "Welcome to the VerifiedX Web Wallet!",
+              l10n.authWelcomeTitle,
               style: TextStyle(
                   color: AppColors.getBlue(), fontWeight: FontWeight.w400),
             ),
@@ -82,18 +84,15 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                      "The network does NOT store your email/password or mnemonic. They are used as seeds to generate your accounts' keypairs."),
+                  Text(l10n.authWelcomeBodyOne),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                      "This includes your VFX account, Vault account, and Bitcoin account."),
+                  Text(l10n.authWelcomeBodyTwo),
                   SizedBox(
                     height: 16,
                   ),
-                  Text(
-                      "We recommend backing up all private keys however, when generating with an email/password or mnemonic, your VFX private key will restore all three accounts."),
+                  Text(l10n.authWelcomeBodyThree),
                 ],
               ),
             ),
@@ -103,7 +102,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                     final success = await backupWebKeys(context, ref);
                   },
                   child: Text(
-                    "Backup Keys",
+                    l10n.authBackupKeys,
                     style: TextStyle(color: Colors.white),
                   )),
               TextButton(
@@ -111,7 +110,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                   Navigator.of(context).pop();
                 },
                 child: Text(
-                  "Continue",
+                  l10n.actionContinue,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -188,6 +187,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
     //   _handleSession(next);
     // });
 
+    final l10n = AppLocalizations.of(context);
     final isMobile = BreakPoints.useMobileLayout(context);
 
     final keypair = ref.watch(webSessionProvider.select((v) => v.keypair));
@@ -235,7 +235,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
           if (needsPassword) ...[
             // Show the address they're unlocking
             Text(
-              "Unlock wallet for:",
+              l10n.authUnlockWalletFor,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.8),
                 fontSize: 12,
@@ -243,7 +243,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             ),
             Text(
               storage.getString(Storage.WEB_PRIMARY_ADDRESS) ??
-                  "Unknown Address",
+                  l10n.authUnknownAddress,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.7),
                 fontSize: 12,
@@ -252,15 +252,14 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             ),
             const SizedBox(height: 16),
             AppButton(
-              label: "Enter Password",
+              label: l10n.authEnterPassword,
               icon: Icons.lock,
               onPressed: () async {
                 final password =
                     await PasswordPromptService.promptAndVerifyPassword(
                   context,
-                  title: "Enter Password",
-                  customMessage:
-                      "Enter your password to decrypt your stored keys.",
+                  title: l10n.authEnterPassword,
+                  customMessage: l10n.authEnterPasswordBody,
                 );
 
                 if (password != null) {
@@ -270,7 +269,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                   if (success) {
                     redirectToDashboard(false);
                   } else {
-                    Toast.error("Failed to decrypt keys");
+                    Toast.error(l10n.authDecryptFailed);
                   }
                 }
               },
@@ -279,7 +278,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: AppButton(
-                label: "Logout",
+                label: l10n.authLogout,
                 type: AppButtonType.Text,
                 underlined: true,
                 onPressed: () async {
@@ -290,7 +289,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             ),
           ] else
             AppButton(
-              label: "Login / Create Account",
+              label: l10n.authLoginCreateAccount,
               icon: Icons.upload,
               onPressed: () {
                 showWebLoginModal(
@@ -315,7 +314,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: AppButton(
-                label: "Resume Session",
+                label: l10n.authResumeSession,
                 variant: AppColorVariant.Light,
                 type: AppButtonType.Text,
                 underlined: true,
@@ -390,7 +389,7 @@ class WebWalletWordWordmark extends StatelessWidget {
             height: 8,
           ),
           Text(
-            "Web Wallet $APP_VERSION",
+            AppLocalizations.of(context).authWebWalletSubtitle(APP_VERSION),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white.withOpacity(0.7),

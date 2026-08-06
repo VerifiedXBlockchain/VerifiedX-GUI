@@ -11,6 +11,7 @@ import '../../../core/theme/components.dart';
 import '../../btc_web/components/web_mpc_ceremony_dialog.dart';
 import '../../smart_contracts/components/sc_creator/common/file_selector.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 
 import '../../../utils/files.dart';
@@ -25,7 +26,7 @@ class TokenizeBtcScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
       backgroundColor: Colors.black,
-      title: Text("Tokenize BTC (vBTC)"),
+      title: Text(AppLocalizations.of(context).btcTokenizeTitle),
     );
   }
 
@@ -81,12 +82,12 @@ class TokenizeBtcForm extends BaseComponent {
                   borderSide: BorderSide(color: AppColors.getWhite()),
                 ),
                 label: Text(
-                  "Token Name (Optional)",
+                  AppLocalizations.of(context).bw2TokenNameOptional,
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
-                hintText: "vBTC Token",
+                hintText: AppLocalizations.of(context).btcVbtcTokenHint,
               ),
             ),
             TextFormField(
@@ -96,12 +97,12 @@ class TokenizeBtcForm extends BaseComponent {
                   borderSide: BorderSide(color: AppColors.getWhite()),
                 ),
                 label: Text(
-                  "Token Description (Optional)",
+                  AppLocalizations.of(context).bw2TokenDescriptionOptional,
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
-                hintText: "vBTC Token",
+                hintText: AppLocalizations.of(context).btcVbtcTokenHint,
               ),
               minLines: 3,
               maxLines: 3,
@@ -113,19 +114,19 @@ class TokenizeBtcForm extends BaseComponent {
                   borderSide: BorderSide(color: AppColors.getWhite()),
                 ),
                 label: Text(
-                  "Token Ticker (Optional)",
+                  AppLocalizations.of(context).bw2TokenTickerOptional,
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
-                hintText: "vBTC",
+                hintText: AppLocalizations.of(context).btcVbtcHint,
               ),
             ),
             SizedBox(
               height: 12,
             ),
             Text(
-              "Token Image (Optional)",
+              AppLocalizations.of(context).bw2TokenImageOptional,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -155,7 +156,7 @@ class TokenizeBtcForm extends BaseComponent {
               height: 12,
             ),
             Text(
-              "Media (Optional)",
+              AppLocalizations.of(context).bw2MediaOptional,
               style: TextStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -211,7 +212,7 @@ class TokenizeBtcForm extends BaseComponent {
     // If a ceremony is in progress, show "View Progress" button
     if (!ceremonyState.isIdle && !ceremonyState.isFailed && !ceremonyState.isContractCreated) {
       return VBtcButton(
-        label: "View Progress",
+        label: AppLocalizations.of(context).btcViewProgress,
         icon: Icons.visibility,
         onPressed: () {
           MpcCeremonyProgressModal.show(context);
@@ -222,19 +223,19 @@ class TokenizeBtcForm extends BaseComponent {
     // Web flow — V2 MPC ceremony
     if (kIsWeb) {
       return VBtcButton(
-        label: "Create vBTC Token",
+        label: AppLocalizations.of(context).tkbCreateVbtcToken,
         onPressed: () async {
           if (formState.isProcessing) return;
 
           final keypair = ref.read(webSessionProvider).keypair;
           if (keypair == null) {
-            Toast.error("A VFX account is required to proceed.");
+            Toast.error(AppLocalizations.of(context).bw2VfxAccountRequired);
             return;
           }
 
           final balance = ref.read(webSessionProvider).balance;
           if (balance == null || balance < MIN_RBX_FOR_SC_ACTION) {
-            Toast.error("A VFX account with a balance is required.");
+            Toast.error(AppLocalizations.of(context).bw2VfxAccountBalanceRequiredShort);
             return;
           }
 
@@ -256,19 +257,19 @@ class TokenizeBtcForm extends BaseComponent {
 
     // Desktop V2 flow
     return VBtcButton(
-      label: "Mint & Deploy",
+      label: AppLocalizations.of(context).btcMintAndDeploy,
       onPressed: () async {
         if (formState.isProcessing) return;
 
         if (formState.vfxAddress == null) {
-          Toast.error("A VFX address is required");
+          Toast.error(AppLocalizations.of(context).btcVfxAddressRequired);
           return;
         }
 
         final confirmed = await ConfirmDialog.show(
-          title: "Create vBTC Token?",
-          cancelText: "Cancel",
-          confirmText: "Mint & Deploy",
+          title: AppLocalizations.of(context).btcCreateVbtcTitle,
+          cancelText: AppLocalizations.of(context).actionCancel,
+          confirmText: AppLocalizations.of(context).btcMintAndDeploy,
           content: Consumer(builder: (context, ref, child) {
             final formState = ref.watch(tokenizeBtcFormProvider);
             final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
@@ -281,16 +282,16 @@ class TokenizeBtcForm extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("This will start an MPC ceremony to create your vBTC token."),
-                  Text("A network fee of ~0.000028 VFX is required."),
-                  if (wallets.length == 1) Text("VFX Account: ${formState.vfxAddress}"),
+                  Text(AppLocalizations.of(context).btcMpcStartBody),
+                  Text(AppLocalizations.of(context).btcNetworkFeeBody),
+                  if (wallets.length == 1) Text(AppLocalizations.of(context).btcVfxAccountLabel(formState.vfxAddress ?? '')),
                   if (wallets.length > 1)
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 12),
-                        Text("Change Account:"),
+                        Text(AppLocalizations.of(context).btcChangeAccountLabel),
                         Row(
                           children: [
                             PopupMenuButton<String>(
@@ -305,7 +306,7 @@ class TokenizeBtcForm extends BaseComponent {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("VFX Address:"),
+                                  Text(AppLocalizations.of(context).btcVfxAddressLabel),
                                   SizedBox(width: 4),
                                   Text(
                                     formState.vfxAddress ?? "None",
@@ -343,7 +344,7 @@ class TokenizeBtcForm extends BaseComponent {
                       ],
                     ),
                   SizedBox(height: 12),
-                  Text("Continue?"),
+                  Text(AppLocalizations.of(context).btcContinueQuestion),
                 ],
               ),
             );

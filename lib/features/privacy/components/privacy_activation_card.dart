@@ -7,6 +7,8 @@ import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -18,6 +20,7 @@ class PrivacyActivationCard extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 480),
@@ -34,20 +37,19 @@ class PrivacyActivationCard extends BaseComponent {
                   color: AppColors.getPrism(),
                 ),
                 const SizedBox(height: 24),
-                const Text(
-                  "PRISM Privacy Layer",
-                  style: TextStyle(
+                Text(
+                  l10n.prvPrismLayerTitle,
+                  style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  "Activate your privacy wallet to shield VFX using zero-knowledge proofs. "
-                  "Shielded funds are hidden from the public ledger and can be transferred privately.",
+                Text(
+                  l10n.prvActivationDescription,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: Colors.white70,
                     height: 1.5,
@@ -77,7 +79,7 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
 
     final wallet = ref.read(sessionProvider).currentWallet;
     if (wallet == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return;
     }
 
@@ -89,12 +91,12 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
     try {
       final address = await ref.read(shieldedAddressProvider.notifier).generate(wallet.address, password);
       if (address != null) {
-        Toast.message("Privacy wallet activated: ${address.zfxAddress}");
+        Toast.message(globalL10n.prvWalletActivated(address.zfxAddress));
       } else {
-        Toast.error("Failed to generate shielded address");
+        Toast.error(globalL10n.prvFailedGenerateShieldedAddress);
       }
     } catch (e) {
-      Toast.error("Error activating privacy wallet: $e");
+      Toast.error(globalL10n.prvErrorActivatingWallet(e.toString()));
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -103,12 +105,13 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
   }
 
   Future<String?> _promptNewPassword() async {
+    final l10n = globalL10n;
     final password = await PromptModal.show(
       contextOverride: rootNavigatorKey.currentContext!,
-      title: "Create Privacy Password",
-      labelText: "Password",
-      body: "Create a password to secure your shielded wallet's spending key. You'll need this password to unshield, transfer, or consolidate funds.",
-      validator: (value) => formValidatorNotEmpty(value, "Password"),
+      title: l10n.prvCreatePasswordTitle,
+      labelText: l10n.prvPasswordLabel,
+      body: l10n.prvCreatePasswordBody,
+      validator: (value) => formValidatorNotEmpty(value, l10n.prvPasswordLabel),
       obscureText: true,
       revealObscure: true,
       lines: 1,
@@ -119,10 +122,10 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
     // Confirm
     final confirm = await PromptModal.show(
       contextOverride: rootNavigatorKey.currentContext!,
-      title: "Confirm Password",
-      labelText: "Confirm Password",
+      title: l10n.prvConfirmPasswordTitle,
+      labelText: l10n.prvConfirmPasswordLabel,
       validator: (value) {
-        if (value != password) return "Passwords do not match";
+        if (value != password) return l10n.prvPasswordsDoNotMatch;
         return null;
       },
       obscureText: true,
@@ -130,7 +133,7 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
     );
 
     if (confirm != password) {
-      Toast.error("Password confirmation failed");
+      Toast.error(l10n.prvPasswordConfirmationFailed);
       return null;
     }
 
@@ -139,8 +142,9 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: _isLoading ? "Activating..." : "Activate Privacy Wallet",
+      label: _isLoading ? l10n.prvActivating : l10n.prvActivateWallet,
       icon: Icons.shield,
       variant: AppColorVariant.Prism,
       processing: _isLoading,

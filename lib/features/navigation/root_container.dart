@@ -10,6 +10,7 @@ import '../../core/providers/currency_segmented_button_provider.dart';
 import '../../core/providers/session_provider.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/theme/colors.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../bridge/providers/status_provider.dart';
 import '../bridge/providers/wallet_info_provider.dart';
 import '../btc/providers/electrum_connected_provider.dart';
@@ -29,6 +30,45 @@ import 'components/root_container_wallet_selector_list.dart';
 const ROOT_CONTAINER_TRANSITION_DURATION = Duration(milliseconds: 250);
 const ROOT_CONTAINER_TRANSITION_CURVE = Curves.ease;
 const SIDE_NAV_WIDTH_EXPANDED = 180.0;
+
+/// Expanded side-nav width sized to the longest localized menu label
+/// (Spanish labels overflow the fixed 180px). Measured with the item's
+/// largest text style, plus icon + paddings + badge slack; clamped so
+/// English keeps the original width and long locales stay reasonable.
+double sideNavExpandedWidth(BuildContext context) {
+  final l10n = AppLocalizations.of(context);
+  final labels = [
+    l10n.navDashboard,
+    l10n.navMenuVaultAccountSingular,
+    l10n.navMenuVaultAccounts,
+    l10n.navDomains,
+    l10n.actionSend,
+    l10n.actionReceive,
+    l10n.navMenuPayWithButterfly,
+    l10n.navMenuCryptoCom,
+    l10n.navTransactions,
+    l10n.navMenuTokenizeBitcoin,
+    l10n.svcNavPrivacyLabel,
+    l10n.navMenuFungibleTokens,
+    l10n.navMenuSmartContracts,
+    l10n.navMenuNfts,
+    l10n.navMenuP2PAuctions,
+    l10n.navMenuValidator,
+    l10n.navMenuOperations,
+    l10n.navMenuSignOut,
+  ];
+  final painter = TextPainter(textDirection: TextDirection.ltr);
+  double maxLabel = 0;
+  for (final label in labels) {
+    painter.text = TextSpan(
+      text: label,
+      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+    );
+    painter.layout();
+    if (painter.width > maxLabel) maxLabel = painter.width;
+  }
+  return (maxLabel + 84).clamp(SIDE_NAV_WIDTH_EXPANDED, 250.0);
+}
 const SIDE_NAV_WIDTH_CONTRACTED = 60.0;
 
 class RootContainer extends BaseComponent {
@@ -94,6 +134,7 @@ class _LayoutState extends State<_Layout> {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, _) {
+      final l10n = AppLocalizations.of(context);
       final tabsRouter = AutoTabsRouter.of(context);
       final globalBalancesExpanded = ref.watch(globalBalancesExpandedProvider);
 
@@ -145,7 +186,7 @@ class _LayoutState extends State<_Layout> {
                         width: 4,
                       ),
                       Text(
-                        "Validating...",
+                        l10n.hnavValidating,
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.white,
@@ -166,7 +207,7 @@ class _LayoutState extends State<_Layout> {
                     padding: const EdgeInsets.only(top: 56.0),
                     child: AnimatedContainer(
                       duration: ROOT_CONTAINER_TRANSITION_DURATION,
-                      width: sideNavExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED,
+                      width: sideNavExpanded ? sideNavExpandedWidth(context) : SIDE_NAV_WIDTH_CONTRACTED,
                       curve: ROOT_CONTAINER_TRANSITION_CURVE,
                       child: RootContainerSideNav(
                           isExpanded: sideNavExpanded,
@@ -265,7 +306,7 @@ class _LayoutState extends State<_Layout> {
                 AnimatedPadding(
                   duration: ROOT_CONTAINER_TRANSITION_DURATION,
                   curve: ROOT_CONTAINER_TRANSITION_CURVE,
-                  padding: EdgeInsets.only(left: sideNavExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED),
+                  padding: EdgeInsets.only(left: sideNavExpanded ? sideNavExpandedWidth(context) : SIDE_NAV_WIDTH_CONTRACTED),
                   child: Stack(
                     children: [
                       Column(
@@ -364,7 +405,7 @@ class _LayoutState extends State<_Layout> {
                                           child: Builder(builder: (context) {
                                             if (vfxWallet != null) {
                                               return Tooltip(
-                                                message: "Selected VFX Address",
+                                                message: l10n.hnavSelectedVfxAddressTooltip,
                                                 child: Row(
                                                   children: [
                                                     Text(vfxWallet.address),
@@ -389,7 +430,7 @@ class _LayoutState extends State<_Layout> {
 
                                             if (btcWallet != null) {
                                               return Tooltip(
-                                                message: "Selected BTC Account",
+                                                message: l10n.hnavSelectedBtcAccountTooltip,
                                                 child: Row(
                                                   children: [
                                                     Text(btcWallet.address),
@@ -411,7 +452,7 @@ class _LayoutState extends State<_Layout> {
                                                 ),
                                               );
                                             }
-                                            return Text("Select Account");
+                                            return Text(l10n.webSelectAccount);
                                           }),
                                         ),
                                         Transform.translate(
@@ -499,7 +540,7 @@ class _LayoutState extends State<_Layout> {
                                         fontSize: 14,
                                       ),
                                       child: Text(
-                                        "Block ${block.height}",
+                                        l10n.hnavBlockNumber(block.height.toString()),
                                       ),
                                     ),
                                     SizedBox(
@@ -511,23 +552,23 @@ class _LayoutState extends State<_Layout> {
                                         late final String message;
                                         if (!ref.watch(sessionProvider.select((v) => v.cliStarted))) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "CLI Inactive";
+                                          message = l10n.hnavCliInactive;
                                         } else {
                                           final status = ref.watch(statusProvider);
 
                                           switch (status) {
                                             case BridgeStatus.Loading:
                                               color = Theme.of(context).colorScheme.warning;
-                                              message = "VFX CLI Loading";
+                                              message = l10n.hnavVfxCliLoading;
                                               break;
                                             case BridgeStatus.Online:
                                               color = Theme.of(context).colorScheme.success;
-                                              message = "VFX Online";
+                                              message = l10n.hnavVfxOnline;
                                               break;
 
                                             case BridgeStatus.Offline:
                                               color = Theme.of(context).colorScheme.danger;
-                                              message = "VFX CLI Offline";
+                                              message = l10n.hnavVfxCliOffline;
                                               break;
                                           }
                                         }
@@ -558,23 +599,23 @@ class _LayoutState extends State<_Layout> {
                                         late final String message;
                                         if (!sessionState.cliStarted) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "BTC Inactive";
+                                          message = l10n.hnavBtcInactive;
                                         } else {
                                           final electrumConnected = ref.watch(electrumConnectedProvider);
 
                                           switch (electrumConnected) {
                                             case null:
                                               color = Theme.of(context).colorScheme.warning;
-                                              message = "BTC Loading";
+                                              message = l10n.hnavBtcLoading;
                                               break;
                                             case true:
                                               color = Theme.of(context).colorScheme.success;
-                                              message = "BTC Online";
+                                              message = l10n.hnavBtcOnline;
                                               break;
 
                                             case false:
                                               color = Theme.of(context).colorScheme.danger;
-                                              message = "BTC Offline";
+                                              message = l10n.hnavBtcOffline;
                                               break;
                                           }
                                         }
@@ -607,19 +648,19 @@ class _LayoutState extends State<_Layout> {
                                         bool isSynced = false;
                                         if (!session.cliStarted) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "CLI Inactive";
+                                          message = l10n.hnavCliInactive;
                                         } else if (walletInfo == null) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "Loading...";
+                                          message = l10n.statusLoading;
                                         } else if (walletInfo.isResyncing) {
                                           color = Theme.of(context).colorScheme.danger;
-                                          message = "Resyncing...";
+                                          message = l10n.hnavResyncing;
                                         } else if (!walletInfo.isChainSynced) {
                                           color = AppColors.getGold();
-                                          message = "Syncing...";
+                                          message = l10n.hnavSyncing;
                                         } else {
                                           color = Theme.of(context).colorScheme.success;
-                                          message = "Synced";
+                                          message = l10n.hnavSynced;
                                           isSynced = true;
                                         }
 
@@ -680,6 +721,7 @@ class AccountManagementContainer extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final mode = ref.watch(currencySegementedButtonProvider);
 
     return Column(
@@ -702,7 +744,7 @@ class AccountManagementContainer extends BaseComponent {
                         Opacity(
                           opacity: 0.7,
                           child: AppButton(
-                            label: "[Restore Hidden]",
+                            label: l10n.hnavRestoreHiddenBracket,
                             type: AppButtonType.Text,
                             variant: AppColorVariant.Light,
                             onPressed: () {
@@ -715,7 +757,7 @@ class AccountManagementContainer extends BaseComponent {
                           ),
                         ),
                         AppButton(
-                          label: "Add Account",
+                          label: l10n.navAddAccount,
                           onPressed: () {
                             AccountUtils.promptVfxNewOrImport(context, ref);
                           },
@@ -727,7 +769,7 @@ class AccountManagementContainer extends BaseComponent {
 
                   case CurrencyType.btc:
                     return AppButton(
-                      label: "Add Account",
+                      label: l10n.navAddAccount,
                       onPressed: () {
                         AccountUtils.promptBtcNewOrImport(context, ref);
                       },
@@ -742,7 +784,7 @@ class AccountManagementContainer extends BaseComponent {
                         Opacity(
                           opacity: 0.7,
                           child: AppButton(
-                            label: "[Restore Hidden]",
+                            label: l10n.hnavRestoreHiddenBracket,
                             type: AppButtonType.Text,
                             variant: AppColorVariant.Light,
                             onPressed: () {
@@ -755,7 +797,7 @@ class AccountManagementContainer extends BaseComponent {
                           ),
                         ),
                         AppButton(
-                          label: "Add Account",
+                          label: l10n.navAddAccount,
                           onPressed: () {
                             AccountUtils.promptVfxOrBtc(context, ref);
                           },

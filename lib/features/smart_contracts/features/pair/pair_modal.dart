@@ -9,6 +9,7 @@ import '../../components/sc_creator/common/help_button.dart';
 import '../../components/sc_creator/common/manage_properties_list.dart';
 import '../../components/sc_creator/common/modal_bottom_actions.dart';
 import '../../components/sc_creator/common/modal_container.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'pair_provider.dart';
 
 class PairModal extends BaseComponent {
@@ -18,17 +19,18 @@ class PairModal extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final _provider = ref.read(pairFormProvider.notifier);
     final _model = ref.watch(pairFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Form(
       key: _provider.formKey,
       child: ModalContainer(children: [
-        const FormGroupHeader(
-          "Pair/Wrap with Existing NFT",
+        FormGroupHeader(
+          l10n.scwPairWrapTitle,
         ),
         Row(
           children: [
             AppDropdown<String>(
-                label: "Network",
+                label: l10n.scwNetwork,
                 selectedValue: _model.network,
                 selectedLabel: _model.network,
                 options: _provider.networkOptions.map((o) => AppDropdownOption<String>(label: o, value: o)).toList(),
@@ -40,7 +42,7 @@ class PairModal extends BaseComponent {
             ),
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(label: Text("${_model.network} Contract Address")),
+                decoration: InputDecoration(label: Text(l10n.scwNetworkContractAddress(_model.network))),
                 validator: _provider.nftAddressValidator,
                 controller: _provider.nftAddressController,
               ),
@@ -51,7 +53,7 @@ class PairModal extends BaseComponent {
               ),
               Expanded(
                 child: TextFormField(
-                  decoration: const InputDecoration(label: Text("Token ID (Optional)")),
+                  decoration: InputDecoration(label: Text(l10n.scwTokenIdOptional)),
                   // validator: _provider.descriptionValidator,
                   // controller: _provider.descriptionController,
                 ),
@@ -61,7 +63,7 @@ class PairModal extends BaseComponent {
               ),
               Expanded(
                 child: TextFormField(
-                  decoration: const InputDecoration(label: Text("Token Standard (Optional)")),
+                  decoration: InputDecoration(label: Text(l10n.scwTokenStandardOptional)),
                   // validator: _provider.descriptionValidator,
                   // controller: _provider.descriptionController,
                 ),
@@ -70,14 +72,14 @@ class PairModal extends BaseComponent {
           ],
         ),
         TextFormField(
-          decoration: const InputDecoration(label: Text("Full Description")),
+          decoration: InputDecoration(label: Text(l10n.scwFullDescription)),
           validator: _provider.descriptionValidator,
           controller: _provider.descriptionController,
           minLines: 3,
           maxLines: 6,
         ),
         TextFormField(
-          decoration: const InputDecoration(label: Text("Reason for Pairing/Wrapping")),
+          decoration: InputDecoration(label: Text(l10n.scwReasonForPairingWrapping)),
           validator: _provider.reasonValidator,
           controller: _provider.reasonController,
           minLines: 3,
@@ -87,7 +89,7 @@ class PairModal extends BaseComponent {
           children: [
             Expanded(
               child: FileSelector(
-                title: "Provenance Files (Optional)",
+                title: l10n.scwProvenanceFilesOptional,
                 transparentBackground: true,
                 asset: _model.provenance,
                 onChange: (asset) {
@@ -101,7 +103,7 @@ class PairModal extends BaseComponent {
             ),
             Expanded(
               child: TextFormField(
-                decoration: const InputDecoration(label: Text("Metadata URL")),
+                decoration: InputDecoration(label: Text(l10n.scwMetadataUrl)),
                 controller: _provider.metadataUrlController,
               ),
             ),
@@ -111,9 +113,9 @@ class PairModal extends BaseComponent {
           padding: const EdgeInsets.only(top: 8),
           child: Row(
             children: [
-              const Text(
-                "Properties (Optional)",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              Text(
+                l10n.scwPropertiesOptional,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const HelpButton(HelpType.manageProperties)
             ],

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/models/value_label.dart';
@@ -86,8 +87,7 @@ class TopicFormProvider extends StateNotifier<NewTopic> {
 
       final charLength = jsonEncode(adjVoteData).length;
       if (charLength > 2800) {
-        Toast.error(
-            "The 'Vote Adjudicator In' submission is too long. Please reduce the content.");
+        Toast.error(globalL10n.r3hAdjVoteInTooLong);
         return null;
       }
     } else {

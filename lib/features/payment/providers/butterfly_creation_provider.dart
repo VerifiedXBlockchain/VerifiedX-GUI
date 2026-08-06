@@ -6,6 +6,7 @@ import '../models/butterfly_create_link_response.dart';
 import '../models/butterfly_link.dart';
 import '../services/butterfly_service.dart';
 import 'butterfly_links_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 
 enum ButterflyCreationStep {
   input,
@@ -66,17 +67,17 @@ class ButterflyCreationState {
   String get stepTitle {
     switch (step) {
       case ButterflyCreationStep.input:
-        return 'Create Payment Link';
+        return globalL10n.r3dCreatePaymentLink;
       case ButterflyCreationStep.confirm:
-        return 'Confirm Details';
+        return globalL10n.r3dConfirmDetails;
       case ButterflyCreationStep.sendingTx:
-        return 'Sending VFX';
+        return globalL10n.r3dSendingVfx;
       case ButterflyCreationStep.waitingForFund:
-        return 'Waiting for Confirmation';
+        return globalL10n.r3dWaitingForConfirmation;
       case ButterflyCreationStep.complete:
-        return 'Payment Link Ready!';
+        return globalL10n.r3dPaymentLinkReady;
       case ButterflyCreationStep.error:
-        return 'Error';
+        return globalL10n.shopErrorTitle;
     }
   }
 
@@ -135,13 +136,13 @@ class ButterflyCreationProvider extends StateNotifier<ButterflyCreationState> {
     final response = await ButterflyService().createButterflyLink(
       amount: state.amount,
       message:
-          state.message.isEmpty ? 'Payment from VFX Wallet' : state.message,
+          state.message.isEmpty ? globalL10n.r3dPaymentFromVfxWallet : state.message,
       icon: state.icon,
     );
 
     if (response == null) {
       state = state.copyWith(
-        errorMessage: 'Failed to create payment link. Please try again.',
+        errorMessage: globalL10n.r3dFailedCreatePaymentLink,
         isProcessing: false,
         step: ButterflyCreationStep.error,
       );
@@ -156,7 +157,7 @@ class ButterflyCreationProvider extends StateNotifier<ButterflyCreationState> {
 
     if (txHash == null) {
       state = state.copyWith(
-        errorMessage: 'Failed to send VFX to escrow. Please try again.',
+        errorMessage: globalL10n.r3dFailedSendVfxEscrow,
         isProcessing: false,
         step: ButterflyCreationStep.error,
       );
@@ -188,8 +189,7 @@ class ButterflyCreationProvider extends StateNotifier<ButterflyCreationState> {
       if (_pollCount > _maxPollAttempts) {
         timer.cancel();
         state = state.copyWith(
-          errorMessage:
-              'Timeout waiting for deposit confirmation. The link was created but may need manual verification.',
+          errorMessage: globalL10n.r3dTimeoutDepositConfirmation,
           isProcessing: false,
           step: ButterflyCreationStep.error,
         );
@@ -211,7 +211,7 @@ class ButterflyCreationProvider extends StateNotifier<ButterflyCreationState> {
           amount: state.createResponse!.amountDouble,
           claimAmount: status.claimAmountDouble ?? state.amount,
           message:
-              state.message.isEmpty ? 'Payment from VFX Wallet' : state.message,
+              state.message.isEmpty ? globalL10n.r3dPaymentFromVfxWallet : state.message,
           icon: state.icon,
           status: ButterflyLinkStatus.readyForRedemption,
           senderAddress: senderAddress,

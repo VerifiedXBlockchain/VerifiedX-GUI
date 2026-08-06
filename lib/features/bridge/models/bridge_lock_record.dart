@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../l10n/l10n_helper.dart';
+
 part 'bridge_lock_record.freezed.dart';
 part 'bridge_lock_record.g.dart';
 
@@ -209,19 +211,21 @@ class BridgeLockRecord with _$BridgeLockRecord {
   String get friendlyStatus {
     switch (status) {
       case BridgeLockStatus.locked:
-        return vfxLockConfirmedOnChain ? "Confirmed" : "Locking";
+        return vfxLockConfirmedOnChain
+            ? globalL10n.statusConfirmed
+            : globalL10n.r3fBridgeStatusLocking;
       case BridgeLockStatus.attestationPending:
       case BridgeLockStatus.attestationReady:
-        return "Awaiting signatures";
+        return globalL10n.r3fBridgeStatusAwaitingSignatures;
       case BridgeLockStatus.proofSubmitted:
-        return "Minting";
+        return globalL10n.r3fBridgeStatusMinting;
       case BridgeLockStatus.minted:
       case BridgeLockStatus.mintedOnBase:
-        return "Minted";
+        return globalL10n.r3fBridgeStatusMinted;
       case BridgeLockStatus.failed:
-        return "Failed";
+        return globalL10n.statusFailed;
       case BridgeLockStatus.expired:
-        return "Expired";
+        return globalL10n.r3fBridgeStatusExpired;
       // Exit-flow states — bridge-in users won't usually see these, but if
       // they do we surface something readable rather than CLI jargon.
       case BridgeLockStatus.redeeming:
@@ -229,15 +233,15 @@ class BridgeLockRecord with _$BridgeLockRecord {
       case BridgeLockStatus.btcExitBurned:
       case BridgeLockStatus.btcExitSigning:
       case BridgeLockStatus.btcExitBroadcast:
-        return "Exiting";
+        return globalL10n.r3fBridgeStatusExiting;
       case BridgeLockStatus.redeemed:
       case BridgeLockStatus.unlocked:
       case BridgeLockStatus.unlockedOnVFX:
       case BridgeLockStatus.btcExitComplete:
-        return "Returned";
+        return globalL10n.r3fBridgeStatusReturned;
       case BridgeLockStatus.unknown:
         final raw = statusRaw;
-        return raw != null && raw.isNotEmpty ? raw : "Unknown";
+        return raw != null && raw.isNotEmpty ? raw : globalL10n.r3fBridgeStatusUnknown;
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/adj_vote.dart';
 import '../models/topic.dart';
 import 'topic_vote_actions.dart';
@@ -16,6 +17,7 @@ class TopicDetail extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -35,25 +37,25 @@ class TopicDetail extends BaseComponent {
                     VotingCategoryBadge(topic: topic),
                     const SizedBox(height: 4),
                     SelectableText(
-                      "UID: ${topic.uid}",
+                      l10n.votingUid(topic.uid),
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                   ],
                 ),
               ),
               DateCard(
-                label: "Topic Created",
+                label: l10n.votingTopicCreatedLabel,
                 value: topic.createdAtFormatted,
               ),
               DateCard(
-                label: "Voting Ends",
+                label: l10n.votingEndsLabel,
                 value: topic.endsAtFormatted,
               )
             ],
           ),
           const Divider(),
-          SelectableText("Block Height: ${topic.blockHeight}"),
-          SelectableText("Topic Owner: ${topic.ownerAddress}"),
+          SelectableText(l10n.votingBlockHeightDetail(topic.blockHeight.toString())),
+          SelectableText(l10n.votingTopicOwner(topic.ownerAddress)),
           const Divider(),
           const SizedBox(height: 6),
           topic.category == VoteTopicCategory.AdjVoteIn && topic.descriptionIsJson
@@ -80,48 +82,49 @@ class AdjudicatorInVoteDetails extends BaseComponent {
   final Topic topic;
   @override
   Widget build(BuildContext context, ref) {
+    final l10n = AppLocalizations.of(context);
     final data = jsonDecode(topic.description);
     final details = AdjVote.fromJson(data);
     return Column(
       children: [
         _AdjudicatorDetailValue(
-          label: 'Adjudicator to be VFX Address: ',
+          label: l10n.govAdjVfxAddressLabel,
           value: details.rbxAddress,
         ),
         _AdjudicatorDetailValue(
-          label: 'Adjudicator to be Ip Address: ',
+          label: l10n.govAdjIpAddressLabel,
           value: details.ipAddress,
         ),
         _AdjudicatorDetailValue(
-          label: 'Machine Provider: ',
+          label: l10n.govAdjMachineProviderLabel,
           value: details.provider.name,
         ),
         _AdjudicatorDetailValue(
-          label: 'Operating System: ',
+          label: l10n.govAdjOperatingSystemLabel,
           value: details.machineOs.name,
         ),
         _AdjudicatorDetailValue(
-          label: 'Machine type: ',
+          label: l10n.govAdjMachineTypeLabel,
           value: details.machineType,
         ),
         Row(
           children: [
             _AdjudicatorDetailValue(
-              label: 'CPU: ',
+              label: l10n.govAdjCpuLabel,
               value: details.machineCPU,
             ),
             const SizedBox(
               width: 10,
             ),
             _AdjudicatorDetailValue(
-              label: 'CPU Cores: ',
+              label: l10n.govAdjCpuCoresLabel,
               value: details.machineCPUCores.toString(),
             ),
             const SizedBox(
               width: 10,
             ),
             _AdjudicatorDetailValue(
-              label: 'CPU Threads: ',
+              label: l10n.govAdjCpuThreadsLabel,
               value: details.machineCPUThreads.toString(),
             ),
           ],
@@ -129,14 +132,14 @@ class AdjudicatorInVoteDetails extends BaseComponent {
         Row(
           children: [
             _AdjudicatorDetailValue(
-              label: 'RAM (GB): ',
+              label: l10n.govAdjRamLabel,
               value: details.machineRam.toString(),
             ),
             const SizedBox(
               width: 10,
             ),
             _AdjudicatorDetailValue(
-              label: 'HD Size: ',
+              label: l10n.govAdjHdSizeLabel,
               value: details.machineRam.toString() + details.machineHDDSpecifier.name.toUpperCase(),
             ),
           ],
@@ -144,41 +147,41 @@ class AdjudicatorInVoteDetails extends BaseComponent {
         Row(
           children: [
             _AdjudicatorDetailValue(
-              label: 'Internet Speed down(Gbps): ',
+              label: l10n.govAdjInternetDownLabel,
               value: details.internetSpeedDown.toString(),
             ),
             const SizedBox(
               width: 10,
             ),
             _AdjudicatorDetailValue(
-              label: 'Internet Speed up(Gbps): ',
+              label: l10n.govAdjInternetUpLabel,
               value: details.internetSpeedUp.toString(),
             ),
             const SizedBox(
               width: 10,
             ),
             _AdjudicatorDetailValue(
-              label: 'Bandwidth (TB): ',
-              value: details.bandwith != 0 ? details.bandwith.toString() : 'Unlimitted',
+              label: l10n.govAdjBandwidthLabel,
+              value: details.bandwith != 0 ? details.bandwith.toString() : l10n.govAdjBandwidthUnlimited,
             ),
           ],
         ),
         _AdjudicatorDetailValue(
-          label: 'Technical background: ',
+          label: l10n.govAdjTechnicalBackgroundLabel,
           value: details.technicalBackground,
           maxLines: 3,
         ),
         _AdjudicatorDetailValue(
-          label: 'Reasons to be added as adjudicator: ',
+          label: l10n.govAdjReasonLabel,
           value: details.reasonForAdjJoin,
           maxLines: 3,
         ),
         _AdjudicatorDetailValue(
-          label: 'Github Link: ',
+          label: l10n.govAdjGithubLinkLabel,
           value: details.githubLink,
         ),
         _AdjudicatorDetailValue(
-          label: 'Additional Links: ',
+          label: l10n.govAdjAdditionalLinksLabel,
           value: details.supplementalURLs,
         ),
       ],

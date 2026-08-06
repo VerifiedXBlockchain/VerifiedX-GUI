@@ -10,6 +10,7 @@ import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../generated/assets.gen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../nft/data/templates.dart';
 import '../components/sc_creator/common/modal_container.dart';
 import '../models/smart_contract_template.dart';
@@ -26,7 +27,7 @@ class TemplateChooserScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Smart Contracts Templates"),
+      title: Text(AppLocalizations.of(context).scTemplatesTitle),
       leading: IconButton(
         onPressed: () async {
           AutoRouter.of(context).pop();
@@ -66,7 +67,7 @@ class TemplateChooserScreen extends BaseScreen {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "Choose a Smart Contract & Add Features",
+                AppLocalizations.of(context).scTemplatesHeading,
                 style: Theme.of(context).textTheme.displayMedium!.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -248,7 +249,7 @@ class _TemplateCardState extends BaseComponentState<_TemplateCard> {
                             ),
                           ),
                           onPressed: _handleCreate,
-                          child: const Text("Create"),
+                          child: Text(AppLocalizations.of(context).scCreateButton),
                         ),
                       ),
                       const SizedBox(
@@ -256,7 +257,7 @@ class _TemplateCardState extends BaseComponentState<_TemplateCard> {
                       ),
                       if (widget.template.learnMoreContent != null)
                         AppButton(
-                          label: "Learn More",
+                          label: AppLocalizations.of(context).scLearnMore,
                           icon: Icons.help,
                           onPressed: () {
                             showModalBottomSheet(

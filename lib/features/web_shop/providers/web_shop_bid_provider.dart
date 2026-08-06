@@ -24,6 +24,7 @@ import '../services/web_shop_service.dart';
 import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../../l10n/l10n_helper.dart';
 
 import '../../global_loader/global_loading_provider.dart';
 
@@ -67,7 +68,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     if (kIsWeb) {
       final balance = ref.read(webSessionProvider).balance;
       if (balance == null) {
-        Toast.error("No Balance");
+        Toast.error(globalL10n.mktNoBalanceToast);
         return false;
       }
 
@@ -75,7 +76,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         if (ALLOW_BIDS_WITHOUT_BALANCE) {
           return null;
         }
-        Toast.error("Not enough balance.");
+        Toast.error(globalL10n.mktNotEnoughBalanceToast);
         return false;
       }
 
@@ -84,7 +85,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     final wallet = ref.read(sessionProvider).currentWallet;
 
     if (wallet == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return false;
     }
 
@@ -93,14 +94,14 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         return null;
       }
 
-      Toast.error("Not enough balance.");
+      Toast.error(globalL10n.mktNotEnoughBalanceToast);
       return false;
     }
 
     if (wallet.isValidating) {
       if (wallet.balance <
           (amount + MIN_RBX_FOR_SC_ACTION + ASSURED_AMOUNT_TO_VALIDATE)) {
-        Toast.error("Not enough balance since you are validating.");
+        Toast.error(globalL10n.mktNotEnoughBalanceValidatingToast);
         return false;
       }
     }
@@ -137,7 +138,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     final keypair = ref.read(webSessionProvider).keypair;
 
     if (keypair == null) {
-      Toast.error("no account", surpressErrors);
+      Toast.error(globalL10n.mktNoAccountToast, surpressErrors);
       return;
     }
 
@@ -153,13 +154,13 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     final timestamp = timestampOverride ?? await txService.getTimestamp();
     if (timestamp == null) {
-      Toast.error("Could not get timestamp", surpressErrors);
+      Toast.error(globalL10n.mktCouldNotGetTimestampToast, surpressErrors);
       return false;
     }
 
     final nonce = await txService.getNonce(buyerAddress);
     if (nonce == null) {
-      Toast.error("Could not get nonce", surpressErrors);
+      Toast.error(globalL10n.mktCouldNotGetNonceToast, surpressErrors);
       return false;
     }
 
@@ -200,7 +201,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
       final royaltyFee = await txService.getFee(royaltyData);
       if (royaltyFee == null) {
-        Toast.error("Could not get fee", surpressErrors);
+        Toast.error(globalL10n.mktCouldNotGetFeeToast, surpressErrors);
         return false;
       }
 
@@ -217,7 +218,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
       final royaltyHash = await txService.getHash(royaltyData);
       if (royaltyHash == null) {
-        Toast.error("Could not generate hash", surpressErrors);
+        Toast.error(globalL10n.mktCouldNotGenerateHashToast, surpressErrors);
         return false;
       }
 
@@ -227,7 +228,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         publicKey: keypair.public,
       );
       if (royaltySignature == null) {
-        Toast.error("Signature generation failed.", surpressErrors);
+        Toast.error(globalL10n.webErrorSignatureGen, surpressErrors);
         return false;
       }
 
@@ -238,7 +239,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       );
 
       if (!isValid) {
-        Toast.error("Signature not valid", surpressErrors);
+        Toast.error(globalL10n.webErrorSignatureInvalid, surpressErrors);
         return false;
       }
 
@@ -286,7 +287,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     final fee = await txService.getFee(txData);
     if (fee == null) {
-      Toast.error("Could not get fee", surpressErrors);
+      Toast.error(globalL10n.mktCouldNotGetFeeToast, surpressErrors);
       return false;
     }
 
@@ -303,7 +304,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     final hash = await txService.getHash(txData);
     if (hash == null) {
-      Toast.error("Could not generate hash", surpressErrors);
+      Toast.error(globalL10n.mktCouldNotGenerateHashToast, surpressErrors);
       return false;
     }
 
@@ -314,7 +315,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     );
 
     if (signature == null) {
-      Toast.error("Signature generation failed.", surpressErrors);
+      Toast.error(globalL10n.webErrorSignatureGen, surpressErrors);
       return false;
     }
 
@@ -325,7 +326,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     );
 
     if (!isValid) {
-      Toast.error("Signature not valid", surpressErrors);
+      Toast.error(globalL10n.webErrorSignatureInvalid, surpressErrors);
       return false;
     }
 
@@ -368,7 +369,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     final primaryFee = await txService.getFee(primaryTxData);
     if (primaryFee == null) {
-      Toast.error("Could not get fee", surpressErrors);
+      Toast.error(globalL10n.mktCouldNotGetFeeToast, surpressErrors);
       return false;
     }
 
@@ -385,7 +386,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     final hashPrimary = await txService.getHash(primaryTxData);
     if (hashPrimary == null) {
-      Toast.error("Could not generate hash", surpressErrors);
+      Toast.error(globalL10n.mktCouldNotGenerateHashToast, surpressErrors);
       return false;
     }
 
@@ -396,7 +397,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     );
 
     if (signaturePrimary == null) {
-      Toast.error("Signature generation failed.", surpressErrors);
+      Toast.error(globalL10n.webErrorSignatureGen, surpressErrors);
       return false;
     }
 
@@ -407,7 +408,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     );
 
     if (!isValidPrimary) {
-      Toast.error("Signature not valid (primary)", surpressErrors);
+      Toast.error(globalL10n.mktSignatureNotValidPrimaryToast, surpressErrors);
       return false;
     }
 
@@ -434,7 +435,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     ));
 
     if (verifyTransactionData == null) {
-      Toast.error("Could not verify transaction", surpressErrors);
+      Toast.error(globalL10n.mktCouldNotVerifyTransactionToast, surpressErrors);
       return false;
     }
 
@@ -453,12 +454,12 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     if (tx != null) {
       if (tx['Result'] == "Success") {
-        Toast.message("TX Broadcasted", surpressErrors);
+        Toast.message(globalL10n.mktTxBroadcastedToast, surpressErrors);
         return true;
       }
     }
 
-    Toast.error("A problem occurred", surpressErrors);
+    Toast.error(globalL10n.mktProblemOccurredToast, surpressErrors);
     return false;
   }
 
@@ -567,11 +568,10 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         return null;
       }
       final confirmed = await ConfirmDialog.show(
-        title: "Insufficient Balance",
-        body:
-            "This NFT has a buy now price of ${listing.buyNowPrice} VFX and you don't have enough balance to cover it.\n\nWould you like to pay with a Credit Card or another crypto token?",
-        cancelText: "No",
-        confirmText: "Yes",
+        title: globalL10n.mktInsufficientBalanceTitle,
+        body: globalL10n.mktBuyNowInsufficientBody(listing.buyNowPrice.toString()),
+        cancelText: globalL10n.actionNo,
+        confirmText: globalL10n.actionYes,
       );
       if (confirmed == true) {
         final purchaseUuid = await showDialog(
@@ -579,7 +579,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
             barrierDismissible: false,
             builder: (context) {
               return AlertDialog(
-                title: Text("Pay with Credit Card / Crypto"),
+                title: Text(globalL10n.mktPayWithCardCryptoTitle),
                 content: OnRampInitializer(
                   walletAddress: address,
                   vfxAmount: listing.buyNowPrice! + (MIN_RBX_FOR_SC_ACTION * 2),
@@ -616,10 +616,10 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     final confirmed = await ConfirmDialog.show(
       context: context,
-      title: "Buy Now",
-      body: "Are you sure you want to buy now for ${listing.buyNowPrice} VFX?",
-      confirmText: "Buy Now",
-      cancelText: "Cancel",
+      title: globalL10n.shopBuyNow,
+      body: globalL10n.mktBuyNowConfirmBody(listing.buyNowPrice.toString()),
+      confirmText: globalL10n.shopBuyNow,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed != true) {
@@ -631,7 +631,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         ? ref.read(webSessionProvider).keypair?.address
         : ref.read(sessionProvider).currentWallet?.address;
     if (address == null) {
-      Toast.error("No Account");
+      Toast.error(globalL10n.mktNoAccountToast);
       ref.read(globalLoadingProvider.notifier).complete();
 
       return null;
@@ -643,7 +643,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     if (kIsWeb) {
       final keypair = ref.read(webSessionProvider).keypair;
       if (keypair == null) {
-        Toast.error("No Account");
+        Toast.error(globalL10n.mktNoAccountToast);
         ref.read(globalLoadingProvider.notifier).complete();
 
         return null;
@@ -653,7 +653,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
           listing.purchaseKey, listing.buyNowPrice!, keypair);
 
       if (signature == null) {
-        Toast.error("Could not produce signature");
+        Toast.error(globalL10n.mktCouldNotProduceSignatureToast);
         ref.read(globalLoadingProvider.notifier).complete();
 
         return null;
@@ -671,8 +671,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         );
 
         if (presignedTx == null) {
-          Toast.error(
-              "A problem occurred presigning the sale transaction. Please try again");
+          Toast.error(globalL10n.mktPresignProblemToast);
           return null;
         }
 
@@ -706,18 +705,16 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         // Future.delayed(Duration(seconds: 10)).then((_) {
         //   waitForSaleStart(listing.nft!.smartContract.id, address, listing.buyNowPrice!);
         // });
-        Toast.message(
-            "Buy Now TX broadcasted. Please wait for it to be accepted by the shop owner");
+        Toast.message(globalL10n.mktBuyNowTxBroadcastedToast);
 
         ref.read(globalLoadingProvider.notifier).complete();
-        String body = "Please wait for the transaction to be finalized.";
+        String body = globalL10n.mktWaitForFinalizeBody;
         if (listing.collection.shop!.isThirdParty) {
-          body +=
-              "\nBecause this auction house is hosted on the VFX Web Wallet, the seller will need to authorize the Sale Start transaction. You will see that in your transaction list once it's been sent.";
+          body += "\n${globalL10n.mktThirdPartySaleStartNote}";
         }
         InfoDialog.show(
             contextOverride: context,
-            title: "Buy Now TX broadcasted.",
+            title: globalL10n.mktBuyNowTxBroadcastedTitle,
             body: body);
       }
     } else {
@@ -755,12 +752,12 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     }
 
     if (listing.auction == null) {
-      Toast.error("Auction is not live");
+      Toast.error(globalL10n.mktAuctionNotLiveToast);
       return null;
     }
 
     if (!listing.isActive) {
-      Toast.error("Auction is over");
+      Toast.error(globalL10n.mktAuctionOverToast);
       return null;
     }
 
@@ -769,7 +766,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         : ref.read(sessionProvider).currentWallet?.address;
 
     if (address == null) {
-      Toast.error("No account");
+      Toast.error(globalL10n.adnrNoAccountToast);
       return null;
     }
 
@@ -782,12 +779,12 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     if (forceAmount == null) {
       final amountStr = await PromptModal.show(
         contextOverride: context,
-        title: "Place Bid",
-        validator: (val) => formValidatorNumber(val, "Bid Amount"),
-        labelText: "Bid Amount (VFX)",
-        footer: "Must be greater than $minimumBid VFX",
-        confirmText: "Continue",
-        cancelText: "Cancel",
+        title: globalL10n.mktPlaceBid,
+        validator: (val) => formValidatorNumber(val, globalL10n.r3bBidAmount),
+        labelText: globalL10n.mktBidAmountLabel,
+        footer: globalL10n.mktBidMustBeGreaterFooter(minimumBid.toString()),
+        confirmText: globalL10n.actionContinue,
+        cancelText: globalL10n.actionCancel,
       );
 
       if (amountStr == null) {
@@ -796,12 +793,12 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
       amount = double.tryParse(amountStr);
       if (amount == null) {
-        Toast.error("Invalid amount");
+        Toast.error(globalL10n.webInvalidAmount);
         return null;
       }
 
       if (listing.auction == null) {
-        Toast.error("No auction");
+        Toast.error(globalL10n.mktNoAuctionToast);
         return null;
       }
     } else {
@@ -809,15 +806,18 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
     }
 
     if (amount <= listing.auction!.currentBidPrice!) {
-      Toast.error(
-          "Your bid must be greater than the current highest bid (${listing.auction!.currentBidPrice} VFX)");
+      Toast.error(globalL10n
+          .mktBidMustBeGreaterToast(listing.auction!.currentBidPrice.toString()));
       return null;
     }
 
     if (amount <=
         listing.auction!.currentBidPrice! + listing.auction!.incrementAmount) {
-      Toast.error(
-          "The minimum increment amount is ${listing.auction!.incrementAmount} VFX. A bid grater than ${listing.auction!.currentBidPrice! + listing.auction!.incrementAmount} VFX is required.");
+      Toast.error(globalL10n.mktBidIncrementToast(
+        listing.auction!.incrementAmount.toString(),
+        (listing.auction!.currentBidPrice! + listing.auction!.incrementAmount)
+            .toString(),
+      ));
       return null;
     }
 
@@ -832,11 +832,10 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         return null;
       }
       final confirmed = await ConfirmDialog.show(
-        title: "Insufficient Balance",
-        body:
-            "You don't have enough balance to cover this bid.\n\nWould you like to pay with a Credit Card or another crypto token?",
-        cancelText: "No",
-        confirmText: "Yes",
+        title: globalL10n.mktInsufficientBalanceTitle,
+        body: globalL10n.mktBidInsufficientBody,
+        cancelText: globalL10n.actionNo,
+        confirmText: globalL10n.actionYes,
       );
       if (confirmed == true) {
         final purchaseUuid = await showDialog(
@@ -844,7 +843,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
             barrierDismissible: false,
             builder: (context) {
               return AlertDialog(
-                title: Text("Pay with Credit Card / Crypto"),
+                title: Text(globalL10n.mktPayWithCardCryptoTitle),
                 content: OnRampInitializer(
                   walletAddress: address,
                   vfxAmount: amount! + (MIN_RBX_FOR_SC_ACTION * 2),
@@ -881,11 +880,10 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
 
     final confirmed = await ConfirmDialog.show(
       context: context,
-      title: "Place Bid",
-      body:
-          "Are you sure you want to place a bid of $amount VFX${amount != amount ? ' with a bid of $amount VFX' : ''}?",
-      confirmText: "Place Bid",
-      cancelText: "Cancel",
+      title: globalL10n.mktPlaceBid,
+      body: globalL10n.mktPlaceBidConfirmBody(amount.toString()),
+      confirmText: globalL10n.mktPlaceBid,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed != true) {
@@ -899,14 +897,14 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
       final keypair = ref.read(webSessionProvider).keypair;
       if (keypair == null) {
         ref.read(globalLoadingProvider.notifier).complete();
-        Toast.error("No Account");
+        Toast.error(globalL10n.mktNoAccountToast);
         return null;
       }
 
       signature = await getBidSignature(listing.purchaseKey, amount, keypair);
 
       if (signature == null) {
-        Toast.error("Could not produce signature");
+        Toast.error(globalL10n.mktCouldNotProduceSignatureToast);
         ref.read(globalLoadingProvider.notifier).complete();
         return null;
       }
@@ -922,8 +920,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
         );
 
         if (presignedTx == null) {
-          Toast.error(
-              "A problem occurred presigning the sale transaction. Please try again");
+          Toast.error(globalL10n.mktPresignProblemToast);
           return null;
         }
 
@@ -979,24 +976,22 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
           if (currentEmail == null) {
             String? email = await PromptModal.show(
               contextOverride: context,
-              title: "Subscribe for updates?",
-              body:
-                  "In order for the web wallet to provide notifications to auction winners to sign transactions, an email address is required.",
+              title: globalL10n.mktSubscribeUpdatesTitle,
+              body: globalL10n.mktSubscribeUpdatesBody,
               validator: formValidatorEmail,
-              labelText: "Email Address",
+              labelText: globalL10n.keygenEmailAddressTitle,
             );
 
             email = email?.trim();
 
             if (email == null || email.isEmpty) {
-              Toast.error(
-                  "You will not be notified. You can update this setting on the dashboard if you change your mind.");
+              Toast.error(globalL10n.mktNotNotifiedToast);
             } else {
               final subscribed =
                   await WebShopService().createContact(email, address);
               if (subscribed) {
                 ref.read(webAuthTokenProvider.notifier).addEmail(email);
-                Toast.message("Subscribed");
+                Toast.message(globalL10n.mktSubscribedToast);
               }
             }
           }
@@ -1007,7 +1002,7 @@ class WebBidListProvider extends StateNotifier<List<Bid>> {
                   "${listing.collection.shop?.id},${listing.collection.id}")
               .notifier)
           .refresh();
-      Toast.message("Bid Submitted");
+      Toast.message(globalL10n.mktBidSubmittedToast);
     } else {
       Toast.error();
     }

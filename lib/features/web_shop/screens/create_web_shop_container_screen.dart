@@ -10,25 +10,27 @@ import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../components/create_web_shop_form_group.dart';
 import '../providers/web_shop_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateWebShopContainerScreen extends BaseScreen {
   const CreateWebShopContainerScreen({Key? key}) : super(key: key, verticalPadding: 0, horizontalPadding: 0);
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webShopFormProvider.notifier);
     final model = ref.read(webShopFormProvider);
 
     return AppBar(
       backgroundColor: Colors.black,
-      title: Text(model.id != 0 ? "Edit Auction House" : "Create Auction House"),
+      title: Text(model.id != 0 ? l10n.r3bEditAuctionHouse : l10n.r3bCreateAuctionHouse),
       leading: IconButton(
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
-            title: "Are you sure you want to close the shop ${model.id != 0 ? 'editing' : 'creation'} screen?",
-            body: "All unsaved changes will be lost.",
-            cancelText: "Cancel",
-            confirmText: "Continue",
+            title: l10n.r3bCloseShopConfirm(model.id != 0 ? l10n.r3bActionEditing : l10n.r3bActionCreation),
+            body: l10n.configCloseDialogBody,
+            cancelText: l10n.actionCancel,
+            confirmText: l10n.actionContinue,
           );
 
           if (confirmed == true) {
@@ -50,6 +52,7 @@ class CreateWebShopContainerScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webShopFormProvider.notifier);
     final model = ref.read(webShopFormProvider);
 
@@ -75,14 +78,14 @@ class CreateWebShopContainerScreen extends BaseScreen {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
-                  label: "Discard Changes",
+                  label: l10n.dstDiscardChanges,
                   variant: AppColorVariant.Danger,
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                      title: "Are you sure you want to close the shop ${model.id != 0 ? 'editing' : 'creation'} screen?",
-                      body: "All unsaved changes will be lost.",
-                      cancelText: "Cancel",
-                      confirmText: "Continue",
+                      title: l10n.r3bCloseShopConfirm(model.id != 0 ? l10n.r3bActionEditing : l10n.r3bActionCreation),
+                      body: l10n.configCloseDialogBody,
+                      cancelText: l10n.actionCancel,
+                      confirmText: l10n.actionContinue,
                     );
 
                     if (confirmed == true) {
@@ -94,7 +97,7 @@ class CreateWebShopContainerScreen extends BaseScreen {
                 ),
                 if (model.id != 0) DecPublishShopButton(),
                 AppButton(
-                  label: model.id != 0 ? 'Save Changes' : 'Create',
+                  label: model.id != 0 ? l10n.r3bSaveChanges : l10n.txpCreate,
                   variant: AppColorVariant.Success,
                   onPressed: () {
                     provider.complete(context);

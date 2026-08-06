@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 
 import '../../../core/base_component.dart';
 import '../../../core/models/value_label.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/validation.dart';
 import '../models/adj_vote.dart';
 import '../providers/adj_vote_form_provider.dart';
@@ -13,6 +14,7 @@ class AdjVoteForm extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final model = ref.watch(adjVoteFormProvider);
     final provider = ref.read(adjVoteFormProvider.notifier);
 
@@ -22,7 +24,7 @@ class AdjVoteForm extends BaseComponent {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Adj Vote In Details",
+            l10n.r3hAdjVoteInDetails,
             style: Theme.of(context).textTheme.headlineSmall!.copyWith(
                   color: Colors.white,
                 ),
@@ -30,12 +32,12 @@ class AdjVoteForm extends BaseComponent {
           _FormRow(
             children: [
               _FormField(
-                label: "VFX Address to Nominate",
+                label: l10n.r3hVfxAddressToNominate,
                 controller: provider.rbxAddressController,
                 validator: provider.rbxAddressValidator,
               ),
               _FormField(
-                label: "IP Address",
+                label: l10n.beaconIpLabel,
                 controller: provider.ipAddressController,
                 required: true,
                 inputFormatters: [
@@ -47,7 +49,7 @@ class AdjVoteForm extends BaseComponent {
           _FormRow(
             children: [
               _FormDropDown<Provider>(
-                label: "Machine Provider",
+                label: l10n.r3hMachineProvider,
                 value: model.provider,
                 options: provider.providerOptions(context),
                 onChanged: (val) {
@@ -55,7 +57,7 @@ class AdjVoteForm extends BaseComponent {
                 },
               ),
               _FormDropDown<OS>(
-                label: "Machine OS",
+                label: l10n.r3hMachineOs,
                 value: model.machineOs,
                 options: provider.osOptions(context),
                 onChanged: (val) {
@@ -63,23 +65,23 @@ class AdjVoteForm extends BaseComponent {
                 },
               ),
               _FormField(
-                label: "Machine Type",
+                label: l10n.r3hMachineType,
                 controller: provider.machineTypeController,
                 required: true,
-                hintText: "ie. Server, Desktop, Laptop, etc.",
+                hintText: l10n.r3hMachineTypeHint,
               ),
             ],
           ),
           _FormRow(
             children: [
               _FormField(
-                label: "CPU",
+                label: l10n.r3hCpu,
                 controller: provider.machineCPUController,
                 required: true,
-                hintText: "ie. Intel",
+                hintText: l10n.r3hCpuHint,
               ),
               _FormField(
-                label: "CPU Cores",
+                label: l10n.r3hCpuCores,
                 controller: provider.machineCPUCoresController,
                 required: true,
                 selectOnFocus: true,
@@ -88,7 +90,7 @@ class AdjVoteForm extends BaseComponent {
                 ],
               ),
               _FormField(
-                label: "CPU Threads",
+                label: l10n.r3hCpuThreads,
                 controller: provider.machineCPUThreadsController,
                 required: true,
                 selectOnFocus: true,
@@ -101,7 +103,7 @@ class AdjVoteForm extends BaseComponent {
           _FormRow(
             children: [
               _FormField(
-                label: "RAM (in GB)",
+                label: l10n.r3hRamGb,
                 controller: provider.machineRamController,
                 required: true,
                 selectOnFocus: true,
@@ -110,7 +112,7 @@ class AdjVoteForm extends BaseComponent {
                 ],
               ),
               _FormField(
-                label: "HD Size",
+                label: l10n.r3hHdSize,
                 controller: provider.machineHDDSizeController,
                 required: true,
                 selectOnFocus: true,
@@ -119,7 +121,7 @@ class AdjVoteForm extends BaseComponent {
                 ],
               ),
               _FormDropDown<HDSizeSpecifier>(
-                label: "HD Size Specifier",
+                label: l10n.r3hHdSizeSpecifier,
                 value: model.machineHDDSpecifier,
                 options: provider.hdSizeSpecifierOptions(context),
                 onChanged: (val) {
@@ -131,7 +133,7 @@ class AdjVoteForm extends BaseComponent {
           _FormRow(
             children: [
               _FormField(
-                label: "Internet Speed Up (in Gbps)",
+                label: l10n.r3hInternetSpeedUp,
                 controller: provider.internetSpeedUpController,
                 required: true,
                 selectOnFocus: true,
@@ -140,7 +142,7 @@ class AdjVoteForm extends BaseComponent {
                 ],
               ),
               _FormField(
-                label: "Internet Speed Down (in Gbps)",
+                label: l10n.r3hInternetSpeedDown,
                 controller: provider.internetSpeedDownController,
                 required: true,
                 selectOnFocus: true,
@@ -149,11 +151,11 @@ class AdjVoteForm extends BaseComponent {
                 ],
               ),
               _FormField(
-                label: "Bandwidth (in TB)",
+                label: l10n.r3hBandwidthTb,
                 controller: provider.bandwithController,
                 required: true,
                 selectOnFocus: true,
-                hintText: "0 for unlimited",
+                hintText: l10n.r3hBandwidthHint,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp("[0-9]")),
                 ],
@@ -163,7 +165,7 @@ class AdjVoteForm extends BaseComponent {
           _FormRow(
             children: [
               _FormField(
-                label: "Technical Background",
+                label: l10n.r3hTechnicalBackground,
                 controller: provider.technicalBackgroundController,
                 required: true,
                 lines: 3,
@@ -174,7 +176,7 @@ class AdjVoteForm extends BaseComponent {
           _FormRow(
             children: [
               _FormField(
-                label: "Reason To Become Adjudicator",
+                label: l10n.r3hReasonToBecomeAdj,
                 controller: provider.reasonForAdjJoinController,
                 required: true,
                 lines: 3,
@@ -185,13 +187,13 @@ class AdjVoteForm extends BaseComponent {
           _FormRow(
             children: [
               _FormField(
-                label: "Github Link (Optional)",
+                label: l10n.r3hGithubLinkOptional,
                 controller: provider.githubLinkController,
               ),
               _FormField(
-                label: "Additional Link(s) (Optional)",
+                label: l10n.r3hAdditionalLinksOptional,
                 controller: provider.supplementalURLsController,
-                hintText: "Separate multiple with commas",
+                hintText: l10n.r3hSeparateWithCommas,
               ),
             ],
           ),

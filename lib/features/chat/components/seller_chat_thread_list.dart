@@ -8,6 +8,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart' as web_router;
 import '../providers/seller_chat_thread_list_provider.dart';
 import '../providers/web_seller_chat_thread_list_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class SellerChatThreadList extends BaseComponent {
   final int shopId;
@@ -15,11 +16,12 @@ class SellerChatThreadList extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final threads = kIsWeb ? ref.watch(webSellerChatThreadListProvider(shopId)) : ref.watch(sellerChatThreadListProvider);
 
     if (threads.isEmpty) {
       return Center(
-        child: Text("No Chats"),
+        child: Text(l10n.chatNoChats),
       );
     }
     return ListView.builder(
@@ -41,7 +43,7 @@ class SellerChatThreadList extends BaseComponent {
               child: ListTile(
                 title: Text(thread.user),
                 subtitle: Text(
-                  message?.message ?? "No messages yet",
+                  message?.message ?? l10n.mktNoMessagesYet,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

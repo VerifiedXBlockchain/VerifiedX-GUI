@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'bridge_format.dart';
 
 /// Step 2 of the bridge flow. Stateless review screen — the parent owns the
@@ -29,13 +30,14 @@ class BridgeConfirmation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 460),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("You're about to bridge", style: TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(l10n.prvBridgeAboutTo, style: const TextStyle(color: Colors.white70, fontSize: 12)),
           const SizedBox(height: 8),
           Container(
             width: double.infinity,
@@ -49,19 +51,19 @@ class BridgeConfirmation extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "${formatVbtc(amount)} vBTC",
+                  l10n.prvVbtcAmountSuffix(formatVbtc(amount)),
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
                 ),
-                const Text("from VFX", style: TextStyle(color: Colors.white54, fontSize: 12)),
+                Text(l10n.prvBridgeFromVfx, style: const TextStyle(color: Colors.white54, fontSize: 12)),
                 const SizedBox(height: 10),
                 const Icon(Icons.arrow_downward, size: 16, color: Colors.white38),
                 const SizedBox(height: 10),
                 Text(
-                  "${formatVbtc(amount)} vBTC.b",
+                  l10n.prvBridgeVbtcbAmount(formatVbtc(amount)),
                   style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  "to ${_shortDestination()} on Base",
+                  l10n.prvBridgeToDestOnBase(_shortDestination()),
                   style: const TextStyle(color: Colors.white54, fontSize: 12),
                 ),
                 const SizedBox(height: 4),
@@ -73,19 +75,18 @@ class BridgeConfirmation extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          const Text("This will:", style: TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(l10n.prvBridgeThisWill, style: const TextStyle(color: Colors.white70, fontSize: 12)),
           const SizedBox(height: 6),
-          _StepLine(index: 1, label: "Lock your ${formatVbtc(amount)} vBTC on VFX"),
-          const _StepLine(index: 2, label: "Wait for validator signatures"),
+          _StepLine(index: 1, label: l10n.prvBridgeStepLock(formatVbtc(amount))),
+          _StepLine(index: 2, label: l10n.prvBridgeStepWaitSignatures),
           _StepLine(
             index: 3,
-            label: "Submit a mintWithProof transaction on Base "
-                "(paid from your derived Base address)",
+            label: l10n.prvBridgeStepMint,
           ),
           const SizedBox(height: 8),
-          const Text(
-            "Estimated time: 2–5 minutes once submitted.",
-            style: TextStyle(color: Colors.white54, fontSize: 11),
+          Text(
+            l10n.prvBridgeEstimatedTime,
+            style: const TextStyle(color: Colors.white54, fontSize: 11),
           ),
           const SizedBox(height: 16),
           Container(
@@ -97,13 +98,13 @@ class BridgeConfirmation extends StatelessWidget {
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Icon(Icons.info_outline, size: 16, color: Colors.white54),
-                SizedBox(width: 8),
+              children: [
+                const Icon(Icons.info_outline, size: 16, color: Colors.white54),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    "Reminder: this is one-way from this app. You'll use your DeFi provider or another Base (EVM) wallet for any further actions on vBTC.b.",
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                    l10n.prvBridgeOneWayReminder,
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ),
               ],
@@ -114,7 +115,7 @@ class BridgeConfirmation extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppButton(
-                label: "Back",
+                label: l10n.prvBack,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
                 onPressed: isSubmitting ? () {} : onBack,
@@ -122,7 +123,7 @@ class BridgeConfirmation extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               AppButton(
-                label: "Confirm & Bridge",
+                label: l10n.prvBridgeConfirmAndBridge,
                 variant: AppColorVariant.Success,
                 processing: isSubmitting,
                 onPressed: isSubmitting ? () {} : onConfirm,

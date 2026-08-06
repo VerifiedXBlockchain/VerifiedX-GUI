@@ -18,6 +18,7 @@ import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../providers/sc_wizard_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class SmartContractWizardScreen extends BaseScreen {
   const SmartContractWizardScreen({Key? key})
@@ -29,8 +30,9 @@ class SmartContractWizardScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: const Text("NFT Collection Wizard"),
+      title: Text(l10n.r3aNftCollectionWizard),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: [
@@ -39,10 +41,10 @@ class SmartContractWizardScreen extends BaseScreen {
       leading: IconButton(
           onPressed: () async {
             final confirmed = await ConfirmDialog.show(
-              title: "Are you sure you want to close the NFT collection Wizard?",
-              body: "All unsaved changes will be lost.",
-              cancelText: "Cancel",
-              confirmText: "Continue",
+              title: l10n.r3aCloseNftWizardConfirm,
+              body: l10n.configCloseDialogBody,
+              cancelText: l10n.actionCancel,
+              confirmText: l10n.actionContinue,
             );
             if (confirmed == true) {
               ref.read(scWizardProvider.notifier).clear();
@@ -58,6 +60,7 @@ class SmartContractWizardScreen extends BaseScreen {
     final provider = ref.read(scWizardProvider.notifier);
     final items = ref.watch(scWizardProvider);
     final isMobile = BreakPoints.useMobileLayout(context);
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         const Expanded(child: ScWizardList()),
@@ -70,7 +73,7 @@ class SmartContractWizardScreen extends BaseScreen {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   AppButton(
-                    label: "Clear",
+                    label: l10n.actionClear,
                     onPressed: () async {
                       if (items.isEmpty) {
                         provider.clear();
@@ -79,10 +82,10 @@ class SmartContractWizardScreen extends BaseScreen {
                       }
 
                       final confirmed = await ConfirmDialog.show(
-                        title: "Clear NFT Collection Wizard?",
-                        body: "Are you sure you want to remove everything?",
-                        cancelText: "Cancel",
-                        confirmText: "Clear",
+                        title: l10n.r3aClearNftWizardTitle,
+                        body: l10n.r3aRemoveEverythingConfirm,
+                        cancelText: l10n.actionCancel,
+                        confirmText: l10n.actionClear,
                         destructive: true,
                       );
 
@@ -94,7 +97,7 @@ class SmartContractWizardScreen extends BaseScreen {
                     variant: AppColorVariant.Danger,
                   ),
                   AppButton(
-                    label: "${isMobile ? '' : 'Create'} New Instance",
+                    label: isMobile ? l10n.r3aNewInstance : l10n.r3aCreateNewInstance,
                     onPressed: () {
                       provider.insert(
                         entry: BulkSmartContractEntry.empty(),
@@ -106,7 +109,7 @@ class SmartContractWizardScreen extends BaseScreen {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => ScWizardEditItemScreen(
-                            title: "Create Instance",
+                            title: l10n.r3aCreateInstance,
                             index: items.length,
                           ),
                         ),
@@ -115,11 +118,11 @@ class SmartContractWizardScreen extends BaseScreen {
                     variant: AppColorVariant.Primary,
                   ),
                   AppButton(
-                    label: isMobile ? "Mint" : "Compile & Mint",
+                    label: isMobile ? l10n.r3aMint : l10n.btcCompileMint,
                     onPressed: () async {
                       final wallet = kIsWeb ? ref.read(webSessionProvider).currentWallet : ref.read(sessionProvider).currentWallet;
                       if (wallet == null) {
-                        Toast.error("No account selected.");
+                        Toast.error(l10n.svcNoAccountSelectedPeriod);
 
                         return;
                       }
@@ -131,25 +134,24 @@ class SmartContractWizardScreen extends BaseScreen {
 
                       if (!kIsWeb) {
                         if (wallet.balance < MIN_RBX_FOR_SC_ACTION) {
-                          Toast.error("Not enough VFX balance to mint a smart contract.");
+                          Toast.error(l10n.r3aNotEnoughVfxToMint);
                           return;
                         }
                       }
 
                       final confirmed = await ConfirmDialog.show(
-                        title: "Compile & Mint Smart Contract?",
-                        body:
-                            "Are you sure you want to proceed minting $amount Smart Contract${amount == 1 ? '' : 's'}?\n\nOnce compiled you will not be able to make any changes\nand the smart contract will be deployed to the chain.",
-                        confirmText: "Continue",
-                        cancelText: "Cancel",
+                        title: l10n.r3aCompileMintScConfirm,
+                        body: l10n.r3aConfirmMintBody(amount.toString()),
+                        confirmText: l10n.actionContinue,
+                        cancelText: l10n.actionCancel,
                       );
 
                       if (confirmed == true) {
                         final extraConfirm = await ConfirmDialog.show(
-                          title: "Confirm Address",
-                          body: "This will be minted by ${wallet.labelWithoutTruncation}",
-                          confirmText: "Compile & Mint",
-                          cancelText: "Cancel",
+                          title: l10n.tokenFormConfirmAddressTitle,
+                          body: l10n.r3aWillBeMintedBy(wallet.labelWithoutTruncation),
+                          confirmText: l10n.btcCompileMint,
+                          cancelText: l10n.actionCancel,
                         );
 
                         if (extraConfirm == true) {

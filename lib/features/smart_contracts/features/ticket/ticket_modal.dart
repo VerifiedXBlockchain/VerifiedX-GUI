@@ -8,6 +8,7 @@ import '../../../../utils/validation.dart';
 import '../../components/sc_creator/common/form_group_header.dart';
 import '../../components/sc_creator/common/modal_bottom_actions.dart';
 import '../../components/sc_creator/common/modal_container.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'ticket.dart';
 import 'ticket_form_provider.dart';
 
@@ -18,6 +19,7 @@ class TicketModal extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final _provider = ref.read(ticketFormProvider.notifier);
     final _model = ref.watch(ticketFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     final GlobalKey<FormState> _formKey = GlobalKey();
 
@@ -52,11 +54,11 @@ class TicketModal extends BaseComponent {
       key: _formKey,
       child: ModalContainer(
         children: [
-          const FormGroupHeader("Ticket"),
+          FormGroupHeader(l10n.scwTicketTitle),
           Row(
             children: [
               AppDropdown<TicketType>(
-                label: "Ticket Type",
+                label: l10n.scwTicketType,
                 selectedValue: _model.type,
                 selectedLabel: _model.typeLabel,
                 onChange: (val) {
@@ -75,9 +77,9 @@ class TicketModal extends BaseComponent {
               Expanded(
                 child: TextFormField(
                   controller: _provider.eventNameController,
-                  decoration: const InputDecoration(
-                    label: Text("Event Name"),
-                    labelStyle: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    label: Text(l10n.scwEventName),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
                   // validator: _provider.addressValidator,
                 ),
@@ -87,7 +89,7 @@ class TicketModal extends BaseComponent {
                 child: TextFormField(
                   controller: _provider.eventAddressController,
                   decoration: InputDecoration(
-                    label: Text(_model.type == TicketType.physicalEvent ? "Event Address" : "Event URL"),
+                    label: Text(_model.type == TicketType.physicalEvent ? l10n.scwEventAddress : l10n.scwEventUrl),
                     labelStyle: const TextStyle(color: Colors.white),
                   ),
                   // validator: _provider.addressValidator,
@@ -100,14 +102,14 @@ class TicketModal extends BaseComponent {
                   controller: _provider.quantityController,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) => formValidatorNotEmpty(value, "Quantity"),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     label: Text(
-                      "Quantity to Mint",
-                      style: TextStyle(
+                      l10n.scwQuantityToMint,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
-                    labelStyle: TextStyle(color: Colors.white),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
                 ),
               )
@@ -122,9 +124,9 @@ class TicketModal extends BaseComponent {
                     _showDatePicker();
                   },
                   decoration: InputDecoration(
-                    label: const Text(
-                      "Event Date",
-                      style: TextStyle(
+                    label: Text(
+                      l10n.scwEventDate,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -145,9 +147,9 @@ class TicketModal extends BaseComponent {
                     _showTimePicker();
                   },
                   decoration: InputDecoration(
-                    label: const Text(
-                      "Event Time",
-                      style: TextStyle(
+                    label: Text(
+                      l10n.scwEventTime,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -178,7 +180,7 @@ class TicketModal extends BaseComponent {
                         _provider.setEvolveOnRedeem(val);
                       },
                     ),
-                    const Text("Evolve on Redeem?"),
+                    Text(l10n.scwEvolveOnRedeem),
                   ],
                 ),
               )
@@ -189,9 +191,9 @@ class TicketModal extends BaseComponent {
               Expanded(
                 child: TextFormField(
                   controller: _provider.eventCodeController,
-                  decoration: const InputDecoration(
-                    label: Text("Event Code"),
-                    labelStyle: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    label: Text(l10n.scwEventCode),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
                   // validator: _provider.addressValidator,
                 ),
@@ -204,9 +206,9 @@ class TicketModal extends BaseComponent {
                     _showDatePicker(forExpire: true);
                   },
                   decoration: InputDecoration(
-                    label: const Text(
-                      "Expire Date",
-                      style: TextStyle(
+                    label: Text(
+                      l10n.scwExpireDate,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -227,9 +229,9 @@ class TicketModal extends BaseComponent {
                     _showTimePicker(forExpire: true);
                   },
                   decoration: InputDecoration(
-                    label: const Text(
-                      "Expire Time",
-                      style: TextStyle(
+                    label: Text(
+                      l10n.scwExpireTime,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -249,9 +251,9 @@ class TicketModal extends BaseComponent {
               Expanded(
                 child: TextFormField(
                   controller: _provider.descriptionController,
-                  decoration: const InputDecoration(
-                    label: Text("Event Description"),
-                    labelStyle: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    label: Text(l10n.scwEventDescription),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
                   minLines: 1,
                   maxLines: 3,
@@ -262,9 +264,9 @@ class TicketModal extends BaseComponent {
               Expanded(
                 child: TextFormField(
                   controller: _provider.seatInfoController,
-                  decoration: const InputDecoration(
-                    label: Text("Seating Info"),
-                    labelStyle: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    label: Text(l10n.scwSeatingInfo),
+                    labelStyle: const TextStyle(color: Colors.white),
                   ),
                   minLines: 1,
                   maxLines: 3,

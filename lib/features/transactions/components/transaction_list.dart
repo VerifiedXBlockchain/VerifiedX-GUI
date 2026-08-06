@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/transaction.dart';
 import '../providers/transaction_list_provider.dart';
 import '../providers/vfx_transaction_filter_provider.dart';
@@ -38,7 +39,7 @@ class TransactionList extends BaseComponent {
     if (transactions.isEmpty) {
       return Center(
         child: Text(
-          filteringByAddress || filters.txTypes.isNotEmpty ? "No Transactions Found\n[with current filters]" : "No Transactions Found",
+          filteringByAddress || filters.txTypes.isNotEmpty ? AppLocalizations.of(context).r3cNoTransactionsFoundFiltered : AppLocalizations.of(context).r3cNoTransactionsFound,
           style: TextStyle(
             fontSize: 14,
             height: 1.2,

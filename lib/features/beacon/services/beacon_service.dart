@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../../../core/services/base_service.dart';
 import '../models/beacon.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class BeaconService extends BaseService {
   BeaconService() : super(apiBasePathOverride: "/bcapi/BCV1");
@@ -34,10 +35,10 @@ class BeaconService extends BaseService {
       if (data['Result'] != null && data['Result'] == 'Success') {
         return null;
       }
-      return data['Message'] ?? "A problem occurred";
+      return data['Message'] ?? globalL10n.mktProblemOccurredToast;
     } catch (e) {
       print(e);
-      return "A problem occurred";
+      return globalL10n.mktProblemOccurredToast;
     }
   }
 
@@ -57,10 +58,10 @@ class BeaconService extends BaseService {
       if (data['Result'] != null && data['Result'] == 'Success') {
         return null;
       }
-      return data['Message'] ?? "A problem occurred";
+      return data['Message'] ?? globalL10n.mktProblemOccurredToast;
     } catch (e) {
       print(e);
-      return "A problem occurred";
+      return globalL10n.mktProblemOccurredToast;
     }
   }
 

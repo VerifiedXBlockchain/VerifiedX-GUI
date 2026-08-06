@@ -7,6 +7,7 @@ import '../../../../core/base_component.dart';
 import '../../../../core/components/badges.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/formatting.dart';
 import '../../../block/latest_block.dart';
 import '../../../bridge/providers/status_provider.dart';
@@ -55,7 +56,7 @@ class StatusContainer extends BaseComponent {
                             child: ElevatedButton.icon(
                               icon: const Icon(Icons.download),
                               style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).colorScheme.danger),
-                              label: const Text("Update Available"),
+                              label: Text(AppLocalizations.of(context).statusUpdateAvailable),
                               onPressed: () {
                                 ref.read(sessionProvider.notifier).updateGui();
                               },
@@ -83,43 +84,43 @@ class StatusContainer extends BaseComponent {
                   // ),
                   if (blockchainVersion != null)
                     _DetailItem(
-                      label: "Blockchain Version",
+                      label: AppLocalizations.of(context).statusBlockchainVersion,
                       value: blockchainVersion,
                       icon: Icons.sentiment_very_satisfied_outlined,
                     ),
                   if (cliVersion != null)
                     _DetailItem(
-                      label: "CLI Version",
+                      label: AppLocalizations.of(context).statusCliVersion,
                       value: cliVersion,
                       icon: Icons.code,
                     ),
                   if (walletInfo != null)
                     _DetailItem(
-                      label: "Block Height",
+                      label: AppLocalizations.of(context).statusBlockHeight,
                       value: "${walletInfo.blockHeight}",
                       icon: Icons.summarize,
                     ),
                   if (walletInfo != null)
                     _DetailItem(
-                      label: "Peers (In / Out)",
+                      label: AppLocalizations.of(context).statusPeers,
                       value: "${walletInfo.peerCount} / 10",
                       icon: Icons.people_alt,
                     ),
                   if (walletInfo != null)
                     _DetailItem(
-                      label: "Wallet Started",
+                      label: AppLocalizations.of(context).statusWalletStarted,
                       value: ref.watch(sessionProvider.select((v) => v.startTimeFormatted)),
                       icon: Icons.timer,
                     ),
                   if (walletInfo?.networkMetrics != null)
                     _DetailItem(
-                      label: "Network Metrics",
+                      label: AppLocalizations.of(context).statusNetworkMetrics,
                       value: "",
                       content: Align(
                         alignment: Alignment.centerLeft,
                         child: InkWell(
                           child: Text(
-                            "View Metrics",
+                            AppLocalizations.of(context).operationsViewMetrics,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
                               decoration: TextDecoration.underline,
@@ -142,7 +143,7 @@ class StatusContainer extends BaseComponent {
                                   );
 
                                   return AlertDialog(
-                                    title: const Text("Network Metrics"),
+                                    title: Text(AppLocalizations.of(context).statusNetworkMetrics),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +153,7 @@ class StatusContainer extends BaseComponent {
                                         Text("Block Last Delay: ${metrics.blockLastDelay}", style: style),
                                         Text("Time Since Last Block: ${metrics.timeSinceLastBlockSeconds}s", style: style),
                                         Text("Blocks Averaged: ${metrics.blocksAveraged}", style: style),
-                                        if (validatorCount != null) Text("Active Validators: $validatorCount", style: style),
+                                        if (validatorCount != null) Text(AppLocalizations.of(context).r3hActiveValidators(validatorCount.toString()), style: style),
                                       ],
                                     ),
                                     actions: [
@@ -160,9 +161,9 @@ class StatusContainer extends BaseComponent {
                                         onPressed: () {
                                           Navigator.of(context).pop();
                                         },
-                                        child: const Text(
-                                          "Close",
-                                          style: TextStyle(
+                                        child: Text(
+                                          AppLocalizations.of(context).actionClose,
+                                          style: const TextStyle(
                                             color: Colors.white70,
                                           ),
                                         ),
@@ -217,12 +218,12 @@ class _BlockStatus extends BaseComponent {
           final walletInfo = ref.watch(walletInfoProvider);
 
           if (!ref.watch(sessionProvider.select((v) => v.cliStarted))) {
-            return const SizedBox(
+            return SizedBox(
               width: 16,
               height: 16,
               child: Text(
-                "CLI Inactive",
-                style: TextStyle(fontSize: 11),
+                AppLocalizations.of(context).statusCliInactive,
+                style: const TextStyle(fontSize: 11),
               ),
             );
           }
@@ -324,7 +325,7 @@ class _BlockStatus extends BaseComponent {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Wallet Synced",
+                  AppLocalizations.of(context).r3hWalletSynced,
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 const SizedBox(
@@ -422,27 +423,28 @@ class _StatusIndicator extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     if (!ref.watch(sessionProvider.select((v) => v.cliStarted))) {
-      return const AppBadge(
-        label: "CLI Inactive",
+      return AppBadge(
+        label: l10n.statusCliInactive,
         variant: AppColorVariant.Danger,
       );
     }
 
     switch (status) {
       case BridgeStatus.Loading:
-        return const AppBadge(
-          label: "Loading",
+        return AppBadge(
+          label: l10n.statusLoadingLabel,
           variant: AppColorVariant.Primary,
         );
       case BridgeStatus.Online:
-        return const AppBadge(
-          label: "VFX Online",
+        return AppBadge(
+          label: l10n.statusVfxOnline,
           variant: AppColorVariant.Success,
         );
       case BridgeStatus.Offline:
-        return const AppBadge(
-          label: "VFX Offline",
+        return AppBadge(
+          label: l10n.statusVfxOffline,
           variant: AppColorVariant.Danger,
         );
     }
@@ -503,10 +505,11 @@ class _BtcStatusIndicator extends BaseComponent {
 
     final btcAccountSyncInfo = sessionState.btcAccountSyncInfo;
 
+    final l10n = AppLocalizations.of(context);
     switch (electrumConnected) {
       case null:
-        return const AppBadge(
-          label: "BTC Loading",
+        return AppBadge(
+          label: l10n.statusBtcLoading,
           variant: AppColorVariant.Light,
         );
       case true:
@@ -514,14 +517,14 @@ class _BtcStatusIndicator extends BaseComponent {
           message: btcAccountSyncInfo != null
               ? "Last Sync: ${btcAccountSyncInfo.lastSyncFormatted}\nNext Sync: ${btcAccountSyncInfo.nextSyncFormatted}"
               : "",
-          child: const AppBadge(
-            label: "BTC Online",
+          child: AppBadge(
+            label: l10n.statusBtcOnline,
             variant: AppColorVariant.Btc,
           ),
         );
       case false:
-        return const AppBadge(
-          label: "BTC Offline",
+        return AppBadge(
+          label: l10n.statusBtcOffline,
           variant: AppColorVariant.Danger,
         );
     }

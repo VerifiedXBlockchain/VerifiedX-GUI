@@ -13,6 +13,7 @@ import '../../../core/breakpoints.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/web_transaction.dart';
 import '../../web_shop/components/complete_sale_button.dart';
 
@@ -26,12 +27,13 @@ class WebTransactionCard extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     var date1 = DateTime.fromMillisecondsSinceEpoch((tx.date.millisecondsSinceEpoch).round());
     String date = DateFormat('MM-dd-yyyy hh:mm a').format(date1);
 
     if (tx.isPendingSettlement) {
       final settlementDate = DateFormat('MM-dd-yyyy hh:mm a').format(tx.unlockTime!);
-      date = "$date | Settlement Date: $settlementDate";
+      date = "$date | ${l10n.txpTileSettlementDateLabel(settlementDate)}";
     }
 
     final address = ref.watch(webSessionProvider.select((v) => v.keypair?.address));
@@ -54,7 +56,7 @@ class WebTransactionCard extends BaseComponent {
 
     if (tx.callbackDetails != null) {
       final cb = tx.callbackDetails!;
-      text = "$text [${cb.amount} VFX from ${cb.toAddress}]";
+      text = l10n.r3cCallbackFromDetails(text, cb.amount.toString(), cb.toAddress);
     }
 
     return AppCard(
@@ -74,11 +76,11 @@ class WebTransactionCard extends BaseComponent {
                 text: TextSpan(
                   style: TextStyle(color: Colors.white70, fontSize: 12),
                   children: [
-                    TextSpan(text: "From: "),
+                    TextSpan(text: "${l10n.sendFormLabelFrom} "),
                     TextSpan(
                         text: "${tx.fromAddress}\n",
                         style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                    TextSpan(text: "To: "),
+                    TextSpan(text: "${l10n.sendFormLabelTo} "),
                     TextSpan(
                         text: "${tx.toAddress}\n",
                         style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
@@ -91,7 +93,7 @@ class WebTransactionCard extends BaseComponent {
                     text: TextSpan(
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                       children: [
-                        TextSpan(text: "From: "),
+                        TextSpan(text: "${l10n.sendFormLabelFrom} "),
                         TextSpan(
                             text: "${tx.fromAddress}\n",
                             style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
@@ -103,7 +105,7 @@ class WebTransactionCard extends BaseComponent {
                     text: TextSpan(
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                       children: [
-                        TextSpan(text: "To: "),
+                        TextSpan(text: "${l10n.sendFormLabelTo} "),
                         TextSpan(
                             text: "${tx.toAddress}\n",
                             style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
@@ -116,12 +118,12 @@ class WebTransactionCard extends BaseComponent {
           children: [
             if (tx.isPending)
               AppBadge(
-                label: "Pending",
+                label: l10n.statusPending,
                 variant: AppColorVariant.Warning,
               ),
             if (tx.callbackHash != null)
               AppButton(
-                label: "Original TX",
+                label: l10n.txpOriginalTx,
                 onPressed: () {
                   AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.callbackHash!));
                 },

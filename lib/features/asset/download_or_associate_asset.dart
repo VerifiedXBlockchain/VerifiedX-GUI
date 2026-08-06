@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../nft/services/nft_service.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../core/dialogs.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../reserve/services/reserve_account_service.dart';
 import '../../utils/toast.dart';
 
@@ -98,6 +99,7 @@ class _DownloadOrAssociateState extends State<DownloadOrAssociate> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (!visible) {
       return const SizedBox();
     }
@@ -108,19 +110,19 @@ class _DownloadOrAssociateState extends State<DownloadOrAssociate> {
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
-              "Since this is a Vault Account you'll need to authorize the download.",
+              l10n.tkbVaultAuthorizeDownload,
               style: TextStyle(color: Colors.deepPurple.shade200),
             ),
             const SizedBox(
               height: 6,
             ),
             AppButton(
-              label: "Authorize Now",
+              label: l10n.tkbAuthorizeNow,
               onPressed: () async {
                 final password = await PromptModal.show(
-                  title: "Vault Account Password",
+                  title: l10n.tkbVaultAccountPassword,
                   validator: (_) => null,
-                  labelText: "Password",
+                  labelText: l10n.tkbPassword,
                   lines: 1,
                   obscureText: true,
                   revealObscure: true,
@@ -139,13 +141,13 @@ class _DownloadOrAssociateState extends State<DownloadOrAssociate> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Media asset file not found on your machine (${widget.asset.fileName})."),
-            const Text("Please check any other account with the same address for the media."),
+            Text(l10n.tkbMediaNotFound(widget.asset.fileName)),
+            Text(l10n.tkbCheckOtherAccount),
             const SizedBox(
               height: 12,
             ),
             AppButton(
-              label: widget.allowBeaconRequest ? "Call Media" : "Associate Media",
+              label: widget.allowBeaconRequest ? l10n.tkbCallMedia : l10n.tkbAssociateMedia,
               onPressed: () async {
                 if (widget.allowBeaconRequest) {
                   showModalBottomSheet(
@@ -159,7 +161,7 @@ class _DownloadOrAssociateState extends State<DownloadOrAssociate> {
                           children: [
                             ListTile(
                               leading: Icon(Icons.wifi_tethering_outlined),
-                              title: Text("Call Media from Beacon"),
+                              title: Text(l10n.tkbCallMediaFromBeacon),
                               trailing: Icon(Icons.chevron_right),
                               onTap: () async {
                                 final success = await NftService().requestMediaFromBeacon(widget.nftId);
@@ -168,19 +170,17 @@ class _DownloadOrAssociateState extends State<DownloadOrAssociate> {
 
                                   InfoDialog.show(
                                       contextOverride: context,
-                                      title: "Call to beacon process has started.",
-                                      body:
-                                          "Please be patient while ALL assets associated with the NFT are called and downloaded.\n\nDo not close your wallet or attempt to call again.");
+                                      title: l10n.tkbCallToBeaconStartedTitle,
+                                      body: l10n.tkbCallToBeaconStartedBody);
 
-                                  Toast.message(
-                                      "Call to beacon process has started. Please be patient while ALL assets associated with the NFT are called and downloaded.");
+                                  Toast.message(l10n.tkbCallToBeaconStartedToast);
                                   Navigator.of(context).pop();
                                 }
                               },
                             ),
                             ListTile(
                               leading: Icon(Icons.file_upload),
-                              title: Text("Associate Local File"),
+                              title: Text(l10n.tkbAssociateLocalFile),
                               trailing: Icon(Icons.chevron_right),
                               onTap: () async {
                                 chooseLocalFiles(ref);

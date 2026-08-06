@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ImportWalletForm extends StatelessWidget {
   const ImportWalletForm({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class ImportWalletForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _controller = TextEditingController();
+    final l10n = AppLocalizations.of(context);
 
     return Form(
       child: Row(
@@ -17,12 +19,12 @@ class ImportWalletForm extends StatelessWidget {
           TextFormField(
             controller: _controller,
             obscureText: true,
-            decoration: const InputDecoration(label: Text("Private Key")),
+            decoration: InputDecoration(label: Text(l10n.walletPrivateKeyLabel)),
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
             ],
           ),
-          const AppButton(label: "Import")
+          AppButton(label: l10n.walletImportLabel)
         ],
       ),
     );

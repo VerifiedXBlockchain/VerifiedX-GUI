@@ -5,6 +5,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/providers/log_provider.dart';
 import 'log_item.dart';
 
@@ -20,7 +21,7 @@ class LogWindow extends BaseComponent {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Status Log",
+          AppLocalizations.of(context).r3eStatusLog,
           style: Theme.of(context).textTheme.titleSmall,
         ),
         const SizedBox(height: 8),
@@ -67,7 +68,7 @@ class LogWindow extends BaseComponent {
                       alignment: Alignment.bottomRight,
                       child: ref.watch(sessionProvider.select((v) => v.logWindowExpanded))
                           ? AppButton(
-                              label: "Collapse",
+                              label: AppLocalizations.of(context).r3eCollapse,
                               onPressed: () {
                                 ref.read(sessionProvider.notifier).setLogWindowExpanded(false);
                               },
@@ -77,7 +78,7 @@ class LogWindow extends BaseComponent {
                               icon: Icons.arrow_upward_rounded,
                             )
                           : AppButton(
-                              label: "Clear",
+                              label: AppLocalizations.of(context).actionClear,
                               onPressed: () {
                                 ref.read(logProvider.notifier).clear();
                               },

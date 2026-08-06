@@ -5,6 +5,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/models/nft.dart';
 import '../models/token_account.dart';
@@ -40,8 +41,9 @@ class MintTokensButton extends BaseComponent {
     }
     final isOwnedByRA = nft.currentOwner.startsWith("xRBX");
 
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Mint Tokens",
+      label: l10n.tokenMintTokens,
       variant: AppColorVariant.Success,
       useDisabledColor: isOwnedByRA,
       type: elevated ? AppButtonType.Elevated : AppButtonType.Text,
@@ -51,9 +53,9 @@ class MintTokensButton extends BaseComponent {
             }
           : () async {
               final amount = await PromptModal.show(
-                title: "Amount to Mint",
-                validator: (val) => formValidatorNumber(val, "Amount"),
-                labelText: "Amount",
+                title: l10n.tokenAmountToMintTitle,
+                validator: (val) => formValidatorNumber(val, l10n.tokenAmountLabel),
+                labelText: l10n.tokenAmountLabel,
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
               );
               if (amount == null || amount.isEmpty) {
@@ -63,7 +65,7 @@ class MintTokensButton extends BaseComponent {
               final amountDouble = double.tryParse(amount);
 
               if (amountDouble == null) {
-                Toast.error("Invalid Amount");
+                Toast.error(l10n.tokenInvalidAmountToast);
                 return;
               }
               ref.read(globalLoadingProvider.notifier).start();
@@ -71,7 +73,7 @@ class MintTokensButton extends BaseComponent {
               ref.read(globalLoadingProvider.notifier).complete();
 
               if (success) {
-                Toast.message("Token mint transaction broadcasted");
+                Toast.message(l10n.tokenMintBroadcastedToast);
                 notifyTransactionSubmitted();
               }
             },

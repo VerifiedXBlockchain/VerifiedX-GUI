@@ -17,14 +17,16 @@ import '../../../core/theme/colors.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../home/components/home_buttons.dart';
 import '../../home/components/log_item.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class OperationsScreen extends BaseScreen {
   const OperationsScreen({super.key});
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: Text("Operations"),
+      title: Text(l10n.operationsTitle),
       backgroundColor: Colors.transparent,
       shadowColor: Colors.transparent,
       actions: [
@@ -36,6 +38,7 @@ class OperationsScreen extends BaseScreen {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final logEntries = ref.watch(logProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       children: [
@@ -58,7 +61,7 @@ class OperationsScreen extends BaseScreen {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text("Activity Log"),
+                        child: Text(l10n.operationsActivityLog),
                       ),
                       Expanded(
                         child: AppCard(
@@ -98,7 +101,7 @@ class OperationsScreen extends BaseScreen {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text("Status"),
+                        child: Text(l10n.operationsStatus),
                       ),
                       NewStatusContainer(),
                       SizedBox(
@@ -134,7 +137,7 @@ class OperationsScreen extends BaseScreen {
                               launchUrlString("https://docs.verifiedx.io");
                             },
                             child: Text(
-                              "Docs",
+                              l10n.operationsDocs,
                               style: TextStyle(
                                   color: Colors.white.withOpacity(0.8),
                                   fontSize: 12,
@@ -149,7 +152,15 @@ class OperationsScreen extends BaseScreen {
                         height: 12,
                       ),
                       Text(
-                        "VFX Wallet${Env.isDevnet ? '[DEVNET]' : Env.isTestNet ? ' [TESTNET]' : ''}\nVersion $APP_VERSION ($APP_VERSION_NICKNAME)",
+                        l10n.txpWalletVersionInfo(
+                          Env.isDevnet
+                              ? '[DEVNET]'
+                              : Env.isTestNet
+                                  ? ' [TESTNET]'
+                                  : '',
+                          APP_VERSION,
+                          APP_VERSION_NICKNAME,
+                        ),
                         style: TextStyle(
                           fontSize: 11,
                           color: AppColors.getBlue(ColorShade.s50),
@@ -174,6 +185,7 @@ class NewStatusContainer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final walletInfo = ref.watch(walletInfoProvider);
 
     final cliVersion = ref.watch(sessionProvider.select((v) => v.cliVersion));
@@ -184,44 +196,44 @@ class NewStatusContainer extends ConsumerWidget {
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         if (blockchainVersion != null)
           _DetailItem(
-            label: "Blockchain Version",
+            label: l10n.operationsBlockchainVersion,
             value: blockchainVersion,
             icon: Icons.sentiment_very_satisfied_outlined,
           ),
         if (cliVersion != null)
           _DetailItem(
-            label: "CLI Version",
+            label: l10n.operationsCliVersion,
             value: cliVersion,
             icon: Icons.code,
           ),
         if (walletInfo != null)
           _DetailItem(
-            label: "Block Height",
+            label: l10n.operationsBlockHeight,
             value: "${walletInfo.blockHeight}",
             icon: Icons.summarize,
           ),
         if (walletInfo != null)
           _DetailItem(
-            label: "Peers (In / Out)",
+            label: l10n.operationsPeers,
             value: "${walletInfo.peerCount} / 10",
             icon: Icons.people_alt,
           ),
         if (walletInfo != null)
           _DetailItem(
-            label: "Wallet Started",
+            label: l10n.operationsWalletStarted,
             value:
                 ref.watch(sessionProvider.select((v) => v.startTimeFormatted)),
             icon: Icons.timer,
           ),
         if (walletInfo?.networkMetrics != null)
           _DetailItem(
-            label: "Network Metrics",
+            label: l10n.operationsNetworkMetrics,
             value: "",
             content: Align(
               alignment: Alignment.centerLeft,
               child: InkWell(
                 child: Text(
-                  "View Metrics",
+                  l10n.operationsViewMetrics,
                   style: TextStyle(
                     // color: Theme.of(context).colorScheme.secondary,
                     decoration: TextDecoration.underline,
@@ -245,26 +257,35 @@ class NewStatusContainer extends ConsumerWidget {
                         );
 
                         return AlertDialog(
-                          title: const Text("Network Metrics"),
+                          title: Text(l10n.operationsNetworkMetrics),
                           content: Column(
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Block Diff Avg: ${metrics.blockDiffAvg}",
+                              Text(
+                                  l10n.txpBlockDiffAvg(
+                                      "${metrics.blockDiffAvg}"),
                                   style: style),
                               Text(
-                                  "Block Last Received: ${metrics.blockLastReceived.toLocal()}",
+                                  l10n.txpBlockLastReceived(
+                                      "${metrics.blockLastReceived.toLocal()}"),
                                   style: style),
                               Text(
-                                  "Block Last Delay: ${metrics.blockLastDelay}",
+                                  l10n.txpBlockLastDelay(
+                                      metrics.blockLastDelay),
                                   style: style),
                               Text(
-                                  "Time Since Last Block: ${metrics.timeSinceLastBlockSeconds}s",
+                                  l10n.txpTimeSinceLastBlock(
+                                      metrics.timeSinceLastBlockSeconds),
                                   style: style),
-                              Text("Blocks Averaged: ${metrics.blocksAveraged}",
+                              Text(
+                                  l10n.txpBlocksAveraged(
+                                      metrics.blocksAveraged),
                                   style: style),
                               if (validatorCount != null)
-                                Text("Active Validators: $validatorCount",
+                                Text(
+                                    l10n.operationsActiveValidators(
+                                        "$validatorCount"),
                                     style: style),
                             ],
                           ),
@@ -273,9 +294,9 @@ class NewStatusContainer extends ConsumerWidget {
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: const Text(
-                                "Close",
-                                style: TextStyle(
+                              child: Text(
+                                l10n.actionClose,
+                                style: const TextStyle(
                                   color: Colors.white70,
                                 ),
                               ),

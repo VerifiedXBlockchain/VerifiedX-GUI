@@ -6,6 +6,7 @@ import '../../../../core/components/buttons.dart';
 import '../../../../core/dialogs.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/toast.dart';
 import '../../../bridge/services/bridge_service.dart';
 
@@ -19,14 +20,14 @@ class ShowDebugDataButton extends BaseComponent {
     final cliStarted = ref.watch(sessionProvider.select((v) => v.cliStarted));
 
     return AppButton(
-      label: "Show Debug Data",
+      label: AppLocalizations.of(context).r3eShowDebugData,
       icon: Icons.analytics_outlined,
       onPressed: !cliStarted
           ? null
           : () async {
               final data = await BridgeService().getDebugInfo();
               InfoDialog.show(
-                title: "Debug Data",
+                title: AppLocalizations.of(context).r3eDebugData,
                 withBackArrow: true,
                 content: Container(
                   color: Colors.black54,
@@ -38,12 +39,13 @@ class ShowDebugDataButton extends BaseComponent {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           AppButton(
-                            label: "Copy",
+                            label: AppLocalizations.of(context).actionCopy,
                             icon: Icons.copy,
                             variant: AppColorVariant.Success,
                             onPressed: () async {
                               await Clipboard.setData(ClipboardData(text: data));
-                              Toast.message("Debug data copied to clipboard");
+                              Toast.message(AppLocalizations.of(context)
+                                  .r3eDebugDataCopied);
                             },
                           ),
                           const SizedBox(

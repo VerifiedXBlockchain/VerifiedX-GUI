@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/storage.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/chat_message.dart';
 import '../models/chat_payload.dart';
 import 'chat_list_provider_interface.dart';
@@ -33,7 +34,7 @@ class ShopChatListProvider extends ChatListProviderInterface {
 
     final fromAddress = ref.read(sessionProvider).currentWallet?.address;
     if (fromAddress == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return;
     }
 

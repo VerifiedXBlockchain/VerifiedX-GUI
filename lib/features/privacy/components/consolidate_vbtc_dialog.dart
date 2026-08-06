@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../providers/shielded_address_provider.dart';
@@ -36,7 +38,7 @@ class _ConsolidateVbtcDialogState extends ConsumerState<ConsolidateVbtcDialog> {
 
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
-      Toast.error("No shielded address found");
+      Toast.error(globalL10n.prvNoShieldedAddress);
       return;
     }
 
@@ -55,26 +57,27 @@ class _ConsolidateVbtcDialogState extends ConsumerState<ConsolidateVbtcDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final balanceMap = ref.watch(shieldedVbtcBalanceProvider);
     final balance = balanceMap[widget.token.smartContractUid];
     final noteCount = balance?.unspentCommitments ?? 0;
     final canConsolidate = noteCount >= 2;
 
     return AlertDialog(
-      title: const Text("Consolidate vBTC Notes"),
+      title: Text(l10n.prvConsolidateVbtcNotesTitle),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Merge your 2 smallest vBTC notes into a single note. This reduces dust and improves privacy.",
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+            Text(
+              l10n.prvConsolidateVbtcNotesBody,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
             ),
             const SizedBox(height: 16),
             Text(
-              "Contract: ${widget.token.tokenName}",
+              l10n.prvContractName(widget.token.tokenName),
               style: const TextStyle(color: Colors.white54, fontSize: 12),
             ),
             const SizedBox(height: 4),
@@ -84,18 +87,18 @@ class _ConsolidateVbtcDialogState extends ConsumerState<ConsolidateVbtcDialog> {
             ),
             const SizedBox(height: 12),
             Text(
-              "Current notes: $noteCount",
+              l10n.prvCurrentNotes(noteCount),
               style: const TextStyle(color: Colors.white54, fontSize: 13),
             ),
             const SizedBox(height: 8),
             Text(
-              "Fee: $PRIVACY_TX_FIXED_FEE_LABEL (deducted from shielded VFX balance)",
+              l10n.prvFeeDeductedFromShieldedVfx(PRIVACY_TX_FIXED_FEE_LABEL),
               style: const TextStyle(color: Colors.white38, fontSize: 11),
             ),
             if (!canConsolidate) ...[
               const SizedBox(height: 12),
               Text(
-                "At least 2 unspent notes are required to consolidate.",
+                l10n.prvConsolidateMinNotes,
                 style: TextStyle(color: Theme.of(context).colorScheme.danger, fontSize: 12),
               ),
             ],
@@ -105,14 +108,14 @@ class _ConsolidateVbtcDialogState extends ConsumerState<ConsolidateVbtcDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
+          child: Text(l10n.actionCancel),
         ),
         TextButton(
           onPressed: _isSubmitting || !canConsolidate ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
               : Text(
-                  "Consolidate",
+                  l10n.prvConsolidateAction,
                   style: TextStyle(
                     color: canConsolidate ? Theme.of(context).colorScheme.info : Colors.white38,
                   ),

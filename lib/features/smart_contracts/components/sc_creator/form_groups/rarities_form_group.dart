@@ -11,6 +11,7 @@ import '../../../providers/create_smart_contract_provider.dart';
 import '../common/form_group_container.dart';
 import '../common/form_group_header.dart';
 import '../common/help_button.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class RaritiesFormGroup extends BaseComponent {
   const RaritiesFormGroup({Key? key}) : super(key: key);
@@ -18,14 +19,15 @@ class RaritiesFormGroup extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _model = ref.watch(createSmartContractProvider);
+    final l10n = AppLocalizations.of(context);
 
     return FormGroupContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const FormGroupHeader(
-            "Rarities",
+          FormGroupHeader(
+            l10n.r3aRarities,
             helpType: HelpType.unknown,
           ),
           ..._model.rarities.map((r) => _RarityCard(r)).toList(),
@@ -35,7 +37,7 @@ class RaritiesFormGroup extends BaseComponent {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AppButton(
-                  label: "Add Rarity",
+                  label: l10n.r3aAddRarity,
                   onPressed: () {
                     showModalBottomSheet(
                       backgroundColor: Colors.transparent,
@@ -69,6 +71,7 @@ class _RarityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       child: ListTile(
         leading: SizedBox(
@@ -88,13 +91,13 @@ class _RarityCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              label: "Edit",
+              label: l10n.scwEdit,
               icon: Icons.edit,
               onPressed: () {},
             ),
             const SizedBox(width: 6),
             AppButton(
-              label: "Remove",
+              label: l10n.beaconRemove,
               icon: Icons.delete,
               variant: AppColorVariant.Danger,
               onPressed: () {},

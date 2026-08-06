@@ -13,6 +13,7 @@ import '../../transactions/providers/transaction_list_provider.dart';
 import '../../wallet/models/wallet.dart';
 import '../../../utils/toast.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:collection/collection.dart';
 
@@ -111,44 +112,44 @@ class VBtcOnboardState {
   String get stepTitle {
     switch (step) {
       case VBtcOnboardStep.createVfxWallet:
-        return "Create VFX Account";
+        return globalL10n.bw2StepCreateVfxAccount;
 
       case VBtcOnboardStep.faucetWithdrawl:
-        return "Get VFX";
+        return globalL10n.bw2StepGetVfx;
 
       case VBtcOnboardStep.createOrImportBtcAccount:
-        return "Import BTC Account";
+        return globalL10n.bw2StepImportBtcAccount;
 
       case VBtcOnboardStep.transferBtc:
-        return "Transfer BTC";
+        return globalL10n.bw2StepTransferBtc;
 
       case VBtcOnboardStep.tokenize:
-        return "Tokenized vBTC";
+        return globalL10n.bw2StepTokenizedVbtc;
 
       case VBtcOnboardStep.transferBtcToVbtc:
-        return "Transfer BTC to vBTC Token";
+        return globalL10n.bw2StepTransferBtcToVbtc;
     }
   }
 
   String get stepDetails {
     switch (step) {
       case VBtcOnboardStep.createVfxWallet:
-        return "First you'll need a VFX Wallet. You can either import an existing one or create one now.";
+        return globalL10n.bw2OnboardCreateVfxDetails;
 
       case VBtcOnboardStep.faucetWithdrawl:
-        return "The community has provided a faucet to withdraw a minimal amount of VFX from in order to try out this feature. A phone number is required for verification purposes and to reduce the chance of abuse. Please note that only a hash of the phone number is stored with the faucet. Alternatively, you are welcome to purchase VFX via an exchange or on-ramp if you like.";
+        return globalL10n.bw2OnboardFaucetDetails;
 
       case VBtcOnboardStep.createOrImportBtcAccount:
-        return "Now you need a BTC account added to your wallet. You can either import a private key or generate a new one.";
+        return globalL10n.bw2OnboardImportBtcDetails;
 
       case VBtcOnboardStep.transferBtc:
-        return "Looks like this account doesn't have any BTC. Please transfer BTC to this account to continue.";
+        return globalL10n.bw2OnboardTransferBtcDetails;
 
       case VBtcOnboardStep.tokenize:
-        return "Time to tokenize a vBTC token. The following fields are all optional!";
+        return globalL10n.bw2OnboardTokenizeDetails;
 
       case VBtcOnboardStep.transferBtcToVbtc:
-        return "Now you are ready to transfer BTC to your vBTC token. Select the amount and Fee Rate below";
+        return globalL10n.bw2OnboardTransferToVbtcDetails;
     }
   }
 
@@ -158,16 +159,16 @@ class VBtcOnboardState {
         return "";
 
       case VBtcProcessingState.waitingForVfxTransfer:
-        return "Waiting for VFX Transfer to reflect on-chain.";
+        return globalL10n.bw2WaitingVfxTransfer;
 
       case VBtcProcessingState.waitingForBtcTransfer:
-        return "Waiting for BTC transfer to reflect on-chain.";
+        return globalL10n.bw2WaitingBtcTransfer;
 
       case VBtcProcessingState.waitingForTokenization:
-        return "MPC ceremony and contract creation in progress.";
+        return globalL10n.bw2WaitingTokenization;
 
       case VBtcProcessingState.waitingForBtcToVbtcTransfer:
-        return "Waiting for BTC to vBTC transaction to reflect on-chain.";
+        return globalL10n.bw2WaitingBtcToVbtc;
     }
   }
 
@@ -221,7 +222,7 @@ class VBtcOnboard extends _$VBtcOnboard {
             t.toAddress == state.vfxWallet?.address &&
             t.amount >= VBTC_ONBOARD_VFX_AMOUNT);
         if (tx != null) {
-          Toast.message("VFX Funds Received!");
+          Toast.message(globalL10n.bw2VfxFundsReceived);
           state = state.copyWith(
               step: VBtcOnboardStep.createOrImportBtcAccount,
               processingState: VBtcProcessingState.ready);
@@ -238,7 +239,7 @@ class VBtcOnboard extends _$VBtcOnboard {
         final account = accounts.firstWhereOrNull(
             (a) => a.address == state.btcAccount?.address && a.balance > 0);
         if (account != null) {
-          Toast.message("BTC Funds Received!");
+          Toast.message(globalL10n.bw2BtcFundsReceived);
           state = state.copyWith(
               step: VBtcOnboardStep.tokenize,
               processingState: VBtcProcessingState.ready);
@@ -285,7 +286,7 @@ class VBtcOnboard extends _$VBtcOnboard {
             .firstWhereOrNull((t) => t.rbxAddress == state.vfxWallet?.address);
 
         if (token != null) {
-          Toast.message("Token Deployed!");
+          Toast.message(globalL10n.bw2TokenDeployed);
           state = state.copyWith(
               step: VBtcOnboardStep.transferBtcToVbtc,
               processingState: VBtcProcessingState.ready,
@@ -308,7 +309,7 @@ class VBtcOnboard extends _$VBtcOnboard {
         final token = tokens.firstWhereOrNull(
             (t) => t.id == state.tokenizedBtc!.id && t.balance > 0);
         if (token != null) {
-          Toast.message("Transfer Complete!");
+          Toast.message(globalL10n.bw2TransferComplete);
           state = state.copyWith(
               completed: true, processingState: VBtcProcessingState.ready);
 
@@ -396,16 +397,16 @@ class VBtcOnboard extends _$VBtcOnboard {
 
   Future<bool> transferBtcToVbtc(double amount, int feeRate) async {
     if (state.btcAccount == null) {
-      Toast.error("No BTC Account selected");
+      Toast.error(globalL10n.bw2NoBtcAccountSelected);
       return false;
     }
 
     if (state.tokenizedBtc == null) {
-      Toast.error("No BTC Token selected");
+      Toast.error(globalL10n.bw2NoBtcTokenSelected);
       return false;
     }
     if (state.tokenizedBtc!.btcAddress == null) {
-      Toast.error("No BTC address in token");
+      Toast.error(globalL10n.bw2NoBtcAddressInToken);
       return false;
     }
 

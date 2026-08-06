@@ -13,6 +13,7 @@ import '../../smart_contracts/models/multi_asset.dart';
 import '../../smart_contracts/models/smart_contract.dart';
 import '../../../utils/toast.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 
 import '../../../core/services/explorer_service.dart';
 import '../../nft/providers/nft_list_provider.dart';
@@ -130,7 +131,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
     }
 
     if (state.vfxAddress == null) {
-      Toast.error("A VFX account with a balance is required to proceed.");
+      Toast.error(globalL10n.bw2VfxAccountBalanceRequired);
       return null;
     }
 
@@ -185,13 +186,13 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
 
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("A VFX account is required to proceed.");
+      Toast.error(globalL10n.bw2VfxAccountRequired);
       return null;
     }
 
     final balance = ref.read(webSessionProvider).balance;
     if (balance == null || balance < MIN_RBX_FOR_SC_ACTION) {
-      Toast.error("A VFX account with a balance is required to proceed.");
+      Toast.error(globalL10n.bw2VfxAccountBalanceRequired);
       return null;
     }
 
@@ -224,7 +225,7 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
 
     final vbtcExtraData = await ExplorerService().vbtcCompileData(keypair.address);
     if (vbtcExtraData == null) {
-      Toast.error("Could not connect to arbiter. Try again later");
+      Toast.error(globalL10n.bw2CouldNotConnectArbiter);
       return false;
     }
 

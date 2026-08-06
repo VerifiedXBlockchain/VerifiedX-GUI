@@ -10,6 +10,7 @@ import '../../global_loader/global_loading_provider.dart';
 import '../../raw/raw_service.dart';
 import '../providers/web_ra_pending_recovery_provider.dart';
 import '../utils/raw_transaction.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 
 class WebRecoverRaButton extends BaseComponent {
@@ -19,6 +20,7 @@ class WebRecoverRaButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final keypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
     final hasRecovered = ref.watch(webRaPendingRecoveryProvider).contains(keypair?.address);
 
@@ -26,7 +28,7 @@ class WebRecoverRaButton extends BaseComponent {
       return SizedBox();
     }
     return AppButton(
-      label: "Recover",
+      label: l10n.reserveRecoverLabel,
       disabled: hasRecovered,
       type: AppButtonType.Elevated,
       variant: AppColorVariant.Warning,
@@ -40,11 +42,10 @@ class WebRecoverRaButton extends BaseComponent {
         }
 
         final confirmed = await ConfirmDialog.show(
-          title: "Recover Funds & NFTs",
-          body:
-              "This is a destructive function that will callback all pending transactions and assets and move everything to this recovery address:\n\n${raKeypair.recoveryAddress}",
-          confirmText: "Proceed",
-          cancelText: "Cancel",
+          title: l10n.reserveRecoverTitle,
+          body: l10n.r3fRecoverBody(raKeypair.recoveryAddress),
+          confirmText: l10n.reserveRecoverProceed,
+          cancelText: l10n.actionCancel,
           destructive: true,
         );
 
@@ -59,7 +60,7 @@ class WebRecoverRaButton extends BaseComponent {
         final timestamp = await txService.getTimestamp();
 
         if (timestamp == null) {
-          Toast.error("Failed to retrieve timestamp");
+          Toast.error(l10n.r3fFailedRetrieveTimestamp);
           loadingProvider.complete();
 
           return false;
@@ -67,7 +68,7 @@ class WebRecoverRaButton extends BaseComponent {
 
         final nonce = await txService.getNonce(raKeypair.address);
         if (nonce == null) {
-          Toast.error("Failed to retrieve nonce");
+          Toast.error(l10n.r3fFailedRetrieveNonce);
           loadingProvider.complete();
           return false;
         }
@@ -80,7 +81,7 @@ class WebRecoverRaButton extends BaseComponent {
             message: recoverySigScriptMessage, privateKey: raKeypair.recoveryPrivate, publicKey: raKeypair.recoveryPublic);
 
         if (recoverySigScript == null) {
-          Toast.error("Problem generating RecoverySigScript");
+          Toast.error(l10n.r3fProblemRecoverySigScript);
           loadingProvider.complete();
           return false;
         }
@@ -106,7 +107,7 @@ class WebRecoverRaButton extends BaseComponent {
         final fee = await txService.getFee(txData);
 
         if (fee == null) {
-          Toast.error("Failed to parse fee");
+          Toast.error(l10n.r3fFailedParseFee);
           loadingProvider.complete();
           return false;
         }
@@ -125,14 +126,14 @@ class WebRecoverRaButton extends BaseComponent {
 
         final hash = (await txService.getHash(txData));
         if (hash == null) {
-          Toast.error("Failed to parse hash");
+          Toast.error(l10n.r3fFailedParseHash);
           loadingProvider.complete();
           return false;
         }
 
         final signature = await RawTransaction.getSignature(message: hash, privateKey: raKeypair.private, publicKey: raKeypair.public);
         if (signature == null) {
-          Toast.error("Signature generation failed.");
+          Toast.error(l10n.webErrorSignatureGen);
           loadingProvider.complete();
           return false;
         }
@@ -144,7 +145,7 @@ class WebRecoverRaButton extends BaseComponent {
         );
 
         if (!isValid) {
-          Toast.error("Signature not valid");
+          Toast.error(l10n.webErrorSignatureInvalid);
           loadingProvider.complete();
           return false;
         }
@@ -169,7 +170,7 @@ class WebRecoverRaButton extends BaseComponent {
         ));
 
         if (verifyTransactionData == null) {
-          Toast.error("Transaction not valid");
+          Toast.error(l10n.webErrorTxInvalid);
           loadingProvider.complete();
           return false;
         }
@@ -182,7 +183,7 @@ class WebRecoverRaButton extends BaseComponent {
 
         if (tx != null) {
           if (tx['Result'] == "Success") {
-            Toast.message("Recovery transaction broadcasted.");
+            Toast.message(l10n.webRecoveryBroadcasted);
             ref.read(webRaPendingRecoveryProvider.notifier).addAddress(keypair.address);
             loadingProvider.complete();
             return true;

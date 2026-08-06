@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
 import '../providers/shielded_address_provider.dart';
@@ -15,9 +17,10 @@ class PrivacySettingsMenu extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return PopupMenuButton<String>(
       icon: Icon(Icons.settings, color: Colors.white54, size: 20),
-      tooltip: "Privacy settings",
+      tooltip: l10n.prvSettingsTooltip,
       color: AppColors.getGray(ColorShade.s200),
       onSelected: (value) {
         switch (value) {
@@ -45,7 +48,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
             children: [
               const Icon(Icons.key, size: 18, color: Colors.white70),
               const SizedBox(width: 8),
-              const Text("Export Viewing Key"),
+              Text(l10n.prvExportViewingKey),
             ],
           ),
         ),
@@ -55,7 +58,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
             children: [
               const Icon(Icons.download, size: 18, color: Colors.white70),
               const SizedBox(width: 8),
-              const Text("Import Viewing Key"),
+              Text(l10n.prvImportViewingKey),
             ],
           ),
         ),
@@ -66,7 +69,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
             children: [
               const Icon(Icons.sync, size: 18, color: Colors.orange),
               const SizedBox(width: 8),
-              const Text("Resync Wallet", style: TextStyle(color: Colors.orange)),
+              Text(l10n.prvResyncWallet, style: const TextStyle(color: Colors.orange)),
             ],
           ),
         ),
@@ -76,7 +79,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
             children: [
               Icon(Icons.sync, size: 18, color: AppColors.getBtc()),
               const SizedBox(width: 8),
-              Text("Resync vBTC Wallet", style: TextStyle(color: AppColors.getBtc())),
+              Text(l10n.prvResyncVbtcWallet, style: TextStyle(color: AppColors.getBtc())),
             ],
           ),
         ),
@@ -86,7 +89,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
             children: [
               Icon(Icons.delete_forever, size: 18, color: Colors.red.shade300),
               const SizedBox(width: 8),
-              Text("Reset Privacy Wallet", style: TextStyle(color: Colors.red.shade300)),
+              Text(l10n.prvResetPrivacyWallet, style: TextStyle(color: Colors.red.shade300)),
             ],
           ),
         ),
@@ -95,9 +98,10 @@ class PrivacySettingsMenu extends ConsumerWidget {
   }
 
   Future<void> _exportViewingKey(WidgetRef ref) async {
+    final l10n = globalL10n;
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
-      Toast.error("No shielded address found");
+      Toast.error(l10n.prvNoShieldedAddress);
       return;
     }
 
@@ -105,16 +109,16 @@ class PrivacySettingsMenu extends ConsumerWidget {
     if (result != null && result['ViewingKeyBase64'] != null) {
       final key = result['ViewingKeyBase64'] as String;
       await InfoDialog.show(
-        title: "Viewing Key",
+        title: l10n.prvViewingKeyTitle,
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 450),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.",
-                style: TextStyle(color: Colors.white70, fontSize: 13),
+              Text(
+                l10n.prvExportViewingKeyBody,
+                style: const TextStyle(color: Colors.white70, fontSize: 13),
               ),
               const SizedBox(height: 16),
               Container(
@@ -140,7 +144,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
                       color: Colors.white54,
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: key));
-                        Toast.message("Viewing key copied to clipboard");
+                        Toast.message(l10n.prvViewingKeyCopied);
                       },
                     ),
                   ],
@@ -151,7 +155,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
         ),
       );
     } else {
-      Toast.error("Failed to export viewing key");
+      Toast.error(l10n.prvFailedExportViewingKey);
     }
   }
 
@@ -164,39 +168,41 @@ class PrivacySettingsMenu extends ConsumerWidget {
   }
 
   Future<void> _resyncWallet(WidgetRef ref) async {
+    final l10n = globalL10n;
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
-      Toast.error("No shielded address found");
+      Toast.error(l10n.prvNoShieldedAddress);
       return;
     }
 
     final confirmed = await ConfirmDialog.show(
-      title: "Resync Shielded Wallet",
-      body: "This will wipe all cached notes and balances, then rescan from the beginning. This may take a while.\n\nContinue?",
-      confirmText: "Resync",
-      cancelText: "Cancel",
+      title: l10n.prvResyncShieldedWalletTitle,
+      body: l10n.prvResyncShieldedWalletBody,
+      confirmText: l10n.prvResyncAction,
+      cancelText: l10n.actionCancel,
       destructive: true,
     );
 
     if (confirmed == true) {
-      Toast.message("Resync started...");
+      Toast.message(l10n.prvResyncStarted);
       final success = await PrivacyService().resyncShieldedWallet(
         zfxAddress: zfxAddress,
         fromHeight: 0,
         toHeight: 0,
       );
       if (success) {
-        Toast.message("Resync complete");
+        Toast.message(l10n.prvResyncComplete);
       } else {
-        Toast.error("Resync failed");
+        Toast.error(l10n.prvResyncFailed);
       }
     }
   }
 
   Future<void> _resyncVbtcWallet(WidgetRef ref) async {
+    final l10n = globalL10n;
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
-      Toast.error("No shielded address found");
+      Toast.error(l10n.prvNoShieldedAddress);
       return;
     }
 
@@ -204,7 +210,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
     final vbtcTokens = allTokens.where((t) => t.version == 2).toList();
 
     if (vbtcTokens.isEmpty) {
-      Toast.error("No vBTC tokens found");
+      Toast.error(l10n.prvNoVbtcTokens);
       return;
     }
 
@@ -221,15 +227,15 @@ class PrivacySettingsMenu extends ConsumerWidget {
       final picked = await showDialog<int>(
         context: context,
         builder: (ctx) => AlertDialog(
-          title: const Text("Select vBTC Contract"),
+          title: Text(l10n.prvSelectVbtcContract),
           content: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Choose which vBTC contract to resync.",
-                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                Text(
+                  l10n.prvChooseVbtcContract,
+                  style: const TextStyle(color: Colors.white70, fontSize: 13),
                 ),
                 const SizedBox(height: 12),
                 ...List.generate(vbtcTokens.length, (i) {
@@ -249,7 +255,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text("Cancel"),
+              child: Text(l10n.actionCancel),
             ),
           ],
         ),
@@ -261,39 +267,40 @@ class PrivacySettingsMenu extends ConsumerWidget {
     }
 
     final confirmed = await ConfirmDialog.show(
-      title: "Resync vBTC Wallet",
-      body: "This will wipe cached notes and balances for \"$selectedName\" and rescan from the beginning. This may take a while.\n\nContinue?",
-      confirmText: "Resync",
-      cancelText: "Cancel",
+      title: l10n.prvResyncVbtcWallet,
+      body: l10n.prvResyncVbtcBody(selectedName),
+      confirmText: l10n.prvResyncAction,
+      cancelText: l10n.actionCancel,
       destructive: true,
     );
 
     if (confirmed == true) {
-      Toast.message("vBTC resync started...");
+      Toast.message(l10n.prvVbtcResyncStarted);
       final success = await PrivacyService().resyncShieldedVbtc(
         zfxAddress: zfxAddress,
         vbtcContractUid: selectedUid,
       );
       if (success) {
-        Toast.message("vBTC resync complete");
+        Toast.message(l10n.prvVbtcResyncComplete);
       } else {
-        Toast.error("vBTC resync failed");
+        Toast.error(l10n.prvVbtcResyncFailed);
       }
     }
   }
 
   Future<void> _resetWallet(WidgetRef ref) async {
+    final l10n = globalL10n;
     final confirmed = await ConfirmDialog.show(
-      title: "Reset Privacy Wallet",
-      body: "This will clear your local privacy wallet state and return to the activation screen. Your shielded funds on the network are not affected — you can re-activate with the same account to recover them.\n\nContinue?",
-      confirmText: "Reset",
-      cancelText: "Cancel",
+      title: l10n.prvResetPrivacyWallet,
+      body: l10n.prvResetWalletBody,
+      confirmText: l10n.prvResetAction,
+      cancelText: l10n.actionCancel,
       destructive: true,
     );
 
     if (confirmed == true) {
       ref.read(shieldedAddressProvider.notifier).clear();
-      Toast.message("Privacy wallet reset");
+      Toast.message(l10n.prvWalletReset);
     }
   }
 }
@@ -320,13 +327,13 @@ class _ImportViewingKeyDialogState extends ConsumerState<_ImportViewingKeyDialog
   Future<void> _submit() async {
     final address = _addressController.text.trim();
     if (address.isEmpty || !address.startsWith("zfx_")) {
-      Toast.error("Please enter a valid zfx_ address");
+      Toast.error(globalL10n.prvEnterValidZfxAddress);
       return;
     }
 
     final key = _keyController.text.trim();
     if (key.isEmpty) {
-      Toast.error("Please enter the viewing key");
+      Toast.error(globalL10n.prvEnterViewingKey);
       return;
     }
 
@@ -340,45 +347,46 @@ class _ImportViewingKeyDialogState extends ConsumerState<_ImportViewingKeyDialog
     if (mounted) {
       setState(() => _isSubmitting = false);
       if (success) {
-        Toast.message("Viewing key imported successfully");
+        Toast.message(globalL10n.prvViewingKeyImported);
         Navigator.of(context).pop();
       } else {
-        Toast.error("Failed to import viewing key");
+        Toast.error(globalL10n.prvFailedImportViewingKey);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text("Import Viewing Key"),
+      title: Text(l10n.prvImportViewingKey),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Import a viewing key to create a view-only wallet. You can see balances but cannot spend.",
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+            Text(
+              l10n.prvImportViewingKeyBody,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _addressController,
-              decoration: const InputDecoration(
-                labelText: "zfx_ Address",
+              decoration: InputDecoration(
+                labelText: l10n.prvZfxAddressLabel,
                 hintText: "zfx_...",
-                border: OutlineInputBorder(),
+                border: const OutlineInputBorder(),
               ),
               enabled: !_isSubmitting,
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _keyController,
-              decoration: const InputDecoration(
-                labelText: "Viewing Key (Base64)",
-                hintText: "Paste Base64 key here",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.prvViewingKeyBase64Label,
+                hintText: l10n.prvPasteBase64Hint,
+                border: const OutlineInputBorder(),
               ),
               maxLines: 2,
               enabled: !_isSubmitting,
@@ -389,13 +397,13 @@ class _ImportViewingKeyDialogState extends ConsumerState<_ImportViewingKeyDialog
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
+          child: Text(l10n.actionCancel),
         ),
         TextButton(
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : const Text("Import"),
+              : Text(l10n.prvImportAction),
         ),
       ],
     );

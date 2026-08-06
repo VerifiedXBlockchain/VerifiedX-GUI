@@ -9,6 +9,7 @@ import '../env.dart';
 import '../theme/app_theme.dart';
 import '../../features/bridge/models/log_entry.dart';
 import '../../features/startup/startup_data_provider.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 import '../../features/bridge/providers/log_provider.dart';
 import '../base_component.dart';
@@ -92,7 +93,8 @@ class BootContainer extends BaseComponent {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      "Syncing state treis due to improper shutdown"
+                                      AppLocalizations.of(context)
+                                          .r3eSyncingState
                                           .toUpperCase(),
                                       style: TextStyle(
                                           fontSize: 16,
@@ -104,7 +106,8 @@ class BootContainer extends BaseComponent {
                                     const SizedBox(height: 6),
                                     const Divider(),
                                     Text(
-                                      "Block: ${data.block}",
+                                      AppLocalizations.of(context)
+                                          .r3eBlockLabel(data.block.toString()),
                                       style: const TextStyle(
                                           fontFamily: 'RobotoMono',
                                           fontSize: 16,
@@ -112,7 +115,9 @@ class BootContainer extends BaseComponent {
                                     ),
                                     const SizedBox(height: 3),
                                     Text(
-                                      "Progress: ${data.percent}",
+                                      AppLocalizations.of(context)
+                                          .r3eProgressLabel(
+                                              data.percent.toString()),
                                       style: const TextStyle(
                                           fontFamily: 'RobotoMono',
                                           fontSize: 16,
@@ -129,9 +134,10 @@ class BootContainer extends BaseComponent {
                                       ),
                                     ),
                                     const SizedBox(height: 10),
-                                    const Text(
-                                      "Please do not close your wallet.",
-                                      style: TextStyle(
+                                    Text(
+                                      AppLocalizations.of(context)
+                                          .r3eDoNotCloseWallet,
+                                      style: const TextStyle(
                                         color: Colors.white38,
                                         fontSize: 13,
                                       ),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart';
 
 import '../../token/models/token_details.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/models/paginated_response.dart';
@@ -224,7 +225,7 @@ class NftService extends BaseService {
       if (data["Success"] == true) {
         return true;
       }
-      Toast.error(data["Message"] ?? "A problem occurred");
+      Toast.error(data["Message"] ?? globalL10n.mktProblemOccurredToast);
       return true;
     } catch (e) {
       print(e);
@@ -246,7 +247,7 @@ class NftService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error("A problem occurred");
+      Toast.error(globalL10n.mktProblemOccurredToast);
       return false;
     }
   }
@@ -263,7 +264,7 @@ class NftService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error("A problem occurred");
+      Toast.error(globalL10n.mktProblemOccurredToast);
       return null;
     }
   }
@@ -275,7 +276,7 @@ class NftService extends BaseService {
       return data["Success"] == true;
     } catch (e) {
       print(e);
-      Toast.error("A problem occurred");
+      Toast.error(globalL10n.mktProblemOccurredToast);
       return null;
     }
   }

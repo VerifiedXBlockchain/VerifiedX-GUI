@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/components/big_button.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/components/back_to_home_button.dart';
@@ -26,7 +27,7 @@ class SmartContractsScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Smart Contracts"),
+      title: Text(AppLocalizations.of(context).scTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // leading: BackToHomeButton(),
@@ -68,9 +69,9 @@ class SmartContractsScreen extends BaseScreen {
                 //   },
                 // ),
                 BigButton(
-                  title: "Create a Smart Contract & Mint",
+                  title: AppLocalizations.of(context).scCreateAndMintTitle,
                   iconData: Icons.receipt_long,
-                  body: "Start with a baseline smart contract and add customized features",
+                  body: AppLocalizations.of(context).scCreateAndMintBody,
                   onPressed: () async {
                     if (!kDebugMode) {
                       if (!widgetGuardWalletIsSynced(ref)) {
@@ -79,12 +80,12 @@ class SmartContractsScreen extends BaseScreen {
                     }
 
                     if (ref.read(sessionProvider).btcSelected) {
-                      Toast.error("Please choose a VFX account to begin creating a smart contract.");
+                      Toast.error(AppLocalizations.of(context).scChooseVfxToast);
                       return;
                     }
 
                     if (ref.read(sessionProvider).currentWallet?.isReserved == true) {
-                      Toast.error("Vault Accounts cannot mint smart contracts");
+                      Toast.error(AppLocalizations.of(context).scVaultCannotMintToast);
                       return;
                     }
 
@@ -101,17 +102,17 @@ class SmartContractsScreen extends BaseScreen {
                 ),
                 // if (kDebugMode)
                 BigButton(
-                  title: "Mint NFT Collection",
+                  title: AppLocalizations.of(context).scMintCollectionTitle,
                   iconData: Icons.auto_awesome,
-                  body: "Mint multiple Smart Contracts into a collection",
+                  body: AppLocalizations.of(context).scMintCollectionBody,
                   onPressed: () {
                     AutoRouter.of(context).push(const BulkCreateScreenRoute());
                   },
                 ),
                 BigButton(
-                  title: "Launch IDE",
+                  title: AppLocalizations.of(context).scLaunchIdeTitle,
                   iconData: Icons.code,
-                  body: "Open the online IDE to write your own Trillium code for your smart contract",
+                  body: AppLocalizations.of(context).scLaunchIdeBody,
                   onPressed: () {
                     launchUrl(Uri.parse("https://trillium.rbx.network/"));
                   },

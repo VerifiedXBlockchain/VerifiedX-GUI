@@ -5,6 +5,7 @@ import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/dialogs.dart';
 import '../../../../core/providers/session_provider.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/toast.dart';
 import '../../../../utils/validation.dart';
 import '../../../bridge/services/bridge_service.dart';
@@ -23,18 +24,20 @@ class EncryptWalletButton extends BaseComponent {
     //   return SizedBox.shrink();
     // }
 
+    final l10n = AppLocalizations.of(context);
     if (ref.watch(walletIsEncryptedProvider)) {
       if (ref.watch(passwordRequiredProvider)) {
         return AppButton(
           icon: Icons.lock_open_rounded,
-          label: "Unlock Wallet",
+          label: l10n.r3eUnlockWallet,
           onPressed: !ref.watch(sessionProvider.select((v) => v.cliStarted))
               ? null
               : () async {
                   final password = await PromptModal.show(
-                    title: "Unlock Wallet",
-                    validator: (value) => formValidatorNotEmpty(value, "Password"),
-                    labelText: "Password",
+                    title: l10n.r3eUnlockWallet,
+                    validator: (value) =>
+                        formValidatorNotEmpty(value, l10n.tkbPassword),
+                    labelText: l10n.tkbPassword,
                     obscureText: true,
                     revealObscure: true,
                     lines: 1,
@@ -46,12 +49,12 @@ class EncryptWalletButton extends BaseComponent {
 
                     if (success) {
                       if (ref.watch(currentValidatorProvider)?.isValidating == true) {
-                        Toast.message("Wallet has been unlocked.");
+                        Toast.message(l10n.r3eWalletUnlocked);
                       } else {
-                        Toast.message("Wallet has been unlocked for 10 minutes.");
+                        Toast.message(l10n.r3eWalletUnlocked10Min);
                       }
                     } else {
-                      Toast.error("Incorrect decryption password.");
+                      Toast.error(l10n.r3eIncorrectDecryptionPassword);
                     }
                   }
                 },
@@ -59,19 +62,19 @@ class EncryptWalletButton extends BaseComponent {
       }
 
       return AppButton(
-        label: "Lock Wallet",
+        label: l10n.webLockWallet,
         icon: Icons.lock,
         onPressed: !ref.watch(sessionProvider.select((v) => v.cliStarted))
             ? null
             : () async {
                 if (ref.read(currentValidatorProvider)?.isValidating == true) {
-                  Toast.error("You can not lock your wallet while validating.");
+                  Toast.error(l10n.r3eCannotLockWhileValidating);
                   return;
                 }
                 final success = await ref.read(passwordRequiredProvider.notifier).lock();
 
                 if (success) {
-                  Toast.message("Your wallet is now locked.");
+                  Toast.message(l10n.r3eWalletLocked);
                 } else {
                   Toast.error();
                 }
@@ -80,43 +83,44 @@ class EncryptWalletButton extends BaseComponent {
     }
 
     return AppButton(
-      label: "Encrypt Wallet",
+      label: l10n.r3eEncryptWallet,
       icon: Icons.lock,
       onPressed: !ref.watch(sessionProvider.select((v) => v.cliStarted))
           ? null
           : () async {
               if (ref.read(walletListProvider).isEmpty) {
-                Toast.error("No keys to encrypt.");
+                Toast.error(l10n.r3eNoKeysToEncrypt);
                 return;
               }
 
               final password = await PromptModal.show(
-                title: "Encrypt Wallet",
-                validator: (value) => formValidatorNotEmpty(value, "Password"),
-                labelText: "Create Password",
+                title: l10n.r3eEncryptWallet,
+                validator: (value) =>
+                    formValidatorNotEmpty(value, l10n.tkbPassword),
+                labelText: l10n.motherCreatePasswordLabel,
                 obscureText: true,
                 revealObscure: true,
                 lines: 1,
-                body:
-                    "This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.",
-                confirmText: "Agree",
-                cancelText: "Cancel",
+                body: l10n.r3eEncryptWalletBody,
+                confirmText: l10n.r3eAgree,
+                cancelText: l10n.actionCancel,
               );
 
               if (password != null && password.isNotEmpty) {
                 final confirmedPassword = await PromptModal.show(
-                  title: "Confirm Password",
-                  validator: (value) => formValidatorNotEmpty(value, "Password"),
-                  labelText: "Password",
+                  title: l10n.txpConfirmPassword,
+                  validator: (value) =>
+                      formValidatorNotEmpty(value, l10n.tkbPassword),
+                  labelText: l10n.tkbPassword,
                   obscureText: true,
                   revealObscure: true,
                   lines: 1,
-                  body: "Please confirm your encryption password.",
+                  body: l10n.r3eConfirmEncryptionPassword,
                 );
 
                 if (confirmedPassword != null && confirmedPassword.isNotEmpty) {
                   if (password != confirmedPassword) {
-                    Toast.error("Your passwords do not match. Please try again.");
+                    Toast.error(l10n.r3ePasswordsDoNotMatchRetry);
                     return;
                   }
                 }
@@ -128,7 +132,7 @@ class EncryptWalletButton extends BaseComponent {
                 if (error != null) {
                   Toast.error(error);
                 } else {
-                  Toast.message("Your wallet is now encrypted.");
+                  Toast.message(l10n.r3eWalletEncrypted);
                   ref.read(walletIsEncryptedProvider.notifier).set(true);
                 }
               }
