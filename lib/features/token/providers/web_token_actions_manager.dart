@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/explorer_service.dart';
@@ -731,7 +733,18 @@ class WebTokenActionsManager {
         if (status['status'] == 'complete') {
           return _FrostSigningPollResult.signed(status['signed_btc_tx_hex'] as String?);
         } else if (status['status'] == 'failed') {
-          return _FrostSigningPollResult.failed(status['message'] ?? globalL10n.bw2FrostSigningFailed);
+          // Diagnosable failures carry a code and session id — log them, the
+          // message alone is what used to make these unactionable.
+          debugPrint(
+            'FROST job $jobId failed: code=${status['failure_code']} '
+            'session=${status['session_id']} input=${status['input_index']} '
+            'retryable=${status['retryable']}',
+          );
+          return _FrostSigningPollResult.failed(
+            status['message'] ?? globalL10n.bw2FrostSigningFailed,
+            failureCode: status['failure_code'] as String?,
+            retryable: status['retryable'] as bool?,
+          );
         } else if (status['success'] == false) {
           notFoundCount++;
           // Job not registered yet (race) — tolerate a few misses, bail if persistent
@@ -853,6 +866,35 @@ class WebTokenActionsManager {
           return {'success': false, 'message': globalL10n.bw2FailedSignFrost};
         }
 
+        // Step 2b: Multi-input withdrawals need one signature per vault UTXO.
+        // StartMessages[0] is byte-identical to the legacy StartMessage and is
+        // already covered by startSig; every later entry is signed verbatim —
+        // the node verifies the exact Message strings it returned, so they
+        // must not be reconstructed here.
+        List<Map<String, dynamic>>? extraStartSignatures;
+        final startMessages =
+            (prepared['StartMessages'] as List?)?.whereType<Map>().toList();
+        if (startMessages != null && startMessages.length > 1) {
+          extraStartSignatures = [];
+          for (final entry in startMessages) {
+            final inputIndex = entry['InputIndex'] as int? ?? 0;
+            if (inputIndex == 0) continue;
+
+            final sig = await RawTransaction.getSignature(
+              message: entry['Message'] as String,
+              privateKey: keypair.private,
+              publicKey: keypair.public,
+            );
+            if (sig == null) {
+              return {'success': false, 'message': globalL10n.bw2FailedSignFrost};
+            }
+            extraStartSignatures.add({
+              'input_index': inputIndex,
+              'signature': sig,
+            });
+          }
+        }
+
         // Step 3: Execute — kicks off FROST signing asynchronously, returns job_id
         final executeResult = await ExplorerService().executeV2WithdrawalComplete(
           scIdentifier: scIdentifier,
@@ -866,6 +908,7 @@ class WebTokenActionsManager {
           amount: withdrawalAmount,
           btcDestination: btcDestination,
           feeRate: prepared['FeeRate'] as int? ?? 0,
+          startSignatures: extraStartSignatures,
         );
 
         final startedJobId = executeResult['job_id'] as String?;
@@ -895,9 +938,18 @@ class WebTokenActionsManager {
 
       if (poll.failureMessage != null) {
         // Signing will not produce anything and the id is now worthless, so it
-        // must not be resumed — that would report a dead job forever.
+        // must not be resumed — that would report a dead job forever. The next
+        // retry runs a full fresh prepare → sign → execute cycle, which is
+        // exactly what the node wants: old session ids are never reusable.
         await PendingFrostSigningJobService().clear(requestHash);
-        return {'success': false, 'message': poll.failureMessage};
+        return {
+          'success': false,
+          'message': poll.retryable == true
+              ? '${poll.failureMessage} This looks temporary — wait about a minute, then retry.'
+              : poll.failureMessage,
+          'failure_code': poll.failureCode,
+          'retryable': poll.retryable,
+        };
       }
 
       final signedBtcTxHex = poll.signedBtcTxHex;
@@ -1149,13 +1201,29 @@ class _FrostSigningPollResult {
   /// longer knows the id.
   final String? failureMessage;
 
-  const _FrostSigningPollResult.signed(this.signedBtcTxHex)
-      : failureMessage = null;
+  /// Structured diagnostics from the node, when the failure came from an
+  /// actual FROST ceremony. Null on pre-ceremony failures (contract not
+  /// found, validation, balance) — the message is all there is then.
+  final String? failureCode;
 
-  const _FrostSigningPollResult.failed(this.failureMessage)
-      : signedBtcTxHex = null;
+  /// True means transient: a full fresh prepare → sign → execute cycle after
+  /// the validators' ~60 second cooldown is expected to succeed.
+  final bool? retryable;
+
+  const _FrostSigningPollResult.signed(this.signedBtcTxHex)
+      : failureMessage = null,
+        failureCode = null,
+        retryable = null;
+
+  const _FrostSigningPollResult.failed(
+    this.failureMessage, {
+    this.failureCode,
+    this.retryable,
+  }) : signedBtcTxHex = null;
 
   const _FrostSigningPollResult.timedOut()
       : signedBtcTxHex = null,
-        failureMessage = null;
+        failureMessage = null,
+        failureCode = null,
+        retryable = null;
 }

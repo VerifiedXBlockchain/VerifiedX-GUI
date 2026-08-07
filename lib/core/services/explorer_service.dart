@@ -898,6 +898,12 @@ class ExplorerService extends BaseService {
   }
 
   /// Kicks off FROST signing asynchronously. Returns a job_id to poll.
+  ///
+  /// [startSignatures] carries one entry per transaction input beyond the
+  /// first: `{'input_index': k, 'signature': ...}` for the matching
+  /// StartMessages[k] from the prepare response. Input 0's signature always
+  /// travels in [startSignature] — the node requires it there and ignores
+  /// index-0 entries in the array. Omitted for single-input withdrawals.
   Future<Map<String, dynamic>> executeV2WithdrawalComplete({
     required String scIdentifier,
     required String withdrawalRequestHash,
@@ -910,6 +916,7 @@ class ExplorerService extends BaseService {
     double amount = 0,
     String btcDestination = '',
     int feeRate = 0,
+    List<Map<String, dynamic>>? startSignatures,
   }) async {
     try {
       final response = await postJson(
@@ -926,6 +933,8 @@ class ExplorerService extends BaseService {
           'amount': amount,
           'btc_destination': btcDestination,
           'fee_rate': feeRate,
+          if (startSignatures != null && startSignatures.isNotEmpty)
+            'start_signatures': startSignatures,
         },
       );
       return response['data'];
