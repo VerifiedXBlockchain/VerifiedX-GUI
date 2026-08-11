@@ -800,7 +800,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       return '';
     }
     if (Platform.isMacOS) {
-      return '/Applications/VFXWallet.app/Contents/Resources/RBXCore/ReserveBlockCore';
+      return '/Applications/VFXWallet.app/Contents/Resources/VFXCore/VerifiedXCore';
     } else {
       if (state.windowsLauncherPath == null) {
         final appPath = Directory.current.path;
