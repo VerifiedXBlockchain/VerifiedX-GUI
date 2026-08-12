@@ -32,9 +32,15 @@ class VbtcV2Service extends BaseService {
   /// Fetch V2 contracts from the CLI endpoint.
   /// Returns them as [TokenizedBitcoin] with version=2 so the UI
   /// can merge them into the unified token list.
+  ///
+  /// When [address] is given, the result is filtered to contracts that
+  /// address owns or holds a spendable balance on.
   Future<List<TokenizedBitcoin>> getContractList({String? address}) async {
     const method = 'GetContractList';
-    final path = address != null ? '/GetContractList/$address' : '/GetContractList';
+    // Always the unfiltered list: GetContractList/{address} is owner-scoped
+    // on the CLI, which hides contracts this wallet received balance on but
+    // does not own. Holder filtering happens below via the spendable lookups.
+    const path = '/GetContractList';
 
     try {
       final result = await getJson(
@@ -85,6 +91,9 @@ class VbtcV2Service extends BaseService {
       for (int i = 0; i < parsed.length; i++) {
         final c = parsed[i];
         try {
+          // Non-owned contracts come back with an empty Name — the CLI only
+          // has SmartContractMain metadata for contracts it minted.
+          final String name = c['Name'] ?? c['TokenName'] ?? '';
           final token = TokenizedBitcoin(
             id: (c['Id'] ?? 0).toDouble(),
             smartContractUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
@@ -95,7 +104,7 @@ class VbtcV2Service extends BaseService {
             // blocking a transfer is recoverable, offering a balance that is
             // not there is not.
             myBalance: spendable[i] ?? 0,
-            tokenName: c['Name'] ?? c['TokenName'] ?? 'vBTC',
+            tokenName: name.isEmpty ? 'vBTC' : name,
             tokenDescription: c['Description'] ?? c['TokenDescription'] ?? '',
             smartContractMainId: (c['SmartContractMainId'] ?? 0).toDouble(),
             isPublished: c['IsPublished'] ?? true,
@@ -111,7 +120,17 @@ class VbtcV2Service extends BaseService {
         }
       }
 
-      return tokens;
+      if (address == null) {
+        return tokens;
+      }
+
+      // The unfiltered endpoint returns every contract the node knows about;
+      // only this wallet's belong in the list: owned, or holding a spendable
+      // balance (received via transfer). A failed spendable lookup still
+      // keeps owned contracts (rescued by the owner check) but drops
+      // received-only ones — hiding a token beats showing one whose balance
+      // cannot be established.
+      return tokens.where((t) => t.rbxAddress == address || t.myBalance > 0).toList();
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
       return [];
