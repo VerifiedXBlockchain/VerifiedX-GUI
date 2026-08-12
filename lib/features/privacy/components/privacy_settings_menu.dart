@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
+import '../../../core/app_constants.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -73,16 +74,17 @@ class PrivacySettingsMenu extends ConsumerWidget {
             ],
           ),
         ),
-        PopupMenuItem(
-          value: 'resync_vbtc',
-          child: Row(
-            children: [
-              Icon(Icons.sync, size: 18, color: AppColors.getBtc()),
-              const SizedBox(width: 8),
-              Text(l10n.prvResyncVbtcWallet, style: TextStyle(color: AppColors.getBtc())),
-            ],
+        if (VBTC_PRIVACY_ENABLED)
+          PopupMenuItem(
+            value: 'resync_vbtc',
+            child: Row(
+              children: [
+                Icon(Icons.sync, size: 18, color: AppColors.getBtc()),
+                const SizedBox(width: 8),
+                Text(l10n.prvResyncVbtcWallet, style: TextStyle(color: AppColors.getBtc())),
+              ],
+            ),
           ),
-        ),
         PopupMenuItem(
           value: 'reset',
           child: Row(

@@ -3,7 +3,7 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "6.2.5";
+const APP_V = "7.0.0";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
@@ -12,6 +12,8 @@ const ALLOW_PAYMENT = true;
 const BUTTERFLY_ENABLED = true;
 const VALIDATOR_NAV_ENABLED = false;
 const BULK_VBTC_TRANSFER_ENABLED = false;
+// Shielded vBTC is disabled in the CLI; VFX private txs remain supported.
+const VBTC_PRIVACY_ENABLED = false;
 const WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED = true;
 
 const REFRESH_TIMEOUT_SECONDS = 30;

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app_constants.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
@@ -57,7 +58,7 @@ class _PrivacyDashboardState extends ConsumerState<PrivacyDashboard> {
           const SizedBox(height: 16),
           _ActionButtons(),
           const SizedBox(height: 16),
-          if (vbtcTokens.isNotEmpty) ...[
+          if (VBTC_PRIVACY_ENABLED && vbtcTokens.isNotEmpty) ...[
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Text(
