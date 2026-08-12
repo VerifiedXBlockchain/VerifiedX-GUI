@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import '../../../utils/toast.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../core/services/base_service.dart';
+import '../../../core/services/explorer_service.dart';
+import '../../btc_web/models/btc_web_vbtc_token.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../models/withdrawal_result.dart';
 
@@ -67,6 +69,26 @@ class VbtcV2Service extends BaseService {
         }
       }
 
+      // Contracts this node didn't mint come back with an empty Name — the
+      // CLI only has SmartContractMain metadata for its own mints. Spyglass
+      // indexes every mint, so missing names resolve from there. Kicked off
+      // here to run alongside the spendable lookups below.
+      final Future<List<BtcWebVbtcToken?>> explorerMetaFuture = Future.wait(
+        parsed.map((c) async {
+          final String name = c['Name'] ?? c['TokenName'] ?? '';
+          if (name.isNotEmpty) return null;
+          try {
+            return await ExplorerService().getWebVbtcTokenDetail(
+              c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
+              address ?? '',
+            );
+          } catch (_) {
+            // Offline or unindexed: the display fallback below covers it.
+            return null;
+          }
+        }),
+      );
+
       // GetContractList carries no per-address figure, so spendable balances
       // are fetched alongside it. One request per contract against the local
       // node.
@@ -87,13 +109,15 @@ class VbtcV2Service extends BaseService {
               ),
             );
 
+      final List<BtcWebVbtcToken?> explorerMeta = await explorerMetaFuture;
+
       final List<TokenizedBitcoin> tokens = [];
       for (int i = 0; i < parsed.length; i++) {
         final c = parsed[i];
+        final meta = explorerMeta[i];
         try {
-          // Non-owned contracts come back with an empty Name — the CLI only
-          // has SmartContractMain metadata for contracts it minted.
           final String name = c['Name'] ?? c['TokenName'] ?? '';
+          final String description = c['Description'] ?? c['TokenDescription'] ?? '';
           final token = TokenizedBitcoin(
             id: (c['Id'] ?? 0).toDouble(),
             smartContractUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
@@ -104,8 +128,10 @@ class VbtcV2Service extends BaseService {
             // blocking a transfer is recoverable, offering a balance that is
             // not there is not.
             myBalance: spendable[i] ?? 0,
-            tokenName: name.isEmpty ? 'vBTC' : name,
-            tokenDescription: c['Description'] ?? c['TokenDescription'] ?? '',
+            tokenName: name.isNotEmpty
+                ? name
+                : (meta != null && meta.name.isNotEmpty ? meta.name : 'vBTC'),
+            tokenDescription: description.isNotEmpty ? description : (meta?.description ?? ''),
             smartContractMainId: (c['SmartContractMainId'] ?? 0).toDouble(),
             isPublished: c['IsPublished'] ?? true,
             version: 2,
