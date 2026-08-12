@@ -39,13 +39,17 @@ class TokenizedBtcDetailScreen extends BaseScreen {
     }
     final nft = ref.watch(nftDetailProvider(token.smartContractUid));
 
-    if (nft == null) {
+    // V2 contracts held as balance without ownership have no local
+    // smart-contract record, so the NFT lookup never resolves — fall back
+    // to the contract's owner instead of waiting on it.
+    if (nft == null && token.version != 2) {
       return AppBar(
         backgroundColor: Colors.black,
         shadowColor: Colors.transparent,
       );
     }
 
+    final scOwner = nft?.currentOwner ?? token.rbxAddress;
     final btcPrice = ref.watch(btcCurrentPriceDataDetailProvider);
 
     return AppBar(
@@ -82,7 +86,7 @@ class TokenizedBtcDetailScreen extends BaseScreen {
             alignment: Alignment.centerRight,
             child: Builder(builder: (context) {
               final l10n = AppLocalizations.of(context);
-              if (nft.currentOwner != token.rbxAddress && token.myBalance == 0) {
+              if (scOwner != token.rbxAddress && token.myBalance == 0) {
                 return Text(
                   l10n.r3fConfirmingBalance,
                   style: TextStyle(
@@ -123,11 +127,13 @@ class TokenizedBtcDetailScreen extends BaseScreen {
     }
     final nft = ref.watch(nftDetailProvider(token.smartContractUid));
 
-    if (nft == null) {
+    // Same fallback as the app bar: only block on the NFT record for V1
+    // tokens, which always have one locally.
+    if (nft == null && token.version != 2) {
       return CenteredLoader();
     }
 
-    final scOwner = nft.currentOwner;
+    final scOwner = nft?.currentOwner ?? token.rbxAddress;
 
     return SingleChildScrollView(
       child: Column(
