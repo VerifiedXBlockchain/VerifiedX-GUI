@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import '../../../utils/toast.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../core/services/base_service.dart';
-import '../../../core/services/explorer_service.dart';
-import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../nft/models/nft.dart';
+import '../../nft/services/nft_service.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../models/withdrawal_result.dart';
 
@@ -70,22 +70,17 @@ class VbtcV2Service extends BaseService {
       }
 
       // Contracts this node didn't mint come back with an empty Name — the
-      // CLI only has SmartContractMain metadata for its own mints. Spyglass
-      // indexes every mint, so missing names resolve from there. Kicked off
-      // here to run alongside the spendable lookups below.
-      final Future<List<BtcWebVbtcToken?>> explorerMetaFuture = Future.wait(
+      // CLI only enriches the list from SmartContractMain, which exists just
+      // for its own mints. GetSmartContractData instead decompiles the
+      // contract straight from the state trei, so the on-chain name resolves
+      // locally. Kicked off here to run alongside the spendable lookups
+      // below; getNftData returns null on any failure, and the display
+      // fallback below covers that.
+      final Future<List<Nft?>> chainMetaFuture = Future.wait(
         parsed.map((c) async {
           final String name = c['Name'] ?? c['TokenName'] ?? '';
           if (name.isNotEmpty) return null;
-          try {
-            return await ExplorerService().getWebVbtcTokenDetail(
-              c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
-              address ?? '',
-            );
-          } catch (_) {
-            // Offline or unindexed: the display fallback below covers it.
-            return null;
-          }
+          return NftService().getNftData(c['SmartContractUID'] ?? c['SmartContractUid'] ?? '');
         }),
       );
 
@@ -109,12 +104,12 @@ class VbtcV2Service extends BaseService {
               ),
             );
 
-      final List<BtcWebVbtcToken?> explorerMeta = await explorerMetaFuture;
+      final List<Nft?> chainMeta = await chainMetaFuture;
 
       final List<TokenizedBitcoin> tokens = [];
       for (int i = 0; i < parsed.length; i++) {
         final c = parsed[i];
-        final meta = explorerMeta[i];
+        final meta = chainMeta[i];
         try {
           final String name = c['Name'] ?? c['TokenName'] ?? '';
           final String description = c['Description'] ?? c['TokenDescription'] ?? '';
