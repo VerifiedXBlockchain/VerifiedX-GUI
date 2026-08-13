@@ -726,7 +726,7 @@ class WebTokenActionsManager {
   /// fails outright, or outlives the poll budget.
   Future<_FrostSigningPollResult> _pollFrostSigningJob(String jobId) async {
     int notFoundCount = 0;
-    for (int i = 0; i < 36; i++) {
+    for (int i = 0; i < 120; i++) {
       await Future.delayed(const Duration(seconds: 5));
       try {
         final status = await ExplorerService().getV2WithdrawalCompleteStatus(jobId);
@@ -814,7 +814,26 @@ class WebTokenActionsManager {
       // A job left over from an earlier attempt is resumed as-is. Starting a
       // second ceremony for the same request is refused for 24 hours, so the
       // stored id is the only way back to a signature that may already exist.
-      final pendingJob = PendingFrostSigningJobService().get(requestHash);
+      var pendingJob = PendingFrostSigningJobService().get(requestHash);
+
+      // A stored id is only worth resuming while the explorer still knows the
+      // job. Once its TTL has lapsed, polling it burns ~35s and a failure
+      // dialog before the record clears — probe once and fall through to the
+      // guard instead. Only an explicit "Job not found" clears the record; a
+      // transient probe error keeps it, because clearing a LIVE job strands
+      // its signature and a fresh ceremony is refused for 24 hours.
+      if (pendingJob != null) {
+        try {
+          final probe = await ExplorerService()
+              .getV2WithdrawalCompleteStatus(pendingJob.jobId);
+          if (probe['success'] == false && probe['message'] == 'Job not found') {
+            await PendingFrostSigningJobService().clear(requestHash);
+            pendingJob = null;
+          }
+        } catch (_) {
+          // Transient explorer error — resume the stored job as before.
+        }
+      }
 
       if (pendingJob != null) {
         jobId = pendingJob.jobId;
@@ -933,7 +952,10 @@ class WebTokenActionsManager {
         );
       }
 
-      // Step 4: Poll for FROST signing result (up to 3 minutes)
+      // Step 4: Poll for FROST signing result (up to 10 minutes — real
+      // ceremonies exceeded 4 minutes on flaky testnet ElectrumX, and a poll
+      // that gives up before the job finishes sends the user into the
+      // timeout/recovery flow for a withdrawal that is about to succeed).
       final poll = await _pollFrostSigningJob(jobId);
 
       if (poll.failureMessage != null) {
