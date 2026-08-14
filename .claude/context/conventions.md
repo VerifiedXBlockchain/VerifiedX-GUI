@@ -42,6 +42,7 @@
 - `kIsWeb` for platform branching, never `Platform.isX` alone
 - Desktop API base path: `Env.apiBaseUrl` (localhost with env-specific port)
 - Service path overrides: `super(apiBasePathOverride: "/privacyapi/PrivacyV1")` to replace default `/api/V1`
+- Web detail-screen `FutureProvider.family` must be `.autoDispose` and be invalidated from `WebSessionProvider.loop()` — without both it fetches once and serves that value forever, so the screen goes stale and re-entering doesn't help (`AsyncValue.when` defaults `skipLoadingOnRefresh: true`, so the periodic invalidate won't flash a loader). Desktop detail screens derive from a polled list provider instead and need neither.
 
 <!-- Add new conventions above this line. Use /remember to add entries automatically. -->
 

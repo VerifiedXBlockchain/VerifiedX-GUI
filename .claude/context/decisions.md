@@ -33,6 +33,10 @@
 - **Status:** Active (added 2026-03)
 - **Rationale:** PLONK params (~253MB) download in a background task on CLI startup. GUI polls `GetPlonkStatus` every 15s until `isPrivacyEnabled` is true. Privacy nav item always visible; screen shows loading state until ready.
 
+### Shielded vBTC gated behind a flag rather than removed
+- **Status:** Active (added 2026-08)
+- **Rationale:** The CLI disabled its shielded-vBTC endpoints ("temp") during the caster upgrade, so the GUI surface had to go. Chose `VBTC_PRIVACY_ENABLED = false` in `app_constants.dart` over deleting the ~9 files: the disable may be temporary, and re-enabling is a one-line flip. Gating the dashboard section also stops the balance providers polling, since the cards were their only watchers. VFX private txs are unaffected — only the vBTC surface is gated.
+
 <!-- Add new decisions above this line. Use /remember to add entries automatically. -->
 
 ## Manual Notes
