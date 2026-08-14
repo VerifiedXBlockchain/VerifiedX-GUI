@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/btc_web/providers/btc_web_transaction_list_provider.dart';
+import '../../features/btc_web/providers/btc_web_vbtc_token_detail_provider.dart';
 import '../../features/btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../../features/misc/providers/global_balances_expanded_provider.dart';
 import '../../features/price/providers/price_detail_providers.dart';
@@ -367,6 +368,10 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
 
     ref.invalidate(vfxPriceDataDetailProvider);
     ref.invalidate(btcPriceDataDetailProvider);
+    // The vBTC detail screen has no list to ride along with, so its balance
+    // only moves when this fires. autoDispose keeps it free when no detail
+    // screen is open.
+    ref.invalidate(btcWebVbtcTokenDetailProvider);
   }
 
   void btcLoop() async {
