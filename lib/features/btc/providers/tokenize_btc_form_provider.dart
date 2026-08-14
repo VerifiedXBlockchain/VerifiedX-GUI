@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../utils/guards.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../bridge/models/log_entry.dart';
@@ -87,6 +89,12 @@ class TokenizeBtcFormProvider extends StateNotifier<TokenizeBtcFormState> {
   /// the ceremony provider state for completion.
   Future<bool?> submit() async {
     if (!formKey.currentState!.validate()) {
+      return null;
+    }
+
+    // Deploying while the chain is behind produces a contract built on stale
+    // state. Desktop only: walletInfoProvider is CLI-fed.
+    if (!kIsWeb && !guardWalletIsSynced(ref)) {
       return null;
     }
 

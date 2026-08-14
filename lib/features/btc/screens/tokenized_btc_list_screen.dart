@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/env.dart';
 import 'package:rbx_wallet/features/btc/screens/web_tokenize_btc_onboarding_screen.dart';
+import 'package:rbx_wallet/utils/guards.dart';
 import 'package:rbx_wallet/utils/toast.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/base_screen.dart';
@@ -139,6 +140,9 @@ class TokenizeBtcListScreen extends BaseScreen {
 
                     return;
                   }
+
+                  if (!widgetGuardWalletIsSynced(ref)) return;
+
                   Wallet? wallet = ref.read(walletListProvider).firstWhereOrNull((a) => a.balance > MIN_RBX_FOR_SC_ACTION && !a.isReserved);
 
                   if (wallet == null) {
@@ -195,6 +199,8 @@ class TokenizeBtcListScreen extends BaseScreen {
                     label: AppLocalizations.of(context).btcUseWizard,
                     type: AppButtonType.Text,
                     onPressed: () async {
+                      if (!kIsWeb && !widgetGuardWalletIsSynced(ref)) return;
+
                       ref.read(vBtcOnboardProvider.notifier).reset();
 
                       final token = await Navigator.of(context)
