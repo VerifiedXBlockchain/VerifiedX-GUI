@@ -22,6 +22,7 @@ import '../../sc_property/models/sc_property.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/base_screen.dart';
+import '../../../core/breakpoints.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
@@ -64,6 +65,59 @@ class NftDetailScreen extends BaseScreen {
       ClipboardData(text: val),
     );
     Toast.message("$val copied to clipboard");
+  }
+
+  Widget _buildTitle(Nft nft) {
+    return Text(
+      nft.currentEvolveName,
+      style: const TextStyle(
+        fontSize: 40,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        height: 1,
+      ),
+    );
+  }
+
+  Widget _buildScIdChip(Nft nft) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.getBlue(ColorShade.s300),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: Tooltip(
+                message: "Smart Contract ID",
+                child: Text(
+                  nft.id,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+            InkWell(
+              onTap: () async {
+                await Clipboard.setData(ClipboardData(text: nft.id));
+                Toast.message("Smart Contract Identifier copied to clipboard");
+              },
+              child: const Icon(
+                Icons.copy,
+                size: 14,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -180,62 +234,30 @@ class NftDetailScreen extends BaseScreen {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              nft.currentEvolveName,
-                              style: TextStyle(
-                                fontSize: 40,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                height: 1,
-                              ),
+                      // On narrow screens the unconstrained SC id chip starves
+                      // the title of width (one letter per line), so it gets
+                      // its own row instead.
+                      if (BreakPoints.useMobileLayout(context))
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildTitle(nft),
+                            const SizedBox(height: 8),
+                            _buildScIdChip(nft),
+                          ],
+                        )
+                      else
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: _buildTitle(nft),
                             ),
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.getBlue(ColorShade.s300),
-                              borderRadius: BorderRadius.circular(12),
+                            Flexible(
+                              child: _buildScIdChip(nft),
                             ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Tooltip(
-                                    message: "Smart Contract ID",
-                                    child: Text(
-                                      nft.id,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 6,
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      await Clipboard.setData(
-                                          ClipboardData(text: nft.id));
-                                      Toast.message(
-                                          "Smart Contract Identifier copied to clipboard");
-                                    },
-                                    child: Icon(
-                                      Icons.copy,
-                                      size: 14,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                       const SizedBox(
                         height: 4,
                       ),
