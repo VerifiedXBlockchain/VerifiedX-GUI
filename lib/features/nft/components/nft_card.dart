@@ -82,6 +82,11 @@ class NftCard extends BaseComponent {
                         imageUrl: nft.currentEvolveAssetWeb!.location,
                         width: double.infinity,
                         fit: BoxFit.cover,
+                        // Grid cells never render larger than ~400 logical px;
+                        // decoding multi-MB originals at full size is wasted
+                        // memory (and a tab-killer on mobile).
+                        memCacheWidth: 800,
+                        maxWidthDiskCache: 800,
                       ),
                     )
                   : nft.currentEvolveAssetWeb != null

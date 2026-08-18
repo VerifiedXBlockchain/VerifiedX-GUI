@@ -134,26 +134,38 @@ final webTransactionListProvider = StateNotifierProvider.family<WebTransactionLi
   return WebTransactionListProvider(ref, address);
 });
 
-final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, String>((ref, String identifier) async {
+/// Full VFX history for both addresses, fetched page-by-page and then cached.
+/// Split out of [combinedWebTransactionListProvider] so the network fetch only
+/// re-runs when a NEW confirmed transaction lands on either address — the
+/// newest-confirmed-hash selects below are the sole reactive keys. Previously
+/// the fetch lived inline and re-ran on every upstream list-identity change
+/// (the 10s checkForNew tick, the 30s vBTC token reload, the 90s BTC loop),
+/// re-downloading the entire history each time — the constant churn behind
+/// the choppy transactions tab and mobile tab crashes.
+final _combinedVfxHistoryProvider = FutureProvider.family<List<WebTransaction>, String>((ref, String identifier) async {
   final parts = identifier.split(':');
   final vfxAddress = parts[0];
   final raAddress = parts[1];
 
-  List<WebTransaction> vfxTransactions = [];
+  ref.watch(webTransactionListProvider(vfxAddress)
+      .select((v) => v.transactions.firstWhereOrNull((t) => !t.isPending)?.hash ?? ''));
+  ref.watch(webTransactionListProvider(raAddress)
+      .select((v) => v.transactions.firstWhereOrNull((t) => !t.isPending)?.hash ?? ''));
 
-  final pendingVfxTxs = ref.watch(webTransactionListProvider(vfxAddress).select((v) => v.transactions)).where((t) => t.isPending).toList();
-  final pendingRaTxs = ref.watch(webTransactionListProvider(raAddress).select((v) => v.transactions)).where((t) => t.isPending).toList();
+  final List<WebTransaction> transactions = [];
 
-  vfxTransactions.addAll([...pendingVfxTxs, ...pendingRaTxs]);
-
+  // Bounded: the old unbounded loop walked every page a whale account has,
+  // which is part of what overwhelmed mobile tabs. Deeper history stays
+  // reachable through the paginated per-address tabs.
+  const maxPages = 30;
   int page = 1;
-  while (true) {
+  while (page <= maxPages) {
     try {
       final data = await ExplorerService().getTransactionsFromMultipleAddresses(
         addresses: [vfxAddress, raAddress],
         page: page,
       );
-      vfxTransactions.addAll(data.results);
+      transactions.addAll(data.results);
 
       if (data.num_pages == data.page || data.results.isEmpty) {
         break;
@@ -164,6 +176,27 @@ final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, 
       break;
     }
   }
+
+  return transactions;
+});
+
+final combinedWebTransactionListProvider = FutureProvider.family<List<dynamic>, String>((ref, String identifier) async {
+  final parts = identifier.split(':');
+  final vfxAddress = parts[0];
+  final raAddress = parts[1];
+
+  // All loaded per-address txs, not just pending: when checkForNew swaps a
+  // pending tx for its confirmed version, the confirmed copy is here
+  // immediately, so it can't drop out while the history cache catches up.
+  // The groupBy below dedupes against history, first entry wins.
+  final vfxTxs = ref.watch(webTransactionListProvider(vfxAddress).select((v) => v.transactions));
+  final raTxs = ref.watch(webTransactionListProvider(raAddress).select((v) => v.transactions));
+
+  // Cached unless a new confirmed tx arrived; the merge/sort below is the
+  // only work that re-runs on the poll loops.
+  final history = await ref.watch(_combinedVfxHistoryProvider(identifier).future);
+
+  List<WebTransaction> vfxTransactions = [...vfxTxs, ...raTxs, ...history];
 
   final groups = groupBy(vfxTransactions, (WebTransaction tx) => "${tx.hash}_${tx.fromAddress}_${tx.toAddress}");
   vfxTransactions = groups.values.map((list) => list.first).toList();
