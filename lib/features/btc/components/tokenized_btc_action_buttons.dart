@@ -403,11 +403,20 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   return;
                 }
 
+                // The withdrawal requestor is the wallet pressing the button, NOT
+                // token.rbxAddress (the contract owner) — non-owner holders withdraw
+                // their own balance, and the node holds only this wallet's key.
+                final currentWallet = ref.read(sessionProvider).currentWallet;
+                if (currentWallet == null) {
+                  Toast.error(l10n.tkbFailedRequestWithdrawal);
+                  return;
+                }
+
                 // V2: refresh token data and check for pending withdrawal before showing the form
                 if (token.version >= 2) {
                   // Fetch fresh V2 contract data to get current withdrawal state
                   final freshContracts = await VbtcV2Service().getContractList(
-                    address: ref.read(sessionProvider).currentWallet?.address,
+                    address: currentWallet.address,
                   );
                   final freshToken = freshContracts.firstWhereOrNull(
                     (t) => t.smartContractUid == token.smartContractUid,
@@ -432,7 +441,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     final dialogResult = await WithdrawalProcessingDialog.show(
                       scUid: token.smartContractUid,
                       requestHash: freshToken.activeWithdrawalRequestHash!,
-                      ownerAddress: isOwner ? token.rbxAddress : null,
+                      ownerAddress: currentWallet.address,
                     );
 
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
@@ -474,7 +483,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     ref.read(globalLoadingProvider.notifier).start();
                     final withdrawResult = await VbtcV2Service().requestWithdrawal(
                       scUid: token.smartContractUid,
-                      requestorAddress: token.rbxAddress,
+                      requestorAddress: currentWallet.address,
                       btcAddress: result.toAddress,
                       amount: result.amount,
                       feeRate: result.feeRate,
@@ -514,7 +523,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     final dialogResult = await WithdrawalProcessingDialog.show(
                       scUid: token.smartContractUid,
                       requestHash: requestHash,
-                      ownerAddress: isOwner ? token.rbxAddress : null,
+                      ownerAddress: currentWallet.address,
                       waitForConfirmation: needsBlockConfirmation,
                     );
 
