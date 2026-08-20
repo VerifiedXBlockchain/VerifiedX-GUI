@@ -158,6 +158,26 @@ class BridgeService extends BaseService {
     return response;
   }
 
+  /// Extracts the tx hash from a /SendTransaction response. The CLI returns
+  /// JSON ({"Result": "Success", ..., "Hash": "..."}) once broadcast; plain-
+  /// text errors ("Insufficient Funds...", "FAIL...") carry no hash. Returns
+  /// null when the send did not broadcast.
+  static String? txHashFromResponse(String? message) {
+    if (message == null) return null;
+    try {
+      final data = jsonDecode(message);
+      if (data is Map && data['Result'] == 'Success' && data['Hash'] is String) {
+        return data['Hash'];
+      }
+    } catch (_) {
+      // Not JSON — fall through to the legacy format check.
+    }
+    if (message.startsWith("Success! TxId: ")) {
+      return message.replaceFirst("Success! TxId: ", "").trim();
+    }
+    return null;
+  }
+
   Future<String?> sendFunds({
     required double amount,
     required String to,

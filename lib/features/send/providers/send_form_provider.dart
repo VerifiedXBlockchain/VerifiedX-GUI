@@ -750,13 +750,16 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         );
         state = state.copyWith(isProcessing: false);
 
-        if (message != null) {
+        final txHash = BridgeService.txHashFromResponse(message);
+        if (txHash != null) {
           Toast.message(globalL10n.svcVfxSentToAddressDashboard('$amount', address));
           ref.read(logProvider.notifier).append(
-                LogEntry(message: message, textToCopy: message.replaceAll("Success! TxId: ", ""), variant: AppColorVariant.Success),
+                LogEntry(message: message!, textToCopy: txHash, variant: AppColorVariant.Success),
               );
           notifyTransactionSubmitted();
           clear();
+        } else if (message != null) {
+          Toast.error(message);
         }
       } catch (e) {
         print(e);

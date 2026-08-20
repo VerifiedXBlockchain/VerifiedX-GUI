@@ -139,10 +139,10 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
           from: fundingWallet.address,
         );
 
-        if (message != null) {
-          final txHash = message.replaceAll("Success! TxId: ", "");
+        final txHash = BridgeService.txHashFromResponse(message);
+        if (txHash != null) {
           ref.read(logProvider.notifier).append(
-                LogEntry(message: message, textToCopy: txHash, variant: AppColorVariant.Success),
+                LogEntry(message: message!, textToCopy: txHash, variant: AppColorVariant.Success),
               );
           notifyTransactionSubmitted();
           await InfoDialog.show(
@@ -177,7 +177,7 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
             }
           }
         } else {
-          Toast.error();
+          Toast.error(message);
         }
       }
     } else {

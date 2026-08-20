@@ -264,10 +264,10 @@ class VfxAdnrCard extends BaseComponent {
           from: fundingWallet.address,
         );
 
-        if (message != null) {
-          final txHash = message.replaceAll("Success! TxId: ", "");
+        final txHash = BridgeService.txHashFromResponse(message);
+        if (txHash != null) {
           ref.read(logProvider.notifier).append(
-                LogEntry(message: message, textToCopy: txHash, variant: AppColorVariant.Success),
+                LogEntry(message: message!, textToCopy: txHash, variant: AppColorVariant.Success),
               );
           notifyTransactionSubmitted();
           await InfoDialog.show(
@@ -275,6 +275,8 @@ class VfxAdnrCard extends BaseComponent {
             title: l10n.adnrFundsSentTitle,
             body: l10n.adnrFundsSentBody(amount.toString(), walletAddress),
           );
+        } else {
+          Toast.error(message);
         }
       }
     } else {
