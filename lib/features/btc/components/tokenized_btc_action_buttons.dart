@@ -1171,7 +1171,7 @@ class _TransferSharesModal extends BaseComponent {
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: forWithdrawl
                     ? formValidatorBtcAddress
-                    : (value) => formValidatorNotEmpty(value, "Address"),
+                    : formValidatorVbtcRecipient,
                 decoration: InputDecoration(
                   suffix: !forWithdrawl
                       ? AddressChoosingIconButton(
@@ -1327,7 +1327,7 @@ class _TransferSharesModal extends BaseComponent {
                       // which has no key and is never validated.
                       final addressError = forWithdrawl
                           ? formValidatorBtcAddress(toAddress)
-                          : formValidatorNotEmpty(toAddress, "Address");
+                          : formValidatorVbtcRecipient(toAddress);
                       if (addressError != null) {
                         Toast.error(addressError);
                         return;

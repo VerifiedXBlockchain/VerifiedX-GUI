@@ -5777,6 +5777,8 @@
   "r3hAddressInvalid": "Invalid Address.",
   "r3hAddressOrDomainRequired": "Address or VFX domain required",
   "r3hAddressRequired": "Address required",
+  "r3hVbtcPrivacyRecipientInvalid": "vBTC can only be sent to a standard VFX address (not a privacy address).",
+  "r3hVbtcVaultRecipientInvalid": "vBTC can only be sent to a standard VFX address (not a Vault account).",
   "r3hAddressToBan": "Address to Ban",
   "r3hAdjVoteInDetails": "Adj Vote In Details",
   "r3hAdjVoteInTooLong": "The 'Vote Adjudicator In' submission is too long. Please reduce the content.",

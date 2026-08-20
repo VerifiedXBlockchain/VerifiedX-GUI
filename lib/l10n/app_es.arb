@@ -5765,6 +5765,8 @@
   "r3hAddressInvalid": "Dirección inválida.",
   "r3hAddressOrDomainRequired": "Dirección o dominio VFX requerido",
   "r3hAddressRequired": "Dirección requerida",
+  "r3hVbtcPrivacyRecipientInvalid": "vBTC solo puede enviarse a una dirección VFX estándar (no a una dirección de privacidad).",
+  "r3hVbtcVaultRecipientInvalid": "vBTC solo puede enviarse a una dirección VFX estándar (no a una cuenta Vault).",
   "r3hAddressToBan": "Dirección a banear",
   "r3hAdjVoteInDetails": "Detalles del voto de adj.",
   "r3hAdjVoteInTooLong": "El envío 'Voto de adjudicador' es muy largo. Reduce el contenido.",

@@ -13065,6 +13065,18 @@ abstract class AppLocalizations {
   /// **'Address required'**
   String get r3hAddressRequired;
 
+  /// No description provided for @r3hVbtcPrivacyRecipientInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC can only be sent to a standard VFX address (not a privacy address).'**
+  String get r3hVbtcPrivacyRecipientInvalid;
+
+  /// No description provided for @r3hVbtcVaultRecipientInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC can only be sent to a standard VFX address (not a Vault account).'**
+  String get r3hVbtcVaultRecipientInvalid;
+
   /// No description provided for @r3hAddressToBan.
   ///
   /// In en, this message translates to:

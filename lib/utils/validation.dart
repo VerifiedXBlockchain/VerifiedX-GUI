@@ -168,6 +168,32 @@ String? formValidatorRbxAddress(String? value, [bool allowAdnr = false]) {
   return null;
 }
 
+/// vBTC amount transfers must land on a standard VFX address. The chain
+/// currently accepts vault (xRBX) recipients, but reserve protections do not
+/// apply to vBTC and no UI can move the balance back out; privacy (zfx_)
+/// recipients wait on the disabled vBTC privacy feature flag.
+String? formValidatorVbtcRecipient(String? value) {
+  if (value == null || value.isEmpty) {
+    return globalL10n.r3hAddressRequired;
+  }
+
+  final address = value.trim().replaceAll("\n", "");
+
+  if (address.startsWith("xRBX")) {
+    return globalL10n.r3hVbtcVaultRecipientInvalid;
+  }
+
+  if (address.startsWith("zfx_")) {
+    return globalL10n.r3hVbtcPrivacyRecipientInvalid;
+  }
+
+  if (!isValidRbxAddress(address)) {
+    return globalL10n.r3hAddressInvalid;
+  }
+
+  return null;
+}
+
 String? formValidatorRbxAddressOrEmpty(String? value) {
   if (value == null || value.isEmpty) {
     return null;

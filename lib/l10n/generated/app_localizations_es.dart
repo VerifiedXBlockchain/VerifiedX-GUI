@@ -6995,6 +6995,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3hAddressRequired => 'Dirección requerida';
 
   @override
+  String get r3hVbtcPrivacyRecipientInvalid => 'vBTC solo puede enviarse a una dirección VFX estándar (no a una dirección de privacidad).';
+
+  @override
+  String get r3hVbtcVaultRecipientInvalid => 'vBTC solo puede enviarse a una dirección VFX estándar (no a una cuenta Vault).';
+
+  @override
   String get r3hAddressToBan => 'Dirección a banear';
 
   @override

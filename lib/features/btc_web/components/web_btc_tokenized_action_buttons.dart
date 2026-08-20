@@ -460,6 +460,10 @@ class _TransferSharesModal extends BaseComponent {
             children: [
               TextFormField(
                 controller: toAddressController,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: forWithdrawl
+                    ? formValidatorBtcAddress
+                    : formValidatorVbtcRecipient,
                 decoration: InputDecoration(
                   label: Text(
                     forWithdrawl ? l10n.tkbToBtcAddress : l10n.tkbToVfxAddress,
@@ -506,8 +510,13 @@ class _TransferSharesModal extends BaseComponent {
                         : AppColorVariant.Btc,
                     onPressed: () {
                       final toAddress = toAddressController.text.trim();
-                      if (toAddress.isEmpty) {
-                        print("Invalid To Address");
+                      // Checked here rather than through the enclosing Form,
+                      // which has no key and is never validated.
+                      final addressError = forWithdrawl
+                          ? formValidatorBtcAddress(toAddress)
+                          : formValidatorVbtcRecipient(toAddress);
+                      if (addressError != null) {
+                        Toast.error(addressError);
                         return;
                       }
                       final amount = double.tryParse(amountControlller.text);
