@@ -197,6 +197,19 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       // HEAD failed — we can still download, just can't verify size
     }
 
+    // A legitimately empty file (e.g. a checkpointed LiteDB WAL) downloads as
+    // 0 bytes, which the retry loop below rejects as a failed transfer. Write
+    // it directly instead of downloading.
+    if (expectedSize == 0) {
+      final file = File(filePath);
+      if (await file.exists()) {
+        await file.delete();
+      }
+      await file.create();
+      print('[Snapshot] [$fileIndex/$fileCount] $filename — empty file per manifest, created directly');
+      return 0;
+    }
+
     for (int attempt = 1; attempt <= _maxRetries; attempt++) {
       if (attempt > 1) {
         await Future.delayed(_retryDelay);
