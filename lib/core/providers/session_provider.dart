@@ -559,10 +559,8 @@ class SessionProvider extends StateNotifier<SessionModel> {
     print('[Snapshot] stopCli: resetting state (preserving snapshotRequested=${state.snapshotRequested})');
     state = _initial.copyWith(windowsLauncherPath: state.windowsLauncherPath, snapshotRequested: state.snapshotRequested);
     print('[Snapshot] stopCli: sending killCli command...');
-    await BridgeService().killCli();
-    print('[Snapshot] stopCli: killCli sent, waiting 5 seconds for CLI to exit...');
-    await Future.delayed(const Duration(milliseconds: 5000));
-    print('[Snapshot] stopCli: 5 second wait complete');
+    final exited = await BridgeService().killCli();
+    print('[Snapshot] stopCli: CLI ${exited ? "exited" : "still answering after the exit timeout"}');
   }
 
   Future<void> restartCli() async {
