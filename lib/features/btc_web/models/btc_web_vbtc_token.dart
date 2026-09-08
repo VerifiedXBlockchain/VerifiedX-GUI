@@ -74,6 +74,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     @JsonKey(name: 'frost_group_public_key') String? frostGroupPublicKey,
     @JsonKey(name: 'required_threshold') int? requiredThreshold,
     @JsonKey(name: 'withdrawal_requests') List<Map<String, dynamic>>? withdrawalRequests,
+    @JsonKey(name: 'available_balances') Map<String, dynamic>? availableBalances,
   }) = _BtcWebVbtcToken;
 
   factory BtcWebVbtcToken.fromJson(Map<String, dynamic> json) => _$BtcWebVbtcTokenFromJson(json);
@@ -112,6 +113,21 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
   /// True when `address` has a withdrawal of its own still to finish.
   bool hasResumableWithdrawalFor(String? address) =>
       resumableWithdrawalRequestsFor(address).isNotEmpty;
+
+  /// Spendable vBTC for [address]: the explorer's `available_balances`
+  /// (gross ledger minus that address's open withdrawal requests) when the
+  /// API sends it, otherwise the gross figure. A multi-contract send sizes
+  /// its inputs from this so it does not spend into a pending withdrawal.
+  double availableBalanceForAddress(String? address) {
+    if (address == null) {
+      return 0.0;
+    }
+    final available = availableBalances;
+    if (available != null && available.containsKey(address)) {
+      return (available[address] as num).toDouble();
+    }
+    return balanceForAddress(address);
+  }
 
   double balanceForAddress(String? address) {
     if (address == null) {
