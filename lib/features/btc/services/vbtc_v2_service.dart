@@ -9,6 +9,7 @@ import '../../../core/services/base_service.dart';
 import '../../nft/models/nft.dart';
 import '../../nft/services/nft_service.dart';
 import '../models/tokenized_bitcoin.dart';
+import '../models/vbtc_multi_transfer_result.dart';
 import '../models/withdrawal_result.dart';
 
 const _tag = '[vBTC-V2]';
@@ -339,6 +340,57 @@ class VbtcV2Service extends BaseService {
       if (data['Success'] == true) {
         _log(method, 'Transfer succeeded — txHash: ${data['TransactionHash']}');
         return data['TransactionHash'];
+      }
+
+      _log(method, 'FAILED: ${data['Message']}');
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedTransferVbtc);
+      return null;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      Toast.error(e.toString());
+      return null;
+    }
+  }
+
+  /// Send [totalAmount] vBTC to [toAddress], drawing on every V2 contract
+  /// [fromAddress] holds a spendable balance on. The CLI picks the inputs
+  /// (largest balance first) and signs one transaction; the returned
+  /// allocations say which contracts were debited.
+  ///
+  /// Returns null after surfacing the CLI's message on failure. The CLI
+  /// rejects Vault (xRBX) senders and totals that would need more than 25
+  /// inputs, and only accepts the multi shape once the network has activated
+  /// it (testnet today).
+  Future<VbtcMultiTransferResult?> transferVbtcMulti({
+    required String fromAddress,
+    required String toAddress,
+    required double totalAmount,
+  }) async {
+    const method = 'TransferVBTCMulti';
+    final params = {
+      'FromAddress': fromAddress,
+      'ToAddress': toAddress,
+      'TotalAmount': totalAmount,
+    };
+
+    _log(method, 'REQUEST POST /TransferVBTCMulti', params);
+
+    try {
+      final response = await postJson(
+        "/TransferVBTCMulti",
+        params: params,
+        cleanPath: false,
+        inspect: true,
+      );
+
+      final Map<String, dynamic> data = response['data'];
+      _log(method, 'RESPONSE', data);
+
+      if (data['Success'] == true) {
+        final result = VbtcMultiTransferResult.fromJson(data);
+        _log(method,
+            'Multi transfer succeeded — txHash: ${result.transactionHash}, inputs: ${result.allocations.length}');
+        return result;
       }
 
       _log(method, 'FAILED: ${data['Message']}');

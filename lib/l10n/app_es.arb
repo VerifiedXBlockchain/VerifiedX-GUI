@@ -740,6 +740,10 @@
   "@btcBulkNoTokensSelected": {
     "description": "Toast when the user tries to continue without selecting any tokens."
   },
+  "btcBulkMaxDecimals": "El monto puede tener como máximo 8 decimales",
+  "@btcBulkMaxDecimals": {
+    "description": "Validation error for a multi-token vBTC transfer amount with more than 8 decimals."
+  },
   "btcBulkNoVfxSelectedToast": "No se seleccionó ninguna cuenta VFX",
   "@btcBulkNoVfxSelectedToast": {
     "description": "Toast shown when the user has not selected a VFX account."

@@ -522,6 +522,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get btcBulkNoTokensSelected => 'No se seleccionaron tokens.';
 
   @override
+  String get btcBulkMaxDecimals => 'El monto puede tener como máximo 8 decimales';
+
+  @override
   String get btcBulkNoVfxSelectedToast => 'No se seleccionó ninguna cuenta VFX';
 
   @override

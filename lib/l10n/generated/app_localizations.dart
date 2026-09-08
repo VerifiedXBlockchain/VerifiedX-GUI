@@ -1035,6 +1035,12 @@ abstract class AppLocalizations {
   /// **'No tokens selected.'**
   String get btcBulkNoTokensSelected;
 
+  /// Validation error for a multi-token vBTC transfer amount with more than 8 decimals.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount can have at most 8 decimal places'**
+  String get btcBulkMaxDecimals;
+
   /// Toast shown when the user has not selected a VFX account.
   ///
   /// In en, this message translates to:
