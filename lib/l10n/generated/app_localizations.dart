@@ -5679,10 +5679,10 @@ abstract class AppLocalizations {
   /// **'P2P Auctions'**
   String get navMenuP2PAuctions;
 
-  /// Side nav label for Butterfly payments.
+  /// Side nav label that launches Butterfly (BFLY).
   ///
   /// In en, this message translates to:
-  /// **'Pay /w Butterfly'**
+  /// **'Launch BFLY'**
   String get navMenuPayWithButterfly;
 
   /// Side-nav label for the receive screen.

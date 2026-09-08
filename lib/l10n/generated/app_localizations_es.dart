@@ -2994,7 +2994,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navMenuP2PAuctions => 'Subastas P2P';
 
   @override
-  String get navMenuPayWithButterfly => 'Pagar con Butterfly';
+  String get navMenuPayWithButterfly => 'Abrir BFLY';
 
   @override
   String get navMenuReceive => 'Recibir';

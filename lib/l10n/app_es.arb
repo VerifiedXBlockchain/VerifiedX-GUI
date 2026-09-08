@@ -2958,9 +2958,9 @@
   "@navMenuP2PAuctions": {
     "description": "Side-nav label for the P2P auctions section."
   },
-  "navMenuPayWithButterfly": "Pagar con Butterfly",
+  "navMenuPayWithButterfly": "Abrir BFLY",
   "@navMenuPayWithButterfly": {
-    "description": "Side nav label for Butterfly payments."
+    "description": "Side nav label that launches Butterfly (BFLY)."
   },
   "navMenuReceive": "Recibir",
   "@navMenuReceive": {
