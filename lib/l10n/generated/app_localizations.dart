@@ -1047,6 +1047,18 @@ abstract class AppLocalizations {
   /// **'Drawn from:'**
   String get btcBulkDrawnFrom;
 
+  /// Error when the wallet's tokens together cannot cover a multi-token vBTC transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Insufficient combined vBTC balance. Available: {available} vBTC, requested: {requested} vBTC.'**
+  String btcBulkInsufficientCombined(String available, String requested);
+
+  /// Error when a multi-token vBTC transfer would exceed the consensus cap on inputs.
+  ///
+  /// In en, this message translates to:
+  /// **'This amount would need more than {max} tokens in one transaction. Send a smaller amount.'**
+  String btcBulkTooManyInputs(String max);
+
   /// Toast shown when the user has not selected a VFX account.
   ///
   /// In en, this message translates to:

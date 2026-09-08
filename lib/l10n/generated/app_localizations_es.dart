@@ -526,6 +526,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get btcBulkDrawnFrom => 'Tomado de:';
 
   @override
+  String btcBulkInsufficientCombined(String available, String requested) {
+    return 'Saldo combinado de vBTC insuficiente. Disponible: $available vBTC, solicitado: $requested vBTC.';
+  }
+
+  @override
+  String btcBulkTooManyInputs(String max) {
+    return 'Este monto necesitaría más de $max tokens en una sola transacción. Envía un monto menor.';
+  }
+
+  @override
   String get btcBulkNoVfxSelectedToast => 'No se seleccionó ninguna cuenta VFX';
 
   @override

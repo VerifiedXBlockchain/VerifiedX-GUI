@@ -92,20 +92,24 @@ class TokenizeBtcListScreen extends BaseScreen {
                   ),
                 ],
               ),
-              // Desktop-only until Spyglass exposes multi-transfer endpoints
-              // for the web wallet. The flag itself is testnet-only until the
-              // network upgrade activates multi-contract transfers on mainnet.
-              if (BULK_VBTC_TRANSFER_ENABLED && !kIsWeb)
+              // Testnet-only until the network upgrade activates
+              // multi-contract transfers on mainnet.
+              if (BULK_VBTC_TRANSFER_ENABLED)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: AppButton(
                     label: AppLocalizations.of(context).btcBulkTransferLabel,
                     onPressed: () {
-                      final tokens = ref
-                          .read(tokenizedBitcoinListProvider)
-                          .where((t) => t.version >= 2 && t.myBalance > 0);
+                      final webAddress = ref.read(webSessionProvider).keypair?.address;
+                      final hasSpendable = kIsWeb
+                          ? ref
+                              .read(btcWebVbtcTokenListProvider)
+                              .any((t) => t.availableBalanceForAddress(webAddress) > 0)
+                          : ref
+                              .read(tokenizedBitcoinListProvider)
+                              .any((t) => t.version >= 2 && t.myBalance > 0);
 
-                      if (tokens.isEmpty) {
+                      if (!hasSpendable) {
                         Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
                         return;
                       }

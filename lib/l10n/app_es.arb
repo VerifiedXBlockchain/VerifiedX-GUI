@@ -743,6 +743,27 @@
   "@btcBulkDrawnFrom": {
     "description": "Heading above the per-token allocation list in the multi-token vBTC transfer success dialog."
   },
+  "btcBulkInsufficientCombined": "Saldo combinado de vBTC insuficiente. Disponible: {available} vBTC, solicitado: {requested} vBTC.",
+  "@btcBulkInsufficientCombined": {
+    "description": "Error when the wallet's tokens together cannot cover a multi-token vBTC transfer.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "requested": {
+        "type": "String"
+      }
+    }
+  },
+  "btcBulkTooManyInputs": "Este monto necesitaría más de {max} tokens en una sola transacción. Envía un monto menor.",
+  "@btcBulkTooManyInputs": {
+    "description": "Error when a multi-token vBTC transfer would exceed the consensus cap on inputs.",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "btcBulkNoVfxSelectedToast": "No se seleccionó ninguna cuenta VFX",
   "@btcBulkNoVfxSelectedToast": {
     "description": "Toast shown when the user has not selected a VFX account."

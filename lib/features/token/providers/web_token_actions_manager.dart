@@ -18,6 +18,8 @@ import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import '../../btc_web/utils/vbtc_multi_allocator.dart';
 import '../../btc_web/services/frost_resume_guard.dart';
 import '../../btc_web/services/vbtc_media_detection.dart';
 import '../../btc_web/services/pending_frost_signing_job_service.dart';
@@ -45,6 +47,7 @@ class WebTokenActionsManager {
     bool showConfirmation = true,
     bool showLoader = true,
     bool showToasts = true,
+    void Function(String hash)? onBroadcast,
   }) async {
     final keypair = keypairOverride ?? ref.read(webSessionProvider).keypair;
     if (keypair == null) {
@@ -100,6 +103,7 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
     }
     if (tx != null && tx['Result'] == 'Success') {
+      onBroadcast?.call(txData['Hash'].toString());
       if (showToasts) {
         Toast.message(globalL10n.bw2TransactionBroadcasted);
       }
@@ -440,6 +444,7 @@ class WebTokenActionsManager {
     required String toAddress,
     required String fromAddress,
     required double amount,
+    bool showConfirmation = true,
   }) async {
     ref.read(globalLoadingProvider.notifier).start();
 
@@ -458,14 +463,15 @@ class WebTokenActionsManager {
         return false;
       }
 
-      final confirmed = await ConfirmDialog.show(
-        title: globalL10n.bw2ConfirmTransfer,
-        body: globalL10n.bw2ConfirmTransferBody(amount.toString(), toAddress),
-        confirmText: globalL10n.btcTransferLabel,
-        cancelText: globalL10n.actionCancel,
-      );
-
-      if (confirmed != true) return null;
+      if (showConfirmation) {
+        final confirmed = await ConfirmDialog.show(
+          title: globalL10n.bw2ConfirmTransfer,
+          body: globalL10n.bw2ConfirmTransferBody(amount.toString(), toAddress),
+          confirmText: globalL10n.btcTransferLabel,
+          cancelText: globalL10n.actionCancel,
+        );
+        if (confirmed != true) return null;
+      }
 
       ref.read(globalLoadingProvider.notifier).start();
 
@@ -1112,6 +1118,88 @@ class WebTokenActionsManager {
       Toast.error(globalL10n.bw2CancellationFailedError(e.toString()));
       return false;
     }
+  }
+
+  /// Sends [totalAmount] vBTC to [toAddress] drawn from every V2 token the
+  /// primary keypair holds a spendable balance on. Inputs are chosen here
+  /// with the CLI's own allocation rule; a single covering token goes
+  /// through the ordinary transfer flow instead of the multi shape, which
+  /// also keeps the one-input case working before network activation.
+  /// Returns the inputs used on success, null on failure or cancel.
+  Future<List<VbtcAllocationInput>?> transferVbtcMulti({
+    required String toAddress,
+    required double totalAmount,
+    bool showConfirmation = true,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error(globalL10n.bw2NoKeypairToSign);
+      return null;
+    }
+    if (!verifyBalance()) {
+      return null;
+    }
+
+    final tokens = ref.read(btcWebVbtcTokenListProvider);
+    final balances = {
+      for (final token in tokens)
+        token.scIdentifier: token.availableBalanceForAddress(keypair.address),
+    };
+    final allocation = allocateVbtcInputs(balances, totalAmount);
+    if (!allocation.ok) {
+      Toast.error(allocation.failure == VbtcAllocationFailure.tooManyInputs
+          ? globalL10n.btcBulkTooManyInputs(VBTC_MULTI_MAX_INPUTS.toString())
+          : globalL10n.btcBulkInsufficientCombined(
+              allocation.available.toString(), totalAmount.toString()));
+      return null;
+    }
+
+    if (allocation.inputs.length == 1) {
+      final input = allocation.inputs.single;
+      final token =
+          tokens.firstWhere((t) => t.scIdentifier == input.scIdentifier);
+      final sent = await transferVbtcV2(
+        token: token,
+        toAddress: toAddress,
+        fromAddress: keypair.address,
+        amount: input.amount,
+        showConfirmation: showConfirmation,
+      );
+      return sent == true ? allocation.inputs : null;
+    }
+
+    final data = buildVbtcMultiTransferData(
+      fromAddress: keypair.address,
+      toAddress: toAddress,
+      totalAmount: totalAmount,
+      inputs: allocation.inputs,
+    );
+
+    String broadcastHash = '';
+    final sent = await _verifyConfirmAndSendTx(
+      toAddress: toAddress,
+      data: data,
+      txType: TxType.vbtcV2Transfer,
+      showConfirmation: showConfirmation,
+      onBroadcast: (hash) => broadcastHash = hash,
+    );
+    if (sent != true) {
+      return null;
+    }
+
+    ref.read(webTransactionListProvider(keypair.address).notifier).insertPendingTx(
+      WebTransaction(
+        hash: broadcastHash,
+        toAddress: toAddress,
+        fromAddress: keypair.address,
+        type: TxType.vbtcV2Transfer,
+        amount: 0,
+        fee: 0,
+        date: DateTime.now(),
+        height: 0,
+      ),
+    );
+    return allocation.inputs;
   }
 
   bool verifyBalance({bool isRa = false}) {

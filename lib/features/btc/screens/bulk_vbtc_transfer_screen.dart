@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rbx_wallet/core/app_constants.dart';
@@ -5,6 +6,7 @@ import 'package:rbx_wallet/core/base_screen.dart';
 import 'package:rbx_wallet/core/components/buttons.dart';
 import 'package:rbx_wallet/core/dialogs.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
+import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
 import 'package:rbx_wallet/features/btc/providers/tokenized_bitcoin_list_provider.dart';
@@ -15,17 +17,16 @@ import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
-import '../models/tokenized_bitcoin.dart';
-import '../models/vbtc_multi_transfer_result.dart';
+import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import '../../btc_web/utils/vbtc_multi_allocator.dart';
+import '../../token/providers/web_token_actions_manager.dart';
 import '../services/vbtc_v2_service.dart';
 import '../utils.dart';
 
 /// Sends one vBTC amount drawn from every V2 token the current wallet can
-/// spend from. The CLI allocates the inputs itself, so the user only picks a
-/// total and a recipient.
-///
-/// Desktop-only for now: the web wallet needs Spyglass multi-transfer
-/// endpoints before it can build this transaction.
+/// spend from. The user only picks a total and a recipient: on desktop the
+/// CLI allocates the inputs, on web the wallet allocates them itself and
+/// sends through the raw path.
 class BulkVbtcTransferScreen extends BaseStatefulScreen {
   const BulkVbtcTransferScreen({super.key})
       : super(horizontalPadding: 16, verticalPadding: 8);
@@ -47,21 +48,41 @@ class BulkVbtcTransferScreenState
     super.dispose();
   }
 
-  /// V2 tokens the current wallet holds a spendable balance on. `myBalance`
-  /// is the CLI's AvailableBalance, so anything locked in a pending
-  /// withdrawal is already excluded. Outflows still in the mempool are not;
-  /// the CLI reports those as an insufficient-balance error at send time.
-  List<TokenizedBitcoin> _spendableTokens() {
+  /// V2 tokens the current account holds a spendable balance on. Both
+  /// sources already net out amounts locked in a pending withdrawal (the
+  /// CLI's AvailableBalance, the explorer's available_balances). Outflows
+  /// still in the mempool are not; the node reports those as an
+  /// insufficient-balance error at send time.
+  List<_SpendableToken> _spendableTokens() {
+    if (kIsWeb) {
+      final address = ref.watch(webSessionProvider).keypair?.address;
+      // The web list holds one entry per (contract, loaded address), so a
+      // contract seen from both the primary and Vault address appears twice.
+      final byContract = <String, _SpendableToken>{};
+      for (final t in ref.watch(btcWebVbtcTokenListProvider)) {
+        byContract[t.scIdentifier] = _SpendableToken(
+          scIdentifier: t.scIdentifier,
+          name: t.name,
+          balance: t.availableBalanceForAddress(address),
+        );
+      }
+      return byContract.values.where((t) => t.balance > 0).toList();
+    }
     return ref
         .watch(tokenizedBitcoinListProvider)
         .where((t) => t.version >= 2 && t.myBalance > 0)
+        .map((t) => _SpendableToken(
+              scIdentifier: t.smartContractUid,
+              name: t.tokenName,
+              balance: t.myBalance,
+            ))
         .toList();
   }
 
   /// Summed then re-parsed at 8 decimals so the label and the MAX button
   /// never show floating-point noise.
-  double _available(List<TokenizedBitcoin> tokens) {
-    final sum = tokens.fold<double>(0.0, (total, t) => total + t.myBalance);
+  double _available(List<_SpendableToken> tokens) {
+    final sum = tokens.fold<double>(0.0, (total, t) => total + t.balance);
     return double.parse(sum.toStringAsFixed(8));
   }
 
@@ -186,26 +207,10 @@ class BulkVbtcTransferScreenState
     );
   }
 
-  Future<void> _send(BuildContext context, List<TokenizedBitcoin> tokens) async {
+  Future<void> _send(BuildContext context, List<_SpendableToken> tokens) async {
     final l10n = AppLocalizations.of(context);
 
     if (!formKey.currentState!.validate()) {
-      return;
-    }
-
-    final currentWallet = ref.read(sessionProvider).currentWallet;
-    if (currentWallet == null) {
-      Toast.error(l10n.btcBulkNoVfxSelectedToast);
-      return;
-    }
-    // The CLI rejects Vault senders too, but that message only arrives after
-    // the request round-trips; catching it here keeps the form responsive.
-    if (currentWallet.isReserved) {
-      Toast.error(l10n.btcBulkReserveSenderInvalid);
-      return;
-    }
-    if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
-      Toast.error(l10n.r3fInsufficientVfxBalance);
       return;
     }
 
@@ -222,6 +227,74 @@ class BulkVbtcTransferScreenState
       return;
     }
 
+    final inputs = kIsWeb
+        ? await _sendWeb(l10n, amount, toAddress)
+        : await _sendDesktop(l10n, amount, toAddress);
+    if (inputs == null || !mounted) {
+      return;
+    }
+
+    await InfoDialog.show(
+      title: l10n.btcBulkSuccessTitle,
+      body: _allocationSummary(l10n, amount, inputs, tokens, toAddress),
+      buttonColorOverride: Theme.of(context).colorScheme.btcOrange,
+    );
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  /// Web: the wallet allocates and signs; the manager sends through the raw
+  /// path and surfaces its own broadcast toast.
+  Future<List<VbtcAllocationInput>?> _sendWeb(
+    AppLocalizations l10n,
+    double amount,
+    String toAddress,
+  ) async {
+    final session = ref.read(webSessionProvider);
+    final keypair = session.keypair;
+    if (keypair == null) {
+      Toast.error(l10n.btcBulkNoVfxSelectedToast);
+      return null;
+    }
+
+    final inputs = await ref.read(webTokenActionsManager).transferVbtcMulti(
+          toAddress: toAddress,
+          totalAmount: amount,
+          showConfirmation: false,
+        );
+    if (inputs == null) {
+      return null;
+    }
+
+    ref
+        .read(btcWebVbtcTokenListProvider.notifier)
+        .reload(keypair.address, raAddress: session.raKeypair?.address);
+    return inputs;
+  }
+
+  /// Desktop: the CLI allocates, signs and broadcasts in one call.
+  Future<List<VbtcAllocationInput>?> _sendDesktop(
+    AppLocalizations l10n,
+    double amount,
+    String toAddress,
+  ) async {
+    final currentWallet = ref.read(sessionProvider).currentWallet;
+    if (currentWallet == null) {
+      Toast.error(l10n.btcBulkNoVfxSelectedToast);
+      return null;
+    }
+    // The CLI rejects Vault senders too, but that message only arrives after
+    // the request round-trips; catching it here keeps the form responsive.
+    if (currentWallet.isReserved) {
+      Toast.error(l10n.btcBulkReserveSenderInvalid);
+      return null;
+    }
+    if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
+      Toast.error(l10n.r3fInsufficientVfxBalance);
+      return null;
+    }
+
     ref.read(globalLoadingProvider.notifier).start();
     final result = await VbtcV2Service().transferVbtcMulti(
       fromAddress: currentWallet.address,
@@ -231,7 +304,7 @@ class BulkVbtcTransferScreenState
     ref.read(globalLoadingProvider.notifier).complete();
 
     if (result == null) {
-      return;
+      return null;
     }
 
     final message = l10n.tkbVbtcTransferBroadcasted(result.transactionHash);
@@ -246,39 +319,46 @@ class BulkVbtcTransferScreenState
     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
     Toast.message(l10n.r3fBulkSentToast(amount.toString(), toAddress));
 
-    if (!mounted) {
-      return;
-    }
-    await InfoDialog.show(
-      title: l10n.btcBulkSuccessTitle,
-      body: _allocationSummary(l10n, result, tokens, toAddress),
-      buttonColorOverride: Theme.of(context).colorScheme.btcOrange,
-    );
-    if (mounted) {
-      Navigator.of(context).pop();
-    }
+    return result.allocations
+        .map((a) => VbtcAllocationInput(
+              scIdentifier: a.smartContractUid,
+              amount: a.amount,
+            ))
+        .toList();
   }
 
-  /// The CLI picked the inputs, so this is the user's only view of which
-  /// tokens were debited. Falls back to the contract id for any allocation
+  /// The inputs were chosen for the user, so this is their only view of
+  /// which tokens were debited. Falls back to the contract id for any input
   /// the local token list does not know by name.
   String _allocationSummary(
     AppLocalizations l10n,
-    VbtcMultiTransferResult result,
-    List<TokenizedBitcoin> tokens,
+    double amount,
+    List<VbtcAllocationInput> inputs,
+    List<_SpendableToken> tokens,
     String toAddress,
   ) {
-    final lines = result.allocations.map((allocation) {
-      final token = tokens
-          .where((t) => t.smartContractUid == allocation.smartContractUid)
-          .toList();
-      final name = token.isEmpty
-          ? allocation.smartContractUid
-          : token.first.tokenName;
-      return "• $name: ${allocation.amount} vBTC";
+    final lines = inputs.map((input) {
+      final matches =
+          tokens.where((t) => t.scIdentifier == input.scIdentifier).toList();
+      final name = matches.isEmpty ? input.scIdentifier : matches.first.name;
+      return "• $name: ${input.amount} vBTC";
     });
 
-    return "${l10n.r3fBulkSentToast(result.totalAmount.toString(), toAddress)}"
+    return "${l10n.r3fBulkSentToast(amount.toString(), toAddress)}"
         "\n\n${l10n.btcBulkDrawnFrom}\n${lines.join('\n')}";
   }
+}
+
+/// A token the current account can draw from, in whichever shape the
+/// platform's token list provides.
+class _SpendableToken {
+  final String scIdentifier;
+  final String name;
+  final double balance;
+
+  const _SpendableToken({
+    required this.scIdentifier,
+    required this.name,
+    required this.balance,
+  });
 }

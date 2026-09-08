@@ -256,6 +256,13 @@ class WebTransaction with _$WebTransaction {
       case 25:
         return l10n.r3cTypeVbtcContractMint;
       case 26:
+        if (nftDataValue('Function') == "TransferVBTCMultiV2()") {
+          final total = nftDataValue('TotalAmount');
+          if (total != null) {
+            return "${l10n.r3cTypeVbtcBulkTransfer} ($total vBTC)";
+          }
+          return l10n.r3cTypeVbtcBulkTransfer;
+        }
         return l10n.r3cTypeVbtcTransfer;
       case 27:
         return l10n.r3cTypeVbtcWithdrawalRequest;
