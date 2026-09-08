@@ -12,10 +12,10 @@ Let a web wallet user send one vBTC amount to one recipient, drawn automatically
 
 ## 2. Where things stand
 
-- Core CLI: consensus for `TransferVBTCMultiV2()` is complete and active on testnet from height 1. Nothing further is needed from the CLI for the web path.
-- Desktop GUI: done. The screen calls the keyed endpoint `POST /vbtcapi/VBTC/TransferVBTCMulti` and is gated to testnet and desktop.
-- Spyglass: the V2 indexer only recognizes `TransferVBTCV2()`, so every multi transfer that lands on chain today leaves Spyglass's vBTC ledger wrong for both parties. Required before the web wallet ships, and worth doing now since desktop wallets can already broadcast multi transfers on testnet. No new endpoints.
-- Web wallet: can be built now against the existing raw path; see section 4.
+- Core CLI: consensus for `TransferVBTCMultiV2()` is complete and active on testnet from height 1. Nothing is needed from the CLI for the web path.
+- Desktop GUI: done. The screen calls the keyed endpoint `POST /vbtcapi/VBTC/TransferVBTCMulti` and is gated to testnet.
+- Spyglass: done on `testnet` (2026-09-08): the indexer handles `TransferVBTCMultiV2()` per input, transfers carry `is_multi`, and the token list exposes `available_balances` net of open withdrawal requests inside the CLI's 360-block expiry window.
+- Web wallet: built per section 4 (GUI `testnet`, 2026-09-08). Same screen as desktop; the wallet allocates client-side and sends through the raw path. Awaiting a testnet run.
 
 ## 3. Design
 
