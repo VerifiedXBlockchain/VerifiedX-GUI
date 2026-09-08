@@ -2205,6 +2205,18 @@
   "hnavRequestTimedOut": "Request timed out",
   "hnavReserveAccountsNotExported": "Please note that Reserve/Protected Accounts will not be exported.",
   "hnavRestoreHiddenBracket": "[Restore Hidden]",
+  "chainRebuildBannerTitle": "Rebuilding chain state",
+  "@chainRebuildBannerTitle": {
+    "description": "Title of the banner shown while VFXCore rebuilds its chain state (IsResyncing)."
+  },
+  "chainRebuildBannerBody": "VFXCore is re-verifying its copy of the ledger. Balances show as zero until it finishes, which can take several minutes. Keep the wallet open.",
+  "@chainRebuildBannerBody": {
+    "description": "Body of the banner shown while VFXCore rebuilds its chain state."
+  },
+  "chainRebuildBalancePlaceholder": "Rebuilding…",
+  "@chainRebuildBalancePlaceholder": {
+    "description": "Shown in place of the VFX balance while VFXCore rebuilds its chain state."
+  },
   "hnavResyncing": "Resyncing...",
   "hnavRevealPrivateKeysPasswordMessage": "Enter your password to reveal private keys.",
   "hnavRevealVaultKeysPasswordMessage": "Enter your password to reveal Vault account private keys.",

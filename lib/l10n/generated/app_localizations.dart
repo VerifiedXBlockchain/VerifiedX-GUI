@@ -4221,6 +4221,24 @@ abstract class AppLocalizations {
   /// **'[Restore Hidden]'**
   String get hnavRestoreHiddenBracket;
 
+  /// Title of the banner shown while VFXCore rebuilds its chain state (IsResyncing).
+  ///
+  /// In en, this message translates to:
+  /// **'Rebuilding chain state'**
+  String get chainRebuildBannerTitle;
+
+  /// Body of the banner shown while VFXCore rebuilds its chain state.
+  ///
+  /// In en, this message translates to:
+  /// **'VFXCore is re-verifying its copy of the ledger. Balances show as zero until it finishes, which can take several minutes. Keep the wallet open.'**
+  String get chainRebuildBannerBody;
+
+  /// Shown in place of the VFX balance while VFXCore rebuilds its chain state.
+  ///
+  /// In en, this message translates to:
+  /// **'Rebuilding…'**
+  String get chainRebuildBalancePlaceholder;
+
   /// No description provided for @hnavResyncing.
   ///
   /// In en, this message translates to:

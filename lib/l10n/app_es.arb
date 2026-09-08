@@ -2193,6 +2193,18 @@
   "hnavRequestTimedOut": "La solicitud expiró",
   "hnavReserveAccountsNotExported": "Ten en cuenta que las cuentas de reserva/protegidas no se exportarán.",
   "hnavRestoreHiddenBracket": "[Restaurar ocultas]",
+  "chainRebuildBannerTitle": "Reconstruyendo el estado de la cadena",
+  "@chainRebuildBannerTitle": {
+    "description": "Title of the banner shown while VFXCore rebuilds its chain state (IsResyncing)."
+  },
+  "chainRebuildBannerBody": "VFXCore está verificando de nuevo su copia del libro mayor. Los saldos se muestran en cero hasta que termine, lo que puede tardar varios minutos. Mantén la billetera abierta.",
+  "@chainRebuildBannerBody": {
+    "description": "Body of the banner shown while VFXCore rebuilds its chain state."
+  },
+  "chainRebuildBalancePlaceholder": "Reconstruyendo…",
+  "@chainRebuildBalancePlaceholder": {
+    "description": "Shown in place of the VFX balance while VFXCore rebuilds its chain state."
+  },
   "hnavResyncing": "Resincronizando...",
   "hnavRevealPrivateKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas.",
   "hnavRevealVaultKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas de la cuenta de bóveda.",

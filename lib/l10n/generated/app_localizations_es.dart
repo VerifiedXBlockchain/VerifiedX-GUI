@@ -2217,6 +2217,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hnavRestoreHiddenBracket => '[Restaurar ocultas]';
 
   @override
+  String get chainRebuildBannerTitle => 'Reconstruyendo el estado de la cadena';
+
+  @override
+  String get chainRebuildBannerBody => 'VFXCore está verificando de nuevo su copia del libro mayor. Los saldos se muestran en cero hasta que termine, lo que puede tardar varios minutos. Mantén la billetera abierta.';
+
+  @override
+  String get chainRebuildBalancePlaceholder => 'Reconstruyendo…';
+
+  @override
   String get hnavResyncing => 'Resincronizando...';
 
   @override

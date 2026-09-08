@@ -25,6 +25,8 @@ const REFRESH_TIMEOUT_SECONDS = 30;
 const REFRESH_TIMEOUT_SECONDS_WEB_BTC = 90;
 const REFRESH_TIMEOUT_SECONDS_INACTIVE = 300;
 const REFRESH_TIMEOUT_SECONDS_BTC = 30;
+// Wallet-info poll interval while VFXCore reports a chain-state rebuild.
+const REBUILD_POLL_SECONDS = 5;
 const IDLE_TIMEOUT_MINUTES = 10;
 const ALLOW_DOUBLE_MINTES = false;
 const MIN_RBX_FOR_SC_ACTION = 0.001;

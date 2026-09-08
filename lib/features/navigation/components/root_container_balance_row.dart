@@ -44,6 +44,9 @@ class RootContainerBalanceRow extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final vfxBalance = ref.watch(sessionProvider.select((v) => v.totalBalance));
+    // During a chain-state rebuild the CLI reports real wallets with zero
+    // balances, so a number here would be wrong rather than merely stale.
+    final isRebuilding = ref.watch(sessionProvider.select((v) => v.blocksAreResyncing));
     final btcBalance = ref.watch(btcBalanceProvider);
 
     final allVfxWallets = ref.watch(walletListProvider);
@@ -102,7 +105,11 @@ class RootContainerBalanceRow extends BaseComponent {
                     height: 32,
                   ),
                   forceExpand: forceExpand,
-                  heading: vfxBalance != null ? "$vfxBalance VFX" : "0.0 VFX",
+                  heading: isRebuilding
+                      ? l10n.chainRebuildBalancePlaceholder
+                      : vfxBalance != null
+                          ? "$vfxBalance VFX"
+                          : l10n.statusLoading,
                   headingColor: AppColors.getBlue(),
                   accountCount: raWallets.isNotEmpty && vfxWallets.isNotEmpty
                       ? "${vfxWallets.length == 1 ? l10n.navAddressSingular('${vfxWallets.length}') : l10n.navAddressPlural('${vfxWallets.length}')}   ${raWallets.length == 1 ? l10n.navVaultAddressSingular('${raWallets.length}') : l10n.navVaultAddressPlural('${raWallets.length}')}"

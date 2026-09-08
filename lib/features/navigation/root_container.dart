@@ -22,6 +22,7 @@ import '../../core/components/currency_segmented_button.dart';
 import '../block/latest_block.dart';
 import '../misc/providers/global_balances_expanded_provider.dart';
 import '../validator/screens/validator_screen.dart';
+import 'components/chain_rebuild_banner.dart';
 import 'components/root_container_balance_row.dart';
 import 'components/root_container_rotating_cube.dart';
 import 'components/root_container_side_nav.dart';
@@ -314,6 +315,7 @@ class _LayoutState extends State<_Layout> {
                           Container(
                             height: 57,
                           ),
+                          const ChainRebuildBanner(),
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(),
