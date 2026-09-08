@@ -2978,9 +2978,9 @@
   "@navMenuSmartContracts": {
     "description": "Side-nav label for the smart contracts section."
   },
-  "navMenuTokenizeBitcoin": "Tokenizar Bitcoin",
+  "navMenuTokenizeBitcoin": "Tokens vBTC",
   "@navMenuTokenizeBitcoin": {
-    "description": "Side-nav label for the tokenize-Bitcoin (vBTC) section."
+    "description": "Side-nav label for the vBTC tokens section."
   },
   "navMenuTransactions": "Transacciones",
   "@navMenuTransactions": {

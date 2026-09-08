@@ -3009,7 +3009,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navMenuSmartContracts => 'Contratos inteligentes';
 
   @override
-  String get navMenuTokenizeBitcoin => 'Tokenizar Bitcoin';
+  String get navMenuTokenizeBitcoin => 'Tokens vBTC';
 
   @override
   String get navMenuTransactions => 'Transacciones';

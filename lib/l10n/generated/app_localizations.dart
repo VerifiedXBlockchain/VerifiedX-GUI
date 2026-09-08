@@ -5709,10 +5709,10 @@ abstract class AppLocalizations {
   /// **'Smart Contracts'**
   String get navMenuSmartContracts;
 
-  /// Side-nav label for the tokenize-Bitcoin (vBTC) section.
+  /// Side-nav label for the vBTC tokens section.
   ///
   /// In en, this message translates to:
-  /// **'Tokenize Bitcoin'**
+  /// **'vBTC Tokens'**
   String get navMenuTokenizeBitcoin;
 
   /// Side-nav label for the transactions screen.

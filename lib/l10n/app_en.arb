@@ -2990,9 +2990,9 @@
   "@navMenuSmartContracts": {
     "description": "Side-nav label for the smart contracts section."
   },
-  "navMenuTokenizeBitcoin": "Tokenize Bitcoin",
+  "navMenuTokenizeBitcoin": "vBTC Tokens",
   "@navMenuTokenizeBitcoin": {
-    "description": "Side-nav label for the tokenize-Bitcoin (vBTC) section."
+    "description": "Side-nav label for the vBTC tokens section."
   },
   "navMenuTransactions": "Transactions",
   "@navMenuTransactions": {
