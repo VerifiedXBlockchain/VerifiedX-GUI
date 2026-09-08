@@ -504,7 +504,9 @@ class AccountUtils {
                   height: 12,
                 ),
               ],
-              if (ALLOW_BIDS_WITHOUT_BALANCE || type == VfxOrBtcOption.btc) ...[
+              if (CRYPTO_DOT_COM_ENABLED &&
+                  (ALLOW_BIDS_WITHOUT_BALANCE ||
+                      type == VfxOrBtcOption.btc)) ...[
                 AppCard(
                   padding: 0,
                   child: ListTile(

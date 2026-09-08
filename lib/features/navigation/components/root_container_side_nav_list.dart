@@ -133,25 +133,26 @@ class RootContainerSideNavList extends BaseComponent {
               isActive: false,
               isExpanded: isExpanded,
             ),
-          RootContainerSideNavItem(
-            title: l10n.navMenuCryptoCom,
-            iconType: PrettyIconType.custom,
-            customIconWidget: Image.asset(
-              "assets/images/crypto_dot_com_icon.png",
-              width: 16,
-              height: 16,
-              fit: BoxFit.contain,
-            ),
-            onPressed: () {
-              AccountUtils.showCryptoDotComOnrampFlow(context, ref);
+          if (CRYPTO_DOT_COM_ENABLED)
+            RootContainerSideNavItem(
+              title: l10n.navMenuCryptoCom,
+              iconType: PrettyIconType.custom,
+              customIconWidget: Image.asset(
+                "assets/images/crypto_dot_com_icon.png",
+                width: 16,
+                height: 16,
+                fit: BoxFit.contain,
+              ),
+              onPressed: () {
+                AccountUtils.showCryptoDotComOnrampFlow(context, ref);
 
-              if (inDrawer) {
-                rootScaffoldKey.currentState!.closeDrawer();
-              }
-            },
-            isActive: tabsRouter.activeIndex == 2,
-            isExpanded: isExpanded,
-          ),
+                if (inDrawer) {
+                  rootScaffoldKey.currentState!.closeDrawer();
+                }
+              },
+              isActive: tabsRouter.activeIndex == 2,
+              isExpanded: isExpanded,
+            ),
           RootContainerSideNavItem(
             title: l10n.navTransactions,
             iconType: PrettyIconType.transactions,

@@ -10,6 +10,8 @@ const APP_VERSION_NICKNAME = "Switchblade";
 
 const ALLOW_PAYMENT = true;
 const BUTTERFLY_ENABLED = true;
+// Crypto.com on-ramp is hidden for now: side-nav link and Get VFX/BTC gateway option.
+const CRYPTO_DOT_COM_ENABLED = false;
 const VALIDATOR_NAV_ENABLED = false;
 const BULK_VBTC_TRANSFER_ENABLED = false;
 // Shielded vBTC is disabled in the CLI; VFX private txs remain supported.
