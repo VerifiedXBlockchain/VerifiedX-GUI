@@ -244,6 +244,13 @@ class Transaction with _$Transaction {
       case 26:
         final data = parseNftData(this);
         if (data != null) {
+          if (nftDataValue(data, 'Function') == "TransferVBTCMultiV2()") {
+            final totalAmount = nftDataValue(data, 'TotalAmount');
+            if (totalAmount != null) {
+              return "${l10n.r3cTypeVbtcBulkTransfer} ($totalAmount vBTC)";
+            }
+            return l10n.r3cTypeVbtcBulkTransfer;
+          }
           final amount = nftDataValue(data, 'Amount');
           if (amount != null) {
             return "${l10n.r3cTypeVbtcTransfer} ($amount vBTC)";
