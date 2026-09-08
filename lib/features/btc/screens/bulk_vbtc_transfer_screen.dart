@@ -1,39 +1,72 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/core/app_constants.dart';
 import 'package:rbx_wallet/core/base_screen.dart';
 import 'package:rbx_wallet/core/components/buttons.dart';
 import 'package:rbx_wallet/core/dialogs.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
-import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
 import 'package:rbx_wallet/features/btc/providers/tokenized_bitcoin_list_provider.dart';
-import 'package:collection/collection.dart';
-import 'package:rbx_wallet/features/btc/screens/tokenized_btc_detail_screen.dart';
-import 'package:rbx_wallet/features/smart_contracts/components/sc_creator/common/modal_container.dart';
 import 'package:rbx_wallet/utils/toast.dart';
-import '../../../core/base_component.dart';
-import '../../../generated/assets.gen.dart';
+import '../../../core/utils/tx_refresh.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
-import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
-import '../../token/providers/web_token_actions_manager.dart';
-import '../providers/bulk_vbtc_transfer_provider.dart';
-import '../services/btc_service.dart';
-import '../../../core/utils/tx_refresh.dart';
+import '../models/tokenized_bitcoin.dart';
+import '../models/vbtc_multi_transfer_result.dart';
+import '../services/vbtc_v2_service.dart';
+import '../utils.dart';
 
-class BulkVbtcTransferScreen extends BaseScreen {
-  const BulkVbtcTransferScreen({super.key});
+/// Sends one vBTC amount drawn from every V2 token the current wallet can
+/// spend from. The CLI allocates the inputs itself, so the user only picks a
+/// total and a recipient.
+///
+/// Desktop-only for now: the web wallet needs Spyglass multi-transfer
+/// endpoints before it can build this transaction.
+class BulkVbtcTransferScreen extends BaseStatefulScreen {
+  const BulkVbtcTransferScreen({super.key})
+      : super(horizontalPadding: 16, verticalPadding: 8);
 
   @override
-  AppBar? appBar(BuildContext context, WidgetRef ref) {
+  BulkVbtcTransferScreenState createState() => BulkVbtcTransferScreenState();
+}
+
+class BulkVbtcTransferScreenState
+    extends BaseScreenState<BulkVbtcTransferScreen> {
+  final formKey = GlobalKey<FormState>();
+  final amountController = TextEditingController();
+  final addressController = TextEditingController();
+
+  @override
+  void dispose() {
+    amountController.dispose();
+    addressController.dispose();
+    super.dispose();
+  }
+
+  /// V2 tokens the current wallet holds a spendable balance on. `myBalance`
+  /// is the CLI's AvailableBalance, so anything locked in a pending
+  /// withdrawal is already excluded. Outflows still in the mempool are not;
+  /// the CLI reports those as an insufficient-balance error at send time.
+  List<TokenizedBitcoin> _spendableTokens() {
+    return ref
+        .watch(tokenizedBitcoinListProvider)
+        .where((t) => t.version >= 2 && t.myBalance > 0)
+        .toList();
+  }
+
+  /// Summed then re-parsed at 8 decimals so the label and the MAX button
+  /// never show floating-point noise.
+  double _available(List<TokenizedBitcoin> tokens) {
+    final sum = tokens.fold<double>(0.0, (total, t) => total + t.myBalance);
+    return double.parse(sum.toStringAsFixed(8));
+  }
+
+  @override
+  AppBar? appBar(BuildContext context) {
     return AppBar(
       title: Text(AppLocalizations.of(context).btcBulkTransferTitle),
       backgroundColor: Colors.black,
@@ -42,577 +75,210 @@ class BulkVbtcTransferScreen extends BaseScreen {
   }
 
   @override
-  Widget body(BuildContext context, WidgetRef ref) {
-    //
+  Widget body(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final tokens = _spendableTokens();
+    final available = _available(tokens);
 
-    final provider = ref.read(bulkVbtcTransferProvider.notifier);
-    final inputs = ref.watch(bulkVbtcTransferProvider);
-
-    final maximumAmount =
-        inputs.fold<double>(0.0, (prev, item) => prev + item.amount);
-
-    return Column(
-      children: [
-        Text(
-          AppLocalizations.of(context).r3fSelectTokensToTransfer,
-          style: TextStyle(
-            fontSize: 16,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            l10n.btcBulkIntro,
+            style: TextStyle(fontSize: 16),
           ),
-        ),
-        kIsWeb
-            ? Expanded(
-                child: Consumer(builder: (context, ref, _) {
-                  final webTokens = ref
-                      .watch(btcWebVbtcTokenListProvider)
-                      .where((element) => element.globalBalance > 0)
-                      .toList();
-                  return ListView.builder(
-                      itemCount: webTokens.length,
-                      itemBuilder: (context, index) {
-                        final token = webTokens[index];
-
-                        final isSelected = inputs.firstWhereOrNull(
-                                (input) => input.scId == token.scIdentifier) !=
-                            null;
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: AppCard(
-                            padding: 0,
-                            child: ListTile(
-                              leading: SizedBox(
-                                width: 48,
-                                height: 48,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(24)),
-                                      clipBehavior: Clip.antiAlias,
-                                      child: CachedNetworkImage(
-                                        imageUrl: token.imageUrl,
-                                        height: 48,
-                                        width: 48,
-                                        errorWidget: (context, _, __) {
-                                          return Image.asset(
-                                            Assets.images.vbtcPng.path,
-                                            width: 48,
-                                            height: 48,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration:
-                                            BoxDecoration(color: Colors.black),
-                                        child: Checkbox(
-                                          value: isSelected,
-                                          fillColor: MaterialStateProperty
-                                              .resolveWith<Color>(
-                                                  (Set<MaterialState> states) {
-                                            if (states.contains(
-                                                MaterialState.selected)) {
-                                              return Theme.of(context)
-                                                  .colorScheme
-                                                  .btcOrange;
-                                            }
-                                            return Colors.white;
-                                          }),
-                                          onChanged: (value) {
-                                            if (!isSelected) {
-                                              provider.add(
-                                                  scId: token.scIdentifier,
-                                                  amount: token.globalBalance,
-                                                  ownerAddress:
-                                                      token.ownerAddress);
-                                            } else {
-                                              provider
-                                                  .remove(token.scIdentifier);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              title: Text(token.name),
-                              subtitle: Text(token.ownerAddress),
-                              trailing: Text(
-                                "${token.globalBalance} vBTC",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .btcOrange),
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                }),
-              )
-            : Expanded(
-                child: Consumer(builder: (context, ref, _) {
-                  final tokens = ref
-                      .watch(tokenizedBitcoinListProvider)
-                      .where((element) => element.balance > 0)
-                      .toList();
-                  return ListView.builder(
-                      itemCount: tokens.length,
-                      itemBuilder: (context, index) {
-                        final token = tokens[index];
-
-                        final isSelected = inputs.firstWhereOrNull((input) =>
-                                input.scId == token.smartContractUid) !=
-                            null;
-
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: AppCard(
-                            padding: 0,
-                            child: ListTile(
-                              leading: SizedBox(
-                                width: 48,
-                                height: 48,
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(50)),
-                                      clipBehavior: Clip.antiAlias,
-                                      child: BtcTokenImage(
-                                        nftId: token.smartContractUid,
-                                        size: 48,
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        decoration:
-                                            BoxDecoration(color: Colors.black),
-                                        child: Checkbox(
-                                          value: isSelected,
-                                          fillColor: MaterialStateProperty
-                                              .resolveWith<Color>(
-                                                  (Set<MaterialState> states) {
-                                            if (states.contains(
-                                                MaterialState.selected)) {
-                                              return Theme.of(context)
-                                                  .colorScheme
-                                                  .btcOrange;
-                                            }
-                                            return Colors.white;
-                                          }),
-                                          onChanged: (value) {
-                                            if (!isSelected) {
-                                              provider.add(
-                                                  scId: token.smartContractUid,
-                                                  amount: token.myBalance,
-                                                  ownerAddress:
-                                                      token.rbxAddress);
-                                            } else {
-                                              provider.remove(
-                                                  token.smartContractUid);
-                                            }
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              title: Text(token.tokenName),
-                              subtitle: Text(token.rbxAddress),
-                              trailing: Text(
-                                "${token.myBalance} vBTC",
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .btcOrange),
-                              ),
-                            ),
-                          ),
-                        );
-                      });
-                }),
-              ),
-        AppCard(
-          fullWidth: true,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(AppLocalizations.of(context).btcBulkMaxTransferAmount),
-                  Text(
-                    "$maximumAmount vBTC",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).colorScheme.btcOrange,
-                      fontSize: 20,
-                    ),
+          SizedBox(height: 16),
+          AppCard(
+            fullWidth: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(l10n.btcBulkAvailableTotal),
+                Text(
+                  "$available vBTC",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.btcOrange,
+                    fontSize: 20,
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 16),
+          Form(
+            key: formKey,
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: amountController,
+                        validator: (value) =>
+                            formValidatorVbtcMultiAmount(value, available),
+                        decoration: InputDecoration(
+                          label: Text(l10n.btcBulkAmountLabel),
+                          hintText: l10n.btcBulkAmountHint,
+                          suffixText: "vBTC",
+                        ),
+                        keyboardType: const TextInputType.numberWithOptions(
+                            decimal: true),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12.0),
+                      child: AppButton(
+                        label: l10n.r3fMaxLabel(available.toString()),
+                        type: AppButtonType.Text,
+                        underlined: true,
+                        onPressed: () {
+                          amountController.text = available.toString();
+                        },
+                        variant: AppColorVariant.Btc,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                TextFormField(
+                  controller: addressController,
+                  validator: formValidatorVbtcRecipient,
+                  decoration: InputDecoration(
+                    label: Text(l10n.btcBulkTransferToLabel),
+                    hintText: l10n.btcBulkTransferToHint,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
               AppButton(
-                label: AppLocalizations.of(context).btcBulkContinue,
+                label: l10n.actionCancel,
                 onPressed: () {
-                  if (inputs.isEmpty) {
-                    Toast.message(AppLocalizations.of(context).btcBulkNoTokensSelected);
-                    return;
-                  }
-
-                  if (inputs.length < 2) {
-                    Toast.message(
-                        AppLocalizations.of(context).r3fBulkMinTwoTokens);
-                    return;
-                  }
-                  provider.setAllToZero();
-
-                  showModalBottomSheet(
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (context) {
-                        return _ConfirmBottomSheet();
-                      });
+                  Navigator.of(context).pop();
                 },
+                variant: AppColorVariant.Light,
+                type: AppButtonType.Text,
+              ),
+              SizedBox(width: 8),
+              AppButton(
+                label: l10n.actionSend,
+                onPressed: () => _send(context, tokens),
                 variant: AppColorVariant.Btc,
-              )
+              ),
             ],
           ),
-        ),
-        SizedBox(
-          height: 32,
-        )
-      ],
+        ],
+      ),
     );
   }
-}
 
-class _ConfirmBottomSheet extends BaseComponent {
-  const _ConfirmBottomSheet({super.key});
+  Future<void> _send(BuildContext context, List<TokenizedBitcoin> tokens) async {
+    final l10n = AppLocalizations.of(context);
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final provider = ref.read(bulkVbtcTransferProvider.notifier);
-    final inputs = ref.watch(bulkVbtcTransferProvider);
+    if (!formKey.currentState!.validate()) {
+      return;
+    }
 
-    final totalAmount =
-        inputs.fold<double>(0.0, (prev, item) => prev + item.amount);
+    final currentWallet = ref.read(sessionProvider).currentWallet;
+    if (currentWallet == null) {
+      Toast.error(l10n.btcBulkNoVfxSelectedToast);
+      return;
+    }
+    // The CLI rejects Vault senders too, but that message only arrives after
+    // the request round-trips; catching it here keeps the form responsive.
+    if (currentWallet.isReserved) {
+      Toast.error(l10n.btcBulkReserveSenderInvalid);
+      return;
+    }
+    if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
+      Toast.error(l10n.r3fInsufficientVfxBalance);
+      return;
+    }
 
-    final inputScIds = inputs.map((e) => e.scId).toList();
-    final tokens = ref
-        .watch(tokenizedBitcoinListProvider)
-        .where((element) => inputScIds.contains(element.smartContractUid))
-        .toList();
-    final webTokens = ref
-        .watch(btcWebVbtcTokenListProvider)
-        .where((element) => inputScIds.contains(element.scIdentifier))
-        .toList();
+    final amount = double.parse(amountController.text.trim());
+    final toAddress = addressController.text.trim();
 
-    return ModalContainer(
-      children: [
-        Text(
-          AppLocalizations.of(context).r3fInputAmountsPerToken,
-          style: TextStyle(fontSize: 18),
-        ),
-        SizedBox(
-          height: 8,
-        ),
-        Form(
-          key: provider.formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (kIsWeb)
-                ...webTokens.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final token = entry.value;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: AppCard(
-                      padding: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: ListTile(
-                          title: Text(token.name),
-                          subtitle: Text(token.ownerAddress),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: TextFormField(
-                                  controller: provider.controllers[index],
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return AppLocalizations.of(context).svcAmountRequired;
-                                    }
-                                    final d = double.tryParse(value);
-                                    if (d == null) {
-                                      return AppLocalizations.of(context).btcInvalidAmountToast;
-                                    }
-
-                                    if (d > token.globalBalance) {
-                                      return AppLocalizations.of(context)
-                                          .r3fMaxAmountIs(token.globalBalance.toString());
-                                    }
-
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context).btcBulkAmountHint,
-                                      suffixText: "vBTC"),
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9.]"),
-                                    ),
-                                  ],
-                                  onChanged: (value) {
-                                    print(value);
-                                    final d = double.tryParse(value);
-                                    if (d != null) {
-                                      provider.updateAmount(index, d);
-                                    }
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              AppButton(
-                                label: AppLocalizations.of(context)
-                                    .r3fMaxLabel(token.globalBalance.toString()),
-                                type: AppButtonType.Text,
-                                underlined: true,
-                                onPressed: () {
-                                  provider.controllers[index].text =
-                                      "${token.globalBalance}";
-                                  provider.updateAmount(
-                                      index, token.globalBalance);
-                                },
-                                variant: AppColorVariant.Btc,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              if (!kIsWeb)
-                ...tokens.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final token = entry.value;
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: AppCard(
-                      padding: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        child: ListTile(
-                          title: Text(token.tokenName),
-                          subtitle: Text(token.rbxAddress),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SizedBox(
-                                width: 200,
-                                child: TextFormField(
-                                  controller: provider.controllers[index],
-                                  validator: (value) {
-                                    if (value == null) {
-                                      return AppLocalizations.of(context).svcAmountRequired;
-                                    }
-                                    final d = double.tryParse(value);
-                                    if (d == null) {
-                                      return AppLocalizations.of(context).btcInvalidAmountToast;
-                                    }
-
-                                    if (d > token.myBalance) {
-                                      return AppLocalizations.of(context)
-                                          .r3fMaxAmountIs(token.myBalance.toString());
-                                    }
-
-                                    return null;
-                                  },
-                                  decoration: InputDecoration(
-                                      hintText: AppLocalizations.of(context).btcBulkAmountHint,
-                                      suffixText: "vBTC"),
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                      RegExp("[0-9.]"),
-                                    ),
-                                  ],
-                                  onChanged: (value) {
-                                    print(value);
-                                    final d = double.tryParse(value);
-                                    if (d != null) {
-                                      provider.updateAmount(index, d);
-                                    }
-                                  },
-                                ),
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              AppButton(
-                                label: AppLocalizations.of(context)
-                                    .r3fMaxLabel(token.myBalance.toString()),
-                                type: AppButtonType.Text,
-                                underlined: true,
-                                onPressed: () {
-                                  provider.controllers[index].text =
-                                      "${token.myBalance}";
-                                  provider.updateAmount(index, token.myBalance);
-                                },
-                                variant: AppColorVariant.Btc,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(AppLocalizations.of(context).btcBulkTotalLabel(totalAmount.toString())),
-                ),
-              ),
-              TextFormField(
-                controller: provider.addressController,
-                validator: (value) => formValidatorRbxAddress(value, false),
-                decoration: InputDecoration(
-                  label: Text(AppLocalizations.of(context).btcBulkTransferToLabel),
-                  hintText: AppLocalizations.of(context).btcBulkTransferToHint,
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(
-                    RegExp('[a-zA-Z0-9.]'),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 16,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            AppButton(
-              label: AppLocalizations.of(context).actionCancel,
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              variant: AppColorVariant.Light,
-              type: AppButtonType.Text,
-            ),
-            AppButton(
-              label: AppLocalizations.of(context).actionSend,
-              onPressed: () async {
-                if (!provider.formKey.currentState!.validate()) {
-                  return;
-                }
-
-                final validInputs =
-                    inputs.where((element) => element.amount > 0).toList();
-
-                if (validInputs.length < 2) {
-                  Toast.message(
-                      AppLocalizations.of(context).r3fBulkMinTwoTokens);
-                  return;
-                }
-
-                final toAddress = provider.addressController.text.trim();
-
-                final message = AppLocalizations.of(context)
-                    .r3fBulkConfirmBody(totalAmount.toString(), toAddress);
-
-                final confirmed = await ConfirmDialog.show(
-                    title: AppLocalizations.of(context).btcBulkConfirmTxTitle,
-                    body: message,
-                    confirmText: AppLocalizations.of(context).actionSend,
-                    cancelText: AppLocalizations.of(context).actionCancel);
-                if (confirmed != true) {
-                  return;
-                }
-
-                if (kIsWeb) {
-                  Toast.error(AppLocalizations.of(context).tkbBulkTransferUnavailableWeb);
-                  return;
-                } else {
-                  final currentWallet = ref.read(sessionProvider).currentWallet;
-                  if (currentWallet == null) {
-                    Toast.error(AppLocalizations.of(context).btcBulkNoVfxSelectedToast);
-                    return;
-                  }
-                  if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
-                    Toast.error(
-                        AppLocalizations.of(context).r3fInsufficientVfxBalance);
-                    return;
-                  }
-
-                  ref.read(globalLoadingProvider.notifier).start();
-
-                  final hash = await BtcService().transferCoinMulti(
-                    currentWallet.address,
-                    toAddress,
-                    validInputs,
-                  );
-
-                  ref.read(globalLoadingProvider.notifier).complete();
-
-                  if (hash != null) {
-                    final message =
-                        "vBTC Bulk Transfer TX broadcasted with hash of $hash";
-
-                    ref.read(logProvider.notifier).append(
-                          LogEntry(
-                            message: message,
-                            textToCopy: hash,
-                            variant: AppColorVariant.Btc,
-                          ),
-                        );
-
-                    notifyTransactionSubmitted();
-
-                    for (var element in provider.controllers) {
-                      element.clear();
-                    }
-                    provider.addressController.clear();
-                    ref.invalidate(bulkVbtcTransferProvider);
-
-                    Toast.message(AppLocalizations.of(context)
-                        .r3fBulkSentToast(totalAmount.toString(), toAddress));
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  }
-                }
-              },
-              variant: AppColorVariant.Btc,
-            )
-          ],
-        ),
-      ],
+    final confirmed = await ConfirmDialog.show(
+      title: l10n.btcBulkConfirmTxTitle,
+      body: l10n.r3fBulkConfirmBody(amount.toString(), toAddress),
+      confirmText: l10n.actionSend,
+      cancelText: l10n.actionCancel,
     );
+    if (confirmed != true) {
+      return;
+    }
+
+    ref.read(globalLoadingProvider.notifier).start();
+    final result = await VbtcV2Service().transferVbtcMulti(
+      fromAddress: currentWallet.address,
+      toAddress: toAddress,
+      totalAmount: amount,
+    );
+    ref.read(globalLoadingProvider.notifier).complete();
+
+    if (result == null) {
+      return;
+    }
+
+    final message = l10n.tkbVbtcTransferBroadcasted(result.transactionHash);
+    ref.read(logProvider.notifier).append(
+          LogEntry(
+            message: message,
+            textToCopy: result.transactionHash,
+            variant: AppColorVariant.Btc,
+          ),
+        );
+    notifyTransactionSubmitted();
+    ref.read(tokenizedBitcoinListProvider.notifier).refresh();
+    Toast.message(l10n.r3fBulkSentToast(amount.toString(), toAddress));
+
+    if (!mounted) {
+      return;
+    }
+    await InfoDialog.show(
+      title: l10n.btcBulkSuccessTitle,
+      body: _allocationSummary(l10n, result, tokens, toAddress),
+      buttonColorOverride: Theme.of(context).colorScheme.btcOrange,
+    );
+    if (mounted) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  /// The CLI picked the inputs, so this is the user's only view of which
+  /// tokens were debited. Falls back to the contract id for any allocation
+  /// the local token list does not know by name.
+  String _allocationSummary(
+    AppLocalizations l10n,
+    VbtcMultiTransferResult result,
+    List<TokenizedBitcoin> tokens,
+    String toAddress,
+  ) {
+    final lines = result.allocations.map((allocation) {
+      final token = tokens
+          .where((t) => t.smartContractUid == allocation.smartContractUid)
+          .toList();
+      final name = token.isEmpty
+          ? allocation.smartContractUid
+          : token.first.tokenName;
+      return "• $name: ${allocation.amount} vBTC";
+    });
+
+    return "${l10n.r3fBulkSentToast(result.totalAmount.toString(), toAddress)}"
+        "\n\n${l10n.btcBulkDrawnFrom}\n${lines.join('\n')}";
   }
 }

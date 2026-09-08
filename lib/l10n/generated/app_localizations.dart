@@ -999,41 +999,11 @@ abstract class AppLocalizations {
   /// **'Amount'**
   String get btcBulkAmountHint;
 
-  /// Toast confirming the bulk vBTC transfer was broadcast.
-  ///
-  /// In en, this message translates to:
-  /// **'vBTC Bulk Transfer TX broadcasted'**
-  String get btcBulkBroadcastedToast;
-
   /// Confirm dialog title for the bulk vBTC transfer.
   ///
   /// In en, this message translates to:
   /// **'Confirm Bulk Tx'**
   String get btcBulkConfirmTxTitle;
-
-  /// Button to continue from the bulk vBTC selection step.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get btcBulkContinue;
-
-  /// Helper label showing the maximum transferable amount for a token.
-  ///
-  /// In en, this message translates to:
-  /// **'(MAX: {amount} vBTC)'**
-  String btcBulkMaxLabel(String amount);
-
-  /// Label for the maximum transferable vBTC amount.
-  ///
-  /// In en, this message translates to:
-  /// **'Maximum Transfer Amount:'**
-  String get btcBulkMaxTransferAmount;
-
-  /// Toast when the user tries to continue without selecting any tokens.
-  ///
-  /// In en, this message translates to:
-  /// **'No tokens selected.'**
-  String get btcBulkNoTokensSelected;
 
   /// Validation error for a multi-token vBTC transfer amount with more than 8 decimals.
   ///
@@ -1041,17 +1011,47 @@ abstract class AppLocalizations {
   /// **'Amount can have at most 8 decimal places'**
   String get btcBulkMaxDecimals;
 
+  /// Intro text on the multi-token vBTC transfer screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Send vBTC from all of your tokens in one transaction. The amount is drawn from your tokens automatically, largest balance first.'**
+  String get btcBulkIntro;
+
+  /// Label above the combined spendable vBTC balance on the multi-token transfer screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Available across your vBTC tokens:'**
+  String get btcBulkAvailableTotal;
+
+  /// Field label for the total on the multi-token vBTC transfer screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to Send'**
+  String get btcBulkAmountLabel;
+
+  /// Error toast when a Vault (xRBX) account tries a multi-token vBTC transfer.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault accounts can\'t send multi-token vBTC transfers. Send from a single token instead.'**
+  String get btcBulkReserveSenderInvalid;
+
+  /// Title of the dialog shown after a multi-token vBTC transfer is broadcast.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Sent'**
+  String get btcBulkSuccessTitle;
+
+  /// Heading above the per-token allocation list in the multi-token vBTC transfer success dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Drawn from:'**
+  String get btcBulkDrawnFrom;
+
   /// Toast shown when the user has not selected a VFX account.
   ///
   /// In en, this message translates to:
   /// **'No VFX account selected'**
   String get btcBulkNoVfxSelectedToast;
-
-  /// Total transfer amount label.
-  ///
-  /// In en, this message translates to:
-  /// **'Total: {amount} vBTC'**
-  String btcBulkTotalLabel(String amount);
 
   /// Button to open the bulk vBTC transfer screen.
   ///
@@ -11931,12 +11931,6 @@ abstract class AppLocalizations {
   /// **'Would you like to send a total of {amount} vBTC to {address}'**
   String r3fBulkConfirmBody(String amount, String address);
 
-  /// No description provided for @r3fBulkMinTwoTokens.
-  ///
-  /// In en, this message translates to:
-  /// **'At least two tokens are required to do a bulk vBTC transaction'**
-  String get r3fBulkMinTwoTokens;
-
   /// No description provided for @r3fBulkSentToast.
   ///
   /// In en, this message translates to:
@@ -12093,12 +12087,6 @@ abstract class AppLocalizations {
   /// **'5 VFX sent to {address}'**
   String r3fFundSentToast(String address);
 
-  /// No description provided for @r3fInputAmountsPerToken.
-  ///
-  /// In en, this message translates to:
-  /// **'Input Amounts for each token:'**
-  String get r3fInputAmountsPerToken;
-
   /// No description provided for @r3fInsufficientVfxBalance.
   ///
   /// In en, this message translates to:
@@ -12224,12 +12212,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to reveal your private key?'**
   String get r3fRevealPrivateKeyBody;
-
-  /// No description provided for @r3fSelectTokensToTransfer.
-  ///
-  /// In en, this message translates to:
-  /// **'Select the tokens you\'d like to transfer from:'**
-  String get r3fSelectTokensToTransfer;
 
   /// No description provided for @r3fTokenMedia.
   ///
@@ -16418,12 +16400,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'BTC Withdrawl TX Broadcasted successfully. Hash: {hash}'**
   String tkbBtcWithdrawalBroadcasted(String hash);
-
-  /// No description provided for @tkbBulkTransferUnavailableWeb.
-  ///
-  /// In en, this message translates to:
-  /// **'Bulk transfer is not yet available on the web wallet.'**
-  String get tkbBulkTransferUnavailableWeb;
 
   /// No description provided for @tkbCallMedia.
   ///

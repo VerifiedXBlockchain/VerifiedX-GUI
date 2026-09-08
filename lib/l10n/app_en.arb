@@ -711,51 +711,41 @@
   "@btcBulkAmountHint": {
     "description": "Hint for the per-token amount field in the bulk transfer screen."
   },
-  "btcBulkBroadcastedToast": "vBTC Bulk Transfer TX broadcasted",
-  "@btcBulkBroadcastedToast": {
-    "description": "Toast confirming the bulk vBTC transfer was broadcast."
-  },
   "btcBulkConfirmTxTitle": "Confirm Bulk Tx",
   "@btcBulkConfirmTxTitle": {
     "description": "Confirm dialog title for the bulk vBTC transfer."
-  },
-  "btcBulkContinue": "Continue",
-  "@btcBulkContinue": {
-    "description": "Button to continue from the bulk vBTC selection step."
-  },
-  "btcBulkMaxLabel": "(MAX: {amount} vBTC)",
-  "@btcBulkMaxLabel": {
-    "description": "Helper label showing the maximum transferable amount for a token.",
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
-  "btcBulkMaxTransferAmount": "Maximum Transfer Amount:",
-  "@btcBulkMaxTransferAmount": {
-    "description": "Label for the maximum transferable vBTC amount."
-  },
-  "btcBulkNoTokensSelected": "No tokens selected.",
-  "@btcBulkNoTokensSelected": {
-    "description": "Toast when the user tries to continue without selecting any tokens."
   },
   "btcBulkMaxDecimals": "Amount can have at most 8 decimal places",
   "@btcBulkMaxDecimals": {
     "description": "Validation error for a multi-token vBTC transfer amount with more than 8 decimals."
   },
+  "btcBulkIntro": "Send vBTC from all of your tokens in one transaction. The amount is drawn from your tokens automatically, largest balance first.",
+  "@btcBulkIntro": {
+    "description": "Intro text on the multi-token vBTC transfer screen."
+  },
+  "btcBulkAvailableTotal": "Available across your vBTC tokens:",
+  "@btcBulkAvailableTotal": {
+    "description": "Label above the combined spendable vBTC balance on the multi-token transfer screen."
+  },
+  "btcBulkAmountLabel": "Amount to Send",
+  "@btcBulkAmountLabel": {
+    "description": "Field label for the total on the multi-token vBTC transfer screen."
+  },
+  "btcBulkReserveSenderInvalid": "Vault accounts can't send multi-token vBTC transfers. Send from a single token instead.",
+  "@btcBulkReserveSenderInvalid": {
+    "description": "Error toast when a Vault (xRBX) account tries a multi-token vBTC transfer."
+  },
+  "btcBulkSuccessTitle": "vBTC Sent",
+  "@btcBulkSuccessTitle": {
+    "description": "Title of the dialog shown after a multi-token vBTC transfer is broadcast."
+  },
+  "btcBulkDrawnFrom": "Drawn from:",
+  "@btcBulkDrawnFrom": {
+    "description": "Heading above the per-token allocation list in the multi-token vBTC transfer success dialog."
+  },
   "btcBulkNoVfxSelectedToast": "No VFX account selected",
   "@btcBulkNoVfxSelectedToast": {
     "description": "Toast shown when the user has not selected a VFX account."
-  },
-  "btcBulkTotalLabel": "Total: {amount} vBTC",
-  "@btcBulkTotalLabel": {
-    "description": "Total transfer amount label.",
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
   },
   "btcBulkTransferLabel": "Bulk vBTC Transfer",
   "@btcBulkTransferLabel": {
@@ -5187,7 +5177,6 @@
       }
     }
   },
-  "r3fBulkMinTwoTokens": "At least two tokens are required to do a bulk vBTC transaction",
   "r3fBulkSentToast": "{amount} vBTC has been sent to {address}.",
   "@r3fBulkSentToast": {
     "placeholders": {
@@ -5252,7 +5241,6 @@
       }
     }
   },
-  "r3fInputAmountsPerToken": "Input Amounts for each token:",
   "r3fInsufficientVfxBalance": "Selected VFX account doesn't have enough balance",
   "r3fMaxAmountIs": "Maximum amount is {amount} vBTC",
   "@r3fMaxAmountIs": {
@@ -5312,7 +5300,6 @@
   "r3fRestoreBody": "Importing an existing Vault Account will replace the current one tied to your login. To revert you can logout and login again.\n\nContinue?",
   "r3fRestoreCodePrompt": "Paste in your RESTORE CODE to import your existing Vault Account.",
   "r3fRevealPrivateKeyBody": "Are you sure you want to reveal your private key?",
-  "r3fSelectTokensToTransfer": "Select the tokens you'd like to transfer from:",
   "r3fTokenMedia": "Token Media",
   "r3fTokenTotalBalanceTooltip": "Token Total Balance: {balance} vBTC{usd}",
   "@r3fTokenTotalBalanceTooltip": {
@@ -7286,7 +7273,6 @@
       }
     }
   },
-  "tkbBulkTransferUnavailableWeb": "Bulk transfer is not yet available on the web wallet.",
   "tkbCallMedia": "Call Media",
   "tkbCallMediaFromBeacon": "Call Media from Beacon",
   "tkbCallToBeaconStartedBody": "Please be patient while ALL assets associated with the NFT are called and downloaded.\n\nDo not close your wallet or attempt to call again.",

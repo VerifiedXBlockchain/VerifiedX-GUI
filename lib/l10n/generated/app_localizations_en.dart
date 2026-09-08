@@ -502,35 +502,31 @@ class AppLocalizationsEn extends AppLocalizations {
   String get btcBulkAmountHint => 'Amount';
 
   @override
-  String get btcBulkBroadcastedToast => 'vBTC Bulk Transfer TX broadcasted';
-
-  @override
   String get btcBulkConfirmTxTitle => 'Confirm Bulk Tx';
-
-  @override
-  String get btcBulkContinue => 'Continue';
-
-  @override
-  String btcBulkMaxLabel(String amount) {
-    return '(MAX: $amount vBTC)';
-  }
-
-  @override
-  String get btcBulkMaxTransferAmount => 'Maximum Transfer Amount:';
-
-  @override
-  String get btcBulkNoTokensSelected => 'No tokens selected.';
 
   @override
   String get btcBulkMaxDecimals => 'Amount can have at most 8 decimal places';
 
   @override
-  String get btcBulkNoVfxSelectedToast => 'No VFX account selected';
+  String get btcBulkIntro => 'Send vBTC from all of your tokens in one transaction. The amount is drawn from your tokens automatically, largest balance first.';
 
   @override
-  String btcBulkTotalLabel(String amount) {
-    return 'Total: $amount vBTC';
-  }
+  String get btcBulkAvailableTotal => 'Available across your vBTC tokens:';
+
+  @override
+  String get btcBulkAmountLabel => 'Amount to Send';
+
+  @override
+  String get btcBulkReserveSenderInvalid => 'Vault accounts can\'t send multi-token vBTC transfers. Send from a single token instead.';
+
+  @override
+  String get btcBulkSuccessTitle => 'vBTC Sent';
+
+  @override
+  String get btcBulkDrawnFrom => 'Drawn from:';
+
+  @override
+  String get btcBulkNoVfxSelectedToast => 'No VFX account selected';
 
   @override
   String get btcBulkTransferLabel => 'Bulk vBTC Transfer';
@@ -6334,9 +6330,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get r3fBulkMinTwoTokens => 'At least two tokens are required to do a bulk vBTC transaction';
-
-  @override
   String r3fBulkSentToast(String amount, String address) {
     return '$amount vBTC has been sent to $address.';
   }
@@ -6425,9 +6418,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get r3fInputAmountsPerToken => 'Input Amounts for each token:';
-
-  @override
   String get r3fInsufficientVfxBalance => 'Selected VFX account doesn\'t have enough balance';
 
   @override
@@ -6499,9 +6489,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3fRevealPrivateKeyBody => 'Are you sure you want to reveal your private key?';
-
-  @override
-  String get r3fSelectTokensToTransfer => 'Select the tokens you\'d like to transfer from:';
 
   @override
   String get r3fTokenMedia => 'Token Media';
@@ -8792,9 +8779,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String tkbBtcWithdrawalBroadcasted(String hash) {
     return 'BTC Withdrawl TX Broadcasted successfully. Hash: $hash';
   }
-
-  @override
-  String get tkbBulkTransferUnavailableWeb => 'Bulk transfer is not yet available on the web wallet.';
 
   @override
   String get tkbCallMedia => 'Call Media';

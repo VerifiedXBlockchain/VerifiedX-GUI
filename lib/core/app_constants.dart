@@ -13,7 +13,10 @@ const BUTTERFLY_ENABLED = true;
 // Crypto.com on-ramp is hidden for now: side-nav link and Get VFX/BTC gateway option.
 const CRYPTO_DOT_COM_ENABLED = false;
 const VALIDATOR_NAV_ENABLED = false;
-const BULK_VBTC_TRANSFER_ENABLED = false;
+// Multi-contract vBTC transfers only activate on mainnet after the network
+// upgrade (CLI Globals.V2TransferMultiHeight), so the entry point is
+// testnet-only until then.
+final BULK_VBTC_TRANSFER_ENABLED = Env.isTestNet;
 // Shielded vBTC is disabled in the CLI; VFX private txs remain supported.
 const VBTC_PRIVACY_ENABLED = false;
 const WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED = true;

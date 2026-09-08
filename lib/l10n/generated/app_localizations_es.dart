@@ -502,35 +502,31 @@ class AppLocalizationsEs extends AppLocalizations {
   String get btcBulkAmountHint => 'Monto';
 
   @override
-  String get btcBulkBroadcastedToast => 'TX de transferencia masiva de vBTC transmitida';
-
-  @override
   String get btcBulkConfirmTxTitle => 'Confirmar TX masiva';
-
-  @override
-  String get btcBulkContinue => 'Continuar';
-
-  @override
-  String btcBulkMaxLabel(String amount) {
-    return '(MÁX: $amount vBTC)';
-  }
-
-  @override
-  String get btcBulkMaxTransferAmount => 'Monto máximo de transferencia:';
-
-  @override
-  String get btcBulkNoTokensSelected => 'No se seleccionaron tokens.';
 
   @override
   String get btcBulkMaxDecimals => 'El monto puede tener como máximo 8 decimales';
 
   @override
-  String get btcBulkNoVfxSelectedToast => 'No se seleccionó ninguna cuenta VFX';
+  String get btcBulkIntro => 'Envía vBTC desde todos tus tokens en una sola transacción. El monto se toma automáticamente de tus tokens, empezando por el de mayor saldo.';
 
   @override
-  String btcBulkTotalLabel(String amount) {
-    return 'Total: $amount vBTC';
-  }
+  String get btcBulkAvailableTotal => 'Disponible en tus tokens vBTC:';
+
+  @override
+  String get btcBulkAmountLabel => 'Monto a enviar';
+
+  @override
+  String get btcBulkReserveSenderInvalid => 'Las cuentas de bóveda no pueden enviar transferencias de vBTC de varios tokens. Envía desde un solo token.';
+
+  @override
+  String get btcBulkSuccessTitle => 'vBTC enviado';
+
+  @override
+  String get btcBulkDrawnFrom => 'Tomado de:';
+
+  @override
+  String get btcBulkNoVfxSelectedToast => 'No se seleccionó ninguna cuenta VFX';
 
   @override
   String get btcBulkTransferLabel => 'Transferencia masiva de vBTC';
@@ -6334,9 +6330,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get r3fBulkMinTwoTokens => 'Se requieren al menos dos tokens para una transacción vBTC masiva';
-
-  @override
   String r3fBulkSentToast(String amount, String address) {
     return 'Se enviaron $amount vBTC a $address.';
   }
@@ -6425,9 +6418,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get r3fInputAmountsPerToken => 'Ingresa los montos de cada token:';
-
-  @override
   String get r3fInsufficientVfxBalance => 'La cuenta VFX seleccionada no tiene saldo suficiente';
 
   @override
@@ -6499,9 +6489,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3fRevealPrivateKeyBody => '¿Seguro que quieres revelar tu clave privada?';
-
-  @override
-  String get r3fSelectTokensToTransfer => 'Selecciona los tokens desde los que quieres transferir:';
 
   @override
   String get r3fTokenMedia => 'Medios del token';
@@ -8792,9 +8779,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String tkbBtcWithdrawalBroadcasted(String hash) {
     return 'TX de retiro de BTC transmitida con éxito. Hash: $hash';
   }
-
-  @override
-  String get tkbBulkTransferUnavailableWeb => 'La transferencia masiva aún no está disponible en la billetera web.';
 
   @override
   String get tkbCallMedia => 'Solicitar recurso';
