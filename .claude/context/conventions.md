@@ -44,6 +44,11 @@
 - Service path overrides: `super(apiBasePathOverride: "/privacyapi/PrivacyV1")` to replace default `/api/V1`
 - Web detail-screen `FutureProvider.family` must be `.autoDispose` and be invalidated from `WebSessionProvider.loop()` — without both it fetches once and serves that value forever, so the screen goes stale and re-entering doesn't help (`AsyncValue.when` defaults `skipLoadingOnRefresh: true`, so the periodic invalidate won't flash a loader). Desktop detail screens derive from a polled list provider instead and need neither.
 
+- Web wallet transaction types: if the `Data` payload is plain JSON the client can assemble, build it in `WebTokenActionsManager` and send via `_verifyConfirmAndSendTx` (Spyglass `/raw/*`: fee, node-side hash, local sign, verify, send). The CLI `GetRaw*Data`/`SendRaw*Tx` pairs and their Spyglass `prepare`/`send` proxies are only for operations the client cannot perform (Trillium compilation, MPC/FROST). Do not propose new ones for plain payloads.
+- User-facing strings are l10n keys in both `lib/l10n/app_en.arb` and `lib/l10n/app_es.arb` (keep key parity, each with an `@key` description), then `fvm flutter gen-l10n`; the generated files under `lib/l10n/generated/` are committed. Log-panel strings stay hardcoded English.
+- Network-gated features use `final FLAG = Env.isTestNet;` in `app_constants.dart` (e.g. `BULK_VBTC_TRANSFER_ENABLED`) rather than a `const`, so the same branch ships dark on mainnet until the activation height lands.
+- `build_runner` also rewrites stale generated files whose sources were not touched (seen 2026-09 under `lib/features/btc/providers/`); revert those with `git checkout --` and commit only the generated files for the model you changed.
+- Unit tests that reach `globalL10n` (validators, toast helpers) need `TestWidgetsFlutterBinding.ensureInitialized()` and `rootNavigatorKey = GlobalKey<NavigatorState>()` in `setUpAll`, so the lookup skips get_it and falls back to English. See `test/features/btc/vbtc_multi_amount_validator_test.dart`.
 <!-- Add new conventions above this line. Use /remember to add entries automatically. -->
 
 ## Manual Notes

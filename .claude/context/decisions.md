@@ -37,6 +37,14 @@
 - **Status:** Active (added 2026-08)
 - **Rationale:** The CLI disabled its shielded-vBTC endpoints ("temp") during the caster upgrade, so the GUI surface had to go. Chose `VBTC_PRIVACY_ENABLED = false` in `app_constants.dart` over deleting the ~9 files: the disable may be temporary, and re-enabling is a one-line flip. Gating the dashboard section also stops the balance providers polling, since the cards were their only watchers. VFX private txs are unaffected — only the vBTC surface is gated.
 
+### Multi-contract vBTC transfer: no picker, auto-allocate
+- **Status:** Active (added 2026-09, testnet-only until the network upgrade sets the mainnet activation height)
+- **Rationale:** The V1 "bulk transfer" let users pick tokens and type an amount per token against the V1 `TransferCoinMulti` endpoint. V2 consensus (`TransferVBTCMultiV2()`, type 26) takes a flat list of inputs and the CLI's keyed endpoint allocates them itself, so the UI is a single form: total plus recipient, allocations shown afterwards. Desktop calls `POST /vbtcapi/vbtc/TransferVBTCMulti`; web allocates client-side with the same greedy rule (`lib/features/btc_web/utils/vbtc_multi_allocator.dart`) and sends through the raw path. A single covering token falls back to the ordinary single transfer on both platforms. Kept as a separate "Bulk vBTC Transfer" entry point for now; a vBTC option on the main Send screen is the intended follow-up.
+
+### GUI quit waits for the CLI to exit
+- **Status:** Active (added 2026-09)
+- **Rationale:** The CLI's `SendExit` handler needs two-plus seconds to record a clean shutdown. Quitting the GUI 300 ms after firing it left the next launch flagged as an improper shutdown, which triggers a full state rebuild (`ResetTreis`) that zeros every local balance while it replays blocks. `killCli` now polls until the CLI stops answering (15 s cap), and the GUI shows a rebuild banner plus "Rebuilding…" in place of balances while the CLI reports `IsResyncing`.
+
 <!-- Add new decisions above this line. Use /remember to add entries automatically. -->
 
 ## Manual Notes
