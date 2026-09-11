@@ -124,9 +124,10 @@ class BaseService {
     bool responseIsJson = false,
     int timeout = 30000,
     bool inspect = false,
+    bool Function(int?)? validateStatus,
   }) async {
     try {
-      final dio = Dio(_options(auth: auth, timeout: timeout));
+      final dio = Dio(_options(auth: auth, timeout: timeout, validateStatus: validateStatus));
       if (!kIsWeb) {
         (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
           client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;

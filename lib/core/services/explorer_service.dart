@@ -945,9 +945,20 @@ class ExplorerService extends BaseService {
   }
 
   /// Polls the FROST signing job status. Returns signed BTC tx hex when complete.
+  ///
+  /// Spyglass reports a failed ceremony as HTTP 500 and an unknown or expired
+  /// job as HTTP 404, both with the JSON body the poll loop and the stale-job
+  /// probe are written for (`status`, `success`, `message`, `failure_code`,
+  /// `retryable`). Those statuses must come back as data: thrown, they are
+  /// indistinguishable from a transient network error, so a failed ceremony
+  /// polls for the full budget and the stored job is resumed forever. Only a
+  /// genuinely unparseable response (proxy error page, timeout) still throws.
   Future<Map<String, dynamic>> getV2WithdrawalCompleteStatus(String jobId) async {
     try {
-      final response = await getJson('/btc/vbtc-v2/withdraw/complete/status/$jobId/');
+      final response = await getJson(
+        '/btc/vbtc-v2/withdraw/complete/status/$jobId/',
+        validateStatus: (status) => status != null && status < 600,
+      );
       return response;
     } catch (e) {
       print(e);
