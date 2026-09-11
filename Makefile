@@ -88,10 +88,10 @@ build_win:
 	if exist .\build\windows\runner\Release rmdir /s /q ".\build\windows\runner\Release"
 	fvm flutter build windows --release
 	move ".\build\windows\runner\Release\rbx_wallet_gui.exe" ".\build\windows\runner\Release\VFXWallet.exe"
-	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\ReserveBlockCore\ReserveBlockCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
+	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\VerifiedXCore\VerifiedXCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
 	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
-	copy ".\installers\resources\windows-64\RBXLauncher.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncher.exe" 
-	copy ".\installers\resources\windows-64\RBXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncherTestNet.exe" 
+	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
+	copy ".\installers\resources\windows-64\VFXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncherTestNet.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
@@ -105,8 +105,8 @@ build_win7:
 	move ".\build\windows\runner\Release\rbx_wallet_gui.exe" ".\build\windows\runner\Release\VFXWallet.exe"
 	dotnet publish -c Release -r win7-x64 ..\ReserveBlock-Core\ --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
 	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
-	copy ".\installers\resources\windows-64\RBXLauncher.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncher.exe" 
-	copy ".\installers\resources\windows-64\RBXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncherTestNet.exe" 
+	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
+	copy ".\installers\resources\windows-64\VFXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncherTestNet.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 

@@ -803,7 +803,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       if (state.windowsLauncherPath == null) {
         final appPath = Directory.current.path;
         final p =
-            "$appPath\\RBXCore\\${Env.isTestNet || Env.isDevnet ? 'RBXLauncherTestNet.exe' : 'RBXLauncher.exe'}";
+            "$appPath\\RBXCore\\${Env.isTestNet || Env.isDevnet ? 'VFXLauncherTestNet.exe' : 'VFXLauncher.exe'}";
         state = state.copyWith(windowsLauncherPath: p);
         return p;
       }
