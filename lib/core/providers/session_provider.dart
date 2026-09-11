@@ -803,7 +803,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       if (state.windowsLauncherPath == null) {
         final appPath = Directory.current.path;
         final p =
-            "$appPath\\RBXCore\\${Env.isTestNet || Env.isDevnet ? 'VFXLauncherTestNet.exe' : 'VFXLauncher.exe'}";
+            "$appPath\\RBXCore\\VFXLauncher.exe";
         state = state.copyWith(windowsLauncherPath: p);
         return p;
       }
@@ -902,10 +902,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
           ref
               .read(logProvider.notifier)
               .append(LogEntry(message: "Launching CLI in the background."));
-          final List<String> params =
-              Env.isTestNet || Env.isDevnet || kDebugMode
-                  ? [cliPath]
-                  : [cliPath, 'apitoken=$apiToken'];
+          // VFXLauncher.exe forwards its arguments to VerifiedXCore.exe, so
+          // the network and API flags travel the same way as on macOS.
+          final List<String> params = [cliPath, ...options];
           pm.run(params).then((result) {
             ref
                 .read(logProvider.notifier)

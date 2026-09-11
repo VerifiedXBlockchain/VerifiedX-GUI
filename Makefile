@@ -91,7 +91,6 @@ build_win:
 	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\VerifiedXCore\VerifiedXCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
 	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
 	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
-	copy ".\installers\resources\windows-64\VFXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncherTestNet.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
@@ -106,7 +105,6 @@ build_win7:
 	dotnet publish -c Release -r win7-x64 ..\ReserveBlock-Core\ --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
 	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
 	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
-	copy ".\installers\resources\windows-64\VFXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncherTestNet.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
