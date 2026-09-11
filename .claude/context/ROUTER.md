@@ -13,6 +13,7 @@
 | **Planning / Scoping** | `architecture.md`, `decisions.md`, `conventions.md` |
 | **Adding a Feature** | `architecture.md`, `conventions.md` |
 | **Debugging / Fixing** | `architecture.md`, `conventions.md` |
+| **vBTC V2 work** | `patterns/non-owned-vbtc-v2-contracts.md`, `conventions.md` |
 | **Code Review** | `conventions.md`, `decisions.md` |
 | **Onboarding / Context** | `architecture.md`, `decisions.md`, `conventions.md` |
 | **Refactoring** | `conventions.md`, `decisions.md` |
@@ -24,7 +25,8 @@
 | `architecture.md` | Stack, structure, constraints, entry points | Populated |
 | `decisions.md` | Why things are the way they are (lightweight ADRs) | Populated |
 | `conventions.md` | Naming, file organization, error handling norms | Populated |
-| `patterns/` | Reusable solutions discovered during implementation | Empty |
+| `patterns/` | Reusable solutions discovered during implementation | Populated |
+| `patterns/non-owned-vbtc-v2-contracts.md` | Reading vBTC V2 contracts the wallet holds but didn't mint | Populated |
 
 ## Notes
 - All paths relative to `.claude/context/`

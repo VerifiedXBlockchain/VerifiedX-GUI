@@ -10,6 +10,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../bridge/models/log_entry.dart';
 
 part 'btc_adnr_transfer_form_provider.freezed.dart';
@@ -42,14 +43,14 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
 
   String? toBtcAddressValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return "To BTC address required.";
+      return globalL10n.bw2ToBtcAddressRequired;
     }
     return null;
   }
 
   String? toRbxAddressValidator(String? value) {
     if (value == null || value.isEmpty) {
-      return "To VFX address required.";
+      return globalL10n.bw2ToVfxAddressRequired;
     }
 
     return formValidatorRbxAddress(value);
@@ -61,7 +62,7 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
     }
 
     if (state.fromBtcAddress == null) {
-      Toast.error("Selecting a BTC address is required.");
+      Toast.error(globalL10n.bw2SelectBtcAddressRequired);
       return false;
     }
 

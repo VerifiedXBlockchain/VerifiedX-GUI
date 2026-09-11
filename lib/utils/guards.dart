@@ -5,12 +5,13 @@ import '../core/providers/web_session_provider.dart';
 import '../features/web_shop/providers/web_auth_token_provider.dart';
 
 import '../features/bridge/providers/wallet_info_provider.dart';
+import '../l10n/l10n_helper.dart';
 import 'toast.dart';
 
 bool guardWalletIsSynced(Ref ref) {
   if (ref.read(walletInfoProvider) == null ||
       !ref.read(walletInfoProvider)!.isChainSynced) {
-    Toast.error("Please wait until your wallet is synced with the network");
+    Toast.error(globalL10n.r3hWalletSyncWait);
     return false;
   }
 
@@ -25,7 +26,7 @@ bool widgetGuardWalletIsSynced(WidgetRef ref) {
           "Please wait until your wallet is synced with the network. In debug mode, you shall pass.");
       return true;
     }
-    Toast.error("Please wait until your wallet is synced with the network");
+    Toast.error(globalL10n.r3hWalletSyncWait);
 
     return false;
   }
@@ -93,7 +94,7 @@ Future<bool> guardWebAuthorizedFromProvider(Ref ref, String? expectedAddress,
 
   if (address != expectedAddress) {
     if (withError) {
-      Toast.error("Not authorized (incorrect address).");
+      Toast.error(globalL10n.r3hNotAuthorizedAddress);
     }
     return false;
   }
@@ -111,7 +112,7 @@ Future<bool> guardWebAuthorizedFromProvider(Ref ref, String? expectedAddress,
   }
 
   if (withError) {
-    Toast.error("Not authorized (token invalid).");
+    Toast.error(globalL10n.r3hNotAuthorizedToken);
   }
 
   return false;

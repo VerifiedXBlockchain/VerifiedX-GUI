@@ -15,6 +15,7 @@ import '../../../core/web_router.gr.dart' as webRouter;
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../remote_shop/providers/connected_shop_provider.dart';
 import '../models/web_shop.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebShopTile extends BaseComponent {
   final WebShop shop;
@@ -23,6 +24,7 @@ class WebShopTile extends BaseComponent {
   const WebShopTile(this.shop, {Key? key, this.requiresAuth = false}) : super(key: key);
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final currentUrl = ref.watch(connectedShopProvider.select((v) => v.url));
     final isConnected = ref.watch(connectedShopProvider.select((v) => v.isConnected));
     return Padding(
@@ -43,7 +45,7 @@ class WebShopTile extends BaseComponent {
                 ),
                 if (shop.isOwner(ref))
                   TextSpan(
-                    text: " [My Shop]",
+                    text: l10n.r3bMyShopSuffix,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.warning,
                     ),
@@ -77,28 +79,28 @@ class WebShopTile extends BaseComponent {
             children: [
               if (shop.isPublished)
                 AppBadge(
-                  label: shop.isOnline ? 'Online' : 'Offline',
+                  label: shop.isOnline ? l10n.r3bOnline : l10n.r3bOffline,
                   variant: shop.isOnline ? AppColorVariant.Success : AppColorVariant.Danger,
                 ),
-              if (!shop.isPublished && shop.isOwner(ref)) AppBadge(label: "Unpublished", variant: AppColorVariant.Warning),
+              if (!shop.isPublished && shop.isOwner(ref)) AppBadge(label: l10n.r3bUnpublished, variant: AppColorVariant.Warning),
               Icon(Icons.chevron_right),
             ],
           ),
           onTap: () async {
             if (requiresAuth) {
               if (!await guardWebAuthorized(ref, shop.ownerAddress)) {
-                Toast.error("Not Authorized");
+                Toast.error(l10n.r3bNotAuthorized);
                 return;
               }
             }
 
             if (!requiresAuth && shop.isOwner(ref) && !kIsWeb) {
-              Toast.error("This is your own shop.");
+              Toast.error(l10n.r3bThisIsYourShop);
               return;
             }
 
             if (!shop.isOnline) {
-              Toast.error("Shop is offline.");
+              Toast.error(l10n.r3bShopIsOffline);
               return;
             }
 
@@ -130,6 +132,7 @@ class WebShopTile extends BaseComponent {
   }
 
   static Future pushToShop(BuildContext context, WidgetRef ref, WebShop shop) async {
+    final l10n = AppLocalizations.of(context);
     if (shop.isThirdParty) {
       AutoRouter.of(context).push(WebShopDetailScreenRoute(shopId: shop.id));
       return;
@@ -137,10 +140,10 @@ class WebShopTile extends BaseComponent {
 
     if (ref.read(walletInfoProvider) == null || !ref.read(walletInfoProvider)!.isChainSynced) {
       final cont = await ConfirmDialog.show(
-        title: "Wallet Not Synced",
-        body: "Since your wallet is not synced there may be some issues viewing the data in this shop. Continue anyway?",
-        confirmText: "Continue",
-        cancelText: "Cancel",
+        title: l10n.shopWalletNotSyncedTitle,
+        body: l10n.r3bWalletNotSyncedBody,
+        confirmText: l10n.actionContinue,
+        cancelText: l10n.actionCancel,
       );
 
       if (cont != true) {

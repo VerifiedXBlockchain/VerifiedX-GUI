@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../generated/assets.gen.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class CompileAnimation extends StatefulWidget {
   final bool mint;
@@ -71,7 +72,7 @@ class _CompileAnimationState extends State<CompileAnimation> with TickerProvider
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  widget.mint ? "Minting…" : "Compiling & Minting…",
+                  widget.mint ? AppLocalizations.of(context).r3aMintingEllipsis : AppLocalizations.of(context).r3aCompilingMintingEllipsis,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white, letterSpacing: 1),
                 )

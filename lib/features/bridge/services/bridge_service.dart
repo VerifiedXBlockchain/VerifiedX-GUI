@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,7 +7,9 @@ import '../../metrics/models/network_metrics.dart';
 
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
+import '../utils/cli_exit.dart';
 import '../../block/block.dart';
 import '../../genesis/models/genesis_block.dart';
 import '../../node/models/node.dart';
@@ -51,7 +54,7 @@ class BridgeService extends BaseService {
         return response['Message'];
       }
 
-      return "A problem occurred";
+      return globalL10n.mktProblemOccurredToast;
     } catch (e) {
       print("Unlock Account Error");
       print(e);
@@ -155,6 +158,26 @@ class BridgeService extends BaseService {
       return null;
     }
     return response;
+  }
+
+  /// Extracts the tx hash from a /SendTransaction response. The CLI returns
+  /// JSON ({"Result": "Success", ..., "Hash": "..."}) once broadcast; plain-
+  /// text errors ("Insufficient Funds...", "FAIL...") carry no hash. Returns
+  /// null when the send did not broadcast.
+  static String? txHashFromResponse(String? message) {
+    if (message == null) return null;
+    try {
+      final data = jsonDecode(message);
+      if (data is Map && data['Result'] == 'Success' && data['Hash'] is String) {
+        return data['Hash'];
+      }
+    } catch (_) {
+      // Not JSON — fall through to the legacy format check.
+    }
+    if (message.startsWith("Success! TxId: ")) {
+      return message.replaceFirst("Success! TxId: ", "").trim();
+    }
+    return null;
   }
 
   Future<String?> sendFunds({
@@ -274,26 +297,26 @@ class BridgeService extends BaseService {
     }
   }
 
-  Future<bool> checkIfCliIsKilled() async {
-    try {
-      final response = await getText("/SendExitComplete", timeout: 1000);
-      if (response == "SA") {
-        await Future.delayed(const Duration(seconds: 5));
-        return checkIfCliIsKilled();
-      }
-      return true;
-    } catch (e) {
+  /// Asks the CLI to exit and waits until it has actually gone, so the CLI
+  /// gets to record a clean shutdown before the GUI terminates. Returns false
+  /// if the CLI was still answering when [maxWait] ran out.
+  Future<bool> killCli({Duration maxWait = const Duration(seconds: 15)}) async {
+    if (!Env.launchCli) {
       return true;
     }
+    // SendExit never completes its response (the process exits mid-request),
+    // so fire it and discard the resulting connection error.
+    unawaited(getText("/SendExit").catchError((_) => ""));
+    return waitUntilCliStops(_cliStillAnswering, maxWait: maxWait);
   }
 
-  Future<bool> killCli() async {
-    if (Env.launchCli) {
-      getText("/SendExit");
-      await Future.delayed(const Duration(milliseconds: 300));
-      // return await checkIfCliIsKilled();
+  Future<bool> _cliStillAnswering() async {
+    try {
+      await getText("/SendExitComplete", timeout: 1000);
+      return true;
+    } catch (_) {
+      return false;
     }
-    return true;
   }
 
   Future<bool> clearLog() async {

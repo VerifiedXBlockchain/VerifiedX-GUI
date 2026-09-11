@@ -9,6 +9,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../services/nft_service.dart';
 import '../../web/components/web_wallet_type_switcher.dart';
@@ -39,7 +40,7 @@ class NftListScreen extends BaseScreen {
 
     return AppBar(
       leading: isMobile ? WebMobileDrawerButton() : null,
-      title: const Text("NFTs"),
+      title: Text(AppLocalizations.of(context).nftListTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       // leading: BackToHomeButton(),
@@ -51,21 +52,22 @@ class NftListScreen extends BaseScreen {
             if (!kIsWeb)
               AppButton(
                 type: AppButtonType.Text,
-                label: "Import NFT",
+                label: AppLocalizations.of(context).nftImportLabel,
                 variant: AppColorVariant.Light,
                 onPressed: () async {
+                  final l10n = AppLocalizations.of(context);
                   final scId = await PromptModal.show(
-                    title: "Smart Contract Identifier",
-                    body: "Paste in the smart contract's unique identifier.",
-                    validator: (val) => formValidatorNotEmpty(val, "Identifier"),
-                    labelText: "Identifier",
+                    title: l10n.nftImportPromptTitle,
+                    body: l10n.nftImportPromptBody,
+                    validator: (val) => formValidatorNotEmpty(val, l10n.nftImportFieldLabel),
+                    labelText: l10n.nftImportFieldLabel,
                   );
 
                   if (scId != null && scId.isNotEmpty) {
                     final success = await NftService().importFromNetwork(scId);
                     if (success) {
                       ref.read(sessionProvider.notifier).smartContractLoop(false);
-                      Toast.message("Smart Contract imported from network");
+                      Toast.message(l10n.nftImportedToast);
                     }
                   }
                 },
@@ -107,10 +109,10 @@ class NftListScreen extends BaseScreen {
               indicatorColor: AppColors.getBlue(),
               tabs: [
                 Tab(
-                  child: Text("My NFTs"),
+                  child: Text(AppLocalizations.of(context).nftTabMyNfts),
                 ),
                 Tab(
-                  child: Text("Manage Minted NFTs"),
+                  child: Text(AppLocalizations.of(context).nftTabManageMinted),
                 ),
               ],
             ),

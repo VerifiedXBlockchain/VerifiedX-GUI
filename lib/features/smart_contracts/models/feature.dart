@@ -12,6 +12,7 @@ import 'fractional.dart';
 import 'multi_asset.dart';
 import 'pair.dart';
 import 'tokenization.dart';
+import '../../../l10n/l10n_helper.dart';
 
 part 'feature.freezed.dart';
 part 'feature.g.dart';
@@ -90,26 +91,26 @@ abstract class Feature with _$Feature {
     if (isAvailable) {
       switch (type) {
         case FeatureType.royalty:
-          return "Include a royalty that is enforced on-chain upon any trade";
+          return globalL10n.r3aFeatureDescRoyalty;
         case FeatureType.evolution:
-          return "Allow the smart contract to evolve based on time or network variables";
+          return globalL10n.r3aFeatureDescEvolution;
         case FeatureType.multiAsset:
-          return "Allow multiple assets to be compiled into the smart contract";
+          return globalL10n.r3aFeatureDescMultiAsset;
         case FeatureType.tokenization:
-          return "Pair this smart contract with a physical/digital good";
+          return globalL10n.r3aFeatureDescTokenization;
         case FeatureType.fractionalization:
-          return "Share ownership between multiple wallets and support voting";
+          return globalL10n.r3aFeatureDescFractional;
         case FeatureType.pair:
-          return "Pair/Wrap this smart contract with an existing NFT on or off this network";
+          return globalL10n.r3aFeatureDescPair;
         case FeatureType.soulBound:
-          return "Create a non-transferrable smart contract bound to a perminent address";
+          return globalL10n.r3aFeatureDescSoulBound;
         case FeatureType.btcTokenization:
-          return "Tokenize BTC within a smart contract";
+          return globalL10n.r3aFeatureDescBtcTokenization;
         default:
           break;
       }
     }
-    return "Activating soon...";
+    return globalL10n.r3aActivatingSoon;
   }
 
   IconData get icon {
@@ -198,48 +199,48 @@ abstract class Feature with _$Feature {
         if (data.containsKey("AssetTicker") && data.containsKey('AssetName')) {
           return "${data['AssetName']} [${data['AssetTicker']}]";
         }
-        return "Token";
+        return globalL10n.r3aToken;
       case FeatureType.btcTokenization:
-        return "BTC Tokenization";
+        return globalL10n.r3aBtcTokenization;
       default:
-        return "Not implemented";
+        return globalL10n.r3aNotImplemented;
     }
   }
 
   static String typeToName(FeatureType type) {
     switch (type) {
       case FeatureType.royalty:
-        return "Royalty";
+        return globalL10n.scwRoyaltyTitle;
       case FeatureType.evolution:
-        return "Evolving";
+        return globalL10n.r3aFeatureNameEvolving;
       case FeatureType.multiAsset:
-        return "Multi Asset";
+        return globalL10n.r3aMultiAsset;
       case FeatureType.ticket:
-        return "Ticketing";
+        return globalL10n.r3aTicketing;
       case FeatureType.tokenization:
-        return "Tokenization of Physical/Digital Good";
+        return globalL10n.r3aTokenizationPhysicalDigital;
       case FeatureType.music:
-        return "Music Release";
+        return globalL10n.r3aMusicRelease;
       case FeatureType.additionalOwners:
-        return "Additional Owners";
+        return globalL10n.r3aAdditionalOwners;
       case FeatureType.selfDestructive:
-        return "Self Destructive";
+        return globalL10n.r3aSelfDestructive;
       case FeatureType.consumable:
-        return "Consumable";
+        return globalL10n.r3aConsumable;
       case FeatureType.fractionalization:
-        return "Fractionalization";
+        return globalL10n.scwFractionalizationTitle;
       case FeatureType.pair:
-        return "Mint a physical or Real World Asset";
+        return globalL10n.r3aMintPhysicalRwa;
       case FeatureType.soulBound:
-        return "Soul Bound";
+        return globalL10n.scwSoulBoundTitle;
       case FeatureType.wrap:
-        return "Wrap";
+        return globalL10n.r3aWrap;
       case FeatureType.token:
-        return "Token";
+        return globalL10n.r3aToken;
       case FeatureType.btcTokenization:
-        return "BTC Tokenization";
+        return globalL10n.r3aBtcTokenization;
       case FeatureType.notImplemented:
-        return "Not implemented";
+        return globalL10n.r3aNotImplemented;
     }
   }
 

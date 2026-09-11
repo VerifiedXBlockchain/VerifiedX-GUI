@@ -13,6 +13,7 @@ import '../common/form_group_container.dart';
 import '../common/form_group_header.dart';
 import '../common/help_button.dart';
 import '../modals/stat_modal.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class StatsFormGroup extends BaseComponent {
   const StatsFormGroup({Key? key}) : super(key: key);
@@ -20,14 +21,15 @@ class StatsFormGroup extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _model = ref.watch(createSmartContractProvider);
+    final l10n = AppLocalizations.of(context);
 
     return FormGroupContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const FormGroupHeader(
-            "Stats",
+          FormGroupHeader(
+            l10n.scwStats,
             helpType: HelpType.unknown,
           ),
           ..._model.stats.asMap().entries.map((entry) => _StatCard(entry.value, entry.key)).toList(),
@@ -37,7 +39,7 @@ class StatsFormGroup extends BaseComponent {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: AppButton(
-                  label: "Add Stat",
+                  label: l10n.scwAddStat,
                   onPressed: () {
                     showModalBottomSheet(
                       backgroundColor: Colors.transparent,
@@ -73,16 +75,17 @@ class _StatCard extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       child: ListTile(
         leading: const Icon(FontAwesomeIcons.trophy),
         title: Text("${stat.label}: ${stat.value}"),
-        subtitle: const Text("Type: String"),
+        subtitle: Text(l10n.scwStatTypeString),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              label: "Edit",
+              label: l10n.scwEdit,
               icon: Icons.edit,
               onPressed: () {
                 final _provider = ref.read(statFormProvider(index).notifier);
@@ -101,7 +104,7 @@ class _StatCard extends BaseComponent {
             ),
             const SizedBox(width: 6),
             AppButton(
-              label: "Remove",
+              label: l10n.scwRemove,
               icon: Icons.delete,
               variant: AppColorVariant.Danger,
               onPressed: () {},

@@ -41,6 +41,7 @@ import '../../../core/breakpoints.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../generated/assets.gen.dart';
@@ -72,7 +73,7 @@ class WebHomeScreen extends BaseScreen {
 
     return isMobile
         ? AppBar(
-            title: const Text("Dashboard"),
+            title: Text(AppLocalizations.of(context).navDashboard),
             backgroundColor: Colors.black,
             shadowColor: Colors.transparent,
             actions: [WebWalletTypeSwitcher()],
@@ -117,7 +118,7 @@ class WebHomeScreen extends BaseScreen {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Coin Prices",
+                    AppLocalizations.of(context).r3eCoinPrices,
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
@@ -154,7 +155,7 @@ class WebHomeScreen extends BaseScreen {
                           },
                           variant: AppColorVariant.Secondary,
                           type: AppButtonType.Outlined,
-                          label: "Get VFX",
+                          label: AppLocalizations.of(context).bw2StepGetVfx,
                         ),
                       ],
                     ),
@@ -186,7 +187,7 @@ class WebHomeScreen extends BaseScreen {
                             AccountUtils.getCoin(
                                 context, ref, VfxOrBtcOption.btc);
                           },
-                          label: "Get BTC",
+                          label: AppLocalizations.of(context).r3eGetBtc,
                           variant: AppColorVariant.Btc,
                           type: AppButtonType.Outlined,
                         ),
@@ -284,7 +285,7 @@ class WebHomeScreen extends BaseScreen {
                               ),
                             );
                           },
-                          label: "View Chart",
+                          label: AppLocalizations.of(context).r3eViewChart,
                           variant: AppColorVariant.Light,
                           type: AppButtonType.Outlined,
                         ),
@@ -295,7 +296,7 @@ class WebHomeScreen extends BaseScreen {
                           },
                           variant: AppColorVariant.Secondary,
                           type: AppButtonType.Outlined,
-                          label: "Get VFX",
+                          label: AppLocalizations.of(context).bw2StepGetVfx,
                         ),
                       ],
                     ),
@@ -323,7 +324,7 @@ class WebHomeScreen extends BaseScreen {
                               ),
                             );
                           },
-                          label: "View Chart",
+                          label: AppLocalizations.of(context).r3eViewChart,
                           variant: AppColorVariant.Light,
                           type: AppButtonType.Outlined,
                         ),
@@ -332,7 +333,7 @@ class WebHomeScreen extends BaseScreen {
                             AccountUtils.getCoin(
                                 context, ref, VfxOrBtcOption.btc);
                           },
-                          label: "Get BTC",
+                          label: AppLocalizations.of(context).r3eGetBtc,
                           variant: AppColorVariant.Btc,
                           type: AppButtonType.Outlined,
                         ),
@@ -428,7 +429,7 @@ class _Actions extends BaseComponent {
               // ),
 
               AppVerticalIconButton(
-                label: "Send\nCoin",
+                label: AppLocalizations.of(context).homeActionSendCoin,
                 icon: Icons.outbox,
                 prettyIconType: PrettyIconType.send,
                 onPressed: () {
@@ -436,7 +437,7 @@ class _Actions extends BaseComponent {
                 },
               ),
               AppVerticalIconButton(
-                label: "Receive\nCoin",
+                label: AppLocalizations.of(context).homeActionReceiveCoin,
                 icon: Icons.move_to_inbox,
                 prettyIconType: PrettyIconType.receive,
                 onPressed: () {
@@ -444,7 +445,7 @@ class _Actions extends BaseComponent {
                 },
               ),
               AppVerticalIconButton(
-                label: "TXs",
+                label: AppLocalizations.of(context).homeActionTxs,
                 icon: Icons.history,
                 prettyIconType: PrettyIconType.transactions,
                 onPressed: () {
@@ -454,7 +455,7 @@ class _Actions extends BaseComponent {
               ),
               Builder(builder: (context) {
                 return AppVerticalIconButton(
-                  label: "Tokens",
+                  label: AppLocalizations.of(context).homeActionTokens,
                   prettyIconType: PrettyIconType.fungibleToken,
                   icon: Icons.toll,
                   onPressed: () {
@@ -465,7 +466,7 @@ class _Actions extends BaseComponent {
                 );
               }),
               AppVerticalIconButton(
-                label: "Tutorials",
+                label: AppLocalizations.of(context).homeActionTutorials,
                 prettyIconType: PrettyIconType.custom,
                 icon: FontAwesomeIcons.video,
                 iconScale: 0.7,
@@ -481,13 +482,13 @@ class _Actions extends BaseComponent {
                       context: context,
                       builder: (context) {
                         return ModalContainer(
-                          title: "Get Help",
+                          title: AppLocalizations.of(context).homeGetHelpTitle,
                           withClose: true,
                           children: [
                             AppCard(
                               padding: 0,
                               child: ListTile(
-                                  title: Text("Join Discord"),
+                                  title: Text(AppLocalizations.of(context).homeJoinDiscord),
                                   leading: Icon(
                                     FontAwesomeIcons.discord,
                                     size: 18,
@@ -504,7 +505,7 @@ class _Actions extends BaseComponent {
                             AppCard(
                               padding: 0,
                               child: ListTile(
-                                  title: Text("Visit Website"),
+                                  title: Text(AppLocalizations.of(context).homeVisitWebsite),
                                   leading: Icon(
                                     Icons.link,
                                   ),
@@ -519,7 +520,7 @@ class _Actions extends BaseComponent {
                             AppCard(
                               padding: 0,
                               child: ListTile(
-                                  title: Text("Read Docs"),
+                                  title: Text(AppLocalizations.of(context).homeReadDocs),
                                   leading: Icon(
                                     Icons.read_more,
                                   ),
@@ -534,11 +535,11 @@ class _Actions extends BaseComponent {
                       });
                 },
                 icon: Icons.help,
-                label: "Get\nHelp",
+                label: AppLocalizations.of(context).homeActionGetHelp,
                 prettyIconType: PrettyIconType.custom,
               ),
               AppVerticalIconButton(
-                label: "Open\nExplorer",
+                label: AppLocalizations.of(context).homeActionOpenExplorer,
                 icon: Icons.open_in_browser,
                 prettyIconType: PrettyIconType.custom,
                 onPressed: () {
@@ -550,22 +551,21 @@ class _Actions extends BaseComponent {
                 },
               ),
               AppVerticalIconButton(
-                  label: "Verify\nOwner",
+                  label: AppLocalizations.of(context).homeActionVerifyOwner,
                   prettyIconType: PrettyIconType.validator,
                   icon: Icons.check,
                   onPressed: () async {
                     final sig = await PromptModal.show(
-                      title: "Validate Ownership",
-                      body:
-                          "Paste in the signature provided by the owner to validate its ownership.",
+                      title: AppLocalizations.of(context).homeValidateOwnership,
+                      body: AppLocalizations.of(context).homeValidateOwnershipBody,
                       validator: (val) =>
-                          formValidatorNotEmpty(val, "Signature"),
-                      labelText: "Signature",
+                          formValidatorNotEmpty(val, AppLocalizations.of(context).homeSignatureLabel),
+                      labelText: AppLocalizations.of(context).homeSignatureLabel,
                     );
                     if (sig != null && sig.isNotEmpty) {
                       final components = sig.split("<>");
                       if (components.length != 4) {
-                        Toast.error("Invalid ownership verification signature");
+                        Toast.error(AppLocalizations.of(context).homeInvalidSignature);
                         return;
                       }
 
@@ -582,13 +582,13 @@ class _Actions extends BaseComponent {
                           ? Theme.of(context).colorScheme.success
                           : Theme.of(context).colorScheme.danger;
                       final iconData = verified ? Icons.check : Icons.close;
-                      final title = verified ? "Verified" : "Not Verified";
+                      final title = verified ? AppLocalizations.of(context).homeVerified : AppLocalizations.of(context).homeNotVerified;
                       final subtitle = verified
-                          ? "Ownership Verified"
-                          : "Ownership NOT Verified";
+                          ? AppLocalizations.of(context).homeOwnershipVerified
+                          : AppLocalizations.of(context).homeOwnershipNotVerified;
                       final body = verified
-                          ? "$address\nOWNS\n$scId"
-                          : "$address\ndoes NOT own\n$scId";
+                          ? "$address\n${AppLocalizations.of(context).homeOwns}\n$scId"
+                          : "$address\n${AppLocalizations.of(context).homeDoesNotOwn}\n$scId";
 
                       InfoDialog.show(
                         title: title,
@@ -614,17 +614,16 @@ class _Actions extends BaseComponent {
 
               if (ref.read(webSessionProvider).keypair != null && !isMobile)
                 AppVerticalIconButton(
-                  label: "Sign\nOut",
+                  label: AppLocalizations.of(context).homeActionSignOut,
                   icon: Icons.logout,
                   prettyIconType: PrettyIconType.custom,
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                      title: "Sign Out",
-                      body:
-                          "Are you sure you want to logout of the VFX Web Wallet?",
+                      title: AppLocalizations.of(context).navSignOutTitle,
+                      body: AppLocalizations.of(context).navSignOutBody,
                       destructive: true,
-                      confirmText: "Logout",
-                      cancelText: "Cancel",
+                      confirmText: AppLocalizations.of(context).navMenuLogout,
+                      cancelText: AppLocalizations.of(context).actionCancel,
                     );
                     if (confirmed == true) {
                       await ref.read(webSessionProvider.notifier).logout();

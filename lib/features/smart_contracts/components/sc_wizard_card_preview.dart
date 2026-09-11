@@ -7,6 +7,7 @@ import '../models/bulk_smart_contract_entry.dart';
 import '../providers/sc_wizard_provider.dart';
 import '../screens/sc_wizard_edit_item_screen.dart';
 import 'sc_wizard_asset_preview.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardCardPreview extends BaseComponent {
   final int index;
@@ -34,7 +35,7 @@ class ScWizardCardPreview extends BaseComponent {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ScWizardEditItemScreen(
-          title: "Create Instance",
+          title: AppLocalizations.of(context).r3aCreateInstance,
           index: index,
         ),
       ),
@@ -47,6 +48,7 @@ class ScWizardCardPreview extends BaseComponent {
     WidgetRef ref,
   ) {
     final provider = ref.read(scWizardProvider.notifier);
+    final l10n = AppLocalizations.of(context);
 
     final items = ref.watch(scWizardProvider);
     final item = items.length >= index + 1 ? items[index] : null;
@@ -54,12 +56,12 @@ class ScWizardCardPreview extends BaseComponent {
     String title = "";
     if (item == null) {
       if (items.isEmpty) {
-        title = "Create Blueprint";
+        title = l10n.r3aCreateBlueprint;
       } else {
-        title = "Create Instance";
+        title = l10n.r3aCreateInstance;
       }
     } else {
-      title = item.entry.name.isEmpty ? "Untitled" : item.entry.name;
+      title = item.entry.name.isEmpty ? l10n.r3aUntitled : item.entry.name;
     }
 
     final bool addButtonAbove = item != null && item.y > 0 && items.firstWhereOrNull((i) => i.x == item.x && i.y == item.y - 1) == null;
@@ -129,8 +131,8 @@ class ScWizardCardPreview extends BaseComponent {
 
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => const ScWizardEditItemScreen(
-                            title: "Create Collection Blueprint",
+                          builder: (context) => ScWizardEditItemScreen(
+                            title: l10n.r3aCreateCollectionBlueprint,
                             index: 0,
                           ),
                         ),
@@ -139,7 +141,7 @@ class ScWizardCardPreview extends BaseComponent {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => ScWizardEditItemScreen(
-                            title: "Edit Instance",
+                            title: l10n.r3aEditInstance,
                             index: item.index,
                           ),
                         ),

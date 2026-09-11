@@ -12,6 +12,7 @@ import '../../raw/raw_service.dart';
 import '../../reserve/vault_web_utils.dart';
 import '../providers/web_ra_pending_activation_provider.dart';
 import '../utils/raw_transaction.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 
 class WebActivateRaButton extends BaseComponent {
@@ -21,6 +22,7 @@ class WebActivateRaButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final keypair = ref.watch(webSessionProvider.select((v) => v.raKeypair));
 
     final hasActivated = ref.watch(webRaPendingActivationProvider).contains(keypair?.address);
@@ -31,13 +33,13 @@ class WebActivateRaButton extends BaseComponent {
 
     if (hasActivated) {
       return AppBadge(
-        label: "Pending Activation",
+        label: l10n.webPendingActivation,
         variant: AppColorVariant.Warning,
       );
     }
 
     return AppButton(
-      label: "Activate Now",
+      label: l10n.reserveActivateNow,
       variant: AppColorVariant.Light,
       onPressed: () async {
         activateVaultAccountWeb(

@@ -24,24 +24,25 @@ wingen_watch:
 build_core:
 	rm -rf ../Core-CLI/bin/Release
 	cd ../Core-CLI && git pull && cd /Users/tylersavery/Projects/rbx/rbx_wallet/
-	dotnet publish -c Release -r osx-x64 ../Core-Cli/ --self-contained true -f net6.0 -p:PublishSingleFile=true
+	dotnet publish -c Release -r osx-x64 ../Core-CLI/VerifiedXCore/VerifiedXCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 
 package_mac:
 	rm -rf ../Core-CLI/bin/Release
 	cd ../Core-CLI && git pull && cd /Users/tylersavery/Projects/rbx/rbx_wallet/
-	dotnet publish -c Release -r osx-x64 ../Core-Cli/ReserveBlockCore/ReserveBlockCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
+	dotnet publish -c Release -r osx-x64 ../Core-CLI/VerifiedXCore/VerifiedXCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 	rm -f ./installers/exports/RBX-OSX-INTEL-Installer.dmg
 	rm -f ./installers/exports/VFX-OSX-INTEL-Installer.dmg
 	rm -f ./installers/resources/Runner/VFXWallet.app
 	mv "./installers/resources/Runner/VFX Switchblade.app" "./installers/resources/Runner/VFXWallet.app"
 	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
-	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
-	cp -r ../Core-CLI/ReserveBlockCore/bin/Release/net6.0/osx-x64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
-	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39	
+	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
+	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
+	cp -r ../Core-CLI/VerifiedXCore/bin/Release/net6.0/osx-x64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
+	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39
 	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-Intel-Installer.dmg
 	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
 	rm -f ./installers/exports/vfx-corecli-mac-arm.zip
-	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tylersavery/Projects/rbx/rbx_wallet/installers/exports/vfx-corecli-mac-intel.zip ./RBXCore/
+	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tylersavery/Projects/rbx/rbx_wallet/installers/exports/vfx-corecli-mac-intel.zip ./VFXCore/
 	cd /Users/tylersavery/Projects/rbx/rbx_wallet/
 	open ./installers/exports/
 
@@ -49,10 +50,11 @@ package_mac:
 
 redeploy_cli:
 	rm -rf ../Core-CLI/bin/Release
-	dotnet publish -c Release -r osx-arm64 -p:RuntimeIdentifier=osx-arm64 ../Core-Cli/ReserveBlockCore/ReserveBlockCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
+	dotnet publish -c Release -r osx-arm64 -p:RuntimeIdentifier=osx-arm64 ../Core-CLI/VerifiedXCore/VerifiedXCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 	rm -rf /Applications/VFXWallet.app/Contents/Resources/RBXCore
-	mkdir /Applications/VFXWallet.app/Contents/Resources/RBXCore
-	cp -r ../Core-CLI/ReserveBlockCore/bin/Release/net6.0/osx-arm64/publish/ /Applications/VFXWallet.app/Contents/Resources/RBXCore
+	rm -rf /Applications/VFXWallet.app/Contents/Resources/VFXCore
+	mkdir /Applications/VFXWallet.app/Contents/Resources/VFXCore
+	cp -r ../Core-CLI/VerifiedXCore/bin/Release/net6.0/osx-arm64/publish/ /Applications/VFXWallet.app/Contents/Resources/VFXCore
 	@echo "CLI rebuilt and deployed to /Applications/VFXWallet.app"
 
 	
@@ -63,19 +65,20 @@ build_win_cli:
 package_m1:
 	rm -rf ../Core-CLI/bin/Release
 	cd ../Core-CLI && git pull && cd /Users/tyler/prj/vfx/vfx-gui/
-	dotnet publish -c Release -r osx-arm64 -p:RuntimeIdentifier=osx-arm64 ../Core-Cli/ReserveBlockCore/ReserveBlockCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
+	dotnet publish -c Release -r osx-arm64 -p:RuntimeIdentifier=osx-arm64 ../Core-CLI/VerifiedXCore/VerifiedXCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 	rm -f ./installers/exports/RBX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/VFX-OSX-ARM-Installer.dmg
 	rm -f ./installers/resources/Runner/VFXWallet.app
 	mv "./installers/resources/Runner/VFX Switchblade.app" "./installers/resources/Runner/VFXWallet.app"
 	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
-	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
-	cp -r ../Core-CLI/ReserveBlockCore/bin/Release/net6.0/osx-arm64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/RBXCore
-	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39	
+	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
+	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
+	cp -r ../Core-CLI/VerifiedXCore/bin/Release/net6.0/osx-arm64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
+	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39
 	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
 	rm -f ./installers/exports/vfx-corecli-mac-arm.zip
-	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tyler/prj/vfx/vfx-gui/installers/exports/vfx-corecli-mac-arm.zip ./RBXCore/
+	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tyler/prj/vfx/vfx-gui/installers/exports/vfx-corecli-mac-arm.zip ./VFXCore/
 	cd /Users/tyler/prj/vfx/vfx-gui/
 	open ./installers/exports/
 
@@ -85,10 +88,9 @@ build_win:
 	if exist .\build\windows\runner\Release rmdir /s /q ".\build\windows\runner\Release"
 	fvm flutter build windows --release
 	move ".\build\windows\runner\Release\rbx_wallet_gui.exe" ".\build\windows\runner\Release\VFXWallet.exe"
-	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\ReserveBlockCore\ReserveBlockCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
+	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\VerifiedXCore\VerifiedXCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
 	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
-	copy ".\installers\resources\windows-64\RBXLauncher.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncher.exe" 
-	copy ".\installers\resources\windows-64\RBXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncherTestNet.exe" 
+	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
@@ -102,8 +104,7 @@ build_win7:
 	move ".\build\windows\runner\Release\rbx_wallet_gui.exe" ".\build\windows\runner\Release\VFXWallet.exe"
 	dotnet publish -c Release -r win7-x64 ..\ReserveBlock-Core\ --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
 	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
-	copy ".\installers\resources\windows-64\RBXLauncher.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncher.exe" 
-	copy ".\installers\resources\windows-64\RBXLauncherTestNet.exe" ".\build\windows\runner\Release\RBXCore\RBXLauncherTestNet.exe" 
+	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
@@ -151,10 +152,10 @@ run_web_cors:
 	fvm flutter run -d chrome --web-browser-flag "--disable-web-security" --web-port 42069
 
 run_cli_mainnet:
-	/Applications/VFXWallet.app/Contents/Resources/RBXCore/ReserveBlockCore enableapi gui
+	/Applications/VFXWallet.app/Contents/Resources/VFXCore/VerifiedXCore enableapi gui
 
 run_cli_testnet:
-	/Applications/VFXWallet.app/Contents/Resources/RBXCore/ReserveBlockCore testnet enableapi gui
+	/Applications/VFXWallet.app/Contents/Resources/VFXCore/VerifiedXCore testnet enableapi gui
 
 run_cli_testnet_win:
 	C:\Users\Administrator\prj\ReserveBlock-Core\rbxpublished\ReserveBlockCore.exe testnet enableapi gui

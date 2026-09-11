@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/token_form.dart';
 import '../../wallet/components/wallet_selector.dart';
 
@@ -16,7 +17,7 @@ class TokenCreateScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
       backgroundColor: Colors.black54,
-      title: Text("Create Fungible Token"),
+      title: Text(AppLocalizations.of(context).tokenCreateTitle),
     );
   }
 
@@ -26,7 +27,7 @@ class TokenCreateScreen extends BaseScreen {
 
     if (currentWallet == null) {
       return Center(
-        child: Text("No account selected"),
+        child: Text(AppLocalizations.of(context).tokenFormNoAccountSelectedToast),
       );
     }
     if (currentWallet.isReserved) {
@@ -34,7 +35,7 @@ class TokenCreateScreen extends BaseScreen {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Vault Accounts cann't mint tokens"),
+            Text(AppLocalizations.of(context).scVaultCannotMintToast),
             SizedBox(
               height: 8,
             ),

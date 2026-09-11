@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../l10n/l10n_helper.dart';
 
 part 'new_reserve_account.freezed.dart';
 part 'new_reserve_account.g.dart';
@@ -19,15 +20,15 @@ abstract class NewReserveAccount with _$NewReserveAccount {
 
   String get backupContents {
     return [
-      "Restore Code:",
+      globalL10n.r3dBackupRestoreCode,
       restoreCode,
-      "\nPrivate Key:",
+      "\n${globalL10n.r3dBackupPrivateKey}",
       privateKey,
-      "\nAddress:",
+      "\n${globalL10n.r3dBackupAddress}",
       address,
-      "\nRecovery Private Key:",
+      "\n${globalL10n.r3dBackupRecoveryPrivateKey}",
       recoveryPrivateKey,
-      "\nRecovery Address:",
+      "\n${globalL10n.r3dBackupRecoveryAddress}",
       recoveryAddress,
     ].join("\n");
   }

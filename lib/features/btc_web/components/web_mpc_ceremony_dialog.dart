@@ -11,6 +11,7 @@ import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils.dart';
 import '../../../core/app_constants.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../../transactions/providers/web_transaction_list_provider.dart';
@@ -84,7 +85,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
     if (keypair == null) {
       setState(() {
         _step = _CeremonyStep.failure;
-        _errorMessage = "No keypair found.";
+        _errorMessage = AppLocalizations.of(context).bw2NoKeypairFoundPeriod;
       });
       return;
     }
@@ -98,7 +99,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
       if (prepared['success'] != true || prepared['ceremony_id'] == null) {
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = prepared['message'] ?? "Failed to prepare MPC ceremony.";
+          _errorMessage = prepared['message'] ?? AppLocalizations.of(context).bw2FailedPrepareMpc;
         });
         return;
       }
@@ -128,7 +129,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         if (!mounted) return;
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = "Failed to sign ceremony messages.";
+          _errorMessage = AppLocalizations.of(context).bw2FailedSignCeremony;
         });
         return;
       }
@@ -151,14 +152,14 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
       } else {
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = executeResult['message'] ?? "Failed to execute MPC ceremony.";
+          _errorMessage = executeResult['message'] ?? AppLocalizations.of(context).bw2FailedExecuteMpc;
         });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _step = _CeremonyStep.failure;
-        _errorMessage = "Failed to initiate MPC ceremony.";
+        _errorMessage = AppLocalizations.of(context).bw2FailedInitiateMpc;
       });
     }
   }
@@ -193,7 +194,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
           timer.cancel();
           setState(() {
             _step = _CeremonyStep.failure;
-            _errorMessage = message.isNotEmpty ? message : "MPC ceremony failed.";
+            _errorMessage = message.isNotEmpty ? message : AppLocalizations.of(context).bw2MpcCeremonyFailedToast;
           });
         }
       } catch (e) {
@@ -211,7 +212,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
     if (keypair == null) {
       setState(() {
         _step = _CeremonyStep.failure;
-        _errorMessage = "No keypair found.";
+        _errorMessage = AppLocalizations.of(context).bw2NoKeypairFoundPeriod;
       });
       return;
     }
@@ -234,7 +235,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         if (!mounted) return;
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = "Failed to sign ownership proof.";
+          _errorMessage = AppLocalizations.of(context).bw2FailedSignOwnershipProof;
         });
         return;
       }
@@ -256,7 +257,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
       if (prepared['success'] != true || prepared['Hash'] == null) {
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = prepared['message'] ?? "Failed to prepare contract creation.";
+          _errorMessage = prepared['message'] ?? AppLocalizations.of(context).bw2FailedPrepareContractCreation;
         });
         return;
       }
@@ -272,7 +273,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         if (!mounted) return;
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = "Failed to sign contract creation transaction.";
+          _errorMessage = AppLocalizations.of(context).bw2FailedSignContractTx;
         });
         return;
       }
@@ -308,26 +309,27 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
       } else {
         setState(() {
           _step = _CeremonyStep.failure;
-          _errorMessage = result['message'] ?? "Failed to create contract.";
+          _errorMessage = result['message'] ?? AppLocalizations.of(context).bw2FailedCreateContractShort;
         });
       }
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _step = _CeremonyStep.failure;
-        _errorMessage = "Failed to create contract.";
+        _errorMessage = AppLocalizations.of(context).bw2FailedCreateContractShort;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            _titleForStep(),
+            _titleForStep(l10n),
             style: const TextStyle(color: Colors.white),
           ),
           if (_step == _CeremonyStep.success || _step == _CeremonyStep.failure)
@@ -346,46 +348,46 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (_step == _CeremonyStep.initiating) _buildInitiatingSection(),
-            if (_step == _CeremonyStep.polling) _buildPollingSection(),
-            if (_step == _CeremonyStep.creatingContract) _buildCreatingSection(),
-            if (_step == _CeremonyStep.success) _buildSuccessSection(),
-            if (_step == _CeremonyStep.failure) _buildFailureSection(),
+            if (_step == _CeremonyStep.initiating) _buildInitiatingSection(l10n),
+            if (_step == _CeremonyStep.polling) _buildPollingSection(l10n),
+            if (_step == _CeremonyStep.creatingContract) _buildCreatingSection(l10n),
+            if (_step == _CeremonyStep.success) _buildSuccessSection(l10n),
+            if (_step == _CeremonyStep.failure) _buildFailureSection(l10n),
           ],
         ),
       ),
     );
   }
 
-  String _titleForStep() {
+  String _titleForStep(AppLocalizations l10n) {
     switch (_step) {
       case _CeremonyStep.initiating:
-        return "Starting MPC Ceremony";
+        return l10n.bw2StartingMpcCeremony;
       case _CeremonyStep.polling:
-        return "MPC Ceremony in Progress";
+        return l10n.bw2MpcCeremonyInProgress;
       case _CeremonyStep.creatingContract:
-        return "Creating Contract";
+        return l10n.bw2CreatingContract;
       case _CeremonyStep.success:
-        return "Token Created";
+        return l10n.bw2TokenCreated;
       case _CeremonyStep.failure:
-        return "Error";
+        return l10n.tkbError;
     }
   }
 
-  Widget _buildInitiatingSection() {
+  Widget _buildInitiatingSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("Initiating MPC ceremony...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("This starts the distributed key generation process.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(l10n.bw2InitiatingMpc, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(l10n.bw2DkgStartHint, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
 
-  Widget _buildPollingSection() {
+  Widget _buildPollingSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -396,7 +398,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         ),
         const SizedBox(height: 12),
         Text(
-          "$_progress% complete",
+          l10n.bw2PercentComplete(_progress.toString()),
           style: const TextStyle(color: Colors.white70, fontSize: 13),
         ),
         if (_statusMessage.isNotEmpty) ...[
@@ -407,41 +409,41 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
           ),
         ],
         const SizedBox(height: 16),
-        const Text(
-          "Validators are generating threshold signing keys. This typically takes 30-90 seconds.",
-          style: TextStyle(color: Colors.white38, fontSize: 12),
+        Text(
+          l10n.bw2ValidatorsGeneratingKeys,
+          style: const TextStyle(color: Colors.white38, fontSize: 12),
         ),
       ],
     );
   }
 
-  Widget _buildCreatingSection() {
+  Widget _buildCreatingSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("Creating vBTC contract on-chain...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("This will be confirmed once indexed by the explorer.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(l10n.bw2CreatingVbtcContract, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(l10n.bw2ConfirmedWhenIndexed, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
 
-  Widget _buildSuccessSection() {
+  Widget _buildSuccessSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          children: const [
-            Icon(Icons.check_circle, color: Color(0xFF43ae52), size: 20),
-            SizedBox(width: 8),
-            Text("vBTC token created successfully!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          children: [
+            const Icon(Icons.check_circle, color: Color(0xFF43ae52), size: 20),
+            const SizedBox(width: 8),
+            Text(l10n.bw2VbtcTokenCreatedSuccess, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
           ],
         ),
         if (_transactionHash != null) ...[
           const SizedBox(height: 16),
-          const Text("Transaction Hash:", style: TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(l10n.bw2TransactionHashColon, style: const TextStyle(color: Colors.white70, fontSize: 12)),
           const SizedBox(height: 4),
           Row(
             children: [
@@ -450,7 +452,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
               InkWell(
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: _transactionHash!));
-                  Toast.message("Copied to clipboard");
+                  Toast.message(l10n.messageCopiedToClipboard);
                 },
                 child: const Icon(Icons.copy, size: 16, color: Colors.white54),
               ),
@@ -459,17 +461,17 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         ],
         if (_scIdentifier != null) ...[
           const SizedBox(height: 12),
-          const Text("Smart Contract ID:", style: TextStyle(color: Colors.white70, fontSize: 12)),
+          Text(l10n.bw2SmartContractIdColon, style: const TextStyle(color: Colors.white70, fontSize: 12)),
           const SizedBox(height: 4),
           SelectableText(_scIdentifier!, style: const TextStyle(color: Colors.white, fontSize: 13)),
         ],
         const SizedBox(height: 16),
-        const Text("The token will appear in your list once indexed (typically a few seconds).", style: TextStyle(color: Colors.white38, fontSize: 12)),
+        Text(l10n.bw2TokenAppearWhenIndexed, style: const TextStyle(color: Colors.white38, fontSize: 12)),
         const SizedBox(height: 20),
         Align(
           alignment: Alignment.centerRight,
           child: AppButton(
-            label: "Done",
+            label: l10n.actionDone,
             variant: AppColorVariant.Success,
             onPressed: () {
               ref.read(btcWebVbtcTokenListProvider.notifier).reload(
@@ -483,7 +485,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
     );
   }
 
-  Widget _buildFailureSection() {
+  Widget _buildFailureSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -494,7 +496,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                _errorMessage ?? "An error occurred.",
+                _errorMessage ?? l10n.bw2AnErrorOccurred,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -505,13 +507,13 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             AppButton(
-              label: "Dismiss",
+              label: l10n.tkbDismiss,
               variant: AppColorVariant.Light,
               onPressed: () => Navigator.of(context).pop(),
             ),
             const SizedBox(width: 8),
             AppButton(
-              label: "Retry",
+              label: l10n.btcRetry,
               variant: AppColorVariant.Warning,
               onPressed: _initiateCeremony,
             ),

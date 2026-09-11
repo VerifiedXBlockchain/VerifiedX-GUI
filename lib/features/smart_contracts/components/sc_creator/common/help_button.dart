@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../core/app_constants.dart';
 import '../../../../../core/dialogs.dart';
+import '../../../../../l10n/l10n_helper.dart';
 
 enum HelpType {
   unknown,
@@ -74,7 +75,7 @@ class HelpButton extends StatelessWidget {
         size: subtle ? 16 : 22,
       ),
       onPressed: () {
-        InfoDialog.show(title: _title, body: _body, closeText: "Close", icon: Icons.help, headerColor: Theme.of(context).colorScheme.secondary);
+        InfoDialog.show(title: _title, body: _body, closeText: globalL10n.actionClose, icon: Icons.help, headerColor: Theme.of(context).colorScheme.secondary);
       },
     );
   }
@@ -82,185 +83,185 @@ class HelpButton extends StatelessWidget {
   String get _title {
     switch (type) {
       case HelpType.unknown:
-        return "Not implemented";
+        return globalL10n.r3aNotImplemented;
       case HelpType.smartContractName:
-        return "Smart Contract Name";
+        return globalL10n.r3aSmartContractName;
       case HelpType.description:
-        return "Description";
+        return globalL10n.btcDetailDescriptionLabel;
       case HelpType.ownerAddress:
-        return "Owner Address";
+        return globalL10n.scwOwnerAddress;
       case HelpType.baselineProperties:
-        return "Properties";
+        return globalL10n.scwProperties;
       case HelpType.minterName:
-        return "Minter Name";
+        return globalL10n.r3aMinterName;
       case HelpType.primaryAsset:
-        return "Primary Asset";
+        return globalL10n.scwPrimaryAsset;
       case HelpType.features:
-        return "Features";
+        return globalL10n.r3aFeatures;
       case HelpType.royaltyPercent:
-        return "Royalty Percentage Fee Amount";
+        return globalL10n.r3aRoyaltyPercentageFeeAmount;
       case HelpType.royaltyFlat:
-        return "Royalty Flat Fee Amount";
+        return globalL10n.r3aRoyaltyFlatFeeAmount;
       case HelpType.royaltyAddress:
-        return "Payee Address";
+        return globalL10n.r3aPayeeAddress;
 
       case HelpType.evolveMode:
-        return "Evolution Mode";
+        return globalL10n.r3aEvolutionMode;
       case HelpType.evolveType:
-        return "Evolution Type";
+        return globalL10n.r3aEvolutionType;
       case HelpType.evolveDatetime:
-        return "Date/Time Variable";
+        return globalL10n.r3aDateTimeVariable;
       case HelpType.evolveBlockHeight:
-        return "Block Height Variable";
+        return globalL10n.r3aBlockHeightVariable;
       case HelpType.evolveStageName:
-        return "Evolve Stage Name";
+        return globalL10n.scwEvolveStageName;
       case HelpType.evolveStageDescription:
-        return "Evolve Stage Description";
+        return globalL10n.scwEvolveStageDescription;
       case HelpType.evolveAsset:
-        return "Evolve Stage Asset";
+        return globalL10n.scwEvolveStageAsset;
       case HelpType.smartContract:
-        return "Smart Contract";
+        return globalL10n.r3aSmartContract;
       case HelpType.saveAsDraft:
-        return "Save as Draft";
+        return globalL10n.r3aSaveAsDraft;
       case HelpType.compile:
-        return "Compile";
+        return globalL10n.r3aCompile;
       case HelpType.mint:
-        return "Mint";
+        return globalL10n.r3aMint;
       case HelpType.delete:
-        return "Delete";
+        return globalL10n.actionDelete;
       case HelpType.burn:
-        return "Burn NFT";
+        return globalL10n.r3aBurnNft;
       case HelpType.transfer:
-        return "Transfer NFT";
+        return globalL10n.r3aTransferNft;
       case HelpType.minting:
-        return "Minting";
+        return globalL10n.r3aMinting;
       case HelpType.setEvolution:
-        return "Set Evolution";
+        return globalL10n.r3aSetEvolution;
       case HelpType.manageProperties:
-        return "Properties";
+        return globalL10n.scwProperties;
 
       case HelpType.configuration:
-        return "Configuration";
+        return globalL10n.r3aConfiguration;
       case HelpType.apiPort:
-        return "Api Port";
+        return globalL10n.hnavConfigApiPort;
       case HelpType.apiCallUrl:
-        return "Api Call Url";
+        return globalL10n.hnavConfigApiCallUrl;
       case HelpType.walletUnlockTime:
-        return "Account Unlock Time";
+        return globalL10n.r3aAccountUnlockTime;
       case HelpType.nftTimeout:
-        return "Nft Timeout";
+        return globalL10n.r3aNftTimeout;
       case HelpType.passwordClearTime:
-        return "Password Clear Time";
+        return globalL10n.r3aPasswordClearTime;
       case HelpType.autoDownloadNftAsset:
-        return "Auto Download NFT Asset";
+        return globalL10n.r3aAutoDownloadNftAsset;
       case HelpType.ignoreIncomingNfts:
-        return "Ignore Incoming NFTs";
+        return globalL10n.r3aIgnoreIncomingNfts;
       case HelpType.rejectAssetExtensionTypes:
-        return "Reject Asset Extension Types";
+        return globalL10n.r3aRejectAssetExtensionTypes;
       case HelpType.allowedAssetExtensionTypes:
-        return "Allowed Asset Extension Types";
+        return globalL10n.r3aAllowedAssetExtensionTypes;
       case HelpType.motherAddress:
-        return "Mother Address";
+        return globalL10n.r3aMotherAddress;
       case HelpType.motherPassword:
-        return "Mother Password";
+        return globalL10n.r3aMotherPassword;
       case HelpType.mintQuantity:
-        return "Quantity to Mint";
+        return globalL10n.scwQuantityToMint;
       case HelpType.properties:
-        return "Properties";
+        return globalL10n.scwProperties;
       case HelpType.propertyTyes:
-        return "Property Types";
+        return globalL10n.r3aPropertyTypes;
     }
   }
 
   String get _body {
     switch (type) {
       case HelpType.unknown:
-        return "Not implemented.";
+        return globalL10n.scwNotImplemented;
       case HelpType.smartContractName:
-        return "Name your smart contract. This field is required and is publicly visible.";
+        return globalL10n.r3aHelpBodyScName;
       case HelpType.ownerAddress:
-        return "This should be the account address that will be used to compile and mint the smart contract.";
+        return globalL10n.r3aHelpBodyOwnerAddress;
       case HelpType.description:
-        return "Provide a text-based description of your smart contract/NFT. This field is required and will be publicly visible.";
+        return globalL10n.r3aHelpBodyDescription;
       case HelpType.baselineProperties:
-        return "Fill out the baseline info required by all smart contracts. Choose a name, the minter's name (optional), and the account you want to use. Then, give your smart contract/NFT a detailed description.";
+        return globalL10n.r3aHelpBodyBaseline;
       case HelpType.minterName:
-        return "This field is optional but will be displayed publicly if set. This can be your name/persona, or just leave it blank.";
+        return globalL10n.r3aHelpBodyMinterName;
       case HelpType.primaryAsset:
-        return "This is the primary file asset contained in the smart contract/NFT. It can be an image, audio, video or any file.";
+        return globalL10n.r3aHelpBodyPrimaryAsset;
       case HelpType.features:
-        return "Add a feature to your smart contract such as royalties or evolving functionality.";
+        return globalL10n.r3aHelpBodyFeatures;
       case HelpType.royaltyPercent:
-        return "Type in the percent that will be paid to the address provided and is enforced on-chain upon any trade. This fee is remitted to the royalty holder upon transaction finality.";
+        return globalL10n.r3aHelpBodyRoyaltyPercent;
       case HelpType.royaltyFlat:
-        return "Type in the amount of VFX that will be paid to the address provided and is enforced on-chain upon any trade. This fee is remitted to the royalty holder upon transaction finality.";
+        return globalL10n.r3aHelpBodyRoyaltyFlat;
       case HelpType.royaltyAddress:
-        return "Provide the VFX public address that the royalty will be paid to upon transaction finality.";
+        return globalL10n.r3aHelpBodyRoyaltyAddress;
       case HelpType.evolveMode:
-        return "You decide how the evolution will be controlled.\n\nIssuer/Minter Controlled: The minter will be able to evolve/devolve the smart contract at any point.\n\nAutomated/Application Controlled: Automatically evolves based on time/date, on-chain variables, and/or application induced variables.";
+        return globalL10n.r3aHelpBodyEvolveMode;
       case HelpType.evolveType:
-        return "Choose the variable type that can dynamically affect the evolution state.\n\nDate/Time: The smart contract will automatically evolve at a certain point of time.\n\nBlock Height: The smart contract will evolve when the chain reaches a particular block height.\n\nManual Only: The smart contract will not evolve unless manually told to by the issuer or user/application (depending on which mode is selected).";
+        return globalL10n.r3aHelpBodyEvolveType;
       case HelpType.evolveBlockHeight:
-        return "The smart contract will evolve when the VFX chain reaches this block height.";
+        return globalL10n.r3aHelpBodyEvolveBlockHeight;
       case HelpType.evolveStageName:
-        return "Provide a name for this evolution stage.";
+        return globalL10n.r3aHelpBodyEvolveStageName;
       case HelpType.evolveStageDescription:
-        return "Provide a description for this evolution stage.";
+        return globalL10n.r3aHelpBodyEvolveStageDescription;
       case HelpType.evolveAsset:
-        return "Overide the asset when the smart contract evolves to this stage. This field is optional.";
+        return globalL10n.r3aHelpBodyEvolveAsset;
       case HelpType.evolveDatetime:
-        return "The date and time the smart contract will evolve (UTC).";
+        return globalL10n.r3aHelpBodyEvolveDatetime;
       case HelpType.smartContract:
-        return "Configure the parameters of your smart contract then compile and mint it.";
+        return globalL10n.r3aHelpBodySmartContract;
       case HelpType.saveAsDraft:
-        return "Save your smart contract as a draft locally to come back and work on it later.";
+        return globalL10n.r3aHelpBodySaveAsDraft;
       case HelpType.compile:
-        return "Compile the Trilliam code based on the parameters you've configured and then mint when ready.";
+        return globalL10n.r3aHelpBodyCompile;
       case HelpType.mint:
-        return "Mint and deploy the smart contract to the chain.";
+        return globalL10n.r3aHelpBodyMint;
       case HelpType.delete:
-        return "Delete your smart contract";
+        return globalL10n.r3aHelpBodyDelete;
       case HelpType.burn:
-        return "Burn (destroy) this NFT permanently.";
+        return globalL10n.r3aHelpBodyBurn;
       case HelpType.transfer:
-        return "Transfer this NFT to another account.";
+        return globalL10n.r3aHelpBodyTransfer;
       case HelpType.minting:
-        return "This action occurs after you have successfully compiled and minted but requires the transaction to be authenticated by the network which takes approximately 30 seconds for finality as well as your wallet to be synced with the block that includes this transaction.";
+        return globalL10n.r3aHelpBodyMinting;
       case HelpType.setEvolution:
-        return "With an NFT that has more than 2 phases the user can go directly from one stage to another with the “Set Evolution” button instead of evolving and devolving stage by stage";
+        return globalL10n.r3aHelpBodySetEvolution;
       case HelpType.manageProperties:
-        return "Create label & value pairs.\nFor example:\n\nLabel: Color\nValue: Blue";
+        return globalL10n.r3aHelpBodyManageProperties;
 
       case HelpType.configuration:
-        return "This values will modify the config.txt file located in the CLIs database, for this changes to take effect the CLI needs to be restarted";
+        return globalL10n.r3aHelpBodyConfiguration;
       case HelpType.apiPort:
-        return "This is the port to call the API. This may be changed to whatever you want. \n\nDefault value: 7292";
+        return globalL10n.r3aHelpBodyApiPort;
       case HelpType.apiCallUrl:
-        return "This URL is used to send incoming transactions to an outside URL. This is something used for like incoming deposits or other notification. services. \n\nDefault value: null";
+        return globalL10n.r3aHelpBodyApiCallUrl;
       case HelpType.walletUnlockTime:
-        return "This is the amount of time once a password has been entered the wallet will remain unlocked and not need password again \n\nDefault value: 15";
+        return globalL10n.r3aHelpBodyWalletUnlockTime;
       case HelpType.nftTimeout:
-        return "This will control the timeout for processing an incoming NFT \n\nDefault value: 15";
+        return globalL10n.r3aHelpBodyNftTimeout;
       case HelpType.passwordClearTime:
-        return "This will control the clear time for an ecrypted wallets password \n\nDefault value: 10";
+        return globalL10n.r3aHelpBodyPasswordClearTime;
       case HelpType.autoDownloadNftAsset:
-        return "This will control whether or not an NFT's asset is automatically downloaded \n\nDefault value: true";
+        return globalL10n.r3aHelpBodyAutoDownload;
       case HelpType.ignoreIncomingNfts:
-        return "This will control whether or not incoming NFTs are processed or just added as a TX record \n\nDefault value: false";
+        return globalL10n.r3aHelpBodyIgnoreIncoming;
       case HelpType.rejectAssetExtensionTypes:
-        return "This will add extension types to the already defined list and will reject any NFT assets with these known extension types \nEx: exe,zip,pdf... (ensure there are no spaces between types) \n\nDefault value: (leave blank)\n\nIf left blank, this is the default:\n${DEFAULT_REJECTED_EXTENIONS.join(',')}";
+        return globalL10n.r3aHelpBodyRejectExt(DEFAULT_REJECTED_EXTENIONS.join(','));
       case HelpType.allowedAssetExtensionTypes:
-        return "This will remove extension types to the already defined list and will allow any NFT assets with these known extension types to be downloaded \nEx: pdf,doc,xls \n\nDefault value: (leave blank)";
+        return globalL10n.r3aHelpBodyAllowedExt;
       case HelpType.motherAddress:
-        return "The IP address of the HOST wallet. \n\n Default value: (leave blank)";
+        return globalL10n.r3aHelpBodyMotherAddress;
       case HelpType.motherPassword:
-        return "The password set in your HOST wallet when configuring MOTHER.\n\n Default value: (leave blank)";
+        return globalL10n.r3aHelpBodyMotherPassword;
       case HelpType.mintQuantity:
-        return "The number of Smart Contracts / NFTs you want to mint from this template.";
+        return globalL10n.r3aHelpBodyMintQuantity;
       case HelpType.properties:
-        return "Define and assign values to assets in your smart contract. This can be a rare trait as an example.";
+        return globalL10n.r3aHelpBodyProperties;
       case HelpType.propertyTyes:
-        return "Define the kind of value that your property will have \nThis types are: \n- Text: alphanumeric value \n- Number: numerical value \n- Color: Hexadecimal value of a color of your choice";
+        return globalL10n.r3aHelpBodyPropertyTypes;
     }
   }
 }

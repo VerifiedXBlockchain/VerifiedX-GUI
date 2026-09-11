@@ -3,21 +3,32 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "6.2.7";
+const APP_V = "7.0.0";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
 
 const ALLOW_PAYMENT = true;
 const BUTTERFLY_ENABLED = true;
+// Crypto.com on-ramp is hidden for now: side-nav link and Get VFX/BTC gateway option.
+const CRYPTO_DOT_COM_ENABLED = false;
 const VALIDATOR_NAV_ENABLED = false;
-const BULK_VBTC_TRANSFER_ENABLED = false;
+// Multi-contract vBTC transfers only activate on mainnet after the network
+// upgrade (CLI Globals.V2TransferMultiHeight), so the entry point is
+// testnet-only until then.
+final BULK_VBTC_TRANSFER_ENABLED = Env.isTestNet;
+// Shielded vBTC is disabled in the CLI; VFX private txs remain supported.
+const VBTC_PRIVACY_ENABLED = false;
 const WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED = true;
+// CLI consensus cap on inputs in one multi-contract vBTC transfer.
+const VBTC_MULTI_MAX_INPUTS = 25;
 
 const REFRESH_TIMEOUT_SECONDS = 30;
 const REFRESH_TIMEOUT_SECONDS_WEB_BTC = 90;
 const REFRESH_TIMEOUT_SECONDS_INACTIVE = 300;
 const REFRESH_TIMEOUT_SECONDS_BTC = 30;
+// Wallet-info poll interval while VFXCore reports a chain-state rebuild.
+const REBUILD_POLL_SECONDS = 5;
 const IDLE_TIMEOUT_MINUTES = 10;
 const ALLOW_DOUBLE_MINTES = false;
 const MIN_RBX_FOR_SC_ACTION = 0.001;

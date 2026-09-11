@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../sc_property/models/sc_property.dart';
 import '../providers/property_wizard_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardPropertyDialog extends BaseComponent {
   ScWizardPropertyDialog({
@@ -23,12 +24,13 @@ class ScWizardPropertyDialog extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(propertyWizardFormProvider(propertyIndex).notifier);
     final model = ref.read(propertyWizardFormProvider(propertyIndex));
+    final l10n = AppLocalizations.of(context);
 
     return StatefulBuilder(builder: (context, setState) {
       return Form(
         key: formKey,
         child: AlertDialog(
-          title: Text(_getTitle()),
+          title: Text(_getTitle(l10n)),
           content: SizedBox(
             width: 400,
             child: Column(
@@ -40,9 +42,9 @@ class ScWizardPropertyDialog extends BaseComponent {
                       child: TextFormField(
                         validator: provider.nameValidator,
                         controller: provider.nameController,
-                        decoration: const InputDecoration(
-                          label: Text("Property Name"),
-                          labelStyle: TextStyle(color: Colors.white),
+                        decoration: InputDecoration(
+                          label: Text(l10n.scwPropertyName),
+                          labelStyle: const TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -58,7 +60,7 @@ class ScWizardPropertyDialog extends BaseComponent {
                         controller: provider.valueController,
                         validator: provider.valueValidator,
                         decoration: InputDecoration(
-                          label: Text("Property Value"),
+                          label: Text(l10n.scwPropertyValue),
                         ),
                         inputFormatters: [
                           if (type == ScPropertyType.number)
@@ -99,7 +101,7 @@ class ScWizardPropertyDialog extends BaseComponent {
                                         Navigator.of(context).pop();
                                       },
                                       child: Text(
-                                        "Cancel",
+                                        l10n.actionCancel,
                                         style: TextStyle(color: Colors.white54),
                                       ),
                                     ),
@@ -108,7 +110,7 @@ class ScWizardPropertyDialog extends BaseComponent {
                                         Navigator.of(context).pop(color);
                                       },
                                       child: Text(
-                                        "Choose",
+                                        l10n.scwChoose,
                                         style: TextStyle(color: Colors.white),
                                       ),
                                     )
@@ -134,9 +136,9 @@ class ScWizardPropertyDialog extends BaseComponent {
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.white60),
+              child: Text(
+                l10n.actionCancel,
+                style: const TextStyle(color: Colors.white60),
               ),
             ),
             TextButton(
@@ -150,9 +152,9 @@ class ScWizardPropertyDialog extends BaseComponent {
                   Navigator.of(context).pop(e);
                 }
               },
-              child: const Text(
-                "Add property",
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                l10n.scwAddProperty,
+                style: const TextStyle(color: Colors.white),
               ),
             )
           ],
@@ -161,16 +163,16 @@ class ScWizardPropertyDialog extends BaseComponent {
     });
   }
 
-  String _getTitle() {
+  String _getTitle(AppLocalizations l10n) {
     switch (type) {
       case ScPropertyType.text:
-        return 'Text Property';
+        return l10n.scwTextProperty;
       case ScPropertyType.number:
-        return 'Numerical Property';
+        return l10n.scwNumericalProperty;
       case ScPropertyType.color:
-        return 'Color Property';
+        return l10n.scwColorProperty;
       default:
-        return 'Text Property';
+        return l10n.scwTextProperty;
     }
   }
 }

@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
+import '../../l10n/generated/app_localizations.dart';
+
 class PollingImagePreview extends StatefulWidget {
   const PollingImagePreview({
     Key? key,
@@ -60,6 +62,7 @@ class _PollingImagePreviewState extends State<PollingImagePreview> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (hide) {
       return const SizedBox();
     }
@@ -74,7 +77,7 @@ class _PollingImagePreviewState extends State<PollingImagePreview> {
         fit: BoxFit.cover,
         errorBuilder: (context, _, __) {
           return Text(
-            "File not found for preview.\nLikely this means this NFT no longer exists on this machine.\n",
+            l10n.tkbImagePreviewNotFound,
             style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.left,
           );

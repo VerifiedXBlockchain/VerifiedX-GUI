@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
@@ -84,6 +85,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
     final provider = ref.read(vfxTransactionFilterProvider.notifier);
     final model = ref.watch(vfxTransactionFilterProvider);
     final txHelpers = TxHelper.getAllTypes();
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(
       withClose: false,
@@ -92,7 +94,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "Transaction Filters",
+              l10n.txpTxFilters,
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             Row(
@@ -103,7 +105,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
                     provider.clear();
                   },
                   child: Text(
-                    "Clear Filters",
+                    l10n.txpClearFilters,
                     style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline,
@@ -115,7 +117,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    "Close",
+                    l10n.actionClose,
                     style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline,
@@ -132,7 +134,9 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
           children: [
             Expanded(
               child: Text(
-                "Tx Type${model.txTypes.isEmpty ? '' : ' (${model.txTypes.length})'}:",
+                l10n.txpTxTypeLabel(model.txTypes.isEmpty
+                    ? ''
+                    : ' (${model.txTypes.length})'),
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
@@ -144,7 +148,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      model.address.isEmpty ? "All Addresses" : model.address,
+                      model.address.isEmpty ? l10n.txpAllAddresses : model.address,
                       style: TextStyle(
                         fontSize: 16,
                         color: model.address.isEmpty
@@ -178,7 +182,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
                           SizedBox(
                             width: 6,
                           ),
-                          Text("All Addresses"),
+                          Text(l10n.txpAllAddresses),
                         ],
                       ),
                     ),

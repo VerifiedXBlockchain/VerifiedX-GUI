@@ -13,6 +13,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_currency_segmented_button.dart';
 import '../../web/components/web_mobile_drawer_button.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
@@ -40,7 +41,7 @@ class WebAdnrScreen extends BaseScreen {
     final isMobile = BreakPoints.useMobileLayout(context);
 
     return AppBar(
-      title: const Text("Domains"),
+      title: Text(AppLocalizations.of(context).adnrTitleAny),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       leading: isMobile ? WebMobileDrawerButton() : null,
@@ -66,7 +67,7 @@ class WebAdnrScreen extends BaseScreen {
             ),
             if ([WebCurrencyType.any, WebCurrencyType.vfx, WebCurrencyType.vault].contains(currencyType)) ...[
               Text(
-                "VFX Domain",
+                AppLocalizations.of(context).adnrVfxDomainBadge,
                 style: TextStyle(
                   color: AppColors.getBlue(),
                   fontSize: 18,
@@ -84,7 +85,7 @@ class WebAdnrScreen extends BaseScreen {
               ),
             if ([WebCurrencyType.any, WebCurrencyType.btc].contains(currencyType) && btcKeypair != null) ...[
               Text(
-                "BTC Domain",
+                AppLocalizations.of(context).adnrBtcDomainBadge,
                 style: TextStyle(
                   color: AppColors.getBtc(),
                   fontSize: 18,
@@ -128,27 +129,27 @@ class _VfxDomain extends BaseComponent {
     final isPendingTransfer = ref.watch(adnrPendingProvider).contains("$address.transfer.${adnr ?? 'null'}");
 
     if (isPendingCreate) {
-      return const Center(
+      return Center(
         child: AppBadge(
-          label: "VFX Domain Pending",
+          label: AppLocalizations.of(context).adnrVfxDomainPending,
           variant: AppColorVariant.Success,
         ),
       );
     }
 
     if (isPendingTransfer) {
-      return const Center(
+      return Center(
         child: AppBadge(
-          label: "VFX Domain Transfer Pending",
+          label: AppLocalizations.of(context).adnrVfxDomainTransferPending,
           variant: AppColorVariant.Primary,
         ),
       );
     }
 
     if (isPendingBurn) {
-      return const Center(
+      return Center(
         child: AppBadge(
-          label: "VFX Domain Delete Pending",
+          label: AppLocalizations.of(context).adnrVfxDomainDeletePending,
           variant: AppColorVariant.Danger,
         ),
       );
@@ -160,9 +161,9 @@ class _VfxDomain extends BaseComponent {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Create a VFX Domain as an alias to your account's address for receiving funds.",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context).adnrCreateVfxOnAccount,
+                style: const TextStyle(
                   fontSize: 17,
                 ),
                 textAlign: TextAlign.center,
@@ -170,19 +171,19 @@ class _VfxDomain extends BaseComponent {
               const SizedBox(
                 height: 4,
               ),
-              const Text(
-                "VFX domains cost $ADNR_COST VFX plus the transaction fee.",
+              Text(
+                AppLocalizations.of(context).adnrCostNoteVfx(ADNR_COST.toString()),
                 textAlign: TextAlign.center,
               ),
               SizedBox(
                 height: 16,
               ),
               AppButton(
-                label: "Create Domain",
+                label: AppLocalizations.of(context).adnrCreateDomain,
                 variant: AppColorVariant.Success,
                 onPressed: () async {
                   if (balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION)) {
-                    Toast.error("Not enough VFX in this account to create a VFX domain. $ADNR_COST VFX required (plus TX fee).");
+                    Toast.error(AppLocalizations.of(context).adnrInsufficientFundsCreateVfx(ADNR_COST.toString()));
                     return;
                   }
 
@@ -232,19 +233,19 @@ class _VfxDomain extends BaseComponent {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     AppButton(
-                      label: "Transfer",
+                      label: AppLocalizations.of(context).adnrTransfer,
                       onPressed: () async {
                         if (balance < (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
-                          Toast.error("Not enough VFX in this account to create a transaction.");
+                          Toast.error(AppLocalizations.of(context).adnrInsufficientFundsTransfer);
                           return;
                         }
 
                         PromptModal.show(
                             contextOverride: context,
-                            title: "Transfer VFX Domain",
-                            body: "There is a cost of $ADNR_TRANSFER_COST VFX to transfer a VFX Domain.",
+                            title: AppLocalizations.of(context).adnrTransferDomainTitle,
+                            body: AppLocalizations.of(context).adnrTransferDomainBody(ADNR_TRANSFER_COST.toString()),
                             validator: (value) => formValidatorRbxAddress(value, false),
-                            labelText: "Address",
+                            labelText: AppLocalizations.of(context).adnrAddressFieldLabel,
                             onValidSubmission: (toAddress) async {
                               ref.read(globalLoadingProvider.notifier).start();
 
@@ -259,22 +260,22 @@ class _VfxDomain extends BaseComponent {
                               ref.read(globalLoadingProvider.notifier).complete();
 
                               if (txData == null) {
-                                Toast.error("Invalid transaction data.");
+                                Toast.error(AppLocalizations.of(context).btcInvalidTxData);
                                 return;
                               }
 
                               final txFee = txData['Fee'];
 
                               final confirmed = await ConfirmDialog.show(
-                                title: "Valid Transaction",
+                                title: AppLocalizations.of(context).btcValidTxTitle,
                                 body:
                                     "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
-                                confirmText: "Send",
-                                cancelText: "Cancel",
+                                confirmText: AppLocalizations.of(context).actionSend,
+                                cancelText: AppLocalizations.of(context).actionCancel,
                               );
 
                               if (confirmed != true) {
-                                Toast.message("Transaction Cancelled");
+                                Toast.message(AppLocalizations.of(context).btcTxCancelledToast);
                                 return;
                               }
 
@@ -291,7 +292,7 @@ class _VfxDomain extends BaseComponent {
                               if (tx != null && tx['Result'] == "Success") {
                                 ref.read(adnrPendingProvider.notifier).addId(address, "transfer", adnr);
 
-                                Toast.message("VFX Domain Transaction has been broadcasted. See log for hash.");
+                                Toast.message(AppLocalizations.of(context).adnrTxBroadcastedToast);
 
                                 return;
                               }
@@ -301,21 +302,24 @@ class _VfxDomain extends BaseComponent {
                       },
                     ),
                     AppButton(
-                      label: "Delete",
+                      label: AppLocalizations.of(context).adnrDelete,
                       variant: AppColorVariant.Danger,
                       onPressed: () async {
                         if (balance < (ADNR_DELETE_COST + MIN_RBX_FOR_SC_ACTION)) {
-                          Toast.error("Not enough VFX in this account to create a transaction.");
+                          Toast.error(AppLocalizations.of(context).adnrInsufficientFundsTransfer);
                           return;
                         }
 
                         final confirmed = await ConfirmDialog.show(
-                          title: "Delete VFX Domain?",
-                          body:
-                              "Are you sure you want to delete this VFX Domain?\n${ADNR_DELETE_COST == 0 ? 'There is no cost to delete and VFX Domain (aside from the TX fee).' : 'There is a cost of $ADNR_DELETE_COST RBX to delete an RBX Domain.'}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+                          title: AppLocalizations.of(context).adnrDeleteTitle,
+                          body: AppLocalizations.of(context).r3gAdnrDeleteBody(
+                            ADNR_DELETE_COST == 0
+                                ? AppLocalizations.of(context).r3gAdnrDeleteNoCost
+                                : AppLocalizations.of(context).r3gAdnrDeleteWithCost(ADNR_DELETE_COST.toString()),
+                          ),
                           destructive: true,
-                          cancelText: "Cancel",
-                          confirmText: "Delete",
+                          cancelText: AppLocalizations.of(context).actionCancel,
+                          confirmText: AppLocalizations.of(context).adnrDelete,
                         );
 
                         if (confirmed == true) {
@@ -330,7 +334,7 @@ class _VfxDomain extends BaseComponent {
 
                           ref.read(globalLoadingProvider.notifier).complete();
                           if (txData == null) {
-                            Toast.error("Invalid transaction data.");
+                            Toast.error(AppLocalizations.of(context).btcInvalidTxData);
 
                             return;
                           }
@@ -338,15 +342,15 @@ class _VfxDomain extends BaseComponent {
                           final txFee = txData['Fee'];
 
                           final confirmed = await ConfirmDialog.show(
-                            title: "Valid Transaction",
+                            title: AppLocalizations.of(context).btcValidTxTitle,
                             body:
                                 "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
-                            confirmText: "Send",
-                            cancelText: "Cancel",
+                            confirmText: AppLocalizations.of(context).actionSend,
+                            cancelText: AppLocalizations.of(context).actionCancel,
                           );
 
                           if (confirmed != true) {
-                            Toast.message("Transaction Cancelled");
+                            Toast.message(AppLocalizations.of(context).btcTxCancelledToast);
                             return;
                           }
 
@@ -358,7 +362,7 @@ class _VfxDomain extends BaseComponent {
                           if (tx != null && tx['Result'] == "Success") {
                             ref.read(adnrPendingProvider.notifier).addId(address, "delete", adnr);
 
-                            Toast.message("VFX Domain Transaction has been broadcasted. See log for hash.");
+                            Toast.message(AppLocalizations.of(context).adnrTxBroadcastedToast);
                             return;
                           }
 

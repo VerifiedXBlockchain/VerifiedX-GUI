@@ -10,6 +10,7 @@ import 'sc_creator/common/help_button.dart';
 import '../features/royalty/royalty.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../utils/validation.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardRoyaltyDialog extends BaseComponent {
   ScWizardRoyaltyDialog({
@@ -27,15 +28,15 @@ class ScWizardRoyaltyDialog extends BaseComponent {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Choose an address"),
+          title: Text(AppLocalizations.of(context).scwChooseAnAddress),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.white60),
+              child: Text(
+                AppLocalizations.of(context).actionCancel,
+                style: const TextStyle(color: Colors.white60),
               ),
             )
           ],
@@ -66,12 +67,13 @@ class ScWizardRoyaltyDialog extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     RoyaltyType type = RoyaltyType.percent;
+    final l10n = AppLocalizations.of(context);
 
     return StatefulBuilder(builder: (context, setState) {
       return Form(
         key: formKey,
         child: AlertDialog(
-          title: const Text("Add Royalty"),
+          title: Text(l10n.scwAddRoyalty),
           content: SizedBox(
             width: 400,
             child: Column(
@@ -80,10 +82,10 @@ class ScWizardRoyaltyDialog extends BaseComponent {
                 Row(
                   children: [
                     AppDropdown<RoyaltyType>(
-                      label: "Royalty Type",
+                      label: l10n.scwRoyaltyType,
                       selectedValue: type,
                       selectedLabel:
-                          type == RoyaltyType.percent ? "Percent" : "Fixed",
+                          type == RoyaltyType.percent ? l10n.scwRoyaltyTypePercent : l10n.scwRoyaltyTypeFixed,
                       onChange: (val) {
                         setState(() {
                           type = val;
@@ -106,7 +108,7 @@ class ScWizardRoyaltyDialog extends BaseComponent {
                       child: TextFormField(
                           controller: amountController,
                           decoration: InputDecoration(
-                              label: const Text("Amount"),
+                              label: Text(l10n.labelAmount),
                               labelStyle: const TextStyle(color: Colors.white),
                               suffix: Text(
                                   type == RoyaltyType.percent ? "%" : "VFX"),
@@ -130,7 +132,7 @@ class ScWizardRoyaltyDialog extends BaseComponent {
                 TextFormField(
                   controller: addressController,
                   decoration: InputDecoration(
-                    label: const Text("Address"),
+                    label: Text(l10n.labelAddress),
                     labelStyle: const TextStyle(color: Colors.white),
                     suffixIcon: kIsWeb
                         ? IconButton(
@@ -174,9 +176,9 @@ class ScWizardRoyaltyDialog extends BaseComponent {
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
-              child: const Text(
-                "Cancel",
-                style: TextStyle(color: Colors.white60),
+              child: Text(
+                l10n.actionCancel,
+                style: const TextStyle(color: Colors.white60),
               ),
             ),
             TextButton(
@@ -198,9 +200,9 @@ class ScWizardRoyaltyDialog extends BaseComponent {
 
                 Navigator.of(context).pop(r);
               },
-              child: const Text(
-                "Add Royalty",
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                l10n.scwAddRoyalty,
+                style: const TextStyle(color: Colors.white),
               ),
             )
           ],

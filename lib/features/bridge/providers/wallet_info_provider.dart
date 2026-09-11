@@ -80,6 +80,7 @@ class WalletInfoProvider extends StateNotifier<WalletInfoModel?> {
 
     if (data.isNotEmpty) {
       final prevIsChainSynced = state == null ? false : state!.isChainSynced;
+      final prevIsResyncing = state?.isResyncing ?? false;
 
       final int blockHeight = int.parse(data['BlockHeight']);
       final int peerCount = int.parse(data['PeerCount']);
@@ -133,10 +134,32 @@ class WalletInfoProvider extends StateNotifier<WalletInfoModel?> {
               ),
             );
       }
+      if (!prevIsResyncing && isResyncing) {
+        ref.read(logProvider.notifier).append(
+              LogEntry(
+                message: "VFXCore is rebuilding its chain state. Balances will show as zero until it finishes.",
+                variant: AppColorVariant.Warning,
+              ),
+            );
+      }
+      if (prevIsResyncing && !isResyncing) {
+        ref.read(logProvider.notifier).append(
+              LogEntry(
+                message: "Chain state rebuild finished. Refreshing balances.",
+                variant: AppColorVariant.Success,
+              ),
+            );
+        // Balances were zeroed during the rebuild; don't wait for the next
+        // scheduled refresh to show the restored figures.
+        ref.read(sessionProvider.notifier).mainLoop(false);
+      }
     }
 
     if (inLoop) {
-      await Future.delayed(const Duration(seconds: REFRESH_TIMEOUT_SECONDS));
+      // Poll faster while a rebuild is in progress so the banner clears and
+      // balances refresh promptly once it finishes.
+      final seconds = state?.isResyncing == true ? REBUILD_POLL_SECONDS : REFRESH_TIMEOUT_SECONDS;
+      await Future.delayed(Duration(seconds: seconds));
       infoLoop(true);
     }
   }

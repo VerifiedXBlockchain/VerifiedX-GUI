@@ -12,6 +12,7 @@ import 'web_listing_list_provider.dart';
 import '../../../utils/toast.dart';
 import '../models/web_listing.dart';
 import '../services/web_shop_service.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class WebListingFormProvider extends StateNotifier<WebListing> {
   final Ref ref;
@@ -104,7 +105,7 @@ class WebListingFormProvider extends StateNotifier<WebListing> {
 
   updateEnableReservePrice(bool enableReservePrice) {
     if (state.isAuctionStarted && state.exists) {
-      Toast.error('The auction has already started.');
+      Toast.error(globalL10n.mktAuctionAlreadyStartedToast);
       return;
     }
     state = state.copyWith(enableReservePrice: enableReservePrice);
@@ -113,7 +114,7 @@ class WebListingFormProvider extends StateNotifier<WebListing> {
   updateDate(DateTime date, bool isStartDate) {
     if (!isStartDate) {
       if (date.isBefore(state.startDate)) {
-        OverlayToast.error("End Date must be after the start date");
+        OverlayToast.error(globalL10n.r3bEndDateAfterStart);
         return;
       }
     }
@@ -140,7 +141,7 @@ class WebListingFormProvider extends StateNotifier<WebListing> {
 
   updateEnableAuction(bool enableAuction) {
     if (state.isAuctionStarted && state.exists) {
-      Toast.error('The auction has already started.');
+      Toast.error(globalL10n.mktAuctionAlreadyStartedToast);
       return;
     }
     state = state.copyWith(enableAuction: enableAuction);
@@ -158,7 +159,7 @@ class WebListingFormProvider extends StateNotifier<WebListing> {
 
   updateGalleryOnly(bool value) {
     if (state.isAuctionStarted && state.exists) {
-      Toast.error('The auction has already started.');
+      Toast.error(globalL10n.mktAuctionAlreadyStartedToast);
       return;
     }
 
@@ -193,27 +194,27 @@ class WebListingFormProvider extends StateNotifier<WebListing> {
 
     if (state.enableAuction && state.reservePrice != null && state.floorPrice != null) {
       if (state.reservePrice! < state.floorPrice!) {
-        Toast.error("The reserve price must be greater or equal to the floor price.");
+        Toast.error(globalL10n.r3bReserveGteFloor);
         return;
       }
     }
 
     if (state.startDate.isAfter(state.endDate)) {
-      Toast.error('The start date must be before the end date.');
+      Toast.error(globalL10n.r3bStartBeforeEnd);
       return;
     }
 
     if (state.smartContractUid.isEmpty) {
-      Toast.error('The NFT must be set');
+      Toast.error(globalL10n.r3bNftMustBeSet);
       return;
     }
     if (!state.enableAuction && !state.enableBuyNow && !state.galleryOnly) {
-      Toast.error('Enable at least one of the options (Gallery, Buy Now, or Auction)');
+      Toast.error(globalL10n.r3bEnableOneOption);
       return;
     }
 
     if (state.endDate.isBefore(state.startDate) || state.endDate.isAtSameMomentAs(state.startDate)) {
-      Toast.error("End date must be after start date");
+      Toast.error(globalL10n.r3bEndDateAfterStart);
       return;
     }
 

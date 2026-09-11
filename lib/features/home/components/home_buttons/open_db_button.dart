@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/files.dart';
 
 class OpenDbFolderButton extends BaseComponent {
@@ -14,7 +15,7 @@ class OpenDbFolderButton extends BaseComponent {
   @override
   Widget build(BuildContext context, ref) {
     return AppButton(
-      label: "Open DB Folder",
+      label: AppLocalizations.of(context).r3eOpenDbFolder,
       icon: Icons.folder_open_rounded,
       onPressed: () async {
         // final shell = Shell(throwOnError: false);

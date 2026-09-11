@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/centered_loader.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/web_fungible_token.dart';
 
 import '../components/web_token_detail_component.dart';
@@ -18,14 +19,15 @@ class WebTokenDetailScreen extends BaseScreen {
     final data = ref.watch(webTokenDetailProvider(scId));
 
     return data.when(
-      loading: () => _buildAppBar(),
-      error: (e, _) => _buildAppBar(),
+      loading: () => _buildAppBar(context),
+      error: (e, _) => _buildAppBar(context),
       data: (tokenDetail) {
         if (tokenDetail == null) {
-          return _buildAppBar();
+          return _buildAppBar(context);
         }
 
         return _buildAppBar(
+            context,
             child: _AppBarContents(
           tokenDetails: tokenDetail,
         ));
@@ -33,9 +35,9 @@ class WebTokenDetailScreen extends BaseScreen {
     );
   }
 
-  AppBar _buildAppBar({Widget? child}) {
+  AppBar _buildAppBar(BuildContext context, {Widget? child}) {
     return AppBar(
-      title: child ?? Text("Fungible Token"),
+      title: child ?? Text(AppLocalizations.of(context).tkbFungibleToken),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
     );
@@ -52,7 +54,7 @@ class WebTokenDetailScreen extends BaseScreen {
       ),
       data: (tokenDetail) {
         if (tokenDetail == null) {
-          return Text("Not Found.");
+          return Text(AppLocalizations.of(context).tkbNotFound);
         }
 
         return WebTokenDetailComponent(

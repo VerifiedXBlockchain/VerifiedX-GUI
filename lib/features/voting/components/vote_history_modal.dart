@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../models/vote.dart';
 import '../providers/vote_list_provider.dart';
@@ -18,6 +19,7 @@ class VoteListModal extends BaseComponent {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final votes = ref.watch(voteListProvider(topicUid));
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(
       padding: 8,
@@ -27,7 +29,7 @@ class VoteListModal extends BaseComponent {
           .map(
             (vote) => ListTile(
               title: SelectableText(vote.address),
-              subtitle: Text("Block ${vote.blockHeight}"),
+              subtitle: Text(l10n.govVoteBlock(vote.blockHeight)),
               trailing: AppBadge(
                 label: vote.voteTypeLabel,
                 variant: vote.type == VoteType.Yes ? AppColorVariant.Success : AppColorVariant.Danger,

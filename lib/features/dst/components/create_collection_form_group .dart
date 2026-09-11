@@ -7,6 +7,7 @@ import '../providers/collection_form_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../utils/validation.dart';
 import '../../smart_contracts/components/sc_creator/common/form_group_container.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateCollectionFormGroup extends BaseComponent {
   const CreateCollectionFormGroup({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class CreateCollectionFormGroup extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(storeFormProvider.notifier);
     final model = ref.read(storeFormProvider);
+    final l10n = AppLocalizations.of(context);
     return FormGroupContainer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +33,7 @@ class CreateCollectionFormGroup extends BaseComponent {
                     padding: const EdgeInsets.only(bottom: 24.0),
                     child: Center(
                       child: Text(
-                        "You are creating a new collection in your auction house.\nAfter creating the new collection you will be able to create listings.",
+                        l10n.r3dCreatingNewCollectionBody,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -75,6 +77,7 @@ class _IsLiveCheckbox extends BaseComponent {
   Widget build(BuildContext context, ref) {
     final provider = ref.read(storeFormProvider.notifier);
     final model = ref.watch(storeFormProvider);
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         Row(
@@ -90,12 +93,12 @@ class _IsLiveCheckbox extends BaseComponent {
               onTap: () {
                 provider.updateIsLive(!model.isLive);
               },
-              child: const Text("Publish Live"),
+              child: Text(l10n.mktPublishLive),
             ),
           ],
         ),
         Text(
-          'When this is enabled, this collection will be visible to other users when they connect to your shop',
+          l10n.r3dCollectionLiveHelp,
           style: TextStyle(fontSize: 12, color: Colors.white.withOpacity(0.6)),
         )
       ],
@@ -111,15 +114,16 @@ class _CollectionName extends BaseComponent {
   @override
   Widget build(BuildContext context, ref) {
     final provider = ref.read(storeFormProvider.notifier);
+    final l10n = AppLocalizations.of(context);
     return TextFormField(
       controller: provider.nameController,
       onChanged: provider.updateName,
       maxLength: MAX_DEC_SHOP_COLLECTION_NAME_LENGTH,
       validator: formValidatorDecName,
       decoration: InputDecoration(
-        label: const Text(
-          "Collection Name",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktCollectionNameLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -134,6 +138,7 @@ class _CollectionDescription extends BaseComponent {
   @override
   Widget build(BuildContext context, ref) {
     final provider = ref.read(storeFormProvider.notifier);
+    final l10n = AppLocalizations.of(context);
     return TextFormField(
       controller: provider.descriptionController,
       maxLength: MAX_DEC_SHOP_COLLECTION_DESCRIPTION_LENGTH,
@@ -141,9 +146,9 @@ class _CollectionDescription extends BaseComponent {
       validator: formValidatorDecDescription,
       maxLines: 3,
       decoration: InputDecoration(
-        label: const Text(
-          "Collection Description",
-          style: TextStyle(color: Colors.white),
+        label: Text(
+          l10n.mktCollectionDescriptionLabel,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );

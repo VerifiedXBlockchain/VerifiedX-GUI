@@ -9,6 +9,7 @@ import '../keygen/models/ra_keypair.dart';
 import '../raw/raw_service.dart';
 import '../web/providers/web_ra_pending_activation_provider.dart';
 import '../web/utils/raw_transaction.dart';
+import '../../l10n/l10n_helper.dart';
 
 Future<bool?> activateVaultAccountWeb({
   required RaKeypair keypair,
@@ -25,10 +26,10 @@ Future<bool?> activateVaultAccountWeb({
 
   if (promptForConfirmation) {
     final confirmed = await ConfirmDialog.show(
-      title: "Activate Vault Account?",
-      body: "There is a cost of $RA_ACTIVATION_COST VFX to activate your Vault Account which is burned.\n\nContinue?",
-      confirmText: "Activate",
-      cancelText: "Cancel",
+      title: globalL10n.r3dActivateVaultTitle,
+      body: globalL10n.r3dActivateVaultBody(RA_ACTIVATION_COST.toString()),
+      confirmText: globalL10n.r3dActivate,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed != true) {
@@ -43,7 +44,7 @@ Future<bool?> activateVaultAccountWeb({
   final timestamp = await txService.getTimestamp();
 
   if (timestamp == null) {
-    if (!silent) Toast.error("Failed to retrieve timestamp");
+    if (!silent) Toast.error(globalL10n.r3dFailedRetrieveTimestamp);
 
     loadingProvider?.complete();
     return false;
@@ -51,7 +52,7 @@ Future<bool?> activateVaultAccountWeb({
 
   final nonce = await txService.getNonce(keypair.address);
   if (nonce == null) {
-    if (!silent) Toast.error("Failed to retrieve nonce");
+    if (!silent) Toast.error(globalL10n.r3dFailedRetrieveNonce);
     loadingProvider?.complete();
     return false;
   }
@@ -74,7 +75,7 @@ Future<bool?> activateVaultAccountWeb({
   final fee = await txService.getFee(txData);
 
   if (fee == null) {
-    if (!silent) Toast.error("Failed to parse fee");
+    if (!silent) Toast.error(globalL10n.r3dFailedParseFee);
     loadingProvider?.complete();
     return false;
   }
@@ -92,14 +93,14 @@ Future<bool?> activateVaultAccountWeb({
 
   final hash = (await txService.getHash(txData));
   if (hash == null) {
-    if (!silent) Toast.error("Failed to parse hash");
+    if (!silent) Toast.error(globalL10n.r3dFailedParseHash);
     loadingProvider?.complete();
     return false;
   }
 
   final signature = await RawTransaction.getSignature(message: hash, privateKey: keypair.private, publicKey: keypair.public);
   if (signature == null) {
-    if (!silent) Toast.error("Signature generation failed.");
+    if (!silent) Toast.error(globalL10n.r3dSignatureGenerationFailed);
     loadingProvider?.complete();
     return false;
   }
@@ -111,7 +112,7 @@ Future<bool?> activateVaultAccountWeb({
   );
 
   if (!isValid) {
-    if (!silent) Toast.error("Signature not valid");
+    if (!silent) Toast.error(globalL10n.r3dSignatureNotValid);
     loadingProvider?.complete();
     return false;
   }
@@ -135,7 +136,7 @@ Future<bool?> activateVaultAccountWeb({
   ));
 
   if (verifyTransactionData == null) {
-    if (!silent) Toast.error("Transaction not valid");
+    if (!silent) Toast.error(globalL10n.r3dTransactionNotValid);
     loadingProvider?.complete();
     return false;
   }
@@ -144,7 +145,7 @@ Future<bool?> activateVaultAccountWeb({
 
   if (tx != null) {
     if (tx['Result'] == "Success") {
-      if (!silent) Toast.message("Activation transaction broadcasted");
+      if (!silent) Toast.message(globalL10n.r3dActivationTxBroadcasted);
       loadingProvider?.complete();
       if (ref != null) {
         ref.read(webRaPendingActivationProvider.notifier).addAddress(keypair.address);

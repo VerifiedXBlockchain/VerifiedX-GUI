@@ -14,6 +14,7 @@ import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../bridge/services/bridge_service.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/wallet.dart';
 
 class WalletListProvider extends StateNotifier<List<Wallet>> {
@@ -31,7 +32,7 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
     final data = await BridgeService().importPrivateKey(privateKey, rescan);
 
     if (data == null) {
-      Toast.error("No account found");
+      Toast.error(globalL10n.txpNoAccountFound);
       return null;
     }
 
@@ -50,19 +51,19 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Account Created"),
+            title: Text(globalL10n.txpAccountCreated),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
-                  child: Text("Here are your wallet details. Please ensure to back up your private key in a safe place."),
+                  child: Text(globalL10n.txpWalletDetailsBackup),
                 ),
                 ListTile(
                   leading: const Icon(Icons.account_balance_wallet),
                   title: TextFormField(
                     initialValue: wallet.address,
-                    decoration: const InputDecoration(label: Text("Address")),
+                    decoration: InputDecoration(label: Text(globalL10n.walletAddressLabel)),
                     readOnly: true,
                     style: const TextStyle(fontSize: 13),
                   ),
@@ -71,8 +72,8 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
                   leading: const Icon(Icons.security),
                   title: TextFormField(
                     initialValue: wallet.privateKey,
-                    decoration: const InputDecoration(
-                      label: Text("Private Key"),
+                    decoration: InputDecoration(
+                      label: Text(globalL10n.walletPrivateKeyLabel),
                     ),
                     style: const TextStyle(fontSize: 13),
                     readOnly: true,
@@ -81,13 +82,13 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
                     icon: const Icon(Icons.copy),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: wallet.privateKey));
-                      Toast.message("Private Key copied to clipboard");
+                      Toast.message(globalL10n.walletPrivateKeyCopiedToast);
                     },
                   ),
                 ),
                 const Divider(),
                 AppButton(
-                  label: "Done",
+                  label: globalL10n.walletDoneLabel,
                   onPressed: () {
                     Navigator.of(context).pop(wallet);
                   },
@@ -108,7 +109,7 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
     final data = await BridgeService().newAddress();
 
     if (data == null) {
-      Toast.error("An error occurred");
+      Toast.error(globalL10n.txpErrorOccurred);
       return null;
     }
     final json = jsonDecode(data);

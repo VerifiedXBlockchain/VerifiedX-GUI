@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/storage.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/chat_message.dart';
 import 'chat_list_provider_interface.dart';
 import '../services/web_chat_service.dart';
@@ -40,7 +41,7 @@ class WebShopChatListProvider extends ChatListProviderInterface {
 
     final fromAddress = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
     if (fromAddress == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return;
     }
 

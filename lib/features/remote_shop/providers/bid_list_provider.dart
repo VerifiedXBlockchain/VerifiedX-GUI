@@ -5,6 +5,7 @@ import '../../web_shop/services/web_shop_service.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../dst/models/bid.dart';
 import '../../dst/services/dst_service.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -70,18 +71,18 @@ class BidListProvider extends StateNotifier<List<Bid>> {
     final wallet = ref.read(sessionProvider).currentWallet;
 
     if (wallet == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return false;
     }
 
     if (wallet.balance < (amount + MIN_RBX_FOR_SC_ACTION)) {
-      Toast.error("Not enough balance.");
+      Toast.error(globalL10n.r3gNotEnoughBalanceDot);
       return false;
     }
 
     if (wallet.isValidating) {
       if (wallet.balance < (amount + MIN_RBX_FOR_SC_ACTION + ASSURED_AMOUNT_TO_VALIDATE)) {
-        Toast.error("Not enough balance since you are validating.");
+        Toast.error(globalL10n.r3gNotEnoughBalanceValidating);
         return false;
       }
     }
@@ -100,10 +101,10 @@ class BidListProvider extends StateNotifier<List<Bid>> {
 
     final confirmed = await ConfirmDialog.show(
       context: rootNavigatorKey.currentContext,
-      title: "Buy Now",
-      body: "Are you sure you want to buy now for ${listing.buyNowPrice} VFX?",
-      confirmText: "Buy Now",
-      cancelText: "Cancel",
+      title: globalL10n.shopBuyNow,
+      body: globalL10n.r3gConfirmBuyNowBody(listing.buyNowPrice.toString()),
+      confirmText: globalL10n.shopBuyNow,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed != true) {
@@ -136,31 +137,31 @@ class BidListProvider extends StateNotifier<List<Bid>> {
     }
 
     if (listing.auction == null) {
-      Toast.error("Auction is not live");
+      Toast.error(globalL10n.mktAuctionNotLiveToast);
       return null;
     }
 
     if (!listing.isActive) {
-      Toast.error("Auction is over");
+      Toast.error(globalL10n.mktAuctionOverToast);
       return null;
     }
 
     final wallet = ref.read(sessionProvider).currentWallet;
 
     if (wallet == null) {
-      Toast.error("No account selected");
+      Toast.error(globalL10n.messageNoAccountSelected);
       return null;
     }
 
     final minimumBid = listing.auction!.currentBidPrice + listing.auction!.incrementAmount;
 
     final amountStr = await PromptModal.show(
-      title: "Place Bid",
-      validator: (val) => formValidatorNumber(val, "Bid Amount"),
-      labelText: "Bid Amount (VFX)",
-      footer: "Must be greater than $minimumBid VFX",
-      confirmText: "Continue",
-      cancelText: "Cancel",
+      title: globalL10n.mktPlaceBid,
+      validator: (val) => formValidatorNumber(val, globalL10n.r3gBidAmount),
+      labelText: globalL10n.mktBidAmountLabel,
+      footer: globalL10n.r3gMustBeGreaterThanBid(minimumBid.toString()),
+      confirmText: globalL10n.actionContinue,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (amountStr == null) {
@@ -169,18 +170,20 @@ class BidListProvider extends StateNotifier<List<Bid>> {
 
     final amount = double.tryParse(amountStr);
     if (amount == null) {
-      Toast.error("Invalid amount");
+      Toast.error(globalL10n.webInvalidAmount);
       return null;
     }
 
     if (amount <= listing.auction!.currentBidPrice) {
-      Toast.error("Your bid must be greater than the current highest bid (${listing.auction!.currentBidPrice} VFX)");
+      Toast.error(globalL10n.r3gBidGreaterThanHighest(listing.auction!.currentBidPrice.toString()));
       return null;
     }
 
     if (amount <= listing.auction!.currentBidPrice + listing.auction!.incrementAmount) {
-      Toast.error(
-          "The minimum increment amount is ${listing.auction!.incrementAmount} VFX. A bid grater than ${listing.auction!.currentBidPrice + listing.auction!.incrementAmount} VFX is required.");
+      Toast.error(globalL10n.r3gMinIncrementAmount(
+        listing.auction!.incrementAmount.toString(),
+        (listing.auction!.currentBidPrice + listing.auction!.incrementAmount).toString(),
+      ));
       return null;
     }
 
@@ -212,10 +215,13 @@ class BidListProvider extends StateNotifier<List<Bid>> {
 
     final confirmed = await ConfirmDialog.show(
       context: context,
-      title: "Place Bid",
-      body: "Are you sure you want to place a bid of $amount VFX${amount != maxAmount ? ' with a max bid of $maxAmount VFX' : ''}?",
-      confirmText: "Place Bid",
-      cancelText: "Cancel",
+      title: globalL10n.mktPlaceBid,
+      body: globalL10n.r3gConfirmPlaceBidBody(
+        amount.toString(),
+        amount != maxAmount ? globalL10n.r3gMaxBidSuffix(maxAmount.toString()) : '',
+      ),
+      confirmText: globalL10n.mktPlaceBid,
+      cancelText: globalL10n.actionCancel,
     );
 
     if (confirmed != true) {

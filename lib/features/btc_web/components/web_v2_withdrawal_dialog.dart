@@ -11,6 +11,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../token/providers/web_token_actions_manager.dart';
 import '../services/pending_withdrawal_completion_service.dart';
@@ -155,7 +156,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
 
       setState(() {
         _step = _DialogStep.failure;
-        _errorMessage = message ?? "Failed to broadcast withdrawal request.";
+        _errorMessage = message ?? AppLocalizations.of(context).bw2FailedBroadcastWithdrawal;
       });
       return;
     }
@@ -176,7 +177,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         if (!mounted) return;
         setState(() {
           _step = _DialogStep.failure;
-          _errorMessage = "Timed out waiting for block confirmation. You can retry later from the token detail screen.";
+          _errorMessage = AppLocalizations.of(context).bw2BlockConfirmTimedOut;
         });
         return;
       }
@@ -263,7 +264,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
       _btcBroadcastUnconfirmed = result?['btc_broadcast_unconfirmed'] == true;
       _signingAlreadyStarted = result?['signing_already_started'] == true;
       _step = _DialogStep.failure;
-      _errorMessage = result?['message'] ?? "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.";
+      _errorMessage = result?['message'] ?? AppLocalizations.of(context).bw2FrostFailedOrTimedOut;
     });
   }
 
@@ -310,10 +311,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     if (pending == null) {
       setState(() {
         _step = _DialogStep.failure;
-        _errorMessage = "Could not determine the Bitcoin transaction for this withdrawal, "
-            "so it cannot be settled automatically. Check the destination address on a "
-            "block explorer and contact support before retrying — retrying may broadcast "
-            "a second Bitcoin transaction.";
+        _errorMessage = AppLocalizations.of(context).bw2CompletionUnknownBtcTx;
       });
       return;
     }
@@ -368,31 +366,31 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   String _titleForStep() {
     switch (_step) {
       case _DialogStep.broadcasting:
-        return "Broadcasting Request";
+        return AppLocalizations.of(context).bw2BroadcastingRequest;
       case _DialogStep.waitingForBlock:
-        return "Waiting for Confirmation";
+        return AppLocalizations.of(context).bw2WaitingForConfirmation;
       case _DialogStep.frostSigning:
-        return "FROST Signing";
+        return AppLocalizations.of(context).bw2FrostSigning;
       case _DialogStep.recordingCompletion:
-        return "Recording Completion";
+        return AppLocalizations.of(context).bw2RecordingCompletionTitle;
       case _DialogStep.success:
-        return "Withdrawal Complete";
+        return AppLocalizations.of(context).bw2WithdrawalComplete;
       case _DialogStep.completionPending:
         return "Action Required";
       case _DialogStep.failure:
-        return "Withdrawal Failed";
+        return AppLocalizations.of(context).bw2WithdrawalFailed;
     }
   }
 
   Widget _buildBroadcastingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("Broadcasting withdrawal request...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("Submitting a transaction to the VFX network.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(AppLocalizations.of(context).bw2BroadcastingWithdrawal, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(AppLocalizations.of(context).bw2SubmittingTxVfx, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
@@ -400,12 +398,12 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   Widget _buildWaitingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("Waiting for block confirmation...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(AppLocalizations.of(context).bw2WaitingBlockConfirmation, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(AppLocalizations.of(context).bw2FrostConfirmHintWeb, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
@@ -413,12 +411,12 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   Widget _buildFrostSigningSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("FROST signing in progress...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("Validators are signing the Bitcoin transaction. This may take a minute or two. Please do not close this window.", style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(AppLocalizations.of(context).bw2FrostSigningInProgress, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(AppLocalizations.of(context).bw2FrostValidatorsSigning, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
@@ -426,13 +424,13 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   Widget _buildRecordingSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
-        SizedBox(height: 16),
-        Text("Recording completion on the VFX chain...", style: TextStyle(color: Colors.white70)),
-        SizedBox(height: 8),
-        Text("The Bitcoin transaction has been broadcast. This final transaction settles the withdrawal on chain.",
-            style: TextStyle(color: Colors.white38, fontSize: 12)),
+      children: [
+        const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3))),
+        const SizedBox(height: 16),
+        Text(AppLocalizations.of(context).bw2RecordingCompletion, style: const TextStyle(color: Colors.white70)),
+        const SizedBox(height: 8),
+        Text(AppLocalizations.of(context).bw2RecordingCompletionHint,
+            style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
@@ -443,13 +441,13 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Icon(Icons.warning_amber_rounded, color: Color(0xFFE0A32E), size: 20),
-            SizedBox(width: 8),
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Color(0xFFE0A32E), size: 20),
+            const SizedBox(width: 8),
             Expanded(
               child: Text(
-                "Your Bitcoin was sent, but the withdrawal has not been settled on the VFX chain yet.",
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                AppLocalizations.of(context).bw2CompletionPendingTitle,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
               ),
             ),
           ],
@@ -457,11 +455,8 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         const SizedBox(height: 12),
         Text(
           _completionRecoverable
-              ? "Retry below to finish. This only submits the completion transaction — your Bitcoin will not be sent again. "
-                  "You can also come back to this from the token's withdrawal history."
-              : "Retry below to finish. This only submits the completion transaction — your Bitcoin will not be sent again. "
-                  "This withdrawal could not be saved for later recovery, so do not close this page before it succeeds. "
-                  "Copy the Bitcoin transaction ID below first.",
+              ? AppLocalizations.of(context).bw2CompletionPendingHint
+              : AppLocalizations.of(context).bw2CompletionPendingHintUnsaved,
           style: TextStyle(
             color: _completionRecoverable ? Colors.white38 : const Color(0xFFE0A32E),
             fontSize: 12,
@@ -474,7 +469,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         if (_btcTxHash != null) ...[
           const SizedBox(height: 16),
           _buildHashRow(
-            "BTC Transaction:",
+            AppLocalizations.of(context).bw2BtcTransactionLabel,
             _btcTxHash!,
             explorerUrl: Env.btcIsTestNet
                 ? "https://mempool.space/testnet4/tx/$_btcTxHash"
@@ -489,14 +484,14 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             // again later, so it is not offered when the record failed to save.
             if (_completionRecoverable) ...[
               AppButton(
-                label: "Later",
+                label: AppLocalizations.of(context).beaconLater,
                 variant: AppColorVariant.Light,
                 onPressed: () => Navigator.of(context).pop(),
               ),
               const SizedBox(width: 8),
             ],
             AppButton(
-              label: "Retry Completion",
+              label: AppLocalizations.of(context).bw2RetryCompletion,
               variant: AppColorVariant.Warning,
               onPressed: _busy ? null : _retryCompletion,
             ),
@@ -511,16 +506,16 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          children: const [
-            Icon(Icons.check_circle, color: Color(0xFF43ae52), size: 20),
-            SizedBox(width: 8),
-            Text("Withdrawal completed successfully!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
+          children: [
+            const Icon(Icons.check_circle, color: Color(0xFF43ae52), size: 20),
+            const SizedBox(width: 8),
+            Text(AppLocalizations.of(context).bw2WithdrawalCompletedSuccess, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500)),
           ],
         ),
         if (_btcTxHash != null) ...[
           const SizedBox(height: 16),
           _buildHashRow(
-            "BTC Transaction:",
+            AppLocalizations.of(context).bw2BtcTransactionLabel,
             _btcTxHash!,
             explorerUrl: Env.btcIsTestNet
                 ? "https://mempool.space/testnet4/tx/$_btcTxHash"
@@ -531,7 +526,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         Align(
           alignment: Alignment.centerRight,
           child: AppButton(
-            label: "Done",
+            label: AppLocalizations.of(context).actionDone,
             variant: AppColorVariant.Success,
             onPressed: () => Navigator.of(context).pop(),
           ),
@@ -551,7 +546,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                _errorMessage ?? "An error occurred during withdrawal.",
+                _errorMessage ?? AppLocalizations.of(context).bw2WithdrawalError,
                 style: const TextStyle(color: Colors.white),
               ),
             ),
@@ -562,7 +557,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             AppButton(
-              label: "Dismiss",
+              label: AppLocalizations.of(context).tkbDismiss,
               variant: AppColorVariant.Light,
               onPressed: () => Navigator.of(context).pop(),
             ),
@@ -575,7 +570,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
                 !_signingAlreadyStarted) ...[
               const SizedBox(width: 8),
               AppButton(
-                label: "Retry Signing",
+                label: AppLocalizations.of(context).bw2RetrySigning,
                 variant: AppColorVariant.Warning,
                 onPressed: _busy ? null : _runFrostSigning,
               ),
@@ -601,7 +596,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             InkWell(
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: hash));
-                Toast.message("Copied to clipboard");
+                Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
               },
               child: const Icon(Icons.copy, size: 16, color: Colors.white54),
             ),

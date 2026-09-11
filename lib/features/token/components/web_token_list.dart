@@ -10,6 +10,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'token_list_tile.dart';
 import '../models/token_account.dart';
 import '../providers/token_nfts_provider.dart';
@@ -33,6 +34,7 @@ class WebTokenList extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final accounts = ref.watch(webTokenListProvider);
 
     if (accounts.isEmpty) {
@@ -44,14 +46,14 @@ class WebTokenList extends BaseComponent {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "No Fungible Tokens",
+              l10n.tkbNoFungibleTokens,
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 8),
-            Text("You have no fungible tokens with supply in any of your accounts."),
+            Text(l10n.tkbNoFungibleTokensBody),
             SizedBox(height: 16),
             AppButton(
-              label: "Create Token",
+              label: l10n.tokenCreateButton,
               variant: AppColorVariant.Success,
               onPressed: () {
                 if (kIsWeb) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../l10n/l10n_helper.dart';
 
 part 'onramp_purchase_details.freezed.dart';
 part 'onramp_purchase_details.g.dart';
@@ -52,28 +53,28 @@ class OnrampPurchaseDetails with _$OnrampPurchaseDetails {
   String get statusLabel {
     switch (status) {
       case OnrampPurchaseStatus.initialized:
-        return "Initialized";
+        return globalL10n.r3dStatusInitialized;
 
       case OnrampPurchaseStatus.canceled:
-        return "Cancelled";
+        return globalL10n.bw2Cancelled;
 
       case OnrampPurchaseStatus.quoted:
-        return "Quoted";
+        return globalL10n.r3dStatusQuoted;
 
       case OnrampPurchaseStatus.paymentIntended:
-        return "Awaiting Payment";
+        return globalL10n.r3dAwaitingPayment;
 
       case OnrampPurchaseStatus.paymentProcessed:
-        return "Payment Processed";
+        return globalL10n.r3dPaymentProcessed;
 
       case OnrampPurchaseStatus.paymentCaptured:
-        return "Payment Captured";
+        return globalL10n.r3dPaymentCaptured;
 
       case OnrampPurchaseStatus.transactionSent:
-        return "Transaction Sent";
+        return globalL10n.txpTransactionSent;
 
       case OnrampPurchaseStatus.transactionSettled:
-        return "Transaction Settled";
+        return globalL10n.r3dTransactionSettled;
     }
   }
 

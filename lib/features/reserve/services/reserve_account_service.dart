@@ -6,6 +6,7 @@ import '../models/new_reserve_account.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/services/base_service.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class ReserveAccountService extends BaseService {
   ReserveAccountService() : super(apiBasePathOverride: "/rsapi/RSV1");
@@ -30,7 +31,7 @@ class ReserveAccountService extends BaseService {
       }
     }
 
-    Toast.error(data['Message'] ?? "A problem occurred.");
+    Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
 
     return null;
   }
@@ -62,7 +63,7 @@ class ReserveAccountService extends BaseService {
       }
     }
 
-    Toast.error(data['Message'] ?? "A problem occurred.");
+    Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
 
     return null;
   }
@@ -211,7 +212,7 @@ class ReserveAccountService extends BaseService {
       final data = response['data'];
 
       if (data['Success'] == true) {
-        Toast.message(data['Message'] ?? 'Success: NFT Transfer has been started.');
+        Toast.message(data['Message'] ?? globalL10n.r3dNftTransferStarted);
         return true;
       }
 
@@ -240,7 +241,7 @@ class ReserveAccountService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error("A problem occurred");
+      Toast.error(globalL10n.mktProblemOccurredToast);
       return false;
     }
   }

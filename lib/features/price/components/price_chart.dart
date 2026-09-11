@@ -9,6 +9,7 @@ import '../../../core/services/explorer_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/price_history_item.dart';
 
 class PriceChartScreen extends BaseScreen {
@@ -17,9 +18,10 @@ class PriceChartScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(currencySegementedButtonProvider);
+    final l10n = AppLocalizations.of(context);
 
     return AppBar(
-      title: Text(mode == CurrencyType.btc ? "BTC Price History" : "VFX Price History"),
+      title: Text(mode == CurrencyType.btc ? l10n.r3cPriceHistoryBtc : l10n.r3cPriceHistoryVfx),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
       actions: [
@@ -60,9 +62,10 @@ class WebPriceChartScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final mode = ref.watch(currencySegementedButtonProvider);
+    final l10n = AppLocalizations.of(context);
 
     return AppBar(
-      title: Text(mode == CurrencyType.btc ? "BTC Price History" : "VFX Price History"),
+      title: Text(mode == CurrencyType.btc ? l10n.r3cPriceHistoryBtc : l10n.r3cPriceHistoryVfx),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
       actions: [

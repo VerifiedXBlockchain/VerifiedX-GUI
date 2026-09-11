@@ -11,6 +11,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../encrypt/utils.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/services/nft_service.dart';
@@ -124,6 +125,7 @@ class _TokenTopicDetailState extends BaseComponentState<TokenTopicDetail> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -140,18 +142,18 @@ class _TokenTopicDetailState extends BaseComponentState<TokenTopicDetail> {
                   ),
                   const SizedBox(height: 4),
                   SelectableText(
-                    "UID: ${topic.topicUid}",
+                    l10n.tkbTopicUidLabel(topic.topicUid),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
               ),
             ),
             DateCard(
-              label: "Topic Created",
+              label: l10n.tokenTopicCreatedLabel,
               value: topic.createdAtFormatted,
             ),
             DateCard(
-              label: "Voting Ends",
+              label: l10n.tokenVotingEndsLabel,
               value: topic.endsAtFormatted,
             )
           ],
@@ -159,15 +161,15 @@ class _TokenTopicDetailState extends BaseComponentState<TokenTopicDetail> {
         const Divider(),
         Text(topic.topicDescription, style: TextStyle(fontSize: 18)),
         const SizedBox(height: 6),
-        SelectableText("Smart Contract UID: ${topic.smartContractUid}"),
+        SelectableText(l10n.tkbSmartContractUidWithValue(topic.smartContractUid)),
         const SizedBox(height: 6),
         if (!kIsWeb) ...[
-          Text("Block Height: ${topic.blockHeight}"),
+          Text(l10n.tkbBlockHeightValue(topic.blockHeight.toString())),
           const SizedBox(height: 6),
         ],
-        Text("Minimum Tokens to Vote: ${topic.minimumVoteRequirement}"),
+        Text(l10n.tkbMinimumTokensToVote(topic.minimumVoteRequirement.toString())),
         const SizedBox(height: 6),
-        Text("Your Balance: ${widget.balance}"),
+        Text(l10n.tkbYourBalanceValue(widget.balance.toString())),
 
         // const SizedBox(height: 6),
         // Text("Token Holder Count: ${topic.tokenHolderCount}"),
@@ -203,33 +205,34 @@ class _TopicVotingActions extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     if (currentVote != null) {
-      return _ErrorMessage("You voted ${currentVote!.voteTypeLabel} on block ${currentVote!.blockHeight}.");
+      return _ErrorMessage(l10n.tkbVotedOnBlock(currentVote!.voteTypeLabel, currentVote!.blockHeight.toString()));
     }
 
     final pendingVoteKey = "$address|${topic.topicUid}";
 
     if (!kIsWeb && ref.watch(pendingVotesProvider).contains(pendingVoteKey)) {
-      return const _ErrorMessage("Vote transaction pending.");
+      return _ErrorMessage(l10n.votingPendingTx);
     }
 
     if (kIsWeb && ref.watch(pendingVotesProvider).contains(pendingVoteKey)) {
-      return const _ErrorMessage("You have voted.");
+      return _ErrorMessage(l10n.tkbYouHaveVoted);
     }
 
     if (!topic.isActive) {
-      return _ErrorMessage("Voting Ended on ${topic.endsAtFormatted}.");
+      return _ErrorMessage(l10n.votingEndedOn(topic.endsAtFormatted));
     }
 
     if (balance < topic.minimumVoteRequirement) {
-      return _ErrorMessage("You need at least ${topic.minimumVoteRequirement} tokens to vote.");
+      return _ErrorMessage(l10n.tkbNeedTokensToVote(topic.minimumVoteRequirement.toString()));
     }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "Cast Your Vote",
+          l10n.votingCastYourVote,
           style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                 color: Colors.white,
               ),
@@ -239,14 +242,14 @@ class _TopicVotingActions extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AppButton(
-              label: "Vote Yes",
+              label: l10n.tokenVoteYes,
               onPressed: () async {
                 if (!await passwordRequiredGuard(context, ref)) return;
                 final confirmed = await ConfirmDialog.show(
-                  title: "Confirm Vote [YES]",
-                  body: "Are you sure you want to vote YES on this token topic?",
-                  confirmText: "Vote YES",
-                  cancelText: "Cancel",
+                  title: l10n.tokenConfirmVoteYes,
+                  body: l10n.tkbConfirmVoteYesBody,
+                  confirmText: l10n.votingConfirmYesAction,
+                  cancelText: l10n.actionCancel,
                 );
                 if (confirmed == true) {
                   // provider.voteYes();
@@ -257,7 +260,7 @@ class _TopicVotingActions extends BaseComponent {
                   if (kIsWeb) {
                     final token = await ExplorerService().retrieveToken(topic.smartContractUid);
                     if (token == null) {
-                      Toast.error("Could not get owner of token");
+                      Toast.error(l10n.tokenNoOwnerToast);
                       success = false;
                     } else {
                       success = await ref
@@ -275,7 +278,7 @@ class _TopicVotingActions extends BaseComponent {
 
                   if (success == true) {
                     ref.read(pendingVotesProvider.notifier).addId(pendingVoteKey);
-                    Toast.message("Vote casted");
+                    Toast.message(l10n.tokenVoteCastedToast);
                   }
 
                   ref.read(globalLoadingProvider.notifier).complete();
@@ -288,15 +291,15 @@ class _TopicVotingActions extends BaseComponent {
               width: 16,
             ),
             AppButton(
-              label: "Vote No",
+              label: l10n.tokenVoteNo,
               onPressed: () async {
                 if (!await passwordRequiredGuard(context, ref)) return;
 
                 final confirmed = await ConfirmDialog.show(
-                  title: "Confirm Vote [NO]",
-                  body: "Are you sure you want to vote NO on this token topic?",
-                  confirmText: "Vote NO",
-                  cancelText: "Cancel",
+                  title: l10n.tokenConfirmVoteNo,
+                  body: l10n.tkbConfirmVoteNoBody,
+                  confirmText: l10n.votingConfirmNoAction,
+                  cancelText: l10n.actionCancel,
                 );
                 if (confirmed == true) {
                   // provider.voteNo();
@@ -307,7 +310,7 @@ class _TopicVotingActions extends BaseComponent {
                   if (kIsWeb) {
                     final token = await ExplorerService().retrieveToken(topic.smartContractUid);
                     if (token == null) {
-                      Toast.error("Could not get owner of token");
+                      Toast.error(l10n.tokenNoOwnerToast);
                       success = false;
                     } else {
                       success = await ref
@@ -325,7 +328,7 @@ class _TopicVotingActions extends BaseComponent {
 
                   if (success == true) {
                     ref.read(pendingVotesProvider.notifier).addId(pendingVoteKey);
-                    Toast.message("Vote casted");
+                    Toast.message(l10n.tokenVoteCastedToast);
                   }
                   ref.read(globalLoadingProvider.notifier).complete();
                 }
@@ -337,7 +340,7 @@ class _TopicVotingActions extends BaseComponent {
         ),
         const SizedBox(height: 8),
         Text(
-          "Voting ends ${topic.endsAtFormatted}.",
+          l10n.votingEndsAt(topic.endsAtFormatted),
           style: Theme.of(context).textTheme.bodySmall,
         )
       ],
@@ -356,15 +359,16 @@ class _TopicVotingDetails extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Builder(
       builder: (context) {
         if (topic.totalVotes < 1) {
-          return const Center(
+          return Center(
             child: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Text(
-                "No votes yet.",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                l10n.tkbNoVotesYet,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           );
@@ -381,7 +385,7 @@ class _TopicVotingDetails extends BaseComponent {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Vote Counts",
+                      l10n.tkbVoteCounts,
                       style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
                     ),
                     const SizedBox(
@@ -392,19 +396,19 @@ class _TopicVotingDetails extends BaseComponent {
                       children: [
                         buildDetailRow(
                           context,
-                          "Votes Yes",
+                          l10n.tkbVotesYes,
                           topic.voteYes.toString(),
                           Theme.of(context).colorScheme.success,
                         ),
                         buildDetailRow(
                           context,
-                          "Votes No",
+                          l10n.tkbVotesNo,
                           topic.voteNo.toString(),
                           Theme.of(context).colorScheme.danger,
                         ),
                         buildDetailRow(
                           context,
-                          "Total Votes",
+                          l10n.tkbTotalVotes,
                           topic.totalVotes.toString(),
                         ),
                       ],
@@ -423,7 +427,7 @@ class _TopicVotingDetails extends BaseComponent {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Percentages",
+                      l10n.tkbPercentages,
                       style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
                     ),
                     const SizedBox(
@@ -434,18 +438,18 @@ class _TopicVotingDetails extends BaseComponent {
                       children: [
                         buildDetailRow(
                           context,
-                          "Votes Yes",
+                          l10n.tkbVotesYes,
                           "${topic.percentVotesYes}%",
                           Theme.of(context).colorScheme.success,
                         ),
                         buildDetailRow(
                           context,
-                          "Votes No",
+                          l10n.tkbVotesNo,
                           "${topic.percentVotesNo}%",
                           Theme.of(context).colorScheme.danger,
                         ),
-                        if (topic.isActive) buildDetailRow(context, "Result", "In Progress"),
-                        if (!topic.isActive) buildDetailRow(context, "Result", topic.percentInFavor > topic.percentAgainst ? "Pass" : "Fail"),
+                        if (topic.isActive) buildDetailRow(context, l10n.tkbResult, l10n.tkbInProgress),
+                        if (!topic.isActive) buildDetailRow(context, l10n.tkbResult, topic.percentInFavor > topic.percentAgainst ? l10n.tkbResultPass : l10n.tkbResultFail),
                       ],
                     )
                   ],
@@ -467,21 +471,21 @@ class _TopicVotingDetails extends BaseComponent {
                 Theme.of(context).colorScheme.danger,
               ],
               dataMap: {
-                "Yes": topic.voteYes.toDouble(),
-                "No": topic.voteNo.toDouble(),
+                l10n.actionYes: topic.voteYes.toDouble(),
+                l10n.actionNo: topic.voteNo.toDouble(),
               },
             ),
             const SizedBox(width: 16),
             if (isOwner)
               AppButton(
-                label: "Vote History",
+                label: l10n.tokenVoteHistory,
                 onPressed: () async {
                   // await ref.read(voteListProvider(topic.uid).notifier).load();
 
                   if (kIsWeb) {
                     final votes = topic.webVoteList;
                     if (votes == null || votes.isEmpty) {
-                      Toast.message("No Votes");
+                      Toast.message(l10n.tokenNoVotesToast);
                       return;
                     }
 
@@ -500,7 +504,7 @@ class _TopicVotingDetails extends BaseComponent {
                                     title: SelectableText(vote.address),
                                     subtitle: Text(vote.createdAtFormatted),
                                     trailing: AppBadge(
-                                      label: vote.value ? "YES" : "NO",
+                                      label: vote.value ? l10n.tkbYesUpper : l10n.tkbNoUpper,
                                       variant: vote.value ? AppColorVariant.Success : AppColorVariant.Danger,
                                     ),
                                   ),
@@ -526,7 +530,7 @@ class _TopicVotingDetails extends BaseComponent {
                               .map(
                                 (vote) => ListTile(
                                   title: SelectableText(vote.address),
-                                  subtitle: Text("Block ${vote.blockHeight}"),
+                                  subtitle: Text(l10n.tokenVoteBlockSubtitle(vote.blockHeight.toString())),
                                   trailing: AppBadge(
                                     label: vote.voteTypeLabel,
                                     variant: vote.voteType == TokenVoteType.Yes ? AppColorVariant.Success : AppColorVariant.Danger,

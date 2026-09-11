@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
@@ -43,15 +45,16 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
   }
 
   void _showAddressPicker() {
+    final l10n = AppLocalizations.of(context);
     final wallets = ref.read(walletListProvider);
     if (wallets.isEmpty) {
-      Toast.error("No accounts found");
+      Toast.error(l10n.prvNoAccountsFound);
       return;
     }
     showModalBottomSheet(
       context: context,
       builder: (context) => ModalContainer(
-        title: "Select Account",
+        title: l10n.webSelectAccount,
         withClose: true,
         children: wallets.map((wallet) {
           return Padding(
@@ -68,7 +71,7 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
                   ? Text(wallet.address, style: const TextStyle(fontSize: 11, color: Colors.white38, fontFamily: 'monospace'))
                   : null,
               trailing: Text(
-                "${wallet.balance} VFX",
+                l10n.prvVfxAmountSuffix(wallet.balance.toString()),
                 style: const TextStyle(fontSize: 12, color: Colors.white54),
               ),
               onTap: () {
@@ -87,19 +90,19 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
 
     final toAddress = _toAddressController.text.trim();
     if (!isValidRbxAddress(toAddress)) {
-      Toast.error("Please enter a valid VFX address");
+      Toast.error(globalL10n.prvEnterValidVfxAddress);
       return;
     }
 
     final amount = double.tryParse(_amountController.text.trim());
     if (amount == null || amount <= 0) {
-      Toast.error("Please enter a valid amount");
+      Toast.error(globalL10n.prvEnterValidAmount);
       return;
     }
 
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
-      Toast.error("No shielded address found");
+      Toast.error(globalL10n.prvNoShieldedAddress);
       return;
     }
 
@@ -120,21 +123,22 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text("Unshield vBTC"),
+      title: Text(l10n.prvUnshieldVbtcTitle),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Move vBTC from the shielded pool back to a transparent address.",
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+            Text(
+              l10n.prvUnshieldVbtcBody,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
             ),
             const SizedBox(height: 16),
             Text(
-              "Contract: ${widget.token.tokenName}",
+              l10n.prvContractName(widget.token.tokenName),
               style: const TextStyle(color: Colors.white54, fontSize: 12),
             ),
             const SizedBox(height: 4),
@@ -146,12 +150,12 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
             TextField(
               controller: _toAddressController,
               decoration: InputDecoration(
-                labelText: "To Address (transparent)",
-                hintText: "Enter VFX address",
+                labelText: l10n.prvToAddressLabel,
+                hintText: l10n.prvEnterVfxAddressHint,
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.account_balance_wallet, size: 20),
-                  tooltip: "Select from my accounts",
+                  tooltip: l10n.prvSelectFromAccounts,
                   onPressed: _isSubmitting ? null : () => _showAddressPicker(),
                 ),
               ),
@@ -161,15 +165,15 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
             TextField(
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(
-                labelText: "Amount (vBTC)",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.prvAmountVbtcLabel,
+                border: const OutlineInputBorder(),
               ),
               enabled: !_isSubmitting,
             ),
             const SizedBox(height: 8),
             Text(
-              "A fee of $PRIVACY_TX_FIXED_FEE_LABEL will be deducted from your shielded VFX balance.",
+              l10n.prvFeeDeductedShieldedVfxLong(PRIVACY_TX_FIXED_FEE_LABEL),
               style: const TextStyle(color: Colors.white38, fontSize: 11),
             ),
           ],
@@ -178,13 +182,13 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
+          child: Text(l10n.actionCancel),
         ),
         TextButton(
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : Text("Unshield", style: TextStyle(color: Theme.of(context).colorScheme.warning)),
+              : Text(l10n.prvUnshieldAction, style: TextStyle(color: Theme.of(context).colorScheme.warning)),
         ),
       ],
     );

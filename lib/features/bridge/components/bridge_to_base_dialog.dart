@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../models/bridge_lock_record.dart';
@@ -61,10 +63,11 @@ class BridgeToBaseDialog extends ConsumerStatefulWidget {
     String lockId, {
     BridgeLockRecord? seedRecord,
   }) async {
+    final l10n = AppLocalizations.of(context);
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Bridge details"),
+        title: Text(l10n.prvBridgeDetailsTitle),
         content: SizedBox(
           width: 520,
           child: BridgeProgress(
@@ -76,7 +79,7 @@ class BridgeToBaseDialog extends ConsumerStatefulWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Close"),
+            child: Text(l10n.actionClose),
           ),
         ],
       ),
@@ -139,7 +142,7 @@ class _BridgeToBaseDialogState extends ConsumerState<BridgeToBaseDialog> {
     setState(() => _isSubmitting = false);
 
     if (record == null || record.lockId.isEmpty) {
-      Toast.error("Failed to start bridge. Please try again.");
+      Toast.error(globalL10n.prvBridgeFailedToStart);
       return;
     }
 
@@ -162,12 +165,13 @@ class _BridgeToBaseDialogState extends ConsumerState<BridgeToBaseDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
       title: Row(
         children: [
-          const Expanded(child: Text("Bridge to Base")),
+          Expanded(child: Text(l10n.prvBridgeToBaseTitle)),
           IconButton(
-            tooltip: _isSubmitting ? "Bridging…" : "Close",
+            tooltip: _isSubmitting ? l10n.prvBridging : l10n.actionClose,
             iconSize: 18,
             onPressed: _isSubmitting ? null : _close,
             icon: const Icon(Icons.close),
@@ -235,9 +239,9 @@ class _MissingLockId extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      child: Text("Bridge state lost. Close and try again.", style: TextStyle(color: Colors.white)),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Text(AppLocalizations.of(context).prvBridgeStateLost, style: const TextStyle(color: Colors.white)),
     );
   }
 }

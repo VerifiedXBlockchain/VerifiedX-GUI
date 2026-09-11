@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 
 class DataNodeScreen extends BaseScreen {
@@ -10,7 +11,7 @@ class DataNodeScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Datanode"),
+      title: Text(AppLocalizations.of(context).datanodeTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: const [WalletSelector()],
@@ -21,7 +22,7 @@ class DataNodeScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     return Center(
       child: Text(
-        "Activating soon.",
+        AppLocalizations.of(context).hnavActivatingSoon,
         style: Theme.of(context).textTheme.headlineMedium,
       ),
     );

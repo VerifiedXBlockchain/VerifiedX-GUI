@@ -7,6 +7,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/utils.dart';
 
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 
@@ -52,9 +53,10 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
     verificationController = TextEditingController();
   }
 
-  String? amountValidator(String? val) => formValidatorNumber(val, "Amount");
+  String? amountValidator(String? val) =>
+      formValidatorNumber(val, globalL10n.labelAmount);
   String? verificationValidator(String? val) =>
-      formValidatorNumber(val, "Verification Code");
+      formValidatorNumber(val, globalL10n.faucetVerificationCodeLabel);
 
   load(FaucetFormstate model) {
     state = model;
@@ -77,13 +79,13 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
         : ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
     if (address == null) {
-      Toast.error("No Account Selected");
+      Toast.error(globalL10n.r3eNoAccountSelected);
       return null;
     }
 
     final phoneNumber = phoneController.value;
     if (phoneNumber == null) {
-      Toast.error("Phone Number is required");
+      Toast.error(globalL10n.r3ePhoneNumberRequired);
       return false;
     }
     
@@ -93,7 +95,7 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
         amountOverride ?? double.tryParse(amountController.text);
 
     if (parsedAmount == null) {
-      Toast.error("Invalid Amount");
+      Toast.error(globalL10n.btcInvalidAmount);
       return false;
     }
 
@@ -121,7 +123,7 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
       );
       clear();
 
-      Toast.message("Success! Funds are on their way. TX Hash: $result");
+      Toast.message(globalL10n.r3eFaucetSuccess(result.toString()));
       return true;
     } catch (e) {
       Toast.error(e.toString());

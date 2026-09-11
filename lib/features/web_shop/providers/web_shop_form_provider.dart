@@ -19,6 +19,7 @@ import '../../../utils/validation.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../services/web_shop_service.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class WebShopFormProvider extends StateNotifier<WebShop> {
   final Ref ref;
@@ -70,7 +71,7 @@ class WebShopFormProvider extends StateNotifier<WebShop> {
       final urlAvailable = await WebShopService().checkAvailabilty(state.url);
 
       if (!urlAvailable) {
-        Toast.error("Shop URL is not available.");
+        Toast.error(globalL10n.r3bShopUrlNotAvailable);
         ref.read(globalLoadingProvider.notifier).complete();
         return null;
       }
@@ -78,7 +79,7 @@ class WebShopFormProvider extends StateNotifier<WebShop> {
     final address = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
     state = state.copyWith(ownerAddress: address ?? '');
     if (state.ownerAddress.isEmpty) {
-      Toast.error("Address Required.");
+      Toast.error(globalL10n.r3bAddressRequired);
       ref.read(globalLoadingProvider.notifier).complete();
 
       return null;
@@ -93,10 +94,10 @@ class WebShopFormProvider extends StateNotifier<WebShop> {
       ref.read(globalLoadingProvider.notifier).complete();
 
       final confirmed = await ConfirmDialog.show(
-        title: "Update Shop?",
-        body: "There is a cost of $SHOP_UPDATE_COST VFX to update your shop on the network (plus the transaction fee).",
-        confirmText: "Update",
-        cancelText: "Cancel",
+        title: globalL10n.r3bUpdateShopTitle,
+        body: globalL10n.r3bUpdateShopBody(SHOP_UPDATE_COST.toString()),
+        confirmText: globalL10n.svcActionUpdate,
+        cancelText: globalL10n.actionCancel,
       );
       if (confirmed == true) {
         ref.read(globalLoadingProvider.notifier).start();
@@ -119,17 +120,16 @@ class WebShopFormProvider extends StateNotifier<WebShop> {
     if (authenticated && address != null && currentEmail == null) {
       String? email = await PromptModal.show(
         contextOverride: context,
-        title: "Subscribe for updates?",
-        body:
-            "In order for the web wallet to provide notifications about bids/purchases for you to sign the transactions, an email address is required.",
+        title: globalL10n.mktSubscribeUpdatesTitle,
+        body: globalL10n.r3bSubscribeUpdatesBody,
         validator: formValidatorEmail,
-        labelText: "Email Address",
+        labelText: globalL10n.keygenEmailAddressTitle,
       );
 
       email = email?.trim();
 
       if (email == null || email.isEmpty) {
-        Toast.error("You will not be notified. You can update this setting on the dashboard if you change your mind.");
+        Toast.error(globalL10n.r3bWillNotBeNotified);
       } else {
         ref.read(globalLoadingProvider.notifier).start();
 
@@ -138,7 +138,7 @@ class WebShopFormProvider extends StateNotifier<WebShop> {
 
         if (subscribed) {
           ref.read(webAuthTokenProvider.notifier).addEmail(email);
-          Toast.message("Subscribed");
+          Toast.message(globalL10n.mktSubscribedToast);
         }
       }
     }
@@ -146,10 +146,10 @@ class WebShopFormProvider extends StateNotifier<WebShop> {
     if (updatedShop != null) {
       if (!updatedShop.isPublished) {
         final confirm = await ConfirmDialog.show(
-          title: "Publish Shop?",
-          body: "There is a cost of $SHOP_PUBLISH_COST VFX to publish your shop to the network (plus the transaction fee).",
-          confirmText: "Publish",
-          cancelText: "Cancel",
+          title: globalL10n.shopPublishShopTitle,
+          body: globalL10n.r3bPublishShopBody(SHOP_PUBLISH_COST.toString()),
+          confirmText: globalL10n.r3bActionPublish,
+          cancelText: globalL10n.actionCancel,
         );
 
         if (confirm == true) {

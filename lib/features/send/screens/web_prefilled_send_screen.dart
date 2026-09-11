@@ -10,6 +10,7 @@ import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../components/send_form.dart';
 import '../providers/send_form_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebPrefilledSendScreen extends BaseScreen {
   final String currency;
@@ -32,8 +33,11 @@ class WebPrefilledSendScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final isBtc = ref.watch(webSessionProvider.select((v) => v.usingBtc));
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: isBtc ? Text("Send BTC") : Text("Send VFX"),
+      title: isBtc
+          ? Text(l10n.sendAppBarTitle('BTC'))
+          : Text(l10n.sendAppBarTitle('VFX')),
       shadowColor: Colors.transparent,
       backgroundColor: Colors.black,
     );

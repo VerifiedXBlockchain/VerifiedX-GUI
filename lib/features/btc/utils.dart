@@ -8,6 +8,8 @@ import 'package:crypto/crypto.dart' show sha256;
 import '../../app.dart';
 import '../../core/app_constants.dart';
 import '../../core/env.dart';
+import '../../l10n/generated/app_localizations.dart';
+import '../../l10n/l10n_helper.dart';
 import 'models/btc_fee_rate_preset.dart';
 
 double satashisToBtc(int satashis) {
@@ -28,6 +30,7 @@ String btcTxFeeEstimateLabel(int satashis) {
 }
 
 Future<int?> promptForFeeRate(BuildContext context) async {
+  final l10n = AppLocalizations.of(context);
   final recommendedFees = await BtcFeeRateService().recommended();
 
   final int? feeRate = await showDialog(
@@ -42,7 +45,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
       return StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
-            title: Text("Fee Rate"),
+            title: Text(l10n.btcRbfFeeRateTitle),
             content: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,11 +118,11 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                       },
                       validator: (value) {
                         if (value == null) {
-                          return "Fee Rate Required";
+                          return l10n.tkbFeeRateRequired;
                         }
 
                         if ((int.tryParse(value) ?? 0) < 1) {
-                          return "Invalid Fee Rate. Must be atleast 1 satoshi.";
+                          return l10n.tkbInvalidFeeRate;
                         }
 
                         return null;
@@ -128,7 +131,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                         FilteringTextInputFormatter.allow(RegExp("[0-9]"))
                       ],
                       decoration:
-                          InputDecoration(hintText: "Fee rate in satoshis"),
+                          InputDecoration(hintText: l10n.tkbFeeRateHint),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: false),
                     ),
@@ -147,7 +150,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                   Navigator.of(context).pop(null);
                 },
                 child: Text(
-                  "Cancel",
+                  l10n.actionCancel,
                   style: TextStyle(color: Colors.white70),
                 ),
               ),
@@ -160,7 +163,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                   }
                 },
                 child: Text(
-                  "Continue",
+                  l10n.actionContinue,
                   style: TextStyle(color: Colors.white),
                 ),
               )
@@ -433,4 +436,31 @@ List<int> _base58Decode(String s) {
 List<int> _doubleSha256(List<int> data) {
   final first = sha256.convert(data).bytes;
   return sha256.convert(first).bytes;
+}
+
+/// Validates the total for a multi-contract vBTC transfer. The CLI allocates
+/// the amount across contracts itself, so the client only checks that the
+/// value is a positive number with at most 8 decimals that does not exceed
+/// [available], the wallet's combined spendable vBTC across its V2 tokens.
+String? formValidatorVbtcMultiAmount(String? value, double available) {
+  if (value == null || value.trim().isEmpty) {
+    return globalL10n.svcAmountRequired;
+  }
+
+  final trimmed = value.trim();
+  final amount = double.tryParse(trimmed);
+  if (amount == null || amount <= 0) {
+    return globalL10n.btcInvalidAmountToast;
+  }
+
+  final parts = trimmed.split('.');
+  if (parts.length == 2 && parts[1].length > 8) {
+    return globalL10n.btcBulkMaxDecimals;
+  }
+
+  if (amount > available) {
+    return globalL10n.r3fMaxAmountIs(available.toString());
+  }
+
+  return null;
 }

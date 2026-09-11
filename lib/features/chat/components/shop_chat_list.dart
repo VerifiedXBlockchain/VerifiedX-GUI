@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/chat_message.dart';
 import '../providers/chat_list_provider_interface.dart';
 import '../providers/shop_chat_list_provider.dart';
@@ -151,30 +152,30 @@ class _ChatMessageCard extends StatelessWidget {
                   contextMenu: GenericContextMenu(
                     buttonConfigs: [
                       ContextMenuButtonConfig(
-                        "Copy Message",
+                        AppLocalizations.of(context).r3gCopyMessage,
                         icon: Icon(
                           Icons.messenger_outline,
                           size: 16,
                         ),
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(text: message.message));
-                          Toast.message("Message copied to clipboard.");
+                          Toast.message(AppLocalizations.of(context).r3gMessageCopied);
                         },
                       ),
                       ContextMenuButtonConfig(
-                        "Copy Address",
+                        AppLocalizations.of(context).adnrFundCopyAddress,
                         icon: Icon(
                           Icons.wallet,
                           size: 16,
                         ),
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(text: message.fromAddress));
-                          Toast.message("Address copied to clipboard.");
+                          Toast.message(AppLocalizations.of(context).r3gAddressCopiedDot);
                         },
                       ),
                       if (!message.received)
                         ContextMenuButtonConfig(
-                          "Resend Message",
+                          AppLocalizations.of(context).r3gResendMessage,
                           icon: Icon(
                             Icons.refresh,
                             size: 16,

@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../models/bridge_lock_record.dart';
 import '../providers/bridge_lock_list_provider.dart';
@@ -67,10 +69,10 @@ class _BridgeHistoryListState extends ConsumerState<BridgeHistoryList> {
     setState(() => _retrying.remove(record.lockId));
 
     if (ok) {
-      Toast.message("Retry submitted. Watching for status updates.");
+      Toast.message(globalL10n.prvBridgeRetrySubmitted);
       ref.read(bridgeLockListProvider(widget.ownerAddress).notifier).refresh();
     } else {
-      Toast.error("Retry failed. See history detail for status.");
+      Toast.error(globalL10n.prvBridgeRetryFailedToast);
     }
   }
 
@@ -121,7 +123,7 @@ class _BridgeHistoryListState extends ConsumerState<BridgeHistoryList> {
 
   static String _messageFromError(Object error) {
     if (error is BridgeServiceException) return error.message;
-    return "Couldn't load bridge history. Check your connection and try again.";
+    return globalL10n.prvBridgeHistoryLoadError;
   }
 }
 
@@ -131,18 +133,19 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Text(
-              "Bridge History",
-              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+              l10n.prvBridgeHistoryTitle,
+              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ),
           IconButton(
-            tooltip: "Refresh",
+            tooltip: l10n.prvRefresh,
             iconSize: 18,
             visualDensity: VisualDensity.compact,
             onPressed: onRefresh,
@@ -159,6 +162,7 @@ class _Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
       decoration: BoxDecoration(
@@ -167,12 +171,12 @@ class _Loading extends StatelessWidget {
         borderRadius: BorderRadius.circular(6),
       ),
       child: Row(
-        children: const [
-          SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-          SizedBox(width: 10),
+        children: [
+          const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
+          const SizedBox(width: 10),
           Text(
-            "Loading bridge history…",
-            style: TextStyle(color: Colors.white54, fontSize: 12),
+            l10n.prvBridgeHistoryLoading,
+            style: const TextStyle(color: Colors.white54, fontSize: 12),
           ),
         ],
       ),
@@ -208,7 +212,7 @@ class _ErrorState extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           AppButton(
-            label: "Try again",
+            label: AppLocalizations.of(context).prvTryAgain,
             type: AppButtonType.Outlined,
             variant: AppColorVariant.Warning,
             size: AppSizeVariant.Sm,
@@ -232,10 +236,10 @@ class _Empty extends StatelessWidget {
         border: Border.all(color: Colors.white12),
         borderRadius: BorderRadius.circular(6),
       ),
-      child: const Center(
+      child: Center(
         child: Text(
-          "No bridge operations yet.",
-          style: TextStyle(color: Colors.white54, fontSize: 12),
+          AppLocalizations.of(context).prvBridgeNoOperations,
+          style: const TextStyle(color: Colors.white54, fontSize: 12),
         ),
       ),
     );

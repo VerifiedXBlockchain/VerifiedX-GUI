@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../wallet/models/wallet.dart';
@@ -26,7 +27,7 @@ class CurrentValidatorProvider extends StateNotifier<Wallet?> {
     }
 
     if (response == "Node name already taken.") {
-      Toast.error("Node name already taken.");
+      Toast.error(globalL10n.r3hNodeNameTaken);
       return false;
     }
 

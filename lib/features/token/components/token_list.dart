@@ -7,6 +7,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import 'token_list_tile.dart';
 import '../models/token_account.dart';
 import '../providers/token_nfts_provider.dart';
@@ -34,14 +35,14 @@ class TokenList extends BaseComponent {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "No Fungible Tokens",
+              AppLocalizations.of(context).tokenListTitle,
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(height: 8),
-            Text("You have no fungible tokens with supply in any of your accounts."),
+            Text(AppLocalizations.of(context).tkbNoFungibleTokensBody),
             SizedBox(height: 16),
             AppButton(
-              label: "Create Token",
+              label: AppLocalizations.of(context).tokenCreateButton,
               variant: AppColorVariant.Success,
               onPressed: () {
                 AutoRouter.of(context).push(TokenCreateScreenRoute());
@@ -86,7 +87,7 @@ class TokenList extends BaseComponent {
                     InkWell(
                       onTap: () async {
                         await Clipboard.setData(ClipboardData(text: account.address));
-                        Toast.message("Address copied to clipboard (${account.address})");
+                        Toast.message(AppLocalizations.of(context).tokenAddressCopiedToast(account.address));
                       },
                       child: Icon(
                         Icons.copy,

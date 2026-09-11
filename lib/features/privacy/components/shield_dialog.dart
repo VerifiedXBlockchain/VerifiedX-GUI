@@ -5,6 +5,8 @@ import '../../../app.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
@@ -36,19 +38,19 @@ class _ShieldDialogState extends ConsumerState<ShieldDialog> {
   Future<void> _submit() async {
     final wallet = ref.read(sessionProvider).currentWallet;
     if (wallet == null) {
-      Toast.error("No wallet selected");
+      Toast.error(globalL10n.prvNoWalletSelected);
       return;
     }
 
     final amount = double.tryParse(_amountController.text.trim());
     if (amount == null || amount < MIN_SHIELD_AMOUNT_VFX) {
-      Toast.error("Minimum shield amount is $MIN_SHIELD_AMOUNT_VFX VFX");
+      Toast.error(globalL10n.prvMinShieldAmountVfx(MIN_SHIELD_AMOUNT_VFX.toString()));
       return;
     }
 
     final zfxAddress = ref.read(shieldedAddressProvider)?.zfxAddress;
     if (zfxAddress == null) {
-      Toast.error("No shielded address found");
+      Toast.error(globalL10n.prvNoShieldedAddress);
       return;
     }
 
@@ -68,40 +70,41 @@ class _ShieldDialogState extends ConsumerState<ShieldDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final wallet = ref.watch(sessionProvider.select((v) => v.currentWallet));
 
     return AlertDialog(
-      title: const Text("Shield VFX"),
+      title: Text(l10n.prvShieldVfxTitle),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Move VFX from your transparent wallet into the shielded pool.",
-              style: TextStyle(color: Colors.white70, fontSize: 13),
+            Text(
+              l10n.prvShieldVfxBody,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
             ),
             const SizedBox(height: 16),
             Text(
-              "From: ${wallet?.address ?? 'No wallet selected'}",
+              l10n.prvFromAddress(wallet?.address ?? l10n.prvNoWalletSelected),
               style: const TextStyle(color: Colors.white54, fontSize: 12),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(
-                labelText: "Amount (VFX)",
-                hintText: "Min: $MIN_SHIELD_AMOUNT_VFX",
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.prvAmountVfxLabel,
+                hintText: l10n.prvMinHint(MIN_SHIELD_AMOUNT_VFX.toString()),
+                border: const OutlineInputBorder(),
               ),
               enabled: !_isSubmitting,
             ),
             const SizedBox(height: 8),
-            const Text(
-              "Transparent network fee will be auto-calculated.",
-              style: TextStyle(color: Colors.white38, fontSize: 11),
+            Text(
+              l10n.prvTransparentFeeAutoCalc,
+              style: const TextStyle(color: Colors.white38, fontSize: 11),
             ),
           ],
         ),
@@ -109,13 +112,13 @@ class _ShieldDialogState extends ConsumerState<ShieldDialog> {
       actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.of(context).pop(),
-          child: const Text("Cancel"),
+          child: Text(l10n.actionCancel),
         ),
         TextButton(
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-              : Text("Shield", style: TextStyle(color: Theme.of(context).colorScheme.success)),
+              : Text(l10n.prvShieldAction, style: TextStyle(color: Theme.of(context).colorScheme.success)),
         ),
       ],
     );

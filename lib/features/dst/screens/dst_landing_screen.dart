@@ -6,6 +6,7 @@ import '../../../core/components/back_to_home_button.dart';
 
 import '../../../core/app_router.gr.dart';
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 
 class DstLandingScreen extends BaseScreen {
@@ -19,7 +20,7 @@ class DstLandingScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("P2P Auctions"),
+      title: Text(AppLocalizations.of(context).dstAuctionsTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: const [
@@ -59,18 +60,18 @@ class DstLandingScreen extends BaseScreen {
               mainAxisSize: MainAxisSize.min,
               children: [
                 BigButton(
-                  title: "Connect to Auction House",
+                  title: AppLocalizations.of(context).dstConnectToAuctionHouse,
                   iconData: Icons.connect_without_contact,
-                  body: "Connect to a remote auction house to trade NFTs.",
+                  body: AppLocalizations.of(context).dstConnectToAuctionHouseBody,
                   onPressed: () async {
                     // AutoRouter.of(context).push(RemoteShopListScreenRoute());
                     AutoRouter.of(context).push(RemoteShopContainerScreenRoute());
                   },
                 ),
                 BigButton(
-                  title: "Manage my Auction House",
+                  title: AppLocalizations.of(context).dstManageMyAuctionHouse,
                   iconData: Icons.house,
-                  body: "Manage your account's auction house and trade NFTs.",
+                  body: AppLocalizations.of(context).dstManageMyAuctionHouseBody,
                   onPressed: () async {
                     AutoRouter.of(context).push(MyCollectionsListScreenRoute());
                   },

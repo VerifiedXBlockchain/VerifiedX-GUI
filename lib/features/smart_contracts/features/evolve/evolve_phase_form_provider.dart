@@ -4,6 +4,7 @@ import '../../../sc_property/models/sc_property.dart';
 
 import '../../../../utils/toast.dart';
 import '../../../../utils/validation.dart';
+import '../../../../l10n/l10n_helper.dart';
 import '../../../asset/asset.dart';
 import '../../../bridge/providers/wallet_info_provider.dart';
 import 'evolve.dart';
@@ -32,8 +33,8 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
     timeController = TextEditingController(text: model.timeLabel);
   }
 
-  String? nameValidator(String? val) => formValidatorNotEmpty(val, "Name");
-  String? descriptionValidator(String? val) => formValidatorNotEmpty(val, "Description");
+  String? nameValidator(String? val) => formValidatorNotEmpty(val, globalL10n.walletNameLabel);
+  String? descriptionValidator(String? val) => formValidatorNotEmpty(val, globalL10n.btcDetailDescriptionLabel);
 
   String? dateTimeValidator(String? val) {
     if (ref.read(evolveFormProvider).type != EvolveType.time) {
@@ -41,7 +42,7 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
     }
 
     if (val == null || val.isEmpty) {
-      return "Required for Date/Time evolution.";
+      return globalL10n.r3aRequiredForDateTimeEvolution;
     }
 
     return null;
@@ -53,12 +54,12 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
     }
 
     if (val == null || val.isEmpty) {
-      return "Required for Block Height evolution.";
+      return globalL10n.r3aRequiredForBlockHeightEvolution;
     }
 
     final parsed = int.tryParse(val);
     if (parsed == null) {
-      return "Invalid value";
+      return globalL10n.r3aInvalidValue;
     }
 
     if (ref.read(walletInfoProvider) == null) {
@@ -68,7 +69,7 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
     final currentBh = ref.read(walletInfoProvider)!.blockHeight;
 
     if (parsed <= currentBh) {
-      return "Block height must be greater than $currentBh.";
+      return globalL10n.r3aBlockHeightMustBeGreaterThan(currentBh.toString());
     }
 
     return null;
@@ -90,7 +91,7 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
     );
 
     if (state.asset == null) {
-      OverlayToast.error("Asset is required");
+      OverlayToast.error(globalL10n.r3aAssetIsRequired);
       return false;
     }
 
@@ -109,7 +110,7 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
     final d = existing == null ? date : DateTime(date.year, date.month, date.day, existing.hour, existing.minute);
 
     if (d.isBefore(DateTime.now())) {
-      OverlayToast.error("Date must be in the future.");
+      OverlayToast.error(globalL10n.r3aDateMustBeInFuture);
 
       return;
     }
@@ -128,7 +129,7 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
         : DateTime(existing.year, existing.month, existing.day, time.hour, time.minute);
 
     if (d.isBefore(DateTime.now())) {
-      OverlayToast.error("Time must be in the future.");
+      OverlayToast.error(globalL10n.r3aTimeMustBeInFuture);
       return;
     }
 

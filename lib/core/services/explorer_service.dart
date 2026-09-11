@@ -898,6 +898,12 @@ class ExplorerService extends BaseService {
   }
 
   /// Kicks off FROST signing asynchronously. Returns a job_id to poll.
+  ///
+  /// [startSignatures] carries one entry per transaction input beyond the
+  /// first: `{'input_index': k, 'signature': ...}` for the matching
+  /// StartMessages[k] from the prepare response. Input 0's signature always
+  /// travels in [startSignature] — the node requires it there and ignores
+  /// index-0 entries in the array. Omitted for single-input withdrawals.
   Future<Map<String, dynamic>> executeV2WithdrawalComplete({
     required String scIdentifier,
     required String withdrawalRequestHash,
@@ -910,6 +916,7 @@ class ExplorerService extends BaseService {
     double amount = 0,
     String btcDestination = '',
     int feeRate = 0,
+    List<Map<String, dynamic>>? startSignatures,
   }) async {
     try {
       final response = await postJson(
@@ -926,6 +933,8 @@ class ExplorerService extends BaseService {
           'amount': amount,
           'btc_destination': btcDestination,
           'fee_rate': feeRate,
+          if (startSignatures != null && startSignatures.isNotEmpty)
+            'start_signatures': startSignatures,
         },
       );
       return response['data'];
@@ -936,9 +945,20 @@ class ExplorerService extends BaseService {
   }
 
   /// Polls the FROST signing job status. Returns signed BTC tx hex when complete.
+  ///
+  /// Spyglass reports a failed ceremony as HTTP 500 and an unknown or expired
+  /// job as HTTP 404, both with the JSON body the poll loop and the stale-job
+  /// probe are written for (`status`, `success`, `message`, `failure_code`,
+  /// `retryable`). Those statuses must come back as data: thrown, they are
+  /// indistinguishable from a transient network error, so a failed ceremony
+  /// polls for the full budget and the stored job is resumed forever. Only a
+  /// genuinely unparseable response (proxy error page, timeout) still throws.
   Future<Map<String, dynamic>> getV2WithdrawalCompleteStatus(String jobId) async {
     try {
-      final response = await getJson('/btc/vbtc-v2/withdraw/complete/status/$jobId/');
+      final response = await getJson(
+        '/btc/vbtc-v2/withdraw/complete/status/$jobId/',
+        validateStatus: (status) => status != null && status < 600,
+      );
       return response;
     } catch (e) {
       print(e);

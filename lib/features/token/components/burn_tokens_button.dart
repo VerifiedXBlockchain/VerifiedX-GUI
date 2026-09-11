@@ -5,6 +5,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/services/nft_service.dart';
 import '../services/token_service.dart';
@@ -32,8 +33,9 @@ class BurnTokensButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Burn",
+      label: l10n.tokenBurn,
       variant: AppColorVariant.Danger,
       useDisabledColor: isOwnedByRA,
       type: elevated ? AppButtonType.Elevated : AppButtonType.Text,
@@ -46,14 +48,14 @@ class BurnTokensButton extends BaseComponent {
         final nft = await NftService().getNftData(scId);
 
         if (nft?.tokenStateDetails?.burnable != true) {
-          Toast.error("This token is not burnable");
+          Toast.error(l10n.tokenNotBurnableToast);
           return;
         }
 
         final amount = await PromptModal.show(
-          title: "Amount to Burn",
-          validator: (val) => formValidatorNumber(val, "Amount"),
-          labelText: "Amount",
+          title: l10n.tokenAmountToBurnTitle,
+          validator: (val) => formValidatorNumber(val, l10n.tokenAmountLabel),
+          labelText: l10n.tokenAmountLabel,
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
         );
         if (amount == null || amount.isEmpty) {
@@ -63,12 +65,12 @@ class BurnTokensButton extends BaseComponent {
         final amountDouble = double.tryParse(amount);
 
         if (amountDouble == null) {
-          Toast.error("Invalid Amount");
+          Toast.error(l10n.tokenInvalidAmountToast);
           return;
         }
 
         if (amountDouble > currentBalance) {
-          Toast.error("Not enough balance to perform this transaction");
+          Toast.error(l10n.tokenInsufficientBalanceToast);
           return;
         }
         ref.read(globalLoadingProvider.notifier).start();
@@ -80,7 +82,7 @@ class BurnTokensButton extends BaseComponent {
         ref.read(globalLoadingProvider.notifier).complete();
 
         if (success) {
-          Toast.message("Token burn transaction broadcasted");
+          Toast.message(l10n.tokenBurnBroadcastedToast);
           notifyTransactionSubmitted();
         }
       },

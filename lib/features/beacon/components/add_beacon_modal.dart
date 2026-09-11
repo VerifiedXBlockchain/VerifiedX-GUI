@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../providers/add_beacon_form_provider.dart';
 import '../providers/beacon_list_provider.dart';
@@ -15,13 +16,14 @@ class AddBeaconModal extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final provider = ref.read(addBeaconFormProvider.notifier);
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       withClose: true,
       withDecor: false,
       children: [
-        const Text("Add Beacon"),
+        Text(l10n.beaconAddTitle),
         Text(
-          "Add an existing beacon to foreign nodes to use that relay instead of default ones on the VFX network. Configure your wallet to use a remote beacon for media transferring rather than using the default VFX network beacons. You will need to know the IP address of the remote beacon. If that beacon is using the non-default port, provide that as well. The beacon name is a friendly name visible only to you.",
+          l10n.r3bAddBeaconDescription,
           style: Theme.of(context).textTheme.bodySmall,
         ),
         Form(
@@ -32,8 +34,8 @@ class AddBeaconModal extends BaseComponent {
                 child: TextFormField(
                   controller: provider.nameController,
                   validator: provider.nameValidator,
-                  decoration: const InputDecoration(
-                    label: Text("Beacon Name"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.beaconNameLabel),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
@@ -47,8 +49,8 @@ class AddBeaconModal extends BaseComponent {
                 child: TextFormField(
                   controller: provider.ipController,
                   validator: provider.ipAddressValidator,
-                  decoration: const InputDecoration(
-                    label: Text("IP Address"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.beaconIpLabel),
                   ),
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
@@ -62,7 +64,7 @@ class AddBeaconModal extends BaseComponent {
                 width: 240,
                 child: TextFormField(
                   controller: provider.portController,
-                  decoration: const InputDecoration(label: Text("Port (leave blank for default)")),
+                  decoration: InputDecoration(label: Text(l10n.beaconPortLabel)),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
               ),
@@ -76,7 +78,7 @@ class AddBeaconModal extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppButton(
-              label: "Cancel",
+              label: l10n.actionCancel,
               type: AppButtonType.Text,
               variant: AppColorVariant.Light,
               onPressed: () {
@@ -85,7 +87,7 @@ class AddBeaconModal extends BaseComponent {
               },
             ),
             AppButton(
-              label: "Add",
+              label: l10n.beaconAdd,
               variant: AppColorVariant.Success,
               onPressed: () async {
                 final success = await provider.submit();

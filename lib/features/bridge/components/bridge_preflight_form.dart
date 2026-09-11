@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../models/bridge_preflight.dart';
@@ -109,19 +110,21 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
   }
 
   String? _validateAmount(String? raw, BridgePreflight preflight) {
-    if (raw == null || raw.trim().isEmpty) return "Amount is required";
+    final l10n = AppLocalizations.of(context);
+    if (raw == null || raw.trim().isEmpty) return l10n.prvBridgeAmountRequired;
     final value = double.tryParse(raw.trim());
-    if (value == null || value <= 0) return "Enter a positive amount";
+    if (value == null || value <= 0) return l10n.prvBridgeEnterPositive;
     if (value > preflight.availableVbtc) {
-      return "Exceeds available (${formatVbtc(preflight.availableVbtc)} vBTC)";
+      return l10n.prvBridgeExceedsAvailable(formatVbtc(preflight.availableVbtc));
     }
     return null;
   }
 
   String? _validateDestination(String? raw) {
-    if (raw == null || raw.trim().isEmpty) return "Base address is required";
+    final l10n = AppLocalizations.of(context);
+    if (raw == null || raw.trim().isEmpty) return l10n.prvBridgeBaseAddressRequired;
     if (!_evmAddressPattern.hasMatch(raw.trim())) {
-      return "Must be a valid 0x Base address (40 hex chars)";
+      return l10n.prvBridgeInvalidBaseAddress;
     }
     return null;
   }
@@ -154,6 +157,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final async = ref.watch(bridgePreflightProvider(_args));
 
     return async.when(
@@ -165,30 +169,28 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
       skipLoadingOnRefresh: true,
       loading: () => _Loading(onCancel: widget.onCancel),
       error: (err, _) => _ErrorState(
-        message: "Couldn't reach the bridge service. Check your connection and try again.",
+        message: l10n.prvBridgeCantReach,
         onCancel: widget.onCancel,
         onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
       ),
       data: (preflight) {
         if (preflight == null || !preflight.success) {
           return _ErrorState(
-            message: preflight?.message ?? "Couldn't load bridge info.",
+            message: preflight?.message ?? l10n.prvBridgeCantLoadInfo,
             onCancel: widget.onCancel,
             onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
           );
         }
         if (!preflight.bridgeConfigured) {
           return _BlockedState(
-            message: "Bridging is currently unavailable. The CLI is not configured to talk to Base.",
+            message: l10n.prvBridgeUnavailableCli,
             onCancel: widget.onCancel,
           );
         }
         if (!preflight.hasDerivedAddress) {
           // UX § 6 — "User has no derived Base address (key unavailable)".
           return _BlockedState(
-            message:
-                "Bridge unavailable — your Base address couldn't be derived. "
-                "This usually means the wallet is locked. Unlock your wallet and try again.",
+            message: l10n.prvBridgeUnavailableNoAddress,
             onCancel: widget.onCancel,
           );
         }
@@ -204,15 +206,8 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
           final cliError = preflight.vbtcError;
           debugPrint('[bridge preflight] availableVbtc=${preflight.availableVbtc} vbtcError=$cliError');
           final message = cliError != null && cliError.isNotEmpty
-              ? "Couldn't read your vBTC balance: $cliError"
-              : "Nothing available to bridge yet.\n\n"
-                  "Your wallet may show a balance, but the chain doesn't "
-                  "see any confirmed vBTC for this contract yet. The most "
-                  "common cause is a BTC deposit that hasn't received enough "
-                  "Bitcoin confirmations. Bridge reservations from an earlier "
-                  "attempt could also be holding the balance.\n\n"
-                  "Wait a few minutes and try again, or check Bridge History "
-                  "below for any in-flight operations.";
+              ? l10n.prvBridgeCantReadBalance(cliError)
+              : l10n.prvBridgeNothingAvailable;
           return _BlockedState(
             message: message,
             onCancel: widget.onCancel,
@@ -236,6 +231,7 @@ class _Form extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 480),
       child: SingleChildScrollView(
@@ -250,7 +246,7 @@ class _Form extends StatelessWidget {
             children: [
               const _OneWayDisclaimer(),
               const SizedBox(height: 16),
-              const Text("Amount to bridge", style: TextStyle(color: Colors.white70, fontSize: 12)),
+              Text(l10n.prvBridgeAmountToBridge, style: const TextStyle(color: Colors.white70, fontSize: 12)),
               const SizedBox(height: 4),
               Row(
                 children: [
@@ -282,19 +278,19 @@ class _Form extends StatelessWidget {
                   const SizedBox(width: 8),
                   TextButton(
                     onPressed: () => state._setMax(preflight),
-                    child: const Text("Max"),
+                    child: Text(l10n.prvMax),
                   ),
                 ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  "Available: ${formatVbtc(preflight.availableVbtc)} vBTC",
+                  l10n.prvBridgeAvailableAmount(formatVbtc(preflight.availableVbtc)),
                   style: const TextStyle(color: Colors.white54, fontSize: 11),
                 ),
               ),
               const SizedBox(height: 16),
-              const Text("Base (EVM) Address", style: TextStyle(color: Colors.white70, fontSize: 12)),
+              Text(l10n.prvBridgeBaseEvmAddress, style: const TextStyle(color: Colors.white70, fontSize: 12)),
               const SizedBox(height: 4),
               TextFormField(
                 controller: state.widget.destinationController,
@@ -308,11 +304,11 @@ class _Form extends StatelessWidget {
                   state.rebuild();
                 },
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 4),
+              Padding(
+                padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  "Paste the destination address from your DeFi provider or Base wallet.",
-                  style: TextStyle(color: Colors.white38, fontSize: 11),
+                  l10n.prvBridgePasteDestination,
+                  style: const TextStyle(color: Colors.white38, fontSize: 11),
                 ),
               ),
               const SizedBox(height: 16),
@@ -334,14 +330,14 @@ class _Form extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   AppButton(
-                    label: "Cancel",
+                    label: l10n.actionCancel,
                     type: AppButtonType.Text,
                     variant: AppColorVariant.Light,
                     onPressed: state.widget.onCancel,
                   ),
                   const SizedBox(width: 8),
                   AppButton(
-                    label: "Review Bridge",
+                    label: l10n.prvBridgeReviewBridge,
                     variant: AppColorVariant.Success,
                     onPressed: () => state._submit(preflight),
                   ),
@@ -369,13 +365,13 @@ class _OneWayDisclaimer extends StatelessWidget {
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Icon(Icons.info_outline, size: 18, color: Colors.white70),
-          SizedBox(width: 8),
+        children: [
+          const Icon(Icons.info_outline, size: 18, color: Colors.white70),
+          const SizedBox(width: 8),
           Expanded(
             child: Text(
-              "Bridging is one-way from this app. Once vBTC.b is on Base, use your DeFi provider or another Base (EVM) wallet to manage, transfer, or exit.",
-              style: TextStyle(color: Colors.white70, fontSize: 12),
+              AppLocalizations.of(context).prvBridgeOneWayDisclaimer,
+              style: const TextStyle(color: Colors.white70, fontSize: 12),
             ),
           ),
         ],
@@ -397,6 +393,7 @@ class _GasFundingSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final lowGas = preflight.isLowOnGas(BRIDGE_MIN_ETH_FOR_GAS);
     final ethBalance = preflight.ethBalance;
     final hasZeroEth = ethBalance == null || ethBalance <= 0;
@@ -420,10 +417,10 @@ class _GasFundingSection extends StatelessWidget {
               Icon(lowGas ? Icons.warning_amber : Icons.local_gas_station,
                   size: 16, color: lowGas ? Colors.amberAccent : Colors.white70),
               const SizedBox(width: 6),
-              const Expanded(
+              Expanded(
                 child: Text(
-                  "Gas (paid on Base)",
-                  style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                  l10n.prvBridgeGasTitle,
+                  style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ),
               InkWell(
@@ -433,12 +430,12 @@ class _GasFundingSection extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(Icons.refresh, size: 14, color: Colors.white54),
-                      SizedBox(width: 4),
+                    children: [
+                      const Icon(Icons.refresh, size: 14, color: Colors.white54),
+                      const SizedBox(width: 4),
                       Text(
-                        "Refresh",
-                        style: TextStyle(color: Colors.white54, fontSize: 11),
+                        l10n.prvRefresh,
+                        style: const TextStyle(color: Colors.white54, fontSize: 11),
                       ),
                     ],
                   ),
@@ -447,9 +444,9 @@ class _GasFundingSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          const Text(
-            "Your gas address",
-            style: TextStyle(color: Colors.white54, fontSize: 11),
+          Text(
+            l10n.prvBridgeYourGasAddress,
+            style: const TextStyle(color: Colors.white54, fontSize: 11),
           ),
           const SizedBox(height: 2),
           Row(
@@ -472,7 +469,7 @@ class _GasFundingSection extends StatelessWidget {
                     await Clipboard.setData(
                       ClipboardData(text: preflight.derivedBaseAddress),
                     );
-                    Toast.message("Copied to clipboard");
+                    Toast.message(l10n.messageCopiedToClipboard);
                   },
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4),
@@ -482,13 +479,13 @@ class _GasFundingSection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          const Text(
-            "Current balance",
-            style: TextStyle(color: Colors.white54, fontSize: 11),
+          Text(
+            l10n.prvBridgeCurrentBalance,
+            style: const TextStyle(color: Colors.white54, fontSize: 11),
           ),
           const SizedBox(height: 2),
           Text(
-            ethBalance == null ? "—" : "${ethBalance.toStringAsFixed(6)} ETH",
+            ethBalance == null ? "—" : l10n.prvBridgeEthAmount(ethBalance.toStringAsFixed(6)),
             style: TextStyle(
               color: lowGas ? Colors.amberAccent : Colors.white,
               fontSize: 13,
@@ -497,15 +494,7 @@ class _GasFundingSection extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            hasZeroEth
-                ? "This address pays the gas fee for the mint transaction on "
-                    "Base. Send a small amount of Base ETH (≈ 0.001 ETH) to "
-                    "the address above before bridging. You can fund it from "
-                    "any exchange or Base wallet that supports withdrawing to "
-                    "Base mainnet. Balance updates automatically every 10s — "
-                    "tap Refresh for an immediate check."
-                : "Low balance — gas costs vary. Top up the address above if "
-                    "the mint fails.",
+            hasZeroEth ? l10n.prvBridgeGasZeroEth : l10n.prvBridgeGasLowBalance,
             style: const TextStyle(color: Colors.white70, fontSize: 12, height: 1.4),
           ),
         ],
@@ -530,7 +519,7 @@ class _DetailsToggle extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              expanded ? "Hide details" : "Show details",
+              expanded ? AppLocalizations.of(context).prvBridgeHideDetails : AppLocalizations.of(context).prvBridgeShowDetails,
               style: const TextStyle(color: Colors.white54, fontSize: 12),
             ),
             const SizedBox(width: 4),
@@ -552,6 +541,7 @@ class _NetworkInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -562,13 +552,13 @@ class _NetworkInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text("Network info", style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500)),
+          Text(l10n.prvBridgeNetworkInfo, style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500)),
           const SizedBox(height: 8),
-          _row(context, "Network", preflight.networkName ?? "Base"),
+          _row(context, l10n.prvBridgeNetworkLabel, preflight.networkName ?? "Base"),
           if ((preflight.contractAddress ?? '').isNotEmpty)
             _row(
               context,
-              "Contract",
+              l10n.prvBridgeContractLabel,
               preflight.contractAddress!,
               copyValue: preflight.contractAddress,
               explorerUrl: BridgeExplorerLinks.baseAddress(preflight.contractAddress!),
@@ -577,20 +567,20 @@ class _NetworkInfo extends StatelessWidget {
           if (preflight.derivedBaseAddress.isNotEmpty)
             _row(
               context,
-              "Your Base address",
+              l10n.prvBridgeYourBaseAddress,
               preflight.derivedBaseAddress,
               copyValue: preflight.derivedBaseAddress,
               monospace: true,
             ),
           _row(
             context,
-            "ETH for gas",
-            preflight.ethBalance == null ? "—" : "${preflight.ethBalance!.toStringAsFixed(6)} ETH",
+            l10n.prvBridgeEthForGas,
+            preflight.ethBalance == null ? "—" : l10n.prvBridgeEthAmount(preflight.ethBalance!.toStringAsFixed(6)),
           ),
           _row(
             context,
-            "vBTC.b balance",
-            preflight.vbtcBBalance == null ? "—" : "${formatVbtc(preflight.vbtcBBalance!)} vBTC.b",
+            l10n.prvBridgeVbtcbBalanceLabel,
+            preflight.vbtcBBalance == null ? "—" : l10n.prvBridgeVbtcbAmount(formatVbtc(preflight.vbtcBBalance!)),
           ),
         ],
       ),
@@ -628,7 +618,7 @@ class _NetworkInfo extends StatelessWidget {
             InkWell(
               onTap: () async {
                 await Clipboard.setData(ClipboardData(text: copyValue));
-                Toast.message("Copied to clipboard");
+                Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
@@ -668,12 +658,12 @@ class _Loading extends StatelessWidget {
               child: CircularProgressIndicator(strokeWidth: 2),
             ),
             const SizedBox(height: 16),
-            const Text("Checking your accounts…", style: TextStyle(color: Colors.white70)),
+            Text(AppLocalizations.of(context).prvBridgeCheckingAccounts, style: const TextStyle(color: Colors.white70)),
             const SizedBox(height: 24),
             Align(
               alignment: Alignment.centerRight,
               child: AppButton(
-                label: "Cancel",
+                label: AppLocalizations.of(context).actionCancel,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
                 onPressed: onCancel,
@@ -714,14 +704,14 @@ class _ErrorState extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppButton(
-                label: "Cancel",
+                label: AppLocalizations.of(context).actionCancel,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
                 onPressed: onCancel,
               ),
               const SizedBox(width: 8),
               AppButton(
-                label: "Retry",
+                label: AppLocalizations.of(context).prvRetry,
                 variant: AppColorVariant.Warning,
                 onPressed: onRetry,
               ),
@@ -758,14 +748,14 @@ class _BlockedState extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppButton(
-                label: "Close",
+                label: AppLocalizations.of(context).actionClose,
                 variant: AppColorVariant.Light,
                 onPressed: onCancel,
               ),
               if (onRetry != null) ...[
                 const SizedBox(width: 8),
                 AppButton(
-                  label: "Try Again",
+                  label: AppLocalizations.of(context).prvTryAgain,
                   variant: AppColorVariant.Warning,
                   onPressed: onRetry!,
                 ),

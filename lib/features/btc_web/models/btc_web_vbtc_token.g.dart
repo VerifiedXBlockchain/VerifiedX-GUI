@@ -27,6 +27,7 @@ _$_BtcWebVbtcToken _$$_BtcWebVbtcTokenFromJson(Map<String, dynamic> json) =>
       withdrawalRequests: (json['withdrawal_requests'] as List<dynamic>?)
           ?.map((e) => e as Map<String, dynamic>)
           .toList(),
+      availableBalances: json['available_balances'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
@@ -48,4 +49,5 @@ Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
       'frost_group_public_key': instance.frostGroupPublicKey,
       'required_threshold': instance.requiredThreshold,
       'withdrawal_requests': instance.withdrawalRequests,
+      'available_balances': instance.availableBalances,
     };

@@ -7,6 +7,7 @@ import '../../../utils/toast.dart';
 import '../models/butterfly_link.dart';
 import '../providers/butterfly_links_provider.dart';
 import 'butterfly_status_badge.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ButterflyLinkCard extends ConsumerWidget {
   final ButterflyLink link;
@@ -20,6 +21,7 @@ class ButterflyLinkCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: InkWell(
@@ -97,9 +99,9 @@ class ButterflyLinkCard extends ConsumerWidget {
                         ref
                             .read(butterflyLinksProvider.notifier)
                             .refreshLinkStatus(link.linkId);
-                        Toast.message('Refreshing status...');
+                        Toast.message(l10n.r3dRefreshingStatus);
                       },
-                      tooltip: 'Refresh Status',
+                      tooltip: l10n.r3dRefreshStatus,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
@@ -108,9 +110,9 @@ class ButterflyLinkCard extends ConsumerWidget {
                     icon: const Icon(Icons.copy, size: 18),
                     onPressed: () {
                       Clipboard.setData(ClipboardData(text: link.fullUrl));
-                      Toast.message('Link copied to clipboard');
+                      Toast.message(l10n.r3dLinkCopiedClipboard);
                     },
-                    tooltip: 'Copy Link',
+                    tooltip: l10n.r3dCopyLink,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),

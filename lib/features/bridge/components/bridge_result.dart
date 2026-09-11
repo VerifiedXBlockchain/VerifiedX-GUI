@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../models/bridge_lock_record.dart';
 import 'bridge_explorer_links.dart';
@@ -47,6 +48,7 @@ class _Success extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final basescanUrl = (record.baseTxHash ?? '').isNotEmpty
         ? BridgeExplorerLinks.baseTx(record.baseTxHash!)
         : BridgeExplorerLinks.baseAddress(record.evmDestination);
@@ -61,15 +63,15 @@ class _Success extends StatelessWidget {
             children: [
               const Icon(Icons.check_circle, color: Colors.greenAccent, size: 22),
               const SizedBox(width: 8),
-              const Text(
-                "Bridged to Base",
-                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
+              Text(
+                l10n.prvBridgeSuccessTitle,
+                style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ],
           ),
           const SizedBox(height: 12),
           Text(
-            "You now have ${formatVbtc(record.amount)} vBTC.b on Base",
+            l10n.prvBridgeSuccessAmount(formatVbtc(record.amount)),
             style: const TextStyle(color: Colors.white, fontSize: 14),
           ),
           const SizedBox(height: 4),
@@ -77,14 +79,14 @@ class _Success extends StatelessWidget {
             children: [
               Expanded(
                 child: SelectableText(
-                  "at ${record.evmDestination}",
+                  l10n.prvBridgeAtDest(record.evmDestination),
                   style: const TextStyle(color: Colors.white54, fontSize: 12, fontFamily: 'monospace'),
                 ),
               ),
               InkWell(
                 onTap: () async {
                   await Clipboard.setData(ClipboardData(text: record.evmDestination));
-                  Toast.message("Copied to clipboard");
+                  Toast.message(l10n.messageCopiedToClipboard);
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4),
@@ -111,24 +113,20 @@ class _Success extends StatelessWidget {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  "What's next?",
-                  style: TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500),
+                  l10n.prvBridgeWhatsNext,
+                  style: const TextStyle(color: Colors.white70, fontSize: 12, fontWeight: FontWeight.w500),
                 ),
-                SizedBox(height: 6),
+                const SizedBox(height: 6),
                 Text(
-                  "Use your DeFi provider or another Base (EVM) wallet to:",
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
+                  l10n.prvBridgeUseDefiTo,
+                  style: const TextStyle(color: Colors.white70, fontSize: 12),
                 ),
-                SizedBox(height: 4),
-                _Bullet("Earn yield via Base DeFi"),
-                _Bullet("Transfer to another Base address"),
-                _Bullet(
-                  "Exit back to vBTC on VFX or directly to BTC "
-                  "(whoever holds the vBTC.b initiates the exit; the network will "
-                  "detect it and credit you back automatically)",
-                ),
+                const SizedBox(height: 4),
+                _Bullet(l10n.prvBridgeBulletYield),
+                _Bullet(l10n.prvBridgeBulletTransfer),
+                _Bullet(l10n.prvBridgeBulletExit),
               ],
             ),
           ),
@@ -137,14 +135,14 @@ class _Success extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppButton(
-                label: "View on Basescan",
+                label: l10n.prvBridgeViewOnBasescan,
                 type: AppButtonType.Outlined,
                 variant: AppColorVariant.Info,
                 onPressed: () => launchUrlString(basescanUrl),
               ),
               const SizedBox(width: 8),
               AppButton(
-                label: "Done",
+                label: l10n.actionDone,
                 variant: AppColorVariant.Success,
                 onPressed: onDone,
               ),
@@ -165,6 +163,7 @@ class _Failure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 460),
       child: Column(
@@ -178,7 +177,7 @@ class _Failure extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  "Bridge failed",
+                  l10n.prvBridgeFailedTitle,
                   style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600),
                 ),
               ),
@@ -186,20 +185,20 @@ class _Failure extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            record.errorMessage ?? "The bridge could not complete.",
+            record.errorMessage ?? l10n.prvBridgeCouldNotComplete,
             style: const TextStyle(color: Colors.white, fontSize: 13),
           ),
           const SizedBox(height: 8),
-          const Text(
-            "Your vBTC may still be locked on VFX. Check Bridge History for details, or contact support if this persists.",
-            style: TextStyle(color: Colors.white54, fontSize: 12),
+          Text(
+            l10n.prvBridgeFailedHelp,
+            style: const TextStyle(color: Colors.white54, fontSize: 12),
           ),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppButton(
-                label: "Close",
+                label: l10n.actionClose,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
                 onPressed: onDone,
@@ -207,7 +206,7 @@ class _Failure extends StatelessWidget {
               if (onViewDetails != null) ...[
                 const SizedBox(width: 8),
                 AppButton(
-                  label: "View Details",
+                  label: l10n.prvBridgeViewDetails,
                   variant: AppColorVariant.Warning,
                   onPressed: onViewDetails!,
                 ),

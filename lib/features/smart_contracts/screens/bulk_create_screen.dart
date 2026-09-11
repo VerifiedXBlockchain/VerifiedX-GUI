@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../providers/sc_wizard_provider.dart';
 import 'smart_contract_wizard_screen.dart';
@@ -26,7 +27,7 @@ class BulkCreateScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Mint NFT Collection"),
+      title: Text(AppLocalizations.of(context).scwMintNftCollectionTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: const [WalletSelector()],
@@ -35,6 +36,7 @@ class BulkCreateScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Stack(
       children: [
         SingleChildScrollView(
@@ -45,7 +47,7 @@ class BulkCreateScreen extends BaseScreen {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    "Mint NFT Collection",
+                    l10n.scwMintNftCollectionTitle,
                     style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w500,
@@ -94,7 +96,7 @@ class BulkCreateScreen extends BaseScreen {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
-                                "Collection Wizard",
+                                l10n.scwCollectionWizard,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium!
@@ -117,7 +119,7 @@ class BulkCreateScreen extends BaseScreen {
                           Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: AppButton(
-                              label: "Launch Wizard",
+                              label: l10n.scwLaunchWizard,
                               onPressed: () async {
                                 await Navigator.of(context).push(
                                   MaterialPageRoute(
@@ -163,7 +165,7 @@ class BulkCreateScreen extends BaseScreen {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: Text(
-                                "Upload JSON / CSV",
+                                l10n.scwUploadJsonCsv,
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineMedium!
@@ -177,8 +179,8 @@ class BulkCreateScreen extends BaseScreen {
                               child: ConstrainedBox(
                                 constraints:
                                     const BoxConstraints(maxWidth: 500),
-                                child: const Text(
-                                  "Create a collection with a JSON or CSV file. See the example files below and use them as a template. Upon uploading the file you will be able to configure and tweak the settings through the wizard's UI.\n\nThis is an advanced feature for users who want to compile and mint collections outside of the graphical user interface.",
+                                child: Text(
+                                  l10n.scwUploadJsonCsvBody,
                                   textAlign: TextAlign.center,
                                 ),
                               ),
@@ -203,7 +205,7 @@ class BulkCreateScreen extends BaseScreen {
                                     ),
                                     const SizedBox(height: 8),
                                     AppButton(
-                                      label: "Download Example JSON",
+                                      label: l10n.scwDownloadExampleJson,
                                       onPressed: () {
                                         launchUrlString(
                                             "https://firebasestorage.googleapis.com/v0/b/vfx-storage.appspot.com/o/nft-metadata-example.json?alt=media&token=6ce020f6-81e4-49ce-aa52-983f51a077f7");
@@ -214,7 +216,7 @@ class BulkCreateScreen extends BaseScreen {
                                     Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: AppButton(
-                                        label: "Upload JSON",
+                                        label: l10n.scwUploadJson,
                                         variant: AppColorVariant.Success,
                                         icon: Icons.upload,
                                         onPressed: () async {
@@ -271,7 +273,7 @@ class BulkCreateScreen extends BaseScreen {
                                     ),
                                     const SizedBox(height: 8),
                                     AppButton(
-                                      label: "Download Example CSV",
+                                      label: l10n.scwDownloadExampleCsv,
                                       onPressed: () {
                                         // openFile(File(Assets.docs.nftMetadataExampleCsv));
                                         launchUrlString(
@@ -283,7 +285,7 @@ class BulkCreateScreen extends BaseScreen {
                                     Padding(
                                       padding: const EdgeInsets.all(16.0),
                                       child: AppButton(
-                                        label: "Upload CSV",
+                                        label: l10n.scwUploadCsv,
                                         variant: AppColorVariant.Success,
                                         icon: Icons.upload,
                                         onPressed: () async {
@@ -412,7 +414,7 @@ class ScWizardLogWindow extends BaseComponent {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Importing",
+                AppLocalizations.of(context).scwImporting,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               Container(

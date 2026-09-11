@@ -7,6 +7,7 @@ import '../components/seller_chat_thread_list.dart';
 import '../providers/web_seller_chat_thread_list_provider.dart';
 
 import '../../../core/base_screen.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebSellerChatThreadListScreen extends BaseScreen {
   final int shopId;
@@ -17,8 +18,9 @@ class WebSellerChatThreadListScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: const Text("Chats"),
+      title: Text(l10n.chatTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: [

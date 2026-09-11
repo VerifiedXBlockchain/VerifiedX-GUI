@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../app_constants.dart';
 import '../providers/web_session_provider.dart';
 import '../dialogs.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../utils/html_helpers.dart';
 import '../storage.dart';
 import '../singletons.dart';
@@ -68,11 +69,12 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
       }
     });
 
+    final l10n = AppLocalizations.of(context);
     final confirmed = await ConfirmDialog.show(
-      title: "Session Timeout Warning",
-      body: "Your session will be locked due to inactivity. Do you want to stay logged in?\n\nThis dialog will auto-lock in 15 seconds.",
-      confirmText: "Stay Logged In",
-      cancelText: "Lock Now",
+      title: l10n.r3eSessionTimeoutWarning,
+      body: l10n.r3eSessionTimeoutBody,
+      confirmText: l10n.r3eStayLoggedIn,
+      cancelText: l10n.r3eLockNow,
     );
 
     userResponded = true;

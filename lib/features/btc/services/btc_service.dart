@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../../core/app_constants.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../../smart_contracts/models/multi_asset.dart';
 import '../../../utils/toast.dart';
@@ -13,7 +14,6 @@ import 'package:collection/collection.dart';
 import '../models/btc_send_tx_result.dart';
 import '../models/btc_transaction.dart';
 import '../models/btc_utxo.dart';
-import '../models/vbtc_input.dart';
 
 class BtcService extends BaseService {
   BtcService() : super(apiBasePathOverride: "/btcapi/BTCV2");
@@ -198,7 +198,7 @@ class BtcService extends BaseService {
       }
       return BtcSendTxResult(
         success: false,
-        message: result['Message'] ?? "A Problem Occurred",
+        message: result['Message'] ?? globalL10n.r3fAProblemOccurred,
       );
     } catch (e) {
       print("SendTransaction");
@@ -575,43 +575,4 @@ class BtcService extends BaseService {
     }
   }
 
-  Future<String?> transferCoinMulti(String vfxFromAddress, String vfxToAddress, List<VBtcInput> inputs) async {
-    final params = {
-      'fromAddress': vfxFromAddress,
-      'toAddress': vfxToAddress,
-      'vBTCInputs': inputs.map((input) => input.toJson()).toList(),
-    };
-
-    print("------------");
-    print(jsonEncode(params));
-    print("------------");
-
-    try {
-      final result = await postJson(
-        '/TransferCoinMulti',
-        params: params,
-        cleanPath: false,
-      );
-
-      final data = result['data'];
-      if (data == null) {
-        Toast.error("data was null");
-        return null;
-      }
-      print("------------");
-      print(jsonEncode(result));
-      print("------------");
-
-      if (data["Success"] == true && data['Hash'] != null) {
-        return data['Hash'];
-      }
-
-      Toast.error("Error: ${data['Message'] ?? "And error occurred"}");
-
-      return null;
-    } catch (e) {
-      Toast.error(e.toString());
-      return null;
-    }
-  }
 }

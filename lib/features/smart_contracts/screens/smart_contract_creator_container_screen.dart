@@ -8,6 +8,7 @@ import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/dialogs.dart';
 import '../providers/create_smart_contract_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class SmartContractCreatorContainerScreen extends BaseScreen {
   const SmartContractCreatorContainerScreen({Key? key}) : super(key: key, verticalPadding: 0, horizontalPadding: 0);
@@ -18,17 +19,18 @@ class SmartContractCreatorContainerScreen extends BaseScreen {
 
     final wallets = ref.read(walletListProvider).where((w) => !w.isReserved);
     final selectedWallet = ref.watch(sessionProvider.select((v) => v.currentWallet));
+    final l10n = AppLocalizations.of(context);
 
     return AppBar(
-        title: Text(_model.isCompiled ? "View Compiled Smart Contract" : "Create Smart Contract"),
+        title: Text(_model.isCompiled ? l10n.r3aViewCompiledSmartContract : l10n.scwCreateSmartContractTitle),
         backgroundColor: Colors.black,
         leading: IconButton(
           onPressed: () async {
             final confirmed = await ConfirmDialog.show(
-              title: "Are you sure you want to close the smart contract creator?",
-              body: "All unsaved changes will be lost.",
-              cancelText: "Cancel",
-              confirmText: "Continue",
+              title: l10n.r3aCloseScCreatorConfirm,
+              body: l10n.configCloseDialogBody,
+              cancelText: l10n.actionCancel,
+              confirmText: l10n.actionContinue,
             );
 
             if (confirmed == true) {
@@ -55,7 +57,7 @@ class SmartContractCreatorContainerScreen extends BaseScreen {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Minter Address:",
+                      l10n.r3aMinterAddressColon,
                       style: TextStyle(
                         fontSize: 12,
                       ),
@@ -64,7 +66,7 @@ class SmartContractCreatorContainerScreen extends BaseScreen {
                       width: 4,
                     ),
                     Text(
-                      selectedWallet?.address ?? "None",
+                      selectedWallet?.address ?? l10n.tkbNone,
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.secondary,

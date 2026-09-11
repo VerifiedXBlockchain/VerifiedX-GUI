@@ -4,6 +4,7 @@ import '../../../core/utils.dart';
 import '../../dst/models/bid.dart';
 import '../../dst/models/dec_shop.dart';
 import '../../web_shop/services/web_shop_service.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/services/base_service.dart';
@@ -211,7 +212,7 @@ class RemoteShopService extends BaseService {
 
         return true;
       }
-      Toast.error(data['Message'] ?? "A problem occurred");
+      Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
       return false;
     } catch (e) {
       print(e);
@@ -229,7 +230,7 @@ class RemoteShopService extends BaseService {
 
       final data = jsonDecode(response);
       if (data['Success'] != true) {
-        Toast.error(data['Message'] ?? "A problem occurred");
+        Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
         return false;
       }
 
@@ -268,7 +269,7 @@ class RemoteShopService extends BaseService {
       return items.map((item) => DecShop.fromJson(item)).toList();
     }
 
-    Toast.error(response['Message'] ?? "A problem occurred");
+    Toast.error(response['Message'] ?? globalL10n.mktProblemOccurredToast);
     return [];
   }
 }

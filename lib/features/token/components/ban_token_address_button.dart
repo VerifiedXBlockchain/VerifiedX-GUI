@@ -4,6 +4,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../nft/models/nft.dart';
 import '../services/token_service.dart';
@@ -26,8 +27,9 @@ class BanTokenAddressButton extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final isOwnedByRA = nft.currentOwner.startsWith("xRBX");
 
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Ban Address",
+      label: l10n.tokenBanAddress,
       variant: AppColorVariant.Danger,
       type: AppButtonType.Text,
       useDisabledColor: isOwnedByRA,
@@ -37,9 +39,9 @@ class BanTokenAddressButton extends BaseComponent {
           return;
         }
         final banAddress = await PromptModal.show(
-          title: "Address To Ban",
+          title: l10n.tokenBanAddressTitle,
           validator: (val) => formValidatorRbxAddress(val),
-          labelText: "Address",
+          labelText: l10n.tokenAddressFieldLabel,
         );
         if (banAddress == null || banAddress.isEmpty) {
           return;
@@ -54,7 +56,7 @@ class BanTokenAddressButton extends BaseComponent {
         ref.read(globalLoadingProvider.notifier).complete();
 
         if (success) {
-          Toast.message("Token address ban transaction broadcasted");
+          Toast.message(l10n.tokenBanBroadcastedToast);
         }
       },
     );

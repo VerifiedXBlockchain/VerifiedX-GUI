@@ -10,6 +10,7 @@ import '../providers/shop_chat_list_provider.dart';
 import '../providers/web_chat_thread_detail_provider.dart';
 import '../providers/web_shop_chat_list_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebShopChatScreen extends BaseScreen {
   final String identifier;
@@ -20,12 +21,13 @@ class WebShopChatScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(webChatThreadDetailProvider(identifier));
 
     return data.when(
       data: (thread) => thread != null
           ? AppBar(
-              title: Text("Chatting with ${thread.shop.name}"),
+              title: Text(l10n.chatChattingWith(thread.shop.name)),
               centerTitle: true,
               backgroundColor: Colors.black,
               actions: [
@@ -39,11 +41,11 @@ class WebShopChatScreen extends BaseScreen {
                   icon: Icon(Icons.delete),
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                      title: "Delete Chat Thread",
-                      body: "Are you sure you want to delete this chat thread?",
+                      title: l10n.chatDeleteThread,
+                      body: l10n.mktDeleteChatThreadBody,
                       destructive: true,
-                      confirmText: "Delete",
-                      cancelText: "Cancel",
+                      confirmText: l10n.actionDelete,
+                      cancelText: l10n.actionCancel,
                     );
 
                     if (confirmed == true) {
@@ -62,10 +64,10 @@ class WebShopChatScreen extends BaseScreen {
               ],
             )
           : AppBar(
-              title: const Text("Error"),
+              title: Text(l10n.chatErrorTitle),
             ),
       error: (_, __) => AppBar(
-        title: const Text("Error"),
+        title: Text(l10n.chatErrorTitle),
       ),
       loading: () => AppBar(
         title: const Text(""),
@@ -76,6 +78,7 @@ class WebShopChatScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(webChatThreadDetailProvider(identifier));
 
     return data.when(
@@ -94,8 +97,8 @@ class WebShopChatScreen extends BaseScreen {
                 )
               ],
             )
-          : const Center(child: Text("Error")),
-      error: (_, __) => const Text("Error"),
+          : Center(child: Text(l10n.chatErrorTitle)),
+      error: (_, __) => Text(l10n.chatErrorTitle),
       loading: () => const CenteredLoader(),
     );
   }

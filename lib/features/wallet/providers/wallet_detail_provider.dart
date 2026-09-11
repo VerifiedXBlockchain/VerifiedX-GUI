@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/dialogs.dart';
 import '../../../core/singletons.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../core/storage.dart';
 import '../models/wallet.dart';
 import 'wallet_list_provider.dart';
@@ -18,8 +19,8 @@ class WalletDetailProvider extends StateNotifier<Wallet> {
   void delete() {
     if (state.isValidating) {
       InfoDialog.show(
-        title: 'This account is validating',
-        body: "You can't hide an account that is validating",
+        title: globalL10n.r3hAccountIsValidating,
+        body: globalL10n.r3hCannotHideValidating,
       );
       return;
     }

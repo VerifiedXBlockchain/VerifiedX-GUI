@@ -7,6 +7,7 @@ import 'package:process_run/shell.dart';
 import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/env.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class OpenLogButton extends BaseComponent {
   const OpenLogButton({
@@ -16,7 +17,7 @@ class OpenLogButton extends BaseComponent {
   @override
   Widget build(BuildContext context, ref) {
     return AppButton(
-      label: "Open Log",
+      label: AppLocalizations.of(context).r3eOpenLog,
       icon: Icons.open_in_new,
       onPressed: () async {
         final shell = Shell(throwOnError: false);

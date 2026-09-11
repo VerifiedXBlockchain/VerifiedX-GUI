@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import '../../../core/services/base_service.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/bridge_lock_record.dart';
 import '../models/bridge_lock_request.dart';
 import '../models/bridge_preflight.dart';
@@ -156,11 +157,11 @@ class VbtcBridgeService extends BaseService {
       );
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      throw BridgeServiceException("Couldn't reach the bridge service.", cause: e);
+      throw BridgeServiceException(globalL10n.r3fBridgeUnreachable, cause: e);
     }
 
     if (data['Success'] != true) {
-      final msg = data['Message']?.toString() ?? 'Bridge history is unavailable.';
+      final msg = data['Message']?.toString() ?? globalL10n.r3fBridgeHistoryUnavailable;
       _log(method, 'FAILED: $msg');
       throw BridgeServiceException(msg);
     }

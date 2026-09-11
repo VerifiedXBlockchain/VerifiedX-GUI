@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app.dart';
 import '../../../core/app_constants.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../providers/shielded_balance_provider.dart';
 import '../components/shield_dialog.dart';
 
@@ -11,13 +12,14 @@ class VfxFeeGuard {
   /// If insufficient, shows an info dialog and returns false.
   /// If sufficient, returns true.
   static Future<bool> check(WidgetRef ref) async {
+    final l10n = globalL10n;
     final vfxBalance = ref.read(shieldedBalanceProvider)?.vfxBalance ?? 0.0;
     if (vfxBalance >= PRIVACY_TX_FIXED_FEE) return true;
 
     await showDialog(
       context: rootNavigatorKey.currentContext!,
       builder: (context) => AlertDialog(
-        title: const Text("Shielded VFX Required"),
+        title: Text(l10n.prvShieldedVfxRequiredTitle),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 400),
           child: Column(
@@ -25,9 +27,7 @@ class VfxFeeGuard {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "vBTC privacy operations require a small fee paid from your shielded VFX balance.\n\n"
-                "You currently have $vfxBalance shielded VFX.\n"
-                "Please shield at least $PRIVACY_TX_FIXED_FEE_LABEL first.",
+                l10n.prvShieldedVfxRequiredBody(vfxBalance.toString(), PRIVACY_TX_FIXED_FEE_LABEL),
                 style: const TextStyle(color: Colors.white70, fontSize: 13),
               ),
             ],
@@ -36,14 +36,14 @@ class VfxFeeGuard {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text("Cancel"),
+            child: Text(l10n.actionCancel),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               ShieldDialog.show();
             },
-            child: const Text("Shield VFX"),
+            child: Text(l10n.prvShieldVfxTitle),
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../core/env.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebPaymentIFrameContainer extends StatefulWidget {
   final String fiatType;
@@ -102,7 +103,7 @@ class _WebPaymentIFrameContainerState extends State<WebPaymentIFrameContainer> {
       width: widget.width,
       height: widget.height,
       decoration: BoxDecoration(color: Colors.black),
-      child: error != null ? Center(child: Text(error!)) : iframeWidget,
+      child: error != null ? Center(child: Text(AppLocalizations.of(context).r3dPaymentNotAvailable)) : iframeWidget,
     );
   }
 }

@@ -24,6 +24,7 @@ import '../../../utils/validation.dart';
 
 import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../asset/asset.dart';
 import '../../nft/providers/minted_nft_list_provider.dart';
@@ -334,7 +335,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       data = jsonDecode(input);
     } catch (e) {
       print(e);
-      Toast.error("Invalid JSON");
+      Toast.error(globalL10n.svcInvalidJson);
       return false;
     }
 
@@ -437,7 +438,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
         .join(',')
         .toLowerCase()
         .contains('Name,Description,Primary Asset URL,Creator Name,Royalty Amount,Royalty Address,Additional Asset URLs,Quantity'.toLowerCase())) {
-      Toast.error("The CSV headers are not in the correct format, please check the example file");
+      Toast.error(globalL10n.svcCsvHeadersInvalid);
       return false;
     }
 
@@ -538,7 +539,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           );
 
     if (primaryAsset == null) {
-      Toast.error("Problem downloading $primaryAssetUrl. Skipping.");
+      Toast.error(globalL10n.svcProblemDownloadingSkipping(primaryAssetUrl));
       logProvider.append("Problem downloading $primaryAssetUrl. Skipping.");
       return null;
     }
@@ -751,7 +752,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       final owner = kIsWeb ? ref.read(webSessionProvider).currentWallet : ref.read(sessionProvider).currentWallet;
 
       if (owner == null) {
-        Toast.error("No account selected.");
+        Toast.error(globalL10n.svcNoAccountSelectedPeriod);
         return;
       }
 
@@ -774,7 +775,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       while (i < entry.quantity) {
         i += 1;
 
-        ref.read(scWizardMintingProgress.notifier).setLabel("Minting ${totalProgress + 1}/$totalItems...");
+        ref.read(scWizardMintingProgress.notifier).setLabel(globalL10n.svcMintingProgress('${totalProgress + 1}', '$totalItems'));
 
         if (kIsWeb) {
           final success = await RawService().compileAndMintSmartContract(payload, ref.read(webSessionProvider).keypair!, ref);
@@ -827,7 +828,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       // clear();
     }
     ref.read(scWizardMintingProgress.notifier).setPercent(1);
-    ref.read(scWizardMintingProgress.notifier).setLabel("Complete");
+    ref.read(scWizardMintingProgress.notifier).setLabel(globalL10n.svcComplete);
 
     notifyTransactionSubmitted();
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 
 enum NewBtcWalletOption {
@@ -15,12 +16,13 @@ class WebCreateBtcWalletModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       withClose: true,
       withDecor: false,
       children: [
         Text(
-          "Add BTC Account (Segwit)",
+          l10n.btcAddBtcAccount,
           style: TextStyle(fontSize: 18),
         ),
         SizedBox(
@@ -35,8 +37,8 @@ class WebCreateBtcWalletModal extends StatelessWidget {
             child: Card(
               color: Colors.black,
               child: ListTile(
-                title: Text("Generate Keypair"),
-                subtitle: Text("Generate a random BTC keypair."),
+                title: Text(l10n.btcGenerateKeypair),
+                subtitle: Text(l10n.btcGenerateKeypairSubtitle),
                 trailing: Icon(Icons.chevron_right),
                 leading: Icon(FontAwesomeIcons.diceD6),
                 onTap: () async {
@@ -55,8 +57,8 @@ class WebCreateBtcWalletModal extends StatelessWidget {
             child: Card(
               color: Colors.black,
               child: ListTile(
-                title: Text("Import WIF Private Key"),
-                subtitle: Text("Import your BTC WIF private key"),
+                title: Text(l10n.btcImportWifTitle),
+                subtitle: Text(l10n.btcImportWifSubtitle),
                 trailing: Icon(Icons.chevron_right),
                 leading: Icon(Icons.upload),
                 onTap: () async {

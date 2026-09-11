@@ -8,6 +8,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../components/create_collection_form_group .dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateCollectionContainerScreen extends BaseScreen {
   const CreateCollectionContainerScreen({Key? key}) : super(key: key, verticalPadding: 0, horizontalPadding: 0);
@@ -16,16 +17,17 @@ class CreateCollectionContainerScreen extends BaseScreen {
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     final provider = ref.read(storeFormProvider.notifier);
     final model = ref.read(storeFormProvider);
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: Text(model.id != 0 ? "Edit Collection" : "Create New Collection"),
+      title: Text(model.id != 0 ? l10n.mktEditCollection : l10n.r3dCreateNewCollection),
       backgroundColor: Colors.black,
       leading: IconButton(
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
-            title: "Are you sure you want to close the store ${model.id != 0 ? 'editing' : 'creation'} screen?",
-            body: "All unsaved changes will be lost.",
-            cancelText: "Cancel",
-            confirmText: "Continue",
+            title: model.id != 0 ? l10n.r3dCloseStoreEditingConfirm : l10n.r3dCloseStoreCreationConfirm,
+            body: l10n.configCloseDialogBody,
+            cancelText: l10n.actionCancel,
+            confirmText: l10n.actionContinue,
           );
 
           if (confirmed == true) {
@@ -43,6 +45,7 @@ class CreateCollectionContainerScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(storeFormProvider.notifier);
     final model = ref.read(storeFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       children: [
@@ -66,14 +69,14 @@ class CreateCollectionContainerScreen extends BaseScreen {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
-                  label: "Discard Changes",
+                  label: l10n.dstDiscardChanges,
                   variant: AppColorVariant.Danger,
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                      title: "Are you sure you want to close the collection ${model.id != 0 ? 'editing' : 'creation'} screen?",
-                      body: "All unsaved changes will be lost.",
-                      cancelText: "Cancel",
-                      confirmText: "Continue",
+                      title: model.id != 0 ? l10n.r3dCloseCollectionEditingConfirm : l10n.r3dCloseCollectionCreationConfirm,
+                      body: l10n.configCloseDialogBody,
+                      cancelText: l10n.actionCancel,
+                      confirmText: l10n.actionContinue,
                     );
 
                     if (confirmed == true) {
@@ -84,7 +87,7 @@ class CreateCollectionContainerScreen extends BaseScreen {
                   },
                 ),
                 AppButton(
-                  label: model.id != 0 ? 'Save' : 'Create',
+                  label: model.id != 0 ? l10n.actionSave : l10n.r3dCreate,
                   variant: AppColorVariant.Success,
                   onPressed: () async {
                     await provider.complete(context);

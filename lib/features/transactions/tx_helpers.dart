@@ -1,3 +1,4 @@
+import '../../l10n/l10n_helper.dart';
 import 'models/transaction.dart';
 import 'models/web_transaction.dart';
 
@@ -26,85 +27,86 @@ class TxHelper {
   }
 
   String get typeName {
+    final l10n = globalL10n;
     switch (type) {
       case 0:
-        return "Tx";
+        return l10n.r3cTypeTx;
       case 1:
-        return "Node";
+        return l10n.r3cTypeNode;
       case 2:
-        return "NFT Mint";
+        return l10n.r3cTypeNftMint;
       case 3:
-        return "NFT Tx";
+        return l10n.r3cTypeNftTx;
       case 4:
-        return "NFT Burn";
+        return l10n.r3cTypeNftBurn;
       case 5:
-        return "NFT Sale";
+        return l10n.r3cTypeNftSale;
       case 6:
-        return "ADNR";
+        return l10n.r3cTypeAdnr;
       case 7:
-        return "DST Registration";
+        return l10n.r3cTypeDstRegistration;
       case 8:
-        return "Topic Create";
+        return l10n.r3cTypeTopicCreate;
       case 9:
-        return "Topic Vote";
+        return l10n.r3cTypeTopicVote;
       case 10:
-        return "Vault";
+        return l10n.r3cTypeVault;
       case 11:
-        return "Smart Contract Mint";
+        return l10n.r3cTypeSmartContractMint;
       case 12:
-        return "Smart Contract TX";
+        return l10n.r3cTypeSmartContractTx;
       case 13:
-        return "Smart Contract Burn";
+        return l10n.r3cTypeSmartContractBurn;
       case 14:
-        return "Fungible Token Mint";
+        return l10n.r3cTypeFungibleMint;
       case 15:
-        return "Fungible Token TX";
+        return l10n.r3cTypeFungibleTx;
       case 16:
-        return "Fungible Token Burn";
+        return l10n.r3cTypeFungibleBurn;
       case 17:
-        return "vBTC Mint";
+        return l10n.r3cTypeVbtcMint;
       case 18:
-        return "vBTC TX";
+        return l10n.r3cTypeVbtcTx;
       case 19:
-        return "vBTC Burn";
+        return l10n.r3cTypeVbtcBurn;
       case 20:
-        return "vBTC Withdrawal (Arb)";
+        return l10n.r3cTypeVbtcWithdrawalArb;
       case 21:
-        return "vBTC Withdrawal (Owner)";
+        return l10n.r3cTypeVbtcWithdrawalOwner;
       case 22:
-        return "vBTC Validator Register";
+        return l10n.r3cTypeVbtcValidatorRegister;
       case 23:
-        return "vBTC Validator Heartbeat";
+        return l10n.r3cTypeVbtcValidatorHeartbeat;
       case 24:
-        return "vBTC Validator Exit";
+        return l10n.r3cTypeVbtcValidatorExit;
       case 25:
-        return "vBTC Contract Create";
+        return l10n.r3cTypeVbtcContractCreate;
       case 26:
-        return "vBTC Transfer";
+        return l10n.r3cTypeVbtcTransfer;
       case 27:
-        return "vBTC Withdrawal Request";
+        return l10n.r3cTypeVbtcWithdrawalRequest;
       case 28:
-        return "vBTC Withdrawal Complete";
+        return l10n.r3cTypeVbtcWithdrawalComplete;
       case 29:
-        return "vBTC Withdrawal Cancel";
+        return l10n.r3cTypeVbtcWithdrawalCancel;
       case 30:
-        return "vBTC Withdrawal Vote";
+        return l10n.r3cTypeVbtcWithdrawalVote;
       case 31:
-        return "VFX Shield";
+        return l10n.r3cTypeVfxShield;
       case 32:
-        return "VFX Unshield";
+        return l10n.r3cTypeVfxUnshield;
       case 33:
-        return "VFX Private Transfer";
+        return l10n.r3cTypeVfxPrivateTransfer;
       case 34:
-        return "vBTC Shield";
+        return l10n.r3cTypeVbtcShield;
       case 35:
-        return "vBTC Unshield";
+        return l10n.r3cTypeVbtcUnshield;
       case 36:
-        return "vBTC Private Transfer";
+        return l10n.r3cTypeVbtcPrivateTransfer;
       case 37:
-        return "vBTC Bridge Lock";
+        return l10n.r3cTypeVbtcBridgeLock;
       case 38:
-        return "vBTC Bridge Unlock";
+        return l10n.r3cTypeVbtcBridgeUnlock;
       default:
         return type.toString();
     }

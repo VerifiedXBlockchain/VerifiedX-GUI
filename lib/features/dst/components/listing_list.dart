@@ -11,6 +11,7 @@ import '../providers/listing_form_provider.dart';
 import '../providers/listing_list_provider.dart';
 import '../services/dst_service.dart';
 import '../../../core/components/poller.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ListingList extends BaseComponent {
   const ListingList(this.collectionId, {Key? key}) : super(key: key);
@@ -19,6 +20,7 @@ class ListingList extends BaseComponent {
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final listings = ref.watch(listingListProvider(collectionId));
+    final l10n = AppLocalizations.of(context);
 
     return listings.isNotEmpty
         ? Column(
@@ -79,7 +81,7 @@ class ListingList extends BaseComponent {
                           title: Text(listing.nft != null ? listing.nft!.name : listing.smartContractUid),
                           subtitle: listing.deactivateForSeller
                               ? Text(
-                                  listing.saleHasFailed ? "Sale Complete TX Failed" : "Completed",
+                                  listing.saleHasFailed ? l10n.r3dSaleCompleteTxFailed : l10n.dstCompleted,
                                   style: TextStyle(
                                     color: listing.saleHasFailed ? Theme.of(context).colorScheme.danger : Theme.of(context).colorScheme.success,
                                     fontWeight: FontWeight.w600,
@@ -93,7 +95,7 @@ class ListingList extends BaseComponent {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: AppButton(
-                                    label: "Complete Sale",
+                                    label: l10n.txpCompleteSale,
                                     variant: AppColorVariant.Warning,
                                     onPressed: () {
                                       DstService().retrySale(listing.id);
@@ -104,7 +106,7 @@ class ListingList extends BaseComponent {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: AppButton(
-                                    label: "Activity",
+                                    label: l10n.r3dActivity,
                                     variant: AppColorVariant.Success,
                                     onPressed: () {
                                       AutoRouter.of(context).push(ListingAuctionDetailScreenRoute(listingId: listing.id));
@@ -112,7 +114,7 @@ class ListingList extends BaseComponent {
                                   ),
                                 ),
                               AppButton(
-                                label: 'Delete',
+                                label: l10n.actionDelete,
                                 variant: AppColorVariant.Danger,
                                 onPressed: () {
                                   ref.read(listingFormProvider.notifier).delete(context, listing.collectionId, listing, false);
@@ -123,7 +125,7 @@ class ListingList extends BaseComponent {
                               ),
                               if (!listing.deactivateForSeller)
                                 AppButton(
-                                  label: "Edit",
+                                  label: l10n.scwEdit,
                                   variant: AppColorVariant.Light,
                                   onPressed: () async {
                                     final l = await DstService().retreiveListing(listing.id);
@@ -135,7 +137,7 @@ class ListingList extends BaseComponent {
                                 width: 8,
                               ),
                               AppButton(
-                                label: "Details",
+                                label: l10n.shopDetailsLabel,
                                 onPressed: () {
                                   AutoRouter.of(context).push(ListingDetailScreenRoute(listingId: listing.id));
                                 },
@@ -160,14 +162,14 @@ class ListingList extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Now you can create listings for the NFTs you own.",
+                    l10n.r3dCreateListingsForNfts,
                     style: TextStyle(fontSize: 16),
                   ),
                   SizedBox(
                     height: 16,
                   ),
                   AppButton(
-                    label: "Create First Listing",
+                    label: l10n.r3dCreateFirstListing,
                     variant: AppColorVariant.Success,
                     onPressed: () {
                       AutoRouter.of(context).push(CreateListingContainerScreenRoute(collectionId: collectionId));

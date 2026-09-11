@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../utils/toast.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/mpc_ceremony.dart';
 import '../services/vbtc_v2_service.dart';
 
@@ -78,9 +79,9 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
 
     if (ceremonyId == null) {
       debugPrint('$_tag startCeremony FAILED — no ceremonyId returned');
-      state = const MpcCeremonyState(
+      state = MpcCeremonyState(
         phase: MpcCeremonyPhase.failed,
-        errorMessage: "Failed to initiate MPC ceremony.",
+        errorMessage: globalL10n.bw2FailedInitiateMpc,
       );
       return;
     }
@@ -115,11 +116,11 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
       _pollingTimer?.cancel();
       final elapsed = DateTime.now().difference(_ceremonyStartTime!);
       debugPrint('$_tag Poll TIMEOUT after ${elapsed.inSeconds}s — aborting');
-      state = const MpcCeremonyState(
+      state = MpcCeremonyState(
         phase: MpcCeremonyPhase.failed,
-        errorMessage: "Ceremony timed out. Please try again.",
+        errorMessage: globalL10n.bw2CeremonyTimedOut,
       );
-      Toast.error("MPC ceremony timed out.");
+      Toast.error(globalL10n.bw2MpcCeremonyTimedOutToast);
       return;
     }
 
@@ -133,11 +134,11 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
       if (_consecutivePollFailures >= _kMaxConsecutivePollFailures) {
         _pollingTimer?.cancel();
         debugPrint('$_tag Max poll failures reached — aborting');
-        state = const MpcCeremonyState(
+        state = MpcCeremonyState(
           phase: MpcCeremonyPhase.failed,
-          errorMessage: "Lost connection while monitoring ceremony. Please try again.",
+          errorMessage: globalL10n.bw2LostConnectionCeremony,
         );
-        Toast.error("Lost connection to ceremony.");
+        Toast.error(globalL10n.bw2LostConnectionToast);
       }
       return;
     }
@@ -155,7 +156,7 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
         phase: MpcCeremonyPhase.ceremonyCompleted,
         ceremony: ceremony,
       );
-      Toast.message("MPC ceremony completed successfully.");
+      Toast.message(globalL10n.bw2MpcCeremonyCompletedSuccess);
       return;
     }
 
@@ -167,10 +168,10 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
         phase: MpcCeremonyPhase.failed,
         ceremony: ceremony,
         errorMessage: ceremony.status == MpcCeremonyStatus.timedOut
-            ? "Ceremony timed out on the network. Please try again."
-            : "Ceremony failed. Please try again.",
+            ? globalL10n.bw2CeremonyTimedOutNetwork
+            : globalL10n.bw2CeremonyFailedRetry,
       );
-      Toast.error("MPC ceremony failed.");
+      Toast.error(globalL10n.bw2MpcCeremonyFailedToast);
       return;
     }
 
@@ -209,14 +210,14 @@ class MpcCeremonyNotifier extends StateNotifier<MpcCeremonyState> {
         ceremony: state.ceremony,
         contractHash: hash,
       );
-      Toast.message("vBTC contract created. Hash: $hash");
+      Toast.message(globalL10n.bw2VbtcContractCreatedHash(hash));
       notifyTransactionSubmitted();
     } else {
       debugPrint('$_tag Contract creation FAILED');
       state = MpcCeremonyState(
         phase: MpcCeremonyPhase.failed,
         ceremony: state.ceremony,
-        errorMessage: "Failed to create contract. Please try again.",
+        errorMessage: globalL10n.bw2FailedCreateContract,
       );
     }
   }

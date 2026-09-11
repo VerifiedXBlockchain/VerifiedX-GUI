@@ -6,6 +6,7 @@ import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/dialogs.dart';
 import '../../../../core/providers/session_provider.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/toast.dart';
 import '../../../bridge/services/bridge_service.dart';
 import '../../../encrypt/providers/wallet_is_encrypted_provider.dart';
@@ -31,14 +32,15 @@ class HdWalletButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Create HD Account",
+      label: l10n.hnavHdCreateAccount,
       icon: Icons.hd_outlined,
       onPressed: !ref.watch(sessionProvider.select((v) => v.cliStarted))
           ? null
           : () async {
               if (ref.read(walletIsEncryptedProvider)) {
-                Toast.error("You can not create an HD account with an encrypted wallet.");
+                Toast.error(l10n.hnavHdEncryptedError);
                 return;
               }
 
@@ -48,16 +50,16 @@ class HdWalletButton extends BaseComponent {
                   return AlertDialog(
                     // buttonPadding: EdgeInsets.all(8.0),
                     // actionsPadding: EdgeInsets.all(0.0),
-                    title: const Text("HD Account"),
+                    title: Text(l10n.hnavHdAccountTitle),
                     actionsAlignment: MainAxisAlignment.center,
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text(
-                          "Cancel",
-                          style: TextStyle(color: Colors.white70),
+                        child: Text(
+                          l10n.actionCancel,
+                          style: const TextStyle(color: Colors.white70),
                         ),
                       )
                     ],
@@ -67,25 +69,24 @@ class HdWalletButton extends BaseComponent {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text("By creating an HD account you are creating a function to recover your private keys by use of recovery phrase."),
+                          Text(l10n.hnavHdExplanation1),
                           const SizedBox(
                             height: 8,
                           ),
-                          const Text(
-                              "Once generated, any keys you create will use this phrase to seed the private key generation. Therefore, you will only need to remember this to deterministically recover your keys."),
+                          Text(l10n.hnavHdExplanation2),
                           const SizedBox(
                             height: 8,
                           ),
-                          const Text(
-                            "This is an advanced feature and is not recommended unless you are familiar with Hierarchical Deterministic concepts.\n\nAny keys created prior to this will not be recoverable through this phrase so please ensure they are backed up as well.",
-                            style: TextStyle(
+                          Text(
+                            l10n.hnavHdExplanation3,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           const Divider(),
-                          const Text(
-                            "Generate with strength:",
-                            style: TextStyle(
+                          Text(
+                            l10n.hnavHdGenerateStrength,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -96,7 +97,7 @@ class HdWalletButton extends BaseComponent {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               AppButton(
-                                label: "12 Words",
+                                label: l10n.hnavHd12Words,
                                 onPressed: () async {
                                   await create(context, ref, 12);
                                 },
@@ -105,7 +106,7 @@ class HdWalletButton extends BaseComponent {
                                 width: 8,
                               ),
                               AppButton(
-                                label: "24 Words",
+                                label: l10n.hnavHd24Words,
                                 onPressed: () async {
                                   await create(context, ref, 24);
                                 },
@@ -143,25 +144,26 @@ class RecoveryPhraseDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text("Recovery Phrase Generated"),
+      title: Text(l10n.hnavRecoveryPhraseGeneratedTitle),
       actions: [
         TextButton(
           onPressed: () async {
             final confirmed = await ConfirmDialog.show(
-              title: "Close Recovery Phrase?",
-              body: "Are you sure you have copied your recovery phrase to a secure location?",
-              confirmText: "Agree and Close",
-              cancelText: "Cancel",
+              title: l10n.hnavCloseRecoveryPhraseTitle,
+              body: l10n.hnavCloseRecoveryPhraseBody,
+              confirmText: l10n.hnavAgreeAndClose,
+              cancelText: l10n.actionCancel,
             );
 
             if (confirmed == true) {
               Navigator.of(context).pop();
             }
           },
-          child: const Text(
-            "Done",
-            style: TextStyle(
+          child: Text(
+            l10n.actionDone,
+            style: const TextStyle(
               color: Colors.white,
             ),
           ),
@@ -173,12 +175,12 @@ class RecoveryPhraseDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Copy your recovery phrase to a secure location."),
+            Text(l10n.hnavCopyRecoveryPhraseInstruction),
             Column(
               children: [
                 TextFormField(
-                  decoration: const InputDecoration(
-                    label: Text("Recovery Phrase"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.walletRecoveryPhrase),
                   ),
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   initialValue: mneumonic,
@@ -191,11 +193,11 @@ class RecoveryPhraseDialog extends StatelessWidget {
                   height: 16,
                 ),
                 AppButton(
-                  label: "Copy to Clipboard",
+                  label: l10n.hnavCopyToClipboard,
                   icon: Icons.copy,
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: mneumonic));
-                    Toast.message("Mnemonic copied to clipboard");
+                    Toast.message(l10n.keygenMnemonicCopiedToast);
                   },
                 )
               ],

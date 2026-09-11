@@ -9,6 +9,7 @@ import '../../../core/singletons.dart';
 import '../../../core/storage.dart';
 import '../../../utils/generators.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/compiled_smart_contract.dart';
 import '../models/compiler_response.dart';
 import '../models/detailed_smart_contract.dart';
@@ -147,7 +148,7 @@ class SmartContractService extends BaseService {
 
       final Map<String, dynamic> data = jsonDecode(text);
       if (data['Result'] == "Success") {
-        Toast.message(data['Message'] ?? 'Success: NFT Transfer has been started.');
+        Toast.message(data['Message'] ?? globalL10n.r3aNftTransferStarted);
         return true;
       }
       Toast.error(data['Message']);
@@ -173,7 +174,7 @@ class SmartContractService extends BaseService {
       print(data);
 
       if (data['Success'] == true) {
-        Toast.message(data['Message'] ?? 'Success: NFT Sale Transfer has been started.');
+        Toast.message(data['Message'] ?? globalL10n.r3aNftSaleTransferStarted);
         return true;
       }
       Toast.error(data['Message']);
@@ -191,11 +192,11 @@ class SmartContractService extends BaseService {
 
       final data = jsonDecode(text);
       if (data['Success'] == true) {
-        Toast.message(data['Message'] ?? "Sale Complete TX Sent");
+        Toast.message(data['Message'] ?? globalL10n.r3aSaleCompleteTxSent);
         return true;
       }
 
-      Toast.error(data['Message'] ?? "A problem occurred");
+      Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
 
       return false;
     } catch (e) {

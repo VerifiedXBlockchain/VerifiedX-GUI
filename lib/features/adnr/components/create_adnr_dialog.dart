@@ -11,6 +11,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
@@ -36,9 +37,10 @@ class CreateAdnrDialog extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = TextEditingController();
     final formKey = GlobalKey<FormState>();
+    final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
-      title: Text(isBtc ? "New BTC Domain" : "New VFX Domain"),
+      title: Text(isBtc ? l10n.adnrCreateDialogTitleBtc : l10n.adnrCreateDialogTitleVfx),
       content: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Form(
@@ -47,17 +49,17 @@ class CreateAdnrDialog extends BaseComponent {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${isBtc ? 'BTC' : 'VFX'} Domains cost $ADNR_COST VFX."),
+              Text(isBtc ? l10n.adnrCreateDialogCostBtc(ADNR_COST.toString()) : l10n.adnrCreateDialogCostVfx(ADNR_COST.toString())),
               Text(
-                "Your domain must only contain letters and numbers and will automatically be appended with ${isBtc ? '".btc"' : '".vfx"'} upon verification",
+                isBtc ? l10n.adnrCreateDialogSuffixHelpBtc : l10n.adnrCreateDialogSuffixHelpVfx,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               TextFormField(
                 controller: controller,
                 validator: (value) =>
-                    formValidatorAlphaNumeric(value, "Domain Name"),
+                    formValidatorAlphaNumeric(value, l10n.adnrDomainNameLabel),
                 decoration: InputDecoration(
-                    label: Text("Domain Name"),
+                    label: Text(l10n.adnrDomainNameLabel),
                     suffix: Text(isBtc ? '.btc' : '.vfx')),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))
@@ -72,9 +74,9 @@ class CreateAdnrDialog extends BaseComponent {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text(
-            "Cancel",
-            style: TextStyle(color: Colors.white38),
+          child: Text(
+            l10n.actionCancel,
+            style: const TextStyle(color: Colors.white38),
           ),
         ),
         Consumer(builder: (context, ref, _) {
@@ -90,29 +92,27 @@ class CreateAdnrDialog extends BaseComponent {
               ? TextButton(
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
-                        title: "$ADNR_COST VFX Required",
-                        body:
-                            "There is a $ADNR_COST VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWoud you like to proceed?",
-                        confirmText: "Continue",
-                        cancelText: "No Thanks");
+                        title: l10n.adnrFaucetRequiredTitle(ADNR_COST.toString()),
+                        body: l10n.adnrFaucetRequiredBody(ADNR_COST.toString()),
+                        confirmText: l10n.adnrFaucetContinue,
+                        cancelText: l10n.adnrFaucetNoThanks);
 
                     if (confirmed != true) {
                       Toast.error(
-                          "Not enough VFX in your account to create a BTC domain. $ADNR_COST VFX required (plus TX fee).");
+                          l10n.adnrInsufficientFundsCreateBtc(ADNR_COST.toString()));
                       Navigator.of(context).pop();
                     }
 
                     await InfoDialog.show(
-                      title: "VFX Faucet",
+                      title: l10n.adnrFaucetTitle,
                       content: FaucetForm(forceAmount: 6.0),
-                      closeText: "Close",
+                      closeText: l10n.actionClose,
                     );
 
-                    Toast.message(
-                        "Please wait for your balance to arrive before continuing.");
+                    Toast.message(l10n.adnrFaucetWaitToast);
                   },
                   child:
-                      Text("Continue", style: TextStyle(color: Colors.white)))
+                      Text(l10n.adnrFaucetContinue, style: const TextStyle(color: Colors.white)))
               : TextButton(
                   onPressed: () async {
                     if (!formKey.currentState!.validate()) {
@@ -120,14 +120,14 @@ class CreateAdnrDialog extends BaseComponent {
                     }
 
                     if (address.length > 65) {
-                      Toast.error("Maximum characters for domain is 65");
+                      Toast.error(l10n.adnrMaxLengthToast);
                       return;
                     }
 
                     if (kIsWeb) {
                       final keyPair = ref.read(webSessionProvider).keypair;
                       if (keyPair == null) {
-                        Toast.error("No account");
+                        Toast.error(l10n.adnrNoAccountToast);
                         return;
                       }
 
@@ -143,20 +143,20 @@ class CreateAdnrDialog extends BaseComponent {
                       if (!available) {
                         ref.read(globalLoadingProvider.notifier).complete();
                         Toast.error(
-                            "This ${isBtc ? 'BTC' : 'VFX'} Domain already exists");
+                            l10n.adnrAlreadyExistsToast(isBtc ? 'BTC' : 'VFX'));
                         return;
                       }
                       final btcAddress = isBtc
                           ? ref.read(webSessionProvider).btcKeypair?.address
                           : null;
                       if (isBtc && btcAddress == null) {
-                        Toast.error("No BTC Address Found");
+                        Toast.error(l10n.adnrNoBtcAddress);
                         return;
                       }
                       final btcWif =
                           ref.read(webSessionProvider).btcKeypair?.wif;
                       if (isBtc && btcWif == null) {
-                        Toast.error("No BTC WIF Private Key Found");
+                        Toast.error(l10n.adnrNoBtcWif);
                         return;
                       }
 
@@ -201,18 +201,23 @@ class CreateAdnrDialog extends BaseComponent {
                       ref.read(globalLoadingProvider.notifier).complete();
 
                       if (txData == null) {
-                        Toast.error("Invalid transaction data.");
+                        Toast.error(l10n.btcInvalidTxData);
                         return;
                       }
 
                       final txFee = txData['Fee'];
 
                       final confirmed = await ConfirmDialog.show(
-                        title: "Valid Transaction",
-                        body:
-                            "The ${isBtc ? 'BTC' : 'VFX'} Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $domain\nAmount: $ADNR_COST VFX\nFee: $txFee VFX\nTotal: ${ADNR_COST + txFee} VFX",
-                        confirmText: "Send",
-                        cancelText: "Cancel",
+                        title: l10n.btcValidTxTitle,
+                        body: l10n.r3gAdnrCreateConfirmBody(
+                          isBtc ? 'BTC' : 'VFX',
+                          domain,
+                          ADNR_COST.toString(),
+                          txFee.toString(),
+                          (ADNR_COST + txFee).toString(),
+                        ),
+                        confirmText: l10n.actionSend,
+                        cancelText: l10n.actionCancel,
                       );
 
                       if (confirmed != true) {
@@ -231,8 +236,7 @@ class CreateAdnrDialog extends BaseComponent {
                         ref
                             .read(adnrPendingProvider.notifier)
                             .addId(address, "create", "null");
-                        Toast.message(
-                            "${isBtc ? 'BTC' : 'VFX'} Domain Transaction has been broadcasted. See log for hash.");
+                        Toast.message(isBtc ? l10n.adnrBtcTxBroadcastedToast : l10n.adnrTxBroadcastedToast);
                         Navigator.of(context).pop();
 
                         return;
@@ -246,13 +250,11 @@ class CreateAdnrDialog extends BaseComponent {
                       ref.read(globalLoadingProvider.notifier).complete();
 
                       if (result.success) {
-                        Toast.message(
-                            "VFX Domain Transaction has been broadcasted. See log for hash.");
+                        Toast.message(l10n.adnrTxBroadcastedToast);
                         if (result.hash != null) {
                           ref.read(logProvider.notifier).append(
                                 LogEntry(
-                                    message:
-                                        "ADNR create transaction broadcasted. Tx Hash: ${result.hash}",
+                                    message: l10n.adnrLogCreateEntry(result.hash!),
                                     textToCopy: result.hash,
                                     variant: AppColorVariant.Success),
                               );
@@ -269,9 +271,9 @@ class CreateAdnrDialog extends BaseComponent {
                       Toast.error(result.message);
                     }
                   },
-                  child: const Text(
-                    "Create",
-                    style: TextStyle(color: Colors.white),
+                  child: Text(
+                    l10n.adnrCreateButton,
+                    style: const TextStyle(color: Colors.white),
                   ),
                 );
         })

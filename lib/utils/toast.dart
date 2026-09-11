@@ -5,6 +5,7 @@ import '../core/theme/colors.dart';
 import '../app.dart';
 import '../core/dialogs.dart';
 import '../core/theme/app_theme.dart';
+import '../l10n/l10n_helper.dart';
 import 'html_helpers.dart';
 
 class Toast {
@@ -14,6 +15,7 @@ class Toast {
       return;
     }
 
+    final l10n = globalL10n;
     final snackBar = SnackBar(
       content: Text(
         message,
@@ -25,7 +27,7 @@ class Toast {
       ),
       backgroundColor: AppColors.getSpringGreen(),
       action: SnackBarAction(
-        label: "Dismiss",
+        label: l10n.tkbDismiss,
         textColor: Colors.white70,
         onPressed: () {},
       ),
@@ -33,7 +35,9 @@ class Toast {
     rootScaffoldMessengerKey.currentState?.showSnackBar(snackBar);
   }
 
-  static error([String message = "A problem occurred.", bool surpress = false]) {
+  static error([String? message, bool surpress = false]) {
+    final l10n = globalL10n;
+    message ??= l10n.r3hProblemOccurred;
     if (surpress) {
       print(message);
       return;
@@ -49,7 +53,7 @@ class Toast {
       ),
       backgroundColor: Color(0xFFBA2121),
       action: SnackBarAction(
-        label: "Dismiss",
+        label: l10n.tkbDismiss,
         textColor: Colors.white70,
         onPressed: () {},
       ),
@@ -59,12 +63,12 @@ class Toast {
 }
 
 class OverlayToast {
-  static message({required String message, String title = "Success"}) {
-    InfoDialog.show(title: title, body: message);
+  static message({required String message, String? title}) {
+    InfoDialog.show(title: title ?? globalL10n.statusSuccess, body: message);
   }
 
   static error([String? message]) {
-    InfoDialog.show(title: "Error", body: message ?? "An error occurred");
+    InfoDialog.show(title: globalL10n.btcWebError, body: message ?? globalL10n.txpErrorOccurred);
 
     // final context = rootNavigatorKey.currentContext!;
     // showTopSnackBar(

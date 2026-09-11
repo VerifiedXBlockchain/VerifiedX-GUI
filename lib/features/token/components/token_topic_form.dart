@@ -8,6 +8,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../encrypt/utils.dart';
 import '../providers/token_topic_form_provider.dart';
@@ -23,6 +24,7 @@ class TokenTopicForm extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final family = "$scId||$address";
     final provider = ref.read(tokenTopicFormProvider(family).notifier);
     final model = ref.watch(tokenTopicFormProvider(family));
@@ -41,8 +43,8 @@ class TokenTopicForm extends BaseComponent {
                     child: TextFormField(
                         controller: provider.nameController,
                         validator: provider.nameValidator,
-                        decoration: const InputDecoration(
-                          label: Text("Topic Name"),
+                        decoration: InputDecoration(
+                          label: Text(l10n.votingTopicNameLabel),
                         ),
                         inputFormatters: [
                           FilteringTextInputFormatter.deny(
@@ -55,7 +57,7 @@ class TokenTopicForm extends BaseComponent {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "128 character limit",
+                                l10n.votingCharLimit128,
                                 style: Theme.of(context).textTheme.bodySmall,
                               ),
                               Text(
@@ -76,7 +78,7 @@ class TokenTopicForm extends BaseComponent {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Voting Ends",
+                        l10n.votingEndsLabel,
                         style: TextStyle(color: Theme.of(context).colorScheme.secondary),
                       ),
                       DropdownButton<TokenVotingDays>(
@@ -107,8 +109,8 @@ class TokenTopicForm extends BaseComponent {
             TextFormField(
               controller: provider.descriptionController,
               validator: provider.descriptionValidator,
-              decoration: const InputDecoration(
-                label: Text("Topic Description"),
+              decoration: InputDecoration(
+                label: Text(l10n.votingTopicDescriptionLabel),
               ),
               inputFormatters: [
                 FilteringTextInputFormatter.deny(
@@ -123,7 +125,7 @@ class TokenTopicForm extends BaseComponent {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "1,600 character limit including provided links",
+                      l10n.votingCharLimit1600,
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Text(
@@ -137,9 +139,9 @@ class TokenTopicForm extends BaseComponent {
             TextFormField(
               controller: provider.miniumVotesController,
               validator: provider.minimumVotesValidator,
-              decoration: const InputDecoration(
-                label: Text("Minimum Token Requirement"),
-                helperText: "The minimum token balance required to vote.",
+              decoration: InputDecoration(
+                label: Text(l10n.tkbMinimumTokenRequirement),
+                helperText: l10n.tkbMinimumTokenRequirementHelper,
               ),
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             ),
@@ -150,11 +152,11 @@ class TokenTopicForm extends BaseComponent {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
-                  label: "Cancel",
+                  label: l10n.actionCancel,
                   type: AppButtonType.Text,
                   variant: AppColorVariant.Light,
                   onPressed: () async {
-                    final confirmed = await ConfirmDialog.show(title: "Discard", body: "Are you sure you want to discard this new topic?");
+                    final confirmed = await ConfirmDialog.show(title: l10n.votingDiscardTitle, body: l10n.votingDiscardBody);
 
                     if (confirmed == true) {
                       provider.clear();
@@ -163,14 +165,14 @@ class TokenTopicForm extends BaseComponent {
                   },
                 ),
                 AppButton(
-                  label: "Create Topic",
+                  label: l10n.votingCreateTopic,
                   onPressed: () async {
                     if (!await passwordRequiredGuard(context, ref)) return;
                     final confirmed = await ConfirmDialog.show(
-                      title: "Create Topic",
-                      body: "Are you sure you want to create this token topic?",
-                      confirmText: "Create",
-                      cancelText: "Cancel",
+                      title: l10n.votingCreateTopic,
+                      body: l10n.tkbCreateTokenTopicBody,
+                      confirmText: l10n.votingCreateAction,
+                      cancelText: l10n.actionCancel,
                     );
 
                     if (confirmed != true) {
@@ -180,7 +182,7 @@ class TokenTopicForm extends BaseComponent {
                     if (success == null) return;
 
                     if (success == true) {
-                      Toast.message("Token Topic Created");
+                      Toast.message(l10n.tkbTokenTopicCreated);
                       AutoRouter.of(context).pop();
                     } else {
                       Toast.error();

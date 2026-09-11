@@ -9,6 +9,7 @@ import '../../../utils/toast.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/web_token_actions_manager.dart';
 
 class WebTokenBalanceListTile extends BaseComponent {
@@ -40,7 +41,7 @@ class WebTokenBalanceListTile extends BaseComponent {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              label: "Voting",
+              label: AppLocalizations.of(context).tokenVoting,
               variant: AppColorVariant.Dark,
               onPressed: () {
                 showModalBottomSheet(
@@ -89,8 +90,9 @@ class WebBurnTokenAmountButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Burn",
+      label: l10n.tokenBurn,
       variant: AppColorVariant.Danger,
       onPressed: () async {
         final manager = ref.read(webTokenActionsManager);
@@ -103,13 +105,13 @@ class WebBurnTokenAmountButton extends BaseComponent {
           return;
         }
 
-        final amount = await manager.promptForAmount(title: "Amount to Burn");
+        final amount = await manager.promptForAmount(title: l10n.tokenAmountToBurnTitle);
         if (amount == null) {
           return;
         }
 
         if (amount > balance) {
-          Toast.error("This address's ($address) ${tokenDetail.token.ticker} balance is insufficient.");
+          Toast.error(l10n.tokenWebInsufficient(address, tokenDetail.token.ticker));
           return;
         }
 
@@ -133,8 +135,9 @@ class WebTransferTokenAmountButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Transfer",
+      label: l10n.tokenTransfer,
       onPressed: () async {
         final manager = ref.read(webTokenActionsManager);
 
@@ -146,18 +149,18 @@ class WebTransferTokenAmountButton extends BaseComponent {
           return;
         }
 
-        final toAddress = await manager.promptForAddress(title: "Transfer to");
+        final toAddress = await manager.promptForAddress(title: l10n.tokenTransferTo);
         if (toAddress == null) {
           return;
         }
 
-        final amount = await manager.promptForAmount(title: "Amount to Transfer");
+        final amount = await manager.promptForAmount(title: l10n.tokenAmountToTransferTitle);
         if (amount == null) {
           return;
         }
 
         if (amount > balance) {
-          Toast.error("This address's ($address) ${tokenDetail.token.ticker} balance is insufficient.");
+          Toast.error(l10n.tokenWebInsufficient(address, tokenDetail.token.ticker));
           return;
         }
 

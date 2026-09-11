@@ -14,6 +14,7 @@ import '../../../core/theme/app_theme.dart';
 import '../providers/web_shop_form_provider.dart';
 import '../providers/web_shop_list_provider.dart';
 import '../providers/web_shop_search_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebMyShopList extends BaseComponent {
   const WebMyShopList({
@@ -22,6 +23,7 @@ class WebMyShopList extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final listProvider = ref.read(webShopListProvider(WebShopListType.mine).notifier);
     final model = ref.watch(webShopListProvider(WebShopListType.mine));
 
@@ -40,7 +42,7 @@ class WebMyShopList extends BaseComponent {
                     Icons.search,
                     color: Colors.white70,
                   ),
-                  hintText: "Search for auction house...",
+                  hintText: l10n.shopSearchAuctionHouseHint,
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.clear,
@@ -74,13 +76,13 @@ class WebMyShopList extends BaseComponent {
               shop,
               requiresAuth: true,
             ),
-            emptyText: "No Auction Houses",
+            emptyText: l10n.r3bNoAuctionHouses,
             emptyWidget: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "First, setup your auction house / gallery.\nThen you'll be able to create collections and add listings to them.",
+                    l10n.r3bSetupAuctionHousePrompt,
                     style: TextStyle(
                       fontSize: 18,
                       height: 1.5,
@@ -138,11 +140,12 @@ class _CreateShopButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AppButton(
-          label: 'Setup Auction House',
+          label: l10n.r3bSetupAuctionHouse,
           icon: Icons.store,
           type: buttonType,
           variant: variant,
@@ -158,7 +161,7 @@ class _CreateShopButton extends BaseComponent {
             height: 8,
           ),
           Text(
-            "or",
+            l10n.r3bOr,
             style: TextStyle(
               fontSize: 12,
               color: Colors.white54,

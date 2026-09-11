@@ -10,6 +10,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
 import '../../btc/screens/tokenized_btc_list_screen.dart';
 import '../../nft/components/nft_list_tile.dart';
@@ -37,7 +38,7 @@ class ManageReserveAccountsScreen extends BaseScreen {
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
       title: Text(
-        "Manage Vault Accounts",
+        AppLocalizations.of(context).reserveManageTitle,
       ),
     );
   }
@@ -57,7 +58,7 @@ class ManageReserveAccountsScreen extends BaseScreen {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppButton(
-                label: "Setup New Account",
+                label: AppLocalizations.of(context).reserveSetupNewAccount,
                 icon: Icons.add,
                 variant: AppColorVariant.Success,
                 onPressed: () {
@@ -68,7 +69,7 @@ class ManageReserveAccountsScreen extends BaseScreen {
                 height: 6,
               ),
               AppButton(
-                label: "Restore Vault Account",
+                label: AppLocalizations.of(context).reserveRestoreVaultAccount,
                 icon: Icons.refresh,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
@@ -82,7 +83,7 @@ class ManageReserveAccountsScreen extends BaseScreen {
         Expanded(
           child: accounts.isEmpty
               ? Center(
-                  child: Text("No Vault Accounts"),
+                  child: Text(AppLocalizations.of(context).reserveNoVaultAccounts),
                 )
               : ListView.builder(
                   itemCount: accounts.length,
@@ -120,7 +121,7 @@ class ReserveAccountManageCard extends BaseComponent {
               Row(
                 children: [
                   Text(
-                    "Address:",
+                    AppLocalizations.of(context).reserveAddressColon,
                     style: TextStyle(color: Colors.white.withOpacity(0.8)),
                   ),
                   SizedBox(
@@ -138,7 +139,7 @@ class ReserveAccountManageCard extends BaseComponent {
                   InkWell(
                     onTap: () async {
                       await Clipboard.setData(ClipboardData(text: ra.address));
-                      Toast.message("Address copied to clipboard");
+                      Toast.message(AppLocalizations.of(context).messageAddressCopied);
                     },
                     child: Icon(
                       Icons.copy,
@@ -154,7 +155,7 @@ class ReserveAccountManageCard extends BaseComponent {
               Row(
                 children: [
                   Text(
-                    "Available Balance:",
+                    AppLocalizations.of(context).reserveAvailableBalanceColon,
                     style: TextStyle(color: Colors.white.withOpacity(0.8)),
                   ),
                   SizedBox(
@@ -184,7 +185,7 @@ class ReserveAccountManageCard extends BaseComponent {
               Row(
                 children: [
                   Text(
-                    "Status:",
+                    AppLocalizations.of(context).reserveStatusColon,
                     style: TextStyle(color: Colors.white.withOpacity(0.8)),
                   ),
                   SizedBox(
@@ -214,7 +215,7 @@ class ReserveAccountManageCard extends BaseComponent {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         AppButton(
-                          label: "Send Funds",
+                          label: AppLocalizations.of(context).reserveSendFunds,
                           variant: AppColorVariant.Light,
                           icon: Icons.arrow_upward,
                           // variant: AppColorVariant.Light,
@@ -224,7 +225,7 @@ class ReserveAccountManageCard extends BaseComponent {
                           },
                         ),
                         AppButton(
-                          label: "Manage Assets",
+                          label: AppLocalizations.of(context).reserveManageAssets,
                           icon: Icons.toll,
                           variant: AppColorVariant.Light,
                           onPressed: () async {
@@ -237,7 +238,7 @@ class ReserveAccountManageCard extends BaseComponent {
                                       AppCard(
                                         padding: 0,
                                         child: ListTile(
-                                          title: Text("NFTs"),
+                                          title: Text(AppLocalizations.of(context).reserveAssetsNfts),
                                           leading: Icon(Icons.lightbulb_outline),
                                           trailing: Icon(Icons.chevron_right),
                                           onTap: () {
@@ -249,7 +250,7 @@ class ReserveAccountManageCard extends BaseComponent {
                                       AppCard(
                                         padding: 0,
                                         child: ListTile(
-                                          title: Text("Fungible Tokens"),
+                                          title: Text(AppLocalizations.of(context).reserveAssetsTokens),
                                           leading: Icon(Icons.toll),
                                           trailing: Icon(Icons.chevron_right),
                                           onTap: () {
@@ -261,7 +262,7 @@ class ReserveAccountManageCard extends BaseComponent {
                                       AppCard(
                                         padding: 0,
                                         child: ListTile(
-                                          title: Text("Bitcoin (vBTC)"),
+                                          title: Text(AppLocalizations.of(context).reserveAssetsBtc),
                                           leading: Icon(FontAwesomeIcons.bitcoin),
                                           trailing: Icon(Icons.chevron_right),
                                           onTap: () {
@@ -303,7 +304,7 @@ class ReserveAccountManageCard extends BaseComponent {
                               }
 
                               if (ownedNfts.isEmpty) {
-                                Toast.message("This account has no assets/NFTS.");
+                                Toast.message(AppLocalizations.of(context).reserveNoAssetsToast);
                                 return;
                               }
 
@@ -313,7 +314,7 @@ class ReserveAccountManageCard extends BaseComponent {
                                     return ModalContainer(
                                       withDecor: false,
                                       children: [
-                                        Text("Manage Assets"),
+                                        Text(AppLocalizations.of(context).reserveManageAssets),
                                         ...ownedNfts
                                             .map(
                                               (nft) => NftListTile(
@@ -351,7 +352,7 @@ class ReserveAccountManageCard extends BaseComponent {
                                                   children: [
                                                     if (option == 'nfts') ...[
                                                       AppButton(
-                                                        label: "Transfer",
+                                                        label: AppLocalizations.of(context).reserveTransferLabel,
                                                         variant: AppColorVariant.Secondary,
                                                         onPressed: () {
                                                           initTransferNftProcess(context, ref, nft);
@@ -362,7 +363,7 @@ class ReserveAccountManageCard extends BaseComponent {
                                                       width: 8,
                                                     ),
                                                     AppButton(
-                                                      label: "View Details",
+                                                      label: AppLocalizations.of(context).reserveViewDetailsLabel,
                                                       onPressed: () async {
                                                         print(option);
                                                         if (option == 'nfts') {
@@ -404,7 +405,7 @@ class ReserveAccountManageCard extends BaseComponent {
                             } else if (option == 'btc') {
                               final btcTokens = ref.read(tokenizedBitcoinListProvider).where((t) => t.rbxAddress == ra.address).toList();
                               if (btcTokens.isEmpty) {
-                                Toast.message("This account has no vBTC Tokens");
+                                Toast.message(AppLocalizations.of(context).reserveNoVbtcTokens);
                                 return;
                               }
                               showModalBottomSheet(
@@ -420,7 +421,7 @@ class ReserveAccountManageCard extends BaseComponent {
                           },
                         ),
                         AppButton(
-                          label: "Receive Assets",
+                          label: AppLocalizations.of(context).reserveReceiveAssets,
                           icon: Icons.arrow_downward,
                           variant: AppColorVariant.Light,
                           onPressed: () {
@@ -430,7 +431,7 @@ class ReserveAccountManageCard extends BaseComponent {
                         ),
                         if (showActivateButton)
                           AppVerticalIconButton(
-                            label: "Activate\nAccount",
+                            label: AppLocalizations.of(context).reserveActivateAccountAction,
                             icon: Icons.upload,
                             color: AppColors.getReserve(),
                             onPressed: () {

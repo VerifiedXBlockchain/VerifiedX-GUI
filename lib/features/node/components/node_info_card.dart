@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/node_info.dart';
 
 class NodeInfoCard extends StatelessWidget {
@@ -9,6 +10,7 @@ class NodeInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Card(
@@ -21,22 +23,22 @@ class NodeInfoCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Text(
-                    "IP:",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                    l10n.nodeIpLabel,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "Height:",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                    l10n.nodeHeightLabel,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "Latency:",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                    l10n.nodeLatencyLabel,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "Last Checked:",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                    l10n.nodeLastCheckedLabel,
+                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),

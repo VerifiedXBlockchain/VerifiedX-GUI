@@ -10,6 +10,7 @@ import '../../nft/models/nft.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../web_shop/providers/web_listed_nfts_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class NftSelector extends BaseComponent {
   final Function(Nft nft) onSelect;
@@ -26,7 +27,7 @@ class NftSelector extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppButton(
-      label: labelOverride ?? "Choose NFT",
+      label: labelOverride ?? AppLocalizations.of(context).r3dChooseNft,
       onPressed: disabled
           ? null
           : () async {
@@ -57,6 +58,7 @@ class NftSelectorModal extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final d = ref.watch(nftListProvider);
     final nfts = d.data.results;
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(
       withDecor: false,
@@ -67,16 +69,16 @@ class NftSelectorModal extends BaseComponent {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Select NFT",
+              l10n.mktSelectNft,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text(
-                "Close",
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                l10n.actionClose,
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],

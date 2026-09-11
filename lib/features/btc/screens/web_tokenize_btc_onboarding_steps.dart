@@ -5,6 +5,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webVBtcOnboardProvider.notifier);
     final state = ref.watch(webVBtcOnboardProvider);
 
@@ -12,9 +13,9 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("No BTC account / Token Found."),
+          Text(l10n.btcNoBtcAccountOrToken),
           AppButton(
-            label: "Start Over",
+            label: l10n.btcStartOver,
             onPressed: () {
               provider.reset();
             },
@@ -34,18 +35,18 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (!state.transferToTokenManually) ...[
-              Text("From: ${state.btcAccount!.address}"),
+              Text(l10n.btcFromAddress(state.btcAccount!.address)),
               SizedBox(
                 height: 8,
               ),
-              Text("To: ${state.tokenizedBtc!.depositAddress}"),
+              Text(l10n.btcToAddress(state.tokenizedBtc!.depositAddress)),
               SizedBox(
                 height: 8,
               ),
               TextFormField(
                 controller: provider.btcTransferAmountController,
                 validator: (val) => formValidatorNumber(val, "Amount"),
-                decoration: InputDecoration(label: Text("Amount to Send (BTC)")),
+                decoration: InputDecoration(label: Text(l10n.btcAmountToSendLabel)),
                 inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
               ),
               SizedBox(
@@ -85,7 +86,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ListTile(
-                        leading: const SizedBox(width: 100, child: Text("Fee Rate:")),
+                        leading: SizedBox(width: 100, child: Text(l10n.btcFeeRateLabel)),
                         title: Row(
                           children: [
                             PopupMenuButton<BtcFeeRatePreset>(
@@ -123,7 +124,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                         height: 8,
                       ),
                       Text(
-                        "Fee Estimate: ~$feeEstimate SATS | ~$feeEstimateBtc BTC    ($fee SATS /byte | $feeBtc BTC /byte)",
+                        l10n.tkbFeeEstimate(feeEstimate.toString(), feeEstimateBtc, fee.toString(), feeBtc),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ],
@@ -134,7 +135,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AppButton(
-                    label: "Initiate Transfer",
+                    label: l10n.btcInitiateTransfer,
                     variant: AppColorVariant.Btc,
                     onPressed: () async {
                       if (!provider.btcTransferFormKey.currentState!.validate()) {
@@ -142,7 +143,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                       }
                       final amountParsed = double.tryParse(provider.btcTransferAmountController.text.trim());
                       if (amountParsed == null) {
-                        Toast.error("Invalid Amount");
+                        Toast.error(l10n.btcInvalidAmount);
                         return;
                       }
 
@@ -150,7 +151,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                       // comparing a BTC amount against it lets a transfer of
                       // up to 100,000,000x the actual balance through.
                       if (amountParsed > (ref.read(webSessionProvider).btcBalanceInfo?.btcBalance ?? 0)) {
-                        Toast.error("Not enough balance in BTC account to send $amountParsed BTC");
+                        Toast.error(l10n.btcNotEnoughBalance(amountParsed.toString()));
                         return;
                       }
 
@@ -166,13 +167,13 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
             ],
             if (!state.transferToTokenManually) ...[
               Divider(),
-              Text("Alternatively, you can send the BTC manually to your token's deposit address."),
+              Text(l10n.btcManualSendBody),
             ],
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
               child: Center(
                 child: AppButton(
-                  label: state.transferToTokenManually ? "Send Automatically" : "Send Manually",
+                  label: state.transferToTokenManually ? l10n.tkbSendAutomatically : l10n.tkbSendManually,
                   type: AppButtonType.Text,
                   underlined: true,
                   onPressed: () {
@@ -188,14 +189,14 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                 readOnly: true,
                 decoration: InputDecoration(
                   label: Text(
-                    "BTC Address",
+                    l10n.btcAddressLabel,
                     style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
                   ),
                   suffix: IconButton(
                     icon: Icon(Icons.copy),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: state.tokenizedBtc!.depositAddress));
-                      Toast.message("Address copied to clipboard!");
+                      Toast.message(l10n.btcAddressCopiedToast);
                     },
                   ),
                 ),
@@ -205,7 +206,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
               ),
               Center(
                 child: AppButton(
-                  label: "I've sent this manually!",
+                  label: l10n.btcSentManually,
                   type: AppButtonType.Text,
                   underlined: true,
                   onPressed: () {
@@ -243,6 +244,7 @@ class _TransferBtcStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webVBtcOnboardProvider.notifier);
     final state = ref.watch(webVBtcOnboardProvider);
 
@@ -250,9 +252,9 @@ class _TransferBtcStep extends BaseComponent {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("No BTC Account Found."),
+          Text(l10n.btcNoBtcAccount),
           AppButton(
-            label: "Start Over",
+            label: l10n.btcStartOver,
             onPressed: () {
               provider.reset();
             },
@@ -269,12 +271,12 @@ class _TransferBtcStep extends BaseComponent {
             initialValue: state.btcAccount!.address,
             readOnly: true,
             decoration: InputDecoration(
-              label: Text("BTC Address"),
+              label: Text(l10n.btcAddressLabel),
               suffix: IconButton(
                 icon: Icon(Icons.copy),
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: state.btcAccount!.address));
-                  Toast.message("WIF private key copied to clipboard");
+                  Toast.message(l10n.btcWifCopiedToast);
                 },
               ),
             ),
@@ -284,7 +286,7 @@ class _TransferBtcStep extends BaseComponent {
           height: 12,
         ),
         AppButton(
-          label: "Done!",
+          label: l10n.btcDoneExclamation,
           onPressed: () {
             provider.setProcessingState(VBtcProcessingState.waitingForBtcTransfer);
           },
@@ -300,6 +302,7 @@ class _FaucetWithdrawlStep extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(webVBtcOnboardProvider.notifier);
     final state = ref.watch(webVBtcOnboardProvider);
 
@@ -307,9 +310,9 @@ class _FaucetWithdrawlStep extends BaseComponent {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text("No VFX Account Found."),
+          Text(l10n.btcNoVfxAccount),
           AppButton(
-            label: "Start Over",
+            label: l10n.btcStartOver,
             onPressed: () {
               provider.reset();
             },
@@ -322,18 +325,18 @@ class _FaucetWithdrawlStep extends BaseComponent {
       spacing: 16,
       children: [
         AppButton(
-          label: "Use Faucet",
+          label: l10n.btcUseFaucet,
           onPressed: () async {
             final phone = await PromptModal.show(
-              title: "Phone Number",
+              title: l10n.btcPhoneNumberTitle,
               validator: formValidatorPhoneNumber,
-              labelText: "Your Phone Number",
+              labelText: l10n.btcPhoneNumberLabel,
             );
 
             if (phone != null) {
               final cleanPhone = cleanPhoneNumber(phone);
               if (cleanPhone == null) {
-                Toast.error("Invalid Phone Number");
+                Toast.error(l10n.btcInvalidPhoneToast);
                 return;
               }
 
@@ -342,15 +345,16 @@ class _FaucetWithdrawlStep extends BaseComponent {
                 final uuid = await ExplorerService().faucetRequest(cleanPhone, VBTC_ONBOARD_VFX_AMOUNT, state.vfxWallet!.address);
 
                 final code = await PromptModal.show(
-                  title: "Enter verification code sent to $phone",
-                  validator: (v) => formValidatorNumber(v, "Verification Code"),
-                  labelText: "Verification Code",
+                  title: l10n.btcVerificationCodeTitle(phone),
+                  validator: (v) =>
+                      formValidatorNumber(v, l10n.btcVerificationCodeLabel),
+                  labelText: l10n.btcVerificationCodeLabel,
                 );
 
                 if (code != null) {
                   final result = await ExplorerService().faucetVerify(uuid, code.trim());
 
-                  Toast.message("Success! Funds are on their way. TX Hash: $result");
+                  Toast.message(l10n.btcFundsSuccessToast(result));
                   provider.setProcessingState(VBtcProcessingState.waitingForVfxTransfer);
                 }
               } catch (e) {
@@ -360,7 +364,7 @@ class _FaucetWithdrawlStep extends BaseComponent {
           },
         ),
         AppButton(
-          label: "Transfer Manually",
+          label: l10n.btcTransferManually,
           onPressed: () async {
             provider.setProcessingState(VBtcProcessingState.waitingForVfxTransfer);
           },

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../models/shielded_balance.dart';
 import '../providers/shielded_address_provider.dart';
@@ -70,6 +71,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
   }
 
   Widget _buildBalanceRow(ShieldedBalance? balance) {
+    final l10n = AppLocalizations.of(context);
     return Row(
       children: [
         Expanded(
@@ -101,7 +103,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Text(
-                      "${balance.vbtcBalance(widget.token.smartContractUid)} vBTC",
+                      l10n.prvVbtcAmountSuffix(balance.vbtcBalance(widget.token.smartContractUid).toString()),
                       style: TextStyle(
                         color: AppColors.getBtc(),
                         fontSize: 22,
@@ -116,7 +118,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                "${balance.unspentCommitments} note${balance.unspentCommitments == 1 ? '' : 's'}",
+                l10n.prvNoteCount(balance.unspentCommitments),
                 style: const TextStyle(
                   color: Colors.white54,
                   fontSize: 12,
@@ -124,7 +126,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
               ),
               const SizedBox(height: 2),
               Text(
-                "Block ${balance.lastScannedBlock}",
+                l10n.prvBlockLabel(balance.lastScannedBlock.toString()),
                 style: const TextStyle(
                   color: Colors.white38,
                   fontSize: 11,
@@ -137,11 +139,12 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
   }
 
   Widget _buildActionButtons() {
+    final l10n = AppLocalizations.of(context);
     return Row(
       children: [
         Expanded(
           child: AppButton(
-            label: "Shield",
+            label: l10n.prvShieldAction,
             icon: Icons.arrow_downward,
             variant: AppColorVariant.Success,
             onPressed: widget.onShield,
@@ -150,7 +153,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
         const SizedBox(width: 8),
         Expanded(
           child: AppButton(
-            label: "Unshield",
+            label: l10n.prvUnshieldAction,
             icon: Icons.arrow_upward,
             variant: AppColorVariant.Warning,
             onPressed: widget.onUnshield,
@@ -159,7 +162,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
         const SizedBox(width: 8),
         Expanded(
           child: AppButton(
-            label: "Transfer",
+            label: l10n.prvTransferAction,
             icon: Icons.send,
             variant: AppColorVariant.Prism,
             onPressed: widget.onTransfer,
@@ -168,7 +171,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
         const SizedBox(width: 8),
         Expanded(
           child: AppButton(
-            label: "Consolidate",
+            label: l10n.prvConsolidateAction,
             icon: Icons.compress,
             variant: AppColorVariant.Info,
             onPressed: widget.onConsolidate,

@@ -10,6 +10,7 @@ import 'package:rbx_wallet/features/wallet/providers/wallet_list_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/topic.dart';
 import '../services/topic_service.dart';
 import 'vote_history_modal.dart';
@@ -53,13 +54,14 @@ class _VotingDetailsState extends BaseComponentState<VotingDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     if (topic.totalVotes < 1) {
-      return const Center(
+      return Center(
         child: Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(
-            "No votes yet.",
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            l10n.votingNoVotesYet,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
       );
@@ -79,7 +81,7 @@ class _VotingDetailsState extends BaseComponentState<VotingDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Vote Counts",
+                  l10n.votingVoteCounts,
                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
                 ),
                 const SizedBox(
@@ -90,19 +92,19 @@ class _VotingDetailsState extends BaseComponentState<VotingDetails> {
                   children: [
                     buildDetailRow(
                       context,
-                      "Votes Yes",
+                      l10n.votingVotesYes,
                       topic.yesVotes.toString(),
                       Theme.of(context).colorScheme.success,
                     ),
                     buildDetailRow(
                       context,
-                      "Votes No",
+                      l10n.votingVotesNo,
                       topic.noVotes.toString(),
                       Theme.of(context).colorScheme.danger,
                     ),
                     buildDetailRow(
                       context,
-                      "Total Votes",
+                      l10n.votingTotalVotes,
                       topic.totalVotes.toString(),
                     ),
                   ],
@@ -121,7 +123,7 @@ class _VotingDetailsState extends BaseComponentState<VotingDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Percentages",
+                  l10n.votingPercentages,
                   style: Theme.of(context).textTheme.headlineSmall!.copyWith(color: Colors.white),
                 ),
                 const SizedBox(
@@ -132,18 +134,18 @@ class _VotingDetailsState extends BaseComponentState<VotingDetails> {
                   children: [
                     buildDetailRow(
                       context,
-                      "Votes Yes",
+                      l10n.votingVotesYes,
                       "${topic.yesPercent}%",
                       Theme.of(context).colorScheme.success,
                     ),
                     buildDetailRow(
                       context,
-                      "Votes No",
+                      l10n.votingVotesNo,
                       "${topic.noPercent}%",
                       Theme.of(context).colorScheme.danger,
                     ),
-                    if (topic.isActive) buildDetailRow(context, "Result", "In Progress"),
-                    if (!topic.isActive) buildDetailRow(context, "Result", topic.percentInFavor > topic.percentAgainst ? "Pass" : "Fail"),
+                    if (topic.isActive) buildDetailRow(context, l10n.votingResult, l10n.votingInProgress),
+                    if (!topic.isActive) buildDetailRow(context, l10n.votingResult, topic.percentInFavor > topic.percentAgainst ? l10n.votingPass : l10n.votingFail),
                   ],
                 )
               ],
@@ -165,14 +167,14 @@ class _VotingDetailsState extends BaseComponentState<VotingDetails> {
             Theme.of(context).colorScheme.danger,
           ],
           dataMap: {
-            "Yes": topic.yesVotes.toDouble(),
-            "No": topic.noVotes.toDouble(),
+            l10n.actionYes: topic.yesVotes.toDouble(),
+            l10n.actionNo: topic.noVotes.toDouble(),
           },
         ),
         const SizedBox(width: 16),
         if (includeShowHistoryButton)
           AppButton(
-            label: "Show History",
+            label: l10n.votingShowHistory,
             onPressed: () async {
               await ref.read(voteListProvider(topic.uid).notifier).load();
               showModalBottomSheet(

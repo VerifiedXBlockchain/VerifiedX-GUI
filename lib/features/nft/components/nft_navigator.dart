@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/minted_nft_list_provider.dart';
 import '../providers/nft_list_provider.dart';
 
@@ -18,6 +19,7 @@ class NftNavigator extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final NftListModel _model = ref.watch(minted ? mintedNftListProvider : nftListProvider);
+    final l10n = AppLocalizations.of(context);
 
     final hasNextPage = kIsWeb ? true : _model.data.canLoadMore;
     final hasPrevPage = _model.data.page > 1;
@@ -54,7 +56,7 @@ class NftNavigator extends BaseComponent {
             },
             style: TextStyle(color: _model.search == _model.currentSearch ? Colors.white : Colors.white70),
             decoration: InputDecoration(
-              hintText: "Search...",
+              hintText: l10n.tokenSearchHint,
               prefixIcon: const Icon(
                 Icons.search,
                 color: Colors.white,
@@ -98,7 +100,7 @@ class NftNavigator extends BaseComponent {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              label: "Prev Page",
+              label: l10n.tokenPrevPage,
               onPressed: hasPrevPage
                   ? () {
                       if (minted) {
@@ -116,7 +118,7 @@ class NftNavigator extends BaseComponent {
               width: 8,
             ),
             AppButton(
-              label: "Next Page",
+              label: l10n.tokenNextPage,
               onPressed: hasNextPage
                   ? () {
                       if (minted) {

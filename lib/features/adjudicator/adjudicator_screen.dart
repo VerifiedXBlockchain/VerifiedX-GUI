@@ -6,6 +6,8 @@ import '../../core/components/buttons.dart';
 import '../../core/env.dart';
 import '../../core/providers/session_provider.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/generated/app_localizations.dart';
+import '../../l10n/l10n_helper.dart';
 import '../../utils/guards.dart';
 import '../../utils/toast.dart';
 import '../global_loader/global_loading_provider.dart';
@@ -19,7 +21,7 @@ class AdjudicatorScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Adjudicator"),
+      title: Text(AppLocalizations.of(context).adjudicatorTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: const [WalletSelector()],
@@ -33,21 +35,22 @@ class AdjudicatorScreen extends BaseScreen {
 
     if (open) {
       if (withSuccessMessage) {
-        Toast.message("Port $port is open!");
+        Toast.message(globalL10n.hnavPortOpen(port.toString()));
       }
       return true;
     } else {
-      Toast.error("Port $port is NOT open. Please configure your firewall.");
+      Toast.error(globalL10n.hnavPortNotOpen(port.toString()));
       return false;
     }
   }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final currentWallet = ref.watch(sessionProvider.select((v) => v.currentWallet));
 
     if (currentWallet == null) {
-      return const InvalidWallet(message: "No account selected");
+      return InvalidWallet(message: l10n.messageNoAccountSelected);
     }
 
     // final validator = ref.watch(currentValidatorProvider);
@@ -65,7 +68,7 @@ class AdjudicatorScreen extends BaseScreen {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-              label: "Start Adjudicating",
+              label: l10n.hnavStartAdjudicating,
               icon: Icons.star,
               variant: AppColorVariant.Success,
               onPressed: () async {
@@ -93,7 +96,7 @@ class AdjudicatorScreen extends BaseScreen {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          "${currentWallet.labelWithoutTruncation}  is Adjudicating...",
+          l10n.hnavIsAdjudicating(currentWallet.labelWithoutTruncation),
           style: Theme.of(context).textTheme.headlineMedium,
         ),
         const Padding(
@@ -108,7 +111,7 @@ class AdjudicatorScreen extends BaseScreen {
               )),
         ),
         AppButton(
-          label: "Stop Adjudicating",
+          label: l10n.hnavStopAdjudicating,
           variant: AppColorVariant.Danger,
           onPressed: () async {
             // ref.read(globalLoadingProvider.notifier).start();

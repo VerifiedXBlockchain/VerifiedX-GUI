@@ -14,6 +14,7 @@ import '../providers/web_listing_list_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/infinite_list.dart';
 import '../../remote_shop/providers/shop_list_view_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebMyListingList extends BaseComponent {
   final int shopId;
@@ -26,20 +27,21 @@ class WebMyListingList extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final listProvider = ref.read(webListingListProvider("$shopId,$collectionId").notifier);
     final isExpanded = ref.watch(shopListViewProvider);
 
     return InfiniteList<WebListing>(
       pagingController: listProvider.pagingController,
       itemBuilder: (context, listing, index) => isExpanded ? WebListingDetails(listing: listing) : WebListingDetailsListTile(listing: listing),
-      emptyText: "No Listings",
+      emptyText: l10n.r3bNoListings,
       emptyWidget: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             // EmptyPlaceholder(title: "No Listings"),
             Text(
-              "Now you can create listings for the NFTs you own.",
+              l10n.r3bCreateListingsHint,
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(
@@ -70,8 +72,9 @@ class _CreateListingButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: 'Create Listing',
+      label: l10n.shopCreateListing,
       icon: Icons.add,
       type: buttonType,
       variant: AppColorVariant.Success,

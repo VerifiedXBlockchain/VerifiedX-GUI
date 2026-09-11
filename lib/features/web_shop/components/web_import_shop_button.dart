@@ -10,6 +10,7 @@ import '../../global_loader/global_loading_provider.dart';
 import '../services/web_shop_service.dart';
 import '../utils/shop_publishing.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebImportShopButton extends BaseComponent {
   final AppColorVariant variant;
@@ -22,24 +23,25 @@ class WebImportShopButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Import Shop",
+      label: l10n.dstImportShop,
       type: type,
       variant: variant,
       icon: type == AppButtonType.Text ? null : Icons.upload,
       onPressed: () async {
         final myAddress = ref.read(webSessionProvider).keypair?.address;
         if (myAddress == null) {
-          Toast.error("No account found");
+          Toast.error(l10n.txpNoAccountFound);
           return;
         }
 
         String? shopUrl = await PromptModal.show(
           contextOverride: context,
-          title: "Shop URL",
+          title: l10n.shopUrlPromptTitle,
           validator: (_) => null,
-          labelText: "Shop URL",
-          body: "What is the shop URL you'd like to import?",
+          labelText: l10n.shopUrlPromptTitle,
+          body: l10n.r3bShopUrlImportPrompt,
           prefixText: "vfx://",
         );
 
@@ -54,21 +56,20 @@ class WebImportShopButton extends BaseComponent {
         final shop = await WebShopService().lookupShop(shopUrl);
 
         if (shop == null) {
-          Toast.error("Shop Not Found");
+          Toast.error(l10n.r3bShopNotFound);
           return;
         }
 
         if (shop.ownerAddress != myAddress) {
-          Toast.error("You are not the owner of this shop. Please login as ${shop.ownerAddress}");
+          Toast.error(l10n.r3bNotOwnerLoginAs(shop.ownerAddress));
           return;
         }
 
         final confirmed = await ConfirmDialog.show(
-          title: "Ready to Import",
-          body:
-              "Are you sure you want to import this shop? A $SHOP_UPDATE_COST VFX fee will be charged to publish this change to the network.\n\nThis is a destructive action and will not carry over your collections and listings.",
-          confirmText: "Import & Publish",
-          cancelText: "Cancel",
+          title: l10n.r3bReadyToImport,
+          body: l10n.r3bImportShopConfirmBody(SHOP_UPDATE_COST.toString()),
+          confirmText: l10n.r3bImportAndPublish,
+          cancelText: l10n.actionCancel,
         );
 
         if (confirmed != true) {
@@ -82,8 +83,8 @@ class WebImportShopButton extends BaseComponent {
 
         if (success == true) {
           InfoDialog.show(
-            title: "TX Broadcasted",
-            body: "Once the transaction relects on chain, your shop will appear here.",
+            title: l10n.mktTxBroadcastedToast,
+            body: l10n.r3bImportShopBroadcastBody,
           );
         }
       },

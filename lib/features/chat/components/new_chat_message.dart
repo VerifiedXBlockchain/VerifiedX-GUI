@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/shop_chat_list_provider.dart';
 import '../providers/seller_chat_list_provider.dart';
 import '../providers/web_seller_chat_list_provider.dart';
@@ -44,7 +45,7 @@ class NewChatMessage extends BaseComponent {
                 controller: provider.newMessageController,
                 focusNode: provider.newMessageFocusNode,
                 decoration: InputDecoration(
-                  hintText: "Send message...",
+                  hintText: AppLocalizations.of(context).chatSendHint,
                   border: InputBorder.none,
                   enabledBorder: InputBorder.none,
                   focusedBorder: InputBorder.none,

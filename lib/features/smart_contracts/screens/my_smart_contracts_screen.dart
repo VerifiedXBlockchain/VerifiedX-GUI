@@ -8,6 +8,7 @@ import '../../../core/base_component.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../wallet/models/wallet.dart';
 import '../models/smart_contract.dart';
@@ -22,7 +23,7 @@ class MySmartContractsScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("My Smart Contracts"),
+      title: Text(AppLocalizations.of(context).scMyTitle),
       leading: IconButton(
         onPressed: () async {
           AutoRouter.of(context).pop();
@@ -46,20 +47,20 @@ class MySmartContractsScreen extends BaseScreen {
       length: 2,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        children: [
           TabBar(
             tabs: [
               Tab(
-                child: Text("Compiled"),
+                child: Text(AppLocalizations.of(context).scTabCompiled),
               ),
               Tab(
-                child: Text("Drafts"),
+                child: Text(AppLocalizations.of(context).scTabDrafts),
               ),
             ],
           ),
           Expanded(
               child: TabBarView(
-            children: [
+            children: const [
               _CompiledList(),
               _DraftList(),
             ],
@@ -78,8 +79,8 @@ class _DraftList extends BaseComponent {
     final _model = ref.watch(draftsSmartContractProvider);
 
     if (_model.isEmpty) {
-      return const Center(
-        child: Text("No Smart Contracts Drafts Found"),
+      return Center(
+        child: Text(AppLocalizations.of(context).scNoDrafts),
       );
     }
     return ListView.builder(
@@ -114,8 +115,8 @@ class _CompiledList extends BaseComponent {
     final _model = ref.watch(mySmartContractsProvider);
 
     if (_model.isEmpty) {
-      return const Center(
-        child: Text("No Smart Contracts Found"),
+      return Center(
+        child: Text(AppLocalizations.of(context).scNoCompiled),
       );
     }
     return ListView.builder(

@@ -6,6 +6,7 @@ import '../../../core/app_router.gr.dart';
 import '../../../core/base_component.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../dst/models/dec_shop.dart';
 import '../providers/connected_shop_provider.dart';
@@ -81,11 +82,12 @@ class RemoteShopListTile extends BaseComponent {
             }
 
             if (ref.read(walletInfoProvider) == null || !ref.read(walletInfoProvider)!.isChainSynced) {
+              final l10n = AppLocalizations.of(context);
               final cont = await ConfirmDialog.show(
-                title: "Wallet Not Synced",
-                body: "Since your wallet is not synced there may be some issues viewing the data in this shop. Continue anyway?",
-                confirmText: "Continue",
-                cancelText: "Cancel",
+                title: l10n.shopWalletNotSyncedTitle,
+                body: l10n.shopWalletNotSyncedBody,
+                confirmText: l10n.actionContinue,
+                cancelText: l10n.actionCancel,
               );
 
               if (cont != true) {

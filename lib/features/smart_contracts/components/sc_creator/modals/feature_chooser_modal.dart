@@ -25,6 +25,7 @@ import '../../../features/tokenization/tokenization_provider.dart';
 import '../../../models/feature.dart';
 import '../common/form_group_header.dart';
 import '../common/modal_container.dart';
+import '../../../../../l10n/generated/app_localizations.dart';
 
 class FeatureChooserModal extends BaseComponent {
   final bool canAddRoyalty;
@@ -41,6 +42,7 @@ class FeatureChooserModal extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       children: [
         Align(
@@ -52,10 +54,10 @@ class FeatureChooserModal extends BaseComponent {
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
             ),
-            child: const Text("Close"),
+            child: Text(l10n.actionClose),
           ),
         ),
-        const FormGroupHeader("Add a Feature"),
+        FormGroupHeader(l10n.scwAddAFeature),
         ...Feature.allTypes()
             .asMap()
             .entries
@@ -68,7 +70,7 @@ class FeatureChooserModal extends BaseComponent {
                   switch (f.type) {
                     case FeatureType.royalty:
                       if (!canAddRoyalty) {
-                        InfoDialog.show(title: "Can't add Royalty", body: "You already have a royalty feature in this smart contract.");
+                        InfoDialog.show(title: l10n.scwCantAddRoyaltyTitle, body: l10n.scwCantAddRoyaltyBody);
                         return null;
                       }
                       ref.read(royaltyFormProvider.notifier).clear();
@@ -77,9 +79,8 @@ class FeatureChooserModal extends BaseComponent {
                     case FeatureType.evolution:
                       if (!canAddEvolve) {
                         InfoDialog.show(
-                            title: "Can't add Evolve",
-                            body:
-                                "You already have an evolve feature in this smart contract. Edit the existing evolving feature to add more stages.");
+                            title: l10n.scwCantAddEvolveTitle,
+                            body: l10n.scwCantAddEvolveBody);
                         return null;
                       }
                       ref.read(evolveFormProvider.notifier).clear();
@@ -88,9 +89,8 @@ class FeatureChooserModal extends BaseComponent {
                     case FeatureType.multiAsset:
                       if (!canAddMultiAsset) {
                         InfoDialog.show(
-                            title: "Can't add Multi Asset",
-                            body:
-                                "You already have a multi asset feature in this smart contract. Edit the existing multi asset feature to add more assets.");
+                            title: l10n.scwCantAddMultiAssetTitle,
+                            body: l10n.scwCantAddMultiAssetBody);
                         return null;
                       }
                       ref.read(multiAssetFormProvider.notifier).clear();
@@ -117,7 +117,7 @@ class FeatureChooserModal extends BaseComponent {
                       ref.read(soulBoundFormProvider.notifier).clear();
                       modal = const SoulBoundModal();
                       if (!canAddSoulBound) {
-                        InfoDialog.show(title: "Can't add Soul Bound", body: "You already have a soul bound feature in this smart contract.");
+                        InfoDialog.show(title: l10n.scwCantAddSoulBoundTitle, body: l10n.scwCantAddSoulBoundBody);
                         return null;
                       }
                       break;
@@ -126,8 +126,8 @@ class FeatureChooserModal extends BaseComponent {
                       return null;
 
                     default:
-                      return const ModalContainer(
-                        children: [Text("Not implemented.")],
+                      return ModalContainer(
+                        children: [Text(l10n.scwNotImplemented)],
                       );
                   }
 
@@ -140,8 +140,8 @@ class FeatureChooserModal extends BaseComponent {
                       if (modal != null) {
                         return modal;
                       }
-                      return const ModalContainer(
-                        children: [Text("Not implemented.")],
+                      return ModalContainer(
+                        children: [Text(l10n.scwNotImplemented)],
                       );
                     },
                   );

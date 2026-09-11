@@ -35,6 +35,7 @@ import '../models/web_listing.dart';
 import '../providers/create_web_listing_provider.dart';
 import '../providers/web_listing_full_list_provider.dart';
 import '../providers/web_shop_bid_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebListingDetails extends BaseComponent {
   final WebListing listing;
@@ -42,12 +43,13 @@ class WebListingDetails extends BaseComponent {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final nft = listing.nft;
 
     return ContextMenuRegion(
       contextMenu: GenericContextMenu(
         buttonConfigs: [
-          ContextMenuButtonConfig('Edit Listing', onPressed: () {
+          ContextMenuButtonConfig(l10n.mktEditListing, onPressed: () {
             print("edit listing ${listing.id}");
           })
         ],
@@ -89,13 +91,13 @@ class WebListingDetails extends BaseComponent {
 
               if (listing.isSaleComplete)
                 Text(
-                  "Sale has Completed",
+                  l10n.r3bSaleCompleted,
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                 ),
 
               if (!listing.isSaleComplete && listing.isSalePending)
                 Text(
-                  "Sale is Pending",
+                  l10n.r3bSalePending,
                   style: TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                 ),
 
@@ -121,6 +123,7 @@ class WebListingDetails extends BaseComponent {
 
   @override
   Widget desktopBody(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final nft = listing.nft;
     final myAddress = kIsWeb
         ? ref.read(webSessionProvider).keypair?.address
@@ -131,7 +134,7 @@ class WebListingDetails extends BaseComponent {
         buttonConfigs: [
           if (listing.ownerAddress == myAddress) ...[
             ContextMenuButtonConfig(
-              'Edit Listing',
+              l10n.mktEditListing,
               onPressed: () async {
                 ref.read(createWebListingProvider.notifier).load(listing,
                     listing.collection.id, listing.collection.shop!.id);
@@ -144,13 +147,13 @@ class WebListingDetails extends BaseComponent {
               icon: Icon(Icons.edit),
             ),
             ContextMenuButtonConfig(
-              'Delete Listing',
+              l10n.mktDeleteListing,
               onPressed: () async {
                 final confirmed = await ConfirmDialog.show(
-                  title: "Delete Listing",
-                  body: "Are you sure you want to delete this listing?",
-                  confirmText: "Delete",
-                  cancelText: "Cancel",
+                  title: l10n.mktDeleteListing,
+                  body: l10n.r3bDeleteListingConfirm,
+                  confirmText: l10n.actionDelete,
+                  cancelText: l10n.actionCancel,
                 );
                 if (confirmed == true) {
                   ref
@@ -222,13 +225,13 @@ class WebListingDetails extends BaseComponent {
                     ),
                   if (listing.isSaleComplete)
                     Text(
-                      "Sale has Completed",
+                      l10n.r3bSaleCompleted,
                       style:
                           TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                     ),
                   if (!listing.isSaleComplete && listing.isSalePending)
                     Text(
-                      "Sale is Pending",
+                      l10n.r3bSalePending,
                       style:
                           TextStyle(fontSize: 28, fontWeight: FontWeight.w700),
                     ),
@@ -512,6 +515,7 @@ class _Details extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final myAddress = kIsWeb
         ? ref.read(webSessionProvider).keypair?.address
         : ref.read(sessionProvider).currentWallet?.address;
@@ -551,7 +555,7 @@ class _Details extends BaseComponent {
             ),
             // if (withShareButtons) buildShareButtons(context),
             AppButton(
-              label: "Share Listing",
+              label: l10n.r3bShareListing,
               icon: Icons.ios_share_rounded,
               variant: AppColorVariant.Light,
               type: AppButtonType.Text,
@@ -559,7 +563,7 @@ class _Details extends BaseComponent {
                 await Clipboard.setData(ClipboardData(
                     text:
                         "${Env.appBaseUrl}/#dashboard/p2p/shop/${listing.collection.shop!.id}/collection/${listing.collection.id}/listing/${listing.id}"));
-                Toast.message("Share url copied to clipboard");
+                Toast.message(l10n.r3bShareUrlCopied);
               },
             ),
             if (listing.ownerAddress == myAddress)
@@ -567,7 +571,7 @@ class _Details extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AppButton(
-                    label: "Edit",
+                    label: l10n.scwEdit,
                     icon: Icons.edit,
                     variant: AppColorVariant.Light,
                     type: AppButtonType.Text,
@@ -585,16 +589,16 @@ class _Details extends BaseComponent {
                     width: 6,
                   ),
                   AppButton(
-                    label: "Delete",
+                    label: l10n.actionDelete,
                     icon: Icons.delete,
                     variant: AppColorVariant.Danger,
                     type: AppButtonType.Text,
                     onPressed: () async {
                       final confirmed = await ConfirmDialog.show(
-                        title: "Delete Listing",
-                        body: "Are you sure you want to delete this listing?",
-                        confirmText: "Delete",
-                        cancelText: "Cancel",
+                        title: l10n.mktDeleteListing,
+                        body: l10n.r3bDeleteListingConfirm,
+                        confirmText: l10n.actionDelete,
+                        cancelText: l10n.actionCancel,
                       );
                       if (confirmed == true) {
                         ref.read(createWebListingProvider.notifier).delete(
@@ -781,13 +785,14 @@ class _Features extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("NFT Features:",
+          Text(l10n.r3bNftFeatures,
               style: Theme.of(context).textTheme.headlineSmall),
           Builder(
             builder: (context) {
@@ -796,17 +801,17 @@ class _Features extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(
+                    children: [
+                      const Icon(
                         Icons.cancel,
                         size: 16,
                         color: Colors.white54,
                       ),
                       Padding(
-                        padding: EdgeInsets.only(left: 4.0),
+                        padding: const EdgeInsets.only(left: 4.0),
                         child: Text(
-                          "Baseline Asset",
-                          style: TextStyle(fontSize: 14, color: Colors.white54),
+                          l10n.r3bBaselineAsset,
+                          style: const TextStyle(fontSize: 14, color: Colors.white54),
                         ),
                       ),
                     ],
@@ -913,7 +918,7 @@ class _WebNftData extends StatelessWidget {
                         onTap: () async {
                           await Clipboard.setData(ClipboardData(text: value));
 
-                          Toast.message("$label copied to clipboard");
+                          Toast.message(AppLocalizations.of(context).r3bLabelCopied(label));
                         },
                         child: const Icon(Icons.copy, size: 12)),
                   ),
@@ -950,7 +955,7 @@ class _WebNftData extends StatelessWidget {
                     onTap: () async {
                       await Clipboard.setData(ClipboardData(text: value));
 
-                      Toast.message("$label copied to clipboard");
+                      Toast.message(AppLocalizations.of(context).r3bLabelCopied(label));
                     },
                     child: const Icon(Icons.copy, size: 12)),
             ],
@@ -962,26 +967,27 @@ class _WebNftData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return SizedBox(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Details",
-            style: TextStyle(
+          Text(
+            l10n.shopDetailsLabel,
+            style: const TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           const SizedBox(height: 8),
           Table(
             defaultColumnWidth: const IntrinsicColumnWidth(),
             children: [
-              buildDetailRow(context, "Identifier", nft.id, true),
-              buildDetailRow(context, "Minted By", nft.minterName),
+              buildDetailRow(context, l10n.r3bIdentifier, nft.id, true),
+              buildDetailRow(context, l10n.r3bMintedBy, nft.minterName),
               buildDetailRow(
-                  context, "Minter Address", nft.minterAddress, true),
-              buildDetailRow(context, "Owned by", nft.currentOwner, true),
-              buildDetailRow(context, "Chain", "VFX"),
+                  context, l10n.r3bMinterAddress, nft.minterAddress, true),
+              buildDetailRow(context, l10n.r3bOwnedBy, nft.currentOwner, true),
+              buildDetailRow(context, l10n.r3bChain, "VFX"),
               //TODO: Auction stuff
             ],
           ),
@@ -997,6 +1003,7 @@ class _BuyNow extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     if (listing.buyNowPrice == null) {
       return SizedBox.shrink();
     }
@@ -1014,9 +1021,9 @@ class _BuyNow extends BaseComponent {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Buy Now",
-                style: TextStyle(
+              Text(
+                l10n.shopBuyNow,
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
@@ -1025,17 +1032,17 @@ class _BuyNow extends BaseComponent {
               ),
               const SizedBox(height: 8),
               _Price(
-                label: "Price",
+                label: l10n.shopPriceLabel,
                 amount: listing.buyNowPrice!,
               ),
               const SizedBox(height: 16),
               AppButton(
-                label: "Buy Now",
+                label: l10n.shopBuyNow,
                 icon: Icons.money,
                 size: AppSizeVariant.Lg,
                 onPressed: () async {
                   if (listing.collection.shop!.isOwner(ref)) {
-                    Toast.error("You are the owner of this shop.");
+                    Toast.error(l10n.r3bYouAreShopOwner);
                     return;
                   }
 
@@ -1103,6 +1110,7 @@ class _Auction extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     if (listing.floorPrice == null) {
       return SizedBox.shrink();
     }
@@ -1120,9 +1128,9 @@ class _Auction extends BaseComponent {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                "Auction",
-                style: TextStyle(
+              Text(
+                l10n.mktAuction,
+                style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
@@ -1132,9 +1140,9 @@ class _Auction extends BaseComponent {
               const SizedBox(height: 8),
               if (listing.auction != null && listing.floorPrice != null) ...[
                 listing.floorPrice == listing.auction!.currentBidPrice
-                    ? _Price(label: "Floor Price", amount: listing.floorPrice!)
+                    ? _Price(label: l10n.shopFloorPriceLabel, amount: listing.floorPrice!)
                     : _Price(
-                        label: "Highest Bid",
+                        label: l10n.shopHighestBidLabel,
                         amount: listing.auction!.currentBidPrice!,
                       )
               ],
@@ -1145,12 +1153,12 @@ class _Auction extends BaseComponent {
                     : MainAxisAlignment.center,
                 children: [
                   AppButton(
-                      label: "Bid Now",
+                      label: l10n.shopBidNow,
                       icon: Icons.gavel,
                       size: AppSizeVariant.Lg,
                       onPressed: () {
                         if (listing.collection.shop!.isOwner(ref)) {
-                          Toast.error("You are the owner of this shop.");
+                          Toast.error(l10n.r3bYouAreShopOwner);
                           return;
                         }
                         ref
@@ -1169,14 +1177,14 @@ class _Auction extends BaseComponent {
                   const SizedBox(width: 8),
                   if (listing.auction != null)
                     AppButton(
-                      label: "Details",
+                      label: l10n.shopDetailsLabel,
                       icon: Icons.info,
                       size: AppSizeVariant.Lg,
                       onPressed: () async {
                         final auction = listing.auction!;
 
                         InfoDialog.show(
-                          title: "Auction Details",
+                          title: l10n.shopAuctionDetailsTitle,
                           content: _AuctionInfoDialogContent(
                             auction: auction,
                           ),
@@ -1199,6 +1207,7 @@ class _Countdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: BreakPoints.useMobileLayout(context)
           ? CrossAxisAlignment.stretch
@@ -1210,7 +1219,7 @@ class _Countdown extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 3),
             child: AppCountdown(
               dueDate: listing.endDate,
-              prefix: listing.floorPrice != null ? "Auction Ends" : "Ends in",
+              prefix: listing.floorPrice != null ? l10n.r3bAuctionEnds : l10n.r3bEndsIn,
             ),
           ),
         // if (!listing.hasStarted)
@@ -1235,6 +1244,7 @@ class _AuctionInfoDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final labelStyle = TextStyle(fontWeight: FontWeight.w600);
     final valueStyle = TextStyle();
 
@@ -1249,7 +1259,7 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Current Bid Price:",
+                l10n.r3bCurrentBidPrice,
                 style: labelStyle,
               ),
               Text(
@@ -1261,7 +1271,7 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Increment Amount:",
+                l10n.r3bIncrementAmount,
                 style: labelStyle,
               ),
               Text(
@@ -1273,11 +1283,11 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Reserve Met:",
+                l10n.r3bReserveMet,
                 style: labelStyle,
               ),
               Text(
-                auction.isReserveMet ? "Yes" : "No",
+                auction.isReserveMet ? l10n.actionYes : l10n.actionNo,
                 style: valueStyle,
               )
             ],
@@ -1285,11 +1295,11 @@ class _AuctionInfoDialogContent extends StatelessWidget {
           TableRow(
             children: [
               Text(
-                "Active:",
+                l10n.r3bActive,
                 style: labelStyle,
               ),
               Text(
-                auction.isAuctionOver ? "Completed" : "Yes",
+                auction.isAuctionOver ? l10n.dstCompleted : l10n.actionYes,
                 style: valueStyle,
               )
             ],
@@ -1309,10 +1319,11 @@ class _BidHistoryButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     // final provider = ref.read(bidListProvider(listing.familyIdentifier).notifier);
 
     return AppButton(
-      label: "Bid History",
+      label: l10n.shopBidHistory,
       icon: Icons.punch_clock,
       size: AppSizeVariant.Lg,
       onPressed: () async {
@@ -1320,7 +1331,7 @@ class _BidHistoryButton extends BaseComponent {
         bids.sort((a, b) => a.amount > b.amount ? -1 : 1);
 
         if (bids.isEmpty) {
-          Toast.message("No bids.");
+          Toast.message(l10n.r3bNoBids);
           return;
         }
 
@@ -1347,13 +1358,14 @@ class _BidHistoryModal extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isMobile = BreakPoints.useMobileLayout(context);
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
       withClose: true,
       withDecor: false,
       children: [
-        const Text(
-          "Current Bids",
-          style: TextStyle(
+        Text(
+          l10n.r3bCurrentBids,
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
@@ -1406,18 +1418,19 @@ class _BidStatusIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Builder(
       builder: (context) {
         if (bid.bidStatus == WebBidStatus.Sent) {
           return AppBadge(
-            label: "Sent",
+            label: l10n.shopBidSent,
             variant: AppColorVariant.Primary,
           );
         }
 
         if (bid.bidStatus == WebBidStatus.Received) {
           return AppBadge(
-            label: "Received",
+            label: l10n.shopBidReceived,
             variant: AppColorVariant.Primary,
           );
         }
@@ -1429,24 +1442,24 @@ class _BidStatusIndicator extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBadge(
-                  label: "Purchased",
+                  label: l10n.shopBidPurchased,
                   variant: AppColorVariant.Success,
                 ),
                 SizedBox(height: 4),
-                Text("[Buy Now]")
+                Text(l10n.r3bBuyNowTag)
               ],
             );
           }
 
           return AppBadge(
-            label: "Accepted",
+            label: l10n.shopBidAccepted,
             variant: AppColorVariant.Success,
           );
         }
 
         if (bid.bidStatus == WebBidStatus.Rejected) {
           return AppBadge(
-            label: "Rejected",
+            label: l10n.shopBidRejected,
             variant: AppColorVariant.Danger,
           );
         }

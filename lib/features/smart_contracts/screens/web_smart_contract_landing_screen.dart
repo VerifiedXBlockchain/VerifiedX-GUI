@@ -12,6 +12,7 @@ import '../../../core/breakpoints.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/web_router.gr.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_no_wallet.dart';
 
 class WebSmartContractLandingScreen extends BaseScreen {
@@ -30,7 +31,7 @@ class WebSmartContractLandingScreen extends BaseScreen {
 
     return AppBar(
       leading: isMobile ? WebMobileDrawerButton() : null,
-      title: const Text("Create Smart Contract"),
+      title: Text(AppLocalizations.of(context).scwCreateSmartContractTitle),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,
     );
@@ -45,6 +46,7 @@ class WebSmartContractLandingScreen extends BaseScreen {
     }
 
     final isMobile = BreakPoints.useMobileLayout(context);
+    final l10n = AppLocalizations.of(context);
 
     return Stack(
       children: [
@@ -72,17 +74,17 @@ class WebSmartContractLandingScreen extends BaseScreen {
               child: Column(
                 children: [
                   BigButton(
-                    title: "Create a Smart Contract & Mint",
+                    title: l10n.scwCreateAndMintTitle,
                     iconData: Icons.create,
-                    body: "Start with a baseline smart contract and add customized features",
+                    body: l10n.scwCreateAndMintBody,
                     onPressed: () {
                       AutoRouter.of(context).push(const WebCreateSmartContractScreenRoute());
                     },
                   ),
                   BigButton(
-                    title: "Mint NFT Collection",
+                    title: l10n.scwMintNftCollectionTitle,
                     iconData: Icons.auto_awesome,
-                    body: "Mint multiple Smart Contracts into a collection",
+                    body: l10n.scwMintNftCollectionBody,
                     onPressed: () {
                       AutoRouter.of(context).push(const WebBulkCreateScreenRoute());
 
@@ -93,15 +95,15 @@ class WebSmartContractLandingScreen extends BaseScreen {
                     },
                   ),
                   BigButton(
-                    title: "Launch IDE",
+                    title: l10n.scwLaunchIdeTitle,
                     iconData: Icons.code,
-                    body: "Open the online IDE to write your own Trillium code for your smart contract",
+                    body: l10n.scwLaunchIdeBody,
                     onPressed: () async {
                       if (isMobile) {
                         final confirmed = await ConfirmDialog.show(
-                            title: "Launch IDE on mobile?",
-                            body: "The IDE is optimized for larger screens. Would you like to proceed?",
-                            confirmText: "Launch IDE");
+                            title: l10n.scwLaunchIdeMobileTitle,
+                            body: l10n.scwLaunchIdeMobileBody,
+                            confirmText: l10n.scwLaunchIdeTitle);
                         if (confirmed != true) {
                           return;
                         }

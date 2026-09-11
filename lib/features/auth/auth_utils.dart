@@ -26,6 +26,7 @@ import 'package:rbx_wallet/utils/validation.dart';
 import '../../core/breakpoints.dart';
 import '../../core/components/buttons.dart';
 import '../../core/dialogs.dart';
+import '../../l10n/generated/app_localizations.dart';
 import '../../core/providers/web_session_provider.dart';
 import '../../core/web_router.gr.dart';
 import '../global_loader/global_loading_provider.dart';
@@ -71,13 +72,14 @@ Future<void> handleImportWithPrivateKey(
   WidgetRef ref, {
   bool showRememberMe = true,
 }) async {
+  final l10n = AppLocalizations.of(context);
   final privateKey = await PromptModal.show(
     contextOverride: context,
     tightPadding: true,
-    title: "Import Wallet",
+    title: l10n.walletImportTitle,
     validator: (String? value) =>
-        formValidatorNotEmpty(value, "VFX Private Key"),
-    labelText: "VFX Private Key",
+        formValidatorNotEmpty(value, l10n.authTypeVfxPrivateKey),
+    labelText: l10n.authTypeVfxPrivateKey,
   );
 
   if (privateKey != null) {
@@ -86,8 +88,8 @@ Future<void> handleImportWithPrivateKey(
     // Collect encryption password
     final encryptionPassword = await PasswordPromptService.promptNewPassword(
       context,
-      title: "Set Encryption Password",
-      customMessage: "This password will encrypt your imported private key.",
+      title: l10n.hnavSetEncryptionPasswordTitle,
+      customMessage: l10n.hnavEncryptImportedPrivateKeyMessage,
     );
 
     if (encryptionPassword == null) return; // User cancelled
@@ -156,13 +158,14 @@ Future<void> handleLoginWithExtension(
   BuildContext context,
   WidgetRef ref,
 ) async {
+  final l10n = AppLocalizations.of(context);
   if (!kIsWeb) {
-    Toast.error("VFX Extension is only available on web");
+    Toast.error(l10n.hnavExtensionWebOnly);
     return;
   }
 
   if (!VerifiedXExtensionService.isExtensionInstalled()) {
-    Toast.error("VFX Extension not detected");
+    Toast.error(l10n.hnavExtensionNotDetected);
     return;
   }
 
@@ -178,11 +181,11 @@ Future<void> handleLoginWithExtension(
     final errorMessage = e.toString();
 
     if (errorMessage.contains('rejected')) {
-      Toast.message("Request cancelled");
+      Toast.message(l10n.hnavRequestCancelled);
     } else if (errorMessage.contains('timed out')) {
-      Toast.error("Request timed out");
+      Toast.error(l10n.hnavRequestTimedOut);
     } else if (errorMessage.contains('locked')) {
-      Toast.error("Please unlock your extension wallet first");
+      Toast.error(l10n.hnavExtensionUnlockFirst);
     } else {
       // Show the actual error for debugging
       Toast.error(errorMessage);
@@ -196,10 +199,10 @@ Future<void> handleLoginWithExtension(
   // Prompt for password to decrypt the key
   final password = await PromptModal.show(
     contextOverride: context,
-    title: "Enter Wallet Password",
-    body: "Enter the password you used in the VFX Extension to decrypt your private key.",
-    validator: (value) => formValidatorNotEmpty(value, "Password"),
-    labelText: "Wallet Password",
+    title: l10n.hnavEnterWalletPasswordTitle,
+    body: l10n.hnavExtensionDecryptPasswordBody,
+    validator: (value) => formValidatorNotEmpty(value, l10n.reservePasswordLabel),
+    labelText: l10n.hnavWalletPasswordLabel,
     obscureText: true,
     revealObscure: true,
     lines: 1,
@@ -222,7 +225,7 @@ Future<void> handleLoginWithExtension(
     );
   } catch (e) {
     ref.read(globalLoadingProvider.notifier).complete();
-    Toast.error("Decryption failed. Check your password.");
+    Toast.error(l10n.hnavDecryptionFailedCheckPassword);
     return;
   }
 
@@ -275,11 +278,11 @@ Future<void> handleImportWithBtcPrivateKey(
   WidgetRef ref, {
   bool showRememberMe = true,
 }) async {
+  final l10n = AppLocalizations.of(context);
   await InfoDialog.show(
-    title: "Warning",
-    body:
-        "Although if you login with a BTC Private key, if this key was generated originally with a different login mechanism, your VFX/Vault account keypairs will not match with your previous login since private keys are not reversable.",
-    closeText: "Okay",
+    title: l10n.hnavWarningTitle,
+    body: l10n.hnavBtcLoginWarningBody,
+    closeText: l10n.walletOkay,
   );
 
   final BtcPrivateKeyImportModalResult? result = await showModalBottomSheet(
@@ -298,8 +301,8 @@ Future<void> handleImportWithBtcPrivateKey(
   // Collect encryption password
   final encryptionPassword = await PasswordPromptService.promptNewPassword(
     context,
-    title: "Set Encryption Password",
-    customMessage: "This password will encrypt your imported BTC private key.",
+    title: l10n.hnavSetEncryptionPasswordTitle,
+    customMessage: l10n.hnavEncryptImportedBtcPrivateKeyMessage,
   );
 
   if (encryptionPassword == null) return; // User cancelled
@@ -314,8 +317,7 @@ Future<void> handleImportWithBtcPrivateKey(
     //WIF
     btcKeypair = await BtcWebService().keypairFromWif(privateKey, addressType);
   } else {
-    Toast.error(
-        "Not a valid Private Key or WIF Key. Should be 64 or 52 characters");
+    Toast.error(l10n.hnavInvalidPrivateKeyOrWif);
     return;
   }
 
@@ -327,7 +329,7 @@ Future<void> handleImportWithBtcPrivateKey(
   final keypair = await KeygenService.seedToKeypair(seed);
 
   if (keypair == null) {
-    Toast.error("Could not generate keypair");
+    Toast.error(l10n.hnavCouldNotGenerateKeypair);
     return;
   }
 
@@ -401,19 +403,20 @@ class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ModalContainer(
-      title: "Import BTC Private Key or WIF Key",
+      title: l10n.hnavImportBtcPrivateKeyOrWifTitle,
       children: [
-        const Text('Enter your BTC Private Key or WIF Key:'),
+        Text(l10n.hnavEnterBtcPrivateKeyOrWif),
         TextField(
           controller: _privateKeyController,
-          decoration: const InputDecoration(
-            hintText: 'Enter your private key',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            hintText: l10n.hnavEnterPrivateKeyHint,
+            border: const OutlineInputBorder(),
           ),
         ),
         const SizedBox(height: 20),
-        const Text('Select your address type:'),
+        Text(l10n.hnavSelectAddressType),
         DropdownButtonFormField<WebBtcAddressType?>(
           value: _selectedAddressType,
           items: [
@@ -425,7 +428,7 @@ class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
             }).toList(),
             DropdownMenuItem(
               value: null,
-              child: Text("I don't know"),
+              child: Text(l10n.hnavIDontKnow),
             )
           ],
           onChanged: (value) {
@@ -439,12 +442,12 @@ class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
         ),
         if (_selectedAddressType == null) ...[
           const SizedBox(height: 20),
-          const Text('Paste your BTC address:'),
+          Text(l10n.hnavPasteBtcAddress),
           TextField(
             controller: _addressController,
-            decoration: const InputDecoration(
-              hintText: 'Enter your BTC address',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              hintText: l10n.hnavEnterBtcAddressHint,
+              border: const OutlineInputBorder(),
             ),
           ),
         ],
@@ -453,14 +456,14 @@ class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             AppButton(
-              label: "Cancel",
+              label: l10n.actionCancel,
               variant: AppColorVariant.Light,
               onPressed: () {
                 Navigator.of(context).pop(null);
               },
             ),
             AppButton(
-              label: "Import",
+              label: l10n.actionImport,
               variant: AppColorVariant.Btc,
               onPressed: () {
                 if (_selectedAddressType == null) {
@@ -474,7 +477,7 @@ class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
                   } else if (address.startsWith('bc1p')) {
                     _selectedAddressType = WebBtcAddressType.bech32m;
                   } else {
-                    Toast.error("Invalid BTC Address");
+                    Toast.error(l10n.hnavInvalidBtcAddress);
                     Navigator.of(context).pop(null);
                     return;
                   }
@@ -598,6 +601,7 @@ Future<void> handleCreateWithMnemonic(
   WidgetRef ref, {
   bool showRememberMe = true,
 }) async {
+  final l10n = AppLocalizations.of(context);
   ref.read(globalLoadingProvider.notifier).start();
 
   await Future.delayed(const Duration(milliseconds: 300));
@@ -652,8 +656,8 @@ Future<void> handleCreateWithMnemonic(
   // Collect encryption password
   final encryptionPassword = await PasswordPromptService.promptNewPassword(
     context,
-    title: "Set Encryption Password",
-    customMessage: "This password will encrypt your generated mnemonic keys.",
+    title: l10n.hnavSetEncryptionPasswordTitle,
+    customMessage: l10n.hnavEncryptGeneratedMnemonicMessage,
   );
 
   if (encryptionPassword == null) {
@@ -668,11 +672,12 @@ Future<void> handleCreateWithMnemonic(
 
 Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
     {bool showRememberMe = true}) async {
+  final l10n = AppLocalizations.of(context);
   final value = await PromptModal.show(
     contextOverride: context,
-    title: "Input Recovery Mnemonic",
-    validator: (value) => formValidatorNotEmpty(value, "Recovery Mnemonic"),
-    labelText: "Recovery Mnemonic",
+    title: l10n.keygenRecoveryMnemonicTitle,
+    validator: (value) => formValidatorNotEmpty(value, l10n.keygenRecoveryMnemonicLabel),
+    labelText: l10n.keygenRecoveryMnemonicLabel,
     lines: 3,
     tightPadding: true,
   );
@@ -727,8 +732,8 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
     // Collect encryption password
     final encryptionPassword = await PasswordPromptService.promptNewPassword(
       context,
-      title: "Set Encryption Password",
-      customMessage: "This password will encrypt your recovered mnemonic keys.",
+      title: l10n.hnavSetEncryptionPasswordTitle,
+      customMessage: l10n.hnavEncryptRecoveredMnemonicMessage,
     );
 
     if (encryptionPassword == null) return;
@@ -771,13 +776,13 @@ Future<MultiAccountInstance?> _getDecryptedAccount(
 
   if (!hasEncryptedKeys) return account;
 
+  final l10n = AppLocalizations.of(context);
   final password = await PromptModal.show(
     contextOverride: context,
-    title: "Enter Account Password",
-    labelText: "Account Password",
-    body:
-        "Enter the password for this account to decrypt and view its private keys.",
-    validator: (value) => formValidatorNotEmpty(value, "Password"),
+    title: l10n.hnavEnterAccountPasswordTitle,
+    labelText: l10n.encryptPasswordHint,
+    body: l10n.hnavDecryptAccountKeysBody,
+    validator: (value) => formValidatorNotEmpty(value, l10n.reservePasswordLabel),
     obscureText: true,
     revealObscure: true,
     lines: 1,
@@ -791,7 +796,7 @@ Future<MultiAccountInstance?> _getDecryptedAccount(
             storedAccountJson, password);
     return MultiAccountInstance.fromJson(decryptedJson);
   } catch (e) {
-    Toast.error("Failed to decrypt account keys. Check your password.");
+    Toast.error(l10n.hnavFailedDecryptAccountKeys);
     return null;
   }
 }
@@ -842,7 +847,7 @@ Future<void> showKeys(
       !bypassPassword) {
     await PasswordPromptService.requirePasswordFor(context, (password) async {
       await _showKeysInternal(context, keypair, forReveal);
-    }, customMessage: "Enter your password to reveal private keys.");
+    }, customMessage: AppLocalizations.of(context).hnavRevealPrivateKeysPasswordMessage);
   } else {
     await _showKeysInternal(context, keypair, forReveal);
   }
@@ -855,20 +860,21 @@ Future<void> _showKeysInternal(
 ]) async {
   final isBtc = keypair.btcWif != null;
   final isMobile = BreakPoints.useMobileLayout(context);
+  final l10n = AppLocalizations.of(context);
 
   await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        title: Text(forReveal ? "Keys" : "Key Generated"),
+        title: Text(forReveal ? l10n.homeKeysHeading : l10n.keygenKeyGeneratedTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                  "Here are your${isBtc ? ' BTC' : ''} account details. Please ensure to back up your private key in a safe place."),
+                  l10n.hnavShowKeysAccountDetailsBody(isBtc ? ' BTC' : '')),
             ),
             if (keypair.mneumonic != null)
               ListTile(
@@ -876,8 +882,8 @@ Future<void> _showKeysInternal(
                     isMobile ? null : const Icon(FontAwesomeIcons.paragraph),
                 title: TextFormField(
                   initialValue: keypair.mneumonic!,
-                  decoration: const InputDecoration(
-                    label: Text("Recovery Mnemonic"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.keygenRecoveryMnemonicLabel),
                   ),
                   style: const TextStyle(fontSize: 16),
                   readOnly: true,
@@ -889,7 +895,7 @@ Future<void> _showKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.mneumonic));
-                    Toast.message("Mnemonic copied to clipboard");
+                    Toast.message(l10n.keygenMnemonicCopiedToast);
                   },
                 ),
               ),
@@ -900,7 +906,7 @@ Future<void> _showKeysInternal(
                 initialValue: keypair.address,
                 decoration: InputDecoration(
                     label: Text(
-                  "Address",
+                  l10n.walletAddressLabel,
                   style: TextStyle(
                     color: isBtc
                         ? Theme.of(context).colorScheme.btcOrange
@@ -914,7 +920,7 @@ Future<void> _showKeysInternal(
                 icon: const Icon(Icons.copy),
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: keypair.address));
-                  Toast.message("Public key copied to clipboard");
+                  Toast.message(l10n.keygenPublicKeyCopiedToast);
                 },
               ),
             ),
@@ -925,7 +931,7 @@ Future<void> _showKeysInternal(
                   initialValue: keypair.btcWif,
                   decoration: InputDecoration(
                     label: Text(
-                      "WIF Private Key",
+                      l10n.webWifPrivateKey,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.btcOrange,
                       ),
@@ -939,7 +945,7 @@ Future<void> _showKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.btcWif));
-                    Toast.message("WIF private key copied to clipboard");
+                    Toast.message(l10n.btcWifCopiedToast);
                   },
                 ),
               ),
@@ -952,7 +958,7 @@ Future<void> _showKeysInternal(
                     : keypair.privateCorrected,
                 decoration: InputDecoration(
                   label: Text(
-                    "Private Key",
+                    l10n.walletPrivateKeyLabel,
                     style: TextStyle(
                       color: isBtc
                           ? Theme.of(context).colorScheme.btcOrange
@@ -970,7 +976,7 @@ Future<void> _showKeysInternal(
                       text: keypair.btcWif != null
                           ? keypair.private
                           : keypair.privateCorrected));
-                  Toast.message("Private key copied to clipboard");
+                  Toast.message(l10n.keygenPrivateKeyCopiedToast);
                 },
               ),
             ),
@@ -978,7 +984,7 @@ Future<void> _showKeysInternal(
 
             const Divider(),
             AppButton(
-              label: "Done",
+              label: l10n.actionDone,
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -1010,7 +1016,7 @@ Future<void> showRaKeys(
       await _showRaKeysInternal(context, keypair, forReveal);
     },
         customMessage:
-            "Enter your password to reveal Vault account private keys.");
+            AppLocalizations.of(context).hnavRevealVaultKeysPasswordMessage);
   } else {
     // Legacy user with unencrypted storage - show keys directly
     await _showRaKeysInternal(context, keypair, forReveal);
@@ -1023,22 +1029,22 @@ Future<void> _showRaKeysInternal(
   bool forReveal = false,
 ]) async {
   final isMobile = BreakPoints.useMobileLayout(context);
+  final l10n = AppLocalizations.of(context);
 
   await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (context) {
       return AlertDialog(
-        title: Text("Vault Account Details"),
+        title: Text(l10n.hnavVaultAccountDetailsTitle),
         content: ConstrainedBox(
           constraints: BoxConstraints(maxWidth: 700),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
-                    "Here are your Vault Account details. Please ensure to back up your private key in a safe place."),
+                child: Text(l10n.hnavVaultAccountDetailsBody),
               ),
 
               ListTile(
@@ -1046,7 +1052,7 @@ Future<void> _showRaKeysInternal(
                     isMobile ? null : const Icon(Icons.account_balance_wallet),
                 title: TextFormField(
                   initialValue: keypair.address,
-                  decoration: const InputDecoration(label: Text("Address")),
+                  decoration: InputDecoration(label: Text(l10n.walletAddressLabel)),
                   readOnly: true,
                   style: const TextStyle(fontSize: 13),
                 ),
@@ -1055,7 +1061,7 @@ Future<void> _showRaKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.address));
-                    Toast.message("Public key copied to clipboard");
+                    Toast.message(l10n.keygenPublicKeyCopiedToast);
                   },
                 ),
               ),
@@ -1063,8 +1069,8 @@ Future<void> _showRaKeysInternal(
                 leading: isMobile ? null : const Icon(Icons.security),
                 title: TextFormField(
                   initialValue: keypair.privateCorrected,
-                  decoration: const InputDecoration(
-                    label: Text("Private Key"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.walletPrivateKeyLabel),
                   ),
                   style: const TextStyle(fontSize: 13),
                   readOnly: true,
@@ -1074,7 +1080,7 @@ Future<void> _showRaKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.privateCorrected));
-                    Toast.message("Private key copied to clipboard");
+                    Toast.message(l10n.keygenPrivateKeyCopiedToast);
                   },
                 ),
               ),
@@ -1085,7 +1091,7 @@ Future<void> _showRaKeysInternal(
                 title: TextFormField(
                   initialValue: keypair.recoveryAddress,
                   decoration:
-                      const InputDecoration(label: Text("Recovery Address")),
+                      InputDecoration(label: Text(l10n.walletRecoveryAddressLabel)),
                   readOnly: true,
                   style: const TextStyle(fontSize: 13),
                 ),
@@ -1094,7 +1100,7 @@ Future<void> _showRaKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.recoveryAddress));
-                    Toast.message("Recovery Address copied to clipboard");
+                    Toast.message(l10n.walletRecoveryAddressCopiedToast);
                   },
                 ),
               ),
@@ -1102,8 +1108,8 @@ Future<void> _showRaKeysInternal(
                 leading: isMobile ? null : const Icon(Icons.security),
                 title: TextFormField(
                   initialValue: keypair.recoveryPrivateCorrected,
-                  decoration: const InputDecoration(
-                    label: Text("Recovery Private Key"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.walletRecoveryPrivateKeyLabel),
                   ),
                   style: const TextStyle(fontSize: 13),
                   readOnly: true,
@@ -1113,7 +1119,7 @@ Future<void> _showRaKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.recoveryPrivateCorrected));
-                    Toast.message("Recovery Private Key copied to clipboard");
+                    Toast.message(l10n.walletRecoveryPrivateKeyCopiedToast);
                   },
                 ),
               ),
@@ -1121,8 +1127,8 @@ Future<void> _showRaKeysInternal(
                 leading: isMobile ? null : const Icon(Icons.error),
                 title: TextFormField(
                   initialValue: keypair.restoreCode,
-                  decoration: const InputDecoration(
-                    label: Text("Restore Code"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.walletRestoreCodeLabel),
                   ),
                   style: const TextStyle(fontSize: 13),
                   readOnly: true,
@@ -1134,7 +1140,7 @@ Future<void> _showRaKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.restoreCode));
-                    Toast.message("Restore Code copied to clipboard");
+                    Toast.message(l10n.walletRestoreCodeCopiedToast);
                   },
                 ),
               ),
@@ -1145,20 +1151,20 @@ Future<void> _showRaKeysInternal(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AppButton(
-                    label: "Copy All",
+                    label: l10n.walletCopyAll,
                     variant: AppColorVariant.Success,
                     icon: Icons.copy,
                     onPressed: () async {
                       await Clipboard.setData(
                           ClipboardData(text: keypair.backupContents));
-                      Toast.message("Vault Account Data copied to clipboard");
+                      Toast.message(l10n.walletVaultDataCopiedToast);
                     },
                   ),
                   SizedBox(
                     width: 8,
                   ),
                   AppButton(
-                    label: "Done",
+                    label: l10n.actionDone,
                     icon: Icons.check,
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -1183,6 +1189,7 @@ showWebLoginModal(
   bool showRememberMe = true,
   Function(BuildContext)? handleExtension,
 }) {
+  final l10n = AppLocalizations.of(context);
   showModalBottomSheet(
     backgroundColor: Colors.transparent,
     context: context,
@@ -1201,7 +1208,7 @@ showWebLoginModal(
                       onTap: () {
                         Navigator.of(context).pop("new");
                       },
-                      title: Text("Create New Mnemonic"),
+                      title: Text(l10n.hnavCreateNewMnemonic),
                       trailing: Icon(Icons.chevron_right),
                     ),
                   ),
@@ -1211,7 +1218,7 @@ showWebLoginModal(
                   AppCard(
                     padding: 0,
                     child: ListTile(
-                      title: Text("Recover From  Mnemonic"),
+                      title: Text(l10n.hnavRecoverFromMnemonic),
                       trailing: Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.of(context).pop("recover");
@@ -1225,8 +1232,8 @@ showWebLoginModal(
 
           if (kind == 'new') {
             final success = await ConfirmDialog.show(
-                title: 'Mnemonic',
-                body: 'Are you sure you want to create a Mnemonic account?');
+                title: l10n.hnavMnemonicTitle,
+                body: l10n.hnavConfirmCreateMnemonicBody);
             if (success == true) {
               await handleCreateWithMnemonic(context, ref,
                   showRememberMe: showRememberMe);

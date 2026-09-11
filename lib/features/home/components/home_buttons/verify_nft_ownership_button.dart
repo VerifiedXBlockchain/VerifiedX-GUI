@@ -6,6 +6,7 @@ import '../../../../core/components/buttons.dart';
 import '../../../../core/dialogs.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../core/theme/app_theme.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../nft/services/nft_service.dart';
 import '../../../../utils/toast.dart';
 import '../../../../utils/validation.dart';
@@ -19,23 +20,25 @@ class VerifyNftOwnershipButton extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final cliStarted = kIsWeb ? null : ref.watch(sessionProvider.select((v) => v.cliStarted));
 
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Verify NFT Ownership",
+      label: l10n.r3eVerifyNftOwnership,
       icon: Icons.security,
       onPressed: cliStarted == false
           ? null
           : () async {
               final sig = await PromptModal.show(
-                title: "Validate Ownership",
-                body: "Paste in the signature provided by the owner to validate its ownership.",
-                validator: (val) => formValidatorNotEmpty(val, "Signature"),
-                labelText: "Signature",
+                title: l10n.homeValidateOwnership,
+                body: l10n.r3ePasteSignature,
+                validator: (val) =>
+                    formValidatorNotEmpty(val, l10n.homeSignatureLabel),
+                labelText: l10n.homeSignatureLabel,
               );
 
               if (sig != null && sig.isNotEmpty) {
                 final components = sig.split("<>");
                 if (components.length != 4) {
-                  Toast.error("Invalid ownership verification signature");
+                  Toast.error(l10n.r3eInvalidOwnershipSig);
                   return;
                 }
 
@@ -49,9 +52,13 @@ class VerifyNftOwnershipButton extends BaseComponent {
                 }
                 final color = verified ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.danger;
                 final iconData = verified ? Icons.check : Icons.close;
-                final title = verified ? "Verified" : "Not Verified";
-                final subtitle = verified ? "Ownership Verified" : "Ownership NOT Verified";
-                final body = verified ? "$address\nOWNS\n$scId" : "$address\ndoes NOT own\n$scId";
+                final title = verified ? l10n.homeVerified : l10n.homeNotVerified;
+                final subtitle = verified
+                    ? l10n.homeOwnershipVerified
+                    : l10n.r3eOwnershipNotVerified;
+                final body = verified
+                    ? l10n.r3eOwnsBody(address, scId)
+                    : l10n.r3eDoesNotOwnBody(address, scId);
 
                 InfoDialog.show(
                   title: title,

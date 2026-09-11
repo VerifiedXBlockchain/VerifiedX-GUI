@@ -12,6 +12,7 @@ import '../../../utils/toast.dart';
 import 'package:collection/collection.dart';
 
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../bridge/models/log_entry.dart';
 
 part 'btc_adnr_create_form_provider.freezed.dart';
@@ -54,15 +55,15 @@ class BtcAdnrCreateFormProvider extends StateNotifier<BtcAdnrCreateFormState> {
     value = value.replaceAll(".btc", "");
 
     if (value.isEmpty) {
-      return "Domain Name Required";
+      return globalL10n.bw2DomainNameRequired;
     }
 
     if (value.length > BTC_ADNR_MAX_LENGTH) {
-      return "Domain must be less than ${BTC_ADNR_MAX_LENGTH + 1} charcters.";
+      return globalL10n.bw2DomainTooLong((BTC_ADNR_MAX_LENGTH + 1).toString());
     }
 
     if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(value)) {
-      return "Invalid domain. Must only contain letters and/or numbers.";
+      return globalL10n.bw2InvalidDomainLetters;
     }
 
     return null;
@@ -74,24 +75,24 @@ class BtcAdnrCreateFormProvider extends StateNotifier<BtcAdnrCreateFormState> {
     }
 
     if (state.btcAddress == null) {
-      Toast.error("Selecting a BTC address is required.");
+      Toast.error(globalL10n.bw2SelectBtcAddressRequired);
       return null;
     }
 
     if (state.selectedAddress == null) {
-      Toast.error("Selecting a VFX Address is required.");
+      Toast.error(globalL10n.bw2SelectVfxAddressRequired);
       return null;
     }
 
     final wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == state.selectedAddress);
 
     if (wallet == null) {
-      Toast.error("The VFX account that controls this BTC domain was not found. [${state.selectedAddress}]");
+      Toast.error(globalL10n.bw2VfxControllerNotFound(state.selectedAddress ?? ''));
       return null;
     }
 
     if (wallet.balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION)) {
-      Toast.error("Not enough VFX in your controlling account to delete a VFX domain. [${state.selectedAddress}]");
+      Toast.error(globalL10n.bw2NotEnoughVfxDeleteDomain(state.selectedAddress ?? ''));
       return null;
     }
 

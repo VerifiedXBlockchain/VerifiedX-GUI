@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/breakpoints.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/colors.dart';
 import '../../../utils/toast.dart';
@@ -21,6 +22,7 @@ class NewWebWalletSelector extends BaseComponent {
     return Builder(
         key: Key(address ?? ""),
         builder: (context) {
+          final l10n = AppLocalizations.of(context);
           final fontSize = BreakPoints.useMobileLayout(context) ? 12.0 : 14.0;
 
           final currencyType = ref.watch(webCurrencySegementedButtonProvider);
@@ -28,7 +30,7 @@ class NewWebWalletSelector extends BaseComponent {
 
           if (currencyType != WebCurrencyType.any) {
             if (selectedAccount == null) {
-              return Text("Select Account");
+              return Text(l10n.webSelectAccount);
             }
 
             return Row(
@@ -39,7 +41,7 @@ class NewWebWalletSelector extends BaseComponent {
                     await Clipboard.setData(
                       ClipboardData(text: selectedAccount.address),
                     );
-                    Toast.message("${selectedAccount.address} copied to clipboard");
+                    Toast.message(l10n.walletAddressCopiedToast(selectedAccount.address));
                   },
                   child: Icon(
                     Icons.copy,
@@ -57,7 +59,7 @@ class NewWebWalletSelector extends BaseComponent {
           }
 
           if (selectedAccount == null) {
-            return Text("Select Account");
+            return Text(l10n.webSelectAccount);
           }
 
           return Row(
@@ -68,7 +70,7 @@ class NewWebWalletSelector extends BaseComponent {
                   await Clipboard.setData(
                     ClipboardData(text: selectedAccount.address),
                   );
-                  Toast.message("${selectedAccount.address} copied to clipboard");
+                  Toast.message(l10n.walletAddressCopiedToast(selectedAccount.address));
                 },
                 child: Icon(
                   Icons.copy,

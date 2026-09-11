@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -16,10 +17,11 @@ class KeygenCta extends BaseComponent {
   const KeygenCta({Key? key}) : super(key: key);
 
   Future<void> handleImport(BuildContext context, WidgetRef ref, String email) async {
+    final l10n = AppLocalizations.of(context);
     PromptModal.show(
-      title: "Import Wallet",
-      validator: (String? value) => formValidatorNotEmpty(value, "Private Key"),
-      labelText: "Private Key",
+      title: l10n.keygenImportWalletTitle,
+      validator: (String? value) => formValidatorNotEmpty(value, l10n.keygenPrivateKeyLabel),
+      labelText: l10n.keygenPrivateKeyLabel,
       onValidSubmission: (value) async {
         final keypair = await KeygenService.importPrivateKey(value, email);
 
@@ -30,11 +32,12 @@ class KeygenCta extends BaseComponent {
 
   Future<void> handleCreate(BuildContext context, WidgetRef ref) async {
     ref.read(globalLoadingProvider.notifier).start();
+    final l10n = AppLocalizations.of(context);
 
     final email = await PromptModal.show(
       contextOverride: context,
-      title: "Email Address",
-      labelText: "Email",
+      title: l10n.keygenEmailAddressTitle,
+      labelText: l10n.keygenEmailLabel,
       validator: formValidatorEmail,
     );
 
@@ -60,10 +63,11 @@ class KeygenCta extends BaseComponent {
     BuildContext context,
     WidgetRef ref,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final email = await PromptModal.show(
       contextOverride: context,
-      title: "Email Address",
-      labelText: "Email",
+      title: l10n.keygenEmailAddressTitle,
+      labelText: l10n.keygenEmailLabel,
       validator: formValidatorEmail,
     );
 
@@ -72,9 +76,9 @@ class KeygenCta extends BaseComponent {
     }
 
     await PromptModal.show(
-      title: "Input Recovery Mnemonic",
-      validator: (value) => formValidatorNotEmpty(value, "Recovery Mnemonic"),
-      labelText: "Recovery Mnemonic",
+      title: l10n.keygenRecoveryMnemonicTitle,
+      validator: (value) => formValidatorNotEmpty(value, l10n.keygenRecoveryMnemonicLabel),
+      labelText: l10n.keygenRecoveryMnemonicLabel,
       lines: 3,
       onValidSubmission: (value) async {
         ref.read(globalLoadingProvider.notifier).start();
@@ -103,22 +107,23 @@ class KeygenCta extends BaseComponent {
     await showDialog(
       context: context,
       builder: (context) {
+        final l10n = AppLocalizations.of(context);
         return AlertDialog(
-          title: const Text("Key Generated"),
+          title: Text(l10n.keygenKeyGeneratedTitle),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Align(
+              Align(
                 alignment: Alignment.centerLeft,
-                child: Text("Here is your account details. Please ensure to back up your private key in a safe place."),
+                child: Text(l10n.keygenKeyGeneratedBody),
               ),
               if (keypair.mneumonic != null)
                 ListTile(
                   leading: const Icon(FontAwesomeIcons.paragraph),
                   title: TextFormField(
                     initialValue: keypair.mneumonic!,
-                    decoration: const InputDecoration(
-                      label: Text("Recovery Mnemonic"),
+                    decoration: InputDecoration(
+                      label: Text(l10n.keygenRecoveryMnemonicLabel),
                     ),
                     style: const TextStyle(fontSize: 16),
                     readOnly: true,
@@ -129,7 +134,7 @@ class KeygenCta extends BaseComponent {
                     icon: const Icon(Icons.copy),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: keypair.mneumonic));
-                      Toast.message("Mnemonic copied to clipboard");
+                      Toast.message(l10n.keygenMnemonicCopiedToast);
                     },
                   ),
                 ),
@@ -137,7 +142,7 @@ class KeygenCta extends BaseComponent {
                 leading: const Icon(Icons.account_balance_wallet),
                 title: TextFormField(
                   initialValue: keypair.address,
-                  decoration: const InputDecoration(label: Text("Address")),
+                  decoration: InputDecoration(label: Text(l10n.keygenAddressLabel)),
                   readOnly: true,
                   style: const TextStyle(fontSize: 13),
                 ),
@@ -145,7 +150,7 @@ class KeygenCta extends BaseComponent {
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: keypair.address));
-                    Toast.message("Public key copied to clipboard");
+                    Toast.message(l10n.keygenPublicKeyCopiedToast);
                   },
                 ),
               ),
@@ -153,8 +158,8 @@ class KeygenCta extends BaseComponent {
                 leading: const Icon(Icons.security),
                 title: TextFormField(
                   initialValue: keypair.privateCorrected,
-                  decoration: const InputDecoration(
-                    label: Text("Private Key"),
+                  decoration: InputDecoration(
+                    label: Text(l10n.keygenPrivateKeyLabel),
                   ),
                   style: const TextStyle(fontSize: 13),
                   readOnly: true,
@@ -163,7 +168,7 @@ class KeygenCta extends BaseComponent {
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: keypair.privateCorrected));
-                    Toast.message("Private key copied to clipboard");
+                    Toast.message(l10n.keygenPrivateKeyCopiedToast);
                   },
                 ),
               ),
@@ -171,7 +176,7 @@ class KeygenCta extends BaseComponent {
 
               const Divider(),
               AppButton(
-                label: "Done",
+                label: l10n.keygenDone,
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -185,15 +190,16 @@ class KeygenCta extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Row(
       children: [
         AppButton(
-          label: "Import Private Key",
+          label: l10n.keygenImportPrivateKey,
           onPressed: () async {
             final email = await PromptModal.show(
-              title: "Email Address",
+              title: l10n.keygenEmailAddressTitle,
               validator: (value) => formValidatorEmail(value),
-              labelText: "Email",
+              labelText: l10n.keygenEmailLabel,
             );
             if (email != null) {
               handleImport(context, ref, email);
@@ -204,7 +210,7 @@ class KeygenCta extends BaseComponent {
           width: 8,
         ),
         AppButton(
-          label: "Generate Keypair",
+          label: l10n.keygenGenerateKeypair,
           onPressed: () {
             handleCreate(
               context,
@@ -216,7 +222,7 @@ class KeygenCta extends BaseComponent {
           width: 8,
         ),
         AppButton(
-          label: "Recover Account",
+          label: l10n.keygenRecoverAccount,
           onPressed: () {
             handleRecover(context, ref);
           },

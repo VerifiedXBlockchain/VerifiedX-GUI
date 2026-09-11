@@ -9,6 +9,7 @@ import '../../../utils/toast.dart';
 
 import '../models/collection.dart';
 import '../models/dec_shop.dart';
+import '../../../l10n/l10n_helper.dart';
 
 // TODO: Hosting Type + IP / Port + AutoUpdateNetworkDNS
 
@@ -61,7 +62,7 @@ class DecShopFormProvider extends StateNotifier<DecShop> {
     }
 
     if (state.ownerAddress == null || state.ownerAddress!.isEmpty) {
-      Toast.error("Address Required.");
+      Toast.error(globalL10n.r3dAddressRequired);
       return null;
     }
 

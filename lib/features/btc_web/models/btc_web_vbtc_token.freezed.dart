@@ -49,6 +49,9 @@ mixin _$BtcWebVbtcToken {
   @JsonKey(name: 'withdrawal_requests')
   List<Map<String, dynamic>>? get withdrawalRequests =>
       throw _privateConstructorUsedError;
+  @JsonKey(name: 'available_balances')
+  Map<String, dynamic>? get availableBalances =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -90,7 +93,9 @@ abstract class $BtcWebVbtcTokenCopyWith<$Res> {
       @JsonKey(name: 'required_threshold')
           int? requiredThreshold,
       @JsonKey(name: 'withdrawal_requests')
-          List<Map<String, dynamic>>? withdrawalRequests});
+          List<Map<String, dynamic>>? withdrawalRequests,
+      @JsonKey(name: 'available_balances')
+          Map<String, dynamic>? availableBalances});
 
   $WebNftCopyWith<$Res> get nft;
 }
@@ -125,6 +130,7 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
     Object? frostGroupPublicKey = freezed,
     Object? requiredThreshold = freezed,
     Object? withdrawalRequests = freezed,
+    Object? availableBalances = freezed,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -195,6 +201,10 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
           ? _value.withdrawalRequests
           : withdrawalRequests // ignore: cast_nullable_to_non_nullable
               as List<Map<String, dynamic>>?,
+      availableBalances: freezed == availableBalances
+          ? _value.availableBalances
+          : availableBalances // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ) as $Val);
   }
 
@@ -243,7 +253,9 @@ abstract class _$$_BtcWebVbtcTokenCopyWith<$Res>
       @JsonKey(name: 'required_threshold')
           int? requiredThreshold,
       @JsonKey(name: 'withdrawal_requests')
-          List<Map<String, dynamic>>? withdrawalRequests});
+          List<Map<String, dynamic>>? withdrawalRequests,
+      @JsonKey(name: 'available_balances')
+          Map<String, dynamic>? availableBalances});
 
   @override
   $WebNftCopyWith<$Res> get nft;
@@ -277,6 +289,7 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
     Object? frostGroupPublicKey = freezed,
     Object? requiredThreshold = freezed,
     Object? withdrawalRequests = freezed,
+    Object? availableBalances = freezed,
   }) {
     return _then(_$_BtcWebVbtcToken(
       name: null == name
@@ -347,6 +360,10 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
           ? _value._withdrawalRequests
           : withdrawalRequests // ignore: cast_nullable_to_non_nullable
               as List<Map<String, dynamic>>?,
+      availableBalances: freezed == availableBalances
+          ? _value._availableBalances
+          : availableBalances // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
@@ -382,9 +399,12 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       @JsonKey(name: 'required_threshold')
           this.requiredThreshold,
       @JsonKey(name: 'withdrawal_requests')
-          final List<Map<String, dynamic>>? withdrawalRequests})
+          final List<Map<String, dynamic>>? withdrawalRequests,
+      @JsonKey(name: 'available_balances')
+          final Map<String, dynamic>? availableBalances})
       : _addresses = addresses,
         _withdrawalRequests = withdrawalRequests,
+        _availableBalances = availableBalances,
         super._();
 
   factory _$_BtcWebVbtcToken.fromJson(Map<String, dynamic> json) =>
@@ -451,9 +471,21 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
     return EqualUnmodifiableListView(value);
   }
 
+  final Map<String, dynamic>? _availableBalances;
+  @override
+  @JsonKey(name: 'available_balances')
+  Map<String, dynamic>? get availableBalances {
+    final value = _availableBalances;
+    if (value == null) return null;
+    if (_availableBalances is EqualUnmodifiableMapView)
+      return _availableBalances;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   @override
   String toString() {
-    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, address: $address, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt, nft: $nft, version: $version, isPendingWithdrawal: $isPendingWithdrawal, frostGroupPublicKey: $frostGroupPublicKey, requiredThreshold: $requiredThreshold, withdrawalRequests: $withdrawalRequests)';
+    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, address: $address, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt, nft: $nft, version: $version, isPendingWithdrawal: $isPendingWithdrawal, frostGroupPublicKey: $frostGroupPublicKey, requiredThreshold: $requiredThreshold, withdrawalRequests: $withdrawalRequests, availableBalances: $availableBalances)';
   }
 
   @override
@@ -490,7 +522,9 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
             (identical(other.requiredThreshold, requiredThreshold) ||
                 other.requiredThreshold == requiredThreshold) &&
             const DeepCollectionEquality()
-                .equals(other._withdrawalRequests, _withdrawalRequests));
+                .equals(other._withdrawalRequests, _withdrawalRequests) &&
+            const DeepCollectionEquality()
+                .equals(other._availableBalances, _availableBalances));
   }
 
   @JsonKey(ignore: true)
@@ -513,7 +547,8 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       isPendingWithdrawal,
       frostGroupPublicKey,
       requiredThreshold,
-      const DeepCollectionEquality().hash(_withdrawalRequests));
+      const DeepCollectionEquality().hash(_withdrawalRequests),
+      const DeepCollectionEquality().hash(_availableBalances));
 
   @JsonKey(ignore: true)
   @override
@@ -531,35 +566,36 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
 
 abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
   factory _BtcWebVbtcToken(
-          {required final String name,
-          required final String description,
-          required final Map<String, dynamic> addresses,
-          required final String address,
-          @JsonKey(name: 'sc_identifier')
-              required final String scIdentifier,
-          @JsonKey(name: 'owner_address')
-              required final String ownerAddress,
-          @JsonKey(name: 'image_url')
-              required final String imageUrl,
-          @JsonKey(name: 'deposit_address')
-              required final String depositAddress,
-          @JsonKey(name: 'public_key_proofs')
-              final String? publicKeyProofs,
-          @JsonKey(name: 'global_balance')
-              required final double globalBalance,
-          @JsonKey(name: 'created_at')
-              required final DateTime createdAt,
-          required final WebNft nft,
-          final int version,
-          @JsonKey(name: 'is_pending_withdrawal')
-              final bool isPendingWithdrawal,
-          @JsonKey(name: 'frost_group_public_key')
-              final String? frostGroupPublicKey,
-          @JsonKey(name: 'required_threshold')
-              final int? requiredThreshold,
-          @JsonKey(name: 'withdrawal_requests')
-              final List<Map<String, dynamic>>? withdrawalRequests}) =
-      _$_BtcWebVbtcToken;
+      {required final String name,
+      required final String description,
+      required final Map<String, dynamic> addresses,
+      required final String address,
+      @JsonKey(name: 'sc_identifier')
+          required final String scIdentifier,
+      @JsonKey(name: 'owner_address')
+          required final String ownerAddress,
+      @JsonKey(name: 'image_url')
+          required final String imageUrl,
+      @JsonKey(name: 'deposit_address')
+          required final String depositAddress,
+      @JsonKey(name: 'public_key_proofs')
+          final String? publicKeyProofs,
+      @JsonKey(name: 'global_balance')
+          required final double globalBalance,
+      @JsonKey(name: 'created_at')
+          required final DateTime createdAt,
+      required final WebNft nft,
+      final int version,
+      @JsonKey(name: 'is_pending_withdrawal')
+          final bool isPendingWithdrawal,
+      @JsonKey(name: 'frost_group_public_key')
+          final String? frostGroupPublicKey,
+      @JsonKey(name: 'required_threshold')
+          final int? requiredThreshold,
+      @JsonKey(name: 'withdrawal_requests')
+          final List<Map<String, dynamic>>? withdrawalRequests,
+      @JsonKey(name: 'available_balances')
+          final Map<String, dynamic>? availableBalances}) = _$_BtcWebVbtcToken;
   _BtcWebVbtcToken._() : super._();
 
   factory _BtcWebVbtcToken.fromJson(Map<String, dynamic> json) =
@@ -610,6 +646,9 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
   @override
   @JsonKey(name: 'withdrawal_requests')
   List<Map<String, dynamic>>? get withdrawalRequests;
+  @override
+  @JsonKey(name: 'available_balances')
+  Map<String, dynamic>? get availableBalances;
   @override
   @JsonKey(ignore: true)
   _$$_BtcWebVbtcTokenCopyWith<_$_BtcWebVbtcToken> get copyWith =>

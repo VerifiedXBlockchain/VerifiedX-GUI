@@ -11,6 +11,7 @@ import '../models/web_listing.dart';
 import '../models/web_shop.dart';
 import '../models/auth_token.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class WebShopService extends BaseService {
   WebShopService()
@@ -345,7 +346,7 @@ class WebShopService extends BaseService {
       return true;
     }
 
-    Toast.error(data['message'] ?? "A problem occurred");
+    Toast.error(data['message'] ?? globalL10n.mktProblemOccurredToast);
     return false;
   }
 

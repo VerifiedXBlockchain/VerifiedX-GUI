@@ -7,6 +7,7 @@ import '../../components/sc_creator/common/form_group_header.dart';
 import '../../components/sc_creator/common/modal_bottom_actions.dart';
 import '../../components/sc_creator/common/modal_container.dart';
 import 'multi_asset_provider.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 
 class MultiAssetModal extends BaseComponent {
   const MultiAssetModal({Key? key}) : super(key: key);
@@ -15,10 +16,11 @@ class MultiAssetModal extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final _provider = ref.read(multiAssetFormProvider.notifier);
     final _model = ref.watch(multiAssetFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(children: [
-      const FormGroupHeader(
-        "Assets",
+      FormGroupHeader(
+        l10n.r3aAssets,
       ),
       ListView.builder(
         shrinkWrap: true,
@@ -29,7 +31,7 @@ class MultiAssetModal extends BaseComponent {
 
           return FileSelector(
               transparentBackground: true,
-              title: "Choose a File",
+              title: l10n.r3aChooseAFile,
               asset: a,
               allowReplace: false,
               onChange: (asset) {

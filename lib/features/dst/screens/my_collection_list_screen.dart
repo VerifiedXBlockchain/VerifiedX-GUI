@@ -12,6 +12,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/publish_shop_button.dart';
 import '../components/shop_online_button.dart';
 import '../components/collection_list.dart';
@@ -30,14 +31,14 @@ class MyCollectionsListScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: Text("My Auction House"),
+      title: Text(AppLocalizations.of(context).dstMyAuctionHouseTitle),
       backgroundColor: Colors.black,
       actions: [
         AppButton(
           type: AppButtonType.Text,
           variant: AppColorVariant.Light,
           icon: Icons.chat_bubble_outline,
-          label: 'Chat',
+          label: AppLocalizations.of(context).r3dChat,
           onPressed: () {
             AutoRouter.of(context).push(SellerChatThreadListScreenRoute());
           },
@@ -93,7 +94,7 @@ class MyCollectionsListScreen extends BaseScreen {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "URL: ${shop.url}",
+                                    AppLocalizations.of(context).r3dShopUrlLabel(shop.url),
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500,
@@ -102,7 +103,7 @@ class MyCollectionsListScreen extends BaseScreen {
                                   IconButton(
                                       onPressed: () async {
                                         await Clipboard.setData(ClipboardData(text: shop.url));
-                                        Toast.message("Shop URL copied to clipboard");
+                                        Toast.message(AppLocalizations.of(context).r3dShopUrlCopied);
                                       },
                                       icon: Icon(
                                         Icons.copy,
@@ -122,7 +123,7 @@ class MyCollectionsListScreen extends BaseScreen {
                             if (shop.isPublished) ShopOnlineButton(),
                             AppButton(
                               variant: AppColorVariant.Primary,
-                              label: "Edit Details",
+                              label: AppLocalizations.of(context).dstEditDetails,
                               icon: Icons.edit,
                               onPressed: () {
                                 ref.read(decShopFormProvider.notifier).load(shop);
@@ -133,15 +134,16 @@ class MyCollectionsListScreen extends BaseScreen {
                             if (!shop.isPublished)
                               AppButton(
                                 variant: AppColorVariant.Danger,
-                                label: "Delete Shop",
+                                label: AppLocalizations.of(context).dstDeleteShop,
                                 icon: Icons.delete,
                                 onPressed: () async {
+                                  final l10n = AppLocalizations.of(context);
                                   final confirmed = await ConfirmDialog.show(
-                                    title: "Delete Shop",
-                                    body: "Are you sure you want to delete your unpublished shop?",
+                                    title: l10n.dstDeleteShop,
+                                    body: l10n.r3dConfirmDeleteUnpublishedShop,
                                     destructive: true,
-                                    confirmText: "Delete",
-                                    cancelText: "Cancel",
+                                    confirmText: l10n.adnrDelete,
+                                    cancelText: l10n.actionCancel,
                                   );
 
                                   if (confirmed == true) {
@@ -155,7 +157,7 @@ class MyCollectionsListScreen extends BaseScreen {
                                       ref.invalidate(decShopProvider);
                                       ref.read(collectionListProvider.notifier).refresh();
 
-                                      Toast.message("Shop Deleted");
+                                      Toast.message(l10n.r3dShopDeleted);
                                       // Navigator.of(context).pop();
                                     }
                                   }
@@ -164,22 +166,22 @@ class MyCollectionsListScreen extends BaseScreen {
                             if (shop.isPublished)
                               AppButton(
                                 variant: AppColorVariant.Danger,
-                                label: "Delete Shop",
+                                label: AppLocalizations.of(context).dstDeleteShop,
                                 icon: Icons.delete,
                                 onPressed: () async {
+                                  final l10n = AppLocalizations.of(context);
                                   final confirmed = await ConfirmDialog.show(
-                                    title: "Delete Shop",
-                                    body:
-                                        "Are you sure you want to delete this shop from the network? There is a cost of $SHOP_DELETE_COST VFX plus TX fee to perform this operation.",
+                                    title: l10n.dstDeleteShop,
+                                    body: l10n.r3dConfirmDeletePublishedShop(SHOP_DELETE_COST.toString()),
                                     destructive: true,
-                                    confirmText: "Delete",
-                                    cancelText: "Cancel",
+                                    confirmText: l10n.adnrDelete,
+                                    cancelText: l10n.actionCancel,
                                   );
 
                                   if (confirmed == true) {
                                     final successRemote = await DstService().deleteShop();
                                     if (successRemote) {
-                                      Toast.message("Delete TX broadcasted.");
+                                      Toast.message(l10n.r3dDeleteTxBroadcasted);
 
                                       final success = await DstService().deleteShopLocally();
                                       if (success) {
@@ -191,7 +193,7 @@ class MyCollectionsListScreen extends BaseScreen {
 
                                         ref.invalidate(decShopProvider);
                                         ref.read(collectionListProvider.notifier).refresh();
-                                        Toast.message("Shop Deleted.");
+                                        Toast.message(l10n.r3dShopDeleted);
                                         // Navigator.of(context).pop();
                                         // ref.read(globalLoadingProvider.notifier).start();
                                         // ref.read(sessionProvider.notifier).restartCli();
@@ -227,7 +229,7 @@ class MyCollectionsListScreen extends BaseScreen {
                         children: [
                           if (shop == null) ...[
                             Text(
-                              "First, setup your auction house / gallery.\nThen you'll be able to create collections and add listings to them.",
+                              AppLocalizations.of(context).r3dSetupAuctionHousePrompt,
                               style: TextStyle(
                                 fontSize: 18,
                                 height: 1.5,
@@ -240,7 +242,7 @@ class MyCollectionsListScreen extends BaseScreen {
                           ],
                           if (shop != null && shop.isPublished && collections.isEmpty) ...[
                             Text(
-                              "Now you can create collections and then add listings to them.",
+                              AppLocalizations.of(context).r3dCreateCollectionsPrompt,
                               style: TextStyle(
                                 fontSize: 18,
                                 height: 1.5,
@@ -258,7 +260,7 @@ class MyCollectionsListScreen extends BaseScreen {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 24.0),
                                   child: AppButton(
-                                    label: 'Create New Collection',
+                                    label: AppLocalizations.of(context).r3dCreateNewCollection,
                                     icon: Icons.add,
                                     variant: AppColorVariant.Success,
                                     onPressed: () async {
@@ -292,7 +294,7 @@ class MyCollectionsListScreen extends BaseScreen {
               children: [
                 DecShopButton(),
                 AppButton(
-                  label: 'Create New Collection',
+                  label: AppLocalizations.of(context).r3dCreateNewCollection,
                   icon: Icons.add,
                   variant: AppColorVariant.Success,
                   onPressed: () async {
@@ -327,7 +329,7 @@ class DecShopButton extends BaseComponent {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppButton(
-                label: 'Setup Auction House',
+                label: AppLocalizations.of(context).r3dSetupAuctionHouse,
                 icon: Icons.store,
                 variant: AppColorVariant.Light,
                 onPressed: () async {
@@ -339,30 +341,31 @@ class DecShopButton extends BaseComponent {
                 height: 8,
               ),
               Text(
-                "or",
+                AppLocalizations.of(context).r3dOr,
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.white54,
                 ),
               ),
               AppButton(
-                label: "Import Shop",
+                label: AppLocalizations.of(context).dstImportShop,
                 onPressed: () async {
+                  final l10n = AppLocalizations.of(context);
                   final address = await PromptModal.show(
-                    title: "Import Shop",
+                    title: l10n.dstImportShop,
                     validator: formValidatorRbxAddress,
-                    labelText: "Your VFX Address",
+                    labelText: l10n.dstImportShopAddressLabel,
                   );
 
                   if (address != null) {
                     if (!addresses.contains(address)) {
-                      Toast.error('This is not one of your addresses');
+                      Toast.error(AppLocalizations.of(context).r3dNotOneOfYourAddresses);
                       return;
                     }
                     final success = await DstService().importShop(address);
                     if (success == true) {
                       ref.invalidate(decShopProvider);
-                      Toast.message("Shop Imported");
+                      Toast.message(AppLocalizations.of(context).r3dShopImported);
                     } else {
                       Toast.error();
                     }
@@ -376,7 +379,7 @@ class DecShopButton extends BaseComponent {
         }
 
         return AppButton(
-          label: 'Edit Auction House',
+          label: AppLocalizations.of(context).r3dEditAuctionHouse,
           icon: Icons.store,
           variant: AppColorVariant.Light,
           onPressed: () async {

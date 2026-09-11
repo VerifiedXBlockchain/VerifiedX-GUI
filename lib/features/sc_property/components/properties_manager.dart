@@ -12,6 +12,7 @@ import '../../smart_contracts/components/sc_creator/common/form_group_container.
 import '../../smart_contracts/components/sc_creator/common/form_group_header.dart';
 import '../../smart_contracts/components/sc_creator/common/help_button.dart';
 import '../../smart_contracts/providers/create_smart_contract_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class PropertiesManager extends BaseComponent {
   const PropertiesManager({Key? key}) : super(key: key);
@@ -34,6 +35,7 @@ class PropertiesManager extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(createSmartContractProvider.notifier);
     final properties = ref.watch(createSmartContractProvider.select((v) => v.properties));
+    final l10n = AppLocalizations.of(context);
 
     return FormGroupContainer(
       child: AppCard(
@@ -45,8 +47,8 @@ class PropertiesManager extends BaseComponent {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 12.0),
-              child: const FormGroupHeader(
-                "Properties",
+              child: FormGroupHeader(
+                l10n.scwProperties,
                 helpType: HelpType.properties,
               ),
             ),
@@ -64,10 +66,10 @@ class PropertiesManager extends BaseComponent {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("No Properties"),
+                            Text(l10n.scwNoProperties),
                             AppButton(
                               icon: Icons.add,
-                              label: "Add Property",
+                              label: l10n.scwAddPropertyButton,
                               onPressed: () async {
                                 final property = await handleEdit(context, ref);
                                 if (property != null) {
@@ -113,7 +115,7 @@ class PropertiesManager extends BaseComponent {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     AppButton(
-                                      label: "Remove",
+                                      label: l10n.scwRemove,
                                       type: AppButtonType.Text,
                                       variant: AppColorVariant.Danger,
                                       onPressed: () {
@@ -121,7 +123,7 @@ class PropertiesManager extends BaseComponent {
                                       },
                                     ),
                                     AppButton(
-                                      label: "Edit",
+                                      label: l10n.scwEdit,
                                       type: AppButtonType.Text,
                                       variant: AppColorVariant.Light,
                                       onPressed: () async {
@@ -142,7 +144,7 @@ class PropertiesManager extends BaseComponent {
                         ),
                         AppButton(
                           icon: Icons.add,
-                          label: "Add Property",
+                          label: l10n.scwAddPropertyButton,
                           onPressed: () async {
                             final property = await handleEdit(context, ref);
                             if (property != null) {

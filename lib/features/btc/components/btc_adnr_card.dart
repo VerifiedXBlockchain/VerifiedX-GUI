@@ -10,6 +10,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
 import '../../../core/utils.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../adnr/providers/adnr_pending_provider.dart';
@@ -32,6 +33,7 @@ class BtcAdnrCard extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return Builder(
       builder: (context) {
         final isPendingCreate = ref.watch(adnrPendingProvider).contains("${account.address}.create.${account.adnr ?? 'null'}");
@@ -58,35 +60,35 @@ class BtcAdnrCard extends BaseComponent {
                       ),
                       if (account.adnrOwnerAddress != null)
                         Text(
-                          "Controlled by: ${account.adnrOwnerAddress!}",
+                          l10n.tkbControlledBy(account.adnrOwnerAddress!),
                           style: Theme.of(context).textTheme.bodySmall,
                         )
                     ],
                   )
-                : Text("No Domain"),
+                : Text(l10n.adnrNoDomain),
             trailing: Builder(builder: (context) {
               if (isPendingTransfer) {
                 return AppBadge(
-                  label: "Transfer Pending",
+                  label: l10n.tkbTransferPending,
                   variant: AppColorVariant.Btc,
                 );
               }
 
               if (isPendingBurn) {
                 return AppBadge(
-                  label: "Delete Pending",
+                  label: l10n.tkbDeletePending,
                   variant: AppColorVariant.Btc,
                 );
               }
               if (isPendingCreate) {
                 return AppBadge(
-                  label: "Creation Pending",
+                  label: l10n.tkbCreationPending,
                   variant: AppColorVariant.Btc,
                 );
               }
               if (account.adnr == null) {
                 return AppButton(
-                  label: "Create Domain",
+                  label: l10n.btcCreateDomain,
                   variant: AppColorVariant.Btc,
                   onPressed: () async {
                     if (!await passwordRequiredGuard(context, ref)) return;
@@ -95,7 +97,7 @@ class BtcAdnrCard extends BaseComponent {
                     }
 
                     if (ref.read(walletListProvider).isEmpty) {
-                      Toast.error("An VFX wallet is required for this functionality.");
+                      Toast.error(l10n.tkbVfxWalletRequired);
                       return;
                     }
 
@@ -122,7 +124,7 @@ class BtcAdnrCard extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AppButton(
-                    label: "Transfer",
+                    label: l10n.btcTransferLabel,
                     onPressed: () async {
                       if (!await passwordRequiredGuard(context, ref)) return;
                       if (!widgetGuardWalletIsSynced(ref)) {
@@ -144,15 +146,16 @@ class BtcAdnrCard extends BaseComponent {
                     width: 8,
                   ),
                   AppButton(
-                    label: "Delete",
+                    label: l10n.actionDelete,
                     onPressed: () async {
                       final confirmed = await ConfirmDialog.show(
-                        title: "Delete BTC Domain?",
-                        body:
-                            "Are you sure you want to delete this BTC Domain?\n${ADNR_DELETE_COST == 0 ? 'There is no cost to delete and VFX Domain (aside from the TX fee).' : 'There is a cost of $ADNR_DELETE_COST VFX to delete an RBX Domain.'}\n\nOnce deleted, this ADNR will no longer be able to receive any transactions.",
+                        title: l10n.btcDeleteDomainTitle,
+                        body: l10n.tkbDeleteBtcDomainBody(
+                          ADNR_DELETE_COST == 0 ? l10n.tkbDeleteDomainNoCost : l10n.tkbDeleteDomainWithCost(ADNR_DELETE_COST.toString()),
+                        ),
                         destructive: true,
-                        cancelText: "Cancel",
-                        confirmText: "Delete",
+                        cancelText: l10n.actionCancel,
+                        confirmText: l10n.actionDelete,
                       );
 
                       if (confirmed != true) {
@@ -161,7 +164,7 @@ class BtcAdnrCard extends BaseComponent {
 
                       final hash = await BtcService().deleteAdnr(btcAddress: account.address);
                       ref.read(adnrPendingProvider.notifier).addId(account.address, "burn", account.adnr!);
-                      Toast.message("TX broadcasted!");
+                      Toast.message(l10n.tkbTxBroadcasted);
                       notifyTransactionSubmitted();
                     },
                     variant: AppColorVariant.Danger,
@@ -183,6 +186,7 @@ class TransferBtcAdnrModal extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final formProvider = ref.read(btcAdnrTransferFormProvider.notifier);
     final formState = ref.watch(btcAdnrTransferFormProvider);
 
@@ -194,7 +198,7 @@ class TransferBtcAdnrModal extends BaseComponent {
         children: [
           if (formState.fromBtcAddress != null)
             Text(
-              "Transfer Domain from ${formState.fromBtcAddress}",
+              l10n.tkbTransferDomainFrom(formState.fromBtcAddress!),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -208,7 +212,7 @@ class TransferBtcAdnrModal extends BaseComponent {
             validator: formProvider.toBtcAddressValidator,
             decoration: InputDecoration(
               label: Text(
-                "To BTC Address",
+                l10n.tkbToBtcAddress,
                 style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
               ),
             ),
@@ -222,7 +226,7 @@ class TransferBtcAdnrModal extends BaseComponent {
             decoration: InputDecoration(
               suffix: AddressChoosingIconButton(controller: formProvider.toRbxAddressController),
               label: Text(
-                "To VFX Address",
+                l10n.tkbToVfxAddress,
               ),
             ),
           ),
@@ -231,7 +235,7 @@ class TransferBtcAdnrModal extends BaseComponent {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppButton(
-                label: "Cancel",
+                label: l10n.actionCancel,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
                 onPressed: () {
@@ -239,7 +243,7 @@ class TransferBtcAdnrModal extends BaseComponent {
                 },
               ),
               AppButton(
-                label: "Transfer BTC Domain",
+                label: l10n.btcTransferBtcDomain,
                 variant: AppColorVariant.Btc,
                 onPressed: () async {
                   final success = await formProvider.submit();
@@ -249,7 +253,7 @@ class TransferBtcAdnrModal extends BaseComponent {
                     return;
                   }
 
-                  Toast.message("Transaction Broadcasted!");
+                  Toast.message(l10n.tkbTransactionBroadcastedBang);
 
                   Navigator.of(context).pop();
                 },
@@ -269,6 +273,7 @@ class CreateBtcAdnrModal extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final formProvider = ref.read(btcAdnrCreateFormProvider.notifier);
     final formState = ref.watch(btcAdnrCreateFormProvider);
 
@@ -282,7 +287,7 @@ class CreateBtcAdnrModal extends BaseComponent {
         children: [
           if (formState.btcAddress != null)
             Text(
-              "Create Domain for ${formState.btcAddress}",
+              l10n.tkbCreateDomainFor(formState.btcAddress!),
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
@@ -292,7 +297,7 @@ class CreateBtcAdnrModal extends BaseComponent {
             height: 8,
           ),
           Text(
-            "Your domain must only contain letters and numbers and will automatically be appended with \".btc\" upon verification",
+            l10n.tkbDomainNameRule,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           TextFormField(
@@ -301,7 +306,7 @@ class CreateBtcAdnrModal extends BaseComponent {
             decoration: InputDecoration(
               suffix: Text(".btc"),
               label: Text(
-                "Domain Name",
+                l10n.tkbDomainName,
                 style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
               ),
             ),
@@ -310,11 +315,11 @@ class CreateBtcAdnrModal extends BaseComponent {
             height: 16,
           ),
           Text(
-            "Select VFX Address",
+            l10n.tkbSelectVfxAddress,
             style: TextStyle(color: Theme.of(context).colorScheme.btcOrange, fontSize: 12),
           ),
           Text(
-            "This wallet will control transfer/delete ownership over this new domain.",
+            l10n.tkbWalletControlsDomain,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           SizedBox(
@@ -332,12 +337,12 @@ class CreateBtcAdnrModal extends BaseComponent {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text("Selected Address:"),
+                Text(l10n.tkbSelectedAddress),
                 SizedBox(
                   width: 4,
                 ),
                 Text(
-                  formState.selectedAddress ?? "None",
+                  formState.selectedAddress ?? l10n.tkbNone,
                   style: TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 Transform.translate(
@@ -372,7 +377,7 @@ class CreateBtcAdnrModal extends BaseComponent {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               AppButton(
-                label: "Cancel",
+                label: l10n.actionCancel,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
                 onPressed: () {
@@ -380,7 +385,7 @@ class CreateBtcAdnrModal extends BaseComponent {
                 },
               ),
               AppButton(
-                label: "Create BTC Domain",
+                label: l10n.tkbCreateBtcDomain,
                 variant: AppColorVariant.Btc,
                 onPressed: () async {
                   final success = await formProvider.submit();
@@ -389,7 +394,7 @@ class CreateBtcAdnrModal extends BaseComponent {
                     return;
                   }
 
-                  Toast.message("Transaction Broadcasted!");
+                  Toast.message(l10n.tkbTransactionBroadcastedBang);
 
                   Navigator.of(context).pop();
                 },

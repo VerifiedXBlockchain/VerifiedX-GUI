@@ -9,6 +9,7 @@ import '../../../core/theme/app_theme.dart';
 import '../providers/edit_sc_property_provider.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../models/sc_property.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class PropertyModal extends BaseComponent {
   const PropertyModal({Key? key}) : super(key: key);
@@ -17,6 +18,7 @@ class PropertyModal extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(editScPropertyProvider.notifier);
     final model = ref.watch(editScPropertyProvider);
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(
       withDecor: false,
@@ -30,16 +32,16 @@ class PropertyModal extends BaseComponent {
               Row(
                 children: [
                   AppDropdown<ScPropertyType>(
-                    label: "Property Type",
+                    label: l10n.scwPropertyType,
                     selectedValue: model.type,
                     selectedLabel: model.typeLabel,
                     onChange: (val) {
                       provider.setType(val);
                     },
                     options: [
-                      AppDropdownOption(label: "Text", value: ScPropertyType.text),
-                      AppDropdownOption(label: "Number", value: ScPropertyType.number),
-                      AppDropdownOption(label: "Color", value: ScPropertyType.color),
+                      AppDropdownOption(label: l10n.scwPropertyTypeText, value: ScPropertyType.text),
+                      AppDropdownOption(label: l10n.scwPropertyTypeNumber, value: ScPropertyType.number),
+                      AppDropdownOption(label: l10n.scwPropertyTypeColor, value: ScPropertyType.color),
                     ],
                   ),
                   SizedBox(width: 8),
@@ -48,7 +50,7 @@ class PropertyModal extends BaseComponent {
                       controller: provider.nameController,
                       validator: provider.nameValidator,
                       decoration: InputDecoration(
-                        label: Text("Property Name"),
+                        label: Text(l10n.scwPropertyName),
                       ),
                     ),
                   ),
@@ -58,7 +60,7 @@ class PropertyModal extends BaseComponent {
                       controller: provider.valueController,
                       validator: provider.valueValidator,
                       decoration: InputDecoration(
-                        label: Text("Property Value"),
+                        label: Text(l10n.scwPropertyValue),
                       ),
                       inputFormatters: [
                         if (model.type == ScPropertyType.number)
@@ -99,7 +101,7 @@ class PropertyModal extends BaseComponent {
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
-                                      "Cancel",
+                                      l10n.actionCancel,
                                       style: TextStyle(color: Colors.white54),
                                     ),
                                   ),
@@ -108,7 +110,7 @@ class PropertyModal extends BaseComponent {
                                       Navigator.of(context).pop(color);
                                     },
                                     child: Text(
-                                      "Choose",
+                                      l10n.scwChoose,
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   )
@@ -131,7 +133,7 @@ class PropertyModal extends BaseComponent {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   AppButton(
-                    label: "Cancel",
+                    label: l10n.actionCancel,
                     type: AppButtonType.Text,
                     variant: AppColorVariant.Light,
                     onPressed: () {
@@ -139,7 +141,7 @@ class PropertyModal extends BaseComponent {
                     },
                   ),
                   AppButton(
-                    label: "Save",
+                    label: l10n.actionSave,
                     onPressed: () {
                       final property = provider.submit();
                       if (property != null) {

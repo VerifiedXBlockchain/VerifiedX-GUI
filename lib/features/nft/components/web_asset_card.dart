@@ -7,6 +7,7 @@ import 'package:video_player/video_player.dart';
 
 import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/html_helpers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -18,6 +19,7 @@ class WebAssetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     // final Future<String> _assetDownload = Future<String>.delayed(
     //   const Duration(seconds: 1),
     //   () => 'Data Loaded',
@@ -59,7 +61,7 @@ class WebAssetCard extends StatelessWidget {
                             if (snapshot.data != null) {
                               return SelectableText(snapshot.data!);
                             }
-                            return const Text("Error");
+                            return Text(l10n.tkbError);
                           } else {
                             return const Center(child: CenteredLoader());
                           }
@@ -81,7 +83,7 @@ class WebAssetCard extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 leading: Icon(asset!.icon),
                 title: Text(asset!.fileType),
-                subtitle: const Text("File Type"),
+                subtitle: Text(l10n.tkbFileType),
               ),
             ),
             SizedBox(
@@ -90,7 +92,7 @@ class WebAssetCard extends StatelessWidget {
                 leading: const Icon(Icons.line_weight),
                 contentPadding: EdgeInsets.zero,
                 title: Text(nft!.primaryAsset.filesizeLabel),
-                subtitle: const Text("File Size"),
+                subtitle: Text(l10n.tkbFileSize),
               ),
             ),
           ],
@@ -98,7 +100,7 @@ class WebAssetCard extends StatelessWidget {
         const Divider(),
         Center(
           child: AppButton(
-            label: "Download Asset",
+            label: l10n.tkbDownloadAsset,
             icon: Icons.file_open,
             onPressed: () {
               HtmlHelpers().triggerDownload(asset!.location);

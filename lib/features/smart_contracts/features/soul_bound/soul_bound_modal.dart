@@ -10,6 +10,7 @@ import '../../components/sc_creator/common/form_group_header.dart';
 import '../../components/sc_creator/common/help_button.dart';
 import '../../components/sc_creator/common/modal_bottom_actions.dart';
 import '../../components/sc_creator/common/modal_container.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'sould_bound_form_provider.dart';
 
 class SoulBoundModal extends BaseComponent {
@@ -22,15 +23,15 @@ class SoulBoundModal extends BaseComponent {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text("Choose an address"),
+            title: Text(AppLocalizations.of(context).scwChooseAnAddress),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(null);
                 },
-                child: const Text(
-                  "Cancel",
-                  style: TextStyle(color: Colors.white60),
+                child: Text(
+                  AppLocalizations.of(context).actionCancel,
+                  style: const TextStyle(color: Colors.white60),
                 ),
               )
             ],
@@ -66,7 +67,7 @@ class SoulBoundModal extends BaseComponent {
 
     return ModalContainer(
       children: [
-        buildHeader(),
+        buildHeader(context),
         Form(
           key: _formKey,
           child: Row(
@@ -94,7 +95,7 @@ class SoulBoundModal extends BaseComponent {
 
     return ModalContainer(
       children: [
-        buildHeader(),
+        buildHeader(context),
         const SizedBox(height: 16),
         Form(
           key: _formKey,
@@ -112,9 +113,9 @@ class SoulBoundModal extends BaseComponent {
     );
   }
 
-  FormGroupHeader buildHeader() {
-    return const FormGroupHeader(
-      "Soul Bound",
+  FormGroupHeader buildHeader(BuildContext context) {
+    return FormGroupHeader(
+      AppLocalizations.of(context).scwSoulBoundTitle,
     );
   }
 
@@ -133,7 +134,7 @@ class SoulBoundModal extends BaseComponent {
     return TextFormField(
       controller: _provider.ownerAddressController,
       decoration: InputDecoration(
-          label: const Text("Owner Address"),
+          label: Text(AppLocalizations.of(context).scwOwnerAddress),
           labelStyle: const TextStyle(color: Colors.white),
           suffixIcon: kIsWeb
               ? IconButton(
@@ -164,7 +165,7 @@ class SoulBoundModal extends BaseComponent {
     return TextFormField(
       controller: _provider.beneficiaryAddressController,
       decoration: InputDecoration(
-          label: const Text("Beneficiary Address (Optional)"),
+          label: Text(AppLocalizations.of(context).scwBeneficiaryAddressOptional),
           labelStyle: const TextStyle(color: Colors.white),
           suffixIcon: kIsWeb
               ? IconButton(

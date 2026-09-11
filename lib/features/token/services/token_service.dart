@@ -3,6 +3,7 @@ import 'dart:convert';
 import '../../../utils/toast.dart';
 
 import '../../../core/services/base_service.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../models/new_token_topic.dart';
 import '../models/token_vote.dart';
 
@@ -24,7 +25,7 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error("Error minting token");
+      Toast.error(globalL10n.r3hErrorMinting);
       print(e);
       return false;
     }
@@ -46,7 +47,7 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error("Error transferring token");
+      Toast.error(globalL10n.r3hErrorTransferring);
       print(e);
       return false;
     }
@@ -67,7 +68,7 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error("Error burning token");
+      Toast.error(globalL10n.r3hErrorBurning);
       print(e);
       return false;
     }
@@ -88,7 +89,7 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error("Error pausing/unpausing token");
+      Toast.error(globalL10n.r3hErrorPausing);
       print(e);
       return false;
     }
@@ -109,7 +110,7 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error("Error changing ownership");
+      Toast.error(globalL10n.r3hErrorChangingOwnership);
       print(e);
       return false;
     }
@@ -130,7 +131,7 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error("Error banning address");
+      Toast.error(globalL10n.r3hErrorBanning);
       print(e);
       return false;
     }
@@ -151,7 +152,7 @@ class TokenService extends BaseService {
       return false;
     } catch (e) {
       print("Error creating topic");
-      Toast.error("Error creating topic");
+      Toast.error(globalL10n.r3hErrorCreatingTopic);
       print(e);
       return false;
     }
@@ -175,7 +176,7 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error("Error banning address");
+      Toast.error(globalL10n.r3hErrorBanning);
       print(e);
       return false;
     }

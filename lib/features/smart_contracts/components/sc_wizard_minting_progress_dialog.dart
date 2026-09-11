@@ -7,6 +7,7 @@ import '../providers/sc_wizard_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../generated/assets.gen.dart';
 import '../providers/sc_wizard_minting_progress_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ScWizardMintingProgressDialog extends BaseComponent {
   final BuildContext? contextOverride;
@@ -15,12 +16,13 @@ class ScWizardMintingProgressDialog extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final model = ref.watch(scWizardMintingProgress);
+    final l10n = AppLocalizations.of(context);
 
     return AlertDialog(
       backgroundColor: Colors.black,
-      title: const Text(
-        "Compiling & Minting",
-        style: TextStyle(color: Colors.white),
+      title: Text(
+        l10n.r3aCompilingMinting,
+        style: const TextStyle(color: Colors.white),
       ),
       content: Container(
         color: Colors.black,
@@ -73,9 +75,9 @@ class ScWizardMintingProgressDialog extends BaseComponent {
                     }
                   }
                 : null,
-            child: const Text(
-              "Close",
-              style: TextStyle(color: Colors.white),
+            child: Text(
+              l10n.actionClose,
+              style: const TextStyle(color: Colors.white),
             ))
       ],
     );

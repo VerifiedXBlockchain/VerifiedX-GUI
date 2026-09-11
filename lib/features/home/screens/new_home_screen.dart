@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
@@ -60,7 +61,7 @@ class NewHomeScreen extends BaseScreen {
                             ),
                           );
                         },
-                        label: "View Chart",
+                        label: AppLocalizations.of(context).r3eViewChart,
                         variant: AppColorVariant.Light,
                         type: AppButtonType.Outlined,
                       ),
@@ -70,7 +71,7 @@ class NewHomeScreen extends BaseScreen {
                         },
                         variant: AppColorVariant.Secondary,
                         type: AppButtonType.Outlined,
-                        label: "Get VFX",
+                        label: AppLocalizations.of(context).bw2StepGetVfx,
                       ),
                     ],
                   ),
@@ -92,7 +93,7 @@ class NewHomeScreen extends BaseScreen {
                             ),
                           );
                         },
-                        label: "View Chart",
+                        label: AppLocalizations.of(context).r3eViewChart,
                         variant: AppColorVariant.Light,
                         type: AppButtonType.Outlined,
                       ),
@@ -100,7 +101,7 @@ class NewHomeScreen extends BaseScreen {
                         onPressed: () {
                           AccountUtils.getCoin(context, ref, VfxOrBtcOption.btc);
                         },
-                        label: "Get BTC",
+                        label: AppLocalizations.of(context).r3eGetBtc,
                         variant: AppColorVariant.Btc,
                         type: AppButtonType.Outlined,
                       ),

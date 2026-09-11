@@ -6,6 +6,7 @@ import '../../../utils/validation.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../models/beacon.dart';
 import '../services/beacon_service.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class AddBeaconFormProvider extends StateNotifier<Beacon> {
   final Ref ref;
@@ -38,8 +39,8 @@ class AddBeaconFormProvider extends StateNotifier<Beacon> {
     // portController.text = beacon.port.toString();
   }
 
-  String? nameValidator(String? val) => formValidatorNotEmpty(val, "Name");
-  String? ipAddressValidator(String? val) => formValidatorNotEmpty(val, "IP Address");
+  String? nameValidator(String? val) => formValidatorNotEmpty(val, globalL10n.beaconNameLabel);
+  String? ipAddressValidator(String? val) => formValidatorNotEmpty(val, globalL10n.beaconIpLabel);
 
   clear() {
     load(Beacon.empty());

@@ -11,6 +11,7 @@ import '../services/dst_service.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class DecPublishShopButton extends BaseComponent {
   const DecPublishShopButton({
@@ -20,6 +21,7 @@ class DecPublishShopButton extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(decShopProvider);
+    final l10n = AppLocalizations.of(context);
 
     return data.when(
       loading: () => SizedBox(),
@@ -31,7 +33,7 @@ class DecPublishShopButton extends BaseComponent {
 
         if (ref.watch(dstTxPendingProvider)) {
           return AppButton(
-            label: "Pending",
+            label: l10n.statusPending,
             processing: true,
           );
         }
@@ -43,21 +45,19 @@ class DecPublishShopButton extends BaseComponent {
                   ? AppColorVariant.Danger
                   : AppColorVariant.Warning,
               label:
-                  shop.ipIsDifferent ? "Publish IP Change" : "Publish Changes",
+                  shop.ipIsDifferent ? l10n.r3dPublishIpChange : l10n.r3dPublishChanges,
               icon: shop.ipIsDifferent ? Icons.error : Icons.publish,
               onPressed: () async {
                 if (shop.updateWillCost) {
                   if (ref.read(sessionProvider).currentWallet!.balance < 10) {
-                    Toast.error(
-                        "This wallet doesn't have the minimmun balance send an update tx");
+                    Toast.error(l10n.r3dInsufficientBalanceUpdate);
                     return;
                   }
                   final confirm = await ConfirmDialog.show(
-                    title: "Publish Shop?",
-                    body:
-                        "There is a cost of $SHOP_UPDATE_COST VFX to publish your shop changes to the network (plus the transaction fee).",
-                    confirmText: "Publish Changes",
-                    cancelText: "Cancel",
+                    title: l10n.shopPublishShopTitle,
+                    body: l10n.r3dPublishUpdateCostBody(SHOP_UPDATE_COST.toString()),
+                    confirmText: l10n.r3dPublishChanges,
+                    cancelText: l10n.actionCancel,
                   );
 
                   if (confirm != true) {
@@ -76,7 +76,7 @@ class DecPublishShopButton extends BaseComponent {
                   ref.invalidate(decShopProvider);
                   ref.read(dstTxPendingProvider.notifier).set(true);
 
-                  Toast.message("Publish Transaction Sent!");
+                  Toast.message(l10n.r3dPublishTransactionSent);
                   ref.invalidate(decShopProvider);
                 } else {
                   ref.read(dstTxPendingProvider.notifier).set(false);
@@ -87,43 +87,40 @@ class DecPublishShopButton extends BaseComponent {
             );
           }
           return AppButton(
-            label: "Published",
+            label: l10n.shopPublished,
             icon: Icons.check,
           );
         }
 
         return AppButton(
-          label: "Publish Shop",
+          label: l10n.shopPublishShop,
           variant: AppColorVariant.Light,
           onPressed: () async {
             if (ref.read(sessionProvider).currentWallet!.balance < 10) {
-              Toast.error(
-                  "This wallet doesn't have the minimmun balance send a publish tx");
+              Toast.error(l10n.r3dInsufficientBalancePublish);
               return;
             }
 
             final confirm = await ConfirmDialog.show(
-              title: "Publish Shop?",
-              body:
-                  "There is a cost of $SHOP_PUBLISH_COST VFX to publish your shop to the network (plus the transaction fee).",
-              confirmText: "Publish",
-              cancelText: "Cancel",
+              title: l10n.shopPublishShopTitle,
+              body: l10n.r3dPublishShopCostBody(SHOP_PUBLISH_COST.toString()),
+              confirmText: l10n.r3dPublish,
+              cancelText: l10n.actionCancel,
             );
 
             if (confirm == true) {
               final success = await DstService().publishShop();
 
               if (success) {
-                Toast.message("Publish Transaction Sent!");
+                Toast.message(l10n.r3dPublishTransactionSent);
 
                 ref.invalidate(decShopProvider);
                 ref.read(dstTxPendingProvider.notifier).set(true);
                 final confirmed = await ConfirmDialog.show(
-                  title: "CLI Restart Required",
-                  body:
-                      "A CLI restart is required for this change to take effect. Would you like to restart now?",
-                  confirmText: "Restart",
-                  cancelText: "Cancel",
+                  title: l10n.dstCliRestartTitle,
+                  body: l10n.r3dCliRestartBody,
+                  confirmText: l10n.validatorRestartCliConfirm,
+                  cancelText: l10n.actionCancel,
                   destructive: true,
                 );
 

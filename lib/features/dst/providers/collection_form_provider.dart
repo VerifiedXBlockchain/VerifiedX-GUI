@@ -11,6 +11,7 @@ import '../../../utils/toast.dart';
 
 import '../../../core/dialogs.dart';
 import '../models/collection.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class CollectionFormProvider extends StateNotifier<Collection> {
   final Ref ref;
@@ -75,18 +76,18 @@ class CollectionFormProvider extends StateNotifier<Collection> {
     bool? confirmed;
     if (isLive) {
       confirmed = await ConfirmDialog.show(
-        title: "Make Collection Live?",
-        body: "Are you sure you want to make this collection live? This collection will be visible to other users when they connect to your shop.",
-        confirmText: "Make Live",
-        cancelText: "Cancel",
+        title: globalL10n.r3dMakeCollectionLiveTitle,
+        body: globalL10n.r3dMakeCollectionLiveBody,
+        confirmText: globalL10n.r3dMakeLive,
+        cancelText: globalL10n.actionCancel,
       );
     } else {
       confirmed = await ConfirmDialog.show(
-        title: "Hide Collection?",
-        body: "Are you sure you want to hide this collection? It won't be visible to other users when they connect to your shop.",
+        title: globalL10n.r3dHideCollectionTitle,
+        body: globalL10n.r3dHideCollectionBody,
         destructive: true,
-        confirmText: "Hide",
-        cancelText: "Cancel",
+        confirmText: globalL10n.walletHideLabel,
+        cancelText: globalL10n.actionCancel,
       );
     }
     if (confirmed == true) {

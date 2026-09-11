@@ -5,6 +5,7 @@ import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../services/reserve_account_service.dart';
@@ -21,26 +22,26 @@ class CallbackButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Callback",
+      label: l10n.reserveCallbackLabel,
       disabled: ref.watch(pendingCallbackProvider).contains(transaction.hash),
       variant: AppColorVariant.Warning,
       onPressed: () async {
         final password = await PromptModal.show(
-          title: "Callback Transaction",
-          body:
-              "Callbacks can be used to return the funds/assets to the same account for escrow purposes. Input your password to callback this transaction.",
+          title: l10n.reserveCallbackTitle,
+          body: l10n.reserveCallbackBody,
           validator: (v) => null,
           lines: 1,
           obscureText: true,
-          labelText: "Password",
+          labelText: l10n.reservePasswordLabel,
           revealObscure: true,
         );
 
         if (password != null) {
           final hash = await ReserveAccountService().callBack(password, transaction.hash);
           if (hash != null) {
-            final message = "Callback TX sent with hash of $hash";
+            final message = l10n.reserveCallbackSentToast(hash);
             ref.read(pendingCallbackProvider.notifier).addHash(transaction.hash);
 
             Toast.message(message);

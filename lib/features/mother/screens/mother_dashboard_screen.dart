@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/env.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../models/mother_child_list.dart';
 
 class MotherDashboardScreen extends BaseScreen {
@@ -11,8 +12,9 @@ class MotherDashboardScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppBar(
-      title: const Text("MOTHER Dashboard"),
+      title: Text(l10n.motherDashboardTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: [
@@ -21,9 +23,9 @@ class MotherDashboardScreen extends BaseScreen {
               final url = "${Env.apiBaseUrl}/mother".replaceAll("https://", "http://");
               launchUrlString(url);
             },
-            child: const Text(
-              "Open in Browser",
-              style: TextStyle(
+            child: Text(
+              l10n.motherOpenInBrowser,
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ))

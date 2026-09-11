@@ -11,6 +11,7 @@ import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/files.dart';
 import '../../../utils/toast.dart';
 import '../../../core/utils/tx_refresh.dart';
@@ -29,6 +30,7 @@ class MotherModal extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final connectedToMother = ref.watch(walletInfoProvider)?.connectedToMother == true;
+    final l10n = AppLocalizations.of(context);
 
     return ModalContainer(
       padding: 16.0,
@@ -43,18 +45,18 @@ class MotherModal extends BaseComponent {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Monitor Of The Roster",
+                    l10n.motherTitle,
                     style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
                   ),
                   Text(
-                    "MOTHER is a tool for monitoring the state of your remote validators.",
+                    l10n.motherDescription,
                     style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: Colors.white),
                   ),
                 ],
               ),
             ),
             AppButton(
-              label: "Close",
+              label: l10n.motherClose,
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -64,20 +66,20 @@ class MotherModal extends BaseComponent {
           ],
         ),
         const Divider(),
-        const Text(
-          "Status",
-          style: TextStyle(
+        Text(
+          l10n.motherStatusHeading,
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             decoration: TextDecoration.underline,
           ),
         ),
-        Text("Is Host: ${motherData != null ? 'YES' : 'NO'}"),
-        Text("Is Remote: ${connectedToMother ? 'YES' : 'NO'}"),
-        if (motherData != null) Text("Children: ${children.length}"),
+        Text(l10n.motherIsHostRow(motherData != null ? l10n.motherYes : l10n.motherNo)),
+        Text(l10n.motherIsRemoteRow(connectedToMother ? l10n.motherYes : l10n.motherNo)),
+        if (motherData != null) Text(l10n.motherChildrenRow(children.length.toString())),
         const Divider(),
         if (motherData != null)
           ListTile(
-            title: const Text("Launch MOTHER"),
+            title: Text(l10n.motherLaunchHost),
             leading: const Icon(Icons.launch),
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
@@ -85,7 +87,7 @@ class MotherModal extends BaseComponent {
             },
           ),
         ListTile(
-          title: Text(motherData == null ? "Set Wallet as Host" : "Update Host Info"),
+          title: Text(motherData == null ? l10n.motherSetWalletHost : l10n.motherUpdateHostInfo),
           leading: const Icon(Icons.cell_tower),
           trailing: const Icon(Icons.chevron_right),
           onTap: () async {
@@ -101,7 +103,7 @@ class MotherModal extends BaseComponent {
         ),
         if (motherData != null)
           ListTile(
-            title: const Text("Stop Host"),
+            title: Text(l10n.motherStopHost),
             leading: const Icon(
               Icons.stop,
               color: Colors.red,
@@ -109,10 +111,10 @@ class MotherModal extends BaseComponent {
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
               final confirmed = await ConfirmDialog.show(
-                title: "Stop MOTHER Host?",
-                body: "Are you sure you want to stop running this wallet as a MOTHER host?",
-                confirmText: "Stop",
-                cancelText: "Cancel",
+                title: l10n.motherStopHostConfirmTitle,
+                body: l10n.motherStopHostBody,
+                confirmText: l10n.motherStop,
+                cancelText: l10n.actionCancel,
               );
 
               if (confirmed == true) {
@@ -120,10 +122,10 @@ class MotherModal extends BaseComponent {
                 if (success == true) {
                   notifyTransactionSubmitted();
                   final restart = await ConfirmDialog.show(
-                    title: "CLI Restart Required",
-                    body: "Would you like to restart now?",
-                    confirmText: "Restart",
-                    cancelText: "Later",
+                    title: l10n.motherCliRestartTitle,
+                    body: l10n.motherCliRestartBody,
+                    confirmText: l10n.beaconRestartNow,
+                    cancelText: l10n.beaconLater,
                   );
 
                   if (restart == true) {
@@ -136,7 +138,7 @@ class MotherModal extends BaseComponent {
           ),
         if (!connectedToMother)
           ListTile(
-            title: const Text("Set Wallet as Remote"),
+            title: Text(l10n.motherSetWalletRemote),
             leading: const Icon(Icons.satellite_alt_outlined),
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
@@ -152,7 +154,7 @@ class MotherModal extends BaseComponent {
           ),
         if (connectedToMother)
           ListTile(
-            title: const Text("Stop Remote"),
+            title: Text(l10n.motherStopRemote),
             leading: const Icon(
               Icons.stop,
               color: Colors.red,
@@ -160,10 +162,10 @@ class MotherModal extends BaseComponent {
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
               final confirmed = await ConfirmDialog.show(
-                title: "Stop Remote",
-                body: "Are you sure you want to remove this node as a REMOTE?\n\nA CLI restart will be required.",
-                confirmText: "Stop Remote & Restart CLI",
-                cancelText: "Cancel",
+                title: l10n.motherStopRemote,
+                body: l10n.motherStopRemoteBody,
+                confirmText: l10n.motherStopRemoteAction,
+                cancelText: l10n.actionCancel,
               );
               if (confirmed == true) {
                 final path = await configPath();
@@ -178,19 +180,18 @@ class MotherModal extends BaseComponent {
                 await File(path).writeAsString(updatedLines.join('\n'));
                 await ref.read(sessionProvider.notifier).restartCli();
                 Navigator.of(context).pop();
-                Toast.message("REMOTE node has been removed from MOTHER");
+                Toast.message(l10n.motherRemoteRemoved);
               }
             },
           ),
         ListTile(
-          title: const Text("What is MOTHER?"),
+          title: Text(l10n.motherWhatIs),
           leading: const Icon(Icons.help),
           trailing: const Icon(Icons.chevron_right),
           onTap: () {
             InfoDialog.show(
-              title: "Monitor Of The Roster",
-              body:
-                  "MOTHER is a tool for monitoring the state of your remote validators.\n\nFirst you must setup one of your wallets as the HOST and then add your additional node as a REMOTE.\n\nWhen adding a REMOTE node, you will need to know the IP address and the password for the HOST.\n\nOnce complete, you'll be able to view a dashboard tracking all of your node's activity from one wallet.\n\nNote: you must have port '${Env.validatorPort}' open on the HOST machine.",
+              title: l10n.motherTitle,
+              body: l10n.motherInfoBody(Env.validatorPort.toString()),
             );
           },
         ),

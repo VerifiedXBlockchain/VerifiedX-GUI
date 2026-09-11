@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../dst/models/dec_shop.dart';
 import '../components/remote_shop_list_tile.dart';
@@ -25,17 +26,18 @@ class RemoteShopListScreen extends BaseScreen {
     BuildContext context,
     WidgetRef ref,
   ) async {
+    final l10n = AppLocalizations.of(context);
     String? url = await PromptModal.show(
-      title: "Shop URL",
+      title: l10n.shopUrlPromptTitle,
       initialValue: "vfx://",
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return "Shop URL required";
+          return l10n.shopUrlRequired;
         }
 
         return null;
       },
-      labelText: "Input Shop Name Only",
+      labelText: l10n.shopUrlLabel,
     );
 
     if (url == null) {
@@ -56,11 +58,12 @@ class RemoteShopListScreen extends BaseScreen {
     final url = await promptForShopUrl(context, ref);
 
     if (ref.read(walletInfoProvider) == null || !ref.read(walletInfoProvider)!.isChainSynced) {
+      final l10n = AppLocalizations.of(context);
       final cont = await ConfirmDialog.show(
-        title: "Wallet Not Synced",
-        body: "Since your wallet is not synced there may be some issues viewing the data in this shop. Continue anyway?",
-        confirmText: "Continue",
-        cancelText: "Cancel",
+        title: l10n.shopWalletNotSyncedTitle,
+        body: l10n.shopWalletNotSyncedBody,
+        confirmText: l10n.actionContinue,
+        cancelText: l10n.actionCancel,
       );
 
       if (cont != true) {
@@ -76,7 +79,7 @@ class RemoteShopListScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Auction Houses"),
+      title: Text(AppLocalizations.of(context).shopAuctionHousesTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       centerTitle: true,
@@ -103,7 +106,7 @@ class RemoteShopListScreen extends BaseScreen {
           onPressed: () async {
             await loadShopWithPrompt(context, ref);
           },
-          label: "Connect to a Shop",
+          label: AppLocalizations.of(context).shopConnectToShop,
           type: AppButtonType.Text,
           variant: AppColorVariant.Light,
           icon: Icons.add,
@@ -120,7 +123,7 @@ class RemoteShopListScreen extends BaseScreen {
     if (globalShops.isEmpty) {
       return Center(
         child: AppButton(
-          label: "Connect to a Shop",
+          label: AppLocalizations.of(context).shopConnectToShop,
           variant: AppColorVariant.Success,
           onPressed: () async {
             await loadShopWithPrompt(context, ref);
@@ -150,7 +153,7 @@ class RemoteShopListScreen extends BaseScreen {
                     Icons.search,
                     color: Colors.white70,
                   ),
-                  hintText: "Search for auction house...",
+                  hintText: AppLocalizations.of(context).shopSearchAuctionHouseHint,
                   suffixIcon: IconButton(
                     icon: Icon(
                       Icons.clear,

@@ -11,6 +11,7 @@ import 'web_collection_list_provider.dart';
 import 'web_shop_detail_provider.dart';
 import '../services/web_shop_service.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class WebCollectionFormProvider extends StateNotifier<WebCollection> {
   final Ref ref;
@@ -53,7 +54,7 @@ class WebCollectionFormProvider extends StateNotifier<WebCollection> {
     final collection = await WebShopService().saveCollection(state);
 
     if (collection != null) {
-      Toast.message(exists ? "Collection Updated!" : "Collection Created");
+      Toast.message(exists ? globalL10n.r3bCollectionUpdatedToast : globalL10n.r3bCollectionCreatedToast);
 
       if (state.shop != null) {
         ref.read(webCollectionListProvider(state.shop!.id).notifier).refresh();

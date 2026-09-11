@@ -5,6 +5,7 @@ import '../../../../core/utils.dart';
 import '../../../sc_property/models/sc_property.dart';
 
 import '../../../asset/asset.dart';
+import '../../../../l10n/l10n_helper.dart';
 import 'evolve_phase.dart';
 
 part 'evolve.freezed.dart';
@@ -42,11 +43,11 @@ abstract class Evolve with _$Evolve {
   static String typeToString(EvolveType type) {
     switch (type) {
       case EvolveType.time:
-        return "Date/Time";
+        return globalL10n.r3aDateTime;
       case EvolveType.blockHeight:
-        return "Block Height";
+        return globalL10n.btcBlockHeightLabel;
       case EvolveType.manualOnly:
-        return "Manual Only";
+        return globalL10n.scwEvolveTypeManualOnly;
     }
   }
 

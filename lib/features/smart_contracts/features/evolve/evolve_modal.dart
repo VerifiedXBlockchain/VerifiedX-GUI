@@ -21,6 +21,7 @@ import 'evolve.dart';
 import 'evolve_form_provider.dart';
 import 'evolve_phase.dart';
 import 'evolve_phase_form_provider.dart';
+import '../../../../l10n/l10n_helper.dart';
 
 class EvolveModal extends BaseComponent {
   const EvolveModal({Key? key}) : super(key: key);
@@ -122,7 +123,7 @@ class EvolveModal extends BaseComponent {
           subtle: true,
         ),
         AppDropdown<EvolveType>(
-          label: "Evolution Type",
+          label: globalL10n.r3aEvolutionType,
           selectedValue: _model.type,
           selectedLabel: _model.typeLabel,
           onChange: (val) {
@@ -150,16 +151,16 @@ class EvolveModal extends BaseComponent {
           subtle: true,
         ),
         AppDropdown<bool>(
-          label: "Evolving Mode",
+          label: globalL10n.r3aEvolvingMode,
           selectedValue: _model.isDynamic,
-          selectedLabel: _model.isDynamic ? "Automated/Application Controlled" : "Issuer/Minter Controlled",
+          selectedLabel: _model.isDynamic ? globalL10n.r3aAutomatedAppControlled : globalL10n.r3aIssuerMinterControlled,
           onChange: (val) {
             _provider.updateMode(val);
           },
           options: [false, true]
               .map(
                 (val) => AppDropdownOption(
-                  label: val ? "Automated/Application Controlled" : "Issuer/Minter Controlled",
+                  label: val ? globalL10n.r3aAutomatedAppControlled : globalL10n.r3aIssuerMinterControlled,
                   value: val,
                 ),
               )
@@ -172,9 +173,9 @@ class EvolveModal extends BaseComponent {
   Row buildHeader() {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: const [
+      children: [
         FormGroupHeader(
-          "Evolve",
+          globalL10n.nftEvolve,
         ),
       ],
     );
@@ -250,9 +251,9 @@ class _EvolvePhaseContainer extends BaseComponent {
     final _evolveProvider = ref.read(evolveFormProvider.notifier);
 
     final confirmed = await ConfirmDialog.show(
-      title: "Delete Stage",
-      body: "Are you sure you want to delete this stage?",
-      confirmText: "Delete",
+      title: globalL10n.r3aDeleteStage,
+      body: globalL10n.r3aDeleteThisStageConfirm,
+      confirmText: globalL10n.actionDelete,
       destructive: true,
     );
 
@@ -457,14 +458,14 @@ class _EvolvePhaseContainer extends BaseComponent {
         Row(
           children: [
             Text(
-              "Properties (Optional)",
+              globalL10n.scwPropertiesOptional,
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
             SizedBox(
               width: 6,
             ),
             AppButton(
-              label: "Add Property",
+              label: globalL10n.scwAddPropertyButton,
               onPressed: () async {
                 final property = await _handlePropertyEdit(context, ref);
                 if (property != null) {
@@ -535,7 +536,7 @@ class _EvolvePhaseContainer extends BaseComponent {
 
   AppButton buildSave(bool Function() save, EvolveFormProvider _evolveProvider, BuildContext context) {
     return AppButton(
-      label: "Save and Close",
+      label: globalL10n.r3aSaveAndClose,
       icon: Icons.save,
       variant: AppColorVariant.Success,
       onPressed: () {
@@ -551,7 +552,7 @@ class _EvolvePhaseContainer extends BaseComponent {
 
   AppButton buildNewPhase(bool Function() save, EvolveFormProvider _evolveProvider) {
     return AppButton(
-      label: "Create New Phase",
+      label: globalL10n.r3aCreateNewPhase,
       icon: Icons.add,
       variant: AppColorVariant.Light,
       onPressed: () {
@@ -579,14 +580,14 @@ class _EvolvePhaseContainer extends BaseComponent {
     return TextFormField(
       controller: _provider.descriptionController,
       validator: _provider.descriptionValidator,
-      decoration: const InputDecoration(
-        prefixIcon: HelpButton(
+      decoration: InputDecoration(
+        prefixIcon: const HelpButton(
           HelpType.evolveStageDescription,
           subtle: true,
         ),
         label: Text(
-          "Evolve Stage Description",
-          style: TextStyle(color: Colors.white),
+          globalL10n.scwEvolveStageDescription,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
       minLines: 3,
@@ -596,7 +597,7 @@ class _EvolvePhaseContainer extends BaseComponent {
 
   FileSelector buildFileSelector(WidgetRef ref, EvolvePhaseFormProvider _provider) {
     return FileSelector(
-      title: "Evolve Stage Asset",
+      title: globalL10n.scwEvolveStageAsset,
       asset: ref.watch(evolvePhaseFormProvider(index)).asset,
       transparentBackground: true,
       onChange: (Asset? asset) {
@@ -609,14 +610,14 @@ class _EvolvePhaseContainer extends BaseComponent {
     return TextFormField(
       controller: _provider.nameController,
       validator: _provider.nameValidator,
-      decoration: const InputDecoration(
-        prefixIcon: HelpButton(
+      decoration: InputDecoration(
+        prefixIcon: const HelpButton(
           HelpType.evolveStageName,
           subtle: true,
         ),
         label: Text(
-          "Evolve Stage Name",
-          style: TextStyle(color: Colors.white),
+          globalL10n.scwEvolveStageName,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -631,14 +632,14 @@ class _EvolvePhaseContainer extends BaseComponent {
           RegExp("[0-9]"),
         )
       ],
-      decoration: const InputDecoration(
-        prefixIcon: HelpButton(
+      decoration: InputDecoration(
+        prefixIcon: const HelpButton(
           HelpType.evolveBlockHeight,
           subtle: true,
         ),
         label: Text(
-          "Block Height Value",
-          style: TextStyle(
+          globalL10n.scwBlockHeightValue,
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -659,7 +660,7 @@ class _EvolvePhaseContainer extends BaseComponent {
           subtle: true,
         ),
         label: Text(
-          "Evolution Time (${DateTime.now().timeZoneName.toString()})",
+          globalL10n.r3aEvolutionTime(DateTime.now().timeZoneName.toString()),
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -686,9 +687,9 @@ class _EvolvePhaseContainer extends BaseComponent {
           HelpType.evolveDatetime,
           subtle: true,
         ),
-        label: const Text(
-          "Evolution Date",
-          style: TextStyle(
+        label: Text(
+          globalL10n.scwEvolutionDate,
+          style: const TextStyle(
             color: Colors.white,
           ),
         ),
@@ -706,7 +707,7 @@ class _EvolvePhaseContainer extends BaseComponent {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Text(
-        "Evolve Stage ${index + 1}",
+        globalL10n.r3aEvolveStageNumber((index + 1).toString()),
         style: Theme.of(context).textTheme.titleLarge,
       ),
     );

@@ -7,6 +7,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../global_loader/global_loading_provider.dart';
@@ -27,14 +28,15 @@ class TransferTokensButton extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     return AppButton(
-      label: "Transfer",
+      label: l10n.tokenTransfer,
       variant: AppColorVariant.Primary,
       onPressed: () async {
         final amount = await PromptModal.show(
-          title: "Amount to Transfer",
-          validator: (val) => formValidatorNumber(val, "Amount"),
-          labelText: "Amount",
+          title: l10n.tokenAmountToTransferTitle,
+          validator: (val) => formValidatorNumber(val, l10n.tokenAmountLabel),
+          labelText: l10n.tokenAmountLabel,
           inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
         );
         if (amount == null || amount.isEmpty) {
@@ -44,19 +46,19 @@ class TransferTokensButton extends BaseComponent {
         final amountDouble = double.tryParse(amount);
 
         if (amountDouble == null) {
-          Toast.error("Invalid Amount");
+          Toast.error(l10n.tokenInvalidAmountToast);
           return;
         }
 
         if (amountDouble > currentBalance) {
-          Toast.error("Not enough balance to perform this transaction");
+          Toast.error(l10n.tokenInsufficientBalanceToast);
           return;
         }
         final controller = TextEditingController();
         final toAddress = await PromptModal.show(
-          title: "To Address",
+          title: l10n.tokenToAddressLabel,
           validator: (val) => formValidatorRbxAddress(val),
-          labelText: "To Address",
+          labelText: l10n.tokenToAddressLabel,
           controller: controller,
           sufixIcon: AddressChoosingIconButton(controller: controller),
         );
@@ -73,7 +75,7 @@ class TransferTokensButton extends BaseComponent {
         ref.read(globalLoadingProvider.notifier).complete();
 
         if (success) {
-          Toast.message("Token transfer transaction broadcasted");
+          Toast.message(l10n.tokenTransferBroadcastedToast);
           notifyTransactionSubmitted();
         }
       },

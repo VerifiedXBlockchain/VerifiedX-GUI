@@ -10,6 +10,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../components/create_web_listing_form.dart';
 import '../providers/create_web_listing_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class CreateWebListingScreen extends BaseScreen {
   final int shopId;
@@ -28,19 +29,20 @@ class CreateWebListingScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final provider = ref.read(createWebListingProvider.notifier);
     final model = ref.watch(createWebListingProvider);
 
     return AppBar(
       backgroundColor: Colors.black,
-      title: Text(model.id == 0 ? "Create Listing" : "Edit Listing"),
+      title: Text(model.id == 0 ? l10n.shopCreateListing : l10n.mktEditListing),
       leading: IconButton(
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
-            title: "Are you sure you want to close the listing ${model.id != 0 ? 'editing' : 'creation'} screen?",
-            body: "All unsaved changes will be lost.",
-            cancelText: "Cancel",
-            confirmText: "Continue",
+            title: model.id != 0 ? l10n.mktCloseEditListingTitle : l10n.mktCloseCreateListingTitle,
+            body: l10n.configCloseDialogBody,
+            cancelText: l10n.actionCancel,
+            confirmText: l10n.actionContinue,
           );
 
           if (confirmed == true) {
@@ -56,11 +58,12 @@ class CreateWebListingScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final address = kIsWeb ? ref.read(webSessionProvider).keypair?.address : ref.read(sessionProvider).currentWallet?.address;
 
     if (address == null) {
-      return const Center(
-        child: Text("No Account"),
+      return Center(
+        child: Text(l10n.mktNoAccountToast),
       );
     }
     return Center(

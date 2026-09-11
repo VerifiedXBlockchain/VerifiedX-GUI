@@ -8,6 +8,7 @@ import '../../components/sc_creator/common/help_button.dart';
 import '../../components/sc_creator/common/manage_properties_list.dart';
 import '../../components/sc_creator/common/modal_bottom_actions.dart';
 import '../../components/sc_creator/common/modal_container.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import 'tokenization_provider.dart';
 
 class TokenizationModal extends BaseComponent {
@@ -17,15 +18,16 @@ class TokenizationModal extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final _provider = ref.read(tokenizationFormProvider.notifier);
     final _model = ref.watch(tokenizationFormProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Form(
       key: _provider.formKey,
       child: ModalContainer(children: [
-        const FormGroupHeader(
-          "Tokenization",
+        FormGroupHeader(
+          l10n.scwTokenizationTitle,
         ),
         TextFormField(
-          decoration: const InputDecoration(label: Text("Physical/Digital Good Name")),
+          decoration: InputDecoration(label: Text(l10n.scwPhysicalDigitalGoodName)),
           validator: _provider.nameValidator,
           controller: _provider.nameController,
         ),
@@ -33,7 +35,7 @@ class TokenizationModal extends BaseComponent {
           children: [
             Expanded(
               child: FileSelector(
-                title: "Image(s)",
+                title: l10n.scwImages,
                 transparentBackground: true,
                 asset: _model.photo,
                 onChange: (asset) {
@@ -50,7 +52,7 @@ class TokenizationModal extends BaseComponent {
             ),
             Expanded(
               child: FileSelector(
-                title: "Provenance Files (Optional)",
+                title: l10n.scwProvenanceFilesOptional,
                 transparentBackground: true,
                 asset: _model.provenance,
                 onChange: (asset) {
@@ -65,7 +67,7 @@ class TokenizationModal extends BaseComponent {
           ],
         ),
         TextFormField(
-          decoration: const InputDecoration(label: Text("Description of Physical/Digital Good")),
+          decoration: InputDecoration(label: Text(l10n.scwDescriptionOfPhysicalDigitalGood)),
           validator: _provider.descriptionValidator,
           controller: _provider.descriptionController,
           minLines: 3,
@@ -75,9 +77,9 @@ class TokenizationModal extends BaseComponent {
           padding: const EdgeInsets.only(top: 8),
           child: Row(
             children: [
-              const Text(
-                "Properties (Optional)",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              Text(
+                l10n.scwPropertiesOptional,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               const HelpButton(HelpType.manageProperties)
             ],

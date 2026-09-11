@@ -4,6 +4,7 @@ import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
 import '../../../../core/providers/session_provider.dart';
 import '../../../../core/utils.dart';
+import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/toast.dart';
 
 class ImportMediaButton extends BaseComponent {
@@ -16,7 +17,7 @@ class ImportMediaButton extends BaseComponent {
     final cliStarted = ref.watch(sessionProvider.select((v) => v.cliStarted));
 
     return AppButton(
-      label: "Import Media",
+      label: AppLocalizations.of(context).r3eImportMedia,
       icon: Icons.cloud_download_outlined,
       onPressed: !cliStarted
           ? null
@@ -24,9 +25,10 @@ class ImportMediaButton extends BaseComponent {
               final success = await importMedia(context, ref);
 
               if (success == true) {
-                Toast.message("Media Imported Successfully");
+                Toast.message(AppLocalizations.of(context).r3eMediaImported);
               } else if (success == false) {
-                Toast.error("Could not import media");
+                Toast.error(
+                    AppLocalizations.of(context).r3eCouldNotImportMedia);
               }
             },
     );

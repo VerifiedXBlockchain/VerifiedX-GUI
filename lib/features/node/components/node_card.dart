@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../validator/providers/validator_list_provider.dart';
 import '../models/node.dart';
@@ -55,9 +56,9 @@ class NodeCard extends BaseComponent {
                 trailing: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text("Connected: ${node.connectDateFormatted}"),
+                    Text(AppLocalizations.of(context).nodeConnectedLabel(node.connectDateFormatted)),
 
-                    Text("Wallet Version: ${node.walletVersion ?? '-'}"),
+                    Text(AppLocalizations.of(context).nodeWalletVersionLabel(node.walletVersion ?? '-')),
                     // Padding(
                     //   padding: const EdgeInsets.only(top: 3.0),
                     //   child: Text(

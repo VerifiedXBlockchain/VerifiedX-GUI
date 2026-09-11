@@ -65,3 +65,7 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Scratch files
+scratch-in.txt
+scratch-out.txt

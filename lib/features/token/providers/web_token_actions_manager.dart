@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/explorer_service.dart';
@@ -12,9 +14,12 @@ import '../../web/utils/raw_transaction.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import '../../btc_web/utils/vbtc_multi_allocator.dart';
 import '../../btc_web/services/frost_resume_guard.dart';
 import '../../btc_web/services/vbtc_media_detection.dart';
 import '../../btc_web/services/pending_frost_signing_job_service.dart';
@@ -42,10 +47,11 @@ class WebTokenActionsManager {
     bool showConfirmation = true,
     bool showLoader = true,
     bool showToasts = true,
+    void Function(String hash)? onBroadcast,
   }) async {
     final keypair = keypairOverride ?? ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No keypair found to sign transaction");
+      Toast.error(globalL10n.bw2NoKeypairToSign);
       return false;
     }
 
@@ -66,7 +72,7 @@ class WebTokenActionsManager {
     }
     if (txData == null) {
       if (showToasts) {
-        Toast.error("Invalid transaction data.");
+        Toast.error(globalL10n.btcInvalidTxData);
       }
       return false;
     }
@@ -75,11 +81,11 @@ class WebTokenActionsManager {
 
     if (showConfirmation) {
       final confirmed = await ConfirmDialog.show(
-        title: "Valid Transaction",
+        title: globalL10n.btcValidTxTitle,
         body:
-            "Transaction verified. There will be a fee of $txFee VFX. Would you like to proceed?",
+            globalL10n.bw2TxVerifiedFeeBody(txFee.toString()),
         confirmText: "Yes",
-        cancelText: "Cancel",
+        cancelText: globalL10n.actionCancel,
       );
 
       if (confirmed != true) {
@@ -96,9 +102,10 @@ class WebTokenActionsManager {
     if (showLoader) {
       ref.read(globalLoadingProvider.notifier).complete();
     }
-    if (tx != null && tx['Result'] == "Success") {
+    if (tx != null && tx['Result'] == 'Success') {
+      onBroadcast?.call(txData['Hash'].toString());
       if (showToasts) {
-        Toast.message("Transaction broadcasted!");
+        Toast.message(globalL10n.bw2TransactionBroadcasted);
       }
       return true;
     }
@@ -320,7 +327,7 @@ class WebTokenActionsManager {
   }) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No VFX account found");
+      Toast.error(globalL10n.bw2NoVfxAccountFound);
       return false;
     }
 
@@ -331,7 +338,7 @@ class WebTokenActionsManager {
       publicKey: keypair.public,
     );
     if (beaconSig == null) {
-      Toast.error("Failed to sign beacon upload");
+      Toast.error(globalL10n.bw2FailedSignBeacon);
       return false;
     }
 
@@ -361,8 +368,7 @@ class WebTokenActionsManager {
       } else {
         ref.read(globalLoadingProvider.notifier).complete();
         Toast.error(
-          "Beacon upload failed. This token has a media file that must be transferred with it, "
-          "so the transfer cannot continue until a beacon is reachable.",
+          globalL10n.bw2BeaconUploadFailedHasMedia,
         );
         return false;
       }
@@ -379,7 +385,7 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (response['success'] != true || response['tx_data'] == null) {
-        Toast.error(response['message'] ?? "Failed to prepare ownership transfer");
+        Toast.error(response['message'] ?? globalL10n.bw2FailedPrepareOwnershipTransfer);
         return false;
       }
 
@@ -391,7 +397,7 @@ class WebTokenActionsManager {
       );
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error("Ownership transfer failed: $e");
+      Toast.error(globalL10n.bw2OwnershipTransferFailed(e.toString()));
       return false;
     }
   }
@@ -406,7 +412,7 @@ class WebTokenActionsManager {
   }) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No keypair found to sign transaction");
+      Toast.error(globalL10n.bw2NoKeypairToSign);
       return null;
     }
 
@@ -417,7 +423,7 @@ class WebTokenActionsManager {
     );
 
     if (signature == null) {
-      Toast.error("Failed to sign transaction");
+      Toast.error(globalL10n.bw2FailedSignTransaction);
       return null;
     }
 
@@ -428,7 +434,7 @@ class WebTokenActionsManager {
         publicKey: keypair.public,
       );
     } catch (e) {
-      Toast.error("Transaction failed: $e");
+      Toast.error(globalL10n.bw2TransactionFailed(e.toString()));
       return null;
     }
   }
@@ -438,6 +444,7 @@ class WebTokenActionsManager {
     required String toAddress,
     required String fromAddress,
     required double amount,
+    bool showConfirmation = true,
   }) async {
     ref.read(globalLoadingProvider.notifier).start();
 
@@ -452,18 +459,19 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (prepared['success'] != true || prepared['Hash'] == null) {
-        Toast.error(prepared['message'] ?? "Failed to prepare transfer");
+        Toast.error(prepared['message'] ?? globalL10n.bw2FailedPrepareTransfer);
         return false;
       }
 
-      final confirmed = await ConfirmDialog.show(
-        title: "Confirm Transfer",
-        body: "Transfer $amount vBTC to $toAddress?",
-        confirmText: "Transfer",
-        cancelText: "Cancel",
-      );
-
-      if (confirmed != true) return null;
+      if (showConfirmation) {
+        final confirmed = await ConfirmDialog.show(
+          title: globalL10n.bw2ConfirmTransfer,
+          body: globalL10n.bw2ConfirmTransferBody(amount.toString(), toAddress),
+          confirmText: globalL10n.btcTransferLabel,
+          cancelText: globalL10n.actionCancel,
+        );
+        if (confirmed != true) return null;
+      }
 
       ref.read(globalLoadingProvider.notifier).start();
 
@@ -475,7 +483,7 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (result != null && result['success'] == true) {
-        Toast.message("vBTC transfer broadcasted successfully");
+        Toast.message(globalL10n.bw2VbtcTransferBroadcastedSuccess);
         ref.read(webTransactionListProvider(fromAddress).notifier).insertPendingTx(
           WebTransaction(
             hash: result['Hash'] ?? prepared['Hash'] ?? '',
@@ -491,11 +499,11 @@ class WebTokenActionsManager {
         return true;
       }
 
-      Toast.error(result?['message'] ?? "Transfer failed");
+      Toast.error(result?['message'] ?? globalL10n.bw2TransferFailed);
       return false;
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error("Transfer failed: $e");
+      Toast.error(globalL10n.bw2TransferFailedError(e.toString()));
       return false;
     }
   }
@@ -523,17 +531,17 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).complete();
 
       if (prepared['success'] != true || prepared['Hash'] == null) {
-        return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare withdrawal request'};
+        return {'success': false, 'message': prepared['message'] ?? globalL10n.bw2FailedPrepareWithdrawalRequest};
       }
 
       final confirmed = await ConfirmDialog.show(
-        title: "Confirm Withdrawal Request",
-        body: "Withdraw $amount BTC to $btcAddress\nFee rate: $feeRate sats/byte\n\nProceed?",
+        title: globalL10n.bw2ConfirmWithdrawalRequest,
+        body: globalL10n.bw2WithdrawalRequestBody(amount.toString(), btcAddress, feeRate.toString()),
         confirmText: "Yes",
-        cancelText: "Cancel",
+        cancelText: globalL10n.actionCancel,
       );
 
-      if (confirmed != true) return {'success': false, 'message': 'Cancelled'};
+      if (confirmed != true) return {'success': false, 'message': globalL10n.bw2Cancelled};
 
       ref.read(globalLoadingProvider.notifier).start();
 
@@ -563,7 +571,7 @@ class WebTokenActionsManager {
         return {'success': true, 'hash': hash};
       }
 
-      return {'success': false, 'message': result?['message'] ?? 'Withdrawal request failed'};
+      return {'success': false, 'message': result?['message'] ?? globalL10n.bw2WithdrawalRequestFailed};
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
       return {'success': false, 'message': 'Withdrawal request failed: $e'};
@@ -724,19 +732,30 @@ class WebTokenActionsManager {
   /// fails outright, or outlives the poll budget.
   Future<_FrostSigningPollResult> _pollFrostSigningJob(String jobId) async {
     int notFoundCount = 0;
-    for (int i = 0; i < 36; i++) {
+    for (int i = 0; i < 120; i++) {
       await Future.delayed(const Duration(seconds: 5));
       try {
         final status = await ExplorerService().getV2WithdrawalCompleteStatus(jobId);
         if (status['status'] == 'complete') {
           return _FrostSigningPollResult.signed(status['signed_btc_tx_hex'] as String?);
         } else if (status['status'] == 'failed') {
-          return _FrostSigningPollResult.failed(status['message'] ?? 'FROST signing failed');
+          // Diagnosable failures carry a code and session id — log them, the
+          // message alone is what used to make these unactionable.
+          debugPrint(
+            'FROST job $jobId failed: code=${status['failure_code']} '
+            'session=${status['session_id']} input=${status['input_index']} '
+            'retryable=${status['retryable']}',
+          );
+          return _FrostSigningPollResult.failed(
+            status['message'] ?? globalL10n.bw2FrostSigningFailed,
+            failureCode: status['failure_code'] as String?,
+            retryable: status['retryable'] as bool?,
+          );
         } else if (status['success'] == false) {
           notFoundCount++;
           // Job not registered yet (race) — tolerate a few misses, bail if persistent
           if (notFoundCount > 6) {
-            return _FrostSigningPollResult.failed(status['message'] ?? 'FROST signing job not found');
+            return _FrostSigningPollResult.failed(status['message'] ?? globalL10n.bw2FrostJobNotFound);
           }
         } else {
           notFoundCount = 0; // reset if we get a valid pending response
@@ -761,7 +780,7 @@ class WebTokenActionsManager {
   }) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
-      Toast.error("No keypair found");
+      Toast.error(globalL10n.bw2NoKeypairFound);
       return null;
     }
 
@@ -801,7 +820,26 @@ class WebTokenActionsManager {
       // A job left over from an earlier attempt is resumed as-is. Starting a
       // second ceremony for the same request is refused for 24 hours, so the
       // stored id is the only way back to a signature that may already exist.
-      final pendingJob = PendingFrostSigningJobService().get(requestHash);
+      var pendingJob = PendingFrostSigningJobService().get(requestHash);
+
+      // A stored id is only worth resuming while the explorer still knows the
+      // job. Once its TTL has lapsed, polling it burns ~35s and a failure
+      // dialog before the record clears — probe once and fall through to the
+      // guard instead. Only an explicit "Job not found" clears the record; a
+      // transient probe error keeps it, because clearing a LIVE job strands
+      // its signature and a fresh ceremony is refused for 24 hours.
+      if (pendingJob != null) {
+        try {
+          final probe = await ExplorerService()
+              .getV2WithdrawalCompleteStatus(pendingJob.jobId);
+          if (probe['success'] == false && probe['message'] == 'Job not found') {
+            await PendingFrostSigningJobService().clear(requestHash);
+            pendingJob = null;
+          }
+        } catch (_) {
+          // Transient explorer error — resume the stored job as before.
+        }
+      }
 
       if (pendingJob != null) {
         jobId = pendingJob.jobId;
@@ -825,7 +863,7 @@ class WebTokenActionsManager {
         );
 
         if (prepared['success'] != true || prepared['StartMessage'] == null) {
-          return {'success': false, 'message': prepared['message'] ?? 'Failed to prepare FROST signing'};
+          return {'success': false, 'message': prepared['message'] ?? globalL10n.bw2FailedPrepareFrost};
         }
 
         final startMessage = prepared['StartMessage'] as String;
@@ -850,7 +888,36 @@ class WebTokenActionsManager {
         );
 
         if (startSig == null || shareSig == null) {
-          return {'success': false, 'message': 'Failed to sign FROST messages'};
+          return {'success': false, 'message': globalL10n.bw2FailedSignFrost};
+        }
+
+        // Step 2b: Multi-input withdrawals need one signature per vault UTXO.
+        // StartMessages[0] is byte-identical to the legacy StartMessage and is
+        // already covered by startSig; every later entry is signed verbatim —
+        // the node verifies the exact Message strings it returned, so they
+        // must not be reconstructed here.
+        List<Map<String, dynamic>>? extraStartSignatures;
+        final startMessages =
+            (prepared['StartMessages'] as List?)?.whereType<Map>().toList();
+        if (startMessages != null && startMessages.length > 1) {
+          extraStartSignatures = [];
+          for (final entry in startMessages) {
+            final inputIndex = entry['InputIndex'] as int? ?? 0;
+            if (inputIndex == 0) continue;
+
+            final sig = await RawTransaction.getSignature(
+              message: entry['Message'] as String,
+              privateKey: keypair.private,
+              publicKey: keypair.public,
+            );
+            if (sig == null) {
+              return {'success': false, 'message': globalL10n.bw2FailedSignFrost};
+            }
+            extraStartSignatures.add({
+              'input_index': inputIndex,
+              'signature': sig,
+            });
+          }
         }
 
         // Step 3: Execute — kicks off FROST signing asynchronously, returns job_id
@@ -866,11 +933,12 @@ class WebTokenActionsManager {
           amount: withdrawalAmount,
           btcDestination: btcDestination,
           feeRate: prepared['FeeRate'] as int? ?? 0,
+          startSignatures: extraStartSignatures,
         );
 
         final startedJobId = executeResult['job_id'] as String?;
         if (startedJobId == null) {
-          return {'success': false, 'message': 'Failed to start FROST signing'};
+          return {'success': false, 'message': globalL10n.bw2FailedStartFrost};
         }
         jobId = startedJobId;
 
@@ -890,14 +958,26 @@ class WebTokenActionsManager {
         );
       }
 
-      // Step 4: Poll for FROST signing result (up to 3 minutes)
+      // Step 4: Poll for FROST signing result (up to 10 minutes — real
+      // ceremonies exceeded 4 minutes on flaky testnet ElectrumX, and a poll
+      // that gives up before the job finishes sends the user into the
+      // timeout/recovery flow for a withdrawal that is about to succeed).
       final poll = await _pollFrostSigningJob(jobId);
 
       if (poll.failureMessage != null) {
         // Signing will not produce anything and the id is now worthless, so it
-        // must not be resumed — that would report a dead job forever.
+        // must not be resumed — that would report a dead job forever. The next
+        // retry runs a full fresh prepare → sign → execute cycle, which is
+        // exactly what the node wants: old session ids are never reusable.
         await PendingFrostSigningJobService().clear(requestHash);
-        return {'success': false, 'message': poll.failureMessage};
+        return {
+          'success': false,
+          'message': poll.retryable == true
+              ? '${poll.failureMessage} This looks temporary — wait about a minute, then retry.'
+              : poll.failureMessage,
+          'failure_code': poll.failureCode,
+          'retryable': poll.retryable,
+        };
       }
 
       final signedBtcTxHex = poll.signedBtcTxHex;
@@ -919,7 +999,7 @@ class WebTokenActionsManager {
       if (broadcastResult['success'] != true) {
         return {
           'success': false,
-          'message': broadcastResult['message'] ?? 'Failed to broadcast BTC transaction',
+          'message': broadcastResult['message'] ?? globalL10n.bw2FailedBroadcastBtc,
           'SignedBTCTxHex': signedBtcTxHex,
         };
       }
@@ -1009,7 +1089,7 @@ class WebTokenActionsManager {
       );
 
       if (prepared['success'] != true || prepared['Hash'] == null) {
-        Toast.error(prepared['message'] ?? "Failed to prepare cancellation");
+        Toast.error(prepared['message'] ?? globalL10n.bw2FailedPrepareCancellation);
         return false;
       }
 
@@ -1035,9 +1115,91 @@ class WebTokenActionsManager {
       }
       return false;
     } catch (e) {
-      Toast.error("Cancellation failed: $e");
+      Toast.error(globalL10n.bw2CancellationFailedError(e.toString()));
       return false;
     }
+  }
+
+  /// Sends [totalAmount] vBTC to [toAddress] drawn from every V2 token the
+  /// primary keypair holds a spendable balance on. Inputs are chosen here
+  /// with the CLI's own allocation rule; a single covering token goes
+  /// through the ordinary transfer flow instead of the multi shape, which
+  /// also keeps the one-input case working before network activation.
+  /// Returns the inputs used on success, null on failure or cancel.
+  Future<List<VbtcAllocationInput>?> transferVbtcMulti({
+    required String toAddress,
+    required double totalAmount,
+    bool showConfirmation = true,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error(globalL10n.bw2NoKeypairToSign);
+      return null;
+    }
+    if (!verifyBalance()) {
+      return null;
+    }
+
+    final tokens = ref.read(btcWebVbtcTokenListProvider);
+    final balances = {
+      for (final token in tokens)
+        token.scIdentifier: token.availableBalanceForAddress(keypair.address),
+    };
+    final allocation = allocateVbtcInputs(balances, totalAmount);
+    if (!allocation.ok) {
+      Toast.error(allocation.failure == VbtcAllocationFailure.tooManyInputs
+          ? globalL10n.btcBulkTooManyInputs(VBTC_MULTI_MAX_INPUTS.toString())
+          : globalL10n.btcBulkInsufficientCombined(
+              allocation.available.toString(), totalAmount.toString()));
+      return null;
+    }
+
+    if (allocation.inputs.length == 1) {
+      final input = allocation.inputs.single;
+      final token =
+          tokens.firstWhere((t) => t.scIdentifier == input.scIdentifier);
+      final sent = await transferVbtcV2(
+        token: token,
+        toAddress: toAddress,
+        fromAddress: keypair.address,
+        amount: input.amount,
+        showConfirmation: showConfirmation,
+      );
+      return sent == true ? allocation.inputs : null;
+    }
+
+    final data = buildVbtcMultiTransferData(
+      fromAddress: keypair.address,
+      toAddress: toAddress,
+      totalAmount: totalAmount,
+      inputs: allocation.inputs,
+    );
+
+    String broadcastHash = '';
+    final sent = await _verifyConfirmAndSendTx(
+      toAddress: toAddress,
+      data: data,
+      txType: TxType.vbtcV2Transfer,
+      showConfirmation: showConfirmation,
+      onBroadcast: (hash) => broadcastHash = hash,
+    );
+    if (sent != true) {
+      return null;
+    }
+
+    ref.read(webTransactionListProvider(keypair.address).notifier).insertPendingTx(
+      WebTransaction(
+        hash: broadcastHash,
+        toAddress: toAddress,
+        fromAddress: keypair.address,
+        type: TxType.vbtcV2Transfer,
+        amount: 0,
+        fee: 0,
+        date: DateTime.now(),
+        height: 0,
+      ),
+    );
+    return allocation.inputs;
   }
 
   bool verifyBalance({bool isRa = false}) {
@@ -1045,7 +1207,7 @@ class WebTokenActionsManager {
       if ((ref.read(webSessionProvider).raBalance ?? 0) <
           MIN_RBX_FOR_SC_ACTION) {
         Toast.error(
-            "A balance on your Vault account is required to broadcast this transaction");
+            globalL10n.bw2VaultBalanceRequired);
 
         return false;
       }
@@ -1054,7 +1216,7 @@ class WebTokenActionsManager {
 
     if ((ref.read(webSessionProvider).balance ?? 0) < MIN_RBX_FOR_SC_ACTION) {
       Toast.error(
-          "A balance on your VFX account is required to broadcast this transaction");
+          globalL10n.bw2VfxBalanceRequiredBroadcast);
 
       return false;
     }
@@ -1068,7 +1230,7 @@ class WebTokenActionsManager {
         .contains(token.ownerAddress)) {
       return true;
     }
-    Toast.error("Only the owner of this token can perform this action");
+    Toast.error(globalL10n.bw2OnlyOwnerCanAction);
     return false;
   }
 
@@ -1084,23 +1246,23 @@ class WebTokenActionsManager {
     }
 
     Toast.error(
-        "Vault accounts cannot perform this action. Please transfer ownership to your standard VFX account first");
+        globalL10n.bw2VaultCannotActionTransferFirst);
     return false;
   }
 
   bool guardIsNotPaused(WebFungibleToken token) {
     if (token.isPaused) {
-      Toast.error("Transactions on this token are currently paused.");
+      Toast.error(globalL10n.bw2TokenPaused);
       return false;
     }
     return true;
   }
 
-  Future<String?> promptForAddress({String title = "Address"}) async {
+  Future<String?> promptForAddress({String? title}) async {
     final address = await PromptModal.show(
-      title: title,
+      title: title ?? globalL10n.labelAddress,
       validator: formValidatorRbxAddress,
-      labelText: "Address",
+      labelText: globalL10n.labelAddress,
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]')),
       ],
@@ -1113,11 +1275,11 @@ class WebTokenActionsManager {
     return address;
   }
 
-  Future<double?> promptForAmount({String title = "Amount"}) async {
+  Future<double?> promptForAmount({String? title}) async {
     final amount = await PromptModal.show(
-      title: title,
-      validator: (val) => formValidatorNumber(val, "Amount"),
-      labelText: "Amount",
+      title: title ?? globalL10n.labelAmount,
+      validator: (val) => formValidatorNumber(val, globalL10n.labelAmount),
+      labelText: globalL10n.labelAmount,
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
     );
     if (amount == null || amount.isEmpty) {
@@ -1127,7 +1289,7 @@ class WebTokenActionsManager {
     final amountDouble = double.tryParse(amount);
 
     if (amountDouble == null) {
-      Toast.error("Invalid Amount");
+      Toast.error(globalL10n.btcInvalidAmountToast);
       return null;
     }
     return amountDouble;
@@ -1149,13 +1311,29 @@ class _FrostSigningPollResult {
   /// longer knows the id.
   final String? failureMessage;
 
-  const _FrostSigningPollResult.signed(this.signedBtcTxHex)
-      : failureMessage = null;
+  /// Structured diagnostics from the node, when the failure came from an
+  /// actual FROST ceremony. Null on pre-ceremony failures (contract not
+  /// found, validation, balance) — the message is all there is then.
+  final String? failureCode;
 
-  const _FrostSigningPollResult.failed(this.failureMessage)
-      : signedBtcTxHex = null;
+  /// True means transient: a full fresh prepare → sign → execute cycle after
+  /// the validators' ~60 second cooldown is expected to succeed.
+  final bool? retryable;
+
+  const _FrostSigningPollResult.signed(this.signedBtcTxHex)
+      : failureMessage = null,
+        failureCode = null,
+        retryable = null;
+
+  const _FrostSigningPollResult.failed(
+    this.failureMessage, {
+    this.failureCode,
+    this.retryable,
+  }) : signedBtcTxHex = null;
 
   const _FrostSigningPollResult.timedOut()
       : signedBtcTxHex = null,
-        failureMessage = null;
+        failureMessage = null,
+        failureCode = null,
+        retryable = null;
 }

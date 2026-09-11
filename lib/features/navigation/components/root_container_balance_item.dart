@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/components.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../constants.dart';
 import '../root_container.dart';
 
@@ -73,7 +74,7 @@ class RootContainerBalanceItemState extends State<RootContainerBalanceItem> {
                           children: [
                             Expanded(
                               child: Text(
-                                "Latest TX:",
+                                AppLocalizations.of(context).navLatestTx,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: 13,
@@ -93,7 +94,7 @@ class RootContainerBalanceItemState extends State<RootContainerBalanceItem> {
                                 child: TextButton(
                                   onPressed: widget.handleViewAllTxs,
                                   child: Text(
-                                    "View All Txs",
+                                    AppLocalizations.of(context).navViewAllTxs,
                                     style: TextStyle(
                                       color: widget.headingColor,
                                       fontSize: 13,
@@ -120,7 +121,7 @@ class RootContainerBalanceItemState extends State<RootContainerBalanceItem> {
                                       fullWidth: true,
                                       child: Center(
                                         child: Text(
-                                          "No Transactions",
+                                          AppLocalizations.of(context).navNoTransactions,
                                           style: Theme.of(context).textTheme.bodySmall,
                                         ),
                                       ),

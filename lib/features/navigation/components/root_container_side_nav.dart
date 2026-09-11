@@ -26,7 +26,7 @@ class RootContainerSideNav extends BaseComponent {
             AnimatedContainer(
               duration: ROOT_CONTAINER_TRANSITION_DURATION,
               curve: ROOT_CONTAINER_TRANSITION_CURVE,
-              width: isExpanded ? SIDE_NAV_WIDTH_EXPANDED : SIDE_NAV_WIDTH_CONTRACTED,
+              width: isExpanded ? sideNavExpandedWidth(context) : SIDE_NAV_WIDTH_CONTRACTED,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
                   topRight: Radius.circular(8),

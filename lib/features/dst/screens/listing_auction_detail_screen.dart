@@ -7,6 +7,7 @@ import '../components/auction_activity.dart';
 import '../providers/seller_bid_list_provider.dart';
 
 import '../providers/listing_detail_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ListingAuctionDetailScreen extends BaseScreen {
   final int listingId;
@@ -17,6 +18,7 @@ class ListingAuctionDetailScreen extends BaseScreen {
 
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(listingDetailProvider(listingId));
 
     return data.when(
@@ -28,7 +30,7 @@ class ListingAuctionDetailScreen extends BaseScreen {
         }
         return AppBar(
           title: Text(
-            "Auction Activity for ${listing.nft != null ? listing.nft!.name : listing.smartContractUid}",
+            l10n.mktAuctionActivityForTitle(listing.nft != null ? listing.nft!.name : listing.smartContractUid),
           ),
           backgroundColor: Colors.black,
           actions: [
@@ -46,14 +48,15 @@ class ListingAuctionDetailScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     final data = ref.watch(listingDetailProvider(listingId));
 
     return data.when(
       loading: () => CenteredLoader(),
-      error: (_, __) => Center(child: Text("An error occurred.")),
+      error: (_, __) => Center(child: Text(l10n.mktErrorOccurred)),
       data: (listing) {
         if (listing == null) {
-          return Center(child: Text("Error"));
+          return Center(child: Text(l10n.shopErrorTitle));
         }
         return AuctionActivity(listing);
       },

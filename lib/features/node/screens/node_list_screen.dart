@@ -6,6 +6,7 @@ import '../../../core/components/back_to_home_button.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../validator/providers/validator_list_provider.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../components/masternode_card.dart';
@@ -23,7 +24,7 @@ class NodeListScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
-      title: const Text("Validator Pool"),
+      title: Text(AppLocalizations.of(context).nodePoolTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: const [WalletSelector()],
@@ -57,7 +58,7 @@ class NodeListScreen extends BaseScreen {
                   _searchProvider.search();
                 },
                 decoration: InputDecoration(
-                  hintText: "Search by validator name...",
+                  hintText: AppLocalizations.of(context).nodeSearchHint,
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.clear, color: Colors.white70),
                     onPressed: () {
@@ -90,7 +91,7 @@ class NodeListScreen extends BaseScreen {
           height: 4,
         ),
         Text(
-          "* Must be the name exactly",
+          AppLocalizations.of(context).nodeSearchExactNote,
           style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.white),
         ),
         ConstrainedBox(
@@ -121,7 +122,7 @@ class NodeListScreen extends BaseScreen {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "Validator",
+              AppLocalizations.of(context).nodeValidatorHeading,
               style: Theme.of(context).textTheme.headlineSmall,
             ),
           ),
@@ -141,12 +142,12 @@ class NodeListScreen extends BaseScreen {
                 return ListTile(
                   title: Text(w.labelWithoutTruncation),
                   leading: w.isValidating
-                      ? const AppBadge(
-                          label: "Active",
+                      ? AppBadge(
+                          label: AppLocalizations.of(context).nodeStatusActive,
                           variant: AppColorVariant.Success,
                         )
-                      : const AppBadge(
-                          label: "Inactive",
+                      : AppBadge(
+                          label: AppLocalizations.of(context).nodeStatusInactive,
                           variant: AppColorVariant.Danger,
                         ),
                 );

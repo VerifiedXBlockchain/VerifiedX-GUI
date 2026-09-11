@@ -1,3 +1,5 @@
+import 'dart:ui' show PlatformDispatcher;
+import 'package:timeago/timeago.dart' as timeago;
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
@@ -17,7 +19,9 @@ import 'features/bridge/services/bridge_service.dart';
 import 'features/remote_shop/providers/shop_loading_provider.dart';
 import 'generated/assets.gen.dart';
 
+import 'l10n/generated/app_localizations.dart';
 import 'core/app_router.gr.dart';
+import 'core/providers/locale_provider.dart';
 import 'core/components/boot_container.dart';
 import 'core/components/centered_loader.dart';
 import 'core/env.dart';
@@ -97,11 +101,18 @@ class AppContainer extends ConsumerWidget {
 
     final router = Env.isWeb ? webRouter : appRouter;
 
+    final appLocale = ref.watch(localeProvider);
+    // Keep package-generated relative times ("about a year ago") in the app language.
+    timeago.setDefaultLocale((appLocale?.languageCode ?? PlatformDispatcher.instance.locale.languageCode) == 'es' ? 'es' : 'en');
+
     return MaterialApp.router(
       restorationScopeId: "app",
       debugShowCheckedModeBanner: false,
       scaffoldMessengerKey: rootScaffoldMessengerKey,
       theme: AppTheme.dark().themeData,
+      locale: appLocale,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: AutoRouterDelegate(
         router,
@@ -182,7 +193,7 @@ class AppContent extends BaseComponent {
                       color: Colors.black54,
                       child: Center(
                         child: Text(
-                          "Loading...",
+                          AppLocalizations.of(context).statusLoading,
                           style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,

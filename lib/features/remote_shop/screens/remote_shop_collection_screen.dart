@@ -6,6 +6,7 @@ import '../../../core/base_component.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/components/empty_placeholder.dart';
 import '../../../core/providers/session_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../components/listing_details_list_tile.dart';
 import '../components/shop_connected_indicator.dart';
 import '../models/shop_data.dart';
@@ -64,7 +65,7 @@ class RemoteShopCollectionScreen extends BaseScreen {
         ),
         Center(
             child: Tooltip(
-          message: "My Balance",
+          message: AppLocalizations.of(context).btcDetailMyBalanceLabel,
           child: Text("${balance.toStringAsFixed(5)} VFX"),
         )),
         IconButton(
@@ -77,7 +78,7 @@ class RemoteShopCollectionScreen extends BaseScreen {
           type: AppButtonType.Text,
           variant: AppColorVariant.Light,
           icon: Icons.chat_bubble_outline,
-          label: 'Chat',
+          label: AppLocalizations.of(context).chatTitleSingle,
           onPressed: () {
             AutoRouter.of(context).push(ShopChatScreenRoute(url: url));
           },
@@ -95,13 +96,13 @@ class RemoteShopCollectionScreen extends BaseScreen {
 
     final shop = model.data;
     if (shop == null) {
-      return Center(child: Text("Shop Error"));
+      return Center(child: Text(AppLocalizations.of(context).r3gShopError));
     }
 
     final collection = shop.collections.firstWhereOrNull((c) => c.id == collectionId);
 
     if (collection == null) {
-      return Center(child: Text("Collection Error"));
+      return Center(child: Text(AppLocalizations.of(context).r3gCollectionError));
     }
 
     final validListings = collection.listings.where((l) => l.nft != null && !l.hide).toList();
@@ -112,7 +113,7 @@ class RemoteShopCollectionScreen extends BaseScreen {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _Header(collection: collection),
-          EmptyPlaceholder(title: "No Active Listings"),
+          EmptyPlaceholder(title: AppLocalizations.of(context).shopNoActiveListings),
         ],
       );
     }

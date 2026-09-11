@@ -29,6 +29,7 @@ import '../features/btc/services/btc_service.dart';
 import '../features/transactions/models/transaction.dart';
 
 import '../features/wallet/providers/wallet_list_provider.dart';
+import '../l10n/generated/app_localizations.dart';
 import '../utils/files.dart';
 import '../utils/toast.dart';
 import 'base_component.dart';
@@ -86,7 +87,7 @@ Future<bool> backupKeys(BuildContext context, WidgetRef ref) async {
           bytes: Uint8List.fromList(bytes),
           ext: 'txt',
           mimeType: MimeType.text);
-      Toast.message("Saved to $data");
+      Toast.message(AppLocalizations.of(context).r3eSavedTo(data.toString()));
     }
 
     return true;
@@ -132,7 +133,7 @@ Future<bool> backupWebKeys(BuildContext context, WidgetRef ref) async {
     bool result = false;
     await PasswordPromptService.requirePasswordFor(context, (password) async {
       result = await _backupWebKeysInternal(context, ref);
-    }, customMessage: "Enter your password to backup your keys.");
+    }, customMessage: AppLocalizations.of(context).r3eEnterPasswordBackup);
     return result;
   } else {
     // Legacy user with unencrypted storage - backup directly
@@ -274,7 +275,7 @@ Future<bool> backupMedia(BuildContext context, WidgetRef ref) async {
           ext: "zip",
           mimeType: MimeType.zip,
           bytes: Uint8List.fromList(bytes));
-      Toast.message("Saved to $data");
+      Toast.message(AppLocalizations.of(context).r3eSavedTo(data.toString()));
     }
 
     return true;
@@ -404,10 +405,9 @@ Future<bool> checkEncryptionMigrationRequired(
 
   if (!storage.isEncryptionEnabled() && session.isAuthenticated) {
     await InfoDialog.show(
-      title: "Web Wallet Now Uses Encryption",
-      body:
-          "The web wallet now uses encryption to protect your keys. In order to add an additional account you must fully sign out of the wallet and login again. Please make sure all your existing login details / keys are backed up before proceeding.",
-      closeText: "Okay",
+      title: AppLocalizations.of(context).r3eWebWalletEncryptionTitle,
+      body: AppLocalizations.of(context).r3eWebWalletEncryptionBody,
+      closeText: AppLocalizations.of(context).walletOkay,
     );
     return true;
   }
@@ -430,11 +430,11 @@ Future<void> proveSmartContractOwnership(BuildContext context, WidgetRef ref,
         ? ref.read(webSessionProvider).raKeypair?.address
         : ref.read(webSessionProvider).keypair?.address;
     if (privateKey == null) {
-      Toast.error("Can't find private key");
+      Toast.error(AppLocalizations.of(context).r3eCantFindPrivateKey);
       return;
     }
     if (publicKey == null) {
-      Toast.error("Can't find public key");
+      Toast.error(AppLocalizations.of(context).r3eCantFindPublicKey);
       return;
     }
 
@@ -447,7 +447,7 @@ Future<void> proveSmartContractOwnership(BuildContext context, WidgetRef ref,
         message: message, privateKey: privateKey, publicKey: publicKey);
 
     if (sigScript == null) {
-      Toast.error("Could not generate signature");
+      Toast.error(AppLocalizations.of(context).r3eCouldNotGenerateSignature);
       return;
     }
 
@@ -461,7 +461,7 @@ Future<void> proveSmartContractOwnership(BuildContext context, WidgetRef ref,
   }
 
   InfoDialog.show(
-    title: "Ownership Verification Signature",
+    title: AppLocalizations.of(context).r3eOwnershipVerificationSignature,
     content: SizedBox(
       width: 420,
       child: Column(
@@ -469,7 +469,7 @@ Future<void> proveSmartContractOwnership(BuildContext context, WidgetRef ref,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Send this ownership validation signature to prove you are the owner.",
+            AppLocalizations.of(context).r3eSendOwnershipSignature,
             style: Theme.of(context).textTheme.bodySmall,
           ),
           TextFormField(
@@ -483,11 +483,11 @@ Future<void> proveSmartContractOwnership(BuildContext context, WidgetRef ref,
           ),
           Center(
             child: AppButton(
-              label: "Copy Signature",
+              label: AppLocalizations.of(context).r3eCopySignature,
               icon: Icons.copy,
               onPressed: () async {
                 await Clipboard.setData(ClipboardData(text: str));
-                Toast.message("Signature Verification copied to clipboard.");
+                Toast.message(AppLocalizations.of(context).r3eSignatureCopied);
               },
             ),
           )

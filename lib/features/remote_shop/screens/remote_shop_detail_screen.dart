@@ -9,6 +9,7 @@ import '../providers/remote_shop_detail_provider.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/theme/app_theme.dart';
 
@@ -62,7 +63,7 @@ class RemoteShopDetailScreen extends BaseScreen {
               ],
             )
           : AppBar(
-              title: const Text("Error"),
+              title: Text(AppLocalizations.of(context).shopErrorTitle),
             ),
       error: (_, __) => AppBar(
         title: const Text("Error"),

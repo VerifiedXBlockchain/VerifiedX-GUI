@@ -4,8 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../../utils/toast.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../core/services/base_service.dart';
+import '../../nft/models/nft.dart';
+import '../../nft/services/nft_service.dart';
 import '../models/tokenized_bitcoin.dart';
+import '../models/vbtc_multi_transfer_result.dart';
 import '../models/withdrawal_result.dart';
 
 const _tag = '[vBTC-V2]';
@@ -31,9 +35,15 @@ class VbtcV2Service extends BaseService {
   /// Fetch V2 contracts from the CLI endpoint.
   /// Returns them as [TokenizedBitcoin] with version=2 so the UI
   /// can merge them into the unified token list.
+  ///
+  /// When [address] is given, the result is filtered to contracts that
+  /// address owns or holds a spendable balance on.
   Future<List<TokenizedBitcoin>> getContractList({String? address}) async {
     const method = 'GetContractList';
-    final path = address != null ? '/GetContractList/$address' : '/GetContractList';
+    // Always the unfiltered list: GetContractList/{address} is owner-scoped
+    // on the CLI, which hides contracts this wallet received balance on but
+    // does not own. Holder filtering happens below via the spendable lookups.
+    const path = '/GetContractList';
 
     try {
       final result = await getJson(
@@ -60,6 +70,21 @@ class VbtcV2Service extends BaseService {
         }
       }
 
+      // Contracts this node didn't mint come back with an empty Name — the
+      // CLI only enriches the list from SmartContractMain, which exists just
+      // for its own mints. GetSmartContractData instead decompiles the
+      // contract straight from the state trei, so the on-chain name resolves
+      // locally. Kicked off here to run alongside the spendable lookups
+      // below; getNftData returns null on any failure, and the display
+      // fallback below covers that.
+      final Future<List<Nft?>> chainMetaFuture = Future.wait(
+        parsed.map((c) async {
+          final String name = c['Name'] ?? c['TokenName'] ?? '';
+          if (name.isNotEmpty) return null;
+          return NftService().getNftData(c['SmartContractUID'] ?? c['SmartContractUid'] ?? '');
+        }),
+      );
+
       // GetContractList carries no per-address figure, so spendable balances
       // are fetched alongside it. One request per contract against the local
       // node.
@@ -80,10 +105,15 @@ class VbtcV2Service extends BaseService {
               ),
             );
 
+      final List<Nft?> chainMeta = await chainMetaFuture;
+
       final List<TokenizedBitcoin> tokens = [];
       for (int i = 0; i < parsed.length; i++) {
         final c = parsed[i];
+        final meta = chainMeta[i];
         try {
+          final String name = c['Name'] ?? c['TokenName'] ?? '';
+          final String description = c['Description'] ?? c['TokenDescription'] ?? '';
           final token = TokenizedBitcoin(
             id: (c['Id'] ?? 0).toDouble(),
             smartContractUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
@@ -94,8 +124,10 @@ class VbtcV2Service extends BaseService {
             // blocking a transfer is recoverable, offering a balance that is
             // not there is not.
             myBalance: spendable[i] ?? 0,
-            tokenName: c['Name'] ?? c['TokenName'] ?? 'vBTC',
-            tokenDescription: c['Description'] ?? c['TokenDescription'] ?? '',
+            tokenName: name.isNotEmpty
+                ? name
+                : (meta != null && meta.name.isNotEmpty ? meta.name : 'vBTC'),
+            tokenDescription: description.isNotEmpty ? description : (meta?.description ?? ''),
             smartContractMainId: (c['SmartContractMainId'] ?? 0).toDouble(),
             isPublished: c['IsPublished'] ?? true,
             version: 2,
@@ -110,7 +142,17 @@ class VbtcV2Service extends BaseService {
         }
       }
 
-      return tokens;
+      if (address == null) {
+        return tokens;
+      }
+
+      // The unfiltered endpoint returns every contract the node knows about;
+      // only this wallet's belong in the list: owned, or holding a spendable
+      // balance (received via transfer). A failed spendable lookup still
+      // keeps owned contracts (rescued by the owner check) but drops
+      // received-only ones — hiding a token beats showing one whose balance
+      // cannot be established.
+      return tokens.where((t) => t.rbxAddress == address || t.myBalance > 0).toList();
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
       return [];
@@ -183,7 +225,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to initiate ceremony.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedInitiateCeremony);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -210,7 +252,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${result['Message']}');
-      Toast.error(result['Message'] ?? "Failed to get ceremony status.");
+      Toast.error(result['Message'] ?? globalL10n.r3fFailedCeremonyStatus);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -257,7 +299,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to create contract.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedCreateContract);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -301,7 +343,58 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to transfer vBTC.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedTransferVbtc);
+      return null;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      Toast.error(e.toString());
+      return null;
+    }
+  }
+
+  /// Send [totalAmount] vBTC to [toAddress], drawing on every V2 contract
+  /// [fromAddress] holds a spendable balance on. The CLI picks the inputs
+  /// (largest balance first) and signs one transaction; the returned
+  /// allocations say which contracts were debited.
+  ///
+  /// Returns null after surfacing the CLI's message on failure. The CLI
+  /// rejects Vault (xRBX) senders and totals that would need more than 25
+  /// inputs, and only accepts the multi shape once the network has activated
+  /// it (testnet today).
+  Future<VbtcMultiTransferResult?> transferVbtcMulti({
+    required String fromAddress,
+    required String toAddress,
+    required double totalAmount,
+  }) async {
+    const method = 'TransferVBTCMulti';
+    final params = {
+      'FromAddress': fromAddress,
+      'ToAddress': toAddress,
+      'TotalAmount': totalAmount,
+    };
+
+    _log(method, 'REQUEST POST /TransferVBTCMulti', params);
+
+    try {
+      final response = await postJson(
+        "/TransferVBTCMulti",
+        params: params,
+        cleanPath: false,
+        inspect: true,
+      );
+
+      final Map<String, dynamic> data = response['data'];
+      _log(method, 'RESPONSE', data);
+
+      if (data['Success'] == true) {
+        final result = VbtcMultiTransferResult.fromJson(data);
+        _log(method,
+            'Multi transfer succeeded — txHash: ${result.transactionHash}, inputs: ${result.allocations.length}');
+        return result;
+      }
+
+      _log(method, 'FAILED: ${data['Message']}');
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedTransferVbtc);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -333,7 +426,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${result['Message']}');
-      Toast.error(result['Message'] ?? "Failed to transfer ownership.");
+      Toast.error(result['Message'] ?? globalL10n.r3fFailedTransferOwnership);
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -386,7 +479,7 @@ class VbtcV2Service extends BaseService {
       _log(method, 'FAILED: ${data['Message']}');
       return WithdrawalResult(
         success: false,
-        message: data['Message'] ?? "Failed to request withdrawal.",
+        message: data['Message'] ?? globalL10n.r3fFailedRequestWithdrawal,
       );
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -440,7 +533,7 @@ class VbtcV2Service extends BaseService {
       _log(method, 'FAILED: ${data['Message']}');
       return WithdrawalResult(
         success: false,
-        message: data['Message'] ?? "Failed to complete withdrawal.",
+        message: data['Message'] ?? globalL10n.r3fFailedCompleteWithdrawal,
         requestHash: withdrawalRequestHash,
       );
     } catch (e, st) {
@@ -560,7 +653,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? "Failed to cancel withdrawal.");
+      Toast.error(data['Message'] ?? globalL10n.r3fFailedCancelWithdrawal);
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');

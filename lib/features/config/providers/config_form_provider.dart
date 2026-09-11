@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
+import '../../../l10n/l10n_helper.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../utils/files.dart';
 import '../../../utils/toast.dart';
@@ -148,10 +149,10 @@ class ConfigFormProvider extends StateNotifier<Config> {
 
   Future<bool> submit() async {
     final shouldRestart = await ConfirmDialog.show(
-      title: "CLI restart required for changes to take effect.",
-      body: "Would you like to restart now?",
-      cancelText: "Later",
-      confirmText: "Restart Now",
+      title: globalL10n.r3fCliRestartRequired,
+      body: globalL10n.motherCliRestartBody,
+      cancelText: globalL10n.beaconLater,
+      confirmText: globalL10n.r3fRestartNow,
     );
 
     ref.read(globalLoadingProvider.notifier).start();
@@ -160,7 +161,7 @@ class ConfigFormProvider extends StateNotifier<Config> {
     await File(path).writeAsString(fileContents);
 
     if (shouldRestart == true) {
-      Toast.message("Restarting CLI...");
+      Toast.message(globalL10n.validatorRestartingToast);
       await ref.read(sessionProvider.notifier).restartCli();
     }
     ref.read(globalLoadingProvider.notifier).complete();

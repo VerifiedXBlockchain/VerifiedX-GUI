@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../providers/validating_status_provider.dart';
 import '../screens/validator_screen.dart';
 
@@ -22,9 +23,9 @@ class ValidatingStatus extends BaseComponent {
               const RotatingGear(
                 size: 18,
               ),
-              const Text(
-                "Validating...",
-                style: TextStyle(
+              Text(
+                AppLocalizations.of(context).validatorActive,
+                style: const TextStyle(
                   fontSize: 12,
                   letterSpacing: 1,
                   fontWeight: FontWeight.w600,
