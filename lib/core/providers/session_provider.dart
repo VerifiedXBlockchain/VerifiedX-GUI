@@ -891,19 +891,47 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
         try {
 
+          // VFXLauncher.exe resolves <cwd>\VFXCore\VerifiedXCore.exe (the folder
+          // name is baked into the launcher) and forwards apitoken/testnet, so
+          // the flags travel the same way as on macOS. Check both files up
+          // front: the launcher is a windowless app that exits silently when
+          // the CLI binary is missing, which otherwise looks identical to a
+          // CLI that is still booting.
+          final cliExePath =
+              "${Directory.current.path}\\VFXCore\\VerifiedXCore.exe";
+          for (final entry in {
+            "CLI launcher": cliPath,
+            "CLI binary": cliExePath,
+          }.entries) {
+            if (!File(entry.value).existsSync()) {
+              ref.read(logProvider.notifier).append(LogEntry(
+                    message: "${entry.key} not found at ${entry.value}",
+                    variant: AppColorVariant.Danger,
+                  ));
+              return false;
+            }
+          }
           ref
               .read(logProvider.notifier)
               .append(LogEntry(message: "Launching CLI in the background."));
-          // VFXLauncher.exe resolves <cwd>\VFXCore\VerifiedXCore.exe (the folder
-          // name is baked into the launcher) and forwards apitoken/testnet, so
-          // the flags travel the same way as on macOS.
           final List<String> params = [cliPath, ...options];
           pm.run(params).then((result) {
-            ref
-                .read(logProvider.notifier)
-                .append(LogEntry(message: "Command ran successfully."));
+            final output = "${result.stdout}${result.stderr}".trim();
+            final snippet =
+                output.length > 300 ? output.substring(0, 300) : output;
+            ref.read(logProvider.notifier).append(LogEntry(
+                  message: "Launcher exited with code ${result.exitCode}"
+                      "${snippet.isEmpty ? '' : ': $snippet'}",
+                  variant: result.exitCode == 0
+                      ? AppColorVariant.Info
+                      : AppColorVariant.Warning,
+                ));
+          }).catchError((e) {
+            ref.read(logProvider.notifier).append(LogEntry(
+                  message: "Launcher failed to start: $e",
+                  variant: AppColorVariant.Danger,
+                ));
           });
-
           singleton<ApiTokenManager>().set(apiToken);
 
           await Future.delayed(const Duration(seconds: 3));
