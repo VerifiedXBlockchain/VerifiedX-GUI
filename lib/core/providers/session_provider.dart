@@ -793,6 +793,13 @@ class SessionProvider extends StateNotifier<SessionModel> {
     state = state.copyWith(logWindowExpanded: value);
   }
 
+  /// Folder holding VFXWallet.exe. The Windows launcher resolves the CLI
+  /// relative to its working directory, so the GUI anchors both the launcher
+  /// path and that working directory to its own location instead of to
+  /// whatever cwd the shortcut or installer happened to start it with.
+  static String windowsAppPath() =>
+      File(Platform.resolvedExecutable).parent.path;
+
   String getCliPath() {
     if (kIsWeb) {
       return '';
@@ -801,9 +808,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       return '/Applications/VFXWallet.app/Contents/Resources/VFXCore/VerifiedXCore';
     } else {
       if (state.windowsLauncherPath == null) {
-        final appPath = Directory.current.path;
-        final p =
-            "$appPath\\VFXCore\\VFXLauncher.exe";
+        final p = "${windowsAppPath()}\\VFXCore\\VFXLauncher.exe";
         state = state.copyWith(windowsLauncherPath: p);
         return p;
       }
@@ -892,13 +897,14 @@ class SessionProvider extends StateNotifier<SessionModel> {
         try {
 
           // VFXLauncher.exe resolves <cwd>\VFXCore\VerifiedXCore.exe (the folder
-          // name is baked into the launcher) and forwards apitoken/testnet, so
-          // the flags travel the same way as on macOS. Check both files up
+          // name is baked into the launcher, and it reads the working directory,
+          // not its own location) and forwards apitoken/testnet, so the flags
+          // travel the same way as on macOS. Check both files up
           // front: the launcher is a windowless app that exits silently when
           // the CLI binary is missing, which otherwise looks identical to a
           // CLI that is still booting.
-          final cliExePath =
-              "${Directory.current.path}\\VFXCore\\VerifiedXCore.exe";
+          final appPath = windowsAppPath();
+          final cliExePath = "$appPath\\VFXCore\\VerifiedXCore.exe";
           for (final entry in {
             "CLI launcher": cliPath,
             "CLI binary": cliExePath,
@@ -915,7 +921,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
               .read(logProvider.notifier)
               .append(LogEntry(message: "Launching CLI in the background."));
           final List<String> params = [cliPath, ...options];
-          pm.run(params).then((result) {
+          pm.run(params, workingDirectory: appPath).then((result) {
             final output = "${result.stdout}${result.stderr}".trim();
             final snippet =
                 output.length > 300 ? output.substring(0, 300) : output;
