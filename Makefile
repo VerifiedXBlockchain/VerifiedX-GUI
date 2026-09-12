@@ -88,9 +88,10 @@ build_win:
 	if exist .\build\windows\runner\Release rmdir /s /q ".\build\windows\runner\Release"
 	fvm flutter build windows --release
 	move ".\build\windows\runner\Release\rbx_wallet_gui.exe" ".\build\windows\runner\Release\VFXWallet.exe"
+	if exist ..\ReserveBlock-Core\rbxpublished rmdir /s /q "..\ReserveBlock-Core\rbxpublished"
 	dotnet publish -c Release -r win-x64 ..\ReserveBlock-Core\VerifiedXCore\VerifiedXCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
-	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
-	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
+	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\VFXCore\" /E /Y /K
+	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\VFXCore\VFXLauncher.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
@@ -102,9 +103,10 @@ build_win7:
 	if exist .\build\windows\runner\Release rmdir /s /q ".\build\windows\runner\Release"
 	fvm flutter build windows --release
 	move ".\build\windows\runner\Release\rbx_wallet_gui.exe" ".\build\windows\runner\Release\VFXWallet.exe"
-	dotnet publish -c Release -r win7-x64 ..\ReserveBlock-Core\ --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
-	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\RBXCore\" /E /Y /K
-	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\RBXCore\VFXLauncher.exe" 
+	if exist ..\ReserveBlock-Core\rbxpublished rmdir /s /q "..\ReserveBlock-Core\rbxpublished"
+	dotnet publish -c Release -r win7-x64 ..\ReserveBlock-Core\VerifiedXCore\VerifiedXCore.csproj --output ..\ReserveBlock-Core\rbxpublished --self-contained true -p:PublishSingleFile=true
+	Xcopy "..\ReserveBlock-Core\rbxpublished" ".\build\windows\runner\Release\VFXCore\" /E /Y /K
+	copy ".\installers\resources\windows-64\VFXLauncher.exe" ".\build\windows\runner\Release\VFXCore\VFXLauncher.exe" 
 	copy ".\installers\resources\windows-64\msvcp140.dll" ".\build\windows\runner\Release\msvcp140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
@@ -158,7 +160,7 @@ run_cli_testnet:
 	/Applications/VFXWallet.app/Contents/Resources/VFXCore/VerifiedXCore testnet enableapi gui
 
 run_cli_testnet_win:
-	C:\Users\Administrator\prj\ReserveBlock-Core\rbxpublished\ReserveBlockCore.exe testnet enableapi gui
+	C:\Users\Administrator\prj\ReserveBlock-Core\rbxpublished\VerifiedXCore.exe testnet enableapi gui
 
 
 

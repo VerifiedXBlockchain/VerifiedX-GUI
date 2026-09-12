@@ -803,7 +803,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       if (state.windowsLauncherPath == null) {
         final appPath = Directory.current.path;
         final p =
-            "$appPath\\RBXCore\\VFXLauncher.exe";
+            "$appPath\\VFXCore\\VFXLauncher.exe";
         state = state.copyWith(windowsLauncherPath: p);
         return p;
       }
@@ -890,20 +890,13 @@ class SessionProvider extends StateNotifier<SessionModel> {
         ProcessManager pm = const LocalProcessManager();
 
         try {
-          // final appPath = Directory.current.path;
-          // cmd = Env.isTestNet ? "$appPath\\RbxCore\\RBXLauncherTestNet.exe" : "$appPath\\RbxCore\\RBXLauncher.exe";
-
-          // if (state.windowsLauncherPath == null) {
-          //   final p = "C:\\Program Files (x86)\\RBXWallet\\RBXCore\\${Env.isTestNet ? 'RBXLauncherTestNet.exe' : 'RBXLauncher.exe'}";
-          //   state = state.copyWith(windowsLauncherPath: p);
-          //   await Future.delayed(Duration(milliseconds: 100));
-          // }
 
           ref
               .read(logProvider.notifier)
               .append(LogEntry(message: "Launching CLI in the background."));
-          // VFXLauncher.exe forwards its arguments to VerifiedXCore.exe, so
-          // the network and API flags travel the same way as on macOS.
+          // VFXLauncher.exe resolves <cwd>\VFXCore\VerifiedXCore.exe (the folder
+          // name is baked into the launcher) and forwards apitoken/testnet, so
+          // the flags travel the same way as on macOS.
           final List<String> params = [cliPath, ...options];
           pm.run(params).then((result) {
             ref
