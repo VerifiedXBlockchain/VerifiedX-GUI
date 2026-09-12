@@ -1,5 +1,10 @@
 phony: build_mac, package_mac, build_core
 
+# One quoted token with the extension spelled out: GNU Make on Windows runs
+# "simple" recipe lines through CreateProcess rather than cmd.exe, which
+# neither tolerates mid-path quotes nor resolves PATHEXT.
+ISCC = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+
 gen:
 	fvm flutter packages pub run build_runner build --delete-conflicting-outputs
 
@@ -96,7 +101,7 @@ build_win:
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
 	Xcopy ".\installers\resources\BIP39" ".\build\windows\runner\Release\BIP39\" /E /Y /K
-	C:\"Program Files (x86)"\"Inno Setup 6"\ISCC .\installers\resources\WindowsInstallerScript.iss
+	$(ISCC) .\installers\resources\WindowsInstallerScript.iss
 
 
 build_win7:
@@ -111,7 +116,7 @@ build_win7:
 	copy ".\installers\resources\windows-64\vcruntime140.dll" ".\build\windows\runner\Release\vcruntime140.dll" 
 	copy ".\installers\resources\windows-64\vcruntime140_1.dll" ".\build\windows\runner\Release\vcruntime140_1.dll" 
 	Xcopy ".\installers\resources\BIP39" ".\build\windows\runner\Release\BIP39\" /E /Y /K
-	C:\"Program Files (x86)"\"Inno Setup 6"\ISCC .\installers\resources\WindowsInstallerScript-win7.iss
+	$(ISCC) .\installers\resources\WindowsInstallerScript-win7.iss
 
 
 deploy_proxy:
