@@ -481,6 +481,22 @@ class AccountUtils {
       return;
     }
 
+    // Mirrors the option gates in the sheet below; on mainnet with every VFX
+    // on-ramp disabled the sheet would otherwise open empty.
+    final gatewayAvailable = (type == VfxOrBtcOption.vfx
+            ? Env.moonpayEnabledVFX
+            : Env.moonpayEnabled) ||
+        (CRYPTO_DOT_COM_ENABLED &&
+            (ALLOW_BIDS_WITHOUT_BALANCE || type == VfxOrBtcOption.btc)) ||
+        (BANXA_VFX_ENABLED || type == VfxOrBtcOption.btc) ||
+        INCLUDE_STRIPE_INTEGRATION ||
+        Env.isTestNet;
+
+    if (!gatewayAvailable) {
+      Toast.error(l10n.r3dPaymentNotAvailable);
+      return;
+    }
+
     PaymentGateway? paymentGateway = await showModalBottomSheet(
         context: context,
         builder: (context) {
