@@ -520,15 +520,16 @@ class AccountUtils {
                   height: 12,
                 ),
               ],
-              AppCard(
-                padding: 0,
-                child: ListTile(
-                    title: Text("Banxa"),
-                    onTap: () {
-                      Navigator.of(context).pop(PaymentGateway.banxa);
-                    },
-                    trailing: Icon(Icons.chevron_right, size: 16)),
-              ),
+              if (BANXA_VFX_ENABLED || type == VfxOrBtcOption.btc)
+                AppCard(
+                  padding: 0,
+                  child: ListTile(
+                      title: Text("Banxa"),
+                      onTap: () {
+                        Navigator.of(context).pop(PaymentGateway.banxa);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
               if (INCLUDE_STRIPE_INTEGRATION) ...[
                 SizedBox(
                   height: 12,
