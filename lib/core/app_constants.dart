@@ -12,6 +12,8 @@ const ALLOW_PAYMENT = true;
 const BUTTERFLY_ENABLED = true;
 // Crypto.com on-ramp is hidden for now: side-nav link and Get VFX/BTC gateway option.
 const CRYPTO_DOT_COM_ENABLED = false;
+// Banxa stays available for BTC; the VFX option is hidden with the other VFX on-ramps.
+const BANXA_VFX_ENABLED = false;
 const VALIDATOR_NAV_ENABLED = false;
 // Multi-contract vBTC transfers went live on mainnet at block 7,281,000
 // (CLI Globals.V2TransferMultiHeight, 7.0.0 network upgrade, 2026-09-11).
@@ -68,7 +70,10 @@ const ALLOW_FAUCET_FOR_BTC_DOMAINS = true;
 
 const BACKUP_URL_PROPERTY_NAME = "MEDIA_BACKUP_URL";
 
-const ALLOW_BIDS_WITHOUT_BALANCE = true;
+// Off: the marketplace insufficient-balance path routed users into the retired
+// Crypto.com VFX on-ramp (dead webhook, payments can't settle). Plain
+// insufficient-balance toast shows instead.
+const ALLOW_BIDS_WITHOUT_BALANCE = false;
 const INCLUDE_STRIPE_INTEGRATION = false;
 
 const DEBUG_ENCRYPTION_PASSWORD = kDebugMode ? "younotry" : "";
