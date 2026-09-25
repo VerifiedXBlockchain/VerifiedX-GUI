@@ -757,6 +757,17 @@ class AppLocalizationsEs extends AppLocalizations {
   String get btcRbfFeeRateTitle => 'Comisión';
 
   @override
+  String btcRbfHighFeeBody(String reason) {
+    return '$reason ¿Reemplazar la transacción de todos modos?';
+  }
+
+  @override
+  String get btcRbfHighFeeConfirm => 'Reemplazar de todos modos';
+
+  @override
+  String get btcRbfHighFeeTitle => 'Comisión alta';
+
+  @override
   String get btcReceivingAddressLabel => 'Dirección receptora';
 
   @override

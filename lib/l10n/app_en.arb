@@ -1068,6 +1068,23 @@
   "@btcRbfFeeRateTitle": {
     "description": "Prompt title for the replace-by-fee fee-rate input."
   },
+  "btcRbfHighFeeBody": "{reason} Replace the transaction anyway?",
+  "@btcRbfHighFeeBody": {
+    "description": "Confirm body when the node refuses a Bitcoin replace-by-fee whose total fee is more than 10% of the amount. The reason is the node's message.",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "btcRbfHighFeeConfirm": "Replace anyway",
+  "@btcRbfHighFeeConfirm": {
+    "description": "Confirm button that retries a Bitcoin replace-by-fee with a fee above 10% of the amount."
+  },
+  "btcRbfHighFeeTitle": "High Fee",
+  "@btcRbfHighFeeTitle": {
+    "description": "Confirm title when a Bitcoin replace-by-fee fee is more than 10% of the amount."
+  },
   "btcReceivingAddressLabel": "Receiving Address",
   "@btcReceivingAddressLabel": {
     "description": "Field label for the receiving address on a withdrawal."

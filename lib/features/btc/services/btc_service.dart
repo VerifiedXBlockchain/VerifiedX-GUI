@@ -14,6 +14,7 @@ import 'package:collection/collection.dart';
 import '../models/btc_send_tx_result.dart';
 import '../models/btc_transaction.dart';
 import '../models/btc_utxo.dart';
+import '../utils.dart';
 
 class BtcService extends BaseService {
   BtcService() : super(apiBasePathOverride: "/btcapi/BTCV2");
@@ -516,12 +517,32 @@ class BtcService extends BaseService {
     }
   }
 
-  Future<String?> replaceByFee(String txId, int feeRate) async {
+  /// Replaces a pending Bitcoin transaction at [feeRate] and returns the new
+  /// hash, or null after showing the node's refusal. The node refuses a
+  /// replacement whose total fee is more than 10% of the amount unless
+  /// allowHighFee is passed; [confirmHighFee] is asked with the node's reason
+  /// and a yes retries with it.
+  Future<String?> replaceByFee(
+    String txId,
+    int feeRate, {
+    Future<bool> Function(String reason)? confirmHighFee,
+  }) async {
     try {
-      final result = await getJson(
+      var result = await getJson(
         "/ReplaceByFee/$txId/$feeRate",
         cleanPath: false,
       );
+
+      final highFeeReason = rbfHighFeeReason(result['Message']?.toString());
+      if (result['Success'] != true && highFeeReason != null && confirmHighFee != null) {
+        if (!await confirmHighFee(highFeeReason)) {
+          return null;
+        }
+        result = await getJson(
+          "/ReplaceByFee/$txId/$feeRate/true",
+          cleanPath: false,
+        );
+      }
 
       if (result.containsKey("Success") && result['Success'] == true) {
         return result['Hash'];

@@ -1485,6 +1485,24 @@ abstract class AppLocalizations {
   /// **'Fee Rate'**
   String get btcRbfFeeRateTitle;
 
+  /// Confirm body when the node refuses a Bitcoin replace-by-fee whose total fee is more than 10% of the amount. The reason is the node's message.
+  ///
+  /// In en, this message translates to:
+  /// **'{reason} Replace the transaction anyway?'**
+  String btcRbfHighFeeBody(String reason);
+
+  /// Confirm button that retries a Bitcoin replace-by-fee with a fee above 10% of the amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace anyway'**
+  String get btcRbfHighFeeConfirm;
+
+  /// Confirm title when a Bitcoin replace-by-fee fee is more than 10% of the amount.
+  ///
+  /// In en, this message translates to:
+  /// **'High Fee'**
+  String get btcRbfHighFeeTitle;
+
   /// Field label for the receiving address on a withdrawal.
   ///
   /// In en, this message translates to:

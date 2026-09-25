@@ -464,3 +464,18 @@ String? formValidatorVbtcMultiAmount(String? value, double available) {
 
   return null;
 }
+
+/// Returns the node's reason when it refused a Bitcoin replace-by-fee because
+/// the replacement's total fee is more than 10% of the amount (VX-18),
+/// without the node's "Pass allowHighFee=true" instruction. Returns null for
+/// any other reply.
+String? rbfHighFeeReason(String? message) {
+  if (message == null) {
+    return null;
+  }
+  final instruction = message.indexOf('Pass allowHighFee=true');
+  if (instruction < 0) {
+    return null;
+  }
+  return message.substring(0, instruction).trim();
+}

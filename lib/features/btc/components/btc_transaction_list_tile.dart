@@ -219,7 +219,18 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                                   return;
                                 }
 
-                                final hash = await BtcService().replaceByFee(widget.transaction.hash, feeRate);
+                                final hash = await BtcService().replaceByFee(
+                                  widget.transaction.hash,
+                                  feeRate,
+                                  confirmHighFee: (reason) async =>
+                                      await ConfirmDialog.show(
+                                        title: l10n.btcRbfHighFeeTitle,
+                                        body: l10n.btcRbfHighFeeBody(reason),
+                                        confirmText: l10n.btcRbfHighFeeConfirm,
+                                        cancelText: l10n.actionCancel,
+                                      ) ==
+                                      true,
+                                );
 
                                 if (hash != null) {
                                   final message = l10n.bw2ReplacedByFeeMessage(feeRate.toString(), hash);
