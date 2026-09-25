@@ -36,6 +36,9 @@ import '../web/models/multi_account_instance.dart';
 import '../../core/services/multi_account_encryption_service.dart';
 import 'package:collection/collection.dart';
 import 'components/auth_type_modal.dart';
+import 'components/imported_key_accounts_dialog.dart';
+import 'services/imported_key_accounts.dart';
+import '../keygen/utils/private_key_text.dart';
 import 'services/extension_crypto_service.dart';
 import 'services/verifiedx_extension_service.dart'
     if (dart.library.io) 'services/verifiedx_extension_service_stub.dart';
@@ -78,11 +81,20 @@ Future<void> handleImportWithPrivateKey(
     tightPadding: true,
     title: l10n.walletImportTitle,
     validator: (String? value) =>
-        formValidatorNotEmpty(value, l10n.authTypeVfxPrivateKey),
+        formValidatorNotEmpty(value, l10n.authTypeVfxPrivateKey) ??
+        (canonicalPrivateKeyHex(value!) == null
+            ? l10n.keyImportInvalidKey
+            : null),
     labelText: l10n.authTypeVfxPrivateKey,
   );
 
   if (privateKey != null) {
+    final canonicalKey = canonicalPrivateKeyHex(privateKey);
+    if (canonicalKey == null) {
+      Toast.error(l10n.keyImportInvalidKey);
+      return;
+    }
+
     // Auto-enable Remember Me since keys will be encrypted
 
     // Collect encryption password
@@ -94,57 +106,48 @@ Future<void> handleImportWithPrivateKey(
 
     if (encryptionPassword == null) return; // User cancelled
 
-    final keypair = await KeygenService.importPrivateKey(privateKey);
+    final keypair = await KeygenService.importPrivateKey(canonicalKey);
 
-    RaKeypair? reserveKeyPair;
-    int append = 0;
-    while (true) {
-      String input = keypair.private;
-      if (input.startsWith("00")) {
-        input = input.substring(2);
-      }
-      String seed = "${input.substring(0, 32)}$append";
+    final accounts = await _resolveImportedKeyAccounts(
+        context, ref, canonicalKey, privateKey);
+    if (accounts == null) return;
 
-      final kp = await KeygenService.seedToKeypair(seed);
-      if (kp == null) {
-        continue;
-      }
-
-      reserveKeyPair =
-          await KeygenService.importReserveAccountPrivateKey(kp.private);
-
-      if (reserveKeyPair.address.startsWith("xRBX")) {
-        break;
-      }
-
-      append += 1;
-    }
-
-    final btcGeneratedEmail =
-        btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-    final btcGeneratedPassword =
-        btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
-
-    final btcKeypair = await BtcWebService()
-        .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
-
-    await loginWithEncryption(
-        context, ref, keypair, reserveKeyPair, btcKeypair, encryptionPassword);
+    await loginWithEncryption(context, ref, keypair, accounts.reserveKeypair,
+        accounts.btcAccount, encryptionPassword);
   }
+}
+
+/// Restores the Vault and Bitcoin accounts of an imported key. They are cut
+/// from the key's text, which older nodes, the remediated node and this wallet
+/// have written differently for the same key (VX-11), so every text form is
+/// tried: the pair with activity is restored, the canonical pair when none has
+/// any, and the user chooses when several do or a lookup failed. Returns null
+/// when the user closes the chooser.
+Future<DerivedAccounts?> _resolveImportedKeyAccounts(
+  BuildContext context,
+  WidgetRef ref,
+  String canonicalKey,
+  String enteredText,
+) async {
+  ref.read(globalLoadingProvider.notifier).start();
+  final ImportedKeyAccountOptions accountOptions;
+  try {
+    accountOptions =
+        await importedKeyAccountOptions(canonicalKey, enteredText: enteredText);
+  } finally {
+    ref.read(globalLoadingProvider.notifier).complete();
+  }
+
+  return accountOptions.autoSelected ??
+      await chooseImportedKeyAccounts(context, accountOptions);
 }
 
 String btcGeneratedEmailFromPrivateKey(String privateKey) {
-  if (privateKey.startsWith("00")) {
-    privateKey = privateKey.replaceFirst("00", "");
-  }
-  return "${privateKey.substring(0, 8)}@${privateKey.substring(privateKey.length - 8)}.com";
+  return btcEmailFromDerivationText(derivationTextFromKeyText(privateKey));
 }
 
 String btcGeneratedPasswordFromPrivateKey(String privateKey) {
-  if (privateKey.startsWith("00")) {
-    privateKey = privateKey.replaceFirst("00", "");
-  }
-  return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
+  return btcPasswordFromDerivationText(derivationTextFromKeyText(privateKey));
 }
 
 /// Handle login with VFX Browser Extension
@@ -229,44 +232,23 @@ Future<void> handleLoginWithExtension(
     return;
   }
 
-  // Import the private key to create keypair
-  final keypair = await KeygenService.importPrivateKey(privateKey);
-
-  // Generate Reserve Account keypair (same logic as other import methods)
-  RaKeypair? reserveKeyPair;
-  int append = 0;
-  while (true) {
-    String input = keypair.private;
-    if (input.startsWith("00")) {
-      input = input.substring(2);
-    }
-    String seed = "${input.substring(0, 32)}$append";
-
-    final kp = await KeygenService.seedToKeypair(seed);
-    if (kp == null) {
-      continue;
-    }
-
-    reserveKeyPair =
-        await KeygenService.importReserveAccountPrivateKey(kp.private);
-
-    if (reserveKeyPair.address.startsWith("xRBX")) {
-      break;
-    }
-
-    append += 1;
+  final canonicalKey = canonicalPrivateKeyHex(privateKey);
+  if (canonicalKey == null) {
+    ref.read(globalLoadingProvider.notifier).complete();
+    Toast.error(l10n.keyImportInvalidKey);
+    return;
   }
 
-  // Generate BTC keypair
-  final btcGeneratedEmail =
-      btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-  final btcGeneratedPassword =
-      btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
-
-  final btcKeypair = await BtcWebService()
-      .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
-
+  // Import the private key to create keypair
+  final keypair = await KeygenService.importPrivateKey(canonicalKey);
   ref.read(globalLoadingProvider.notifier).complete();
+
+  // Vault and BTC accounts (same logic as the private key import)
+  final accounts =
+      await _resolveImportedKeyAccounts(context, ref, canonicalKey, privateKey);
+  if (accounts == null) return;
+  final reserveKeyPair = accounts.reserveKeypair;
+  final btcKeypair = accounts.btcAccount;
 
   // Login with encryption using the same password from the extension
   await loginWithEncryption(

@@ -2432,6 +2432,40 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeVisitWebsite => 'Visitar sitio web';
 
   @override
+  String get keyImportActivityFound => 'Se encontró actividad';
+
+  @override
+  String get keyImportActivityUnknown => 'No se pudo comprobar la actividad';
+
+  @override
+  String keyImportBitcoinLine(String address) {
+    return 'Bitcoin: $address';
+  }
+
+  @override
+  String get keyImportChooseAccountsBody => 'Versiones anteriores de la billetera escribieron esta clave de más de una forma, y cada forma lleva a una cuenta de Bóveda y de Bitcoin distinta. Tu cuenta VFX es la misma en todos los casos. Elige el par que quieres restaurar.';
+
+  @override
+  String get keyImportChooseAccountsTitle => 'Elige las cuentas que quieres restaurar';
+
+  @override
+  String get keyImportEarlierForm => 'Forma anterior de la clave';
+
+  @override
+  String get keyImportInvalidKey => 'Esta no es una clave privada válida. Pega la clave hexadecimal.';
+
+  @override
+  String get keyImportNoActivity => 'No se encontró actividad';
+
+  @override
+  String get keyImportStandardForm => 'Forma estándar de la clave';
+
+  @override
+  String keyImportVaultLine(String address) {
+    return 'Bóveda: $address';
+  }
+
+  @override
   String get keygenAddressLabel => 'Dirección';
 
   @override

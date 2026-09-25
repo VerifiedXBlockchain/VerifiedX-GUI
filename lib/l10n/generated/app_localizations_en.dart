@@ -2432,6 +2432,40 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeVisitWebsite => 'Visit Website';
 
   @override
+  String get keyImportActivityFound => 'Activity found';
+
+  @override
+  String get keyImportActivityUnknown => 'Could not check activity';
+
+  @override
+  String keyImportBitcoinLine(String address) {
+    return 'Bitcoin: $address';
+  }
+
+  @override
+  String get keyImportChooseAccountsBody => 'Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.';
+
+  @override
+  String get keyImportChooseAccountsTitle => 'Choose accounts to restore';
+
+  @override
+  String get keyImportEarlierForm => 'Earlier key form';
+
+  @override
+  String get keyImportInvalidKey => 'This is not a valid private key. Paste the hexadecimal key.';
+
+  @override
+  String get keyImportNoActivity => 'No activity found';
+
+  @override
+  String get keyImportStandardForm => 'Standard key form';
+
+  @override
+  String keyImportVaultLine(String address) {
+    return 'Vault: $address';
+  }
+
+  @override
   String get keygenAddressLabel => 'Address';
 
   @override

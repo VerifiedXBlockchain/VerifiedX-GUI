@@ -166,6 +166,21 @@ class ExplorerService extends BaseService {
     }
   }
 
+  /// Whether [address] has any transaction on record. Unlike [getTransactions]
+  /// it throws when the explorer cannot answer, so a caller can tell an
+  /// unused address from a failed lookup.
+  Future<bool> addressHasHistory(String address) async {
+    final response = await getJson(
+      '/transaction/address/$address',
+      params: {'page': 1, 'limit': 1},
+    );
+    final count = response['count'];
+    if (count is! int) {
+      throw "Unexpected transaction count for $address";
+    }
+    return count > 0;
+  }
+
   Future<PaginatedResponse<WebTransaction>>
       getTransactionsFromMultipleAddresses({
     required int page,

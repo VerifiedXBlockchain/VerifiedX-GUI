@@ -2420,6 +2420,56 @@
   "@homeVisitWebsite": {
     "description": "Get Help option: visit the VerifiedX website."
   },
+  "keyImportActivityFound": "Activity found",
+  "@keyImportActivityFound": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it."
+  },
+  "keyImportActivityUnknown": "Could not check activity",
+  "@keyImportActivityUnknown": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed."
+  },
+  "keyImportBitcoinLine": "Bitcoin: {address}",
+  "@keyImportBitcoinLine": {
+    "description": "Bitcoin address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "keyImportChooseAccountsBody": "Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.",
+  "@keyImportChooseAccountsBody": {
+    "description": "Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportChooseAccountsTitle": "Choose accounts to restore",
+  "@keyImportChooseAccountsTitle": {
+    "description": "Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportEarlierForm": "Earlier key form",
+  "@keyImportEarlierForm": {
+    "description": "Label of a pair in the import chooser that comes from a historical text form of the key."
+  },
+  "keyImportInvalidKey": "This is not a valid private key. Paste the hexadecimal key.",
+  "@keyImportInvalidKey": {
+    "description": "Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key."
+  },
+  "keyImportNoActivity": "No activity found",
+  "@keyImportNoActivity": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: no transactions found."
+  },
+  "keyImportStandardForm": "Standard key form",
+  "@keyImportStandardForm": {
+    "description": "Label of the pair in the import chooser that comes from the canonical 64-digit key."
+  },
+  "keyImportVaultLine": "Vault: {address}",
+  "@keyImportVaultLine": {
+    "description": "Vault address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
   "keygenAddressLabel": "Address",
   "@keygenAddressLabel": {
     "description": "Field label for the generated address."

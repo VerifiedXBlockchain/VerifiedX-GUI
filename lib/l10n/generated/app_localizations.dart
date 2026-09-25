@@ -4623,6 +4623,66 @@ abstract class AppLocalizations {
   /// **'Visit Website'**
   String get homeVisitWebsite;
 
+  /// Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity found'**
+  String get keyImportActivityFound;
+
+  /// Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check activity'**
+  String get keyImportActivityUnknown;
+
+  /// Bitcoin address line of a pair in the import chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin: {address}'**
+  String keyImportBitcoinLine(String address);
+
+  /// Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.'**
+  String get keyImportChooseAccountsBody;
+
+  /// Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose accounts to restore'**
+  String get keyImportChooseAccountsTitle;
+
+  /// Label of a pair in the import chooser that comes from a historical text form of the key.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier key form'**
+  String get keyImportEarlierForm;
+
+  /// Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a valid private key. Paste the hexadecimal key.'**
+  String get keyImportInvalidKey;
+
+  /// Status of a Vault and Bitcoin pair in the import chooser: no transactions found.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity found'**
+  String get keyImportNoActivity;
+
+  /// Label of the pair in the import chooser that comes from the canonical 64-digit key.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard key form'**
+  String get keyImportStandardForm;
+
+  /// Vault address line of a pair in the import chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault: {address}'**
+  String keyImportVaultLine(String address);
+
   /// Field label for the generated address.
   ///
   /// In en, this message translates to:

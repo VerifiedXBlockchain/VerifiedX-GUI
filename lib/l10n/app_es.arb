@@ -2408,6 +2408,56 @@
   "@homeVisitWebsite": {
     "description": "Get Help option: visit the VerifiedX website."
   },
+  "keyImportActivityFound": "Se encontró actividad",
+  "@keyImportActivityFound": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it."
+  },
+  "keyImportActivityUnknown": "No se pudo comprobar la actividad",
+  "@keyImportActivityUnknown": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed."
+  },
+  "keyImportBitcoinLine": "Bitcoin: {address}",
+  "@keyImportBitcoinLine": {
+    "description": "Bitcoin address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "keyImportChooseAccountsBody": "Versiones anteriores de la billetera escribieron esta clave de más de una forma, y cada forma lleva a una cuenta de Bóveda y de Bitcoin distinta. Tu cuenta VFX es la misma en todos los casos. Elige el par que quieres restaurar.",
+  "@keyImportChooseAccountsBody": {
+    "description": "Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportChooseAccountsTitle": "Elige las cuentas que quieres restaurar",
+  "@keyImportChooseAccountsTitle": {
+    "description": "Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportEarlierForm": "Forma anterior de la clave",
+  "@keyImportEarlierForm": {
+    "description": "Label of a pair in the import chooser that comes from a historical text form of the key."
+  },
+  "keyImportInvalidKey": "Esta no es una clave privada válida. Pega la clave hexadecimal.",
+  "@keyImportInvalidKey": {
+    "description": "Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key."
+  },
+  "keyImportNoActivity": "No se encontró actividad",
+  "@keyImportNoActivity": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: no transactions found."
+  },
+  "keyImportStandardForm": "Forma estándar de la clave",
+  "@keyImportStandardForm": {
+    "description": "Label of the pair in the import chooser that comes from the canonical 64-digit key."
+  },
+  "keyImportVaultLine": "Bóveda: {address}",
+  "@keyImportVaultLine": {
+    "description": "Vault address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
   "keygenAddressLabel": "Dirección",
   "@keygenAddressLabel": {
     "description": "Field label for the generated address."
