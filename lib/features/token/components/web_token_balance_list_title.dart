@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/features/token/components/web_token_management_actions.dart';
 import '../../../core/base_component.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../models/web_fungible_token.dart';
 import '../../../utils/toast.dart';
 
@@ -25,6 +26,12 @@ class WebTokenBalanceListTile extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    // Transfer, burn and voting sign with the main key, and the node refuses a
+    // TokenTransfer, TokenBurn or TokenVoteTopicCast whose FromAddress is not
+    // the signer, so a Vault row offers none of them.
+    final isVaultRow = ref.watch(webSessionProvider.select((value) => value.raKeypair?.address)) == address;
+
     return AppCard(
       padding: 0,
       child: ListTile(
@@ -36,41 +43,58 @@ class WebTokenBalanceListTile extends BaseComponent {
               )
             : null,
         title: Text(address),
-        subtitle: Text("$balance ${tokenDetail.token.ticker}"),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppButton(
-              label: AppLocalizations.of(context).tokenVoting,
-              variant: AppColorVariant.Dark,
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return WebTokenTopicBottomSheet(tokenDetail: tokenDetail, isOwner: tokenDetail.token.ownerAddress == address);
-                    });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: WebTransferTokenAmountButton(
-                balance: balance,
-                address: address,
-                tokenDetail: tokenDetail,
+        subtitle: isVaultRow
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("$balance ${tokenDetail.token.ticker}"),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      l10n.tokenWebVaultRowActionsUnavailable,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              )
+            : Text("$balance ${tokenDetail.token.ticker}"),
+        trailing: isVaultRow
+            ? null
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppButton(
+                    label: l10n.tokenVoting,
+                    variant: AppColorVariant.Dark,
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return WebTokenTopicBottomSheet(tokenDetail: tokenDetail, isOwner: tokenDetail.token.ownerAddress == address);
+                          });
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: WebTransferTokenAmountButton(
+                      balance: balance,
+                      address: address,
+                      tokenDetail: tokenDetail,
+                    ),
+                  ),
+                  if (tokenDetail.token.canBurn)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: WebBurnTokenAmountButton(
+                        balance: balance,
+                        address: address,
+                        tokenDetail: tokenDetail,
+                      ),
+                    ),
+                ],
               ),
-            ),
-            if (tokenDetail.token.canBurn)
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: WebBurnTokenAmountButton(
-                  balance: balance,
-                  address: address,
-                  tokenDetail: tokenDetail,
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }

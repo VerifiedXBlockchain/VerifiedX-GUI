@@ -17661,6 +17661,12 @@ abstract class AppLocalizations {
   /// **'This address\'\'s ({address}) {ticker} balance is insufficient.'**
   String tokenWebInsufficient(String address, String ticker);
 
+  /// Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.'**
+  String get tokenWebVaultRowActionsUnavailable;
+
   /// Transactions screen title when viewing both VFX and BTC.
   ///
   /// In en, this message translates to:

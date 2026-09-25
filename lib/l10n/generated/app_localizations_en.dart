@@ -9483,6 +9483,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get tokenWebVaultRowActionsUnavailable => 'Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.';
+
+  @override
   String get txAppBarAll => 'All Transactions';
 
   @override

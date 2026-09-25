@@ -8005,6 +8005,10 @@
       }
     }
   },
+  "tokenWebVaultRowActionsUnavailable": "Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.",
+  "@tokenWebVaultRowActionsUnavailable": {
+    "description": "Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons."
+  },
   "txAppBarAll": "All Transactions",
   "@txAppBarAll": {
     "description": "Transactions screen title when viewing both VFX and BTC."

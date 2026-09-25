@@ -7987,6 +7987,10 @@
       }
     }
   },
+  "tokenWebVaultRowActionsUnavailable": "Transferir, quemar y votar no están disponibles para los tokens guardados en la Bóveda. Primero muévelos fuera de la Bóveda.",
+  "@tokenWebVaultRowActionsUnavailable": {
+    "description": "Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons."
+  },
   "txAppBarAll": "Todas las transacciones",
   "@txAppBarAll": {
     "description": "Transactions screen title when viewing both VFX and BTC."
