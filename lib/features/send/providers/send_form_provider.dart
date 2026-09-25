@@ -696,7 +696,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       }
 
       final amountDouble = double.parse(amount);
-      final txData = await RawTransaction.generate(
+      final generated = await RawTransaction.generate(
         // keypair: ref.read(webSessionProvider).usingRa ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         keypair: senderAddress.startsWith("xRBX") ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         amount: amountDouble,
@@ -704,6 +704,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         unlockHours: unlockHours,
         txType: TxType.rbxTransfer,
       );
+      final txData = generated.txData;
 
       state = state.copyWith(isProcessing: false);
 
@@ -740,6 +741,8 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
           Toast.error();
         }
+      } else {
+        Toast.error(generated.refusalMessage);
       }
     } else {
       try {

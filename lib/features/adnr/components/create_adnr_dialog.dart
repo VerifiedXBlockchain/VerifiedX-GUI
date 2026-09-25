@@ -190,7 +190,7 @@ class CreateAdnrDialog extends BaseComponent {
 
                       print(data);
 
-                      final txData = await RawTransaction.generate(
+                      final generated = await RawTransaction.generate(
                         keypair: ref.read(webSessionProvider).keypair!,
                         amount: ADNR_COST,
                         toAddress: "Adnr_Base",
@@ -198,10 +198,12 @@ class CreateAdnrDialog extends BaseComponent {
                         data: data,
                       );
 
+                      final txData = generated.txData;
+
                       ref.read(globalLoadingProvider.notifier).complete();
 
                       if (txData == null) {
-                        Toast.error(l10n.btcInvalidTxData);
+                        Toast.error(generated.refusalMessage ?? l10n.btcInvalidTxData);
                         return;
                       }
 

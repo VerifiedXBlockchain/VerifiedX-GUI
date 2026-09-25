@@ -27,8 +27,21 @@ class RawTxValue {
   });
 }
 
+/// Outcome of [RawTransaction.generate]: the signed transaction when the node
+/// accepted it at verification, otherwise the node's refusal reason when it
+/// gave one. [refusalMessage] is null when the failure happened before the
+/// node was asked (timestamp, nonce, fee, hash or signing).
+class RawTransactionResult {
+  final Map<String, dynamic>? txData;
+  final String? refusalMessage;
+
+  const RawTransactionResult.verified(Map<String, dynamic> this.txData) : refusalMessage = null;
+
+  const RawTransactionResult.failed([this.refusalMessage]) : txData = null;
+}
+
 class RawTransaction {
-  static Future<Map<String, dynamic>?> generate({
+  static Future<RawTransactionResult> generate({
     required Keypair keypair,
     required String toAddress,
     required double amount,
@@ -48,7 +61,7 @@ class RawTransaction {
     );
 
     if (rawTx == null) {
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     final hash = rawTx.hash;
@@ -60,7 +73,7 @@ class RawTransaction {
     );
 
     if (signature == null) {
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     final rawTxService = RawService();
@@ -73,7 +86,7 @@ class RawTransaction {
 
     if (!signatureIsValid) {
       print("Signature not valid");
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     final txData = buildTransaction(
@@ -97,16 +110,16 @@ class RawTransaction {
 
     if (verifyTransactionData == null) {
       print("Transaction not valid");
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     if (verifyTransactionData['Result'] == "Fail") {
-      print("Transaction Not Verified");
-      print(verifyTransactionData['Message']);
-      return null;
+      final message = verifyTransactionData['Message'];
+      print("Transaction Not Verified: $message");
+      return RawTransactionResult.failed(message is String && message.trim().isNotEmpty ? message : null);
     }
 
-    return txData;
+    return RawTransactionResult.verified(txData);
   }
 
   static Future<RawTxValue?> _getTransactionForSignature({

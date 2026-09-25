@@ -59,7 +59,7 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).start();
     }
 
-    final txData = await RawTransaction.generate(
+    final generated = await RawTransaction.generate(
       keypair: keypair,
       toAddress: toAddress,
       amount: amount,
@@ -67,12 +67,14 @@ class WebTokenActionsManager {
       data: data,
       unlockHours: unlockHours,
     );
+
+    final txData = generated.txData;
     if (showLoader) {
       ref.read(globalLoadingProvider.notifier).complete();
     }
     if (txData == null) {
       if (showToasts) {
-        Toast.error(globalL10n.btcInvalidTxData);
+        Toast.error(generated.refusalMessage ?? globalL10n.btcInvalidTxData);
       }
       return false;
     }

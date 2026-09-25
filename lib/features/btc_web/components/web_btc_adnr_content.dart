@@ -191,7 +191,7 @@ class WebBtcAdnrContent extends BaseComponent {
 
                         ref.read(globalLoadingProvider.notifier).start();
 
-                        final txData = await RawTransaction.generate(
+                        final generated = await RawTransaction.generate(
                           keypair: ref.read(webSessionProvider).keypair!,
                           amount: ADNR_TRANSFER_COST,
                           toAddress: vfxToAddress,
@@ -203,10 +203,12 @@ class WebBtcAdnrContent extends BaseComponent {
                           },
                         );
 
+                        final txData = generated.txData;
+
                         ref.read(globalLoadingProvider.notifier).complete();
 
                         if (txData == null) {
-                          Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                          Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
                           return;
                         }
 
@@ -279,7 +281,7 @@ class WebBtcAdnrContent extends BaseComponent {
 
                         if (confirmed == true) {
                           ref.read(globalLoadingProvider.notifier).start();
-                          final txData = await RawTransaction.generate(
+                          final generated = await RawTransaction.generate(
                             keypair: ref.read(webSessionProvider).keypair!,
                             amount: ADNR_DELETE_COST,
                             toAddress: "Adnr_Base",
@@ -289,10 +291,11 @@ class WebBtcAdnrContent extends BaseComponent {
                               "BTCFromAddress": account.address
                             },
                           );
+                          final txData = generated.txData;
 
                           ref.read(globalLoadingProvider.notifier).complete();
                           if (txData == null) {
-                            Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                            Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
 
                             return;
                           }

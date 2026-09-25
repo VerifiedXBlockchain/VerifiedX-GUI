@@ -153,7 +153,7 @@ class RawService extends BaseService {
       }
       final data = response['data'];
 
-      final txData = await RawTransaction.generate(
+      final generated = await RawTransaction.generate(
         keypair: keypair,
         amount: 0.0,
         toAddress: keypair.address,
@@ -161,8 +161,10 @@ class RawService extends BaseService {
         txType: type,
       );
 
+      final txData = generated.txData;
+
       if (txData == null) {
-        Toast.error(globalL10n.btcInvalidTxData);
+        Toast.error(generated.refusalMessage ?? globalL10n.btcInvalidTxData);
         return false;
       }
 
@@ -198,7 +200,7 @@ class RawService extends BaseService {
       }
       final data = response['data'];
 
-      final txData = await RawTransaction.generate(
+      final generated = await RawTransaction.generate(
         keypair: keypair,
         amount: 0.0,
         toAddress: keypair.address,
@@ -206,8 +208,10 @@ class RawService extends BaseService {
         txType: type,
       );
 
+      final txData = generated.txData;
+
       if (txData == null) {
-        Toast.error(globalL10n.btcInvalidTxData);
+        Toast.error(generated.refusalMessage ?? globalL10n.btcInvalidTxData);
         return null;
       }
 
