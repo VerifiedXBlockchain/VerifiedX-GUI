@@ -32,6 +32,16 @@ class RawService extends BaseService {
           hostOverride: "${Env.explorerApiBaseUrl}/raw",
         );
 
+  /// The pending copy of a broadcast keeps its Data as the explorer returns
+  /// it (a JSON string), so pre-send checks can count the token and vBTC
+  /// amounts it commits before it confirms.
+  static String? _pendingTxData(dynamic data) {
+    if (data == null || data is String) {
+      return data;
+    }
+    return jsonEncode(data);
+  }
+
   Future<int?> getTimestamp() async {
     try {
       final response = await postJson('/timestamp');
@@ -121,6 +131,7 @@ class RawService extends BaseService {
             fee: transactionData['Fee'],
             date: DateTime.now(),
             height: 0,
+            data: _pendingTxData(transactionData['Data']),
           );
 
           if (ref != null) {

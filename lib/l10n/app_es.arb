@@ -9493,6 +9493,30 @@
     "description": "Title for import-BTC-WIF dialog."
   },
   "webInvalidAmount": "Monto inválido",
+  "webPendingBalanceInsufficient": "Saldo insuficiente al contar los envíos pendientes. Disponible: {available} {unit}",
+  "@webPendingBalanceInsufficient": {
+    "description": "Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "webVaultMinimumBalance": "Una Bóveda debe conservar {minimum} VFX. Disponible para enviar: {available} VFX",
+  "@webVaultMinimumBalance": {
+    "description": "Error when a web send from the Vault would leave it below the minimum balance the network requires.",
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "available": {
+        "type": "String"
+      }
+    }
+  },
   "webLanguageLabel": "Idioma",
   "@webLanguageLabel": {
     "description": "Menu item label for the language picker."

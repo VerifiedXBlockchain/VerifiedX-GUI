@@ -13,6 +13,8 @@ import '../../../core/theme/components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/web_token_actions_manager.dart';
 import '../token_rules.dart';
+import '../../transactions/providers/web_transaction_list_provider.dart';
+import '../../web/utils/pending_debits.dart';
 
 class WebTokenBalanceListTile extends BaseComponent {
   final WebFungibleTokenDetail tokenDetail;
@@ -101,6 +103,31 @@ class WebTokenBalanceListTile extends BaseComponent {
   }
 }
 
+/// The node counts the sender's unconfirmed transfers and burns of the same
+/// token at admission, so the check subtracts the ones this session broadcast.
+String? _tokenShortfallMessage(
+  WidgetRef ref,
+  AppLocalizations l10n,
+  WebFungibleTokenDetail tokenDetail,
+  String address,
+  double balance,
+  double amount,
+) {
+  if (amount > balance) {
+    return l10n.tokenWebInsufficient(address, tokenDetail.token.ticker);
+  }
+  final pending = pendingContractDebit(
+    ref.read(webTransactionListProvider(address)).transactions,
+    address,
+    tokenDetail.token.smartContractId,
+  );
+  final available = balance - pending;
+  if (amount > available) {
+    return l10n.webPendingBalanceInsufficient(formatDebitAmount(available > 0 ? available : 0), tokenDetail.token.ticker);
+  }
+  return null;
+}
+
 class WebBurnTokenAmountButton extends BaseComponent {
   const WebBurnTokenAmountButton({
     super.key,
@@ -135,8 +162,9 @@ class WebBurnTokenAmountButton extends BaseComponent {
           return;
         }
 
-        if (amount > balance) {
-          Toast.error(l10n.tokenWebInsufficient(address, tokenDetail.token.ticker));
+        final shortfall = _tokenShortfallMessage(ref, l10n, tokenDetail, address, balance, amount);
+        if (shortfall != null) {
+          Toast.error(shortfall);
           return;
         }
 
@@ -189,8 +217,9 @@ class WebTransferTokenAmountButton extends BaseComponent {
           return;
         }
 
-        if (amount > balance) {
-          Toast.error(l10n.tokenWebInsufficient(address, tokenDetail.token.ticker));
+        final shortfall = _tokenShortfallMessage(ref, l10n, tokenDetail, address, balance, amount);
+        if (shortfall != null) {
+          Toast.error(shortfall);
           return;
         }
 

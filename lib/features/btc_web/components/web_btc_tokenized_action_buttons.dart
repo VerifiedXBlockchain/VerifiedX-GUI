@@ -23,6 +23,7 @@ import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import '../services/btc_web_service.dart';
 import '../utils/vbtc_amount.dart';
+import '../../web/utils/pending_debits.dart';
 import 'web_v2_withdrawal_dialog.dart';
 
 class WebTokenizedBtcActionButtons extends BaseComponent {
@@ -301,7 +302,9 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               return;
             }
 
-            final available = token.balanceForAddress(myAddress);
+            final available = myAddress == null
+                ? 0.0
+                : manager.spendableContractBalance(myAddress, token.scIdentifier, token.balanceForAddress(myAddress));
             if (withdrawAmount > available) {
               Toast.error(l10n.bw2InsufficientBalanceAvailable(available.toString()));
               return;
@@ -542,8 +545,16 @@ class _TransferSharesModal extends BaseComponent {
                       }
                       print("-----");
 
-                      if (amount > token.balanceForAddress(thisAddress)) {
+                      final balance = token.balanceForAddress(thisAddress);
+                      if (amount > balance) {
                         Toast.error(l10n.btcNotEnoughBalanceShort);
+                        return;
+                      }
+                      final available = ref
+                          .read(webTokenActionsManager)
+                          .spendableContractBalance(thisAddress, token.scIdentifier, balance);
+                      if (amount > available) {
+                        Toast.error(l10n.webPendingBalanceInsufficient(formatDebitAmount(available), "vBTC"));
                         return;
                       }
                       final result = _TransferShareModalResponse(

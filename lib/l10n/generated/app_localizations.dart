@@ -19821,6 +19821,18 @@ abstract class AppLocalizations {
   /// **'Invalid amount'**
   String get webInvalidAmount;
 
+  /// Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance once pending sends are counted. Available: {available} {unit}'**
+  String webPendingBalanceInsufficient(String available, String unit);
+
+  /// Error when a web send from the Vault would leave it below the minimum balance the network requires.
+  ///
+  /// In en, this message translates to:
+  /// **'A Vault must keep {minimum} VFX. Available to send: {available} VFX'**
+  String webVaultMinimumBalance(String minimum, String available);
+
   /// Menu item label for the language picker.
   ///
   /// In en, this message translates to:

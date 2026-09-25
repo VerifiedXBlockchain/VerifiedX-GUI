@@ -9532,6 +9532,30 @@
   "@webInvalidAmount": {
     "description": "Error toast for invalid amount input."
   },
+  "webPendingBalanceInsufficient": "Not enough balance once pending sends are counted. Available: {available} {unit}",
+  "@webPendingBalanceInsufficient": {
+    "description": "Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "webVaultMinimumBalance": "A Vault must keep {minimum} VFX. Available to send: {available} VFX",
+  "@webVaultMinimumBalance": {
+    "description": "Error when a web send from the Vault would leave it below the minimum balance the network requires.",
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "available": {
+        "type": "String"
+      }
+    }
+  },
   "webLanguageLabel": "Language",
   "@webLanguageLabel": {
     "description": "Menu item label for the language picker."

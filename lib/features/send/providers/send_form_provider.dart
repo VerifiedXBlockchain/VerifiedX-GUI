@@ -31,8 +31,10 @@ import '../../bridge/providers/log_provider.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
+import '../../web/utils/pending_debits.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../../raw/raw_service.dart';
+import '../../transactions/providers/web_transaction_list_provider.dart';
 import '../../../core/utils/tx_refresh.dart';
 // import 'package:rbx_wallet/features/wallet/models/wallet.dart';
 
@@ -101,6 +103,27 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
   String get amount => amountController.value.text;
   String get address => addressController.value.text;
 
+  /// Web only. The node counts the sender's unconfirmed transactions at
+  /// admission and keeps a Vault at 0.5 VFX, so the confirmed balance alone
+  /// can accept a send the node then refuses.
+  String? _webVfxShortfallMessage(WebSelectedAccount account, double amount) {
+    final pendingDebit = pendingVfxDebit(ref.read(webTransactionListProvider(account.address)).transactions, account.address);
+    final isVault = account.address.startsWith("xRBX");
+    final shortfall = vfxSendShortfall(amount: amount, balance: account.balance, pendingDebit: pendingDebit, isVault: isVault);
+    if (shortfall == null) {
+      return null;
+    }
+    final available = formatDebitAmount(spendableVfx(balance: account.balance, pendingDebit: pendingDebit, isVault: isVault));
+    switch (shortfall) {
+      case VfxSendShortfall.balance:
+        return globalL10n.svcNotEnoughBalanceAccount;
+      case VfxSendShortfall.pending:
+        return globalL10n.webPendingBalanceInsufficient(available, "VFX");
+      case VfxSendShortfall.vaultMinimum:
+        return globalL10n.webVaultMinimumBalance(formatDebitAmount(kVaultMinimumBalance), available);
+    }
+  }
+
   String? amountValidator(String? value) {
     if (value == null || value.isEmpty) {
       return globalL10n.svcAmountRequired;
@@ -164,8 +187,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         return globalL10n.messageNoAccountSelected;
       }
 
-      if (account.balance < parsed) {
-        return globalL10n.svcNotEnoughBalanceAccount;
+      final shortfall = _webVfxShortfallMessage(account, parsed);
+      if (shortfall != null) {
+        return shortfall;
       }
     } else {
       final currentWallet = ref.read(sessionProvider).currentWallet;
@@ -600,8 +624,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         return;
       }
 
-      if (selectedAccount.balance < amountDouble) {
-        Toast.error(globalL10n.svcInsufficientBalanceToSend);
+      final shortfall = _webVfxShortfallMessage(selectedAccount, amountDouble);
+      if (shortfall != null) {
+        Toast.error(shortfall);
         return;
       }
 

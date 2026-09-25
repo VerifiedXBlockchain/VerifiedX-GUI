@@ -10691,6 +10691,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webInvalidAmount => 'Invalid amount';
 
   @override
+  String webPendingBalanceInsufficient(String available, String unit) {
+    return 'Not enough balance once pending sends are counted. Available: $available $unit';
+  }
+
+  @override
+  String webVaultMinimumBalance(String minimum, String available) {
+    return 'A Vault must keep $minimum VFX. Available to send: $available VFX';
+  }
+
+  @override
   String get webLanguageLabel => 'Language';
 
   @override
