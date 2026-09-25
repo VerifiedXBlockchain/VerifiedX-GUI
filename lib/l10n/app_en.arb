@@ -3069,10 +3069,6 @@
   "@navPendingStatus": {
     "description": "Status label for pending transactions."
   },
-  "navPrivateKeyNotAvailable": "Private key not available.",
-  "@navPrivateKeyNotAvailable": {
-    "description": "Error toast when private key is not available."
-  },
   "navSettings": "Settings",
   "@navSettings": {
     "description": "Primary navigation label for settings."
@@ -7129,7 +7125,6 @@
   },
   "svcNotifVoteCastedTitle": "Vote Casted",
   "svcNotValidAmount": "Not a valid amount",
-  "svcPrivateKeyNotAvailableUnlock": "Private key not available. Please ensure wallet is unlocked.",
   "svcPrivateKeyNotFoundRecipient": "Private key not found for recipient address",
   "svcProblemDownloadingSkipping": "Problem downloading {url}. Skipping.",
   "@svcProblemDownloadingSkipping": {
@@ -9162,6 +9157,10 @@
   "walletPrivateKeyImportedToast": "Private Key Imported!",
   "@walletPrivateKeyImportedToast": {
     "description": "Toast confirming a BTC private key was imported."
+  },
+  "walletKeyExportUnavailable": "The node did not return a private key.",
+  "@walletKeyExportUnavailable": {
+    "description": "Error shown when the node refuses to export a VFX private key and gives no reason."
   },
   "walletPrivateKeyLabel": "Private Key",
   "@walletPrivateKeyLabel": {

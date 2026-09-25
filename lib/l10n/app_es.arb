@@ -3057,10 +3057,6 @@
   "@navPendingStatus": {
     "description": "Status label for pending transactions."
   },
-  "navPrivateKeyNotAvailable": "Clave privada no disponible.",
-  "@navPrivateKeyNotAvailable": {
-    "description": "Error toast when private key is not available."
-  },
   "navSettings": "Configuración",
   "@navSettings": {
     "description": "Primary navigation label for settings."
@@ -7111,7 +7107,6 @@
   },
   "svcNotifVoteCastedTitle": "Voto emitido",
   "svcNotValidAmount": "No es un monto válido",
-  "svcPrivateKeyNotAvailableUnlock": "Clave privada no disponible. Asegúrate de que la billetera esté desbloqueada.",
   "svcPrivateKeyNotFoundRecipient": "No se encontró la clave privada para la dirección del destinatario",
   "svcProblemDownloadingSkipping": "Problema al descargar {url}. Se omite.",
   "@svcProblemDownloadingSkipping": {
@@ -9145,6 +9140,7 @@
   "@walletPrivateKeyImportedToast": {
     "description": "Toast confirming a BTC private key was imported."
   },
+  "walletKeyExportUnavailable": "El nodo no devolvió una clave privada.",
   "walletPrivateKeyLabel": "Clave privada",
   "@walletPrivateKeyLabel": {
     "description": "Field label for the private key input/display."

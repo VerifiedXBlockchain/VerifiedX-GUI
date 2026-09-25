@@ -5823,12 +5823,6 @@ abstract class AppLocalizations {
   /// **'Pending'**
   String get navPendingStatus;
 
-  /// Error toast when private key is not available.
-  ///
-  /// In en, this message translates to:
-  /// **'Private key not available.'**
-  String get navPrivateKeyNotAvailable;
-
   /// Primary navigation label for settings.
   ///
   /// In en, this message translates to:
@@ -16215,12 +16209,6 @@ abstract class AppLocalizations {
   /// **'Not a valid amount'**
   String get svcNotValidAmount;
 
-  /// No description provided for @svcPrivateKeyNotAvailableUnlock.
-  ///
-  /// In en, this message translates to:
-  /// **'Private key not available. Please ensure wallet is unlocked.'**
-  String get svcPrivateKeyNotAvailableUnlock;
-
   /// No description provided for @svcPrivateKeyNotFoundRecipient.
   ///
   /// In en, this message translates to:
@@ -19352,6 +19340,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Private Key Imported!'**
   String get walletPrivateKeyImportedToast;
+
+  /// Error shown when the node refuses to export a VFX private key and gives no reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The node did not return a private key.'**
+  String get walletKeyExportUnavailable;
 
   /// Field label for the private key input/display.
   ///

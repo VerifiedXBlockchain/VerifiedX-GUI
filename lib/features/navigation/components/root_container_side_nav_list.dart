@@ -10,6 +10,7 @@ import 'package:rbx_wallet/core/services/password_prompt_service.dart';
 import 'package:rbx_wallet/core/theme/colors.dart';
 import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/features/wallet/utils.dart';
+import 'package:rbx_wallet/features/wallet/private_key_access.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
@@ -388,11 +389,10 @@ Future<void> _handleButterflyLogin(BuildContext context, WidgetRef ref) async {
       Toast.error(l10n.messageNoAccountSelected);
       return;
     }
-    if (wallet.privateKey == null) {
-      Toast.error(l10n.navPrivateKeyNotAvailable);
+    privateKey = await fetchVfxPrivateKey(context, ref, wallet.address);
+    if (privateKey == null) {
       return;
     }
-    privateKey = wallet.privateKey!;
     publicKey = wallet.publicKey;
     address = wallet.address;
   }

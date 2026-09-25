@@ -50,7 +50,7 @@ class BackupButton extends BaseComponent {
                             if (success == true) {
                               Navigator.of(context).pop();
                               Toast.message(l10n.hnavKeysBackedUpSuccess);
-                            } else {
+                            } else if (success == false) {
                               Toast.error();
                             }
                           },

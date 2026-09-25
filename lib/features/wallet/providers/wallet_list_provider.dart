@@ -71,7 +71,7 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
                 ListTile(
                   leading: const Icon(Icons.security),
                   title: TextFormField(
-                    initialValue: wallet.privateKey,
+                    initialValue: privateKey.trim(),
                     decoration: InputDecoration(
                       label: Text(globalL10n.walletPrivateKeyLabel),
                     ),
@@ -81,7 +81,7 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
                   trailing: IconButton(
                     icon: const Icon(Icons.copy),
                     onPressed: () async {
-                      await Clipboard.setData(ClipboardData(text: wallet.privateKey));
+                      await Clipboard.setData(ClipboardData(text: privateKey.trim()));
                       Toast.message(globalL10n.walletPrivateKeyCopiedToast);
                     },
                   ),

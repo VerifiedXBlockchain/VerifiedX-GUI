@@ -1050,10 +1050,8 @@ class NftDetailScreen extends BaseScreen {
               icon: Icons.lock_open,
               variant: AppColorVariant.Success,
               onPressed: () async {
-                final success = await provider.decryptMessage();
-                if (!success) {
-                  // Error toast already shown in provider
-                }
+                if (!await passwordRequiredGuard(context, ref)) return;
+                await provider.decryptMessage();
               },
             ),
           ),

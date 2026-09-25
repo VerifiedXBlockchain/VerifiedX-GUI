@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../../metrics/models/network_metrics.dart';
 
@@ -11,6 +12,7 @@ import '../../../core/services/launched_cli.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../utils/cli_exit.dart';
+import '../../wallet/models/private_key_export.dart';
 import '../../block/block.dart';
 import '../../genesis/models/genesis_block.dart';
 import '../../node/models/node.dart';
@@ -150,6 +152,19 @@ class BridgeService extends BaseService {
     } catch (e) {
       print(e);
       return false;
+    }
+  }
+
+  /// Exports the VFX private key for one local [address]. The node refuses
+  /// while an encrypted wallet is locked, and on an unencrypted wallet unless
+  /// the API is protected by a token or password.
+  Future<PrivateKeyExport> getPrivateKey(String address) async {
+    try {
+      final response = await getText("/GetPrivateKey/$address", cleanPath: false);
+      return PrivateKeyExport.fromResponse(address, response);
+    } on DioException catch (e) {
+      final body = e.response?.data;
+      return PrivateKeyExport.refused(address, body is String && body.trim().isNotEmpty ? body.trim() : null);
     }
   }
 

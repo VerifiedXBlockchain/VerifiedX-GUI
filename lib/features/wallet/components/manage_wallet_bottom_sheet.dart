@@ -19,6 +19,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../encrypt/utils.dart';
+import '../private_key_access.dart';
 import '../providers/wallet_detail_provider.dart';
 import '../providers/wallet_list_provider.dart';
 
@@ -349,10 +350,8 @@ class ManageWalletListTile extends BaseComponent {
           if (!wallet.isReserved)
             IconButton(
                 onPressed: () async {
-                  if (!await passwordRequiredGuard(context, ref)) return;
-
-                  final decryptedWallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == wallet.address);
-                  if (decryptedWallet == null) {
+                  final privateKey = await fetchVfxPrivateKey(context, ref, wallet.address);
+                  if (privateKey == null) {
                     return;
                   }
                   showDialog(
@@ -368,7 +367,7 @@ class ManageWalletListTile extends BaseComponent {
                               title: SizedBox(
                                 width: 500,
                                 child: TextFormField(
-                                  initialValue: decryptedWallet.privateKey,
+                                  initialValue: privateKey,
                                   decoration: InputDecoration(
                                     label: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
                                   ),
@@ -379,7 +378,7 @@ class ManageWalletListTile extends BaseComponent {
                               trailing: IconButton(
                                 icon: const Icon(Icons.copy),
                                 onPressed: () async {
-                                  await Clipboard.setData(ClipboardData(text: decryptedWallet.privateKey));
+                                  await Clipboard.setData(ClipboardData(text: privateKey));
                                   Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
                                 },
                               ),

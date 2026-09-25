@@ -29,6 +29,9 @@ import '../features/btc/services/btc_service.dart';
 import '../features/transactions/models/transaction.dart';
 
 import '../features/wallet/providers/wallet_list_provider.dart';
+import '../features/bridge/services/bridge_service.dart';
+import '../features/encrypt/utils.dart';
+import '../features/wallet/models/private_key_export.dart';
 import '../l10n/generated/app_localizations.dart';
 import '../utils/files.dart';
 import '../utils/toast.dart';
@@ -36,27 +39,29 @@ import 'base_component.dart';
 import 'dialogs.dart';
 import 'env.dart';
 
-Future<bool> backupKeys(BuildContext context, WidgetRef ref) async {
+/// Saves a text file with every VFX and Bitcoin key the node will export.
+/// Returns true once saved, false on an unexpected error, and null when the
+/// user cancelled the unlock or the node exported no VFX key (its reason has
+/// already been shown).
+Future<bool?> backupKeys(BuildContext context, WidgetRef ref) async {
   try {
-    final wallets = ref.read(walletListProvider).where((w) => !w.isReserved);
-
-    String output = "";
-
-    for (final w in wallets) {
-      output += "Address:\n${w.address}\n\n";
-      output += "Public Key:\n${w.publicKey}\n\n";
-      output += "Private Key:\n${w.privateKey}\n\n";
-      output += "===================================\n\n";
+    if (!await passwordRequiredGuard(context, ref)) {
+      return null;
     }
 
-    output += "FOR BULK IMPORT:\n\n";
+    final wallets = ref.read(walletListProvider).where((w) => !w.isReserved).toList();
 
+    final exports = <String, PrivateKeyExport>{};
     for (final w in wallets) {
-      if (w.privateKey != '0') {
-        output += "${w.privateKey}\n";
-      }
+      exports[w.address] = await BridgeService().getPrivateKey(w.address);
     }
-    output += "\n===================================\n\n";
+
+    if (wallets.isNotEmpty && exports.values.every((e) => !e.isExported)) {
+      Toast.error(exports.values.first.message ?? AppLocalizations.of(context).walletKeyExportUnavailable);
+      return null;
+    }
+
+    String output = vfxKeyBackupText(wallets, exports);
 
     final btcAccounts = await BtcService().listAccounts(false);
 

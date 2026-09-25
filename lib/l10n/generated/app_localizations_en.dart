@@ -3066,9 +3066,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navPendingStatus => 'Pending';
 
   @override
-  String get navPrivateKeyNotAvailable => 'Private key not available.';
-
-  @override
   String get navSettings => 'Settings';
 
   @override
@@ -8662,9 +8659,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcNotValidAmount => 'Not a valid amount';
 
   @override
-  String get svcPrivateKeyNotAvailableUnlock => 'Private key not available. Please ensure wallet is unlocked.';
-
-  @override
   String get svcPrivateKeyNotFoundRecipient => 'Private key not found for recipient address';
 
   @override
@@ -10435,6 +10429,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletPrivateKeyImportedToast => 'Private Key Imported!';
+
+  @override
+  String get walletKeyExportUnavailable => 'The node did not return a private key.';
 
   @override
   String get walletPrivateKeyLabel => 'Private Key';
