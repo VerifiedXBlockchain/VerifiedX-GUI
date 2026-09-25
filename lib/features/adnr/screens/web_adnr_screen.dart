@@ -249,7 +249,7 @@ class _VfxDomain extends BaseComponent {
                             onValidSubmission: (toAddress) async {
                               ref.read(globalLoadingProvider.notifier).start();
 
-                              final txData = await RawTransaction.generate(
+                              final generated = await RawTransaction.generate(
                                 keypair: ref.read(webSessionProvider).keypair!,
                                 amount: ADNR_TRANSFER_COST,
                                 toAddress: toAddress,
@@ -257,10 +257,12 @@ class _VfxDomain extends BaseComponent {
                                 data: {"Function": "AdnrTransfer()", "Name": adnr},
                               );
 
+                              final txData = generated.txData;
+
                               ref.read(globalLoadingProvider.notifier).complete();
 
                               if (txData == null) {
-                                Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                                Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
                                 return;
                               }
 
@@ -324,17 +326,18 @@ class _VfxDomain extends BaseComponent {
 
                         if (confirmed == true) {
                           ref.read(globalLoadingProvider.notifier).start();
-                          final txData = await RawTransaction.generate(
+                          final generated = await RawTransaction.generate(
                             keypair: ref.read(webSessionProvider).keypair!,
                             amount: ADNR_DELETE_COST,
                             toAddress: "Adnr_Base",
                             txType: TxType.adnr,
                             data: {"Function": "AdnrDelete()", "Name": adnr},
                           );
+                          final txData = generated.txData;
 
                           ref.read(globalLoadingProvider.notifier).complete();
                           if (txData == null) {
-                            Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                            Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
 
                             return;
                           }

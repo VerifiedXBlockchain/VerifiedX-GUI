@@ -1629,6 +1629,15 @@
   "bw2StepValidating": "Validando",
   "bw2SubmittingTxVfx": "Enviando una transacción a la red VFX.",
   "bw2SupplyAmount": "Cantidad de suministro",
+  "bw2SupplyWholeNumberMax": "El suministro debe ser un número entero de 0 a {max}.",
+  "@bw2SupplyWholeNumberMax": {
+    "description": "Validation error for a token supply that has decimals or exceeds the largest supply the network accepts.",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "bw2SupplyLabel": "Suministro",
   "bw2ToBtcAddressRequired": "Dirección BTC de destino obligatoria.",
   "bw2TokenAppearWhenIndexed": "El token aparecerá en tu lista una vez indexado (normalmente unos segundos).",
@@ -2401,6 +2410,56 @@
   "homeVisitWebsite": "Visitar sitio web",
   "@homeVisitWebsite": {
     "description": "Get Help option: visit the VerifiedX website."
+  },
+  "keyImportActivityFound": "Se encontró actividad",
+  "@keyImportActivityFound": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it."
+  },
+  "keyImportActivityUnknown": "No se pudo comprobar la actividad",
+  "@keyImportActivityUnknown": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed."
+  },
+  "keyImportBitcoinLine": "Bitcoin: {address}",
+  "@keyImportBitcoinLine": {
+    "description": "Bitcoin address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "keyImportChooseAccountsBody": "Versiones anteriores de la billetera escribieron esta clave de más de una forma, y cada forma lleva a una cuenta de Bóveda y de Bitcoin distinta. Tu cuenta VFX es la misma en todos los casos. Elige el par que quieres restaurar.",
+  "@keyImportChooseAccountsBody": {
+    "description": "Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportChooseAccountsTitle": "Elige las cuentas que quieres restaurar",
+  "@keyImportChooseAccountsTitle": {
+    "description": "Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportEarlierForm": "Forma anterior de la clave",
+  "@keyImportEarlierForm": {
+    "description": "Label of a pair in the import chooser that comes from a historical text form of the key."
+  },
+  "keyImportInvalidKey": "Esta no es una clave privada válida. Pega la clave hexadecimal.",
+  "@keyImportInvalidKey": {
+    "description": "Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key."
+  },
+  "keyImportNoActivity": "No se encontró actividad",
+  "@keyImportNoActivity": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: no transactions found."
+  },
+  "keyImportStandardForm": "Forma estándar de la clave",
+  "@keyImportStandardForm": {
+    "description": "Label of the pair in the import chooser that comes from the canonical 64-digit key."
+  },
+  "keyImportVaultLine": "Bóveda: {address}",
+  "@keyImportVaultLine": {
+    "description": "Vault address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
   },
   "keygenAddressLabel": "Dirección",
   "@keygenAddressLabel": {
@@ -7985,6 +8044,14 @@
       }
     }
   },
+  "tokenWebVaultRowActionsUnavailable": "Transferir, quemar y votar no están disponibles para los tokens guardados en la Bóveda. Primero muévelos fuera de la Bóveda.",
+  "@tokenWebVaultRowActionsUnavailable": {
+    "description": "Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons."
+  },
+  "tokenWebTransferToSelf": "Los tokens no se pueden transferir a la misma dirección que los tiene.",
+  "@tokenWebTransferToSelf": {
+    "description": "Error when a web token transfer names the sending address as the recipient."
+  },
   "txAppBarAll": "Todas las transacciones",
   "@txAppBarAll": {
     "description": "Transactions screen title when viewing both VFX and BTC."
@@ -9475,6 +9542,30 @@
     "description": "Title for import-BTC-WIF dialog."
   },
   "webInvalidAmount": "Monto inválido",
+  "webPendingBalanceInsufficient": "Saldo insuficiente al contar los envíos pendientes. Disponible: {available} {unit}",
+  "@webPendingBalanceInsufficient": {
+    "description": "Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "webVaultMinimumBalance": "Una Bóveda debe conservar {minimum} VFX. Disponible para enviar: {available} VFX",
+  "@webVaultMinimumBalance": {
+    "description": "Error when a web send from the Vault would leave it below the minimum balance the network requires.",
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "available": {
+        "type": "String"
+      }
+    }
+  },
   "webLanguageLabel": "Idioma",
   "@webLanguageLabel": {
     "description": "Menu item label for the language picker."

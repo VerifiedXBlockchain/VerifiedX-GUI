@@ -1492,6 +1492,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2SupplyAmount => 'Cantidad de suministro';
 
   @override
+  String bw2SupplyWholeNumberMax(String max) {
+    return 'El suministro debe ser un número entero de 0 a $max.';
+  }
+
+  @override
   String get bw2SupplyLabel => 'Suministro';
 
   @override
@@ -2436,6 +2441,40 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get homeVisitWebsite => 'Visitar sitio web';
+
+  @override
+  String get keyImportActivityFound => 'Se encontró actividad';
+
+  @override
+  String get keyImportActivityUnknown => 'No se pudo comprobar la actividad';
+
+  @override
+  String keyImportBitcoinLine(String address) {
+    return 'Bitcoin: $address';
+  }
+
+  @override
+  String get keyImportChooseAccountsBody => 'Versiones anteriores de la billetera escribieron esta clave de más de una forma, y cada forma lleva a una cuenta de Bóveda y de Bitcoin distinta. Tu cuenta VFX es la misma en todos los casos. Elige el par que quieres restaurar.';
+
+  @override
+  String get keyImportChooseAccountsTitle => 'Elige las cuentas que quieres restaurar';
+
+  @override
+  String get keyImportEarlierForm => 'Forma anterior de la clave';
+
+  @override
+  String get keyImportInvalidKey => 'Esta no es una clave privada válida. Pega la clave hexadecimal.';
+
+  @override
+  String get keyImportNoActivity => 'No se encontró actividad';
+
+  @override
+  String get keyImportStandardForm => 'Forma estándar de la clave';
+
+  @override
+  String keyImportVaultLine(String address) {
+    return 'Bóveda: $address';
+  }
 
   @override
   String get keygenAddressLabel => 'Dirección';
@@ -9488,6 +9527,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get tokenWebVaultRowActionsUnavailable => 'Transferir, quemar y votar no están disponibles para los tokens guardados en la Bóveda. Primero muévelos fuera de la Bóveda.';
+
+  @override
+  String get tokenWebTransferToSelf => 'Los tokens no se pueden transferir a la misma dirección que los tiene.';
+
+  @override
   String get txAppBarAll => 'Todas las transacciones';
 
   @override
@@ -10686,6 +10731,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get webInvalidAmount => 'Monto inválido';
+
+  @override
+  String webPendingBalanceInsufficient(String available, String unit) {
+    return 'Saldo insuficiente al contar los envíos pendientes. Disponible: $available $unit';
+  }
+
+  @override
+  String webVaultMinimumBalance(String minimum, String available) {
+    return 'Una Bóveda debe conservar $minimum VFX. Disponible para enviar: $available VFX';
+  }
 
   @override
   String get webLanguageLabel => 'Idioma';

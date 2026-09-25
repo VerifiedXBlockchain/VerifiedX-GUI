@@ -1492,6 +1492,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2SupplyAmount => 'Supply Amount';
 
   @override
+  String bw2SupplyWholeNumberMax(String max) {
+    return 'Supply must be a whole number from 0 to $max.';
+  }
+
+  @override
   String get bw2SupplyLabel => 'Supply';
 
   @override
@@ -2436,6 +2441,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeVisitWebsite => 'Visit Website';
+
+  @override
+  String get keyImportActivityFound => 'Activity found';
+
+  @override
+  String get keyImportActivityUnknown => 'Could not check activity';
+
+  @override
+  String keyImportBitcoinLine(String address) {
+    return 'Bitcoin: $address';
+  }
+
+  @override
+  String get keyImportChooseAccountsBody => 'Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.';
+
+  @override
+  String get keyImportChooseAccountsTitle => 'Choose accounts to restore';
+
+  @override
+  String get keyImportEarlierForm => 'Earlier key form';
+
+  @override
+  String get keyImportInvalidKey => 'This is not a valid private key. Paste the hexadecimal key.';
+
+  @override
+  String get keyImportNoActivity => 'No activity found';
+
+  @override
+  String get keyImportStandardForm => 'Standard key form';
+
+  @override
+  String keyImportVaultLine(String address) {
+    return 'Vault: $address';
+  }
 
   @override
   String get keygenAddressLabel => 'Address';
@@ -9488,6 +9527,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get tokenWebVaultRowActionsUnavailable => 'Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.';
+
+  @override
+  String get tokenWebTransferToSelf => 'Tokens cannot be transferred to the address that holds them.';
+
+  @override
   String get txAppBarAll => 'All Transactions';
 
   @override
@@ -10686,6 +10731,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webInvalidAmount => 'Invalid amount';
+
+  @override
+  String webPendingBalanceInsufficient(String available, String unit) {
+    return 'Not enough balance once pending sends are counted. Available: $available $unit';
+  }
+
+  @override
+  String webVaultMinimumBalance(String minimum, String available) {
+    return 'A Vault must keep $minimum VFX. Available to send: $available VFX';
+  }
 
   @override
   String get webLanguageLabel => 'Language';

@@ -1643,6 +1643,15 @@
   "bw2StepValidating": "Validating",
   "bw2SubmittingTxVfx": "Submitting a transaction to the VFX network.",
   "bw2SupplyAmount": "Supply Amount",
+  "bw2SupplyWholeNumberMax": "Supply must be a whole number from 0 to {max}.",
+  "@bw2SupplyWholeNumberMax": {
+    "description": "Validation error for a token supply that has decimals or exceeds the largest supply the network accepts.",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "bw2SupplyLabel": "Supply",
   "bw2ToBtcAddressRequired": "To BTC address required.",
   "bw2TokenAppearWhenIndexed": "The token will appear in your list once indexed (typically a few seconds).",
@@ -2427,6 +2436,56 @@
   "homeVisitWebsite": "Visit Website",
   "@homeVisitWebsite": {
     "description": "Get Help option: visit the VerifiedX website."
+  },
+  "keyImportActivityFound": "Activity found",
+  "@keyImportActivityFound": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it."
+  },
+  "keyImportActivityUnknown": "Could not check activity",
+  "@keyImportActivityUnknown": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed."
+  },
+  "keyImportBitcoinLine": "Bitcoin: {address}",
+  "@keyImportBitcoinLine": {
+    "description": "Bitcoin address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "keyImportChooseAccountsBody": "Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.",
+  "@keyImportChooseAccountsBody": {
+    "description": "Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportChooseAccountsTitle": "Choose accounts to restore",
+  "@keyImportChooseAccountsTitle": {
+    "description": "Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportEarlierForm": "Earlier key form",
+  "@keyImportEarlierForm": {
+    "description": "Label of a pair in the import chooser that comes from a historical text form of the key."
+  },
+  "keyImportInvalidKey": "This is not a valid private key. Paste the hexadecimal key.",
+  "@keyImportInvalidKey": {
+    "description": "Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key."
+  },
+  "keyImportNoActivity": "No activity found",
+  "@keyImportNoActivity": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: no transactions found."
+  },
+  "keyImportStandardForm": "Standard key form",
+  "@keyImportStandardForm": {
+    "description": "Label of the pair in the import chooser that comes from the canonical 64-digit key."
+  },
+  "keyImportVaultLine": "Vault: {address}",
+  "@keyImportVaultLine": {
+    "description": "Vault address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
   },
   "keygenAddressLabel": "Address",
   "@keygenAddressLabel": {
@@ -8017,6 +8076,14 @@
       }
     }
   },
+  "tokenWebVaultRowActionsUnavailable": "Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.",
+  "@tokenWebVaultRowActionsUnavailable": {
+    "description": "Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons."
+  },
+  "tokenWebTransferToSelf": "Tokens cannot be transferred to the address that holds them.",
+  "@tokenWebTransferToSelf": {
+    "description": "Error when a web token transfer names the sending address as the recipient."
+  },
   "txAppBarAll": "All Transactions",
   "@txAppBarAll": {
     "description": "Transactions screen title when viewing both VFX and BTC."
@@ -9530,6 +9597,30 @@
   "webInvalidAmount": "Invalid amount",
   "@webInvalidAmount": {
     "description": "Error toast for invalid amount input."
+  },
+  "webPendingBalanceInsufficient": "Not enough balance once pending sends are counted. Available: {available} {unit}",
+  "@webPendingBalanceInsufficient": {
+    "description": "Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "webVaultMinimumBalance": "A Vault must keep {minimum} VFX. Available to send: {available} VFX",
+  "@webVaultMinimumBalance": {
+    "description": "Error when a web send from the Vault would leave it below the minimum balance the network requires.",
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "available": {
+        "type": "String"
+      }
+    }
   },
   "webLanguageLabel": "Language",
   "@webLanguageLabel": {

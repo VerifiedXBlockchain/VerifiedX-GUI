@@ -51,16 +51,18 @@ class WebFundRaAccountButton extends BaseComponent {
         if (confirmed == true) {
           ref.read(globalLoadingProvider.notifier).start();
 
-          final txData = await RawTransaction.generate(
+          final generated = await RawTransaction.generate(
             keypair: ref.read(webSessionProvider).keypair!,
             amount: 5.0,
             toAddress: ref.read(webSessionProvider).raKeypair!.address,
             txType: TxType.rbxTransfer,
           );
 
+          final txData = generated.txData;
+
           if (txData == null) {
             ref.read(globalLoadingProvider.notifier).complete();
-            Toast.error();
+            Toast.error(generated.refusalMessage);
             return;
           }
 

@@ -2859,6 +2859,12 @@ abstract class AppLocalizations {
   /// **'Supply Amount'**
   String get bw2SupplyAmount;
 
+  /// Validation error for a token supply that has decimals or exceeds the largest supply the network accepts.
+  ///
+  /// In en, this message translates to:
+  /// **'Supply must be a whole number from 0 to {max}.'**
+  String bw2SupplyWholeNumberMax(String max);
+
   /// No description provided for @bw2SupplyLabel.
   ///
   /// In en, this message translates to:
@@ -4634,6 +4640,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Visit Website'**
   String get homeVisitWebsite;
+
+  /// Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity found'**
+  String get keyImportActivityFound;
+
+  /// Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check activity'**
+  String get keyImportActivityUnknown;
+
+  /// Bitcoin address line of a pair in the import chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin: {address}'**
+  String keyImportBitcoinLine(String address);
+
+  /// Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.'**
+  String get keyImportChooseAccountsBody;
+
+  /// Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose accounts to restore'**
+  String get keyImportChooseAccountsTitle;
+
+  /// Label of a pair in the import chooser that comes from a historical text form of the key.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier key form'**
+  String get keyImportEarlierForm;
+
+  /// Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a valid private key. Paste the hexadecimal key.'**
+  String get keyImportInvalidKey;
+
+  /// Status of a Vault and Bitcoin pair in the import chooser: no transactions found.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity found'**
+  String get keyImportNoActivity;
+
+  /// Label of the pair in the import chooser that comes from the canonical 64-digit key.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard key form'**
+  String get keyImportStandardForm;
+
+  /// Vault address line of a pair in the import chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault: {address}'**
+  String keyImportVaultLine(String address);
 
   /// Field label for the generated address.
   ///
@@ -17667,6 +17733,18 @@ abstract class AppLocalizations {
   /// **'This address\'\'s ({address}) {ticker} balance is insufficient.'**
   String tokenWebInsufficient(String address, String ticker);
 
+  /// Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.'**
+  String get tokenWebVaultRowActionsUnavailable;
+
+  /// Error when a web token transfer names the sending address as the recipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens cannot be transferred to the address that holds them.'**
+  String get tokenWebTransferToSelf;
+
   /// Transactions screen title when viewing both VFX and BTC.
   ///
   /// In en, this message translates to:
@@ -19814,6 +19892,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Invalid amount'**
   String get webInvalidAmount;
+
+  /// Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance once pending sends are counted. Available: {available} {unit}'**
+  String webPendingBalanceInsufficient(String available, String unit);
+
+  /// Error when a web send from the Vault would leave it below the minimum balance the network requires.
+  ///
+  /// In en, this message translates to:
+  /// **'A Vault must keep {minimum} VFX. Available to send: {available} VFX'**
+  String webVaultMinimumBalance(String minimum, String available);
 
   /// Menu item label for the language picker.
   ///

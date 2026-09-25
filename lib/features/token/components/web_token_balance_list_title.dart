@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/features/token/components/web_token_management_actions.dart';
 import '../../../core/base_component.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../models/web_fungible_token.dart';
 import '../../../utils/toast.dart';
 
@@ -11,6 +12,9 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/web_token_actions_manager.dart';
+import '../token_rules.dart';
+import '../../transactions/providers/web_transaction_list_provider.dart';
+import '../../web/utils/pending_debits.dart';
 
 class WebTokenBalanceListTile extends BaseComponent {
   final WebFungibleTokenDetail tokenDetail;
@@ -25,6 +29,12 @@ class WebTokenBalanceListTile extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    // Transfer, burn and voting sign with the main key, and the node refuses a
+    // TokenTransfer, TokenBurn or TokenVoteTopicCast whose FromAddress is not
+    // the signer, so a Vault row offers none of them.
+    final isVaultRow = ref.watch(webSessionProvider.select((value) => value.raKeypair?.address)) == address;
+
     return AppCard(
       padding: 0,
       child: ListTile(
@@ -36,44 +46,86 @@ class WebTokenBalanceListTile extends BaseComponent {
               )
             : null,
         title: Text(address),
-        subtitle: Text("$balance ${tokenDetail.token.ticker}"),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AppButton(
-              label: AppLocalizations.of(context).tokenVoting,
-              variant: AppColorVariant.Dark,
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) {
-                      return WebTokenTopicBottomSheet(tokenDetail: tokenDetail, isOwner: tokenDetail.token.ownerAddress == address);
-                    });
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 12.0),
-              child: WebTransferTokenAmountButton(
-                balance: balance,
-                address: address,
-                tokenDetail: tokenDetail,
+        subtitle: isVaultRow
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("$balance ${tokenDetail.token.ticker}"),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      l10n.tokenWebVaultRowActionsUnavailable,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ),
+                ],
+              )
+            : Text("$balance ${tokenDetail.token.ticker}"),
+        trailing: isVaultRow
+            ? null
+            : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppButton(
+                    label: l10n.tokenVoting,
+                    variant: AppColorVariant.Dark,
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return WebTokenTopicBottomSheet(tokenDetail: tokenDetail, isOwner: tokenDetail.token.ownerAddress == address);
+                          });
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12.0),
+                    child: WebTransferTokenAmountButton(
+                      balance: balance,
+                      address: address,
+                      tokenDetail: tokenDetail,
+                    ),
+                  ),
+                  if (tokenDetail.token.canBurn)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 12.0),
+                      child: WebBurnTokenAmountButton(
+                        balance: balance,
+                        address: address,
+                        tokenDetail: tokenDetail,
+                      ),
+                    ),
+                ],
               ),
-            ),
-            if (tokenDetail.token.canBurn)
-              Padding(
-                padding: const EdgeInsets.only(left: 12.0),
-                child: WebBurnTokenAmountButton(
-                  balance: balance,
-                  address: address,
-                  tokenDetail: tokenDetail,
-                ),
-              ),
-          ],
-        ),
       ),
     );
   }
+}
+
+/// The node counts the sender's unconfirmed transfers and burns of the same
+/// token at admission, so the check subtracts the ones this session broadcast.
+String? _tokenShortfallMessage(
+  WidgetRef ref,
+  AppLocalizations l10n,
+  WebFungibleTokenDetail tokenDetail,
+  String address,
+  double balance,
+  double amount,
+) {
+  if (amount > balance) {
+    return l10n.tokenWebInsufficient(address, tokenDetail.token.ticker);
+  }
+  final pending = pendingContractDebit(
+    ref.read(webTransactionListProvider(address)).transactions,
+    address,
+    tokenDetail.token.smartContractId,
+  );
+  final available = balance - pending;
+  if (amount > available) {
+    return l10n.webPendingBalanceInsufficient(formatDebitAmount(available > 0 ? available : 0), tokenDetail.token.ticker);
+  }
+  return null;
 }
 
 class WebBurnTokenAmountButton extends BaseComponent {
@@ -110,8 +162,9 @@ class WebBurnTokenAmountButton extends BaseComponent {
           return;
         }
 
-        if (amount > balance) {
-          Toast.error(l10n.tokenWebInsufficient(address, tokenDetail.token.ticker));
+        final shortfall = _tokenShortfallMessage(ref, l10n, tokenDetail, address, balance, amount);
+        if (shortfall != null) {
+          Toast.error(shortfall);
           return;
         }
 
@@ -154,13 +207,19 @@ class WebTransferTokenAmountButton extends BaseComponent {
           return;
         }
 
+        if (isTokenTransferToSelf(address, toAddress)) {
+          Toast.error(l10n.tokenWebTransferToSelf);
+          return;
+        }
+
         final amount = await manager.promptForAmount(title: l10n.tokenAmountToTransferTitle);
         if (amount == null) {
           return;
         }
 
-        if (amount > balance) {
-          Toast.error(l10n.tokenWebInsufficient(address, tokenDetail.token.ticker));
+        final shortfall = _tokenShortfallMessage(ref, l10n, tokenDetail, address, balance, amount);
+        if (shortfall != null) {
+          Toast.error(shortfall);
           return;
         }
 
