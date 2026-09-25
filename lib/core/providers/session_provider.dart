@@ -219,8 +219,11 @@ class SessionProvider extends StateNotifier<SessionModel> {
   }
 
   Future<void> init(bool inLoop) async {
-    final token =
-        kDebugMode ? DEV_API_TOKEN : generateRandomString(8).toLowerCase();
+    final token = cliApiToken(
+      isMainnet: !Env.isTestNet,
+      isDebug: kDebugMode,
+      randomToken: () => generateRandomString(8).toLowerCase(),
+    );
 
     ref.read(logProvider.notifier).append(
         LogEntry(message: "Welcome to VerifiedX Wallet version $APP_VERSION"));
@@ -869,6 +872,10 @@ class SessionProvider extends StateNotifier<SessionModel> {
   Future<bool> _startCli(String apiToken) async {
     if (Env.launchCli) {
       if (await _cliIsActive()) {
+        // A CLI launched by an earlier session holds that session's token.
+        // The fixed non-mainnet and debug tokens match it; a mainnet release
+        // token is random per launch and cannot.
+        singleton<ApiTokenManager>().set(apiToken);
         await fetchConfig();
         ref
             .read(logProvider.notifier)
@@ -880,10 +887,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       startupDataLoop();
 
       final cliPath = Env.cliPathOverride ?? getCliPath();
-      List<String> options = Env.isTestNet || Env.isDevnet || kDebugMode
-          ? ['enableapi', 'gui']
-          : ['enableapi', 'gui', 'apitoken=$apiToken'];
-      // List<String> options = ['enableapi', 'gui'];
+      List<String> options = ['enableapi', 'gui', 'apitoken=$apiToken'];
 
       if (Env.isTestNet || Env.isDevnet) {
         options.add("testnet");

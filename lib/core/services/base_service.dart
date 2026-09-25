@@ -25,18 +25,25 @@ class BaseService {
     this.withWebAuth = false,
   });
 
-  Map<String, dynamic> _headers([bool auth = true, bool json = false]) {
-    final token = singleton<ApiTokenManager>().get();
+  /// The apitoken header for calls to the local CLI. Services that point at
+  /// another host (Spyglass, mempool.space, the snapshot fleet) never get it.
+  Map<String, String> _apiTokenHeader() {
+    if (kIsWeb || hostOverride != null) {
+      return {};
+    }
+    return {'apitoken': singleton<ApiTokenManager>().get()};
+  }
 
+  Map<String, dynamic> _headers([bool auth = true, bool json = false]) {
     return json
         ? {
             HttpHeaders.contentTypeHeader: "application/json",
             HttpHeaders.acceptHeader: "application/json",
-            ...!kIsWeb && !Env.isTestNet ? {'apitoken': token} : {},
+            ..._apiTokenHeader(),
             ...withWebAuth && auth ? {'Authorization': "basic ${singleton<Storage>().getString(Storage.WEB_AUTH_TOKEN)}"} : {},
           }
         : {
-            ...!kIsWeb && !Env.isTestNet ? {'apitoken': token} : {},
+            ..._apiTokenHeader(),
             ...withWebAuth && auth ? {'Authorization': "basic ${singleton<Storage>().getString(Storage.WEB_AUTH_TOKEN)}"} : {},
           };
   }
