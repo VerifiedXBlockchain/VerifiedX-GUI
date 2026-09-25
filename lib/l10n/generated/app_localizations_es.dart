@@ -9486,6 +9486,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tokenWebVaultRowActionsUnavailable => 'Transferir, quemar y votar no están disponibles para los tokens guardados en la Bóveda. Primero muévelos fuera de la Bóveda.';
 
   @override
+  String get tokenWebTransferToSelf => 'Los tokens no se pueden transferir a la misma dirección que los tiene.';
+
+  @override
   String get txAppBarAll => 'Todas las transacciones';
 
   @override

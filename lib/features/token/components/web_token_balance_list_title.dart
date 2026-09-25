@@ -12,6 +12,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/components.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../providers/web_token_actions_manager.dart';
+import '../token_rules.dart';
 
 class WebTokenBalanceListTile extends BaseComponent {
   final WebFungibleTokenDetail tokenDetail;
@@ -175,6 +176,11 @@ class WebTransferTokenAmountButton extends BaseComponent {
 
         final toAddress = await manager.promptForAddress(title: l10n.tokenTransferTo);
         if (toAddress == null) {
+          return;
+        }
+
+        if (isTokenTransferToSelf(address, toAddress)) {
+          Toast.error(l10n.tokenWebTransferToSelf);
           return;
         }
 

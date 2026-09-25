@@ -7991,6 +7991,10 @@
   "@tokenWebVaultRowActionsUnavailable": {
     "description": "Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons."
   },
+  "tokenWebTransferToSelf": "Los tokens no se pueden transferir a la misma dirección que los tiene.",
+  "@tokenWebTransferToSelf": {
+    "description": "Error when a web token transfer names the sending address as the recipient."
+  },
   "txAppBarAll": "Todas las transacciones",
   "@txAppBarAll": {
     "description": "Transactions screen title when viewing both VFX and BTC."

@@ -17667,6 +17667,12 @@ abstract class AppLocalizations {
   /// **'Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.'**
   String get tokenWebVaultRowActionsUnavailable;
 
+  /// Error when a web token transfer names the sending address as the recipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens cannot be transferred to the address that holds them.'**
+  String get tokenWebTransferToSelf;
+
   /// Transactions screen title when viewing both VFX and BTC.
   ///
   /// In en, this message translates to:
