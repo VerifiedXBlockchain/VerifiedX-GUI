@@ -7,6 +7,7 @@ import '../../metrics/models/network_metrics.dart';
 
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
+import '../../../core/services/launched_cli.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../utils/cli_exit.dart';
@@ -298,24 +299,29 @@ class BridgeService extends BaseService {
   }
 
   /// Asks the CLI to exit and waits until it has actually gone, so the CLI
-  /// gets to record a clean shutdown before the GUI terminates. Returns false
-  /// if the CLI was still answering when [maxWait] ran out.
+  /// gets to record a clean shutdown before the GUI terminates. If the node
+  /// refuses the exit request, the CLI this session launched is terminated.
+  /// Returns false if the CLI was still answering when [maxWait] ran out.
   Future<bool> killCli({Duration maxWait = const Duration(seconds: 15)}) async {
     if (!Env.launchCli) {
       return true;
     }
-    // SendExit never completes its response (the process exits mid-request),
-    // so fire it and discard the resulting connection error.
-    unawaited(getText("/SendExit").catchError((_) => ""));
-    return waitUntilCliStops(_cliStillAnswering, maxWait: maxWait);
+    return exitCli(
+      sendExit: () => getText("/SendExit"),
+      stillAnswering: _cliStillAnswering,
+      terminateLaunchedCli: LaunchedCli.terminate,
+      maxWait: maxWait,
+    );
   }
 
+  /// A credential refusal (401 while locked, 403 on a token mismatch) is an
+  /// answer, so the CLI is still running; any other failure means it is gone.
   Future<bool> _cliStillAnswering() async {
     try {
       await getText("/SendExitComplete", timeout: 1000);
       return true;
-    } catch (_) {
-      return false;
+    } catch (error) {
+      return isCredentialRefusal(error);
     }
   }
 

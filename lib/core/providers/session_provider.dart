@@ -29,6 +29,7 @@ import '../../features/btc/services/btc_fee_rate_service.dart';
 import '../../features/btc/services/btc_service.dart';
 
 import '../api_token_manager.dart';
+import '../services/launched_cli.dart';
 import '../utils.dart';
 import '../../features/chat/providers/chat_notification_provider.dart';
 import '../../features/dst/providers/listed_nfts_provider.dart';
@@ -925,6 +926,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
               .read(logProvider.notifier)
               .append(LogEntry(message: "Launching CLI in the background."));
           final List<String> params = [cliPath, ...options];
+          LaunchedCli.launchedOnWindows(cliExePath);
           pm.run(params, workingDirectory: appPath).then((result) {
             final output = "${result.stdout}${result.stderr}".trim();
             final snippet =
@@ -974,6 +976,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
         try {
           shell.run(cmd);
+          LaunchedCli.launchedOnMac(shell);
           singleton<ApiTokenManager>().set(apiToken);
 
           await Future.delayed(const Duration(seconds: 3));
