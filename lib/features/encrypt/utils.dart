@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../global_loader/global_loading_provider.dart';
 import '../reserve/services/reserve_account_service.dart';
 
 import '../../core/dialogs.dart';
@@ -109,7 +110,9 @@ Future<bool?> promptForPassword(BuildContext context, WidgetRef ref, [bool forVa
   }
 
   if (password.isNotEmpty) {
+    ref.read(globalLoadingProvider.notifier).start();
     final success = await ref.read(passwordRequiredProvider.notifier).unlock(password);
+    ref.read(globalLoadingProvider.notifier).complete();
     if (success) {
       if (forValidating) {
         Toast.message(l10n.r3gAccountUnlocked);

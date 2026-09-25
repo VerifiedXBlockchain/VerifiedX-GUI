@@ -67,7 +67,10 @@ class BridgeService extends BaseService {
 
   Future<bool> unlockWallet(String password) async {
     try {
-      final data = await getText("/GetDecryptWallet/$password", cleanPath: false);
+      // The first unlock after the upgrade re-wraps every legacy keystore
+      // record with 600,000-iteration PBKDF2 before the node replies, which
+      // can outlast the default timeout on a wallet with many addresses.
+      final data = await getText("/GetDecryptWallet/$password", cleanPath: false, timeout: 0);
       final response = jsonDecode(data);
 
       if (response['Result'] != null && response['Result'] == "Success") {
