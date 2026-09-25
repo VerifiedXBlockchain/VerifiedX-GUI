@@ -171,12 +171,35 @@ class BridgeService extends BaseService {
     }
   }
 
+  /// Creates a VFX address and returns the node's JSON reply, or null after
+  /// showing why the node created none.
   Future<String?> newAddress() async {
-    final response = await getText("/GetNewAddress");
-    if (response == "Fail") {
+    final String response;
+    try {
+      response = await getText("/GetNewAddress");
+    } catch (e) {
+      print("GetNewAddress failed: $e");
+      Toast.error();
+      return null;
+    }
+    final refusal = newAddressRefusal(response);
+    if (refusal != null) {
+      Toast.error(refusal.isEmpty ? null : refusal);
       return null;
     }
     return response;
+  }
+
+  /// The reason the node gave for creating no address, or null when [response]
+  /// is not a refusal. The node answers "Fail" or, since the remediation,
+  /// "Fail. No address was created: <reason>"; an empty string means it gave
+  /// no reason.
+  static String? newAddressRefusal(String response) {
+    final trimmed = response.trim();
+    if (!trimmed.startsWith("Fail")) {
+      return null;
+    }
+    return trimmed.substring("Fail".length).replaceFirst(RegExp(r'^[.:\s]+'), '').trim();
   }
 
   /// Extracts the tx hash from a /SendTransaction response. The CLI returns
@@ -390,16 +413,34 @@ class BridgeService extends BaseService {
     }
   }
 
-  Future<bool> restoreHd(String mnumonic) async {
+  /// Restores an HD wallet from [mnumonic]. Returns null on success, or the
+  /// node's reason (empty when it gave none).
+  Future<String?> restoreHd(String mnumonic) async {
     try {
       final response = await getText("/GetRestoreHDWallet/${mnumonic.trim()}", cleanPath: false);
-      final data = jsonDecode(response);
-      print(data);
-      return true;
+      return hdRestoreFailure(response);
     } catch (e) {
       print(e);
-      return false;
+      return "";
     }
+  }
+
+  /// The node's reason for not restoring an HD wallet, or null when it did.
+  /// It replies {Result: "<text>"}: "Mnemonic Restored..." on success, or the
+  /// refusal ("HD Wallet Already Exist", "Invalid Mnemonic Entered...", the
+  /// encrypted-wallet refusal), and plain "ERROR! Message: ..." on an error.
+  static String? hdRestoreFailure(String response) {
+    Object? data;
+    try {
+      data = jsonDecode(response);
+    } on FormatException {
+      return response.trim();
+    }
+    final result = data is Map<String, dynamic> ? data['Result'] : null;
+    if (result is String && result.startsWith("Mnemonic Restored")) {
+      return null;
+    }
+    return result is String ? result.trim() : "";
   }
 
   Future<bool> validateSendToAddress(String address) async {

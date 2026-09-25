@@ -24,6 +24,7 @@ import '../../../utils/validation.dart';
 import 'package:collection/collection.dart';
 
 import '../providers/tokenized_btc_onboard_provider.dart';
+import '../../encrypt/utils.dart';
 
 part './tokenize_btc_onboarding_steps.dart';
 

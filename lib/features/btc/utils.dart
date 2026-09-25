@@ -453,8 +453,7 @@ String? formValidatorVbtcMultiAmount(String? value, double available) {
     return globalL10n.btcInvalidAmountToast;
   }
 
-  final parts = trimmed.split('.');
-  if (parts.length == 2 && parts[1].length > 8) {
+  if (vbtcAmountHasTooManyDecimals(trimmed)) {
     return globalL10n.btcBulkMaxDecimals;
   }
 
@@ -478,4 +477,11 @@ String? rbfHighFeeReason(String? message) {
     return null;
   }
   return message.substring(0, instruction).trim();
+}
+
+/// True when a typed vBTC [amount] has more than the 8 decimal places the
+/// node accepts for vBTC transfers and withdrawals (VX-01).
+bool vbtcAmountHasTooManyDecimals(String amount) {
+  final parts = amount.trim().split('.');
+  return parts.length == 2 && parts[1].length > 8;
 }

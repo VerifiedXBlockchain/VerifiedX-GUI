@@ -1185,6 +1185,8 @@ class _TransferSharesModal extends BaseComponent {
               ),
               TextFormField(
                 controller: amountControlller,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) => value != null && vbtcAmountHasTooManyDecimals(value) ? l10n.btcBulkMaxDecimals : null,
                 decoration: InputDecoration(
                   label: Text(
                     l10n.tkbAmountOfVbtcTo(forWithdrawl ? l10n.btcWithdrawLabel : l10n.actionSend),
@@ -1337,6 +1339,11 @@ class _TransferSharesModal extends BaseComponent {
 
                       if (amount == null || amount <= 0) {
                         Toast.error(l10n.btcInvalidAmount);
+                        return;
+                      }
+
+                      if (vbtcAmountHasTooManyDecimals(amountControlller.text)) {
+                        Toast.error(l10n.btcBulkMaxDecimals);
                         return;
                       }
 

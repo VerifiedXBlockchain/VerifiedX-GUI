@@ -109,7 +109,6 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
     final data = await BridgeService().newAddress();
 
     if (data == null) {
-      Toast.error(globalL10n.txpErrorOccurred);
       return null;
     }
     final json = jsonDecode(data);

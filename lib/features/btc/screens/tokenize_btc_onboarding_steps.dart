@@ -375,6 +375,7 @@ class _CreateOrImportVfxWalletStep extends BaseComponent {
               label: l10n.btcCreateNew,
               icon: Icons.add,
               onPressed: () async {
+                if (!await passwordRequiredGuard(context, ref)) return;
                 final w = await ref.read(walletListProvider.notifier).create();
                 if (w != null) {
                   provider.setVfxWallet(w);
