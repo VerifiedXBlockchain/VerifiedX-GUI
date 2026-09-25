@@ -17,6 +17,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../models/btc_transaction.dart';
 import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import '../../encrypt/utils.dart';
 
 class BtcTransactionListTile extends BaseStatefulComponent {
   final BtcTransaction transaction;
@@ -197,6 +198,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                             child: AppButton(
                               label: AppLocalizations.of(context).btcReplaceByFee,
                               onPressed: () async {
+                                if (!await passwordRequiredGuard(context, ref)) return;
                                 final feeRateStr = await PromptModal.show(
                                     title: AppLocalizations.of(context).btcRbfFeeRateTitle,
                                     body: l10n.bw2RbfFeeRateBody,

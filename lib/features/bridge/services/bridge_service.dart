@@ -476,7 +476,14 @@ class BridgeService extends BaseService {
       return null;
     }
 
-    final data = await getJson('/GetLatestRelease/${execute ? 'true' : 'false'}/$filename', cleanPath: false);
+    final Map<String, dynamic> data;
+    try {
+      data = await getJson('/GetLatestRelease/${execute ? 'true' : 'false'}/$filename', cleanPath: false);
+    } catch (e) {
+      // The node refuses this route (401) while an encrypted wallet is locked.
+      print("CLI update check failed: $e");
+      return null;
+    }
     if (data.containsKey('Result') && data['Result'] == "Success") {
       if (data.containsKey("Message")) {
         final message = data['Message'];

@@ -247,20 +247,24 @@ class ReserveAccountService extends BaseService {
   }
 
   Future<bool> isUnlockedV2(String address) async {
-    final response = await getText("/UnlockReserveAccount/$address/0/checking", cleanPath: false);
-    final data = jsonDecode(response);
-
-    print(data);
-
-    return data['AlreadyUnlocked'] == true;
+    try {
+      final response = await getText("/UnlockReserveAccount/$address/0/checking", cleanPath: false);
+      final data = jsonDecode(response);
+      return data['AlreadyUnlocked'] == true;
+    } catch (e) {
+      print("Reserve unlock check failed: $e");
+      return false;
+    }
   }
 
   Future<bool> unlockV2(String address, String password) async {
-    final response = await getText("/UnlockReserveAccount/$address/0/$password", cleanPath: false);
-    final data = jsonDecode(response);
-
-    print(data);
-
-    return data['Success'] == true;
+    try {
+      final response = await getText("/UnlockReserveAccount/$address/0/$password", cleanPath: false);
+      final data = jsonDecode(response);
+      return data['Success'] == true;
+    } catch (e) {
+      print("Reserve unlock failed: $e");
+      return false;
+    }
   }
 }

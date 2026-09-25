@@ -56,6 +56,12 @@ Future<bool> passwordRequiredGuardV2(
     return true;
   }
 
+  // The node refuses the reserve unlock route while the encrypted wallet
+  // itself is locked, so that is unlocked first.
+  if (!await passwordRequiredGuard(context, ref, prompt, forValidating)) {
+    return false;
+  }
+
   final alreadyUnlocked = await ReserveAccountService().isUnlockedV2(address);
   if (alreadyUnlocked) {
     return true;

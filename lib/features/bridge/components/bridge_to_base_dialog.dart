@@ -13,6 +13,7 @@ import 'bridge_confirmation.dart';
 import 'bridge_preflight_form.dart';
 import 'bridge_progress.dart';
 import 'bridge_result.dart';
+import '../../encrypt/utils.dart';
 
 /// Step machine for the bridge flow. Library-private — only the dialog's
 /// internal state references it. Names align with the spec's § 3 wording.
@@ -128,6 +129,8 @@ class _BridgeToBaseDialogState extends ConsumerState<BridgeToBaseDialog> {
 
   Future<void> _handleConfirm() async {
     if (_reviewedAmount == null || _reviewedDestination == null) return;
+    if (!await passwordRequiredGuard(context, ref)) return;
+    if (!mounted) return;
     setState(() => _isSubmitting = true);
 
     final req = BridgeLockRequest.fromValues(

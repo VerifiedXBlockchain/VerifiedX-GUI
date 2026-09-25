@@ -11,6 +11,7 @@ import '../providers/bridge_lock_list_provider.dart';
 import '../services/vbtc_bridge_service.dart';
 import 'bridge_history_item.dart';
 import 'bridge_to_base_dialog.dart';
+import '../../encrypt/utils.dart';
 
 /// Per-contract bridge history list.
 ///
@@ -63,6 +64,8 @@ class _BridgeHistoryListState extends ConsumerState<BridgeHistoryList> {
 
   Future<void> _retry(BridgeLockRecord record) async {
     if (_retrying.contains(record.lockId)) return;
+    if (!await passwordRequiredGuard(context, ref)) return;
+    if (!mounted) return;
     setState(() => _retrying.add(record.lockId));
     final ok = await VbtcBridgeService().retryMint(record.lockId, widget.ownerAddress);
     if (!mounted) return;
