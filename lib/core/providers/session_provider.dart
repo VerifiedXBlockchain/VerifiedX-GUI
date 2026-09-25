@@ -221,7 +221,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
   Future<void> init(bool inLoop) async {
     final token = cliApiToken(
-      isMainnet: !Env.isTestNet,
+      isMainnet: !Env.isTestNet && !Env.isDevnet,
       isDebug: kDebugMode,
       randomToken: () => generateRandomString(8).toLowerCase(),
     );
