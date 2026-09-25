@@ -22,6 +22,7 @@ import '../../token/providers/web_token_actions_manager.dart';
 import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import '../services/btc_web_service.dart';
+import '../utils/vbtc_amount.dart';
 import 'web_v2_withdrawal_dialog.dart';
 
 class WebTokenizedBtcActionButtons extends BaseComponent {
@@ -279,7 +280,13 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             // New withdrawal request
             final amountStr = await PromptModal.show(
               title: l10n.labelAmount,
-              validator: (val) => formValidatorNumber(val, l10n.labelAmount),
+              validator: (val) {
+                final numberError = formValidatorNumber(val, l10n.labelAmount);
+                if (numberError != null) {
+                  return numberError;
+                }
+                return vbtcAmountWithinSatoshiPrecision(val!) ? null : l10n.btcBulkMaxDecimals;
+              },
               body: l10n.bw2HowMuchBtcWithdraw,
               labelText: l10n.bw2WithdrawalAmount,
             );
@@ -287,6 +294,10 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             final withdrawAmount = double.tryParse(amountStr);
             if (withdrawAmount == null || withdrawAmount <= 0) {
               Toast.error(l10n.btcInvalidAmount);
+              return;
+            }
+            if (!vbtcAmountWithinSatoshiPrecision(amountStr)) {
+              Toast.error(l10n.btcBulkMaxDecimals);
               return;
             }
 
@@ -523,6 +534,10 @@ class _TransferSharesModal extends BaseComponent {
 
                       if (amount == null || amount <= 0) {
                         Toast.error(l10n.btcInvalidAmount);
+                        return;
+                      }
+                      if (!vbtcAmountWithinSatoshiPrecision(amountControlller.text)) {
+                        Toast.error(l10n.btcBulkMaxDecimals);
                         return;
                       }
                       print("-----");
