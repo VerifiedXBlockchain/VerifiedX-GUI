@@ -2841,6 +2841,12 @@ abstract class AppLocalizations {
   /// **'Supply Amount'**
   String get bw2SupplyAmount;
 
+  /// Validation error for a token supply that has decimals or exceeds the largest supply the network accepts.
+  ///
+  /// In en, this message translates to:
+  /// **'Supply must be a whole number from 0 to {max}.'**
+  String bw2SupplyWholeNumberMax(String max);
+
   /// No description provided for @bw2SupplyLabel.
   ///
   /// In en, this message translates to:

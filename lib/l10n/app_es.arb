@@ -1626,6 +1626,15 @@
   "bw2StepValidating": "Validando",
   "bw2SubmittingTxVfx": "Enviando una transacción a la red VFX.",
   "bw2SupplyAmount": "Cantidad de suministro",
+  "bw2SupplyWholeNumberMax": "El suministro debe ser un número entero de 0 a {max}.",
+  "@bw2SupplyWholeNumberMax": {
+    "description": "Validation error for a token supply that has decimals or exceeds the largest supply the network accepts.",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "bw2SupplyLabel": "Suministro",
   "bw2ToBtcAddressRequired": "Dirección BTC de destino obligatoria.",
   "bw2TokenAppearWhenIndexed": "El token aparecerá en tu lista una vez indexado (normalmente unos segundos).",

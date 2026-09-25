@@ -1481,6 +1481,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2SupplyAmount => 'Supply Amount';
 
   @override
+  String bw2SupplyWholeNumberMax(String max) {
+    return 'Supply must be a whole number from 0 to $max.';
+  }
+
+  @override
   String get bw2SupplyLabel => 'Supply';
 
   @override
