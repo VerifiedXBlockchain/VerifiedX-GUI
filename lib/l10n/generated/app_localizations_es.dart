@@ -10499,6 +10499,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get walletRevealPrivateKey => 'Revelar clave privada';
 
   @override
+  String get walletBtcPrivateKeyNotExported => 'El nodo solo comparte la clave privada de Bitcoin al crear la cuenta. Usa la copia de seguridad que guardaste en ese momento.';
+
+  @override
   String get walletSaveAsFile => 'Guardar como archivo';
 
   @override

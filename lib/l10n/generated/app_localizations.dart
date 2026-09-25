@@ -19473,6 +19473,12 @@ abstract class AppLocalizations {
   /// **'Reveal Private Key'**
   String get walletRevealPrivateKey;
 
+  /// Shown when revealing a BTC private key that the node no longer returns.
+  ///
+  /// In en, this message translates to:
+  /// **'The node only shares a Bitcoin private key when the account is created. Use the backup you saved at that time.'**
+  String get walletBtcPrivateKeyNotExported;
+
   /// Button label to export Vault-account backup data as a file.
   ///
   /// In en, this message translates to:

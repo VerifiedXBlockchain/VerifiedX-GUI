@@ -9248,6 +9248,10 @@
   "@walletRevealPrivateKey": {
     "description": "Button to reveal the private key for an account."
   },
+  "walletBtcPrivateKeyNotExported": "The node only shares a Bitcoin private key when the account is created. Use the backup you saved at that time.",
+  "@walletBtcPrivateKeyNotExported": {
+    "description": "Shown when revealing a BTC private key that the node no longer returns."
+  },
   "walletSaveAsFile": "Save as File",
   "@walletSaveAsFile": {
     "description": "Button label to export Vault-account backup data as a file."

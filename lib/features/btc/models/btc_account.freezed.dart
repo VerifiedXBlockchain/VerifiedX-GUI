@@ -25,13 +25,13 @@ mixin _$BtcAccount {
   @JsonKey(name: "Address")
   String get address => throw _privateConstructorUsedError;
   @JsonKey(name: "PrivateKey")
-  String get privateKey => throw _privateConstructorUsedError;
+  String? get privateKey => throw _privateConstructorUsedError;
   @JsonKey(name: "ADNR")
   String? get adnr => throw _privateConstructorUsedError;
   @JsonKey(name: "ADNROwnerAddress")
   String? get adnrOwnerAddress => throw _privateConstructorUsedError;
   @JsonKey(name: "WifKey")
-  String get wifKey => throw _privateConstructorUsedError;
+  String? get wifKey => throw _privateConstructorUsedError;
   @JsonKey(name: "Balance")
   double get balance => throw _privateConstructorUsedError;
 
@@ -50,10 +50,10 @@ abstract class $BtcAccountCopyWith<$Res> {
   $Res call(
       {@JsonKey(name: "Id") int id,
       @JsonKey(name: "Address") String address,
-      @JsonKey(name: "PrivateKey") String privateKey,
+      @JsonKey(name: "PrivateKey") String? privateKey,
       @JsonKey(name: "ADNR") String? adnr,
       @JsonKey(name: "ADNROwnerAddress") String? adnrOwnerAddress,
-      @JsonKey(name: "WifKey") String wifKey,
+      @JsonKey(name: "WifKey") String? wifKey,
       @JsonKey(name: "Balance") double balance});
 }
 
@@ -72,10 +72,10 @@ class _$BtcAccountCopyWithImpl<$Res, $Val extends BtcAccount>
   $Res call({
     Object? id = null,
     Object? address = null,
-    Object? privateKey = null,
+    Object? privateKey = freezed,
     Object? adnr = freezed,
     Object? adnrOwnerAddress = freezed,
-    Object? wifKey = null,
+    Object? wifKey = freezed,
     Object? balance = null,
   }) {
     return _then(_value.copyWith(
@@ -87,10 +87,10 @@ class _$BtcAccountCopyWithImpl<$Res, $Val extends BtcAccount>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      privateKey: null == privateKey
+      privateKey: freezed == privateKey
           ? _value.privateKey
           : privateKey // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       adnr: freezed == adnr
           ? _value.adnr
           : adnr // ignore: cast_nullable_to_non_nullable
@@ -99,10 +99,10 @@ class _$BtcAccountCopyWithImpl<$Res, $Val extends BtcAccount>
           ? _value.adnrOwnerAddress
           : adnrOwnerAddress // ignore: cast_nullable_to_non_nullable
               as String?,
-      wifKey: null == wifKey
+      wifKey: freezed == wifKey
           ? _value.wifKey
           : wifKey // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -122,10 +122,10 @@ abstract class _$$_BtcAccountCopyWith<$Res>
   $Res call(
       {@JsonKey(name: "Id") int id,
       @JsonKey(name: "Address") String address,
-      @JsonKey(name: "PrivateKey") String privateKey,
+      @JsonKey(name: "PrivateKey") String? privateKey,
       @JsonKey(name: "ADNR") String? adnr,
       @JsonKey(name: "ADNROwnerAddress") String? adnrOwnerAddress,
-      @JsonKey(name: "WifKey") String wifKey,
+      @JsonKey(name: "WifKey") String? wifKey,
       @JsonKey(name: "Balance") double balance});
 }
 
@@ -142,10 +142,10 @@ class __$$_BtcAccountCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? address = null,
-    Object? privateKey = null,
+    Object? privateKey = freezed,
     Object? adnr = freezed,
     Object? adnrOwnerAddress = freezed,
-    Object? wifKey = null,
+    Object? wifKey = freezed,
     Object? balance = null,
   }) {
     return _then(_$_BtcAccount(
@@ -157,10 +157,10 @@ class __$$_BtcAccountCopyWithImpl<$Res>
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
               as String,
-      privateKey: null == privateKey
+      privateKey: freezed == privateKey
           ? _value.privateKey
           : privateKey // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       adnr: freezed == adnr
           ? _value.adnr
           : adnr // ignore: cast_nullable_to_non_nullable
@@ -169,10 +169,10 @@ class __$$_BtcAccountCopyWithImpl<$Res>
           ? _value.adnrOwnerAddress
           : adnrOwnerAddress // ignore: cast_nullable_to_non_nullable
               as String?,
-      wifKey: null == wifKey
+      wifKey: freezed == wifKey
           ? _value.wifKey
           : wifKey // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       balance: null == balance
           ? _value.balance
           : balance // ignore: cast_nullable_to_non_nullable
@@ -187,10 +187,10 @@ class _$_BtcAccount extends _BtcAccount {
   _$_BtcAccount(
       {@JsonKey(name: "Id") this.id = 0,
       @JsonKey(name: "Address") required this.address,
-      @JsonKey(name: "PrivateKey") required this.privateKey,
+      @JsonKey(name: "PrivateKey") this.privateKey,
       @JsonKey(name: "ADNR") this.adnr,
       @JsonKey(name: "ADNROwnerAddress") this.adnrOwnerAddress,
-      @JsonKey(name: "WifKey") required this.wifKey,
+      @JsonKey(name: "WifKey") this.wifKey,
       @JsonKey(name: "Balance") this.balance = 0.0})
       : super._();
 
@@ -205,7 +205,7 @@ class _$_BtcAccount extends _BtcAccount {
   final String address;
   @override
   @JsonKey(name: "PrivateKey")
-  final String privateKey;
+  final String? privateKey;
   @override
   @JsonKey(name: "ADNR")
   final String? adnr;
@@ -214,7 +214,7 @@ class _$_BtcAccount extends _BtcAccount {
   final String? adnrOwnerAddress;
   @override
   @JsonKey(name: "WifKey")
-  final String wifKey;
+  final String? wifKey;
   @override
   @JsonKey(name: "Balance")
   final double balance;
@@ -263,10 +263,10 @@ abstract class _BtcAccount extends BtcAccount {
   factory _BtcAccount(
       {@JsonKey(name: "Id") final int id,
       @JsonKey(name: "Address") required final String address,
-      @JsonKey(name: "PrivateKey") required final String privateKey,
+      @JsonKey(name: "PrivateKey") final String? privateKey,
       @JsonKey(name: "ADNR") final String? adnr,
       @JsonKey(name: "ADNROwnerAddress") final String? adnrOwnerAddress,
-      @JsonKey(name: "WifKey") required final String wifKey,
+      @JsonKey(name: "WifKey") final String? wifKey,
       @JsonKey(name: "Balance") final double balance}) = _$_BtcAccount;
   _BtcAccount._() : super._();
 
@@ -281,7 +281,7 @@ abstract class _BtcAccount extends BtcAccount {
   String get address;
   @override
   @JsonKey(name: "PrivateKey")
-  String get privateKey;
+  String? get privateKey;
   @override
   @JsonKey(name: "ADNR")
   String? get adnr;
@@ -290,7 +290,7 @@ abstract class _BtcAccount extends BtcAccount {
   String? get adnrOwnerAddress;
   @override
   @JsonKey(name: "WifKey")
-  String get wifKey;
+  String? get wifKey;
   @override
   @JsonKey(name: "Balance")
   double get balance;

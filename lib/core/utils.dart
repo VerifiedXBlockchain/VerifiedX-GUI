@@ -65,8 +65,10 @@ Future<bool> backupKeys(BuildContext context, WidgetRef ref) async {
 
       for (final b in btcAccounts) {
         output += "Addresss: \n${b.address}\n\n";
-        output += "Private Key: \n${b.privateKey}\n\n";
-        output += "WIF Private Key: \n${b.wifKey}\n\n";
+        // The node exports a Bitcoin key only in the reply that creates the
+        // account (Core VX-13); a listing never carries it.
+        output += "Private Key: \n${b.privateKey ?? 'not exported by the node; use the backup saved when the account was created'}\n\n";
+        output += "WIF Private Key: \n${b.wifKey ?? 'not exported by the node'}\n\n";
         output += "===================================\n\n";
       }
     }

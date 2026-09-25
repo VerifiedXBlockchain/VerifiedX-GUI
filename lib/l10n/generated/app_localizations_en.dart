@@ -10499,6 +10499,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletRevealPrivateKey => 'Reveal Private Key';
 
   @override
+  String get walletBtcPrivateKeyNotExported => 'The node only shares a Bitcoin private key when the account is created. Use the backup you saved at that time.';
+
+  @override
   String get walletSaveAsFile => 'Save as File';
 
   @override

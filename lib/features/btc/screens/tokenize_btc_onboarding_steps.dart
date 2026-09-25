@@ -575,6 +575,13 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                   if (data.length == 2) {
                     final privateKey = data.first;
                     const addressType = BtcAddressType.segwit;
+                    // The node's import reply carries no address and its
+                    // listings carry no keys, so the imported account is the
+                    // one that appears in the list after the import.
+                    final addressesBefore = ref
+                        .read(btcAccountListProvider)
+                        .map((a) => a.address)
+                        .toSet();
                     final success = await ref
                         .read(btcAccountListProvider.notifier)
                         .importPrivateKey(privateKey, addressType);
@@ -590,7 +597,8 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                       }
                       final account = ref
                           .read(btcAccountListProvider)
-                          .firstWhereOrNull((a) => a.privateKey == privateKey);
+                          .firstWhereOrNull(
+                              (a) => !addressesBefore.contains(a.address));
                       if (account != null) {
                         provider.setBtcAccount(account);
                       }

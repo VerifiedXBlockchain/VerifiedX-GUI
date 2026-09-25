@@ -183,6 +183,12 @@ class ManageWalletBtcListTile extends BaseComponent {
             Toast.error();
             return;
           }
+          if (!a.hasPrivateKey) {
+            // Core VX-13: the node exports a Bitcoin key only when the
+            // account is created, never on a later lookup.
+            Toast.error(AppLocalizations.of(context).walletBtcPrivateKeyNotExported);
+            return;
+          }
 
           showDialog(
             context: context,
