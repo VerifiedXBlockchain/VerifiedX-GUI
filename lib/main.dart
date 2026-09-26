@@ -10,6 +10,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:uni_links_desktop/uni_links_desktop.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'app.dart';
+import 'core/automation/web_semantics.dart';
 import 'core/env.dart';
 import 'core/singletons.dart';
 import 'features/bridge/services/bridge_service.dart';
@@ -58,6 +59,8 @@ void main(List<String> args) async {
       child: App(),
     ),
   ));
+
+  enableWebSemanticsForAutomation();
 
   doWhenWindowReady(() {
     rootAppWindow.size = Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);

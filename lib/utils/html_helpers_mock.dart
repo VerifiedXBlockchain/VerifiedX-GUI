@@ -30,4 +30,10 @@ class HtmlHelpersImplementation extends HtmlHelpersInterface {
   void downloadKeysWeb(List<int> bytes) {
     print("Not implemented for non web");
   }
+
+  @override
+  bool enableSemantics() {
+    return false;
+  }
 }
+
