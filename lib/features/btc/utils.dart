@@ -11,6 +11,7 @@ import '../../core/env.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/l10n_helper.dart';
 import 'models/btc_fee_rate_preset.dart';
+import 'models/btc_recommended_fees.dart';
 
 double satashisToBtc(int satashis) {
   return satashis * BTC_SATOSHI_MULTIPLIER;
@@ -29,15 +30,47 @@ String btcTxFeeEstimateLabel(int satashis) {
       .toStringAsFixed(9);
 }
 
+/// Fee rate in sats/vB for a preset, read from the fee table at the moment it
+/// is needed. The picker used to keep one `fee` variable that every row wrote
+/// to while the list was built, so Continue on the default (Economy) returned
+/// whatever the last row had written: the Fastest rate.
+int feeRateForPreset(BtcFeeRatePreset preset, BtcRecommendedFees fees) {
+  switch (preset) {
+    case BtcFeeRatePreset.minimum:
+      return fees.minimumFee;
+    case BtcFeeRatePreset.economy:
+      return fees.economyFee;
+    case BtcFeeRatePreset.hour:
+      return fees.hourFee;
+    case BtcFeeRatePreset.halfHour:
+      return fees.halfHourFee;
+    case BtcFeeRatePreset.fastest:
+      return fees.fastestFee;
+    case BtcFeeRatePreset.custom:
+      return 0;
+  }
+}
+
+/// Fetches the recommended fees and shows the picker on the root navigator.
+/// [context] is accepted for callers' convenience only: the dialog and its
+/// strings resolve from the root navigator, which is always mounted. Callers
+/// that had already popped their own route (the vBTC Fund sheet) used to hand
+/// in a dead context, and the string lookup on it killed the flow silently.
 Future<int?> promptForFeeRate(BuildContext context) async {
-  final l10n = AppLocalizations.of(context);
   final recommendedFees = await BtcFeeRateService().recommended();
+  return showFeeRatePicker(rootNavigatorKey.currentContext!, recommendedFees);
+}
+
+/// The fee-rate dialog for a known fee table. Returns the chosen sats/vB, or
+/// null when cancelled. [dialogContext] must be mounted and under a
+/// MaterialApp with the app's localizations.
+Future<int?> showFeeRatePicker(BuildContext dialogContext, BtcRecommendedFees recommendedFees) async {
+  final l10n = AppLocalizations.of(dialogContext);
 
   final int? feeRate = await showDialog(
-    context: rootNavigatorKey.currentContext!,
+    context: dialogContext,
     builder: (context) {
       BtcFeeRatePreset preset = BtcFeeRatePreset.economy;
-      int fee = 0;
       bool isCustom = false;
       int customFee = 0;
       String customFeeLabel = "";
@@ -46,73 +79,47 @@ Future<int?> promptForFeeRate(BuildContext context) async {
         builder: (context, setState) {
           return AlertDialog(
             title: Text(l10n.btcRbfFeeRateTitle),
-            content: Column(
+            // Scrollable so six preset rows plus the custom field fit a short
+            // window instead of overflowing the dialog.
+            content: SingleChildScrollView(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...BtcFeeRatePreset.values.map((p) {
-                    switch (p) {
-                      case BtcFeeRatePreset.custom:
-                        break;
-                      case BtcFeeRatePreset.minimum:
-                        fee = recommendedFees.minimumFee;
-                        break;
-                      case BtcFeeRatePreset.economy:
-                        fee = recommendedFees.economyFee;
-                        break;
-                      case BtcFeeRatePreset.hour:
-                        fee = recommendedFees.hourFee;
-                        break;
-                      case BtcFeeRatePreset.halfHour:
-                        fee = recommendedFees.halfHourFee;
-                        break;
-                      case BtcFeeRatePreset.fastest:
-                        fee = recommendedFees.fastestFee;
-                        break;
-                    }
+                    final rowFee = feeRateForPreset(p, recommendedFees);
 
                     return ConstrainedBox(
-                      key: Key("${p}_$fee"),
+                      key: Key("${p}_$rowFee"),
                       constraints: BoxConstraints(minWidth: 300),
                       child: CheckboxListTile(
                         value: p == preset,
                         controlAffinity: ListTileControlAffinity.leading,
                         onChanged: (v) {
                           if (v == true) {
-                            if (p == BtcFeeRatePreset.custom) {
-                              setState(() {
-                                preset = p;
-                                isCustom = true;
-                              });
-                            } else {
-                              print('ho');
-                              setState(() {
-                                preset = p;
-                                isCustom = false;
-                              });
-                            }
+                            setState(() {
+                              preset = p;
+                              isCustom = p == BtcFeeRatePreset.custom;
+                            });
                           }
                         },
-                        title: Text(p.label),
+                        title: Text(p.labelWith(l10n)),
                         subtitle: p == BtcFeeRatePreset.custom
                             ? null
-                            : Text("$fee SATS | ${satashiToBtcLabel(fee)} BTC"),
+                            : Text("$rowFee SATS | ${satashiToBtcLabel(rowFee)} BTC"),
                       ),
                     );
                   }).toList(),
                   if (isCustom) ...[
                     TextFormField(
                       autofocus: true,
-                      // controller: formProvider.btcCustomFeeRateController,
                       onChanged: (v) {
                         final valueInt = int.tryParse(v);
-                        print(v);
                         if (valueInt != null) {
                           setState(() {
-                            fee = valueInt;
+                            customFee = valueInt;
                             customFeeLabel =
                                 "$valueInt SATS /byte | ${(satashiToBtcLabel(valueInt))} BTC /byte";
-                            customFee = fee;
                           });
                         }
                       },
@@ -144,6 +151,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                     ),
                   )
                 ]),
+            ),
             actions: [
               TextButton(
                 onPressed: () {
@@ -159,7 +167,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
                   if (isCustom) {
                     Navigator.of(context).pop(customFee);
                   } else {
-                    Navigator.of(context).pop(fee);
+                    Navigator.of(context).pop(feeRateForPreset(preset, recommendedFees));
                   }
                 },
                 child: Text(
@@ -173,6 +181,7 @@ Future<int?> promptForFeeRate(BuildContext context) async {
       );
     },
   );
+
   return feeRate;
 }
 
