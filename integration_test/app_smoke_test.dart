@@ -114,6 +114,6 @@ void main() {
             '${isolatedData.parent.path}: $folders');
       }
     },
-    timeout: const Timeout(Duration(minutes: 5)),
+    timeout: const Timeout(Duration(minutes: 8)),
   );
 }

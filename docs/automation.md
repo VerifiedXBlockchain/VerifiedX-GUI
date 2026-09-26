@@ -36,7 +36,7 @@ The smoke test in `integration_test/app_smoke_test.dart` refuses to run while a 
 
 Agent shells do not have CocoaPods on `PATH`, so prefix the desktop commands with `LANG=en_US.UTF-8 PATH="$HOME/.rbenv/versions/3.4.4/bin:$PATH"`. Every macOS build also lets CocoaPods rewrite `macos/Runner.xcodeproj/project.pbxproj` (four empty-array lines); that change is noise and is reverted with `git checkout macos/Runner.xcodeproj/project.pbxproj`, never committed.
 
-Testnet data on macOS lives under `~/rbxtest/` (`DatabasesTestNet`, `ConfigTestNet`, `AssetsTestNet`, ...), see `lib/core/utils.dart`. Until the data isolation below lands, every desktop integration run launches the CLI against those real folders.
+Testnet data on macOS lives under `~/rbxtest/` (`DatabasesTestNet`, `ConfigTestNet`, `AssetsTestNet`, ...), see `lib/core/utils.dart`. Automation builds never touch it; they run against the isolated folder described under "Desktop data isolation" below.
 
 ## What Claude sees
 
@@ -52,9 +52,26 @@ The Core CLI has no data-folder argument or environment variable. On macOS it de
 
 - First run in a fresh folder downloads the PLONK params (about 250 MB) and starts syncing the testnet chain into the isolated folder. The folder persists between runs and grows with the sync; delete it to start over.
 - The smoke test refuses to run when a `VerifiedXCore` process exists or anything answers on `http://localhost:17292/api/V1/CheckStatus/`, and prints a loud warning when run without `AUTOMATION=true` (it would then use the real `~/rbxtest`; back that folder up first).
-- Not isolated: the GUI's own preferences (NSUserDefaults for the app's bundle id, e.g. the stored password hash and encryption flags) are shared with the installed wallet because the pinned `shared_preferences` has no prefix API. Windows has no isolation at all.
+- Not isolated: Windows CLI data (the `HOME` override is macOS-only); the preferences prefix applies on every desktop platform.
 - Launching the CLI by hand with a custom `HOME`: create the folder first. .NET treats a missing home directory as empty and the CLI crashes trying to write `/rbxtest`.
 
-## Flutter Driver (phase 6, placeholder)
+The GUI's own preferences are isolated as well. `shared_preferences` (2.2.x since phase 6) namespaces every key with a prefix and only reads, writes and clears keys under it, so a desktop automation build calls `SharedPreferences.setPrefix('automation.')` before the first `getInstance` (`isolatePreferencesForAutomation()` in `lib/core/automation/prefs_isolation.dart`, called from `main()` ahead of `initSingletons()`). The installed wallet's `flutter.*` entries in the same NSUserDefaults domain are neither read nor written, and an automation build that sets a password stores it under `automation.*`. Web builds keep the default prefix because their preferences already live in the dev server origin's local storage.
 
-To be filled in by phase 6: `make run_macos_driver`, `lib/main_automation.dart`, `tool/drive.dart` commands, and how to get the VM service URL from the `flutter run` output.
+## Flutter Driver (desktop)
+
+`make run_macos_driver` runs the app from `lib/main_automation.dart` with `TESTNET=true` and `AUTOMATION=true`. It is the same automation build as `run_macos_automation` with the Flutter Driver extension compiled in, so `tool/drive.dart` can tap, type, wait and read text through the VM service, and the CLI and GUI data are isolated as described above. The driver extension is only compiled into `lib/main_automation.dart`; production `lib/main.dart` never imports it. The flavor registers one extra finder (`ByLabel`, `lib/core/automation/driver_label_finder.dart`) and keeps the driver's text entry emulation on, which intercepts the text input channel: `drive.dart type` works, the physical keyboard cannot type into fields.
+
+`flutter run` prints `An Observatory debugger and profiler on macOS is available at: http://127.0.0.1:PORT/TOKEN=/` once the app is up (newer SDKs call the same line "A Dart VM Service"). That URL, token and trailing slash included, is the `--vm-service-url` value. From an agent shell, run the target's `flutter run` command with the CocoaPods prefix from the desktop section, redirect its output to a file, and read the line from the file; the `VM_SERVICE_URL` environment variable can replace the option. Keystrokes such as `q` do not reach a `flutter run` whose input is redirected, so quit the app with `osascript -e 'tell application id "io.reserveblock.wallet" to quit'`: that runs the app's own quit handler, which asks the Core CLI it launched to exit (verified on 2026-09-26: no `VerifiedXCore` process and port 17292 free afterwards), and `flutter run` then exits by itself with "Lost connection to device."
+
+Each `$HOME/fvm/versions/3.7.12/bin/dart run tool/drive.dart --vm-service-url <url> <command> [args]` invocation connects, runs one command, prints one line, and exits: 0 on success, 1 when the app rejected the command (the first line of the driver error is printed, `--verbose` prints all of it), 2 on a usage error. `--timeout <seconds>` (default 30) bounds the command, and every command runs with frame sync off because the boot screen animates forever. Commands:
+
+- `health` prints the extension's health status.
+- `tap-text <text>` taps the widget whose text is exactly `<text>`.
+- `tap-key <key>` taps the widget with the string `ValueKey` `<key>`, such as the `elevated:<key>` keys built by `lib/core/components/buttons.dart`.
+- `tap-label <label>` taps the control labelled `<label>`: a `Semantics(label:)` widget (icon-only tap targets, `Icon.semanticLabel`) or a `Tooltip` message (`IconButton.tooltip`). It matches on the widget tree, not the platform accessibility tree, because the macOS embedder in 3.7.12 asserts when semantics are forced on without an assistive client, so `find.bySemanticsLabel` cannot be used there.
+- `type <text>` enters `<text>` into the focused text field, replacing its contents; tap the field first, a `type` with no focused field is dropped silently.
+- `get-text <finder>` prints the text of the matched `Text`, `RichText` or text field, where `<finder>` is `text:<text>`, `key:<key>`, `label:<label>` (the `Text` inside the widget carrying that label or tooltip) or `type:<WidgetType>`.
+- `wait-for-text <text> [--timeout s]` waits until a widget whose text is exactly `<text>` exists.
+- `screenshot <path>` writes a PNG of the current frame to `<path>` (the driver waits two seconds before capturing).
+
+A finder that matches more than one widget fails with "Too many elements"; use a key. Text matches are exact, so `wait-for-text VFX` finds the boot screen's `VFX` label while a string that only appears inside a longer label does not match.

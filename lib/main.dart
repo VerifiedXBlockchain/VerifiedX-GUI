@@ -10,6 +10,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:uni_links_desktop/uni_links_desktop.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'app.dart';
+import 'core/automation/prefs_isolation.dart';
 import 'core/automation/web_semantics.dart';
 import 'core/env.dart';
 import 'core/singletons.dart';
@@ -28,6 +29,11 @@ void main(List<String> args) async {
   timeago.setLocaleMessages('es', timeago.EsMessages());
   timeago.setLocaleMessages('es_short', timeago.EsShortMessages());
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Desktop automation builds keep their preferences apart from the installed
+  // wallet's. This must precede the first SharedPreferences.getInstance,
+  // which initSingletons() below performs.
+  isolatePreferencesForAutomation();
 
   // Parse command-line args for --testnet flag (desktop only)
   if (!kIsWeb) {

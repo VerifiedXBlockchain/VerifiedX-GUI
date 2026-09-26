@@ -88,7 +88,7 @@ SPEC CHECKSUMS:
   path_provider_foundation: 9b2865ae0d177584c376882d93e61be1e80b9e39
   screen_retriever: 4f97c103641aab8ce183fa5af3b87029df167936
   share_plus_macos: bad864466cc8d3edc440a2dec8befc781bf002e4
-  shared_preferences_foundation: 9febbcd5d8b5587372cd230ce67c9dde54338f6b
+  shared_preferences_foundation: 4e65c567e7877037d328829a522222c938bf308c
   sqflite: c73556b2499b92f0b6e6946abe4a4084510cdf90
   uni_links_desktop: 34322c2646e4c9abc69b62e1865f9782d2850ba2
   url_launcher_macos: be8b6bbc62bb3bd5befb226f3345dd434a91802f

@@ -166,6 +166,11 @@ run_web_automation:
 run_macos_automation:
 	fvm flutter run -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
 
+# Driver flavor: the same automation build with the Flutter Driver extension
+# compiled in (lib/main_automation.dart); drive it with tool/drive.dart.
+run_macos_driver:
+	fvm flutter run -t lib/main_automation.dart -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
+
 test_integration_macos:
 	fvm flutter test integration_test -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
 
