@@ -1,9 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../integration_test/helpers.dart';
+
+/// flutter_test swaps every [HttpClient] for a stub that answers 400. The
+/// probe tests need the real client to reach the local server they start.
+class _RealHttpOverrides extends HttpOverrides {}
+
+Future<T> withRealHttp<T>(Future<T> Function() body) {
+  return HttpOverrides.runWithHttpOverrides(body, _RealHttpOverrides());
+}
 
 /// Shows "waiting" and swaps to "ready" after [delay].
 class _DelayedText extends StatefulWidget {
@@ -93,5 +102,34 @@ void main() {
       ),
       throwsA(isA<TimeoutException>()),
     );
+  });
+
+  group('probeHttp', () {
+    test('describes the answer when something listens, whatever the status',
+        () async {
+      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      server.listen((request) {
+        request.response.statusCode = HttpStatus.unauthorized;
+        request.response.close();
+      });
+      try {
+        final answer = await withRealHttp(() => probeHttp(
+              Uri.parse('http://127.0.0.1:${server.port}/api/V1/CheckStatus/'),
+            ));
+        expect(answer, 'HTTP 401');
+      } finally {
+        await server.close(force: true);
+      }
+    });
+
+    test('is null when nothing listens', () async {
+      final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+      final port = server.port;
+      await server.close(force: true);
+
+      final answer =
+          await withRealHttp(() => probeHttp(Uri.parse('http://127.0.0.1:$port/')));
+      expect(answer, isNull);
+    });
   });
 }

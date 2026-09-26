@@ -10,7 +10,7 @@ Start the dev server with `make run_web_automation` and open `http://localhost:4
 
 The `?automation` query parameter is read by a small script in `web/index.html` before `main.dart.js` loads. It wraps `document.createElement` so that the `flt-glass-pane` element the engine creates has no `attachShadow` property. The 3.7.12 engine then falls back to a light-DOM host (`flt-glass-pane > flt-element-host-node > flt-semantics-host`) instead of a shadow root, which is what lets a page reader traverse the semantics nodes. Without the parameter nothing is wrapped and the engine uses its shadow root as usual. One known limitation of the light-DOM host: screens that embed an `HtmlElementView` (the payment and on-ramp iframes under `lib/features/payment/`) rely on `<slot>` projection that only exists inside a shadow tree, so under `?automation` the iframe is expected not to render in place. Keep those screens out of automated flows; production without the parameter is unchanged.
 
-The `AUTOMATION=true` dart-define sets `Env.isAutomation`. On web, `enableWebSemanticsForAutomation()` in `lib/core/automation/web_semantics.dart` runs after the first frame and clicks the engine's hidden `flt-semantics-placeholder` ("Enable accessibility") through `HtmlHelpers().enableSemantics()`, retrying up to ten times at 300 ms. That is the only way to turn semantics on in this engine version because `setSemanticsEnabled(true)` is ignored on web. The console prints `[automation] semantics placeholder clicked` when it worked, and the first `flt-semantics` nodes appear a frame or two later. On desktop the define changes nothing yet.
+The `AUTOMATION=true` dart-define sets `Env.isAutomation`. On web, `enableWebSemanticsForAutomation()` in `lib/core/automation/web_semantics.dart` runs after the first frame and clicks the engine's hidden `flt-semantics-placeholder` ("Enable accessibility") through `HtmlHelpers().enableSemantics()`, retrying up to ten times at 300 ms. That is the only way to turn semantics on in this engine version because `setSemanticsEnabled(true)` is ignored on web. The console prints `[automation] semantics placeholder clicked` when it worked, and the first `flt-semantics` nodes appear a frame or two later. On desktop the define switches the CLI and GUI data paths to an isolated folder (see "Desktop data isolation").
 
 The web router uses hash URLs and rewrites the address to `http://localhost:42069/#./` right after load, which drops the query parameter. Automation mode is decided once, when the page loads, so the running page keeps it. Every fresh navigation or reload must include `?automation=1` again; reloading the rewritten URL brings the shadow root back, the semantics tree is still switched on by the define but the page reader cannot see it.
 
@@ -46,9 +46,14 @@ The same session through the helper: `fltA11y.list()` on the landing screen retu
 
 Tile-style tap targets on the login sheet (`Email & Password`, `Mnemonic (HD account)`, ...) currently surface as `text` rather than `button`, because they are `InkWell`/`GestureDetector` targets without button semantics, so `click` cannot reach them and `tap` is needed. Phase 4 of the plan adds the labels and keys that turn them into buttons.
 
-## Data isolation (phase 3, placeholder)
+## Desktop data isolation (automation builds)
 
-To be filled in by phase 3: whether the Core CLI accepts a data-folder override, the folder an automation run uses, and the manual backup step if no override exists.
+The Core CLI has no data-folder argument or environment variable. On macOS it derives every folder from the user's home directory (`~/rbxtest/...` on testnet), which .NET resolves from `$HOME`. An automation build (`--dart-define AUTOMATION=true`, set by `make test_integration_macos` and `make run_macos_automation`) launches the CLI with `HOME` pointed at `~/Library/Application Support/vfx-gui-automation`, so the CLI writes to `.../vfx-gui-automation/rbxtest/{DatabasesTestNet,ConfigTestNet,...}` and the GUI's own log, config and media paths (`lib/core/data_home.dart`) resolve there too. The real `~/rbxtest` is never touched; verified on 2026-09-26 by comparing mtimes before and after a smoke run.
+
+- First run in a fresh folder downloads the PLONK params (about 250 MB) and starts syncing the testnet chain into the isolated folder. The folder persists between runs and grows with the sync; delete it to start over.
+- The smoke test refuses to run when a `VerifiedXCore` process exists or anything answers on `http://localhost:17292/api/V1/CheckStatus/`, and prints a loud warning when run without `AUTOMATION=true` (it would then use the real `~/rbxtest`; back that folder up first).
+- Not isolated: the GUI's own preferences (NSUserDefaults for the app's bundle id, e.g. the stored password hash and encryption flags) are shared with the installed wallet because the pinned `shared_preferences` has no prefix API. Windows has no isolation at all.
+- Launching the CLI by hand with a custom `HOME`: create the folder first. .NET treats a missing home directory as empty and the CLI crashes trying to write `/rbxtest`.
 
 ## Flutter Driver (phase 6, placeholder)
 

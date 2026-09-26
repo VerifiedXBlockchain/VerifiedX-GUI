@@ -13,6 +13,7 @@ import 'package:image/image.dart' as IMG;
 import 'dart:convert' show base64Encode;
 
 import '../core/app_constants.dart';
+import '../core/data_home.dart';
 import '../core/dialogs.dart';
 import '../core/env.dart';
 import '../features/asset/asset.dart';
@@ -50,7 +51,7 @@ Future<String> dbPath() async {
   String appDocPath = appDocDir.path;
 
   if (Platform.isMacOS) {
-    appDocPath = appDocPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/rbx");
+    appDocPath = DataHome.fromDocuments(appDocPath, Env.isTestNet ? "/rbxtest" : "/rbx");
   } else {
     final winDir = await getApplicationSupportDirectory();
     appDocPath = winDir.path;
@@ -77,7 +78,7 @@ Future<String> configPath() async {
   String path = appDocDir.path;
 
   if (Platform.isMacOS) {
-    path = path.replaceAll("/Documents", Env.isTestNet ? "/RBXTest/ConfigTestNet/config.txt" : "/RBX/Config/config.txt");
+    path = DataHome.fromDocuments(path, Env.isTestNet ? "/RBXTest/ConfigTestNet/config.txt" : "/RBX/Config/config.txt");
   } else {
     final winDir = await getApplicationSupportDirectory();
     path = winDir.path;
@@ -92,7 +93,7 @@ Future<String> startupProgressPath() async {
   String path = appDocDir.path;
 
   if (Platform.isMacOS) {
-    path = path.replaceAll("/Documents", Env.isTestNet ? "/RBXTest/DatabasesTestNet/statesynclog.txt" : "/RBX/Databases/statesynclog.txt");
+    path = DataHome.fromDocuments(path, Env.isTestNet ? "/RBXTest/DatabasesTestNet/statesynclog.txt" : "/RBX/Databases/statesynclog.txt");
   } else {
     final winDir = await getApplicationSupportDirectory();
     path = winDir.path;

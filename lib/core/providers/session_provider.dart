@@ -29,6 +29,7 @@ import '../../features/btc/services/btc_fee_rate_service.dart';
 import '../../features/btc/services/btc_service.dart';
 
 import '../api_token_manager.dart';
+import '../data_home.dart';
 import '../services/launched_cli.dart';
 import '../utils.dart';
 import '../../features/chat/providers/chat_notification_provider.dart';
@@ -962,11 +963,32 @@ class SessionProvider extends StateNotifier<SessionModel> {
           return false;
         }
       } else {
+        Map<String, String>? environment;
+        if (Env.isAutomation) {
+          // The CLI derives its data folders from HOME (see DataHome), so an
+          // automation build points it at the isolated folder. The folder must
+          // exist before the launch: .NET verifies the home directory and
+          // treats a missing one as empty, which sends the CLI to `/rbxtest`.
+          try {
+            final cliHome = DataHome.cliHome();
+            Directory(cliHome).createSync(recursive: true);
+            environment = {'HOME': cliHome};
+            ref.read(logProvider.notifier).append(LogEntry(
+                message: "Automation: CLI data isolated under $cliHome",
+                variant: AppColorVariant.Info));
+          } catch (e) {
+            ref.read(logProvider.notifier).append(
+                LogEntry(message: "$e", variant: AppColorVariant.Danger));
+            return false;
+          }
+        }
+
         var stdOutController = ShellLinesController();
         final shell = Shell(
           throwOnError: false,
           stdout: Env.hideCliOutput ? stdOutController.sink : null,
           workingDirectory: "/Applications/VFXWallet.app/Contents/MacOS/",
+          environment: environment,
         );
         cmd = '"$cliPath" ${options.join(' ')}';
 

@@ -36,6 +36,7 @@ import '../l10n/generated/app_localizations.dart';
 import '../utils/files.dart';
 import '../utils/toast.dart';
 import 'base_component.dart';
+import 'data_home.dart';
 import 'dialogs.dart';
 import 'env.dart';
 
@@ -249,8 +250,8 @@ Future<bool> backupMedia(BuildContext context, WidgetRef ref) async {
     final assetsFolderName = Env.isTestNet ? "AssetsTestNet" : "Assets";
 
     if (Platform.isMacOS) {
-      rbxPath =
-          rbxPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/vfx");
+      rbxPath = DataHome.fromDocuments(
+          rbxPath, Env.isTestNet ? "/rbxtest" : "/vfx");
     } else {
       rbxPath = rbxPath.replaceAll("\\Roaming\\com.example\\rbx_wallet_gui",
           "\\Local\\VFX${Env.isTestNet ? 'Test' : ''}");

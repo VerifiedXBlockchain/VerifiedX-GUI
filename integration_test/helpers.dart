@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -41,6 +42,31 @@ Future<void> pumpUntilGone(
     step: step,
     description: 'Timed out after $timeout waiting for $finder to go away',
   );
+}
+
+/// Sends a GET to [url] and returns a short description of whatever answered,
+/// or null when nothing listens there (connection refused, or no answer
+/// within [timeout]). The status code does not matter: a CLI holding another
+/// API token answers 401 and is still a running CLI.
+Future<String?> probeHttp(
+  Uri url, {
+  Duration timeout = const Duration(seconds: 5),
+}) async {
+  final client = HttpClient()..connectionTimeout = timeout;
+  try {
+    final request = await client.getUrl(url).timeout(timeout);
+    final response = await request.close().timeout(timeout);
+    await response.drain<void>();
+    return 'HTTP ${response.statusCode}';
+  } on SocketException {
+    return null;
+  } on TimeoutException {
+    return null;
+  } on HttpException catch (e) {
+    return 'unexpected answer: $e';
+  } finally {
+    client.close(force: true);
+  }
 }
 
 /// The text of every [Text] widget currently in the tree, for failure

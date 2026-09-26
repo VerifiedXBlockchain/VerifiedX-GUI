@@ -6,6 +6,7 @@ import 'package:process_run/shell.dart';
 
 import '../../../../core/base_component.dart';
 import '../../../../core/components/buttons.dart';
+import '../../../../core/data_home.dart';
 import '../../../../core/env.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 
@@ -27,8 +28,8 @@ class OpenLogButton extends BaseComponent {
 
         String cmd = "";
         if (Platform.isMacOS) {
-          appDocPath = appDocPath.replaceAll(
-              "/Documents", Env.isTestNet ? "/rbxtest" : "/vfx");
+          appDocPath = DataHome.fromDocuments(
+              appDocPath, Env.isTestNet ? "/rbxtest" : "/vfx");
           cmd =
               "open $appDocPath/Databases${Env.isTestNet ? 'TestNet' : ''}/rbxlog.txt";
         } else {

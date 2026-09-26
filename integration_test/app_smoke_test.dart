@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:rbx_wallet/core/components/boot_container.dart';
+import 'package:rbx_wallet/core/data_home.dart';
+import 'package:rbx_wallet/core/env.dart';
 import 'package:rbx_wallet/core/services/launched_cli.dart';
 import 'package:rbx_wallet/features/bridge/services/bridge_service.dart';
 import 'package:rbx_wallet/main.dart' as app;
@@ -27,6 +29,17 @@ void main() {
           'wallet before running integration tests so the test does not start '
           'a second CLI against the same data:\n${running.stdout}');
     }
+
+    // A CLI under another process name passes the check above; the app would
+    // adopt it and tearDownAll would then exit it. Probe the API the way
+    // `_cliIsActive()` in session_provider.dart does.
+    final apiUrl = Uri.parse('${Env.apiBaseUrl}/CheckStatus/');
+    final answer = await probeHttp(apiUrl);
+    if (answer != null) {
+      fail('Something already answers on $apiUrl ($answer). Quit it before '
+          'running integration tests so the test does not adopt it and then '
+          'exit it.');
+    }
   });
 
   tearDownAll(() async {
@@ -43,6 +56,19 @@ void main() {
   testWidgets(
     'desktop app boots to the first screen',
     (tester) async {
+      if (Env.isAutomation) {
+        tester.printToConsole(
+            '[smoke] Core CLI data isolated under ${DataHome.cliHome()}');
+      } else {
+        tester.printToConsole(
+            '[smoke] ************************************************************\n'
+            '[smoke] WARNING: the AUTOMATION dart-define is not set. This run\n'
+            '[smoke] launches the Core CLI against the REAL ~/rbxtest data\n'
+            '[smoke] (DatabasesTestNet, ConfigTestNet, ...). Back it up first, or\n'
+            '[smoke] pass --dart-define AUTOMATION=true (make test_integration_macos).\n'
+            '[smoke] ************************************************************');
+      }
+
       final stopwatch = Stopwatch()..start();
       cliLaunchedByTest = true;
       app.main(const []);
@@ -69,6 +95,24 @@ void main() {
       tester.printToConsole(
           '[smoke] Core CLI answered and boot screen cleared after '
           '${stopwatch.elapsed}');
+
+      if (Env.isAutomation) {
+        final isolatedData =
+            Directory('${DataHome.cliHome()}/rbxtest/DatabasesTestNet');
+        expect(
+          isolatedData.existsSync(),
+          isTrue,
+          reason: 'the Core CLI did not create its data under the isolated '
+              'home; it may have used the real ~/rbxtest instead',
+        );
+        final folders = isolatedData.parent
+            .listSync()
+            .map((entry) => entry.path.split('/').last)
+            .toList()
+          ..sort();
+        tester.printToConsole('[smoke] isolated CLI folders in '
+            '${isolatedData.parent.path}: $folders');
+      }
     },
     timeout: const Timeout(Duration(minutes: 5)),
   );

@@ -11,6 +11,7 @@ import '../providers/sale_provider.dart';
 
 import '../../../core/base_component.dart';
 import '../../../core/components/badges.dart';
+import '../../../core/data_home.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -313,7 +314,7 @@ class _UploadProgressModalState extends State<UploadProgressModal> {
     String location = "";
 
     if (Platform.isMacOS) {
-      appDocPath = appDocPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/vfx");
+      appDocPath = DataHome.fromDocuments(appDocPath, Env.isTestNet ? "/rbxtest" : "/vfx");
       location = "$appDocPath/Databases${Env.isTestNet ? 'TestNet' : ''}/beaconlog.txt";
     } else {
       appDocDir = await getApplicationSupportDirectory();

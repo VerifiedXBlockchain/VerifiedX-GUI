@@ -107,7 +107,9 @@ Same rules as phase 4 over the remaining `lib/features/*` directories. Waves are
 - `tool/drive.dart`: a small Dart CLI (run with the pinned `dart`) that connects with `FlutterDriver.connect(dartVmServiceUrl: ...)` and supports at least: `tap-text`, `tap-key`, `tap-label`, `type`, `get-text`, `screenshot <path>`, `wait-for-text`. Print clear errors.
 - Makefile: `run_macos_driver` (`-t lib/main_automation.dart -d macos` with the automation and testnet defines).
 - `docs/automation.md`: a section on the driver flow, including how to get the VM service URL from `flutter run` output.
-- Acceptance: with the app running via `run_macos_driver`, `tool/drive.dart` can tap a labeled control from phase 4 and read text back. Show the session transcript in the report.
+- Phase 3 review carry-over (WARN 1): desktop `SharedPreferences` (NSUserDefaults) are still shared with the installed wallet, so a driver flow that sets a password would write the real wallet's prefs. Bump `shared_preferences` to `^2.1.2` (fits Dart 2.19.6; check `shared_preferences_foundation` with `pub upgrade --dry-run`) and call `SharedPreferences.setPrefix('automation.')` under `Env.isAutomation` before the first `getInstance`. Document it in the data isolation section.
+- Phase 3 review carry-over (INFO): the smoke test's outer `Timeout` (5 min) can fire before `pumpUntilGone`'s 3-min pumped-time budget under load, hiding the helper's diagnostic message; raise the outer timeout to 8 min.
+- Acceptance: with the app running via `run_macos_driver`, `tool/drive.dart` can tap a labeled control (from phase 4 if merged, otherwise any existing labeled control) and read text back. Show the session transcript in the report.
 
 ## Verification reports
 
