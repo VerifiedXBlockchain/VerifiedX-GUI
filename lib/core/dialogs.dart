@@ -304,6 +304,8 @@ class PromptModal {
     TextEditingController? controller,
     bool showUsdValue = false,
     CurrencyType currencyType = CurrencyType.vfx,
+    Key? fieldKey,
+    Key? submitKey,
   }) async {
     // final context = rootNavigatorKey.currentContext!;
     final context = contextOverride ?? rootNavigatorKey.currentContext!;
@@ -413,6 +415,7 @@ class PromptModal {
                           children: [
                             Expanded(
                               child: TextFormField(
+                                key: fieldKey,
                                 controller: _controller,
                                 obscureText: _obscureText,
                                 autofocus: true,
@@ -489,6 +492,7 @@ class PromptModal {
                 ),
               ),
             TextButton(
+              key: submitKey,
               style: TextButton.styleFrom(
                 primary: destructive
                     ? Colors.red.shade600

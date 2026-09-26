@@ -3393,6 +3393,12 @@ abstract class AppLocalizations {
   /// **'Send message...'**
   String get chatSendHint;
 
+  /// Tooltip on the send icon button next to the message-compose field.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get chatSendMessage;
+
   /// App bar title for the chats list.
   ///
   /// In en, this message translates to:
@@ -5162,6 +5168,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Collection Name'**
   String get mktCollectionNameLabel;
+
+  /// Tooltip on the copy icon next to the auction house URL on the my-collections screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy shop URL'**
+  String get mktCopyShopUrl;
 
   /// No description provided for @mktCouldNotGenerateHashToast.
   ///
@@ -7035,12 +7047,6 @@ abstract class AppLocalizations {
   /// **'This address pays the gas fee for the mint transaction on Base. Send a small amount of Base ETH (≈ 0.001 ETH) to the address above before bridging. You can fund it from any exchange or Base wallet that supports withdrawing to Base mainnet. Balance updates automatically every 10s — tap Refresh for an immediate check.'**
   String get prvBridgeGasZeroEth;
 
-  /// No description provided for @prvBridgeHideDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide details'**
-  String get prvBridgeHideDetails;
-
   /// No description provided for @prvBridgeHistoryLoadError.
   ///
   /// In en, this message translates to:
@@ -7178,12 +7184,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Safe to close this dialog — your bridge will continue in the background. Track progress in Bridge History.'**
   String get prvBridgeSafeToClose;
-
-  /// No description provided for @prvBridgeShowDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Show details'**
-  String get prvBridgeShowDetails;
 
   /// No description provided for @prvBridgeSigsProgress.
   ///
@@ -7730,12 +7730,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recipient (zfx_ address)'**
   String get prvRecipientZfxLabel;
-
-  /// No description provided for @prvRefresh.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh'**
-  String get prvRefresh;
 
   /// No description provided for @prvResetAction.
   ///

@@ -1785,6 +1785,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get chatSendHint => 'Enviar mensaje...';
 
   @override
+  String get chatSendMessage => 'Enviar mensaje';
+
+  @override
   String get chatTitle => 'Chats';
 
   @override
@@ -2718,6 +2721,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get mktCollectionNameLabel => 'Nombre de la colección';
+
+  @override
+  String get mktCopyShopUrl => 'Copiar URL de la tienda';
 
   @override
   String get mktCouldNotGenerateHashToast => 'No se pudo generar el hash';
@@ -3716,9 +3722,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvBridgeGasZeroEth => 'Esta dirección paga la comisión de gas de la transacción de acuñación en Base. Envía una pequeña cantidad de ETH de Base (≈ 0.001 ETH) a la dirección de arriba antes de transferir. Puedes financiarla desde cualquier exchange o billetera Base que admita retiros a la red principal de Base. El saldo se actualiza automáticamente cada 10 s; toca Actualizar para comprobarlo de inmediato.';
 
   @override
-  String get prvBridgeHideDetails => 'Ocultar detalles';
-
-  @override
   String get prvBridgeHistoryLoadError => 'No se pudo cargar el historial del puente. Comprueba tu conexión e inténtalo de nuevo.';
 
   @override
@@ -3796,9 +3799,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get prvBridgeSafeToClose => 'Puedes cerrar este diálogo de forma segura: tu puente continuará en segundo plano. Sigue el progreso en el historial del puente.';
-
-  @override
-  String get prvBridgeShowDetails => 'Mostrar detalles';
 
   @override
   String prvBridgeSigsProgress(int collected, int required) {
@@ -4114,9 +4114,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get prvRecipientZfxLabel => 'Destinatario (dirección zfx_)';
-
-  @override
-  String get prvRefresh => 'Actualizar';
 
   @override
   String get prvResetAction => 'Restablecer';

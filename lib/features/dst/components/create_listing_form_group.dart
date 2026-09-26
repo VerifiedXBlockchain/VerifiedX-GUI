@@ -479,6 +479,7 @@ class _StartDate extends BaseComponent {
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.calendar_month),
+                    tooltip: l10n.scwPickDate,
                     onPressed: () {
                       _showDatePicker(context, ref, true);
                     },
@@ -504,6 +505,7 @@ class _StartDate extends BaseComponent {
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.hourglass_bottom),
+                    tooltip: l10n.scwPickTime,
                     onPressed: () {
                       _showTimePicker(context, ref, true);
                     },
@@ -554,6 +556,7 @@ class _EndDate extends BaseComponent {
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.calendar_month),
+                    tooltip: l10n.scwPickDate,
                     onPressed: () {
                       _showDatePicker(context, ref, false);
                     },
@@ -579,6 +582,7 @@ class _EndDate extends BaseComponent {
                   ),
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.hourglass_bottom),
+                    tooltip: l10n.scwPickTime,
                     onPressed: () {
                       _showTimePicker(context, ref, false);
                     },

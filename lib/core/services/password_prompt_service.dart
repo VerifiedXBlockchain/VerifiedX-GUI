@@ -14,6 +14,8 @@ class PasswordPromptService {
     String? title,
     String? labelText,
     String? customMessage,
+    Key? fieldKey,
+    Key? submitKey,
   }) async {
     final l10n = AppLocalizations.of(context);
     final password = await PromptModal.show(
@@ -26,6 +28,8 @@ class PasswordPromptService {
       revealObscure: true,
       lines: 1, // Ensure single line for password
       initialValue: DEBUG_ENCRYPTION_PASSWORD,
+      fieldKey: fieldKey,
+      submitKey: submitKey,
     );
 
     if (password != null) {

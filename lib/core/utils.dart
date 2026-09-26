@@ -128,6 +128,7 @@ class AddressChoosingIconButton extends BaseComponent {
           controller.text = address;
         }
       },
+      tooltip: AppLocalizations.of(context).sendChooseAddressTitle,
     );
   }
 }

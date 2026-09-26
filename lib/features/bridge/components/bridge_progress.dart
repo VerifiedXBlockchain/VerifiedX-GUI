@@ -425,17 +425,25 @@ class _TxRow extends StatelessWidget {
           style: const TextStyle(color: Colors.white, fontSize: 11, fontFamily: 'monospace'),
         ),
         const SizedBox(width: 6),
-        InkWell(
-          onTap: () async {
-            await Clipboard.setData(ClipboardData(text: hash));
-            Toast.message(l10n.messageCopiedToClipboard);
-          },
-          child: const Icon(Icons.copy, size: 12, color: Colors.white54),
+        Semantics(
+          label: l10n.actionCopyTransactionHash,
+          button: true,
+          child: InkWell(
+            onTap: () async {
+              await Clipboard.setData(ClipboardData(text: hash));
+              Toast.message(l10n.messageCopiedToClipboard);
+            },
+            child: const Icon(Icons.copy, size: 12, color: Colors.white54),
+          ),
         ),
         const SizedBox(width: 6),
-        InkWell(
-          onTap: () => launchUrlString(explorerUrl),
-          child: const Icon(Icons.open_in_new, size: 12, color: Colors.white54),
+        Semantics(
+          label: l10n.prvBridgeViewOnBasescan,
+          button: true,
+          child: InkWell(
+            onTap: () => launchUrlString(explorerUrl),
+            child: const Icon(Icons.open_in_new, size: 12, color: Colors.white54),
+          ),
         ),
       ],
     );

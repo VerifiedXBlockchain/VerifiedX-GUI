@@ -252,6 +252,7 @@ class _Form extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      key: const ValueKey('bridge:amount'),
                       controller: state.widget.amountController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
@@ -277,6 +278,7 @@ class _Form extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   TextButton(
+                    key: const Key('bridge:max'),
                     onPressed: () => state._setMax(preflight),
                     child: Text(l10n.prvMax),
                   ),
@@ -293,6 +295,7 @@ class _Form extends StatelessWidget {
               Text(l10n.prvBridgeBaseEvmAddress, style: const TextStyle(color: Colors.white70, fontSize: 12)),
               const SizedBox(height: 4),
               TextFormField(
+                key: const ValueKey('bridge:destination'),
                 controller: state.widget.destinationController,
                 decoration: InputDecoration(
                   hintText: "0x…",
@@ -337,6 +340,7 @@ class _Form extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   AppButton(
+                    key: const Key('bridge:review'),
                     label: l10n.prvBridgeReviewBridge,
                     variant: AppColorVariant.Success,
                     onPressed: () => state._submit(preflight),
@@ -423,21 +427,24 @@ class _GasFundingSection extends StatelessWidget {
                   style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ),
-              InkWell(
-                onTap: onRefresh,
-                borderRadius: BorderRadius.circular(4),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.refresh, size: 14, color: Colors.white54),
-                      const SizedBox(width: 4),
-                      Text(
-                        l10n.prvRefresh,
-                        style: const TextStyle(color: Colors.white54, fontSize: 11),
-                      ),
-                    ],
+              Semantics(
+                button: true,
+                child: InkWell(
+                  onTap: onRefresh,
+                  borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.refresh, size: 14, color: Colors.white54),
+                        const SizedBox(width: 4),
+                        Text(
+                          l10n.actionRefresh,
+                          style: const TextStyle(color: Colors.white54, fontSize: 11),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -464,16 +471,20 @@ class _GasFundingSection extends StatelessWidget {
                 ),
               ),
               if (preflight.derivedBaseAddress.isNotEmpty)
-                InkWell(
-                  onTap: () async {
-                    await Clipboard.setData(
-                      ClipboardData(text: preflight.derivedBaseAddress),
-                    );
-                    Toast.message(l10n.messageCopiedToClipboard);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                Semantics(
+                  label: l10n.actionCopyAddress,
+                  button: true,
+                  child: InkWell(
+                    onTap: () async {
+                      await Clipboard.setData(
+                        ClipboardData(text: preflight.derivedBaseAddress),
+                      );
+                      Toast.message(l10n.messageCopiedToClipboard);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                    ),
                   ),
                 ),
             ],
@@ -511,24 +522,27 @@ class _DetailsToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onToggle,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              expanded ? AppLocalizations.of(context).prvBridgeHideDetails : AppLocalizations.of(context).prvBridgeShowDetails,
-              style: const TextStyle(color: Colors.white54, fontSize: 12),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              expanded ? Icons.expand_less : Icons.expand_more,
-              size: 16,
-              color: Colors.white54,
-            ),
-          ],
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: onToggle,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                expanded ? AppLocalizations.of(context).actionHideDetails : AppLocalizations.of(context).actionShowDetails,
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                expanded ? Icons.expand_less : Icons.expand_more,
+                size: 16,
+                color: Colors.white54,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -615,22 +629,30 @@ class _NetworkInfo extends StatelessWidget {
             ),
           ),
           if (copyValue != null)
-            InkWell(
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: copyValue));
-                Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: Icon(Icons.copy, size: 14, color: Colors.white54),
+            Semantics(
+              label: AppLocalizations.of(context).actionCopyAddress,
+              button: true,
+              child: InkWell(
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: copyValue));
+                  Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                ),
               ),
             ),
           if (explorerUrl != null)
-            InkWell(
-              onTap: () => launchUrlString(explorerUrl),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: Icon(Icons.open_in_new, size: 14, color: Colors.white54),
+            Semantics(
+              label: AppLocalizations.of(context).prvBridgeViewOnBasescan,
+              button: true,
+              child: InkWell(
+                onTap: () => launchUrlString(explorerUrl),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(Icons.open_in_new, size: 14, color: Colors.white54),
+                ),
               ),
             ),
         ],

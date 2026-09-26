@@ -43,6 +43,7 @@ class FaucetForm extends BaseComponent {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      key: const ValueKey('faucet:verification_code'),
                       controller: provider.verificationController,
                       validator: provider.verificationValidator,
                       decoration:
@@ -53,6 +54,7 @@ class FaucetForm extends BaseComponent {
                     width: 4,
                   ),
                   AppButton(
+                    key: const Key('faucet:verify'),
                     onPressed: () async {
                       final success = await provider.submitVerification();
                       if (success == true) {
@@ -89,6 +91,7 @@ class FaucetForm extends BaseComponent {
             ),
           if (forceAmount == null)
             TextFormField(
+              key: const ValueKey('faucet:amount'),
               controller: provider.amountController,
               validator: provider.amountValidator,
               decoration: InputDecoration(
@@ -96,6 +99,7 @@ class FaucetForm extends BaseComponent {
               ),
             ),
           PhoneFormField(
+            key: const ValueKey('faucet:phone'),
             controller: provider.phoneController,
             isCountrySelectionEnabled: true,
             validator: PhoneValidator.compose([
@@ -117,6 +121,7 @@ class FaucetForm extends BaseComponent {
                 label: l10n.faucetCancel,
               ),
               AppButton(
+                key: const Key('faucet:request'),
                 onPressed: () {
                   provider.submitRequest(forceAmount);
                 },

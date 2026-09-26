@@ -174,6 +174,7 @@ class _BridgeToBaseDialogState extends ConsumerState<BridgeToBaseDialog> {
         children: [
           Expanded(child: Text(l10n.prvBridgeToBaseTitle)),
           IconButton(
+            key: const Key('bridge:close'),
             tooltip: _isSubmitting ? l10n.prvBridging : l10n.actionClose,
             iconSize: 18,
             onPressed: _isSubmitting ? null : _close,

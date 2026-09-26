@@ -18,6 +18,7 @@ class RestoreHdWalletButton extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     return AppButton(
+      key: const Key('hd:restore'),
       label: l10n.r3dRestoreHdAccount,
       icon: Icons.hd_outlined,
       onPressed: !ref.watch(sessionProvider.select((v) => v.cliStarted))
@@ -28,6 +29,8 @@ class RestoreHdWalletButton extends BaseComponent {
                 title: l10n.r3dInputRecoverPhrase,
                 validator: (value) => formValidatorNotEmpty(value, l10n.walletRecoveryPhrase),
                 labelText: l10n.walletRecoveryPhrase,
+                fieldKey: const ValueKey('hd:restore_phrase'),
+                submitKey: const Key('hd:restore_submit'),
               );
 
               if (val != null) {

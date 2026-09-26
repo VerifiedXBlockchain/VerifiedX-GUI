@@ -179,6 +179,7 @@ class _VfxDomain extends BaseComponent {
                 height: 16,
               ),
               AppButton(
+                key: const Key('adnr:create'),
                 label: AppLocalizations.of(context).adnrCreateDomain,
                 variant: AppColorVariant.Success,
                 onPressed: () async {
@@ -233,6 +234,7 @@ class _VfxDomain extends BaseComponent {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     AppButton(
+                      key: const Key('adnr:transfer'),
                       label: AppLocalizations.of(context).adnrTransfer,
                       onPressed: () async {
                         if (balance < (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
@@ -246,6 +248,8 @@ class _VfxDomain extends BaseComponent {
                             body: AppLocalizations.of(context).adnrTransferDomainBody(ADNR_TRANSFER_COST.toString()),
                             validator: (value) => formValidatorRbxAddress(value, false),
                             labelText: AppLocalizations.of(context).adnrAddressFieldLabel,
+                            fieldKey: const ValueKey('adnr:transfer_address'),
+                            submitKey: const Key('adnr:transfer_submit'),
                             onValidSubmission: (toAddress) async {
                               ref.read(globalLoadingProvider.notifier).start();
 
@@ -304,6 +308,7 @@ class _VfxDomain extends BaseComponent {
                       },
                     ),
                     AppButton(
+                      key: const Key('adnr:delete'),
                       label: AppLocalizations.of(context).adnrDelete,
                       variant: AppColorVariant.Danger,
                       onPressed: () async {

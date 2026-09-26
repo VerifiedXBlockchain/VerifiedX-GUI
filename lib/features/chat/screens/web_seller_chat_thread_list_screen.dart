@@ -29,6 +29,7 @@ class WebSellerChatThreadListScreen extends BaseScreen {
             ref.read(webSellerChatThreadListProvider(shopId).notifier).fetch();
           },
           icon: Icon(Icons.refresh),
+          tooltip: l10n.actionRefresh,
         )
       ],
     );

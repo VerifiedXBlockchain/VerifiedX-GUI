@@ -55,6 +55,7 @@ class CreateAdnrDialog extends BaseComponent {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               TextFormField(
+                key: const ValueKey('adnr:domain_name'),
                 controller: controller,
                 validator: (value) =>
                     formValidatorAlphaNumeric(value, l10n.adnrDomainNameLabel),
@@ -114,6 +115,7 @@ class CreateAdnrDialog extends BaseComponent {
                   child:
                       Text(l10n.adnrFaucetContinue, style: const TextStyle(color: Colors.white)))
               : TextButton(
+                  key: const Key('adnr:create_submit'),
                   onPressed: () async {
                     if (!formKey.currentState!.validate()) {
                       return;

@@ -1903,6 +1903,10 @@
   "@chatSendHint": {
     "description": "Hint inside the message-compose field."
   },
+  "chatSendMessage": "Send message",
+  "@chatSendMessage": {
+    "description": "Tooltip on the send icon button next to the message-compose field."
+  },
   "chatTitle": "Chats",
   "@chatTitle": {
     "description": "App bar title for the chats list."
@@ -2760,6 +2764,10 @@
   "mktCollectionDeletedToast": "Collection deleted.",
   "mktCollectionDescriptionLabel": "Collection Description",
   "mktCollectionNameLabel": "Collection Name",
+  "mktCopyShopUrl": "Copy shop URL",
+  "@mktCopyShopUrl": {
+    "description": "Tooltip on the copy icon next to the auction house URL on the my-collections screen."
+  },
   "mktCouldNotGenerateHashToast": "Could not generate hash",
   "mktCouldNotGetFeeToast": "Could not get fee",
   "mktCouldNotGetNonceToast": "Could not get nonce",
@@ -3873,7 +3881,6 @@
   "prvBridgeGasLowBalance": "Low balance — gas costs vary. Top up the address above if the mint fails.",
   "prvBridgeGasTitle": "Gas (paid on Base)",
   "prvBridgeGasZeroEth": "This address pays the gas fee for the mint transaction on Base. Send a small amount of Base ETH (≈ 0.001 ETH) to the address above before bridging. You can fund it from any exchange or Base wallet that supports withdrawing to Base mainnet. Balance updates automatically every 10s — tap Refresh for an immediate check.",
-  "prvBridgeHideDetails": "Hide details",
   "prvBridgeHistoryLoadError": "Couldn't load bridge history. Check your connection and try again.",
   "prvBridgeHistoryLoading": "Loading bridge history…",
   "prvBridgeHistoryTitle": "Bridge History",
@@ -3932,7 +3939,6 @@
   "prvBridgeRetrySubmitted": "Retry submitted. Watching for status updates.",
   "prvBridgeReviewBridge": "Review Bridge",
   "prvBridgeSafeToClose": "Safe to close this dialog — your bridge will continue in the background. Track progress in Bridge History.",
-  "prvBridgeShowDetails": "Show details",
   "prvBridgeSigsProgress": "{collected} / {required} signatures collected",
   "@prvBridgeSigsProgress": {
     "placeholders": {
@@ -4156,7 +4162,6 @@
   "prvPrivateTransferVfxBody": "Transfer shielded VFX to another zfx_ address. Fully private.",
   "prvRecipientInvalidZfx": "Recipient must be a valid zfx_ address",
   "prvRecipientZfxLabel": "Recipient (zfx_ address)",
-  "prvRefresh": "Refresh",
   "prvResetAction": "Reset",
   "prvResetPrivacyWallet": "Reset Privacy Wallet",
   "prvResetWalletBody": "This will clear your local privacy wallet state and return to the activation screen. Your shielded funds on the network are not affected — you can re-activate with the same account to recover them.\n\nContinue?",

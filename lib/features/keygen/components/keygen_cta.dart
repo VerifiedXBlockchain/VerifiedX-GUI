@@ -22,6 +22,8 @@ class KeygenCta extends BaseComponent {
       title: l10n.keygenImportWalletTitle,
       validator: (String? value) => formValidatorNotEmpty(value, l10n.keygenPrivateKeyLabel),
       labelText: l10n.keygenPrivateKeyLabel,
+      fieldKey: const ValueKey('keygen:private_key'),
+      submitKey: const Key('keygen:private_key_submit'),
       onValidSubmission: (value) async {
         final keypair = await KeygenService.importPrivateKey(value, email);
 
@@ -39,6 +41,8 @@ class KeygenCta extends BaseComponent {
       title: l10n.keygenEmailAddressTitle,
       labelText: l10n.keygenEmailLabel,
       validator: formValidatorEmail,
+      fieldKey: const ValueKey('keygen:email'),
+      submitKey: const Key('keygen:email_submit'),
     );
 
     if (email == null || email.isEmpty) {
@@ -69,6 +73,8 @@ class KeygenCta extends BaseComponent {
       title: l10n.keygenEmailAddressTitle,
       labelText: l10n.keygenEmailLabel,
       validator: formValidatorEmail,
+      fieldKey: const ValueKey('keygen:email'),
+      submitKey: const Key('keygen:email_submit'),
     );
 
     if (email == null || email.isEmpty) {
@@ -80,6 +86,8 @@ class KeygenCta extends BaseComponent {
       validator: (value) => formValidatorNotEmpty(value, l10n.keygenRecoveryMnemonicLabel),
       labelText: l10n.keygenRecoveryMnemonicLabel,
       lines: 3,
+      fieldKey: const ValueKey('keygen:mnemonic'),
+      submitKey: const Key('keygen:mnemonic_submit'),
       onValidSubmission: (value) async {
         ref.read(globalLoadingProvider.notifier).start();
 
@@ -131,11 +139,13 @@ class KeygenCta extends BaseComponent {
                     maxLines: 3,
                   ),
                   trailing: IconButton(
+                    key: const Key('keygen:copy_mnemonic'),
                     icon: const Icon(Icons.copy),
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: keypair.mneumonic));
                       Toast.message(l10n.keygenMnemonicCopiedToast);
                     },
+                    tooltip: l10n.actionCopyMnemonic,
                   ),
                 ),
               ListTile(
@@ -147,11 +157,13 @@ class KeygenCta extends BaseComponent {
                   style: const TextStyle(fontSize: 13),
                 ),
                 trailing: IconButton(
+                  key: const Key('keygen:copy_address'),
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: keypair.address));
                     Toast.message(l10n.keygenPublicKeyCopiedToast);
                   },
+                  tooltip: l10n.actionCopyAddress,
                 ),
               ),
               ListTile(
@@ -165,17 +177,20 @@ class KeygenCta extends BaseComponent {
                   readOnly: true,
                 ),
                 trailing: IconButton(
+                  key: const Key('keygen:copy_private_key'),
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: keypair.privateCorrected));
                     Toast.message(l10n.keygenPrivateKeyCopiedToast);
                   },
+                  tooltip: l10n.actionCopyPrivateKey,
                 ),
               ),
               // if (keypair.mneumonic != null) Text(keypair.mneumonic!),
 
               const Divider(),
               AppButton(
+                key: const Key('keygen:done'),
                 label: l10n.keygenDone,
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -194,12 +209,15 @@ class KeygenCta extends BaseComponent {
     return Row(
       children: [
         AppButton(
+          key: const Key('keygen:import'),
           label: l10n.keygenImportPrivateKey,
           onPressed: () async {
             final email = await PromptModal.show(
               title: l10n.keygenEmailAddressTitle,
               validator: (value) => formValidatorEmail(value),
               labelText: l10n.keygenEmailLabel,
+              fieldKey: const ValueKey('keygen:email'),
+              submitKey: const Key('keygen:email_submit'),
             );
             if (email != null) {
               handleImport(context, ref, email);
@@ -210,6 +228,7 @@ class KeygenCta extends BaseComponent {
           width: 8,
         ),
         AppButton(
+          key: const Key('keygen:generate'),
           label: l10n.keygenGenerateKeypair,
           onPressed: () {
             handleCreate(
@@ -222,6 +241,7 @@ class KeygenCta extends BaseComponent {
           width: 8,
         ),
         AppButton(
+          key: const Key('keygen:recover'),
           label: l10n.keygenRecoverAccount,
           onPressed: () {
             handleRecover(context, ref);

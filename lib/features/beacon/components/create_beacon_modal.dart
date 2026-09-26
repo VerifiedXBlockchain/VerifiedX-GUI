@@ -39,6 +39,7 @@ class CreateBeaconModal extends BaseComponent {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      key: const ValueKey('beacon:create_name'),
                       controller: provider.nameController,
                       validator: provider.nameValidator,
                       decoration: InputDecoration(
@@ -54,6 +55,7 @@ class CreateBeaconModal extends BaseComponent {
                   SizedBox(
                     width: 240,
                     child: TextFormField(
+                      key: const ValueKey('beacon:create_port'),
                       controller: provider.portController,
                       decoration: InputDecoration(
                           label: Text(l10n.beaconPortLabel)),
@@ -64,6 +66,7 @@ class CreateBeaconModal extends BaseComponent {
                   SizedBox(
                     width: 240,
                     child: TextFormField(
+                      key: const ValueKey('beacon:create_retain_days'),
                       controller: provider.periodController,
                       decoration: InputDecoration(
                           label: Text(l10n.beaconRetainDaysLabel)),
@@ -106,6 +109,7 @@ class CreateBeaconModal extends BaseComponent {
               },
             ),
             AppButton(
+              key: const Key('beacon:create_submit'),
               label: l10n.beaconCreate,
               variant: AppColorVariant.Success,
               onPressed: () async {

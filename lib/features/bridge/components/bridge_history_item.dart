@@ -77,54 +77,57 @@ class BridgeHistoryItem extends StatelessWidget {
     final r = record;
     final _StatusBadge badge = _statusBadge(r);
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(6),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.prvBridgeAmountToDest(formatVbtc(r.amount), _shortDestination(r.evmDestination)),
-                    style: const TextStyle(color: Colors.white, fontSize: 13),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    _relativeTime(l10n, r.createdAt),
-                    style: const TextStyle(color: Colors.white54, fontSize: 11),
-                  ),
-                ],
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(6),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.prvBridgeAmountToDest(formatVbtc(r.amount), _shortDestination(r.evmDestination)),
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _relativeTime(l10n, r.createdAt),
+                      style: const TextStyle(color: Colors.white54, fontSize: 11),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: badge.color.withOpacity(0.12),
-                border: Border.all(color: badge.color.withOpacity(0.6)),
-                borderRadius: BorderRadius.circular(10),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: badge.color.withOpacity(0.12),
+                  border: Border.all(color: badge.color.withOpacity(0.6)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  badge.label,
+                  style: TextStyle(color: badge.color, fontSize: 11, fontWeight: FontWeight.w500),
+                ),
               ),
-              child: Text(
-                badge.label,
-                style: TextStyle(color: badge.color, fontSize: 11, fontWeight: FontWeight.w500),
-              ),
-            ),
-            if (onRetry != null) ...[
-              const SizedBox(width: 8),
-              AppButton(
-                label: l10n.prvRetry,
-                type: AppButtonType.Outlined,
-                variant: AppColorVariant.Warning,
-                size: AppSizeVariant.Sm,
-                processing: isRetrying,
-                onPressed: isRetrying ? () {} : onRetry!,
-              ),
+              if (onRetry != null) ...[
+                const SizedBox(width: 8),
+                AppButton(
+                  label: l10n.prvRetry,
+                  type: AppButtonType.Outlined,
+                  variant: AppColorVariant.Warning,
+                  size: AppSizeVariant.Sm,
+                  processing: isRetrying,
+                  onPressed: isRetrying ? () {} : onRetry!,
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

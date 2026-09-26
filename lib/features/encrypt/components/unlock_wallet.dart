@@ -104,6 +104,7 @@ class _UnlockWalletState extends State<UnlockWallet> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
+                    key: const ValueKey('auth:password'),
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).encryptPasswordHint,
@@ -152,6 +153,7 @@ class _UnlockWalletState extends State<UnlockWallet> {
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: IconButton(
+                    key: const Key('auth:password_submit'),
                     onPressed: password.isEmpty
                         ? null
                         : () {
@@ -162,6 +164,7 @@ class _UnlockWalletState extends State<UnlockWallet> {
                       color: Colors.black,
                       // color: Colors.white,
                     ),
+                    tooltip: AppLocalizations.of(context).r3gUnlockAccount,
                   ),
                 ),
               ),

@@ -1889,6 +1889,10 @@
   "@chatSendHint": {
     "description": "Hint inside the message-compose field."
   },
+  "chatSendMessage": "Enviar mensaje",
+  "@chatSendMessage": {
+    "description": "Tooltip on the send icon button next to the message-compose field."
+  },
   "chatTitle": "Chats",
   "@chatTitle": {
     "description": "App bar title for the chats list."
@@ -2734,6 +2738,10 @@
   "mktCollectionDeletedToast": "Colección eliminada.",
   "mktCollectionDescriptionLabel": "Descripción de la colección",
   "mktCollectionNameLabel": "Nombre de la colección",
+  "mktCopyShopUrl": "Copiar URL de la tienda",
+  "@mktCopyShopUrl": {
+    "description": "Tooltip on the copy icon next to the auction house URL on the my-collections screen."
+  },
   "mktCouldNotGenerateHashToast": "No se pudo generar el hash",
   "mktCouldNotGetFeeToast": "No se pudo obtener la comisión",
   "mktCouldNotGetNonceToast": "No se pudo obtener el nonce",
@@ -3847,7 +3855,6 @@
   "prvBridgeGasLowBalance": "Saldo bajo: los costos de gas varían. Recarga la dirección de arriba si la acuñación falla.",
   "prvBridgeGasTitle": "Gas (pagado en Base)",
   "prvBridgeGasZeroEth": "Esta dirección paga la comisión de gas de la transacción de acuñación en Base. Envía una pequeña cantidad de ETH de Base (≈ 0.001 ETH) a la dirección de arriba antes de transferir. Puedes financiarla desde cualquier exchange o billetera Base que admita retiros a la red principal de Base. El saldo se actualiza automáticamente cada 10 s; toca Actualizar para comprobarlo de inmediato.",
-  "prvBridgeHideDetails": "Ocultar detalles",
   "prvBridgeHistoryLoadError": "No se pudo cargar el historial del puente. Comprueba tu conexión e inténtalo de nuevo.",
   "prvBridgeHistoryLoading": "Cargando el historial del puente…",
   "prvBridgeHistoryTitle": "Historial del puente",
@@ -3906,7 +3913,6 @@
   "prvBridgeRetrySubmitted": "Reintento enviado. Vigilando las actualizaciones de estado.",
   "prvBridgeReviewBridge": "Revisar puente",
   "prvBridgeSafeToClose": "Puedes cerrar este diálogo de forma segura: tu puente continuará en segundo plano. Sigue el progreso en el historial del puente.",
-  "prvBridgeShowDetails": "Mostrar detalles",
   "prvBridgeSigsProgress": "{collected} / {required} firmas recopiladas",
   "@prvBridgeSigsProgress": {
     "placeholders": {
@@ -4130,7 +4136,6 @@
   "prvPrivateTransferVfxBody": "Transfiere VFX blindado a otra dirección zfx_. Totalmente privado.",
   "prvRecipientInvalidZfx": "El destinatario debe ser una dirección zfx_ válida",
   "prvRecipientZfxLabel": "Destinatario (dirección zfx_)",
-  "prvRefresh": "Actualizar",
   "prvResetAction": "Restablecer",
   "prvResetPrivacyWallet": "Restablecer billetera privada",
   "prvResetWalletBody": "Esto borrará el estado local de tu billetera privada y volverá a la pantalla de activación. Tus fondos blindados en la red no se ven afectados: puedes reactivar con la misma cuenta para recuperarlos.\n\n¿Continuar?",

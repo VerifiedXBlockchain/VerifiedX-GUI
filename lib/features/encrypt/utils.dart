@@ -104,6 +104,8 @@ Future<bool?> promptForPassword(BuildContext context, WidgetRef ref, [bool forVa
     revealObscure: true,
     lines: 1,
     tightPadding: true,
+    fieldKey: const ValueKey('auth:password'),
+    submitKey: const Key('auth:password_submit'),
   );
   if (password == null) {
     return null;

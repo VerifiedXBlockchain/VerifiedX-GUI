@@ -261,6 +261,8 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                   context,
                   title: l10n.authEnterPassword,
                   customMessage: l10n.authEnterPasswordBody,
+                  fieldKey: const ValueKey('auth:password'),
+                  submitKey: const Key('auth:password_submit'),
                 );
 
                 if (password != null) {

@@ -148,7 +148,7 @@ class _Header extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: l10n.prvRefresh,
+            tooltip: l10n.actionRefresh,
             iconSize: 18,
             visualDensity: VisualDensity.compact,
             onPressed: onRefresh,

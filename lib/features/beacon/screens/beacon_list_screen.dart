@@ -38,6 +38,7 @@ class BeaconListScreen extends BaseScreen {
       leading: BackToHomeButton(),
       actions: [
         AppButton(
+          key: const Key('beacon:add_remote'),
           label: AppLocalizations.of(context).beaconAddRemote,
           variant: AppColorVariant.Light,
           onPressed: () async {
@@ -52,6 +53,7 @@ class BeaconListScreen extends BaseScreen {
           width: 8,
         ),
         AppButton(
+          key: const Key('beacon:create_host'),
           label: AppLocalizations.of(context).beaconCreateHost,
           variant: AppColorVariant.Light,
           onPressed: () async {
