@@ -244,7 +244,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
                     SizedBox(
                       width: 2,
                     ),
-                    Text(t.typeName),
+                    Flexible(child: Text(t.typeName)),
                   ],
                 ),
               );

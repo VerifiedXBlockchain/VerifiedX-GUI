@@ -293,7 +293,7 @@ class ScWizedCard extends BaseComponent {
                       onPressed: () async {
                         final value = await PromptModal.show(
                           contextOverride: context,
-                          title: entry.name.isEmpty ? l10n.scwAddDescription : l10n.scwEditDescription,
+                          title: entry.description.isEmpty ? l10n.scwAddDescription : l10n.scwEditDescription,
                           validator: (value) => formValidatorNotEmpty(value, "Description"),
                           labelText: l10n.scwDescription,
                           initialValue: entry.description,

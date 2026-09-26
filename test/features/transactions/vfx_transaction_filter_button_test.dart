@@ -37,29 +37,16 @@ void main() {
     expect(data.hasFlag(SemanticsFlag.isButton), isTrue);
     expect(data.hasAction(SemanticsAction.tap), isTrue);
 
-    // Pre-existing layout bug, not part of the labels work: the sheet lays each
-    // tx type out in a fixed 180 px box, and the longer type names overflow it.
-    // The test binding reports that overflow as an error, so only that report
-    // is ignored while the sheet is open.
-    final onError = FlutterError.onError;
-    FlutterError.onError = (details) {
-      if (details.exceptionAsString().contains('overflowed')) return;
-      onError?.call(details);
-    };
-    try {
-      await tester.tap(button);
-      await tester.pumpAndSettle();
+    await tester.tap(button);
+    await tester.pumpAndSettle();
 
-      expect(find.byKey(const Key('tx:filter_clear')), findsOneWidget);
-      expect(find.byKey(const Key('tx:filter_close')), findsOneWidget);
-      expect(find.byKey(const Key('tx:filter_address')), findsOneWidget);
-      expect(find.byKey(const Key('tx:filter_type_0')), findsOneWidget);
+    expect(find.byKey(const Key('tx:filter_clear')), findsOneWidget);
+    expect(find.byKey(const Key('tx:filter_close')), findsOneWidget);
+    expect(find.byKey(const Key('tx:filter_address')), findsOneWidget);
+    expect(find.byKey(const Key('tx:filter_type_0')), findsOneWidget);
 
-      await tester.tap(find.byKey(const Key('tx:filter_close')));
-      await tester.pumpAndSettle();
-      expect(find.byKey(const Key('tx:filter_clear')), findsNothing);
-    } finally {
-      FlutterError.onError = onError;
-    }
+    await tester.tap(find.byKey(const Key('tx:filter_close')));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('tx:filter_clear')), findsNothing);
   });
 }

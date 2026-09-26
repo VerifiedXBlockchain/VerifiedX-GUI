@@ -303,7 +303,7 @@ class _TransferBtcStep extends BaseComponent {
                 onPressed: () async {
                   await Clipboard.setData(
                       ClipboardData(text: state.btcAccount!.address));
-                  Toast.message(l10n.btcWifCopiedToast);
+                  Toast.message(l10n.btcAddressCopiedToast);
                 },
               ),
             ),

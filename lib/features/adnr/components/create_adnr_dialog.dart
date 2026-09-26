@@ -121,7 +121,7 @@ class CreateAdnrDialog extends BaseComponent {
                       return;
                     }
 
-                    if (address.length > 65) {
+                    if (controller.text.length > 65) {
                       Toast.error(l10n.adnrMaxLengthToast);
                       return;
                     }
