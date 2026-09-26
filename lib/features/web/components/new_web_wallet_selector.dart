@@ -36,17 +36,21 @@ class NewWebWalletSelector extends BaseComponent {
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                InkWell(
-                  onTap: () async {
-                    await Clipboard.setData(
-                      ClipboardData(text: selectedAccount.address),
-                    );
-                    Toast.message(l10n.walletAddressCopiedToast(selectedAccount.address));
-                  },
-                  child: Icon(
-                    Icons.copy,
-                    size: 12,
-                    color: selectedAccount.color,
+                Semantics(
+                  label: l10n.actionCopyAddress,
+                  button: true,
+                  child: InkWell(
+                    onTap: () async {
+                      await Clipboard.setData(
+                        ClipboardData(text: selectedAccount.address),
+                      );
+                      Toast.message(l10n.walletAddressCopiedToast(selectedAccount.address));
+                    },
+                    child: Icon(
+                      Icons.copy,
+                      size: 12,
+                      color: selectedAccount.color,
+                    ),
                   ),
                 ),
                 SizedBox(width: 6),
@@ -65,17 +69,21 @@ class NewWebWalletSelector extends BaseComponent {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              InkWell(
-                onTap: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: selectedAccount.address),
-                  );
-                  Toast.message(l10n.walletAddressCopiedToast(selectedAccount.address));
-                },
-                child: Icon(
-                  Icons.copy,
-                  size: 12,
-                  color: selectedAccount.color,
+              Semantics(
+                label: l10n.actionCopyAddress,
+                button: true,
+                child: InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: selectedAccount.address),
+                    );
+                    Toast.message(l10n.walletAddressCopiedToast(selectedAccount.address));
+                  },
+                  child: Icon(
+                    Icons.copy,
+                    size: 12,
+                    color: selectedAccount.color,
+                  ),
                 ),
               ),
               const SizedBox(width: 6),

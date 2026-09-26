@@ -46,6 +46,7 @@ class WebTransactionDetailScreen extends BaseScreen {
             launchUrl(Uri.parse("${Env.baseExplorerUrl}/transaction/$hash"));
           },
           icon: const Icon(Icons.open_in_new),
+          tooltip: l10n.actionViewOnExplorer,
         )
       ],
     );
@@ -120,6 +121,7 @@ class _TransactionDetails extends BaseComponent {
                   onPressed: () {
                     copyToClipboard(tx.hash);
                   },
+                  tooltip: l10n.actionCopyTransactionHash,
                 ),
               ),
             ),
@@ -166,6 +168,7 @@ class _TransactionDetails extends BaseComponent {
                   onPressed: () {
                     copyToClipboard(tx.toAddress);
                   },
+                  tooltip: l10n.actionCopyAddress,
                 ),
               ),
             ),
@@ -182,6 +185,7 @@ class _TransactionDetails extends BaseComponent {
                   onPressed: () {
                     copyToClipboard(tx.fromAddress);
                   },
+                  tooltip: l10n.actionCopyAddress,
                 ),
               ),
             ),

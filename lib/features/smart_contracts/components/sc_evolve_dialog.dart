@@ -190,7 +190,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.watch),
-          tooltip: l10n.scwPickTime,
+          tooltip: l10n.actionPickTime,
           onPressed: () {
             _showTimePicker();
           },
@@ -242,7 +242,7 @@ class ScWizardEvolvesDialog extends BaseComponent {
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.calendar_month),
-          tooltip: l10n.scwPickDate,
+          tooltip: l10n.actionPickDate,
           onPressed: () {
             _showDatePicker();
           },

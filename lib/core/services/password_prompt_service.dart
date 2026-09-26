@@ -104,6 +104,8 @@ class PasswordPromptService {
       title: l10n.txpConfirmPassword,
       customMessage:
           customMessage ?? l10n.r3eSensitiveOperationPassword,
+      fieldKey: const ValueKey('auth:password'),
+      submitKey: const Key('auth:password_submit'),
     );
 
     if (password != null) {

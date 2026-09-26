@@ -185,16 +185,20 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       SizedBox(
                         width: 4,
                       ),
-                      InkWell(
-                        onTap: () async {
-                          await Clipboard.setData(
-                              ClipboardData(text: keypair.address));
-                          Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                        },
-                        child: Icon(
-                          Icons.copy,
-                          color: Theme.of(context).colorScheme.reserve,
-                          size: 14,
+                      Semantics(
+                        label: AppLocalizations.of(context).actionCopyAddress,
+                        button: true,
+                        child: InkWell(
+                          onTap: () async {
+                            await Clipboard.setData(
+                                ClipboardData(text: keypair.address));
+                            Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                          },
+                          child: Icon(
+                            Icons.copy,
+                            color: Theme.of(context).colorScheme.reserve,
+                            size: 14,
+                          ),
                         ),
                       )
                     ],
@@ -217,18 +221,22 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           color: Colors.white,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          final session = ref.read(webSessionProvider);
-                          final body =
-                              "Available: ${session.raBalance} VFX\nLocked: ${session.raBalanceLocked} VFX\nTotal: ${session.raBalanceTotal} VFX";
-                          InfoDialog.show(
-                              title: AppLocalizations.of(context).reserveWebVaultBalanceTitle, body: body);
-                        },
-                        child: Icon(
-                          Icons.help,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.secondary,
+                      Semantics(
+                        label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                        button: true,
+                        child: InkWell(
+                          onTap: () {
+                            final session = ref.read(webSessionProvider);
+                            final body =
+                                "Available: ${session.raBalance} VFX\nLocked: ${session.raBalanceLocked} VFX\nTotal: ${session.raBalanceTotal} VFX";
+                            InfoDialog.show(
+                                title: AppLocalizations.of(context).reserveWebVaultBalanceTitle, body: body);
+                          },
+                          child: Icon(
+                            Icons.help,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
                       )
                     ],
@@ -274,6 +282,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                   height: 12,
                                 ),
                                 AppButton(
+                                  key: const Key('reserve:reveal_keys'),
                                   label: AppLocalizations.of(context).reserveWebRevealKeys,
                                   onPressed: () {
                                     showRaKeys(context, keypair);
@@ -321,6 +330,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       runSpacing: 12,
                       children: [
                         AppButton(
+                          key: const Key('reserve:send_funds'),
                           label: AppLocalizations.of(context).reserveSendFunds,
                           variant: AppColorVariant.Light,
                           icon: Icons.arrow_upward,
@@ -335,6 +345,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           },
                         ),
                         AppButton(
+                          key: const Key('reserve:manage_assets'),
                           label: AppLocalizations.of(context).reserveManageAssets,
                           icon: Icons.toll,
                           variant: AppColorVariant.Light,
@@ -625,6 +636,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           },
                         ),
                         AppButton(
+                          key: const Key('reserve:receive_assets'),
                           label: AppLocalizations.of(context).reserveReceiveAssets,
                           icon: Icons.arrow_downward,
                           variant: AppColorVariant.Light,

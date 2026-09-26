@@ -2612,6 +2612,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get labelTotal => 'Total';
 
   @override
+  String get actionHidePassword => 'Ocultar contraseña';
+
+  @override
+  String get actionNext => 'Siguiente';
+
+  @override
+  String get actionOpenAsset => 'Abrir archivo';
+
+  @override
+  String get actionPickDate => 'Elegir una fecha';
+
+  @override
+  String get actionPickTime => 'Elegir una hora';
+
+  @override
+  String get actionPrevious => 'Anterior';
+
+  @override
+  String get actionShowPassword => 'Mostrar contraseña';
+
+  @override
+  String get actionViewAsset => 'Ver archivo';
+
+  @override
+  String get actionViewOnExplorer => 'Ver en el explorador';
+
+  @override
   String get messageAddressCopied => 'Dirección copiada al portapapeles';
 
   @override
@@ -3414,9 +3441,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nftVaultCannotSellToast => 'Las cuentas de bóveda no pueden vender NFTs.';
-
-  @override
-  String get nftViewAsset => 'Ver archivo';
 
   @override
   String get nftViewCode => 'Ver código';
@@ -8052,9 +8076,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwNumericalProperty => 'Propiedad numérica';
 
   @override
-  String get scwOpenAsset => 'Abrir archivo';
-
-  @override
   String get scwOtherOptions => 'Otras opciones';
 
   @override
@@ -8079,12 +8100,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get scwPickColor => 'Elegir un color';
-
-  @override
-  String get scwPickDate => 'Elegir una fecha';
-
-  @override
-  String get scwPickTime => 'Elegir una hora';
 
   @override
   String get scwPrimaryAsset => 'Archivo principal';
@@ -10867,6 +10882,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get webNoWalletDetected => 'No se detectó billetera.';
+
+  @override
+  String get webOpenMenu => 'Abrir menú';
 
   @override
   String get webPendingActivation => 'Activación pendiente';

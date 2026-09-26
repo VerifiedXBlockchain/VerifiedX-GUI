@@ -372,94 +372,99 @@ class _PreviewState extends State<_Preview> {
 
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: GestureDetector(
-                          onTap: isIcon
-                              ? null
-                              : () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Center(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(16.0),
-                                              child: CachedNetworkImage(
-                                                imageUrl: path,
-                                                width: isMobile ? 300 : 512,
-                                                height: isMobile ? 300 : 512,
-                                                fit: BoxFit.contain,
+                      child: Semantics(
+                        label: isIcon ? null : AppLocalizations.of(context).actionViewAsset,
+                        button: !isIcon,
+                        child: GestureDetector(
+                            onTap: isIcon
+                                ? null
+                                : () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Center(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(16.0),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: path,
+                                                  width: isMobile ? 300 : 512,
+                                                  height: isMobile ? 300 : 512,
+                                                  fit: BoxFit.contain,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      });
-                                },
-                          child: isIcon
-                              ? Center(
-                                  child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(icon),
-                                    if (filename != null)
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 6.0),
-                                        child: Text(filename),
-                                      )
-                                  ],
-                                ))
-                              : Builder(builder: (context) {
-                                  if (fileTypeFromPath(path) == "Image") {
-                                    return Stack(
-                                      children: [
-                                        Center(
-                                          child: CachedNetworkImage(
-                                            imageUrl: path,
-                                            errorWidget: (context, _, __) {
-                                              // return Text(path);
-                                              return Center(
-                                                child: IconButton(
-                                                  icon: Icon(Icons.refresh),
-                                                  onPressed: () async {
-                                                    setState(() {
-                                                      rebuilding = true;
-                                                    });
-                                                    await FileImage(File(path))
-                                                        .evict();
-
-                                                    Future.delayed(Duration(
-                                                            milliseconds: 300))
-                                                        .then((value) {
+                                          );
+                                        });
+                                  },
+                            child: isIcon
+                                ? Center(
+                                    child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(icon),
+                                      if (filename != null)
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 6.0),
+                                          child: Text(filename),
+                                        )
+                                    ],
+                                  ))
+                                : Builder(builder: (context) {
+                                    if (fileTypeFromPath(path) == "Image") {
+                                      return Stack(
+                                        children: [
+                                          Center(
+                                            child: CachedNetworkImage(
+                                              imageUrl: path,
+                                              errorWidget: (context, _, __) {
+                                                // return Text(path);
+                                                return Center(
+                                                  child: IconButton(
+                                                    icon: Icon(Icons.refresh),
+                                                    onPressed: () async {
                                                       setState(() {
-                                                        rebuilding = false;
+                                                        rebuilding = true;
                                                       });
-                                                    });
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                        ),
-                                        if (extraIcon != null)
-                                          Align(
-                                            alignment: Alignment.bottomRight,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Icon(extraIcon),
-                                            ),
-                                          )
-                                      ],
-                                    );
-                                  }
+                                                      await FileImage(File(path))
+                                                          .evict();
 
-                                  return Center(
-                                      child: Icon(iconFromPath(path)));
-                                })),
+                                                      Future.delayed(Duration(
+                                                              milliseconds: 300))
+                                                          .then((value) {
+                                                        setState(() {
+                                                          rebuilding = false;
+                                                        });
+                                                      });
+                                                    },
+                                                    tooltip: AppLocalizations.of(context).actionRefresh,
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          if (extraIcon != null)
+                                            Align(
+                                              alignment: Alignment.bottomRight,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Icon(extraIcon),
+                                              ),
+                                            )
+                                        ],
+                                      );
+                                    }
+
+                                    return Center(
+                                        child: Icon(iconFromPath(path)));
+                                  })),
+                      ),
                     );
                   }).toList(),
                 ),
@@ -478,6 +483,7 @@ class _PreviewState extends State<_Preview> {
                   onPressed: () {
                     controller.previousPage();
                   },
+                  tooltip: AppLocalizations.of(context).actionPrevious,
                 ),
                 DotsIndicator(
                   dotsCount: orderedThumbs.length,
@@ -498,6 +504,7 @@ class _PreviewState extends State<_Preview> {
                   onPressed: () {
                     controller.nextPage();
                   },
+                  tooltip: AppLocalizations.of(context).actionNext,
                 ),
               ],
             ),
@@ -555,6 +562,7 @@ class _Details extends BaseComponent {
             ),
             // if (withShareButtons) buildShareButtons(context),
             AppButton(
+              key: const Key('web_shop:share_listing'),
               label: l10n.r3bShareListing,
               icon: Icons.ios_share_rounded,
               variant: AppColorVariant.Light,
@@ -571,6 +579,7 @@ class _Details extends BaseComponent {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AppButton(
+                    key: const Key('web_shop:edit_listing'),
                     label: l10n.scwEdit,
                     icon: Icons.edit,
                     variant: AppColorVariant.Light,
@@ -589,6 +598,7 @@ class _Details extends BaseComponent {
                     width: 6,
                   ),
                   AppButton(
+                    key: const Key('web_shop:delete_listing'),
                     label: l10n.actionDelete,
                     icon: Icons.delete,
                     variant: AppColorVariant.Danger,
@@ -914,13 +924,17 @@ class _WebNftData extends StatelessWidget {
                 if (copyValue)
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
-                    child: InkWell(
-                        onTap: () async {
-                          await Clipboard.setData(ClipboardData(text: value));
+                    child: Semantics(
+                      label: AppLocalizations.of(context).actionCopy,
+                      button: true,
+                      child: InkWell(
+                          onTap: () async {
+                            await Clipboard.setData(ClipboardData(text: value));
 
-                          Toast.message(AppLocalizations.of(context).r3bLabelCopied(label));
-                        },
-                        child: const Icon(Icons.copy, size: 12)),
+                            Toast.message(AppLocalizations.of(context).r3bLabelCopied(label));
+                          },
+                          child: const Icon(Icons.copy, size: 12)),
+                    ),
                   ),
               ],
             ),
@@ -951,13 +965,17 @@ class _WebNftData extends StatelessWidget {
               Text(value),
               const SizedBox(width: 8),
               if (copyValue)
-                InkWell(
-                    onTap: () async {
-                      await Clipboard.setData(ClipboardData(text: value));
+                Semantics(
+                  label: AppLocalizations.of(context).actionCopy,
+                  button: true,
+                  child: InkWell(
+                      onTap: () async {
+                        await Clipboard.setData(ClipboardData(text: value));
 
-                      Toast.message(AppLocalizations.of(context).r3bLabelCopied(label));
-                    },
-                    child: const Icon(Icons.copy, size: 12)),
+                        Toast.message(AppLocalizations.of(context).r3bLabelCopied(label));
+                      },
+                      child: const Icon(Icons.copy, size: 12)),
+                ),
             ],
           ),
         ),
@@ -1037,6 +1055,7 @@ class _BuyNow extends BaseComponent {
               ),
               const SizedBox(height: 16),
               AppButton(
+                key: const Key('web_shop:buy_now'),
                 label: l10n.shopBuyNow,
                 icon: Icons.money,
                 size: AppSizeVariant.Lg,
@@ -1153,6 +1172,7 @@ class _Auction extends BaseComponent {
                     : MainAxisAlignment.center,
                 children: [
                   AppButton(
+                      key: const Key('web_shop:bid_now'),
                       label: l10n.shopBidNow,
                       icon: Icons.gavel,
                       size: AppSizeVariant.Lg,
@@ -1177,6 +1197,7 @@ class _Auction extends BaseComponent {
                   const SizedBox(width: 8),
                   if (listing.auction != null)
                     AppButton(
+                      key: const Key('web_shop:auction_details'),
                       label: l10n.shopDetailsLabel,
                       icon: Icons.info,
                       size: AppSizeVariant.Lg,
@@ -1323,6 +1344,7 @@ class _BidHistoryButton extends BaseComponent {
     // final provider = ref.read(bidListProvider(listing.familyIdentifier).notifier);
 
     return AppButton(
+      key: const Key('web_shop:bid_history'),
       label: l10n.shopBidHistory,
       icon: Icons.punch_clock,
       size: AppSizeVariant.Lg,

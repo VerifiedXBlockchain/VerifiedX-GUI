@@ -54,6 +54,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                   ref.read(webListingFullListProvider("$shopId,$collectionId").notifier).pauseTimer();
                   AutoRouter.of(context).pop();
                 },
+                tooltip: AppLocalizations.of(context).actionBack,
               ),
               actions: [
                 if (collection.shop != null && address != null && !collection.shop!.isOwner(ref))
@@ -91,7 +92,8 @@ class WebCollectionDetailScreen extends BaseScreen {
                       ref.read(webListingListProvider("$shopId,$collectionId").notifier).refresh();
                       ref.read(webListingFullListProvider("$shopId,$collectionId").notifier).reload();
                     },
-                    icon: Icon(Icons.refresh)),
+                    icon: Icon(Icons.refresh),
+                    tooltip: AppLocalizations.of(context).actionRefresh),
               ],
             )
           : AppBar(
@@ -147,6 +149,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           AppButton(
+                            key: const Key('web_shop:delete_collection'),
                             label: isMobile ? AppLocalizations.of(context).actionDelete : AppLocalizations.of(context).dstDeleteCollection,
                             icon: Icons.delete,
                             variant: AppColorVariant.Danger,
@@ -163,6 +166,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
+                            key: const Key('web_shop:edit_collection'),
                             label: isMobile ? AppLocalizations.of(context).scwEdit : AppLocalizations.of(context).mktEditCollection,
                             icon: Icons.edit,
                             variant: AppColorVariant.Primary,
@@ -172,6 +176,7 @@ class WebCollectionDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
+                            key: const Key('web_shop:create_listing'),
                             label: AppLocalizations.of(context).shopCreateListing,
                             icon: Icons.add,
                             variant: AppColorVariant.Success,

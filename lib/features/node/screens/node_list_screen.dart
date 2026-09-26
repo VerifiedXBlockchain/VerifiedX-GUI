@@ -64,6 +64,7 @@ class NodeListScreen extends BaseScreen {
                     onPressed: () {
                       _searchProvider.clear();
                     },
+                    tooltip: AppLocalizations.of(context).actionClear,
                   ),
                 ),
               ),
@@ -75,6 +76,7 @@ class NodeListScreen extends BaseScreen {
               icon: const Icon(
                 Icons.search,
               ),
+              tooltip: AppLocalizations.of(context).actionSearch,
             )
             // AppButton(
             //   label: "Search",

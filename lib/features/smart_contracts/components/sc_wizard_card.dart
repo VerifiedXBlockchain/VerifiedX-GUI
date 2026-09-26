@@ -194,7 +194,7 @@ class ScWizedCard extends BaseComponent {
                                               openFile(entry.primaryAsset!.file);
                                             }
                                           },
-                                          tooltip: l10n.scwOpenAsset,
+                                          tooltip: l10n.actionOpenAsset,
                                           icon: const Icon(Icons.open_in_new)),
                                     ),
                                   ),

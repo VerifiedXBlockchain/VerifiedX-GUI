@@ -330,7 +330,7 @@ class EvolutionStateRow extends BaseComponent {
                       ),
                     if (showMedia)
                       Semantics(
-                        label: kIsWeb ? null : l10n.nftViewAsset,
+                        label: kIsWeb ? null : l10n.actionViewAsset,
                         button: !kIsWeb,
                         child: InkWell(
                           onTap: kIsWeb

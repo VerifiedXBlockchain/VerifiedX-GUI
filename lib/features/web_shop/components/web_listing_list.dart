@@ -6,6 +6,7 @@ import 'web_listing_detail_tile.dart';
 import '../providers/web_listing_full_list_provider.dart';
 
 import '../../../core/base_component.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../remote_shop/providers/shop_list_view_provider.dart';
 
 class WebListingListContainer extends ConsumerStatefulWidget {
@@ -117,6 +118,7 @@ class WebListingList extends BaseComponent {
                             Icons.grid_on,
                             color: isExpanded ? Colors.white : Colors.white38,
                           ),
+                          tooltip: AppLocalizations.of(context).actionGridView,
                         ),
                         IconButton(
                           onPressed: () {
@@ -126,6 +128,7 @@ class WebListingList extends BaseComponent {
                             Icons.list_outlined,
                             color: !isExpanded ? Colors.white : Colors.white38,
                           ),
+                          tooltip: AppLocalizations.of(context).actionListView,
                         ),
                       ],
                     ),

@@ -37,42 +37,45 @@ class BigButton extends StatelessWidget {
         ),
         child: Material(
           color: Colors.transparent,
-          child: InkWell(
-            onTap: onPressed,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 20,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    iconData,
-                    size: isMobile ? 20 : 20,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      title,
-                      style: isMobile
-                          ? Theme.of(context).textTheme.headlineSmall!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              )
-                          : Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
-                      textAlign: TextAlign.center,
+          child: Semantics(
+            button: true,
+            child: InkWell(
+              onTap: onPressed,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 20,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      iconData,
+                      size: isMobile ? 20 : 20,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    child: Text(
-                      body,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      textAlign: TextAlign.center,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        title,
+                        style: isMobile
+                            ? Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                )
+                            : Theme.of(context).textTheme.headlineMedium!.copyWith(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        body,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

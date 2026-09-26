@@ -4971,6 +4971,60 @@ abstract class AppLocalizations {
   /// **'Total'**
   String get labelTotal;
 
+  /// Tooltip on the eye icon button that obscures a revealed password field.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get actionHidePassword;
+
+  /// Tooltip on the right chevron icon button that shows the next item in a carousel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get actionNext;
+
+  /// Label on the control that opens an asset file in the system viewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Open asset'**
+  String get actionOpenAsset;
+
+  /// Tooltip on the calendar icon button that opens a date picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date'**
+  String get actionPickDate;
+
+  /// Tooltip on the clock icon button that opens a time picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time'**
+  String get actionPickTime;
+
+  /// Tooltip on the left chevron icon button that shows the previous item in a carousel.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get actionPrevious;
+
+  /// Tooltip on the eye icon button that reveals an obscured password field.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get actionShowPassword;
+
+  /// Accessibility label on an asset thumbnail that opens the asset preview.
+  ///
+  /// In en, this message translates to:
+  /// **'View asset'**
+  String get actionViewAsset;
+
+  /// Tooltip on the open-in-new icon that opens a transaction on the block explorer website.
+  ///
+  /// In en, this message translates to:
+  /// **'View on explorer'**
+  String get actionViewOnExplorer;
+
   /// Transient toast shown after copying a wallet address.
   ///
   /// In en, this message translates to:
@@ -6494,12 +6548,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault Accounts can not sell NFTs.'**
   String get nftVaultCannotSellToast;
-
-  /// Accessibility label on an evolution stage thumbnail that opens the asset preview.
-  ///
-  /// In en, this message translates to:
-  /// **'View asset'**
-  String get nftViewAsset;
 
   /// Button to view the smart-contract code for an NFT.
   ///
@@ -15087,12 +15135,6 @@ abstract class AppLocalizations {
   /// **'Numerical Property'**
   String get scwNumericalProperty;
 
-  /// Tooltip on the icon button that opens the primary asset from the wizard card.
-  ///
-  /// In en, this message translates to:
-  /// **'Open asset'**
-  String get scwOpenAsset;
-
   /// No description provided for @scwOtherOptions.
   ///
   /// In en, this message translates to:
@@ -15140,18 +15182,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pick a color'**
   String get scwPickColor;
-
-  /// Tooltip on the calendar icon button that opens the date picker.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a date'**
-  String get scwPickDate;
-
-  /// Tooltip on the clock icon button that opens the time picker.
-  ///
-  /// In en, this message translates to:
-  /// **'Pick a time'**
-  String get scwPickTime;
 
   /// No description provided for @scwPrimaryAsset.
   ///
@@ -17139,7 +17169,7 @@ abstract class AppLocalizations {
   /// **'No votes yet.'**
   String get tkbNoVotesYet;
 
-  /// No description provided for @tkbOpenAsset.
+  /// Visible label of the asset card button that opens the asset file (title case, unlike the actionOpenAsset tooltip)
   ///
   /// In en, this message translates to:
   /// **'Open Asset'**
@@ -20156,6 +20186,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Wallet detected.'**
   String get webNoWalletDetected;
+
+  /// Tooltip on the hamburger icon button that opens the navigation drawer on the mobile web wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Open menu'**
+  String get webOpenMenu;
 
   /// Badge for a Vault account whose activation is in progress on the web.
   ///

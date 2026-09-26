@@ -52,6 +52,7 @@ class WebMyShopList extends BaseComponent {
                       ref.read(webShopSearchProvider.notifier).clear();
                       listProvider.refresh();
                     },
+                    tooltip: l10n.actionClear,
                   ),
                 ),
                 onChanged: (val) {
@@ -66,7 +67,8 @@ class WebMyShopList extends BaseComponent {
                 onPressed: () {
                   listProvider.refresh();
                 },
-                icon: Icon(Icons.search))
+                icon: Icon(Icons.search),
+                tooltip: l10n.actionSearch)
           ],
         ),
         Expanded(
@@ -145,6 +147,7 @@ class _CreateShopButton extends BaseComponent {
       mainAxisSize: MainAxisSize.min,
       children: [
         AppButton(
+          key: const Key('web_shop:setup_shop'),
           label: l10n.r3bSetupAuctionHouse,
           icon: Icons.store,
           type: buttonType,

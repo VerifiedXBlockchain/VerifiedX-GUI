@@ -2612,6 +2612,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get labelTotal => 'Total';
 
   @override
+  String get actionHidePassword => 'Hide password';
+
+  @override
+  String get actionNext => 'Next';
+
+  @override
+  String get actionOpenAsset => 'Open asset';
+
+  @override
+  String get actionPickDate => 'Pick a date';
+
+  @override
+  String get actionPickTime => 'Pick a time';
+
+  @override
+  String get actionPrevious => 'Previous';
+
+  @override
+  String get actionShowPassword => 'Show password';
+
+  @override
+  String get actionViewAsset => 'View asset';
+
+  @override
+  String get actionViewOnExplorer => 'View on explorer';
+
+  @override
   String get messageAddressCopied => 'Address copied to clipboard';
 
   @override
@@ -3414,9 +3441,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nftVaultCannotSellToast => 'Vault Accounts can not sell NFTs.';
-
-  @override
-  String get nftViewAsset => 'View asset';
 
   @override
   String get nftViewCode => 'View Code';
@@ -8052,9 +8076,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scwNumericalProperty => 'Numerical Property';
 
   @override
-  String get scwOpenAsset => 'Open asset';
-
-  @override
   String get scwOtherOptions => 'Other Options';
 
   @override
@@ -8079,12 +8100,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scwPickColor => 'Pick a color';
-
-  @override
-  String get scwPickDate => 'Pick a date';
-
-  @override
-  String get scwPickTime => 'Pick a time';
 
   @override
   String get scwPrimaryAsset => 'Primary Asset';
@@ -10867,6 +10882,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webNoWalletDetected => 'No Wallet detected.';
+
+  @override
+  String get webOpenMenu => 'Open menu';
 
   @override
   String get webPendingActivation => 'Pending Activation';

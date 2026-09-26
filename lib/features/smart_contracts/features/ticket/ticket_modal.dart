@@ -132,7 +132,7 @@ class TicketModal extends BaseComponent {
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.calendar_month),
-                      tooltip: l10n.scwPickDate,
+                      tooltip: l10n.actionPickDate,
                       onPressed: () {
                         _showDatePicker();
                       },
@@ -156,7 +156,7 @@ class TicketModal extends BaseComponent {
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.watch),
-                      tooltip: l10n.scwPickTime,
+                      tooltip: l10n.actionPickTime,
                       onPressed: () {
                         _showTimePicker();
                       },
@@ -216,7 +216,7 @@ class TicketModal extends BaseComponent {
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.calendar_month),
-                      tooltip: l10n.scwPickDate,
+                      tooltip: l10n.actionPickDate,
                       onPressed: () {
                         _showDatePicker(forExpire: true);
                       },
@@ -240,7 +240,7 @@ class TicketModal extends BaseComponent {
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.watch),
-                      tooltip: l10n.scwPickTime,
+                      tooltip: l10n.actionPickTime,
                       onPressed: () {
                         _showTimePicker(forExpire: true);
                       },

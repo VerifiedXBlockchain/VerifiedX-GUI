@@ -35,18 +35,21 @@ class _SimpleExpandableTextState extends State<SimpleExpandableText> {
         alignment: Alignment.centerLeft,
         child: Padding(
           padding: const EdgeInsets.only(top: 6.0),
-          child: InkWell(
-              child: Text(
-                isExpanded
-                    ? AppLocalizations.of(context).r3eReadLess
-                    : AppLocalizations.of(context).r3eReadMore,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.white70,
-                  height: 1.4,
+          child: Semantics(
+            button: true,
+            child: InkWell(
+                child: Text(
+                  isExpanded
+                      ? AppLocalizations.of(context).r3eReadLess
+                      : AppLocalizations.of(context).r3eReadMore,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.white70,
+                    height: 1.4,
+                  ),
                 ),
-              ),
-              onTap: () => setState(() => isExpanded = !isExpanded)),
+                onTap: () => setState(() => isExpanded = !isExpanded)),
+          ),
         ),
       )
     ]);

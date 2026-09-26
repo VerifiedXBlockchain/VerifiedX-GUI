@@ -67,4 +67,28 @@ void main() {
     expect(find.byKey(fieldKey), findsNothing);
     expect(find.byKey(submitKey), findsNothing);
   });
+
+  testWidgets('password reveal toggle flips its tooltip with the obscured state', (tester) async {
+    final context = await pumpHost(tester);
+
+    PromptModal.show(
+      contextOverride: context,
+      title: 'Unlock',
+      labelText: 'Password',
+      validator: (_) => null,
+      obscureText: true,
+      revealObscure: true,
+      lines: 1,
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('Show password'), findsOneWidget);
+    expect(find.byTooltip('Hide password'), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.remove_red_eye));
+    await tester.pumpAndSettle();
+
+    expect(find.byTooltip('Hide password'), findsOneWidget);
+    expect(find.byTooltip('Show password'), findsNothing);
+  });
 }

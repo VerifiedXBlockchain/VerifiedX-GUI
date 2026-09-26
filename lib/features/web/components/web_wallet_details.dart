@@ -60,11 +60,15 @@ class WebWalletDetails extends BaseComponent {
                   child: Icon(Icons.help, color: Theme.of(context).colorScheme.secondary.withOpacity(0.7), size: 14),
                 ),
                 SizedBox(width: 2),
-                InkWell(
-                    onTap: () {
-                      ref.read(webSessionProvider.notifier).refreshBtcBalanceInfo();
-                    },
-                    child: Icon(Icons.refresh, size: 14)),
+                Semantics(
+                  label: l10n.actionRefresh,
+                  button: true,
+                  child: InkWell(
+                      onTap: () {
+                        ref.read(webSessionProvider.notifier).refreshBtcBalanceInfo();
+                      },
+                      child: Icon(Icons.refresh, size: 14)),
+                ),
               ],
             );
           }
@@ -87,57 +91,65 @@ class WebWalletDetails extends BaseComponent {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            InkWell(
-                onTap: () async {
-                  await Clipboard.setData(ClipboardData(text: wallet.address));
-                  Toast.message(l10n.r3fAddressCopied(wallet.address));
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: Icon(
-                    Icons.copy,
-                    size: 20,
-                  ),
-                )),
-            InkWell(
-                onTap: () async {
-                  final confirmed = await ConfirmDialog.show(
-                    title: l10n.webRevealPrivateKeyTitle,
-                    body: l10n.r3fRevealPrivateKeyBody,
-                    confirmText: l10n.webReveal,
-                    cancelText: l10n.actionCancel,
-                  );
-                  if (confirmed == true) {
-                    switch (session.selectedWalletType) {
-                      case WalletType.rbx:
-                        showKeys(context, ref.read(webSessionProvider).keypair!, true);
+            Semantics(
+              label: l10n.actionCopyAddress,
+              button: true,
+              child: InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: wallet.address));
+                    Toast.message(l10n.r3fAddressCopied(wallet.address));
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Icon(
+                      Icons.copy,
+                      size: 20,
+                    ),
+                  )),
+            ),
+            Semantics(
+              label: l10n.walletRevealPrivateKey,
+              button: true,
+              child: InkWell(
+                  onTap: () async {
+                    final confirmed = await ConfirmDialog.show(
+                      title: l10n.webRevealPrivateKeyTitle,
+                      body: l10n.r3fRevealPrivateKeyBody,
+                      confirmText: l10n.webReveal,
+                      cancelText: l10n.actionCancel,
+                    );
+                    if (confirmed == true) {
+                      switch (session.selectedWalletType) {
+                        case WalletType.rbx:
+                          showKeys(context, ref.read(webSessionProvider).keypair!, true);
 
-                        break;
-                      case WalletType.ra:
-                        showKeys(context, ref.read(webSessionProvider).keypair!, true);
-                        break;
-                      case WalletType.btc:
-                        final account = ref.read(webSessionProvider).btcKeypair;
-                        if (account == null) return;
+                          break;
+                        case WalletType.ra:
+                          showKeys(context, ref.read(webSessionProvider).keypair!, true);
+                          break;
+                        case WalletType.btc:
+                          final account = ref.read(webSessionProvider).btcKeypair;
+                          if (account == null) return;
 
-                        final keypair = Keypair(
-                          private: account.privateKey,
-                          address: account.address,
-                          public: account.publicKey,
-                          mneumonic: account.mnemonic,
-                          btcWif: account.wif,
-                        );
-                        showKeys(context, keypair, true);
+                          final keypair = Keypair(
+                            private: account.privateKey,
+                            address: account.address,
+                            public: account.publicKey,
+                            mneumonic: account.mnemonic,
+                            btcWif: account.wif,
+                          );
+                          showKeys(context, keypair, true);
+                      }
                     }
-                  }
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(4.0),
-                  child: Icon(
-                    Icons.remove_red_eye,
-                    size: 20,
-                  ),
-                )),
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Icon(
+                      Icons.remove_red_eye,
+                      size: 20,
+                    ),
+                  )),
+            ),
           ],
         ),
       ),

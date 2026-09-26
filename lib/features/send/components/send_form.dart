@@ -410,29 +410,23 @@ class SendForm extends BaseComponent {
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Semantics(
+                          PrettyIconButton(
+                            type: PrettyIconType.custom,
+                            customIcon: Icons.paste,
                             label: AppLocalizations.of(context).actionPaste,
-                            button: true,
-                            child: PrettyIconButton(
-                              type: PrettyIconType.custom,
-                              customIcon: Icons.paste,
-                              onPressed: () {
-                                _pasteAddress(context, formProvider);
-                              },
-                            ),
+                            onPressed: () {
+                              _pasteAddress(context, formProvider);
+                            },
                           ),
                           if (!kIsWeb)
-                            Semantics(
+                            PrettyIconButton(
+                              type: PrettyIconType.custom,
+                              iconScale: .75,
+                              customIcon: FontAwesomeIcons.folderOpen,
                               label: AppLocalizations.of(context).sendChooseAddressTitle,
-                              button: true,
-                              child: PrettyIconButton(
-                                type: PrettyIconType.custom,
-                                iconScale: .75,
-                                customIcon: FontAwesomeIcons.folderOpen,
-                                onPressed: () {
-                                  chooseAddress(context, ref, formProvider);
-                                },
-                              ),
+                              onPressed: () {
+                                chooseAddress(context, ref, formProvider);
+                              },
                             ),
                         ],
                       ),

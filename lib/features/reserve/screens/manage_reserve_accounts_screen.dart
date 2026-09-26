@@ -58,6 +58,7 @@ class ManageReserveAccountsScreen extends BaseScreen {
             mainAxisSize: MainAxisSize.min,
             children: [
               AppButton(
+                key: const Key('reserve:setup_new_account'),
                 label: AppLocalizations.of(context).reserveSetupNewAccount,
                 icon: Icons.add,
                 variant: AppColorVariant.Success,
@@ -69,6 +70,7 @@ class ManageReserveAccountsScreen extends BaseScreen {
                 height: 6,
               ),
               AppButton(
+                key: const Key('reserve:restore'),
                 label: AppLocalizations.of(context).reserveRestoreVaultAccount,
                 icon: Icons.refresh,
                 type: AppButtonType.Text,
@@ -136,15 +138,19 @@ class ReserveAccountManageCard extends BaseComponent {
                   SizedBox(
                     width: 4,
                   ),
-                  InkWell(
-                    onTap: () async {
-                      await Clipboard.setData(ClipboardData(text: ra.address));
-                      Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                    },
-                    child: Icon(
-                      Icons.copy,
-                      color: Theme.of(context).colorScheme.reserve,
-                      size: 14,
+                  Semantics(
+                    label: AppLocalizations.of(context).actionCopyAddress,
+                    button: true,
+                    child: InkWell(
+                      onTap: () async {
+                        await Clipboard.setData(ClipboardData(text: ra.address));
+                        Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                      },
+                      child: Icon(
+                        Icons.copy,
+                        color: Theme.of(context).colorScheme.reserve,
+                        size: 14,
+                      ),
                     ),
                   )
                 ],
@@ -167,14 +173,18 @@ class ReserveAccountManageCard extends BaseComponent {
                       color: Colors.white,
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      provider.showBalanceInfo(context, ra);
-                    },
-                    child: Icon(
-                      Icons.help,
-                      size: 16,
-                      color: Theme.of(context).colorScheme.secondary,
+                  Semantics(
+                    label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                    button: true,
+                    child: InkWell(
+                      onTap: () {
+                        provider.showBalanceInfo(context, ra);
+                      },
+                      child: Icon(
+                        Icons.help,
+                        size: 16,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
                     ),
                   )
                 ],
@@ -215,6 +225,7 @@ class ReserveAccountManageCard extends BaseComponent {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         AppButton(
+                          key: Key('reserve:send_funds:${ra.address}'),
                           label: AppLocalizations.of(context).reserveSendFunds,
                           variant: AppColorVariant.Light,
                           icon: Icons.arrow_upward,
@@ -225,6 +236,7 @@ class ReserveAccountManageCard extends BaseComponent {
                           },
                         ),
                         AppButton(
+                          key: Key('reserve:manage_assets:${ra.address}'),
                           label: AppLocalizations.of(context).reserveManageAssets,
                           icon: Icons.toll,
                           variant: AppColorVariant.Light,
@@ -421,6 +433,7 @@ class ReserveAccountManageCard extends BaseComponent {
                           },
                         ),
                         AppButton(
+                          key: Key('reserve:receive_assets:${ra.address}'),
                           label: AppLocalizations.of(context).reserveReceiveAssets,
                           icon: Icons.arrow_downward,
                           variant: AppColorVariant.Light,
@@ -431,6 +444,7 @@ class ReserveAccountManageCard extends BaseComponent {
                         ),
                         if (showActivateButton)
                           AppVerticalIconButton(
+                            key: Key('reserve:activate:${ra.address}'),
                             label: AppLocalizations.of(context).reserveActivateAccountAction,
                             icon: Icons.upload,
                             color: AppColors.getReserve(),

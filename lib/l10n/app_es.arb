@@ -2642,6 +2642,42 @@
     "description": "Generic total label."
   },
   "@@locale": "es",
+  "actionHidePassword": "Ocultar contraseña",
+  "@actionHidePassword": {
+    "description": "Tooltip on the eye icon button that obscures a revealed password field."
+  },
+  "actionNext": "Siguiente",
+  "@actionNext": {
+    "description": "Tooltip on the right chevron icon button that shows the next item in a carousel."
+  },
+  "actionOpenAsset": "Abrir archivo",
+  "@actionOpenAsset": {
+    "description": "Label on the control that opens an asset file in the system viewer."
+  },
+  "actionPickDate": "Elegir una fecha",
+  "@actionPickDate": {
+    "description": "Tooltip on the calendar icon button that opens a date picker."
+  },
+  "actionPickTime": "Elegir una hora",
+  "@actionPickTime": {
+    "description": "Tooltip on the clock icon button that opens a time picker."
+  },
+  "actionPrevious": "Anterior",
+  "@actionPrevious": {
+    "description": "Tooltip on the left chevron icon button that shows the previous item in a carousel."
+  },
+  "actionShowPassword": "Mostrar contraseña",
+  "@actionShowPassword": {
+    "description": "Tooltip on the eye icon button that reveals an obscured password field."
+  },
+  "actionViewAsset": "Ver archivo",
+  "@actionViewAsset": {
+    "description": "Accessibility label on an asset thumbnail that opens the asset preview."
+  },
+  "actionViewOnExplorer": "Ver en el explorador",
+  "@actionViewOnExplorer": {
+    "description": "Tooltip on the open-in-new icon that opens a transaction on the block explorer website."
+  },
   "messageAddressCopied": "Dirección copiada al portapapeles",
   "@messageAddressCopied": {
     "description": "Transient toast shown after copying a wallet address."
@@ -3525,10 +3561,6 @@
   "nftVaultCannotSellToast": "Las cuentas de bóveda no pueden vender NFTs.",
   "@nftVaultCannotSellToast": {
     "description": "Toast shown when a vault account attempts to sell an NFT."
-  },
-  "nftViewAsset": "Ver archivo",
-  "@nftViewAsset": {
-    "description": "Accessibility label on an evolution stage thumbnail that opens the asset preview."
   },
   "nftViewCode": "Ver código",
   "@nftViewCode": {
@@ -6611,10 +6643,6 @@
   "scwNoProperties": "Sin propiedades",
   "scwNotImplemented": "No implementado.",
   "scwNumericalProperty": "Propiedad numérica",
-  "scwOpenAsset": "Abrir archivo",
-  "@scwOpenAsset": {
-    "description": "Tooltip on the icon button that opens the primary asset from the wizard card."
-  },
   "scwOtherOptions": "Otras opciones",
   "scwOwnerAddress": "Dirección del propietario",
   "scwPairWrapTitle": "Emparejar/Envolver con un NFT existente",
@@ -6635,14 +6663,6 @@
   "scwPickColor": "Elegir un color",
   "@scwPickColor": {
     "description": "Tooltip on the palette icon button that opens the color picker for a property value."
-  },
-  "scwPickDate": "Elegir una fecha",
-  "@scwPickDate": {
-    "description": "Tooltip on the calendar icon button that opens the date picker."
-  },
-  "scwPickTime": "Elegir una hora",
-  "@scwPickTime": {
-    "description": "Tooltip on the clock icon button that opens the time picker."
   },
   "scwPrimaryAsset": "Archivo principal",
   "scwProperties": "Propiedades",
@@ -7705,6 +7725,9 @@
   "tkbNoVaultAccounts": "No tienes ninguna Cuenta de bóveda en esta billetera",
   "tkbNoVotesYet": "Aún no hay votos.",
   "tkbOpenAsset": "Abrir recurso",
+  "@tkbOpenAsset": {
+    "description": "Visible label of the asset card button that opens the asset file (title case, unlike the actionOpenAsset tooltip)"
+  },
   "tkbOpenFolder": "Abrir carpeta",
   "tkbOwnershipTransferInitiated": "Transferencia de propiedad iniciada.",
   "tkbPassword": "Contraseña",
@@ -9742,6 +9765,10 @@
   "webNoWalletDetected": "No se detectó billetera.",
   "@webNoWalletDetected": {
     "description": "Empty-state shown on web when no wallet is loaded."
+  },
+  "webOpenMenu": "Abrir menú",
+  "@webOpenMenu": {
+    "description": "Tooltip on the hamburger icon button that opens the navigation drawer on the mobile web wallet."
   },
   "webPendingActivation": "Activación pendiente",
   "@webPendingActivation": {

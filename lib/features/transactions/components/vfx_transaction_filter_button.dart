@@ -23,6 +23,7 @@ class VfxTransactionFilterButton extends BaseComponent {
     final model = ref.watch(vfxTransactionFilterProvider);
 
     return IconButton(
+      key: const Key('tx:filter'),
       icon: SizedBox(
         width: 32,
         height: 32,
@@ -71,6 +72,7 @@ class VfxTransactionFilterButton extends BaseComponent {
           },
         );
       },
+      tooltip: AppLocalizations.of(context).txpTxFilters,
     );
   }
 }
@@ -101,6 +103,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextButton(
+                  key: const Key('tx:filter_clear'),
                   onPressed: () {
                     provider.clear();
                   },
@@ -113,6 +116,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
                   ),
                 ),
                 TextButton(
+                  key: const Key('tx:filter_close'),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -142,6 +146,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
             ),
             if (!kIsWeb)
               PopupMenuButton<String>(
+                key: const Key('tx:filter_address'),
                 constraints: BoxConstraints(minWidth: 300),
                 color: Colors.black,
                 child: Row(
@@ -227,6 +232,7 @@ class _VfxTransactionFilterBottomSheet extends BaseComponent {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Checkbox(
+                        key: Key('tx:filter_type_${t.type}'),
                         value: model.txTypes.contains(t.type),
                         onChanged: (value) {
                           if (value == true) {

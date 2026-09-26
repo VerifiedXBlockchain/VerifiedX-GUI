@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../app.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class WebMobileDrawerButton extends StatelessWidget {
   const WebMobileDrawerButton({
@@ -14,6 +15,7 @@ class WebMobileDrawerButton extends StatelessWidget {
       onPressed: () {
         rootScaffoldKey.currentState!.openDrawer();
       },
+      tooltip: AppLocalizations.of(context).webOpenMenu,
     );
   }
 }

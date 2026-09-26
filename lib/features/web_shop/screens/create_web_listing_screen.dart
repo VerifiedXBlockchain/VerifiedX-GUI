@@ -52,6 +52,7 @@ class CreateWebListingScreen extends BaseScreen {
           }
         },
         icon: const Icon(Icons.close),
+        tooltip: l10n.actionClose,
       ),
     );
   }

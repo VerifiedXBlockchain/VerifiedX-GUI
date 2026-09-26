@@ -675,7 +675,7 @@ class _EvolvePhaseContainer extends BaseComponent {
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.watch),
-          tooltip: globalL10n.scwPickTime,
+          tooltip: globalL10n.actionPickTime,
           onPressed: () {
             _showTimePicker();
           },
@@ -704,7 +704,7 @@ class _EvolvePhaseContainer extends BaseComponent {
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.calendar_month),
-          tooltip: globalL10n.scwPickDate,
+          tooltip: globalL10n.actionPickDate,
           onPressed: () {
             _showDatePicker();
           },

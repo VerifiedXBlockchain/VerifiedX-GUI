@@ -2668,6 +2668,42 @@
     "description": "Generic total label."
   },
   "@@locale": "en",
+  "actionHidePassword": "Hide password",
+  "@actionHidePassword": {
+    "description": "Tooltip on the eye icon button that obscures a revealed password field."
+  },
+  "actionNext": "Next",
+  "@actionNext": {
+    "description": "Tooltip on the right chevron icon button that shows the next item in a carousel."
+  },
+  "actionOpenAsset": "Open asset",
+  "@actionOpenAsset": {
+    "description": "Label on the control that opens an asset file in the system viewer."
+  },
+  "actionPickDate": "Pick a date",
+  "@actionPickDate": {
+    "description": "Tooltip on the calendar icon button that opens a date picker."
+  },
+  "actionPickTime": "Pick a time",
+  "@actionPickTime": {
+    "description": "Tooltip on the clock icon button that opens a time picker."
+  },
+  "actionPrevious": "Previous",
+  "@actionPrevious": {
+    "description": "Tooltip on the left chevron icon button that shows the previous item in a carousel."
+  },
+  "actionShowPassword": "Show password",
+  "@actionShowPassword": {
+    "description": "Tooltip on the eye icon button that reveals an obscured password field."
+  },
+  "actionViewAsset": "View asset",
+  "@actionViewAsset": {
+    "description": "Accessibility label on an asset thumbnail that opens the asset preview."
+  },
+  "actionViewOnExplorer": "View on explorer",
+  "@actionViewOnExplorer": {
+    "description": "Tooltip on the open-in-new icon that opens a transaction on the block explorer website."
+  },
   "messageAddressCopied": "Address copied to clipboard",
   "@messageAddressCopied": {
     "description": "Transient toast shown after copying a wallet address."
@@ -3551,10 +3587,6 @@
   "nftVaultCannotSellToast": "Vault Accounts can not sell NFTs.",
   "@nftVaultCannotSellToast": {
     "description": "Toast shown when a vault account attempts to sell an NFT."
-  },
-  "nftViewAsset": "View asset",
-  "@nftViewAsset": {
-    "description": "Accessibility label on an evolution stage thumbnail that opens the asset preview."
   },
   "nftViewCode": "View Code",
   "@nftViewCode": {
@@ -6637,10 +6669,6 @@
   "scwNoProperties": "No Properties",
   "scwNotImplemented": "Not implemented.",
   "scwNumericalProperty": "Numerical Property",
-  "scwOpenAsset": "Open asset",
-  "@scwOpenAsset": {
-    "description": "Tooltip on the icon button that opens the primary asset from the wizard card."
-  },
   "scwOtherOptions": "Other Options",
   "scwOwnerAddress": "Owner Address",
   "scwPairWrapTitle": "Pair/Wrap with Existing NFT",
@@ -6661,14 +6689,6 @@
   "scwPickColor": "Pick a color",
   "@scwPickColor": {
     "description": "Tooltip on the palette icon button that opens the color picker for a property value."
-  },
-  "scwPickDate": "Pick a date",
-  "@scwPickDate": {
-    "description": "Tooltip on the calendar icon button that opens the date picker."
-  },
-  "scwPickTime": "Pick a time",
-  "@scwPickTime": {
-    "description": "Tooltip on the clock icon button that opens the time picker."
   },
   "scwPrimaryAsset": "Primary Asset",
   "scwProperties": "Properties",
@@ -7737,6 +7757,9 @@
   "tkbNoVaultAccounts": "You don''t have any Vault Accounts in this wallet",
   "tkbNoVotesYet": "No votes yet.",
   "tkbOpenAsset": "Open Asset",
+  "@tkbOpenAsset": {
+    "description": "Visible label of the asset card button that opens the asset file (title case, unlike the actionOpenAsset tooltip)"
+  },
   "tkbOpenFolder": "Open Folder",
   "tkbOwnershipTransferInitiated": "Ownership transfer initiated.",
   "tkbPassword": "Password",
@@ -9798,6 +9821,10 @@
   "webNoWalletDetected": "No Wallet detected.",
   "@webNoWalletDetected": {
     "description": "Empty-state shown on web when no wallet is loaded."
+  },
+  "webOpenMenu": "Open menu",
+  "@webOpenMenu": {
+    "description": "Tooltip on the hamburger icon button that opens the navigation drawer on the mobile web wallet."
   },
   "webPendingActivation": "Pending Activation",
   "@webPendingActivation": {

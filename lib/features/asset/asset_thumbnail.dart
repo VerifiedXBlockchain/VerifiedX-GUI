@@ -24,7 +24,7 @@ class AssetThumbnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: asset.localPath != null && asset.isImage ? AppLocalizations.of(context).nftViewAsset : null,
+      label: asset.localPath != null && asset.isImage ? AppLocalizations.of(context).actionViewAsset : null,
       button: true,
       child: InkWell(
         onTap: () {

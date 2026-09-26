@@ -167,6 +167,7 @@ class TopicForm extends BaseComponent {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
+                  key: const Key('voting:create_topic_cancel'),
                   label: l10n.actionCancel,
                   type: AppButtonType.Text,
                   variant: AppColorVariant.Light,
@@ -182,6 +183,7 @@ class TopicForm extends BaseComponent {
                   },
                 ),
                 AppButton(
+                  key: const Key('voting:create_topic_submit'),
                   label: l10n.votingCreateTopic,
                   onPressed: () async {
                     if (!await passwordRequiredGuard(context, ref)) return;

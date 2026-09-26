@@ -83,6 +83,7 @@ class WebShopList extends BaseComponent {
                     onPressed: () {
                       ref.read(webShopSearchProvider.notifier).clear();
                     },
+                    tooltip: l10n.actionClear,
                   ),
                 ),
                 onChanged: (val) {
