@@ -88,6 +88,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^2.3.2
+  integration_test:
+    sdk: flutter
   json_serializable: ^6.3.1
   msix: ^3.6.2
 
@@ -143,3 +145,8 @@ flutter_icons:
 # flutter_native_splash:
 #   background_image: 'resources/splash-bg.png'
 #   image: 'resources/splash-fg.png'
+
+# integration_test and flutter_driver (SDK 3.7.12) pin archive to 3.3.2, which
+# would downgrade the production dependency. Keep the version the app shipped with.
+dependency_overrides:
+  archive: 3.3.6

@@ -158,6 +158,17 @@ run_web:
 run_web_cors:
 	fvm flutter run -d chrome --web-browser-flag "--disable-web-security" --web-port 42069
 
+# Automation builds: TESTNET selects the network, AUTOMATION flips Env.isAutomation.
+# web-server (not chrome) so an external Chrome with the Claude extension can attach.
+run_web_automation:
+	fvm flutter run -d web-server --web-port 42069 --dart-define TESTNET=true --dart-define AUTOMATION=true
+
+run_macos_automation:
+	fvm flutter run -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
+
+test_integration_macos:
+	fvm flutter test integration_test -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
+
 run_cli_mainnet:
 	/Applications/VFXWallet.app/Contents/Resources/VFXCore/VerifiedXCore enableapi gui
 

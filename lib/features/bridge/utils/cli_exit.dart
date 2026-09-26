@@ -30,11 +30,18 @@ Future<bool> exitCli({
 
   // SendExit never completes its response when it is accepted (the process
   // exits mid-request), so its connection error is expected and discarded.
-  unawaited(sendExit().catchError((Object error) {
-    if (isCredentialRefusal(error)) {
-      exitRefused = true;
+  // Caught with await rather than catchError: the future the HTTP client
+  // returns is a Future<String>, so a catchError handler would have to
+  // return a String or fail with an ArgumentError.
+  unawaited(() async {
+    try {
+      await sendExit();
+    } catch (error) {
+      if (isCredentialRefusal(error)) {
+        exitRefused = true;
+      }
     }
-  }));
+  }());
 
   return waitUntilCliStops(
     () async {

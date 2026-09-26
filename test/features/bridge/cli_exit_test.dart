@@ -64,6 +64,23 @@ void main() {
       expect(terminated, isFalse);
     });
 
+    test('accepts a SendExit future typed like the HTTP client', () async {
+      // BridgeService.getText returns Future<String>. The connection error
+      // that means "exit accepted" must not surface as an unhandled error.
+      var polls = 0;
+      var terminated = false;
+      final stopped = await exitCli(
+        sendExit: () => Future<String>.error(_connectionError()),
+        stillAnswering: () async => ++polls < 2,
+        terminateLaunchedCli: () async => terminated = true,
+        maxWait: const Duration(seconds: 1),
+        interval: interval,
+      );
+
+      expect(stopped, isTrue);
+      expect(terminated, isFalse);
+    });
+
     test('terminates the launched CLI once when SendExit is refused', () async {
       var terminations = 0;
       final stopped = await exitCli(
