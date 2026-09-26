@@ -145,6 +145,7 @@ class ScWizardRoyaltyDialog extends BaseComponent {
                                 addressController.text = address;
                               }
                             },
+                            tooltip: l10n.scwUseMyAddress,
                             icon: const Icon(Icons.wallet))
                         : IconButton(
                             icon: const Icon(
@@ -152,6 +153,7 @@ class ScWizardRoyaltyDialog extends BaseComponent {
                               size: 16,
                               color: Colors.white,
                             ),
+                            tooltip: l10n.scwChooseAnAddress,
                             onPressed: () async {
                               final address = await chooseAddress(context, ref);
                               print(address);

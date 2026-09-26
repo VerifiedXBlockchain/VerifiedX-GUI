@@ -143,6 +143,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.copy, size: 16),
+                      tooltip: l10n.prvCopyViewingKey,
                       color: Colors.white54,
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: key));

@@ -155,38 +155,41 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                     ),
                   ],
                 ),
-                InkWell(
-                  onTap: () {
-                    openTxOnExplorer(widget.tx);
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "TX ID: ",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
+                Semantics(
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      openTxOnExplorer(widget.tx);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "TX ID: ",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white70,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        widget.tx.txid,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white70,
-                          decoration: TextDecoration.underline,
+                        Text(
+                          widget.tx.txid,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white70,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Icon(
-                        Icons.open_in_new,
-                        size: 12,
-                        color: Colors.white70,
-                      ),
-                    ],
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Icon(
+                          Icons.open_in_new,
+                          size: 12,
+                          color: Colors.white70,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -261,13 +264,16 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
               SizedBox(
                 width: 8,
               ),
-              InkWell(
-                  onTap: () {
-                    setState(() {
-                      expanded = !expanded;
-                    });
-                  },
-                  child: Icon(expanded ? Icons.arrow_drop_up : Icons.arrow_drop_down))
+              Semantics(
+                  label: expanded ? AppLocalizations.of(context).actionHideDetails : AppLocalizations.of(context).actionShowDetails,
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    },
+                    child: Icon(expanded ? Icons.arrow_drop_up : Icons.arrow_drop_down)))
             ],
           ),
           if (expanded) ...[
@@ -307,17 +313,21 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(right: 4.0),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final address = input.prevout.scriptpubkeyAddress;
-                                        if (address == null) return;
-                                        await Clipboard.setData(ClipboardData(text: address));
-                                        Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                                      },
-                                      child: Icon(
-                                        Icons.copy,
-                                        size: 12,
-                                        color: Colors.white70,
+                                    child: Semantics(
+                                      label: AppLocalizations.of(context).actionCopyAddress,
+                                      button: true,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final address = input.prevout.scriptpubkeyAddress;
+                                          if (address == null) return;
+                                          await Clipboard.setData(ClipboardData(text: address));
+                                          Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                                        },
+                                        child: Icon(
+                                          Icons.copy,
+                                          size: 12,
+                                          color: Colors.white70,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -368,17 +378,21 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(left: 4.0),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final address = output.scriptpubkeyAddress;
-                                        if (address == null) return;
-                                        await Clipboard.setData(ClipboardData(text: address));
-                                        Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                                      },
-                                      child: Icon(
-                                        Icons.copy,
-                                        size: 12,
-                                        color: Colors.white70,
+                                    child: Semantics(
+                                      label: AppLocalizations.of(context).actionCopyAddress,
+                                      button: true,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final address = output.scriptpubkeyAddress;
+                                          if (address == null) return;
+                                          await Clipboard.setData(ClipboardData(text: address));
+                                          Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                                        },
+                                        child: Icon(
+                                          Icons.copy,
+                                          size: 12,
+                                          color: Colors.white70,
+                                        ),
                                       ),
                                     ),
                                   ),

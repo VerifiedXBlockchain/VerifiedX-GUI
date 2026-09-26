@@ -144,6 +144,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
       children: [
         Expanded(
           child: AppButton(
+            key: const Key('privacy:shield_vbtc'),
             label: l10n.prvShieldAction,
             icon: Icons.arrow_downward,
             variant: AppColorVariant.Success,
@@ -153,6 +154,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
         const SizedBox(width: 8),
         Expanded(
           child: AppButton(
+            key: const Key('privacy:unshield_vbtc'),
             label: l10n.prvUnshieldAction,
             icon: Icons.arrow_upward,
             variant: AppColorVariant.Warning,
@@ -162,6 +164,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
         const SizedBox(width: 8),
         Expanded(
           child: AppButton(
+            key: const Key('privacy:transfer_vbtc'),
             label: l10n.prvTransferAction,
             icon: Icons.send,
             variant: AppColorVariant.Prism,
@@ -171,6 +174,7 @@ class _VbtcBalanceCardState extends ConsumerState<VbtcBalanceCard> {
         const SizedBox(width: 8),
         Expanded(
           child: AppButton(
+            key: const Key('privacy:consolidate_vbtc'),
             label: l10n.prvConsolidateAction,
             icon: Icons.compress,
             variant: AppColorVariant.Info,

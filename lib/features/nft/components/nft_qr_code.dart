@@ -114,6 +114,7 @@ class NftQrCode extends StatelessWidget {
               iconButtons
                   ? IconButton(
                       icon: Icon(Icons.download),
+                      tooltip: AppLocalizations.of(context).nftQrSave,
                       iconSize: 22,
                       onPressed: () {
                         handleDownload();
@@ -138,6 +139,7 @@ class NftQrCode extends StatelessWidget {
               if (withOpen && iconButtons)
                 IconButton(
                   icon: Icon(Icons.open_in_new),
+                  tooltip: AppLocalizations.of(context).nftQrOpen,
                   iconSize: 22,
                   onPressed: () {
                     launchUrlString(data);

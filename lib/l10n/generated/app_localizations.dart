@@ -183,6 +183,12 @@ abstract class AppLocalizations {
   /// **'Copy restore code'**
   String get actionCopyRestoreCode;
 
+  /// Tooltip on the copy icon next to a transaction signature.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy signature'**
+  String get actionCopySignature;
+
   /// Tooltip on the copy icon next to a transaction hash.
   ///
   /// In en, this message translates to:
@@ -207,11 +213,35 @@ abstract class AppLocalizations {
   /// **'Done'**
   String get actionDone;
 
+  /// Tooltip on the icon button that switches a list to the grid layout.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid view'**
+  String get actionGridView;
+
+  /// Tooltip on the help icon button that opens an explanation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get actionHelp;
+
+  /// Tooltip / accessibility label on the collapse arrow of an expanded transaction tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide details'**
+  String get actionHideDetails;
+
   /// Import action — imports a wallet or key.
   ///
   /// In en, this message translates to:
   /// **'Import'**
   String get actionImport;
+
+  /// Tooltip on the icon button that switches a grid to the list layout.
+  ///
+  /// In en, this message translates to:
+  /// **'List view'**
+  String get actionListView;
 
   /// Negative response in a confirmation dialog.
   ///
@@ -231,6 +261,12 @@ abstract class AppLocalizations {
   /// **'Receive'**
   String get actionReceive;
 
+  /// Tooltip on a refresh icon button that reloads the current list.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get actionRefresh;
+
   /// Save action — persists current form state.
   ///
   /// In en, this message translates to:
@@ -248,6 +284,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send'**
   String get actionSend;
+
+  /// Tooltip / accessibility label on the expand arrow of a collapsed transaction tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Show details'**
+  String get actionShowDetails;
 
   /// Affirmative response in a confirmation dialog.
   ///
@@ -6117,6 +6159,12 @@ abstract class AppLocalizations {
   /// **'Confirm Sale Start'**
   String get nftConfirmSaleStartTitle;
 
+  /// Accessibility label on the copy icon next to an NFT's smart contract ID.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy smart contract ID'**
+  String get nftCopySmartContractId;
+
   /// Button to copy a media-backup URL.
   ///
   /// In en, this message translates to:
@@ -6297,11 +6345,23 @@ abstract class AppLocalizations {
   /// **'Owned by Me'**
   String get nftOwnedByMe;
 
+  /// Tooltip on the pause button of an NFT video asset.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get nftPauseMedia;
+
   /// Phase name label inside the NFT management modal.
   ///
   /// In en, this message translates to:
   /// **'Name: {name}'**
   String nftPhaseNameLabel(String name);
+
+  /// Tooltip on the play button of an NFT video asset.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get nftPlayMedia;
 
   /// Section heading for NFT properties.
   ///
@@ -6422,6 +6482,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault Accounts can not sell NFTs.'**
   String get nftVaultCannotSellToast;
+
+  /// Accessibility label on an evolution stage thumbnail that opens the asset preview.
+  ///
+  /// In en, this message translates to:
+  /// **'View asset'**
+  String get nftViewAsset;
 
   /// Button to view the smart-contract code for an NFT.
   ///
@@ -7382,6 +7448,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy address'**
   String get prvCopyAddress;
+
+  /// Tooltip on the copy icon next to the exported privacy viewing key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy viewing key'**
+  String get prvCopyViewingKey;
 
   /// No description provided for @prvCreatePasswordBody.
   ///
@@ -14469,6 +14541,12 @@ abstract class AppLocalizations {
   /// **'Vault Accounts cannot mint smart contracts'**
   String get scVaultCannotMintToast;
 
+  /// Tooltip on the add icon button in the additional assets section of the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Add additional asset'**
+  String get scwAddAdditionalAsset;
+
   /// No description provided for @scwAddAFeature.
   ///
   /// In en, this message translates to:
@@ -14690,6 +14768,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Creator: {name}'**
   String scwCreatorValue(String name);
+
+  /// Tooltip on the delete icon button over the primary asset in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete primary asset'**
+  String get scwDeletePrimaryAsset;
 
   /// No description provided for @scwDeletePrimaryAssetBody.
   ///
@@ -15009,6 +15093,12 @@ abstract class AppLocalizations {
   /// **'Numerical Property'**
   String get scwNumericalProperty;
 
+  /// Tooltip on the icon button that opens the primary asset from the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Open asset'**
+  String get scwOpenAsset;
+
   /// No description provided for @scwOtherOptions.
   ///
   /// In en, this message translates to:
@@ -15050,6 +15140,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Physical/Digital Good Name'**
   String get scwPhysicalDigitalGoodName;
+
+  /// Tooltip on the palette icon button that opens the color picker for a property value.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a color'**
+  String get scwPickColor;
+
+  /// Tooltip on the calendar icon button that opens the date picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date'**
+  String get scwPickDate;
+
+  /// Tooltip on the clock icon button that opens the time picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time'**
+  String get scwPickTime;
 
   /// No description provided for @scwPrimaryAsset.
   ///
@@ -15141,6 +15249,12 @@ abstract class AppLocalizations {
   /// **'Remove'**
   String get scwRemove;
 
+  /// Tooltip on the delete icon button next to an additional asset in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove asset'**
+  String get scwRemoveAsset;
+
   /// No description provided for @scwRemoveAssetBody.
   ///
   /// In en, this message translates to:
@@ -15152,6 +15266,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove Asset?'**
   String get scwRemoveAssetTitle;
+
+  /// Tooltip on the delete icon button next to an evolution phase in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove phase'**
+  String get scwRemovePhase;
 
   /// No description provided for @scwRemovePhaseBody.
   ///
@@ -15165,6 +15285,12 @@ abstract class AppLocalizations {
   /// **'Remove Phase?'**
   String get scwRemovePhaseTitle;
 
+  /// Tooltip / accessibility label on the delete icon next to a property in the wizard card or evolve modal.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove property'**
+  String get scwRemoveProperty;
+
   /// No description provided for @scwRemovePropertyBody.
   ///
   /// In en, this message translates to:
@@ -15176,6 +15302,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove Property?'**
   String get scwRemovePropertyTitle;
+
+  /// Tooltip on the delete icon button next to the royalty in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove royalty'**
+  String get scwRemoveRoyalty;
 
   /// No description provided for @scwRemoveRoyaltyBody.
   ///
@@ -17523,6 +17655,12 @@ abstract class AppLocalizations {
   /// **'Create Fungible Token'**
   String get tokenCreateTitle;
 
+  /// Tooltip on the down arrow that lowers the decimal places of a new token.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease decimal places'**
+  String get tokenDecreaseDecimalPlaces;
+
   /// Cancel button label in the token create form.
   ///
   /// In en, this message translates to:
@@ -17576,6 +17714,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ABC'**
   String get tokenFormTickerHint;
+
+  /// Tooltip on the up arrow that raises the decimal places of a new token.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase decimal places'**
+  String get tokenIncreaseDecimalPlaces;
 
   /// Toast shown when balance is insufficient for a token transaction.
   ///

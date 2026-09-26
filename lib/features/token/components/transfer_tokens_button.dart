@@ -30,6 +30,7 @@ class TransferTokensButton extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     return AppButton(
+      key: const Key('token:transfer'),
       label: l10n.tokenTransfer,
       variant: AppColorVariant.Primary,
       onPressed: () async {

@@ -170,6 +170,7 @@ class RoyaltyModal extends BaseComponent {
                     size: 16,
                     color: Colors.white,
                   ),
+                  tooltip: AppLocalizations.of(context).scwChooseAnAddress,
                   onPressed: () {
                     chooseAddress(context, ref);
                   },

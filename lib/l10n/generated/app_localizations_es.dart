@@ -52,6 +52,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get actionCopyRestoreCode => 'Copiar código de restauración';
 
   @override
+  String get actionCopySignature => 'Copiar firma';
+
+  @override
   String get actionCopyTransactionHash => 'Copiar hash de la transacción';
 
   @override
@@ -64,7 +67,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get actionDone => 'Listo';
 
   @override
+  String get actionGridView => 'Vista de cuadrícula';
+
+  @override
+  String get actionHelp => 'Ayuda';
+
+  @override
+  String get actionHideDetails => 'Ocultar detalles';
+
+  @override
   String get actionImport => 'Importar';
+
+  @override
+  String get actionListView => 'Vista de lista';
 
   @override
   String get actionNo => 'No';
@@ -76,6 +91,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get actionReceive => 'Recibir';
 
   @override
+  String get actionRefresh => 'Actualizar';
+
+  @override
   String get actionSave => 'Guardar';
 
   @override
@@ -83,6 +101,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get actionSend => 'Enviar';
+
+  @override
+  String get actionShowDetails => 'Mostrar detalles';
 
   @override
   String get actionYes => 'Sí';
@@ -3225,6 +3246,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nftConfirmSaleStartTitle => 'Confirmar inicio de venta';
 
   @override
+  String get nftCopySmartContractId => 'Copiar identificador del contrato inteligente';
+
+  @override
   String get nftCopyUrl => 'Copiar URL';
 
   @override
@@ -3315,9 +3339,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nftOwnedByMe => 'De mi propiedad';
 
   @override
+  String get nftPauseMedia => 'Pausar';
+
+  @override
   String nftPhaseNameLabel(String name) {
     return 'Nombre: $name';
   }
+
+  @override
+  String get nftPlayMedia => 'Reproducir';
 
   @override
   String get nftPropertiesHeading => 'Propiedades:';
@@ -3378,6 +3408,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nftVaultCannotSellToast => 'Las cuentas de bóveda no pueden vender NFTs.';
+
+  @override
+  String get nftViewAsset => 'Ver archivo';
 
   @override
   String get nftViewCode => 'Ver código';
@@ -3912,6 +3945,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get prvCopyAddress => 'Copiar dirección';
+
+  @override
+  String get prvCopyViewingKey => 'Copiar clave de visualización';
 
   @override
   String get prvCreatePasswordBody => 'Crea una contraseña para proteger la clave de gasto de tu billetera blindada. Necesitarás esta contraseña para desblindar, transferir o consolidar fondos.';
@@ -7735,6 +7771,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scVaultCannotMintToast => 'Las cuentas de bóveda no pueden emitir contratos inteligentes';
 
   @override
+  String get scwAddAdditionalAsset => 'Agregar archivo adicional';
+
+  @override
   String get scwAddAFeature => 'Agregar una función';
 
   @override
@@ -7846,6 +7885,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String scwCreatorValue(String name) {
     return 'Creador: $name';
   }
+
+  @override
+  String get scwDeletePrimaryAsset => 'Eliminar archivo principal';
 
   @override
   String get scwDeletePrimaryAssetBody => '¿Estás seguro de que quieres eliminar el archivo principal?';
@@ -8013,6 +8055,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwNumericalProperty => 'Propiedad numérica';
 
   @override
+  String get scwOpenAsset => 'Abrir archivo';
+
+  @override
   String get scwOtherOptions => 'Otras opciones';
 
   @override
@@ -8034,6 +8079,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get scwPhysicalDigitalGoodName => 'Nombre del bien físico/digital';
+
+  @override
+  String get scwPickColor => 'Elegir un color';
+
+  @override
+  String get scwPickDate => 'Elegir una fecha';
+
+  @override
+  String get scwPickTime => 'Elegir una hora';
 
   @override
   String get scwPrimaryAsset => 'Archivo principal';
@@ -8083,10 +8137,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwRemove => 'Eliminar';
 
   @override
+  String get scwRemoveAsset => 'Quitar archivo';
+
+  @override
   String get scwRemoveAssetBody => '¿Estás seguro de que quieres quitar este archivo adicional?';
 
   @override
   String get scwRemoveAssetTitle => '¿Quitar archivo?';
+
+  @override
+  String get scwRemovePhase => 'Eliminar fase';
 
   @override
   String get scwRemovePhaseBody => '¿Estás seguro de que quieres eliminar esta fase de evolución?';
@@ -8095,10 +8155,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get scwRemovePhaseTitle => '¿Eliminar fase?';
 
   @override
+  String get scwRemoveProperty => 'Eliminar propiedad';
+
+  @override
   String get scwRemovePropertyBody => '¿Estás seguro de que quieres eliminar esta propiedad?';
 
   @override
   String get scwRemovePropertyTitle => '¿Eliminar propiedad?';
+
+  @override
+  String get scwRemoveRoyalty => 'Eliminar regalía';
 
   @override
   String get scwRemoveRoyaltyBody => '¿Estás seguro de que quieres eliminar la regalía?';
@@ -9416,6 +9482,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get tokenCreateTitle => 'Crear token fungible';
 
   @override
+  String get tokenDecreaseDecimalPlaces => 'Reducir decimales';
+
+  @override
   String get tokenFormCancel => 'Cancelar';
 
   @override
@@ -9441,6 +9510,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tokenFormTickerHint => 'ABC';
+
+  @override
+  String get tokenIncreaseDecimalPlaces => 'Aumentar decimales';
 
   @override
   String get tokenInsufficientBalanceToast => 'Saldo insuficiente para realizar esta transacción';

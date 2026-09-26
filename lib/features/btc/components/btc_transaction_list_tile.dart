@@ -99,29 +99,37 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                         const SizedBox(
                           width: 4,
                         ),
-                        InkWell(
-                          onTap: () {
-                            _copy(widget.transaction.hash, l10n.bw2LabelHash);
-                          },
-                          child: const Icon(
-                            Icons.copy,
-                            size: 12,
+                        Semantics(
+                          label: l10n.actionCopyTransactionHash,
+                          button: true,
+                          child: InkWell(
+                            onTap: () {
+                              _copy(widget.transaction.hash, l10n.bw2LabelHash);
+                            },
+                            child: const Icon(
+                              Icons.copy,
+                              size: 12,
+                            ),
                           ),
                         ),
                         const SizedBox(
                           width: 4,
                         ),
-                        InkWell(
-                          onTap: () async {
-                            if (Env.btcIsTestNet) {
-                              launchUrlString("https://mempool.space/testnet4/tx/${transaction.hash}");
-                            } else {
-                              launchUrlString("https://mempool.space/tx/${transaction.hash}");
-                            }
-                          },
-                          child: const Icon(
-                            Icons.open_in_new,
-                            size: 12,
+                        Semantics(
+                          label: l10n.btcOpenInExplorer,
+                          button: true,
+                          child: InkWell(
+                            onTap: () async {
+                              if (Env.btcIsTestNet) {
+                                launchUrlString("https://mempool.space/testnet4/tx/${transaction.hash}");
+                              } else {
+                                launchUrlString("https://mempool.space/tx/${transaction.hash}");
+                              }
+                            },
+                            child: const Icon(
+                              Icons.open_in_new,
+                              size: 12,
+                            ),
                           ),
                         ),
                       ],
@@ -314,6 +322,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                                     Icons.copy,
                                     size: 14,
                                   ),
+                                  tooltip: l10n.actionCopySignature,
                                 ),
                               )
                             ],
@@ -345,6 +354,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
               ),
               IconButton(
                 icon: Icon(_expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined),
+                tooltip: _expanded ? l10n.actionHideDetails : l10n.actionShowDetails,
                 onPressed: () {
                   setState(() {
                     _expanded = !_expanded;

@@ -111,6 +111,7 @@ class _ConsolidateVbtcDialogState extends ConsumerState<ConsolidateVbtcDialog> {
           child: Text(l10n.actionCancel),
         ),
         TextButton(
+          key: const ValueKey('privacy:consolidate_vbtc_submit'),
           onPressed: _isSubmitting || !canConsolidate ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))

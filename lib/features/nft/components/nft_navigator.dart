@@ -69,6 +69,7 @@ class NftNavigator extends BaseComponent {
                       Icons.search,
                       color: canSearch ? Colors.white : Colors.white12,
                     ),
+                    tooltip: l10n.actionSearch,
                     onPressed: canSearch ? handleSearch : null,
                   ),
                   IconButton(
@@ -76,6 +77,7 @@ class NftNavigator extends BaseComponent {
                       Icons.clear,
                       color: canClearSearch ? Colors.white : Colors.white12,
                     ),
+                    tooltip: l10n.actionClear,
                     onPressed: canClearSearch
                         ? () {
                             if (minted) {
@@ -141,6 +143,7 @@ class NftNavigator extends BaseComponent {
                         address: kIsWeb ? [ref.read(webSessionProvider).keypair?.address, ref.read(webSessionProvider).raKeypair?.address] : null);
                   }
                 },
+                tooltip: l10n.actionRefresh,
                 icon: const Icon(Icons.refresh))
           ],
         )

@@ -53,6 +53,7 @@ class ManageTokenNavigator extends BaseComponent {
                       Icons.search,
                       color: canSearch ? Colors.white : Colors.white12,
                     ),
+                    tooltip: AppLocalizations.of(context).actionSearch,
                     onPressed: canSearch ? handleSearch : null,
                   ),
                   IconButton(
@@ -60,6 +61,7 @@ class ManageTokenNavigator extends BaseComponent {
                       Icons.clear,
                       color: canClearSearch ? Colors.white : Colors.white12,
                     ),
+                    tooltip: AppLocalizations.of(context).actionClear,
                     onPressed: canClearSearch
                         ? () {
                             ref.read(tokenListProvider.notifier).clearSearch();
@@ -101,6 +103,7 @@ class ManageTokenNavigator extends BaseComponent {
                 onPressed: () {
                   ref.read(tokenListProvider.notifier).reloadCurrentPage();
                 },
+                tooltip: AppLocalizations.of(context).actionRefresh,
                 icon: const Icon(Icons.refresh))
           ],
         )

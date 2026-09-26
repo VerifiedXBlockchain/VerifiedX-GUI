@@ -281,6 +281,7 @@ class _ActionButtons extends ConsumerWidget {
           children: [
             Expanded(
               child: AppButton(
+                key: const Key('privacy:shield'),
                 label: l10n.prvShieldAction,
                 icon: Icons.arrow_downward,
                 variant: AppColorVariant.Success,
@@ -290,6 +291,7 @@ class _ActionButtons extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: AppButton(
+                key: const Key('privacy:unshield'),
                 label: l10n.prvUnshieldAction,
                 icon: Icons.arrow_upward,
                 variant: AppColorVariant.Warning,
@@ -299,6 +301,7 @@ class _ActionButtons extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: AppButton(
+                key: const Key('privacy:transfer'),
                 label: l10n.prvTransferAction,
                 icon: Icons.send,
                 variant: AppColorVariant.Prism,
@@ -308,6 +311,7 @@ class _ActionButtons extends ConsumerWidget {
             const SizedBox(width: 8),
             Expanded(
               child: AppButton(
+                key: const Key('privacy:consolidate'),
                 label: l10n.prvConsolidateAction,
                 icon: Icons.compress,
                 variant: AppColorVariant.Info,

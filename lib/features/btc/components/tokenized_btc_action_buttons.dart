@@ -330,6 +330,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                                       ),
                                                       suffix: IconButton(
                                                         icon: Icon(Icons.copy),
+                                                        tooltip: l10n.actionCopyTransactionHash,
                                                         onPressed: () async {
                                                           await Clipboard.setData(
                                                               ClipboardData(
@@ -394,6 +395,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
               ),
 
             AppButton(
+              key: const Key('vbtc:withdraw'),
               label: l10n.btcWithdrawLabel,
               icon: Icons.download,
               variant: AppColorVariant.Primary,
@@ -575,6 +577,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
             // SizedBox makes the surrounding `Wrap` start a new run.
             const SizedBox(width: double.infinity, height: 0),
             AppButton(
+              key: const Key('vbtc:transfer'),
               label: l10n.btcTransferLabel,
               variant: AppColorVariant.Primary,
               icon: Icons.send,
@@ -1167,6 +1170,7 @@ class _TransferSharesModal extends BaseComponent {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
+                key: const ValueKey('vbtc:address'),
                 controller: toAddressController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: forWithdrawl
@@ -1184,6 +1188,7 @@ class _TransferSharesModal extends BaseComponent {
                 ),
               ),
               TextFormField(
+                key: const ValueKey('vbtc:amount'),
                 controller: amountControlller,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: (value) => value != null && vbtcAmountHasTooManyDecimals(value) ? l10n.btcBulkMaxDecimals : null,
@@ -1319,6 +1324,7 @@ class _TransferSharesModal extends BaseComponent {
                     },
                   ),
                   AppButton(
+                    key: const Key('vbtc:submit'),
                     label: forWithdrawl ? l10n.btcWithdrawLabel : l10n.btcTransferLabel,
                     variant: forWithdrawl
                         ? AppColorVariant.Secondary

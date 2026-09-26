@@ -106,14 +106,18 @@ class NftDetailScreen extends BaseScreen {
               ),
             ),
             const SizedBox(width: 6),
-            InkWell(
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: nft.id));
-                Toast.message(AppLocalizations.of(context).r3gSmartContractIdCopied);
-              },
-              child: const Icon(
-                Icons.copy,
-                size: 14,
+            Semantics(
+              label: AppLocalizations.of(context).nftCopySmartContractId,
+              button: true,
+              child: InkWell(
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: nft.id));
+                  Toast.message(AppLocalizations.of(context).r3gSmartContractIdCopied);
+                },
+                child: const Icon(
+                  Icons.copy,
+                  size: 14,
+                ),
               ),
             )
           ],
@@ -306,6 +310,7 @@ class NftDetailScreen extends BaseScreen {
                             trailing: IconButton(
                               iconSize: 16,
                               icon: const Icon(Icons.copy),
+                              tooltip: AppLocalizations.of(context).actionCopyAddress,
                               onPressed: () {
                                 copyToClipboard(nft.currentOwner);
                               },
@@ -330,6 +335,7 @@ class NftDetailScreen extends BaseScreen {
                               subtitle: Text(AppLocalizations.of(context).nftMinterAddressLabel),
                               trailing: IconButton(
                                 icon: const Icon(Icons.copy),
+                                tooltip: AppLocalizations.of(context).actionCopyAddress,
                                 iconSize: 16,
                                 onPressed: () {
                                   copyToClipboard(nft.minterAddress);
@@ -359,6 +365,7 @@ class NftDetailScreen extends BaseScreen {
                         ),
                         leading: IconButton(
                           icon: const Icon(Icons.copy),
+                          tooltip: AppLocalizations.of(context).actionCopyAddress,
                           onPressed: () {
                             copyToClipboard(nft.nextOwner!);
                           },
@@ -652,6 +659,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
+                      key: const Key('nft:transfer'),
                       label: AppLocalizations.of(context).nftTransfer,
                       // helpType: HelpType.transfer,
                       icon: Icons.send,
@@ -989,6 +997,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: AppButton(
+                      key: const Key('nft:transfer_now'),
                       label: AppLocalizations.of(context).nftTransferNow,
                       onPressed: () async {
                         final success = await _provider.transferWebIn();
@@ -1114,13 +1123,16 @@ class NftPropertiesWrap extends StatelessWidget {
                       .replaceAll("http//", 'http://');
                   return Tooltip(
                     message: url,
-                    child: InkWell(
-                      onTap: () {
-                        launchUrlString(url);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).nftQrOpen,
-                        style: TextStyle(decoration: TextDecoration.underline),
+                    child: Semantics(
+                      button: true,
+                      child: InkWell(
+                        onTap: () {
+                          launchUrlString(url);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context).nftQrOpen,
+                          style: TextStyle(decoration: TextDecoration.underline),
+                        ),
                       ),
                     ),
                   );

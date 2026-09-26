@@ -104,6 +104,7 @@ class _PrivateTransferVbtcDialogState extends ConsumerState<PrivateTransferVbtcD
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const ValueKey('privacy:transfer_vbtc_recipient'),
               controller: _recipientController,
               decoration: InputDecoration(
                 labelText: l10n.prvRecipientZfxLabel,
@@ -114,6 +115,7 @@ class _PrivateTransferVbtcDialogState extends ConsumerState<PrivateTransferVbtcD
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const ValueKey('privacy:transfer_vbtc_amount'),
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
@@ -136,6 +138,7 @@ class _PrivateTransferVbtcDialogState extends ConsumerState<PrivateTransferVbtcD
           child: Text(l10n.actionCancel),
         ),
         TextButton(
+          key: const ValueKey('privacy:transfer_vbtc_submit'),
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))

@@ -20,6 +20,7 @@ class SmartContractDraftsScreen extends BaseScreen {
               ref.read(mySmartContractsProvider.notifier).load();
               ref.read(draftsSmartContractProvider.notifier).load();
             },
+            tooltip: AppLocalizations.of(context).actionRefresh,
             icon: const Icon(Icons.refresh))
       ],
     );

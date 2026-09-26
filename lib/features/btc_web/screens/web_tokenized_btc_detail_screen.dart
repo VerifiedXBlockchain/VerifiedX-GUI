@@ -657,15 +657,19 @@ class _DetailRow extends StatelessWidget {
           if (withCopy)
             Transform.translate(
               offset: Offset(0, 2),
-              child: InkWell(
-                onTap: () async {
-                  await Clipboard.setData(ClipboardData(text: value));
-                  Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
-                },
-                child: Icon(
-                  Icons.copy,
-                  size: 12,
-                  color: isReserve ? AppColors.getReserve() : null,
+              child: Semantics(
+                label: AppLocalizations.of(context).actionCopy,
+                button: true,
+                child: InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: value));
+                    Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
+                  },
+                  child: Icon(
+                    Icons.copy,
+                    size: 12,
+                    color: isReserve ? AppColors.getReserve() : null,
+                  ),
                 ),
               ),
             )

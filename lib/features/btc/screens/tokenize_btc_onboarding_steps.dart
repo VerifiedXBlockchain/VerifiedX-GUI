@@ -216,6 +216,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                   label: Text(l10n.btcAddressLabel),
                   suffix: IconButton(
                     icon: Icon(Icons.copy),
+                    tooltip: l10n.btcCopyDepositAddress,
                     onPressed: () async {
                       await Clipboard.setData(
                           ClipboardData(text: state.tokenizedBtc!.btcAddress));
@@ -298,6 +299,7 @@ class _TransferBtcStep extends BaseComponent {
               label: Text(l10n.btcAddressLabel),
               suffix: IconButton(
                 icon: Icon(Icons.copy),
+                tooltip: l10n.actionCopyAddress,
                 onPressed: () async {
                   await Clipboard.setData(
                       ClipboardData(text: state.btcAccount!.address));
@@ -395,17 +397,19 @@ class _CreateOrImportVfxWalletStep extends BaseComponent {
             height: 8,
           ),
           ...existingWallets
-              .map((w) => InkWell(
-                  onTap: () {
-                    provider.setVfxWallet(w);
-                  },
-                  child: Text(
-                    w.address,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        decoration: TextDecoration.underline),
-                  )))
+              .map((w) => Semantics(
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      provider.setVfxWallet(w);
+                    },
+                    child: Text(
+                      w.address,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          decoration: TextDecoration.underline),
+                    ))))
               .toList(),
         ]
       ],
@@ -670,6 +674,7 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
                                 Icons.copy,
                                 color: Theme.of(context).colorScheme.btcOrange,
                               ),
+                              tooltip: l10n.actionCopyPrivateKey,
                               onPressed: () async {
                                 await Clipboard.setData(
                                     ClipboardData(text: account.privateKey));
@@ -711,17 +716,19 @@ class _CreateOrImportBtcAccountStep extends BaseComponent {
             height: 8,
           ),
           ...existingAccounts
-              .map((a) => InkWell(
-                  onTap: () {
-                    provider.setBtcAccount(a);
-                  },
-                  child: Text(
-                    a.address,
-                    style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        decoration: TextDecoration.underline),
-                  )))
+              .map((a) => Semantics(
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      provider.setBtcAccount(a);
+                    },
+                    child: Text(
+                      a.address,
+                      style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          decoration: TextDecoration.underline),
+                    ))))
               .toList(),
         ]
       ],

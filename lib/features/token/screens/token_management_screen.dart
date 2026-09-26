@@ -560,14 +560,18 @@ class TokenDetailRow extends StatelessWidget {
           trailing: copyable
               ? MouseRegion(
                   cursor: SystemMouseCursors.click,
-                  child: GestureDetector(
-                    onTap: () async {
-                      await Clipboard.setData(ClipboardData(text: value));
-                      Toast.message(AppLocalizations.of(context).r3hCopiedToClipboard(label));
-                    },
-                    child: Icon(
-                      Icons.copy,
-                      size: 14,
+                  child: Semantics(
+                    label: AppLocalizations.of(context).actionCopy,
+                    button: true,
+                    child: GestureDetector(
+                      onTap: () async {
+                        await Clipboard.setData(ClipboardData(text: value));
+                        Toast.message(AppLocalizations.of(context).r3hCopiedToClipboard(label));
+                      },
+                      child: Icon(
+                        Icons.copy,
+                        size: 14,
+                      ),
                     ),
                   ),
                 )

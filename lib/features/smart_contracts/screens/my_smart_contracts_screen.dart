@@ -29,6 +29,7 @@ class MySmartContractsScreen extends BaseScreen {
           AutoRouter.of(context).pop();
         },
         icon: const Icon(Icons.close),
+        tooltip: AppLocalizations.of(context).actionClose,
       ),
       actions: [
         IconButton(
@@ -36,6 +37,7 @@ class MySmartContractsScreen extends BaseScreen {
               ref.read(mySmartContractsProvider.notifier).load();
               ref.read(draftsSmartContractProvider.notifier).load();
             },
+            tooltip: AppLocalizations.of(context).actionRefresh,
             icon: const Icon(Icons.refresh))
       ],
     );

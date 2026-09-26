@@ -43,6 +43,7 @@ class TokenizeBtcOnboardingScreen extends BaseScreen {
           Icons.navigate_before,
           size: 32,
         ),
+        tooltip: l10n.actionBack,
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
             title: l10n.btcExitOnboardingTitle,

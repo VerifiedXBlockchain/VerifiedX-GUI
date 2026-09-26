@@ -84,15 +84,19 @@ class TokenList extends BaseComponent {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    InkWell(
-                      onTap: () async {
-                        await Clipboard.setData(ClipboardData(text: account.address));
-                        Toast.message(AppLocalizations.of(context).tokenAddressCopiedToast(account.address));
-                      },
-                      child: Icon(
-                        Icons.copy,
-                        size: 14,
-                        color: isOwnedByRA ? Theme.of(context).colorScheme.reserve : null,
+                    Semantics(
+                      label: AppLocalizations.of(context).actionCopyAddress,
+                      button: true,
+                      child: InkWell(
+                        onTap: () async {
+                          await Clipboard.setData(ClipboardData(text: account.address));
+                          Toast.message(AppLocalizations.of(context).tokenAddressCopiedToast(account.address));
+                        },
+                        child: Icon(
+                          Icons.copy,
+                          size: 14,
+                          color: isOwnedByRA ? Theme.of(context).colorScheme.reserve : null,
+                        ),
                       ),
                     ),
                     SizedBox(

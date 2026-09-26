@@ -133,6 +133,7 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
             ),
             const SizedBox(height: 16),
             TextField(
+              key: const ValueKey('privacy:unshield_address'),
               controller: _toAddressController,
               decoration: InputDecoration(
                 labelText: l10n.prvToAddressLabel,
@@ -148,6 +149,7 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const ValueKey('privacy:unshield_amount'),
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
@@ -170,6 +172,7 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
           child: Text(l10n.actionCancel),
         ),
         TextButton(
+          key: const ValueKey('privacy:unshield_submit'),
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))

@@ -51,6 +51,7 @@ class SmartContractWizardScreen extends BaseScreen {
               Navigator.of(context).pop();
             }
           },
+          tooltip: l10n.actionBack,
           icon: Icon(Icons.chevron_left)),
     );
   }

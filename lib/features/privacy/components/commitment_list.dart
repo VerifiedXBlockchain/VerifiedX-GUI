@@ -108,16 +108,19 @@ class _CommitmentRow extends StatelessWidget {
                         fontSize: 11,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        launchUrlString("${Env.baseExplorerUrl}block/${commitment.blockHeight}");
-                      },
-                      child: Text(
-                        "Block: ${commitment.blockHeight}",
-                        style: const TextStyle(
-                          color: Colors.white54,
-                          fontSize: 11,
-                          decoration: TextDecoration.underline,
+                    Semantics(
+                      button: true,
+                      child: GestureDetector(
+                        onTap: () {
+                          launchUrlString("${Env.baseExplorerUrl}block/${commitment.blockHeight}");
+                        },
+                        child: Text(
+                          "Block: ${commitment.blockHeight}",
+                          style: const TextStyle(
+                            color: Colors.white54,
+                            fontSize: 11,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
                     ),

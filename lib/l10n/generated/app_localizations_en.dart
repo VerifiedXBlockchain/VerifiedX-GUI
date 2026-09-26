@@ -52,6 +52,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionCopyRestoreCode => 'Copy restore code';
 
   @override
+  String get actionCopySignature => 'Copy signature';
+
+  @override
   String get actionCopyTransactionHash => 'Copy transaction hash';
 
   @override
@@ -64,7 +67,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionDone => 'Done';
 
   @override
+  String get actionGridView => 'Grid view';
+
+  @override
+  String get actionHelp => 'Help';
+
+  @override
+  String get actionHideDetails => 'Hide details';
+
+  @override
   String get actionImport => 'Import';
+
+  @override
+  String get actionListView => 'List view';
 
   @override
   String get actionNo => 'No';
@@ -76,6 +91,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionReceive => 'Receive';
 
   @override
+  String get actionRefresh => 'Refresh';
+
+  @override
   String get actionSave => 'Save';
 
   @override
@@ -83,6 +101,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionSend => 'Send';
+
+  @override
+  String get actionShowDetails => 'Show details';
 
   @override
   String get actionYes => 'Yes';
@@ -3225,6 +3246,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nftConfirmSaleStartTitle => 'Confirm Sale Start';
 
   @override
+  String get nftCopySmartContractId => 'Copy smart contract ID';
+
+  @override
   String get nftCopyUrl => 'Copy URL';
 
   @override
@@ -3315,9 +3339,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nftOwnedByMe => 'Owned by Me';
 
   @override
+  String get nftPauseMedia => 'Pause';
+
+  @override
   String nftPhaseNameLabel(String name) {
     return 'Name: $name';
   }
+
+  @override
+  String get nftPlayMedia => 'Play';
 
   @override
   String get nftPropertiesHeading => 'Properties:';
@@ -3378,6 +3408,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nftVaultCannotSellToast => 'Vault Accounts can not sell NFTs.';
+
+  @override
+  String get nftViewAsset => 'View asset';
 
   @override
   String get nftViewCode => 'View Code';
@@ -3912,6 +3945,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prvCopyAddress => 'Copy address';
+
+  @override
+  String get prvCopyViewingKey => 'Copy viewing key';
 
   @override
   String get prvCreatePasswordBody => 'Create a password to secure your shielded wallet\'s spending key. You\'ll need this password to unshield, transfer, or consolidate funds.';
@@ -7735,6 +7771,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scVaultCannotMintToast => 'Vault Accounts cannot mint smart contracts';
 
   @override
+  String get scwAddAdditionalAsset => 'Add additional asset';
+
+  @override
   String get scwAddAFeature => 'Add a Feature';
 
   @override
@@ -7846,6 +7885,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String scwCreatorValue(String name) {
     return 'Creator: $name';
   }
+
+  @override
+  String get scwDeletePrimaryAsset => 'Delete primary asset';
 
   @override
   String get scwDeletePrimaryAssetBody => 'Are you sure you want to delete the primary asset?';
@@ -8013,6 +8055,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scwNumericalProperty => 'Numerical Property';
 
   @override
+  String get scwOpenAsset => 'Open asset';
+
+  @override
   String get scwOtherOptions => 'Other Options';
 
   @override
@@ -8034,6 +8079,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scwPhysicalDigitalGoodName => 'Physical/Digital Good Name';
+
+  @override
+  String get scwPickColor => 'Pick a color';
+
+  @override
+  String get scwPickDate => 'Pick a date';
+
+  @override
+  String get scwPickTime => 'Pick a time';
 
   @override
   String get scwPrimaryAsset => 'Primary Asset';
@@ -8083,10 +8137,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scwRemove => 'Remove';
 
   @override
+  String get scwRemoveAsset => 'Remove asset';
+
+  @override
   String get scwRemoveAssetBody => 'Are you sure you want to remove this additional asset?';
 
   @override
   String get scwRemoveAssetTitle => 'Remove Asset?';
+
+  @override
+  String get scwRemovePhase => 'Remove phase';
 
   @override
   String get scwRemovePhaseBody => 'Are you sure you want to remove this evolution phase?';
@@ -8095,10 +8155,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scwRemovePhaseTitle => 'Remove Phase?';
 
   @override
+  String get scwRemoveProperty => 'Remove property';
+
+  @override
   String get scwRemovePropertyBody => 'Are you sure you want to remove this property?';
 
   @override
   String get scwRemovePropertyTitle => 'Remove Property?';
+
+  @override
+  String get scwRemoveRoyalty => 'Remove royalty';
 
   @override
   String get scwRemoveRoyaltyBody => 'Are you sure you want to remove the royalty?';
@@ -9416,6 +9482,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tokenCreateTitle => 'Create Fungible Token';
 
   @override
+  String get tokenDecreaseDecimalPlaces => 'Decrease decimal places';
+
+  @override
   String get tokenFormCancel => 'Cancel';
 
   @override
@@ -9441,6 +9510,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tokenFormTickerHint => 'ABC';
+
+  @override
+  String get tokenIncreaseDecimalPlaces => 'Increase decimal places';
 
   @override
   String get tokenInsufficientBalanceToast => 'Not enough balance to perform this transaction';

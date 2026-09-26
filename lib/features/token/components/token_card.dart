@@ -28,121 +28,124 @@ class TokenCard extends BaseComponent {
       return SizedBox();
     }
 
-    return InkWell(
-      onTap: () async {
-        final tokenAccount = TokenAccount.fromNft(nft, ref);
-        final tokenFeature = TokenScFeature.fromNft(nft);
-        if (tokenAccount != null && tokenFeature != null) {
-          final updatedNft = await NftService().retrieve(nft.id);
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: () async {
+          final tokenAccount = TokenAccount.fromNft(nft, ref);
+          final tokenFeature = TokenScFeature.fromNft(nft);
+          if (tokenAccount != null && tokenFeature != null) {
+            final updatedNft = await NftService().retrieve(nft.id);
 
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => TokenManagementScreenContainer(
-                    address: updatedNft?.currentOwner ?? nft.currentOwner,
-                    nftId: updatedNft?.id ?? nft.id,
-                    tokenAccount: tokenAccount,
-                    tokenFeature: tokenFeature,
-                    ref: ref,
-                    nft: updatedNft ?? nft,
-                  )));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => TokenManagementScreenContainer(
+                      address: updatedNft?.currentOwner ?? nft.currentOwner,
+                      nftId: updatedNft?.id ?? nft.id,
+                      tokenAccount: tokenAccount,
+                      tokenFeature: tokenFeature,
+                      ref: ref,
+                      nft: updatedNft ?? nft,
+                    )));
 
-          return;
-        }
-      },
-      child: AppCard(
-        padding: 8,
-        margin: EdgeInsets.all(8.0),
-        child: Stack(
-          children: [
-            Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  tokenDetails.imageBase64 != null
-                      ? Container(
-                          width: 66,
-                          height: 66,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(33.0),
-                            border: Border.all(
-                              color: Colors.white.withOpacity(0.5),
-                            ),
-                          ),
-                          child: Container(
-                            width: 64,
-                            height: 64,
+            return;
+          }
+        },
+        child: AppCard(
+          padding: 8,
+          margin: EdgeInsets.all(8.0),
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    tokenDetails.imageBase64 != null
+                        ? Container(
+                            width: 66,
+                            height: 66,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(32.0),
-                            ),
-                            clipBehavior: Clip.antiAlias,
-                            child: Image(
-                              image: CacheMemoryImageProvider(
-                                nft.id,
-                                Base64Decoder().convert(tokenDetails.imageBase64!),
+                              borderRadius: BorderRadius.circular(33.0),
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.5),
                               ),
+                            ),
+                            child: Container(
                               width: 64,
                               height: 64,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                              clipBehavior: Clip.antiAlias,
+                              child: Image(
+                                image: CacheMemoryImageProvider(
+                                  nft.id,
+                                  Base64Decoder().convert(tokenDetails.imageBase64!),
+                                ),
+                                width: 64,
+                                height: 64,
+                              ),
                             ),
-                          ),
-                        )
-                      : Icon(Icons.toll),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    tokenDetails.ticker,
-                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                      shadows: [
-                        const Shadow(
-                          color: Colors.black87,
-                          offset: Offset.zero,
-                          blurRadius: 4.0,
-                        )
-                      ],
+                          )
+                        : Icon(Icons.toll),
+                    SizedBox(
+                      height: 16,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    nft.name,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      fontSize: 18,
-                      shadows: [
-                        const Shadow(
-                          color: Colors.black87,
-                          offset: Offset.zero,
-                          blurRadius: 4.0,
-                        )
-                      ],
+                    Text(
+                      tokenDetails.ticker,
+                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                        shadows: [
+                          const Shadow(
+                            color: Colors.black87,
+                            offset: Offset.zero,
+                            blurRadius: 4.0,
+                          )
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    nft.id,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      shadows: [
-                        const Shadow(
-                          color: Colors.black87,
-                          offset: Offset.zero,
-                          blurRadius: 4.0,
-                        )
-                      ],
+                    SizedBox(
+                      height: 8,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
+                    Text(
+                      nft.name,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontSize: 18,
+                        shadows: [
+                          const Shadow(
+                            color: Colors.black87,
+                            offset: Offset.zero,
+                            blurRadius: 4.0,
+                          )
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      nft.id,
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        shadows: [
+                          const Shadow(
+                            color: Colors.black87,
+                            offset: Offset.zero,
+                            blurRadius: 4.0,
+                          )
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            // if (isTransferred)
-            //   TransferingOverlay(
-            //     nft,
-            //     withLog: true,
-            //   ),
-          ],
+              // if (isTransferred)
+              //   TransferingOverlay(
+              //     nft,
+              //     withLog: true,
+              //   ),
+            ],
+          ),
         ),
       ),
     );

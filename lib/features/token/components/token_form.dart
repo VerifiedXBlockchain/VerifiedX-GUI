@@ -59,6 +59,7 @@ class TokenForm extends BaseComponent {
                 ],
               ),
             TextFormField(
+              key: const ValueKey('token:name'),
               controller: provider.nameController,
               validator: provider.nameValidator,
               decoration: InputDecoration(
@@ -71,6 +72,7 @@ class TokenForm extends BaseComponent {
               ),
             ),
             TextFormField(
+              key: const ValueKey('token:ticker'),
               controller: provider.tickerController,
               validator: provider.tickerValidator,
               decoration: InputDecoration(
@@ -157,6 +159,7 @@ class TokenForm extends BaseComponent {
                       ),
                       IconButton(
                         icon: Icon(Icons.arrow_drop_down),
+                        tooltip: l10n.tokenDecreaseDecimalPlaces,
                         onPressed: model.decimalPlaces <= TOKEN_MIN_DECIMAL_PLACES
                             ? null
                             : () {
@@ -177,6 +180,7 @@ class TokenForm extends BaseComponent {
                       ),
                       IconButton(
                         icon: Icon(Icons.arrow_drop_up),
+                        tooltip: l10n.tokenIncreaseDecimalPlaces,
                         onPressed: model.decimalPlaces >= TOKEN_MAX_DECIMAL_PLACES
                             ? null
                             : () {
@@ -342,6 +346,7 @@ class TokenForm extends BaseComponent {
                   width: 64,
                 ),
                 AppButton(
+                  key: const Key('token:create'),
                   label: l10n.tokenFormCreate,
                   onPressed: () async {
                     if (kIsWeb) {

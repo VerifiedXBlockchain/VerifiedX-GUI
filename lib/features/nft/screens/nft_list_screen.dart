@@ -80,6 +80,7 @@ class NftListScreen extends BaseScreen {
                 Icons.grid_on,
                 color: isGrid ? Colors.white : Colors.white38,
               ),
+              tooltip: AppLocalizations.of(context).actionGridView,
             ),
             IconButton(
               onPressed: () {
@@ -89,6 +90,7 @@ class NftListScreen extends BaseScreen {
                 Icons.list_outlined,
                 color: !isGrid ? Colors.white : Colors.white38,
               ),
+              tooltip: AppLocalizations.of(context).actionListView,
             ),
           ],
         )

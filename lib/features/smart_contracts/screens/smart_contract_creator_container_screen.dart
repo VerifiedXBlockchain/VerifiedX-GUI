@@ -39,6 +39,7 @@ class SmartContractCreatorContainerScreen extends BaseScreen {
             }
           },
           icon: const Icon(Icons.close),
+          tooltip: l10n.actionClose,
         ),
         // actions: [HelpButton(HelpType.smartContract)],
         actions: [

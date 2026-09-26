@@ -59,6 +59,10 @@
   "@actionCopyRestoreCode": {
     "description": "Tooltip on the copy icon next to a Vault restore code."
   },
+  "actionCopySignature": "Copiar firma",
+  "@actionCopySignature": {
+    "description": "Tooltip on the copy icon next to a transaction signature."
+  },
   "actionCopyTransactionHash": "Copiar hash de la transacción",
   "@actionCopyTransactionHash": {
     "description": "Tooltip on the copy icon next to a transaction hash."
@@ -75,9 +79,25 @@
   "@actionDone": {
     "description": "Done action — dismisses a completion dialog."
   },
+  "actionGridView": "Vista de cuadrícula",
+  "@actionGridView": {
+    "description": "Tooltip on the icon button that switches a list to the grid layout."
+  },
+  "actionHelp": "Ayuda",
+  "@actionHelp": {
+    "description": "Tooltip on the help icon button that opens an explanation dialog."
+  },
+  "actionHideDetails": "Ocultar detalles",
+  "@actionHideDetails": {
+    "description": "Tooltip / accessibility label on the collapse arrow of an expanded transaction tile."
+  },
   "actionImport": "Importar",
   "@actionImport": {
     "description": "Import action — imports a wallet or key."
+  },
+  "actionListView": "Vista de lista",
+  "@actionListView": {
+    "description": "Tooltip on the icon button that switches a grid to the list layout."
   },
   "actionNo": "No",
   "@actionNo": {
@@ -91,6 +111,10 @@
   "@actionReceive": {
     "description": "Receive funds button."
   },
+  "actionRefresh": "Actualizar",
+  "@actionRefresh": {
+    "description": "Tooltip on a refresh icon button that reloads the current list."
+  },
   "actionSave": "Guardar",
   "@actionSave": {
     "description": "Save action — persists current form state."
@@ -102,6 +126,10 @@
   "actionSend": "Enviar",
   "@actionSend": {
     "description": "Send funds / send transaction button."
+  },
+  "actionShowDetails": "Mostrar detalles",
+  "@actionShowDetails": {
+    "description": "Tooltip / accessibility label on the expand arrow of a collapsed transaction tile."
   },
   "actionYes": "Sí",
   "@actionYes": {
@@ -3269,6 +3297,10 @@
   "@nftConfirmSaleStartTitle": {
     "description": "Confirm dialog title before starting an NFT sale."
   },
+  "nftCopySmartContractId": "Copiar identificador del contrato inteligente",
+  "@nftCopySmartContractId": {
+    "description": "Accessibility label on the copy icon next to an NFT's smart contract ID."
+  },
   "nftCopyUrl": "Copiar URL",
   "@nftCopyUrl": {
     "description": "Button to copy a media-backup URL."
@@ -3389,6 +3421,10 @@
   "@nftOwnedByMe": {
     "description": "Badge shown on the NFT-management modal when the user owns the NFT."
   },
+  "nftPauseMedia": "Pausar",
+  "@nftPauseMedia": {
+    "description": "Tooltip on the pause button of an NFT video asset."
+  },
   "nftPhaseNameLabel": "Nombre: {name}",
   "@nftPhaseNameLabel": {
     "description": "Phase name label inside the NFT management modal.",
@@ -3397,6 +3433,10 @@
         "type": "String"
       }
     }
+  },
+  "nftPlayMedia": "Reproducir",
+  "@nftPlayMedia": {
+    "description": "Tooltip on the play button of an NFT video asset."
   },
   "nftPropertiesHeading": "Propiedades:",
   "@nftPropertiesHeading": {
@@ -3477,6 +3517,10 @@
   "nftVaultCannotSellToast": "Las cuentas de bóveda no pueden vender NFTs.",
   "@nftVaultCannotSellToast": {
     "description": "Toast shown when a vault account attempts to sell an NFT."
+  },
+  "nftViewAsset": "Ver archivo",
+  "@nftViewAsset": {
+    "description": "Accessibility label on an evolution stage thumbnail that opens the asset preview."
   },
   "nftViewCode": "Ver código",
   "@nftViewCode": {
@@ -3959,6 +4003,10 @@
     }
   },
   "prvCopyAddress": "Copiar dirección",
+  "prvCopyViewingKey": "Copiar clave de visualización",
+  "@prvCopyViewingKey": {
+    "description": "Tooltip on the copy icon next to the exported privacy viewing key."
+  },
   "prvCreatePasswordBody": "Crea una contraseña para proteger la clave de gasto de tu billetera blindada. Necesitarás esta contraseña para desblindar, transferir o consolidar fondos.",
   "prvCreatePasswordTitle": "Crear contraseña de privacidad",
   "prvCurrentNotes": "Notas actuales: {count}",
@@ -6432,6 +6480,10 @@
   "@scVaultCannotMintToast": {
     "description": "Toast shown when a vault account attempts to mint a smart contract."
   },
+  "scwAddAdditionalAsset": "Agregar archivo adicional",
+  "@scwAddAdditionalAsset": {
+    "description": "Tooltip on the add icon button in the additional assets section of the wizard card."
+  },
   "scwAddAFeature": "Agregar una función",
   "scwAddAnotherFeature": "Agregar otra función",
   "scwAddCreatorName": "Agregar nombre del creador",
@@ -6475,6 +6527,10 @@
         "type": "String"
       }
     }
+  },
+  "scwDeletePrimaryAsset": "Eliminar archivo principal",
+  "@scwDeletePrimaryAsset": {
+    "description": "Tooltip on the delete icon button over the primary asset in the wizard card."
   },
   "scwDeletePrimaryAssetBody": "¿Estás seguro de que quieres eliminar el archivo principal?",
   "scwDeletePrimaryAssetTitle": "¿Eliminar archivo principal?",
@@ -6550,6 +6606,10 @@
   "scwNoProperties": "Sin propiedades",
   "scwNotImplemented": "No implementado.",
   "scwNumericalProperty": "Propiedad numérica",
+  "scwOpenAsset": "Abrir archivo",
+  "@scwOpenAsset": {
+    "description": "Tooltip on the icon button that opens the primary asset from the wizard card."
+  },
   "scwOtherOptions": "Otras opciones",
   "scwOwnerAddress": "Dirección del propietario",
   "scwPairWrapTitle": "Emparejar/Envolver con un NFT existente",
@@ -6567,6 +6627,18 @@
     }
   },
   "scwPhysicalDigitalGoodName": "Nombre del bien físico/digital",
+  "scwPickColor": "Elegir un color",
+  "@scwPickColor": {
+    "description": "Tooltip on the palette icon button that opens the color picker for a property value."
+  },
+  "scwPickDate": "Elegir una fecha",
+  "@scwPickDate": {
+    "description": "Tooltip on the calendar icon button that opens the date picker."
+  },
+  "scwPickTime": "Elegir una hora",
+  "@scwPickTime": {
+    "description": "Tooltip on the clock icon button that opens the time picker."
+  },
   "scwPrimaryAsset": "Archivo principal",
   "scwProperties": "Propiedades",
   "scwPropertiesOptional": "Propiedades (opcional)",
@@ -6589,12 +6661,28 @@
   },
   "scwReasonForPairingWrapping": "Motivo del emparejamiento/envoltura",
   "scwRemove": "Eliminar",
+  "scwRemoveAsset": "Quitar archivo",
+  "@scwRemoveAsset": {
+    "description": "Tooltip on the delete icon button next to an additional asset in the wizard card."
+  },
   "scwRemoveAssetBody": "¿Estás seguro de que quieres quitar este archivo adicional?",
   "scwRemoveAssetTitle": "¿Quitar archivo?",
+  "scwRemovePhase": "Eliminar fase",
+  "@scwRemovePhase": {
+    "description": "Tooltip on the delete icon button next to an evolution phase in the wizard card."
+  },
   "scwRemovePhaseBody": "¿Estás seguro de que quieres eliminar esta fase de evolución?",
   "scwRemovePhaseTitle": "¿Eliminar fase?",
+  "scwRemoveProperty": "Eliminar propiedad",
+  "@scwRemoveProperty": {
+    "description": "Tooltip / accessibility label on the delete icon next to a property in the wizard card or evolve modal."
+  },
   "scwRemovePropertyBody": "¿Estás seguro de que quieres eliminar esta propiedad?",
   "scwRemovePropertyTitle": "¿Eliminar propiedad?",
+  "scwRemoveRoyalty": "Eliminar regalía",
+  "@scwRemoveRoyalty": {
+    "description": "Tooltip on the delete icon button next to the royalty in the wizard card."
+  },
   "scwRemoveRoyaltyBody": "¿Estás seguro de que quieres eliminar la regalía?",
   "scwRemoveRoyaltyTitle": "¿Eliminar regalía?",
   "scwRoyaltyTitle": "Regalía",
@@ -7886,6 +7974,10 @@
   "@tokenCreateTitle": {
     "description": "App bar title for the create-token screen."
   },
+  "tokenDecreaseDecimalPlaces": "Reducir decimales",
+  "@tokenDecreaseDecimalPlaces": {
+    "description": "Tooltip on the down arrow that lowers the decimal places of a new token."
+  },
   "tokenFormCancel": "Cancelar",
   "@tokenFormCancel": {
     "description": "Cancel button label in the token create form."
@@ -7921,6 +8013,10 @@
   "tokenFormTickerHint": "ABC",
   "@tokenFormTickerHint": {
     "description": "Hint shown in the token ticker field."
+  },
+  "tokenIncreaseDecimalPlaces": "Aumentar decimales",
+  "@tokenIncreaseDecimalPlaces": {
+    "description": "Tooltip on the up arrow that raises the decimal places of a new token."
   },
   "tokenInsufficientBalanceToast": "Saldo insuficiente para realizar esta transacción",
   "@tokenInsufficientBalanceToast": {

@@ -148,6 +148,7 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const ValueKey('privacy:unshield_vbtc_address'),
               controller: _toAddressController,
               decoration: InputDecoration(
                 labelText: l10n.prvToAddressLabel,
@@ -163,6 +164,7 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const ValueKey('privacy:unshield_vbtc_amount'),
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
@@ -185,6 +187,7 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
           child: Text(l10n.actionCancel),
         ),
         TextButton(
+          key: const ValueKey('privacy:unshield_vbtc_submit'),
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))

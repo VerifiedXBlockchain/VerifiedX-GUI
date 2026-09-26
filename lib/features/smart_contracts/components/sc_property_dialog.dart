@@ -75,6 +75,7 @@ class ScWizardPropertyDialog extends BaseComponent {
                         icon: Icon(
                           Icons.color_lens,
                         ),
+                        tooltip: l10n.scwPickColor,
                         onPressed: () async {
                           final color = await showDialog(
                             context: context,

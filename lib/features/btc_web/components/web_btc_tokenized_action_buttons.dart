@@ -199,6 +199,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                               ),
                                               suffix: IconButton(
                                                 icon: Icon(Icons.copy),
+                                                tooltip: l10n.actionCopyTransactionHash,
                                                 onPressed: () async {
                                                   await Clipboard.setData(
                                                       ClipboardData(
@@ -252,6 +253,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             variant: AppColorVariant.Primary,
           ),
         AppButton(
+          key: const Key('vbtc:withdraw'),
           label: l10n.btcWithdrawLabel,
           icon: Icons.download,
           variant: AppColorVariant.Primary,
@@ -371,6 +373,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             },
           ),
         AppButton(
+          key: const Key('vbtc:transfer'),
           label: l10n.btcTransferLabel,
           variant: AppColorVariant.Primary,
           icon: Icons.send,
@@ -477,6 +480,7 @@ class _TransferSharesModal extends BaseComponent {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
+                key: const ValueKey('vbtc:address'),
                 controller: toAddressController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: forWithdrawl
@@ -490,6 +494,7 @@ class _TransferSharesModal extends BaseComponent {
                 ),
               ),
               TextFormField(
+                key: const ValueKey('vbtc:amount'),
                 controller: amountControlller,
                 decoration: InputDecoration(
                   label: Text(
@@ -522,6 +527,7 @@ class _TransferSharesModal extends BaseComponent {
                     },
                   ),
                   AppButton(
+                    key: const Key('vbtc:submit'),
                     label: forWithdrawl ? l10n.btcWithdrawLabel : l10n.btcTransferLabel,
                     variant: forWithdrawl
                         ? AppColorVariant.Secondary

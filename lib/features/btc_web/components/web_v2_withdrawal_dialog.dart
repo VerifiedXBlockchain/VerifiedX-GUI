@@ -333,6 +333,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
             IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.close, size: 20),
+              tooltip: AppLocalizations.of(context).actionClose,
               color: Colors.white38,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -593,18 +594,26 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
               child: SelectableText(hash, style: const TextStyle(color: Colors.white, fontSize: 13)),
             ),
             const SizedBox(width: 8),
-            InkWell(
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: hash));
-                Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
-              },
-              child: const Icon(Icons.copy, size: 16, color: Colors.white54),
+            Semantics(
+              label: AppLocalizations.of(context).actionCopyTransactionHash,
+              button: true,
+              child: InkWell(
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: hash));
+                  Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
+                },
+                child: const Icon(Icons.copy, size: 16, color: Colors.white54),
+              ),
             ),
             if (explorerUrl != null) ...[
               const SizedBox(width: 8),
-              InkWell(
-                onTap: () => launchUrlString(explorerUrl),
-                child: const Icon(Icons.open_in_new, size: 16, color: Colors.white54),
+              Semantics(
+                label: AppLocalizations.of(context).btcOpenInExplorer,
+                button: true,
+                child: InkWell(
+                  onTap: () => launchUrlString(explorerUrl),
+                  child: const Icon(Icons.open_in_new, size: 16, color: Colors.white54),
+                ),
               ),
             ],
           ],

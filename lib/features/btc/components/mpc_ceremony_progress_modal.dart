@@ -35,6 +35,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: const Icon(Icons.close, size: 20),
+            tooltip: l10n.actionClose,
             color: Colors.white38,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
