@@ -70,7 +70,11 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
               showModalBottomSheet(
                   context: rootNavigatorKey.currentContext!,
                   backgroundColor: Colors.black87,
-                  builder: (context) {
+                  // The sheet gets its own context name so the fee prompt below can use
+                  // the widget's context, which outlives the sheet. Passing the
+                  // sheet's context after popping it handed the prompt a dead
+                  // context and the deposit flow ended without a fee dialog.
+                  builder: (sheetContext) {
                     return ModalContainer(
                       color: Colors.black,
                       withDecor: false,
@@ -81,7 +85,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                           children: [Text(l10n.bw2FundVbtcToken)],
                         ),
                         if (btcKeypair != null)
-                          Consumer(builder: (context, ref, _) {
+                          Consumer(builder: (_, ref, __) {
                             final balance = ref.watch(webSessionProvider.select(
                                 (value) => value.btcBalanceInfo?.btcBalance));
 
@@ -97,7 +101,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                   return;
                                 }
 
-                                Navigator.of(context).pop();
+                                Navigator.of(sheetContext).pop();
                                 final amount = await PromptModal.show(
                                   title: l10n.btcAmountWithBalanceTitle(balance.toString()),
                                   validator: (val) =>
@@ -238,7 +242,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                 ClipboardData(text: token.depositAddress));
                             Toast.message(
                                 l10n.bw2DepositAddressCopied);
-                            Navigator.of(context).pop();
+                            Navigator.of(sheetContext).pop();
                           },
                         ),
                       ],
