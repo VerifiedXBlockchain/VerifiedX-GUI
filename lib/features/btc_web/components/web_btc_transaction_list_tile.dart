@@ -309,7 +309,9 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                     padding: const EdgeInsets.only(right: 4.0),
                                     child: InkWell(
                                       onTap: () async {
-                                        await Clipboard.setData(ClipboardData(text: input.prevout.scriptpubkeyAddress));
+                                        final address = input.prevout.scriptpubkeyAddress;
+                                        if (address == null) return;
+                                        await Clipboard.setData(ClipboardData(text: address));
                                         Toast.message(AppLocalizations.of(context).messageAddressCopied);
                                       },
                                       child: Icon(
@@ -321,7 +323,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                   ),
                                   Expanded(
                                     child: Text(
-                                      input.prevout.scriptpubkeyAddress,
+                                      input.prevout.scriptpubkeyAddress ?? input.prevout.scriptpubkeyType,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -368,7 +370,9 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                     padding: const EdgeInsets.only(left: 4.0),
                                     child: InkWell(
                                       onTap: () async {
-                                        await Clipboard.setData(ClipboardData(text: output.scriptpubkeyAddress));
+                                        final address = output.scriptpubkeyAddress;
+                                        if (address == null) return;
+                                        await Clipboard.setData(ClipboardData(text: address));
                                         Toast.message(AppLocalizations.of(context).messageAddressCopied);
                                       },
                                       child: Icon(
@@ -380,7 +384,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                   ),
                                   Expanded(
                                     child: Text(
-                                      output.scriptpubkeyAddress,
+                                      output.scriptpubkeyAddress ?? output.scriptpubkeyType,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),

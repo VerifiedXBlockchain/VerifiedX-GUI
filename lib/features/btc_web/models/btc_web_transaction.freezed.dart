@@ -537,9 +537,11 @@ mixin _$BtcWebVout {
   @JsonKey(name: 'scriptpubkey_asm')
   String get scriptpubkeyAsm => throw _privateConstructorUsedError;
   @JsonKey(name: 'scriptpubkey_type')
-  String get scriptpubkeyType => throw _privateConstructorUsedError;
+  String get scriptpubkeyType =>
+      throw _privateConstructorUsedError; // Null for outputs that pay no address (OP_RETURN). A required String here
+// threw on the first such output and emptied the whole transaction list.
   @JsonKey(name: 'scriptpubkey_address')
-  String get scriptpubkeyAddress => throw _privateConstructorUsedError;
+  String? get scriptpubkeyAddress => throw _privateConstructorUsedError;
   int get value => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -558,7 +560,7 @@ abstract class $BtcWebVoutCopyWith<$Res> {
       {String scriptpubkey,
       @JsonKey(name: 'scriptpubkey_asm') String scriptpubkeyAsm,
       @JsonKey(name: 'scriptpubkey_type') String scriptpubkeyType,
-      @JsonKey(name: 'scriptpubkey_address') String scriptpubkeyAddress,
+      @JsonKey(name: 'scriptpubkey_address') String? scriptpubkeyAddress,
       int value});
 }
 
@@ -578,7 +580,7 @@ class _$BtcWebVoutCopyWithImpl<$Res, $Val extends BtcWebVout>
     Object? scriptpubkey = null,
     Object? scriptpubkeyAsm = null,
     Object? scriptpubkeyType = null,
-    Object? scriptpubkeyAddress = null,
+    Object? scriptpubkeyAddress = freezed,
     Object? value = null,
   }) {
     return _then(_value.copyWith(
@@ -594,10 +596,10 @@ class _$BtcWebVoutCopyWithImpl<$Res, $Val extends BtcWebVout>
           ? _value.scriptpubkeyType
           : scriptpubkeyType // ignore: cast_nullable_to_non_nullable
               as String,
-      scriptpubkeyAddress: null == scriptpubkeyAddress
+      scriptpubkeyAddress: freezed == scriptpubkeyAddress
           ? _value.scriptpubkeyAddress
           : scriptpubkeyAddress // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -618,7 +620,7 @@ abstract class _$$_BtcWebVoutCopyWith<$Res>
       {String scriptpubkey,
       @JsonKey(name: 'scriptpubkey_asm') String scriptpubkeyAsm,
       @JsonKey(name: 'scriptpubkey_type') String scriptpubkeyType,
-      @JsonKey(name: 'scriptpubkey_address') String scriptpubkeyAddress,
+      @JsonKey(name: 'scriptpubkey_address') String? scriptpubkeyAddress,
       int value});
 }
 
@@ -636,7 +638,7 @@ class __$$_BtcWebVoutCopyWithImpl<$Res>
     Object? scriptpubkey = null,
     Object? scriptpubkeyAsm = null,
     Object? scriptpubkeyType = null,
-    Object? scriptpubkeyAddress = null,
+    Object? scriptpubkeyAddress = freezed,
     Object? value = null,
   }) {
     return _then(_$_BtcWebVout(
@@ -652,10 +654,10 @@ class __$$_BtcWebVoutCopyWithImpl<$Res>
           ? _value.scriptpubkeyType
           : scriptpubkeyType // ignore: cast_nullable_to_non_nullable
               as String,
-      scriptpubkeyAddress: null == scriptpubkeyAddress
+      scriptpubkeyAddress: freezed == scriptpubkeyAddress
           ? _value.scriptpubkeyAddress
           : scriptpubkeyAddress // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
@@ -671,7 +673,7 @@ class _$_BtcWebVout implements _BtcWebVout {
       {required this.scriptpubkey,
       @JsonKey(name: 'scriptpubkey_asm') required this.scriptpubkeyAsm,
       @JsonKey(name: 'scriptpubkey_type') required this.scriptpubkeyType,
-      @JsonKey(name: 'scriptpubkey_address') required this.scriptpubkeyAddress,
+      @JsonKey(name: 'scriptpubkey_address') this.scriptpubkeyAddress,
       required this.value});
 
   factory _$_BtcWebVout.fromJson(Map<String, dynamic> json) =>
@@ -685,9 +687,11 @@ class _$_BtcWebVout implements _BtcWebVout {
   @override
   @JsonKey(name: 'scriptpubkey_type')
   final String scriptpubkeyType;
+// Null for outputs that pay no address (OP_RETURN). A required String here
+// threw on the first such output and emptied the whole transaction list.
   @override
   @JsonKey(name: 'scriptpubkey_address')
-  final String scriptpubkeyAddress;
+  final String? scriptpubkeyAddress;
   @override
   final int value;
 
@@ -739,7 +743,7 @@ abstract class _BtcWebVout implements BtcWebVout {
       @JsonKey(name: 'scriptpubkey_type')
           required final String scriptpubkeyType,
       @JsonKey(name: 'scriptpubkey_address')
-          required final String scriptpubkeyAddress,
+          final String? scriptpubkeyAddress,
       required final int value}) = _$_BtcWebVout;
 
   factory _BtcWebVout.fromJson(Map<String, dynamic> json) =
@@ -753,9 +757,10 @@ abstract class _BtcWebVout implements BtcWebVout {
   @override
   @JsonKey(name: 'scriptpubkey_type')
   String get scriptpubkeyType;
-  @override
+  @override // Null for outputs that pay no address (OP_RETURN). A required String here
+// threw on the first such output and emptied the whole transaction list.
   @JsonKey(name: 'scriptpubkey_address')
-  String get scriptpubkeyAddress;
+  String? get scriptpubkeyAddress;
   @override
   int get value;
   @override
