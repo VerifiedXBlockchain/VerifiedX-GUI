@@ -244,73 +244,82 @@ class TokenManagementScreen extends BaseScreen {
                               withDecor: false,
                               withClose: true,
                               children: [
-                                ListTile(
-                                  title: Text(l10n.tokenTopicCreateTitle),
-                                  leading: Icon(Icons.new_label),
-                                  onTap: () {
-                                    if (isOwnedByRA) {
-                                      showRaErrorMessage(context);
-                                      return;
-                                    }
-                                    Navigator.of(context).pop();
-                                    AutoRouter.of(context).push(CreateTokenTopicScreenRoute(scId: nft.id, address: nft.currentOwner));
-                                  },
+                                Semantics(
+                                  button: true,
+                                  child: ListTile(
+                                    title: Text(l10n.tokenTopicCreateTitle),
+                                    leading: Icon(Icons.new_label),
+                                    onTap: () {
+                                      if (isOwnedByRA) {
+                                        showRaErrorMessage(context);
+                                        return;
+                                      }
+                                      Navigator.of(context).pop();
+                                      AutoRouter.of(context).push(CreateTokenTopicScreenRoute(scId: nft.id, address: nft.currentOwner));
+                                    },
+                                  ),
                                 ),
-                                ListTile(
-                                  title: Text(l10n.tokenViewTopics),
-                                  leading: Icon(Icons.remove_red_eye),
-                                  onTap: () async {
-                                    final nft = await NftService().getNftData(nftId);
+                                Semantics(
+                                  button: true,
+                                  child: ListTile(
+                                    title: Text(l10n.tokenViewTopics),
+                                    leading: Icon(Icons.remove_red_eye),
+                                    onTap: () async {
+                                      final nft = await NftService().getNftData(nftId);
 
-                                    if (nft != null && nft.tokenStateDetails != null) {
-                                      if (nft.tokenStateDetails!.topicList.isEmpty) {
-                                        InfoDialog.show(title: l10n.tokenNoTopicsTitle, body: l10n.tokenNoTopicsBody);
+                                      if (nft != null && nft.tokenStateDetails != null) {
+                                        if (nft.tokenStateDetails!.topicList.isEmpty) {
+                                          InfoDialog.show(title: l10n.tokenNoTopicsTitle, body: l10n.tokenNoTopicsBody);
+                                          return;
+                                        }
+
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          builder: (context) {
+                                            return ModalContainer(
+                                              color: Colors.black,
+                                              withDecor: false,
+                                              withClose: true,
+                                              children: nft.tokenStateDetails!.topicList.map((t) {
+                                                return Semantics(
+                                                  button: true,
+                                                  child: ListTile(
+                                                    title: Text(t.topicName),
+                                                    subtitle: Text(
+                                                      t.topicDescription,
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                    ),
+                                                    trailing: Icon(Icons.chevron_right),
+                                                    onTap: () {
+                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context).pop();
+
+                                                      Navigator.of(context).push(
+                                                        MaterialPageRoute(
+                                                          builder: (_) => TokenTopicDetailScreen(
+                                                            t,
+                                                            nft.currentOwner,
+                                                            tokenAccount.balance,
+                                                            true,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                              }).toList(),
+                                            );
+                                          },
+                                        );
+
                                         return;
                                       }
 
-                                      showModalBottomSheet(
-                                        context: context,
-                                        isScrollControlled: true,
-                                        builder: (context) {
-                                          return ModalContainer(
-                                            color: Colors.black,
-                                            withDecor: false,
-                                            withClose: true,
-                                            children: nft.tokenStateDetails!.topicList.map((t) {
-                                              return ListTile(
-                                                title: Text(t.topicName),
-                                                subtitle: Text(
-                                                  t.topicDescription,
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                                trailing: Icon(Icons.chevron_right),
-                                                onTap: () {
-                                                  Navigator.of(context).pop();
-                                                  Navigator.of(context).pop();
-
-                                                  Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                      builder: (_) => TokenTopicDetailScreen(
-                                                        t,
-                                                        nft.currentOwner,
-                                                        tokenAccount.balance,
-                                                        true,
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              );
-                                            }).toList(),
-                                          );
-                                        },
-                                      );
-
-                                      return;
-                                    }
-
-                                    Toast.error();
-                                  },
+                                      Toast.error();
+                                    },
+                                  ),
                                 )
                               ],
                             );

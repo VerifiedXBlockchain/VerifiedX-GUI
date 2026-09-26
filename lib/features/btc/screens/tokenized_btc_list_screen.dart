@@ -366,33 +366,36 @@ class TokenizedBtcListTile extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ListTile(
-            title: Text(
-              token.tokenName,
-              style: TextStyle(
-                fontSize: 22,
-              ),
-            ),
-            // subtitle: Text("${token.myBalance} vBTC"),
-            subtitle: Text(
-              token.rbxAddress,
-              style: TextStyle(
-                color: token.rbxAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : null,
-                fontSize: 16,
-              ),
-            ),
-
-            trailing: Text(
-              AppLocalizations.of(context).bw2VbtcAmount(token.myBalance.toString()),
-              style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
-            ),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
+          child: Semantics(
+            button: true,
+            child: ListTile(
+              title: Text(
+                token.tokenName,
+                style: TextStyle(
+                  fontSize: 22,
                 ),
-              );
-            },
+              ),
+              // subtitle: Text("${token.myBalance} vBTC"),
+              subtitle: Text(
+                token.rbxAddress,
+                style: TextStyle(
+                  color: token.rbxAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : null,
+                  fontSize: 16,
+                ),
+              ),
+
+              trailing: Text(
+                AppLocalizations.of(context).bw2VbtcAmount(token.myBalance.toString()),
+                style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],

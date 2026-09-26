@@ -358,39 +358,48 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                     children: [
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsNfts),
-                                          leading:
-                                              Icon(Icons.lightbulb_outline),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("nfts");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsNfts),
+                                            leading:
+                                                Icon(Icons.lightbulb_outline),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("nfts");
+                                            },
+                                          ),
                                         ),
                                       ),
                                       SizedBox(height: 10),
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsTokens),
-                                          leading: Icon(Icons.toll),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("tokens");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsTokens),
+                                            leading: Icon(Icons.toll),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("tokens");
+                                            },
+                                          ),
                                         ),
                                       ),
                                       SizedBox(height: 10),
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsBtc),
-                                          leading:
-                                              Icon(FontAwesomeIcons.bitcoin),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("btc");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsBtc),
+                                            leading:
+                                                Icon(FontAwesomeIcons.bitcoin),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("btc");
+                                            },
+                                          ),
                                         ),
                                       )
                                     ],
@@ -423,63 +432,66 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               vertical: 8),
                                           child: AppCard(
                                             padding: 0,
-                                            child: ListTile(
-                                              title: Text(nft.name),
-                                              subtitle: Text(
-                                                nft.description,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              trailing:
-                                                  Icon(Icons.chevron_right),
-                                              leading: Stack(
-                                                children: [
-                                                  Builder(
-                                                    builder: (context) {
-                                                      if (nft.currentEvolveAssetWeb !=
-                                                              null &&
-                                                          nft.currentEvolveAssetWeb!
-                                                              .isImage) {
+                                            child: Semantics(
+                                              button: true,
+                                              child: ListTile(
+                                                title: Text(nft.name),
+                                                subtitle: Text(
+                                                  nft.description,
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                trailing:
+                                                    Icon(Icons.chevron_right),
+                                                leading: Stack(
+                                                  children: [
+                                                    Builder(
+                                                      builder: (context) {
+                                                        if (nft.currentEvolveAssetWeb !=
+                                                                null &&
+                                                            nft.currentEvolveAssetWeb!
+                                                                .isImage) {
+                                                          return SizedBox(
+                                                            width: 32,
+                                                            height: 32,
+                                                            child: AspectRatio(
+                                                              aspectRatio: 1,
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: nft
+                                                                    .currentEvolveAssetWeb!
+                                                                    .location,
+                                                                width: double
+                                                                    .infinity,
+                                                                fit: BoxFit.cover,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
+
+                                                        if (nft.primaryAssetWeb !=
+                                                            null) {
+                                                          return Icon(Icons
+                                                              .file_present_outlined);
+                                                        }
+
                                                         return SizedBox(
                                                           width: 32,
                                                           height: 32,
-                                                          child: AspectRatio(
-                                                            aspectRatio: 1,
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl: nft
-                                                                  .currentEvolveAssetWeb!
-                                                                  .location,
-                                                              width: double
-                                                                  .infinity,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
                                                         );
-                                                      }
-
-                                                      if (nft.primaryAssetWeb !=
-                                                          null) {
-                                                        return Icon(Icons
-                                                            .file_present_outlined);
-                                                      }
-
-                                                      return SizedBox(
-                                                        width: 32,
-                                                        height: 32,
-                                                      );
-                                                    },
-                                                  ),
-                                                ],
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              NftDetailScreen(
+                                                                  id: nft.id)));
+                                                },
                                               ),
-                                              onTap: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            NftDetailScreen(
-                                                                id: nft.id)));
-                                              },
                                             ),
                                           ),
                                         );
@@ -521,42 +533,45 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               vertical: 8),
                                           child: AppCard(
                                             padding: 0,
-                                            child: ListTile(
-                                              title: Text(item.token.name),
-                                              subtitle: Text(
-                                                "$balance ${item.token.ticker}",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              trailing:
-                                                  Icon(Icons.chevron_right),
-                                              leading:
-                                                  item.token.imageUrl != null &&
-                                                          item.token.imageUrl!
-                                                              .isNotEmpty
-                                                      ? Image.network(
-                                                          item.token.imageUrl!,
-                                                          width: 48,
-                                                          height: 48,
-                                                          fit: BoxFit.cover)
-                                                      : PrettyIcon(
-                                                          type: PrettyIconType
-                                                              .fungibleToken,
-                                                        ),
-                                              onTap: () {
-                                                Navigator.of(context).pop();
+                                            child: Semantics(
+                                              button: true,
+                                              child: ListTile(
+                                                title: Text(item.token.name),
+                                                subtitle: Text(
+                                                  "$balance ${item.token.ticker}",
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                trailing:
+                                                    Icon(Icons.chevron_right),
+                                                leading:
+                                                    item.token.imageUrl != null &&
+                                                            item.token.imageUrl!
+                                                                .isNotEmpty
+                                                        ? Image.network(
+                                                            item.token.imageUrl!,
+                                                            width: 48,
+                                                            height: 48,
+                                                            fit: BoxFit.cover)
+                                                        : PrettyIcon(
+                                                            type: PrettyIconType
+                                                                .fungibleToken,
+                                                          ),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
 
-                                                ref.invalidate(
-                                                    webTokenDetailProvider(item
-                                                        .token
-                                                        .smartContractId));
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            WebTokenDetailScreen(
-                                                                scId: item.token
-                                                                    .smartContractId)));
-                                              },
+                                                  ref.invalidate(
+                                                      webTokenDetailProvider(item
+                                                          .token
+                                                          .smartContractId));
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              WebTokenDetailScreen(
+                                                                  scId: item.token
+                                                                      .smartContractId)));
+                                                },
+                                              ),
                                             ),
                                           ),
                                         );
@@ -590,42 +605,45 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               vertical: 8),
                                           child: AppCard(
                                             padding: 0,
-                                            child: ListTile(
-                                              title: Text(item.name),
-                                              subtitle: Text(
-                                                "${item.balanceForAddress(keypair.address)} vBTC",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              trailing:
-                                                  Icon(Icons.chevron_right),
-                                              leading: CachedNetworkImage(
-                                                imageUrl: item.imageUrl,
-                                                height: 32,
-                                                width: 32,
-                                                errorWidget: (context, _, __) {
-                                                  return Image.asset(
-                                                    Assets.images.vbtcPng.path,
-                                                    width: 32,
-                                                    height: 32,
-                                                  );
+                                            child: Semantics(
+                                              button: true,
+                                              child: ListTile(
+                                                title: Text(item.name),
+                                                subtitle: Text(
+                                                  "${item.balanceForAddress(keypair.address)} vBTC",
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                trailing:
+                                                    Icon(Icons.chevron_right),
+                                                leading: CachedNetworkImage(
+                                                  imageUrl: item.imageUrl,
+                                                  height: 32,
+                                                  width: 32,
+                                                  errorWidget: (context, _, __) {
+                                                    return Image.asset(
+                                                      Assets.images.vbtcPng.path,
+                                                      width: 32,
+                                                      height: 32,
+                                                    );
+                                                  },
+                                                ),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+
+                                                  Navigator.of(context).push(MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          WebTokenizedBtcDetailScreen(
+                                                              scIdentifier: item
+                                                                  .scIdentifier,
+                                                              address: ref
+                                                                      .read(
+                                                                          webSessionProvider)
+                                                                      .raKeypair
+                                                                      ?.address ??
+                                                                  '')));
                                                 },
                                               ),
-                                              onTap: () {
-                                                Navigator.of(context).pop();
-
-                                                Navigator.of(context).push(MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        WebTokenizedBtcDetailScreen(
-                                                            scIdentifier: item
-                                                                .scIdentifier,
-                                                            address: ref
-                                                                    .read(
-                                                                        webSessionProvider)
-                                                                    .raKeypair
-                                                                    ?.address ??
-                                                                '')));
-                                              },
                                             ),
                                           ),
                                         );

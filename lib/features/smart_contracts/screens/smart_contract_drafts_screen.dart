@@ -39,29 +39,32 @@ class SmartContractDraftsScreen extends BaseScreen {
       itemCount: _model.length,
       itemBuilder: (context, index) {
         final sc = _model[index];
-        return ListTile(
-          leading: sc.primaryAsset != null && sc.primaryAsset!.isImage
-              ? Image.file(
-                  sc.primaryAsset!.file,
-                  width: 32,
-                  height: 32,
-                  fit: BoxFit.cover,
-                )
-              : const Icon(Icons.document_scanner),
-          title: Text(sc.name),
-          subtitle: Text(
-            sc.description,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+        return Semantics(
+          button: true,
+          child: ListTile(
+            leading: sc.primaryAsset != null && sc.primaryAsset!.isImage
+                ? Image.file(
+                    sc.primaryAsset!.file,
+                    width: 32,
+                    height: 32,
+                    fit: BoxFit.cover,
+                  )
+                : const Icon(Icons.document_scanner),
+            title: Text(sc.name),
+            subtitle: Text(
+              sc.description,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              ref.read(createSmartContractProvider.notifier).setSmartContract(sc);
+              Navigator.of(context).pop();
+              // Navigator.of(context).pop();
+              // AutoRouter.of(context)
+              //     .push(SmartContractCreatorContainerScreenRoute());
+            },
           ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () async {
-            ref.read(createSmartContractProvider.notifier).setSmartContract(sc);
-            Navigator.of(context).pop();
-            // Navigator.of(context).pop();
-            // AutoRouter.of(context)
-            //     .push(SmartContractCreatorContainerScreenRoute());
-          },
         );
       },
     );

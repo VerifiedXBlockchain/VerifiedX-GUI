@@ -53,20 +53,23 @@ class CreateDecShopFormGroup extends BaseComponent {
                       height: 6,
                     ),
                     Flexible(
-                      child: ListTile(
-                        onTap: model.id == 0
-                            ? () async {
-                                final address = await chooseAddress(context, ref, provider);
-                                if (address != null) {
-                                  provider.updateAddress(address);
+                      child: Semantics(
+                        button: model.id == 0,
+                        child: ListTile(
+                          onTap: model.id == 0
+                              ? () async {
+                                  final address = await chooseAddress(context, ref, provider);
+                                  if (address != null) {
+                                    provider.updateAddress(address);
+                                  }
                                 }
-                              }
-                            : null,
-                        title: Text(l10n.mktOwnersAddressLabel),
-                        subtitle: Text(model.ownerAddress == null || model.ownerAddress!.isEmpty
-                            ? l10n.mktSelectOwnerAddressHint
-                            : model.ownerAddress!),
-                        trailing: model.id == 0 ? Icon(Icons.folder_copy_outlined) : null,
+                              : null,
+                          title: Text(l10n.mktOwnersAddressLabel),
+                          subtitle: Text(model.ownerAddress == null || model.ownerAddress!.isEmpty
+                              ? l10n.mktSelectOwnerAddressHint
+                              : model.ownerAddress!),
+                          trailing: model.id == 0 ? Icon(Icons.folder_copy_outlined) : null,
+                        ),
                       ),
                     ),
                     SizedBox(

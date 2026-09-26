@@ -37,40 +37,46 @@ class BackupButton extends BaseComponent {
                       color: Colors.black26,
                       withDecor: false,
                       children: [
-                        ListTile(
-                          title: Text(l10n.authBackupKeys),
-                          subtitle: Text(l10n.hnavBackupKeysSubtitle(kIsWeb ? l10n.hnavVaultSuffix : "")),
-                          leading: const Icon(Icons.wallet),
-                          trailing: const Icon(Icons.chevron_right),
-                          onTap: () async {
-                            if (ref.read(walletListProvider).where((w) => w.isReserved).isNotEmpty && !kIsWeb) {
-                              await InfoDialog.show(title: l10n.hnavNoticeTitle, body: l10n.hnavReserveAccountsNotExported);
-                            }
-                            final success = kIsWeb ? await backupWebKeys(context, ref) : await backupKeys(context, ref);
-                            if (success == true) {
-                              Navigator.of(context).pop();
-                              Toast.message(l10n.hnavKeysBackedUpSuccess);
-                            } else if (success == false) {
-                              Toast.error();
-                            }
-                          },
-                        ),
-                        if (!kIsWeb)
-                          ListTile(
-                            title: Text(l10n.reserveBackupMediaTitle),
-                            subtitle: Text(l10n.hnavBackupMediaSubtitle),
-                            leading: const Icon(Icons.file_present),
+                        Semantics(
+                          button: true,
+                          child: ListTile(
+                            title: Text(l10n.authBackupKeys),
+                            subtitle: Text(l10n.hnavBackupKeysSubtitle(kIsWeb ? l10n.hnavVaultSuffix : "")),
+                            leading: const Icon(Icons.wallet),
                             trailing: const Icon(Icons.chevron_right),
                             onTap: () async {
-                              final success = await backupMedia(context, ref);
-
+                              if (ref.read(walletListProvider).where((w) => w.isReserved).isNotEmpty && !kIsWeb) {
+                                await InfoDialog.show(title: l10n.hnavNoticeTitle, body: l10n.hnavReserveAccountsNotExported);
+                              }
+                              final success = kIsWeb ? await backupWebKeys(context, ref) : await backupKeys(context, ref);
                               if (success == true) {
                                 Navigator.of(context).pop();
-                                Toast.message(l10n.hnavMediaBackedUpSuccess);
-                              } else {
+                                Toast.message(l10n.hnavKeysBackedUpSuccess);
+                              } else if (success == false) {
                                 Toast.error();
                               }
                             },
+                          ),
+                        ),
+                        if (!kIsWeb)
+                          Semantics(
+                            button: true,
+                            child: ListTile(
+                              title: Text(l10n.reserveBackupMediaTitle),
+                              subtitle: Text(l10n.hnavBackupMediaSubtitle),
+                              leading: const Icon(Icons.file_present),
+                              trailing: const Icon(Icons.chevron_right),
+                              onTap: () async {
+                                final success = await backupMedia(context, ref);
+
+                                if (success == true) {
+                                  Navigator.of(context).pop();
+                                  Toast.message(l10n.hnavMediaBackedUpSuccess);
+                                } else {
+                                  Toast.error();
+                                }
+                              },
+                            ),
                           ),
                       ],
                     );

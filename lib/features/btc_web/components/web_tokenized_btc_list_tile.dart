@@ -48,42 +48,45 @@ class WebTokenizedBtcListTile extends BaseComponent {
           ),
         ),
         Expanded(
-          child: ListTile(
-            title: Row(
-              children: [
-                Text(
-                  "${token.name}${isOwner ? ' (Owner)' : ''}",
-                  style: TextStyle(
-                    fontSize: 22,
+          child: Semantics(
+            button: true,
+            child: ListTile(
+              title: Row(
+                children: [
+                  Text(
+                    "${token.name}${isOwner ? ' (Owner)' : ''}",
+                    style: TextStyle(
+                      fontSize: 22,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    "$balance vBTC",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.btcOrange,
+                    ),
+                  ),
+                  Text(
+                    token.address,
+                    style: TextStyle(
+                      color: token.address.startsWith("xRBX") ? AppColors.getReserve() : Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+              isThreeLine: true,
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                AutoRouter.of(context).push(
+                  WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address),
+                );
+              },
             ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "$balance vBTC",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.btcOrange,
-                  ),
-                ),
-                Text(
-                  token.address,
-                  style: TextStyle(
-                    color: token.address.startsWith("xRBX") ? AppColors.getReserve() : Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            isThreeLine: true,
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              AutoRouter.of(context).push(
-                WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address),
-              );
-            },
           ),
         ),
       ],

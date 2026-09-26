@@ -36,14 +36,17 @@ class WebCreateBtcWalletModal extends StatelessWidget {
             ),
             child: Card(
               color: Colors.black,
-              child: ListTile(
-                title: Text(l10n.btcGenerateKeypair),
-                subtitle: Text(l10n.btcGenerateKeypairSubtitle),
-                trailing: Icon(Icons.chevron_right),
-                leading: Icon(FontAwesomeIcons.diceD6),
-                onTap: () async {
-                  Navigator.of(context).pop(NewBtcWalletOption.generate);
-                },
+              child: Semantics(
+                button: true,
+                child: ListTile(
+                  title: Text(l10n.btcGenerateKeypair),
+                  subtitle: Text(l10n.btcGenerateKeypairSubtitle),
+                  trailing: Icon(Icons.chevron_right),
+                  leading: Icon(FontAwesomeIcons.diceD6),
+                  onTap: () async {
+                    Navigator.of(context).pop(NewBtcWalletOption.generate);
+                  },
+                ),
               ),
             ),
           ),
@@ -56,14 +59,17 @@ class WebCreateBtcWalletModal extends StatelessWidget {
             ),
             child: Card(
               color: Colors.black,
-              child: ListTile(
-                title: Text(l10n.btcImportWifTitle),
-                subtitle: Text(l10n.btcImportWifSubtitle),
-                trailing: Icon(Icons.chevron_right),
-                leading: Icon(Icons.upload),
-                onTap: () async {
-                  Navigator.of(context).pop(NewBtcWalletOption.import);
-                },
+              child: Semantics(
+                button: true,
+                child: ListTile(
+                  title: Text(l10n.btcImportWifTitle),
+                  subtitle: Text(l10n.btcImportWifSubtitle),
+                  trailing: Icon(Icons.chevron_right),
+                  leading: Icon(Icons.upload),
+                  onTap: () async {
+                    Navigator.of(context).pop(NewBtcWalletOption.import);
+                  },
+                ),
               ),
             ),
           ),

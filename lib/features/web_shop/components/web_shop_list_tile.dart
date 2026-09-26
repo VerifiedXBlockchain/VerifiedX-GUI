@@ -32,86 +32,89 @@ class WebShopTile extends BaseComponent {
       child: AppCard(
         padding: 0,
         margin: EdgeInsets.zero,
-        child: ListTile(
-          title: RichText(
-            text: TextSpan(
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              children: [
-                TextSpan(
-                  text: shop.name,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                if (shop.isOwner(ref))
+        child: Semantics(
+          button: true,
+          child: ListTile(
+            title: RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                children: [
                   TextSpan(
-                    text: l10n.r3bMyShopSuffix,
+                    text: shop.name,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.warning,
+                      color: Colors.white,
                     ),
                   ),
+                  if (shop.isOwner(ref))
+                    TextSpan(
+                      text: l10n.r3bMyShopSuffix,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.warning,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            subtitle: RichText(
+              text: TextSpan(style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500), children: [
+                TextSpan(
+                  text: shop.url,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
+                  ),
+                ),
+                TextSpan(text: " "),
+                TextSpan(
+                  text: shop.ownerAddress,
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontWeight: FontWeight.w300,
+                  ),
+                ),
+              ]),
+            ),
+            leading: Icon(
+              Icons.house,
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (shop.isPublished)
+                  AppBadge(
+                    label: shop.isOnline ? l10n.r3bOnline : l10n.r3bOffline,
+                    variant: shop.isOnline ? AppColorVariant.Success : AppColorVariant.Danger,
+                  ),
+                if (!shop.isPublished && shop.isOwner(ref)) AppBadge(label: l10n.r3bUnpublished, variant: AppColorVariant.Warning),
+                Icon(Icons.chevron_right),
               ],
             ),
-          ),
-          subtitle: RichText(
-            text: TextSpan(style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500), children: [
-              TextSpan(
-                text: shop.url,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
-                ),
-              ),
-              TextSpan(text: " "),
-              TextSpan(
-                text: shop.ownerAddress,
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontWeight: FontWeight.w300,
-                ),
-              ),
-            ]),
-          ),
-          leading: Icon(
-            Icons.house,
-          ),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (shop.isPublished)
-                AppBadge(
-                  label: shop.isOnline ? l10n.r3bOnline : l10n.r3bOffline,
-                  variant: shop.isOnline ? AppColorVariant.Success : AppColorVariant.Danger,
-                ),
-              if (!shop.isPublished && shop.isOwner(ref)) AppBadge(label: l10n.r3bUnpublished, variant: AppColorVariant.Warning),
-              Icon(Icons.chevron_right),
-            ],
-          ),
-          onTap: () async {
-            if (requiresAuth) {
-              if (!await guardWebAuthorized(ref, shop.ownerAddress)) {
-                Toast.error(l10n.r3bNotAuthorized);
+            onTap: () async {
+              if (requiresAuth) {
+                if (!await guardWebAuthorized(ref, shop.ownerAddress)) {
+                  Toast.error(l10n.r3bNotAuthorized);
+                  return;
+                }
+              }
+
+              if (!requiresAuth && shop.isOwner(ref) && !kIsWeb) {
+                Toast.error(l10n.r3bThisIsYourShop);
                 return;
               }
-            }
 
-            if (!requiresAuth && shop.isOwner(ref) && !kIsWeb) {
-              Toast.error(l10n.r3bThisIsYourShop);
-              return;
-            }
+              if (!shop.isOnline) {
+                Toast.error(l10n.r3bShopIsOffline);
+                return;
+              }
 
-            if (!shop.isOnline) {
-              Toast.error(l10n.r3bShopIsOffline);
-              return;
-            }
+              //If is web just push the web route
+              if (kIsWeb) {
+                AutoRouter.of(context).push(webRouter.WebShopDetailScreenRoute(shopId: shop.id));
+                return;
+              }
 
-            //If is web just push the web route
-            if (kIsWeb) {
-              AutoRouter.of(context).push(webRouter.WebShopDetailScreenRoute(shopId: shop.id));
-              return;
-            }
-
-            await pushToShop(context, ref, shop);
-          },
+              await pushToShop(context, ref, shop);
+            },
+          ),
         ),
       ),
     );

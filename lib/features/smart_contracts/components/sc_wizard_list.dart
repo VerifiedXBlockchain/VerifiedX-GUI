@@ -91,45 +91,92 @@ class ScWizardList extends BaseComponent {
           ),
           child: Card(
             color: Colors.black,
-            child: ListTile(
-              title: RichText(
-                text: TextSpan(
-                  style: TextStyle(color: Colors.white),
-                  children: [
-                    TextSpan(
-                      text: entry.name,
-                    ),
-                    TextSpan(
-                      text: " (x${entry.quantity})",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.success),
-                    ),
-                  ],
+            child: Semantics(
+              button: true,
+              child: ListTile(
+                title: RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.white),
+                    children: [
+                      TextSpan(
+                        text: entry.name,
+                      ),
+                      TextSpan(
+                        text: " (x${entry.quantity})",
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.success),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              leading: SizedBox(
-                width: 32,
-                height: 32,
-                child: ScWizardAssetPreview(entry: entry, small: true),
-              ),
-              subtitle: Text(
-                description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: isMobile
-                  ? PopupMenuButton(itemBuilder: ((context) {
-                      return [
-                        PopupMenuItem(
-                            onTap: () {
+                leading: SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: ScWizardAssetPreview(entry: entry, small: true),
+                ),
+                subtitle: Text(
+                  description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: isMobile
+                    ? PopupMenuButton(itemBuilder: ((context) {
+                        return [
+                          PopupMenuItem(
+                              onTap: () {
+                                createNew(context: context, provider: provider, index: items.length, x: 0, y: 0, item: item.copyWith());
+                                Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                l10n.r3aDuplicate,
+                              )),
+                          PopupMenuItem(
+                              onTap: () {
+                                Navigator.of(rootNavigatorKey.currentContext!).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ScWizardEditItemScreen(
+                                      title: l10n.r3aEditInstance,
+                                      index: index,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                l10n.scwEdit,
+                              )),
+                          PopupMenuItem(
+                              onTap: () async {
+                                final confirmed = await ConfirmDialog.show(
+                                  title: l10n.r3aDeleteInstanceTitle,
+                                  body: l10n.r3aDeleteInstanceConfirm,
+                                  confirmText: l10n.actionDelete,
+                                  destructive: true,
+                                );
+                                if (confirmed == true) {
+                                  ref.read(scWizardProvider.notifier).removeAt(index, delay: 300);
+                                }
+                              },
+                              child: Text(
+                                l10n.actionDelete,
+                              )),
+                        ];
+                      }))
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          AppButton(
+                            label: l10n.r3aDuplicate,
+                            icon: Icons.copy,
+                            onPressed: () {
                               createNew(context: context, provider: provider, index: items.length, x: 0, y: 0, item: item.copyWith());
-                              Navigator.of(context).pop();
                             },
-                            child: Text(
-                              l10n.r3aDuplicate,
-                            )),
-                        PopupMenuItem(
-                            onTap: () {
-                              Navigator.of(rootNavigatorKey.currentContext!).push(
+                            variant: AppColorVariant.Light,
+                          ),
+                          const SizedBox(width: 6),
+                          AppButton(
+                            label: l10n.scwEdit,
+                            icon: Icons.edit,
+                            onPressed: () {
+                              Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => ScWizardEditItemScreen(
                                     title: l10n.r3aEditInstance,
@@ -138,11 +185,13 @@ class ScWizardList extends BaseComponent {
                                 ),
                               );
                             },
-                            child: Text(
-                              l10n.scwEdit,
-                            )),
-                        PopupMenuItem(
-                            onTap: () async {
+                          ),
+                          const SizedBox(width: 6),
+                          AppButton(
+                            label: l10n.actionDelete,
+                            icon: Icons.delete,
+                            variant: AppColorVariant.Danger,
+                            onPressed: () async {
                               final confirmed = await ConfirmDialog.show(
                                 title: l10n.r3aDeleteInstanceTitle,
                                 body: l10n.r3aDeleteInstanceConfirm,
@@ -153,66 +202,20 @@ class ScWizardList extends BaseComponent {
                                 ref.read(scWizardProvider.notifier).removeAt(index, delay: 300);
                               }
                             },
-                            child: Text(
-                              l10n.actionDelete,
-                            )),
-                      ];
-                    }))
-                  : Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AppButton(
-                          label: l10n.r3aDuplicate,
-                          icon: Icons.copy,
-                          onPressed: () {
-                            createNew(context: context, provider: provider, index: items.length, x: 0, y: 0, item: item.copyWith());
-                          },
-                          variant: AppColorVariant.Light,
-                        ),
-                        const SizedBox(width: 6),
-                        AppButton(
-                          label: l10n.scwEdit,
-                          icon: Icons.edit,
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => ScWizardEditItemScreen(
-                                  title: l10n.r3aEditInstance,
-                                  index: index,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(width: 6),
-                        AppButton(
-                          label: l10n.actionDelete,
-                          icon: Icons.delete,
-                          variant: AppColorVariant.Danger,
-                          onPressed: () async {
-                            final confirmed = await ConfirmDialog.show(
-                              title: l10n.r3aDeleteInstanceTitle,
-                              body: l10n.r3aDeleteInstanceConfirm,
-                              confirmText: l10n.actionDelete,
-                              destructive: true,
-                            );
-                            if (confirmed == true) {
-                              ref.read(scWizardProvider.notifier).removeAt(index, delay: 300);
-                            }
-                          },
-                        ),
-                      ],
+                          ),
+                        ],
+                      ),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ScWizardEditItemScreen(
+                        title: l10n.r3aEditInstance,
+                        index: index,
+                      ),
                     ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ScWizardEditItemScreen(
-                      title: l10n.r3aEditInstance,
-                      index: index,
-                    ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         );

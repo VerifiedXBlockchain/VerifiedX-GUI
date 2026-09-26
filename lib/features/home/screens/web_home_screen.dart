@@ -493,48 +493,57 @@ class _Actions extends BaseComponent {
                           children: [
                             AppCard(
                               padding: 0,
-                              child: ListTile(
-                                  title: Text(AppLocalizations.of(context).homeJoinDiscord),
-                                  leading: Icon(
-                                    FontAwesomeIcons.discord,
-                                    size: 18,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString(
-                                        "https://discord.gg/7cd5ebDQCj");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                    title: Text(AppLocalizations.of(context).homeJoinDiscord),
+                                    leading: Icon(
+                                      FontAwesomeIcons.discord,
+                                      size: 18,
+                                    ),
+                                    onTap: () {
+                                      launchUrlString(
+                                          "https://discord.gg/7cd5ebDQCj");
+                                    },
+                                    trailing: Icon(Icons.open_in_new, size: 16)),
+                              ),
                             ),
                             SizedBox(
                               height: 6,
                             ),
                             AppCard(
                               padding: 0,
-                              child: ListTile(
-                                  title: Text(AppLocalizations.of(context).homeVisitWebsite),
-                                  leading: Icon(
-                                    Icons.link,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString("https://verifiedx.io");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                    title: Text(AppLocalizations.of(context).homeVisitWebsite),
+                                    leading: Icon(
+                                      Icons.link,
+                                    ),
+                                    onTap: () {
+                                      launchUrlString("https://verifiedx.io");
+                                    },
+                                    trailing: Icon(Icons.open_in_new, size: 16)),
+                              ),
                             ),
                             SizedBox(
                               height: 6,
                             ),
                             AppCard(
                               padding: 0,
-                              child: ListTile(
-                                  title: Text(AppLocalizations.of(context).homeReadDocs),
-                                  leading: Icon(
-                                    Icons.read_more,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString(
-                                        "https://docs.verifiedx.io");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                    title: Text(AppLocalizations.of(context).homeReadDocs),
+                                    leading: Icon(
+                                      Icons.read_more,
+                                    ),
+                                    onTap: () {
+                                      launchUrlString(
+                                          "https://docs.verifiedx.io");
+                                    },
+                                    trailing: Icon(Icons.open_in_new, size: 16)),
+                              ),
                             )
                           ],
                         );

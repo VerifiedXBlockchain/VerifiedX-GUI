@@ -227,60 +227,63 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: AppCard(
                           padding: 8,
-                          child: ListTile(
-                            title: Text(AppLocalizations.of(context).bw2WithdrawalToLine(amount.toString(), btcAddr.toString())),
-                            subtitle: Text(
-                              unrecorded != null
-                                  ? AppLocalizations.of(context).bw2BtcSentTapToSettle
-                                  : isRequested
-                                      ? AppLocalizations.of(context).bw2PendingTapResume
-                                      : AppLocalizations.of(context).bw2StatusWithValue(status.toString()),
-                              style: unrecorded != null
-                                  ? const TextStyle(color: Color(0xFFE0A32E))
-                                  : null,
-                            ),
-                            onTap: isRequested || unrecorded != null
-                                ? () {
-                                    final requestHash = wr['request_transaction_hash'] as String?;
-                                    if (requestHash != null) {
-                                      WebV2WithdrawalDialog.show(
-                                        scIdentifier: token.scIdentifier,
-                                        requestorAddress: address,
-                                        btcAddress: btcAddr,
-                                        amount: (amount is num) ? amount.toDouble() : (double.tryParse(amount.toString()) ?? 0),
-                                        feeRate: 0,
-                                        ownerAddress: token.ownerAddress,
-                                        existingRequestHash: requestHash,
-                                      );
+                          child: Semantics(
+                            button: isRequested || unrecorded != null,
+                            child: ListTile(
+                              title: Text(AppLocalizations.of(context).bw2WithdrawalToLine(amount.toString(), btcAddr.toString())),
+                              subtitle: Text(
+                                unrecorded != null
+                                    ? AppLocalizations.of(context).bw2BtcSentTapToSettle
+                                    : isRequested
+                                        ? AppLocalizations.of(context).bw2PendingTapResume
+                                        : AppLocalizations.of(context).bw2StatusWithValue(status.toString()),
+                                style: unrecorded != null
+                                    ? const TextStyle(color: Color(0xFFE0A32E))
+                                    : null,
+                              ),
+                              onTap: isRequested || unrecorded != null
+                                  ? () {
+                                      final requestHash = wr['request_transaction_hash'] as String?;
+                                      if (requestHash != null) {
+                                        WebV2WithdrawalDialog.show(
+                                          scIdentifier: token.scIdentifier,
+                                          requestorAddress: address,
+                                          btcAddress: btcAddr,
+                                          amount: (amount is num) ? amount.toDouble() : (double.tryParse(amount.toString()) ?? 0),
+                                          feeRate: 0,
+                                          ownerAddress: token.ownerAddress,
+                                          existingRequestHash: requestHash,
+                                        );
+                                      }
                                     }
-                                  }
-                                : null,
-                            // Cancelling is only meaningful before the BTC goes
-                            // out; once it has, the request must be settled.
-                            trailing: unrecorded != null
-                                ? const Icon(Icons.warning_amber_rounded, color: Color(0xFFE0A32E))
-                                : isRequested
-                                    ? IconButton(
-                                        icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 20),
-                                        tooltip: AppLocalizations.of(context).bw2CancelWithdrawalTooltip,
-                                        onPressed: () async {
-                                          final confirmed = await ConfirmDialog.show(
-                                            title: AppLocalizations.of(context).bw2CancelWithdrawalQuestion,
-                                            body: AppLocalizations.of(context).bw2CancelWithdrawalBody,
-                                          );
-                                          if (confirmed == true) {
-                                            final manager = ref.read(webTokenActionsManager);
-                                            await manager.cancelV2Withdrawal(
-                                              scIdentifier: token.scIdentifier,
-                                              requestorAddress: wr['requestor_address'] ?? '',
-                                              requestHash: wr['request_transaction_hash'] ?? '',
+                                  : null,
+                              // Cancelling is only meaningful before the BTC goes
+                              // out; once it has, the request must be settled.
+                              trailing: unrecorded != null
+                                  ? const Icon(Icons.warning_amber_rounded, color: Color(0xFFE0A32E))
+                                  : isRequested
+                                      ? IconButton(
+                                          icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 20),
+                                          tooltip: AppLocalizations.of(context).bw2CancelWithdrawalTooltip,
+                                          onPressed: () async {
+                                            final confirmed = await ConfirmDialog.show(
+                                              title: AppLocalizations.of(context).bw2CancelWithdrawalQuestion,
+                                              body: AppLocalizations.of(context).bw2CancelWithdrawalBody,
                                             );
-                                          }
-                                        },
-                                      )
-                                    : status == 'completed'
-                                        ? const Icon(Icons.check_circle, color: Colors.green)
-                                        : const Icon(Icons.pending, color: Colors.orange),
+                                            if (confirmed == true) {
+                                              final manager = ref.read(webTokenActionsManager);
+                                              await manager.cancelV2Withdrawal(
+                                                scIdentifier: token.scIdentifier,
+                                                requestorAddress: wr['requestor_address'] ?? '',
+                                                requestHash: wr['request_transaction_hash'] ?? '',
+                                              );
+                                            }
+                                          },
+                                        )
+                                      : status == 'completed'
+                                          ? const Icon(Icons.check_circle, color: Colors.green)
+                                          : const Icon(Icons.pending, color: Colors.orange),
+                            ),
                           ),
                         ),
                       );

@@ -62,38 +62,44 @@ class AccountUtils {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            dense: true,
-            // leading: Icon(Icons.add),
-            title: Text(
-              "VFX",
-              style: TextStyle(color: AppColors.getBlue()),
+          Semantics(
+            button: true,
+            child: ListTile(
+              dense: true,
+              // leading: Icon(Icons.add),
+              title: Text(
+                "VFX",
+                style: TextStyle(color: AppColors.getBlue()),
+              ),
+              subtitle: Text(l10n.txpSetupVfxAccount),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Colors.white54,
+              ),
+              onTap: () {
+                Navigator.of(context).pop(VfxOrBtcOption.vfx);
+              },
             ),
-            subtitle: Text(l10n.txpSetupVfxAccount),
-            trailing: Icon(
-              Icons.chevron_right,
-              color: Colors.white54,
-            ),
-            onTap: () {
-              Navigator.of(context).pop(VfxOrBtcOption.vfx);
-            },
           ),
           Divider(),
-          ListTile(
-            dense: true,
-            // leading: Icon(Icons.upload),
-            title: Text(
-              "BTC",
-              style: TextStyle(color: AppColors.getBtc()),
+          Semantics(
+            button: true,
+            child: ListTile(
+              dense: true,
+              // leading: Icon(Icons.upload),
+              title: Text(
+                "BTC",
+                style: TextStyle(color: AppColors.getBtc()),
+              ),
+              subtitle: Text(l10n.txpSetupBtcAccount),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Colors.white54,
+              ),
+              onTap: () {
+                Navigator.of(context).pop(VfxOrBtcOption.btc);
+              },
             ),
-            subtitle: Text(l10n.txpSetupBtcAccount),
-            trailing: Icon(
-              Icons.chevron_right,
-              color: Colors.white54,
-            ),
-            onTap: () {
-              Navigator.of(context).pop(VfxOrBtcOption.btc);
-            },
           ),
         ],
       ),
@@ -119,32 +125,38 @@ class AccountUtils {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            dense: true,
-            leading: Icon(Icons.add, color: AppColors.getBlue()),
-            title: Text(l10n.txpCreate),
-            subtitle: Text(l10n.txpCreateVfxAccountSub),
-            trailing: Icon(
-              Icons.chevron_right,
-              color: Colors.white54,
+          Semantics(
+            button: true,
+            child: ListTile(
+              dense: true,
+              leading: Icon(Icons.add, color: AppColors.getBlue()),
+              title: Text(l10n.txpCreate),
+              subtitle: Text(l10n.txpCreateVfxAccountSub),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Colors.white54,
+              ),
+              onTap: () {
+                Navigator.of(context).pop(_NewOrImportOption.create);
+              },
             ),
-            onTap: () {
-              Navigator.of(context).pop(_NewOrImportOption.create);
-            },
           ),
           Divider(),
-          ListTile(
-            dense: true,
-            leading: Icon(Icons.upload, color: AppColors.getBlue()),
-            title: Text(l10n.actionImport),
-            subtitle: Text(l10n.txpImportVfxKeySub),
-            trailing: Icon(
-              Icons.chevron_right,
-              color: Colors.white54,
+          Semantics(
+            button: true,
+            child: ListTile(
+              dense: true,
+              leading: Icon(Icons.upload, color: AppColors.getBlue()),
+              title: Text(l10n.actionImport),
+              subtitle: Text(l10n.txpImportVfxKeySub),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Colors.white54,
+              ),
+              onTap: () {
+                Navigator.of(context).pop(_NewOrImportOption.import);
+              },
             ),
-            onTap: () {
-              Navigator.of(context).pop(_NewOrImportOption.import);
-            },
           ),
         ],
       ),
@@ -169,38 +181,44 @@ class AccountUtils {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(
-            dense: true,
-            leading: Icon(
-              Icons.add,
-              color: AppColors.getBtc(),
+          Semantics(
+            button: true,
+            child: ListTile(
+              dense: true,
+              leading: Icon(
+                Icons.add,
+                color: AppColors.getBtc(),
+              ),
+              title: Text(l10n.txpCreate),
+              subtitle: Text(l10n.txpCreateBtcAccountSub),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Colors.white54,
+              ),
+              onTap: () {
+                Navigator.of(context).pop(_NewOrImportOption.create);
+              },
             ),
-            title: Text(l10n.txpCreate),
-            subtitle: Text(l10n.txpCreateBtcAccountSub),
-            trailing: Icon(
-              Icons.chevron_right,
-              color: Colors.white54,
-            ),
-            onTap: () {
-              Navigator.of(context).pop(_NewOrImportOption.create);
-            },
           ),
           Divider(),
-          ListTile(
-            dense: true,
-            leading: Icon(
-              Icons.upload,
-              color: AppColors.getBtc(),
+          Semantics(
+            button: true,
+            child: ListTile(
+              dense: true,
+              leading: Icon(
+                Icons.upload,
+                color: AppColors.getBtc(),
+              ),
+              title: Text(l10n.actionImport),
+              subtitle: Text(l10n.txpImportBtcKeySub),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Colors.white54,
+              ),
+              onTap: () {
+                Navigator.of(context).pop(_NewOrImportOption.import);
+              },
             ),
-            title: Text(l10n.actionImport),
-            subtitle: Text(l10n.txpImportBtcKeySub),
-            trailing: Icon(
-              Icons.chevron_right,
-              color: Colors.white54,
-            ),
-            onTap: () {
-              Navigator.of(context).pop(_NewOrImportOption.import);
-            },
           ),
         ],
       ),
@@ -443,24 +461,30 @@ class AccountUtils {
             children: [
               AppCard(
                 padding: 0,
-                child: ListTile(
-                    title: Text(l10n.txpGetVfxNow),
-                    onTap: () {
-                      Navigator.of(context).pop(VfxOrBtcOption.vfx);
-                    },
-                    trailing: Icon(Icons.chevron_right, size: 16)),
+                child: Semantics(
+                  button: true,
+                  child: ListTile(
+                      title: Text(l10n.txpGetVfxNow),
+                      onTap: () {
+                        Navigator.of(context).pop(VfxOrBtcOption.vfx);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
               ),
               SizedBox(
                 height: 12,
               ),
               AppCard(
                 padding: 0,
-                child: ListTile(
-                    title: Text(l10n.txpGetBtcNow),
-                    onTap: () {
-                      Navigator.of(context).pop(VfxOrBtcOption.btc);
-                    },
-                    trailing: Icon(Icons.chevron_right, size: 16)),
+                child: Semantics(
+                  button: true,
+                  child: ListTile(
+                      title: Text(l10n.txpGetBtcNow),
+                      onTap: () {
+                        Navigator.of(context).pop(VfxOrBtcOption.btc);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
               ),
             ],
           );
@@ -513,12 +537,15 @@ class AccountUtils {
                       : Env.moonpayEnabled) ...[
                 AppCard(
                   padding: 0,
-                  child: ListTile(
-                      title: Text("Moonpay"),
-                      onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.moonpay);
-                      },
-                      trailing: Icon(Icons.chevron_right, size: 16)),
+                  child: Semantics(
+                    button: true,
+                    child: ListTile(
+                        title: Text("Moonpay"),
+                        onTap: () {
+                          Navigator.of(context).pop(PaymentGateway.moonpay);
+                        },
+                        trailing: Icon(Icons.chevron_right, size: 16)),
+                  ),
                 ),
                 SizedBox(
                   height: 12,
@@ -529,12 +556,15 @@ class AccountUtils {
                       type == VfxOrBtcOption.btc)) ...[
                 AppCard(
                   padding: 0,
-                  child: ListTile(
-                      title: Text("Crypto.com"),
-                      onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.cryptoDotCom);
-                      },
-                      trailing: Icon(Icons.chevron_right, size: 16)),
+                  child: Semantics(
+                    button: true,
+                    child: ListTile(
+                        title: Text("Crypto.com"),
+                        onTap: () {
+                          Navigator.of(context).pop(PaymentGateway.cryptoDotCom);
+                        },
+                        trailing: Icon(Icons.chevron_right, size: 16)),
+                  ),
                 ),
                 SizedBox(
                   height: 12,
@@ -543,12 +573,15 @@ class AccountUtils {
               if (BANXA_VFX_ENABLED || type == VfxOrBtcOption.btc)
                 AppCard(
                   padding: 0,
-                  child: ListTile(
-                      title: Text("Banxa"),
-                      onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.banxa);
-                      },
-                      trailing: Icon(Icons.chevron_right, size: 16)),
+                  child: Semantics(
+                    button: true,
+                    child: ListTile(
+                        title: Text("Banxa"),
+                        onTap: () {
+                          Navigator.of(context).pop(PaymentGateway.banxa);
+                        },
+                        trailing: Icon(Icons.chevron_right, size: 16)),
+                  ),
                 ),
               if (INCLUDE_STRIPE_INTEGRATION) ...[
                 SizedBox(
@@ -556,12 +589,15 @@ class AccountUtils {
                 ),
                 AppCard(
                   padding: 0,
-                  child: ListTile(
-                      title: Text(l10n.txpStripeCreditCard),
-                      onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.stripe);
-                      },
-                      trailing: Icon(Icons.chevron_right, size: 16)),
+                  child: Semantics(
+                    button: true,
+                    child: ListTile(
+                        title: Text(l10n.txpStripeCreditCard),
+                        onTap: () {
+                          Navigator.of(context).pop(PaymentGateway.stripe);
+                        },
+                        trailing: Icon(Icons.chevron_right, size: 16)),
+                  ),
                 ),
               ],
               if (Env.isTestNet) ...[
@@ -570,12 +606,15 @@ class AccountUtils {
                 ),
                 AppCard(
                   padding: 0,
-                  child: ListTile(
-                      title: Text(l10n.txpTestnetFaucet),
-                      onTap: () {
-                        Navigator.of(context).pop(PaymentGateway.testnetFaucet);
-                      },
-                      trailing: Icon(Icons.chevron_right, size: 16)),
+                  child: Semantics(
+                    button: true,
+                    child: ListTile(
+                        title: Text(l10n.txpTestnetFaucet),
+                        onTap: () {
+                          Navigator.of(context).pop(PaymentGateway.testnetFaucet);
+                        },
+                        trailing: Icon(Icons.chevron_right, size: 16)),
+                  ),
                 ),
               ]
             ],
@@ -877,24 +916,30 @@ class AccountUtils {
             children: [
               AppCard(
                 padding: 0,
-                child: ListTile(
-                    title: Text(l10n.txpGetVfxNow),
-                    onTap: () {
-                      Navigator.of(context).pop(VfxOrBtcOption.vfx);
-                    },
-                    trailing: Icon(Icons.chevron_right, size: 16)),
+                child: Semantics(
+                  button: true,
+                  child: ListTile(
+                      title: Text(l10n.txpGetVfxNow),
+                      onTap: () {
+                        Navigator.of(context).pop(VfxOrBtcOption.vfx);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
               ),
               SizedBox(
                 height: 12,
               ),
               AppCard(
                 padding: 0,
-                child: ListTile(
-                    title: Text(l10n.txpGetBtcNow),
-                    onTap: () {
-                      Navigator.of(context).pop(VfxOrBtcOption.btc);
-                    },
-                    trailing: Icon(Icons.chevron_right, size: 16)),
+                child: Semantics(
+                  button: true,
+                  child: ListTile(
+                      title: Text(l10n.txpGetBtcNow),
+                      onTap: () {
+                        Navigator.of(context).pop(VfxOrBtcOption.btc);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
               ),
             ],
           );
@@ -1240,24 +1285,30 @@ class AccountUtils {
               ),
               AppCard(
                 padding: 0,
-                child: ListTile(
-                    title: Text(l10n.txpGetVfxNow),
-                    onTap: () {
-                      Navigator.of(context).pop(VfxOrBtcOption.vfx);
-                    },
-                    trailing: Icon(Icons.chevron_right, size: 16)),
+                child: Semantics(
+                  button: true,
+                  child: ListTile(
+                      title: Text(l10n.txpGetVfxNow),
+                      onTap: () {
+                        Navigator.of(context).pop(VfxOrBtcOption.vfx);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
               ),
               SizedBox(
                 height: 12,
               ),
               AppCard(
                 padding: 0,
-                child: ListTile(
-                    title: Text(l10n.txpGetBtcNow),
-                    onTap: () {
-                      Navigator.of(context).pop(VfxOrBtcOption.btc);
-                    },
-                    trailing: Icon(Icons.chevron_right, size: 16)),
+                child: Semantics(
+                  button: true,
+                  child: ListTile(
+                      title: Text(l10n.txpGetBtcNow),
+                      onTap: () {
+                        Navigator.of(context).pop(VfxOrBtcOption.btc);
+                      },
+                      trailing: Icon(Icons.chevron_right, size: 16)),
+                ),
               ),
             ],
           );

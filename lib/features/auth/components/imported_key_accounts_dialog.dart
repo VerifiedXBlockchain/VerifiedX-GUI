@@ -53,27 +53,30 @@ class _ImportedKeyAccountsDialog extends StatelessWidget {
               const SizedBox(height: 12),
               for (var i = 0; i < options.length; i++)
                 Card(
-                  child: ListTile(
-                    title: Text(i == 0 ? l10n.keyImportStandardForm : l10n.keyImportEarlierForm),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(l10n.keyImportVaultLine(options[i].reserveKeypair.address)),
-                        if (options[i].btcAccount != null) Text(l10n.keyImportBitcoinLine(options[i].btcAccount!.address)),
-                        Text(
-                          _historyLabel(l10n, accountOptions.histories[i]),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: accountOptions.histories[i] == DerivedAccountsHistory.found
-                                ? Theme.of(context).colorScheme.success
-                                : null,
+                  child: Semantics(
+                    button: true,
+                    child: ListTile(
+                      title: Text(i == 0 ? l10n.keyImportStandardForm : l10n.keyImportEarlierForm),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(l10n.keyImportVaultLine(options[i].reserveKeypair.address)),
+                          if (options[i].btcAccount != null) Text(l10n.keyImportBitcoinLine(options[i].btcAccount!.address)),
+                          Text(
+                            _historyLabel(l10n, accountOptions.histories[i]),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              color: accountOptions.histories[i] == DerivedAccountsHistory.found
+                                  ? Theme.of(context).colorScheme.success
+                                  : null,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => Navigator.of(context).pop(options[i]),
                     ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () => Navigator.of(context).pop(options[i]),
                   ),
                 ),
             ],

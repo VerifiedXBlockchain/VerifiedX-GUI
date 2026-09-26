@@ -249,37 +249,46 @@ class ReserveAccountManageCard extends BaseComponent {
                                     children: [
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsNfts),
-                                          leading: Icon(Icons.lightbulb_outline),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("nfts");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsNfts),
+                                            leading: Icon(Icons.lightbulb_outline),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("nfts");
+                                            },
+                                          ),
                                         ),
                                       ),
                                       SizedBox(height: 10),
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsTokens),
-                                          leading: Icon(Icons.toll),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("tokens");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsTokens),
+                                            leading: Icon(Icons.toll),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("tokens");
+                                            },
+                                          ),
                                         ),
                                       ),
                                       SizedBox(height: 10),
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsBtc),
-                                          leading: Icon(FontAwesomeIcons.bitcoin),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("btc");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsBtc),
+                                            leading: Icon(FontAwesomeIcons.bitcoin),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("btc");
+                                            },
+                                          ),
                                         ),
                                       )
                                     ],

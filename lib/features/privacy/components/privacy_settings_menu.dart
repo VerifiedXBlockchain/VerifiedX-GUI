@@ -243,13 +243,16 @@ class PrivacySettingsMenu extends ConsumerWidget {
                 const SizedBox(height: 12),
                 ...List.generate(vbtcTokens.length, (i) {
                   final token = vbtcTokens[i];
-                  return ListTile(
-                    title: Text(token.tokenName, style: TextStyle(color: AppColors.getBtc())),
-                    subtitle: Text(
-                      token.smartContractUid,
-                      style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: Colors.white38),
+                  return Semantics(
+                    button: true,
+                    child: ListTile(
+                      title: Text(token.tokenName, style: TextStyle(color: AppColors.getBtc())),
+                      subtitle: Text(
+                        token.smartContractUid,
+                        style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: Colors.white38),
+                      ),
+                      onTap: () => Navigator.of(ctx).pop(i),
                     ),
-                    onTap: () => Navigator.of(ctx).pop(i),
                   );
                 }),
               ],

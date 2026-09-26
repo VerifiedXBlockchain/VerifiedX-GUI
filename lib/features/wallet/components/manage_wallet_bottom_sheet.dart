@@ -127,117 +127,120 @@ class ManageWalletBtcListTile extends BaseComponent {
     final isSelected = ref.watch(sessionProvider.select((v) => v.btcSelected)) &&
         account.address == ref.watch(sessionProvider.select((v) => v.currentBtcAccount?.address));
 
-    return ListTile(
-      key: Key("btc_wallet_${account.address}_$isSelected"),
-      onTap: isSelected
-          ? null
-          : () {
-              ref.read(sessionProvider.notifier).setCurrentBtcAccount(account, false);
-            },
-      dense: true,
-      leading: ref.watch(sessionProvider.select((v) => v.btcSelected)) &&
-              account.address == ref.watch(sessionProvider.select((v) => v.currentBtcAccount?.address))
-          ? Icon(Icons.check_box_rounded, color: btcOrange)
-          : Icon(Icons.check_box_outline_blank_outlined, color: btcOrange),
-      title: Row(
-        children: [
-          Text(
-            account.label,
-            style: TextStyle(color: btcOrange),
-          ),
-          Text(
-            " [${account.balance} BTC]",
-            style: TextStyle(color: btcOrange),
-          ),
-        ],
-      ),
-      subtitle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(account.address),
-          Padding(
-            padding: const EdgeInsets.only(left: 6.0),
-            child: Semantics(
-              label: AppLocalizations.of(context).actionCopyAddress,
-              button: true,
-              child: InkWell(
-                child: const Icon(
-                  Icons.copy,
-                  size: 12,
+    return Semantics(
+      button: !isSelected,
+      child: ListTile(
+        key: Key("btc_wallet_${account.address}_$isSelected"),
+        onTap: isSelected
+            ? null
+            : () {
+                ref.read(sessionProvider.notifier).setCurrentBtcAccount(account, false);
+              },
+        dense: true,
+        leading: ref.watch(sessionProvider.select((v) => v.btcSelected)) &&
+                account.address == ref.watch(sessionProvider.select((v) => v.currentBtcAccount?.address))
+            ? Icon(Icons.check_box_rounded, color: btcOrange)
+            : Icon(Icons.check_box_outline_blank_outlined, color: btcOrange),
+        title: Row(
+          children: [
+            Text(
+              account.label,
+              style: TextStyle(color: btcOrange),
+            ),
+            Text(
+              " [${account.balance} BTC]",
+              style: TextStyle(color: btcOrange),
+            ),
+          ],
+        ),
+        subtitle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(account.address),
+            Padding(
+              padding: const EdgeInsets.only(left: 6.0),
+              child: Semantics(
+                label: AppLocalizations.of(context).actionCopyAddress,
+                button: true,
+                child: InkWell(
+                  child: const Icon(
+                    Icons.copy,
+                    size: 12,
+                  ),
+                  onTap: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: account.address),
+                    );
+                    Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                  },
                 ),
-                onTap: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: account.address),
-                  );
-                  Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                },
               ),
             ),
-          ),
-        ],
-      ),
-      trailing: AppButton(
-        type: AppButtonType.Text,
-        label: AppLocalizations.of(context).walletRevealPrivateKey,
-        variant: AppColorVariant.Info,
-        onPressed: () async {
-          if (!await passwordRequiredGuard(context, ref)) return;
+          ],
+        ),
+        trailing: AppButton(
+          type: AppButtonType.Text,
+          label: AppLocalizations.of(context).walletRevealPrivateKey,
+          variant: AppColorVariant.Info,
+          onPressed: () async {
+            if (!await passwordRequiredGuard(context, ref)) return;
 
-          final a = await BtcService().retrieveAccount(account.address, omitPrivateKey: false);
-          if (a == null) {
-            Toast.error();
-            return;
-          }
-          if (!a.hasPrivateKey) {
-            // Core VX-13: the node exports a Bitcoin key only when the
-            // account is created, never on a later lookup.
-            Toast.error(AppLocalizations.of(context).walletBtcPrivateKeyNotExported);
-            return;
-          }
+            final a = await BtcService().retrieveAccount(account.address, omitPrivateKey: false);
+            if (a == null) {
+              Toast.error();
+              return;
+            }
+            if (!a.hasPrivateKey) {
+              // Core VX-13: the node exports a Bitcoin key only when the
+              // account is created, never on a later lookup.
+              Toast.error(AppLocalizations.of(context).walletBtcPrivateKeyNotExported);
+              return;
+            }
 
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListTile(
-                      leading: const Icon(Icons.security),
-                      title: SizedBox(
-                        width: 500,
-                        child: TextFormField(
-                          initialValue: a.privateKey,
-                          decoration: InputDecoration(
-                            label: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.security),
+                        title: SizedBox(
+                          width: 500,
+                          child: TextFormField(
+                            initialValue: a.privateKey,
+                            decoration: InputDecoration(
+                              label: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
+                            ),
+                            style: const TextStyle(fontSize: 12),
+                            readOnly: true,
                           ),
-                          style: const TextStyle(fontSize: 12),
-                          readOnly: true,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.copy),
+                          tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
+                          onPressed: () async {
+                            await Clipboard.setData(ClipboardData(text: a.privateKey));
+                            Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
+                          },
                         ),
                       ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.copy),
-                        tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
-                        onPressed: () async {
-                          await Clipboard.setData(ClipboardData(text: a.privateKey));
-                          Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
+                      const Divider(),
+                      AppButton(
+                        label: AppLocalizations.of(context).actionClose,
+                        onPressed: () {
+                          Navigator.of(context).pop();
                         },
-                      ),
-                    ),
-                    const Divider(),
-                    AppButton(
-                      label: AppLocalizations.of(context).actionClose,
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                ),
-              );
-            },
-          );
-        },
+                      )
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
@@ -258,225 +261,228 @@ class ManageWalletListTile extends BaseComponent {
     final isSelected = !ref.watch(sessionProvider.select((v) => v.btcSelected)) &&
         wallet.address == ref.watch(sessionProvider.select((v) => v.currentWallet?.address));
 
-    return ListTile(
-      key: Key("vfx_wallet_${wallet.address}_$isSelected"),
+    return Semantics(
+      button: !isSelected,
+      child: ListTile(
+        key: Key("vfx_wallet_${wallet.address}_$isSelected"),
 
-      dense: true,
-      onTap: isSelected
-          ? null
-          : () {
-              ref.read(sessionProvider.notifier).setCurrentWallet(wallet, false);
-            },
-      // leading: Icon(Icons.account_balance_wallet_outlined, color: color),
-      leading: isSelected ? Icon(Icons.check_box_rounded, color: color) : Icon(Icons.check_box_outline_blank_outlined, color: color),
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            wallet.label,
-            style: TextStyle(
-              color: color,
-              fontSize: 16,
+        dense: true,
+        onTap: isSelected
+            ? null
+            : () {
+                ref.read(sessionProvider.notifier).setCurrentWallet(wallet, false);
+              },
+        // leading: Icon(Icons.account_balance_wallet_outlined, color: color),
+        leading: isSelected ? Icon(Icons.check_box_rounded, color: color) : Icon(Icons.check_box_outline_blank_outlined, color: color),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              wallet.label,
+              style: TextStyle(
+                color: color,
+                fontSize: 16,
+              ),
             ),
-          ),
-          wallet.isReserved
-              ? Text(
-                  " [Available: ${wallet.availableBalance} VFX]",
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 16,
+            wallet.isReserved
+                ? Text(
+                    " [Available: ${wallet.availableBalance} VFX]",
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 16,
+                    ),
+                  )
+                : Text(
+                    " [${wallet.balance} VFX]",
+                    style: TextStyle(
+                      color: color,
+                      fontSize: 16,
+                    ),
                   ),
-                )
-              : Text(
-                  " [${wallet.balance} VFX]",
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 16,
+            if (wallet.isReserved || wallet.lockedBalance > 0)
+              Padding(
+                padding: const EdgeInsets.only(left: 6.0),
+                child: Semantics(
+                  label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      ref.read(reserveAccountProvider.notifier).showBalanceInfo(context, wallet);
+                    },
+                    child: Icon(
+                      Icons.help,
+                      size: 14,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
                   ),
                 ),
-          if (wallet.isReserved || wallet.lockedBalance > 0)
+              ),
+          ],
+        ),
+        subtitle: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              wallet.address,
+              style: TextStyle(fontSize: 16),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 6.0),
               child: Semantics(
-                label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                label: AppLocalizations.of(context).actionCopyAddress,
                 button: true,
                 child: InkWell(
-                  onTap: () {
-                    ref.read(reserveAccountProvider.notifier).showBalanceInfo(context, wallet);
-                  },
-                  child: Icon(
-                    Icons.help,
-                    size: 14,
-                    color: Theme.of(context).colorScheme.secondary,
+                  child: const Icon(
+                    Icons.copy,
+                    size: 16,
                   ),
+                  onTap: () async {
+                    await Clipboard.setData(
+                      ClipboardData(text: wallet.address),
+                    );
+                    Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                  },
                 ),
               ),
             ),
-        ],
-      ),
-      subtitle: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            wallet.address,
-            style: TextStyle(fontSize: 16),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 6.0),
-            child: Semantics(
-              label: AppLocalizations.of(context).actionCopyAddress,
-              button: true,
-              child: InkWell(
-                child: const Icon(
-                  Icons.copy,
-                  size: 16,
-                ),
-                onTap: () async {
-                  await Clipboard.setData(
-                    ClipboardData(text: wallet.address),
-                  );
-                  Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                },
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (wallet.isReserved && wallet.isNetworkProtected)
+              Text(
+                AppLocalizations.of(context).walletStatusActivated,
+                style: TextStyle(color: color),
               ),
-            ),
-          ),
-        ],
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (wallet.isReserved && wallet.isNetworkProtected)
-            Text(
-              AppLocalizations.of(context).walletStatusActivated,
-              style: TextStyle(color: color),
-            ),
-          // if (wallet.isReserved && !wallet.isNetworkProtected)
-          //   AppButton(
-          //     label: "Publish",
-          //     type: AppButtonType.Text,
-          //     variant: AppColorVariant.Info,
-          //     onPressed: () async {
-          //       await ref.read(reserveAccountProvider.notifier).activate(wallet);
-          //     },
-          //   ),
+            // if (wallet.isReserved && !wallet.isNetworkProtected)
+            //   AppButton(
+            //     label: "Publish",
+            //     type: AppButtonType.Text,
+            //     variant: AppColorVariant.Info,
+            //     onPressed: () async {
+            //       await ref.read(reserveAccountProvider.notifier).activate(wallet);
+            //     },
+            //   ),
 
-          if (!wallet.isReserved)
-            IconButton(
-                onPressed: () async {
-                  final privateKey = await fetchVfxPrivateKey(context, ref, wallet.address);
-                  if (privateKey == null) {
-                    return;
-                  }
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ListTile(
-                              leading: const Icon(Icons.security),
-                              title: SizedBox(
-                                width: 500,
-                                child: TextFormField(
-                                  initialValue: privateKey,
-                                  decoration: InputDecoration(
-                                    label: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
+            if (!wallet.isReserved)
+              IconButton(
+                  onPressed: () async {
+                    final privateKey = await fetchVfxPrivateKey(context, ref, wallet.address);
+                    if (privateKey == null) {
+                      return;
+                    }
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              ListTile(
+                                leading: const Icon(Icons.security),
+                                title: SizedBox(
+                                  width: 500,
+                                  child: TextFormField(
+                                    initialValue: privateKey,
+                                    decoration: InputDecoration(
+                                      label: Text(AppLocalizations.of(context).walletPrivateKeyLabel),
+                                    ),
+                                    style: const TextStyle(fontSize: 12),
+                                    readOnly: true,
                                   ),
-                                  style: const TextStyle(fontSize: 12),
-                                  readOnly: true,
+                                ),
+                                trailing: IconButton(
+                                  icon: const Icon(Icons.copy),
+                                  tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
+                                  onPressed: () async {
+                                    await Clipboard.setData(ClipboardData(text: privateKey));
+                                    Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
+                                  },
                                 ),
                               ),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.copy),
-                                tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
-                                onPressed: () async {
-                                  await Clipboard.setData(ClipboardData(text: privateKey));
-                                  Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
+                              const Divider(),
+                              AppButton(
+                                label: AppLocalizations.of(context).actionClose,
+                                onPressed: () {
+                                  Navigator.of(context).pop();
                                 },
-                              ),
-                            ),
-                            const Divider(),
-                            AppButton(
-                              label: AppLocalizations.of(context).actionClose,
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            )
-                          ],
-                        ),
-                      );
-                    },
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  iconSize: 16,
+                  tooltip: AppLocalizations.of(context).walletRevealPrivateKey,
+                  icon: Icon(
+                    Icons.remove_red_eye,
+                  )),
+            IconButton(
+                onPressed: () async {
+                  final l10n = AppLocalizations.of(context);
+                  final confirmed = await ConfirmDialog.show(
+                    title: l10n.walletHideAccountTitle,
+                    body: l10n.walletHideAccountBody,
+                    confirmText: l10n.walletHideLabel,
+                    cancelText: l10n.actionCancel,
+                    destructive: true,
                   );
+
+                  if (confirmed != true) {
+                    return;
+                  }
+
+                  ref.read(walletDetailProvider(wallet).notifier).delete();
                 },
                 iconSize: 16,
-                tooltip: AppLocalizations.of(context).walletRevealPrivateKey,
+                tooltip: AppLocalizations.of(context).walletHideAccountTitle,
                 icon: Icon(
-                  Icons.remove_red_eye,
+                  Icons.delete,
                 )),
-          IconButton(
-              onPressed: () async {
-                final l10n = AppLocalizations.of(context);
-                final confirmed = await ConfirmDialog.show(
-                  title: l10n.walletHideAccountTitle,
-                  body: l10n.walletHideAccountBody,
-                  confirmText: l10n.walletHideLabel,
-                  cancelText: l10n.actionCancel,
-                  destructive: true,
-                );
+            // AppButton(
+            //   label: "Rescan",
+            //   type: AppButtonType.Text,
+            //   variant: AppColorVariant.Light,
+            //   onPressed: () async {
+            //     final resync = await ConfirmDialog.show(
+            //       title: "Rescan Blocks?",
+            //       body: "Would you like to rescan the chain to include any transactions relevant to this address?",
+            //       confirmText: "Yes",
+            //       cancelText: "No",
+            //     );
+            //     if (resync == true) {
+            //       final success = await BridgeService().rescanAddress(wallet.address);
+            //       if (success) {
+            //         InfoDialog.show(title: "Rescan has started", body: "Updated TXs will show up shortly");
+            //       } else {
+            //         OverlayToast.error();
+            //       }
+            //     }
+            //   },
+            // ),
+            // AppButton(
+            //   type: AppButtonType.Text,
+            //   variant: AppColorVariant.Danger,
+            //   label: "Hide Account",
+            //   onPressed: () async {
+            //     final confirmed = await ConfirmDialog.show(
+            //       title: "Hide wallet?",
+            //       body: "Are you sure you want to hide this wallet from the GUI?",
+            //       destructive: true,
+            //       confirmText: "Hide",
+            //       cancelText: "Cancel",
+            //     );
 
-                if (confirmed != true) {
-                  return;
-                }
-
-                ref.read(walletDetailProvider(wallet).notifier).delete();
-              },
-              iconSize: 16,
-              tooltip: AppLocalizations.of(context).walletHideAccountTitle,
-              icon: Icon(
-                Icons.delete,
-              )),
-          // AppButton(
-          //   label: "Rescan",
-          //   type: AppButtonType.Text,
-          //   variant: AppColorVariant.Light,
-          //   onPressed: () async {
-          //     final resync = await ConfirmDialog.show(
-          //       title: "Rescan Blocks?",
-          //       body: "Would you like to rescan the chain to include any transactions relevant to this address?",
-          //       confirmText: "Yes",
-          //       cancelText: "No",
-          //     );
-          //     if (resync == true) {
-          //       final success = await BridgeService().rescanAddress(wallet.address);
-          //       if (success) {
-          //         InfoDialog.show(title: "Rescan has started", body: "Updated TXs will show up shortly");
-          //       } else {
-          //         OverlayToast.error();
-          //       }
-          //     }
-          //   },
-          // ),
-          // AppButton(
-          //   type: AppButtonType.Text,
-          //   variant: AppColorVariant.Danger,
-          //   label: "Hide Account",
-          //   onPressed: () async {
-          //     final confirmed = await ConfirmDialog.show(
-          //       title: "Hide wallet?",
-          //       body: "Are you sure you want to hide this wallet from the GUI?",
-          //       destructive: true,
-          //       confirmText: "Hide",
-          //       cancelText: "Cancel",
-          //     );
-
-          //     if (confirmed == true) {
-          //       ref.read(walletDetailProvider(wallet).notifier).delete();
-          //     }
-          //   },
-          // )
-        ],
+            //     if (confirmed == true) {
+            //       ref.read(walletDetailProvider(wallet).notifier).delete();
+            //     }
+            //   },
+            // )
+          ],
+        ),
       ),
     );
   }

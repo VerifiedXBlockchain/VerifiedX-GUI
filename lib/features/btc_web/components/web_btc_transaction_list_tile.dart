@@ -65,27 +65,30 @@ class WebBtcTransactionListTile extends BaseComponent {
       padding: 0,
       color: AppColors.getGray(ColorShade.s100),
       // glowOpacity: 0,
-      child: ListTile(
-        onTap: () {
-          openTxOnExplorer(tx);
-        },
-        title: Text(
-          "${amount.toString()} ${isVbtc ? 'vBTC' : 'BTC'}",
-        ),
-        subtitle: Text("Date: ${tx.blockTimeLabel} \nFee: ${tx.fee} SATS | ${tx.feeBtc} BTC"),
-        leading: tx.status.confirmed
-            ? Text(
-                "Confirmed",
-                style: TextStyle(color: Theme.of(context).colorScheme.success, fontWeight: FontWeight.bold),
-              )
-            : Text(
-                "Pending",
-                style: TextStyle(color: Theme.of(context).colorScheme.warning, fontWeight: FontWeight.bold),
-              ),
-        trailing: Icon(
-          Icons.open_in_new,
-          size: 12,
-          color: Colors.white70,
+      child: Semantics(
+        button: true,
+        child: ListTile(
+          onTap: () {
+            openTxOnExplorer(tx);
+          },
+          title: Text(
+            "${amount.toString()} ${isVbtc ? 'vBTC' : 'BTC'}",
+          ),
+          subtitle: Text("Date: ${tx.blockTimeLabel} \nFee: ${tx.fee} SATS | ${tx.feeBtc} BTC"),
+          leading: tx.status.confirmed
+              ? Text(
+                  "Confirmed",
+                  style: TextStyle(color: Theme.of(context).colorScheme.success, fontWeight: FontWeight.bold),
+                )
+              : Text(
+                  "Pending",
+                  style: TextStyle(color: Theme.of(context).colorScheme.warning, fontWeight: FontWeight.bold),
+                ),
+          trailing: Icon(
+            Icons.open_in_new,
+            size: 12,
+            color: Colors.white70,
+          ),
         ),
       ),
     );

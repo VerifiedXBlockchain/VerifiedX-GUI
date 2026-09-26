@@ -55,25 +55,28 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
         children: wallets.map((wallet) {
           return Padding(
             padding: const EdgeInsets.only(bottom: 4),
-            child: ListTile(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              tileColor: Colors.white.withOpacity(0.03),
-              leading: const Icon(Icons.account_balance_wallet, size: 18, color: Colors.white54),
-              title: Text(
-                wallet.adnr != null ? "${wallet.adnr}.vfx" : wallet.address,
-                style: const TextStyle(fontSize: 13),
+            child: Semantics(
+              button: true,
+              child: ListTile(
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                tileColor: Colors.white.withOpacity(0.03),
+                leading: const Icon(Icons.account_balance_wallet, size: 18, color: Colors.white54),
+                title: Text(
+                  wallet.adnr != null ? "${wallet.adnr}.vfx" : wallet.address,
+                  style: const TextStyle(fontSize: 13),
+                ),
+                subtitle: wallet.adnr != null
+                    ? Text(wallet.address, style: const TextStyle(fontSize: 11, color: Colors.white38, fontFamily: 'monospace'))
+                    : null,
+                trailing: Text(
+                  l10n.prvVfxAmountSuffix(wallet.balance.toString()),
+                  style: const TextStyle(fontSize: 12, color: Colors.white54),
+                ),
+                onTap: () {
+                  _toAddressController.text = wallet.address;
+                  Navigator.of(context).pop();
+                },
               ),
-              subtitle: wallet.adnr != null
-                  ? Text(wallet.address, style: const TextStyle(fontSize: 11, color: Colors.white38, fontFamily: 'monospace'))
-                  : null,
-              trailing: Text(
-                l10n.prvVfxAmountSuffix(wallet.balance.toString()),
-                style: const TextStyle(fontSize: 12, color: Colors.white54),
-              ),
-              onTap: () {
-                _toAddressController.text = wallet.address;
-                Navigator.of(context).pop();
-              },
             ),
           );
         }).toList(),

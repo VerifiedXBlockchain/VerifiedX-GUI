@@ -160,140 +160,149 @@ class AllTokensScreen extends BaseScreen {
                                 : l10n.hnavNonFungibleToken
                             : l10n.hnavNonFungibleToken;
 
-                        return ListTile(
-                          dense: true,
-                          onTap: () async {
-                            if (token is WebNft) {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: token.smartContract.id)));
-                            } else if (token is Nft) {
-                              if (token.isToken) {
-                                final n = await NftService().getNftData(nft.id);
+                        return Semantics(
+                          button: true,
+                          child: ListTile(
+                            dense: true,
+                            onTap: () async {
+                              if (token is WebNft) {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: token.smartContract.id)));
+                              } else if (token is Nft) {
+                                if (token.isToken) {
+                                  final n = await NftService().getNftData(nft.id);
 
-                                if (n != null && n.isToken) {
-                                  final tokenAccount = TokenAccount.fromNft(n, ref);
-                                  final tokenFeature = TokenScFeature.fromNft(n);
-                                  if (tokenAccount != null && tokenFeature != null) {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (_) => TokenManagementScreenContainer(
-                                              address: n.currentOwner,
-                                              nftId: n.id,
-                                              tokenAccount: tokenAccount,
-                                              tokenFeature: tokenFeature,
-                                              ref: ref,
-                                              nft: n,
-                                            )));
+                                  if (n != null && n.isToken) {
+                                    final tokenAccount = TokenAccount.fromNft(n, ref);
+                                    final tokenFeature = TokenScFeature.fromNft(n);
+                                    if (tokenAccount != null && tokenFeature != null) {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                          builder: (_) => TokenManagementScreenContainer(
+                                                address: n.currentOwner,
+                                                nftId: n.id,
+                                                tokenAccount: tokenAccount,
+                                                tokenFeature: tokenFeature,
+                                                ref: ref,
+                                                nft: n,
+                                              )));
+                                    }
                                   }
+                                } else {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: token.id)));
                                 }
-                              } else {
-                                Navigator.of(context).push(MaterialPageRoute(builder: (_) => NftDetailScreen(id: token.id)));
                               }
-                            }
-                          },
-                          title: Text(token.name),
-                          subtitle: Text(subtitle),
-                          trailing: Icon(Icons.chevron_right),
-                          leading: Builder(
-                            builder: (context) {
-                              if (kIsWeb) {
-                                if (nft.currentEvolveAssetWeb != null && nft.currentEvolveAssetWeb!.isImage) {
-                                  return Container(
+                            },
+                            title: Text(token.name),
+                            subtitle: Text(subtitle),
+                            trailing: Icon(Icons.chevron_right),
+                            leading: Builder(
+                              builder: (context) {
+                                if (kIsWeb) {
+                                  if (nft.currentEvolveAssetWeb != null && nft.currentEvolveAssetWeb!.isImage) {
+                                    return Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: AspectRatio(
+                                        aspectRatio: 1,
+                                        child: CachedNetworkImage(
+                                          imageUrl: nft.currentEvolveAssetWeb!.location,
+                                          width: double.infinity,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    );
+                                  }
+
+                                  if (nft.primaryAssetWeb != null) {
+                                    return Icon(Icons.file_present_outlined);
+                                  }
+
+                                  return SizedBox(
                                     width: 32,
                                     height: 32,
-                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                                    clipBehavior: Clip.antiAlias,
-                                    child: AspectRatio(
-                                      aspectRatio: 1,
-                                      child: CachedNetworkImage(
-                                        imageUrl: nft.currentEvolveAssetWeb!.location,
-                                        width: double.infinity,
-                                        fit: BoxFit.cover,
-                                      ),
+                                  );
+                                }
+
+                                if (nft.currentEvolveAsset.isImage) {
+                                  if (nft.currentEvolveAsset.localPath == null) {
+                                    return const SizedBox(
+                                      width: 32,
+                                      height: 32,
+                                    );
+                                  }
+
+                                  return SizedBox(
+                                    width: 32,
+                                    height: 32,
+                                    child: PollingImagePreview(
+                                      localPath: nft.currentEvolveAsset.localPath!,
+                                      expectedSize: nft.currentEvolveAsset.fileSize,
+                                      withProgress: false,
                                     ),
                                   );
                                 }
-
-                                if (nft.primaryAssetWeb != null) {
-                                  return Icon(Icons.file_present_outlined);
-                                }
-
-                                return SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                );
-                              }
-
-                              if (nft.currentEvolveAsset.isImage) {
-                                if (nft.currentEvolveAsset.localPath == null) {
-                                  return const SizedBox(
-                                    width: 32,
-                                    height: 32,
-                                  );
-                                }
-
-                                return SizedBox(
-                                  width: 32,
-                                  height: 32,
-                                  child: PollingImagePreview(
-                                    localPath: nft.currentEvolveAsset.localPath!,
-                                    expectedSize: nft.currentEvolveAsset.fileSize,
-                                    withProgress: false,
-                                  ),
-                                );
-                              }
-                              return const Icon(Icons.file_present_outlined);
-                            },
+                                return const Icon(Icons.file_present_outlined);
+                              },
+                            ),
                           ),
                         );
                       }
 
                       if (token is WebFungibleTokenBalance) {
-                        return ListTile(
-                          dense: true,
-                          onTap: () {
-                            ref.invalidate(webTokenDetailProvider(token.token.smartContractId));
-                            AutoRouter.of(context).push(WebTokenDetailScreenRoute(scId: token.token.smartContractId));
-                          },
-                          title: Text(token.token.name),
-                          subtitle: Text(l10n.hnavFungibleTokenWithBalance(token.balance.toString(), token.token.ticker)),
-                          leading: token.token.imageUrl != null && token.token.imageUrl!.isNotEmpty
-                              ? Container(
-                                  width: 32,
-                                  height: 32,
-                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: Image.network(token.token.imageUrl!, width: 32, height: 32, fit: BoxFit.cover))
-                              : PrettyIcon(
-                                  type: PrettyIconType.fungibleToken,
-                                ),
-                          trailing: Icon(Icons.chevron_right),
+                        return Semantics(
+                          button: true,
+                          child: ListTile(
+                            dense: true,
+                            onTap: () {
+                              ref.invalidate(webTokenDetailProvider(token.token.smartContractId));
+                              AutoRouter.of(context).push(WebTokenDetailScreenRoute(scId: token.token.smartContractId));
+                            },
+                            title: Text(token.token.name),
+                            subtitle: Text(l10n.hnavFungibleTokenWithBalance(token.balance.toString(), token.token.ticker)),
+                            leading: token.token.imageUrl != null && token.token.imageUrl!.isNotEmpty
+                                ? Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: Image.network(token.token.imageUrl!, width: 32, height: 32, fit: BoxFit.cover))
+                                : PrettyIcon(
+                                    type: PrettyIconType.fungibleToken,
+                                  ),
+                            trailing: Icon(Icons.chevron_right),
+                          ),
                         );
                       }
 
                       if (token is BtcWebVbtcToken) {
-                        return ListTile(
-                          dense: true,
-                          onTap: () {
-                            AutoRouter.of(context).push(WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address));
-                          },
-                          title: Text(token.name),
-                          subtitle: Text(l10n.hnavVbtcTokenWithBalance(token.balanceForAddress(address).toString())),
-                          trailing: Icon(Icons.chevron_right),
-                          leading: Container(
-                            width: 32,
-                            height: 32,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
-                            clipBehavior: Clip.antiAlias,
-                            child: CachedNetworkImage(
-                              imageUrl: token.imageUrl,
-                              height: 32,
+                        return Semantics(
+                          button: true,
+                          child: ListTile(
+                            dense: true,
+                            onTap: () {
+                              AutoRouter.of(context).push(WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address));
+                            },
+                            title: Text(token.name),
+                            subtitle: Text(l10n.hnavVbtcTokenWithBalance(token.balanceForAddress(address).toString())),
+                            trailing: Icon(Icons.chevron_right),
+                            leading: Container(
                               width: 32,
-                              errorWidget: (context, _, __) {
-                                return Image.asset(
-                                  Assets.images.vbtcPng.path,
-                                  width: 32,
-                                  height: 32,
-                                );
-                              },
+                              height: 32,
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(16)),
+                              clipBehavior: Clip.antiAlias,
+                              child: CachedNetworkImage(
+                                imageUrl: token.imageUrl,
+                                height: 32,
+                                width: 32,
+                                errorWidget: (context, _, __) {
+                                  return Image.asset(
+                                    Assets.images.vbtcPng.path,
+                                    width: 32,
+                                    height: 32,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         );

@@ -78,73 +78,27 @@ class MotherModal extends BaseComponent {
         if (motherData != null) Text(l10n.motherChildrenRow(children.length.toString())),
         const Divider(),
         if (motherData != null)
-          ListTile(
-            title: Text(l10n.motherLaunchHost),
-            leading: const Icon(Icons.launch),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () async {
-              AutoRouter.of(context).push(const MotherDashboardScreenRoute());
-            },
-          ),
-        ListTile(
-          title: Text(motherData == null ? l10n.motherSetWalletHost : l10n.motherUpdateHostInfo),
-          leading: const Icon(Icons.cell_tower),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () async {
-            final data = await showDialog(
-              context: context,
-              builder: (context) => MotherCreateHostDialog(forUpdate: motherData != null),
-            );
-
-            if (data != null) {
-              Navigator.of(context).pop();
-            }
-          },
-        ),
-        if (motherData != null)
-          ListTile(
-            title: Text(l10n.motherStopHost),
-            leading: const Icon(
-              Icons.stop,
-              color: Colors.red,
+          Semantics(
+            button: true,
+            child: ListTile(
+              title: Text(l10n.motherLaunchHost),
+              leading: const Icon(Icons.launch),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () async {
+                AutoRouter.of(context).push(const MotherDashboardScreenRoute());
+              },
             ),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () async {
-              final confirmed = await ConfirmDialog.show(
-                title: l10n.motherStopHostConfirmTitle,
-                body: l10n.motherStopHostBody,
-                confirmText: l10n.motherStop,
-                cancelText: l10n.actionCancel,
-              );
-
-              if (confirmed == true) {
-                final success = await MotherService().stopHost();
-                if (success == true) {
-                  notifyTransactionSubmitted();
-                  final restart = await ConfirmDialog.show(
-                    title: l10n.motherCliRestartTitle,
-                    body: l10n.motherCliRestartBody,
-                    confirmText: l10n.beaconRestartNow,
-                    cancelText: l10n.beaconLater,
-                  );
-
-                  if (restart == true) {
-                    ref.read(sessionProvider.notifier).restartCli();
-                  }
-                  Navigator.of(context).pop();
-                }
-              }
-            },
           ),
-        if (!connectedToMother)
-          ListTile(
-            title: Text(l10n.motherSetWalletRemote),
-            leading: const Icon(Icons.satellite_alt_outlined),
+        Semantics(
+          button: true,
+          child: ListTile(
+            title: Text(motherData == null ? l10n.motherSetWalletHost : l10n.motherUpdateHostInfo),
+            leading: const Icon(Icons.cell_tower),
             trailing: const Icon(Icons.chevron_right),
             onTap: () async {
               final data = await showDialog(
                 context: context,
-                builder: (context) => MotherAddHostDialog(),
+                builder: (context) => MotherCreateHostDialog(forUpdate: motherData != null),
               );
 
               if (data != null) {
@@ -152,48 +106,112 @@ class MotherModal extends BaseComponent {
               }
             },
           ),
-        if (connectedToMother)
-          ListTile(
-            title: Text(l10n.motherStopRemote),
-            leading: const Icon(
-              Icons.stop,
-              color: Colors.red,
-            ),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () async {
-              final confirmed = await ConfirmDialog.show(
-                title: l10n.motherStopRemote,
-                body: l10n.motherStopRemoteBody,
-                confirmText: l10n.motherStopRemoteAction,
-                cancelText: l10n.actionCancel,
-              );
-              if (confirmed == true) {
-                final path = await configPath();
-                final currentLines = await File(path).readAsLines();
+        ),
+        if (motherData != null)
+          Semantics(
+            button: true,
+            child: ListTile(
+              title: Text(l10n.motherStopHost),
+              leading: const Icon(
+                Icons.stop,
+                color: Colors.red,
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () async {
+                final confirmed = await ConfirmDialog.show(
+                  title: l10n.motherStopHostConfirmTitle,
+                  body: l10n.motherStopHostBody,
+                  confirmText: l10n.motherStop,
+                  cancelText: l10n.actionCancel,
+                );
 
-                final List<String> updatedLines = [];
-                for (final line in currentLines) {
-                  if (!line.contains("MotherPassword=") && !line.contains("MotherAddress=")) {
-                    updatedLines.add(line);
+                if (confirmed == true) {
+                  final success = await MotherService().stopHost();
+                  if (success == true) {
+                    notifyTransactionSubmitted();
+                    final restart = await ConfirmDialog.show(
+                      title: l10n.motherCliRestartTitle,
+                      body: l10n.motherCliRestartBody,
+                      confirmText: l10n.beaconRestartNow,
+                      cancelText: l10n.beaconLater,
+                    );
+
+                    if (restart == true) {
+                      ref.read(sessionProvider.notifier).restartCli();
+                    }
+                    Navigator.of(context).pop();
                   }
                 }
-                await File(path).writeAsString(updatedLines.join('\n'));
-                await ref.read(sessionProvider.notifier).restartCli();
-                Navigator.of(context).pop();
-                Toast.message(l10n.motherRemoteRemoved);
-              }
+              },
+            ),
+          ),
+        if (!connectedToMother)
+          Semantics(
+            button: true,
+            child: ListTile(
+              title: Text(l10n.motherSetWalletRemote),
+              leading: const Icon(Icons.satellite_alt_outlined),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () async {
+                final data = await showDialog(
+                  context: context,
+                  builder: (context) => MotherAddHostDialog(),
+                );
+
+                if (data != null) {
+                  Navigator.of(context).pop();
+                }
+              },
+            ),
+          ),
+        if (connectedToMother)
+          Semantics(
+            button: true,
+            child: ListTile(
+              title: Text(l10n.motherStopRemote),
+              leading: const Icon(
+                Icons.stop,
+                color: Colors.red,
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () async {
+                final confirmed = await ConfirmDialog.show(
+                  title: l10n.motherStopRemote,
+                  body: l10n.motherStopRemoteBody,
+                  confirmText: l10n.motherStopRemoteAction,
+                  cancelText: l10n.actionCancel,
+                );
+                if (confirmed == true) {
+                  final path = await configPath();
+                  final currentLines = await File(path).readAsLines();
+
+                  final List<String> updatedLines = [];
+                  for (final line in currentLines) {
+                    if (!line.contains("MotherPassword=") && !line.contains("MotherAddress=")) {
+                      updatedLines.add(line);
+                    }
+                  }
+                  await File(path).writeAsString(updatedLines.join('\n'));
+                  await ref.read(sessionProvider.notifier).restartCli();
+                  Navigator.of(context).pop();
+                  Toast.message(l10n.motherRemoteRemoved);
+                }
+              },
+            ),
+          ),
+        Semantics(
+          button: true,
+          child: ListTile(
+            title: Text(l10n.motherWhatIs),
+            leading: const Icon(Icons.help),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              InfoDialog.show(
+                title: l10n.motherTitle,
+                body: l10n.motherInfoBody(Env.validatorPort.toString()),
+              );
             },
           ),
-        ListTile(
-          title: Text(l10n.motherWhatIs),
-          leading: const Icon(Icons.help),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () {
-            InfoDialog.show(
-              title: l10n.motherTitle,
-              body: l10n.motherInfoBody(Env.validatorPort.toString()),
-            );
-          },
         ),
       ],
     );

@@ -131,13 +131,16 @@ class WebTokenTopicBottomSheet extends BaseComponent {
             padding: const EdgeInsets.only(bottom: 16.0),
             child: AppCard(
                 padding: 0,
-                child: ListTile(
-                  title: Text(AppLocalizations.of(context).tokenCreateNewVotingTopic),
-                  subtitle: Text(AppLocalizations.of(context).tokenCreateNewVotingTopicBody),
-                  trailing: Icon(Icons.add),
-                  onTap: () {
-                    AutoRouter.of(context).push(CreateTokenTopicScreenRoute(scId: token.smartContractId, address: address));
-                  },
+                child: Semantics(
+                  button: true,
+                  child: ListTile(
+                    title: Text(AppLocalizations.of(context).tokenCreateNewVotingTopic),
+                    subtitle: Text(AppLocalizations.of(context).tokenCreateNewVotingTopicBody),
+                    trailing: Icon(Icons.add),
+                    onTap: () {
+                      AutoRouter.of(context).push(CreateTokenTopicScreenRoute(scId: token.smartContractId, address: address));
+                    },
+                  ),
                 )),
           ),
         ...data.topics.map((t) {
@@ -145,22 +148,25 @@ class WebTokenTopicBottomSheet extends BaseComponent {
             padding: const EdgeInsets.only(bottom: 16.0),
             child: AppCard(
               padding: 0,
-              child: ListTile(
-                title: Text(t.topicName),
-                subtitle: Text(
-                  t.topicDescription,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+              child: Semantics(
+                button: true,
+                child: ListTile(
+                  title: Text(t.topicName),
+                  subtitle: Text(
+                    t.topicDescription,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TokenTopicDetailScreen(t.toNative(), address, balance, isOwner),
+                      ),
+                    );
+                  },
                 ),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => TokenTopicDetailScreen(t.toNative(), address, balance, isOwner),
-                    ),
-                  );
-                },
               ),
             ),
           );

@@ -1195,12 +1195,15 @@ showWebLoginModal(
                 children: [
                   AppCard(
                     padding: 0,
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.of(context).pop("new");
-                      },
-                      title: Text(l10n.hnavCreateNewMnemonic),
-                      trailing: Icon(Icons.chevron_right),
+                    child: Semantics(
+                      button: true,
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).pop("new");
+                        },
+                        title: Text(l10n.hnavCreateNewMnemonic),
+                        trailing: Icon(Icons.chevron_right),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -1208,12 +1211,15 @@ showWebLoginModal(
                   ),
                   AppCard(
                     padding: 0,
-                    child: ListTile(
-                      title: Text(l10n.hnavRecoverFromMnemonic),
-                      trailing: Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.of(context).pop("recover");
-                      },
+                    child: Semantics(
+                      button: true,
+                      child: ListTile(
+                        title: Text(l10n.hnavRecoverFromMnemonic),
+                        trailing: Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.of(context).pop("recover");
+                        },
+                      ),
                     ),
                   ),
                 ],

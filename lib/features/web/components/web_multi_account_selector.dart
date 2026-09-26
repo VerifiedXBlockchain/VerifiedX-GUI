@@ -273,38 +273,47 @@ void _showLanguagePicker(BuildContext context, WidgetRef ref) {
                   ),
                 ),
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.check,
-                  color: currentLocale == null ? AppColors.getBlue() : Colors.transparent,
+              Semantics(
+                button: true,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.check,
+                    color: currentLocale == null ? AppColors.getBlue() : Colors.transparent,
+                  ),
+                  title: Text(l10n.settingsLanguageSystemDefault),
+                  onTap: () {
+                    ref.read(localeProvider.notifier).setLocale(null);
+                    Navigator.of(context).pop();
+                  },
                 ),
-                title: Text(l10n.settingsLanguageSystemDefault),
-                onTap: () {
-                  ref.read(localeProvider.notifier).setLocale(null);
-                  Navigator.of(context).pop();
-                },
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.check,
-                  color: currentLocale?.languageCode == 'en' ? AppColors.getBlue() : Colors.transparent,
+              Semantics(
+                button: true,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.check,
+                    color: currentLocale?.languageCode == 'en' ? AppColors.getBlue() : Colors.transparent,
+                  ),
+                  title: Text(l10n.settingsLanguageEnglish),
+                  onTap: () {
+                    ref.read(localeProvider.notifier).setLocale(const Locale('en'));
+                    Navigator.of(context).pop();
+                  },
                 ),
-                title: Text(l10n.settingsLanguageEnglish),
-                onTap: () {
-                  ref.read(localeProvider.notifier).setLocale(const Locale('en'));
-                  Navigator.of(context).pop();
-                },
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.check,
-                  color: currentLocale?.languageCode == 'es' ? AppColors.getBlue() : Colors.transparent,
+              Semantics(
+                button: true,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.check,
+                    color: currentLocale?.languageCode == 'es' ? AppColors.getBlue() : Colors.transparent,
+                  ),
+                  title: Text(l10n.settingsLanguageSpanish),
+                  onTap: () {
+                    ref.read(localeProvider.notifier).setLocale(const Locale('es'));
+                    Navigator.of(context).pop();
+                  },
                 ),
-                title: Text(l10n.settingsLanguageSpanish),
-                onTap: () {
-                  ref.read(localeProvider.notifier).setLocale(const Locale('es'));
-                  Navigator.of(context).pop();
-                },
               ),
               SizedBox(height: 8),
             ],
