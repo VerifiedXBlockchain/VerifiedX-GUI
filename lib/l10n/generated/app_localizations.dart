@@ -93,6 +93,12 @@ abstract class AppLocalizations {
     Locale('es')
   ];
 
+  /// Tooltip on a back arrow icon button that returns to the previous screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get actionBack;
+
   /// Cancel action — dismisses the current action.
   ///
   /// In en, this message translates to:
@@ -128,6 +134,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy'**
   String get actionCopy;
+
+  /// Tooltip / accessibility label on a copy icon next to an account address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy address'**
+  String get actionCopyAddress;
+
+  /// Tooltip on the copy icon next to an amount field.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy amount'**
+  String get actionCopyAmount;
+
+  /// Tooltip on the copy icon next to a domain name.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy domain'**
+  String get actionCopyDomain;
+
+  /// Tooltip on the copy icon next to a recovery mnemonic.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy mnemonic'**
+  String get actionCopyMnemonic;
+
+  /// Tooltip on the copy icon next to a private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy private key'**
+  String get actionCopyPrivateKey;
+
+  /// Tooltip on the copy icon next to a Vault recovery address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy recovery address'**
+  String get actionCopyRecoveryAddress;
+
+  /// Tooltip on the copy icon next to a Vault recovery private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy recovery private key'**
+  String get actionCopyRecoveryPrivateKey;
+
+  /// Tooltip on the copy icon next to a Vault restore code.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy restore code'**
+  String get actionCopyRestoreCode;
+
+  /// Tooltip on the copy icon next to a transaction hash.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy transaction hash'**
+  String get actionCopyTransactionHash;
+
+  /// Tooltip on the copy icon next to a Bitcoin WIF private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy WIF private key'**
+  String get actionCopyWifPrivateKey;
 
   /// Delete action — destructive, removes an item.
   ///
@@ -4545,6 +4611,12 @@ abstract class AppLocalizations {
   /// **'does NOT own'**
   String get homeDoesNotOwn;
 
+  /// Tooltip on the GitHub icon in the desktop footer.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub'**
+  String get homeFooterGithubTooltip;
+
   /// Title for the Get Help bottom sheet.
   ///
   /// In en, this message translates to:
@@ -5709,6 +5781,12 @@ abstract class AppLocalizations {
   /// **'{count} Address'**
   String navAddressSingular(String count);
 
+  /// Accessibility label on the side navigation expander while the menu is expanded.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse navigation'**
+  String get navCollapseMenuTooltip;
+
   /// Status label for confirmed transactions.
   ///
   /// In en, this message translates to:
@@ -5726,6 +5804,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Domains'**
   String get navDomains;
+
+  /// Accessibility label on the side navigation expander while the menu is collapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand navigation'**
+  String get navExpandMenuTooltip;
 
   /// Vertical icon button label: acquire BTC.
   ///
@@ -15668,6 +15752,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pending'**
   String get statusPending;
+
+  /// Tooltip on the refresh icon button that reloads the wallet info.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload wallet info'**
+  String get statusReloadWalletInfoTooltip;
 
   /// Success status for a completed transaction.
   ///

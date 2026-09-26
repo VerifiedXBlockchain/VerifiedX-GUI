@@ -1,4 +1,8 @@
 {
+  "actionBack": "Atrás",
+  "@actionBack": {
+    "description": "Tooltip on a back arrow icon button that returns to the previous screen."
+  },
   "actionCancel": "Cancelar",
   "@actionCancel": {
     "description": "Cancel action — dismisses the current action."
@@ -22,6 +26,46 @@
   "actionCopy": "Copiar",
   "@actionCopy": {
     "description": "Generic copy-to-clipboard action."
+  },
+  "actionCopyAddress": "Copiar dirección",
+  "@actionCopyAddress": {
+    "description": "Tooltip / accessibility label on a copy icon next to an account address."
+  },
+  "actionCopyAmount": "Copiar monto",
+  "@actionCopyAmount": {
+    "description": "Tooltip on the copy icon next to an amount field."
+  },
+  "actionCopyDomain": "Copiar dominio",
+  "@actionCopyDomain": {
+    "description": "Tooltip on the copy icon next to a domain name."
+  },
+  "actionCopyMnemonic": "Copiar mnemónico",
+  "@actionCopyMnemonic": {
+    "description": "Tooltip on the copy icon next to a recovery mnemonic."
+  },
+  "actionCopyPrivateKey": "Copiar clave privada",
+  "@actionCopyPrivateKey": {
+    "description": "Tooltip on the copy icon next to a private key."
+  },
+  "actionCopyRecoveryAddress": "Copiar dirección de recuperación",
+  "@actionCopyRecoveryAddress": {
+    "description": "Tooltip on the copy icon next to a Vault recovery address."
+  },
+  "actionCopyRecoveryPrivateKey": "Copiar clave privada de recuperación",
+  "@actionCopyRecoveryPrivateKey": {
+    "description": "Tooltip on the copy icon next to a Vault recovery private key."
+  },
+  "actionCopyRestoreCode": "Copiar código de restauración",
+  "@actionCopyRestoreCode": {
+    "description": "Tooltip on the copy icon next to a Vault restore code."
+  },
+  "actionCopyTransactionHash": "Copiar hash de la transacción",
+  "@actionCopyTransactionHash": {
+    "description": "Tooltip on the copy icon next to a transaction hash."
+  },
+  "actionCopyWifPrivateKey": "Copiar clave privada WIF",
+  "@actionCopyWifPrivateKey": {
+    "description": "Tooltip on the copy icon next to a Bitcoin WIF private key."
   },
   "actionDelete": "Eliminar",
   "@actionDelete": {
@@ -2347,6 +2391,10 @@
   "@homeDoesNotOwn": {
     "description": "Connector phrase between address and smartContractId when ownership is NOT verified."
   },
+  "homeFooterGithubTooltip": "GitHub",
+  "@homeFooterGithubTooltip": {
+    "description": "Tooltip on the GitHub icon in the desktop footer."
+  },
   "homeGetHelpTitle": "Obtener ayuda",
   "@homeGetHelpTitle": {
     "description": "Title for the Get Help bottom sheet."
@@ -2987,6 +3035,10 @@
       }
     }
   },
+  "navCollapseMenuTooltip": "Contraer navegación",
+  "@navCollapseMenuTooltip": {
+    "description": "Accessibility label on the side navigation expander while the menu is expanded."
+  },
   "navConfirmedStatus": "Confirmada",
   "@navConfirmedStatus": {
     "description": "Status label for confirmed transactions."
@@ -2998,6 +3050,10 @@
   "navDomains": "Dominios",
   "@navDomains": {
     "description": "Primary navigation label for VFX domains (ADNR)."
+  },
+  "navExpandMenuTooltip": "Expandir navegación",
+  "@navExpandMenuTooltip": {
+    "description": "Accessibility label on the side navigation expander while the menu is collapsed."
   },
   "navGetBtc": "Obtener\nBTC",
   "@navGetBtc": {
@@ -6875,6 +6931,10 @@
   "statusPending": "Pendiente",
   "@statusPending": {
     "description": "Pending status for transactions or operations."
+  },
+  "statusReloadWalletInfoTooltip": "Recargar información de la billetera",
+  "@statusReloadWalletInfoTooltip": {
+    "description": "Tooltip on the refresh icon button that reloads the wallet info."
   },
   "statusSuccess": "Éxito",
   "@statusSuccess": {

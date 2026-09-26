@@ -231,24 +231,27 @@ class AccountUtils {
 
     PromptModal.show(
       title: l10n.walletImportTitle,
-      titleTrailing: InkWell(
-        child: Text(
-          l10n.walletBulkImportLabel,
-          style: const TextStyle(
-            fontSize: 12,
-            // decoration: TextDecoration.underline,
-            color: Colors.white70,
+      titleTrailing: Semantics(
+        button: true,
+        child: InkWell(
+          child: Text(
+            l10n.walletBulkImportLabel,
+            style: const TextStyle(
+              fontSize: 12,
+              // decoration: TextDecoration.underline,
+              color: Colors.white70,
+            ),
           ),
-        ),
-        onTap: () {
-          Navigator.of(rootNavigatorKey.currentContext!).pop();
+          onTap: () {
+            Navigator.of(rootNavigatorKey.currentContext!).pop();
 
-          showModalBottomSheet(
-              context: rootNavigatorKey.currentContext!,
-              builder: (context) {
-                return const BulkImportWalletModal();
-              });
-        },
+            showModalBottomSheet(
+                context: rootNavigatorKey.currentContext!,
+                builder: (context) {
+                  return const BulkImportWalletModal();
+                });
+          },
+        ),
       ),
       validator: (String? value) => formValidatorNotEmpty(value, l10n.walletPrivateKeyValidatorLabel),
       labelText: l10n.walletPrivateKeyLabel,
@@ -324,6 +327,7 @@ class AccountUtils {
                     Icons.copy,
                     color: AppColors.getBtc(),
                   ),
+                  tooltip: l10n.actionCopyPrivateKey,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: account.privateKey));
@@ -989,6 +993,7 @@ class AccountUtils {
                                   ),
                                   suffix: IconButton(
                                     icon: Icon(Icons.copy),
+                                    tooltip: globalL10n.actionCopyAmount,
                                     onPressed: () async {
                                       await Clipboard.setData(
                                           ClipboardData(text: cryptoCurrencyAmount.toString()));
@@ -1008,6 +1013,7 @@ class AccountUtils {
                                   ),
                                   suffix: IconButton(
                                     icon: Icon(Icons.copy),
+                                    tooltip: globalL10n.actionCopyAddress,
                                     onPressed: () async {
                                       await Clipboard.setData(
                                           ClipboardData(text: depositWalletAddress));
@@ -1179,6 +1185,7 @@ class AccountUtils {
                               ),
                               suffix: IconButton(
                                 icon: Icon(Icons.copy),
+                                tooltip: globalL10n.actionCopyTransactionHash,
                                 onPressed: () async {
                                   await Clipboard.setData(ClipboardData(text: txHash));
                                   Toast.message(globalL10n.txpTxHashCopied);

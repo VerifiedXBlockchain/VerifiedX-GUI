@@ -7,6 +7,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get actionBack => 'Back';
+
+  @override
   String get actionCancel => 'Cancel';
 
   @override
@@ -23,6 +26,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionCopy => 'Copy';
+
+  @override
+  String get actionCopyAddress => 'Copy address';
+
+  @override
+  String get actionCopyAmount => 'Copy amount';
+
+  @override
+  String get actionCopyDomain => 'Copy domain';
+
+  @override
+  String get actionCopyMnemonic => 'Copy mnemonic';
+
+  @override
+  String get actionCopyPrivateKey => 'Copy private key';
+
+  @override
+  String get actionCopyRecoveryAddress => 'Copy recovery address';
+
+  @override
+  String get actionCopyRecoveryPrivateKey => 'Copy recovery private key';
+
+  @override
+  String get actionCopyRestoreCode => 'Copy restore code';
+
+  @override
+  String get actionCopyTransactionHash => 'Copy transaction hash';
+
+  @override
+  String get actionCopyWifPrivateKey => 'Copy WIF private key';
 
   @override
   String get actionDelete => 'Delete';
@@ -2395,6 +2428,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeDoesNotOwn => 'does NOT own';
 
   @override
+  String get homeFooterGithubTooltip => 'GitHub';
+
+  @override
   String get homeGetHelpTitle => 'Get Help';
 
   @override
@@ -3017,6 +3053,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get navCollapseMenuTooltip => 'Collapse navigation';
+
+  @override
   String get navConfirmedStatus => 'Confirmed';
 
   @override
@@ -3024,6 +3063,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navDomains => 'Domains';
+
+  @override
+  String get navExpandMenuTooltip => 'Expand navigation';
 
   @override
   String get navGetBtc => 'Get\nBTC';
@@ -8353,6 +8395,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get statusPending => 'Pending';
+
+  @override
+  String get statusReloadWalletInfoTooltip => 'Reload wallet info';
 
   @override
   String get statusSuccess => 'Success';

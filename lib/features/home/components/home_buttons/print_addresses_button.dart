@@ -44,15 +44,19 @@ class PrintAdressesButton extends BaseComponent {
                     colorOverride: wallet.isReserved ? Colors.deepPurple.shade200 : null,
                     textToCopy: wallet.address,
                     trailing: wallet.isReserved
-                        ? InkWell(
-                            child: Icon(
-                              Icons.help,
-                              size: 14,
-                              color: Colors.deepPurple.shade200,
+                        ? Semantics(
+                            label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                            button: true,
+                            child: InkWell(
+                              child: Icon(
+                                Icons.help,
+                                size: 14,
+                                color: Colors.deepPurple.shade200,
+                              ),
+                              onTap: () {
+                                ref.read(reserveAccountProvider.notifier).showBalanceInfo(context, wallet);
+                              },
                             ),
-                            onTap: () {
-                              ref.read(reserveAccountProvider.notifier).showBalanceInfo(context, wallet);
-                            },
                           )
                         : null));
               }

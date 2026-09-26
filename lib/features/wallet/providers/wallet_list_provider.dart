@@ -80,6 +80,7 @@ class WalletListProvider extends StateNotifier<List<Wallet>> {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.copy),
+                    tooltip: globalL10n.actionCopyPrivateKey,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: privateKey.trim()));
                       Toast.message(globalL10n.walletPrivateKeyCopiedToast);

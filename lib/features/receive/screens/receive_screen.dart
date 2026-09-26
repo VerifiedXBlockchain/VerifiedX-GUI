@@ -105,7 +105,9 @@ class ReceiveScreen extends BaseScreen {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
+                                key: const ValueKey('receive:copy_address'),
                                 icon: const Icon(Icons.copy),
+                                tooltip: AppLocalizations.of(context).actionCopyAddress,
                                 onPressed: () async {
                                   if (currentWallet.isReserved &&
                                       !currentWallet.isNetworkProtected) {
@@ -223,7 +225,9 @@ class ReceiveScreen extends BaseScreen {
                             btcAccount.address,
                           ),
                           trailing: IconButton(
+                            key: const ValueKey('receive:copy_btc_address'),
                             icon: const Icon(Icons.copy),
+                            tooltip: AppLocalizations.of(context).actionCopyAddress,
                             onPressed: () async {
                               _handleCopyAddress(context, btcAccount.address);
                             },
@@ -312,6 +316,7 @@ class ReceiveScreen extends BaseScreen {
                                                     .colorScheme
                                                     .btcOrange,
                                               ),
+                                              tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
                                               onPressed: () async {
                                                 await Clipboard.setData(
                                                     ClipboardData(

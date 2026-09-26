@@ -418,6 +418,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                       ),
                       suffix: IconButton(
                         icon: Icon(Icons.copy),
+                        tooltip: globalL10n.actionCopyTransactionHash,
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(text: txHash));
                           Toast.message(globalL10n.tkbTransactionHashCopied);
@@ -536,6 +537,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                         ),
                         suffix: IconButton(
                           icon: Icon(Icons.copy),
+                          tooltip: globalL10n.actionCopyTransactionHash,
                           onPressed: () async {
                             await Clipboard.setData(ClipboardData(text: txHash));
                             Toast.message(globalL10n.tkbTransactionHashCopied);

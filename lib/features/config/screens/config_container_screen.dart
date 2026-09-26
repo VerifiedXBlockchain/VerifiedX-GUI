@@ -46,6 +46,7 @@ class ConfigContainerScreen extends BaseScreen {
           }
         },
         icon: const Icon(Icons.close),
+        tooltip: AppLocalizations.of(context).actionClose,
       ),
       actions: [
         AppButton(

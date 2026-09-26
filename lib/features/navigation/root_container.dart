@@ -377,95 +377,98 @@ class _LayoutState extends State<_Layout> {
                           children: [
                             Transform.translate(
                               offset: Offset(1, 2),
-                              child: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    walletSelectorIsExpanded = !walletSelectorIsExpanded;
-                                  });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: AppColors.getGray(ColorShade.s300),
-                                    borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(16),
+                              child: Semantics(
+                                button: true,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      walletSelectorIsExpanded = !walletSelectorIsExpanded;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppColors.getGray(ColorShade.s300),
+                                      borderRadius: BorderRadius.only(
+                                        topRight: Radius.circular(16),
+                                      ),
+                                      border: Border.all(
+                                        color: Colors.white.withOpacity(0.15),
+                                      ),
                                     ),
-                                    border: Border.all(
-                                      color: Colors.white.withOpacity(0.15),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        AnimatedDefaultTextStyle(
-                                          duration: Duration(milliseconds: 105),
-                                          style: TextStyle(
-                                            color: walletSelectorIsHovering ? Colors.white : Colors.white.withOpacity(0.75),
-                                            fontSize: 14,
-                                          ),
-                                          child: Builder(builder: (context) {
-                                            if (vfxWallet != null) {
-                                              return Tooltip(
-                                                message: l10n.hnavSelectedVfxAddressTooltip,
-                                                child: Row(
-                                                  children: [
-                                                    Text(vfxWallet.address),
-                                                    SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Text(
-                                                      "[${vfxWallet.balanceLabel}]",
-                                                      style: TextStyle(
-                                                        fontSize: 10,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: vfxWallet.isReserved ? AppColors.getReserve() : AppColors.getBlue(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 12),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          AnimatedDefaultTextStyle(
+                                            duration: Duration(milliseconds: 105),
+                                            style: TextStyle(
+                                              color: walletSelectorIsHovering ? Colors.white : Colors.white.withOpacity(0.75),
+                                              fontSize: 14,
+                                            ),
+                                            child: Builder(builder: (context) {
+                                              if (vfxWallet != null) {
+                                                return Tooltip(
+                                                  message: l10n.hnavSelectedVfxAddressTooltip,
+                                                  child: Row(
+                                                    children: [
+                                                      Text(vfxWallet.address),
+                                                      SizedBox(
+                                                        width: 8,
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 3,
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            }
+                                                      Text(
+                                                        "[${vfxWallet.balanceLabel}]",
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: vfxWallet.isReserved ? AppColors.getReserve() : AppColors.getBlue(),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 3,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
 
-                                            if (btcWallet != null) {
-                                              return Tooltip(
-                                                message: l10n.hnavSelectedBtcAccountTooltip,
-                                                child: Row(
-                                                  children: [
-                                                    Text(btcWallet.address),
-                                                    SizedBox(
-                                                      width: 8,
-                                                    ),
-                                                    Text(
-                                                      "[${btcWallet.balance} BTC]",
-                                                      style: TextStyle(
-                                                        fontSize: 10,
-                                                        fontWeight: FontWeight.bold,
-                                                        color: AppColors.getBtc(),
+                                              if (btcWallet != null) {
+                                                return Tooltip(
+                                                  message: l10n.hnavSelectedBtcAccountTooltip,
+                                                  child: Row(
+                                                    children: [
+                                                      Text(btcWallet.address),
+                                                      SizedBox(
+                                                        width: 8,
                                                       ),
-                                                    ),
-                                                    SizedBox(
-                                                      width: 3,
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            }
-                                            return Text(l10n.webSelectAccount);
-                                          }),
-                                        ),
-                                        Transform.translate(
-                                          offset: Offset(0, 1),
-                                          child: Icon(
-                                            Icons.arrow_drop_down,
-                                            color: walletSelectorIsHovering ? Colors.white : Colors.white.withOpacity(0.75),
-                                            size: 16,
+                                                      Text(
+                                                        "[${btcWallet.balance} BTC]",
+                                                        style: TextStyle(
+                                                          fontSize: 10,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: AppColors.getBtc(),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width: 3,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                              return Text(l10n.webSelectAccount);
+                                            }),
                                           ),
-                                        ),
-                                      ],
+                                          Transform.translate(
+                                            offset: Offset(0, 1),
+                                            child: Icon(
+                                              Icons.arrow_drop_down,
+                                              color: walletSelectorIsHovering ? Colors.white : Colors.white.withOpacity(0.75),
+                                              size: 16,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

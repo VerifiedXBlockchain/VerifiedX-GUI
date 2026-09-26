@@ -7,6 +7,9 @@ class AppLocalizationsEs extends AppLocalizations {
   AppLocalizationsEs([String locale = 'es']) : super(locale);
 
   @override
+  String get actionBack => 'Atrás';
+
+  @override
   String get actionCancel => 'Cancelar';
 
   @override
@@ -23,6 +26,36 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get actionCopy => 'Copiar';
+
+  @override
+  String get actionCopyAddress => 'Copiar dirección';
+
+  @override
+  String get actionCopyAmount => 'Copiar monto';
+
+  @override
+  String get actionCopyDomain => 'Copiar dominio';
+
+  @override
+  String get actionCopyMnemonic => 'Copiar mnemónico';
+
+  @override
+  String get actionCopyPrivateKey => 'Copiar clave privada';
+
+  @override
+  String get actionCopyRecoveryAddress => 'Copiar dirección de recuperación';
+
+  @override
+  String get actionCopyRecoveryPrivateKey => 'Copiar clave privada de recuperación';
+
+  @override
+  String get actionCopyRestoreCode => 'Copiar código de restauración';
+
+  @override
+  String get actionCopyTransactionHash => 'Copiar hash de la transacción';
+
+  @override
+  String get actionCopyWifPrivateKey => 'Copiar clave privada WIF';
 
   @override
   String get actionDelete => 'Eliminar';
@@ -2395,6 +2428,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeDoesNotOwn => 'NO posee';
 
   @override
+  String get homeFooterGithubTooltip => 'GitHub';
+
+  @override
   String get homeGetHelpTitle => 'Obtener ayuda';
 
   @override
@@ -3017,6 +3053,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get navCollapseMenuTooltip => 'Contraer navegación';
+
+  @override
   String get navConfirmedStatus => 'Confirmada';
 
   @override
@@ -3024,6 +3063,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get navDomains => 'Dominios';
+
+  @override
+  String get navExpandMenuTooltip => 'Expandir navegación';
 
   @override
   String get navGetBtc => 'Obtener\nBTC';
@@ -8353,6 +8395,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get statusPending => 'Pendiente';
+
+  @override
+  String get statusReloadWalletInfoTooltip => 'Recargar información de la billetera';
 
   @override
   String get statusSuccess => 'Éxito';

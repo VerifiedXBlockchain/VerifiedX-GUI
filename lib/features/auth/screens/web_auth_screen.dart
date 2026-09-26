@@ -252,6 +252,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             ),
             const SizedBox(height: 16),
             AppButton(
+              key: const Key('auth:enter_password'),
               label: l10n.authEnterPassword,
               icon: Icons.lock,
               onPressed: () async {
@@ -278,6 +279,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: AppButton(
+                key: const Key('auth:logout'),
                 label: l10n.authLogout,
                 type: AppButtonType.Text,
                 underlined: true,
@@ -289,6 +291,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             ),
           ] else
             AppButton(
+              key: const Key('auth:login'),
               label: l10n.authLoginCreateAccount,
               icon: Icons.upload,
               onPressed: () {
@@ -314,6 +317,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: AppButton(
+                key: const Key('auth:resume_session'),
                 label: l10n.authResumeSession,
                 variant: AppColorVariant.Light,
                 type: AppButtonType.Text,

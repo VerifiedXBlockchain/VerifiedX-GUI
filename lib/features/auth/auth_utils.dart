@@ -874,6 +874,7 @@ Future<void> _showKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyMnemonic,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.mneumonic));
@@ -900,6 +901,7 @@ Future<void> _showKeysInternal(
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.copy),
+                tooltip: l10n.actionCopyAddress,
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: keypair.address));
                   Toast.message(l10n.keygenPublicKeyCopiedToast);
@@ -924,6 +926,7 @@ Future<void> _showKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyWifPrivateKey,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.btcWif));
@@ -953,6 +956,7 @@ Future<void> _showKeysInternal(
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.copy),
+                tooltip: l10n.actionCopyPrivateKey,
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(
                       text: keypair.btcWif != null
@@ -1040,6 +1044,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyAddress,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.address));
@@ -1059,6 +1064,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyPrivateKey,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.privateCorrected));
@@ -1079,6 +1085,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyRecoveryAddress,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.recoveryAddress));
@@ -1098,6 +1105,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyRecoveryPrivateKey,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.recoveryPrivateCorrected));
@@ -1119,6 +1127,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyRestoreCode,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.restoreCode));

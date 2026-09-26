@@ -372,6 +372,7 @@ class SendForm extends BaseComponent {
               ListTile(
                 leading: isMobile ? null : SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelTo)),
                 title: TextFormField(
+                  key: const ValueKey('send:address'),
                   controller: formProvider.addressController,
                   validator: formProvider.addressValidator,
                   decoration: InputDecoration(hintText: AppLocalizations.of(context).sendRecipientHint),
@@ -385,15 +386,18 @@ class SendForm extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(pasteMessage),
-                      InkWell(
-                        onTap: () {
-                          _pasteAddress(context, formProvider);
-                        },
-                        child: Text(
-                          AppLocalizations.of(context).sendPasteHelperHereLink,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Theme.of(context).colorScheme.secondary,
+                      Semantics(
+                        button: true,
+                        child: InkWell(
+                          onTap: () {
+                            _pasteAddress(context, formProvider);
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).sendPasteHelperHereLink,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
                         ),
                       ),
@@ -406,21 +410,29 @@ class SendForm extends BaseComponent {
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          PrettyIconButton(
-                            type: PrettyIconType.custom,
-                            customIcon: Icons.paste,
-                            onPressed: () {
-                              _pasteAddress(context, formProvider);
-                            },
+                          Semantics(
+                            label: AppLocalizations.of(context).actionPaste,
+                            button: true,
+                            child: PrettyIconButton(
+                              type: PrettyIconType.custom,
+                              customIcon: Icons.paste,
+                              onPressed: () {
+                                _pasteAddress(context, formProvider);
+                              },
+                            ),
                           ),
                           if (!kIsWeb)
-                            PrettyIconButton(
-                              type: PrettyIconType.custom,
-                              iconScale: .75,
-                              customIcon: FontAwesomeIcons.folderOpen,
-                              onPressed: () {
-                                chooseAddress(context, ref, formProvider);
-                              },
+                            Semantics(
+                              label: AppLocalizations.of(context).sendChooseAddressTitle,
+                              button: true,
+                              child: PrettyIconButton(
+                                type: PrettyIconType.custom,
+                                iconScale: .75,
+                                customIcon: FontAwesomeIcons.folderOpen,
+                                onPressed: () {
+                                  chooseAddress(context, ref, formProvider);
+                                },
+                              ),
                             ),
                         ],
                       ),
@@ -428,6 +440,7 @@ class SendForm extends BaseComponent {
               ListTile(
                 leading: isMobile ? null : SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelAmount)),
                 title: TextFormField(
+                  key: const ValueKey('send:amount'),
                   controller: formProvider.amountController,
                   validator: formProvider.amountValidator,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
@@ -566,6 +579,7 @@ class SendForm extends BaseComponent {
                     ),
                     Consumer(builder: (context, ref, _) {
                       return AppButton(
+                        key: const Key('send:submit'),
                         label: AppLocalizations.of(context).actionSend,
                         type: AppButtonType.Elevated,
                         variant: isBtc ? AppColorVariant.Btc : AppColorVariant.Primary,

@@ -316,46 +316,49 @@ class _LatestBtcTx extends BaseComponent {
     final l10n = AppLocalizations.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
-          RootContainerUtils.navigateToTab(context, RootTab.transactions);
-        },
-        child: AppCard(
-          fullWidth: true,
-          padding: 8,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "${tx.amount} BTC",
-                style: TextStyle(
-                  color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white.withOpacity(0.9),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Builder(builder: (context) {
-                final isConfirmed = (kDebugMode && Env.isTestNet) ? true : tx.isConfirmed;
-                return Text(
-                  isConfirmed ? l10n.statusSuccess : l10n.statusPending,
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () {
+            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
+            RootContainerUtils.navigateToTab(context, RootTab.transactions);
+          },
+          child: AppCard(
+            fullWidth: true,
+            padding: 8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "${tx.amount} BTC",
                   style: TextStyle(
+                    color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
                     fontWeight: FontWeight.w600,
-                    color: isConfirmed ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.warning,
                   ),
-                );
-              })
-            ],
+                ),
+                Text(
+                  l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+                Builder(builder: (context) {
+                  final isConfirmed = (kDebugMode && Env.isTestNet) ? true : tx.isConfirmed;
+                  return Text(
+                    isConfirmed ? l10n.statusSuccess : l10n.statusPending,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: isConfirmed ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.warning,
+                    ),
+                  );
+                })
+              ],
+            ),
           ),
         ),
       ),
@@ -375,53 +378,56 @@ class _LatestVfxTx extends BaseComponent {
     final l10n = AppLocalizations.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () {
+            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
 
-          RootContainerUtils.navigateToTab(context, RootTab.transactions);
-        },
-        child: AppCard(
-          padding: 12,
-          fullWidth: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (tx.type == TxType.rbxTransfer)
+            RootContainerUtils.navigateToTab(context, RootTab.transactions);
+          },
+          child: AppCard(
+            padding: 12,
+            fullWidth: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (tx.type == TxType.rbxTransfer)
+                  Text(
+                    "${tx.amount} VFX",
+                    style: TextStyle(
+                      color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                else
+                  Text(
+                    tx.typeLabel,
+                    style: TextStyle(
+                      color: AppColors.getBlue(),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 Text(
-                  "${tx.amount} VFX",
+                  l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
                   style: TextStyle(
-                    color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
+                    fontSize: 11,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  tx.statusLabel,
+                  style: TextStyle(
+                    color: tx.statusColor(context),
                     fontWeight: FontWeight.w600,
                   ),
-                )
-              else
-                Text(
-                  tx.typeLabel,
-                  style: TextStyle(
-                    color: AppColors.getBlue(),
-                    fontWeight: FontWeight.w600,
-                  ),
                 ),
-              Text(
-                l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.white.withOpacity(0.9),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Text(
-                tx.statusLabel,
-                style: TextStyle(
-                  color: tx.statusColor(context),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

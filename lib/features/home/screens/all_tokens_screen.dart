@@ -105,6 +105,7 @@ class AllTokensScreen extends BaseScreen {
           children: [
             IconButton(
               icon: Icon(Icons.navigate_before),
+              tooltip: l10n.actionBack,
               onPressed: () {
                 ref.read(globalBalancesExpandedProvider.notifier).expand();
                 AutoRouter.of(context).pop();

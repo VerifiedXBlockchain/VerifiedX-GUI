@@ -47,6 +47,7 @@ class RootContainerSideNavList extends BaseComponent {
         mainAxisSize: MainAxisSize.min,
         children: [
           RootContainerSideNavItem(
+            key: const ValueKey('nav:dashboard'),
             title: l10n.navDashboard,
             iconType: PrettyIconType.dashboard,
             onPressed: () {
@@ -65,6 +66,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:vault_accounts'),
             title: kIsWeb ? l10n.navMenuVaultAccountSingular : l10n.navMenuVaultAccounts,
             iconType: PrettyIconType.lock,
             onPressed: () {
@@ -78,6 +80,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:domains'),
             title: l10n.navDomains,
             iconType: PrettyIconType.domain,
             onPressed: () {
@@ -91,6 +94,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:send'),
             title: l10n.actionSend,
             iconType: PrettyIconType.send,
             onPressed: () {
@@ -103,6 +107,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:receive'),
             title: l10n.actionReceive,
             iconType: PrettyIconType.receive,
             onPressed: () {
@@ -116,6 +121,7 @@ class RootContainerSideNavList extends BaseComponent {
           ),
           if (BUTTERFLY_ENABLED)
             RootContainerSideNavItem(
+              key: const ValueKey('nav:butterfly'),
               title: l10n.navMenuPayWithButterfly,
               iconType: PrettyIconType.butterfly,
               onPressed: () async {
@@ -136,6 +142,7 @@ class RootContainerSideNavList extends BaseComponent {
             ),
           if (CRYPTO_DOT_COM_ENABLED)
             RootContainerSideNavItem(
+              key: const ValueKey('nav:crypto_com'),
               title: l10n.navMenuCryptoCom,
               iconType: PrettyIconType.custom,
               customIconWidget: Image.asset(
@@ -155,6 +162,7 @@ class RootContainerSideNavList extends BaseComponent {
               isExpanded: isExpanded,
             ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:transactions'),
             title: l10n.navTransactions,
             iconType: PrettyIconType.transactions,
             onPressed: () {
@@ -167,6 +175,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:vbtc_tokens'),
             title: l10n.navMenuTokenizeBitcoin,
             iconType: PrettyIconType.bitcoin,
             textColorOverrideIdle: AppColors.getBtc().withOpacity(0.8),
@@ -191,6 +200,7 @@ class RootContainerSideNavList extends BaseComponent {
           ),
           if (!kIsWeb)
             RootContainerSideNavItem(
+              key: const ValueKey('nav:privacy'),
               title: l10n.svcNavPrivacyLabel,
               iconType: PrettyIconType.custom,
               icon: Icons.shield,
@@ -205,6 +215,7 @@ class RootContainerSideNavList extends BaseComponent {
               isExpanded: isExpanded,
             ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:fungible_tokens'),
             title: l10n.navMenuFungibleTokens,
             iconType: PrettyIconType.fungibleToken,
             onPressed: () {
@@ -231,6 +242,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:smart_contracts'),
             title: l10n.navMenuSmartContracts,
             iconType: PrettyIconType.smartContract,
             onPressed: () {
@@ -256,6 +268,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:nfts'),
             title: l10n.navMenuNfts,
             iconType: PrettyIconType.nft,
             onPressed: () {
@@ -281,6 +294,7 @@ class RootContainerSideNavList extends BaseComponent {
             isExpanded: isExpanded,
           ),
           RootContainerSideNavItem(
+            key: const ValueKey('nav:p2p_auctions'),
             title: l10n.navMenuP2PAuctions,
             iconType: PrettyIconType.p2p,
             onPressed: () {
@@ -308,6 +322,7 @@ class RootContainerSideNavList extends BaseComponent {
           ),
           if (!kIsWeb && VALIDATOR_NAV_ENABLED)
             RootContainerSideNavItem(
+              key: const ValueKey('nav:validator'),
               title: l10n.navMenuValidator,
               iconType: PrettyIconType.validator,
               onPressed: () {
@@ -321,6 +336,7 @@ class RootContainerSideNavList extends BaseComponent {
             ),
           if (!kIsWeb)
             RootContainerSideNavItem(
+              key: const ValueKey('nav:operations'),
               title: l10n.navMenuOperations,
               iconType: PrettyIconType.operations,
               onPressed: () {
@@ -340,6 +356,7 @@ class RootContainerSideNavList extends BaseComponent {
             ),
           if (kIsWeb)
             RootContainerSideNavItem(
+              key: const ValueKey('nav:sign_out'),
               title: l10n.navMenuSignOut,
               iconType: PrettyIconType.custom,
               icon: Icons.logout,

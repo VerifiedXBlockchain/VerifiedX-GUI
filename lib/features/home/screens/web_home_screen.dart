@@ -129,69 +129,75 @@ class WebHomeScreen extends BaseScreen {
                   SizedBox(
                     height: 4,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      ref
-                          .read(currencySegementedButtonProvider.notifier)
-                          .set(CurrencyType.vfx);
-                      Navigator.of(webDashboardScaffoldKey.currentContext!)
-                          .push(
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (_) => WebPriceChartScreen(
-                            isBtc: false,
+                  Semantics(
+                    button: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(currencySegementedButtonProvider.notifier)
+                            .set(CurrencyType.vfx);
+                        Navigator.of(webDashboardScaffoldKey.currentContext!)
+                            .push(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (_) => WebPriceChartScreen(
+                              isBtc: false,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: CoinPriceSummary(
-                      mini: true,
-                      type: CoinPriceSummaryType.vfx,
-                      actions: [
-                        AppButton(
-                          onPressed: () async {
-                            AccountUtils.getCoin(
-                                context, ref, VfxOrBtcOption.vfx);
-                          },
-                          variant: AppColorVariant.Secondary,
-                          type: AppButtonType.Outlined,
-                          label: AppLocalizations.of(context).bw2StepGetVfx,
-                        ),
-                      ],
+                        );
+                      },
+                      child: CoinPriceSummary(
+                        mini: true,
+                        type: CoinPriceSummaryType.vfx,
+                        actions: [
+                          AppButton(
+                            onPressed: () async {
+                              AccountUtils.getCoin(
+                                  context, ref, VfxOrBtcOption.vfx);
+                            },
+                            variant: AppColorVariant.Secondary,
+                            type: AppButtonType.Outlined,
+                            label: AppLocalizations.of(context).bw2StepGetVfx,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      ref
-                          .read(currencySegementedButtonProvider.notifier)
-                          .set(CurrencyType.btc);
-                      Navigator.of(webDashboardScaffoldKey.currentContext!)
-                          .push(
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (_) => WebPriceChartScreen(
-                            isBtc: true,
+                  Semantics(
+                    button: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(currencySegementedButtonProvider.notifier)
+                            .set(CurrencyType.btc);
+                        Navigator.of(webDashboardScaffoldKey.currentContext!)
+                            .push(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (_) => WebPriceChartScreen(
+                              isBtc: true,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: CoinPriceSummary(
-                      mini: true,
-                      type: CoinPriceSummaryType.btc,
-                      actions: [
-                        AppButton(
-                          onPressed: () {
-                            AccountUtils.getCoin(
-                                context, ref, VfxOrBtcOption.btc);
-                          },
-                          label: AppLocalizations.of(context).r3eGetBtc,
-                          variant: AppColorVariant.Btc,
-                          type: AppButtonType.Outlined,
-                        ),
-                      ],
+                        );
+                      },
+                      child: CoinPriceSummary(
+                        mini: true,
+                        type: CoinPriceSummaryType.btc,
+                        actions: [
+                          AppButton(
+                            onPressed: () {
+                              AccountUtils.getCoin(
+                                  context, ref, VfxOrBtcOption.btc);
+                            },
+                            label: AppLocalizations.of(context).r3eGetBtc,
+                            variant: AppColorVariant.Btc,
+                            type: AppButtonType.Outlined,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const _Actions(),

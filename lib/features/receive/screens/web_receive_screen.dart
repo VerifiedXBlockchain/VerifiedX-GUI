@@ -159,7 +159,9 @@ class WebReceiveScreen extends BaseScreen {
                           subtitle: Text(AppLocalizations.of(context).webYourAddress),
                           leading: Icon(Icons.wallet),
                           trailing: IconButton(
+                            key: const ValueKey('receive:copy_address'),
                             icon: const Icon(Icons.copy),
+                            tooltip: AppLocalizations.of(context).actionCopyAddress,
                             onPressed: () {
                               copyToClipboard(selectedAccount.address);
                             },
@@ -180,7 +182,9 @@ class WebReceiveScreen extends BaseScreen {
                             subtitle: Text(AppLocalizations.of(context).webYourDomain),
                             leading: Icon(Icons.link),
                             trailing: IconButton(
+                              key: const ValueKey('receive:copy_domain'),
                               icon: const Icon(Icons.copy),
+                              tooltip: AppLocalizations.of(context).actionCopyDomain,
                               onPressed: () {
                                 copyToClipboard(selectedAccount.domain!);
                               },

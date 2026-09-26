@@ -157,17 +157,21 @@ class ManageWalletBtcListTile extends BaseComponent {
           Text(account.address),
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
-            child: InkWell(
-              child: const Icon(
-                Icons.copy,
-                size: 12,
+            child: Semantics(
+              label: AppLocalizations.of(context).actionCopyAddress,
+              button: true,
+              child: InkWell(
+                child: const Icon(
+                  Icons.copy,
+                  size: 12,
+                ),
+                onTap: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: account.address),
+                  );
+                  Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                },
               ),
-              onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(text: account.address),
-                );
-                Toast.message(AppLocalizations.of(context).messageAddressCopied);
-              },
             ),
           ),
         ],
@@ -214,6 +218,7 @@ class ManageWalletBtcListTile extends BaseComponent {
                       ),
                       trailing: IconButton(
                         icon: const Icon(Icons.copy),
+                        tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(text: a.privateKey));
                           Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
@@ -292,14 +297,18 @@ class ManageWalletListTile extends BaseComponent {
           if (wallet.isReserved || wallet.lockedBalance > 0)
             Padding(
               padding: const EdgeInsets.only(left: 6.0),
-              child: InkWell(
-                onTap: () {
-                  ref.read(reserveAccountProvider.notifier).showBalanceInfo(context, wallet);
-                },
-                child: Icon(
-                  Icons.help,
-                  size: 14,
-                  color: Theme.of(context).colorScheme.secondary,
+              child: Semantics(
+                label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                button: true,
+                child: InkWell(
+                  onTap: () {
+                    ref.read(reserveAccountProvider.notifier).showBalanceInfo(context, wallet);
+                  },
+                  child: Icon(
+                    Icons.help,
+                    size: 14,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
                 ),
               ),
             ),
@@ -314,17 +323,21 @@ class ManageWalletListTile extends BaseComponent {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 6.0),
-            child: InkWell(
-              child: const Icon(
-                Icons.copy,
-                size: 16,
+            child: Semantics(
+              label: AppLocalizations.of(context).actionCopyAddress,
+              button: true,
+              child: InkWell(
+                child: const Icon(
+                  Icons.copy,
+                  size: 16,
+                ),
+                onTap: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: wallet.address),
+                  );
+                  Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                },
               ),
-              onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(text: wallet.address),
-                );
-                Toast.message(AppLocalizations.of(context).messageAddressCopied);
-              },
             ),
           ),
         ],
@@ -377,6 +390,7 @@ class ManageWalletListTile extends BaseComponent {
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.copy),
+                                tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
                                 onPressed: () async {
                                   await Clipboard.setData(ClipboardData(text: privateKey));
                                   Toast.message(AppLocalizations.of(context).walletPrivateKeyCopiedToast);
@@ -397,6 +411,7 @@ class ManageWalletListTile extends BaseComponent {
                   );
                 },
                 iconSize: 16,
+                tooltip: AppLocalizations.of(context).walletRevealPrivateKey,
                 icon: Icon(
                   Icons.remove_red_eye,
                 )),
@@ -418,6 +433,7 @@ class ManageWalletListTile extends BaseComponent {
                 ref.read(walletDetailProvider(wallet).notifier).delete();
               },
               iconSize: 16,
+              tooltip: AppLocalizations.of(context).walletHideAccountTitle,
               icon: Icon(
                 Icons.delete,
               )),
