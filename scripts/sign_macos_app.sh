@@ -42,6 +42,10 @@ sign() {
   codesign --force --timestamp --options runtime --sign "$MACOS_SIGN_IDENTITY" "$@"
 }
 
+team_of() {
+  codesign --display --verbose=2 "$1" 2>&1 | sed -n 's/^TeamIdentifier=//p'
+}
+
 require_hardened_runtime() {
   local signature
   signature="$(codesign --display --verbose=2 "$1" 2>&1)"
@@ -86,12 +90,21 @@ echo "Verifying"
 codesign --verify --deep --strict --verbose=2 "$APP"
 
 # --deep checks code in Contents/Resources only as sealed files, not as code,
-# so each CLI binary is verified on its own.
-while IFS= read -r -d '' payload_file; do
-  if is_macho "$payload_file"; then
-    codesign --verify --strict "$payload_file"
+# so every binary is verified on its own. Each must carry the app's team: the
+# notary service rejects a mixed or unsigned binary, and library validation
+# refuses to load one at launch.
+app_team="$(team_of "$APP")"
+[ -n "$app_team" ] || fail "$MACOS_SIGN_IDENTITY did not produce a team-signed bundle"
+binary_count=0
+while IFS= read -r -d '' bundle_file; do
+  if is_macho "$bundle_file"; then
+    codesign --verify --strict "$bundle_file"
+    [ "$(team_of "$bundle_file")" = "$app_team" ] \
+      || fail "$bundle_file is not signed by team $app_team"
+    binary_count=$((binary_count + 1))
   fi
-done < <(find "$CLI_DIR" -type f -print0)
+done < <(find "$APP" -type f -print0)
+echo "$binary_count binaries signed by team $app_team"
 
 require_hardened_runtime "$APP"
 require_hardened_runtime "$CLI_BINARY"
