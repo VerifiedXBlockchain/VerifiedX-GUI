@@ -57,6 +57,10 @@ require_tool() {
   command -v "$1" > /dev/null || fail "$1 not found on PATH"
 }
 
+has_arch() {
+  [[ " $(lipo -archs "$1") " == *" $2 "* ]]
+}
+
 # Build tools print thousands of lines. Keep them in a log and show the end of
 # it only when the tool fails.
 run_logged() {
@@ -249,9 +253,8 @@ run_logged xcodebuild-archive xcodebuild \
   CODE_SIGNING_ALLOWED=NO
 
 [ -d "$ARCHIVED_APP" ] || fail "archive did not produce $ARCHIVED_APP"
-app_archs="$(lipo -archs "$ARCHIVED_APP/Contents/MacOS/VFX Switchblade")"
-[[ " $app_archs " == *" $APP_ARCH "* ]] \
-  || fail "the app was built for '$app_archs', which does not include $APP_ARCH"
+has_arch "$ARCHIVED_APP/Contents/MacOS/VFX Switchblade" "$APP_ARCH" \
+  || fail "the app was not built for $APP_ARCH"
 bundle_version="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$ARCHIVED_APP/Contents/Info.plist")"
 [ "$bundle_version" = "$APP_VERSION" ] \
   || fail "bundle version is $bundle_version, expected $APP_VERSION"
@@ -266,10 +269,34 @@ run_logged dotnet-publish dotnet publish "$CORE_SOURCE/VerifiedXCore/VerifiedXCo
   -o "$CORE_PUBLISH"
 
 [ -f "$CORE_PUBLISH/VerifiedXCore" ] || fail "dotnet publish did not produce VerifiedXCore"
-cli_archs="$(lipo -archs "$CORE_PUBLISH/VerifiedXCore")"
-[ "$cli_archs" = "$APP_ARCH" ] || fail "the CLI was built for '$cli_archs', expected $APP_ARCH"
+has_arch "$CORE_PUBLISH/VerifiedXCore" "$APP_ARCH" \
+  || fail "the CLI was not built for $APP_ARCH"
 [ -f "$CORE_PUBLISH/BIP39/wordlist/english.txt" ] \
   || fail "the CLI build has no BIP39 wordlists"
+
+# Core checks some native libraries into git as prebuilt files. One built for
+# the other architecture publishes without error and fails only when the CLI
+# first calls it. The runtime looks a library up with and without the "lib"
+# prefix, so either spelling can satisfy the lookup.
+UNLOADABLE_LIBRARIES=""
+for library in "$CORE_PUBLISH"/*.dylib; do
+  if has_arch "$library" "$APP_ARCH"; then
+    continue
+  fi
+  library_name="$(basename "$library")"
+  case "$library_name" in
+    lib*) alternate="$CORE_PUBLISH/${library_name#lib}" ;;
+    *) alternate="$CORE_PUBLISH/lib$library_name" ;;
+  esac
+  if [ -f "$alternate" ] && has_arch "$alternate" "$APP_ARCH"; then
+    continue
+  fi
+  UNLOADABLE_LIBRARIES="$UNLOADABLE_LIBRARIES $library_name"
+done
+UNLOADABLE_LIBRARIES="${UNLOADABLE_LIBRARIES# }"
+if [ -n "$UNLOADABLE_LIBRARIES" ]; then
+  echo "warning: not built for $APP_ARCH, the CLI cannot load: $UNLOADABLE_LIBRARIES" >&2
+fi
 
 step "Assembling the bundle"
 rm -rf "$STAGED_APP"
@@ -310,6 +337,7 @@ step "Packaging the standalone CLI"
   fi
   echo "core cli:       $CORE_REF @ $CORE_COMMIT"
   echo "forces testnet: $CORE_FORCES_TESTNET"
+  echo "cannot load:    ${UNLOADABLE_LIBRARIES:-nothing}"
   echo "signed as:      $MACOS_SIGN_IDENTITY"
   echo "notarized:      $NOTARIZED"
   echo "sha256:"
@@ -322,4 +350,7 @@ echo
 echo "Artifacts in $EXPORT_DIR"
 if [ "$NOTARIZED" = "no" ]; then
   echo "warning: this installer is NOT notarized and will be blocked by Gatekeeper on other Macs" >&2
+fi
+if [ -n "$UNLOADABLE_LIBRARIES" ]; then
+  echo "warning: the CLI in this installer cannot load: $UNLOADABLE_LIBRARIES" >&2
 fi

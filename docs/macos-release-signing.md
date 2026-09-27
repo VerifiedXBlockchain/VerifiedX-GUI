@@ -49,7 +49,7 @@ Nothing depends on what was last opened in Xcode or checked out in the Core CLI 
 | Network | The command. It selects the Xcode scheme and passes the dart-define on the command line, which outranks `EnvironmentConfig.xcconfig`. |
 | Bundle version | `APP_V` in `lib/core/app_constants.dart`. The version in the Xcode project is ignored. |
 | Core CLI | A clean export of a git ref, fetched from origin: `origin/main` for mainnet, `origin/testnet` for testnet. Uncommitted changes in the Core checkout are never built. Override with `--core-ref <branch, tag or commit>`. |
-| CLI architecture | This machine's, or `--arch arm64` / `--arch x64`. The Flutter app is universal. |
+| CLI architecture | This machine's, or `--arch arm64` / `--arch x64`. The Flutter app is universal and .NET publishes for either architecture, so one Mac builds both installers. |
 
 Options go through `ARGS`, for example `make release_macos_testnet ARGS="--core-ref beta7.1.0"`.
 
@@ -59,6 +59,8 @@ Guards that stop the build:
 - A mainnet build whose Core CLI ref forces testnet in `Program.cs`.
 - A bundle version that differs from `APP_V`, or a binary built for the wrong architecture.
 - Any binary in the bundle that is unsigned or signed by another team.
+
+A native library in the CLI build that lacks the target architecture does not stop the build. It is reported as a warning and under `cannot load` in the build info, because the CLI starts without it and fails only in the feature that needs it.
 
 `--skip-notarize` stops after signing. Use it to test the pipeline before the Developer ID certificate exists; the result is blocked by Gatekeeper on other Macs.
 
