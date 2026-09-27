@@ -31,7 +31,6 @@ Every question raised while the cases were written, in case order. They have bee
 ## [03 · Send, receive and transactions](03-send-receive-transactions.md)
 
 - **TC-SEND-011:** the client does not validate the BTC address format (only non-empty). What should a malformed BTC address produce: a CLI/Spyglass error toast, or nothing? Record the observed text.
-- **TC-SEND-012:** the in-app request link (TC-SEND-029) is built as `.../#dashboard/send/...` without a leading slash; confirm both `#/dashboard/...` and `#dashboard/...` resolve.
 - **TC-SEND-014:** the `amount` path parameter is declared as `double`; what should a non-numeric value do? Record what the build does.
 - **TC-SEND-016:** record the exact node refusal text for step 3 on web so the next pass can assert it.
 - **TC-SEND-018:** should the client reserve the fee when the amount equals the full balance? Today neither platform does.

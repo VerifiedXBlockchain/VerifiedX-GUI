@@ -443,7 +443,7 @@ This file covers what a logged-in user sees around every screen: the dashboard o
 ### TC-DASH-026 · Collapse and expand the side nav
 **Platforms:** Web, macOS · **Priority:** P1 · **Moves funds:** no
 
-**Preconditions:** Nav expanded.
+**Preconditions:** Nav expanded. On web, a window tall enough that the expander under the nav is on screen and not covered by the `Addresses` tab (1400x900 is too short; use about 1400x1100).
 
 **Steps**
 1. Tap the expander under the nav. Web: `fltA11y.tap("Collapse navigation")`. macOS: `tap-key nav:expander`. Screenshot.
@@ -453,7 +453,7 @@ This file covers what a logged-in user sees around every screen: the dashboard o
 
 **Expected**
 - Collapsed, the nav shrinks to icons only, the `Verified` `X` / `Switchblade` wordmark fades out, and on web `Select Account` turns into a wallet icon.
-- A collapsed item shows its title as a tooltip on hover and still navigates.
+- A collapsed item shows its title as a tooltip on hover and still navigates, and the nav stays collapsed on the new screen.
 - The expander's accessible label switches between `Collapse navigation` and `Expand navigation`; expanding restores the labels and wordmark.
 
 **Cleanup:** Leave the nav expanded.

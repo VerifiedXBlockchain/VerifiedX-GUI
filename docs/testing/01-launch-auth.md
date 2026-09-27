@@ -446,7 +446,7 @@ This file covers everything between opening the app and holding a usable, unlock
 
 **Steps**
 1. Click `button "Transactions"` in the side nav (the URL hash ends with `dashboard/transactions`).
-2. Reload with `?automation=1`, then unlock with `TEST_ENCRYPTION_PASSWORD`.
+2. Reload keeping the hash (load `http://localhost:42069/?automation=1#dashboard/transactions`), then unlock with `TEST_ENCRYPTION_PASSWORD`.
 
 **Expected**
 - After unlocking, the Transactions screen opens, not the Home tab.

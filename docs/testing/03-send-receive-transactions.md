@@ -244,15 +244,18 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 **Preconditions:** Logged in as account A on web.
 
 **Steps**
-1. Load `http://localhost:42069/?automation=1#/dashboard/send/vfx/<B address>/2.5` (substitute `TEST_VFX_B_ADDRESS`). If the reload drops the session, log in again as A and load the URL again.
+1. Load `http://localhost:42069/?automation=1#dashboard/send/vfx/<B address>/2.5` (substitute `TEST_VFX_B_ADDRESS`). With encrypted storage the wallet asks for the password first; unlock with `TEST_ENCRYPTION_PASSWORD`.
 2. Read the form.
+3. Press `Clear`, go to Home, then set `location.hash` to `#dashboard/send/vfx/<B address>/2.5` in the running session.
 
 **Expected**
 - The screen is `Send VFX` with the `To:` field holding B's address and the amount holding `2.5`.
 - The currency switch is set to VFX (the route's `vfx` segment), even if BTC was selected before.
+- After unlocking, the prefilled form opens, not Home.
+- Step 3 opens the same prefilled form without a reload.
 - Nothing is sent until `Send` is pressed; the normal flow of TC-SEND-003 applies from here.
 
-**Open question:** the in-app request link (TC-SEND-029) is built as `.../#dashboard/send/...` without a leading slash; confirm both `#/dashboard/...` and `#dashboard/...` resolve.
+**Note:** links resolve with or without a leading slash (`#dashboard/...` and `#/dashboard/...`); the in-app request link (TC-SEND-029) uses `#dashboard/...`.
 
 **Cleanup:** press `Clear`.
 
@@ -262,7 +265,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 **Preconditions:** Web session with the BTC key loaded.
 
 **Steps**
-1. Load `http://localhost:42069/?automation=1#/dashboard/send/btc/<a testnet4 address>/0.0001`.
+1. Load `http://localhost:42069/?automation=1#dashboard/send/btc/<a testnet4 address>/0.0001`.
 
 **Expected**
 - The app bar reads `Send BTC`, the currency switch shows BTC selected, and the fields hold the address and `0.0001`.
@@ -275,8 +278,8 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 **Preconditions:** Logged in as account A.
 
 **Steps**
-1. Load `http://localhost:42069/?automation=1#/dashboard/send/vfx/xNOTREAL/1` and press `Send`.
-2. Load `http://localhost:42069/?automation=1#/dashboard/send/vfx/<B address>/abc`.
+1. Load `http://localhost:42069/?automation=1#dashboard/send/vfx/xNOTREAL/1` and press `Send`.
+2. Load `http://localhost:42069/?automation=1#dashboard/send/vfx/<B address>/abc`.
 
 **Expected**
 - Step 1: the address field shows `xNOTREAL` and submitting shows `Invalid Address.` under it.
@@ -719,12 +722,14 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 **Preconditions:** Logged in as account A; a known confirmed hash.
 
 **Steps**
-1. Load `http://localhost:42069/?automation=1#/dashboard/transactions/detail/<known hash>`.
-2. Load the same URL with a made-up hash of the same length.
+1. Load `http://localhost:42069/?automation=1#dashboard/transactions/detail/<known hash>` (the `#/dashboard/...` form works too).
+2. In the same session, change only the hash in the URL to another of A's transaction hashes.
+3. Load the same URL with a made-up hash of the same length.
 
 **Expected**
 - Step 1 renders the detail screen of TC-SEND-036 directly.
-- Step 2 shows a spinner and then the text `Error` (no transaction) or `An error occurred`, and no crash.
+- Step 2 shows the other transaction, not the first one.
+- Step 3 shows a spinner and then the text `Error` (no transaction) or `An error occurred`, and no crash.
 
 **Open question:** the detail provider is not `.autoDispose` and is not invalidated from the session loop, unlike the convention for web detail screens, so a detail opened while pending data was stale may keep the old values until reload. Check whether reopening a recently confirmed transaction shows its final block height.
 
