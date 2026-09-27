@@ -19,12 +19,21 @@ import '../core/env.dart';
 import '../features/asset/asset.dart';
 import '../features/config/providers/config_provider.dart';
 
-Future<void> openFile(File file) async {
+/// Opens [file] with the system handler, falling back to its folder.
+/// Returns false when neither could be opened.
+Future<bool> openFile(File file) async {
   try {
-    await launchUrl(file.uri);
+    if (await launchUrl(file.uri)) {
+      return true;
+    }
   } catch (e) {
     print(e);
-    launchUrl(File(file.parent.path).uri);
+  }
+  try {
+    return await launchUrl(File(file.parent.path).uri);
+  } catch (e) {
+    print(e);
+    return false;
   }
 }
 

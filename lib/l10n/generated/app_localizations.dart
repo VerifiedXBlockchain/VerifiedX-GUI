@@ -20396,6 +20396,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Domain'**
   String get webYourDomain;
+
+  /// Error toast when Open Log cannot find or open the CLI log file.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the log file: {path}'**
+  String r3eLogFileNotFound(String path);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

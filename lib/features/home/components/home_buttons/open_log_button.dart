@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import '../../../../utils/toast.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../core/base_component.dart';
@@ -44,7 +45,10 @@ class OpenLogButton extends BaseComponent {
 
         // Opened through a file URI (as Open DB Folder does) rather than a
         // shell command, so a path containing spaces is not split apart.
-        await openFile(File(logPath));
+        final logFile = File(logPath);
+        if (!await logFile.exists() || !await openFile(logFile)) {
+          Toast.error(AppLocalizations.of(context).r3eLogFileNotFound(logPath));
+        }
       },
     );
   }

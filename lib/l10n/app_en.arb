@@ -9999,5 +9999,14 @@
   "webYourDomain": "Your Domain",
   "@webYourDomain": {
     "description": "Label below domain on the receive screen."
+  },
+  "r3eLogFileNotFound": "Could not open the log file: {path}",
+  "@r3eLogFileNotFound": {
+    "description": "Error toast when Open Log cannot find or open the CLI log file.",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
   }
 }

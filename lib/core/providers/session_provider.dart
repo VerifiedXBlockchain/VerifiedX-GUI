@@ -220,7 +220,13 @@ class SessionProvider extends StateNotifier<SessionModel> {
     init(true);
   }
 
+  /// The loop mode of the most recent [init]. The startup unlock prompt
+  /// finishes setup with the same mode, so a restart (for example after a
+  /// snapshot import) never starts a second set of polling loops.
+  bool lastInitInLoop = true;
+
   Future<void> init(bool inLoop) async {
+    lastInitInLoop = inLoop;
     final token = cliApiToken(
       isMainnet: !Env.isTestNet && !Env.isDevnet,
       isDebug: kDebugMode,

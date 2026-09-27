@@ -10997,4 +10997,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get webYourDomain => 'Tu dominio';
+
+  @override
+  String r3eLogFileNotFound(String path) {
+    return 'No se pudo abrir el archivo de registro: $path';
+  }
 }
