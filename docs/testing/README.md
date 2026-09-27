@@ -116,13 +116,30 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 - **Duplicate controls on macOS.** When the same unkeyed button appears more than once on a screen, `drive.dart` fails with "Too many elements". Cases name these steps; record them as `blocked` automation gaps, not product failures, until the controls get keys.
 - **Temporary secrets.** Vault restore codes created during a run are kept in `$TMPDIR/vfx-run-<run id>/` with mode 600. Both lanes run on the same Mac and share that folder, because the cross-platform phase restores one lane's vault in the other. The folder is deleted at the end of the cross-platform phase.
 
+## Lane schedule
+
+Bitcoin testnet4 confirmations take from a few minutes to an hour, and vBTC deposits and withdrawals each need them. Each lane therefore starts its Bitcoin work first and fills the waits with the rest of the suite. Case order within a file is not run order.
+
+1. **Setup.** Sign in and import the lane's accounts: the account A and B cases in `01-launch-auth.md` that the lane needs (TC-AUTH-016 on web; the desktop import cases on macOS), then the lane's BTC account (TC-BTC-001 on macOS, TC-BTC-002 on web).
+2. **Bitcoin kickoff.** Start everything that waits on Bitcoin, without waiting for any of it:
+   - Create two vBTC contracts (TC-BTC-022 twice on macOS, TC-BTC-023 twice on web). The MPC ceremony itself only needs the VFX chain and finishes in minutes.
+   - Fund both contracts from the lane's BTC account (TC-BTC-026 on macOS, TC-BTC-027 on web), 0.0001 BTC each.
+   - Start the lane's plain BTC send (TC-BTC-010 and TC-SEND-009 on macOS, TC-BTC-011 and TC-SEND-010 on web).
+   - Write each started item into a **Pending BTC** table at the top of the lane's results file: case id, what was sent, the transaction id, the time started, and the check to run.
+3. **Main body.** Run every other area of the lane, `P0` then `P1` then `P2`, following file order within a priority. At the end of each area file, and at least every 15 minutes, check the Pending BTC table: for each item whose transaction has confirmed on mempool.space, finish that case's remaining steps and expected checks, and mark it done.
+4. **vBTC follow-ups.** As soon as both contracts show their deposited balance, interrupt the main body at the next case boundary and run the vBTC cases that need a funded contract: token list and detail, transfers, transfer validation, ownership, and bulk transfers (TC-BTC-030 to TC-BTC-041). These only need the VFX chain, so they finish quickly.
+5. **Withdrawal kickoff.** Straight after the follow-ups, start the withdrawals to the treasury (TC-BTC-042 on macOS, TC-BTC-043 on web, then TC-BTC-044 and TC-BTC-047 to TC-BTC-052). Let the FROST signing finish, add each payout transaction to the Pending BTC table, and return to the main body.
+6. **Close-out.** When the main body is done, wait for anything still pending, checking every 5 minutes for up to 60 minutes. An item still unconfirmed after that is recorded as `blocked` with its transaction id, not as a failure, unless the app itself reported an error.
+
+Phase 2 uses the same idea: it starts the BTC sends in TC-XP-004 and TC-XP-005 first, then runs TC-XP-007 (vBTC from macOS to web) and starts the withdrawal in TC-XP-010 straight after it, and runs the VFX, remaining vBTC, NFT, token, domain and vault cases while those confirm. The Bitcoin checks come last.
+
 ## Running a release pass
 
 A pass has two phases. Phase 1 runs the two lanes in parallel, one Claude agent per lane. Phase 2 runs the cross-platform cases with one agent that drives both the browser and the desktop app.
 
 1. Record the build under test (version string from the app, commit hash) and the run id. Fund both lanes to the minimum VFX balances.
 2. **Pre-run BTC funding.** One agent opens the web wallet with `?automation=1`, logs in with `TEST_BTC_TREASURY_WIF` through `Bitcoin Private Key / WIF Key` (TC-AUTH-018), choosing `Bech32 (Native SegWit - P2WPKH)` rather than `I don't know` (see TC-AUTH-019), and sends each lane's `TEST_BTC_ADDRESS` enough to reach 0.0005 testnet BTC, as in TC-SEND-010. It waits up to 60 minutes for both sends to confirm, then logs out. Because the lanes start only after this, the run begins with confirmed BTC on both sides.
-3. **Phase 1, lanes in parallel.** The web agent runs every case that lists `Web`; the macOS agent runs every case that lists `macOS`. A case listing both platforms is run once in each lane. Each lane skips cases marked `Phase: cross-platform`. Within a lane, run `P0` first, then `P1`, then `P2`, and follow the file order within a priority, because later areas assume accounts and objects created earlier. The two lanes share nothing on chain, so they never wait for each other.
+3. **Phase 1, lanes in parallel.** The web agent runs every case that lists `Web`; the macOS agent runs every case that lists `macOS`. A case listing both platforms is run once in each lane. Each lane skips cases marked `Phase: cross-platform`. Each lane follows the stages in "Lane schedule" below, which starts the slow Bitcoin work first so its confirmations overlap with everything else. The two lanes share nothing on chain, so they never wait for each other.
 4. **Phase 2, cross-platform.** After both lanes finish, one agent keeps the web lane's browser session and the macOS lane's driver app open and runs `13-cross-platform.md`. The few cases in other files marked `Phase: cross-platform` are run from inside it (TC-SC-045 from TC-XP-011, TC-VAULT-026 and TC-VAULT-027 from TC-XP-016), so each is run once. It reads both account files.
 5. On a failure, capture the screenshot, the visible error text, and for macOS the tail of the `flutter run` log, then continue with the next case unless the failure blocks the rest of the area.
 6. Each phase writes its own results file: `docs/testing/runs/<run-id>-web.md`, `docs/testing/runs/<run-id>-macos.md` and `docs/testing/runs/<run-id>-cross.md`. Each has one row per case run in that phase: id, result (`pass`, `fail`, `blocked`, `skipped`), and a one-line note for anything other than pass. A case listing both platforms therefore has a row in each lane's file.
