@@ -27,8 +27,10 @@ mixin _$WebBlock {
   @JsonKey(name: "validator_address")
   String get validator => throw _privateConstructorUsedError;
   @JsonKey(name: "total_amount")
+  @NumOrStringDoubleConverter()
   double get totalAmount => throw _privateConstructorUsedError;
   @JsonKey(name: "total_reward")
+  @NumOrStringDoubleConverter()
   double get totalReward =>
       throw _privateConstructorUsedError; // @JsonKey(name: "number_of_transactions") required int numberOfTransactions,
   List<WebTransaction> get transactions => throw _privateConstructorUsedError;
@@ -51,15 +53,23 @@ abstract class $WebBlockCopyWith<$Res> {
   @useResult
   $Res call(
       {int height,
-      @JsonKey(name: "date_crafted") DateTime dateCrafted,
+      @JsonKey(name: "date_crafted")
+          DateTime dateCrafted,
       String hash,
-      @JsonKey(name: "validator_address") String validator,
-      @JsonKey(name: "total_amount") double totalAmount,
-      @JsonKey(name: "total_reward") double totalReward,
+      @JsonKey(name: "validator_address")
+          String validator,
+      @JsonKey(name: "total_amount")
+      @NumOrStringDoubleConverter()
+          double totalAmount,
+      @JsonKey(name: "total_reward")
+      @NumOrStringDoubleConverter()
+          double totalReward,
       List<WebTransaction> transactions,
       int size,
-      @JsonKey(name: "craft_time") int craftTime,
-      @JsonKey(name: "previous_hash") String prevHash});
+      @JsonKey(name: "craft_time")
+          int craftTime,
+      @JsonKey(name: "previous_hash")
+          String prevHash});
 }
 
 /// @nodoc
@@ -140,15 +150,23 @@ abstract class _$$_WebBlockCopyWith<$Res> implements $WebBlockCopyWith<$Res> {
   @useResult
   $Res call(
       {int height,
-      @JsonKey(name: "date_crafted") DateTime dateCrafted,
+      @JsonKey(name: "date_crafted")
+          DateTime dateCrafted,
       String hash,
-      @JsonKey(name: "validator_address") String validator,
-      @JsonKey(name: "total_amount") double totalAmount,
-      @JsonKey(name: "total_reward") double totalReward,
+      @JsonKey(name: "validator_address")
+          String validator,
+      @JsonKey(name: "total_amount")
+      @NumOrStringDoubleConverter()
+          double totalAmount,
+      @JsonKey(name: "total_reward")
+      @NumOrStringDoubleConverter()
+          double totalReward,
       List<WebTransaction> transactions,
       int size,
-      @JsonKey(name: "craft_time") int craftTime,
-      @JsonKey(name: "previous_hash") String prevHash});
+      @JsonKey(name: "craft_time")
+          int craftTime,
+      @JsonKey(name: "previous_hash")
+          String prevHash});
 }
 
 /// @nodoc
@@ -223,15 +241,23 @@ class __$$_WebBlockCopyWithImpl<$Res>
 class _$_WebBlock extends _WebBlock {
   _$_WebBlock(
       {required this.height,
-      @JsonKey(name: "date_crafted") required this.dateCrafted,
+      @JsonKey(name: "date_crafted")
+          required this.dateCrafted,
       required this.hash,
-      @JsonKey(name: "validator_address") required this.validator,
-      @JsonKey(name: "total_amount") required this.totalAmount,
-      @JsonKey(name: "total_reward") required this.totalReward,
+      @JsonKey(name: "validator_address")
+          required this.validator,
+      @JsonKey(name: "total_amount")
+      @NumOrStringDoubleConverter()
+          required this.totalAmount,
+      @JsonKey(name: "total_reward")
+      @NumOrStringDoubleConverter()
+          required this.totalReward,
       final List<WebTransaction> transactions = const [],
       required this.size,
-      @JsonKey(name: "craft_time") required this.craftTime,
-      @JsonKey(name: "previous_hash") required this.prevHash})
+      @JsonKey(name: "craft_time")
+          required this.craftTime,
+      @JsonKey(name: "previous_hash")
+          required this.prevHash})
       : _transactions = transactions,
         super._();
 
@@ -250,9 +276,11 @@ class _$_WebBlock extends _WebBlock {
   final String validator;
   @override
   @JsonKey(name: "total_amount")
+  @NumOrStringDoubleConverter()
   final double totalAmount;
   @override
   @JsonKey(name: "total_reward")
+  @NumOrStringDoubleConverter()
   final double totalReward;
 // @JsonKey(name: "number_of_transactions") required int numberOfTransactions,
   final List<WebTransaction> _transactions;
@@ -334,17 +362,24 @@ class _$_WebBlock extends _WebBlock {
 
 abstract class _WebBlock extends WebBlock {
   factory _WebBlock(
-          {required final int height,
-          @JsonKey(name: "date_crafted") required final DateTime dateCrafted,
-          required final String hash,
-          @JsonKey(name: "validator_address") required final String validator,
-          @JsonKey(name: "total_amount") required final double totalAmount,
-          @JsonKey(name: "total_reward") required final double totalReward,
-          final List<WebTransaction> transactions,
-          required final int size,
-          @JsonKey(name: "craft_time") required final int craftTime,
-          @JsonKey(name: "previous_hash") required final String prevHash}) =
-      _$_WebBlock;
+      {required final int height,
+      @JsonKey(name: "date_crafted")
+          required final DateTime dateCrafted,
+      required final String hash,
+      @JsonKey(name: "validator_address")
+          required final String validator,
+      @JsonKey(name: "total_amount")
+      @NumOrStringDoubleConverter()
+          required final double totalAmount,
+      @JsonKey(name: "total_reward")
+      @NumOrStringDoubleConverter()
+          required final double totalReward,
+      final List<WebTransaction> transactions,
+      required final int size,
+      @JsonKey(name: "craft_time")
+          required final int craftTime,
+      @JsonKey(name: "previous_hash")
+          required final String prevHash}) = _$_WebBlock;
   _WebBlock._() : super._();
 
   factory _WebBlock.fromJson(Map<String, dynamic> json) = _$_WebBlock.fromJson;
@@ -361,9 +396,11 @@ abstract class _WebBlock extends WebBlock {
   String get validator;
   @override
   @JsonKey(name: "total_amount")
+  @NumOrStringDoubleConverter()
   double get totalAmount;
   @override
   @JsonKey(name: "total_reward")
+  @NumOrStringDoubleConverter()
   double get totalReward;
   @override // @JsonKey(name: "number_of_transactions") required int numberOfTransactions,
   List<WebTransaction> get transactions;

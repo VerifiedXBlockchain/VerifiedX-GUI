@@ -14295,6 +14295,12 @@ abstract class AppLocalizations {
   /// **'No Vault Account Found'**
   String get reserveWebNoAccount;
 
+  /// Shown on the web Vault overview screen when the Vault's activation/recovery status could not be fetched.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load this Vault\'s status from the network. Retrying automatically.'**
+  String get reserveWebStatusUnavailable;
+
   /// Toast shown when the web Vault account has no NFTs to manage.
   ///
   /// In en, this message translates to:

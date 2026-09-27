@@ -27,8 +27,10 @@ mixin _$WebTransaction {
   String get fromAddress => throw _privateConstructorUsedError;
   int get type => throw _privateConstructorUsedError;
   @JsonKey(name: "total_amount")
+  @NullableNumOrStringDoubleConverter()
   double? get amount => throw _privateConstructorUsedError;
   @JsonKey(name: "total_fee")
+  @NullableNumOrStringDoubleConverter()
   double? get fee => throw _privateConstructorUsedError;
   @JsonKey(name: 'date_crafted')
   DateTime get date => throw _privateConstructorUsedError;
@@ -59,18 +61,28 @@ abstract class $WebTransactionCopyWith<$Res> {
   @useResult
   $Res call(
       {String hash,
-      @JsonKey(name: 'to_address') String toAddress,
-      @JsonKey(name: 'from_address') String fromAddress,
+      @JsonKey(name: 'to_address')
+          String toAddress,
+      @JsonKey(name: 'from_address')
+          String fromAddress,
       int type,
-      @JsonKey(name: "total_amount") double? amount,
-      @JsonKey(name: "total_fee") double? fee,
-      @JsonKey(name: 'date_crafted') DateTime date,
-      @JsonKey(name: 'unlock_time') DateTime? unlockTime,
+      @JsonKey(name: "total_amount")
+      @NullableNumOrStringDoubleConverter()
+          double? amount,
+      @JsonKey(name: "total_fee")
+      @NullableNumOrStringDoubleConverter()
+          double? fee,
+      @JsonKey(name: 'date_crafted')
+          DateTime date,
+      @JsonKey(name: 'unlock_time')
+          DateTime? unlockTime,
       bool isPending,
       String? data,
       int height,
-      @JsonKey(name: "callback_details") WebTransaction? callbackDetails,
-      @JsonKey(name: "recovery_details") WebRecoveryDetails? recoveryDetails});
+      @JsonKey(name: "callback_details")
+          WebTransaction? callbackDetails,
+      @JsonKey(name: "recovery_details")
+          WebRecoveryDetails? recoveryDetails});
 
   $WebTransactionCopyWith<$Res>? get callbackDetails;
   $WebRecoveryDetailsCopyWith<$Res>? get recoveryDetails;
@@ -194,18 +206,28 @@ abstract class _$$_WebTransactionCopyWith<$Res>
   @useResult
   $Res call(
       {String hash,
-      @JsonKey(name: 'to_address') String toAddress,
-      @JsonKey(name: 'from_address') String fromAddress,
+      @JsonKey(name: 'to_address')
+          String toAddress,
+      @JsonKey(name: 'from_address')
+          String fromAddress,
       int type,
-      @JsonKey(name: "total_amount") double? amount,
-      @JsonKey(name: "total_fee") double? fee,
-      @JsonKey(name: 'date_crafted') DateTime date,
-      @JsonKey(name: 'unlock_time') DateTime? unlockTime,
+      @JsonKey(name: "total_amount")
+      @NullableNumOrStringDoubleConverter()
+          double? amount,
+      @JsonKey(name: "total_fee")
+      @NullableNumOrStringDoubleConverter()
+          double? fee,
+      @JsonKey(name: 'date_crafted')
+          DateTime date,
+      @JsonKey(name: 'unlock_time')
+          DateTime? unlockTime,
       bool isPending,
       String? data,
       int height,
-      @JsonKey(name: "callback_details") WebTransaction? callbackDetails,
-      @JsonKey(name: "recovery_details") WebRecoveryDetails? recoveryDetails});
+      @JsonKey(name: "callback_details")
+          WebTransaction? callbackDetails,
+      @JsonKey(name: "recovery_details")
+          WebRecoveryDetails? recoveryDetails});
 
   @override
   $WebTransactionCopyWith<$Res>? get callbackDetails;
@@ -300,18 +322,28 @@ class __$$_WebTransactionCopyWithImpl<$Res>
 class _$_WebTransaction extends _WebTransaction {
   _$_WebTransaction(
       {required this.hash,
-      @JsonKey(name: 'to_address') required this.toAddress,
-      @JsonKey(name: 'from_address') required this.fromAddress,
+      @JsonKey(name: 'to_address')
+          required this.toAddress,
+      @JsonKey(name: 'from_address')
+          required this.fromAddress,
       required this.type,
-      @JsonKey(name: "total_amount") required this.amount,
-      @JsonKey(name: "total_fee") required this.fee,
-      @JsonKey(name: 'date_crafted') required this.date,
-      @JsonKey(name: 'unlock_time') this.unlockTime,
+      @JsonKey(name: "total_amount")
+      @NullableNumOrStringDoubleConverter()
+          required this.amount,
+      @JsonKey(name: "total_fee")
+      @NullableNumOrStringDoubleConverter()
+          required this.fee,
+      @JsonKey(name: 'date_crafted')
+          required this.date,
+      @JsonKey(name: 'unlock_time')
+          this.unlockTime,
       this.isPending = false,
       this.data,
       required this.height,
-      @JsonKey(name: "callback_details") this.callbackDetails,
-      @JsonKey(name: "recovery_details") this.recoveryDetails})
+      @JsonKey(name: "callback_details")
+          this.callbackDetails,
+      @JsonKey(name: "recovery_details")
+          this.recoveryDetails})
       : super._();
 
   factory _$_WebTransaction.fromJson(Map<String, dynamic> json) =>
@@ -329,9 +361,11 @@ class _$_WebTransaction extends _WebTransaction {
   final int type;
   @override
   @JsonKey(name: "total_amount")
+  @NullableNumOrStringDoubleConverter()
   final double? amount;
   @override
   @JsonKey(name: "total_fee")
+  @NullableNumOrStringDoubleConverter()
   final double? fee;
   @override
   @JsonKey(name: 'date_crafted')
@@ -428,8 +462,10 @@ abstract class _WebTransaction extends WebTransaction {
           required final String fromAddress,
       required final int type,
       @JsonKey(name: "total_amount")
+      @NullableNumOrStringDoubleConverter()
           required final double? amount,
       @JsonKey(name: "total_fee")
+      @NullableNumOrStringDoubleConverter()
           required final double? fee,
       @JsonKey(name: 'date_crafted')
           required final DateTime date,
@@ -459,9 +495,11 @@ abstract class _WebTransaction extends WebTransaction {
   int get type;
   @override
   @JsonKey(name: "total_amount")
+  @NullableNumOrStringDoubleConverter()
   double? get amount;
   @override
   @JsonKey(name: "total_fee")
+  @NullableNumOrStringDoubleConverter()
   double? get fee;
   @override
   @JsonKey(name: 'date_crafted')

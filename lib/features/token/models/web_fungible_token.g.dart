@@ -18,8 +18,10 @@ _$_WebFungibleToken _$$_WebFungibleTokenFromJson(Map<String, dynamic> json) =>
       canBurn: json['can_burn'] as bool,
       canVote: json['can_vote'] as bool,
       isPaused: json['is_paused'] as bool,
-      circulatingSupply: (json['circulating_supply'] as num).toDouble(),
-      initialSupply: (json['initial_supply'] as num).toDouble(),
+      circulatingSupply: const NumOrStringDoubleConverter()
+          .fromJson(json['circulating_supply'] as Object),
+      initialSupply: const NumOrStringDoubleConverter()
+          .fromJson(json['initial_supply'] as Object),
       bannedAddresses: (json['banned_addresses'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -38,8 +40,10 @@ Map<String, dynamic> _$$_WebFungibleTokenToJson(_$_WebFungibleToken instance) =>
       'can_burn': instance.canBurn,
       'can_vote': instance.canVote,
       'is_paused': instance.isPaused,
-      'circulating_supply': instance.circulatingSupply,
-      'initial_supply': instance.initialSupply,
+      'circulating_supply':
+          const NumOrStringDoubleConverter().toJson(instance.circulatingSupply),
+      'initial_supply':
+          const NumOrStringDoubleConverter().toJson(instance.initialSupply),
       'banned_addresses': instance.bannedAddresses,
       'created_at': instance.createdAt.toIso8601String(),
     };

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../nft/models/web_nft.dart';
+import '../../../utils/json_converters.dart';
 
 part 'btc_web_vbtc_token.freezed.dart';
 part 'btc_web_vbtc_token.g.dart';
@@ -85,7 +86,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     @JsonKey(name: 'image_url') required String imageUrl,
     @JsonKey(name: 'deposit_address') required String depositAddress,
     @JsonKey(name: 'public_key_proofs') String? publicKeyProofs,
-    @JsonKey(name: 'global_balance') required double globalBalance,
+    @JsonKey(name: 'global_balance') @NumOrStringDoubleConverter() required double globalBalance,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     required WebNft nft,
     @Default(1) int version,

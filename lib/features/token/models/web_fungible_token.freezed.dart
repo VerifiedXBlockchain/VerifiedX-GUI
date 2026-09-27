@@ -38,8 +38,10 @@ mixin _$WebFungibleToken {
   @JsonKey(name: "is_paused")
   bool get isPaused => throw _privateConstructorUsedError;
   @JsonKey(name: "circulating_supply")
+  @NumOrStringDoubleConverter()
   double get circulatingSupply => throw _privateConstructorUsedError;
   @JsonKey(name: "initial_supply")
+  @NumOrStringDoubleConverter()
   double get initialSupply => throw _privateConstructorUsedError;
   @JsonKey(name: "banned_addresses")
   List<String> get bannedAddresses => throw _privateConstructorUsedError;
@@ -59,20 +61,33 @@ abstract class $WebFungibleTokenCopyWith<$Res> {
       _$WebFungibleTokenCopyWithImpl<$Res, WebFungibleToken>;
   @useResult
   $Res call(
-      {@JsonKey(name: "sc_identifier") String smartContractId,
+      {@JsonKey(name: "sc_identifier")
+          String smartContractId,
       String name,
       String ticker,
       String? description,
-      @JsonKey(name: "owner_address") String ownerAddress,
-      @JsonKey(name: "image_url") String? imageUrl,
-      @JsonKey(name: "can_mint") bool canMint,
-      @JsonKey(name: "can_burn") bool canBurn,
-      @JsonKey(name: "can_vote") bool canVote,
-      @JsonKey(name: "is_paused") bool isPaused,
-      @JsonKey(name: "circulating_supply") double circulatingSupply,
-      @JsonKey(name: "initial_supply") double initialSupply,
-      @JsonKey(name: "banned_addresses") List<String> bannedAddresses,
-      @JsonKey(name: "created_at") DateTime createdAt});
+      @JsonKey(name: "owner_address")
+          String ownerAddress,
+      @JsonKey(name: "image_url")
+          String? imageUrl,
+      @JsonKey(name: "can_mint")
+          bool canMint,
+      @JsonKey(name: "can_burn")
+          bool canBurn,
+      @JsonKey(name: "can_vote")
+          bool canVote,
+      @JsonKey(name: "is_paused")
+          bool isPaused,
+      @JsonKey(name: "circulating_supply")
+      @NumOrStringDoubleConverter()
+          double circulatingSupply,
+      @JsonKey(name: "initial_supply")
+      @NumOrStringDoubleConverter()
+          double initialSupply,
+      @JsonKey(name: "banned_addresses")
+          List<String> bannedAddresses,
+      @JsonKey(name: "created_at")
+          DateTime createdAt});
 }
 
 /// @nodoc
@@ -173,20 +188,33 @@ abstract class _$$_WebFungibleTokenCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "sc_identifier") String smartContractId,
+      {@JsonKey(name: "sc_identifier")
+          String smartContractId,
       String name,
       String ticker,
       String? description,
-      @JsonKey(name: "owner_address") String ownerAddress,
-      @JsonKey(name: "image_url") String? imageUrl,
-      @JsonKey(name: "can_mint") bool canMint,
-      @JsonKey(name: "can_burn") bool canBurn,
-      @JsonKey(name: "can_vote") bool canVote,
-      @JsonKey(name: "is_paused") bool isPaused,
-      @JsonKey(name: "circulating_supply") double circulatingSupply,
-      @JsonKey(name: "initial_supply") double initialSupply,
-      @JsonKey(name: "banned_addresses") List<String> bannedAddresses,
-      @JsonKey(name: "created_at") DateTime createdAt});
+      @JsonKey(name: "owner_address")
+          String ownerAddress,
+      @JsonKey(name: "image_url")
+          String? imageUrl,
+      @JsonKey(name: "can_mint")
+          bool canMint,
+      @JsonKey(name: "can_burn")
+          bool canBurn,
+      @JsonKey(name: "can_vote")
+          bool canVote,
+      @JsonKey(name: "is_paused")
+          bool isPaused,
+      @JsonKey(name: "circulating_supply")
+      @NumOrStringDoubleConverter()
+          double circulatingSupply,
+      @JsonKey(name: "initial_supply")
+      @NumOrStringDoubleConverter()
+          double initialSupply,
+      @JsonKey(name: "banned_addresses")
+          List<String> bannedAddresses,
+      @JsonKey(name: "created_at")
+          DateTime createdAt});
 }
 
 /// @nodoc
@@ -298,8 +326,10 @@ class _$_WebFungibleToken extends _WebFungibleToken {
       @JsonKey(name: "is_paused")
           required this.isPaused,
       @JsonKey(name: "circulating_supply")
+      @NumOrStringDoubleConverter()
           required this.circulatingSupply,
       @JsonKey(name: "initial_supply")
+      @NumOrStringDoubleConverter()
           required this.initialSupply,
       @JsonKey(name: "banned_addresses")
           required final List<String> bannedAddresses,
@@ -340,9 +370,11 @@ class _$_WebFungibleToken extends _WebFungibleToken {
   final bool isPaused;
   @override
   @JsonKey(name: "circulating_supply")
+  @NumOrStringDoubleConverter()
   final double circulatingSupply;
   @override
   @JsonKey(name: "initial_supply")
+  @NumOrStringDoubleConverter()
   final double initialSupply;
   final List<String> _bannedAddresses;
   @override
@@ -445,8 +477,10 @@ abstract class _WebFungibleToken extends WebFungibleToken {
       @JsonKey(name: "is_paused")
           required final bool isPaused,
       @JsonKey(name: "circulating_supply")
+      @NumOrStringDoubleConverter()
           required final double circulatingSupply,
       @JsonKey(name: "initial_supply")
+      @NumOrStringDoubleConverter()
           required final double initialSupply,
       @JsonKey(name: "banned_addresses")
           required final List<String> bannedAddresses,
@@ -486,9 +520,11 @@ abstract class _WebFungibleToken extends WebFungibleToken {
   bool get isPaused;
   @override
   @JsonKey(name: "circulating_supply")
+  @NumOrStringDoubleConverter()
   double get circulatingSupply;
   @override
   @JsonKey(name: "initial_supply")
+  @NumOrStringDoubleConverter()
   double get initialSupply;
   @override
   @JsonKey(name: "banned_addresses")

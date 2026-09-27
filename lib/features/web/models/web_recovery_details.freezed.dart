@@ -24,6 +24,7 @@ mixin _$WebRecoveryDetails {
   String get originalAddress => throw _privateConstructorUsedError;
   @JsonKey(name: "new_address")
   String get newAddress => throw _privateConstructorUsedError;
+  @NumOrStringDoubleConverter()
   double get amount => throw _privateConstructorUsedError;
   @JsonKey(name: "outstanding_transactions")
   List<WebTransaction>? get outstandingTransactions =>
@@ -46,7 +47,8 @@ abstract class $WebRecoveryDetailsCopyWith<$Res> {
           String originalAddress,
       @JsonKey(name: "new_address")
           String newAddress,
-      double amount,
+      @NumOrStringDoubleConverter()
+          double amount,
       @JsonKey(name: "outstanding_transactions")
           List<WebTransaction>? outstandingTransactions});
 }
@@ -103,7 +105,8 @@ abstract class _$$_WebRecoveryDetailsCopyWith<$Res>
           String originalAddress,
       @JsonKey(name: "new_address")
           String newAddress,
-      double amount,
+      @NumOrStringDoubleConverter()
+          double amount,
       @JsonKey(name: "outstanding_transactions")
           List<WebTransaction>? outstandingTransactions});
 }
@@ -153,7 +156,8 @@ class _$_WebRecoveryDetails extends _WebRecoveryDetails {
           required this.originalAddress,
       @JsonKey(name: "new_address")
           required this.newAddress,
-      this.amount = 0,
+      @NumOrStringDoubleConverter()
+          this.amount = 0,
       @JsonKey(name: "outstanding_transactions")
           final List<WebTransaction>? outstandingTransactions})
       : _outstandingTransactions = outstandingTransactions,
@@ -170,6 +174,7 @@ class _$_WebRecoveryDetails extends _WebRecoveryDetails {
   final String newAddress;
   @override
   @JsonKey()
+  @NumOrStringDoubleConverter()
   final double amount;
   final List<WebTransaction>? _outstandingTransactions;
   @override
@@ -228,7 +233,8 @@ abstract class _WebRecoveryDetails extends WebRecoveryDetails {
               required final String originalAddress,
           @JsonKey(name: "new_address")
               required final String newAddress,
-          final double amount,
+          @NumOrStringDoubleConverter()
+              final double amount,
           @JsonKey(name: "outstanding_transactions")
               final List<WebTransaction>? outstandingTransactions}) =
       _$_WebRecoveryDetails;
@@ -244,6 +250,7 @@ abstract class _WebRecoveryDetails extends WebRecoveryDetails {
   @JsonKey(name: "new_address")
   String get newAddress;
   @override
+  @NumOrStringDoubleConverter()
   double get amount;
   @override
   @JsonKey(name: "outstanding_transactions")

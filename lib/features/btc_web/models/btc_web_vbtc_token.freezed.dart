@@ -35,6 +35,7 @@ mixin _$BtcWebVbtcToken {
   @JsonKey(name: 'public_key_proofs')
   String? get publicKeyProofs => throw _privateConstructorUsedError;
   @JsonKey(name: 'global_balance')
+  @NumOrStringDoubleConverter()
   double get globalBalance => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -81,6 +82,7 @@ abstract class $BtcWebVbtcTokenCopyWith<$Res> {
       @JsonKey(name: 'public_key_proofs')
           String? publicKeyProofs,
       @JsonKey(name: 'global_balance')
+      @NumOrStringDoubleConverter()
           double globalBalance,
       @JsonKey(name: 'created_at')
           DateTime createdAt,
@@ -241,6 +243,7 @@ abstract class _$$_BtcWebVbtcTokenCopyWith<$Res>
       @JsonKey(name: 'public_key_proofs')
           String? publicKeyProofs,
       @JsonKey(name: 'global_balance')
+      @NumOrStringDoubleConverter()
           double globalBalance,
       @JsonKey(name: 'created_at')
           DateTime createdAt,
@@ -387,6 +390,7 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       @JsonKey(name: 'public_key_proofs')
           this.publicKeyProofs,
       @JsonKey(name: 'global_balance')
+      @NumOrStringDoubleConverter()
           required this.globalBalance,
       @JsonKey(name: 'created_at')
           required this.createdAt,
@@ -441,6 +445,7 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
   final String? publicKeyProofs;
   @override
   @JsonKey(name: 'global_balance')
+  @NumOrStringDoubleConverter()
   final double globalBalance;
   @override
   @JsonKey(name: 'created_at')
@@ -581,6 +586,7 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
       @JsonKey(name: 'public_key_proofs')
           final String? publicKeyProofs,
       @JsonKey(name: 'global_balance')
+      @NumOrStringDoubleConverter()
           required final double globalBalance,
       @JsonKey(name: 'created_at')
           required final DateTime createdAt,
@@ -626,6 +632,7 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
   String? get publicKeyProofs;
   @override
   @JsonKey(name: 'global_balance')
+  @NumOrStringDoubleConverter()
   double get globalBalance;
   @override
   @JsonKey(name: 'created_at')

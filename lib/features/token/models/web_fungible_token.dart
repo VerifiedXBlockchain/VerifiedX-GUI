@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../../../utils/json_converters.dart';
+
 part 'web_fungible_token.freezed.dart';
 part 'web_fungible_token.g.dart';
 
@@ -18,8 +20,8 @@ class WebFungibleToken with _$WebFungibleToken {
     @JsonKey(name: "can_burn") required bool canBurn,
     @JsonKey(name: "can_vote") required bool canVote,
     @JsonKey(name: "is_paused") required bool isPaused,
-    @JsonKey(name: "circulating_supply") required double circulatingSupply,
-    @JsonKey(name: "initial_supply") required double initialSupply,
+    @JsonKey(name: "circulating_supply") @NumOrStringDoubleConverter() required double circulatingSupply,
+    @JsonKey(name: "initial_supply") @NumOrStringDoubleConverter() required double initialSupply,
     @JsonKey(name: "banned_addresses") required List<String> bannedAddresses,
     @JsonKey(name: "created_at") required DateTime createdAt,
   }) = _WebFungibleToken;

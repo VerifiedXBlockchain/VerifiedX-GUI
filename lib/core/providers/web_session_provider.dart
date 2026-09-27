@@ -14,6 +14,7 @@ import '../../features/keygen/models/ra_keypair.dart';
 import '../../features/nft/providers/minted_nft_list_provider.dart';
 import 'package:collection/collection.dart';
 import '../../features/web/models/multi_account_instance.dart';
+import '../../features/web/models/web_address.dart';
 import '../../features/web/providers/multi_account_provider.dart';
 import '../../features/web/providers/web_selected_account_provider.dart';
 import '../models/web_session_model.dart';
@@ -250,14 +251,16 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       isAuthenticated: true,
     );
 
-    final webAddress = await ExplorerService().getWebAddress(keypair.address);
+    // Zero until the lookup succeeds; the refresh loop fills in the real
+    // balances via syncBalances once Spyglass answers.
+    final webAddress = await _fetchWebAddress(keypair.address);
 
     ref.read(webSelectedAccountProvider.notifier).setVfx(
         keypair,
-        webAddress.balance,
-        webAddress.balanceLocked,
-        webAddress.balanceTotal,
-        webAddress.adnr);
+        webAddress?.balance ?? 0,
+        webAddress?.balanceLocked ?? 0,
+        webAddress?.balanceTotal ?? 0,
+        webAddress?.adnr);
 
     refreshBtcBalanceInfo();
 
@@ -303,15 +306,14 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     }
 
     if (account.keypair != null) {
-      final webAddress =
-          await ExplorerService().getWebAddress(account.keypair!.address);
+      final webAddress = await _fetchWebAddress(account.keypair!.address);
 
       ref.read(webSelectedAccountProvider.notifier).setVfx(
           account.keypair!,
-          webAddress.balance,
-          webAddress.balanceLocked,
-          webAddress.balanceTotal,
-          webAddress.adnr);
+          webAddress?.balance ?? 0,
+          webAddress?.balanceLocked ?? 0,
+          webAddress?.balanceTotal ?? 0,
+          webAddress?.adnr);
     }
 
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -368,11 +370,12 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       return;
     }
     final address = state.keypair!.address;
-    final webAddress = await ExplorerService().getWebAddress(address);
+    final webAddress = await _fetchWebAddress(address);
 
     // The account may have changed while the request was in flight; a stale
-    // answer must not overwrite the new account's balance.
-    if (state.keypair?.address != address) {
+    // answer must not overwrite the new account's balance. A failed lookup
+    // keeps the last known values rather than zeroing them.
+    if (webAddress == null || state.keypair?.address != address) {
       return;
     }
 
@@ -412,9 +415,17 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       return;
     }
     final raAddress = state.raKeypair!.address;
-    final webAddress = await ExplorerService().getWebAddress(raAddress);
+    final webAddress = await _fetchWebAddress(raAddress);
 
     if (state.raKeypair?.address != raAddress) {
+      return;
+    }
+
+    // Without an answer the Vault's activated/deactivated flags are unknown;
+    // flag that instead of guessing, so the Vault screen does not offer to
+    // fund or recover a Vault that may already be recovered.
+    if (webAddress == null) {
+      state = state.copyWith(raStatusUnavailable: true);
       return;
     }
 
@@ -424,8 +435,19 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       raBalanceTotal: webAddress.balanceTotal,
       raActivated: webAddress.activated,
       raDeactivated: webAddress.deactivated,
+      raStatusUnavailable: false,
     );
     ref.read(webSelectedAccountProvider.notifier).syncBalances(state);
+  }
+
+  /// [ExplorerService.getWebAddress] already logs the failure; null tells the
+  /// caller the address state is unknown.
+  Future<WebAddress?> _fetchWebAddress(String address) async {
+    try {
+      return await ExplorerService().getWebAddress(address);
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> getFungibleTokens() async {

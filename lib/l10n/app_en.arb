@@ -6404,6 +6404,10 @@
   "@reserveWebNoAccount": {
     "description": "Empty-state on the web Vault overview screen."
   },
+  "reserveWebStatusUnavailable": "Could not load this Vault's status from the network. Retrying automatically.",
+  "@reserveWebStatusUnavailable": {
+    "description": "Shown on the web Vault overview screen when the Vault's activation/recovery status could not be fetched."
+  },
   "reserveWebNoNftsToast": "Your Vault Account has no NFTS.",
   "@reserveWebNoNftsToast": {
     "description": "Toast shown when the web Vault account has no NFTs to manage."

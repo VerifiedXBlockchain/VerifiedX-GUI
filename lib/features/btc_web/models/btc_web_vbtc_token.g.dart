@@ -17,7 +17,8 @@ _$_BtcWebVbtcToken _$$_BtcWebVbtcTokenFromJson(Map<String, dynamic> json) =>
       imageUrl: json['image_url'] as String,
       depositAddress: json['deposit_address'] as String,
       publicKeyProofs: json['public_key_proofs'] as String?,
-      globalBalance: (json['global_balance'] as num).toDouble(),
+      globalBalance: const NumOrStringDoubleConverter()
+          .fromJson(json['global_balance'] as Object),
       createdAt: DateTime.parse(json['created_at'] as String),
       nft: WebNft.fromJson(json['nft'] as Map<String, dynamic>),
       version: json['version'] as int? ?? 1,
@@ -41,7 +42,8 @@ Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
       'image_url': instance.imageUrl,
       'deposit_address': instance.depositAddress,
       'public_key_proofs': instance.publicKeyProofs,
-      'global_balance': instance.globalBalance,
+      'global_balance':
+          const NumOrStringDoubleConverter().toJson(instance.globalBalance),
       'created_at': instance.createdAt.toIso8601String(),
       'nft': instance.nft,
       'version': instance.version,

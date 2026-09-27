@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../transactions/models/web_transaction.dart';
+import '../../../utils/json_converters.dart';
 
 import '../../block/block.dart';
 
@@ -15,8 +16,8 @@ abstract class WebBlock with _$WebBlock {
     @JsonKey(name: "date_crafted") required DateTime dateCrafted,
     required String hash,
     @JsonKey(name: "validator_address") required String validator,
-    @JsonKey(name: "total_amount") required double totalAmount,
-    @JsonKey(name: "total_reward") required double totalReward,
+    @JsonKey(name: "total_amount") @NumOrStringDoubleConverter() required double totalAmount,
+    @JsonKey(name: "total_reward") @NumOrStringDoubleConverter() required double totalReward,
     // @JsonKey(name: "number_of_transactions") required int numberOfTransactions,
     @Default([]) List<WebTransaction> transactions,
     required int size,

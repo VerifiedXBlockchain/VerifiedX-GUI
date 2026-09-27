@@ -134,6 +134,33 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
         ),
       );
     }
+    if (ref.watch(webSessionProvider.select((v) => v.raStatusUnavailable))) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.warning,
+                color: Theme.of(context).colorScheme.warning,
+              ),
+              Text(
+                AppLocalizations.of(context).hnavWarningTitle,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                AppLocalizations.of(context).reserveWebStatusUnavailable,
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
+        ),
+      );
+    }
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 800),

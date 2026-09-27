@@ -11,7 +11,10 @@ _$_WebRecoveryDetails _$$_WebRecoveryDetailsFromJson(
     _$_WebRecoveryDetails(
       originalAddress: json['original_address'] as String,
       newAddress: json['new_address'] as String,
-      amount: (json['amount'] as num?)?.toDouble() ?? 0,
+      amount: json['amount'] == null
+          ? 0
+          : const NumOrStringDoubleConverter()
+              .fromJson(json['amount'] as Object),
       outstandingTransactions:
           (json['outstanding_transactions'] as List<dynamic>?)
               ?.map((e) => WebTransaction.fromJson(e as Map<String, dynamic>))
@@ -23,6 +26,6 @@ Map<String, dynamic> _$$_WebRecoveryDetailsToJson(
     <String, dynamic>{
       'original_address': instance.originalAddress,
       'new_address': instance.newAddress,
-      'amount': instance.amount,
+      'amount': const NumOrStringDoubleConverter().toJson(instance.amount),
       'outstanding_transactions': instance.outstandingTransactions,
     };

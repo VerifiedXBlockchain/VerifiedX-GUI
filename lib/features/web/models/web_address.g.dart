@@ -9,9 +9,16 @@ part of 'web_address.dart';
 _$_WebAddress _$$_WebAddressFromJson(Map<String, dynamic> json) =>
     _$_WebAddress(
       address: json['address'] as String,
-      balance: (json['balance'] as num).toDouble(),
-      balanceTotal: (json['balance_total'] as num?)?.toDouble() ?? 0,
-      balanceLocked: (json['balance_locked'] as num?)?.toDouble() ?? 0,
+      balance: const NumOrStringDoubleConverter()
+          .fromJson(json['balance'] as Object),
+      balanceTotal: json['balance_total'] == null
+          ? 0
+          : const NumOrStringDoubleConverter()
+              .fromJson(json['balance_total'] as Object),
+      balanceLocked: json['balance_locked'] == null
+          ? 0
+          : const NumOrStringDoubleConverter()
+              .fromJson(json['balance_locked'] as Object),
       adnr: json['adnr'] as String?,
       activated: json['activated'] as bool? ?? false,
       deactivated: json['deactivated'] as bool? ?? false,
@@ -20,9 +27,11 @@ _$_WebAddress _$$_WebAddressFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_WebAddressToJson(_$_WebAddress instance) =>
     <String, dynamic>{
       'address': instance.address,
-      'balance': instance.balance,
-      'balance_total': instance.balanceTotal,
-      'balance_locked': instance.balanceLocked,
+      'balance': const NumOrStringDoubleConverter().toJson(instance.balance),
+      'balance_total':
+          const NumOrStringDoubleConverter().toJson(instance.balanceTotal),
+      'balance_locked':
+          const NumOrStringDoubleConverter().toJson(instance.balanceLocked),
       'adnr': instance.adnr,
       'activated': instance.activated,
       'deactivated': instance.deactivated,

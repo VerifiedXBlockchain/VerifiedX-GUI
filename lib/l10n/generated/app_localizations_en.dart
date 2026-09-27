@@ -7652,6 +7652,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reserveWebNoAccount => 'No Vault Account Found';
 
   @override
+  String get reserveWebStatusUnavailable => 'Could not load this Vault\'s status from the network. Retrying automatically.';
+
+  @override
   String get reserveWebNoNftsToast => 'Your Vault Account has no NFTS.';
 
   @override

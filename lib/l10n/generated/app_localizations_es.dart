@@ -7652,6 +7652,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get reserveWebNoAccount => 'No se encontró cuenta de bóveda';
 
   @override
+  String get reserveWebStatusUnavailable => 'No se pudo cargar el estado de esta bóveda desde la red. Reintentando automáticamente.';
+
+  @override
   String get reserveWebNoNftsToast => 'Tu cuenta de bóveda no tiene NFTs.';
 
   @override

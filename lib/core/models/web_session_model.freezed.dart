@@ -33,7 +33,10 @@ mixin _$WebSessionModel {
       throw _privateConstructorUsedError; // @Default(false) bool usingRa,
   WalletType get selectedWalletType => throw _privateConstructorUsedError;
   bool get raActivated => throw _privateConstructorUsedError;
-  bool get raDeactivated => throw _privateConstructorUsedError;
+  bool get raDeactivated =>
+      throw _privateConstructorUsedError; // True when the last Vault status lookup failed, so raActivated and
+// raDeactivated may not reflect the chain.
+  bool get raStatusUnavailable => throw _privateConstructorUsedError;
   bool get isAuthenticated => throw _privateConstructorUsedError;
   String get timezoneName => throw _privateConstructorUsedError;
   int get currentRbxWalletIndex => throw _privateConstructorUsedError;
@@ -71,6 +74,7 @@ abstract class $WebSessionModelCopyWith<$Res> {
       WalletType selectedWalletType,
       bool raActivated,
       bool raDeactivated,
+      bool raStatusUnavailable,
       bool isAuthenticated,
       String timezoneName,
       int currentRbxWalletIndex,
@@ -114,6 +118,7 @@ class _$WebSessionModelCopyWithImpl<$Res, $Val extends WebSessionModel>
     Object? selectedWalletType = null,
     Object? raActivated = null,
     Object? raDeactivated = null,
+    Object? raStatusUnavailable = null,
     Object? isAuthenticated = null,
     Object? timezoneName = null,
     Object? currentRbxWalletIndex = null,
@@ -177,6 +182,10 @@ class _$WebSessionModelCopyWithImpl<$Res, $Val extends WebSessionModel>
       raDeactivated: null == raDeactivated
           ? _value.raDeactivated
           : raDeactivated // ignore: cast_nullable_to_non_nullable
+              as bool,
+      raStatusUnavailable: null == raStatusUnavailable
+          ? _value.raStatusUnavailable
+          : raStatusUnavailable // ignore: cast_nullable_to_non_nullable
               as bool,
       isAuthenticated: null == isAuthenticated
           ? _value.isAuthenticated
@@ -292,6 +301,7 @@ abstract class _$$_WebSessionModelCopyWith<$Res>
       WalletType selectedWalletType,
       bool raActivated,
       bool raDeactivated,
+      bool raStatusUnavailable,
       bool isAuthenticated,
       String timezoneName,
       int currentRbxWalletIndex,
@@ -337,6 +347,7 @@ class __$$_WebSessionModelCopyWithImpl<$Res>
     Object? selectedWalletType = null,
     Object? raActivated = null,
     Object? raDeactivated = null,
+    Object? raStatusUnavailable = null,
     Object? isAuthenticated = null,
     Object? timezoneName = null,
     Object? currentRbxWalletIndex = null,
@@ -401,6 +412,10 @@ class __$$_WebSessionModelCopyWithImpl<$Res>
           ? _value.raDeactivated
           : raDeactivated // ignore: cast_nullable_to_non_nullable
               as bool,
+      raStatusUnavailable: null == raStatusUnavailable
+          ? _value.raStatusUnavailable
+          : raStatusUnavailable // ignore: cast_nullable_to_non_nullable
+              as bool,
       isAuthenticated: null == isAuthenticated
           ? _value.isAuthenticated
           : isAuthenticated // ignore: cast_nullable_to_non_nullable
@@ -462,6 +477,7 @@ class _$_WebSessionModel extends _WebSessionModel {
       this.selectedWalletType = WalletType.rbx,
       this.raActivated = false,
       this.raDeactivated = false,
+      this.raStatusUnavailable = false,
       this.isAuthenticated = false,
       this.timezoneName = "America/Los_Angeles",
       this.currentRbxWalletIndex = 0,
@@ -507,6 +523,11 @@ class _$_WebSessionModel extends _WebSessionModel {
   @override
   @JsonKey()
   final bool raDeactivated;
+// True when the last Vault status lookup failed, so raActivated and
+// raDeactivated may not reflect the chain.
+  @override
+  @JsonKey()
+  final bool raStatusUnavailable;
   @override
   @JsonKey()
   final bool isAuthenticated;
@@ -539,7 +560,7 @@ class _$_WebSessionModel extends _WebSessionModel {
 
   @override
   String toString() {
-    return 'WebSessionModel(keypair: $keypair, raKeypair: $raKeypair, btcKeypair: $btcKeypair, balance: $balance, balanceTotal: $balanceTotal, balanceLocked: $balanceLocked, raBalance: $raBalance, raBalanceTotal: $raBalanceTotal, raBalanceLocked: $raBalanceLocked, adnr: $adnr, selectedWalletType: $selectedWalletType, raActivated: $raActivated, raDeactivated: $raDeactivated, isAuthenticated: $isAuthenticated, timezoneName: $timezoneName, currentRbxWalletIndex: $currentRbxWalletIndex, currentRaWalletIndex: $currentRaWalletIndex, currentBtcWalletIndex: $currentBtcWalletIndex, btcBalanceInfo: $btcBalanceInfo, ready: $ready, needsPassword: $needsPassword, needsMigration: $needsMigration, hasEncryptedKeys: $hasEncryptedKeys)';
+    return 'WebSessionModel(keypair: $keypair, raKeypair: $raKeypair, btcKeypair: $btcKeypair, balance: $balance, balanceTotal: $balanceTotal, balanceLocked: $balanceLocked, raBalance: $raBalance, raBalanceTotal: $raBalanceTotal, raBalanceLocked: $raBalanceLocked, adnr: $adnr, selectedWalletType: $selectedWalletType, raActivated: $raActivated, raDeactivated: $raDeactivated, raStatusUnavailable: $raStatusUnavailable, isAuthenticated: $isAuthenticated, timezoneName: $timezoneName, currentRbxWalletIndex: $currentRbxWalletIndex, currentRaWalletIndex: $currentRaWalletIndex, currentBtcWalletIndex: $currentBtcWalletIndex, btcBalanceInfo: $btcBalanceInfo, ready: $ready, needsPassword: $needsPassword, needsMigration: $needsMigration, hasEncryptedKeys: $hasEncryptedKeys)';
   }
 
   @override
@@ -570,6 +591,8 @@ class _$_WebSessionModel extends _WebSessionModel {
                 other.raActivated == raActivated) &&
             (identical(other.raDeactivated, raDeactivated) ||
                 other.raDeactivated == raDeactivated) &&
+            (identical(other.raStatusUnavailable, raStatusUnavailable) ||
+                other.raStatusUnavailable == raStatusUnavailable) &&
             (identical(other.isAuthenticated, isAuthenticated) ||
                 other.isAuthenticated == isAuthenticated) &&
             (identical(other.timezoneName, timezoneName) ||
@@ -608,6 +631,7 @@ class _$_WebSessionModel extends _WebSessionModel {
         selectedWalletType,
         raActivated,
         raDeactivated,
+        raStatusUnavailable,
         isAuthenticated,
         timezoneName,
         currentRbxWalletIndex,
@@ -649,6 +673,7 @@ abstract class _WebSessionModel extends WebSessionModel {
       final WalletType selectedWalletType,
       final bool raActivated,
       final bool raDeactivated,
+      final bool raStatusUnavailable,
       final bool isAuthenticated,
       final String timezoneName,
       final int currentRbxWalletIndex,
@@ -690,6 +715,9 @@ abstract class _WebSessionModel extends WebSessionModel {
   bool get raActivated;
   @override
   bool get raDeactivated;
+  @override // True when the last Vault status lookup failed, so raActivated and
+// raDeactivated may not reflect the chain.
+  bool get raStatusUnavailable;
   @override
   bool get isAuthenticated;
   @override

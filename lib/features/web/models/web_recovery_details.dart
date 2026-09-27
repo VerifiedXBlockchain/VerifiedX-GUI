@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../transactions/models/web_transaction.dart';
+import '../../../utils/json_converters.dart';
 
 part 'web_recovery_details.freezed.dart';
 part 'web_recovery_details.g.dart';
@@ -11,7 +12,7 @@ abstract class WebRecoveryDetails with _$WebRecoveryDetails {
   factory WebRecoveryDetails({
     @JsonKey(name: "original_address") required String originalAddress,
     @JsonKey(name: "new_address") required String newAddress,
-    @Default(0) double amount,
+    @NumOrStringDoubleConverter() @Default(0) double amount,
     @JsonKey(name: "outstanding_transactions") List<WebTransaction>? outstandingTransactions,
   }) = _WebRecoveryDetails;
 

@@ -12,8 +12,10 @@ _$_WebTransaction _$$_WebTransactionFromJson(Map<String, dynamic> json) =>
       toAddress: json['to_address'] as String,
       fromAddress: json['from_address'] as String,
       type: json['type'] as int,
-      amount: (json['total_amount'] as num?)?.toDouble(),
-      fee: (json['total_fee'] as num?)?.toDouble(),
+      amount: const NullableNumOrStringDoubleConverter()
+          .fromJson(json['total_amount']),
+      fee: const NullableNumOrStringDoubleConverter()
+          .fromJson(json['total_fee']),
       date: DateTime.parse(json['date_crafted'] as String),
       unlockTime: json['unlock_time'] == null
           ? null
@@ -37,8 +39,10 @@ Map<String, dynamic> _$$_WebTransactionToJson(_$_WebTransaction instance) =>
       'to_address': instance.toAddress,
       'from_address': instance.fromAddress,
       'type': instance.type,
-      'total_amount': instance.amount,
-      'total_fee': instance.fee,
+      'total_amount':
+          const NullableNumOrStringDoubleConverter().toJson(instance.amount),
+      'total_fee':
+          const NullableNumOrStringDoubleConverter().toJson(instance.fee),
       'date_crafted': instance.date.toIso8601String(),
       'unlock_time': instance.unlockTime?.toIso8601String(),
       'isPending': instance.isPending,

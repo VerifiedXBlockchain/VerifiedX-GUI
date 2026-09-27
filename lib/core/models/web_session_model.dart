@@ -37,6 +37,9 @@ abstract class WebSessionModel with _$WebSessionModel {
     @Default(WalletType.rbx) WalletType selectedWalletType,
     @Default(false) bool raActivated,
     @Default(false) bool raDeactivated,
+    // True when the last Vault status lookup failed, so raActivated and
+    // raDeactivated may not reflect the chain.
+    @Default(false) bool raStatusUnavailable,
     @Default(false) bool isAuthenticated,
     @Default("America/Los_Angeles") String timezoneName,
     @Default(0) int currentRbxWalletIndex,
