@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,11 +19,11 @@ import '../../transactions/providers/web_transaction_list_provider.dart';
 import '../../../utils/toast.dart';
 
 import '../../../core/theme/components.dart';
-import '../../../generated/assets.gen.dart';
 import '../../../core/dialogs.dart';
 import '../../token/providers/web_token_actions_manager.dart';
 import '../components/web_btc_tokenized_action_buttons.dart';
 import '../components/web_btc_transaction_list_tile.dart';
+import '../components/web_vbtc_token_image.dart';
 import '../components/web_v2_withdrawal_dialog.dart';
 import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_vbtc_token_detail_provider.dart';
@@ -489,17 +488,9 @@ class _VBTCImage extends StatelessWidget {
         borderRadius: BorderRadius.circular(100),
       ),
       clipBehavior: Clip.antiAlias,
-      child: CachedNetworkImage(
+      child: WebVbtcTokenImage(
         imageUrl: token.imageUrl,
-        height: isSmall ? 120 : 200,
-        width: isSmall ? 120 : 200,
-        errorWidget: (context, _, __) {
-          return Image.asset(
-            Assets.images.vbtcPng.path,
-            height: isSmall ? 120 : 200,
-            width: isSmall ? 120 : 200,
-          );
-        },
+        size: isSmall ? 120 : 200,
       ),
     );
   }
