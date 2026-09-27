@@ -16005,6 +16005,12 @@ abstract class AppLocalizations {
   /// **'The CSV headers are not in the correct format, please check the example file'**
   String get svcCsvHeadersInvalid;
 
+  /// Error when an NFT collection wizard CSV import contains no data rows
+  ///
+  /// In en, this message translates to:
+  /// **'No rows were found in this CSV file. Add at least one NFT below the header row.'**
+  String get svcCsvNoRows;
+
   /// No description provided for @svcDecryptFailed.
   ///
   /// In en, this message translates to:

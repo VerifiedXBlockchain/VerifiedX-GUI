@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:mime/mime.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
-import 'package:csv/csv.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -35,6 +34,7 @@ import '../features/royalty/royalty.dart';
 import '../models/bulk_smart_contract_entry.dart';
 import '../models/smart_contract.dart';
 import '../services/asset_url_checker.dart';
+import '../services/wizard_csv.dart';
 import '../services/smart_contract_service.dart';
 import 'my_smart_contracts_provider.dart';
 import 'property_wizard_form_provider.dart';
@@ -429,11 +429,13 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       }
     }
 
-    // final input = File(file.path!).openRead();
+    final content = kIsWeb ? utf8.decode(file.bytes!.toList()) : await File(file.path!).readAsString();
+    final fields = parseWizardCsv(content);
 
-    final List<List<dynamic>> fields = kIsWeb
-        ? CsvToListConverter().convert(utf8.decode(file.bytes!.toList()))
-        : await File(file.path!).openRead().transform(utf8.decoder).transform(const CsvToListConverter()).toList();
+    if (fields.isEmpty) {
+      Toast.error(globalL10n.svcCsvNoRows);
+      return false;
+    }
 
     final headers = fields.first;
     if (!headers
@@ -445,6 +447,11 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     }
 
     final rows = [...fields]..removeAt(0);
+    if (rows.isEmpty) {
+      Toast.error(globalL10n.svcCsvNoRows);
+      return false;
+    }
+
     final List<BulkSmartContractEntry> entries = [];
     for (final row in rows) {
       final name = row[0].toString();

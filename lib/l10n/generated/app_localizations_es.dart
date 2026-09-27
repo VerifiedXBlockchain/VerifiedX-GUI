@@ -8545,6 +8545,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcCsvHeadersInvalid => 'Los encabezados del CSV no tienen el formato correcto, por favor revisa el archivo de ejemplo';
 
   @override
+  String get svcCsvNoRows => 'No se encontraron filas en este archivo CSV. Agrega al menos un NFT debajo de la fila de encabezados.';
+
+  @override
   String get svcDecryptFailed => 'No se pudo descifrar el mensaje. Clave inválida o datos corruptos.';
 
   @override

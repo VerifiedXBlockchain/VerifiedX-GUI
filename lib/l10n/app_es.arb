@@ -7166,6 +7166,10 @@
   "svcComplete": "Completado",
   "svcCouldNotParseEncryptedMessage": "No se pudo procesar el mensaje cifrado",
   "svcCsvHeadersInvalid": "Los encabezados del CSV no tienen el formato correcto, por favor revisa el archivo de ejemplo",
+  "svcCsvNoRows": "No se encontraron filas en este archivo CSV. Agrega al menos un NFT debajo de la fila de encabezados.",
+  "@svcCsvNoRows": {
+    "description": "Error when an NFT collection wizard CSV import contains no data rows"
+  },
   "svcDecryptFailed": "No se pudo descifrar el mensaje. Clave inválida o datos corruptos.",
   "svcFailedParseFee": "No se pudo procesar la comisión",
   "svcFailedParseHash": "No se pudo procesar el hash",

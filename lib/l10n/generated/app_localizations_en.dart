@@ -8545,6 +8545,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcCsvHeadersInvalid => 'The CSV headers are not in the correct format, please check the example file';
 
   @override
+  String get svcCsvNoRows => 'No rows were found in this CSV file. Add at least one NFT below the header row.';
+
+  @override
   String get svcDecryptFailed => 'Failed to decrypt message. Invalid key or corrupted data.';
 
   @override

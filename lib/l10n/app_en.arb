@@ -7198,6 +7198,10 @@
   "svcComplete": "Complete",
   "svcCouldNotParseEncryptedMessage": "Could not parse encrypted message",
   "svcCsvHeadersInvalid": "The CSV headers are not in the correct format, please check the example file",
+  "svcCsvNoRows": "No rows were found in this CSV file. Add at least one NFT below the header row.",
+  "@svcCsvNoRows": {
+    "description": "Error when an NFT collection wizard CSV import contains no data rows"
+  },
   "svcDecryptFailed": "Failed to decrypt message. Invalid key or corrupted data.",
   "svcFailedParseFee": "Failed to parse fee",
   "svcFailedParseHash": "Failed to parse hash",
