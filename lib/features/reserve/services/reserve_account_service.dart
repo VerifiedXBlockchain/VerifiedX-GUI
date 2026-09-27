@@ -51,11 +51,8 @@ class ReserveAccountService extends BaseService {
     };
 
     final response = await postJson('/RestoreReserveAddress', params: payload);
-    print(response);
-    print("****");
     final data = response['data'];
     if (data != null) {
-      print(jsonEncode(data));
       if (data['Success'] == true) {
         if (data['ReserveAccount'] != null && data['ReserveAccount']['Result'] != null) {
           return NewReserveAccount.fromJson(data['ReserveAccount']['Result']);
@@ -203,10 +200,6 @@ class ReserveAccountService extends BaseService {
       if (backupUrl != null && backupUrl.isNotEmpty) {
         params['BackupURL'] = backupUrl;
       }
-
-      print("**********");
-      print(jsonEncode(params));
-      print("**********");
 
       final response = await postJson(url, timeout: 0, params: params, cleanPath: false);
       final data = response['data'];
