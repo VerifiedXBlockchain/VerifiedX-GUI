@@ -8,7 +8,7 @@ This area covers Vault (reserve, `xRBX`) accounts on both platforms: creating on
 - Web: the automation build is open at `http://localhost:42069/?automation=1`. Open the area with `button "Vault Account"` in the side nav.
 - Web lifecycle cases use a fresh web account created for this run (the "run web account"), because a web Vault is tied to its login key: it can be activated only once, and after a recovery it stays deactivated forever. Create it through the create-wallet flow in `01-launch-auth.md`, send it 20 VFX from account A, and keep its mnemonic or key only in the browser session. Account A's own web Vault is used only by read-only cases.
 - Vault password: use `TEST_ENCRYPTION_PASSWORD` wherever a case asks for the Vault password, on both platforms (the web wallet only asks when its storage is encrypted).
-- Restore codes are secrets. When a case says to keep one, save it to `$TMPDIR/vfx-run-<run id>/` with mode 600, outside the repo, read it back with `cat` only to type it into the app, and delete the folder in the area cleanup (TC-VAULT-032). Never paste a restore code or private key into results, screenshots' names or chat.
+- Restore codes are secrets. When a case says to keep one, save it to `$TMPDIR/vfx-run-<run id>/` with mode 600, outside the repo, read it back with `cat` only to type it into the app, and leave the folder for the cross-platform phase, which deletes it when it finishes. Never paste a restore code or private key into results, screenshots' names or chat.
 - Run the cases in file order: they chain (the desktop Vault created in TC-VAULT-003 is "Vault D", the second desktop Vault from TC-VAULT-006 is "Vault E", the run web account's Vault is "Vault W"). Record each Vault's address (addresses are not secret) in the run notes.
 - Chain waits: funding, activation, sends, callbacks and recoveries each confirm within 2 minutes on testnet; the desktop lists refresh every 10 seconds on the Transactions screen, the web status on the session loop. Timelocks are at least 24 hours, so settlement is checked in a later pass (TC-VAULT-021).
 - Known hook gaps (record as `blocked` with this note rather than failing the feature): the Manage card can render two widgets keyed `reserve:activate:<address>` (the status badge's `Activate Now` and the `Activate\nAccount` tile), so `tap-key` fails with "Too many elements" there; use the overview screen's key. The desktop activation dialog's confirm button reads `Activate Now`, the same text as the button behind it, and `ConfirmDialog` buttons have no keys. With more than one Vault listed, `tap-label "Vault Account Balance"` and `tap-label "Copy address"` match several widgets.
@@ -477,7 +477,7 @@ This area covers Vault (reserve, `xRBX`) accounts on both platforms: creating on
 ## Restore
 
 ### TC-VAULT-026 · Restore a Vault from its restore code (web)
-**Platforms:** Web · **Priority:** P1 · **Moves funds:** no
+**Platforms:** Web · **Priority:** P1 · **Moves funds:** no · Phase: cross-platform
 
 **Preconditions:** Logged in as account A on web. Vault D's restore code saved in TC-VAULT-004.
 
@@ -498,7 +498,7 @@ This area covers Vault (reserve, `xRBX`) accounts on both platforms: creating on
 **Cleanup:** step 4.
 
 ### TC-VAULT-027 · Restore a Vault from its restore code (desktop)
-**Platforms:** macOS · **Priority:** P1 · **Moves funds:** no
+**Platforms:** macOS · **Priority:** P1 · **Moves funds:** no · Phase: cross-platform
 
 **Preconditions:** Vault W's restore code, copied from the web `Vault Account Details` dialog (reveal from the dashboard account menu, `02-dashboard-navigation-settings.md`, or TC-VAULT-030) and saved as in the area preconditions. Vault W is not in the desktop wallet yet.
 
@@ -604,7 +604,7 @@ This area covers Vault (reserve, `xRBX`) accounts on both platforms: creating on
 3. Read the `Recovery process has started` dialog, then `tap-text "Close Wallet"`.
 4. Wait up to 2 minutes and check Vault D's recovery address on `https://spyglass-testnet.verifiedx.io/`.
 5. Relaunch the driver build (`make run_macos_driver`) and open Vault Accounts.
-6. Delete `$TMPDIR/vfx-run-<run id>/`.
+6. Leave `$TMPDIR/vfx-run-<run id>/` in place; the cross-platform phase needs the restore codes and deletes the folder when it finishes.
 
 **Expected**
 - Vault D disappears from the list before the dialog opens, and if it was the selected wallet another account becomes selected.

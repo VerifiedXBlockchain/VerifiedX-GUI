@@ -795,24 +795,24 @@ This area covers the smart contract creator (name, creator, description, primary
 ### TC-SC-044 · Account B receives the transferred NFTs (web)
 **Platforms:** Web · **Priority:** P0 · **Moves funds:** no
 
-**Preconditions:** TC-SC-043 passed on both platforms.
+**Preconditions:** TC-SC-043 passed in the web lane. The macOS lane's NFT reaching the web wallet is covered by `13-cross-platform.md`.
 
 **Steps**
 1. On web, log out and log in with `TEST_VFX_B_PRIVKEY` through `VFX Private Key`.
-2. Open NFTs and wait up to 3 minutes, pressing `Refresh` every 30 seconds, for `sc-basic-<run-id>-web` and `sc-basic-<run-id>-mac`.
-3. Open each and read `Owner`.
+2. Open NFTs and wait up to 3 minutes, pressing `Refresh` every 30 seconds, for `sc-basic-<run-id>-web`.
+3. Open it and read `Owner`.
 
 **Expected**
-- Both NFTs are listed in account B's `My NFTs`.
+- The NFT is listed in account B's `My NFTs`.
 - `Owner` shows account B's address and `Minter Address` shows account A's.
-- If an NFT's media is not yet on Spyglass, the asset area shows `NFT assets have not been transferred to the VFX Web Wallet.` with `Transfer Now` (TC-SC-045).
+- The primary asset renders, because the NFT was minted on web.
 
 **Cleanup:** Keep B logged in for TC-SC-045, then log out and log back in as account A.
 
 ### TC-SC-045 · Transfer Now fetches assets into the web wallet
-**Platforms:** Web · **Priority:** P1 · **Moves funds:** no
+**Platforms:** Web · **Priority:** P1 · **Moves funds:** no · Phase: cross-platform
 
-**Preconditions:** Logged in on web as account B; an owned NFT's detail shows `NFT assets have not been transferred to the VFX Web Wallet.` (expected for `sc-basic-<run-id>-mac`).
+**Preconditions:** Logged in on web as account B; an owned NFT's detail shows `NFT assets have not been transferred to the VFX Web Wallet.` (expected for an NFT minted on macOS and sent to the web lane's account B, as in TC-XP-009).
 
 **Steps**
 1. Click the `Transfer Now` button (key `nft:transfer_now`; `button "Transfer Now"`).

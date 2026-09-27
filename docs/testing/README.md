@@ -8,6 +8,7 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 - **Out of scope:** P2P shop features (P2P Auctions, web shops, desktop auction houses, remote shops, listings, bids and shop chat).
 - **Network:** testnet, with real transactions. Every flow that moves funds is executed end to end on testnet and confirmed on chain. Mainnet gets only the read-only checks marked `Mainnet smoke`, and nothing is ever signed or sent on mainnet.
 - **Runner:** Claude. Web cases run through Claude in Chrome; macOS cases run through `tool/drive.dart` against the Flutter Driver build. Both are described in `docs/automation.md`, which is required reading before a run.
+- **Lanes:** the web lane and the macOS lane run in parallel, each with its own test accounts, so neither can disturb the other's balances or objects. A final cross-platform phase then moves funds and assets between the two lanes' accounts. See "Running a release pass".
 
 ## Areas
 
@@ -24,7 +25,8 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 | [09-smart-contracts-nfts.md](09-smart-contracts-nfts.md) | Smart contract wizard, templates, drafts, bulk create, NFTs, evolve, transfer, burn | 60 | 4 | 30 | 26 |
 | [11-network-operations.md](11-network-operations.md) | Validator, operations, beacons, adjudicator, nodes, data node, network voting, mother dashboard | 45 | 1 | 19 | 25 |
 | [12-bridge-payments-faucet-keygen.md](12-bridge-payments-faucet-keygen.md) | Base bridge, on-ramp payments, faucet, key generation | 42 | 2 | 22 | 18 |
-| **Total** | | **460** | **86** | **233** | **141** |
+| [13-cross-platform.md](13-cross-platform.md) | Transfers between the web lane and the macOS lane: VFX, BTC, vBTC, NFTs, tokens, domains, vaults | 16 | 7 | 9 | 0 |
+| **Total** | | **476** | **93** | **242** | **141** |
 
 Questions raised while writing the cases, with the case each belongs to, are collected in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md). Several are suspected bugs.
 
@@ -38,14 +40,14 @@ Questions raised while writing the cases, with the case each belongs to, are col
 
 ## Test data
 
-Test accounts are secrets and never go in this repo. A run reads them from `~/.config/vfx-release-tests/accounts.env`, which Tyler maintains. Claude reads values from that file when a step needs them, types them only into the local app under test, and never writes them into results, screenshots names, commit messages or chat. Expected variables:
+Test accounts are secrets and never go in this repo. Each lane has its own account file, which Tyler maintains: `~/.config/vfx-release-tests/accounts.web.env` for the web lane and `~/.config/vfx-release-tests/accounts.macos.env` for the macOS lane. Both files use the same variable names but hold different accounts, so "account A" in a case always means the current lane's account A and no case needs rewriting per lane. The cross-platform phase reads both files and names a lane explicitly, as `web:TEST_VFX_A_ADDRESS` or `macos:TEST_VFX_A_ADDRESS`. Claude reads values from these files when a step needs them, types them only into the local app under test, and never writes them into results, screenshot names, commit messages or chat. Expected variables in each file:
 
 | Variable | Meaning |
 |---|---|
 | `TEST_VFX_A_PRIVKEY`, `TEST_VFX_A_ADDRESS` | Funded testnet VFX account A (sender in most cases) |
 | `TEST_VFX_B_PRIVKEY`, `TEST_VFX_B_ADDRESS` | Testnet VFX account B (receiver and second party) |
 | `TEST_MNEMONIC` | 12 or 24-word testnet HD mnemonic |
-| `TEST_WEB_EMAIL`, `TEST_WEB_PASSWORD` | Email and password login for the web wallet |
+| `TEST_WEB_EMAIL`, `TEST_WEB_PASSWORD` | Email and password login for the web wallet (web file only) |
 | `TEST_BTC_WIF`, `TEST_BTC_ADDRESS` | Funded testnet BTC account |
 | `TEST_ENCRYPTION_PASSWORD` | Password used for wallet encryption and web unlock cases |
 
@@ -61,7 +63,7 @@ Some cases need data that only a few areas use. They read these optional variabl
 | `TEST_REMOTE_BEACON_IP`, `TEST_REMOTE_BEACON_PORT` | Beacon cases (11) |
 | `TEST_MOTHER_HOST_IP`, `TEST_MOTHER_HOST_PASSWORD` | MOTHER dashboard cases (11) |
 
-Minimum balances before a run: account A holds at least 200 testnet VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-bridge-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts) use names suffixed with the run id, for example `qa-20261001a`, so repeated runs never collide.
+No account appears in both files. Minimum balances before a run, per lane: account A holds at least 200 testnet VFX, account B at least 20 VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-bridge-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts) use names suffixed with the run id and the lane, `w` for web and `m` for macOS, for example `qa-20261001a-w`, or `qa20261001aw` where only letters and digits are allowed, so the two lanes and repeated runs never collide. Where an area file already defines its own platform suffix, such as `<p>` = `web` or `mac` in `09-smart-contracts-nfts.md`, that suffix plays the same role.
 
 ## Test case format
 
@@ -86,7 +88,8 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 **Cleanup:** none.
 ```
 
-- **IDs** are `TC-<AREA>-<NNN>` and never reused. Area codes: `AUTH`, `DASH`, `SEND`, `BTC`, `PRV`, `VAULT`, `ADNR`, `TOKEN`, `SC`, `NET`, `MISC`.
+- **IDs** are `TC-<AREA>-<NNN>` and never reused. Area codes: `AUTH`, `DASH`, `SEND`, `BTC`, `PRV`, `VAULT`, `ADNR`, `TOKEN`, `SC`, `NET`, `MISC`, `XP`.
+- **Cross-platform phase.** A case whose header line ends with `Phase: cross-platform` involves both lanes' accounts. Lanes skip it and the cross-platform phase runs it.
 - **Platforms** is `Web`, `macOS` or both. When the two differ, the steps give each platform's hook on its own line.
 - **Priority:** `P0` blocks a release if it fails; `P1` must be fixed or explicitly waived before release; `P2` is logged and triaged.
 - **Moves funds** marks cases that sign a transaction. Those run on testnet only.
@@ -97,16 +100,19 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 ## Known limits of automated runs
 
 - **Steps that need a person.** The faucet's SMS code and native macOS file and save panels need Tyler during the run. Cases that depend on them say so; plan those cases into one attended block.
-- **Two-party cases.** Transfer cases that need a second party use account B in a second Chrome profile with Claude in Chrome connected, or the macOS app as the other side. One Mac runs one Core CLI, so a desktop-to-desktop case needs a second Mac.
+- **Two-party cases.** Within a lane, account A and account B are both that lane's accounts. The web lane uses B in a second Chrome profile with Claude in Chrome connected, or by signing out and in. The macOS lane imports B into the same wallet, or uses a second data folder where a case asks for a wallet holding only B.
 - **Debug build differences.** The driver build is a debug build. On testnet it shows every BTC transaction as confirmed, which hides Replace By Fee and Rebroadcast, and it skips the "wallet not synced" check and prefills password fields. Cases that depend on those behaviours say they need a profile or release testnet build.
 - **Hidden features.** Validator navigation, network voting, MOTHER, vBTC privacy actions and some smart contract features are behind flags or unreachable in the current release. Their cases are written in full and marked to record as `skipped` until the feature ships; a gating case checks they stay hidden.
 - **Duplicate controls on macOS.** When the same unkeyed button appears more than once on a screen, `drive.dart` fails with "Too many elements". Cases name these steps; record them as `blocked` automation gaps, not product failures, until the controls get keys.
-- **Temporary secrets.** Vault restore codes created during a run are kept in `$TMPDIR/vfx-run-<run id>/` with mode 600 and deleted by the last vault case.
+- **Temporary secrets.** Vault restore codes created during a run are kept in `$TMPDIR/vfx-run-<run id>/` with mode 600. Both lanes run on the same Mac and share that folder, because the cross-platform phase restores one lane's vault in the other. The folder is deleted at the end of the cross-platform phase.
 
 ## Running a release pass
 
-1. Record the build under test (version string from the app, commit hash) and the run id.
-2. Run all `P0` cases on both platforms, then `P1`, then `P2`. Within a priority, follow the file order, because later areas assume accounts and objects created earlier.
-3. On a failure, capture the screenshot, the visible error text, and for macOS the tail of the `flutter run` log, then continue with the next case unless the failure blocks the rest of the area.
-4. Write the results to `docs/testing/runs/<run-id>.md` with one row per case: id, platform, result (`pass`, `fail`, `blocked`, `skipped`), and a one-line note for anything other than pass.
-5. The release is blocked while any `P0` case fails.
+A pass has two phases. Phase 1 runs the two lanes in parallel, one Claude agent per lane. Phase 2 runs the cross-platform cases with one agent that drives both the browser and the desktop app.
+
+1. Record the build under test (version string from the app, commit hash) and the run id. Fund both lanes to the minimum balances.
+2. **Phase 1, lanes in parallel.** The web agent runs every case that lists `Web`; the macOS agent runs every case that lists `macOS`. A case listing both platforms is run once in each lane. Each lane skips cases marked `Phase: cross-platform`. Within a lane, run `P0` first, then `P1`, then `P2`, and follow the file order within a priority, because later areas assume accounts and objects created earlier. The two lanes share nothing on chain, so they never wait for each other.
+3. **Phase 2, cross-platform.** After both lanes finish, one agent keeps the web lane's browser session and the macOS lane's driver app open and runs `13-cross-platform.md`. The few cases in other files marked `Phase: cross-platform` are run from inside it (TC-SC-045 from TC-XP-011, TC-VAULT-026 and TC-VAULT-027 from TC-XP-016), so each is run once. It reads both account files.
+4. On a failure, capture the screenshot, the visible error text, and for macOS the tail of the `flutter run` log, then continue with the next case unless the failure blocks the rest of the area.
+5. Each phase writes its own results file: `docs/testing/runs/<run-id>-web.md`, `docs/testing/runs/<run-id>-macos.md` and `docs/testing/runs/<run-id>-cross.md`. Each has one row per case run in that phase: id, result (`pass`, `fail`, `blocked`, `skipped`), and a one-line note for anything other than pass. A case listing both platforms therefore has a row in each lane's file.
+6. The release is blocked while any `P0` case fails in any of the three files.
