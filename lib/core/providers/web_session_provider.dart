@@ -367,8 +367,14 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (state.keypair == null) {
       return;
     }
-    final webAddress =
-        await ExplorerService().getWebAddress(state.keypair!.address);
+    final address = state.keypair!.address;
+    final webAddress = await ExplorerService().getWebAddress(address);
+
+    // The account may have changed while the request was in flight; a stale
+    // answer must not overwrite the new account's balance.
+    if (state.keypair?.address != address) {
+      return;
+    }
 
     state = state.copyWith(
       balance: webAddress.balance,
@@ -405,8 +411,12 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (state.raKeypair == null) {
       return;
     }
-    final webAddress =
-        await ExplorerService().getWebAddress(state.raKeypair!.address);
+    final raAddress = state.raKeypair!.address;
+    final webAddress = await ExplorerService().getWebAddress(raAddress);
+
+    if (state.raKeypair?.address != raAddress) {
+      return;
+    }
 
     state = state.copyWith(
       raBalance: webAddress.balance,
@@ -528,6 +538,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     singleton<Storage>().remove(Storage.ENCRYPTION_ENABLED);
     singleton<Storage>().remove(Storage.ENCRYPTION_VERSION);
     singleton<Storage>().remove(Storage.WEB_AUTH_TOKEN);
+    // A page saved for after unlock belongs to the session being logged out.
+    singleton<Storage>().remove(Storage.PENDING_REDIRECT_URL);
 
     // state = WebSessionModel();
 
