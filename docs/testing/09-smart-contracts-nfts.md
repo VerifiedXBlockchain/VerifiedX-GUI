@@ -711,19 +711,6 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Cleanup:** none.
 
-### TC-SC-039 · Sell is not available on web
-**Platforms:** Web · **Priority:** P2 · **Moves funds:** no
-
-**Preconditions:** An owned NFT's detail is open on web.
-
-**Steps**
-1. Press `button "Sell"`.
-
-**Expected**
-- The toast `Activating soon!` appears and nothing else happens.
-
-**Cleanup:** none.
-
 ## Evolve and devolve
 
 ### TC-SC-040 · Evolve to stage 1

@@ -1,6 +1,6 @@
 # 12 · Base bridge, payments, faucet and key generation
 
-This area covers the features that reach outside the VFX chain or that no other file owns: the vBTC to Base bridge (desktop only, which on testnet locks vBTC on the VFX testnet and mints vBTC.b on Base Sepolia, chain id 84532, with explorer links to `sepolia.basescan.org`), the Butterfly launcher and Butterfly payment links, the Get VFX / Get BTC on-ramp gateways (MoonPay, Banxa, Crypto.com, testnet faucets) and the shop's pay-with-card dialog, the SMS-verified VFX faucet, the standalone web key generator (`lib/features/keygen`), and the leftovers under `lib/features` (the hidden π button, the connector animation, the raw transaction service and the web balance-expander provider). Several of these can only be partly automated: the provider iframes do not render under `?automation=1`, the faucet needs an SMS code only a person can read, and some screens have no entry point in 7.0.2. Each case says which of these applies.
+This area covers the features that reach outside the VFX chain or that no other file owns: the vBTC to Base bridge (desktop only, which on testnet locks vBTC on the VFX testnet and mints vBTC.b on Base Sepolia, chain id 84532, with explorer links to `sepolia.basescan.org`), the Butterfly launcher and Butterfly payment links, the Get VFX / Get BTC on-ramp gateways (MoonPay, Banxa, Crypto.com, testnet faucets), the SMS-verified VFX faucet, the standalone web key generator (`lib/features/keygen`), and the leftovers under `lib/features` (the hidden π button, the connector animation, the raw transaction service and the web balance-expander provider). Several of these can only be partly automated: the provider iframes do not render under `?automation=1`, the faucet needs an SMS code only a person can read, and some screens have no entry point in 7.0.2. Each case says which of these applies.
 
 ## Area preconditions
 
@@ -545,24 +545,18 @@ This area covers the features that reach outside the VFX chain or that no other 
 
 **Cleanup:** none.
 
-### TC-MISC-030 · Crypto.com on-ramp stays hidden, and the shop's pay-with-card dialog
+### TC-MISC-030 · Crypto.com on-ramp stays hidden
 **Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no
 
-**Preconditions:** Part B needs a web shop listing with a Buy Now price above the logged-in account's balance (from `10-shops-auctions-chat.md`), and runs on the deployed testnet web wallet because the checkout is an iframe.
+**Preconditions:** Logged in as account A.
 
 **Steps**
-1. Part A: check the side nav and both Get VFX / Get BTC sheets for Crypto.com.
-2. Part B (web): open the listing and click Buy Now.
-3. In `Insufficient Balance`, confirm.
-4. In `Pay with Credit Card / Crypto`, wait for the quote, screenshot, then click `Cancel`.
+1. Check the side nav and both Get VFX / Get BTC sheets for Crypto.com.
 
 **Expected**
-- Part A: no `Crypto.com` side-nav entry (`nav:crypto_com` does not exist) and no `Crypto.com` gateway, because `CRYPTO_DOT_COM_ENABLED` is false.
-- Part B: the dialog shows a loader, then `<vfx> VFX for $<usd> USD`, the address, `Pay with Crypto.com` and `Cancel`; if the quote fails it shows `An error occurred`. Cancel closes it with no purchase.
+- No `Crypto.com` side-nav entry (`nav:crypto_com` does not exist) and no `Crypto.com` gateway, because `CRYPTO_DOT_COM_ENABLED` is false.
 
 **Cleanup:** none.
-
-**Open question:** Is the shop's pay-with-card flow still meant to offer Crypto.com while the Crypto.com on-ramp is hidden elsewhere, and does its quote service (`api.onramp.verifiedx.io`) support testnet?
 
 ## Faucet
 

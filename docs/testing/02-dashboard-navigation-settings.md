@@ -371,10 +371,10 @@ This file covers what a logged-in user sees around every screen: the dashboard o
 **Preconditions:** Logged in as account A.
 
 **Steps**
-1. For each item click its button, wait for the screen, note the URL (its hash ends with the path given below) and the heading, and screenshot: `Vault Account`, `Domains`, `Send`, `Receive`, `Transactions`, `vBTC Tokens`, `Fungible Tokens`, `Smart Contracts`, `NFTs`, `P2P Auctions`, then `Dashboard`.
+1. For each item click its button, wait for the screen, note the URL (its hash ends with the path given below) and the heading, and screenshot: `Vault Account`, `Domains`, `Send`, `Receive`, `Transactions`, `vBTC Tokens`, `Fungible Tokens`, `Smart Contracts`, `NFTs`, then `Dashboard`. P2P Auctions is out of scope for this suite.
 
 **Expected**
-- Each click highlights that item and opens its section: Vault Account `dashboard/vault-accounts` (`Your Vault Account`), Domains `dashboard/adnrs` (`Domains`), Send `dashboard/send` (`Send VFX`), Receive `dashboard/receive` (`Receive VFX`), Transactions `dashboard/transactions` (`Transactions`), vBTC Tokens `dashboard/vbtc` (`Tokenized Bitcoin (vBTC)`), Fungible Tokens `dashboard/fungible-token` (`Fungible Tokens`), Smart Contracts `dashboard/smart-contract` (`Create Smart Contract`), NFTs `dashboard/nfts` (`NFTs`), P2P Auctions `dashboard/p2p` (`P2P Auctions`), Dashboard `dashboard/home`.
+- Each click highlights that item and opens its section: Vault Account `dashboard/vault-accounts` (`Your Vault Account`), Domains `dashboard/adnrs` (`Domains`), Send `dashboard/send` (`Send VFX`), Receive `dashboard/receive` (`Receive VFX`), Transactions `dashboard/transactions` (`Transactions`), vBTC Tokens `dashboard/vbtc` (`Tokenized Bitcoin (vBTC)`), Fungible Tokens `dashboard/fungible-token` (`Fungible Tokens`), Smart Contracts `dashboard/smart-contract` (`Create Smart Contract`), NFTs `dashboard/nfts` (`NFTs`), Dashboard `dashboard/home`.
 - No section shows an error or a blank page.
 
 **Cleanup:** none.
@@ -387,7 +387,7 @@ This file covers what a logged-in user sees around every screen: the dashboard o
 **Preconditions:** Account A selected.
 
 **Steps**
-1. For each key run `tap-key <key>`, then `wait-for-text "<heading>"` and a screenshot: `nav:vault_accounts` → `Vault Accounts`, `nav:domains` → `VFX Domains` or `Domains`, `nav:send` → `Send VFX`, `nav:receive` → `Receive VFX`, `nav:transactions` → `VFX Transactions` or `All Transactions`, `nav:vbtc_tokens` → `Tokenized Bitcoin (vBTC)`, `nav:privacy` → `PRISM Privacy`, `nav:fungible_tokens` → `Fungible Tokens`, `nav:smart_contracts` → `Smart Contracts`, `nav:nfts` → `NFTs`, `nav:p2p_auctions` → `P2P Auctions`, `nav:operations` → `Operations`.
+1. For each key run `tap-key <key>`, then `wait-for-text "<heading>"` and a screenshot: `nav:vault_accounts` → `Vault Accounts`, `nav:domains` → `VFX Domains` or `Domains`, `nav:send` → `Send VFX`, `nav:receive` → `Receive VFX`, `nav:transactions` → `VFX Transactions` or `All Transactions`, `nav:vbtc_tokens` → `Tokenized Bitcoin (vBTC)`, `nav:privacy` → `PRISM Privacy`, `nav:fungible_tokens` → `Fungible Tokens`, `nav:smart_contracts` → `Smart Contracts`, `nav:nfts` → `NFTs`, `nav:operations` → `Operations`.
 2. `tap-key nav:dashboard`, `wait-for-text $'Send\nCoin'`.
 
 **Expected**
@@ -407,7 +407,7 @@ This file covers what a logged-in user sees around every screen: the dashboard o
 
 **Expected**
 - Dashboard pops back to the dashboard root with the price cards.
-- macOS: tapping the active Fungible Tokens (and Operations, P2P Auctions) item pops back to that section's list.
+- macOS: tapping the active Fungible Tokens (and Operations) item pops back to that section's list.
 
 **Cleanup:** none.
 

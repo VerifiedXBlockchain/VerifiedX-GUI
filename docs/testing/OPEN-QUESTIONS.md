@@ -123,21 +123,6 @@ These questions came up while the test cases were written from the code. Each on
 - **TC-SC-060:** should drafts ship on desktop? `SmartContractDraftsScreen` and `draftsSmartContractProvider` still exist, and `DELETE_DRAFT_ON_MINT` still deletes drafts on compile.
 - **TC-SC-061:** should the compiled list and its refresh ship, or should the screen be removed?
 
-## [10 · Shops, auctions and chat (SHOP)](10-shops-auctions-chat.md)
-
-- **TC-SHOP-009:** the published payload (`WebShop.txPayload`) always sends `ThirdPartyBaseURL` `https://wallet.verifiedx.io` and `ThirdPartyAPIURL` `https://data.verifiedx.io/api` (`Env.shopBaseUrl`/`shopApiUrl`), even on testnet. Is that intended?
-- **TC-SHOP-015:** the web client does not filter on the collection's live flag. Does Spyglass hide a collection saved without "Publish Live" from buyers?
-- **TC-SHOP-022:** the web form cannot end an auction on the day it was created, since the date picker returns midnight and an end date before the start is rejected. The auction settlement case therefore spans two days. Is that intended?
-- **TC-SHOP-028:** who broadcasts the buyer's pre-signed Sale Complete transaction that is sent with the bid: Spyglass on its own once Sale Start lands, or only B through "Complete Sale"? How does the seller get the Sale Start link (and the bid id) without reading the notification email? The screen is not reachable from any navigation.
-- **TC-SHOP-034:** does Spyglass pick the winning bid and send the seller the Sale Start link automatically when the auction ends? The client has no seller screen for it.
-- **TC-SHOP-036:** on desktop, the web-shop buy sends the bid to Spyglass without a signature or pre-signed Sale Complete transaction. It then saves a local CLI bid with `bidStatus: success ? Rejected : Accepted`, which looks inverted. Is this path supported, and does the desktop CLI complete the sale on its own?
-- **TC-SHOP-042:** does `toggleOnlineOffline` send an on-chain update (and fee), or does it only change the CLI's local state?
-- **TC-SHOP-052:** does Spyglass relay a web buyer's bid to a desktop-hosted (CLI) shop, and who broadcasts Sale Complete in that case? If it does not, this case needs a second Mac running the buyer's CLI, using TC-SHOP-057 and TC-SHOP-058.
-- **TC-SHOP-054:** an unknown URL gives no message, because `WebShopService.lookupShop` returns null silently. Should it show "Shop Not Found"?
-- **TC-SHOP-057:** `BidListProvider.sendBid` checks the balance against the listing floor price, not the bid amount. Should a bid above the balance be blocked with "Not enough balance."?
-- **TC-SHOP-063:** `WebSellerChatScreen` never sets the shop URL when `shopId` is not 0, which is always the case on web. The code therefore looks like it will show "No shop" and leave the loading overlay up. Confirm, and file a bug if so.
-- **TC-SHOP-072:** can one address own more than one web shop? If it can, clicking "Publish Shop" on the unpublished shop needs its own case (10 VFX).
-
 ## [11 · Network operations](11-network-operations.md)
 
 - **TC-NET-001:** When `VALIDATOR_NAV_ENABLED` is turned on for a release, should this case flip to asserting the entries are present, and should the Adjudicator and Datanode screens (the Adjudicator's `Start Adjudicating` button only shows a spinner for 750 ms and does nothing; `Stop Adjudicating` has an empty handler; Datanode only shows `Activating soon.`) be deleted instead of kept?
@@ -168,7 +153,6 @@ These questions came up while the test cases were written from the code. Each on
 - **TC-MISC-023:** Does the Butterfly API (`api.befree.io`, called with `is_testnet: true`) honour testnet links end to end, including claiming? And the history view (`Payment Link History`, `No payment links yet`) is commented out of the form; is it meant to ship?
 - **TC-MISC-024:** `https://testnet.rbx.network/faucet` is the old RBX domain; does it still resolve to a working VFX testnet faucet? If not, should this gateway open the in-app SMS faucet (TC-MISC-031) instead?
 - **TC-MISC-028:** The web MoonPay widget is started through a JS SDK (`moonPayBuy`) rather than an `HtmlElementView`; does it render under `?automation=1`? If so this case can run on the local automation build.
-- **TC-MISC-030:** Is the shop's pay-with-card flow still meant to offer Crypto.com while the Crypto.com on-ramp is hidden elsewhere, and does its quote service (`api.onramp.verifiedx.io`) support testnet?
 - **TC-MISC-031:** We need a web account with under 5.001 VFX. Proposed variable `TEST_WEB_EMPTY_EMAIL` / `TEST_WEB_EMPTY_PASSWORD` (a login that is never funded except by this faucet), or should the case log in with a fresh key generated in `01-launch-auth.md`? Also, after `No Thanks` the code pops the dialog but does not return, so it still goes on to open the `VFX Faucet` dialog; is that a bug to fix, or should the case expect it?
 - **TC-MISC-032:** The phone field's messages come from the `phone_form_field` package, whose localization delegate is not registered in `app.dart`. Confirm on a run that the English defaults above appear rather than an error or a key name.
 - **TC-MISC-033:** Which phone number is the faucet test number, who reads its SMS during a run, and what is the faucet's rate limit (per phone and per address)? Proposed variable `TEST_FAUCET_PHONE` (secret, in `accounts.env`).

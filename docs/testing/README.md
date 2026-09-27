@@ -5,6 +5,7 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 ## Scope
 
 - **Platforms:** the web wallet and the macOS desktop GUI. Windows is out of scope.
+- **Out of scope:** P2P shop features (P2P Auctions, web shops, desktop auction houses, remote shops, listings, bids and shop chat).
 - **Network:** testnet, with real transactions. Every flow that moves funds is executed end to end on testnet and confirmed on chain. Mainnet gets only the read-only checks marked `Mainnet smoke`, and nothing is ever signed or sent on mainnet.
 - **Runner:** Claude. Web cases run through Claude in Chrome; macOS cases run through `tool/drive.dart` against the Flutter Driver build. Both are described in `docs/automation.md`, which is required reading before a run.
 
@@ -20,11 +21,10 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 | [06-vault-accounts.md](06-vault-accounts.md) | Vault (reserve) accounts: create, activate, send, recover, manage | 32 | 11 | 14 | 7 |
 | [07-domains.md](07-domains.md) | VFX and BTC domains (ADNR): create, transfer, delete | 23 | 4 | 17 | 2 |
 | [08-fungible-tokens.md](08-fungible-tokens.md) | Fungible tokens: create, mint, transfer, burn, pause, voting topics | 34 | 2 | 19 | 13 |
-| [09-smart-contracts-nfts.md](09-smart-contracts-nfts.md) | Smart contract wizard, templates, drafts, bulk create, NFTs, evolve, transfer, burn | 61 | 4 | 30 | 27 |
-| [10-shops-auctions-chat.md](10-shops-auctions-chat.md) | P2P auctions, web shops, desktop shops, listings, bids, chat | 74 | 7 | 51 | 16 |
+| [09-smart-contracts-nfts.md](09-smart-contracts-nfts.md) | Smart contract wizard, templates, drafts, bulk create, NFTs, evolve, transfer, burn | 60 | 4 | 30 | 26 |
 | [11-network-operations.md](11-network-operations.md) | Validator, operations, beacons, adjudicator, nodes, data node, network voting, mother dashboard | 45 | 1 | 19 | 25 |
 | [12-bridge-payments-faucet-keygen.md](12-bridge-payments-faucet-keygen.md) | Base bridge, on-ramp payments, faucet, key generation | 42 | 2 | 22 | 18 |
-| **Total** | | **535** | **93** | **284** | **158** |
+| **Total** | | **460** | **86** | **233** | **141** |
 
 Questions raised while writing the cases, with the case each belongs to, are collected in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md). Several are suspected bugs.
 
@@ -43,7 +43,7 @@ Test accounts are secrets and never go in this repo. A run reads them from `~/.c
 | Variable | Meaning |
 |---|---|
 | `TEST_VFX_A_PRIVKEY`, `TEST_VFX_A_ADDRESS` | Funded testnet VFX account A (sender in most cases) |
-| `TEST_VFX_B_PRIVKEY`, `TEST_VFX_B_ADDRESS` | Testnet VFX account B (receiver, second party in shops and chat) |
+| `TEST_VFX_B_PRIVKEY`, `TEST_VFX_B_ADDRESS` | Testnet VFX account B (receiver and second party) |
 | `TEST_MNEMONIC` | 12 or 24-word testnet HD mnemonic |
 | `TEST_WEB_EMAIL`, `TEST_WEB_PASSWORD` | Email and password login for the web wallet |
 | `TEST_BTC_WIF`, `TEST_BTC_ADDRESS` | Funded testnet BTC account |
@@ -61,7 +61,7 @@ Some cases need data that only a few areas use. They read these optional variabl
 | `TEST_REMOTE_BEACON_IP`, `TEST_REMOTE_BEACON_PORT` | Beacon cases (11) |
 | `TEST_MOTHER_HOST_IP`, `TEST_MOTHER_HOST_PASSWORD` | MOTHER dashboard cases (11) |
 
-Minimum balances before a run: account A holds at least 200 testnet VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-bridge-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts, shops) use names suffixed with the run id, for example `qa-20261001a`, so repeated runs never collide.
+Minimum balances before a run: account A holds at least 200 testnet VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-bridge-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts) use names suffixed with the run id, for example `qa-20261001a`, so repeated runs never collide.
 
 ## Test case format
 
@@ -86,7 +86,7 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 **Cleanup:** none.
 ```
 
-- **IDs** are `TC-<AREA>-<NNN>` and never reused. Area codes: `AUTH`, `DASH`, `SEND`, `BTC`, `PRV`, `VAULT`, `ADNR`, `TOKEN`, `SC`, `SHOP`, `NET`, `MISC`.
+- **IDs** are `TC-<AREA>-<NNN>` and never reused. Area codes: `AUTH`, `DASH`, `SEND`, `BTC`, `PRV`, `VAULT`, `ADNR`, `TOKEN`, `SC`, `NET`, `MISC`.
 - **Platforms** is `Web`, `macOS` or both. When the two differ, the steps give each platform's hook on its own line.
 - **Priority:** `P0` blocks a release if it fails; `P1` must be fixed or explicitly waived before release; `P2` is logged and triaged.
 - **Moves funds** marks cases that sign a transaction. Those run on testnet only.
@@ -96,8 +96,8 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 
 ## Known limits of automated runs
 
-- **Steps that need a person.** The faucet's SMS code, the web shop sale-approval link that arrives by email, and native macOS file and save panels need Tyler during the run. Cases that depend on them say so; plan those cases into one attended block.
-- **Two-party cases.** Shop, chat and transfer cases that need a second party use account B in a second Chrome profile with Claude in Chrome connected, or the macOS app as the other side. One Mac runs one Core CLI, so a desktop-to-desktop case needs a second Mac.
+- **Steps that need a person.** The faucet's SMS code and native macOS file and save panels need Tyler during the run. Cases that depend on them say so; plan those cases into one attended block.
+- **Two-party cases.** Transfer cases that need a second party use account B in a second Chrome profile with Claude in Chrome connected, or the macOS app as the other side. One Mac runs one Core CLI, so a desktop-to-desktop case needs a second Mac.
 - **Debug build differences.** The driver build is a debug build. On testnet it shows every BTC transaction as confirmed, which hides Replace By Fee and Rebroadcast, and it skips the "wallet not synced" check and prefills password fields. Cases that depend on those behaviours say they need a profile or release testnet build.
 - **Hidden features.** Validator navigation, network voting, MOTHER, vBTC privacy actions and some smart contract features are behind flags or unreachable in the current release. Their cases are written in full and marked to record as `skipped` until the feature ships; a gating case checks they stay hidden.
 - **Duplicate controls on macOS.** When the same unkeyed button appears more than once on a screen, `drive.dart` fails with "Too many elements". Cases name these steps; record them as `blocked` automation gaps, not product failures, until the controls get keys.
