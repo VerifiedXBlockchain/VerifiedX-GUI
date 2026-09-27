@@ -51,6 +51,7 @@ import '../keygen/models/keypair.dart';
 import '../keygen/models/ra_keypair.dart';
 import '../navigation/components/root_container_balance_row.dart';
 import '../navigation/constants.dart';
+import '../navigation/providers/side_nav_expanded_provider.dart';
 import '../transactions/providers/web_transaction_list_provider.dart';
 import '../transactions/providers/web_transactions_tab_provider.dart';
 import '../web/components/web_latest_block.dart';
@@ -151,7 +152,9 @@ class _ContentWrapper extends BaseComponent {
 
   @override
   Widget desktopBody(BuildContext context, WidgetRef ref) {
-    bool sideNavExpanded = true;
+    // From a provider: a local here reset to expanded on every rebuild of
+    // this wrapper, which each navigation triggers.
+    final sideNavExpanded = ref.watch(sideNavExpandedProvider);
     bool isHoveringTopBalance = false;
     bool walletInfoIsHovering = false;
     bool walletInfoIsExpanded = false;
@@ -239,9 +242,9 @@ class _ContentWrapper extends BaseComponent {
                             child: RootContainerSideNav(
                                 isExpanded: sideNavExpanded,
                                 onToggleExpanded: () {
-                                  setState(() {
-                                    sideNavExpanded = !sideNavExpanded;
-                                  });
+                                  ref
+                                      .read(sideNavExpandedProvider.notifier)
+                                      .toggle();
                                 }),
                           ),
                         ],

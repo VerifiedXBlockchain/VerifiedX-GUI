@@ -20,6 +20,9 @@ class RootContainerExpander extends StatelessWidget {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Semantics(
+        // Its own node, so the label cannot merge into the nav's scroll
+        // container.
+        container: true,
         label: isExpanded ? l10n.navCollapseMenuTooltip : l10n.navExpandMenuTooltip,
         button: true,
         child: GestureDetector(
