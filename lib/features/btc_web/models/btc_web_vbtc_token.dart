@@ -157,7 +157,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     }
     final available = availableBalances;
     if (available != null && available.containsKey(address)) {
-      return (available[address] as num).toDouble();
+      return parseJsonDouble(available[address]);
     }
     return balanceForAddress(address);
   }
@@ -167,7 +167,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
       return 0.0;
     }
     if (addresses.containsKey(address)) {
-      return addresses[address];
+      return parseJsonDouble(addresses[address]);
     }
 
     return 0.0;

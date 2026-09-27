@@ -12,7 +12,7 @@ double parseJsonDouble(Object? value) {
   }
   if (value is String) {
     final parsed = double.tryParse(value.trim());
-    if (parsed != null) {
+    if (parsed != null && parsed.isFinite) {
       return parsed;
     }
   }

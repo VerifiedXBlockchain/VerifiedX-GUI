@@ -285,10 +285,23 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   // }
 
   void setMultiAccountInstance(MultiAccountInstance account) async {
+    // Clear the previous account's chain state along with its keys, so a
+    // lookup that fails right after the switch can't leave the old account's
+    // balances, domain or Vault status showing for the new one.
     state = state.copyWith(
       keypair: account.keypair,
       raKeypair: account.raKeypair,
       btcKeypair: account.btcKeypair,
+      balance: null,
+      balanceLocked: null,
+      balanceTotal: null,
+      adnr: null,
+      raBalance: null,
+      raBalanceLocked: null,
+      raBalanceTotal: null,
+      raActivated: false,
+      raDeactivated: false,
+      raStatusUnavailable: false,
     );
 
     // Only save unencrypted keys if encryption is NOT enabled (legacy mode)
