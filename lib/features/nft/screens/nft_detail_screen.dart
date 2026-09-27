@@ -879,21 +879,39 @@ class NftDetailScreen extends BaseScreen {
                         icon: Icons.sync,
                         variant: AppColorVariant.Primary,
                         onPressed: () async {
+                          final l10n = AppLocalizations.of(context);
                           final assets = [
                             nft.primaryAsset,
                             ...nft.additionalAssets
                           ];
-                          Map<String, String> mediaMap = {};
-                          for (final a in assets) {
-                            final bytes = await a.file.readAsBytes();
-                            final url = await ExplorerService()
-                                .uploadAsset(bytes, a.fileName, a.extension);
+                          ref.read(globalLoadingProvider.notifier).start();
+                          try {
+                            final Map<String, String> mediaMap = {};
+                            for (final a in assets) {
+                              final bytes = await a.file.readAsBytes();
+                              final url = await ExplorerService()
+                                  .uploadAsset(bytes, a.fileName, a.extension);
 
-                            mediaMap[a.fileName] = url ?? 'ERROR';
+                              if (url == null) {
+                                Toast.error(l10n.nftSyncMediaUploadFailed(a.fileName));
+                                return;
+                              }
+                              mediaMap[a.fileName] = url;
+                            }
+
+                            final associated = await ExplorerService()
+                                .associateMedia(nft.id, mediaMap);
+                            if (associated) {
+                              Toast.message(l10n.nftSyncMediaSuccess);
+                            } else {
+                              Toast.error(l10n.nftSyncMediaFailed);
+                            }
+                          } catch (e) {
+                            print("Sync media failed: $e");
+                            Toast.error(l10n.nftSyncMediaError(e.toString()));
+                          } finally {
+                            ref.read(globalLoadingProvider.notifier).complete();
                           }
-
-                          await ExplorerService()
-                              .associateMedia(nft.id, mediaMap);
                         },
                       ),
                     ),

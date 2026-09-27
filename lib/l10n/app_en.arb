@@ -3540,6 +3540,32 @@
   "@nftSyncMedia": {
     "description": "Button to sync remote NFT media."
   },
+  "nftSyncMediaSuccess": "Media synced.",
+  "@nftSyncMediaSuccess": {
+    "description": "Toast after Sync Media uploads and associates all NFT media."
+  },
+  "nftSyncMediaFailed": "Couldn't sync media. Please try again.",
+  "@nftSyncMediaFailed": {
+    "description": "Toast when the explorer refuses to associate the uploaded NFT media."
+  },
+  "nftSyncMediaError": "Media sync failed: {error}",
+  "@nftSyncMediaError": {
+    "description": "Toast when Sync Media throws, for example when a local media file is missing; error is the exception message.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "nftSyncMediaUploadFailed": "Couldn't upload {fileName}. Media was not synced.",
+  "@nftSyncMediaUploadFailed": {
+    "description": "Toast when one NFT media file fails to upload during Sync Media; nothing is associated.",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
   "nftTabManageMinted": "Manage Minted NFTs",
   "@nftTabManageMinted": {
     "description": "Tab label for managing minted NFTs."
@@ -4524,6 +4550,15 @@
   "r3aPrimaryAssetOverride": "Primary Asset Override",
   "r3aProblemCompilingSc": "A problem occurred compiling this smart contract.",
   "r3aProblemMintingSc": "A problem occurred minting this smart contract.",
+  "r3aProblemCompilingOrMintingSc": "A problem occurred compiling or minting this smart contract: {error}",
+  "@r3aProblemCompilingOrMintingSc": {
+    "description": "Toast when compiling or minting a smart contract throws; error is the exception message.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "r3aProperty": "Property",
   "r3aPropertyTypes": "Property Types",
   "r3aRareness": "Rareness",
@@ -6576,6 +6611,10 @@
   "scwDescriptionOfPhysicalDigitalGood": "Description of Physical/Digital Good",
   "scwDownloadExampleCsv": "Download Example CSV",
   "scwDownloadExampleJson": "Download Example JSON",
+  "scwDownloadExampleFailed": "Couldn't save the example file.",
+  "@scwDownloadExampleFailed": {
+    "description": "Toast when the bundled example NFT metadata file cannot be saved."
+  },
   "scwEdit": "Edit",
   "scwEditCreatorName": "Edit Creator Name",
   "scwEditDescription": "Edit Description",

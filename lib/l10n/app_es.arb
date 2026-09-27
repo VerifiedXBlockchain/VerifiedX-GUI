@@ -3514,6 +3514,32 @@
   "@nftSyncMedia": {
     "description": "Button to sync remote NFT media."
   },
+  "nftSyncMediaSuccess": "Medios sincronizados.",
+  "@nftSyncMediaSuccess": {
+    "description": "Toast after Sync Media uploads and associates all NFT media."
+  },
+  "nftSyncMediaFailed": "No se pudieron sincronizar los medios. Inténtalo de nuevo.",
+  "@nftSyncMediaFailed": {
+    "description": "Toast when the explorer refuses to associate the uploaded NFT media."
+  },
+  "nftSyncMediaError": "Error al sincronizar los medios: {error}",
+  "@nftSyncMediaError": {
+    "description": "Toast when Sync Media throws, for example when a local media file is missing; error is the exception message.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "nftSyncMediaUploadFailed": "No se pudo subir {fileName}. Los medios no se sincronizaron.",
+  "@nftSyncMediaUploadFailed": {
+    "description": "Toast when one NFT media file fails to upload during Sync Media; nothing is associated.",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
+  },
   "nftTabManageMinted": "Administrar NFTs emitidos",
   "@nftTabManageMinted": {
     "description": "Tab label for managing minted NFTs."
@@ -4498,6 +4524,15 @@
   "r3aPrimaryAssetOverride": "Reemplazo del archivo principal",
   "r3aProblemCompilingSc": "Ocurrió un problema al compilar este contrato inteligente.",
   "r3aProblemMintingSc": "Ocurrió un problema al emitir este contrato inteligente.",
+  "r3aProblemCompilingOrMintingSc": "Ocurrió un problema al compilar o emitir este contrato inteligente: {error}",
+  "@r3aProblemCompilingOrMintingSc": {
+    "description": "Toast when compiling or minting a smart contract throws; error is the exception message.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "r3aProperty": "Propiedad",
   "r3aPropertyTypes": "Tipos de propiedad",
   "r3aRareness": "Rareza",
@@ -6550,6 +6585,10 @@
   "scwDescriptionOfPhysicalDigitalGood": "Descripción del bien físico/digital",
   "scwDownloadExampleCsv": "Descargar CSV de ejemplo",
   "scwDownloadExampleJson": "Descargar JSON de ejemplo",
+  "scwDownloadExampleFailed": "No se pudo guardar el archivo de ejemplo.",
+  "@scwDownloadExampleFailed": {
+    "description": "Toast when the bundled example NFT metadata file cannot be saved."
+  },
   "scwEdit": "Editar",
   "scwEditCreatorName": "Editar nombre del creador",
   "scwEditDescription": "Editar descripción",

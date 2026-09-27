@@ -3407,6 +3407,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String get nftSyncMedia => 'Sincronizar medios';
 
   @override
+  String get nftSyncMediaSuccess => 'Medios sincronizados.';
+
+  @override
+  String get nftSyncMediaFailed => 'No se pudieron sincronizar los medios. Inténtalo de nuevo.';
+
+  @override
+  String nftSyncMediaError(String error) {
+    return 'Error al sincronizar los medios: $error';
+  }
+
+  @override
+  String nftSyncMediaUploadFailed(String fileName) {
+    return 'No se pudo subir $fileName. Los medios no se sincronizaron.';
+  }
+
+  @override
   String get nftTabManageMinted => 'Administrar NFTs emitidos';
 
   @override
@@ -4822,6 +4838,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3aProblemMintingSc => 'Ocurrió un problema al emitir este contrato inteligente.';
+
+  @override
+  String r3aProblemCompilingOrMintingSc(String error) {
+    return 'Ocurrió un problema al compilar o emitir este contrato inteligente: $error';
+  }
 
   @override
   String get r3aProperty => 'Propiedad';
@@ -7897,6 +7918,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get scwDownloadExampleJson => 'Descargar JSON de ejemplo';
+
+  @override
+  String get scwDownloadExampleFailed => 'No se pudo guardar el archivo de ejemplo.';
 
   @override
   String get scwEdit => 'Editar';

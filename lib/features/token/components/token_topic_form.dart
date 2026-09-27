@@ -167,6 +167,7 @@ class TokenTopicForm extends BaseComponent {
                 AppButton(
                   label: l10n.votingCreateTopic,
                   onPressed: () async {
+                    if (!provider.validate()) return;
                     if (!await passwordRequiredGuard(context, ref)) return;
                     final confirmed = await ConfirmDialog.show(
                       title: l10n.votingCreateTopic,

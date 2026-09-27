@@ -216,7 +216,7 @@ class _TopicVotingActions extends BaseComponent {
       return _ErrorMessage(l10n.votingPendingTx);
     }
 
-    if (kIsWeb && ref.watch(pendingVotesProvider).contains(pendingVoteKey)) {
+    if (kIsWeb && (topic.webVoteFor(address) != null || ref.watch(pendingVotesProvider).contains(pendingVoteKey))) {
       return _ErrorMessage(l10n.tkbYouHaveVoted);
     }
 

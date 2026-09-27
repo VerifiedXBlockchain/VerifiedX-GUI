@@ -245,6 +245,8 @@ class SmartContractCreatorMain extends BaseComponent {
           if (!kIsWeb) {
             ref.read(sessionProvider.notifier).setIsMintingOrCompiling(false);
           }
+
+          Toast.error(globalL10n.r3aProblemCompilingOrMintingSc(e.toString()));
         }
       }
     }

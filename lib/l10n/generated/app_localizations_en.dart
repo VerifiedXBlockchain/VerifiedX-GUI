@@ -3407,6 +3407,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nftSyncMedia => 'Sync Media';
 
   @override
+  String get nftSyncMediaSuccess => 'Media synced.';
+
+  @override
+  String get nftSyncMediaFailed => 'Couldn\'t sync media. Please try again.';
+
+  @override
+  String nftSyncMediaError(String error) {
+    return 'Media sync failed: $error';
+  }
+
+  @override
+  String nftSyncMediaUploadFailed(String fileName) {
+    return 'Couldn\'t upload $fileName. Media was not synced.';
+  }
+
+  @override
   String get nftTabManageMinted => 'Manage Minted NFTs';
 
   @override
@@ -4822,6 +4838,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3aProblemMintingSc => 'A problem occurred minting this smart contract.';
+
+  @override
+  String r3aProblemCompilingOrMintingSc(String error) {
+    return 'A problem occurred compiling or minting this smart contract: $error';
+  }
 
   @override
   String get r3aProperty => 'Property';
@@ -7897,6 +7918,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scwDownloadExampleJson => 'Download Example JSON';
+
+  @override
+  String get scwDownloadExampleFailed => 'Couldn\'t save the example file.';
 
   @override
   String get scwEdit => 'Edit';

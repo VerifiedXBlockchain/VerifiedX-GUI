@@ -13,6 +13,7 @@ import '../../../utils/validation.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../../core/utils/tx_refresh.dart';
 import '../services/token_service.dart';
+import '../token_rules.dart';
 
 class TransferTokensButton extends BaseComponent {
   final String scId;
@@ -66,6 +67,12 @@ class TransferTokensButton extends BaseComponent {
         if (toAddress == null || toAddress.isEmpty) {
           return;
         }
+
+        if (isTokenTransferToSelf(fromAddress, toAddress)) {
+          Toast.error(l10n.tokenWebTransferToSelf);
+          return;
+        }
+
         ref.read(globalLoadingProvider.notifier).start();
         final success = await TokenService().transfer(
           scId: scId,

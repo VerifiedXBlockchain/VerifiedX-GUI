@@ -86,7 +86,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
   }
 
   void setDescription(String value) {
-    state = state.copyWith(name: value);
+    state = state.copyWith(description: value);
   }
 
   void setPrimaryAsset(Asset? asset) {
@@ -259,6 +259,9 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
 
   void removeMultiAsset(MultiAsset multiAsset) {
     final index = state.multiAssets.indexWhere((m) => m.id == multiAsset.id);
+    if (index == -1) {
+      return;
+    }
     state = state.copyWith(multiAssets: [...state.multiAssets]..removeAt(index));
   }
 

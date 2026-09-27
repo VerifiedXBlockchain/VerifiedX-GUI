@@ -6477,6 +6477,30 @@ abstract class AppLocalizations {
   /// **'Sync Media'**
   String get nftSyncMedia;
 
+  /// Toast after Sync Media uploads and associates all NFT media.
+  ///
+  /// In en, this message translates to:
+  /// **'Media synced.'**
+  String get nftSyncMediaSuccess;
+
+  /// Toast when the explorer refuses to associate the uploaded NFT media.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t sync media. Please try again.'**
+  String get nftSyncMediaFailed;
+
+  /// Toast when Sync Media throws, for example when a local media file is missing; error is the exception message.
+  ///
+  /// In en, this message translates to:
+  /// **'Media sync failed: {error}'**
+  String nftSyncMediaError(String error);
+
+  /// Toast when one NFT media file fails to upload during Sync Media; nothing is associated.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t upload {fileName}. Media was not synced.'**
+  String nftSyncMediaUploadFailed(String fileName);
+
   /// Tab label for managing minted NFTs.
   ///
   /// In en, this message translates to:
@@ -9074,6 +9098,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A problem occurred minting this smart contract.'**
   String get r3aProblemMintingSc;
+
+  /// Toast when compiling or minting a smart contract throws; error is the exception message.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred compiling or minting this smart contract: {error}'**
+  String r3aProblemCompilingOrMintingSc(String error);
 
   /// No description provided for @r3aProperty.
   ///
@@ -14792,6 +14822,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download Example JSON'**
   String get scwDownloadExampleJson;
+
+  /// Toast when the bundled example NFT metadata file cannot be saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the example file.'**
+  String get scwDownloadExampleFailed;
 
   /// No description provided for @scwEdit.
   ///
