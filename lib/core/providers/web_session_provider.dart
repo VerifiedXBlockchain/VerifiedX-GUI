@@ -23,6 +23,7 @@ import '../../features/web_shop/providers/web_listed_nfts_provider.dart';
 import '../../utils/html_helpers.dart';
 import '../services/encryption_service.dart';
 import '../services/password_verification_service.dart';
+import '../services/web_account_password_store.dart';
 
 import '../../app.dart';
 import '../../features/keygen/models/keypair.dart';
@@ -144,65 +145,48 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     }
   }
 
-  /// Login with encrypted keys using password
+  /// Unlocks the wallet with [password].
+  ///
+  /// Unlock targets the last active account: the password must be that
+  /// account's own. A wallet saved before passwords were per account also
+  /// opens with the password of its wallet-wide slot, which then loads and
+  /// activates the account that slot holds. See [WebAccountPasswordStore].
   Future<bool> loginWithPassword(String password) async {
     final storage = singleton<Storage>();
 
-    // Verify password first
-    if (!PasswordVerificationService.verifyPassword(password)) {
+    final unlocked = WebAccountPasswordStore(storage).unlock(password);
+    if (unlocked == null) {
       return false;
     }
 
-    try {
-      // Decrypt VFX keypair
-      final encryptedVfx = storage.getMap(Storage.WEB_KEYPAIR);
-      if (encryptedVfx != null) {
-        final decryptedVfx = EncryptionService.decrypt(encryptedVfx, password);
-        final keypair = Keypair.fromJson(decryptedVfx);
+    final accountId = unlocked.accountId;
+    if (accountId != null) {
+      ref.read(selectedMultiAccountProvider.notifier).markActive(accountId);
+    }
 
-        // Decrypt RA keypair if exists
-        RaKeypair? raKeypair;
-        final encryptedRa = storage.getMap(Storage.WEB_RA_KEYPAIR);
-        if (encryptedRa != null) {
-          final decryptedRa = EncryptionService.decrypt(encryptedRa, password);
-          raKeypair = RaKeypair.fromJson(decryptedRa);
-        }
+    // Load keys into session
+    login(unlocked.keypair, unlocked.raKeypair, unlocked.btcKeypair,
+        andSave: false, encryptionPassword: password);
 
-        // Decrypt BTC keypair if exists
-        BtcWebAccount? btcKeypair;
-        final encryptedBtc = storage.getMap(Storage.WEB_BTC_KEYPAIR);
-        if (encryptedBtc != null) {
-          final decryptedBtc =
-              EncryptionService.decrypt(encryptedBtc, password);
-          btcKeypair = BtcWebAccount.fromJson(decryptedBtc);
-        }
-
-        // Load keys into session
-        login(keypair, raKeypair, btcKeypair, andSave: false, encryptionPassword: password);
-
-        // Restore wallet type selection
-        final savedSelectedWalletType =
-            storage.getString(Storage.WEB_SELECTED_WALLET_TYPE);
-        if (savedSelectedWalletType != null) {
-          final walletType = WalletType.values.firstWhereOrNull(
-              (t) => t.storageName == savedSelectedWalletType);
-          if (walletType != null) {
-            setSelectedWalletType(walletType, false);
-          }
-        }
-
-        return true;
+    // Restore wallet type selection
+    final savedSelectedWalletType =
+        storage.getString(Storage.WEB_SELECTED_WALLET_TYPE);
+    if (savedSelectedWalletType != null) {
+      final walletType = WalletType.values
+          .firstWhereOrNull((t) => t.storageName == savedSelectedWalletType);
+      if (walletType != null) {
+        setSelectedWalletType(walletType, false);
       }
-    } catch (e, st) {
-      print("Failed to decrypt keys: $e");
-      print(st);
-      return false;
     }
 
-    return false;
+    return true;
   }
 
-  /// Encrypt and save keys with password
+  /// Encrypts and saves the newest account's keys in the wallet-wide slot.
+  ///
+  /// Each account's own password lives with its entry in the multi-account
+  /// store (written by [login]); this slot is the legacy unlock fallback and
+  /// marks the wallet as password protected. See [WebAccountPasswordStore].
   void encryptAndSaveKeys(Keypair keypair, RaKeypair? raKeypair,
       BtcWebAccount? btcKeyPair, String password) {
     final storage = singleton<Storage>();

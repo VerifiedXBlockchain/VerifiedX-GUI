@@ -1290,6 +1290,7 @@ class _WalletListItem extends StatelessWidget {
 
                 if (keypair != null) {
                   showKeys(context, keypair!, true);
+                  return;
                 }
 
                 if (raKeypair != null) {

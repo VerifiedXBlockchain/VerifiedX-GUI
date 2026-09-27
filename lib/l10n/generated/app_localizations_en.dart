@@ -360,13 +360,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authBackupKeys => 'Backup Keys';
 
   @override
-  String get authDecryptFailed => 'Failed to decrypt keys';
-
-  @override
   String get authEnterPassword => 'Enter Password';
 
   @override
-  String get authEnterPasswordBody => 'Enter your password to decrypt your stored keys.';
+  String get authEnterPasswordBody => 'Enter this account\'s password to decrypt its stored keys.';
 
   @override
   String get authLoginCreateAccount => 'Login / Create Account';
@@ -2312,10 +2309,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hnavResyncing => 'Resyncing...';
 
   @override
-  String get hnavRevealPrivateKeysPasswordMessage => 'Enter your password to reveal private keys.';
+  String get hnavRevealPrivateKeysPasswordMessage => 'Enter this account\'s password to reveal its private keys.';
 
   @override
-  String get hnavRevealVaultKeysPasswordMessage => 'Enter your password to reveal Vault account private keys.';
+  String get hnavRevealVaultKeysPasswordMessage => 'Enter this account\'s password to reveal its Vault account private keys.';
 
   @override
   String get hnavSectionAccountSecurity => 'Account Security';
@@ -6158,7 +6155,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3eEncryptWalletBody => 'This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.';
 
   @override
-  String get r3eEnterPasswordBackup => 'Enter your password to backup your keys.';
+  String get r3eEnterPasswordBackup => 'Enter this account\'s password to back up its keys.';
 
   @override
   String get r3eExportNftMedia => 'Export NFT Media';

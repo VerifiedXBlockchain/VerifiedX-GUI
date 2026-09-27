@@ -564,7 +564,7 @@ This area covers Vault (reserve, `xRBX`) accounts on both platforms: creating on
 3. Click each copy icon (`Copy address`, `Copy private key`, `Copy recovery address`, `Copy recovery private key`, `Copy restore code`), then `button "Done"`.
 
 **Expected**
-- With encrypted storage the prompt reads `Enter your password to reveal Vault account private keys.`; a wrong password does not open the dialog.
+- With encrypted storage the prompt reads `Enter this account's password to reveal its Vault account private keys.`; a wrong password does not open the dialog.
 - The dialog `Vault Account Details` reads `Here are your Vault Account details. Please ensure to back up your private key in a safe place.` and shows read-only `Address`, `Private Key`, `Recovery Address`, `Recovery Private Key` and `Restore Code`, then `Copy All` and `Done`.
 - The recovery address matches the one shown in TC-VAULT-029's dialog.
 - Toasts: `Public key copied to clipboard` (address), `Private key copied to clipboard`, `Recovery Address copied to clipboard`, `Recovery Private Key copied to clipboard`, `Restore Code copied to clipboard`. The dialog cannot be dismissed by clicking outside; `Done` closes it.

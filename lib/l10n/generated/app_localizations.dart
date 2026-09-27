@@ -723,12 +723,6 @@ abstract class AppLocalizations {
   /// **'Backup Keys'**
   String get authBackupKeys;
 
-  /// Toast shown when key decryption fails on the auth screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to decrypt keys'**
-  String get authDecryptFailed;
-
   /// Button and prompt-title to enter the wallet password.
   ///
   /// In en, this message translates to:
@@ -738,7 +732,7 @@ abstract class AppLocalizations {
   /// Body text shown in the password prompt to decrypt stored keys.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to decrypt your stored keys.'**
+  /// **'Enter this account\'s password to decrypt its stored keys.'**
   String get authEnterPasswordBody;
 
   /// Primary CTA on the web auth screen to log in or create an account.
@@ -4395,16 +4389,16 @@ abstract class AppLocalizations {
   /// **'Resyncing...'**
   String get hnavResyncing;
 
-  /// No description provided for @hnavRevealPrivateKeysPasswordMessage.
+  /// Password prompt body before revealing the active web account's private keys; the password is that account's own.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to reveal private keys.'**
+  /// **'Enter this account\'s password to reveal its private keys.'**
   String get hnavRevealPrivateKeysPasswordMessage;
 
-  /// No description provided for @hnavRevealVaultKeysPasswordMessage.
+  /// Password prompt body before revealing the active web account's Vault keys; the password is that account's own.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to reveal Vault account private keys.'**
+  /// **'Enter this account\'s password to reveal its Vault account private keys.'**
   String get hnavRevealVaultKeysPasswordMessage;
 
   /// No description provided for @hnavSectionAccountSecurity.
@@ -11607,10 +11601,10 @@ abstract class AppLocalizations {
   /// **'This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.'**
   String get r3eEncryptWalletBody;
 
-  /// No description provided for @r3eEnterPasswordBackup.
+  /// Password prompt body before backing up the active web account's keys; the password is that account's own.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to backup your keys.'**
+  /// **'Enter this account\'s password to back up its keys.'**
   String get r3eEnterPasswordBackup;
 
   /// No description provided for @r3eExportNftMedia.

@@ -517,15 +517,11 @@
   "@authBackupKeys": {
     "description": "Welcome dialog action that opens the backup keys flow."
   },
-  "authDecryptFailed": "No se pudieron descifrar las claves",
-  "@authDecryptFailed": {
-    "description": "Toast shown when key decryption fails on the auth screen."
-  },
   "authEnterPassword": "Ingresa la contraseña",
   "@authEnterPassword": {
     "description": "Button and prompt-title to enter the wallet password."
   },
-  "authEnterPasswordBody": "Ingresa tu contraseña para descifrar tus claves almacenadas.",
+  "authEnterPasswordBody": "Ingresa la contraseña de esta cuenta para descifrar sus claves almacenadas.",
   "@authEnterPasswordBody": {
     "description": "Body text shown in the password prompt to decrypt stored keys."
   },
@@ -2315,8 +2311,14 @@
     "description": "Shown in place of the VFX balance while VFXCore rebuilds its chain state."
   },
   "hnavResyncing": "Resincronizando...",
-  "hnavRevealPrivateKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas.",
-  "hnavRevealVaultKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas de la cuenta de bóveda.",
+  "hnavRevealPrivateKeysPasswordMessage": "Ingresa la contraseña de esta cuenta para revelar sus claves privadas.",
+  "@hnavRevealPrivateKeysPasswordMessage": {
+    "description": "Password prompt body before revealing the active web account's private keys; the password is that account's own."
+  },
+  "hnavRevealVaultKeysPasswordMessage": "Ingresa la contraseña de esta cuenta para revelar las claves privadas de su cuenta de bóveda.",
+  "@hnavRevealVaultKeysPasswordMessage": {
+    "description": "Password prompt body before revealing the active web account's Vault keys; the password is that account's own."
+  },
   "hnavSectionAccountSecurity": "Seguridad de la cuenta",
   "hnavSectionDiagnose": "Diagnóstico",
   "hnavSectionTokensNfts": "Tokens / NFTs",
@@ -5188,7 +5190,10 @@
   "r3eEncryptAccountPasswordBody": "Ingresa una contraseña para cifrar las claves privadas de esta cuenta.",
   "r3eEncryptWallet": "Cifrar billetera",
   "r3eEncryptWalletBody": "Esta función cifrará TODAS las claves privadas de esta billetera. Asegúrate de tener respaldadas TODAS las claves privadas antes de continuar.\n\nEsta acción es irreversible y la contraseña que crees será la única forma de acceder a esta billetera una vez completado el cifrado.\n\nTambién se recomienda respaldar tu contraseña además de tus claves privadas.",
-  "r3eEnterPasswordBackup": "Ingresa tu contraseña para respaldar tus claves.",
+  "r3eEnterPasswordBackup": "Ingresa la contraseña de esta cuenta para respaldar sus claves.",
+  "@r3eEnterPasswordBackup": {
+    "description": "Password prompt body before backing up the active web account's keys; the password is that account's own."
+  },
   "r3eExportNftMedia": "Exportar multimedia del NFT",
   "r3eFailedDecryptKeys": "No se pudieron descifrar las claves. Revisa tu contraseña.",
   "r3eFailedDeleteDb": "No se pudo eliminar {path}: la carpeta sigue existiendo tras el borrado",

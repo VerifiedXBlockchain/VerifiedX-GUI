@@ -360,13 +360,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get authBackupKeys => 'Respaldar claves';
 
   @override
-  String get authDecryptFailed => 'No se pudieron descifrar las claves';
-
-  @override
   String get authEnterPassword => 'Ingresa la contraseña';
 
   @override
-  String get authEnterPasswordBody => 'Ingresa tu contraseña para descifrar tus claves almacenadas.';
+  String get authEnterPasswordBody => 'Ingresa la contraseña de esta cuenta para descifrar sus claves almacenadas.';
 
   @override
   String get authLoginCreateAccount => 'Iniciar sesión / Crear cuenta';
@@ -2312,10 +2309,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hnavResyncing => 'Resincronizando...';
 
   @override
-  String get hnavRevealPrivateKeysPasswordMessage => 'Ingresa tu contraseña para revelar las claves privadas.';
+  String get hnavRevealPrivateKeysPasswordMessage => 'Ingresa la contraseña de esta cuenta para revelar sus claves privadas.';
 
   @override
-  String get hnavRevealVaultKeysPasswordMessage => 'Ingresa tu contraseña para revelar las claves privadas de la cuenta de bóveda.';
+  String get hnavRevealVaultKeysPasswordMessage => 'Ingresa la contraseña de esta cuenta para revelar las claves privadas de su cuenta de bóveda.';
 
   @override
   String get hnavSectionAccountSecurity => 'Seguridad de la cuenta';
@@ -6158,7 +6155,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3eEncryptWalletBody => 'Esta función cifrará TODAS las claves privadas de esta billetera. Asegúrate de tener respaldadas TODAS las claves privadas antes de continuar.\n\nEsta acción es irreversible y la contraseña que crees será la única forma de acceder a esta billetera una vez completado el cifrado.\n\nTambién se recomienda respaldar tu contraseña además de tus claves privadas.';
 
   @override
-  String get r3eEnterPasswordBackup => 'Ingresa tu contraseña para respaldar tus claves.';
+  String get r3eEnterPasswordBackup => 'Ingresa la contraseña de esta cuenta para respaldar sus claves.';
 
   @override
   String get r3eExportNftMedia => 'Exportar multimedia del NFT';

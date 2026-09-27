@@ -10,7 +10,6 @@ Every question raised while the cases were written, in case order. They have bee
 - **TC-AUTH-019:** the `I don't know` detection only recognises mainnet prefixes (`1`, `3`, `bc1q`, `bc1p`). A testnet address (`tb1…`, `m…`, `n…`, `2…`) will fail step 3 with `Invalid BTC Address`. Confirm whether that is acceptable on testnet.
 - **TC-AUTH-021:** the suite has no extension fixture or variable for its password; decide whether this case stays manual.
 - **TC-AUTH-028:** the auth screen pushes an authenticated session straight to the dashboard when the path is `/`, so it is unclear which user path shows `Resume Session`. Confirm the intended trigger.
-- **TC-AUTH-031:** adding an account stores a new password hash for the wallet. If the second account is given a different password than the first, which one does the unlock screen accept afterwards, and can the first account still be switched to? The suite uses the same password for both until this is settled.
 - **TC-AUTH-032:** the suite has no fixture for a legacy unencrypted session; confirm whether one should be built or the case dropped.
 - **TC-AUTH-037:** the VFX reveal passes no reveal flag, so its title reads `Key Generated` instead of `Keys` (the BTC reveal shows `Keys`). Confirm which title is intended.
 - **TC-AUTH-043:** with no accounts the VFX card heading stays `Loading...` because the total balance is only set when the account list is not empty. Confirm whether `0 VFX` is expected instead.
@@ -59,7 +58,6 @@ Every question raised while the cases were written, in case order. They have bee
 - **TC-PRV-001:** the GUI never downloads the parameters itself; it only reads `GetPlonkStatus`. Confirm the CLI's expected download size and duration on testnet, and whether a failed download is reported anywhere other than the permanent `Privacy Layer Starting Up` screen.
 - **TC-PRV-005:** `ShieldedAddressNotifier.load` avoids calling the create endpoint on restart because it "would overwrite scanned data on the node". Confirm that re-activating the same account after a reset is safe for already-scanned notes, and whether a rescan is expected.
 - **TC-PRV-014:** the lock only happens when the node's message contains `password`, `unauthorized` or `authentication`. Confirm the CLI's wording for a wrong privacy password so this case can assert the exact toast.
-- **TC-PRV-020:** the dashboard only follows the stored `zfx_` address, so an imported view-only wallet does not appear in the GUI. Confirm how the `VIEW ONLY` badge is meant to be reached and what the release test should assert after an import.
 
 ## [06 · Vault accounts](06-vault-accounts.md)
 

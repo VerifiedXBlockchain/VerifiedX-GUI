@@ -9,6 +9,7 @@ import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../../core/models/web_session_model.dart';
 import '../../web/components/web_wordmark.dart';
 import '../../../core/services/password_prompt_service.dart';
+import '../../../core/services/web_account_password_store.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/app_router.gr.dart';
@@ -242,7 +243,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               ),
             ),
             Text(
-              storage.getString(Storage.WEB_PRIMARY_ADDRESS) ??
+              WebAccountPasswordStore(storage).unlockTargetAddress() ??
                   l10n.authUnknownAddress,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.7),
@@ -256,8 +257,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               label: l10n.authEnterPassword,
               icon: Icons.lock,
               onPressed: () async {
-                final password =
-                    await PasswordPromptService.promptAndVerifyPassword(
+                final password = await PasswordPromptService.promptPassword(
                   context,
                   title: l10n.authEnterPassword,
                   customMessage: l10n.authEnterPasswordBody,
@@ -272,7 +272,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                   if (success) {
                     redirectToDashboard(false);
                   } else {
-                    Toast.error(l10n.authDecryptFailed);
+                    Toast.error(l10n.r3eIncorrectPassword);
                   }
                 }
               },

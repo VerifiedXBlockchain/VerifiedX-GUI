@@ -1,6 +1,6 @@
 # 05 · Privacy (PRISM)
 
-This area covers the PRISM privacy layer on the desktop GUI: the PLONK proof-system status gate, activating a shielded (`zfx_`) wallet, the privacy password and its unlock and auto-lock, the dashboard (shielded address, shielded balance, note count, last scanned block, commitments list), the four VFX actions (shield, unshield, private transfer, consolidate), the settings menu (export and import viewing key, resync, reset), and the vBTC variants of every action. Privacy is desktop-only: the side-nav entry is built only when `!kIsWeb` and the route exists only in `AppRouter`. Every call goes to the local Core CLI under `/privacyapi/PrivacyV1` (`GetPlonkStatus`, `CreateShieldedAddressFromAccount`, `ShieldVFX`, `UnshieldVFX`, `PrivateTransferVFX`, `ConsolidateShieldedVFX`, `GetShieldedBalance`, `ExportViewingKey`, `ImportViewingKey`, `ResyncShieldedWallet`, and the `...VBTC` equivalents). The vBTC variants are compiled in but hidden while `VBTC_PRIVACY_ENABLED` is `false` (shielded vBTC is disabled in the CLI); their cases are kept so they can run the day the flag flips, and are recorded as skipped until then.
+This area covers the PRISM privacy layer on the desktop GUI: the PLONK proof-system status gate, activating a shielded (`zfx_`) wallet, the privacy password and its unlock and auto-lock, the dashboard (shielded address, shielded balance, note count, last scanned block, commitments list), the four VFX actions (shield, unshield, private transfer, consolidate), the settings menu (export viewing key, resync, reset; import viewing key is hidden while `IMPORT_VIEWING_KEY_ENABLED` is `false`), and the vBTC variants of every action. Privacy is desktop-only: the side-nav entry is built only when `!kIsWeb` and the route exists only in `AppRouter`. Every call goes to the local Core CLI under `/privacyapi/PrivacyV1` (`GetPlonkStatus`, `CreateShieldedAddressFromAccount`, `ShieldVFX`, `UnshieldVFX`, `PrivateTransferVFX`, `ConsolidateShieldedVFX`, `GetShieldedBalance`, `ExportViewingKey`, `ImportViewingKey`, `ResyncShieldedWallet`, and the `...VBTC` equivalents). The vBTC variants are compiled in but hidden while `VBTC_PRIVACY_ENABLED` is `false` (shielded vBTC is disabled in the CLI); their cases are kept so they can run the day the flag flips, and are recorded as skipped until then.
 
 ## Area preconditions
 
@@ -146,7 +146,7 @@ This area covers the PRISM privacy layer on the desktop GUI: the PLONK proof-sys
 - Address card: shield icon, `Shielded Address`, the `zfx_` address in monospace, a copy button and a settings button (`Privacy settings`).
 - Copy shows `Address copied to clipboard`.
 - Balance card: `Shielded Balance` with `<amount> VFX`, and on the right `<n> note` / `<n> notes` and `Block <height>` (the last scanned block, which advances within a minute on a synced node).
-- A `VIEW ONLY` badge appears only for a view-only wallet (TC-PRV-020).
+- No `VIEW ONLY` badge: it belongs to imported view-only wallets, which cannot be reached this release (TC-PRV-020).
 - The `Shielded vBTC` section is absent while `VBTC_PRIVACY_ENABLED` is false, even when the wallet holds V2 vBTC tokens.
 
 **Cleanup:** none.
@@ -365,31 +365,23 @@ This area covers the PRISM privacy layer on the desktop GUI: the PLONK proof-sys
 3. `tap-text Close`.
 
 **Expected**
-- The menu lists `Export Viewing Key`, `Import Viewing Key`, `Resync Wallet`, `Reset Privacy Wallet`, and no `Resync vBTC Wallet` while `VBTC_PRIVACY_ENABLED` is false.
+- The menu lists `Export Viewing Key`, `Resync Wallet`, `Reset Privacy Wallet`, with no `Import Viewing Key` while `IMPORT_VIEWING_KEY_ENABLED` is false (TC-PRV-020) and no `Resync vBTC Wallet` while `VBTC_PRIVACY_ENABLED` is false.
 - The dialog `Viewing Key` reads `Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.` and shows a Base64 key.
 - Copy shows `Viewing key copied to clipboard`. Do not paste the key into results.
 - On a node error the toast reads `Failed to export viewing key`.
 
 **Cleanup:** none.
 
-### TC-PRV-020 · Import a viewing key
+### TC-PRV-020 · Import Viewing Key is hidden
 **Platforms:** macOS · **Priority:** P2 · **Moves funds:** no
 
-**Preconditions:** A viewing key exported in TC-PRV-019 for account B's `zfx_` address (export it while B is the active privacy wallet), and the privacy wallet switched back to account A.
+**Preconditions:** Privacy wallet activated.
 
 **Steps**
-1. `tap-label "Privacy settings"`, `tap-text "Import Viewing Key"`.
-2. Tap `Import` with both fields empty.
-3. Type `abc` in `zfx_ Address`, tap `Import`.
-4. Type account B's `zfx_` address, leave the key empty, tap `Import`.
-5. Paste the exported key into `Viewing Key (Base64)`, tap `Import`.
+1. `tap-label "Privacy settings"`; screenshot the menu.
 
 **Expected**
-- The dialog reads `Import a viewing key to create a view-only wallet. You can see balances but cannot spend.` with hints `zfx_...` and `Paste Base64 key here`.
-- Steps 2 and 3: toast `Please enter a valid zfx_ address`.
-- Step 4: toast `Please enter the viewing key`.
-- Step 5: toast `Viewing key imported successfully` and the dialog closes; an invalid key gives `Failed to import viewing key`.
-- **Open question:** the dashboard only follows the stored `zfx_` address, so an imported view-only wallet does not appear in the GUI. Confirm how the `VIEW ONLY` badge is meant to be reached and what the release test should assert after an import.
+- The menu has no `Import Viewing Key` entry while `IMPORT_VIEWING_KEY_ENABLED` is `false` in `lib/core/app_constants.dart`. The dashboard only follows the wallet's own `zfx_` address, so an imported view-only wallet could not be opened, and the entry is hidden for this release. The import dialog stays in the code for when the flag flips.
 
 **Cleanup:** none.
 

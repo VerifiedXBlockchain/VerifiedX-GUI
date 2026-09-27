@@ -53,16 +53,17 @@ class PrivacySettingsMenu extends ConsumerWidget {
             ],
           ),
         ),
-        PopupMenuItem(
-          value: 'import_viewing_key',
-          child: Row(
-            children: [
-              const Icon(Icons.download, size: 18, color: Colors.white70),
-              const SizedBox(width: 8),
-              Text(l10n.prvImportViewingKey),
-            ],
+        if (IMPORT_VIEWING_KEY_ENABLED)
+          PopupMenuItem(
+            value: 'import_viewing_key',
+            child: Row(
+              children: [
+                const Icon(Icons.download, size: 18, color: Colors.white70),
+                const SizedBox(width: 8),
+                Text(l10n.prvImportViewingKey),
+              ],
+            ),
           ),
-        ),
         const PopupMenuDivider(),
         PopupMenuItem(
           value: 'resync',

@@ -280,6 +280,13 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
     syncWithStorage();
   }
 
+  /// Records [id] as the active account without loading its keys, for when
+  /// the session already holds them (unlock).
+  void markActive(int id) {
+    state = id;
+    syncWithStorage();
+  }
+
   Future<void> setFromId(int id, [String? password]) async {
     if (state == id) {
       return;

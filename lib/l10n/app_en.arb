@@ -517,15 +517,11 @@
   "@authBackupKeys": {
     "description": "Welcome dialog action that opens the backup keys flow."
   },
-  "authDecryptFailed": "Failed to decrypt keys",
-  "@authDecryptFailed": {
-    "description": "Toast shown when key decryption fails on the auth screen."
-  },
   "authEnterPassword": "Enter Password",
   "@authEnterPassword": {
     "description": "Button and prompt-title to enter the wallet password."
   },
-  "authEnterPasswordBody": "Enter your password to decrypt your stored keys.",
+  "authEnterPasswordBody": "Enter this account's password to decrypt its stored keys.",
   "@authEnterPasswordBody": {
     "description": "Body text shown in the password prompt to decrypt stored keys."
   },
@@ -2341,8 +2337,14 @@
     "description": "Shown in place of the VFX balance while VFXCore rebuilds its chain state."
   },
   "hnavResyncing": "Resyncing...",
-  "hnavRevealPrivateKeysPasswordMessage": "Enter your password to reveal private keys.",
-  "hnavRevealVaultKeysPasswordMessage": "Enter your password to reveal Vault account private keys.",
+  "hnavRevealPrivateKeysPasswordMessage": "Enter this account's password to reveal its private keys.",
+  "@hnavRevealPrivateKeysPasswordMessage": {
+    "description": "Password prompt body before revealing the active web account's private keys; the password is that account's own."
+  },
+  "hnavRevealVaultKeysPasswordMessage": "Enter this account's password to reveal its Vault account private keys.",
+  "@hnavRevealVaultKeysPasswordMessage": {
+    "description": "Password prompt body before revealing the active web account's Vault keys; the password is that account's own."
+  },
   "hnavSectionAccountSecurity": "Account Security",
   "hnavSectionDiagnose": "Diagnose",
   "hnavSectionTokensNfts": "Tokens / NFTs",
@@ -5214,7 +5216,10 @@
   "r3eEncryptAccountPasswordBody": "Enter a password to encrypt this account's private keys.",
   "r3eEncryptWallet": "Encrypt Wallet",
   "r3eEncryptWalletBody": "This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.",
-  "r3eEnterPasswordBackup": "Enter your password to backup your keys.",
+  "r3eEnterPasswordBackup": "Enter this account's password to back up its keys.",
+  "@r3eEnterPasswordBackup": {
+    "description": "Password prompt body before backing up the active web account's keys; the password is that account's own."
+  },
   "r3eExportNftMedia": "Export NFT Media",
   "r3eFailedDecryptKeys": "Failed to decrypt account keys. Check your password.",
   "r3eFailedDeleteDb": "Failed to delete {path} — folder still exists after delete",

@@ -419,7 +419,7 @@ This file covers everything between opening the app and holding a usable, unlock
 
 **Expected**
 - The landing screen shows `Unlock wallet for:` and the address `TEST_VFX_A_ADDRESS`, a `Enter Password` button and an underlined `Logout`; `Login / Create Account` is not shown.
-- The prompt is titled `Enter Password` with `Enter your password to decrypt your stored keys.`
+- The prompt is titled `Enter Password` with `Enter this account's password to decrypt its stored keys.`
 - After submitting, the dashboard opens with account A's balance, without the welcome dialog.
 
 **Cleanup:** none.
@@ -557,23 +557,27 @@ This file covers everything between opening the app and holding a usable, unlock
 
 ## Web multiple accounts
 
-### TC-AUTH-031 · Add a second account
+### TC-AUTH-031 · Add a second account with its own password
 **Platforms:** Web · **Priority:** P0 · **Moves funds:** no
 
-**Preconditions:** Logged in as account A with encrypted storage (any login from this suite).
+**Preconditions:** Logged in as account A with encrypted storage (any login from this suite), using `TEST_ENCRYPTION_PASSWORD`.
 
 **Steps**
 1. Click `Select Account`, then `Add Account`.
-2. In the login sheet click `VFX Private Key`, import `TEST_VFX_B_PRIVKEY`, and set and confirm `TEST_ENCRYPTION_PASSWORD`.
+2. In the login sheet click `VFX Private Key`, import `TEST_VFX_B_PRIVKEY`, and set and confirm `second-password-456` (account B's own password, different from account A's).
 3. Click `Select Account` again; screenshot the menu.
+4. Reload with `?automation=1`; screenshot the auth screen.
+5. Click `Enter Password` and enter `TEST_ENCRYPTION_PASSWORD`; screenshot.
+6. Click `Enter Password` and enter `second-password-456`.
 
 **Expected**
 - The dashboard switches to account B (address `TEST_VFX_B_ADDRESS`).
 - The menu lists `Account 1` and `Account 2`, each with a small edit (rename) button, and the checkbox is ticked on `Account 2`. With only one stored account the row reads `Default Account` and has no rename button.
+- Passwords are per account and unlock targets the last active account: the auth screen shows `Unlock wallet for:` with `TEST_VFX_B_ADDRESS`.
+- Step 5: account A's password is rejected with a red toast `Incorrect password`; the auth screen stays.
+- Step 6: account B's own password opens the dashboard on account B.
 
 **Cleanup:** none.
-
-**Open question:** adding an account stores a new password hash for the wallet. If the second account is given a different password than the first, which one does the unlock screen accept afterwards, and can the first account still be switched to? The suite uses the same password for both until this is settled.
 
 ### TC-AUTH-032 · Add Account on a legacy unencrypted session
 **Platforms:** Web · **Priority:** P2 · **Moves funds:** no
@@ -598,13 +602,16 @@ This file covers everything between opening the app and holding a usable, unlock
 **Steps**
 1. Click `Select Account`, then `Account 1`.
 2. In `Enter Account Password` type `wrong-password-123`, click `Submit`; screenshot.
-3. Repeat step 1 and enter `TEST_ENCRYPTION_PASSWORD`.
-4. Wait up to 30 seconds and compare the VFX card and the `Addresses` tab.
+3. Repeat step 1 and enter account B's password `second-password-456`; screenshot.
+4. Repeat step 1 and enter account A's password `TEST_ENCRYPTION_PASSWORD`.
+5. Wait up to 30 seconds and compare the VFX card and the `Addresses` tab.
+6. Reload with `?automation=1`, then unlock with `TEST_ENCRYPTION_PASSWORD`.
 
 **Expected**
 - The prompt has label `Account Password` and body `Enter the password for this account to decrypt its private keys.`
-- Wrong password: red toast `Failed to decrypt account keys. Check your password.`; account B stays active.
-- Right password: the dashboard shows account A (`TEST_VFX_A_ADDRESS`) and its balance; the checkbox moves to `Account 1`. Selecting the already active account does nothing.
+- Wrong password, and account B's password: red toast `Failed to decrypt account keys. Check your password.`; account B stays active.
+- Account A's password: the dashboard shows account A (`TEST_VFX_A_ADDRESS`) and its balance; the checkbox moves to `Account 1`. Selecting the already active account does nothing.
+- Step 6: the auth screen shows `TEST_VFX_A_ADDRESS` (the last active account) and account A's password opens account A.
 
 **Cleanup:** none.
 
@@ -633,7 +640,7 @@ This file covers everything between opening the app and holding a usable, unlock
 **Steps**
 1. Open `Select Account` → `Manage Accounts`; screenshot.
 2. On account B's card tap the copy button next to its VFX address (`fltA11y.tap("Copy address")`).
-3. Tap `Set Active` on account B and enter `TEST_ENCRYPTION_PASSWORD`.
+3. Tap `Set Active` on account B and enter account B's password (`second-password-456` after TC-AUTH-031).
 
 **Expected**
 - The sheet is titled `Manage Accounts` and shows a card per account with its VFX, Vault and BTC addresses, each with copy and reveal buttons, plus `Backup Keys` and `Forget`; `Set Active` appears only on the inactive account; `Add Account` sits at the bottom.
@@ -676,7 +683,7 @@ This file covers everything between opening the app and holding a usable, unlock
 **Expected**
 - The row menu has `Copy Address` and `Reveal Private Key`.
 - The confirm dialog says `Are you sure you want to reveal your private key for this account?`.
-- The password prompt says `Enter your password to reveal private keys.`
+- The password prompt says `Enter this account's password to reveal its private keys.`
 - The key dialog shows `Here are your account details. Please ensure to back up your private key in a safe place.`, `Address` and `Private Key` (plus `Recovery Mnemonic` for a mnemonic account). Copy private key shows `Private key copied to clipboard` and the value matches the imported key; Copy address shows `Public key copied to clipboard`.
 
 **Cleanup:** Clear the clipboard.
@@ -694,7 +701,7 @@ This file covers everything between opening the app and holding a usable, unlock
 3. Click `button "Copy restore code"`, then `button "Copy All"`, then `Done`.
 
 **Expected**
-- The password prompt says `Enter your password to reveal Vault account private keys.`
+- The password prompt says `Enter this account's password to reveal its Vault account private keys.`
 - The dialog `Vault Account Details` shows `Address`, `Private Key`, `Recovery Address`, `Recovery Private Key` and `Restore Code`, each with a copy button (`Copy address`, `Copy private key`, `Copy recovery address`, `Copy recovery private key`, `Copy restore code`).
 - Toasts: `Restore Code copied to clipboard`, then `Vault Account Data copied to clipboard`.
 
@@ -722,9 +729,11 @@ This file covers everything between opening the app and holding a usable, unlock
 
 **Steps**
 1. Start a VFX reveal (TC-AUTH-037 steps 1–3) and enter `wrong-password-123`.
+2. If account B is stored with its own password (TC-AUTH-031), start the reveal again and enter `second-password-456`.
 
 **Expected**
 - A red toast `Incorrect password`; no key dialog opens.
+- Step 2: the reveal checks the active account's password, so account B's password is also rejected with `Incorrect password`.
 
 **Cleanup:** none.
 
@@ -736,7 +745,7 @@ This file covers everything between opening the app and holding a usable, unlock
 **Steps**
 1. Open `Manage Accounts`. Several nodes share the label `Reveal Private Key`, so use `fltA11y.list()` to find the one on the row of account B's VFX address and click its centre.
 2. Enter `wrong-password-123`; screenshot.
-3. Repeat and enter `TEST_ENCRYPTION_PASSWORD`; screenshot, `Done`.
+3. Repeat and enter account B's password (`second-password-456` after TC-AUTH-031); screenshot, `Done`.
 
 **Expected**
 - The prompt is `Enter Account Password` with `Enter the password for this account to decrypt and view its private keys.`
@@ -758,7 +767,7 @@ This file covers everything between opening the app and holding a usable, unlock
 
 **Expected**
 - The sheet shows `Backup Keys` with `Export and save all your VFX Vault and BTC private keys & addresses to a text file.` (no `Backup Media` row on web).
-- The password prompt says `Enter your password to backup your keys.`
+- The password prompt says `Enter this account's password to back up its keys.`
 - A text file downloads, the toast says `Keys backed up successfully.`, and the file has the sections `VFX Account:`, `VFX Vault Account:` and `BTC Account:`.
 
 **Cleanup:** Delete the downloaded file.
