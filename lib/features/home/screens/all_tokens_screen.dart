@@ -23,6 +23,7 @@ import '../../asset/polling_image_preview.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
 import '../../btc/screens/tokenized_btc_list_screen.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../misc/components/expand_balances_on_exit.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../nft/models/nft.dart';
 import '../../nft/providers/web_nft_list_provider.dart';
@@ -35,6 +36,13 @@ import '../../token/screens/token_management_screen.dart';
 
 class AllTokensScreen extends BaseScreen {
   const AllTokensScreen({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Opening this screen collapses the balance cards; restore them whichever
+    // way the screen is left, not only through its Back button.
+    return ExpandBalancesOnExit(child: super.build(context, ref));
+  }
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
