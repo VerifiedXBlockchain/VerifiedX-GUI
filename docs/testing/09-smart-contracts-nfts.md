@@ -257,9 +257,9 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Expected**
 - Step 2: web `Use My Address` fills account A's address; macOS `Choose an address` lists every account in the wallet as full labels.
-- Step 3: a `Royalty` card appears with subtitle `Percent 5.0% [<account B address>]`.
-- Step 4: the edit sheet opens with `5.0` and B's address; after saving, the subtitle reads `Percent 7.5% [<account B address>]` and there is still one card.
-- Step 5: the confirm reads `Are you sure you want to delete this?`; after `Delete` the card is gone and the button reads `Add Feature`.
+- Step 3: a `Royalty` card appears with subtitle `Percent 5% [<account B address>]`.
+- Step 4: the edit sheet opens with `5` and B's address; after saving, the subtitle reads `Percent 7.5% [<account B address>]` and there is still one card.
+- Step 5: the confirm reads `Are you sure you want to delete this?` with `No` and `Delete`; after `Delete` the card is gone and the button reads `Add Feature`.
 
 **Cleanup:** none.
 
@@ -293,7 +293,6 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Expected**
 - The sheet closes, no `Multi Asset` card is added, and the app shows no error.
-- Known bug until fixed (see `BUGS-TO-FIX.md`): today `removeAt(-1)` throws a RangeError, which skips the close, so the sheet stays open. Record a fail with the log line.
 
 **Cleanup:** none.
 
@@ -352,9 +351,9 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Expected**
 - Step 2: `Name is required.` and `Description is required.` under the fields; the sheet stays open.
-- Step 3: an overlay toast `Asset is required` appears and the sheet stays open.
+- Step 3: an `Error` dialog reads `Asset is required` (button `Close`) and the sheet stays open.
 - Step 4 adds an `Evolve Stage 2` block; `Delete Stage`, `Create New Phase` and `Save and Close` move to the last block.
-- Step 5 asks `Are you sure you want to delete this stage?` and removes `Evolve Stage 2`.
+- Step 5 asks `Are you sure you want to delete this stage?` (`No` / `Delete`) and removes `Evolve Stage 2`.
 - Step 6 closes the sheet; an `Evolving` card reads `2 phases` (the base plus one stage).
 - The evolving mode options are exactly `Issuer/Minter Controlled` and `Automated/Application Controlled`; while `Issuer/Minter Controlled` is selected the only type is `Manual Only`.
 
@@ -375,7 +374,7 @@ This area covers the smart contract creator (name, creator, description, primary
 **Expected**
 - Step 1 switches the type to `Date/Time`; the stage shows `Evolution Date` and `Evolution Time (<time zone>)` fields.
 - Step 2 offers exactly `Date/Time` and `Block Height`.
-- Step 3: dates before today cannot be picked; the time `12:00 AM` today shows the overlay toast `Time must be in the future.` and the time field stays empty.
+- Step 3: dates before today cannot be picked; the time `12:00 AM` today opens an `Error` dialog reading `Time must be in the future.` (button `Close`) and the time field stays empty.
 - Step 4 fills the date as tomorrow in `M/D/YYYY` and the time as `00:00:00`.
 - Step 5 saves; the `Evolving` card reads `2 phases`.
 - Pressing `Save and Close` with the date or time empty shows `Required for Date/Time evolution.`.
@@ -406,11 +405,11 @@ This area covers the smart contract creator (name, creator, description, primary
 **Preconditions:** Creator open with a Royalty card and an Evolving card.
 
 **Steps**
-1. On the `Evolving` card press `Remove` (macOS: ambiguous with the other card's `Remove`, see area open question), then `Cancel`.
+1. On the `Evolving` card press `Remove` (macOS: ambiguous with the other card's `Remove`, see area open question), then `No`.
 2. Press `Remove` again and confirm `Delete`.
 
 **Expected**
-- `Delete?` / `Are you sure you want to delete this?` appears both times; `Cancel` keeps the card.
+- `Delete?` / `Are you sure you want to delete this?` (buttons `No` / `Delete`) appears both times; `No` keeps the card.
 - After `Delete` only the Royalty card remains, and `Add Another Feature` can add `Evolving` again.
 
 **Cleanup:** none.
@@ -432,7 +431,7 @@ This area covers the smart contract creator (name, creator, description, primary
 9. In NFTs wait up to 3 minutes for `sc-full-<run-id>-<p>` and open it; wait for `Minted`.
 
 **Expected**
-- Before compiling, the features list shows `Royalty` (`Percent 5.0% [...]`), `Multi Asset` (`1 asset`) and `Evolving` (`3 phases`).
+- Before compiling, the features list shows `Royalty` (`Percent 5% [...]`), `Multi Asset` (`1 asset`) and `Evolving` (`3 phases`).
 - The mint succeeds with the same toasts and dialogs as TC-SC-009.
 - The NFT detail is checked in TC-SC-031.
 
@@ -877,10 +876,10 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Expected**
 - The screen is titled `Mint NFT Collection` and has two cards: `Collection Wizard` with `Launch Wizard`, and `Upload JSON / CSV` with the explanatory text, `JSON` (`Download Example JSON`, `Upload JSON`) and `CSV` (`Download Example CSV`, `Upload CSV`). macOS shows the wallet selector in the app bar.
-- Each download button opens the example file from `firebasestorage.googleapis.com` in the browser.
+- Each download button saves the example bundled with the app (`assets/docs/nft-metadata-example.json` / `.csv`) as `nft-metadata-example.json` / `.csv`: web downloads it through the browser, macOS opens a save dialog. Nothing is fetched from the network.
 - **Open question:** do the example files' image URLs still resolve? They are the natural source for TC-SC-055 and 056.
 
-**Cleanup:** Close the browser tabs.
+**Cleanup:** Delete the downloaded example files.
 
 ### TC-SC-049 · Wizard instance validation
 **Platforms:** Web, macOS · **Priority:** P1 · **Moves funds:** no
@@ -933,8 +932,8 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Expected**
 - The card shows the name, `Creator: QA Runner`, the description, a preview of `sc-a.png` with an `Open asset` button and a `Delete primary asset` button.
-- The royalty reads `5.0% to <account B address>`; the additional asset lists `sc-c.png` with a `Remove asset` button; the evolve header reads `Evolve (Manual Only)` with `Phase #1: Bulk Stage`; the property list shows `Background` with the chosen hex value.
-- After `Save & Close` the wizard list shows `sc-bulk-<run-id>-<p>-1 (x1)` with a subtitle containing `5.0% Royalty to`, `1 Additional Asset`, `1 Evolve Phase` and `1 Property`.
+- The royalty reads `5% to <account B address>`; the additional asset lists `sc-c.png` with a `Remove asset` button; the evolve header reads `Evolve (Manual Only)` with `Phase #1: Bulk Stage`; the property list shows `Background` with the chosen hex value.
+- After `Save & Close` the wizard list shows `sc-bulk-<run-id>-<p>-1 (x1)` with a subtitle containing `5% Royalty to`, `1 Additional Asset`, `1 Evolve Phase` and `1 Property`.
 - Royalty validation matches TC-SC-012 (`Required`, `Must be more than 0%`, `Can not be more than 100%`, `Address required`, `Invalid Address.`).
 
 **Cleanup:** none (used by TC-SC-052 and 054).
@@ -947,7 +946,7 @@ This area covers the smart contract creator (name, creator, description, primary
 **Steps**
 1. Press `Duplicate` on the instance. On the new `Create Instance` screen change the name to `sc-bulk-<run-id>-<p>-2`, set the quantity to `2` and press `Save & Close`.
 2. Press `Edit` on the second row, check the title `Edit Instance`, and press `Save & Close`.
-3. Press `Create New Instance`, then `Delete` → `Delete` on the empty instance.
+3. Press `Create New Instance`, then `Delete` on the empty instance and `Delete` in `Delete Instance?` (`No` / `Delete`).
 4. Press `Clear` at the bottom and then `Cancel` in `Clear NFT Collection Wizard?`.
 
 **Expected**
@@ -1000,7 +999,7 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Expected**
 - macOS: the `Importing` log lists `Creating csv-<run-id>-1...` and `Downloading <url>...` for each row.
-- The wizard opens with `csv-<run-id>-1 (x1)` and `csv-<run-id>-2 (x1)`, each subtitle containing `5.0% Royalty to <account B address>` and `1 Property`; the edit screen shows `Edition` with its value.
+- The wizard opens with `csv-<run-id>-1 (x1)` and `csv-<run-id>-2 (x1)`, each subtitle containing `5% Royalty to <account B address>` and `1 Property`; the edit screen shows `Edition` with its value.
 
 **Cleanup:** Press `Clear` → `Clear` (do not mint).
 
@@ -1015,7 +1014,7 @@ This area covers the smart contract creator (name, creator, description, primary
 3. Open the first row with `Edit`.
 
 **Expected**
-- The wizard opens with `json-<run-id>-1 (x1)` and `json-<run-id>-2 (x2)`, subtitles containing `5.0% Royalty to` and `2 Properties`.
+- The wizard opens with `json-<run-id>-1 (x1)` and `json-<run-id>-2 (x2)`, subtitles containing `5% Royalty to` and `2 Properties`.
 - The edit screen shows `Background` detected as a color property (`#00ff00`) and `Level` as a number (`7`).
 
 **Cleanup:** `Save & Close`, then `Clear` → `Clear` (do not mint).
