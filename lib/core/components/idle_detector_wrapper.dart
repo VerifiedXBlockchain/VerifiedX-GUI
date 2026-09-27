@@ -7,6 +7,7 @@ import '../providers/web_session_provider.dart';
 import '../dialogs.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../utils/html_helpers.dart';
+import '../../utils/web_route_paths.dart';
 import '../storage.dart';
 import '../singletons.dart';
 
@@ -89,16 +90,11 @@ class _IdleDetectorWrapperState extends ConsumerState<IdleDetectorWrapper> {
   }
 
   void _savePendingRedirectAndLock() {
-    final currentUrl = HtmlHelpers().getUrl();
-
-    // Only save if we're on a dashboard route (not already on auth screen)
-    if (currentUrl.contains('/#/dashboard') || currentUrl.contains('#/dashboard')) {
-      // Extract just the hash portion of the URL
-      final hashIndex = currentUrl.indexOf('#');
-      if (hashIndex != -1) {
-        final hashPath = currentUrl.substring(hashIndex + 1);
-        singleton<Storage>().setString(Storage.PENDING_REDIRECT_URL, hashPath);
-      }
+    // Only save if we're on a dashboard route (not already on auth screen).
+    // Accepts both `#dashboard/...` (the router's form) and `#/dashboard/...`.
+    final redirectPath = dashboardRedirectPath(HtmlHelpers().getUrl());
+    if (redirectPath != null) {
+      singleton<Storage>().setString(Storage.PENDING_REDIRECT_URL, redirectPath);
     }
 
     // Soft lock: clear in-memory session state and navigate to auth screen
