@@ -7,6 +7,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../adnr/components/create_adnr_dialog.dart';
 import '../../adnr/providers/adnr_pending_provider.dart';
+import '../../adnr/utils/domain_display.dart';
 import '../models/btc_web_account.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -218,7 +219,7 @@ class WebBtcAdnrContent extends BaseComponent {
                           title: AppLocalizations.of(context).btcValidTxTitle,
                           body: AppLocalizations.of(context)
                               .r3eBtcDomainValidBody(
-                                  "$adnr.btc",
+                                  domainWithSuffix(adnr, ".btc"),
                                   ADNR_TRANSFER_COST.toString(),
                                   txFee.toString(),
                                   (ADNR_TRANSFER_COST + txFee).toString()),
@@ -306,7 +307,7 @@ class WebBtcAdnrContent extends BaseComponent {
                             title: AppLocalizations.of(context).btcValidTxTitle,
                             body:
                                 AppLocalizations.of(context).r3eBtcDomainValidBody(
-                                  "$adnr.btc",
+                                  domainWithSuffix(adnr, ".btc"),
                                   ADNR_DELETE_COST.toString(),
                                   txFee.toString(),
                                   (ADNR_DELETE_COST + txFee).toString()),

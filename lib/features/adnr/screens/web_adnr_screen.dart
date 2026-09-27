@@ -22,6 +22,7 @@ import '../providers/adnr_pending_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../raw/raw_service.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../utils/domain_display.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -275,7 +276,7 @@ class _VfxDomain extends BaseComponent {
                               final confirmed = await ConfirmDialog.show(
                                 title: AppLocalizations.of(context).btcValidTxTitle,
                                 body: AppLocalizations.of(context).r3eVfxDomainValidBody(
-                                  "$adnr.vfx",
+                                  domainWithSuffix(adnr, ".vfx"),
                                   ADNR_TRANSFER_COST.toString(),
                                   txFee.toString(),
                                   (ADNR_TRANSFER_COST + txFee).toString(),
@@ -356,7 +357,7 @@ class _VfxDomain extends BaseComponent {
                           final confirmed = await ConfirmDialog.show(
                             title: AppLocalizations.of(context).btcValidTxTitle,
                             body: AppLocalizations.of(context).r3eVfxDomainValidBody(
-                              "$adnr.vfx",
+                              domainWithSuffix(adnr, ".vfx"),
                               ADNR_DELETE_COST.toString(),
                               txFee.toString(),
                               (ADNR_DELETE_COST + txFee).toString(),
