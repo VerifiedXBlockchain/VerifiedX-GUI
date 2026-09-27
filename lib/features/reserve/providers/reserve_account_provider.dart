@@ -362,6 +362,12 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
       return;
     }
 
+    // A second activation would burn another 5 VFX.
+    if (wallet.isNetworkProtected) {
+      Toast.error(l10n.txpVaultAlreadyActivated);
+      return;
+    }
+
     if (wallet.availableBalance < 5) {
       Toast.error(l10n.txpMinBalanceActivate);
       return;

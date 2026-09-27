@@ -7,4 +7,12 @@ void main() {
       expect(Env.isAutomation, isFalse);
     });
   });
+
+  group('Env.explorerTransactionUrl', () {
+    test('joins the explorer base and hash with a single slash', () {
+      final url = Env.explorerTransactionUrl('abc123');
+      expect(url, '${Env.explorerWebsiteBaseUrl}/transaction/abc123');
+      expect(url.replaceFirst('https://', ''), isNot(contains('//')));
+    });
+  });
 }

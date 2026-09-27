@@ -8517,6 +8517,10 @@
     }
   },
   "txpVaultActivationSent": "Se envió la transacción de activación de la cuenta de bóveda.\n\nEspera a que se refleje como \"Activada\".",
+  "txpVaultAlreadyActivated": "Esta cuenta de bóveda ya está activada.",
+  "@txpVaultAlreadyActivated": {
+    "description": "Error toast when Activate is used on a Vault account that is already activated on the network."
+  },
   "txpVfxAmount": "Monto de VFX",
   "txpVfxOffRampSoon": "La función de retiro de VFX estará disponible pronto",
   "txpVfxQuote": "Cotización de VFX",
@@ -9872,6 +9876,10 @@
   "webVaultRestoredToast": "Cuenta de bóveda restaurada",
   "@webVaultRestoredToast": {
     "description": "Toast confirming a Vault account was restored on the web."
+  },
+  "webVaultRestoreCodeInvalid": "Código de restauración no válido",
+  "@webVaultRestoreCodeInvalid": {
+    "description": "Error toast when a pasted Vault restore code cannot be decoded on the web."
   },
   "webWifPrivateKey": "Clave privada WIF",
   "@webWifPrivateKey": {

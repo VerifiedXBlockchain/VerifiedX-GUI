@@ -10003,6 +10003,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get txpVaultActivationSent => 'Vault Account activation transaction sent.\n\nPlease wait for it to reflect as \"Activated\".';
 
   @override
+  String get txpVaultAlreadyActivated => 'This Vault Account is already activated.';
+
+  @override
   String get txpVfxAmount => 'VFX Amount';
 
   @override
@@ -10958,6 +10961,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webVaultRestoredToast => 'Vault Account restored';
+
+  @override
+  String get webVaultRestoreCodeInvalid => 'Invalid restore code';
 
   @override
   String get webWifPrivateKey => 'WIF Private Key';

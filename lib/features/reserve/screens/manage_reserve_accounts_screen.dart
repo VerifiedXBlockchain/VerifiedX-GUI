@@ -108,7 +108,8 @@ class ReserveAccountManageCard extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final showActivateButton = !ref.watch(pendingActivationProvider).contains(ra.address) && ra.balance >= 5;
+    final showActivateButton =
+        !ra.isNetworkProtected && !ref.watch(pendingActivationProvider).contains(ra.address) && ra.balance >= 5;
 
     final provider = ref.read(reserveAccountProvider.notifier);
     final tabsRouter = AutoTabsRouter.of(context);

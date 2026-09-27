@@ -38,6 +38,7 @@ import '../../web/components/web_wallet_type_switcher.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../providers/send_form_provider.dart';
+import '../utils.dart';
 
 class SendForm extends BaseComponent {
   final Wallet? wallet;
@@ -58,7 +59,7 @@ class SendForm extends BaseComponent {
   Future<void> _pasteAddress(BuildContext context, SendFormProvider formProvider) async {
     ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData != null && clipboardData.text != null) {
-      final normalizedText = clipboardData.text!.replaceAll(RegExp('[^a-zA-Z0-9]'), "");
+      final normalizedText = sanitizePastedSendAddress(clipboardData.text!);
       formProvider.addressController.text = normalizedText;
     } else {
       Toast.error(AppLocalizations.of(context).messageClipboardInvalid);

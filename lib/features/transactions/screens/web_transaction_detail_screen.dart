@@ -43,7 +43,7 @@ class WebTransactionDetailScreen extends BaseScreen {
       actions: [
         IconButton(
           onPressed: () {
-            launchUrl(Uri.parse("${Env.baseExplorerUrl}/transaction/$hash"));
+            launchUrl(Uri.parse(Env.explorerTransactionUrl(hash)));
           },
           icon: const Icon(Icons.open_in_new),
           tooltip: l10n.actionViewOnExplorer,

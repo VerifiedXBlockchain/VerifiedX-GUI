@@ -18597,6 +18597,12 @@ abstract class AppLocalizations {
   /// **'Vault Account activation transaction sent.\n\nPlease wait for it to reflect as \"Activated\".'**
   String get txpVaultActivationSent;
 
+  /// Error toast when Activate is used on a Vault account that is already activated on the network.
+  ///
+  /// In en, this message translates to:
+  /// **'This Vault Account is already activated.'**
+  String get txpVaultAlreadyActivated;
+
   /// No description provided for @txpVfxAmount.
   ///
   /// In en, this message translates to:
@@ -20330,6 +20336,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault Account restored'**
   String get webVaultRestoredToast;
+
+  /// Error toast when a pasted Vault restore code cannot be decoded on the web.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid restore code'**
+  String get webVaultRestoreCodeInvalid;
 
   /// Input label for a BTC WIF private key.
   ///

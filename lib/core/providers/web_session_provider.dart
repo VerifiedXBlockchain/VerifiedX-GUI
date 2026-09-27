@@ -17,6 +17,7 @@ import '../../features/web/models/multi_account_instance.dart';
 import '../../features/web/providers/multi_account_provider.dart';
 import '../../features/web/providers/web_selected_account_provider.dart';
 import '../models/web_session_model.dart';
+import '../../features/transactions/providers/web_transaction_detail_provider.dart';
 import '../../features/transactions/providers/web_transaction_list_provider.dart';
 import '../../features/web_shop/providers/web_listed_nfts_provider.dart';
 import '../../utils/html_helpers.dart';
@@ -372,6 +373,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     // only moves when this fires. autoDispose keeps it free when no detail
     // screen is open.
     ref.invalidate(btcWebVbtcTokenDetailProvider);
+    // Same for the transaction detail screen, so a pending status updates.
+    ref.invalidate(webTransactionDetailProvider);
   }
 
   void btcLoop() async {

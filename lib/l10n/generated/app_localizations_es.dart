@@ -10003,6 +10003,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get txpVaultActivationSent => 'Se envió la transacción de activación de la cuenta de bóveda.\n\nEspera a que se refleje como \"Activada\".';
 
   @override
+  String get txpVaultAlreadyActivated => 'Esta cuenta de bóveda ya está activada.';
+
+  @override
   String get txpVfxAmount => 'Monto de VFX';
 
   @override
@@ -10958,6 +10961,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get webVaultRestoredToast => 'Cuenta de bóveda restaurada';
+
+  @override
+  String get webVaultRestoreCodeInvalid => 'Código de restauración no válido';
 
   @override
   String get webWifPrivateKey => 'Clave privada WIF';

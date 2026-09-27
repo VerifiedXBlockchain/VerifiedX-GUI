@@ -362,7 +362,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           _buildHashRow(
             l10n.bw2VfxTransactionLabel,
             _result!.vfxTransactionHash!,
-            explorerUrl: "${Env.baseExplorerUrl}/transaction/${_result!.vfxTransactionHash!}",
+            explorerUrl: Env.explorerTransactionUrl(_result!.vfxTransactionHash!),
           ),
         ],
         if (_result?.btcTransactionHash != null) ...[

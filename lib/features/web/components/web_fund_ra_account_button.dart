@@ -41,6 +41,10 @@ class WebFundRaAccountButton extends BaseComponent {
           cancelText: l10n.actionCancel,
         );
 
+        if (confirmed != true) {
+          return;
+        }
+
         final shouldActivate = await ConfirmDialog.show(
           title: l10n.webAutoActivateTitle,
           body: l10n.r3fAutoActivateBody,
@@ -48,44 +52,42 @@ class WebFundRaAccountButton extends BaseComponent {
           cancelText: l10n.actionNo,
         );
 
-        if (confirmed == true) {
-          ref.read(globalLoadingProvider.notifier).start();
+        ref.read(globalLoadingProvider.notifier).start();
 
-          final generated = await RawTransaction.generate(
-            keypair: ref.read(webSessionProvider).keypair!,
-            amount: 5.0,
-            toAddress: ref.read(webSessionProvider).raKeypair!.address,
-            txType: TxType.rbxTransfer,
-          );
+        final generated = await RawTransaction.generate(
+          keypair: ref.read(webSessionProvider).keypair!,
+          amount: 5.0,
+          toAddress: ref.read(webSessionProvider).raKeypair!.address,
+          txType: TxType.rbxTransfer,
+        );
 
-          final txData = generated.txData;
+        final txData = generated.txData;
 
-          if (txData == null) {
+        if (txData == null) {
+          ref.read(globalLoadingProvider.notifier).complete();
+          Toast.error(generated.refusalMessage);
+          return;
+        }
+
+        final tx = await RawService().sendTransaction(transactionData: txData, execute: true, widgetRef: ref);
+        if (tx != null) {
+          if (tx['Result'] == "Success") {
+            Toast.message(l10n.r3fFundSentToast(
+                ref.read(webSessionProvider).raKeypair!.address));
             ref.read(globalLoadingProvider.notifier).complete();
-            Toast.error(generated.refusalMessage);
+            ref.read(webRaPendingFundingProvider.notifier).addAddress(raKeypair.address);
+
+            if (shouldActivate == true) {
+              final hash = tx["Hash"];
+              ref.read(reserveAccountAutoActivateProvider.notifier).add(hash, raKeypair.address, "");
+            }
+
             return;
           }
-
-          final tx = await RawService().sendTransaction(transactionData: txData, execute: true, widgetRef: ref);
-          if (tx != null) {
-            if (tx['Result'] == "Success") {
-              Toast.message(l10n.r3fFundSentToast(
-                  ref.read(webSessionProvider).raKeypair!.address));
-              ref.read(globalLoadingProvider.notifier).complete();
-              ref.read(webRaPendingFundingProvider.notifier).addAddress(raKeypair.address);
-
-              if (shouldActivate == true) {
-                final hash = tx["Hash"];
-                ref.read(reserveAccountAutoActivateProvider.notifier).add(hash, raKeypair.address, "");
-              }
-
-              return;
-            }
-          }
-
-          Toast.error();
-          ref.read(globalLoadingProvider.notifier).complete();
         }
+
+        Toast.error();
+        ref.read(globalLoadingProvider.notifier).complete();
       },
     );
   }

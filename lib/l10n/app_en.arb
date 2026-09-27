@@ -8549,6 +8549,10 @@
     }
   },
   "txpVaultActivationSent": "Vault Account activation transaction sent.\n\nPlease wait for it to reflect as \"Activated\".",
+  "txpVaultAlreadyActivated": "This Vault Account is already activated.",
+  "@txpVaultAlreadyActivated": {
+    "description": "Error toast when Activate is used on a Vault account that is already activated on the network."
+  },
   "txpVfxAmount": "VFX Amount",
   "txpVfxOffRampSoon": "VFX Off Ramp feature coming soon",
   "txpVfxQuote": "VFX Quote",
@@ -9940,6 +9944,10 @@
   "webVaultRestoredToast": "Vault Account restored",
   "@webVaultRestoredToast": {
     "description": "Toast confirming a Vault account was restored on the web."
+  },
+  "webVaultRestoreCodeInvalid": "Invalid restore code",
+  "@webVaultRestoreCodeInvalid": {
+    "description": "Error toast when a pasted Vault restore code cannot be decoded on the web."
   },
   "webWifPrivateKey": "WIF Private Key",
   "@webWifPrivateKey": {

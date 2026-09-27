@@ -74,6 +74,7 @@ Future<int?> showFeeRatePicker(BuildContext dialogContext, BtcRecommendedFees re
       bool isCustom = false;
       int customFee = 0;
       String customFeeLabel = "";
+      final customFeeFormKey = GlobalKey<FormState>();
 
       return StatefulBuilder(
         builder: (context, setState) {
@@ -111,36 +112,39 @@ Future<int?> showFeeRatePicker(BuildContext dialogContext, BtcRecommendedFees re
                     );
                   }).toList(),
                   if (isCustom) ...[
-                    TextFormField(
-                      autofocus: true,
-                      onChanged: (v) {
-                        final valueInt = int.tryParse(v);
-                        if (valueInt != null) {
+                    Form(
+                      key: customFeeFormKey,
+                      child: TextFormField(
+                        key: const Key('btcFeeRate:custom'),
+                        autofocus: true,
+                        onChanged: (v) {
+                          final valueInt = int.tryParse(v);
                           setState(() {
-                            customFee = valueInt;
-                            customFeeLabel =
-                                "$valueInt SATS /byte | ${(satashiToBtcLabel(valueInt))} BTC /byte";
+                            customFee = valueInt ?? 0;
+                            customFeeLabel = valueInt == null
+                                ? ""
+                                : "$valueInt SATS /byte | ${(satashiToBtcLabel(valueInt))} BTC /byte";
                           });
-                        }
-                      },
-                      validator: (value) {
-                        if (value == null) {
-                          return l10n.tkbFeeRateRequired;
-                        }
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return l10n.tkbFeeRateRequired;
+                          }
 
-                        if ((int.tryParse(value) ?? 0) < 1) {
-                          return l10n.tkbInvalidFeeRate;
-                        }
+                          if ((int.tryParse(value) ?? 0) < 1) {
+                            return l10n.tkbInvalidFeeRate;
+                          }
 
-                        return null;
-                      },
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp("[0-9]"))
-                      ],
-                      decoration:
-                          InputDecoration(hintText: l10n.tkbFeeRateHint),
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: false),
+                          return null;
+                        },
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp("[0-9]"))
+                        ],
+                        decoration:
+                            InputDecoration(hintText: l10n.tkbFeeRateHint),
+                        keyboardType:
+                            const TextInputType.numberWithOptions(decimal: false),
+                      ),
                     ),
                   ],
                   Padding(
@@ -165,6 +169,11 @@ Future<int?> showFeeRatePicker(BuildContext dialogContext, BtcRecommendedFees re
               TextButton(
                 onPressed: () {
                   if (isCustom) {
+                    // Run the field's validator so an empty or 0 sat/vB rate
+                    // keeps the dialog open instead of being broadcast.
+                    if (customFeeFormKey.currentState?.validate() != true) {
+                      return;
+                    }
                     Navigator.of(context).pop(customFee);
                   } else {
                     Navigator.of(context).pop(feeRateForPreset(preset, recommendedFees));

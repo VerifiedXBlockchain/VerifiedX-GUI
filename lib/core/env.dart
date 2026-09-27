@@ -90,6 +90,12 @@ class Env {
     return 'https://spyglass.verifiedx.io';
   }
 
+  /// Spyglass page for a VFX transaction. Built on [explorerWebsiteBaseUrl]
+  /// because [baseExplorerUrl] ends in '/' and doubled the slash.
+  static String explorerTransactionUrl(String hash) {
+    return "$explorerWebsiteBaseUrl/transaction/$hash";
+  }
+
   static bool get launchCli {
     // Only launch CLI on desktop (non-web)
     return !kIsWeb;

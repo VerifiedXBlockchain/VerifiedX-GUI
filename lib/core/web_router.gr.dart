@@ -273,7 +273,7 @@ class WebRouter extends _i39.RootStackRouter {
           orElse: () => WebPrefilledSendScreenRouteArgs(
                 currency: pathParams.getString('currency'),
                 toAddress: pathParams.getString('toAddress'),
-                amount: pathParams.getDouble('amount'),
+                amount: pathParams.getString('amount'),
               ));
       return _i39.AdaptivePage<dynamic>(
         routeData: routeData,
@@ -1517,7 +1517,7 @@ class WebPrefilledSendScreenRoute
     _i40.Key? key,
     required String currency,
     required String toAddress,
-    required double amount,
+    required String amount,
   }) : super(
           WebPrefilledSendScreenRoute.name,
           path: ':currency/:toAddress/:amount',
@@ -1551,7 +1551,7 @@ class WebPrefilledSendScreenRouteArgs {
 
   final String toAddress;
 
-  final double amount;
+  final String amount;
 
   @override
   String toString() {
