@@ -18,6 +18,7 @@ import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../providers/btc_web_vbtc_token_list_provider.dart';
+import '../../../utils/formatting.dart';
 
 class WebBtcTransactionListTile extends BaseComponent {
   final BtcWebTransaction transaction;
@@ -72,9 +73,9 @@ class WebBtcTransactionListTile extends BaseComponent {
             openTxOnExplorer(tx);
           },
           title: Text(
-            "${amount.toString()} ${isVbtc ? 'vBTC' : 'BTC'}",
+            "${formatBtcAmount(amount)} ${isVbtc ? 'vBTC' : 'BTC'}",
           ),
-          subtitle: Text("Date: ${tx.blockTimeLabel} \nFee: ${tx.fee} SATS | ${tx.feeBtc} BTC"),
+          subtitle: Text("Date: ${tx.blockTimeLabel} \nFee: ${tx.fee} SATS | ${formatBtcAmount(tx.feeBtc)} BTC"),
           leading: tx.status.confirmed
               ? Text(
                   "Confirmed",
@@ -149,7 +150,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                         ),
                       ),
                     Text(
-                      "${widget.amount} ${widget.isVbtc ? 'v' : ''}BTC",
+                      "${formatBtcAmount(widget.amount)} ${widget.isVbtc ? 'v' : ''}BTC",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -231,7 +232,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                   color: AppColors.getGray(ColorShade.s100),
                   glowOpacity: 0,
                   child: ListTile(
-                    title: Text("${widget.tx.fee} SATS | ${widget.tx.feeBtc} BTC"),
+                    title: Text("${widget.tx.fee} SATS | ${formatBtcAmount(widget.tx.feeBtc)} BTC"),
                     subtitle: Text(AppLocalizations.of(context).btcFeeLabel),
                   ),
                 ),
@@ -343,7 +344,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                   ),
                                 ],
                               ),
-                              trailing: Text("${input.prevout.value * BTC_SATOSHI_MULTIPLIER} BTC"),
+                              trailing: Text("${formatBtcAmount(input.prevout.value * BTC_SATOSHI_MULTIPLIER)} BTC"),
                             ),
                           ),
                         );
@@ -408,7 +409,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                 ],
                               ),
                               trailing: Text(
-                                "${output.value * BTC_SATOSHI_MULTIPLIER} BTC",
+                                "${formatBtcAmount(output.value * BTC_SATOSHI_MULTIPLIER)} BTC",
                                 style: TextStyle(
                                   // color: isToMe ? Theme.of(context).colorScheme.success : Colors.white,
                                   fontWeight: FontWeight.bold,

@@ -11,6 +11,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../auth/auth_utils.dart';
+import '../../../utils/formatting.dart';
 
 class WebWalletDetails extends BaseComponent {
   const WebWalletDetails({Key? key}) : super(key: key);
@@ -50,12 +51,12 @@ class WebWalletDetails extends BaseComponent {
             return Row(
               children: [
                 Text(
-                  "${btcInfo.btcBalance} BTC",
+                  "${formatBtcAmount(btcInfo.btcBalance)} BTC",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 SizedBox(width: 2),
                 Tooltip(
-                  message: ["Balance: ${btcInfo.btcBalance} BTC", "Sent: ${btcInfo.btcTotalSent} BTC", "Received: ${btcInfo.btcTotalRecieved} BTC"]
+                  message: ["Balance: ${formatBtcAmount(btcInfo.btcBalance)} BTC", "Sent: ${formatBtcAmount(btcInfo.btcTotalSent)} BTC", "Received: ${formatBtcAmount(btcInfo.btcTotalRecieved)} BTC"]
                       .join('\n'),
                   child: Icon(Icons.help, color: Theme.of(context).colorScheme.secondary.withOpacity(0.7), size: 14),
                 ),

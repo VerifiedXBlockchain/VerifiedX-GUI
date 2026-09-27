@@ -62,6 +62,7 @@ import '../../utils/html_helpers.dart';
 import '../../core/storage.dart';
 import '../../core/singletons.dart';
 import '../../utils/web_route_paths.dart';
+import '../../utils/formatting.dart';
 
 GlobalKey<ScaffoldState> webDashboardScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -412,8 +413,8 @@ class _ContentWrapper extends BaseComponent {
                                           value.btcBalanceInfo?.btcBalance));
                                   final btcBalanceString = btcKeypair?.adnr !=
                                           null
-                                      ? "${btcBalance ?? ""} BTC | @${btcKeypair!.adnr!}"
-                                      : "${(btcBalance ?? 0).toString()} BTC";
+                                      ? "${btcBalance != null ? formatBtcAmount(btcBalance) : ""} BTC | @${btcKeypair!.adnr!}"
+                                      : "${formatBtcAmount(btcBalance ?? 0)} BTC";
                                   return Column(
                                     children: [
                                       if (vfxKeypair != null)
@@ -743,7 +744,7 @@ class WebAccountInfoBtc extends BaseComponent {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "${latestBtcTx.amountBtc()} BTC",
+                            "${formatBtcAmount(latestBtcTx.amountBtc())} BTC",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -904,7 +905,7 @@ class WebAccountInfoVbtc extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "${latestVbtcBtcTx.amountBtc()} vBTC",
+                          "${formatBtcAmount(latestVbtcBtcTx.amountBtc())} vBTC",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

@@ -8,6 +8,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/components.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../providers/account_info_visible_provider.dart';
+import '../../../utils/formatting.dart';
 
 class WebMobileAccountInfo extends BaseComponent {
   const WebMobileAccountInfo({
@@ -98,7 +99,7 @@ class WebMobileAccountInfo extends BaseComponent {
                     size: 28,
                   ),
                   Text(
-                    '${(sessionModel.btcBalanceInfo?.btcBalance ?? 0)} BTC',
+                    '${formatBtcAmount(sessionModel.btcBalanceInfo?.btcBalance ?? 0)} BTC',
                     style: TextStyle(
                       fontSize: 20,
                       color: AppColors.getBtc(),

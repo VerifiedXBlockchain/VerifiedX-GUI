@@ -39,6 +39,7 @@ import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../providers/send_form_provider.dart';
 import '../utils.dart';
+import '../../../utils/formatting.dart';
 
 class SendForm extends BaseComponent {
   final Wallet? wallet;
@@ -339,8 +340,8 @@ class SendForm extends BaseComponent {
                                 children: [
                                   AppBadge(
                                     label: kIsWeb
-                                        ? "${ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance)) ?? 0} BTC"
-                                        : "${btcAccount!.balance} BTC",
+                                        ? "${formatBtcAmount(ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance)) ?? 0)} BTC"
+                                        : "${formatBtcAmount(btcAccount!.balance)} BTC",
                                     variant: AppColorVariant.Btc,
                                   ),
                                 ],
