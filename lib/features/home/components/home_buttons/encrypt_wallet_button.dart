@@ -136,6 +136,13 @@ class EncryptWalletButton extends BaseComponent {
                 } else {
                   Toast.message(l10n.r3eWalletEncrypted);
                   ref.read(walletIsEncryptedProvider.notifier).set(true);
+                  // Take the lock state from the node now rather than on the
+                  // next 10 s poll, so the next guarded action prompts (MTI#6).
+                  try {
+                    await ref.read(passwordRequiredProvider.notifier).check();
+                  } catch (e) {
+                    ref.read(passwordRequiredProvider.notifier).markRequired();
+                  }
                 }
               }
             },

@@ -12,6 +12,7 @@ import 'package:rbx_wallet/features/btc_web/models/btc_web_balance_info.dart';
 import 'package:rbx_wallet/features/btc_web/models/btc_web_transaction.dart';
 import 'package:rbx_wallet/features/btc_web/services/btc_web_service_interface.dart';
 import 'package:rbx_wallet/utils/toast.dart';
+import '../../../core/utils/user_error_message.dart';
 
 @JS()
 external btcAddressInfo(String address);
@@ -167,7 +168,7 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
       Toast.error();
       return null;
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }

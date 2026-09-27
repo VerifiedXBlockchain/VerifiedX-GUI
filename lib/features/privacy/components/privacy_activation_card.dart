@@ -14,6 +14,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../../core/dialogs.dart';
 import '../providers/shielded_address_provider.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class PrivacyActivationCard extends BaseComponent {
   const PrivacyActivationCard({super.key});
@@ -96,7 +97,7 @@ class _ActivateButtonState extends ConsumerState<_ActivateButton> {
         Toast.error(globalL10n.prvFailedGenerateShieldedAddress);
       }
     } catch (e) {
-      Toast.error(globalL10n.prvErrorActivatingWallet(e.toString()));
+      Toast.error(globalL10n.prvErrorActivatingWallet(userErrorMessage(e, withLeadIn: false)));
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);

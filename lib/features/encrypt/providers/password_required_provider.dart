@@ -31,6 +31,12 @@ class PasswordRequiredProvider extends StateNotifier<bool> {
     return false;
   }
 
+  /// The node refused a call because the wallet is locked: reflect that
+  /// right away instead of waiting for the next 10 s check.
+  void markRequired() {
+    state = true;
+  }
+
   Future<bool> unlock(String password) async {
     final unlocked = await BridgeService().unlockWallet(password);
     if (unlocked) {

@@ -11,6 +11,7 @@ import '../../nft/services/nft_service.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../models/vbtc_multi_transfer_result.dart';
 import '../models/withdrawal_result.dart';
+import '../../../core/utils/user_error_message.dart';
 
 const _tag = '[vBTC-V2]';
 
@@ -229,7 +230,7 @@ class VbtcV2Service extends BaseService {
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -303,7 +304,7 @@ class VbtcV2Service extends BaseService {
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -347,7 +348,7 @@ class VbtcV2Service extends BaseService {
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -398,7 +399,7 @@ class VbtcV2Service extends BaseService {
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -430,7 +431,7 @@ class VbtcV2Service extends BaseService {
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }
@@ -485,7 +486,7 @@ class VbtcV2Service extends BaseService {
       _log(method, 'EXCEPTION: $e\n$st');
       return WithdrawalResult(
         success: false,
-        message: e.toString(),
+        message: userErrorMessage(e),
       );
     }
   }
@@ -543,7 +544,7 @@ class VbtcV2Service extends BaseService {
         success: false,
         message: timedOut
             ? "Timed out waiting for the signing ceremony to finish. The withdrawal may still be in progress."
-            : e.toString(),
+            : userErrorMessage(e),
         requestHash: withdrawalRequestHash,
         timedOut: timedOut,
       );
@@ -657,7 +658,7 @@ class VbtcV2Service extends BaseService {
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }

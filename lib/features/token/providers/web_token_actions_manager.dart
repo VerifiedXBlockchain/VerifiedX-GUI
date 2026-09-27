@@ -31,6 +31,7 @@ import '../../raw/raw_service.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../../transactions/providers/web_transaction_list_provider.dart';
 import '../../web/utils/pending_debits.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../models/new_token_topic.dart';
 
 class WebTokenActionsManager {
@@ -400,7 +401,7 @@ class WebTokenActionsManager {
       );
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error(globalL10n.bw2OwnershipTransferFailed(e.toString()));
+      Toast.error(globalL10n.bw2OwnershipTransferFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     }
   }
@@ -437,8 +438,9 @@ class WebTokenActionsManager {
         publicKey: keypair.public,
       );
     } catch (e) {
-      Toast.error(globalL10n.bw2TransactionFailed(e.toString()));
-      return null;
+      // Handed back rather than toasted, so each caller shows Spyglass's
+      // reason once (MTI#2.2).
+      return {'success': false, 'message': userErrorMessage(e)};
     }
   }
 
@@ -513,7 +515,7 @@ class WebTokenActionsManager {
       return false;
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error(globalL10n.bw2TransferFailedError(e.toString()));
+      Toast.error(globalL10n.bw2TransferFailedError(userErrorMessage(e, withLeadIn: false)));
       return false;
     }
   }
@@ -584,7 +586,7 @@ class WebTokenActionsManager {
       return {'success': false, 'message': result?['message'] ?? globalL10n.bw2WithdrawalRequestFailed};
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      return {'success': false, 'message': 'Withdrawal request failed: $e'};
+      return {'success': false, 'message': globalL10n.bw2WithdrawalRequestFailedError(userErrorMessage(e, withLeadIn: false))};
     }
   }
 
@@ -1123,9 +1125,13 @@ class WebTokenActionsManager {
         );
         return true;
       }
+      // A null result was already toasted (no keypair / signing failed).
+      if (result != null) {
+        Toast.error(globalL10n.bw2CancellationFailedError(result['message'] ?? globalL10n.errRequestFailed));
+      }
       return false;
     } catch (e) {
-      Toast.error(globalL10n.bw2CancellationFailedError(e.toString()));
+      Toast.error(globalL10n.bw2CancellationFailedError(userErrorMessage(e, withLeadIn: false)));
       return false;
     }
   }

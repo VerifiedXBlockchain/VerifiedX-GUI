@@ -10,6 +10,7 @@ import '../storage.dart';
 
 import '../../features/inspector/network_inspector.dart';
 import '../env.dart';
+import 'locked_wallet_gate.dart';
 
 class BaseService {
   /// Set to true during snapshot import to suppress DIO error noise in logs.
@@ -69,6 +70,35 @@ class BaseService {
     );
   }
 
+  /// Test hook: when set, every request goes through this adapter instead of
+  /// the network.
+  @visibleForTesting
+  static HttpClientAdapter? httpClientAdapterOverride;
+
+  Dio _dio(BaseOptions options) {
+    final dio = Dio(options);
+    final adapterOverride = httpClientAdapterOverride;
+    if (adapterOverride != null) {
+      dio.httpClientAdapter = adapterOverride;
+    } else if (!kIsWeb) {
+      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+        client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+        return client;
+      };
+    }
+    return dio;
+  }
+
+  /// Sends one request. For native calls to the local node, a locked-wallet
+  /// 401 prompts for the password and retries once (see [LockedWalletGate]);
+  /// web and other hosts (Spyglass, mempool.space, snapshots) are untouched.
+  Future<Response<dynamic>> _send(Future<Response<dynamic>> Function() request, bool unlockIfLocked) {
+    if (kIsWeb || hostOverride != null) {
+      return request();
+    }
+    return LockedWalletGate.run(request, enabled: unlockIfLocked);
+  }
+
   String _cleanPath(String path) {
     if (!path.endsWith("/")) {
       return "$path/";
@@ -85,25 +115,22 @@ class BaseService {
     int timeout = 30000,
     bool inspect = false,
     bool preventError = false,
+    bool unlockIfLocked = true,
   }) async {
     try {
-      final dio = Dio(_options(auth: auth, timeout: timeout));
-
-      if (!kIsWeb) {
-        (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-          return client;
-        };
-      }
+      final dio = _dio(_options(auth: auth, timeout: timeout));
 
       if (inspect) {
         NetworkInspector.attach(dio);
       }
 
       final p = cleanPath ? _cleanPath(path) : path;
-      var response = await dio.get(
-        p,
-        queryParameters: params,
+      var response = await _send(
+        () => dio.get(
+          p,
+          queryParameters: params,
+        ),
+        unlockIfLocked,
       );
 
       if (response.data != null) {
@@ -132,22 +159,20 @@ class BaseService {
     int timeout = 30000,
     bool inspect = false,
     bool Function(int?)? validateStatus,
+    bool unlockIfLocked = true,
   }) async {
     try {
-      final dio = Dio(_options(auth: auth, timeout: timeout, validateStatus: validateStatus));
-      if (!kIsWeb) {
-        (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-          return client;
-        };
-      }
+      final dio = _dio(_options(auth: auth, timeout: timeout, validateStatus: validateStatus));
       if (inspect) {
         NetworkInspector.attach(dio);
       }
       final url = cleanPath ? _cleanPath(path) : path;
-      var response = await dio.get(
-        url,
-        queryParameters: params,
+      var response = await _send(
+        () => dio.get(
+          url,
+          queryParameters: params,
+        ),
+        unlockIfLocked,
       );
 
       if (responseIsJson) {
@@ -179,21 +204,19 @@ class BaseService {
     bool inspect = false,
     bool cleanPath = true,
     bool Function(int?)? validateStatus,
+    bool unlockIfLocked = true,
   }) async {
     try {
-      final dio = Dio(_options(auth: auth, json: true, timeout: timeout, validateStatus: validateStatus));
-      if (!kIsWeb) {
-        (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-          return client;
-        };
-      }
+      final dio = _dio(_options(auth: auth, json: true, timeout: timeout, validateStatus: validateStatus));
       if (inspect) {
         NetworkInspector.attach(dio);
       }
-      var response = await dio.post(
-        cleanPath ? _cleanPath(path) : path,
-        data: params,
+      var response = await _send(
+        () => dio.post(
+          cleanPath ? _cleanPath(path) : path,
+          data: params,
+        ),
+        unlockIfLocked,
       );
 
       final data = responseIsJson ? response.data : jsonDecode(response.toString());
@@ -225,21 +248,19 @@ class BaseService {
     int timeout = 30000,
     bool inspect = false,
     bool cleanPath = true,
+    bool unlockIfLocked = true,
   }) async {
     try {
-      final dio = Dio(_options(auth: auth, json: true, timeout: timeout));
-      if (!kIsWeb) {
-        (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-          return client;
-        };
-      }
+      final dio = _dio(_options(auth: auth, json: true, timeout: timeout));
       if (inspect) {
         NetworkInspector.attach(dio);
       }
-      var response = await dio.patch(
-        cleanPath ? _cleanPath(path) : path,
-        data: params,
+      var response = await _send(
+        () => dio.patch(
+          cleanPath ? _cleanPath(path) : path,
+          data: params,
+        ),
+        unlockIfLocked,
       );
 
       final data = responseIsJson ? response.data : jsonDecode(response.toString());
@@ -257,20 +278,18 @@ class BaseService {
     int timeout = 30000,
     bool inspect = false,
     bool cleanPath = true,
+    bool unlockIfLocked = true,
   }) async {
     try {
-      final dio = Dio(_options(auth: auth, json: true, timeout: timeout));
-      if (!kIsWeb) {
-        (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-          client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-          return client;
-        };
-      }
+      final dio = _dio(_options(auth: auth, json: true, timeout: timeout));
       if (inspect) {
         NetworkInspector.attach(dio);
       }
-      var response = await dio.delete(
-        cleanPath ? _cleanPath(path) : path,
+      var response = await _send(
+        () => dio.delete(
+          cleanPath ? _cleanPath(path) : path,
+        ),
+        unlockIfLocked,
       );
 
       final data = responseIsJson ? response.data : jsonDecode(response.toString());
@@ -336,13 +355,8 @@ class BaseService {
     required FormData data,
     int timeout = 30000,
   }) async {
-    final dio = Dio(_options(json: false, auth: false, timeout: timeout));
-    if (!kIsWeb) {
-      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-        client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-        return client;
-      };
-    }
+    final dio = _dio(_options(json: false, auth: false, timeout: timeout));
+    // A FormData body can only be sent once, so this is never retried.
     var response = await dio.post(
       _cleanPath(path),
       data: data,

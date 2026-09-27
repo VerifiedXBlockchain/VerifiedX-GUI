@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../../../core/services/base_service.dart';
 import '../models/adnr_response.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class AdnrService extends BaseService {
   AdnrService() : super(apiBasePathOverride: "/txapi/TXV1");
@@ -18,7 +19,7 @@ class AdnrService extends BaseService {
         hash: data['Hash'],
       );
     } catch (e) {
-      return AdnrResponse(success: false, message: "An error occurred: ${e.toString()}");
+      return AdnrResponse(success: false, message: userErrorMessage(e));
     }
   }
 
@@ -32,7 +33,7 @@ class AdnrService extends BaseService {
         hash: data['Hash'],
       );
     } catch (e) {
-      return AdnrResponse(success: false, message: "An error occurred: ${e.toString()}");
+      return AdnrResponse(success: false, message: userErrorMessage(e));
     }
   }
 
@@ -46,7 +47,7 @@ class AdnrService extends BaseService {
         hash: data['Hash'],
       );
     } catch (e) {
-      return AdnrResponse(success: false, message: "An error occurred: ${e.toString()}");
+      return AdnrResponse(success: false, message: userErrorMessage(e));
     }
   }
 }

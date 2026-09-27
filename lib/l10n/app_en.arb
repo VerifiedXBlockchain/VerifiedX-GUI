@@ -10050,5 +10050,27 @@
         "example": "exe"
       }
     }
+  },
+  "errWalletLocked": "Your wallet is locked. Unlock it with your password and try again.",
+  "@errWalletLocked": {
+    "description": "Shown when the node refused an action because the encrypted wallet is locked and the user cancelled (or failed) the password prompt."
+  },
+  "errNodeUnreachable": "Could not reach the server. Check your connection and try again.",
+  "@errNodeUnreachable": {
+    "description": "Shown when a request to the node or Spyglass failed without a response (connection error or timeout)."
+  },
+  "errRequestFailed": "The request failed. Please try again.",
+  "@errRequestFailed": {
+    "description": "Generic error when a node or Spyglass request failed and gave no readable reason."
+  },
+  "errNodeReason": "{reason}",
+  "@errNodeReason": {
+    "description": "Wraps an untranslated error message returned by the node or Spyglass. English shows the message as is; other languages add a lead-in saying the text comes from the node.",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "A withdrawal is already in progress for this contract."
+      }
+    }
   }
 }

@@ -19,6 +19,7 @@ import '../../features/web/models/web_block.dart';
 import '../env.dart';
 import 'base_service.dart';
 import 'package:dio/dio.dart';
+import '../utils/user_error_message.dart';
 
 class ExplorerService extends BaseService {
   /// [hostOverride] is for tests; the app always talks to Spyglass.
@@ -469,7 +470,7 @@ class ExplorerService extends BaseService {
       Toast.error(data['message']);
       throw Exception(data['message']);
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       throw Exception(e);
     }
   }
@@ -626,7 +627,7 @@ class ExplorerService extends BaseService {
       Toast.error();
       return null;
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -831,7 +832,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error preparing V2 transfer";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -852,7 +855,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error sending V2 transfer";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -879,7 +884,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error preparing V2 withdrawal request";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -900,7 +907,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error sending V2 withdrawal request";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -1079,7 +1088,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error preparing V2 withdrawal cancellation";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -1100,7 +1111,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error sending V2 withdrawal cancellation";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 }

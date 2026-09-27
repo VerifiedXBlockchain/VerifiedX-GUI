@@ -15,6 +15,7 @@ import '../models/btc_send_tx_result.dart';
 import '../models/btc_transaction.dart';
 import '../models/btc_utxo.dart';
 import '../utils.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class BtcService extends BaseService {
   BtcService() : super(apiBasePathOverride: "/btcapi/BTCV2");
@@ -206,7 +207,7 @@ class BtcService extends BaseService {
       print(e);
       return BtcSendTxResult(
         success: false,
-        message: e.toString(),
+        message: userErrorMessage(e),
       );
     }
   }
@@ -385,7 +386,7 @@ class BtcService extends BaseService {
     } catch (e, st) {
       print(e);
       print(st);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -433,7 +434,7 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }
@@ -452,7 +453,7 @@ class BtcService extends BaseService {
       Toast.error(result['Message']);
       return false;
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       print(e);
       return false;
     }
@@ -481,7 +482,7 @@ class BtcService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return false;
     }
@@ -516,7 +517,7 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }
@@ -558,7 +559,7 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }
@@ -580,7 +581,7 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }

@@ -523,7 +523,12 @@ class BridgeService extends BaseService {
 
     final Map<String, dynamic> data;
     try {
-      data = await getJson('/GetLatestRelease/${execute ? 'true' : 'false'}/$filename', cleanPath: false);
+      // The background check (execute false) must not pop a password prompt.
+      data = await getJson(
+        '/GetLatestRelease/${execute ? 'true' : 'false'}/$filename',
+        cleanPath: false,
+        unlockIfLocked: execute,
+      );
     } catch (e) {
       // The node refuses this route (401) while an encrypted wallet is locked.
       print("CLI update check failed: $e");

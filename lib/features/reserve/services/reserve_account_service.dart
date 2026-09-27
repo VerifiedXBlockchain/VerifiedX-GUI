@@ -7,6 +7,7 @@ import '../../../utils/toast.dart';
 
 import '../../../core/services/base_service.dart';
 import '../../../l10n/l10n_helper.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class ReserveAccountService extends BaseService {
   ReserveAccountService() : super(apiBasePathOverride: "/rsapi/RSV1");
@@ -217,7 +218,7 @@ class ReserveAccountService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }

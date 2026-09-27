@@ -20366,6 +20366,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This file extension (.{extension}) is not permitted.'**
   String assetExtensionNotPermittedBody(String extension);
+
+  /// Shown when the node refused an action because the encrypted wallet is locked and the user cancelled (or failed) the password prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet is locked. Unlock it with your password and try again.'**
+  String get errWalletLocked;
+
+  /// Shown when a request to the node or Spyglass failed without a response (connection error or timeout).
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Check your connection and try again.'**
+  String get errNodeUnreachable;
+
+  /// Generic error when a node or Spyglass request failed and gave no readable reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The request failed. Please try again.'**
+  String get errRequestFailed;
+
+  /// Wraps an untranslated error message returned by the node or Spyglass. English shows the message as is; other languages add a lead-in saying the text comes from the node.
+  ///
+  /// In en, this message translates to:
+  /// **'{reason}'**
+  String errNodeReason(String reason);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

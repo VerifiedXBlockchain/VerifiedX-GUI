@@ -10994,4 +10994,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String assetExtensionNotPermittedBody(String extension) {
     return 'This file extension (.$extension) is not permitted.';
   }
+
+  @override
+  String get errWalletLocked => 'Your wallet is locked. Unlock it with your password and try again.';
+
+  @override
+  String get errNodeUnreachable => 'Could not reach the server. Check your connection and try again.';
+
+  @override
+  String get errRequestFailed => 'The request failed. Please try again.';
+
+  @override
+  String errNodeReason(String reason) {
+    return '$reason';
+  }
 }

@@ -7,9 +7,14 @@ import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
 import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
+import '../../../core/services/locked_wallet_gate.dart';
+import '../../../core/utils/user_error_message.dart';
 
 /// Heuristic: does this error message suggest a wrong password?
 bool _isAuthError(Object e) {
+  // The transparent wallet being locked says nothing about the shielded
+  // password.
+  if (e is WalletLockedException) return false;
   final msg = e.toString().toLowerCase();
   return msg.contains('password') || msg.contains('unauthorized') || msg.contains('authentication');
 }
@@ -51,7 +56,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       _refreshTxList();
       return true;
     } catch (e) {
-      Toast.error(globalL10n.prvShieldFailed(e.toString()));
+      Toast.error(globalL10n.prvShieldFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;
@@ -83,7 +88,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error(globalL10n.prvUnshieldFailed(e.toString()));
+      Toast.error(globalL10n.prvUnshieldFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;
@@ -115,7 +120,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error(globalL10n.prvTransferFailed(e.toString()));
+      Toast.error(globalL10n.prvTransferFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;
@@ -143,7 +148,7 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error(globalL10n.prvConsolidationFailed(e.toString()));
+      Toast.error(globalL10n.prvConsolidationFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;

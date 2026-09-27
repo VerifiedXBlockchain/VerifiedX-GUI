@@ -9976,5 +9976,27 @@
         "example": "exe"
       }
     }
+  },
+  "errWalletLocked": "Tu billetera está bloqueada. Desbloquéala con tu contraseña e inténtalo de nuevo.",
+  "@errWalletLocked": {
+    "description": "Shown when the node refused an action because the encrypted wallet is locked and the user cancelled (or failed) the password prompt."
+  },
+  "errNodeUnreachable": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+  "@errNodeUnreachable": {
+    "description": "Shown when a request to the node or Spyglass failed without a response (connection error or timeout)."
+  },
+  "errRequestFailed": "La solicitud falló. Inténtalo de nuevo.",
+  "@errRequestFailed": {
+    "description": "Generic error when a node or Spyglass request failed and gave no readable reason."
+  },
+  "errNodeReason": "Mensaje del nodo: {reason}",
+  "@errNodeReason": {
+    "description": "Wraps an untranslated error message returned by the node or Spyglass. English shows the message as is; other languages add a lead-in saying the text comes from the node.",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "A withdrawal is already in progress for this contract."
+      }
+    }
   }
 }

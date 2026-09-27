@@ -33,7 +33,9 @@ import 'core/storage.dart';
 import 'core/theme/app_theme.dart';
 import 'core/web_route_information_parser.dart';
 import 'core/web_router.gr.dart';
+import 'core/services/locked_wallet_gate.dart';
 import 'features/encrypt/components/unlock_wallet.dart';
+import 'features/encrypt/utils.dart';
 import 'features/encrypt/providers/password_required_provider.dart';
 import 'features/encrypt/providers/startup_password_required_provider.dart';
 import 'features/encrypt/providers/wallet_is_encrypted_provider.dart';
@@ -85,6 +87,10 @@ class App extends ConsumerWidget {
     ref.read(sessionProvider.notifier);
     ref.read(passwordRequiredProvider.notifier);
     ref.read(walletIsEncryptedProvider.notifier);
+
+    // A node call refused because the wallet is locked prompts for the
+    // password and is retried once (MTI#8).
+    LockedWalletGate.unlocker = () => unlockForLockedRequest(ref);
 
     singleton<Storage>().setStringList(Storage.BURNED_NFT_IDS, []);
     singleton<Storage>().setStringList(Storage.TRANSFERRED_NFT_IDS, []);
