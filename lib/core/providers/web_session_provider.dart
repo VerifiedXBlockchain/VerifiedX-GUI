@@ -252,7 +252,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     );
 
     // Zero until the lookup succeeds; the refresh loop fills in the real
-    // balances via syncBalances once Spyglass answers.
+    // balances via syncWithSession once Spyglass answers.
     final webAddress = await _fetchWebAddress(keypair.address);
 
     ref.read(webSelectedAccountProvider.notifier).setVfx(
@@ -385,7 +385,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       balanceTotal: webAddress.balanceTotal,
       adnr: webAddress.adnr,
     );
-    ref.read(webSelectedAccountProvider.notifier).syncBalances(state);
+    ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
   }
 
   Future<void> lookupBtcAdnr() async {
@@ -408,6 +408,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         btcKeypair: state.btcKeypair!.copyWith(adnr: null),
       );
     }
+    ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
   }
 
   Future<void> getRaAddress() async {
@@ -437,7 +438,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       raDeactivated: webAddress.deactivated,
       raStatusUnavailable: false,
     );
-    ref.read(webSelectedAccountProvider.notifier).syncBalances(state);
+    ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
   }
 
   /// [ExplorerService.getWebAddress] already logs the failure; null tells the
@@ -520,7 +521,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       state = state.copyWith(
         btcBalanceInfo: btcBalanceInfo,
       );
-      ref.read(webSelectedAccountProvider.notifier).syncBalances(state);
+      ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
     }
   }
 

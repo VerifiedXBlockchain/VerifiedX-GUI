@@ -29,10 +29,12 @@ class WebSelectedAccount {
     this.domain,
   });
 
-  WebSelectedAccount copyWithBalances({
+  /// Same account (address, keys, type) with refreshed chain state.
+  WebSelectedAccount copyWithChainState({
     required double balance,
     required double lockedBalance,
     required double totalBalance,
+    required String? domain,
   }) {
     return WebSelectedAccount(
       address: address,
@@ -61,52 +63,71 @@ class WebSelectedAccount {
   }
 }
 
-/// [account] with the balances [session] now holds for its address, or null
-/// when the session has no newer balances for it (not loaded yet, unchanged,
-/// or the account is no longer one of the session's).
-WebSelectedAccount? selectedAccountWithSessionBalances(WebSelectedAccount account, WebSessionModel session) {
-  double? balance;
-  double? lockedBalance;
-  double? totalBalance;
+/// [account] with the balances and domain [session] now holds for its
+/// address, or null when the session has nothing newer for it (not loaded
+/// yet, unchanged, or the account is no longer one of the session's). The
+/// address, keys and type are never touched.
+///
+/// The domain matters for the Receive screen, which reads it from here: a
+/// domain that confirms while the account is selected must show up without
+/// reselecting the account.
+WebSelectedAccount? selectedAccountSyncedWithSession(WebSelectedAccount account, WebSessionModel session) {
+  var balance = account.balance;
+  var lockedBalance = account.lockedBalance;
+  var totalBalance = account.totalBalance;
+  var domain = account.domain;
 
   if (account.type == WebCurrencyType.btc) {
-    final btcBalance = session.btcBalanceInfo?.btcBalance;
-    if (session.btcKeypair?.address == account.address && btcBalance != null) {
-      balance = btcBalance;
-      lockedBalance = 0;
-      totalBalance = btcBalance;
+    final btcKeypair = session.btcKeypair;
+    if (btcKeypair?.address == account.address) {
+      domain = btcKeypair!.adnr;
+      final btcBalance = session.btcBalanceInfo?.btcBalance;
+      if (btcBalance != null) {
+        balance = btcBalance;
+        lockedBalance = 0;
+        totalBalance = btcBalance;
+      }
     }
   } else if (session.keypair?.address == account.address && session.balance != null) {
-    balance = session.balance;
+    // session.adnr arrives in the same lookup as session.balance.
+    balance = session.balance!;
     lockedBalance = session.balanceLocked ?? 0;
     totalBalance = session.balanceTotal ?? 0;
+    domain = session.adnr;
   } else if (session.raKeypair?.address == account.address && session.raBalance != null) {
-    balance = session.raBalance;
+    // A Vault cannot hold a domain; its domain stays as it was set.
+    balance = session.raBalance!;
     lockedBalance = session.raBalanceLocked ?? 0;
     totalBalance = session.raBalanceTotal ?? 0;
   }
 
-  if (balance == null || lockedBalance == null || totalBalance == null) {
+  if (balance == account.balance &&
+      lockedBalance == account.lockedBalance &&
+      totalBalance == account.totalBalance &&
+      domain == account.domain) {
     return null;
   }
-  if (balance == account.balance && lockedBalance == account.lockedBalance && totalBalance == account.totalBalance) {
-    return null;
-  }
-  return account.copyWithBalances(balance: balance, lockedBalance: lockedBalance, totalBalance: totalBalance);
+  return account.copyWithChainState(
+    balance: balance,
+    lockedBalance: lockedBalance,
+    totalBalance: totalBalance,
+    domain: domain,
+  );
 }
 
 class WebSelectedAccountProvider extends StateNotifier<WebSelectedAccount?> {
   WebSelectedAccountProvider() : super(null);
 
-  /// Keeps the selected account's balances in step with the session's
-  /// periodic refresh. The send form validates against them, so a stale
-  /// value lets an amount over the current balance through.
-  void syncBalances(WebSessionModel session) {
+  /// Keeps the selected account's balances and domain in step with the
+  /// session's periodic refresh. The send form validates against the
+  /// balances, so a stale value lets an amount over the current balance
+  /// through; Receive shows the domain.
+  void syncWithSession(WebSessionModel session) {
     final account = state;
     if (account == null) {
       return;
     }
-    final updated = selectedAccountWithSessionBalances(account, session);
+    final updated = selectedAccountSyncedWithSession(account, session);
     if (updated != null) {
       state = updated;
     }
