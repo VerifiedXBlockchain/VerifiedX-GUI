@@ -376,6 +376,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       balanceTotal: webAddress.balanceTotal,
       adnr: webAddress.adnr,
     );
+    ref.read(webSelectedAccountProvider.notifier).syncBalances(state);
   }
 
   Future<void> lookupBtcAdnr() async {
@@ -414,6 +415,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       raActivated: webAddress.activated,
       raDeactivated: webAddress.deactivated,
     );
+    ref.read(webSelectedAccountProvider.notifier).syncBalances(state);
   }
 
   Future<void> getFungibleTokens() async {
@@ -486,6 +488,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       state = state.copyWith(
         btcBalanceInfo: btcBalanceInfo,
       );
+      ref.read(webSelectedAccountProvider.notifier).syncBalances(state);
     }
   }
 
