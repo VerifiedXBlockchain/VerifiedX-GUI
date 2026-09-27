@@ -47,7 +47,11 @@ class TokenListProvider extends StateNotifier<TokenListModel> {
 
   Future<void> load(int page) async {
     if (kIsWeb) {
-      final address = ref.read(webSessionProvider).currentWallet?.address;
+      // NFTs live on the VFX or Vault account; with the BTC wallet selected on
+      // the dashboard, list the VFX account's NFTs rather than looking up the
+      // BTC address.
+      final session = ref.read(webSessionProvider);
+      final address = session.usingBtc ? session.vfxWallet?.address : session.currentWallet?.address;
 
       if (address == null) {
         return;
