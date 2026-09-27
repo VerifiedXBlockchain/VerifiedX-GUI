@@ -420,7 +420,9 @@ class CreateBtcAdnrModal extends BaseComponent {
                 onPressed: () async {
                   final success = await formProvider.submit();
 
-                  if (success == false) {
+                  // null: the form did not validate; false: submit already
+                  // showed why the domain was not created.
+                  if (success != true) {
                     return;
                   }
 
