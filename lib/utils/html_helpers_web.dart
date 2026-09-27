@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_web_libraries_in_flutter
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html' as html;
 
@@ -80,5 +81,27 @@ class HtmlHelpersImplementation extends HtmlHelpersInterface {
       clientY: (rect.top + midY).round(),
     ));
     return true;
+  }
+
+  @override
+  Future<bool> loadScript(String src) async {
+    // Deferred <script> tags run before DOMContentLoaded. Waiting for it keeps
+    // a script that builds on one of them (btc-*.js needs btc.js's window.btc)
+    // from running first when main.dart.js was injected during parsing.
+    if (html.document.readyState == 'loading') {
+      await html.window.onContentLoaded.first;
+    }
+    final loaded = Completer<bool>();
+    final script = html.ScriptElement()
+      ..type = 'application/javascript'
+      ..src = src;
+    script.onLoad.first.then((_) {
+      if (!loaded.isCompleted) loaded.complete(true);
+    });
+    script.onError.first.then((_) {
+      if (!loaded.isCompleted) loaded.complete(false);
+    });
+    html.document.body!.append(script);
+    return loaded.future;
   }
 }

@@ -15,6 +15,7 @@ import 'core/automation/web_semantics.dart';
 import 'core/env.dart';
 import 'core/singletons.dart';
 import 'features/bridge/services/bridge_service.dart';
+import 'features/btc_web/utils/btc_network_script.dart';
 
 const DEFAULT_WIDTH = 1200.0;
 const DEFAULT_HEIGHT = 780.0;
@@ -48,6 +49,7 @@ void main(List<String> args) async {
   if (kIsWeb) {
     await Hive.initFlutter();
     rbxBox = await Hive.openBox('VFX');
+    await loadBtcNetworkScript();
   }
   await initSingletons();
 

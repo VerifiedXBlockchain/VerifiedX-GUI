@@ -35,5 +35,10 @@ class HtmlHelpersImplementation extends HtmlHelpersInterface {
   bool enableSemantics() {
     return false;
   }
+
+  @override
+  Future<bool> loadScript(String src) async {
+    return false;
+  }
 }
 

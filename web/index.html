@@ -74,8 +74,8 @@
   <script src="assets/assets/js/keygen-v3.js?v=5.0.0" defer=""></script>
   <script src="assets/assets/js/btc.js?v=5.0.9" defer=""></script>
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-  <script src="assets/assets/js/btc-testnet.js?v=5.0.5" defer=""></script>
-  <!-- <script src="assets/assets/js/btc-mainnet.js?v=5.0.5" defer=""></script> -->
+  <!-- btc-testnet.js / btc-mainnet.js is loaded from Dart at startup to match
+       the build's network (lib/features/btc_web/utils/btc_network_script.dart). -->
 
   <!-- Automation builds only (?automation in the URL): keep the Flutter engine
        out of shadow DOM so page readers can traverse its semantics tree. The
