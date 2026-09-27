@@ -8606,6 +8606,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String svcMintingStopped(String minted, String total) {
+    return 'Minting stopped after an error. $minted of $total minted.';
+  }
+
+  @override
   String svcMinTxAmountBtc(String amount) {
     return 'The minimum transaction amount is $amount BTC';
   }

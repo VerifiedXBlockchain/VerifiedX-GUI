@@ -7240,6 +7240,18 @@
       }
     }
   },
+  "svcMintingStopped": "Minting stopped after an error. {minted} of {total} minted.",
+  "@svcMintingStopped": {
+    "description": "Collection wizard progress dialog message when a mint fails and the run stops",
+    "placeholders": {
+      "minted": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
   "svcMinTxAmountBtc": "The minimum transaction amount is {amount} BTC",
   "@svcMinTxAmountBtc": {
     "placeholders": {

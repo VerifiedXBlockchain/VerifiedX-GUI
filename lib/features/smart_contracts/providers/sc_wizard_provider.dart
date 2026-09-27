@@ -736,6 +736,10 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     state = [];
   }
 
+  void _failMinting(int minted, int total) {
+    ref.read(scWizardMintingProgress.notifier).fail(globalL10n.svcMintingStopped('$minted', '$total'));
+  }
+
   Future<void> mint(BuildContext context) async {
     if (!kDebugMode && !kIsWeb) {
       if (!guardWalletIsSynced(ref)) {
@@ -743,7 +747,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       }
     }
 
-    ref.read(scWizardMintingProgress.notifier).setPercent(0);
+    ref.read(scWizardMintingProgress.notifier).start();
 
     showDialog(
       context: context,
@@ -753,7 +757,9 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
         );
       },
     ).then((value) {
-      if (kIsWeb) {
+      // After a failed run, stay on the wizard so the entries can be fixed
+      // or minted again.
+      if (kIsWeb && !ref.read(scWizardMintingProgress).failed) {
         AutoRouter.of(context).pop();
       }
     });
@@ -768,6 +774,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
 
       if (owner == null) {
         Toast.error(globalL10n.svcNoAccountSelectedPeriod);
+        _failMinting(totalProgress, totalItems);
         return;
       }
 
@@ -797,6 +804,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (!success) {
             Toast.error();
             print("Mint error");
+            _failMinting(totalProgress, totalItems);
             return;
           }
         } else {
@@ -805,12 +813,14 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (csc == null) {
             Toast.error();
             print("CSC was null");
+            _failMinting(totalProgress, totalItems);
             return;
           }
 
           if (!csc.success) {
             Toast.error();
             print("CSC not successful");
+            _failMinting(totalProgress, totalItems);
             return;
           }
 
@@ -818,6 +828,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (details == null) {
             Toast.error();
             print("Details null");
+            _failMinting(totalProgress, totalItems);
             return;
           }
           final id = details.smartContract.id;
@@ -826,6 +837,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (!success) {
             Toast.error();
             print("Mint error");
+            _failMinting(totalProgress, totalItems);
             return;
           }
 

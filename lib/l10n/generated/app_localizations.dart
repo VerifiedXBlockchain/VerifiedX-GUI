@@ -16119,6 +16119,12 @@ abstract class AppLocalizations {
   /// **'Minting {current}/{total}...'**
   String svcMintingProgress(String current, String total);
 
+  /// Collection wizard progress dialog message when a mint fails and the run stops
+  ///
+  /// In en, this message translates to:
+  /// **'Minting stopped after an error. {minted} of {total} minted.'**
+  String svcMintingStopped(String minted, String total);
+
   /// No description provided for @svcMinTxAmountBtc.
   ///
   /// In en, this message translates to:
