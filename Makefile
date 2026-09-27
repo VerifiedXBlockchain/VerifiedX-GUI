@@ -31,6 +31,18 @@ build_core:
 	cd ../Core-CLI && git pull && cd /Users/tylersavery/Projects/rbx/rbx_wallet/
 	dotnet publish -c Release -r osx-x64 ../Core-CLI/VerifiedXCore/VerifiedXCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 
+# One command per network: builds the app and the Core CLI, assembles the
+# bundle, signs and notarizes. Options pass through ARGS, for example
+# make release_macos_testnet ARGS="--skip-notarize".
+release_macos_mainnet:
+	./scripts/package_macos.sh mainnet $(ARGS)
+
+release_macos_testnet:
+	./scripts/package_macos.sh testnet $(ARGS)
+
+release_macos_devnet:
+	./scripts/package_macos.sh devnet $(ARGS)
+
 # macOS packaging signs last: the CLI and wordlists go into the bundle first,
 # then sign_macos_app.sh seals it and notarize_macos.sh clears the disk image
 # with Apple. Both read MACOS_SIGN_IDENTITY (and MACOS_NOTARY_PROFILE); see
