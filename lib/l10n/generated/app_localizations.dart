@@ -8181,6 +8181,12 @@ abstract class AppLocalizations {
   /// **'Block height must be greater than {currentBh}.'**
   String r3aBlockHeightMustBeGreaterThan(String currentBh);
 
+  /// Validation error on an evolve stage block height when the current chain height has not been loaded
+  ///
+  /// In en, this message translates to:
+  /// **'The current block height is not known yet. Try again in a moment.'**
+  String get r3aBlockHeightUnknown;
+
   /// No description provided for @r3aBlockHeightVariable.
   ///
   /// In en, this message translates to:

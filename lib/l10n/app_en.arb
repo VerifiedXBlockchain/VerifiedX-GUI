@@ -4329,6 +4329,10 @@
       }
     }
   },
+  "r3aBlockHeightUnknown": "The current block height is not known yet. Try again in a moment.",
+  "@r3aBlockHeightUnknown": {
+    "description": "Validation error on an evolve stage block height when the current chain height has not been loaded"
+  },
   "r3aBlockHeightVariable": "Block Height Variable",
   "r3aBtcTokenization": "BTC Tokenization",
   "r3aBurnNft": "Burn NFT",

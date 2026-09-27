@@ -5,8 +5,8 @@ import '../../../../utils/toast.dart';
 import '../../../../utils/validation.dart';
 import '../../../../l10n/l10n_helper.dart';
 import '../../../asset/asset.dart';
-import '../../../bridge/providers/wallet_info_provider.dart';
 import 'evolve.dart';
+import 'evolve_block_height.dart';
 import 'evolve_phase.dart';
 
 class EvolvePhaseWizardFormProvider extends StateNotifier<EvolvePhase> {
@@ -60,17 +60,7 @@ class EvolvePhaseWizardFormProvider extends StateNotifier<EvolvePhase> {
       return globalL10n.r3aInvalidValue;
     }
 
-    if (ref.read(walletInfoProvider) == null) {
-      return "Error";
-    }
-
-    final currentBh = ref.read(walletInfoProvider)!.blockHeight;
-
-    if (parsed <= currentBh) {
-      return globalL10n.r3aBlockHeightMustBeGreaterThan(currentBh.toString());
-    }
-
-    return null;
+    return evolveBlockHeightError(parsed, currentEvolveBlockHeight(ref));
   }
 
   void setPhase(EvolvePhase phase) {

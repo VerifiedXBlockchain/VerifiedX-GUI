@@ -4371,6 +4371,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get r3aBlockHeightUnknown => 'The current block height is not known yet. Try again in a moment.';
+
+  @override
   String get r3aBlockHeightVariable => 'Block Height Variable';
 
   @override

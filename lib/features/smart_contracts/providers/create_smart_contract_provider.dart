@@ -14,13 +14,13 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/generators.dart';
 import '../../../utils/guards.dart';
 import '../../asset/asset.dart';
-import '../../bridge/providers/wallet_info_provider.dart';
 import '../../nft/providers/minted_nft_list_provider.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../nft/services/nft_service.dart';
 import '../../wallet/models/wallet.dart';
 import '../components/sc_creator/common/compile_animation.dart';
 import '../features/evolve/evolve.dart';
+import '../features/evolve/evolve_block_height.dart';
 import '../features/evolve/evolve_form_provider.dart';
 import '../features/multi_asset/multi_asset_provider.dart';
 import '../features/royalty/royalty.dart';
@@ -397,10 +397,11 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
       return false;
     }
 
+    final currentBlockHeight = currentEvolveBlockHeight(ref);
     for (final evo in state.evolves) {
       for (final phase in evo.phases) {
-        if (phase.blockHeight != null && ref.read(walletInfoProvider) != null) {
-          if (phase.blockHeight! < ref.read(walletInfoProvider)!.blockHeight) {
+        if (phase.blockHeight != null && currentBlockHeight != null) {
+          if (phase.blockHeight! < currentBlockHeight) {
             return true;
           }
         }
