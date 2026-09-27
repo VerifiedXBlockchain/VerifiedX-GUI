@@ -75,14 +75,17 @@ class RemoteInfoCli with _$RemoteInfoCli {
   factory RemoteInfoCli.fromJson(Map<String, dynamic> json) => _$RemoteInfoCliFromJson(json);
 }
 
+/// Snapshot fields of `/applications/`. The testnet feed sends `url: null`,
+/// and the GUI reads snapshot data from [SnapshotService] instead, so every
+/// field here except the height is optional.
 @freezed
 class RemoteInfoSnapshot with _$RemoteInfoSnapshot {
   const RemoteInfoSnapshot._();
 
   factory RemoteInfoSnapshot({
     required int height,
-    required String url,
-    required String date,
+    String? url,
+    String? date,
   }) = _RemoteInfoSnapshot;
   factory RemoteInfoSnapshot.fromJson(Map<String, dynamic> json) => _$RemoteInfoSnapshotFromJson(json);
 }
@@ -94,7 +97,7 @@ class RemoteInfo with _$RemoteInfo {
   factory RemoteInfo({
     required RemoteInfoGui gui,
     required RemoteInfoCli cli,
-    required RemoteInfoSnapshot snapshot,
+    RemoteInfoSnapshot? snapshot,
   }) = _RemoteInfo;
   factory RemoteInfo.fromJson(Map<String, dynamic> json) => _$RemoteInfoFromJson(json);
 }

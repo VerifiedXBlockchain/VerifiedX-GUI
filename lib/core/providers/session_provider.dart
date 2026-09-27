@@ -439,6 +439,17 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
   }
 
+  /// Fetches the latest snapshot for this network from the snapshot fleet and
+  /// stores it for [promptForSnapshotImport]. Returns null when it could not
+  /// be fetched.
+  Future<SnapshotInfo?> refreshSnapshotInfo() async {
+    final snapshotInfo = await SnapshotService().fetchLatest();
+    if (snapshotInfo != null) {
+      state = state.copyWith(snapshotInfo: snapshotInfo);
+    }
+    return snapshotInfo;
+  }
+
   Future<void> promptForSnapshotImport() async {
     final snapshotInfo = state.snapshotInfo;
 

@@ -7,7 +7,6 @@ import '../../../../core/providers/session_provider.dart';
 import '../../../../l10n/generated/app_localizations.dart';
 import '../../../../utils/toast.dart';
 import '../../../bridge/services/bridge_service.dart';
-import '../../../remote_info/services/remote_info_service.dart';
 
 class ImportSnapshotButton extends BaseComponent {
   const ImportSnapshotButton({
@@ -32,12 +31,14 @@ class ImportSnapshotButton extends BaseComponent {
                 return;
               }
 
-              final remoteInfo = await RemoteInfoService.fetchInfo();
-              if (remoteInfo == null) {
+              final snapshotInfo = await ref
+                  .read(sessionProvider.notifier)
+                  .refreshSnapshotInfo();
+              if (snapshotInfo == null || !snapshotInfo.isAvailable) {
                 Toast.error(l10n.r3eProblemSnapshotHeight);
                 return;
               }
-              final snapshotHeight = remoteInfo.snapshot.height;
+              final snapshotHeight = snapshotInfo.height!;
 
               if (blockHeight < snapshotHeight) {
                 ref.read(sessionProvider.notifier).promptForSnapshotImport();

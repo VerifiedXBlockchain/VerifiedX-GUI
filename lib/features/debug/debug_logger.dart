@@ -1,16 +1,33 @@
 import 'dart:io';
+
+import 'package:flutter/foundation.dart';
+
 import '../../utils/files.dart';
 
 class DebugLogger {
+  static const fileName = 'debug-gui.txt';
+
+  /// Appends [error] and [stackTrace] to `debug-gui.txt` in the network's
+  /// Databases folder. Never throws: a logging failure is printed and dropped
+  /// so it cannot mask the error being logged.
   static Future<void> log(Object error, StackTrace stackTrace) async {
-    final path = await dbPath();
-    final debugOutputPath = "$path/Databases/debug-gui.txt";
-    if (!File(debugOutputPath).existsSync()) {
-      File(debugOutputPath).createSync();
+    if (kIsWeb) {
+      return;
     }
-    final currentLines = await File(debugOutputPath).readAsLines();
-    final newLines = [error.toString(), stackTrace.toString()];
-    final linesToWrite = [...currentLines, "", "--${DateTime.now().toString()}--", "", ...newLines];
-    File(debugOutputPath).writeAsStringSync(linesToWrite.join("\n"));
+    try {
+      final folder = await databasesPath();
+      await appendEntry(File("$folder${Platform.pathSeparator}$fileName"), error, stackTrace);
+    } catch (e) {
+      print("DebugLogger could not write the log entry: $e");
+    }
+  }
+
+  /// Appends one timestamped entry to [file], creating it and its folders
+  /// when missing.
+  @visibleForTesting
+  static Future<void> appendEntry(File file, Object error, StackTrace stackTrace) async {
+    await file.parent.create(recursive: true);
+    final entry = ["", "--${DateTime.now().toString()}--", "", error.toString(), stackTrace.toString()].join("\n");
+    await file.writeAsString("$entry\n", mode: FileMode.append);
   }
 }

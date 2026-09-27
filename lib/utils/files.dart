@@ -72,6 +72,14 @@ Future<String> dbPath() async {
   return appDocPath;
 }
 
+/// The CLI's `Databases` folder for this network (`DatabasesTestNet` on
+/// testnet and devnet).
+Future<String> databasesPath() async {
+  final root = await dbPath();
+  final separator = Platform.isWindows ? '\\' : '/';
+  return "$root${separator}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
+}
+
 Future<String> assetsPath() async {
   String _dbPath = await dbPath();
 
