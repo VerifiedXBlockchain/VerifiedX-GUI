@@ -757,7 +757,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     for (final item in state) {
       final entry = item.entry;
 
-      final owner = kIsWeb ? ref.read(webSessionProvider).currentWallet : ref.read(sessionProvider).currentWallet;
+      final owner = kIsWeb ? ref.read(webSessionProvider).vfxWallet : ref.read(sessionProvider).currentWallet;
 
       if (owner == null) {
         Toast.error(globalL10n.svcNoAccountSelectedPeriod);

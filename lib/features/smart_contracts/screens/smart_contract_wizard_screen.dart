@@ -121,7 +121,7 @@ class SmartContractWizardScreen extends BaseScreen {
                   AppButton(
                     label: isMobile ? l10n.r3aMint : l10n.btcCompileMint,
                     onPressed: () async {
-                      final wallet = kIsWeb ? ref.read(webSessionProvider).currentWallet : ref.read(sessionProvider).currentWallet;
+                      final wallet = kIsWeb ? ref.read(webSessionProvider).vfxWallet : ref.read(sessionProvider).currentWallet;
                       if (wallet == null) {
                         Toast.error(l10n.svcNoAccountSelectedPeriod);
 

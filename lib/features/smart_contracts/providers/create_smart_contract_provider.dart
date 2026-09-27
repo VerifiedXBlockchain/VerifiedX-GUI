@@ -67,7 +67,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
     ref.read(multiAssetFormProvider.notifier).clear();
 
     final sc = SmartContract(
-      owner: kIsWeb ? ref.read(webSessionProvider).currentWallet! : ref.read(sessionProvider).currentWallet!,
+      owner: kIsWeb ? ref.read(webSessionProvider).vfxWallet! : ref.read(sessionProvider).currentWallet!,
     );
 
     setSmartContract(sc);
@@ -510,7 +510,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
         : ref.read(nftListProvider.notifier).reloadCurrentPage();
 
     if (details != null) {
-      final wallet = kIsWeb ? ref.read(webSessionProvider).currentWallet! : ref.read(sessionProvider).currentWallet!;
+      final wallet = kIsWeb ? ref.read(webSessionProvider).vfxWallet! : ref.read(sessionProvider).currentWallet!;
       final sc = SmartContract.fromCompiled(details, wallet);
       ref.read(createSmartContractProvider.notifier).setSmartContract(
             sc.copyWith(
@@ -568,7 +568,7 @@ final createSmartContractProvider = StateNotifierProvider<CreateSmartContractPro
   (ref) {
     if (kIsWeb) {
       final initial = SmartContract(
-        owner: ref.read(webSessionProvider).currentWallet!,
+        owner: ref.read(webSessionProvider).vfxWallet!,
       );
       return CreateSmartContractProvider(ref, initial);
     } else {

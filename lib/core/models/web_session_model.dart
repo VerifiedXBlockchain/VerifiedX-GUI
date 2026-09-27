@@ -67,22 +67,30 @@ abstract class WebSessionModel with _$WebSessionModel {
     return selectedWalletType == WalletType.btc;
   }
 
+  /// The VFX account (the keypair address), whatever wallet type the
+  /// dashboard has selected. Smart contracts and NFTs are always minted and
+  /// owned by this account: never by the BTC address, and never by the Vault
+  /// (the desktop refuses to mint from a Vault account too).
+  Wallet? get vfxWallet {
+    if (keypair == null) return null;
+    return Wallet(
+      id: 0,
+      publicKey: keypair!.public,
+      privateKey: keypair!.private,
+      address: keypair!.address,
+      balance: balance ?? 0,
+      isValidating: false,
+      totalBalance: balanceTotal ?? 0,
+      lockedBalance: balanceLocked ?? 0,
+    );
+  }
+
   Wallet? get currentWallet {
     if (keypair == null) return null;
 
     switch (selectedWalletType) {
       case WalletType.rbx:
-        if (keypair == null) return null;
-        return Wallet(
-          id: 0,
-          publicKey: keypair!.public,
-          privateKey: keypair!.private,
-          address: keypair!.address,
-          balance: balance ?? 0,
-          isValidating: false,
-          totalBalance: balanceTotal ?? 0,
-          lockedBalance: balanceLocked ?? 0,
-        );
+        return vfxWallet;
 
       case WalletType.ra:
         if (raKeypair == null) return null;

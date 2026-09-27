@@ -88,7 +88,7 @@ class SmartContractCreatorMain extends BaseComponent {
     }
 
     if (kIsWeb) {
-      if (ref.read(webSessionProvider).currentWallet == null) {
+      if (ref.read(webSessionProvider).vfxWallet == null) {
         Toast.error(globalL10n.adnrNoAccountToast);
         return;
       }
@@ -155,7 +155,7 @@ class SmartContractCreatorMain extends BaseComponent {
       final extraConfirm = await ConfirmDialog.show(
         title: globalL10n.tokenFormConfirmAddressTitle,
         body: globalL10n.r3aWillBeMintedBy(
-            kIsWeb ? ref.read(webSessionProvider).currentWallet!.labelWithoutTruncation : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation),
+            kIsWeb ? ref.read(webSessionProvider).vfxWallet!.labelWithoutTruncation : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation),
         confirmText: globalL10n.btcCompileMint,
         cancelText: globalL10n.actionCancel,
       );
