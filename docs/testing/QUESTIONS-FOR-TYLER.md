@@ -1,5 +1,7 @@
 # Questions for Tyler
 
+**Answered 2026-09-27 through Waypoint** (`questions-for-tyler.review.digest.md` holds the answers verbatim). All changes are on `fix/release-bugs`. Notable: VFX amounts are capped at 8 decimal places, not 16, because the Core CLI uses 8 everywhere it fixes a precision (`GlobalsPrivacy.cs:30`, `FeeCalcService.cs:25`); tokens, token deep links, desktop video playback, the minted-list filter and Validator Pool were left as they are by decision.
+
 These are the product decisions the test suite could not settle from the code. Everything else raised while writing the cases is either a bug (see [BUGS-TO-FIX.md](BUGS-TO-FIX.md)) or something the first test run will answer (see [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md)). A one-word answer is enough for most; each answer goes back into the named case's expected result.
 
 ## Money and sending
