@@ -110,7 +110,8 @@ class ReserveAccountService extends BaseService {
       OverlayToast.error(data['Message']);
       return false;
     } catch (e) {
-      print(e);
+      print("Vault activation request failed: ${e.runtimeType}");
+      OverlayToast.error(globalL10n.mktProblemOccurredToast);
       return false;
     }
   }

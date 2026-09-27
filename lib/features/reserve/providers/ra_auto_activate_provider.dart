@@ -111,10 +111,20 @@ Future<void> publishQueuedAutoActivation(Ref ref, String txHash) async {
   if (data is! Map) {
     return;
   }
-  ref.read(reserveAccountAutoActivateProvider.notifier).remove(txHash);
-
   final address = data['address'];
   final password = data['password'];
+
+  // Drop every queued entry for this Vault, not just this hash, so a second
+  // entry for the same address can never publish a second activation.
+  final notifier = ref.read(reserveAccountAutoActivateProvider.notifier);
+  final queue = ref.read(reserveAccountAutoActivateProvider);
+  for (final entry in queue.entries.toList()) {
+    final value = entry.value;
+    if (entry.key == txHash || (value is Map && value['address'] == address)) {
+      notifier.remove(entry.key);
+    }
+  }
+
   if (address is! String || password is! String) {
     return;
   }
@@ -129,6 +139,6 @@ Future<void> publishQueuedAutoActivation(Ref ref, String txHash) async {
   }
 }
 
-final reserveAccountAutoActivateProvider =StateNotifierProvider<ReserveAccountAutoActivateProvider, Map<String, dynamic>>((ref) {
+final reserveAccountAutoActivateProvider = StateNotifierProvider<ReserveAccountAutoActivateProvider, Map<String, dynamic>>((ref) {
   return ReserveAccountAutoActivateProvider();
 });
