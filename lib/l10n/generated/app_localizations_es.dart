@@ -3137,12 +3137,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navMenuCryptoCom => 'Crypto.com';
 
   @override
-  String get navMenuDashboard => 'Panel';
-
-  @override
-  String get navMenuDomains => 'Dominios VFX/BTC';
-
-  @override
   String get navMenuFungibleTokens => 'Tokens fungibles';
 
   @override
@@ -3161,12 +3155,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get navMenuPayWithButterfly => 'Abrir BFLY';
 
   @override
-  String get navMenuReceive => 'Recibir';
-
-  @override
-  String get navMenuSend => 'Enviar';
-
-  @override
   String get navMenuSignOut => 'Cerrar sesión';
 
   @override
@@ -3174,9 +3162,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get navMenuTokenizeBitcoin => 'Tokens vBTC';
-
-  @override
-  String get navMenuTransactions => 'Transacciones';
 
   @override
   String get navMenuValidator => 'Validador';
@@ -5049,9 +5034,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3bCreateCollectionsHint => 'Ahora puedes crear colecciones y agregarles publicaciones.';
 
   @override
-  String get r3bCreateListingsHint => 'Ahora puedes crear publicaciones para los NFT que tienes.';
-
-  @override
   String get r3bCreateNewCollection => 'Crear colección nueva';
 
   @override
@@ -5163,9 +5145,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3bNoCollections => 'Sin colecciones';
-
-  @override
-  String get r3bNoListings => 'Sin publicaciones';
 
   @override
   String get r3bNoPrivateKey => 'No hay clave privada.';
@@ -6319,12 +6298,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get r3eReadLess => 'Ver menos';
-
-  @override
-  String get r3eReadMore => 'Ver más';
-
-  @override
   String get r3eRecentTransactions => 'Transacciones recientes';
 
   @override
@@ -7303,9 +7276,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3hLabelMinTokenRequirement => 'Requisito mínimo de tokens';
-
-  @override
-  String get r3hLogoutConfirmBody => '¿Seguro que quieres cerrar sesión de la Billetera Web VFX?';
 
   @override
   String get r3hMachineOs => 'SO de máquina';
@@ -8623,11 +8593,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get svcLocatorsRequestFailed => 'Falló la solicitud de localizadores.';
-
-  @override
-  String svcMainMenuSyncTooltip(String lastSync, String nextSync) {
-    return 'Última sincronización: $lastSync\nPróxima sincronización: $nextSync';
-  }
 
   @override
   String get svcMessageDecryptedSuccess => '¡Mensaje descifrado con éxito!';

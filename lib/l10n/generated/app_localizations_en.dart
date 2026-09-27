@@ -3137,12 +3137,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navMenuCryptoCom => 'Crypto.com';
 
   @override
-  String get navMenuDashboard => 'Dashboard';
-
-  @override
-  String get navMenuDomains => 'VFX/BTC Domains';
-
-  @override
   String get navMenuFungibleTokens => 'Fungible Tokens';
 
   @override
@@ -3161,12 +3155,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navMenuPayWithButterfly => 'Launch BFLY';
 
   @override
-  String get navMenuReceive => 'Receive';
-
-  @override
-  String get navMenuSend => 'Send';
-
-  @override
   String get navMenuSignOut => 'Sign Out';
 
   @override
@@ -3174,9 +3162,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navMenuTokenizeBitcoin => 'vBTC Tokens';
-
-  @override
-  String get navMenuTransactions => 'Transactions';
 
   @override
   String get navMenuValidator => 'Validator';
@@ -5049,9 +5034,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3bCreateCollectionsHint => 'Now you can create collections and then add listings to them.';
 
   @override
-  String get r3bCreateListingsHint => 'Now you can create listings for the NFTs you own.';
-
-  @override
   String get r3bCreateNewCollection => 'Create New Collection';
 
   @override
@@ -5163,9 +5145,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3bNoCollections => 'No Collections';
-
-  @override
-  String get r3bNoListings => 'No Listings';
 
   @override
   String get r3bNoPrivateKey => 'No private key.';
@@ -6319,12 +6298,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get r3eReadLess => 'Read Less';
-
-  @override
-  String get r3eReadMore => 'Read More';
-
-  @override
   String get r3eRecentTransactions => 'Recent Transactions';
 
   @override
@@ -7303,9 +7276,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3hLabelMinTokenRequirement => 'Minimum Token Requirement';
-
-  @override
-  String get r3hLogoutConfirmBody => 'Are you sure you want to logout of the VFX Web Wallet?';
 
   @override
   String get r3hMachineOs => 'Machine OS';
@@ -8623,11 +8593,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get svcLocatorsRequestFailed => 'Locators request failed.';
-
-  @override
-  String svcMainMenuSyncTooltip(String lastSync, String nextSync) {
-    return 'Last Sync: $lastSync\nNext Sync: $nextSync';
-  }
 
   @override
   String get svcMessageDecryptedSuccess => 'Message decrypted successfully!';

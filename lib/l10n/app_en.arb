@@ -3173,14 +3173,6 @@
   "@navMenuCryptoCom": {
     "description": "Side nav label for Crypto.com onramp."
   },
-  "navMenuDashboard": "Dashboard",
-  "@navMenuDashboard": {
-    "description": "Side-nav label for the dashboard."
-  },
-  "navMenuDomains": "VFX/BTC Domains",
-  "@navMenuDomains": {
-    "description": "Side-nav label for the domains screen."
-  },
   "navMenuFungibleTokens": "Fungible Tokens",
   "@navMenuFungibleTokens": {
     "description": "Side-nav label for the fungible tokens section."
@@ -3205,14 +3197,6 @@
   "@navMenuPayWithButterfly": {
     "description": "Side nav label that launches Butterfly (BFLY)."
   },
-  "navMenuReceive": "Receive",
-  "@navMenuReceive": {
-    "description": "Side-nav label for the receive screen."
-  },
-  "navMenuSend": "Send",
-  "@navMenuSend": {
-    "description": "Side-nav label for the send screen."
-  },
   "navMenuSignOut": "Sign Out",
   "@navMenuSignOut": {
     "description": "Side nav label for sign out (web)."
@@ -3224,10 +3208,6 @@
   "navMenuTokenizeBitcoin": "vBTC Tokens",
   "@navMenuTokenizeBitcoin": {
     "description": "Side-nav label for the vBTC tokens section."
-  },
-  "navMenuTransactions": "Transactions",
-  "@navMenuTransactions": {
-    "description": "Side-nav label for the transactions screen."
   },
   "navMenuValidator": "Validator",
   "@navMenuValidator": {
@@ -4652,7 +4632,6 @@
   "r3bCouldNotVerifyTx": "Could not verify transaction.",
   "r3bCreateAuctionHouse": "Create Auction House",
   "r3bCreateCollectionsHint": "Now you can create collections and then add listings to them.",
-  "r3bCreateListingsHint": "Now you can create listings for the NFTs you own.",
   "r3bCreateNewCollection": "Create New Collection",
   "r3bCurrentBidPrice": "Current Bid Price:",
   "r3bCurrentBids": "Current Bids",
@@ -4716,7 +4695,6 @@
   "r3bNoAuctionHouses": "No Auction Houses",
   "r3bNoBids": "No bids.",
   "r3bNoCollections": "No Collections",
-  "r3bNoListings": "No Listings",
   "r3bNoPrivateKey": "No private key.",
   "r3bNoPublicKey": "No public key.",
   "r3bNotAuthorized": "Not Authorized",
@@ -5308,8 +5286,6 @@
       }
     }
   },
-  "r3eReadLess": "Read Less",
-  "r3eReadMore": "Read More",
   "r3eRecentTransactions": "Recent Transactions",
   "r3eRecoveryBody": "Your Reserve (Protected) Account is being recovered to your recovery address.\n\nTransaction Hash: {hash}\n\nAll non-settled transactions for funds and assets will be transferred as well as your current available balance. \n\nIt is recommended you import your recovery private key into a new machine. NFT media will not be transferred over so please export them by clicking the button below and import them to your new environment.",
   "@r3eRecoveryBody": {
@@ -6091,7 +6067,6 @@
   "r3hInvalid": "Invalid",
   "r3hIsBurnableLabel": "Is Burnable:",
   "r3hLabelMinTokenRequirement": "Minimum Token Requirement",
-  "r3hLogoutConfirmBody": "Are you sure you want to logout of the VFX Web Wallet?",
   "r3hMachineOs": "Machine OS",
   "r3hMachineProvider": "Machine Provider",
   "r3hMachineType": "Machine Type",
@@ -7198,17 +7173,6 @@
   "svcInsufficientBalanceToSend": "Insufficient balance to send",
   "svcInvalidJson": "Invalid JSON",
   "svcLocatorsRequestFailed": "Locators request failed.",
-  "svcMainMenuSyncTooltip": "Last Sync: {lastSync}\nNext Sync: {nextSync}",
-  "@svcMainMenuSyncTooltip": {
-    "placeholders": {
-      "lastSync": {
-        "type": "String"
-      },
-      "nextSync": {
-        "type": "String"
-      }
-    }
-  },
   "svcMessageDecryptedSuccess": "Message decrypted successfully!",
   "svcMintingProgress": "Minting {current}/{total}...",
   "@svcMintingProgress": {

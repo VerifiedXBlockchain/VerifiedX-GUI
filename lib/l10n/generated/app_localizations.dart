@@ -5949,18 +5949,6 @@ abstract class AppLocalizations {
   /// **'Crypto.com'**
   String get navMenuCryptoCom;
 
-  /// Side-nav label for the dashboard.
-  ///
-  /// In en, this message translates to:
-  /// **'Dashboard'**
-  String get navMenuDashboard;
-
-  /// Side-nav label for the domains screen.
-  ///
-  /// In en, this message translates to:
-  /// **'VFX/BTC Domains'**
-  String get navMenuDomains;
-
   /// Side-nav label for the fungible tokens section.
   ///
   /// In en, this message translates to:
@@ -5997,18 +5985,6 @@ abstract class AppLocalizations {
   /// **'Launch BFLY'**
   String get navMenuPayWithButterfly;
 
-  /// Side-nav label for the receive screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive'**
-  String get navMenuReceive;
-
-  /// Side-nav label for the send screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Send'**
-  String get navMenuSend;
-
   /// Side nav label for sign out (web).
   ///
   /// In en, this message translates to:
@@ -6026,12 +6002,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'vBTC Tokens'**
   String get navMenuTokenizeBitcoin;
-
-  /// Side-nav label for the transactions screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Transactions'**
-  String get navMenuTransactions;
 
   /// Side-nav label for the validator screen.
   ///
@@ -9501,12 +9471,6 @@ abstract class AppLocalizations {
   /// **'Now you can create collections and then add listings to them.'**
   String get r3bCreateCollectionsHint;
 
-  /// No description provided for @r3bCreateListingsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Now you can create listings for the NFTs you own.'**
-  String get r3bCreateListingsHint;
-
   /// No description provided for @r3bCreateNewCollection.
   ///
   /// In en, this message translates to:
@@ -9716,12 +9680,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Collections'**
   String get r3bNoCollections;
-
-  /// No description provided for @r3bNoListings.
-  ///
-  /// In en, this message translates to:
-  /// **'No Listings'**
-  String get r3bNoListings;
 
   /// No description provided for @r3bNoPrivateKey.
   ///
@@ -11913,18 +11871,6 @@ abstract class AppLocalizations {
   /// **'Progress: {percent}'**
   String r3eProgressLabel(String percent);
 
-  /// No description provided for @r3eReadLess.
-  ///
-  /// In en, this message translates to:
-  /// **'Read Less'**
-  String get r3eReadLess;
-
-  /// No description provided for @r3eReadMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Read More'**
-  String get r3eReadMore;
-
   /// No description provided for @r3eRecentTransactions.
   ///
   /// In en, this message translates to:
@@ -13652,12 +13598,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Minimum Token Requirement'**
   String get r3hLabelMinTokenRequirement;
-
-  /// No description provided for @r3hLogoutConfirmBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to logout of the VFX Web Wallet?'**
-  String get r3hLogoutConfirmBody;
 
   /// No description provided for @r3hMachineOs.
   ///
@@ -16184,12 +16124,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Locators request failed.'**
   String get svcLocatorsRequestFailed;
-
-  /// No description provided for @svcMainMenuSyncTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Sync: {lastSync}\nNext Sync: {nextSync}'**
-  String svcMainMenuSyncTooltip(String lastSync, String nextSync);
 
   /// No description provided for @svcMessageDecryptedSuccess.
   ///

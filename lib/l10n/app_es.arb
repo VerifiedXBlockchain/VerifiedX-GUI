@@ -3147,14 +3147,6 @@
   "@navMenuCryptoCom": {
     "description": "Side nav label for Crypto.com onramp."
   },
-  "navMenuDashboard": "Panel",
-  "@navMenuDashboard": {
-    "description": "Side-nav label for the dashboard."
-  },
-  "navMenuDomains": "Dominios VFX/BTC",
-  "@navMenuDomains": {
-    "description": "Side-nav label for the domains screen."
-  },
   "navMenuFungibleTokens": "Tokens fungibles",
   "@navMenuFungibleTokens": {
     "description": "Side-nav label for the fungible tokens section."
@@ -3179,14 +3171,6 @@
   "@navMenuPayWithButterfly": {
     "description": "Side nav label that launches Butterfly (BFLY)."
   },
-  "navMenuReceive": "Recibir",
-  "@navMenuReceive": {
-    "description": "Side-nav label for the receive screen."
-  },
-  "navMenuSend": "Enviar",
-  "@navMenuSend": {
-    "description": "Side-nav label for the send screen."
-  },
   "navMenuSignOut": "Cerrar sesión",
   "@navMenuSignOut": {
     "description": "Side nav label for sign out (web)."
@@ -3198,10 +3182,6 @@
   "navMenuTokenizeBitcoin": "Tokens vBTC",
   "@navMenuTokenizeBitcoin": {
     "description": "Side-nav label for the vBTC tokens section."
-  },
-  "navMenuTransactions": "Transacciones",
-  "@navMenuTransactions": {
-    "description": "Side-nav label for the transactions screen."
   },
   "navMenuValidator": "Validador",
   "@navMenuValidator": {
@@ -4626,7 +4606,6 @@
   "r3bCouldNotVerifyTx": "No se pudo verificar la transacción.",
   "r3bCreateAuctionHouse": "Crear casa de subastas",
   "r3bCreateCollectionsHint": "Ahora puedes crear colecciones y agregarles publicaciones.",
-  "r3bCreateListingsHint": "Ahora puedes crear publicaciones para los NFT que tienes.",
   "r3bCreateNewCollection": "Crear colección nueva",
   "r3bCurrentBidPrice": "Precio de oferta actual:",
   "r3bCurrentBids": "Ofertas actuales",
@@ -4690,7 +4669,6 @@
   "r3bNoAuctionHouses": "Sin casas de subastas",
   "r3bNoBids": "Sin ofertas.",
   "r3bNoCollections": "Sin colecciones",
-  "r3bNoListings": "Sin publicaciones",
   "r3bNoPrivateKey": "No hay clave privada.",
   "r3bNoPublicKey": "No hay clave pública.",
   "r3bNotAuthorized": "No autorizado",
@@ -5282,8 +5260,6 @@
       }
     }
   },
-  "r3eReadLess": "Ver menos",
-  "r3eReadMore": "Ver más",
   "r3eRecentTransactions": "Transacciones recientes",
   "r3eRecoveryBody": "Tu cuenta de bóveda (protegida) se está recuperando a tu dirección de recuperación.\n\nHash de la transacción: {hash}\n\nSe transferirán todas las transacciones no liquidadas de fondos y activos, además de tu saldo disponible actual.\n\nSe recomienda importar tu clave privada de recuperación en una máquina nueva. El contenido multimedia de los NFT no se transferirá, así que expórtalo con el botón de abajo e impórtalo en tu nuevo entorno.",
   "@r3eRecoveryBody": {
@@ -6065,7 +6041,6 @@
   "r3hInvalid": "Inválido",
   "r3hIsBurnableLabel": "Quemable:",
   "r3hLabelMinTokenRequirement": "Requisito mínimo de tokens",
-  "r3hLogoutConfirmBody": "¿Seguro que quieres cerrar sesión de la Billetera Web VFX?",
   "r3hMachineOs": "SO de máquina",
   "r3hMachineProvider": "Proveedor de máquina",
   "r3hMachineType": "Tipo de máquina",
@@ -7166,17 +7141,6 @@
   "svcInsufficientBalanceToSend": "Saldo insuficiente para enviar",
   "svcInvalidJson": "JSON no válido",
   "svcLocatorsRequestFailed": "Falló la solicitud de localizadores.",
-  "svcMainMenuSyncTooltip": "Última sincronización: {lastSync}\nPróxima sincronización: {nextSync}",
-  "@svcMainMenuSyncTooltip": {
-    "placeholders": {
-      "lastSync": {
-        "type": "String"
-      },
-      "nextSync": {
-        "type": "String"
-      }
-    }
-  },
   "svcMessageDecryptedSuccess": "¡Mensaje descifrado con éxito!",
   "svcMintingProgress": "Acuñando {current}/{total}...",
   "@svcMintingProgress": {
