@@ -1453,6 +1453,8 @@
   "bw2CancelWithdrawalBody": "Are you sure you want to cancel this withdrawal request?",
   "bw2CancelWithdrawalQuestion": "Cancel Withdrawal?",
   "bw2CancelWithdrawalTooltip": "Cancel withdrawal",
+  "bw2NoCancelNoBtcTx": "No Bitcoin transaction hash was returned for this withdrawal, so it cannot be cancelled from here. Cancelling a request without one needs a vote by the contract's validators, which the wallet cannot start yet.",
+  "bw2NoCancelUnpayable": "This withdrawal can never be paid at its fee rate, so retrying will keep failing. There is no Cancel button because cancelling it needs a vote by the contract's validators, which the wallet cannot start yet. Its vBTC stays held in escrow until then.",
   "bw2CeremonyCompleted": "Ceremony Completed",
   "bw2CeremonyDismissHint": "You can dismiss this dialog. The ceremony will continue in the background.",
   "bw2CeremonyFailed": "Ceremony Failed",
@@ -7807,6 +7809,33 @@
   },
   "tkbPendingWithdrawalContractBody": "You have a pending withdrawal for this contract. Would you like to complete it?",
   "tkbPendingWithdrawalFound": "Pending Withdrawal Found",
+  "tkbExpiredWithdrawalTitle": "Withdrawal Request Expired",
+  "tkbExpiredWithdrawalBody": "Your withdrawal of {amount} vBTC to {destination} expired before it was paid, so it can no longer be completed. It no longer blocks a new withdrawal.",
+  "@tkbExpiredWithdrawalBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbUnpayableWithdrawalTitle": "Withdrawal Cannot Be Paid",
+  "tkbUnpayableWithdrawalBody": "Your withdrawal of {amount} vBTC to {destination} is too small to pay at its fee rate, so completing it will keep failing.",
+  "@tkbUnpayableWithdrawalBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbWithdrawalCancelNeedsVote": "Its vBTC stays held in escrow until the request is cancelled. Cancelling needs a vote by the contract's validators, which the wallet cannot start yet.\n\nYou can still open the withdrawal form for your available balance.",
+  "tkbWithdrawalCancellationPending": "A cancellation has already been requested and is awaiting the validators' vote. Its vBTC stays held in escrow until then.\n\nYou can still open the withdrawal form for your available balance.",
+  "tkbOpenWithdrawalForm": "Open Withdrawal Form",
   "tkbPercentages": "Percentages",
   "tkbResult": "Result",
   "tkbResultFail": "Fail",

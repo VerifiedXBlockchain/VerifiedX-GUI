@@ -28,6 +28,7 @@ import '../../smart_contracts/components/sc_creator/common/modal_container.dart'
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../../wallet/utils.dart';
+import '../models/escrowed_withdrawal.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/btc_account_list_provider.dart';
 import '../providers/btc_pending_tokenized_address_list_provider.dart';
@@ -433,7 +434,55 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   final freshToken = freshContracts.firstWhereOrNull(
                     (t) => t.smartContractUid == token.smartContractUid,
                   );
+
+                  // This wallet's own open requests, flagged Expired /
+                  // Unpayable by the node. Null (older node, lookup failed)
+                  // keeps the prompt below.
+                  final escrowed = freshToken != null && freshToken.hasPendingWithdrawal
+                      ? await VbtcV2Service().getEscrowedWithdrawals(
+                          address: currentWallet.address,
+                          scUid: token.smartContractUid,
+                        )
+                      : null;
                   ref.read(globalLoadingProvider.notifier).complete();
+
+                  final pendingAction = classifyPendingWithdrawal(
+                    activeRequestHash: freshToken?.activeWithdrawalRequestHash,
+                    escrowed: escrowed,
+                  );
+
+                  // An expired or unpayable request can never be completed,
+                  // so offering Complete would only fail (QA MTI#2.5). Say why
+                  // and let the user go on to the withdrawal form.
+                  if (pendingAction == PendingWithdrawalAction.expired ||
+                      pendingAction == PendingWithdrawalAction.unpayable) {
+                    final entry = escrowed!.firstWhere(
+                      (e) => e.requestHash == freshToken!.activeWithdrawalRequestHash,
+                    );
+                    final amount = entry.amount.toString();
+                    final destination = entry.btcDestination ??
+                        freshToken!.activeWithdrawalBtcDestination ??
+                        '';
+                    final isExpired = pendingAction == PendingWithdrawalAction.expired;
+                    final body = [
+                      isExpired
+                          ? l10n.tkbExpiredWithdrawalBody(amount, destination)
+                          : l10n.tkbUnpayableWithdrawalBody(amount, destination),
+                      entry.cancellationPending
+                          ? l10n.tkbWithdrawalCancellationPending
+                          : l10n.tkbWithdrawalCancelNeedsVote,
+                    ].join('\n\n');
+
+                    final openForm = await ConfirmDialog.show(
+                      title: isExpired
+                          ? l10n.tkbExpiredWithdrawalTitle
+                          : l10n.tkbUnpayableWithdrawalTitle,
+                      body: body,
+                      confirmText: l10n.tkbOpenWithdrawalForm,
+                      cancelText: l10n.actionClose,
+                    );
+                    if (openForm != true) return;
+                  }
 
                   // NOTE: `hasPendingWithdrawal` comes from the contract's
                   // ActiveWithdrawal* fields, which are a single slot shared by
@@ -441,7 +490,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   // this cannot be scoped to the current wallet the way the web
                   // build scopes it. The copy therefore does not claim the
                   // withdrawal belongs to this account.
-                  if (freshToken != null && freshToken.hasPendingWithdrawal) {
+                  if (freshToken != null &&
+                      pendingAction == PendingWithdrawalAction.offerComplete) {
                     final shouldComplete = await ConfirmDialog.show(
                       title: l10n.tkbPendingWithdrawalFound,
                       body: l10n.tkbPendingWithdrawalBody(freshToken.activeWithdrawalAmount.toString(), freshToken.activeWithdrawalBtcDestination.toString()),

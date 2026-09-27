@@ -2091,6 +2091,18 @@ abstract class AppLocalizations {
   /// **'Cancel withdrawal'**
   String get bw2CancelWithdrawalTooltip;
 
+  /// No description provided for @bw2NoCancelNoBtcTx.
+  ///
+  /// In en, this message translates to:
+  /// **'No Bitcoin transaction hash was returned for this withdrawal, so it cannot be cancelled from here. Cancelling a request without one needs a vote by the contract\'s validators, which the wallet cannot start yet.'**
+  String get bw2NoCancelNoBtcTx;
+
+  /// No description provided for @bw2NoCancelUnpayable.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdrawal can never be paid at its fee rate, so retrying will keep failing. There is no Cancel button because cancelling it needs a vote by the contract\'s validators, which the wallet cannot start yet. Its vBTC stays held in escrow until then.'**
+  String get bw2NoCancelUnpayable;
+
   /// No description provided for @bw2CeremonyCompleted.
   ///
   /// In en, this message translates to:
@@ -17132,6 +17144,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pending Withdrawal Found'**
   String get tkbPendingWithdrawalFound;
+
+  /// No description provided for @tkbExpiredWithdrawalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Request Expired'**
+  String get tkbExpiredWithdrawalTitle;
+
+  /// No description provided for @tkbExpiredWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal of {amount} vBTC to {destination} expired before it was paid, so it can no longer be completed. It no longer blocks a new withdrawal.'**
+  String tkbExpiredWithdrawalBody(String amount, String destination);
+
+  /// No description provided for @tkbUnpayableWithdrawalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Cannot Be Paid'**
+  String get tkbUnpayableWithdrawalTitle;
+
+  /// No description provided for @tkbUnpayableWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal of {amount} vBTC to {destination} is too small to pay at its fee rate, so completing it will keep failing.'**
+  String tkbUnpayableWithdrawalBody(String amount, String destination);
+
+  /// No description provided for @tkbWithdrawalCancelNeedsVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Its vBTC stays held in escrow until the request is cancelled. Cancelling needs a vote by the contract\'s validators, which the wallet cannot start yet.\n\nYou can still open the withdrawal form for your available balance.'**
+  String get tkbWithdrawalCancelNeedsVote;
+
+  /// No description provided for @tkbWithdrawalCancellationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'A cancellation has already been requested and is awaiting the validators\' vote. Its vBTC stays held in escrow until then.\n\nYou can still open the withdrawal form for your available balance.'**
+  String get tkbWithdrawalCancellationPending;
+
+  /// No description provided for @tkbOpenWithdrawalForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Withdrawal Form'**
+  String get tkbOpenWithdrawalForm;
 
   /// No description provided for @tkbPercentages.
   ///

@@ -1080,6 +1080,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2CancelWithdrawalTooltip => 'Cancelar retiro';
 
   @override
+  String get bw2NoCancelNoBtcTx => 'No se recibió un hash de transacción de Bitcoin para este retiro, así que no se puede cancelar desde aquí. Cancelar una solicitud sin él requiere una votación de los validadores del contrato, que la billetera todavía no puede iniciar.';
+
+  @override
+  String get bw2NoCancelUnpayable => 'Este retiro nunca se podrá pagar con su tarifa, así que reintentarlo seguirá fallando. No hay botón de Cancelar porque cancelarlo requiere una votación de los validadores del contrato, que la billetera todavía no puede iniciar. Sus vBTC siguen retenidos en custodia hasta entonces.';
+
+  @override
   String get bw2CeremonyCompleted => 'Ceremonia completada';
 
   @override
@@ -9203,6 +9209,31 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tkbPendingWithdrawalFound => 'Retiro pendiente encontrado';
+
+  @override
+  String get tkbExpiredWithdrawalTitle => 'Solicitud de retiro vencida';
+
+  @override
+  String tkbExpiredWithdrawalBody(String amount, String destination) {
+    return 'Tu retiro de $amount vBTC a $destination venció antes de pagarse, así que ya no se puede completar. Ya no bloquea un nuevo retiro.';
+  }
+
+  @override
+  String get tkbUnpayableWithdrawalTitle => 'El retiro no se puede pagar';
+
+  @override
+  String tkbUnpayableWithdrawalBody(String amount, String destination) {
+    return 'Tu retiro de $amount vBTC a $destination es demasiado pequeño para pagarse con su tarifa, así que completarlo seguirá fallando.';
+  }
+
+  @override
+  String get tkbWithdrawalCancelNeedsVote => 'Sus vBTC siguen retenidos en custodia hasta que se cancele la solicitud. Cancelarla requiere una votación de los validadores del contrato, que la billetera todavía no puede iniciar.\n\nAún puedes abrir el formulario de retiro para tu saldo disponible.';
+
+  @override
+  String get tkbWithdrawalCancellationPending => 'Ya se solicitó una cancelación y está esperando la votación de los validadores. Sus vBTC siguen retenidos en custodia hasta entonces.\n\nAún puedes abrir el formulario de retiro para tu saldo disponible.';
+
+  @override
+  String get tkbOpenWithdrawalForm => 'Abrir formulario de retiro';
 
   @override
   String get tkbPercentages => 'Porcentajes';

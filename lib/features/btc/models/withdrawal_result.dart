@@ -12,6 +12,10 @@ class WithdrawalResult {
   /// produce a second Bitcoin transaction.
   final bool timedOut;
 
+  /// The node says this request can never be paid (`Unpayable` on
+  /// CompleteWithdrawal), so retrying will keep failing.
+  final bool unpayable;
+
   const WithdrawalResult({
     required this.success,
     this.message,
@@ -20,5 +24,6 @@ class WithdrawalResult {
     this.btcTransactionHash,
     this.status,
     this.timedOut = false,
+    this.unpayable = false,
   });
 }

@@ -1080,6 +1080,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2CancelWithdrawalTooltip => 'Cancel withdrawal';
 
   @override
+  String get bw2NoCancelNoBtcTx => 'No Bitcoin transaction hash was returned for this withdrawal, so it cannot be cancelled from here. Cancelling a request without one needs a vote by the contract\'s validators, which the wallet cannot start yet.';
+
+  @override
+  String get bw2NoCancelUnpayable => 'This withdrawal can never be paid at its fee rate, so retrying will keep failing. There is no Cancel button because cancelling it needs a vote by the contract\'s validators, which the wallet cannot start yet. Its vBTC stays held in escrow until then.';
+
+  @override
   String get bw2CeremonyCompleted => 'Ceremony Completed';
 
   @override
@@ -9203,6 +9209,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tkbPendingWithdrawalFound => 'Pending Withdrawal Found';
+
+  @override
+  String get tkbExpiredWithdrawalTitle => 'Withdrawal Request Expired';
+
+  @override
+  String tkbExpiredWithdrawalBody(String amount, String destination) {
+    return 'Your withdrawal of $amount vBTC to $destination expired before it was paid, so it can no longer be completed. It no longer blocks a new withdrawal.';
+  }
+
+  @override
+  String get tkbUnpayableWithdrawalTitle => 'Withdrawal Cannot Be Paid';
+
+  @override
+  String tkbUnpayableWithdrawalBody(String amount, String destination) {
+    return 'Your withdrawal of $amount vBTC to $destination is too small to pay at its fee rate, so completing it will keep failing.';
+  }
+
+  @override
+  String get tkbWithdrawalCancelNeedsVote => 'Its vBTC stays held in escrow until the request is cancelled. Cancelling needs a vote by the contract\'s validators, which the wallet cannot start yet.\n\nYou can still open the withdrawal form for your available balance.';
+
+  @override
+  String get tkbWithdrawalCancellationPending => 'A cancellation has already been requested and is awaiting the validators\' vote. Its vBTC stays held in escrow until then.\n\nYou can still open the withdrawal form for your available balance.';
+
+  @override
+  String get tkbOpenWithdrawalForm => 'Open Withdrawal Form';
 
   @override
   String get tkbPercentages => 'Percentages';
