@@ -55,6 +55,10 @@ class WebTransaction with _$WebTransaction {
   /// list card and explorer both show local time.
   DateTime get localDate => date.toLocal();
 
+  /// [unlockTime] (the Vault settlement time) in the viewer's time zone,
+  /// matching [localDate]. `unlock_time` parses as UTC too.
+  DateTime? get localUnlockTime => unlockTime?.toLocal();
+
   String get parseTimeStamp {
     //TODO: fix this;
     return "-";

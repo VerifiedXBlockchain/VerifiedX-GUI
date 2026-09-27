@@ -28,11 +28,10 @@ class WebTransactionCard extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    var date1 = DateTime.fromMillisecondsSinceEpoch((tx.date.millisecondsSinceEpoch).round());
-    String date = DateFormat('MM-dd-yyyy hh:mm a').format(date1);
+    String date = DateFormat('MM-dd-yyyy hh:mm a').format(tx.localDate);
 
     if (tx.isPendingSettlement) {
-      final settlementDate = DateFormat('MM-dd-yyyy hh:mm a').format(tx.unlockTime!);
+      final settlementDate = DateFormat('MM-dd-yyyy hh:mm a').format(tx.localUnlockTime!);
       date = "$date | ${l10n.txpTileSettlementDateLabel(settlementDate)}";
     }
 
