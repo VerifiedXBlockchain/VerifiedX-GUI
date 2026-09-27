@@ -28,7 +28,6 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
     try {
       final data = await js.context.callMethod('btcKeypairFromRandom', []);
       final account = BtcWebAccount.fromJson(jsonDecode(data));
-      print(account);
       return account;
     } catch (e) {
       print(e);
@@ -45,7 +44,6 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
       d['address'] = d['addresses'][addressType];
 
       final account = BtcWebAccount.fromJson(d);
-      print(account);
       return account;
     } catch (e) {
       print(e);
@@ -60,7 +58,6 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
       final d = jsonDecode(data);
       d['address'] = d['addresses'][addressType];
       final account = BtcWebAccount.fromJson(d);
-      print(account);
       return account;
     } catch (e) {
       print(e);
@@ -73,7 +70,6 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
     try {
       final data = await js.context.callMethod('btcKeypairFromRandomMnemonic', []);
       final account = BtcWebAccount.fromJson(jsonDecode(data));
-      print(account);
       return account;
     } catch (e) {
       print(e);
@@ -86,7 +82,6 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
     try {
       final data = await js.context.callMethod('btcKeypairFromMnemonic', [mnemonic]);
       final account = BtcWebAccount.fromJson(jsonDecode(data));
-      print(account);
       return account;
     } catch (e) {
       print(e);
@@ -99,7 +94,6 @@ class BtcWebServiceImpl extends BtcWebServiceInterface {
     try {
       final data = await js.context.callMethod('btcKeypairFromEmailPassword', [email, password]);
       final account = BtcWebAccount.fromJson(jsonDecode(data));
-      print(account);
       return account;
     } catch (e) {
       print(e);

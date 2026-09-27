@@ -589,8 +589,8 @@ Future<void> handleCreateWithMnemonic(
     String seed = "${input.substring(0, 32)}$append";
 
     final kp = await KeygenService.seedToKeypair(seed);
-    print(kp);
     if (kp == null) {
+      append += 1;
       continue;
     }
     reserveKeyPair =

@@ -34,7 +34,6 @@ class KeygenService {
     try {
       final String response = await js.context.callMethod('generateReserveAccountRestoreCode', [privateKey, Env.isTestNet]);
 
-      print(response);
 
       final a = response.split("|");
 
