@@ -218,10 +218,10 @@ class WebBtcAdnrContent extends BaseComponent {
                           title: AppLocalizations.of(context).btcValidTxTitle,
                           body: AppLocalizations.of(context)
                               .r3eBtcDomainValidBody(
-                                  "$adnr.vfx",
-                                  ADNR_COST.toString(),
+                                  "$adnr.btc",
+                                  ADNR_TRANSFER_COST.toString(),
                                   txFee.toString(),
-                                  (ADNR_COST + txFee).toString()),
+                                  (ADNR_TRANSFER_COST + txFee).toString()),
                           confirmText: AppLocalizations.of(context).actionSend,
                           cancelText: AppLocalizations.of(context).actionCancel,
                         );
@@ -305,11 +305,11 @@ class WebBtcAdnrContent extends BaseComponent {
                           final confirmed = await ConfirmDialog.show(
                             title: AppLocalizations.of(context).btcValidTxTitle,
                             body:
-                                AppLocalizations.of(context).r3eVfxDomainValidBody(
+                                AppLocalizations.of(context).r3eBtcDomainValidBody(
                                   "$adnr.btc",
-                                  ADNR_COST.toString(),
+                                  ADNR_DELETE_COST.toString(),
                                   txFee.toString(),
-                                  (ADNR_COST + txFee).toString()),
+                                  (ADNR_DELETE_COST + txFee).toString()),
                             confirmText: AppLocalizations.of(context).actionSend,
                             cancelText: AppLocalizations.of(context).actionCancel,
                           );

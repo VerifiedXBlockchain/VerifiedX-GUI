@@ -102,6 +102,7 @@ class CreateAdnrDialog extends BaseComponent {
                       Toast.error(
                           l10n.adnrInsufficientFundsCreateBtc(ADNR_COST.toString()));
                       Navigator.of(context).pop();
+                      return;
                     }
 
                     await InfoDialog.show(

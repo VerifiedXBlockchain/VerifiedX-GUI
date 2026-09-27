@@ -294,6 +294,18 @@ class BtcService extends BaseService {
     }
   }
 
+  /// The tx hash from a BTC domain transfer/delete reply
+  /// (`{Success, Message, Hash}`), or null after showing the node's message.
+  String? _adnrTxHashOrToast(Map<String, dynamic> result) {
+    final hash = result['Hash'];
+    if (result['Success'] == true && hash is String && hash.isNotEmpty) {
+      return hash;
+    }
+
+    Toast.error(result['Message']);
+    return null;
+  }
+
   Future<String?> transferAdnr({
     required String toRbxAddress,
     required String fromBtcAddress,
@@ -301,7 +313,7 @@ class BtcService extends BaseService {
   }) async {
     try {
       final result = await getJson("/TransferAdnr/$toRbxAddress/$fromBtcAddress/$toBtcAddress", cleanPath: false);
-      return null;
+      return _adnrTxHashOrToast(result);
     } catch (e, st) {
       print(e);
       print(st);
@@ -315,14 +327,7 @@ class BtcService extends BaseService {
   }) async {
     try {
       final result = await getJson("/DeleteAdnr/$btcAddress", cleanPath: false);
-      return null;
-      // if (result['Result'] == "Success") {
-      //   if (result.containsKey('Hash')) {
-      //     return result['Hash'];
-      //   }
-      // }
-
-      // Toast.error(result['Message']);
+      return _adnrTxHashOrToast(result);
     } catch (e, st) {
       print(e);
       print(st);

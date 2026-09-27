@@ -274,8 +274,12 @@ class _VfxDomain extends BaseComponent {
 
                               final confirmed = await ConfirmDialog.show(
                                 title: AppLocalizations.of(context).btcValidTxTitle,
-                                body:
-                                    "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
+                                body: AppLocalizations.of(context).r3eVfxDomainValidBody(
+                                  "$adnr.vfx",
+                                  ADNR_TRANSFER_COST.toString(),
+                                  txFee.toString(),
+                                  (ADNR_TRANSFER_COST + txFee).toString(),
+                                ),
                                 confirmText: AppLocalizations.of(context).actionSend,
                                 cancelText: AppLocalizations.of(context).actionCancel,
                               );
@@ -351,8 +355,12 @@ class _VfxDomain extends BaseComponent {
 
                           final confirmed = await ConfirmDialog.show(
                             title: AppLocalizations.of(context).btcValidTxTitle,
-                            body:
-                                "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
+                            body: AppLocalizations.of(context).r3eVfxDomainValidBody(
+                              "$adnr.vfx",
+                              ADNR_DELETE_COST.toString(),
+                              txFee.toString(),
+                              (ADNR_DELETE_COST + txFee).toString(),
+                            ),
                             confirmText: AppLocalizations.of(context).actionSend,
                             cancelText: AppLocalizations.of(context).actionCancel,
                           );

@@ -7884,7 +7884,7 @@ abstract class AppLocalizations {
   /// No description provided for @prvShieldedVfxRequiredBody.
   ///
   /// In en, this message translates to:
-  /// **'vBTC privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.'**
+  /// **'Privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.'**
   String prvShieldedVfxRequiredBody(String balance, String fee);
 
   /// No description provided for @prvShieldedVfxRequiredTitle.
@@ -12558,7 +12558,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3gAdnrDeleteWithCost.
   ///
   /// In en, this message translates to:
-  /// **'There is a cost of {cost} RBX to delete an RBX Domain.'**
+  /// **'There is a cost of {cost} VFX to delete a VFX Domain.'**
   String r3gAdnrDeleteWithCost(String cost);
 
   /// No description provided for @r3gAssetListedInAuctionHouse.
@@ -15924,7 +15924,7 @@ abstract class AppLocalizations {
   /// No description provided for @svcAdnrDeleteWithCost.
   ///
   /// In en, this message translates to:
-  /// **'There is a cost of {cost} RBX to delete an RBX Domain.'**
+  /// **'There is a cost of {cost} VFX to delete a VFX Domain.'**
   String svcAdnrDeleteWithCost(String cost);
 
   /// No description provided for @svcAdnrFundNeededBody.
@@ -16818,7 +16818,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbDeleteDomainWithCost.
   ///
   /// In en, this message translates to:
-  /// **'There is a cost of {cost} VFX to delete an RBX Domain.'**
+  /// **'There is a cost of {cost} VFX to delete a BTC Domain.'**
   String tkbDeleteDomainWithCost(String cost);
 
   /// No description provided for @tkbDeletePending.

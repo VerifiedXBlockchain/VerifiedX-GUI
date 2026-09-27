@@ -504,7 +504,7 @@ class _TransferSharesModal extends BaseComponent {
                 controller: amountControlller,
                 decoration: InputDecoration(
                   label: Text(
-                    l10n.bw2AmountOfBtcToSend,
+                    l10n.tkbAmountOfVbtcTo(forWithdrawl ? l10n.btcWithdrawLabel : l10n.actionSend),
                     style: TextStyle(color: color),
                   ),
                 ),
@@ -516,10 +516,13 @@ class _TransferSharesModal extends BaseComponent {
               //   padding: const EdgeInsets.symmetric(vertical: 8.0),
               //   child: Text("Fee Rate: $BTC_WITHDRAWL_FEE_RATE SATS per byte (${satashiToBtcLabel(BTC_WITHDRAWL_FEE_RATE)} BTC per byte)"),
               // ),
-              Text(
-                l10n.bw2MultiSigHigherFee,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
+              // A vBTC transfer is a VFX transaction with no BTC fee rate;
+              // the multi-signature fee note only applies to a withdrawal.
+              if (forWithdrawl)
+                Text(
+                  l10n.bw2MultiSigHigherFee,
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
               Divider(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

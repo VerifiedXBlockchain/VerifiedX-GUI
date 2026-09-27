@@ -209,7 +209,10 @@ class VfxAdnrCard extends BaseComponent {
                               ref.read(adnrPendingProvider.notifier).addId(wallet.address, "burn", wallet.adnr ?? "null");
                             }
                             notifyTransactionSubmitted();
+                            return;
                           }
+
+                          Toast.error(result.message);
                         }
                       },
                     ),

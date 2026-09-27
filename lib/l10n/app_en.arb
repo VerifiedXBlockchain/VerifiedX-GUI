@@ -4203,7 +4203,7 @@
   "prvShieldedAddressLabel": "Shielded Address",
   "prvShieldedBalanceLabel": "Shielded Balance",
   "prvShieldedVbtcHeading": "Shielded vBTC",
-  "prvShieldedVfxRequiredBody": "vBTC privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.",
+  "prvShieldedVfxRequiredBody": "Privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.",
   "@prvShieldedVfxRequiredBody": {
     "placeholders": {
       "balance": {
@@ -5580,7 +5580,7 @@
     }
   },
   "r3gAdnrDeleteNoCost": "There is no cost to delete and VFX Domain (aside from the TX fee).",
-  "r3gAdnrDeleteWithCost": "There is a cost of {cost} RBX to delete an RBX Domain.",
+  "r3gAdnrDeleteWithCost": "There is a cost of {cost} VFX to delete a VFX Domain.",
   "@r3gAdnrDeleteWithCost": {
     "placeholders": {
       "cost": {
@@ -7092,7 +7092,7 @@
     }
   },
   "svcAdnrDeleteNoCost": "There is no cost to delete a VFX Domain (aside from the TX fee).",
-  "svcAdnrDeleteWithCost": "There is a cost of {cost} RBX to delete an RBX Domain.",
+  "svcAdnrDeleteWithCost": "There is a cost of {cost} VFX to delete a VFX Domain.",
   "@svcAdnrDeleteWithCost": {
     "placeholders": {
       "cost": {
@@ -7580,7 +7580,7 @@
     }
   },
   "tkbDeleteDomainNoCost": "There is no cost to delete and VFX Domain (aside from the TX fee).",
-  "tkbDeleteDomainWithCost": "There is a cost of {cost} VFX to delete an RBX Domain.",
+  "tkbDeleteDomainWithCost": "There is a cost of {cost} VFX to delete a BTC Domain.",
   "@tkbDeleteDomainWithCost": {
     "placeholders": {
       "cost": {

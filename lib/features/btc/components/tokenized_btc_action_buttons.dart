@@ -724,6 +724,17 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   }
                 }
                 if (option == 2) {
+                  final fromAddress = vbtcTransferSenderAddress(
+                    version: token.version,
+                    ownerAddress: token.rbxAddress,
+                    currentWalletAddress:
+                        ref.read(sessionProvider).currentWallet?.address,
+                  );
+                  if (fromAddress == null) {
+                    Toast.error(l10n.r3fFailedTransferVbtc);
+                    return;
+                  }
+
                   final result = await showModalBottomSheet(
                     context: context,
                     builder: (context) {
@@ -744,9 +755,9 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       return;
                     }
 
-                    if (isRa) {
+                    if (fromAddress.startsWith("xRBX")) {
                       if (!await passwordRequiredGuardV2(
-                          context, ref, token.rbxAddress)) {
+                          context, ref, fromAddress)) {
                         return;
                       }
                     }
@@ -756,7 +767,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       ref.read(globalLoadingProvider.notifier).start();
                       final txHash = await VbtcV2Service().transferVbtc(
                         scUid: token.smartContractUid,
-                        fromAddress: token.rbxAddress,
+                        fromAddress: fromAddress,
                         toAddress: result.toAddress,
                         amount: result.amount,
                       );
@@ -783,7 +794,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       final success = await BtcService().transferTokenShares(
                         token.smartContractUid,
                         result.toAddress,
-                        token.rbxAddress,
+                        fromAddress,
                         result.amount,
                       );
                       ref.read(globalLoadingProvider.notifier).complete();

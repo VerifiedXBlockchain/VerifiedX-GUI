@@ -494,3 +494,22 @@ bool vbtcAmountHasTooManyDecimals(String amount) {
   final parts = amount.trim().split('.');
   return parts.length == 2 && parts[1].length > 8;
 }
+
+/// The VFX address a vBTC transfer is sent from.
+///
+/// V2 holders spend their own balance, so the sender is the wallet pressing
+/// the button ([currentWalletAddress]). [ownerAddress] (`token.rbxAddress`) is
+/// the contract's OwnerAddress for V2 and must not be used: a non-owner holder
+/// would get 'Account not found', or move the owner's vBTC on a node that also
+/// holds the owner's key. V1 tokens are held by the NFT owner, so the owner is
+/// the sender. Returns null when V2 has no current wallet to send from.
+String? vbtcTransferSenderAddress({
+  required int version,
+  required String ownerAddress,
+  required String? currentWalletAddress,
+}) {
+  if (version >= 2) {
+    return currentWalletAddress;
+  }
+  return ownerAddress;
+}

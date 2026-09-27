@@ -4194,7 +4194,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String prvShieldedVfxRequiredBody(String balance, String fee) {
-    return 'Las operaciones de privacidad de vBTC requieren una pequeña comisión que se paga con tu saldo de VFX blindado.\n\nActualmente tienes $balance VFX blindado.\nPrimero blinda al menos $fee.';
+    return 'Las operaciones de privacidad requieren una pequeña comisión que se paga con tu saldo de VFX blindado.\n\nActualmente tienes $balance VFX blindado.\nPrimero blinda al menos $fee.';
   }
 
   @override
@@ -6683,7 +6683,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String r3gAdnrDeleteWithCost(String cost) {
-    return 'Eliminar un dominio RBX tiene un costo de $cost RBX.';
+    return 'Hay un costo de $cost VFX para eliminar un dominio VFX.';
   }
 
   @override
@@ -8484,7 +8484,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String svcAdnrDeleteWithCost(String cost) {
-    return 'Hay un costo de $cost RBX para eliminar un dominio RBX.';
+    return 'Hay un costo de $cost VFX para eliminar un dominio VFX.';
   }
 
   @override
@@ -9009,7 +9009,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String tkbDeleteDomainWithCost(String cost) {
-    return 'Hay un costo de $cost VFX para eliminar un dominio RBX.';
+    return 'Hay un costo de $cost VFX para eliminar un dominio BTC.';
   }
 
   @override
