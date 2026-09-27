@@ -7376,9 +7376,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3hOneActiveTopicPerAddress => 'Solo se permite un tema activo por dirección.';
 
   @override
-  String get r3hOptional => 'Opcional';
-
-  @override
   String get r3hPasswordRequired => 'Contraseña requerida.';
 
   @override
@@ -7458,9 +7455,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3hTokenHasFixedSupply => 'Token con suministro fijo:';
-
-  @override
-  String get r3hTokenIconUrlLabel => 'URL del ícono:';
 
   @override
   String get r3hTokenNameFieldLabel => 'Nombre del token:';

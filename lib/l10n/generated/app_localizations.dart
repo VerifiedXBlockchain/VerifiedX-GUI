@@ -13779,12 +13779,6 @@ abstract class AppLocalizations {
   /// **'Only one active topic per address is allowed.'**
   String get r3hOneActiveTopicPerAddress;
 
-  /// No description provided for @r3hOptional.
-  ///
-  /// In en, this message translates to:
-  /// **'Optional'**
-  String get r3hOptional;
-
   /// No description provided for @r3hPasswordRequired.
   ///
   /// In en, this message translates to:
@@ -13946,12 +13940,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Token Has Fixed Supply:'**
   String get r3hTokenHasFixedSupply;
-
-  /// No description provided for @r3hTokenIconUrlLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Token Icon URL:'**
-  String get r3hTokenIconUrlLabel;
 
   /// No description provided for @r3hTokenNameFieldLabel.
   ///

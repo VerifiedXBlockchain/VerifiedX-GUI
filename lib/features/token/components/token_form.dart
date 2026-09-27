@@ -307,22 +307,6 @@ class TokenForm extends BaseComponent {
                   },
                   icon: Icons.image,
                 ),
-                SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                  child: TextFormField(
-                    controller: provider.imageUrlController,
-                    decoration: InputDecoration(
-                      label: Text(
-                        l10n.r3hTokenIconUrlLabel,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      hintText: "https://domain.com/image.jpg",
-                      helperText: l10n.r3hOptional,
-                    ),
-                  ),
-                ),
               ],
             ),
             Padding(

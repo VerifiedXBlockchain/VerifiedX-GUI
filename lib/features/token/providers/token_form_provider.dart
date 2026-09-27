@@ -38,14 +38,12 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
   late final TextEditingController tickerController;
   late final TextEditingController descriptionController;
   late final TextEditingController supplyController;
-  late final TextEditingController imageUrlController;
 
   TokenFormProvider(this.ref, TokenScFeature model) : super(model) {
     nameController = TextEditingController(text: model.name);
     tickerController = TextEditingController(text: model.ticker);
     descriptionController = TextEditingController(text: "");
     supplyController = TextEditingController(text: model.supply == 0 ? '0' : model.supply.toString());
-    imageUrlController = TextEditingController(text: model.imageUrl ?? '');
   }
 
   String? nameValidator(String? val) => formValidatorNotEmpty(val, globalL10n.tokenNameLabel);
@@ -67,7 +65,6 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     tickerController.text = model.ticker;
     descriptionController.text = "";
     supplyController.text = model.supply == 0 ? '0' : model.supply.toString();
-    imageUrlController.text = model.imageUrl ?? '';
   }
 
   clear() {
@@ -125,7 +122,6 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     final token = state.copyWith(
       name: nameController.text,
       ticker: tickerController.text.toUpperCase(),
-      imageUrl: imageUrlController.text,
       supply: state.mintable || supply == 0 ? 0 : supply,
       description: descriptionController.text.isNotEmpty ? descriptionController.text : nameController.text,
     );
@@ -242,7 +238,6 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     final token = state.copyWith(
       name: nameController.text,
       ticker: tickerController.text.toUpperCase(),
-      imageUrl: imageUrlController.text,
       supply: state.mintable || supply == 0 ? 0 : supply,
       description: descriptionController.text.isNotEmpty ? descriptionController.text : tickerController.text,
     );

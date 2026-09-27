@@ -19,12 +19,16 @@ class TransferTokensButton extends BaseComponent {
   final String scId;
   final String fromAddress;
   final double currentBalance;
+  final bool isOwnedByRA;
+  final VoidCallback showRaErrorMessage;
 
   const TransferTokensButton({
     super.key,
     required this.scId,
     required this.fromAddress,
     required this.currentBalance,
+    required this.isOwnedByRA,
+    required this.showRaErrorMessage,
   });
 
   @override
@@ -34,7 +38,13 @@ class TransferTokensButton extends BaseComponent {
       key: const Key('token:transfer'),
       label: l10n.tokenTransfer,
       variant: AppColorVariant.Primary,
+      useDisabledColor: isOwnedByRA,
       onPressed: () async {
+        if (isOwnedByRA) {
+          showRaErrorMessage();
+          return;
+        }
+
         final amount = await PromptModal.show(
           title: l10n.tokenAmountToTransferTitle,
           validator: (val) => formValidatorNumber(val, l10n.tokenAmountLabel),

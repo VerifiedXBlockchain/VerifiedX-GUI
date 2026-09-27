@@ -61,7 +61,7 @@ This area covers fungible tokens on the web wallet and the macOS desktop GUI: th
 - Fields: `Token Name:` (hint `MyToken`, helper "The name of this new token."), `Token Ticker:` (hint `ABC`, helper "The ticker for this new token.", counter `0/20`), `Description (Optional):`.
 - `Token Has Fixed Supply:` is unchecked and no `Total Supply:` field is shown (the token is mintable by default).
 - `Decimal Places:` shows 8 with the decrease and increase arrows; `Is Burnable:` is checked; `Allow Voting:` is unchecked.
-- `Upload Token Icon` and a `Token Icon URL:` field (hint `https://domain.com/image.jpg`, helper `Optional`); a red `Cancel` and a `Create` button.
+- `Upload Token Icon` with no icon URL field next to it; a red `Cancel` and a `Create` button.
 
 **Cleanup:** click `Cancel`.
 
@@ -178,8 +178,9 @@ This area covers fungible tokens on the web wallet and the macOS desktop GUI: th
 - `Stand by` reads "Token Smart Contract mint transaction has been broadcasted." and "The Fungible Token screen will reflect the change once the block is crafted and block height has synced with this transaction."; closing it returns to the list and the form is cleared.
 - When the deploy confirms: a notification "Token Deployed" with the Smart Contract UID, then a green toast "Token Auto Mint initiated. (<T1_SCID>: 1000.0)" (web signs this mint without a confirmation), then a notification "Tokens Minted".
 - The list shows T1 held by A with balance 1000 (web badge `1000.0 <T1 ticker>`; macOS `Balance: 1000.0`) and the row shows `Transfer`, `Burn` and `Voting` (macOS).
+- The uploaded icon is required: the form has no icon URL field, and clicking `Create` before uploading an icon shows the red toast "Icon Image Required" and nothing is compiled. The web form also uploads the icon to Spyglass (`uploadAsset`) as well as embedding it.
 
-**Open question:** the `Is Burnable:` and `Allow Voting:` checkboxes have no key or label and their text is not tappable, and the icon upload opens the native macOS open panel; `tool/drive.dart` can drive neither, so on macOS these are done by hand until keys (for example `token:voting`, `token:burnable`) and a test hook for the picker exist. The web form sends the icon to Spyglass (`uploadAsset`) as well as embedding it; confirm the `Token Icon URL:` field alone is not meant to satisfy the icon requirement (today it does not).
+**Open question:** the `Is Burnable:` and `Allow Voting:` checkboxes have no key or label and their text is not tappable, and the icon upload opens the native macOS open panel; `tool/drive.dart` can drive neither, so on macOS these are done by hand until keys (for example `token:voting`, `token:burnable`) and a test hook for the picker exist.
 
 **Cleanup:** none; later cases use T1. Record `<T1_SCID>`.
 
@@ -375,19 +376,19 @@ This area covers fungible tokens on the web wallet and the macOS desktop GUI: th
 **Steps**
 1. Click `Pause TXs`. Web: `button "Pause TXs"`. macOS: `tap-text "Pause TXs"`.
 2. Confirm. Web: `Yes` in `Pause Transactions`, then `Yes` in `Valid Transaction`. macOS: `tap-text Pause` in `Pause Token Transactions`.
-3. macOS: tap the button again while it reads `Pending Pause`.
+3. Click the button again while it reads `Pending Pause`. Web: `button "Pending Pause"`. macOS: `tap-text "Pending Pause"`.
 4. Wait up to 3 minutes for the button to read `Resume TXs`.
 5. Try to transfer 1 T1 to `TEST_VFX_B_ADDRESS` as in TC-TOKEN-016.
 6. Click `Resume TXs` and confirm (web `Yes`, `Yes`; macOS `tap-text Resume`). Wait up to 3 minutes for `Pause TXs` to return.
 
 **Expected**
 - Confirmations: web `Pause Transactions` "Are you sure you want to pause all transactions with this token?" (`No` / `Yes`); macOS `Pause Token Transactions` "Are you sure you want to pause token transactions? This will prevent transfers and burning of this token until resumed." (`Cancel` / `Pause`).
-- After step 2: web "Transaction broadcasted!"; macOS "Token pause transaction broadcasted" and the button turns into a spinner reading `Pending Pause`; step 3 shows "Token state change is pending. Please wait".
+- After step 2: web "Transaction broadcasted!"; macOS "Token pause transaction broadcasted". On both platforms the button turns into a spinner reading `Pending Pause`, and step 3 shows "Token state change is pending. Please wait" and sends nothing. The web keeps the pending state until a 10-second refresh reports the token paused.
 - Once paused: the button reads `Resume TXs`; the web app bar and list read `[<T1 ticker>] <T1 name> (PAUSED)`; a notification "Token Pause" appears.
 - Step 5: web refuses before the address prompt with "Transactions on this token are currently paused."; macOS shows the CLI's refusal as a red toast and nothing confirms.
-- Resume: web `Resume Transactions` "Are you sure you want resume transactions with this token?"; macOS `Resume Token Transactions` "Are you sure you want to resume token transactions?" and the toast "Token resume transaction broadcasted" with `Pending Resume`; afterwards the button reads `Pause TXs` and `(PAUSED)` is gone.
+- Resume: web `Resume Transactions` "Are you sure you want resume transactions with this token?"; macOS `Resume Token Transactions` "Are you sure you want to resume token transactions?" and the toast "Token resume transaction broadcasted"; on both platforms the button reads `Pending Resume` (a spinner) until the resume reaches the chain; afterwards the button reads `Pause TXs` and `(PAUSED)` is gone.
 
-**Open question:** the macOS refusal text in step 5 comes from the CLI (`TransferToken`); record it on the first run. The web has no pending state for pause, so the button keeps reading `Pause TXs` until the next 10-second refresh after the block; confirm that is acceptable.
+**Open question:** the macOS refusal text in step 5 comes from the CLI (`TransferToken`); record it on the first run.
 
 **Cleanup:** make sure T1 is resumed before continuing.
 
@@ -614,12 +615,10 @@ This area covers fungible tokens on the web wallet and the macOS desktop GUI: th
 
 **Steps**
 1. Web: open T1's detail page and read the vault address's `Token Balances` row.
-2. macOS: on the Fungible Tokens list find the vault group (address in the vault colour) and tap `Burn` on its T1 row.
+2. macOS: on the Fungible Tokens list find the vault group (address in the vault colour) and tap `Transfer` on its T1 row, close the dialog, then tap `Burn`.
 
 **Expected**
 - Web: the vault row shows its balance and "Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first." with no buttons.
-- macOS: the `Burn` button is greyed and tapping it opens `Not Supported by Vault Account` with "Vault Account owned tokens can not perform this action.".
-
-**Open question:** the desktop vault row still offers `Transfer` and the node refuses a transfer whose sender is not the signer (see the comment in `web_token_balance_list_title.dart`); confirm what the desktop should do for vault-held token transfers.
+- macOS: the `Transfer` and `Burn` buttons are greyed, and tapping either opens `Not Supported by Vault Account` with "Vault Account owned tokens can not perform this action."; no amount prompt opens and nothing is sent.
 
 **Cleanup:** none.

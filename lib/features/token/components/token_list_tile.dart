@@ -105,6 +105,8 @@ class TokenListTile extends BaseComponent {
                   scId: tokenAccount.smartContractId,
                   fromAddress: address,
                   currentBalance: tokenAccount.balance,
+                  isOwnedByRA: isOwnedByRA,
+                  showRaErrorMessage: showRaErrorMessage,
                 ),
                 if (canBurn)
                   Padding(

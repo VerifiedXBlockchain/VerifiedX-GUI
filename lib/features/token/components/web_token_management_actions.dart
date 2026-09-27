@@ -15,7 +15,9 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../models/web_fungible_token.dart';
+import '../providers/pending_token_pause_provider.dart';
 import '../providers/web_token_actions_manager.dart';
+import '../providers/web_token_detail_provider.dart';
 import '../providers/web_token_topic_list_provider.dart';
 import '../screens/token_topic_detail_screen.dart';
 
@@ -243,7 +245,29 @@ class WebPauseTokenButton extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final scId = token.smartContractId;
+
+    ref.listen<AsyncValue<WebFungibleTokenDetail?>>(webTokenDetailProvider(scId), (_, next) {
+      final isPaused = next.valueOrNull?.token.isPaused;
+      if (isPaused != null) {
+        ref.read(webPendingTokenPauseProvider.notifier).resolve(scId, isPaused: isPaused);
+      }
+    });
+
+    if (isWebTokenPausePending(ref.watch(webPendingTokenPauseProvider), scId, isPaused: token.isPaused)) {
+      return AppButton(
+        key: const Key('token:pause-pending'),
+        label: token.isPaused ? l10n.r3hPendingResume : l10n.r3hPendingPause,
+        processing: true,
+        variant: AppColorVariant.Light,
+        onPressed: () {
+          Toast.message(l10n.tokenStateChangePendingToast);
+        },
+      );
+    }
+
     return AppButton(
+      key: const Key('token:pause'),
       label: token.isPaused ? l10n.r3hResumeTxs : l10n.r3hPauseTxs,
       variant: AppColorVariant.Light,
       onPressed: () async {
@@ -266,6 +290,9 @@ class WebPauseTokenButton extends BaseComponent {
         );
         if (confirmed == true) {
           final success = await manager.pause(token, token.ownerAddress, !token.isPaused);
+          if (success == true) {
+            ref.read(webPendingTokenPauseProvider.notifier).add(scId, requestedPaused: !token.isPaused);
+          }
         }
       },
     );
