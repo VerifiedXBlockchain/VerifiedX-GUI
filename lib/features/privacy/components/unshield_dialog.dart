@@ -8,6 +8,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../adnr/utils/domain_display.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../providers/privacy_actions_provider.dart';
@@ -62,7 +63,7 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
                 tileColor: Colors.white.withOpacity(0.03),
                 leading: const Icon(Icons.account_balance_wallet, size: 18, color: Colors.white54),
                 title: Text(
-                  wallet.adnr != null ? "${wallet.adnr}.vfx" : wallet.address,
+                  wallet.adnr != null ? domainWithSuffix(wallet.adnr!, ".vfx") : wallet.address,
                   style: const TextStyle(fontSize: 13),
                 ),
                 subtitle: wallet.adnr != null
