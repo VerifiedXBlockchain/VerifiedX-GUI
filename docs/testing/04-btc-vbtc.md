@@ -794,7 +794,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 
 **Steps**
 1. Open the token detail and `tap-key vbtc:withdraw`.
-2. In `Withdraw BTC`, `tap-key vbtc:address` and `type` the value of `TEST_BTC_ADDRESS`; `tap-key vbtc:amount` and `type 0.00002`.
+2. In `Withdraw BTC`, `tap-key vbtc:address` and `type` the value of `TEST_BTC_TREASURY_ADDRESS` (the treasury, see README); `tap-key vbtc:amount` and `type 0.00002`.
 3. Open the `Fee Rate:` menu and choose `Half Hour`.
 4. `tap-key vbtc:submit`, then `Yes` in `Withdraw BTC`.
 5. Watch the processing dialog: wait up to 5 minutes for the request to confirm, then up to 3 minutes for signing (plus up to 2 minutes of verification if the request times out).
@@ -804,7 +804,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 - The sheet shows `To BTC Address`, `Amount of vBTC to Withdraw`, the fee preset menu (no `Custom` entry) and `Fee Estimate: ~<n> SATS | ~<n> BTC    (<n> SATS /byte | <n> BTC /byte)`.
 - The confirm body reads `Are you sure you want to withdraw 0.00002 BTC to <address>?`
 - The dialog moves from `Waiting for Confirmation` (`Waiting for the withdrawal request to be confirmed in a block...`, `This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.`) to `Processing Withdrawal` (`Validators are signing the Bitcoin transaction...`, `This may take a minute. Please do not close the application.`) to `Withdrawal Complete` (`Withdrawal completed successfully!`, `VFX Transaction:` and `BTC Transaction:` hashes with copy and explorer links).
-- A log entry `vBTC Withdrawal completed successfully.` with the BTC hash; `My Balance` drops by 0.00002 after the list refreshes; the BTC transaction confirms on mempool.space within 60 minutes and `TEST_BTC_ADDRESS` receives the amount less the network fee.
+- A log entry `vBTC Withdrawal completed successfully.` with the BTC hash; `My Balance` drops by 0.00002 after the list refreshes; the BTC transaction confirms on mempool.space within 60 minutes and `TEST_BTC_TREASURY_ADDRESS` receives the amount less the network fee.
 
 **Cleanup:** none.
 
@@ -816,7 +816,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 **Steps**
 1. Open the token detail and click `button "Withdraw"`.
 2. In `Amount` (`How much BTC do you want to withdraw?`), type `0.00002` into `textbox "Withdrawal Amount"`, click `button "Submit"`.
-3. In `BTC Address`, type the value of `TEST_BTC_ADDRESS` into `textbox "Receiving BTC Address"`, click `button "Submit"`.
+3. In `BTC Address`, type the value of `TEST_BTC_TREASURY_ADDRESS` (the treasury, see README) into `textbox "Receiving BTC Address"`, click `button "Submit"`.
 4. In the `Fee Rate` picker keep `Economy`, click `button "Continue"`.
 5. In `Confirm Withdrawal Request` click `button "Yes"`.
 6. Keep the tab visible. Wait up to 5 minutes for block confirmation and up to 10 minutes for FROST signing and completion.
@@ -836,7 +836,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 
 **Steps**
 1. Open vBTC Tokens as account B and open the received contract.
-2. Withdraw `0.00001` to `TEST_BTC_ADDRESS` as in TC-BTC-042 (macOS) or TC-BTC-043 (web).
+2. Withdraw `0.00001` to `TEST_BTC_TREASURY_ADDRESS` as in TC-BTC-042 (macOS) or TC-BTC-043 (web).
 
 **Expected**
 - The withdrawal runs to `Withdrawal Complete` for the holder, not the owner: the requestor is account B.

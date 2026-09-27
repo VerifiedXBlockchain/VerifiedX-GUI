@@ -156,11 +156,11 @@ This area moves funds and assets between the web lane and the macOS lane, so eac
 **Preconditions:** `web:A` holds vBTC received from the macOS lane (TC-XP-007).
 
 **Steps**
-1. On web, withdraw the received vBTC to `web:TEST_BTC_ADDRESS` as in TC-BTC-044.
+1. On web, withdraw the received vBTC to `TEST_BTC_TREASURY_ADDRESS` as in TC-BTC-044.
 2. Wait for the FROST signing to finish and for the BTC transaction to confirm (up to 60 minutes).
 
 **Expected**
-- The withdrawal completes on a contract owned by the macOS lane, and the BTC arrives at the web lane's BTC address.
+- The withdrawal completes on a contract owned by the macOS lane, and the BTC arrives at the treasury address.
 
 **Cleanup:** none.
 

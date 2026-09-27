@@ -63,7 +63,17 @@ Some cases need data that only a few areas use. They read these optional variabl
 | `TEST_REMOTE_BEACON_IP`, `TEST_REMOTE_BEACON_PORT` | Beacon cases (11) |
 | `TEST_MOTHER_HOST_IP`, `TEST_MOTHER_HOST_PASSWORD` | MOTHER dashboard cases (11) |
 
-No account appears in both files. Minimum balances before a run, per lane: account A holds at least 200 testnet VFX, account B at least 20 VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-bridge-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts) use names suffixed with the run id and the lane, `w` for web and `m` for macOS, for example `qa-20261001a-w`, or `qa20261001aw` where only letters and digits are allowed, so the two lanes and repeated runs never collide. Where an area file already defines its own platform suffix, such as `<p>` = `web` or `mac` in `09-smart-contracts-nfts.md`, that suffix plays the same role.
+No account appears in both files.
+
+Bitcoin for both lanes comes from one shared testnet4 treasury in `~/.config/vfx-release-tests/treasury.env` (mode 600), which Tyler funds from a testnet4 faucet:
+
+| Variable | Meaning |
+|---|---|
+| `TEST_BTC_TREASURY_ADDRESS` | Treasury address (`tb1q…`, native SegWit). Public; safe to show. |
+| `TEST_BTC_TREASURY_WIF` | Treasury key in WIF form. Secret. |
+
+The treasury is never imported into a lane's wallet, so the two lanes never spend from it at the same time. It is used in three places: the pre-run funding step tops up each lane's `TEST_BTC_ADDRESS` from it, every vBTC withdrawal in the suite pays out to `TEST_BTC_TREASURY_ADDRESS`, and the return step after the run sends leftover lane BTC back to it. Only the funding and return steps sign with the treasury key, and they run before and after the lanes, one at a time.
+ Minimum balances before a run, per lane: account A holds at least 200 testnet VFX, account B at least 20 VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-bridge-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts) use names suffixed with the run id and the lane, `w` for web and `m` for macOS, for example `qa-20261001a-w`, or `qa20261001aw` where only letters and digits are allowed, so the two lanes and repeated runs never collide. Where an area file already defines its own platform suffix, such as `<p>` = `web` or `mac` in `09-smart-contracts-nfts.md`, that suffix plays the same role.
 
 ## Test case format
 
@@ -110,9 +120,11 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 
 A pass has two phases. Phase 1 runs the two lanes in parallel, one Claude agent per lane. Phase 2 runs the cross-platform cases with one agent that drives both the browser and the desktop app.
 
-1. Record the build under test (version string from the app, commit hash) and the run id. Fund both lanes to the minimum balances.
-2. **Phase 1, lanes in parallel.** The web agent runs every case that lists `Web`; the macOS agent runs every case that lists `macOS`. A case listing both platforms is run once in each lane. Each lane skips cases marked `Phase: cross-platform`. Within a lane, run `P0` first, then `P1`, then `P2`, and follow the file order within a priority, because later areas assume accounts and objects created earlier. The two lanes share nothing on chain, so they never wait for each other.
-3. **Phase 2, cross-platform.** After both lanes finish, one agent keeps the web lane's browser session and the macOS lane's driver app open and runs `13-cross-platform.md`. The few cases in other files marked `Phase: cross-platform` are run from inside it (TC-SC-045 from TC-XP-011, TC-VAULT-026 and TC-VAULT-027 from TC-XP-016), so each is run once. It reads both account files.
-4. On a failure, capture the screenshot, the visible error text, and for macOS the tail of the `flutter run` log, then continue with the next case unless the failure blocks the rest of the area.
-5. Each phase writes its own results file: `docs/testing/runs/<run-id>-web.md`, `docs/testing/runs/<run-id>-macos.md` and `docs/testing/runs/<run-id>-cross.md`. Each has one row per case run in that phase: id, result (`pass`, `fail`, `blocked`, `skipped`), and a one-line note for anything other than pass. A case listing both platforms therefore has a row in each lane's file.
-6. The release is blocked while any `P0` case fails in any of the three files.
+1. Record the build under test (version string from the app, commit hash) and the run id. Fund both lanes to the minimum VFX balances.
+2. **Pre-run BTC funding.** One agent opens the web wallet with `?automation=1`, logs in with `TEST_BTC_TREASURY_WIF` through `Bitcoin Private Key / WIF Key` (TC-AUTH-018), choosing `Bech32 (Native SegWit - P2WPKH)` rather than `I don't know` (see TC-AUTH-019), and sends each lane's `TEST_BTC_ADDRESS` enough to reach 0.0005 testnet BTC, as in TC-SEND-010. It waits up to 60 minutes for both sends to confirm, then logs out. Because the lanes start only after this, the run begins with confirmed BTC on both sides.
+3. **Phase 1, lanes in parallel.** The web agent runs every case that lists `Web`; the macOS agent runs every case that lists `macOS`. A case listing both platforms is run once in each lane. Each lane skips cases marked `Phase: cross-platform`. Within a lane, run `P0` first, then `P1`, then `P2`, and follow the file order within a priority, because later areas assume accounts and objects created earlier. The two lanes share nothing on chain, so they never wait for each other.
+4. **Phase 2, cross-platform.** After both lanes finish, one agent keeps the web lane's browser session and the macOS lane's driver app open and runs `13-cross-platform.md`. The few cases in other files marked `Phase: cross-platform` are run from inside it (TC-SC-045 from TC-XP-011, TC-VAULT-026 and TC-VAULT-027 from TC-XP-016), so each is run once. It reads both account files.
+5. On a failure, capture the screenshot, the visible error text, and for macOS the tail of the `flutter run` log, then continue with the next case unless the failure blocks the rest of the area.
+6. Each phase writes its own results file: `docs/testing/runs/<run-id>-web.md`, `docs/testing/runs/<run-id>-macos.md` and `docs/testing/runs/<run-id>-cross.md`. Each has one row per case run in that phase: id, result (`pass`, `fail`, `blocked`, `skipped`), and a one-line note for anything other than pass. A case listing both platforms therefore has a row in each lane's file.
+7. **Return leftover BTC.** After phase 2, the same agent logs in with each lane's BTC key in turn and sends anything above 0.0002 testnet BTC back to `TEST_BTC_TREASURY_ADDRESS`, so the treasury keeps the balance between runs. Record the treasury balance at the start and end of the run in the cross-platform results file.
+8. The release is blocked while any `P0` case fails in any of the three files.
