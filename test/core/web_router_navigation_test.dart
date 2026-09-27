@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/web_route_information_parser.dart';
 import 'package:rbx_wallet/core/web_router.gr.dart';
 import 'package:rbx_wallet/features/root/web_dashboard_container.dart';
+import 'package:rbx_wallet/features/transactions/screens/web_transaction_detail_screen.dart';
 
 /// The web router's real route table with placeholder pages: nested routers
 /// their nested router, the dashboard renders its tabs, and every leaf shows
@@ -22,6 +23,12 @@ class _HarnessRouter extends WebRouter {
         routes: WebDashboardContainer().routes,
         builder: (context, child, _) => child,
       );
+    } else if (data.name == WebTransactionDetailScreenRoute.name) {
+      // Built through the generated factory, so the hash comes from the
+      // route's args exactly as the app resolves it.
+      final page = super.pagesMap[data.name]!(data) as AutoRoutePage;
+      final screen = page.child as WebTransactionDetailScreen;
+      child = Text('detail(${screen.hash})', textDirection: TextDirection.ltr);
     } else if (data.name.endsWith('Router')) {
       child = const AutoRouter();
     } else {
@@ -80,5 +87,21 @@ void main() {
   testWidgets('the auth page still opens at the root URL', (tester) async {
     await _pumpApp(tester, '/');
     expect(find.text('WebAuthScreenRoute()'), findsOneWidget);
+  });
+
+  testWidgets('changing the hash of an open transaction detail shows the new transaction', (tester) async {
+    await _pumpApp(tester, 'dashboard/transactions/detail/aaa');
+    expect(find.text('detail(aaa)'), findsOneWidget);
+
+    await _pushRoute(tester, 'dashboard/transactions/detail/bbb');
+    expect(find.text('detail(bbb)'), findsOneWidget);
+  });
+
+  testWidgets('links written with a leading slash open the same pages', (tester) async {
+    await _pumpApp(tester, '/dashboard/send/vfx/xAbc/2.5');
+    expect(find.text('WebPrefilledSendScreenRoute(vfx,xAbc,2.5)'), findsOneWidget);
+
+    await _pushRoute(tester, '/dashboard/transactions/detail/ccc');
+    expect(find.text('detail(ccc)'), findsOneWidget);
   });
 }
