@@ -292,7 +292,7 @@ This area covers the features that reach outside the VFX chain or that no other 
 
 **Expected**
 - The form shows `VFX Address: <address>` in the accent colour, `Amount: 6.0 VFX`, a `Phone Number` field with a country selector, and `Cancel` / `Request VFX`.
-- Empty phone: the field shows `Required phone number`. Invalid phone: `Invalid phone number`.
+- Empty phone: the field shows `required phone number` (the package's English default, lowercase). Invalid phone: `Invalid phone number`.
 - Cancel closes the dialog.
 
 **Cleanup:** none.

@@ -28,7 +28,7 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 | [13-cross-platform.md](13-cross-platform.md) | Transfers between the web lane and the macOS lane: VFX, BTC, vBTC, NFTs, tokens, domains, vaults | 16 | 7 | 9 | 0 |
 | **Total** | | **456** | **91** | **233** | **132** |
 
-Questions raised while writing the cases, with the case each belongs to, are collected in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md). Several are suspected bugs.
+Findings from writing the cases are triaged into three files: [BUGS-TO-FIX.md](BUGS-TO-FIX.md) lists confirmed defects with file and line, [QUESTIONS-FOR-TYLER.md](QUESTIONS-FOR-TYLER.md) lists the product decisions, and [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) is the full index, including the facts the first run will establish.
 
 ## Environment
 

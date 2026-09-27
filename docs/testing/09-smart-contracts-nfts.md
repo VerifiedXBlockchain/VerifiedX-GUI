@@ -293,8 +293,8 @@ This area covers the smart contract creator (name, creator, description, primary
 1. `Add Feature` → `Multi Asset`, then press `Save` without choosing a file.
 
 **Expected**
-- The sheet closes and no `Multi Asset` card is added; the app shows no error.
-- **Open question:** `MultiAssetFormProvider.complete()` calls `removeMultiAsset` for an id that is not in the list, which runs `removeAt(-1)`; this may throw a RangeError in the log. Record what the log shows.
+- The sheet closes, no `Multi Asset` card is added, and the app shows no error.
+- Known bug until fixed (see `BUGS-TO-FIX.md`): today `removeAt(-1)` throws a RangeError, which skips the close, so the sheet stays open. Record a fail with the log line.
 
 **Cleanup:** none.
 

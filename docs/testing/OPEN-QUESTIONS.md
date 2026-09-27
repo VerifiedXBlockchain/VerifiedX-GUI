@@ -1,6 +1,6 @@
-# Open questions
+# Open questions (full index)
 
-These questions came up while the test cases were written from the code. Each one is also in its case, marked **Open question**. Answering a question usually means editing that case's expected result, or confirming a bug and filing it. They are grouped by area file and listed in case order.
+Every question raised while the cases were written, in case order. They have been triaged: confirmed bugs are listed in [BUGS-TO-FIX.md](BUGS-TO-FIX.md), product decisions in [QUESTIONS-FOR-TYLER.md](QUESTIONS-FOR-TYLER.md). The rest are facts only a real run can establish (exact CLI or Spyglass messages, timings, whether a service does something) or test-setup needs; the first release pass answers those and edits each case.
 
 ## [01 · Launch and authentication](01-launch-auth.md)
 
@@ -45,7 +45,6 @@ These questions came up while the test cases were written from the code. Each on
 ## [04 · BTC and vBTC](04-btc-vbtc.md)
 
 - **TC-BTC-012:** on web, Continue with `Custom` and a 0 or empty value returns 0 without running the field validator. Confirm whether a 0 sat/vB send is expected to be rejected by the backend, and with what message.
-- **TC-BTC-013:** the minimum is printed from the Dart double `0.00001`, which renders as `1e-05`. Confirm whether that wording is acceptable or should read `0.00001`.
 - **TC-BTC-018:** which testnet address with an OP_RETURN transaction should the run use? `TEST_BTC_ADDRESS` only has one if a flow in this suite produced one. Confirm whether a vBTC V2 withdrawal or funding transaction carries OP_RETURN, or name a fixed address to import read-only.
 - **TC-BTC-018:** the desktop list comes from the CLI (`GetBitcoinTXList`); confirm whether desktop needs the same check.
 - **TC-BTC-024:** confirm a reliable way to force a ceremony failure on testnet for this case.
@@ -105,7 +104,6 @@ These questions came up while the test cases were written from the code. Each on
 - **TC-SC-004:** should the web creator also confirm before discarding unsaved input?
 - **TC-SC-008:** - Web has no extension check in `FileSelector`. **Open question:** should the web creator reject the same extensions before uploading to Spyglass?
 - **TC-SC-011:** Soul-Bound, Ticketing, Fractionalization, Tokenization and Pair have modals in `lib/features/smart_contracts/features/` but are commented out of `Feature.allTypes()`. Are they intentionally dark for this release, and should their modals be removed?
-- **TC-SC-015:** `MultiAssetFormProvider.complete()` calls `removeMultiAsset` for an id that is not in the list, which runs `removeAt(-1)`; this may throw a RangeError in the log. Record what the log shows.
 - **TC-SC-023:** should a follow-up run check the next day that the stage became current automatically?
 - **TC-SC-031:** on macOS, does the Media Backup URL block under the QR code (`Media Backup URL:`, the URL and `Copy URL`) appear for this NFT? It depends on the mint transaction's `BackupURL`; record what shows.
 - **TC-SC-031:** - `Features:` lists `Royalty` (subtitle with `5` and account B's address), `Multi Asset` (`1 asset`) and `Evolving` (a phase count) with a `Reveal Evolve Stages` button. **Open question:** the detail builds the phase count from the compiler's feature data; confirm whether it reads `3 phases` like the creator did.

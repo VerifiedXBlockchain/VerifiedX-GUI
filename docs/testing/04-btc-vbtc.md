@@ -239,9 +239,8 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 
 **Expected**
 - Step 1: the recipient field shows `BTC Address required`.
-- Step 2: `The minimum transaction amount is 1e-05 BTC` (macOS shows it on the amount field; web shows it on the field when balance data is loaded).
+- Step 2: `The minimum transaction amount is 0.00001 BTC` (macOS shows it on the amount field; web shows it on the field when balance data is loaded).
 - Step 3: `Not enough balance in BTC account` on the amount field (macOS includes the fee in the check). On web, if the field check passes, the submit toast reads `Not enough balance`.
-- **Open question:** the minimum is printed from the Dart double `0.00001`, which renders as `1e-05`. Confirm whether that wording is acceptable or should read `0.00001`.
 
 **Cleanup:** none.
 

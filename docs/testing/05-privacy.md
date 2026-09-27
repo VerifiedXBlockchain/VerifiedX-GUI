@@ -471,8 +471,8 @@ These cases run only on a build where `VBTC_PRIVACY_ENABLED` is `true` and the C
 3. Wait up to 3 minutes.
 
 **Expected**
-- The dialog `Shield vBTC` reads `Move vBTC from your transparent wallet into the shielded pool.`, `Contract: <name>`, `From: <address>`, the field `Amount (vBTC)` with hint `Min: 1e-05`, and `Transparent network fee will be auto-calculated.`
-- The low amount gives `Minimum shield amount is 1e-05 vBTC`.
+- The dialog `Shield vBTC` reads `Move vBTC from your transparent wallet into the shielded pool.`, `Contract: <name>`, `From: <address>`, the field `Amount (vBTC)` with hint `Min: 0.00001`, and `Transparent network fee will be auto-calculated.`
+- The low amount gives `Minimum shield amount is 0.00001 vBTC`.
 - The valid amount gives `vBTC shield transaction broadcast successfully`, and the card's vBTC balance rises within 3 minutes. Failures read `vBTC shield failed: <error>`.
 
 **Cleanup:** none.
