@@ -6770,6 +6770,30 @@
       }
     }
   },
+  "sendAmountLoweredForFee": "Tu saldo no cubre este monto más la comisión de red de {fee} VFX, así que el monto se redujo a {amount} VFX.",
+  "@sendAmountLoweredForFee": {
+    "description": "Notice at the top of the send confirmation when the VFX amount was lowered automatically so the network fee fits in the balance.",
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "sendAmountTooManyDecimals": "Los montos de {currency} pueden tener como máximo {decimals} decimales.",
+  "@sendAmountTooManyDecimals": {
+    "description": "Send form amount error when the amount has more decimal places than the currency supports (8 for VFX and BTC).",
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "decimals": {
+        "type": "String"
+      }
+    }
+  },
   "sendAppBarTitle": "Enviar {currency}",
   "@sendAppBarTitle": {
     "description": "Send screen app bar title — currency is VFX or BTC.",
@@ -6784,9 +6808,33 @@
   "@sendBadgeNotActivated": {
     "description": "Warning badge shown when a Vault account is not yet activated."
   },
+  "sendBtcAddressInvalid": "Dirección de BTC no válida.",
+  "@sendBtcAddressInvalid": {
+    "description": "Form error when a BTC destination address is malformed or its checksum does not match."
+  },
+  "sendBtcAddressMainnetRequired": "Esta es una dirección de BTC de testnet. Se requiere una dirección de mainnet.",
+  "@sendBtcAddressMainnetRequired": {
+    "description": "Form error when a testnet BTC address is entered while the app runs on mainnet."
+  },
+  "sendBtcAddressTestnetRequired": "Esta es una dirección de BTC de mainnet. Se requiere una dirección de testnet.",
+  "@sendBtcAddressTestnetRequired": {
+    "description": "Form error when a mainnet BTC address is entered while the app runs on testnet."
+  },
   "sendChooseAddressTitle": "Elige una dirección",
   "@sendChooseAddressTitle": {
     "description": "Title of the dialog used to pick one of the user's own addresses as recipient."
+  },
+  "sendFeeNotCovered": "Tu saldo disponible de {available} VFX no cubre la comisión de red de {fee} VFX.",
+  "@sendFeeNotCovered": {
+    "description": "Send error when the balance is too small to pay even the network fee.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
   },
   "sendFormLabelAmount": "Monto:",
   "@sendFormLabelAmount": {
@@ -6803,6 +6851,19 @@
   "sendFormLabelTo": "Para:",
   "@sendFormLabelTo": {
     "description": "Recipient label (with colon) in the send form."
+  },
+  "sendOwnAddressBody": "{address} es una de tus propias direcciones. Los fondos se quedan en tu billetera y solo se gasta la comisión de red.\n\n¿Enviar de todos modos?",
+  "@sendOwnAddressBody": {
+    "description": "Body of the warning shown before sending VFX or BTC to one of the user's own addresses.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "sendOwnAddressTitle": "¿Enviar a tu propia dirección?",
+  "@sendOwnAddressTitle": {
+    "description": "Title of the warning shown before sending VFX or BTC to one of the user's own addresses."
   },
   "sendPasteHelperCmd": "Usa cmd+v para pegar o haz clic ",
   "@sendPasteHelperCmd": {

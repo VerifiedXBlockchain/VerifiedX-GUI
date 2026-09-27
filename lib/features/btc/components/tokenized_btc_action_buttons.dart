@@ -58,8 +58,6 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
     bool debuggingAddressExists = true;
 
-    final isRa = token.rbxAddress.startsWith("xRBX");
-
     return Builder(
       builder: (context) {
         if (token.btcAddress == null) {
@@ -409,17 +407,19 @@ class TokenizedBtcActionButtons extends BaseComponent {
               icon: Icons.download,
               variant: AppColorVariant.Primary,
               onPressed: () async {
-                if (isRa) {
-                  Toast.error(l10n.tkbVaultCannotWithdraw);
-                  return;
-                }
-
                 // The withdrawal requestor is the wallet pressing the button, NOT
                 // token.rbxAddress (the contract owner) — non-owner holders withdraw
                 // their own balance, and the node holds only this wallet's key.
                 final currentWallet = ref.read(sessionProvider).currentWallet;
                 if (currentWallet == null) {
                   Toast.error(l10n.tkbFailedRequestWithdrawal);
+                  return;
+                }
+
+                // Vault accounts cannot withdraw. Test the sender, not the
+                // contract owner, as the transfer does (vbtcTransferSenderAddress).
+                if (vbtcSenderIsVault(currentWallet.address)) {
+                  Toast.error(l10n.tkbVaultCannotWithdraw);
                   return;
                 }
 

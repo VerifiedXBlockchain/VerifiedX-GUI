@@ -17,6 +17,7 @@ import '../../block/block.dart';
 import '../../genesis/models/genesis_block.dart';
 import '../../node/models/node.dart';
 import '../../node/models/node_info.dart';
+import '../../send/send_amount.dart';
 
 class BridgeService extends BaseService {
   Future<dynamic> status() async {
@@ -227,7 +228,7 @@ class BridgeService extends BaseService {
     required String to,
     required String from,
   }) async {
-    final response = await getText("/SendTransaction/$from/$to/$amount", timeout: 0);
+    final response = await getText("/SendTransaction/$from/$to/${formatSendAmount(amount)}", timeout: 0);
 
     if (response == "FAIL") {
       Toast.error();

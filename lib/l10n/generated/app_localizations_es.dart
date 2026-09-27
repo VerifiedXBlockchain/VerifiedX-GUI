@@ -8246,6 +8246,16 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String sendAmountLoweredForFee(String fee, String amount) {
+    return 'Tu saldo no cubre este monto más la comisión de red de $fee VFX, así que el monto se redujo a $amount VFX.';
+  }
+
+  @override
+  String sendAmountTooManyDecimals(String currency, String decimals) {
+    return 'Los montos de $currency pueden tener como máximo $decimals decimales.';
+  }
+
+  @override
   String sendAppBarTitle(String currency) {
     return 'Enviar $currency';
   }
@@ -8254,7 +8264,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get sendBadgeNotActivated => 'No activada';
 
   @override
+  String get sendBtcAddressInvalid => 'Dirección de BTC no válida.';
+
+  @override
+  String get sendBtcAddressMainnetRequired => 'Esta es una dirección de BTC de testnet. Se requiere una dirección de mainnet.';
+
+  @override
+  String get sendBtcAddressTestnetRequired => 'Esta es una dirección de BTC de mainnet. Se requiere una dirección de testnet.';
+
+  @override
   String get sendChooseAddressTitle => 'Elige una dirección';
+
+  @override
+  String sendFeeNotCovered(String available, String fee) {
+    return 'Tu saldo disponible de $available VFX no cubre la comisión de red de $fee VFX.';
+  }
 
   @override
   String get sendFormLabelAmount => 'Monto:';
@@ -8267,6 +8291,14 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get sendFormLabelTo => 'Para:';
+
+  @override
+  String sendOwnAddressBody(String address) {
+    return '$address es una de tus propias direcciones. Los fondos se quedan en tu billetera y solo se gasta la comisión de red.\n\n¿Enviar de todos modos?';
+  }
+
+  @override
+  String get sendOwnAddressTitle => '¿Enviar a tu propia dirección?';
 
   @override
   String get sendPasteHelperCmd => 'Usa cmd+v para pegar o haz clic ';

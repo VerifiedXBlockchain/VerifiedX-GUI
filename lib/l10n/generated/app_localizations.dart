@@ -15447,6 +15447,18 @@ abstract class AppLocalizations {
   /// **'Amount of {currency} to send'**
   String sendAmountHint(String currency);
 
+  /// Notice at the top of the send confirmation when the VFX amount was lowered automatically so the network fee fits in the balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Your balance does not cover this amount plus the {fee} VFX network fee, so the amount was lowered to {amount} VFX.'**
+  String sendAmountLoweredForFee(String fee, String amount);
+
+  /// Send form amount error when the amount has more decimal places than the currency supports (8 for VFX and BTC).
+  ///
+  /// In en, this message translates to:
+  /// **'{currency} amounts can have at most {decimals} decimal places.'**
+  String sendAmountTooManyDecimals(String currency, String decimals);
+
   /// Send screen app bar title — currency is VFX or BTC.
   ///
   /// In en, this message translates to:
@@ -15459,11 +15471,35 @@ abstract class AppLocalizations {
   /// **'Not Activated'**
   String get sendBadgeNotActivated;
 
+  /// Form error when a BTC destination address is malformed or its checksum does not match.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid BTC address.'**
+  String get sendBtcAddressInvalid;
+
+  /// Form error when a testnet BTC address is entered while the app runs on mainnet.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a testnet BTC address. A mainnet address is required.'**
+  String get sendBtcAddressMainnetRequired;
+
+  /// Form error when a mainnet BTC address is entered while the app runs on testnet.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a mainnet BTC address. A testnet address is required.'**
+  String get sendBtcAddressTestnetRequired;
+
   /// Title of the dialog used to pick one of the user's own addresses as recipient.
   ///
   /// In en, this message translates to:
   /// **'Choose an address'**
   String get sendChooseAddressTitle;
+
+  /// Send error when the balance is too small to pay even the network fee.
+  ///
+  /// In en, this message translates to:
+  /// **'Your available balance of {available} VFX does not cover the {fee} VFX network fee.'**
+  String sendFeeNotCovered(String available, String fee);
 
   /// Amount label (with colon) in the send form.
   ///
@@ -15488,6 +15524,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To:'**
   String get sendFormLabelTo;
+
+  /// Body of the warning shown before sending VFX or BTC to one of the user's own addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'{address} is one of your own addresses. The funds stay in your wallet and only the network fee is spent.\n\nSend anyway?'**
+  String sendOwnAddressBody(String address);
+
+  /// Title of the warning shown before sending VFX or BTC to one of the user's own addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to Your Own Address?'**
+  String get sendOwnAddressTitle;
 
   /// Helper text beneath the recipient address field on macOS. Intentionally ends with a trailing space.
   ///

@@ -192,15 +192,14 @@ This area covers VFX domains (`.vfx`, an alias for a VFX address) and BTC domain
 
 **Steps**
 1. Open Receive. Web: `button "Receive"` in the side nav. macOS: `tap-key nav:receive`.
-2. Web only: click `button "Copy domain"`.
+2. Click `button "Copy domain"` (key `receive:copy_domain` on both platforms).
 3. Click the `Copy Link` button (label "Copy" / "Link" on two lines, link icon; web `fltA11y.tap("Copy\nLink")` or click it by its text, macOS `tap-text "Copy\nLink"`). In `Request Funds`, enter `1` in `Amount to request` (web `await fltA11y.type("Amount to request", "1")`; macOS tap the field, `type 1`), confirm with `Generate Link`.
 
 **Expected**
-- Web: below the address card a second card shows the domain in the account colour with the subtitle `Your Domain`; `Copy domain` shows the toast "'<domain>' Copied to clipboard".
-- macOS: the Receive card shows only the address (no domain row, no copy-domain control).
+- Web: below the address card a second card shows the domain in the account colour with the subtitle `Your Domain`.
+- macOS: below the address row the Receive card shows the domain in the account colour with the subtitle `Your Domain` and a copy button.
+- Both: `Copy domain` shows the toast "'<domain>' Copied to clipboard".
 - Both: a green toast "Request funds link copied to clipboard", and the clipboard holds `https://wallet-testnet.verifiedx.io/#dashboard/send/vfx/<domain>/1.0`, using the domain instead of the address.
-
-**Open question:** the desktop Receive screen never shows the domain even though it passes it to the request-link buttons; confirm that is intended.
 
 **Cleanup:** none.
 

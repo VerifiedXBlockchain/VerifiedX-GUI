@@ -220,10 +220,8 @@ This area covers Vault (reserve, `xRBX`) accounts on both platforms: creating on
 2. Fill B's address and amount `1`, click the form's `button "Send"`, confirm `Please Confirm`, accept the `Timelock Duration` default `24`, and stop at the `Valid Transaction` dialog or the error toast; press `Cancel` if `Valid Transaction` appears.
 
 **Expected**
-- The Send screen opens with the `Vault` segment selected and Vault W as sender.
-- The web form has no `Not Activated` guard, so the outcome is decided by the node: either a red toast with the node's refusal, or a `Valid Transaction` dialog (cancelled here).
-
-**Open question:** should the web wallet block sends from a Vault that is not activated, as the desktop does (`You must activate your Vault Account before proceeding.`)? Record what the node answers.
+- The Send screen opens with the `Vault` segment selected, Vault W as sender and a red `Not Activated` badge above the sender.
+- Clicking `Send` shows the red toast `You must activate your Vault Account before proceeding.`, as on the desktop. No `Please Confirm`, timelock or `Valid Transaction` dialog opens and nothing is broadcast.
 
 **Cleanup:** press `Clear`.
 

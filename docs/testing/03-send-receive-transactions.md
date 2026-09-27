@@ -215,18 +215,24 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 
 **Steps**
 1. Submit with both fields empty.
-2. Enter any address and amount `0.000001`, submit.
+2. Enter a valid address for the current network and amount `0.000001`, submit.
 3. Enter amount `1000`, submit.
 4. macOS only: set the fee rate preset to `Custom`, leave the custom fee field (hint `Fee rate in satoshis`) empty, enter a valid amount `0.0001`, submit.
+5. Enter amount `0.0001` and a valid address with its last character changed: on testnet `tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k8`; on mainnet `bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t5`. Submit.
+6. Enter an address of the other network: on testnet `bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4`; on mainnet `tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7`. Submit.
+7. Enter amount `0.000100001` (9 decimals) with a valid address, submit.
+8. Enter one valid address of each type for the current network and submit each with amount `0.0001`, stopping at the first dialog (fee rate picker on web, `Please Confirm` on macOS) and cancelling it. Testnet: `mpXwg4jMtRhuSpVq4xS3HFHmCmWp9NyGKt` (P2PKH), `2N2GDNJ4rEm6NxfMC9ck8VuRdheQzXWaNZv` (P2SH), `tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7` (P2WSH), `tb1pqqqqp399et2xygdj5xreqhjjvcmzhxw4aywxecjdzew6hylgvsesf3hn0c` (Taproot). Mainnet: `1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa`, `3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy`, `bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4`, `bc1p0xlxvlhemja6c4dqv22uapctqupfhlxm9h8z3k2e72q4k9hcz7vqzk5jj0`.
 
 **Expected**
 - Step 1: `BTC Address required` under the address and `Amount required` under the amount.
 - Step 2: `The minimum transaction amount is 0.00001 BTC`.
 - Step 3: `Not enough balance in BTC account`.
 - Step 4: `Invalid Fee Rate. Must be at least 1 satoshi.` under the custom fee field.
-- No confirmation dialog opens in any step.
-
-**Open question:** the client does not validate the BTC address format (only non-empty). What should a malformed BTC address produce: a CLI/Spyglass error toast, or nothing? Record the observed text.
+- Step 5: `Invalid BTC address.` under the address (the checksum does not match).
+- Step 6: on testnet `This is a mainnet BTC address. A testnet address is required.`; on mainnet `This is a testnet BTC address. A mainnet address is required.`
+- Step 7: `BTC amounts can have at most 8 decimal places.` under the amount.
+- Steps 1 to 7: no confirmation dialog opens.
+- Step 8: every address type passes the form and the first dialog opens.
 
 **Cleanup:** press `Clear`, set the preset back to `Economy`.
 
@@ -349,10 +355,9 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 
 **Expected**
 - Step 1: `Not enough balance in account.` under the amount; no dialog.
-- Step 2, macOS: `Please Confirm` opens (the client compares against the balance only, not balance plus fee).
-- Step 2, web: `Please Confirm` opens; if it is confirmed, the node refuses the send because the fee is not covered and a red toast shows the refusal. Press `Cancel` instead.
-
-**Open question:** should the client reserve the fee when the amount equals the full balance? Today neither platform does.
+- Step 2 (both platforms): the client asks the node for the fee before confirming (macOS: CLI `GetRawTxFee`; web: Spyglass raw fee) and lowers the amount so amount plus fee fits. The amount field now holds `<balance - fee>`, and `Please Confirm` starts with `Your balance does not cover this amount plus the <fee> VFX network fee, so the amount was lowered to <balance - fee> VFX.`, followed by the usual `Sending:` block showing the lowered amount. On web the balance used is the spendable one (pending sends deducted, and 0.5 VFX kept for a Vault). Press `Cancel`.
+- If the balance does not even cover the fee, a red toast reads `Your available balance of <balance> VFX does not cover the <fee> VFX network fee.` and no dialog opens.
+- A macOS Vault account (timelocked send) is not adjusted; the node decides.
 
 **Cleanup:** press `Clear`.
 
@@ -363,13 +368,14 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 
 **Steps**
 1. Send `0.12345678` VFX to B through the full flow (TC-SEND-002 on macOS, TC-SEND-003 on web).
-2. Send `0.0000000000000000001` (19 decimals) to B; stop at the web `Valid Transaction` dialog or the macOS toast and record the result.
+2. Enter `0.123456789` (9 decimals) and submit.
+3. Enter `0.0000000000000000001` (19 decimals) and submit.
+4. Enter `1.500000000` (trailing zeros past the 8th decimal) and submit; stop at `Please Confirm` and press `Cancel`.
 
 **Expected**
 - Step 1 succeeds; the transaction lists `-0.12345678 VFX` and B receives exactly `0.12345678`.
-- Step 2: the client has no decimal-places rule, so the form accepts it. The outcome comes from the node: a refusal toast, or a transaction whose amount is shown rounded. The amount shown in the confirmation must equal the amount that lands on chain.
-
-**Open question:** what is VFX's maximum precision, and should the form reject extra decimals with a message? No client rule exists today.
+- Steps 2 and 3: `VFX amounts can have at most 8 decimal places.` under the amount; no dialog. VFX is an 8-decimal currency in the Core CLI (fees are rounded to 8 places and privacy amounts are scaled by 10^8).
+- Step 4: trailing zeros do not count, so `Please Confirm` opens.
 
 **Cleanup:** none.
 
@@ -399,10 +405,9 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 2. Wait up to 2 minutes and open the transaction list.
 
 **Expected**
-- The client does not block it: `Please Confirm` shows the same address as `To:` and `From:`.
+- Before `Please Confirm`, a warning `Send to Your Own Address?` opens: `<A address> is one of your own addresses. The funds stay in your wallet and only the network fee is spent.` / `Send anyway?`, with `Cancel` and `Continue`. `Cancel` stops the send. The same warning appears for another account of this wallet (macOS wallet list, web multi-account list), the account's own Vault or domain, and for BTC sends to one of your own BTC addresses.
+- After `Continue`, `Please Confirm` shows the same address as `To:` and `From:`.
 - The transaction confirms; A's balance drops by the fee only. On macOS the tile shows the refresh (to-and-from-me) icon.
-
-**Open question:** should sending to self be blocked or warned about? No check exists today.
 
 **Cleanup:** none.
 

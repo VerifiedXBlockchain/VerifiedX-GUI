@@ -122,6 +122,8 @@ class SendForm extends BaseComponent {
 
     bool isWeb = kIsWeb;
     bool isBtc = kIsWeb ? webAccountType?.type == WebCurrencyType.btc : ref.watch(sessionProvider.select((v) => v.btcSelected));
+    final webVaultNotActivated =
+        kIsWeb && webAccountType?.type == WebCurrencyType.vault && !ref.watch(webSessionProvider.select((v) => v.raActivated));
 
     const leadingWidth = 70.0;
 
@@ -193,7 +195,7 @@ class SendForm extends BaseComponent {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (!isBtc && wallet!.isReserved && !wallet!.isNetworkProtected)
+                          if (!isBtc && (wallet!.isReserved && !wallet!.isNetworkProtected || webVaultNotActivated))
                             AppBadge(
                               label: AppLocalizations.of(context).sendBadgeNotActivated,
                               variant: AppColorVariant.Danger,

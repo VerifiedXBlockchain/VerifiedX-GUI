@@ -66,4 +66,39 @@ class LocalTransactionService extends BaseService {
   Future<List<Transaction>> transactionsReserved() async {
     return await _transactions('/GetReserveLocalTX');
   }
+
+  /// The fee the CLI charges for a plain VFX transfer of [amount]
+  /// (TXV1 GetRawTxFee). The CLI sizes the fee from the serialized
+  /// transaction, filling the nonce itself, so the quote matches what
+  /// SendTransaction will charge. Null when the CLI cannot quote it.
+  Future<double?> vfxTransferFee({
+    required String fromAddress,
+    required String toAddress,
+    required double amount,
+  }) async {
+    try {
+      final response = await postJson(
+        '/GetRawTxFee',
+        params: {
+          'Timestamp': DateTime.now().millisecondsSinceEpoch ~/ 1000,
+          'FromAddress': fromAddress,
+          'ToAddress': toAddress,
+          'Amount': amount,
+          'Fee': 0,
+          'Nonce': 0,
+          'TransactionType': 0,
+          'Data': null,
+        },
+      );
+      final data = response['data'];
+      if (data is Map && data['Result'] == 'Success' && data['Fee'] is num) {
+        return (data['Fee'] as num).toDouble();
+      }
+      print("GetRawTxFee did not return a fee: $data");
+      return null;
+    } catch (e) {
+      print("GetRawTxFee failed: $e");
+      return null;
+    }
+  }
 }

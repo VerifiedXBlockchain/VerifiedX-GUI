@@ -8246,6 +8246,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String sendAmountLoweredForFee(String fee, String amount) {
+    return 'Your balance does not cover this amount plus the $fee VFX network fee, so the amount was lowered to $amount VFX.';
+  }
+
+  @override
+  String sendAmountTooManyDecimals(String currency, String decimals) {
+    return '$currency amounts can have at most $decimals decimal places.';
+  }
+
+  @override
   String sendAppBarTitle(String currency) {
     return 'Send $currency';
   }
@@ -8254,7 +8264,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendBadgeNotActivated => 'Not Activated';
 
   @override
+  String get sendBtcAddressInvalid => 'Invalid BTC address.';
+
+  @override
+  String get sendBtcAddressMainnetRequired => 'This is a testnet BTC address. A mainnet address is required.';
+
+  @override
+  String get sendBtcAddressTestnetRequired => 'This is a mainnet BTC address. A testnet address is required.';
+
+  @override
   String get sendChooseAddressTitle => 'Choose an address';
+
+  @override
+  String sendFeeNotCovered(String available, String fee) {
+    return 'Your available balance of $available VFX does not cover the $fee VFX network fee.';
+  }
 
   @override
   String get sendFormLabelAmount => 'Amount:';
@@ -8267,6 +8291,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendFormLabelTo => 'To:';
+
+  @override
+  String sendOwnAddressBody(String address) {
+    return '$address is one of your own addresses. The funds stay in your wallet and only the network fee is spent.\n\nSend anyway?';
+  }
+
+  @override
+  String get sendOwnAddressTitle => 'Send to Your Own Address?';
 
   @override
   String get sendPasteHelperCmd => 'Use cmd+v to paste or click ';

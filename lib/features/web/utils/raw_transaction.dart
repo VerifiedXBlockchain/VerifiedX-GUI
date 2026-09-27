@@ -122,6 +122,48 @@ class RawTransaction {
     return RawTransactionResult.verified(txData);
   }
 
+  /// The fee the node quotes for this transaction, without hashing or
+  /// signing it: the same timestamp, nonce and fee calls [generate] makes
+  /// first. The send form uses it to fit the amount and fee in the balance
+  /// before the user confirms. Null when any call fails.
+  static Future<double?> estimateFee({
+    required String fromAddress,
+    required String toAddress,
+    required double amount,
+    required int txType,
+    dynamic data,
+    int? unlockHours,
+  }) async {
+    final rawTxService = RawService();
+
+    final timestamp = await rawTxService.getTimestamp();
+    if (timestamp == null) {
+      print("Failed to retrieve timestamp for the fee estimate");
+      return null;
+    }
+
+    final nonce = await rawTxService.getNonce(fromAddress);
+    if (nonce == null) {
+      print("Failed to retrieve nonce for the fee estimate");
+      return null;
+    }
+
+    final unlockTimestamp = unlockHours != null ? (DateTime.now().add(Duration(hours: unlockHours)).millisecondsSinceEpoch / 1000).round() : null;
+
+    return rawTxService.getFee(
+      buildTransaction(
+        toAddress: toAddress,
+        fromAddress: fromAddress,
+        amount: amount,
+        nonce: nonce,
+        timestamp: timestamp,
+        type: txType,
+        data: data,
+        unlockTimestamp: unlockTimestamp,
+      ),
+    );
+  }
+
   static Future<RawTxValue?> _getTransactionForSignature({
     required String fromAddress,
     required String toAddress,
