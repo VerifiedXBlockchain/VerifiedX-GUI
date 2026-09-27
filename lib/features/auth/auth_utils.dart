@@ -34,7 +34,7 @@ import '../keygen/models/keypair.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../web/models/multi_account_instance.dart';
 import '../../core/services/multi_account_encryption_service.dart';
-import 'package:collection/collection.dart';
+import '../../core/services/web_account_password_store.dart';
 import '../../core/env.dart';
 import 'components/auth_type_modal.dart';
 import 'models/web_btc_address_type.dart';
@@ -728,15 +728,8 @@ Future<MultiAccountInstance?> _getDecryptedAccount(
   BuildContext context,
   MultiAccountInstance account,
 ) async {
-  final storage = singleton<Storage>();
-  final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
-
-  if (savedData == null) return account;
-
-  final storedAccountJson = savedData
-      .map((e) => jsonDecode(e) as Map<String, dynamic>)
-      .where((json) => json['id'] == account.id)
-      .firstOrNull;
+  final store = WebAccountPasswordStore(singleton<Storage>());
+  final storedAccountJson = store.storedAccount(account.id);
 
   final hasEncryptedKeys = storedAccountJson != null &&
       MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson);
@@ -757,15 +750,12 @@ Future<MultiAccountInstance?> _getDecryptedAccount(
 
   if (password == null) return null;
 
-  try {
-    final decryptedJson =
-        MultiAccountEncryptionService.decryptAccountPrivateKeys(
-            storedAccountJson, password);
-    return MultiAccountInstance.fromJson(decryptedJson);
-  } catch (e) {
+  // Decrypts every secret field and upgrades the stored entry's format.
+  final decrypted = store.decryptStoredAccount(account.id, password);
+  if (decrypted == null) {
     Toast.error(l10n.hnavFailedDecryptAccountKeys);
-    return null;
   }
+  return decrypted;
 }
 
 Future<void> _showKeysForType(

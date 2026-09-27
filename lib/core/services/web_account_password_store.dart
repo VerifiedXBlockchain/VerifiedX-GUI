@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../features/btc_web/models/btc_web_account.dart';
 import '../../features/keygen/models/keypair.dart';
@@ -46,11 +47,25 @@ class UnlockedWebAccount {
 /// target account has no encrypted entry (wallets saved before multi-account
 /// encryption), and so that a wallet saved before per-account passwords still
 /// opens with the password that opened it before. That password only ever
-/// decrypts the keys it encrypted.
+/// decrypts the keys it encrypted. The slot encrypts each keypair as a whole,
+/// so every secret field in it is already covered.
+///
+/// Whenever an account's password is confirmed by decrypting its entry, any
+/// secret field of that entry still stored in the earlier format (only the
+/// main private keys were encrypted) is encrypted under the same password and
+/// the entry is rewritten. See [MultiAccountEncryptionService].
 class WebAccountPasswordStore {
   final Storage storage;
 
-  const WebAccountPasswordStore(this.storage);
+  /// Encrypts an account record when upgrading it. Replaceable for tests.
+  final Map<String, dynamic> Function(Map<String, dynamic>, String)
+      encryptAccount;
+
+  const WebAccountPasswordStore(
+    this.storage, {
+    @visibleForTesting this.encryptAccount =
+        MultiAccountEncryptionService.encryptAccountPrivateKeys,
+  });
 
   int? get activeAccountId => storage.getInt(Storage.MULTIPLE_ACCOUNT_SELECTED);
 
@@ -75,7 +90,7 @@ class WebAccountPasswordStore {
     final stored = accountId != null ? storedAccount(accountId) : null;
     if (stored != null &&
         MultiAccountEncryptionService.hasEncryptedPrivateKeys(stored)) {
-      return _decryptAccount(stored, password) != null;
+      return _decryptAndUpgrade(stored, password) != null;
     }
     return verifyLegacyPassword(password);
   }
@@ -114,7 +129,7 @@ class WebAccountPasswordStore {
     if (stored != null &&
         stored['keypair'] != null &&
         MultiAccountEncryptionService.hasEncryptedPrivateKeys(stored)) {
-      final account = _decryptAccount(stored, password);
+      final account = _decryptAndUpgrade(stored, password);
       if (account != null && account.keypair != null) {
         return UnlockedWebAccount(
           accountId: account.id,
@@ -155,6 +170,12 @@ class WebAccountPasswordStore {
 
       final matchingEntry = storedAccounts().firstWhereOrNull(
           (json) => json['keypair']?['address'] == keypair.address);
+      if (matchingEntry != null &&
+          MultiAccountEncryptionService.hasEncryptedPrivateKeys(
+              matchingEntry)) {
+        // Upgrades the entry only when this password is also its own.
+        _decryptAndUpgrade(matchingEntry, password);
+      }
 
       return UnlockedWebAccount(
         accountId: matchingEntry?['id'] as int?,
@@ -166,6 +187,64 @@ class WebAccountPasswordStore {
       print("Failed to decrypt the legacy web wallet keys: $e");
       return null;
     }
+  }
+
+  /// Decrypts the stored account with [id] under [password], for switching to
+  /// it or revealing its keys. Returns null when the account is missing, has
+  /// no encrypted keys, or [password] is not its own.
+  MultiAccountInstance? decryptStoredAccount(int id, String password) {
+    final stored = storedAccount(id);
+    if (stored == null ||
+        !MultiAccountEncryptionService.hasEncryptedPrivateKeys(stored)) {
+      return null;
+    }
+    return _decryptAndUpgrade(stored, password);
+  }
+
+  /// Decrypts [stored] and, when [password] opens it, upgrades the stored
+  /// entry to the current account format.
+  MultiAccountInstance? _decryptAndUpgrade(
+      Map<String, dynamic> stored, String password) {
+    final account = _decryptAccount(stored, password);
+    if (account != null) {
+      _upgradeStoredAccount(stored, password);
+    }
+    return account;
+  }
+
+  /// Rewrites the entry [stored] with every secret field encrypted under
+  /// [password]. Nothing is written when the entry is already in that format,
+  /// when the new record does not decrypt to the same values, or when the
+  /// stored entry changed in the meantime; the old entry is kept.
+  void _upgradeStoredAccount(Map<String, dynamic> stored, String password) {
+    final Map<String, dynamic>? upgraded;
+    try {
+      upgraded = MultiAccountEncryptionService.upgradeAccountRecord(
+          stored, password,
+          encrypt: encryptAccount);
+    } catch (e) {
+      print("Kept the stored format of web account ${stored['id']}: $e");
+      return;
+    }
+    if (upgraded == null) {
+      return;
+    }
+
+    final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
+    if (savedData == null) {
+      return;
+    }
+    final index = savedData.indexWhere((entry) => const DeepCollectionEquality()
+        .equals(jsonDecode(entry as String), stored));
+    if (index < 0) {
+      print("Kept the stored format of web account ${stored['id']}: "
+          "the stored entry changed before it could be rewritten");
+      return;
+    }
+
+    final updated = [...savedData];
+    updated[index] = jsonEncode(upgraded);
+    storage.setList(Storage.MULTIPLE_ACCOUNTS, updated);
   }
 
   /// Decrypts a stored account, or returns null when [password] is wrong.

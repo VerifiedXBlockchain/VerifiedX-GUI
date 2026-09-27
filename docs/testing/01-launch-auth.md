@@ -520,6 +520,29 @@ This file covers everything between opening the app and holding a usable, unlock
 
 **Open question:** the auth screen pushes an authenticated session straight to the dashboard when the path is `/`, so it is unclear which user path shows `Resume Session`. Confirm the intended trigger.
 
+### TC-AUTH-063 · A wallet saved by the previous release unlocks and moves to the extended account format
+**Platforms:** Web · **Priority:** P0 · **Moves funds:** no
+
+The encrypted account format now covers every secret field of an account (recovery mnemonic, Vault recovery private key and restore code, BTC WIF and mnemonic), not only the main private keys. Records saved by earlier builds still load, and are rewritten in the extended format the first time their password is entered.
+
+**Preconditions:** Fresh browser. A build of the previous release (the `main` branch) served at `http://localhost:42069`: create a mnemonic account as in TC-AUTH-013 with `TEST_ENCRYPTION_PASSWORD`, note its mnemonic, open the `Vault` reveal (TC-AUTH-038) and note the restore code. Then stop that build and serve this build at the same origin without clearing site data.
+
+**Steps**
+1. Before unlocking, read the stored account list through the `javascript_tool`: `await new Promise(r => { const q = indexedDB.open('vfx'); q.onsuccess = () => { const s = q.result.transaction('box').objectStore('box'); const k = s.getAllKeys(); k.onsuccess = () => { const key = k.result.find(x => String(x).endsWith('WEB_MULTIPLE_ACCOUNTS_v3')); const g = s.get(key); g.onsuccess = () => { const v = g.result; r(v instanceof ArrayBuffer || ArrayBuffer.isView(v) ? new TextDecoder().decode(v) : JSON.stringify(v)); }; }; }; })`. Hive keeps the value in IndexedDB (not localStorage), so the text can carry a few binary bytes around the JSON; save the result.
+2. Open `http://localhost:42069/?automation=1` and unlock with `TEST_ENCRYPTION_PASSWORD` as in TC-AUTH-022.
+3. Reveal the VFX keys (TC-AUTH-037) and the Vault keys (TC-AUTH-038); screenshot both dialogs, then `Done`.
+4. Read the stored account list again with the snippet from step 1.
+5. Lock the wallet (TC-AUTH-025), reopen `?automation=1`, unlock again, and read the stored account list a third time.
+
+**Expected**
+- Step 1: the record holds `_isPrivateEncrypted` markers, and the mnemonic words and the restore code noted in the preconditions appear in it as stored by the previous release.
+- Step 2: the dashboard opens for the same address as before, with no error.
+- Step 3: `Recovery Mnemonic` shows the same 12 words noted in the preconditions; `Restore Code` and `Recovery Private Key` match the values noted from the previous release.
+- Step 4: the record now also holds `_isMneumonicEncrypted`, `_isRecoveryPrivateEncrypted`, `_isRestoreCodeEncrypted` and, when the account has a BTC key, `_isWifEncrypted`; each of those fields holds an object with `encrypted_data`, `salt`, `iv` and `iterations`; the mnemonic words and the restore code no longer appear anywhere in it. The address fields are unchanged.
+- Step 5: the record is the same as in step 4 (the second unlock rewrites nothing), and the reveals still show the same values.
+
+**Cleanup:** Sign out.
+
 ## Web sign out
 
 ### TC-AUTH-029 · Sign out from the side nav

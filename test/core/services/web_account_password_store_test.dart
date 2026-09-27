@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/services/encryption_service.dart';
 import 'package:rbx_wallet/core/services/multi_account_encryption_service.dart';
@@ -11,6 +12,7 @@ import 'package:rbx_wallet/features/btc_web/models/btc_web_account.dart';
 import 'package:rbx_wallet/features/keygen/models/keypair.dart';
 import 'package:rbx_wallet/features/keygen/models/ra_keypair.dart';
 import 'package:rbx_wallet/features/web/models/multi_account_instance.dart';
+import 'package:rbx_wallet/features/web/providers/multi_account_provider.dart';
 
 /// Storage kept in memory, round-tripping values through JSON like the real
 /// backends do.
@@ -111,16 +113,18 @@ void _addAccount(_MemoryStorage storage, int id, String tag, String password) {
 /// Writes the wallet-wide slot as encryptAndSaveKeys does (the only shape a
 /// wallet had before passwords were per account).
 Future<void> _writeLegacySlot(
-    _MemoryStorage storage, String tag, String password) async {
+    _MemoryStorage storage, String tag, String password,
+    {Keypair? vfx, BtcWebAccount? btc}) async {
+  final vfxKeypair = vfx ?? _vfx(tag);
   storage.setString(
       Storage.STORED_PASSWORD_HASH, EncryptionService.hashPassword(password));
-  storage.setString(Storage.WEB_PRIMARY_ADDRESS, _vfx(tag).address);
-  await storage.setMap(
-      Storage.WEB_KEYPAIR, EncryptionService.encrypt(_vfx(tag).toJson(), password));
+  storage.setString(Storage.WEB_PRIMARY_ADDRESS, vfxKeypair.address);
+  await storage.setMap(Storage.WEB_KEYPAIR,
+      EncryptionService.encrypt(vfxKeypair.toJson(), password));
   await storage.setMap(Storage.WEB_RA_KEYPAIR,
       EncryptionService.encrypt(_vault(tag).toJson(), password));
   await storage.setMap(Storage.WEB_BTC_KEYPAIR,
-      EncryptionService.encrypt(_btc(tag).toJson(), password));
+      EncryptionService.encrypt((btc ?? _btc(tag)).toJson(), password));
   storage.setBool(Storage.ENCRYPTION_ENABLED, true);
   storage.setInt(Storage.ENCRYPTION_VERSION, 1);
 }
@@ -274,5 +278,323 @@ void main() {
       expect(PasswordVerificationService.verifyPassword('pass-one'), isTrue);
       expect(PasswordVerificationService.verifyPassword('pass-two'), isFalse);
     });
+  });
+
+  group('upgrading older account records on unlock', () {
+    test('an older record unlocks with the same keys', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+
+      final unlocked = store.unlock('pass-one');
+
+      expect(unlocked?.accountId, 1);
+      expect(unlocked!.keypair, _fullVfx('one'));
+      expect(unlocked.raKeypair, _vault('one'));
+      expect(unlocked.btcKeypair, _fullBtc('one'));
+    });
+
+    test('unlock rewrites the record with every secret field encrypted', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+
+      store.unlock('pass-one');
+
+      final stored = store.storedAccount(1)!;
+      _expectAllSecretFieldsEncrypted(stored);
+      final raw = storage.values[Storage.MULTIPLE_ACCOUNTS] as String;
+      for (final secret in _secretValues('one')) {
+        expect(raw.contains(secret), isFalse, reason: secret);
+      }
+      expect(
+          MultiAccountEncryptionService.decryptAccountPrivateKeys(
+              stored, 'pass-one'),
+          _fullAccount(1, 'one').toJson());
+    });
+
+    test('a wrong password upgrades nothing', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      final before = Map<String, Object?>.from(storage.values);
+
+      expect(store.unlock('wrong'), isNull);
+      expect(store.verifyAccountPassword(1, 'wrong'), isFalse);
+      expect(store.decryptStoredAccount(1, 'wrong'), isNull);
+
+      expect(storage.values, before);
+    });
+
+    test('a second unlock changes nothing', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+
+      store.unlock('pass-one');
+      final afterFirst = Map<String, Object?>.from(storage.values);
+      final second = store.unlock('pass-one');
+
+      expect(storage.values, afterFirst);
+      expect(second!.keypair, _fullVfx('one'));
+    });
+
+    test('a record that does not round-trip is kept as it was', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      final before = Map<String, Object?>.from(storage.values);
+
+      Map<String, dynamic> alteringEncrypt(
+          Map<String, dynamic> json, String password) {
+        final result = MultiAccountEncryptionService.encryptAccountPrivateKeys(
+            json, password);
+        final keypair = Map<String, dynamic>.from(result['keypair']);
+        keypair['mneumonic'] =
+            EncryptionService.encryptString('different words', password);
+        result['keypair'] = keypair;
+        return result;
+      }
+
+      final failingStore =
+          WebAccountPasswordStore(storage, encryptAccount: alteringEncrypt);
+      final unlocked = failingStore.unlock('pass-one');
+
+      expect(unlocked!.keypair, _fullVfx('one'));
+      expect(storage.values, before);
+    });
+
+    test('a record encrypted under another password is kept as it was', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      final before = Map<String, Object?>.from(storage.values);
+
+      final failingStore = WebAccountPasswordStore(storage,
+          encryptAccount: (json, _) =>
+              MultiAccountEncryptionService.encryptAccountPrivateKeys(
+                  json, 'other-password'));
+
+      expect(failingStore.unlock('pass-one'), isNotNull);
+      expect(storage.values, before);
+    });
+
+    test('only the account whose password was used is upgraded', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      _addEarlierFormatAccount(storage, 2, 'two', 'pass-two');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      final accountTwoBefore = _rawEntry(storage, 1);
+
+      store.unlock('pass-one');
+
+      _expectAllSecretFieldsEncrypted(store.storedAccount(1)!);
+      expect(_rawEntry(storage, 1), accountTwoBefore);
+      expect(
+          MultiAccountEncryptionService.hasUnencryptedSecretFields(
+              store.storedAccount(2)!),
+          isTrue);
+    });
+
+    test('switching to an account or revealing its keys upgrades it', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      _addEarlierFormatAccount(storage, 2, 'two', 'pass-two');
+
+      final account = store.decryptStoredAccount(2, 'pass-two');
+
+      expect(account!.toJson(), _fullAccount(2, 'two').toJson());
+      _expectAllSecretFieldsEncrypted(store.storedAccount(2)!);
+      expect(
+          MultiAccountEncryptionService.hasUnencryptedSecretFields(
+              store.storedAccount(1)!),
+          isTrue);
+    });
+
+    test('a password check on the active account upgrades it', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+
+      expect(store.verifyActiveAccountPassword('pass-one'), isTrue);
+
+      _expectAllSecretFieldsEncrypted(store.storedAccount(1)!);
+    });
+
+    test('an account without encrypted keys is left in its stored format',
+        () async {
+      await _writeLegacySlot(storage, 'one', 'pass-one');
+      storage.setList(Storage.MULTIPLE_ACCOUNTS,
+          [jsonEncode(_fullAccount(1, 'one').toJson())]);
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      final before = Map<String, Object?>.from(storage.values);
+
+      expect(store.unlock('pass-one')?.accountId, 1);
+      expect(storage.values, before);
+    });
+  });
+
+  group('legacy wallet-wide slot', () {
+    test('holds every secret field inside its encrypted values', () async {
+      await _writeLegacySlot(storage, 'one', 'pass-one',
+          vfx: _fullVfx('one'), btc: _fullBtc('one'));
+
+      for (final key in [
+        Storage.WEB_KEYPAIR,
+        Storage.WEB_RA_KEYPAIR,
+        Storage.WEB_BTC_KEYPAIR,
+      ]) {
+        expect(EncryptionService.isEncrypted(storage.getMap(key)), isTrue);
+        for (final secret in _secretValues('one')) {
+          expect((storage.values[key] as String).contains(secret), isFalse);
+        }
+      }
+    });
+
+    test('unlocking through it changes nothing in the slot', () async {
+      await _writeLegacySlot(storage, 'one', 'pass-one',
+          vfx: _fullVfx('one'), btc: _fullBtc('one'));
+      final before = Map<String, Object?>.from(storage.values);
+
+      final unlocked = store.unlock('pass-one');
+
+      expect(unlocked!.keypair, _fullVfx('one'));
+      expect(unlocked.btcKeypair, _fullBtc('one'));
+      expect(storage.values, before);
+    });
+
+    test('its password upgrades the matching entry when it is that entry\'s own',
+        () async {
+      // Account 1 is active under pass-one; the slot holds account 2.
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      await _writeLegacySlot(storage, 'two', 'pass-two',
+          vfx: _fullVfx('two'), btc: _fullBtc('two'));
+      _addEarlierFormatAccount(storage, 2, 'two', 'pass-two');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      final accountOneBefore = _rawEntry(storage, 0);
+
+      expect(store.unlock('pass-two')?.accountId, 2);
+
+      _expectAllSecretFieldsEncrypted(store.storedAccount(2)!);
+      expect(_rawEntry(storage, 0), accountOneBefore);
+    });
+  });
+
+  group('MultiAccountProvider', () {
+    late ProviderContainer container;
+
+    setUp(() {
+      singleton.registerSingleton<Storage>(storage);
+    });
+
+    tearDown(() async {
+      container.dispose();
+      await singleton.unregister<Storage>();
+    });
+
+    test('a new account is written with every secret field encrypted', () {
+      container = ProviderContainer();
+
+      container.read(multiAccountProvider.notifier).add(
+            keypair: _fullVfx('one'),
+            raKeypair: _vault('one'),
+            btcKeypair: _fullBtc('one'),
+            encryptionPassword: 'pass-one',
+          );
+
+      final stored = store.storedAccount(1)!;
+      _expectAllSecretFieldsEncrypted(stored);
+      expect(
+          MultiAccountEncryptionService.decryptAccountPrivateKeys(
+              stored, 'pass-one'),
+          _fullAccount(1, 'one').toJson());
+    });
+
+    test('renaming keeps an upgraded record fully encrypted', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      container = ProviderContainer();
+      // Loaded before the upgrade, as at app start.
+      container.read(multiAccountProvider);
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      store.unlock('pass-one');
+
+      container.read(multiAccountProvider.notifier).rename(1, 'Renamed');
+
+      final stored = store.storedAccount(1)!;
+      expect(stored['name'], 'Renamed');
+      _expectAllSecretFieldsEncrypted(stored);
+      expect(
+          MultiAccountEncryptionService.decryptAccountPrivateKeys(
+              stored, 'pass-one')['raKeypair'],
+          _vault('one').toJson());
+    });
+
+    test('lists an upgraded account with blank secret fields', () {
+      _addEarlierFormatAccount(storage, 1, 'one', 'pass-one');
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+      store.unlock('pass-one');
+      container = ProviderContainer();
+
+      final listed = container.read(multiAccountProvider).single;
+
+      expect(listed.keypair!.address, _fullVfx('one').address);
+      expect(listed.keypair!.mneumonic, '');
+      expect(listed.raKeypair!.restoreCode, '');
+      expect(listed.btcKeypair!.wif, '');
+    });
+  });
+}
+
+Keypair _fullVfx(String tag) => _vfx(tag).copyWith(
+      mneumonic: '$tag mnemonic words',
+      btcWif: '${tag}vfxBtcWif',
+    );
+
+BtcWebAccount _fullBtc(String tag) =>
+    _btc(tag).copyWith(mnemonic: '$tag btc mnemonic words');
+
+MultiAccountInstance _fullAccount(int id, String tag) => MultiAccountInstance(
+      id: id,
+      keypair: _fullVfx(tag),
+      raKeypair: _vault(tag),
+      btcKeypair: _fullBtc(tag),
+    );
+
+/// Every secret value of [_fullAccount] for [tag].
+List<String> _secretValues(String tag) => [
+      _fullVfx(tag).private,
+      _fullVfx(tag).mneumonic!,
+      _fullVfx(tag).btcWif!,
+      _vault(tag).private,
+      _vault(tag).recoveryPrivate,
+      _vault(tag).restoreCode,
+      _fullBtc(tag).privateKey,
+      _fullBtc(tag).wif,
+      _fullBtc(tag).mnemonic!,
+    ];
+
+/// Adds an account entry as earlier versions wrote it: only the main private
+/// key of each keypair encrypted.
+void _addEarlierFormatAccount(
+    _MemoryStorage storage, int id, String tag, String password) {
+  final json = _fullAccount(id, tag).toJson();
+  for (final entry in {
+    'keypair': 'private',
+    'raKeypair': 'private',
+    'btcKeypair': 'privateKey',
+  }.entries) {
+    final keypair = Map<String, dynamic>.from(json[entry.key]);
+    keypair[entry.value] =
+        EncryptionService.encryptString(keypair[entry.value], password);
+    keypair['_isPrivateEncrypted'] = true;
+    json[entry.key] = keypair;
+  }
+  final list = storage.getList(Storage.MULTIPLE_ACCOUNTS) ?? [];
+  storage.setList(Storage.MULTIPLE_ACCOUNTS, [...list, jsonEncode(json)]);
+}
+
+String _rawEntry(_MemoryStorage storage, int index) =>
+    storage.getList(Storage.MULTIPLE_ACCOUNTS)![index] as String;
+
+void _expectAllSecretFieldsEncrypted(Map<String, dynamic> stored) {
+  MultiAccountEncryptionService.secretFields.forEach((keypairKey, fields) {
+    final keypair = stored[keypairKey] as Map<String, dynamic>;
+    for (final field in fields) {
+      expect(EncryptionService.isEncrypted(keypair[field]), isTrue,
+          reason: '$keypairKey.$field');
+      expect(keypair[MultiAccountEncryptionService.markerFor(field)], isTrue,
+          reason: '$keypairKey.$field');
+    }
   });
 }
