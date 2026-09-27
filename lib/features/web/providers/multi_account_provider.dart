@@ -153,15 +153,14 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
     final merged = Map<String, dynamic>.from(currentAccountJson);
 
     // Preserve each keypair that storage holds with encrypted fields
-    MultiAccountEncryptionService.secretFields.forEach((keypairKey, fields) {
+    for (final keypairKey in MultiAccountEncryptionService.secretFields.keys) {
       final storedKeypair = storedAccount[keypairKey];
       if (storedKeypair is Map &&
-          fields.any((field) =>
-              storedKeypair[MultiAccountEncryptionService.markerFor(field)] ==
-              true)) {
+          MultiAccountEncryptionService.hasEncryptedPrivateKeys(
+              {keypairKey: storedKeypair})) {
         merged[keypairKey] = storedKeypair;
       }
-    });
+    }
 
     return merged;
   }

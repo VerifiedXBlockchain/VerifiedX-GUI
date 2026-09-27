@@ -523,7 +523,7 @@ This file covers everything between opening the app and holding a usable, unlock
 ### TC-AUTH-063 · A wallet saved by the previous release unlocks and moves to the extended account format
 **Platforms:** Web · **Priority:** P0 · **Moves funds:** no
 
-The encrypted account format now covers every secret field of an account (recovery mnemonic, Vault recovery private key and restore code, BTC WIF and mnemonic), not only the main private keys. Records saved by earlier builds still load, and are rewritten in the extended format the first time their password is entered.
+The encrypted account format now covers every secret field of an account (recovery mnemonic, Vault recovery private key and restore code, BTC WIF and mnemonic), not only the main private keys. The main private keys stay encrypted in place with `_isPrivateEncrypted`; every other secret field is encrypted into a companion key named `<field>Enc` and its original key is emptied, so earlier builds can still parse the record. Records saved by earlier builds still load, and are rewritten in the extended format the first time their password is entered.
 
 **Preconditions:** Fresh browser. A build of the previous release (the `main` branch) served at `http://localhost:42069`: create a mnemonic account as in TC-AUTH-013 with `TEST_ENCRYPTION_PASSWORD`, note its mnemonic, open the `Vault` reveal (TC-AUTH-038) and note the restore code. Then stop that build and serve this build at the same origin without clearing site data.
 
@@ -538,7 +538,11 @@ The encrypted account format now covers every secret field of an account (recove
 - Step 1: the record holds `_isPrivateEncrypted` markers, and the mnemonic words and the restore code noted in the preconditions appear in it as stored by the previous release.
 - Step 2: the dashboard opens for the same address as before, with no error.
 - Step 3: `Recovery Mnemonic` shows the same 12 words noted in the preconditions; `Restore Code` and `Recovery Private Key` match the values noted from the previous release.
-- Step 4: the record now also holds `_isMneumonicEncrypted`, `_isRecoveryPrivateEncrypted`, `_isRestoreCodeEncrypted` and, when the account has a BTC key, `_isWifEncrypted`; each of those fields holds an object with `encrypted_data`, `salt`, `iv` and `iterations`; the mnemonic words and the restore code no longer appear anywhere in it. The address fields are unchanged.
+- Step 4: in the account's entry (`"keypair"`, `"raKeypair"`, `"btcKeypair"`):
+  - `keypair`: `private` holds an encrypted object and `_isPrivateEncrypted: true` (as before); `mneumonicEnc` holds an encrypted object and `mneumonic` is `null`; if the account has `btcWif`, `btcWifEnc` holds an encrypted object and `btcWif` is `null`.
+  - `raKeypair`: `private` encrypted with `_isPrivateEncrypted: true`; `recoveryPrivateEnc` and `restoreCodeEnc` hold encrypted objects and `recoveryPrivate` and `restoreCode` are `""`.
+  - `btcKeypair` (when present): `privateKey` encrypted with `_isPrivateEncrypted: true`; `wifEnc` holds an encrypted object and `wif` is `""`; if it has a mnemonic, `mnemonicEnc` holds an encrypted object and `mnemonic` is `null`.
+  - Each encrypted object has `encrypted_data`, `salt`, `iv` and `iterations`. No `_isMneumonicEncrypted`-style markers remain. The mnemonic words and the restore code no longer appear anywhere in the record; addresses and public keys are unchanged.
 - Step 5: the record is the same as in step 4 (the second unlock rewrites nothing), and the reveals still show the same values.
 
 **Cleanup:** Sign out.

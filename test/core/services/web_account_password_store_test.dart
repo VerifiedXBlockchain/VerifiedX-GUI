@@ -345,7 +345,7 @@ void main() {
         final result = MultiAccountEncryptionService.encryptAccountPrivateKeys(
             json, password);
         final keypair = Map<String, dynamic>.from(result['keypair']);
-        keypair['mneumonic'] =
+        keypair['mneumonicEnc'] =
             EncryptionService.encryptString('different words', password);
         result['keypair'] = keypair;
         return result;
@@ -384,7 +384,7 @@ void main() {
       _expectAllSecretFieldsEncrypted(store.storedAccount(1)!);
       expect(_rawEntry(storage, 1), accountTwoBefore);
       expect(
-          MultiAccountEncryptionService.hasUnencryptedSecretFields(
+          MultiAccountEncryptionService.needsUpgrade(
               store.storedAccount(2)!),
           isTrue);
     });
@@ -398,7 +398,7 @@ void main() {
       expect(account!.toJson(), _fullAccount(2, 'two').toJson());
       _expectAllSecretFieldsEncrypted(store.storedAccount(2)!);
       expect(
-          MultiAccountEncryptionService.hasUnencryptedSecretFields(
+          MultiAccountEncryptionService.needsUpgrade(
               store.storedAccount(1)!),
           isTrue);
     });
@@ -412,15 +412,92 @@ void main() {
       _expectAllSecretFieldsEncrypted(store.storedAccount(1)!);
     });
 
-    test('an account without encrypted keys is left in its stored format',
-        () async {
-      await _writeLegacySlot(storage, 'one', 'pass-one');
-      storage.setList(Storage.MULTIPLE_ACCOUNTS,
-          [jsonEncode(_fullAccount(1, 'one').toJson())]);
+    test('a record in the interim layout moves to the companion keys', () {
+      final json = _fullAccount(1, 'one').toJson();
+      final interim = MultiAccountEncryptionService.encryptAccountPrivateKeys(
+          json, 'pass-one');
+      // Put each companion value back in its original key with a marker.
+      for (final keypairKey in ['keypair', 'raKeypair', 'btcKeypair']) {
+        final keypair = Map<String, dynamic>.from(interim[keypairKey]);
+        for (final key in keypair.keys.toList()) {
+          if (key.endsWith('Enc')) {
+            final field = key.substring(0, key.length - 3);
+            keypair[field] = keypair.remove(key);
+            keypair[MultiAccountEncryptionService.markerFor(field)] = true;
+          }
+        }
+        interim[keypairKey] = keypair;
+      }
+      storage.setList(Storage.MULTIPLE_ACCOUNTS, [jsonEncode(interim)]);
       storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
-      final before = Map<String, Object?>.from(storage.values);
+
+      expect(store.unlock('pass-one')!.keypair, _fullVfx('one'));
+
+      _expectAllSecretFieldsEncrypted(store.storedAccount(1)!);
+      expect(store.decryptStoredAccount(1, 'pass-one')!.toJson(), json);
+    });
+  });
+
+  group('entries saved before per-account encryption', () {
+    Future<void> writeWallet() async {
+      await _writeLegacySlot(storage, 'one', 'pass-one',
+          vfx: _fullVfx('one'), btc: _fullBtc('one'));
+      storage.setList(Storage.MULTIPLE_ACCOUNTS, [
+        jsonEncode(_fullAccount(1, 'one').toJson()),
+        jsonEncode(_fullAccount(2, 'two').toJson()),
+      ]);
+      storage.setInt(Storage.MULTIPLE_ACCOUNT_SELECTED, 1);
+    }
+
+    test('the entry matching the slot is encrypted with the slot password',
+        () async {
+      await writeWallet();
+      final otherBefore = _rawEntry(storage, 1);
 
       expect(store.unlock('pass-one')?.accountId, 1);
+
+      final stored = store.storedAccount(1)!;
+      _expectAllSecretFieldsEncrypted(stored);
+      expect(
+          MultiAccountEncryptionService.decryptAccountPrivateKeys(
+              stored, 'pass-one'),
+          _fullAccount(1, 'one').toJson());
+      // Other entries are not the slot's account and stay as they were.
+      expect(_rawEntry(storage, 1), otherBefore);
+    });
+
+    test('afterwards the account opens with the same password', () async {
+      await writeWallet();
+
+      store.unlock('pass-one');
+      final before = Map<String, Object?>.from(storage.values);
+
+      final again = store.unlock('pass-one');
+      expect(again?.accountId, 1);
+      expect(again!.raKeypair, _vault('one'));
+      expect(store.verifyAccountPassword(1, 'pass-one'), isTrue);
+      expect(store.verifyAccountPassword(1, 'wrong'), isFalse);
+      expect(storage.values, before);
+    });
+
+    test('a wrong password encrypts nothing', () async {
+      await writeWallet();
+      final before = Map<String, Object?>.from(storage.values);
+
+      expect(store.unlock('wrong'), isNull);
+      expect(storage.values, before);
+    });
+
+    test('a failed round-trip keeps the entry as it was', () async {
+      await writeWallet();
+      final before = Map<String, Object?>.from(storage.values);
+
+      final failingStore = WebAccountPasswordStore(storage,
+          encryptAccount: (json, _) =>
+              MultiAccountEncryptionService.encryptAccountPrivateKeys(
+                  json, 'other-password'));
+
+      expect(failingStore.unlock('pass-one')?.accountId, 1);
       expect(storage.values, before);
     });
   });
@@ -587,14 +664,27 @@ void _addEarlierFormatAccount(
 String _rawEntry(_MemoryStorage storage, int index) =>
     storage.getList(Storage.MULTIPLE_ACCOUNTS)![index] as String;
 
+/// The current layout: main private keys encrypted in place with
+/// `_isPrivateEncrypted`, every other secret field in its `<field>Enc` key
+/// with the original key emptied.
 void _expectAllSecretFieldsEncrypted(Map<String, dynamic> stored) {
   MultiAccountEncryptionService.secretFields.forEach((keypairKey, fields) {
     final keypair = stored[keypairKey] as Map<String, dynamic>;
     for (final field in fields) {
-      expect(EncryptionService.isEncrypted(keypair[field]), isTrue,
-          reason: '$keypairKey.$field');
-      expect(keypair[MultiAccountEncryptionService.markerFor(field)], isTrue,
-          reason: '$keypairKey.$field');
+      final reason = '$keypairKey.$field';
+      if (MultiAccountEncryptionService.isMainKey(field)) {
+        expect(EncryptionService.isEncrypted(keypair[field]), isTrue,
+            reason: reason);
+        expect(keypair['_isPrivateEncrypted'], isTrue, reason: reason);
+      } else {
+        expect(
+            EncryptionService.isEncrypted(
+                keypair[MultiAccountEncryptionService.encKeyFor(field)]),
+            isTrue,
+            reason: reason);
+        expect(keypair[field], anyOf(isNull, ''), reason: reason);
+      }
     }
   });
+  expect(MultiAccountEncryptionService.needsUpgrade(stored), isFalse);
 }

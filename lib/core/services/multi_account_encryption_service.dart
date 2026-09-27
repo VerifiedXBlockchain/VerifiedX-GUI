@@ -5,12 +5,19 @@ import 'encryption_service.dart';
 /// Per-field encryption of the secret fields in a stored web account
 /// (a `Storage.MULTIPLE_ACCOUNTS` entry, the JSON of a MultiAccountInstance).
 ///
-/// Each secret field is encrypted on its own with [EncryptionService] under
-/// the account's password and flagged with a marker key in the same object.
-/// The main private keys use the original `_isPrivateEncrypted` marker; the
-/// other secret fields use `_is<Field>Encrypted`. A field without its marker
-/// is read as is, so records written before the format covered every secret
-/// field still load.
+/// Stored layout, per keypair object:
+/// - The main private key (`private`, or `privateKey` for BTC) is encrypted
+///   in place and flagged with `_isPrivateEncrypted`, as before.
+/// - Every other secret field is encrypted into a companion key named
+///   `<field>Enc`. The original key is kept with an empty value (null for
+///   optional fields, an empty string for required ones), so builds that do
+///   not know the companion keys still parse the record.
+///
+/// Reading prefers the companion key and otherwise uses the original key as
+/// stored, so records written before the format covered every secret field
+/// still load. A record from an interim layout, with the encrypted value in
+/// the original key and a `_is<Field>Encrypted` marker, is also read and is
+/// moved to the companion key on the next upgrade.
 class MultiAccountEncryptionService {
   /// Secret fields per keypair object in the account JSON.
   static const Map<String, List<String>> secretFields = {
@@ -19,18 +26,46 @@ class MultiAccountEncryptionService {
     'btcKeypair': ['privateKey', 'wif', 'mnemonic'],
   };
 
-  /// The marker stored next to [field] once it is encrypted.
+  /// Non-nullable model fields; their original key holds '' once encrypted.
+  static const Set<String> _requiredFields = {
+    'recoveryPrivate',
+    'restoreCode',
+    'wif',
+  };
+
+  static bool isMainKey(String field) =>
+      field == 'private' || field == 'privateKey';
+
+  /// The marker of an in-place encrypted field: `_isPrivateEncrypted` for the
+  /// main private keys, `_is<Field>Encrypted` for the interim layout.
   static String markerFor(String field) {
-    if (field == 'private' || field == 'privateKey') {
+    if (isMainKey(field)) {
       return '_isPrivateEncrypted';
     }
     return '_is${field[0].toUpperCase()}${field.substring(1)}Encrypted';
   }
 
-  /// Encrypts every secret field that is not encrypted yet.
-  ///
-  /// Fields that already carry their marker are left untouched, so this also
-  /// completes a record that only has some fields encrypted.
+  /// The companion key that holds [field] encrypted.
+  static String encKeyFor(String field) => '${field}Enc';
+
+  static Object? _emptyValueFor(String field) =>
+      _requiredFields.contains(field) ? '' : null;
+
+  /// The encrypted value of [field] in [keypair], or null when the field is
+  /// not stored encrypted.
+  static Map<String, dynamic>? _encryptedValue(
+      Map<dynamic, dynamic> keypair, String field) {
+    if (!isMainKey(field) && keypair[encKeyFor(field)] is Map) {
+      return Map<String, dynamic>.from(keypair[encKeyFor(field)] as Map);
+    }
+    if (keypair[markerFor(field)] == true && keypair[field] is Map) {
+      return Map<String, dynamic>.from(keypair[field] as Map);
+    }
+    return null;
+  }
+
+  /// Encrypts every secret field that is not encrypted yet and moves fields
+  /// from the interim layout to their companion key.
   static Map<String, dynamic> encryptAccountPrivateKeys(
     Map<String, dynamic> accountJson,
     String password,
@@ -41,25 +76,41 @@ class MultiAccountEncryptionService {
       if (result[objectKey] == null) {
         return;
       }
-      final objectJson = Map<String, dynamic>.from(result[objectKey]);
+      final keypair = Map<String, dynamic>.from(result[objectKey]);
       for (final field in fields) {
-        final marker = markerFor(field);
-        final value = objectJson[field];
-        if (objectJson[marker] == true || value == null) {
+        final encrypted = _encryptedValue(keypair, field);
+        final value = keypair[field];
+
+        if (isMainKey(field)) {
+          if (encrypted != null || value == null) {
+            continue;
+          }
+          keypair[field] =
+              EncryptionService.encryptString(value as String, password);
+          keypair[markerFor(field)] = true;
           continue;
         }
-        objectJson[field] =
-            EncryptionService.encryptString(value as String, password);
-        objectJson[marker] = true;
+
+        if (encrypted != null) {
+          keypair[encKeyFor(field)] = encrypted;
+        } else if (value != null) {
+          keypair[encKeyFor(field)] =
+              EncryptionService.encryptString(value as String, password);
+        } else {
+          continue;
+        }
+        keypair[field] = _emptyValueFor(field);
+        keypair.remove(markerFor(field));
       }
-      result[objectKey] = objectJson;
+      result[objectKey] = keypair;
     });
 
     return result;
   }
 
-  /// Decrypts every marked secret field and drops the markers. Unmarked fields
-  /// are returned as stored. Throws when [password] does not open a field.
+  /// Decrypts every encrypted secret field into its original key and drops
+  /// markers and companion keys. Fields that are not encrypted are returned as
+  /// stored. Throws when [password] does not open a field.
   static Map<String, dynamic> decryptAccountPrivateKeys(
     Map<String, dynamic> accountJson,
     String password,
@@ -70,20 +121,18 @@ class MultiAccountEncryptionService {
       if (result[objectKey] == null) {
         return;
       }
-      final objectJson = Map<String, dynamic>.from(result[objectKey]);
+      final keypair = Map<String, dynamic>.from(result[objectKey]);
       for (final field in fields) {
-        final marker = markerFor(field);
-        if (objectJson[marker] != true) {
-          continue;
+        final encrypted = _encryptedValue(keypair, field);
+        if (encrypted != null) {
+          keypair[field] = EncryptionService.decryptString(encrypted, password);
         }
-        final value = objectJson[field];
-        if (value != null) {
-          objectJson[field] = EncryptionService.decryptString(
-              Map<String, dynamic>.from(value as Map), password);
+        keypair.remove(markerFor(field));
+        if (!isMainKey(field)) {
+          keypair.remove(encKeyFor(field));
         }
-        objectJson.remove(marker);
       }
-      result[objectKey] = objectJson;
+      result[objectKey] = keypair;
     });
 
     return result;
@@ -93,27 +142,36 @@ class MultiAccountEncryptionService {
   /// account has a password of its own.
   static bool hasEncryptedPrivateKeys(Map<String, dynamic> accountJson) {
     for (final entry in secretFields.entries) {
-      final objectJson = accountJson[entry.key];
-      if (objectJson is! Map) {
+      final keypair = accountJson[entry.key];
+      if (keypair is! Map) {
         continue;
       }
-      if (entry.value.any((field) => objectJson[markerFor(field)] == true)) {
+      if (entry.value.any((field) => _encryptedValue(keypair, field) != null)) {
         return true;
       }
     }
     return false;
   }
 
-  /// Whether any secret field still holds a value without its marker.
-  static bool hasUnencryptedSecretFields(Map<String, dynamic> accountJson) {
+  /// Whether the record differs from the current layout: a secret field with
+  /// a value that is not encrypted, or a field still in the interim layout.
+  static bool needsUpgrade(Map<String, dynamic> accountJson) {
     for (final entry in secretFields.entries) {
-      final objectJson = accountJson[entry.key];
-      if (objectJson is! Map) {
+      final keypair = accountJson[entry.key];
+      if (keypair is! Map) {
         continue;
       }
       for (final field in entry.value) {
-        if (objectJson[field] != null &&
-            objectJson[markerFor(field)] != true) {
+        final value = keypair[field];
+        if (isMainKey(field)) {
+          if (value != null && _encryptedValue(keypair, field) == null) {
+            return true;
+          }
+        } else if (keypair[encKeyFor(field)] is Map) {
+          if (value != null && value != '') {
+            return true;
+          }
+        } else if (value != null) {
           return true;
         }
       }
@@ -121,8 +179,9 @@ class MultiAccountEncryptionService {
     return false;
   }
 
-  /// Copy of the account JSON with each encrypted field replaced by an empty
-  /// placeholder, for listing accounts whose password has not been entered.
+  /// Copy of the account JSON for listing accounts whose password has not
+  /// been entered: every encrypted field, and any secret field holding a map,
+  /// becomes an empty string.
   static Map<String, dynamic> withEncryptedFieldsBlank(
       Map<String, dynamic> accountJson) {
     final result = Map<String, dynamic>.from(accountJson);
@@ -131,46 +190,54 @@ class MultiAccountEncryptionService {
       if (result[objectKey] == null) {
         return;
       }
-      final objectJson = Map<String, dynamic>.from(result[objectKey]);
+      final keypair = Map<String, dynamic>.from(result[objectKey]);
       for (final field in fields) {
-        if (objectJson[markerFor(field)] == true) {
-          objectJson[field] = '';
+        if (_encryptedValue(keypair, field) != null || keypair[field] is Map) {
+          keypair[field] = '';
         }
       }
-      result[objectKey] = objectJson;
+      result[objectKey] = keypair;
     });
 
     return result;
   }
 
-  /// Returns the account record with every secret field encrypted under
-  /// [password], or null when the record already is, or when it has no
-  /// encrypted field (no password of its own that [password] could be checked
-  /// against).
+  /// Returns the account record in the current layout with every secret
+  /// field encrypted under [password], or null when it already is.
   ///
-  /// The new record is decrypted in memory and compared with the stored one
+  /// [expected] is the record's decrypted content when the caller already
+  /// has it; it is also how a caller that confirmed [password] elsewhere
+  /// (the legacy wallet-wide slot) encrypts a record that has no encrypted
+  /// field yet. Without it, a record with no encrypted field is left alone,
+  /// since [password] cannot be checked against it.
+  ///
+  /// The new record is decrypted in memory and compared with [expected]
   /// before it is returned. Throws when [password] does not open the stored
   /// record or when the new record does not round-trip to the same values.
   /// [encrypt] is replaceable for tests.
   static Map<String, dynamic>? upgradeAccountRecord(
     Map<String, dynamic> storedJson,
     String password, {
+    Map<String, dynamic>? expected,
     Map<String, dynamic> Function(Map<String, dynamic>, String) encrypt =
         encryptAccountPrivateKeys,
   }) {
-    if (!hasEncryptedPrivateKeys(storedJson) ||
-        !hasUnencryptedSecretFields(storedJson)) {
+    if (!needsUpgrade(storedJson)) {
+      return null;
+    }
+    if (expected == null && !hasEncryptedPrivateKeys(storedJson)) {
       return null;
     }
 
-    final expected = decryptAccountPrivateKeys(storedJson, password);
+    final expectedValues =
+        expected ?? decryptAccountPrivateKeys(storedJson, password);
     final upgraded = encrypt(storedJson, password);
 
-    if (hasUnencryptedSecretFields(upgraded)) {
-      throw StateError('Upgraded account record still has unmarked fields');
+    if (needsUpgrade(upgraded)) {
+      throw StateError('Upgraded account record is not fully encrypted');
     }
     final roundTrip = decryptAccountPrivateKeys(upgraded, password);
-    if (!const DeepCollectionEquality().equals(roundTrip, expected)) {
+    if (!const DeepCollectionEquality().equals(roundTrip, expectedValues)) {
       throw StateError('Upgraded account record does not round-trip');
     }
 

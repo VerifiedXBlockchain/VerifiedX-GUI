@@ -53,7 +53,9 @@ class UnlockedWebAccount {
 /// Whenever an account's password is confirmed by decrypting its entry, any
 /// secret field of that entry still stored in the earlier format (only the
 /// main private keys were encrypted) is encrypted under the same password and
-/// the entry is rewritten. See [MultiAccountEncryptionService].
+/// the entry is rewritten. An entry saved before per-account encryption is
+/// encrypted with the slot's password when that password unlocks the slot
+/// holding the same address. See [MultiAccountEncryptionService].
 class WebAccountPasswordStore {
   final Storage storage;
 
@@ -170,11 +172,18 @@ class WebAccountPasswordStore {
 
       final matchingEntry = storedAccounts().firstWhereOrNull(
           (json) => json['keypair']?['address'] == keypair.address);
-      if (matchingEntry != null &&
-          MultiAccountEncryptionService.hasEncryptedPrivateKeys(
-              matchingEntry)) {
-        // Upgrades the entry only when this password is also its own.
-        _decryptAndUpgrade(matchingEntry, password);
+      if (matchingEntry != null) {
+        if (MultiAccountEncryptionService.hasEncryptedPrivateKeys(
+            matchingEntry)) {
+          // Upgrades the entry only when this password is also its own.
+          _decryptAndUpgrade(matchingEntry, password);
+        } else {
+          // An entry saved before per-account encryption has no password of
+          // its own; the slot's password, just confirmed, is the one that
+          // opens this account, so the entry is encrypted with it.
+          _upgradeStoredAccount(matchingEntry, password,
+              expected: matchingEntry);
+        }
       }
 
       return UnlockedWebAccount(
@@ -205,23 +214,32 @@ class WebAccountPasswordStore {
   /// entry to the current account format.
   MultiAccountInstance? _decryptAndUpgrade(
       Map<String, dynamic> stored, String password) {
-    final account = _decryptAccount(stored, password);
-    if (account != null) {
-      _upgradeStoredAccount(stored, password);
+    final Map<String, dynamic> decrypted;
+    final MultiAccountInstance account;
+    try {
+      decrypted = MultiAccountEncryptionService.decryptAccountPrivateKeys(
+          stored, password);
+      account = MultiAccountInstance.fromJson(decrypted);
+    } catch (e) {
+      // A wrong password fails the GCM tag check; that is the expected path.
+      return null;
     }
+    _upgradeStoredAccount(stored, password, expected: decrypted);
     return account;
   }
 
   /// Rewrites the entry [stored] with every secret field encrypted under
-  /// [password]. Nothing is written when the entry is already in that format,
-  /// when the new record does not decrypt to the same values, or when the
-  /// stored entry changed in the meantime; the old entry is kept.
-  void _upgradeStoredAccount(Map<String, dynamic> stored, String password) {
+  /// [password], checked against [expected], its decrypted content. Nothing
+  /// is written when the entry is already in that format, when the new record
+  /// does not decrypt to the same values, or when the stored entry changed in
+  /// the meantime; the old entry is kept.
+  void _upgradeStoredAccount(Map<String, dynamic> stored, String password,
+      {required Map<String, dynamic> expected}) {
     final Map<String, dynamic>? upgraded;
     try {
       upgraded = MultiAccountEncryptionService.upgradeAccountRecord(
           stored, password,
-          encrypt: encryptAccount);
+          expected: expected, encrypt: encryptAccount);
     } catch (e) {
       print("Kept the stored format of web account ${stored['id']}: $e");
       return;
@@ -245,18 +263,5 @@ class WebAccountPasswordStore {
     final updated = [...savedData];
     updated[index] = jsonEncode(upgraded);
     storage.setList(Storage.MULTIPLE_ACCOUNTS, updated);
-  }
-
-  /// Decrypts a stored account, or returns null when [password] is wrong.
-  MultiAccountInstance? _decryptAccount(
-      Map<String, dynamic> stored, String password) {
-    try {
-      final decrypted = MultiAccountEncryptionService.decryptAccountPrivateKeys(
-          stored, password);
-      return MultiAccountInstance.fromJson(decrypted);
-    } catch (e) {
-      // A wrong password fails the GCM tag check; that is the expected path.
-      return null;
-    }
   }
 }
