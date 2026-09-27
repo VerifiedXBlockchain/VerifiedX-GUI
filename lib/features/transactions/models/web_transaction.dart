@@ -50,6 +50,10 @@ class WebTransaction with _$WebTransaction {
     );
   }
 
+  /// [date] in the viewer's time zone. `date_crafted` parses as UTC, and the
+  /// list card and explorer both show local time.
+  DateTime get localDate => date.toLocal();
+
   String get parseTimeStamp {
     //TODO: fix this;
     return "-";

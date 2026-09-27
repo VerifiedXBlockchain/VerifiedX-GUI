@@ -131,7 +131,7 @@ class _TransactionDetails extends BaseComponent {
             child: AppCard(
               padding: 0,
               child: ListTile(
-                title: Text(formatter.format(tx.date)),
+                title: Text(formatter.format(tx.localDate)),
                 subtitle: Text(l10n.txpDate),
               ),
             ),
