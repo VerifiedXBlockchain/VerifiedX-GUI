@@ -21,6 +21,7 @@ import '../../features/transactions/providers/web_transaction_detail_provider.da
 import '../../features/transactions/providers/web_transaction_list_provider.dart';
 import '../../features/web_shop/providers/web_listed_nfts_provider.dart';
 import '../../utils/html_helpers.dart';
+import '../../utils/web_route_paths.dart';
 import '../services/encryption_service.dart';
 import '../services/password_verification_service.dart';
 import '../services/web_account_password_store.dart';
@@ -71,19 +72,16 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         isAuthenticated: false,
         ready: true,
       );
+      // Save the dashboard page the app was opened on (a reload or a
+      // payment link) so unlocking returns to it. The URL is the one main()
+      // captured, since the router has rewritten the hash by now.
+      final initialRedirect = InitialWebUrl.takeDashboardRedirect();
+      if (initialRedirect != null) {
+        storage.setString(Storage.PENDING_REDIRECT_URL, initialRedirect);
+      }
+
       // Redirect to auth screen for password entry
       Future.delayed(const Duration(milliseconds: 100), () {
-        // Save current URL if it's a dashboard route
-        final currentUrl = HtmlHelpers().getUrl();
-
-        if (currentUrl.contains('/dashboard')) {
-          final hashIndex = currentUrl.indexOf('#');
-          if (hashIndex != -1) {
-            final hashPath = currentUrl.substring(hashIndex + 1);
-            storage.setString(Storage.PENDING_REDIRECT_URL, hashPath);
-          }
-        }
-
         final context = rootNavigatorKey.currentContext;
         if (context != null) {
           AutoRouter.of(context).replace(const WebAuthRouter());

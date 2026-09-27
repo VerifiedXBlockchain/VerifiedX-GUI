@@ -59,6 +59,7 @@ import 'package:collection/collection.dart';
 import '../../utils/html_helpers.dart';
 import '../../core/storage.dart';
 import '../../core/singletons.dart';
+import '../../utils/web_route_paths.dart';
 
 GlobalKey<ScaffoldState> webDashboardScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -102,16 +103,11 @@ class WebDashboardContainer extends ConsumerWidget {
     // If not authenticated, save the current URL and redirect to auth screen
     if (!session.isAuthenticated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final currentUrl = HtmlHelpers().getUrl();
-
         // Save the intended destination if it's a dashboard route
-        if (currentUrl.contains('/dashboard')) {
-          final hashIndex = currentUrl.indexOf('#');
-          if (hashIndex != -1) {
-            final hashPath = currentUrl.substring(hashIndex + 1);
-            singleton<Storage>()
-                .setString(Storage.PENDING_REDIRECT_URL, hashPath);
-          }
+        final redirectPath = dashboardRedirectPath(HtmlHelpers().getUrl());
+        if (redirectPath != null) {
+          singleton<Storage>()
+              .setString(Storage.PENDING_REDIRECT_URL, redirectPath);
         }
 
         // Redirect to auth screen

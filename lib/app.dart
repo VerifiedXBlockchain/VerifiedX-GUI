@@ -31,6 +31,7 @@ import 'core/providers/web_session_provider.dart';
 import 'core/singletons.dart';
 import 'core/storage.dart';
 import 'core/theme/app_theme.dart';
+import 'core/web_route_information_parser.dart';
 import 'core/web_router.gr.dart';
 import 'features/encrypt/components/unlock_wallet.dart';
 import 'features/encrypt/providers/password_required_provider.dart';
@@ -115,7 +116,7 @@ class AppContainer extends ConsumerWidget {
       locale: appLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
+      routeInformationParser: Env.isWeb ? WebRouteInformationParser(webRouter) : appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: AutoRouterDelegate(
         router,
         navigatorObservers: () => [AutoRouteObserver()],

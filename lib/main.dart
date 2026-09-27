@@ -16,6 +16,7 @@ import 'core/env.dart';
 import 'core/singletons.dart';
 import 'features/bridge/services/bridge_service.dart';
 import 'features/btc_web/utils/btc_network_script.dart';
+import 'utils/web_route_paths.dart';
 
 const DEFAULT_WIDTH = 1200.0;
 const DEFAULT_HEIGHT = 780.0;
@@ -27,6 +28,11 @@ late final Box rbxBox;
 final rootAppWindow = appWindow;
 
 void main(List<String> args) async {
+  if (kIsWeb) {
+    // Read the page URL before anything async runs: once the router starts
+    // it rewrites the hash, and the page to open after unlock is lost.
+    InitialWebUrl.capture();
+  }
   timeago.setLocaleMessages('es', timeago.EsMessages());
   timeago.setLocaleMessages('es_short', timeago.EsShortMessages());
   WidgetsFlutterBinding.ensureInitialized();

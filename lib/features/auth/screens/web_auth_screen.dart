@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/utils.dart';
 import '../../../utils/toast.dart';
+import '../../../utils/web_route_paths.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../../core/models/web_session_model.dart';
 import '../../web/components/web_wordmark.dart';
@@ -158,7 +159,9 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
 
     // Check for pending redirect URL
     final storage = singleton<Storage>();
-    final pendingRedirect = storage.getString(Storage.PENDING_REDIRECT_URL);
+    final storedRedirect = storage.getString(Storage.PENDING_REDIRECT_URL);
+    final pendingRedirect =
+        storedRedirect != null ? normalizeWebRoutePath(storedRedirect) : null;
 
     if (pendingRedirect != null && pendingRedirect.isNotEmpty) {
       // Clear the pending redirect
