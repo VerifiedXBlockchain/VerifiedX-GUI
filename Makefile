@@ -43,7 +43,8 @@ package_mac:
 	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	cp -r ../Core-CLI/VerifiedXCore/bin/Release/net6.0/osx-x64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
-	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39
+	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
+	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
 	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-Intel-Installer.dmg
 	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
 	rm -f ./installers/exports/vfx-corecli-mac-arm.zip
@@ -79,7 +80,8 @@ package_m1:
 	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	cp -r ../Core-CLI/VerifiedXCore/bin/Release/net6.0/osx-arm64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
-	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39
+	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
+	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
 	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
 	rm -f ./installers/exports/vfx-corecli-mac-arm.zip

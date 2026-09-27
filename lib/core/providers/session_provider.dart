@@ -1018,7 +1018,10 @@ class SessionProvider extends StateNotifier<SessionModel> {
         final shell = Shell(
           throwOnError: false,
           stdout: Env.hideCliOutput ? stdOutController.sink : null,
-          workingDirectory: "/Applications/VFXWallet.app/Contents/MacOS/",
+          // The CLI reads BIP39/wordlist relative to its working directory.
+          // The wordlists sit in Contents/Resources because a signed bundle
+          // may hold only executables in Contents/MacOS.
+          workingDirectory: "/Applications/VFXWallet.app/Contents/Resources/",
           environment: environment,
         );
         cmd = '"$cliPath" ${options.join(' ')}';
