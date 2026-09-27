@@ -15,20 +15,20 @@ import '../../features/bridge/providers/log_provider.dart';
 import '../base_component.dart';
 import '../theme/colors.dart';
 
+const bootLogMaxLines = 7;
+
+/// The most recent [maxLines] log entries, oldest first, including the newest.
+List<T> latestBootLogs<T>(List<T> logs, {int maxLines = bootLogMaxLines}) {
+  final start = logs.length > maxLines ? logs.length - maxLines : 0;
+  return logs.sublist(start);
+}
+
 class BootContainer extends BaseComponent {
   const BootContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final logs = ref.watch(logProvider);
-    int start = 0;
-    const maxLogs = 7;
-    if (logs.length >= maxLogs) {
-      start = logs.length - maxLogs;
-    }
-
-    final List<LogEntry> truncatedLogs =
-        logs.isEmpty ? [] : logs.getRange(start, logs.length - 1).toList();
+    final List<LogEntry> truncatedLogs = latestBootLogs(ref.watch(logProvider));
 
     return Column(
       children: [

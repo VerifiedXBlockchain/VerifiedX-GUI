@@ -35,7 +35,9 @@ import '../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../web/models/multi_account_instance.dart';
 import '../../core/services/multi_account_encryption_service.dart';
 import 'package:collection/collection.dart';
+import '../../core/env.dart';
 import 'components/auth_type_modal.dart';
+import 'models/web_btc_address_type.dart';
 import 'components/imported_key_accounts_dialog.dart';
 import 'services/imported_key_accounts.dart';
 import '../keygen/utils/private_key_text.dart';
@@ -355,19 +357,6 @@ class BtcPrivateKeyImportModalResult {
   });
 }
 
-enum WebBtcAddressType {
-  p2pkh("p2pkh", "P2PKH (Legacy)"),
-  p2sh("p2sh", "P2SH (Nested SegWit)"),
-  bech32("bech32", "Bech32 (Native SegWit - P2WPKH)"),
-  bech32m("bech32m", "Bech32m (Taproot - P2TR)"),
-  ;
-
-  final String value;
-  final String label;
-
-  const WebBtcAddressType(this.value, this.label);
-}
-
 class BtcPrivateKeyImportModal extends StatefulWidget {
   const BtcPrivateKeyImportModal({
     super.key,
@@ -449,20 +438,16 @@ class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
               variant: AppColorVariant.Btc,
               onPressed: () {
                 if (_selectedAddressType == null) {
-                  final address = _addressController.text;
-                  if (address.startsWith("1")) {
-                    _selectedAddressType = WebBtcAddressType.p2pkh;
-                  } else if (address.startsWith('3')) {
-                    _selectedAddressType = WebBtcAddressType.p2sh;
-                  } else if (address.startsWith('bc1q')) {
-                    _selectedAddressType = WebBtcAddressType.bech32;
-                  } else if (address.startsWith('bc1p')) {
-                    _selectedAddressType = WebBtcAddressType.bech32m;
-                  } else {
+                  final detectedType = btcAddressTypeFromAddress(
+                    _addressController.text,
+                    isTestNet: Env.isTestNet,
+                  );
+                  if (detectedType == null) {
                     Toast.error(l10n.hnavInvalidBtcAddress);
                     Navigator.of(context).pop(null);
                     return;
                   }
+                  _selectedAddressType = detectedType;
                 }
                 final result = BtcPrivateKeyImportModalResult(
                   addressType: _selectedAddressType!.value,
@@ -904,7 +889,7 @@ Future<void> _showKeysInternal(
                 tooltip: l10n.actionCopyAddress,
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: keypair.address));
-                  Toast.message(l10n.keygenPublicKeyCopiedToast);
+                  Toast.message(l10n.messageAddressCopied);
                 },
               ),
             ),
@@ -1048,7 +1033,7 @@ Future<void> _showRaKeysInternal(
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.address));
-                    Toast.message(l10n.keygenPublicKeyCopiedToast);
+                    Toast.message(l10n.messageAddressCopied);
                   },
                 ),
               ),

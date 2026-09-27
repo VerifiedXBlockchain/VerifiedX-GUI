@@ -118,11 +118,13 @@ class EncryptWalletButton extends BaseComponent {
                   body: l10n.r3eConfirmEncryptionPassword,
                 );
 
-                if (confirmedPassword != null && confirmedPassword.isNotEmpty) {
-                  if (password != confirmedPassword) {
-                    Toast.error(l10n.r3ePasswordsDoNotMatchRetry);
-                    return;
-                  }
+                if (confirmedPassword == null || confirmedPassword.isEmpty) {
+                  return;
+                }
+
+                if (password != confirmedPassword) {
+                  Toast.error(l10n.r3ePasswordsDoNotMatchRetry);
+                  return;
                 }
 
                 ref.read(globalLoadingProvider.notifier).start();

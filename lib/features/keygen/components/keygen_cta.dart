@@ -25,7 +25,7 @@ class KeygenCta extends BaseComponent {
       fieldKey: const ValueKey('keygen:private_key'),
       submitKey: const Key('keygen:private_key_submit'),
       onValidSubmission: (value) async {
-        final keypair = await KeygenService.importPrivateKey(value, email);
+        final keypair = await KeygenService.importPrivateKey(value);
 
         showKeys(context, keypair);
       },
@@ -161,7 +161,7 @@ class KeygenCta extends BaseComponent {
                   icon: const Icon(Icons.copy),
                   onPressed: () async {
                     await Clipboard.setData(ClipboardData(text: keypair.address));
-                    Toast.message(l10n.keygenPublicKeyCopiedToast);
+                    Toast.message(l10n.messageAddressCopied);
                   },
                   tooltip: l10n.actionCopyAddress,
                 ),

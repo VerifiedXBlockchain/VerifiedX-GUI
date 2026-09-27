@@ -654,9 +654,12 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     ref.read(walletListProvider.notifier).set(wallets);
 
-    if (wallets.isNotEmpty) {
-      final totalBalance = wallets.map((e) => e.balance).toList().sum;
+    // Set on every load (0 for an empty list) so the balance row does not
+    // stay on 'Loading...' or keep a stale total after the last account goes.
+    final totalBalance = wallets.map((e) => e.balance).toList().sum;
+    state = state.copyWith(totalBalance: totalBalance);
 
+    if (wallets.isNotEmpty) {
       final currentWalletAddress =
           singleton<Storage>().getString(Storage.CURRENT_WALLET_ADDRESS_KEY);
 
@@ -665,15 +668,11 @@ class SessionProvider extends StateNotifier<SessionModel> {
             (element) => element.address == currentWalletAddress);
 
         if (currentWallet != null) {
-          state = state.copyWith(
-              currentWallet: currentWallet, totalBalance: totalBalance);
+          state = state.copyWith(currentWallet: currentWallet);
           ref.read(currentValidatorProvider.notifier).set(currentWallet);
-        } else {
-          state = state.copyWith(totalBalance: totalBalance);
         }
       } else {
-        state = state.copyWith(
-            currentWallet: wallets.first, totalBalance: totalBalance);
+        state = state.copyWith(currentWallet: wallets.first);
         ref.read(currentValidatorProvider.notifier).set(wallets.first);
       }
 
