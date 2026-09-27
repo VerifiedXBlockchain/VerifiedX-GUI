@@ -271,7 +271,7 @@ This area covers the features that reach outside the VFX chain or that no other 
 4. Repeat steps 1 and 2 and click `Continue` in `5.0 VFX Required`.
 
 **Expected**
-- `5.0 VFX Required` reads `There is a 5.0 VFX cost (plus TX fee) to create a BTC domain.`, then the faucet explanation, then `Woud you like to proceed?` (spelling as shipped), with `No Thanks` and `Continue`.
+- `5.0 VFX Required` reads `There is a 5.0 VFX cost (plus TX fee) to create a BTC domain.`, then the faucet explanation, then `Would you like to proceed?`, with `No Thanks` and `Continue`.
 - `No Thanks` shows the toast `Not enough VFX in your account to create a BTC domain. 5.0 VFX required (plus TX fee).` and closes the create dialog.
 - `Continue` opens an info dialog `VFX Faucet` containing the faucet form (TC-MISC-032); closing it shows `Please wait for your balance to arrive before continuing.`
 

@@ -507,10 +507,10 @@ abstract class AppLocalizations {
   /// **'No Thanks'**
   String get adnrFaucetNoThanks;
 
-  /// Body of the faucet-required dialog. Preserves original typo 'Woud' to match existing copy.
+  /// Body of the faucet-required dialog.
   ///
   /// In en, this message translates to:
-  /// **'There is a {cost} VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWoud you like to proceed?'**
+  /// **'There is a {cost} VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWould you like to proceed?'**
   String adnrFaucetRequiredBody(String cost);
 
   /// Title of the faucet-required dialog when creating a BTC domain.
@@ -2262,7 +2262,7 @@ abstract class AppLocalizations {
   /// No description provided for @bw2DomainTooLong.
   ///
   /// In en, this message translates to:
-  /// **'Domain must be less than {max} charcters.'**
+  /// **'Domain must be less than {max} characters.'**
   String bw2DomainTooLong(String max);
 
   /// No description provided for @bw2DoNotCloseApp.
@@ -8406,7 +8406,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aDeleteDraftConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you wan\'t to delete this smart contract draft?'**
+  /// **'Are you sure you want to delete this smart contract draft?'**
   String get r3aDeleteDraftConfirm;
 
   /// No description provided for @r3aDeleteInstanceConfirm.
@@ -8454,7 +8454,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aDraftDeleted.
   ///
   /// In en, this message translates to:
-  /// **'Draft Delete'**
+  /// **'Draft deleted'**
   String get r3aDraftDeleted;
 
   /// No description provided for @r3aDraftSaved.
@@ -8886,7 +8886,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aMaxMintAtOnce.
   ///
   /// In en, this message translates to:
-  /// **'The maxium number you can mint at one time is {max}.'**
+  /// **'The maximum number you can mint at one time is {max}.'**
   String r3aMaxMintAtOnce(String max);
 
   /// No description provided for @r3aMint.
@@ -8946,7 +8946,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aMintTxSent.
   ///
   /// In en, this message translates to:
-  /// **'Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.'**
+  /// **'Mint transaction sent successfully. Please wait until the smart contract is minted on-chain.'**
   String get r3aMintTxSent;
 
   /// No description provided for @r3aMotherAddress.
@@ -13566,7 +13566,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3hInsufficientBalanceForTopic.
   ///
   /// In en, this message translates to:
-  /// **'Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)'**
+  /// **'Balance will not be sufficient to validate due to the cost of creating a topic (1 VFX + fee)'**
   String get r3hInsufficientBalanceForTopic;
 
   /// No description provided for @r3hInternetSpeedDown.
@@ -16992,7 +16992,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbInvalidFeeRate.
   ///
   /// In en, this message translates to:
-  /// **'Invalid Fee Rate. Must be atleast 1 satoshi.'**
+  /// **'Invalid Fee Rate. Must be at least 1 satoshi.'**
   String get tkbInvalidFeeRate;
 
   /// No description provided for @tkbManualSendExchangeSubtitle.

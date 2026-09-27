@@ -647,7 +647,7 @@ This area covers the desktop GUI's network-facing tools: the Operations screen (
 
 **Expected**
 - The toast reads `Your active account must be a validator to create a topic.` and no form opens.
-- For a validator that already has an active topic the toast is `Only one active topic per address is allowed.`; with a balance under 1,002 VFX it is `Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)` (spelling as shipped).
+- For a validator that already has an active topic the toast is `Only one active topic per address is allowed.`; with a balance under 1,002 VFX it is `Balance will not be sufficient to validate due to the cost of creating a topic (1 VFX + fee)`.
 
 **Cleanup:** none.
 

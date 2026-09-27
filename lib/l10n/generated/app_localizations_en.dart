@@ -233,7 +233,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String adnrFaucetRequiredBody(String cost) {
-    return 'There is a $cost VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWoud you like to proceed?';
+    return 'There is a $cost VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWould you like to proceed?';
   }
 
   @override
@@ -1169,7 +1169,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bw2DomainTooLong(String max) {
-    return 'Domain must be less than $max charcters.';
+    return 'Domain must be less than $max characters.';
   }
 
   @override
@@ -4480,7 +4480,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3aDeleteDraft => 'Delete Draft';
 
   @override
-  String get r3aDeleteDraftConfirm => 'Are you sure you wan\'t to delete this smart contract draft?';
+  String get r3aDeleteDraftConfirm => 'Are you sure you want to delete this smart contract draft?';
 
   @override
   String get r3aDeleteInstanceConfirm => 'Are you sure you want to delete this instance?';
@@ -4504,7 +4504,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3aDescriptionIsRequired => 'Description is required';
 
   @override
-  String get r3aDraftDeleted => 'Draft Delete';
+  String get r3aDraftDeleted => 'Draft deleted';
 
   @override
   String get r3aDraftSaved => 'Draft saved!';
@@ -4727,7 +4727,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String r3aMaxMintAtOnce(String max) {
-    return 'The maxium number you can mint at one time is $max.';
+    return 'The maximum number you can mint at one time is $max.';
   }
 
   @override
@@ -4758,7 +4758,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3aMintPhysicalRwa => 'Mint a physical or Real World Asset';
 
   @override
-  String get r3aMintTxSent => 'Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.';
+  String get r3aMintTxSent => 'Mint transaction sent successfully. Please wait until the smart contract is minted on-chain.';
 
   @override
   String get r3aMotherAddress => 'Mother Address';
@@ -7260,7 +7260,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3hHours24Minimum => 'Hours (24 Minimum)';
 
   @override
-  String get r3hInsufficientBalanceForTopic => 'Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)';
+  String get r3hInsufficientBalanceForTopic => 'Balance will not be sufficient to validate due to the cost of creating a topic (1 VFX + fee)';
 
   @override
   String get r3hInternetSpeedDown => 'Internet Speed Down (in Gbps)';
@@ -9109,7 +9109,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get tkbInvalidFeeRate => 'Invalid Fee Rate. Must be atleast 1 satoshi.';
+  String get tkbInvalidFeeRate => 'Invalid Fee Rate. Must be at least 1 satoshi.';
 
   @override
   String get tkbManualSendExchangeSubtitle => 'Send BTC from any exchange or wallet to this token\'s deposit address';

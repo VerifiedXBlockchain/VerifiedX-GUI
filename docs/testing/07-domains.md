@@ -336,7 +336,7 @@ This area covers VFX domains (`.vfx`, an alias for a VFX address) and BTC domain
 
 **Expected**
 - The sheet reads "Create Domain for <TEST_BTC_ADDRESS>", "Your domain must only contain letters and numbers and will automatically be appended with ".btc" upon verification", a `Domain Name` field with suffix `.btc`, "Select VFX Address", "This wallet will control transfer/delete ownership over this new domain.", and `Selected Address:` preset to the first account holding at least 5.001 VFX.
-- Empty: "Domain Name Required". `qa-bad`: "Invalid domain. Must only contain letters and/or numbers.". 66 characters: "Domain must be less than 66 charcters.". Nothing is sent.
+- Empty: "Domain Name Required". `qa-bad`: "Invalid domain. Must only contain letters and/or numbers.". 66 characters: "Domain must be less than 66 characters.". Nothing is sent.
 
 **Open question:** the too-long message reads "less than 66 charcters" (typo, and the limit is 65 allowed); confirm the intended copy.
 
@@ -356,7 +356,7 @@ This area covers VFX domains (`.vfx`, an alias for a VFX address) and BTC domain
 
 **Expected**
 - The dialog is `New BTC Domain` with "BTC Domains cost 5.0 VFX." and the `.btc` suffix; its action button reads `Continue` instead of `Create`.
-- `5.0 VFX Required` explains the 5.0 VFX cost, the community allocation and the SMS phone check, ending "Woud you like to proceed?", with `No Thanks` and `Continue`.
+- `5.0 VFX Required` explains the 5.0 VFX cost, the community allocation and the SMS phone check, ending "Would you like to proceed?", with `No Thanks` and `Continue`.
 - `No Thanks`: a red toast "Not enough VFX in your account to create a BTC domain. 5.0 VFX required (plus TX fee)." and the dialog closes.
 - `Continue`: the `VFX Faucet` dialog opens with the faucet form; after `Close`, a green toast "Please wait for your balance to arrive before continuing.".
 

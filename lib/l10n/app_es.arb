@@ -322,7 +322,7 @@
   },
   "adnrFaucetRequiredBody": "Crear un dominio BTC tiene un costo de {cost} VFX (más la comisión de TX).\n\nLa comunidad ha asignado algo de VFX para reducir la barrera de entrada y probar esta función. Para evitar abusos, se requiere un número de teléfono para una autorización por SMS. Solo se almacenará un hash de tu número de teléfono.\n\n¿Quieres continuar?",
   "@adnrFaucetRequiredBody": {
-    "description": "Body of the faucet-required dialog. Preserves original typo 'Woud' to match existing copy.",
+    "description": "Body of the faucet-required dialog.",
     "placeholders": {
       "cost": {
         "type": "String"

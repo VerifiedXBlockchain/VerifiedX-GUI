@@ -320,9 +320,9 @@
   "@adnrFaucetNoThanks": {
     "description": "Cancel button on the faucet-required dialog."
   },
-  "adnrFaucetRequiredBody": "There is a {cost} VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWoud you like to proceed?",
+  "adnrFaucetRequiredBody": "There is a {cost} VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWould you like to proceed?",
   "@adnrFaucetRequiredBody": {
-    "description": "Body of the faucet-required dialog. Preserves original typo 'Woud' to match existing copy.",
+    "description": "Body of the faucet-required dialog.",
     "placeholders": {
       "cost": {
         "type": "String"
@@ -1510,7 +1510,7 @@
   "bw2DepositAmount": "Deposit amount",
   "bw2DkgStartHint": "This starts the distributed key generation process.",
   "bw2DomainNameRequired": "Domain Name Required",
-  "bw2DomainTooLong": "Domain must be less than {max} charcters.",
+  "bw2DomainTooLong": "Domain must be less than {max} characters.",
   "@bw2DomainTooLong": {
     "placeholders": {
       "max": {
@@ -4384,7 +4384,7 @@
   "r3aDateTime": "Date/Time",
   "r3aDateTimeVariable": "Date/Time Variable",
   "r3aDeleteDraft": "Delete Draft",
-  "r3aDeleteDraftConfirm": "Are you sure you wan't to delete this smart contract draft?",
+  "r3aDeleteDraftConfirm": "Are you sure you want to delete this smart contract draft?",
   "r3aDeleteInstanceConfirm": "Are you sure you want to delete this instance?",
   "r3aDeleteInstanceTitle": "Delete Instance?",
   "r3aDeleteQuestion": "Delete?",
@@ -4392,7 +4392,7 @@
   "r3aDeleteThisConfirm": "Are you sure you want to delete this?",
   "r3aDeleteThisStageConfirm": "Are you sure you want to delete this stage?",
   "r3aDescriptionIsRequired": "Description is required",
-  "r3aDraftDeleted": "Draft Delete",
+  "r3aDraftDeleted": "Draft deleted",
   "r3aDraftSaved": "Draft saved!",
   "r3aDuplicate": "Duplicate",
   "r3aEditInstance": "Edit Instance",
@@ -4485,7 +4485,7 @@
   "r3aInvalidValue": "Invalid value",
   "r3aIssuerMinterControlled": "Issuer/Minter Controlled",
   "r3aLabel": "Label",
-  "r3aMaxMintAtOnce": "The maxium number you can mint at one time is {max}.",
+  "r3aMaxMintAtOnce": "The maximum number you can mint at one time is {max}.",
   "@r3aMaxMintAtOnce": {
     "placeholders": {
       "max": {
@@ -4502,7 +4502,7 @@
   "r3aMinting": "Minting",
   "r3aMintingEllipsis": "Minting…",
   "r3aMintPhysicalRwa": "Mint a physical or Real World Asset",
-  "r3aMintTxSent": "Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.",
+  "r3aMintTxSent": "Mint transaction sent successfully. Please wait until the smart contract is minted on-chain.",
   "r3aMotherAddress": "Mother Address",
   "r3aMotherPassword": "Mother Password",
   "r3aMultiAsset": "Multi Asset",
@@ -6061,7 +6061,7 @@
   "r3hHdSize": "HD Size",
   "r3hHdSizeSpecifier": "HD Size Specifier",
   "r3hHours24Minimum": "Hours (24 Minimum)",
-  "r3hInsufficientBalanceForTopic": "Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)",
+  "r3hInsufficientBalanceForTopic": "Balance will not be sufficient to validate due to the cost of creating a topic (1 VFX + fee)",
   "r3hInternetSpeedDown": "Internet Speed Down (in Gbps)",
   "r3hInternetSpeedUp": "Internet Speed Up (in Gbps)",
   "r3hInvalid": "Invalid",
@@ -7673,7 +7673,7 @@
       }
     }
   },
-  "tkbInvalidFeeRate": "Invalid Fee Rate. Must be atleast 1 satoshi.",
+  "tkbInvalidFeeRate": "Invalid Fee Rate. Must be at least 1 satoshi.",
   "tkbManualSendExchangeSubtitle": "Send BTC from any exchange or wallet to this token's deposit address",
   "tkbManualSendSubtitle": "Send coin manually to this token''s BTC deposit address",
   "tkbMediaNotFound": "Media asset file not found on your machine ({fileName}).",

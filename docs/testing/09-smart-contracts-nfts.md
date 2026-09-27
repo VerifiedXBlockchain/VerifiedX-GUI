@@ -172,7 +172,7 @@ This area covers the smart contract creator (name, creator, description, primary
 - Step 6 dialog body starts `Are you sure you want to proceed?` and says the contract cannot be changed once compiled.
 - Step 7 dialog reads `This will be minted by` followed by account A's name or address.
 - Step 8 shows `Compiling & Minting…`, then `Compiled!`.
-- Web: the toast `Smart Contract minted successfully.` appears. macOS: the toast `Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.` appears.
+- Web: the toast `Smart Contract minted successfully.` appears. macOS: the toast `Mint transaction sent successfully. Please wait until the smart contract is minted on-chain.` appears.
 - The `Stand by` dialog explains that the mint was broadcast; after `Close` the app returns to the Smart Contracts landing screen.
 - The NFT card appears in `My NFTs` within 3 minutes with the name and its smart contract id.
 - A mint transaction for account A appears in the transaction list.
@@ -1076,7 +1076,7 @@ This area covers the smart contract creator (name, creator, description, primary
 1. Look for `Save as Draft`, `Delete` and a `My Drafts` entry in the creator's app bar and bottom bar.
 
 **Expected**
-- The bottom bar has only `Compile & Mint`; `Save as Draft` (`buildSaveButton`), the draft `Delete` button and the `My Drafts` app bar action are commented out, so drafts cannot be saved (`Draft saved!`), reopened or deleted (`Delete Draft` / `Draft Delete`).
+- The bottom bar has only `Compile & Mint`; `Save as Draft` (`buildSaveButton`), the draft `Delete` button and the `My Drafts` app bar action are commented out, so drafts cannot be saved (`Draft saved!`), reopened or deleted (`Delete Draft` / `Draft deleted`).
 - **Open question:** should drafts ship on desktop? `SmartContractDraftsScreen` and `draftsSmartContractProvider` still exist, and `DELETE_DRAFT_ON_MINT` still deletes drafts on compile.
 
 **Cleanup:** none.

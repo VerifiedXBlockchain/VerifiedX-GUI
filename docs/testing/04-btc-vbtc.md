@@ -220,7 +220,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 3. Cancel before sending. macOS: `tap-text Cancel` in `Please Confirm`. Web: `button "Cancel"` in the picker.
 
 **Expected**
-- macOS step 1: the field shows `Invalid Fee Rate. Must be atleast 1 satoshi.` and the form does not submit.
+- macOS step 1: the field shows `Invalid Fee Rate. Must be at least 1 satoshi.` and the form does not submit.
 - macOS step 2: the helper line reads `Fee Rate: 12 SATS /byte [0.000000120 BTC /byte]` / `Fee Estimate: 1680 SATS [~0.000016800 BTC]`.
 - Web step 2: the label under the field reads `12 SATS /byte | 0.000000120 BTC /byte`.
 - **Open question:** on web, Continue with `Custom` and a 0 or empty value returns 0 without running the field validator. Confirm whether a 0 sat/vB send is expected to be rejected by the backend, and with what message.

@@ -223,7 +223,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 - Step 1: `BTC Address required` under the address and `Amount required` under the amount.
 - Step 2: `The minimum transaction amount is 0.00001 BTC`.
 - Step 3: `Not enough balance in BTC account`.
-- Step 4: `Invalid Fee Rate. Must be atleast 1 satoshi.` under the custom fee field.
+- Step 4: `Invalid Fee Rate. Must be at least 1 satoshi.` under the custom fee field.
 - No confirmation dialog opens in any step.
 
 **Open question:** the client does not validate the BTC address format (only non-empty). What should a malformed BTC address produce: a CLI/Spyglass error toast, or nothing? Record the observed text.
