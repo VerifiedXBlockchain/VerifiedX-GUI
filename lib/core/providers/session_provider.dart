@@ -836,6 +836,24 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
   }
 
+  /// Reads the CLI version and the wallet's password and encryption state.
+  /// Runs once the CLI answers, whether this session launched it or attached
+  /// to one that was already running.
+  Future<void> _loadCliDetails() async {
+    try {
+      final cliVersion = await BridgeService().getCliVersion();
+      ref.read(logProvider.notifier).append(LogEntry(
+          message: "CLI Version: $cliVersion", variant: AppColorVariant.Info));
+      state = state.copyWith(cliVersion: cliVersion);
+    } catch (e) {
+      ref.read(logProvider.notifier).append(LogEntry(
+          message: "Could not read the CLI version: $e",
+          variant: AppColorVariant.Warning));
+    }
+    ref.read(passwordRequiredProvider.notifier).check();
+    ref.read(walletIsEncryptedProvider.notifier).check();
+  }
+
   Future<bool> _cliCheck([int attempt = 1, int maxAttempts = 500]) async {
     if (attempt > maxAttempts) {
       ref.read(logProvider.notifier).append(
@@ -850,12 +868,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
           message: "VerifedX Wallet Started Successfully",
           variant: AppColorVariant.Success));
       await fetchConfig();
-      final cliVersion = await BridgeService().getCliVersion();
-      ref.read(logProvider.notifier).append(LogEntry(
-          message: "CLI Version: $cliVersion", variant: AppColorVariant.Info));
-      state = state.copyWith(cliVersion: cliVersion);
-      ref.read(passwordRequiredProvider.notifier).check();
-      ref.read(walletIsEncryptedProvider.notifier).check();
+      await _loadCliDetails();
       return true;
     }
 
@@ -887,6 +900,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
         ref
             .read(logProvider.notifier)
             .append(LogEntry(message: "CLI is already running!"));
+        await _loadCliDetails();
 
         return true;
       }
