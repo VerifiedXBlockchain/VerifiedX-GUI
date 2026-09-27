@@ -136,12 +136,21 @@ class EncryptWalletButton extends BaseComponent {
                 } else {
                   Toast.message(l10n.r3eWalletEncrypted);
                   ref.read(walletIsEncryptedProvider.notifier).set(true);
-                  // Take the lock state from the node now rather than on the
-                  // next 10 s poll, so the next guarded action prompts (MTI#6).
-                  try {
-                    await ref.read(passwordRequiredProvider.notifier).check();
-                  } catch (e) {
-                    ref.read(passwordRequiredProvider.notifier).markRequired();
+                  // GetEncryptWallet leaves the new password in the node's
+                  // memory, so the wallet would stay unlocked and Reveal
+                  // private key would not ask for it (MTI#6). Lock it right
+                  // away; lock() also sets passwordRequiredProvider. The node
+                  // refuses to lock while validating (it needs the password
+                  // to sign blocks); then take the state from the node.
+                  final notifier = ref.read(passwordRequiredProvider.notifier);
+                  final isValidating = ref.read(currentValidatorProvider)?.isValidating == true;
+                  final locked = !isValidating && await notifier.lock();
+                  if (!locked) {
+                    try {
+                      await notifier.check();
+                    } catch (e) {
+                      print("Password check after encrypting failed: $e");
+                    }
                   }
                 }
               }
