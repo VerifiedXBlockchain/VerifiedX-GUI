@@ -396,7 +396,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     await Future.delayed(const Duration(seconds: 3));
 
-    if (remoteInfo != null) {
+    // Automation builds never offer GUI or CLI updates, so an update dialog
+    // can't interrupt a scripted run. The snapshot prompt below still shows.
+    if (remoteInfo != null && !Env.isAutomation) {
       if (remoteInfo.gui.updateAvailable) {
         updateGui();
         return;
@@ -410,8 +412,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       }
     }
 
-    if (remoteInfo != null) {
-
+    if (remoteInfo != null && !Env.isAutomation) {
       final cliUpdateAvailable = await BridgeService().updateCli(false);
       if (cliUpdateAvailable == true) {
         final confirmed = await ConfirmDialog.show(
