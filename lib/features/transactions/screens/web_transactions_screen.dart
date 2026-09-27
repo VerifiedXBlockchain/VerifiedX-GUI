@@ -23,6 +23,7 @@ import '../components/web_transaction_card.dart';
 import '../models/web_transaction.dart';
 import '../providers/vfx_transaction_filter_provider.dart';
 import '../providers/web_transaction_list_provider.dart';
+import '../providers/web_transactions_tab_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class WebTransactionScreen extends BaseScreen {
@@ -83,42 +84,104 @@ class WebTransactionScreen extends BaseScreen {
     final filters = ref.watch(vfxTransactionFilterProvider);
     final l10n = AppLocalizations.of(context);
 
-    return DefaultTabController(
-      length: 4,
-      child: Column(
-        children: [
-          TabBar(
-            indicatorColor: AppColors.getBlue(),
-            tabs: [
-              Tab(
-                child: Text(l10n.txTabAll),
-              ),
-              Tab(
-                child: Text("VFX"),
-              ),
-              Tab(
-                child: Text(l10n.segmentVault),
-              ),
-              Tab(
-                child: Text("BTC"),
-              ),
-            ],
+    return WebTransactionsTabs(
+      tabs: [
+        Tab(
+          child: Text(l10n.txTabAll),
+        ),
+        Tab(
+          child: Text("VFX"),
+        ),
+        Tab(
+          child: Text(l10n.segmentVault),
+        ),
+        Tab(
+          child: Text("BTC"),
+        ),
+      ],
+      views: [
+        WebTransactionsCombinedList(),
+        WebTransactionsVfxList(address: session.keypair?.address),
+        WebTransactionsVfxList(address: session.raKeypair?.address),
+        WebBtcTransactionList(address: session.btcKeypair?.address),
+      ],
+    );
+  }
+}
+
+/// The Transactions tab bar and views. Opens on, and later switches to, the
+/// tab requested through [webTransactionsTabRequestProvider].
+class WebTransactionsTabs extends ConsumerStatefulWidget {
+  /// One per [WebTransactionsTab], in the same order.
+  final List<Widget> tabs;
+  final List<Widget> views;
+
+  const WebTransactionsTabs({super.key, required this.tabs, required this.views})
+      : assert(tabs.length == views.length);
+
+  @override
+  ConsumerState<WebTransactionsTabs> createState() => _WebTransactionsTabsState();
+}
+
+class _WebTransactionsTabsState extends ConsumerState<WebTransactionsTabs> with SingleTickerProviderStateMixin {
+  late final TabController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    final requested = ref.read(webTransactionsTabRequestProvider);
+    _controller = TabController(
+      length: widget.tabs.length,
+      vsync: this,
+      initialIndex: requested?.index ?? 0,
+    );
+    if (requested != null) {
+      // Providers cannot change while the tree builds.
+      WidgetsBinding.instance.addPostFrameCallback((_) => _clearRequest());
+    }
+  }
+
+  void _clearRequest() {
+    if (mounted) {
+      ref.read(webTransactionsTabRequestProvider.notifier).state = null;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // The dashboard keeps this screen alive between visits, so a request made
+    // after the first build arrives here.
+    ref.listen<WebTransactionsTab?>(webTransactionsTabRequestProvider, (_, requested) {
+      if (requested == null) {
+        return;
+      }
+      _controller.index = requested.index;
+      _clearRequest();
+    });
+
+    return Column(
+      children: [
+        TabBar(
+          controller: _controller,
+          indicatorColor: AppColors.getBlue(),
+          tabs: widget.tabs,
+        ),
+        SizedBox(
+          height: 16,
+        ),
+        Expanded(
+          child: TabBarView(
+            controller: _controller,
+            children: widget.views,
           ),
-          SizedBox(
-            height: 16,
-          ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                WebTransactionsCombinedList(),
-                WebTransactionsVfxList(address: session.keypair?.address),
-                WebTransactionsVfxList(address: session.raKeypair?.address),
-                WebBtcTransactionList(address: session.btcKeypair?.address),
-              ],
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

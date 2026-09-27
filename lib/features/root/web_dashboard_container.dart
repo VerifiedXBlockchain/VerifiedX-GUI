@@ -52,6 +52,7 @@ import '../keygen/models/ra_keypair.dart';
 import '../navigation/components/root_container_balance_row.dart';
 import '../navigation/constants.dart';
 import '../transactions/providers/web_transaction_list_provider.dart';
+import '../transactions/providers/web_transactions_tab_provider.dart';
 import '../web/components/web_latest_block.dart';
 import '../web/components/web_qr_scanner.dart';
 import 'navigation/components/web_drawer.dart';
@@ -62,6 +63,15 @@ import '../../core/singletons.dart';
 import '../../utils/web_route_paths.dart';
 
 GlobalKey<ScaffoldState> webDashboardScaffoldKey = GlobalKey<ScaffoldState>();
+
+/// Opens the Transactions screen at its list (not a detail left open there)
+/// on [tab].
+void openTransactionsTab(BuildContext context, WidgetRef ref, WebTransactionsTab tab) {
+  ref.read(webTransactionsTabRequestProvider.notifier).state = tab;
+  final tabsRouter = AutoTabsRouter.of(context);
+  tabsRouter.stackRouterOfIndex(WebRouteIndex.transactions)?.popUntilRoot();
+  tabsRouter.setActiveIndex(WebRouteIndex.transactions);
+}
 
 class WebRouteIndex {
   static get home => 0;
@@ -708,7 +718,7 @@ class WebAccountInfoBtc extends BaseComponent {
               .read(webSessionProvider.notifier)
               .setSelectedWalletType(WalletType.btc);
 
-          AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+          openTransactionsTab(context, ref, webTransactionsTabFor(WalletType.btc));
         },
         latestTx: latestBtcTx != null
             ? MouseRegion(
@@ -1001,7 +1011,7 @@ class WebAccountInfoVfx extends BaseComponent {
             .read(webSessionProvider.notifier)
             .setSelectedWalletType(WalletType.rbx);
 
-        AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+        openTransactionsTab(context, ref, webTransactionsTabFor(WalletType.rbx));
       },
       topIndicator: Image.asset(
         "assets/images/cube_still.png",
