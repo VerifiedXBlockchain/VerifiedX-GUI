@@ -38,7 +38,9 @@ class BridgePreflightArgs {
 ///
 /// Re-invoking with the same key returns the cached value; call
 /// `ref.refresh(bridgePreflightProvider(args))` to force a re-fetch
-/// (used by the dialog's "Retry" state when preflight fails).
+/// (used by the form's 10 s poll and its "Retry" state). Prefer `refresh`
+/// over `invalidate` here: `invalidate` defers the refetch to the next
+/// frame's scheduler pass and is a no-op while one is already pending.
 final bridgePreflightProvider =
     FutureProvider.family<BridgePreflight?, BridgePreflightArgs>(
   (ref, args) async {

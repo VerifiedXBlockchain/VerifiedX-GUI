@@ -71,7 +71,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
     // tick up after they fund the address from an exchange / external wallet.
     _refreshTimer = Timer.periodic(_preflightRefreshInterval, (_) {
       if (!mounted) return;
-      ref.invalidate(bridgePreflightProvider(_args));
+      _refetch();
     });
   }
 
@@ -96,8 +96,21 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
   /// Force an immediate preflight refresh — used by the "Refresh" button in
   /// the gas funding section so users don't have to wait for the next poll
   /// tick after sending a gas tx.
-  void refreshPreflight() {
-    ref.invalidate(bridgePreflightProvider(_args));
+  void refreshPreflight() => _refetch();
+
+  /// Re-runs the preflight request now.
+  ///
+  /// Uses `ref.refresh` rather than `ref.invalidate`. In Riverpod 2.3,
+  /// `invalidate` only marks the provider dirty and leaves the refetch to the
+  /// container's scheduler, which runs when the ProviderScope rebuilds on the
+  /// next frame. While that refetch is still pending, later `invalidate` calls
+  /// return early. If the pending refetch never runs, the 10 s timer and Retry
+  /// both do nothing and the modal stays on the error until it is reopened
+  /// (QA MTI#7.3). `refresh` reads the provider right away, so the request is
+  /// sent synchronously whatever the scheduler state.
+  void _refetch() {
+    // ignore: unused_result
+    ref.refresh(bridgePreflightProvider(_args));
   }
 
   void _toggleDetails() {
@@ -171,14 +184,14 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
       error: (err, _) => _ErrorState(
         message: l10n.prvBridgeCantReach,
         onCancel: widget.onCancel,
-        onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
+        onRetry: _refetch,
       ),
       data: (preflight) {
         if (preflight == null || !preflight.success) {
           return _ErrorState(
             message: preflight?.message ?? l10n.prvBridgeCantLoadInfo,
             onCancel: widget.onCancel,
-            onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
+            onRetry: _refetch,
           );
         }
         if (!preflight.bridgeConfigured) {
@@ -211,7 +224,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
           return _BlockedState(
             message: message,
             onCancel: widget.onCancel,
-            onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
+            onRetry: _refetch,
           );
         }
         return _Form(
