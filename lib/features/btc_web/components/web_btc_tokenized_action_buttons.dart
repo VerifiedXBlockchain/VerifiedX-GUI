@@ -23,6 +23,8 @@ import '../models/btc_web_vbtc_token.dart';
 import '../providers/btc_web_transaction_list_provider.dart';
 import '../services/btc_web_service.dart';
 import '../utils/vbtc_amount.dart';
+import '../utils/withdrawal_liveness.dart';
+import '../../global_loader/global_loading_provider.dart';
 import '../../web/utils/pending_debits.dart';
 import 'web_v2_withdrawal_dialog.dart';
 
@@ -273,7 +275,9 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
             // another holder's makes the FROST leader address and the
             // signature disagree, which validators reject — and the ceremony
             // then hangs rather than failing.
-            final pending = token.liveResumableWithdrawalRequestsFor(myAddress);
+            ref.read(globalLoadingProvider.notifier).start();
+            final pending = await fetchLiveResumableWithdrawals(token, myAddress);
+            ref.read(globalLoadingProvider.notifier).complete();
             if (pending.isNotEmpty) {
               final requestHash = pending.first['request_transaction_hash'] as String?;
               if (requestHash != null) {
