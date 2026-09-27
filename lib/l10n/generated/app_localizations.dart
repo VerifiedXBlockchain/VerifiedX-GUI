@@ -8277,6 +8277,18 @@ abstract class AppLocalizations {
   /// **'Compiling & Minting…'**
   String get r3aCompilingMintingEllipsis;
 
+  /// Headline shown when the smart contract compile animation finishes (compile only).
+  ///
+  /// In en, this message translates to:
+  /// **'Compiled!'**
+  String get r3aCompiledExclaim;
+
+  /// Headline shown when the smart contract compile animation finishes after minting.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted!'**
+  String get r3aMintedExclaim;
+
   /// No description provided for @r3aConfiguration.
   ///
   /// In en, this message translates to:

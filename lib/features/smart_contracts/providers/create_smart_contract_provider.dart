@@ -38,6 +38,7 @@ import '../services/smart_contract_service.dart';
 import 'draft_smart_contracts_provider.dart';
 import 'my_smart_contracts_provider.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class CreateSmartContractProvider extends StateNotifier<SmartContract> {
   final Ref ref;
@@ -364,18 +365,18 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
     final List<String> errors = [];
 
     if (state.primaryAsset == null) {
-      errors.add("- Asset is required");
+      errors.add("- ${globalL10n.r3aAssetIsRequired}");
     }
     if (state.name.isEmpty) {
-      errors.add("- Name is required");
+      errors.add("- ${globalL10n.r3aNameIsRequired}");
     }
 
     if (state.minterName.isEmpty) {
-      errors.add("- Minter name is required");
+      errors.add("- ${globalL10n.r3aMinterNameIsRequired}");
     }
 
     if (state.description.isEmpty) {
-      errors.add("- Description is required");
+      errors.add("- ${globalL10n.r3aDescriptionIsRequired}");
     }
 
     // int filesize = 0;

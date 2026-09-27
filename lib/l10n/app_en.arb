@@ -4348,6 +4348,14 @@
   "r3aCompileMintScConfirm": "Compile & Mint Smart Contract?",
   "r3aCompilingMinting": "Compiling & Minting",
   "r3aCompilingMintingEllipsis": "Compiling & Minting…",
+  "r3aCompiledExclaim": "Compiled!",
+  "@r3aCompiledExclaim": {
+    "description": "Headline shown when the smart contract compile animation finishes (compile only)."
+  },
+  "r3aMintedExclaim": "Minted!",
+  "@r3aMintedExclaim": {
+    "description": "Headline shown when the smart contract compile animation finishes after minting."
+  },
   "r3aConfiguration": "Configuration",
   "r3aConfirmMintBody": "Are you sure you want to proceed minting {amount} Smart Contract(s)?\n\nOnce compiled you will not be able to make any changes\nand the smart contract will be deployed to the chain.",
   "@r3aConfirmMintBody": {

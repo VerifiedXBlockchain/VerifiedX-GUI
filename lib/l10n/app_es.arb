@@ -4322,6 +4322,14 @@
   "r3aCompileMintScConfirm": "¿Compilar y emitir el contrato inteligente?",
   "r3aCompilingMinting": "Compilando y emitiendo",
   "r3aCompilingMintingEllipsis": "Compilando y emitiendo…",
+  "r3aCompiledExclaim": "¡Compilado!",
+  "@r3aCompiledExclaim": {
+    "description": "Headline shown when the smart contract compile animation finishes (compile only)."
+  },
+  "r3aMintedExclaim": "¡Emitido!",
+  "@r3aMintedExclaim": {
+    "description": "Headline shown when the smart contract compile animation finishes after minting."
+  },
   "r3aConfiguration": "Configuración",
   "r3aConfirmMintBody": "¿Seguro que deseas emitir {amount} contrato(s) inteligente(s)?\n\nUna vez compilado no podrás hacer cambios\ny el contrato se desplegará en la cadena.",
   "@r3aConfirmMintBody": {

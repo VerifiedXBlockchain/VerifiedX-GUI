@@ -4419,6 +4419,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3aCompilingMintingEllipsis => 'Compiling & Minting…';
 
   @override
+  String get r3aCompiledExclaim => 'Compiled!';
+
+  @override
+  String get r3aMintedExclaim => 'Minted!';
+
+  @override
   String get r3aConfiguration => 'Configuration';
 
   @override
