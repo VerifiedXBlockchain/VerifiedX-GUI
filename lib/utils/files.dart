@@ -18,6 +18,8 @@ import '../core/dialogs.dart';
 import '../core/env.dart';
 import '../features/asset/asset.dart';
 import '../features/config/providers/config_provider.dart';
+import '../l10n/l10n_helper.dart';
+import 'asset_extensions.dart';
 
 /// Opens [file] with the system handler, falling back to its folder.
 /// Returns false when neither could be opened.
@@ -112,6 +114,23 @@ Future<String> startupProgressPath() async {
   return path;
 }
 
+/// Shows the "Unsupported File" dialog and returns true when [extension] may
+/// not be used as an NFT asset. Call it before uploading or attaching a file.
+bool rejectIfBlockedAssetExtension(WidgetRef ref, String? extension) {
+  final blocked = isBlockedAssetExtension(
+    extension,
+    rejectedExtensions: ref.read(configProvider).rejectAssetExtensionTypes,
+  );
+  if (!blocked) {
+    return false;
+  }
+  InfoDialog.show(
+    title: globalL10n.assetUnsupportedFileTitle,
+    body: globalL10n.assetExtensionNotPermittedBody(extension!),
+  );
+  return true;
+}
+
 Future<Asset?> selectAsset(WidgetRef ref) async {
   FilePickerResult? result;
   if (!kIsWeb) {
@@ -137,6 +156,10 @@ Future<Asset?> selectAsset(WidgetRef ref) async {
 
     final ext = result.files.single.extension;
     final filename = result.files.single.name;
+
+    if (rejectIfBlockedAssetExtension(ref, ext)) {
+      return null;
+    }
 
     final url = await ExplorerService().uploadAsset(bytes, filename, ext);
 
@@ -164,8 +187,7 @@ Future<Asset?> selectAsset(WidgetRef ref) async {
       return null;
     }
 
-    if (MALWARE_FILE_EXTENSIONS.contains(extension) || ref.read(configProvider).rejectAssetExtensionTypes.contains(extension.toLowerCase())) {
-      InfoDialog.show(title: "Unsupported File", body: "This file extension (.$extension) is not permitted.");
+    if (rejectIfBlockedAssetExtension(ref, extension)) {
       return null;
     }
 

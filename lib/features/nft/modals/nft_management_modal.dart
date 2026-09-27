@@ -33,46 +33,6 @@ class NftMangementModal extends BaseComponent {
   final bool showViewNft;
   const NftMangementModal(this.id, this.nft, {Key? key, this.showViewNft = true}) : super(key: key);
 
-  void evolve(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await ConfirmDialog.show(
-      title: l10n.nftEvolveTitle,
-      body: l10n.r3gConfirmEvolveOneStage,
-      confirmText: l10n.nftEvolve,
-      cancelText: l10n.actionCancel,
-    );
-    if (confirmed == true) {
-      final _provider = ref.read(nftDetailProvider(id).notifier);
-      final success = await _provider.evolve();
-      if (success) {
-        Toast.message(l10n.nftEvolveSentToast);
-        showEvolveMessage();
-      } else {
-        Toast.error();
-      }
-    }
-  }
-
-  void devolve(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await ConfirmDialog.show(
-      title: l10n.nftDevolveTitle,
-      body: l10n.r3gConfirmDevolveOneStage,
-      confirmText: l10n.r3gDevolve,
-      cancelText: l10n.actionCancel,
-    );
-    if (confirmed == true) {
-      final _provider = ref.read(nftDetailProvider(id).notifier);
-      final success = await _provider.devolve();
-      if (success) {
-        Toast.message(AppLocalizations.of(context).nftDevolveSentToast);
-        showEvolveMessage(context);
-      } else {
-        Toast.error();
-      }
-    }
-  }
-
   void setEvolve(
     BuildContext context,
     WidgetRef ref,

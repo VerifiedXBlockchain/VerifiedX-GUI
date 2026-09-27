@@ -19,7 +19,6 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../auth/screens/web_auth_screen.dart';
 import '../../btc_web/services/btc_web_service.dart';
-import '../../faucet/screens/faucet_screen.dart';
 import '../../navigation/constants.dart';
 import '../../navigation/root_container.dart';
 import '../../price/components/coin_price_summary.dart';
@@ -616,16 +615,6 @@ class _Actions extends BaseComponent {
                       );
                     }
                   }),
-              // AppVerticalIconButton(
-              //   label: "Faucet",
-              //   icon: FontAwesomeIcons.faucet,
-              //   prettyIconType: PrettyIconType.custom,
-              //   onPressed: () {
-              //     Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
-              //       builder: (context) => FaucetScreen(),
-              //     ));
-              //   },
-              // ),
 
               if (ref.read(webSessionProvider).keypair != null && !isMobile)
                 AppVerticalIconButton(

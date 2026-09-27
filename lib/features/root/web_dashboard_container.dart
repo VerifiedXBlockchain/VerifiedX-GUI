@@ -649,10 +649,6 @@ class WebAccountInfoExpanderRow extends BaseComponent {
     final forceExpand = ref.watch(globalBalancesExpandedProvider);
 
     return LayoutBuilder(builder: (context, constraints) {
-      final availableWidth = constraints.maxWidth;
-
-      final connector1Left = (availableWidth / 3) - 10;
-      final connector2Left = (availableWidth / 3) + (availableWidth / 3) - 5;
       return Stack(
         children: [
           Row(
@@ -673,41 +669,6 @@ class WebAccountInfoExpanderRow extends BaseComponent {
               ),
             ],
           ),
-          // AnimatedPositioned(
-          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          //   curve: Curves.easeInOut,
-          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-          //   child: IgnorePointer(
-          //     ignoring: true,
-          //     child: Padding(
-          //       padding: EdgeInsets.only(left: connector1Left),
-          //       // child: RootContainerBalanceRowConnector(),
-          //       child: Transform.translate(
-          //         offset: Offset(-33, 4),
-          //         child: ConnectorVisual(
-          //           isBtc: false,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedPositioned(
-          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          //   curve: Curves.easeInOut,
-          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-          //   child: IgnorePointer(
-          //     ignoring: true,
-          //     child: Padding(
-          //       padding: EdgeInsets.only(left: connector2Left),
-          //       child: Transform.translate(
-          //         offset: Offset(-6, 4),
-          //         child: ConnectorVisual(
-          //           isBtc: true,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       );
     });

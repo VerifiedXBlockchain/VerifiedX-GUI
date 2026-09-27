@@ -34,6 +34,7 @@ import '../components/sc_wizard_minting_progress_dialog.dart';
 import '../features/royalty/royalty.dart';
 import '../models/bulk_smart_contract_entry.dart';
 import '../models/smart_contract.dart';
+import '../services/asset_url_checker.dart';
 import '../services/smart_contract_service.dart';
 import 'my_smart_contracts_provider.dart';
 import 'property_wizard_form_provider.dart';
@@ -77,6 +78,7 @@ class ScWizardItem {
 class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
   final Ref ref;
   final ScrollController scrollController = ScrollController();
+  final AssetUrlChecker _assetUrlChecker = AssetUrlChecker();
 
   ScWizardProvider(this.ref, [List<ScWizardItem> model = const []]) : super(model);
 
@@ -528,11 +530,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     logProvider.append("Downloading $primaryAssetUrl...");
 
     final primaryAsset = kIsWeb
-        ? Asset(
-            id: '',
-            fileSize: 0,
-            location: primaryAssetUrl,
-          )
+        ? await _webUrlToAsset(primaryAssetUrl)
         : await urlToAsset(
             primaryAssetUrl,
             creatorName,
@@ -620,11 +618,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     if (additionalAssetUrls != null && additionalAssetUrls.isNotEmpty) {
       for (final url in additionalAssetUrls) {
         final a = kIsWeb
-            ? Asset(
-                id: '',
-                fileSize: 0,
-                location: url,
-              )
+            ? await _webUrlToAsset(url)
             : await urlToAsset(
                 url,
                 creatorName,
@@ -651,6 +645,20 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
 
   EvolveType getEvolveType(int index) {
     return state[index].entry.evolve.type;
+  }
+
+  /// Web keeps the URL as the asset location instead of downloading it, so it
+  /// checks the URL answers first. Returns null for an unreachable URL, which
+  /// the caller skips the same way the desktop skips a failed download.
+  Future<Asset?> _webUrlToAsset(String url) async {
+    if (!await _assetUrlChecker.isReachable(url)) {
+      return null;
+    }
+    return Asset(
+      id: '',
+      fileSize: 0,
+      location: url,
+    );
   }
 
   Future<Asset?> urlToAsset(String url, String creatorName) async {

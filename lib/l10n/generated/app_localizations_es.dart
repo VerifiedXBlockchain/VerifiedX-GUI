@@ -1965,9 +1965,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get faucetRequestVfx => 'Solicitar VFX';
 
   @override
-  String get faucetTitle => 'Faucet de VFX';
-
-  @override
   String get faucetVerificationCodeLabel => 'Código de verificación';
 
   @override
@@ -2534,28 +2531,7 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get keygenAddressLabel => 'Dirección';
-
-  @override
-  String get keygenDone => 'Listo';
-
-  @override
   String get keygenEmailAddressTitle => 'Correo electrónico';
-
-  @override
-  String get keygenEmailLabel => 'Correo';
-
-  @override
-  String get keygenGenerateKeypair => 'Generar par de claves';
-
-  @override
-  String get keygenImportPrivateKey => 'Importar clave privada';
-
-  @override
-  String get keygenImportWalletTitle => 'Importar billetera';
-
-  @override
-  String get keygenKeyGeneratedBody => 'Aquí están los detalles de tu cuenta. Asegúrate de respaldar tu clave privada en un lugar seguro.';
 
   @override
   String get keygenKeyGeneratedTitle => 'Clave generada';
@@ -2567,13 +2543,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get keygenPrivateKeyCopiedToast => 'Clave privada copiada al portapapeles';
 
   @override
-  String get keygenPrivateKeyLabel => 'Clave privada';
-
-  @override
   String get keygenPublicKeyCopiedToast => 'Clave pública copiada al portapapeles';
-
-  @override
-  String get keygenRecoverAccount => 'Recuperar cuenta';
 
   @override
   String get keygenRecoveryMnemonicLabel => 'Mnemónico de recuperación';
@@ -3274,12 +3244,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get nftDetailFallback => 'NFT';
-
-  @override
-  String get nftDevolveSentToast => '¡Transacción de devolución enviada exitosamente!';
-
-  @override
-  String get nftDevolveTitle => '¿Devolucionar?';
 
   @override
   String get nftEvolve => 'Evolucionar';
@@ -6174,9 +6138,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get r3eFaucetIntro => 'La comunidad ha asignado algo de VFX para facilitar probar esta función. Para evitar abusos, se requiere un número de teléfono para una autorización por SMS. Solo se guardará un hash de tu número.';
-
-  @override
   String r3eFaucetSuccess(String result) {
     return '¡Listo! Los fondos están en camino. Hash de TX: $result';
   }
@@ -6224,11 +6185,6 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3eLoginWithThisAccount => 'Iniciar sesión con esta cuenta';
-
-  @override
-  String r3eMaxAmount(String amount) {
-    return 'Monto máximo: $amount VFX';
-  }
 
   @override
   String get r3eMediaBackedUp => 'Contenido multimedia respaldado correctamente.';
@@ -6779,12 +6735,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get r3gConfirmDevolveOneStage => '¿Seguro que quieres retroceder este NFT una etapa?';
-
-  @override
-  String get r3gConfirmEvolveOneStage => '¿Seguro que quieres evolucionar este NFT una etapa?';
-
-  @override
   String r3gConfirmEvolveToStage(String index) {
     return '¿Seguro que quieres evolucionar a la etapa $index?';
   }
@@ -6844,9 +6794,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String r3gCurrentStage(String name) {
     return 'Etapa actual: $name';
   }
-
-  @override
-  String get r3gDevolve => 'Retroceder';
 
   @override
   String get r3gEncryptionPasswordRequired => 'Se requiere contraseña de cifrado para seguir validando.';
@@ -11024,5 +10971,13 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String r3eLogFileNotFound(String path) {
     return 'No se pudo abrir el archivo de registro: $path';
+  }
+
+  @override
+  String get assetUnsupportedFileTitle => 'Archivo no compatible';
+
+  @override
+  String assetExtensionNotPermittedBody(String extension) {
+    return 'Esta extensión de archivo (.$extension) no está permitida.';
   }
 }

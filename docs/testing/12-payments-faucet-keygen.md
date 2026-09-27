@@ -1,6 +1,6 @@
 # 12 · Payments, faucet and key generation
 
-This area covers the features that reach outside the VFX chain or that no other file owns: the Butterfly launcher and Butterfly payment links, the Get VFX / Get BTC on-ramp gateways (MoonPay, Banxa, Crypto.com, testnet faucets), the SMS-verified VFX faucet, the standalone web key generator (`lib/features/keygen`), and the leftovers under `lib/features` (the hidden π button, the connector animation, the raw transaction service and the web balance-expander provider). Several of these can only be partly automated: the provider iframes do not render under `?automation=1`, the faucet needs an SMS code only a person can read, and some screens have no entry point in 7.0.2. Each case says which of these applies. The vBTC to Base bridge is out of scope for this suite.
+This area covers the features that reach outside the VFX chain or that no other file owns: the Butterfly launcher and Butterfly payment links, the Get VFX / Get BTC on-ramp gateways (MoonPay, Banxa, Crypto.com, testnet faucets), the SMS-verified VFX faucet, and the leftovers under `lib/features` (the hidden π button, the raw transaction service and the web balance-expander provider). Web key generation, import and recovery are covered in `01-launch-auth.md`. Several of these can only be partly automated: the provider iframes do not render under `?automation=1`, the faucet needs an SMS code only a person can read, and some screens have no entry point in 7.0.2. Each case says which of these applies. The vBTC to Base bridge is out of scope for this suite.
 
 ## Area preconditions
 
@@ -356,105 +356,6 @@ This area covers the features that reach outside the VFX chain or that no other 
 
 **Open question:** Does `04-btc-vbtc.md` already cover the wizard's faucet step? If so this case should be dropped to avoid spending faucet quota twice.
 
-### TC-MISC-036 · Standalone faucet screen is not reachable
-**Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** `FaucetScreen` (with the editable `faucet:amount` field and `Max Amount: <n> VFX`) is not routed; its two entry points in `web_home_screen.dart` and `common_actions.dart` are commented out. Record `skipped` with "no entry point".
-
-**Preconditions:** none.
-
-**Steps**
-1. Search the dashboard, side nav and Operations for a `VFX Faucet` entry.
-
-**Expected**
-- None exists. Once wired, the screen should show `The community has allocated some VFX to lower the barrier to entry …`, `Max Amount: <n> VFX`, and an `Amount` field (`faucet:amount`, default `5.0`) that rejects empty with `Amount is required.` and text with `Invalid Amount.`; without a VFX account it shows `Please choose a VFX account to continue`.
-
-**Cleanup:** none.
-
-**Open question:** Should the standalone faucet screen be wired back in (for example as the testnet VFX gateway in TC-MISC-024) or deleted?
-
-## Key generation (web keygen panel)
-
-The key generator in `lib/features/keygen/components/keygen_cta.dart` is web only and is rendered only by `HomeScreen` (`lib/features/home/screens/home_screen.dart`), which is not in either router. In 7.0.2 it therefore has no entry point. Web login key generation, private-key import and mnemonic recovery are covered in `01-launch-auth.md` through `lib/features/auth`, which reuses `KeygenService`. The cases below are written against the panel so they can run if it is routed again; until then record them `skipped` with "no entry point".
-
-### TC-MISC-037 · Generate a keypair
-**Platforms:** Web · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** No entry point (see section note).
-
-**Preconditions:** The keygen panel visible under the `Keys` heading.
-
-**Steps**
-1. Click `Generate Keypair` (`keygen:generate`).
-2. In `Email Address`, submit empty (`keygen:email_submit`), then `not-an-email`, then `qa-<run id>@example.com`.
-3. Screenshot the `Key Generated` dialog with the private key field masked in the screenshot, or skip the screenshot.
-4. Click `Done` (`keygen:done`).
-
-**Expected**
-- The email prompt (`keygen:email`) rejects empty with `Email required.` and a malformed address with `Invalid email.`
-- `Key Generated` shows `Here is your account details. Please ensure to back up your private key in a safe place.`, a 12-word `Recovery Mnemonic`, a testnet `Address` and a `Private Key`, each read-only with a copy button.
-- Done closes the dialog.
-
-**Cleanup:** Discard the generated key; it is never funded.
-
-**Open question:** Should this panel be deleted, since the email it asks for is not used to derive or store anything (generate ignores it; import passes it as an unused mnemonic argument)?
-
-### TC-MISC-038 · Keygen copy buttons
-**Platforms:** Web · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** No entry point (see section note).
-
-**Preconditions:** `Key Generated` dialog open (TC-MISC-037).
-
-**Steps**
-1. Click `keygen:copy_mnemonic` (tooltip `Copy mnemonic`).
-2. Click `keygen:copy_address` (tooltip `Copy address`).
-3. Click `keygen:copy_private_key` (tooltip `Copy private key`).
-
-**Expected**
-- Toasts, in order: `Mnemonic copied to clipboard`, `Public key copied to clipboard` (the address button's toast says public key), `Private key copied to clipboard`.
-
-**Cleanup:** Clear the clipboard.
-
-### TC-MISC-039 · Import a private key in the keygen panel
-**Platforms:** Web · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** No entry point (see section note).
-
-**Preconditions:** Keygen panel visible.
-
-**Steps**
-1. Click `Import Private Key` (`keygen:import`) and give a valid email.
-2. In `Import Wallet`, submit empty (`keygen:private_key_submit`).
-3. Type `TEST_VFX_B_PRIVKEY` into `keygen:private_key` and submit.
-
-**Expected**
-- Empty: `Private Key is required.`
-- The `Key Generated` dialog shows `TEST_VFX_B_ADDRESS` as the address.
-- As written, `handleImport` passes the email as the keypair's mnemonic, so the dialog also shows a `Recovery Mnemonic` row containing the email address. Record this as a failure against the expected behaviour (no mnemonic row for an imported key).
-
-**Cleanup:** Close the dialog and clear the clipboard.
-
-### TC-MISC-040 · Recover from a mnemonic in the keygen panel
-**Platforms:** Web · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** No entry point (see section note).
-
-**Preconditions:** Keygen panel visible.
-
-**Steps**
-1. Click `Recover Account` (`keygen:recover`) and give a valid email.
-2. In `Input Recovery Mnemonic`, submit empty (`keygen:mnemonic_submit`).
-3. Type an invalid phrase (twelve copies of `abandon`) and submit.
-4. Type `TEST_MNEMONIC` into `keygen:mnemonic` and submit.
-
-**Expected**
-- Empty: `Recovery Mnemonic is required.`
-- An invalid phrase shows the generic toast `A problem occurred.`
-- `TEST_MNEMONIC` shows `Key Generated` with the mnemonic and the address at index 0, matching the first HD address the web login derives from the same phrase in `01-launch-auth.md`.
-
-**Cleanup:** Close the dialog.
-
 ## Other leftovers
 
 ### TC-MISC-041 · Hidden π button on the configuration screen
@@ -475,20 +376,3 @@ The key generator in `lib/features/keygen/components/keygen_cta.dart` is web onl
 **Cleanup:** Close the browser tab.
 
 **Open question:** Is this easter egg meant to ship, and how is the configuration screen reached in 7.0.2? The only `push(ConfigContainerScreenRoute())` in the code is in `Footer`, which is not used anywhere.
-
-### TC-MISC-042 · Connector animation assets
-**Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** `ConnectorVisual`, the only user of `lib/features/image_sequencer`, is commented out in both balance rows. Record `skipped` with "not rendered".
-
-**Preconditions:** none.
-
-**Steps**
-1. On the dashboard, look for an animated connector between the balance cards.
-
-**Expected**
-- No connector animation is shown in 7.0.2.
-
-**Cleanup:** none.
-
-**Open question:** Should `lib/features/image_sequencer` and the `assets/images/connector` frames be removed, since nothing renders them?

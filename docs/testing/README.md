@@ -24,9 +24,9 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 | [08-fungible-tokens.md](08-fungible-tokens.md) | Fungible tokens: create, mint, transfer, burn, pause, voting topics | 34 | 2 | 19 | 13 |
 | [09-smart-contracts-nfts.md](09-smart-contracts-nfts.md) | Smart contract wizard, templates, drafts, bulk create, NFTs, evolve, transfer, burn | 60 | 4 | 30 | 26 |
 | [11-network-operations.md](11-network-operations.md) | Validator, operations, beacons, adjudicator, nodes, data node, network voting | 41 | 1 | 19 | 21 |
-| [12-payments-faucet-keygen.md](12-payments-faucet-keygen.md) | On-ramp payments, Butterfly, faucet, key generation | 26 | 0 | 13 | 13 |
+| [12-payments-faucet-keygen.md](12-payments-faucet-keygen.md) | On-ramp payments, Butterfly, faucet | 20 | 0 | 13 | 7 |
 | [13-cross-platform.md](13-cross-platform.md) | Transfers between the web lane and the macOS lane: VFX, BTC, vBTC, NFTs, tokens, domains, vaults | 16 | 7 | 9 | 0 |
-| **Total** | | **456** | **91** | **233** | **132** |
+| **Total** | | **450** | **91** | **233** | **126** |
 
 Findings from writing the cases are triaged into three files: [BUGS-TO-FIX.md](BUGS-TO-FIX.md) lists confirmed defects with file and line, [QUESTIONS-FOR-TYLER.md](QUESTIONS-FOR-TYLER.md) lists the product decisions, and [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) is the full index, including the facts the first run will establish.
 

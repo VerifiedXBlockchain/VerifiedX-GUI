@@ -18,8 +18,6 @@ import '../../../core/theme/app_theme.dart';
 import '../../payment/payment_utils.dart';
 import '../../../core/env.dart';
 
-import 'package:rbx_wallet/features/keygen/components/keygen_cta.dart'
-    if (dart.library.io) 'package:rbx_wallet/features/keygen/components/keygen_cta_mock.dart';
 import 'package:rbx_wallet/features/wallet/components/wallet_selector.dart';
 import 'package:rbx_wallet/features/wallet/providers/wallet_list_provider.dart';
 
@@ -77,13 +75,6 @@ class HomeScreen extends BaseScreen {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (kIsWeb)
-                Text(
-                  AppLocalizations.of(context).homeKeysHeading,
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              if (kIsWeb) const Divider(),
-              if (kIsWeb) const KeygenCta(),
               if (!kIsWeb) const Divider(),
               if (!kIsWeb)
                 HomeButtons(

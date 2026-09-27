@@ -1965,9 +1965,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get faucetRequestVfx => 'Request VFX';
 
   @override
-  String get faucetTitle => 'VFX Faucet';
-
-  @override
   String get faucetVerificationCodeLabel => 'Verification Code';
 
   @override
@@ -2534,28 +2531,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get keygenAddressLabel => 'Address';
-
-  @override
-  String get keygenDone => 'Done';
-
-  @override
   String get keygenEmailAddressTitle => 'Email Address';
-
-  @override
-  String get keygenEmailLabel => 'Email';
-
-  @override
-  String get keygenGenerateKeypair => 'Generate Keypair';
-
-  @override
-  String get keygenImportPrivateKey => 'Import Private Key';
-
-  @override
-  String get keygenImportWalletTitle => 'Import Wallet';
-
-  @override
-  String get keygenKeyGeneratedBody => 'Here is your account details. Please ensure to back up your private key in a safe place.';
 
   @override
   String get keygenKeyGeneratedTitle => 'Key Generated';
@@ -2567,13 +2543,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get keygenPrivateKeyCopiedToast => 'Private key copied to clipboard';
 
   @override
-  String get keygenPrivateKeyLabel => 'Private Key';
-
-  @override
   String get keygenPublicKeyCopiedToast => 'Public key copied to clipboard';
-
-  @override
-  String get keygenRecoverAccount => 'Recover Account';
 
   @override
   String get keygenRecoveryMnemonicLabel => 'Recovery Mnemonic';
@@ -3274,12 +3244,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nftDetailFallback => 'NFT';
-
-  @override
-  String get nftDevolveSentToast => 'Devolve transaction sent successfully!';
-
-  @override
-  String get nftDevolveTitle => 'Devolve?';
 
   @override
   String get nftEvolve => 'Evolve';
@@ -6174,9 +6138,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get r3eFaucetIntro => 'The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.';
-
-  @override
   String r3eFaucetSuccess(String result) {
     return 'Success! Funds are on their way. TX Hash: $result';
   }
@@ -6224,11 +6185,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3eLoginWithThisAccount => 'Login with this Account';
-
-  @override
-  String r3eMaxAmount(String amount) {
-    return 'Max Amount: $amount VFX';
-  }
 
   @override
   String get r3eMediaBackedUp => 'Media backed up successfully.';
@@ -6779,12 +6735,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get r3gConfirmDevolveOneStage => 'Are you sure you want to devolve this NFT one stage?';
-
-  @override
-  String get r3gConfirmEvolveOneStage => 'Are you sure you want to evolve this NFT one stage?';
-
-  @override
   String r3gConfirmEvolveToStage(String index) {
     return 'Are you sure you want to evolve to stage $index?';
   }
@@ -6844,9 +6794,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String r3gCurrentStage(String name) {
     return 'Current Stage: $name';
   }
-
-  @override
-  String get r3gDevolve => 'Devolve';
 
   @override
   String get r3gEncryptionPasswordRequired => 'Encryption Password Required to continue validating.';
@@ -11024,5 +10971,13 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String r3eLogFileNotFound(String path) {
     return 'Could not open the log file: $path';
+  }
+
+  @override
+  String get assetUnsupportedFileTitle => 'Unsupported File';
+
+  @override
+  String assetExtensionNotPermittedBody(String extension) {
+    return 'This file extension (.$extension) is not permitted.';
   }
 }

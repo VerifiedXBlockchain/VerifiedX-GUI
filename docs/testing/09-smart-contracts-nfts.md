@@ -72,13 +72,12 @@ This area covers the smart contract creator (name, creator, description, primary
 **Steps**
 1. Open the creator. Web: `fltA11y.click("Create a Smart Contract & Mint")`. macOS: `tap-text "Create a Smart Contract & Mint"`.
 2. Type `close-test` into `Smart Contract Name`.
-3. macOS: `tap-label Close` (the close icon in the app bar). Web: use the browser back button or the side nav, since the web create screen has no close button.
-4. macOS: in the dialog, `tap-text Cancel`, then `tap-label Close` again and `tap-text Continue`.
+3. Press the close icon in the app bar. Web: `fltA11y.click("Close")`. macOS: `tap-label Close`.
+4. In the dialog, press `Cancel`, then press the close icon again and press `Continue`.
 
 **Expected**
-- macOS: the dialog reads `Are you sure you want to close the smart contract creator?` with `All unsaved changes will be lost.`. `Cancel` keeps the creator open with `close-test` still in the name field; `Continue` returns to the landing screen, and reopening the creator shows an empty name field.
-- Web: leaving the screen needs no confirmation.
-- **Open question:** should the web creator also confirm before discarding unsaved input?
+- On both platforms the dialog reads `Are you sure you want to close the smart contract creator?` with `All unsaved changes will be lost.`. `Cancel` keeps the creator open with `close-test` still in the name field; `Continue` returns to the landing screen, and reopening the creator shows an empty name field.
+- Web: leaving through the browser back button or the side nav does not ask and keeps the typed input for the next visit; only the close icon discards it.
 
 **Cleanup:** none.
 
@@ -134,18 +133,18 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Cleanup:** none.
 
-### TC-SC-008 · Blocked file extension is rejected (macOS)
-**Platforms:** macOS · **Priority:** P2 · **Moves funds:** no
+### TC-SC-008 · Blocked file extension is rejected
+**Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no
 
 **Preconditions:** Creator open.
 
 **Steps**
-1. `tap-text "Choose File"` and pick `sc-bad.vbx` (macOS file pick).
-2. `tap-text Close` on the dialog.
+1. Press `Choose File` and pick `sc-bad.vbx` (web file pick / macOS file pick).
+2. Press `Close` on the dialog.
 
 **Expected**
 - A dialog `Unsupported File` reads `This file extension (.vbx) is not permitted.` and the asset stays empty.
-- Web has no extension check in `FileSelector`. **Open question:** should the web creator reject the same extensions before uploading to Spyglass?
+- Web: the dialog appears before any upload, so no loading overlay shows and no request goes to Spyglass. Both platforms refuse the same list (`MALWARE_FILE_EXTENSIONS` plus the rejected-extension list, `DEFAULT_REJECTED_EXTENIONS` on web).
 
 **Cleanup:** none.
 
@@ -745,7 +744,7 @@ This area covers the smart contract creator (name, creator, description, primary
 **Expected**
 - The same toast and dialog as TC-SC-040.
 - `Current Stage: Base` within 3 minutes; the title is `sc-full-<run-id>-<p>` and the image `sc-a.png` again.
-- **Open question:** the modal also has `evolve()`/`devolve()` helpers with `Devolve?` / `Are you sure you want to devolve this NFT one stage?` and the toast `Devolve transaction sent successfully!`, but no button calls them. Is devolving through the per-row `Evolve` button the intended UI?
+- Devolving goes through the per-row `Evolve` button by design; there is no separate `Devolve` control.
 
 **Cleanup:** none.
 
@@ -1036,18 +1035,18 @@ This area covers the smart contract creator (name, creator, description, primary
 
 **Cleanup:** none.
 
-### TC-SC-058 · Unreachable image URL is skipped (macOS)
-**Platforms:** macOS · **Priority:** P2 · **Moves funds:** no
+### TC-SC-058 · Unreachable image URL is skipped
+**Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no
 
 **Preconditions:** On the bulk create screen. A copy of `sc-bulk.csv` whose first row's `Primary Asset URL` is `https://example.invalid/missing-<run-id>.png`.
 
 **Steps**
-1. `tap-text "Upload CSV"` and pick the file.
+1. Press `Upload CSV` and pick the file (web file pick / macOS file pick).
 
 **Expected**
 - The toast `Problem downloading https://example.invalid/missing-<run-id>.png. Skipping.` appears and the log reads the same.
 - The wizard opens with only the second row.
-- Web does not download the URL at import time (it keeps the URL as the asset location), so this case is desktop only. **Open question:** should web validate the URL before minting?
+- Web checks each URL at import instead of downloading it: a URL must answer with a 2xx status within 10 seconds, or it is skipped with the same toast and log line. An unreachable additional asset URL is dropped from its row without a toast, as on macOS.
 
 **Cleanup:** `Clear` → `Clear`.
 

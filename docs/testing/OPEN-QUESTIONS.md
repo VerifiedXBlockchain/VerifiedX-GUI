@@ -99,8 +99,6 @@ Every question raised while the cases were written, in case order. They have bee
 
 ## [09 · Smart contracts and NFTs](09-smart-contracts-nfts.md)
 
-- **TC-SC-004:** should the web creator also confirm before discarding unsaved input?
-- **TC-SC-008:** - Web has no extension check in `FileSelector`. **Open question:** should the web creator reject the same extensions before uploading to Spyglass?
 - **TC-SC-011:** Soul-Bound, Ticketing, Fractionalization, Tokenization and Pair have modals in `lib/features/smart_contracts/features/` but are commented out of `Feature.allTypes()`. Are they intentionally dark for this release, and should their modals be removed?
 - **TC-SC-023:** should a follow-up run check the next day that the stage became current automatically?
 - **TC-SC-031:** on macOS, does the Media Backup URL block under the QR code (`Media Backup URL:`, the URL and `Copy URL`) appear for this NFT? It depends on the mint transaction's `BackupURL`; record what shows.
@@ -109,12 +107,10 @@ Every question raised while the cases were written, in case order. They have bee
 - **TC-SC-034:** - The desktop detail has no video player; a video primary asset shows its file type and the `Open Asset` button. **Open question:** is in-app video playback expected on macOS?
 - **TC-SC-037:** `View Code` only appears when `nft.code` is set; record on which platforms the minted NFT carries code.
 - **TC-SC-038:** `Sync Media` gives no success or failure feedback; should it show a toast?
-- **TC-SC-041:** the modal also has `evolve()`/`devolve()` helpers with `Devolve?` / `Are you sure you want to devolve this NFT one stage?` and the toast `Devolve transaction sent successfully!`, but no button calls them. Is devolving through the per-row `Evolve` button the intended UI?
 - **TC-SC-045:** does the beacon delivery need the macOS wallet that minted the NFT to be running? If yes, keep the desktop app open during this case.
 - **TC-SC-046:** - Web lists only minted NFTs with an evolving feature, so `sc-basic-<run-id>-web` is not expected there; on web this case passes if the NFT is absent and no error shows. **Open question:** should the sender be able to see transferred plain NFTs on web at all, and does the macOS CLI's minted list include `sc-basic-<run-id>-mac` after the transfer?
 - **TC-SC-048:** do the example files' image URLs still resolve? They are the natural source for TC-SC-055 and 056.
 - **TC-SC-055:** **Preconditions:** On the bulk create screen. `sc-bulk.csv` in the scratch folder has the header row `Name,Description,Primary Asset URL,Creator Name,Royalty Amount,Royalty Address,Additional Asset URLs,Quantity,Edition` and two rows: `csv-<run-id>-1` and `csv-<run-id>-2`, each with a description, a public HTTPS PNG URL, creator `QA Runner`, royalty `5%` to `TEST_VFX_B_ADDRESS`, no additional assets, quantity `1`, and `Edition` values `First` and `Second`. **Open question:** which stable public PNG URL should the file use? Proposal: add a non-secret `TEST_IMAGE_URL` to the README's test data.
-- **TC-SC-058:** - Web does not download the URL at import time (it keeps the URL as the asset location), so this case is desktop only. **Open question:** should web validate the URL before minting?
 - **TC-SC-059:** is the templates chooser (route `smart-contract-templates`, templates in `lib/features/nft/data/templates.dart`) meant to ship? If yes, it needs an entry point and full cases; if not, the screen and route should be removed.
 - **TC-SC-060:** should drafts ship on desktop? `SmartContractDraftsScreen` and `draftsSmartContractProvider` still exist, and `DELETE_DRAFT_ON_MINT` still deletes drafts on compile.
 - **TC-SC-061:** should the compiled list and its refresh ship, or should the screen be removed?
@@ -145,7 +141,4 @@ Every question raised while the cases were written, in case order. They have bee
 - **TC-MISC-033:** Which phone number is the faucet test number, who reads its SMS during a run, and what is the faucet's rate limit (per phone and per address)? Proposed variable `TEST_FAUCET_PHONE` (secret, in `accounts.env`).
 - **TC-MISC-034:** What exact message does the faucet return for a rate-limited phone? The client shows the service's `message` field verbatim, so the case needs it to assert the text.
 - **TC-MISC-035:** Does `04-btc-vbtc.md` already cover the wizard's faucet step? If so this case should be dropped to avoid spending faucet quota twice.
-- **TC-MISC-036:** Should the standalone faucet screen be wired back in (for example as the testnet VFX gateway in TC-MISC-024) or deleted?
-- **TC-MISC-037:** Should this panel be deleted, since the email it asks for is not used to derive or store anything (generate ignores it; import passes it as an unused mnemonic argument)?
 - **TC-MISC-041:** Is this easter egg meant to ship, and how is the configuration screen reached in 7.0.2? The only `push(ConfigContainerScreenRoute())` in the code is in `Footer`, which is not used anywhere.
-- **TC-MISC-042:** Should `lib/features/image_sequencer` and the `assets/images/connector` frames be removed, since nothing renders them?

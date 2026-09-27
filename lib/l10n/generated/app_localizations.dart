@@ -3729,12 +3729,6 @@ abstract class AppLocalizations {
   /// **'Request VFX'**
   String get faucetRequestVfx;
 
-  /// App bar title for the VFX faucet screen.
-  ///
-  /// In en, this message translates to:
-  /// **'VFX Faucet'**
-  String get faucetTitle;
-
   /// Field label for the SMS verification code input.
   ///
   /// In en, this message translates to:
@@ -4815,53 +4809,11 @@ abstract class AppLocalizations {
   /// **'Vault: {address}'**
   String keyImportVaultLine(String address);
 
-  /// Field label for the generated address.
-  ///
-  /// In en, this message translates to:
-  /// **'Address'**
-  String get keygenAddressLabel;
-
-  /// Done button label on the keygen result dialog.
-  ///
-  /// In en, this message translates to:
-  /// **'Done'**
-  String get keygenDone;
-
   /// Prompt title for the email-address step of the keygen flow.
   ///
   /// In en, this message translates to:
   /// **'Email Address'**
   String get keygenEmailAddressTitle;
-
-  /// Field label for the email input.
-  ///
-  /// In en, this message translates to:
-  /// **'Email'**
-  String get keygenEmailLabel;
-
-  /// Button to generate a new keypair from the keygen CTA.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate Keypair'**
-  String get keygenGenerateKeypair;
-
-  /// Button to import a private key from the keygen CTA.
-  ///
-  /// In en, this message translates to:
-  /// **'Import Private Key'**
-  String get keygenImportPrivateKey;
-
-  /// Prompt title for importing a wallet via private key on the web keygen flow.
-  ///
-  /// In en, this message translates to:
-  /// **'Import Wallet'**
-  String get keygenImportWalletTitle;
-
-  /// Dialog body shown after a key is generated.
-  ///
-  /// In en, this message translates to:
-  /// **'Here is your account details. Please ensure to back up your private key in a safe place.'**
-  String get keygenKeyGeneratedBody;
 
   /// Dialog title shown after a key is generated.
   ///
@@ -4881,23 +4833,11 @@ abstract class AppLocalizations {
   /// **'Private key copied to clipboard'**
   String get keygenPrivateKeyCopiedToast;
 
-  /// Field label for the private key input.
-  ///
-  /// In en, this message translates to:
-  /// **'Private Key'**
-  String get keygenPrivateKeyLabel;
-
   /// Toast confirming the public key was copied.
   ///
   /// In en, this message translates to:
   /// **'Public key copied to clipboard'**
   String get keygenPublicKeyCopiedToast;
-
-  /// Button to recover an account via mnemonic from the keygen CTA.
-  ///
-  /// In en, this message translates to:
-  /// **'Recover Account'**
-  String get keygenRecoverAccount;
 
   /// Field label for the recovery mnemonic input.
   ///
@@ -6218,18 +6158,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'NFT'**
   String get nftDetailFallback;
-
-  /// Toast confirming a devolve transaction was broadcast.
-  ///
-  /// In en, this message translates to:
-  /// **'Devolve transaction sent successfully!'**
-  String get nftDevolveSentToast;
-
-  /// Confirm dialog title before devolving an NFT.
-  ///
-  /// In en, this message translates to:
-  /// **'Devolve?'**
-  String get nftDevolveTitle;
 
   /// Button to evolve an NFT phase.
   ///
@@ -11631,12 +11559,6 @@ abstract class AppLocalizations {
   /// **'Failed to download {filename} after {attempts} attempts'**
   String r3eFailedDownloadFile(String filename, String attempts);
 
-  /// No description provided for @r3eFaucetIntro.
-  ///
-  /// In en, this message translates to:
-  /// **'The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.'**
-  String get r3eFaucetIntro;
-
   /// No description provided for @r3eFaucetSuccess.
   ///
   /// In en, this message translates to:
@@ -11726,12 +11648,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login with this Account'**
   String get r3eLoginWithThisAccount;
-
-  /// No description provided for @r3eMaxAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Max Amount: {amount} VFX'**
-  String r3eMaxAmount(String amount);
 
   /// No description provided for @r3eMediaBackedUp.
   ///
@@ -12705,18 +12621,6 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to buy now for {price} VFX?'**
   String r3gConfirmBuyNowBody(String price);
 
-  /// No description provided for @r3gConfirmDevolveOneStage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to devolve this NFT one stage?'**
-  String get r3gConfirmDevolveOneStage;
-
-  /// No description provided for @r3gConfirmEvolveOneStage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to evolve this NFT one stage?'**
-  String get r3gConfirmEvolveOneStage;
-
   /// No description provided for @r3gConfirmEvolveToStage.
   ///
   /// In en, this message translates to:
@@ -12806,12 +12710,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Current Stage: {name}'**
   String r3gCurrentStage(String name);
-
-  /// No description provided for @r3gDevolve.
-  ///
-  /// In en, this message translates to:
-  /// **'Devolve'**
-  String get r3gDevolve;
 
   /// No description provided for @r3gEncryptionPasswordRequired.
   ///
@@ -20432,6 +20330,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not open the log file: {path}'**
   String r3eLogFileNotFound(String path);
+
+  /// Title of the dialog shown when a chosen NFT asset file has a blocked extension (desktop and web).
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported File'**
+  String get assetUnsupportedFileTitle;
+
+  /// Body of the dialog shown when a chosen NFT asset file has a blocked extension. {extension} is the file extension without the dot.
+  ///
+  /// In en, this message translates to:
+  /// **'This file extension (.{extension}) is not permitted.'**
+  String assetExtensionNotPermittedBody(String extension);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

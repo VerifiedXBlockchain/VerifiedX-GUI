@@ -2157,10 +2157,6 @@
   "@faucetRequestVfx": {
     "description": "Button to submit a faucet request."
   },
-  "faucetTitle": "VFX Faucet",
-  "@faucetTitle": {
-    "description": "App bar title for the VFX faucet screen."
-  },
   "faucetVerificationCodeLabel": "Verification Code",
   "@faucetVerificationCodeLabel": {
     "description": "Field label for the SMS verification code input."
@@ -2569,37 +2565,9 @@
       }
     }
   },
-  "keygenAddressLabel": "Address",
-  "@keygenAddressLabel": {
-    "description": "Field label for the generated address."
-  },
-  "keygenDone": "Done",
-  "@keygenDone": {
-    "description": "Done button label on the keygen result dialog."
-  },
   "keygenEmailAddressTitle": "Email Address",
   "@keygenEmailAddressTitle": {
     "description": "Prompt title for the email-address step of the keygen flow."
-  },
-  "keygenEmailLabel": "Email",
-  "@keygenEmailLabel": {
-    "description": "Field label for the email input."
-  },
-  "keygenGenerateKeypair": "Generate Keypair",
-  "@keygenGenerateKeypair": {
-    "description": "Button to generate a new keypair from the keygen CTA."
-  },
-  "keygenImportPrivateKey": "Import Private Key",
-  "@keygenImportPrivateKey": {
-    "description": "Button to import a private key from the keygen CTA."
-  },
-  "keygenImportWalletTitle": "Import Wallet",
-  "@keygenImportWalletTitle": {
-    "description": "Prompt title for importing a wallet via private key on the web keygen flow."
-  },
-  "keygenKeyGeneratedBody": "Here is your account details. Please ensure to back up your private key in a safe place.",
-  "@keygenKeyGeneratedBody": {
-    "description": "Dialog body shown after a key is generated."
   },
   "keygenKeyGeneratedTitle": "Key Generated",
   "@keygenKeyGeneratedTitle": {
@@ -2613,17 +2581,9 @@
   "@keygenPrivateKeyCopiedToast": {
     "description": "Toast confirming the private key was copied."
   },
-  "keygenPrivateKeyLabel": "Private Key",
-  "@keygenPrivateKeyLabel": {
-    "description": "Field label for the private key input."
-  },
   "keygenPublicKeyCopiedToast": "Public key copied to clipboard",
   "@keygenPublicKeyCopiedToast": {
     "description": "Toast confirming the public key was copied."
-  },
-  "keygenRecoverAccount": "Recover Account",
-  "@keygenRecoverAccount": {
-    "description": "Button to recover an account via mnemonic from the keygen CTA."
   },
   "keygenRecoveryMnemonicLabel": "Recovery Mnemonic",
   "@keygenRecoveryMnemonicLabel": {
@@ -3368,14 +3328,6 @@
   "nftDetailFallback": "NFT",
   "@nftDetailFallback": {
     "description": "App bar title fallback for the NFT detail screen when no NFT is loaded yet."
-  },
-  "nftDevolveSentToast": "Devolve transaction sent successfully!",
-  "@nftDevolveSentToast": {
-    "description": "Toast confirming a devolve transaction was broadcast."
-  },
-  "nftDevolveTitle": "Devolve?",
-  "@nftDevolveTitle": {
-    "description": "Confirm dialog title before devolving an NFT."
   },
   "nftEvolve": "Evolve",
   "@nftEvolve": {
@@ -5241,7 +5193,6 @@
       }
     }
   },
-  "r3eFaucetIntro": "The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.",
   "r3eFaucetSuccess": "Success! Funds are on their way. TX Hash: {result}",
   "@r3eFaucetSuccess": {
     "placeholders": {
@@ -5274,14 +5225,6 @@
   "r3eLockNow": "Lock Now",
   "r3eLogin": "Login",
   "r3eLoginWithThisAccount": "Login with this Account",
-  "r3eMaxAmount": "Max Amount: {amount} VFX",
-  "@r3eMaxAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
   "r3eMediaBackedUp": "Media backed up successfully.",
   "r3eMediaImported": "Media Imported Successfully",
   "r3eMustAgreeTerms": "You must agree to the terms before proceeding.",
@@ -5703,8 +5646,6 @@
       }
     }
   },
-  "r3gConfirmDevolveOneStage": "Are you sure you want to devolve this NFT one stage?",
-  "r3gConfirmEvolveOneStage": "Are you sure you want to evolve this NFT one stage?",
   "r3gConfirmEvolveToStage": "Are you sure you want to evolve to stage {index}?",
   "@r3gConfirmEvolveToStage": {
     "placeholders": {
@@ -5791,7 +5732,6 @@
       }
     }
   },
-  "r3gDevolve": "Devolve",
   "r3gEncryptionPasswordRequired": "Encryption Password Required to continue validating.",
   "r3gEndsIn": "Ends in",
   "r3gEvolution": "Evolution",
@@ -10070,6 +10010,20 @@
     "placeholders": {
       "path": {
         "type": "String"
+      }
+    }
+  },
+  "assetUnsupportedFileTitle": "Unsupported File",
+  "@assetUnsupportedFileTitle": {
+    "description": "Title of the dialog shown when a chosen NFT asset file has a blocked extension (desktop and web)."
+  },
+  "assetExtensionNotPermittedBody": "This file extension (.{extension}) is not permitted.",
+  "@assetExtensionNotPermittedBody": {
+    "description": "Body of the dialog shown when a chosen NFT asset file has a blocked extension. {extension} is the file extension without the dot.",
+    "placeholders": {
+      "extension": {
+        "type": "String",
+        "example": "exe"
       }
     }
   }

@@ -19,7 +19,6 @@ import '../../../../../utils/files.dart';
 import '../../../../../utils/validation.dart';
 import '../../../../../l10n/l10n_helper.dart';
 import '../../../../asset/asset.dart';
-import '../../../../config/providers/config_provider.dart';
 import 'package:image/image.dart' as IMG;
 
 class FileSelector extends BaseComponent {
@@ -74,6 +73,10 @@ class FileSelector extends BaseComponent {
       final ext = result.files.single.extension;
       final filename = result.files.single.name;
 
+      if (rejectIfBlockedAssetExtension(ref, ext)) {
+        return;
+      }
+
       ref.read(globalLoadingProvider.notifier).start();
 
       final url = await ExplorerService().uploadAsset(bytes, filename, ext);
@@ -126,8 +129,7 @@ class FileSelector extends BaseComponent {
         return;
       }
 
-      if (MALWARE_FILE_EXTENSIONS.contains(extension) || ref.read(configProvider).rejectAssetExtensionTypes.contains(extension.toLowerCase())) {
-        InfoDialog.show(title: "Unsupported File", body: "This file extension (.$extension) is not permitted.");
+      if (rejectIfBlockedAssetExtension(ref, extension)) {
         return;
       }
 
