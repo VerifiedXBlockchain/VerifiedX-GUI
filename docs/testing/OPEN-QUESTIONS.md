@@ -136,19 +136,10 @@ These questions came up while the test cases were written from the code. Each on
 - **TC-NET-026:** `loadMasterNodes()` and `loadPeerInfo()` are commented out in `SessionProvider.mainLoop`, so the `Peer Info` strip (`IP:`, `Height:`, `Latency:`, `Last Checked:`) and the per-node cards (`Connected: <date>`, `Wallet Version: <v>`) can never appear. Is that intended, or should the case expect them?
 - **TC-NET-029:** Which remote beacon should this use? Proposed variables `TEST_REMOTE_BEACON_IP` and `TEST_REMOTE_BEACON_PORT` (public, not secret). The `⋮` menu has no key or tooltip, so `drive.dart` cannot open it by key; should `BeaconContextMenu` get a `Key('beacon:menu:<id>')` and a tooltip?
 - **TC-NET-031:** `BeaconFormProvider.submit` calls `notifyTransactionSubmitted()` after `CreateBeacon`. Does creating a beacon broadcast a transaction? Marked "Moves funds: yes" until confirmed. Also, should a restart be run in step 4 (`Restart`) instead of `Later` to cover that branch, given it costs another 1 to 3 minutes?
-- **TC-NET-040:** Does the MOTHER host setup sign a transaction (the stop path calls `notifyTransactionSubmitted()`)? Marked "Moves funds: yes" until confirmed.
-- **TC-NET-042:** Which host should remote tests join? Proposed variables `TEST_MOTHER_HOST_IP` and `TEST_MOTHER_HOST_PASSWORD` (the password is a secret and belongs in `accounts.env`).
 - **TC-NET-043:** Can `drive.dart` gain a `hover <finder>` command so the macOS half can expand the panel instead of reading off-screen widgets?
 
-## [12 · Base bridge, payments, faucet and key generation](12-bridge-payments-faucet-keygen.md)
+## [12 · Payments, faucet and key generation](12-payments-faucet-keygen.md)
 
-- **TC-MISC-002:** The bridge needs a Base Sepolia destination address and ETH on account A's derived gas address. Proposed new variable `TEST_BASE_SEPOLIA_ADDRESS` (the destination, public) in `accounts.env`, and a note in the README on who keeps the derived gas address funded and from which Base Sepolia faucet.
-- **TC-MISC-003:** `drive.dart type` replaces the field through the text input channel; confirm the input formatter still rejects `abc` that way (if the driver bypasses formatters, check step 5 manually).
-- **TC-MISC-006:** The zero-ETH text says the address can be funded from any exchange "that supports withdrawing to Base mainnet", which is wrong on testnet (Base Sepolia). Should the copy become network-aware? Also, the low-balance sentence shows even when the balance is healthy; is that intended?
-- **TC-MISC-009:** Which Base Sepolia address receives the minted vBTC.b (`TEST_BASE_SEPOLIA_ADDRESS` proposed above), and should a later case exit it back to vBTC, or is exit out of scope for the GUI?
-- **TC-MISC-011:** Both open icons in the stepper are labelled `View on Basescan`, including the one that opens the VFX explorer. Should the VFX row use a VFX-explorer label (which would also let `tap-label` target each one)?
-- **TC-MISC-013:** Is there a reliable way to produce a failed-but-locked record on testnet (for example bridging with an empty gas address)? If so, the case can move to P1 with that setup.
-- **TC-MISC-014:** Confirm the CLI reports "no derived address" for a locked encrypted wallet; if it instead fails the whole preflight, the expected message is the generic `Couldn't load bridge info.` (or the CLI's own message) with `Cancel` and `Retry`.
 - **TC-MISC-020:** Should Butterfly use its own password variable instead of reusing `TEST_ENCRYPTION_PASSWORD`? And which Butterfly testnet account state is expected after login (empty wallet is fine)?
 - **TC-MISC-023:** Does the Butterfly API (`api.befree.io`, called with `is_testnet: true`) honour testnet links end to end, including claiming? And the history view (`Payment Link History`, `No payment links yet`) is commented out of the form; is it meant to ship?
 - **TC-MISC-024:** `https://testnet.rbx.network/faucet` is the old RBX domain; does it still resolve to a working VFX testnet faucet? If not, should this gateway open the in-app SMS faucet (TC-MISC-031) instead?

@@ -345,7 +345,7 @@ This area covers VFX domains (`.vfx`, an alias for a VFX address) and BTC domain
 ### TC-ADNR-019 · Web: faucet prompt when VFX is too low for a BTC domain
 **Platforms:** Web · **Priority:** P1 · **Moves funds:** no
 
-**Preconditions:** A web session whose VFX balance is below 5.001 VFX and that has a BTC account with no domain (a newly created web wallet, as in `01-launch-auth.md`). The faucet itself is covered in `12-bridge-payments-faucet-keygen.md`; this case does not submit it.
+**Preconditions:** A web session whose VFX balance is below 5.001 VFX and that has a BTC account with no domain (a newly created web wallet, as in `01-launch-auth.md`). The faucet itself is covered in `12-payments-faucet-keygen.md`; this case does not submit it.
 
 **Steps**
 1. Open Domains, click `button "BTC"`, click `button "Create Domain"` under `BTC Domain`.

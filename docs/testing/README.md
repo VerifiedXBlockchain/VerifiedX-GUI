@@ -5,7 +5,7 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 ## Scope
 
 - **Platforms:** the web wallet and the macOS desktop GUI. Windows is out of scope.
-- **Out of scope:** P2P shop features (P2P Auctions, web shops, desktop auction houses, remote shops, listings, bids and shop chat).
+- **Out of scope:** P2P shop features (P2P Auctions, web shops, desktop auction houses, remote shops, listings, bids and shop chat), the vBTC to Base bridge, and the MOTHER dashboard.
 - **Network:** testnet, with real transactions. Every flow that moves funds is executed end to end on testnet and confirmed on chain. Mainnet gets only the read-only checks marked `Mainnet smoke`, and nothing is ever signed or sent on mainnet.
 - **Runner:** Claude. Web cases run through Claude in Chrome; macOS cases run through `tool/drive.dart` against the Flutter Driver build. Both are described in `docs/automation.md`, which is required reading before a run.
 - **Lanes:** the web lane and the macOS lane run in parallel, each with its own test accounts, so neither can disturb the other's balances or objects. A final cross-platform phase then moves funds and assets between the two lanes' accounts. See "Running a release pass".
@@ -23,10 +23,10 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 | [07-domains.md](07-domains.md) | VFX and BTC domains (ADNR): create, transfer, delete | 23 | 4 | 17 | 2 |
 | [08-fungible-tokens.md](08-fungible-tokens.md) | Fungible tokens: create, mint, transfer, burn, pause, voting topics | 34 | 2 | 19 | 13 |
 | [09-smart-contracts-nfts.md](09-smart-contracts-nfts.md) | Smart contract wizard, templates, drafts, bulk create, NFTs, evolve, transfer, burn | 60 | 4 | 30 | 26 |
-| [11-network-operations.md](11-network-operations.md) | Validator, operations, beacons, adjudicator, nodes, data node, network voting, mother dashboard | 45 | 1 | 19 | 25 |
-| [12-bridge-payments-faucet-keygen.md](12-bridge-payments-faucet-keygen.md) | Base bridge, on-ramp payments, faucet, key generation | 42 | 2 | 22 | 18 |
+| [11-network-operations.md](11-network-operations.md) | Validator, operations, beacons, adjudicator, nodes, data node, network voting | 41 | 1 | 19 | 21 |
+| [12-payments-faucet-keygen.md](12-payments-faucet-keygen.md) | On-ramp payments, Butterfly, faucet, key generation | 26 | 0 | 13 | 13 |
 | [13-cross-platform.md](13-cross-platform.md) | Transfers between the web lane and the macOS lane: VFX, BTC, vBTC, NFTs, tokens, domains, vaults | 16 | 7 | 9 | 0 |
-| **Total** | | **476** | **93** | **242** | **141** |
+| **Total** | | **456** | **91** | **233** | **132** |
 
 Questions raised while writing the cases, with the case each belongs to, are collected in [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md). Several are suspected bugs.
 
@@ -56,12 +56,10 @@ Some cases need data that only a few areas use. They read these optional variabl
 | Variable | Used by |
 |---|---|
 | `TEST_IMAGE_URL` | A stable public PNG URL for bulk smart contract imports (09) |
-| `TEST_BASE_SEPOLIA_ADDRESS` | Destination for Base bridge cases (12); the bridge's derived gas address also needs Base Sepolia ETH |
 | `TEST_FAUCET_PHONE` | Faucet cases (12) |
 | `TEST_WEB_EMPTY_EMAIL`, `TEST_WEB_EMPTY_PASSWORD` | An unfunded web login for low-balance paths (07, 12) |
 | `TEST_VALIDATOR_PRIVKEY`, `TEST_VALIDATOR_ADDRESS`, `TEST_EXISTING_VALIDATOR_NAME` | Validator cases (11); they also need 5,000 VFX and open ports, so they run on a dedicated machine |
 | `TEST_REMOTE_BEACON_IP`, `TEST_REMOTE_BEACON_PORT` | Beacon cases (11) |
-| `TEST_MOTHER_HOST_IP`, `TEST_MOTHER_HOST_PASSWORD` | MOTHER dashboard cases (11) |
 
 No account appears in both files.
 
@@ -73,7 +71,7 @@ Bitcoin for both lanes comes from one shared testnet4 treasury in `~/.config/vfx
 | `TEST_BTC_TREASURY_WIF` | Treasury key in WIF form. Secret. |
 
 The treasury is never imported into a lane's wallet, so the two lanes never spend from it at the same time. It is used in three places: the pre-run funding step tops up each lane's `TEST_BTC_ADDRESS` from it, every vBTC withdrawal in the suite pays out to `TEST_BTC_TREASURY_ADDRESS`, and the return step after the run sends leftover lane BTC back to it. Only the funding and return steps sign with the treasury key, and they run before and after the lanes, one at a time.
- Minimum balances before a run, per lane: account A holds at least 200 testnet VFX, account B at least 20 VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-bridge-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts) use names suffixed with the run id and the lane, `w` for web and `m` for macOS, for example `qa-20261001a-w`, or `qa20261001aw` where only letters and digits are allowed, so the two lanes and repeated runs never collide. Where an area file already defines its own platform suffix, such as `<p>` = `web` or `mac` in `09-smart-contracts-nfts.md`, that suffix plays the same role.
+ Minimum balances before a run, per lane: account A holds at least 200 testnet VFX, account B at least 20 VFX, and the BTC account holds enough testnet BTC for one tokenization plus fees. The faucet cases in `12-payments-faucet-keygen.md` top VFX up. Cases that create on-chain objects (domains, tokens, NFTs, vault accounts) use names suffixed with the run id and the lane, `w` for web and `m` for macOS, for example `qa-20261001a-w`, or `qa20261001aw` where only letters and digits are allowed, so the two lanes and repeated runs never collide. Where an area file already defines its own platform suffix, such as `<p>` = `web` or `mac` in `09-smart-contracts-nfts.md`, that suffix plays the same role.
 
 ## Test case format
 
@@ -112,7 +110,7 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 - **Steps that need a person.** The faucet's SMS code and native macOS file and save panels need Tyler during the run. Cases that depend on them say so; plan those cases into one attended block.
 - **Two-party cases.** Within a lane, account A and account B are both that lane's accounts. The web lane uses B in a second Chrome profile with Claude in Chrome connected, or by signing out and in. The macOS lane imports B into the same wallet, or uses a second data folder where a case asks for a wallet holding only B.
 - **Debug build differences.** The driver build is a debug build. On testnet it shows every BTC transaction as confirmed, which hides Replace By Fee and Rebroadcast, and it skips the "wallet not synced" check and prefills password fields. Cases that depend on those behaviours say they need a profile or release testnet build.
-- **Hidden features.** Validator navigation, network voting, MOTHER, vBTC privacy actions and some smart contract features are behind flags or unreachable in the current release. Their cases are written in full and marked to record as `skipped` until the feature ships; a gating case checks they stay hidden.
+- **Hidden features.** Validator navigation, network voting, vBTC privacy actions and some smart contract features are behind flags or unreachable in the current release. Their cases are written in full and marked to record as `skipped` until the feature ships; a gating case checks they stay hidden.
 - **Duplicate controls on macOS.** When the same unkeyed button appears more than once on a screen, `drive.dart` fails with "Too many elements". Cases name these steps; record them as `blocked` automation gaps, not product failures, until the controls get keys.
 - **Temporary secrets.** Vault restore codes created during a run are kept in `$TMPDIR/vfx-run-<run id>/` with mode 600. Both lanes run on the same Mac and share that folder, because the cross-platform phase restores one lane's vault in the other. The folder is deleted at the end of the cross-platform phase.
 

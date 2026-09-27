@@ -1,6 +1,6 @@
 # 11 · Network operations
 
-This area covers the desktop GUI's network-facing tools: the Operations screen (status panel, activity log, network metrics and the maintenance buttons grouped under General, Account Security, Tokens / NFTs and Diagnose), the Validator Pool search, beacons, the latest-block panel that doubles as the in-app block explorer, snapshot import, and the validator, network voting, MOTHER, adjudicator and datanode screens. Almost everything here is macOS only, because the web wallet has no Core CLI; the only web case is the latest-block panel. Several features ship dark in 7.0.2: `VALIDATOR_NAV_ENABLED` is `false` in `lib/core/app_constants.dart`, which removes the Validator side-nav entry and the Validator segment on Operations, and with them the only entry points to the Validator screen, the voting topics and MOTHER. The Adjudicator and Datanode screens have routes but no entry point at all. Those cases are written in full so they can run the day the flag flips, and each says how to record it until then.
+This area covers the desktop GUI's network-facing tools: the Operations screen (status panel, activity log, network metrics and the maintenance buttons grouped under General, Account Security, Tokens / NFTs and Diagnose), the Validator Pool search, beacons, the latest-block panel that doubles as the in-app block explorer, snapshot import, and the validator, network voting, adjudicator and datanode screens. The MOTHER dashboard is out of scope for this suite. Almost everything here is macOS only, because the web wallet has no Core CLI; the only web case is the latest-block panel. Several features ship dark in 7.0.2: `VALIDATOR_NAV_ENABLED` is `false` in `lib/core/app_constants.dart`, which removes the Validator side-nav entry and the Validator segment on Operations, and with them the only entry points to the Validator screen and the voting topics. The Adjudicator and Datanode screens have routes but no entry point at all. Those cases are written in full so they can run the day the flag flips, and each says how to record it until then.
 
 ## Area preconditions
 
@@ -29,7 +29,7 @@ This area covers the desktop GUI's network-facing tools: the Operations screen (
 **Expected**
 - The side nav shows Dashboard, Vault Accounts, Domains, Send, Receive, Launch BFLY, Transactions, vBTC Tokens, Privacy, Fungible Tokens, Smart Contracts, NFTs, P2P Auctions and Operations, and no `Validator` entry.
 - The segmented control shows exactly `General`, `Account Security`, `Tokens / NFTs`, `Diagnose`.
-- Step 4 fails with "not found": no `Validator` segment exists, so `Validator Check`, `Validator Pool` (under Validator), `Proposals & Voting` and `MOTHER` are only reachable through the segments listed in later cases.
+- Step 4 fails with "not found": no `Validator` segment exists, so `Validator Check`, `Validator Pool` (under Validator), and `Proposals & Voting` are only reachable through the segments listed in later cases.
 - There is no control anywhere that opens the Adjudicator (`/adjudicator`) or Datanode (`/datanode`) screens.
 
 **Cleanup:** none.
@@ -751,89 +751,6 @@ This area covers the desktop GUI's network-facing tools: the Operations screen (
 - The toast reads `Vote Casted [NO]`, followed by the pending and block messages with `No`.
 
 **Cleanup:** none.
-
-## MOTHER
-
-### TC-NET-039 · MOTHER modal status
-**Platforms:** macOS · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** The `MOTHER` button only exists in the hidden Validator segment. Record `skipped` while `VALIDATOR_NAV_ENABLED` is false.
-
-**Preconditions:** CLI running.
-
-**Steps**
-1. `tap-key nav:operations`, `tap-text Validator`, `tap-text MOTHER`.
-2. If prompted, enter `TEST_ENCRYPTION_PASSWORD`.
-3. Screenshot, then `tap-text "What is MOTHER?"`, read, close, and `tap-text Close`.
-
-**Expected**
-- The sheet shows `Monitor Of The Roster`, `MOTHER is a tool for monitoring the state of your remote validators.`, a `Close` button, a `Status` heading with `Is Host: NO` and `Is Remote: NO` on a fresh wallet.
-- Options: `Set Wallet as Host`, `Set Wallet as Remote`, `What is MOTHER?`.
-- The info dialog is titled `Monitor Of The Roster` and ends with `Note: you must have port '13338' open on the HOST machine.`
-
-**Cleanup:** none.
-
-### TC-NET-040 · Set wallet as MOTHER host
-**Platforms:** macOS · **Priority:** P2 · **Moves funds:** yes
-
-**Availability:** As TC-NET-039. **Cannot run in the isolated automation environment** in any useful way: the host needs the validator port open for remotes to connect.
-
-**Preconditions:** MOTHER sheet open, wallet not a host.
-
-**Steps**
-1. `tap-text "Set Wallet as Host"`.
-2. Submit empty (`tap-text Create`).
-3. `Host Name` = `qa<run id>`, `Create Password` = `TEST_ENCRYPTION_PASSWORD`, `tap-text Create`.
-4. In `CLI Restart Required`, `tap-text Restart` and wait up to 3 minutes for `VFX Online`.
-5. Reopen MOTHER, `tap-text "Launch MOTHER"`, then `tap-text "Open in Browser"`.
-
-**Expected**
-- The dialog `Set Wallet as Host` shows `You must have port '13338' open on the HOST machine.`; empty submit shows `Name Required` and `Password Required`.
-- A valid submit shows the toast `Host Created` and the `CLI Restart Required` / `Would you like to restart now?` dialog.
-- After restart the sheet shows `Is Host: YES`, `Children: <n>`, and the options `Launch MOTHER`, `Update Host Info`, `Stop Host`.
-- `Launch MOTHER` opens `MOTHER Dashboard` listing child cards (`Balance`, `IP Address`, `Block Height`, `Is Validating?`, `Is Connected to Mother?`, `Open in Explorer`); `Open in Browser` opens `http://localhost:<api port>/mother`.
-
-**Cleanup:** TC-NET-041.
-
-**Open question:** Does the MOTHER host setup sign a transaction (the stop path calls `notifyTransactionSubmitted()`)? Marked "Moves funds: yes" until confirmed.
-
-### TC-NET-041 · Stop MOTHER host
-**Platforms:** macOS · **Priority:** P2 · **Moves funds:** yes
-
-**Availability:** As TC-NET-040.
-
-**Preconditions:** Wallet is a MOTHER host.
-
-**Steps**
-1. Open MOTHER, `tap-text "Stop Host"`, `tap-text Cancel`.
-2. `tap-text "Stop Host"`, `tap-text Stop`, then `tap-text Restart` and wait up to 3 minutes for `VFX Online`.
-
-**Expected**
-- The dialog is `Stop MOTHER Host?` / `Are you sure you want to stop running this wallet as a MOTHER host?`.
-- After restart the sheet shows `Is Host: NO`.
-
-**Cleanup:** none.
-
-### TC-NET-042 · Set wallet as MOTHER remote, then stop
-**Platforms:** macOS · **Priority:** P2 · **Moves funds:** no
-
-**Availability:** As TC-NET-039. **Cannot run in the isolated automation environment:** needs a reachable MOTHER host.
-
-**Preconditions:** MOTHER sheet open; IP and password of a running host.
-
-**Steps**
-1. `tap-text "Set Wallet as Remote"`, submit empty with `tap-text Add`.
-2. Fill `IP Address of HOST` and `Password set on HOST`, `tap-text Add`, then `Restart`.
-3. After `VFX Online`, reopen MOTHER, `tap-text "Stop Remote"`, confirm with `Stop Remote & Restart CLI`.
-
-**Expected**
-- The dialog `Add Host` reads `Set the IP address and password set of your MOTHER HOST.`; empty submit shows `IP Address Required` and `Password Required`.
-- After restart the sheet shows `Is Remote: YES` and `Stop Remote`.
-- Stopping asks `Are you sure you want to remove this node as a REMOTE?` plus `A CLI restart will be required.`, removes the `MotherAddress` and `MotherPassword` lines from the CLI config, restarts the CLI and shows `REMOTE node has been removed from MOTHER`.
-
-**Cleanup:** Step 3.
-
-**Open question:** Which host should remote tests join? Proposed variables `TEST_MOTHER_HOST_IP` and `TEST_MOTHER_HOST_PASSWORD` (the password is a secret and belongs in `accounts.env`).
 
 ## Latest block panel (block explorer)
 

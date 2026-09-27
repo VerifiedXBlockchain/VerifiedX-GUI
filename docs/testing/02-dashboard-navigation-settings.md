@@ -68,7 +68,7 @@ This file covers what a logged-in user sees around every screen: the dashboard o
 **Expected**
 - The heading is `<n> BTC` with 8 decimals. A latest BTC transaction card shows `<amount> BTC`, `From: …` / `To: …` and `Confirmed` or `Pending`; otherwise `No Transactions`.
 - Copy Address copies the account's BTC address with the toast `Address copied to clipboard`.
-- Get BTC opens `Choose Payment Gateway`; Off Ramp BTC opens its first off-ramp dialog (or a toast when the BTC balance is too low); both close cleanly. Payment flows themselves are in `12-bridge-payments-faucet-keygen.md`.
+- Get BTC opens `Choose Payment Gateway`; Off Ramp BTC opens its first off-ramp dialog (or a toast when the BTC balance is too low); both close cleanly. Payment flows themselves are in `12-payments-faucet-keygen.md`.
 - View All Txs opens Transactions with BTC selected.
 
 **Cleanup:** none.
