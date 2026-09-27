@@ -50,17 +50,18 @@ class ReserveAccountService extends BaseService {
       "OnlyRestoreRecovery": false,
     };
 
-    final response = await postJson('/RestoreReserveAddress', params: payload);
-    final data = response['data'];
-    if (data != null) {
-      if (data['Success'] == true) {
-        if (data['ReserveAccount'] != null && data['ReserveAccount']['Result'] != null) {
-          return NewReserveAccount.fromJson(data['ReserveAccount']['Result']);
-        }
+    try {
+      final response = await postJson('/RestoreReserveAddress', params: payload);
+      final data = response['data'];
+      final account = restoredReserveAccountFromResponse(data);
+      if (account != null) {
+        return account;
       }
+      Toast.error(reserveResponseErrorMessage(data));
+    } catch (e) {
+      print("Vault restore failed: $e");
+      Toast.error(globalL10n.mktProblemOccurredToast);
     }
-
-    Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
 
     return null;
   }
@@ -260,4 +261,34 @@ class ReserveAccountService extends BaseService {
       return false;
     }
   }
+}
+
+/// The restored Vault in a `RestoreReserveAddress` response, or null when the
+/// CLI refused. An undecodable restore code gets a bare `[]` instead of the
+/// usual `{Success, Message}` map.
+NewReserveAccount? restoredReserveAccountFromResponse(dynamic data) {
+  if (data is! Map || data['Success'] != true) {
+    return null;
+  }
+  final reserveAccount = data['ReserveAccount'];
+  if (reserveAccount is! Map) {
+    return null;
+  }
+  final result = reserveAccount['Result'];
+  if (result is! Map<String, dynamic>) {
+    return null;
+  }
+  return NewReserveAccount.fromJson(result);
+}
+
+/// The CLI's message from a failed reserve response, falling back to the
+/// generic error when there is none or the response is not a map at all.
+String reserveResponseErrorMessage(dynamic data) {
+  if (data is Map) {
+    final message = data['Message'];
+    if (message is String && message.trim().isNotEmpty) {
+      return message;
+    }
+  }
+  return globalL10n.mktProblemOccurredToast;
 }
