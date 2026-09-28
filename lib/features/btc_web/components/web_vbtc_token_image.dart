@@ -7,7 +7,6 @@ import 'package:cached_network_image_platform_interface/cached_network_image_pla
     show ImageRenderMethodForWeb;
 import 'package:flutter/material.dart';
 
-import '../../../generated/assets.gen.dart';
 
 /// Renders a vBTC token image decoded at its on-screen size.
 ///
@@ -35,8 +34,30 @@ class WebVbtcTokenImage extends StatelessWidget {
   final double size;
   final bool animate;
 
+  /// The image Spyglass returns for every vBTC token without a custom one.
+  static const defaultImageUrl = 'https://vfx-resources.s3.amazonaws.com/defaultvBTC.gif';
+
+  /// Bundled 256 px first frame of [defaultImageUrl], and a 256 px copy of the
+  /// fallback logo. Chrome's ImageDecoder ignores the requested size for GIFs,
+  /// so resizing the network image still decoded it at 1080x1080 per tile and
+  /// the renderer still crashed (QA MTI#5 retest, 2026-09-27 20:31). List rows
+  /// therefore never decode the default GIF at all.
+  static const _defaultThumbAsset = 'assets/images/vbtc_default_thumb.png';
+  static const _defaultLargeAsset = 'assets/images/vbtc_default_512.png';
+  static const _fallbackThumbAsset = 'assets/images/vbtc_thumb.png';
+
   @override
   Widget build(BuildContext context) {
+    // The default GIF is never decoded, not even on the detail screen: one
+    // animated 1080x1080 GIF there still swung the renderer between 0.3 and
+    // 1.1 GB and crashed it (QA MTI#5 retest, 20:31 and 20:36-20:43), because
+    // every frame is decoded at full size. Show its first frame from a bundled
+    // file sized for the widget instead.
+    if (imageUrl == defaultImageUrl) {
+      final asset = size * (MediaQuery.maybeOf(context)?.devicePixelRatio ?? 1.0) > 256 ? _defaultLargeAsset : _defaultThumbAsset;
+      return Image.asset(asset, width: size, height: size, fit: BoxFit.cover);
+    }
+
     final dpr = MediaQuery.maybeOf(context)?.devicePixelRatio ?? 1.0;
     final decodeSize = (size * dpr).round();
 
@@ -58,7 +79,7 @@ class WebVbtcTokenImage extends StatelessWidget {
       fit: BoxFit.cover,
       gaplessPlayback: true,
       errorBuilder: (context, _, __) => Image(
-        image: sized(AssetImage(Assets.images.vbtcPng.path)),
+        image: sized(const AssetImage(_fallbackThumbAsset)),
         width: size,
         height: size,
         fit: BoxFit.cover,
