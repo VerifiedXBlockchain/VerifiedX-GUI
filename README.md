@@ -14,12 +14,10 @@ Note: we are working on providing an MSIX file for an even easier install proces
 
 ### Mac Install
 
-- Download `RBX-OSX-Installer.dmg`
+- Download `VFX-OSX-ARM-Installer.dmg` (Apple silicon) or `VFX-OSX-Intel-Installer.dmg` (Intel)
 - Open the file
-- Drag `RBXWallet` to your applications folder (as shown)
-- Run `install.command` (this only needs to be run once)
-- Note, you may have to right-click and select open rather than double-clicking since this is coming directly from Github
-- Moving forward, just open the app in your `/Applications` directory
+- Drag `VFXWallet` to your applications folder (as shown)
+- Open `VFXWallet` from your `/Applications` directory
 
 Note: if the program starts but the loading spinner persists for more than 60s, please try downloading the .NET 6.0 framework
 [Intel - x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-6.0.201-macos-x64-installer)
