@@ -88,6 +88,21 @@ spctl --assess --type open --context context:primary-signature --verbose=2 <inst
 
 The real test is a download: fetch the disk image with a browser on a Mac that has never run the wallet, drag the app to Applications and open it with a double click.
 
+## Disk image window
+
+`installers/dmg/config.json` lays out the window and `background.png` / `background@2x.png` are its artwork. The two are tied together: Finder draws the icons and their names on top of the image, so moving an icon means moving its slot in the art.
+
+| Setting | Value | Note |
+|---------|-------|------|
+| Window | 600 x 400 | Same as the image, so no blank strip shows beside or below it. |
+| Icons | 80 px, centered at (170, 220) and (430, 220) | Finder uses the coordinates as icon centers. An icon placed too close to an edge makes Finder shift every icon. |
+| Visible height | 394 px with Finder defaults, about 318 px with the status, tab and path bars on | The bars are the viewer's Finder settings. Nothing that must be read sits below y = 300. |
+| Name band | Blue Dark `#497C9F` | Finder draws names in black in light mode and white in dark mode; this color keeps both readable. |
+
+The artwork source is HTML in the brand toolkit, `materials/installers/macos-dmg/background.html`, with the render commands in its header. `preview.html` beside it renders a mock-up of the Finder window for review. Copy both rendered PNGs here after a change.
+
+The image has no `install.command`. A notarized app opens with a double click, and a script that clears the quarantine flag would skip the Gatekeeper check the notarization exists for.
+
 ## Local changes to an installed app
 
 `make redeploy_cli` overwrites the CLI inside `/Applications/VFXWallet.app`, which invalidates the signature of a notarized install. Use it only on development machines.
