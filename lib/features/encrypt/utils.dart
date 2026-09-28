@@ -176,7 +176,14 @@ Future<bool> unlockForLockedRequest(WidgetRef ref) async {
       Toast.error(globalL10n.r3gIncorrectDecryptionPassword);
       return false;
     }
-    await ref.read(sessionProvider.notifier).loadWallets();
+    // The node is unlocked at this point, so the refused request is retried
+    // even if refreshing the wallet list fails; the list catches up on the
+    // next refresh.
+    try {
+      await ref.read(sessionProvider.notifier).loadWallets();
+    } catch (e) {
+      debugPrint('unlockForLockedRequest: wallet list refresh failed after unlock: $e');
+    }
     return true;
   } finally {
     if (wasLoading) {

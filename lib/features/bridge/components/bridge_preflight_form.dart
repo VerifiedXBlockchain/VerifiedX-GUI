@@ -72,6 +72,11 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
     // tick up after they fund the address from an exchange / external wallet.
     _refreshTimer = Timer.periodic(_preflightRefreshInterval, (_) {
       if (!mounted) return;
+      // Skip the tick while a preflight is still running: refreshing would
+      // throw its result away, so a node that takes longer than the interval
+      // to answer (25-35 s right after it starts) would never get a result
+      // on screen. Retry and the Refresh button still force a new request.
+      if (ref.read(bridgePreflightProvider(_args)).isLoading) return;
       _refetch();
     });
   }

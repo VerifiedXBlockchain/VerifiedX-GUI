@@ -78,11 +78,22 @@ class WebVbtcTokenImage extends StatelessWidget {
       height: size,
       fit: BoxFit.cover,
       gaplessPlayback: true,
-      errorBuilder: (context, _, __) => Image(
-        image: sized(const AssetImage(_fallbackThumbAsset)),
+      // The byte fetch above needs the image host to allow cross-origin
+      // requests. When it can't load (no CORS headers, or not an image), try
+      // the browser's own <img> element, which doesn't need CORS but decodes
+      // at full size, and only then fall back to the logo.
+      errorBuilder: (context, _, __) => CachedNetworkImage(
+        imageUrl: imageUrl,
+        imageRenderMethodForWeb: ImageRenderMethodForWeb.HtmlImage,
         width: size,
         height: size,
         fit: BoxFit.cover,
+        errorWidget: (context, _, __) => Image(
+          image: sized(const AssetImage(_fallbackThumbAsset)),
+          width: size,
+          height: size,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -93,5 +95,31 @@ void main() {
       });
     });
     await _expectRefetchesWithoutFrames(tester, () => calls);
+  });
+
+  testWidgets('slow preflight: the poll does not restart a request still in flight', (tester) async {
+    var calls = 0;
+    final pending = Completer<BridgePreflight?>();
+    await _pumpForm(tester, () {
+      calls++;
+      return pending.future;
+    });
+    expect(calls, 1);
+
+    // Two poll ticks while the first request is still running: no new request.
+    await tester.binding.delayed(const Duration(seconds: 10));
+    await tester.binding.delayed(const Duration(seconds: 10));
+    expect(calls, 1);
+
+    pending.completeError(Exception('node unreachable'));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Retry'), findsOneWidget);
+
+    // Once it finished, the poll runs again.
+    await tester.binding.delayed(const Duration(seconds: 10));
+    expect(calls, 2);
+
+    await tester.pumpWidget(const SizedBox());
   });
 }
