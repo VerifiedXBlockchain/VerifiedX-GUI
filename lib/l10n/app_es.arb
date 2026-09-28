@@ -7786,7 +7786,7 @@
   "tkbPendingWithdrawalContractBody": "Tienes un retiro pendiente para este contrato. ¿Quieres completarlo?",
   "tkbPendingWithdrawalFound": "Retiro pendiente encontrado",
   "tkbExpiredWithdrawalTitle": "Solicitud de retiro vencida",
-  "tkbExpiredWithdrawalBody": "Tu retiro de {amount} vBTC a {destination} venció antes de pagarse, así que ya no se puede completar. Ya no bloquea un nuevo retiro.",
+  "tkbExpiredWithdrawalBody": "Tu retiro de {amount} vBTC a {destination} venció. Ya no bloquea un nuevo retiro, pero sus vBTC siguen retenidos en depósito.",
   "@tkbExpiredWithdrawalBody": {
     "placeholders": {
       "amount": {

@@ -17166,7 +17166,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbExpiredWithdrawalBody.
   ///
   /// In en, this message translates to:
-  /// **'Your withdrawal of {amount} vBTC to {destination} expired before it was paid, so it can no longer be completed. It no longer blocks a new withdrawal.'**
+  /// **'Your withdrawal of {amount} vBTC to {destination} has expired. It no longer blocks a new withdrawal, but its vBTC is still held in escrow.'**
   String tkbExpiredWithdrawalBody(String amount, String destination);
 
   /// No description provided for @tkbUnpayableWithdrawalTitle.

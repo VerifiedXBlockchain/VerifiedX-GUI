@@ -7818,7 +7818,7 @@
   "tkbPendingWithdrawalContractBody": "You have a pending withdrawal for this contract. Would you like to complete it?",
   "tkbPendingWithdrawalFound": "Pending Withdrawal Found",
   "tkbExpiredWithdrawalTitle": "Withdrawal Request Expired",
-  "tkbExpiredWithdrawalBody": "Your withdrawal of {amount} vBTC to {destination} expired before it was paid, so it can no longer be completed. It no longer blocks a new withdrawal.",
+  "tkbExpiredWithdrawalBody": "Your withdrawal of {amount} vBTC to {destination} has expired. It no longer blocks a new withdrawal, but its vBTC is still held in escrow.",
   "@tkbExpiredWithdrawalBody": {
     "placeholders": {
       "amount": {

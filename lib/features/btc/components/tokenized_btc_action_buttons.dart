@@ -435,15 +435,13 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     (t) => t.smartContractUid == token.smartContractUid,
                   );
 
-                  // This wallet's own open requests, flagged Expired /
-                  // Unpayable by the node. Null (older node, lookup failed)
-                  // keeps the prompt below.
-                  final escrowed = freshToken != null && freshToken.hasPendingWithdrawal
-                      ? await VbtcV2Service().getEscrowedWithdrawals(
-                          address: currentWallet.address,
-                          scUid: token.smartContractUid,
-                        )
-                      : null;
+                  // Core clears the active hash on expiry, but the request's
+                  // escrow remains. Ask even if there is no active request or
+                  // the holder's token dropped out of the spendable list.
+                  final escrowed = await VbtcV2Service().getEscrowedWithdrawals(
+                    address: currentWallet.address,
+                    scUid: token.smartContractUid,
+                  );
                   ref.read(globalLoadingProvider.notifier).complete();
 
                   final pendingAction = classifyPendingWithdrawal(
@@ -451,17 +449,17 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     escrowed: escrowed,
                   );
 
-                  // An expired or unpayable request can never be completed,
-                  // so offering Complete would only fail (QA MTI#2.5). Say why
-                  // and let the user go on to the withdrawal form.
+                  // Explain outstanding escrow before opening another form
+                  // (QA MTI#2.5), including after the active hash is cleared.
                   if (pendingAction == PendingWithdrawalAction.expired ||
                       pendingAction == PendingWithdrawalAction.unpayable) {
-                    final entry = escrowed!.firstWhere(
-                      (e) => e.requestHash == freshToken!.activeWithdrawalRequestHash,
-                    );
+                    final entry = pendingEscrowedWithdrawal(
+                      activeRequestHash: freshToken?.activeWithdrawalRequestHash,
+                      escrowed: escrowed,
+                    )!;
                     final amount = entry.amount.toString();
                     final destination = entry.btcDestination ??
-                        freshToken!.activeWithdrawalBtcDestination ??
+                        freshToken?.activeWithdrawalBtcDestination ??
                         '';
                     final isExpired = pendingAction == PendingWithdrawalAction.expired;
                     final body = [

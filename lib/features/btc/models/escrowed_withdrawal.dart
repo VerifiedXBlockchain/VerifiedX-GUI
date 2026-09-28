@@ -8,8 +8,8 @@ class EscrowedWithdrawal {
   final double amount;
   final String? btcDestination;
 
-  /// Past the 360-block window: it no longer blocks a new request and can no
-  /// longer be completed. The escrow returns only through a cancellation.
+  /// Past the 360-block window: it no longer blocks a new request, but its
+  /// escrow has not been returned.
   final bool expired;
 
   /// Too small to pay at its fee rate, so every completion attempt fails.
@@ -43,10 +43,7 @@ class EscrowedWithdrawal {
   /// requests" from "the node cannot say".
   static List<EscrowedWithdrawal>? listFromJson(dynamic raw) {
     if (raw is! List) return null;
-    return raw
-        .whereType<Map>()
-        .map((e) => EscrowedWithdrawal.fromJson(Map<String, dynamic>.from(e)))
-        .toList();
+    return raw.whereType<Map>().map((e) => EscrowedWithdrawal.fromJson(Map<String, dynamic>.from(e))).toList();
   }
 }
 
@@ -71,17 +68,28 @@ enum PendingWithdrawalAction {
 /// slot shared by every holder). [escrowed] is this wallet's open requests
 /// from `GetVBTCBalance`, or null when they could not be read; then, and when
 /// the active request is not among them, the existing prompt is kept.
+/// When Core clears the active hash, any expired or unpayable escrow still
+/// needs explaining before opening the form.
 PendingWithdrawalAction classifyPendingWithdrawal({
   required String? activeRequestHash,
   required List<EscrowedWithdrawal>? escrowed,
 }) {
-  if (activeRequestHash == null || activeRequestHash.isEmpty) {
-    return PendingWithdrawalAction.openForm;
-  }
-
-  final entry = escrowed?.firstWhereOrNull((e) => e.requestHash == activeRequestHash);
-  if (entry == null) return PendingWithdrawalAction.offerComplete;
-  if (entry.expired) return PendingWithdrawalAction.expired;
-  if (entry.unpayable) return PendingWithdrawalAction.unpayable;
+  final entry = pendingEscrowedWithdrawal(activeRequestHash: activeRequestHash, escrowed: escrowed);
+  if (entry?.expired == true) return PendingWithdrawalAction.expired;
+  if (entry?.unpayable == true) return PendingWithdrawalAction.unpayable;
+  if (activeRequestHash == null || activeRequestHash.isEmpty) return PendingWithdrawalAction.openForm;
   return PendingWithdrawalAction.offerComplete;
+}
+
+/// The escrow entry to explain. Keep a live active request's completion path
+/// ahead of unrelated older escrow, but do not lose expired escrow when Core
+/// removes the contract's active hash.
+EscrowedWithdrawal? pendingEscrowedWithdrawal({
+  required String? activeRequestHash,
+  required List<EscrowedWithdrawal>? escrowed,
+}) {
+  if (activeRequestHash != null && activeRequestHash.isNotEmpty) {
+    return escrowed?.firstWhereOrNull((e) => e.requestHash == activeRequestHash);
+  }
+  return escrowed?.firstWhereOrNull((e) => e.expired || e.unpayable);
 }

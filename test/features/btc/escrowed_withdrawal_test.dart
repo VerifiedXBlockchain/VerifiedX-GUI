@@ -58,10 +58,26 @@ void main() {
       expect(classifyPendingWithdrawal(activeRequestHash: 'h', escrowed: const [unpayable]), PendingWithdrawalAction.unpayable);
     });
 
+    test('expired escrow is explained after the active hash is cleared', () {
+      for (final hash in [null, '']) {
+        expect(classifyPendingWithdrawal(activeRequestHash: hash, escrowed: const [expired]), PendingWithdrawalAction.expired);
+        expect(pendingEscrowedWithdrawal(activeRequestHash: hash, escrowed: const [expired]), expired);
+      }
+    });
+
+    test('unpayable escrow is explained even without an active hash', () {
+      expect(classifyPendingWithdrawal(activeRequestHash: null, escrowed: const [unpayable]), PendingWithdrawalAction.unpayable);
+    });
+
+    test('old escrow does not take over a live active request', () {
+      const old = EscrowedWithdrawal(requestHash: 'old', amount: 2, expired: true);
+      expect(classifyPendingWithdrawal(activeRequestHash: 'h', escrowed: const [old, live]), PendingWithdrawalAction.offerComplete);
+      expect(pendingEscrowedWithdrawal(activeRequestHash: 'h', escrowed: const [old, live]), live);
+    });
+
     test('unknown escrow state keeps the existing Complete prompt', () {
       expect(classifyPendingWithdrawal(activeRequestHash: 'h', escrowed: null), PendingWithdrawalAction.offerComplete);
-      expect(classifyPendingWithdrawal(activeRequestHash: 'other', escrowed: const [expired]),
-          PendingWithdrawalAction.offerComplete);
+      expect(classifyPendingWithdrawal(activeRequestHash: 'other', escrowed: const [expired]), PendingWithdrawalAction.offerComplete);
     });
   });
 }

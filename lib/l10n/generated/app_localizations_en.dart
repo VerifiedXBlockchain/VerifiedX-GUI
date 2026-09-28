@@ -9221,7 +9221,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tkbExpiredWithdrawalBody(String amount, String destination) {
-    return 'Your withdrawal of $amount vBTC to $destination expired before it was paid, so it can no longer be completed. It no longer blocks a new withdrawal.';
+    return 'Your withdrawal of $amount vBTC to $destination has expired. It no longer blocks a new withdrawal, but its vBTC is still held in escrow.';
   }
 
   @override

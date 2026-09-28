@@ -9221,7 +9221,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String tkbExpiredWithdrawalBody(String amount, String destination) {
-    return 'Tu retiro de $amount vBTC a $destination venció antes de pagarse, así que ya no se puede completar. Ya no bloquea un nuevo retiro.';
+    return 'Tu retiro de $amount vBTC a $destination venció. Ya no bloquea un nuevo retiro, pero sus vBTC siguen retenidos en depósito.';
   }
 
   @override
