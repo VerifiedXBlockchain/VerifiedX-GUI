@@ -10,6 +10,7 @@ import '../../../core/utils.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class FaucetFormstate {
   final String verificationUuid;
@@ -106,7 +107,7 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
       state = state.requestCompleted(result);
       return true;
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }
@@ -126,7 +127,7 @@ class FaucetFormProvider extends StateNotifier<FaucetFormstate> {
       Toast.message(globalL10n.r3eFaucetSuccess(result.toString()));
       return true;
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }

@@ -26,12 +26,17 @@ class WithdrawalProcessingDialog extends StatefulWidget {
   /// in a block before calling completeWithdrawal.
   final bool waitForConfirmation;
 
+  /// Replaces the CompleteWithdrawal call in widget tests.
+  @visibleForTesting
+  final Future<WithdrawalResult> Function()? completeWithdrawalOverride;
+
   const WithdrawalProcessingDialog({
     super.key,
     required this.scUid,
     required this.requestHash,
     this.ownerAddress,
     this.waitForConfirmation = false,
+    this.completeWithdrawalOverride,
   });
 
   /// Show the dialog and begin the completeWithdrawal call immediately.
@@ -135,10 +140,11 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     debugPrint('$_tag Calling completeWithdrawal — scUid: ${widget.scUid}, requestHash: ${widget.requestHash}');
     setState(() => _state = _DialogState.processing);
 
-    final result = await VbtcV2Service().completeWithdrawal(
-      scUid: widget.scUid,
-      withdrawalRequestHash: widget.requestHash,
-    );
+    final result = await (widget.completeWithdrawalOverride?.call() ??
+        VbtcV2Service().completeWithdrawal(
+          scUid: widget.scUid,
+          withdrawalRequestHash: widget.requestHash,
+        ));
 
     _busy = false;
     if (!mounted) return;
@@ -390,6 +396,16 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
 
   Widget _buildFailureSection(AppLocalizations l10n) {
     final canCancel = widget.ownerAddress != null && _result?.btcTransactionHash != null;
+    final unpayable = _result?.unpayable ?? false;
+
+    // Why there is no Cancel (QA MTI#10.1). Cancelling a request that sent no
+    // Bitcoin transaction needs the contract's validators to vote, which the
+    // wallet cannot start yet, so no button is offered that could not finish.
+    final String? noCancelNote = canCancel
+        ? null
+        : unpayable
+            ? l10n.bw2NoCancelUnpayable
+            : (_result?.btcTransactionHash == null ? l10n.bw2NoCancelNoBtcTx : null);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -407,30 +423,43 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
             ),
           ],
         ),
+        if (noCancelNote != null) ...[
+          const SizedBox(height: 12),
+          Text(
+            noCancelNote,
+            key: const Key('withdrawal:no-cancel-note'),
+            style: const TextStyle(color: Colors.white54, fontSize: 12),
+          ),
+        ],
         const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            AppButton(
-              label: l10n.tkbDismiss,
-              variant: AppColorVariant.Light,
-              onPressed: () => Navigator.of(context).pop(_result),
-            ),
-            const SizedBox(width: 8),
-            if (canCancel) ...[
+        // Wrap, not Row: three buttons can exceed the dialog's 450 px.
+        Align(
+          alignment: Alignment.centerRight,
+          child: Wrap(
+            alignment: WrapAlignment.end,
+            spacing: 8,
+            runSpacing: 8,
+            children: [
               AppButton(
-                label: l10n.bw2CancelWithdrawal,
-                variant: AppColorVariant.Danger,
-                onPressed: _cancelWithdrawal,
+                label: l10n.tkbDismiss,
+                variant: AppColorVariant.Light,
+                onPressed: () => Navigator.of(context).pop(_result),
               ),
-              const SizedBox(width: 8),
+              if (canCancel)
+                AppButton(
+                  label: l10n.bw2CancelWithdrawal,
+                  variant: AppColorVariant.Danger,
+                  onPressed: _cancelWithdrawal,
+                ),
+              // Retrying an unpayable request fails every time.
+              if (!unpayable)
+                AppButton(
+                  label: l10n.btcRetry,
+                  variant: AppColorVariant.Warning,
+                  onPressed: _busy ? null : _runCompleteWithdrawal,
+                ),
             ],
-            AppButton(
-              label: l10n.btcRetry,
-              variant: AppColorVariant.Warning,
-              onPressed: _busy ? null : _runCompleteWithdrawal,
-            ),
-          ],
+          ),
         ),
       ],
     );

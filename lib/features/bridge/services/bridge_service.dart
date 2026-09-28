@@ -9,6 +9,7 @@ import '../../metrics/models/network_metrics.dart';
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
 import '../../../core/services/launched_cli.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../utils/cli_exit.dart';
@@ -60,9 +61,9 @@ class BridgeService extends BaseService {
 
       return globalL10n.mktProblemOccurredToast;
     } catch (e) {
-      print("Unlock Account Error");
+      print("Encrypt Wallet Error");
       print(e);
-      return "$e";
+      return userErrorMessage(e);
     }
   }
 
@@ -523,7 +524,12 @@ class BridgeService extends BaseService {
 
     final Map<String, dynamic> data;
     try {
-      data = await getJson('/GetLatestRelease/${execute ? 'true' : 'false'}/$filename', cleanPath: false);
+      // The background check (execute false) must not pop a password prompt.
+      data = await getJson(
+        '/GetLatestRelease/${execute ? 'true' : 'false'}/$filename',
+        cleanPath: false,
+        unlockIfLocked: execute,
+      );
     } catch (e) {
       // The node refuses this route (401) while an encrypted wallet is locked.
       print("CLI update check failed: $e");

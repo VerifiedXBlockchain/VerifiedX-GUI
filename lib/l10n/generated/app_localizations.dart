@@ -2091,6 +2091,18 @@ abstract class AppLocalizations {
   /// **'Cancel withdrawal'**
   String get bw2CancelWithdrawalTooltip;
 
+  /// No description provided for @bw2NoCancelNoBtcTx.
+  ///
+  /// In en, this message translates to:
+  /// **'No Bitcoin transaction hash was returned for this withdrawal, so it cannot be cancelled from here. Cancelling a request without one needs a vote by the contract\'s validators, which the wallet cannot start yet.'**
+  String get bw2NoCancelNoBtcTx;
+
+  /// No description provided for @bw2NoCancelUnpayable.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdrawal can never be paid at its fee rate, so retrying will keep failing. There is no Cancel button because cancelling it needs a vote by the contract\'s validators, which the wallet cannot start yet. Its vBTC stays held in escrow until then.'**
+  String get bw2NoCancelUnpayable;
+
   /// No description provided for @bw2CeremonyCompleted.
   ///
   /// In en, this message translates to:
@@ -8264,6 +8276,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compiling & Minting…'**
   String get r3aCompilingMintingEllipsis;
+
+  /// Headline shown when the smart contract compile animation finishes (compile only).
+  ///
+  /// In en, this message translates to:
+  /// **'Compiled!'**
+  String get r3aCompiledExclaim;
+
+  /// Headline shown when the smart contract compile animation finishes after minting.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted!'**
+  String get r3aMintedExclaim;
 
   /// No description provided for @r3aConfiguration.
   ///
@@ -17133,6 +17157,48 @@ abstract class AppLocalizations {
   /// **'Pending Withdrawal Found'**
   String get tkbPendingWithdrawalFound;
 
+  /// No description provided for @tkbExpiredWithdrawalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Request Expired'**
+  String get tkbExpiredWithdrawalTitle;
+
+  /// No description provided for @tkbExpiredWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal of {amount} vBTC to {destination} expired before it was paid, so it can no longer be completed. It no longer blocks a new withdrawal.'**
+  String tkbExpiredWithdrawalBody(String amount, String destination);
+
+  /// No description provided for @tkbUnpayableWithdrawalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Cannot Be Paid'**
+  String get tkbUnpayableWithdrawalTitle;
+
+  /// No description provided for @tkbUnpayableWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal of {amount} vBTC to {destination} is too small to pay at its fee rate, so completing it will keep failing.'**
+  String tkbUnpayableWithdrawalBody(String amount, String destination);
+
+  /// No description provided for @tkbWithdrawalCancelNeedsVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Its vBTC stays held in escrow until the request is cancelled. Cancelling needs a vote by the contract\'s validators, which the wallet cannot start yet.\n\nYou can still open the withdrawal form for your available balance.'**
+  String get tkbWithdrawalCancelNeedsVote;
+
+  /// No description provided for @tkbWithdrawalCancellationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'A cancellation has already been requested and is awaiting the validators\' vote. Its vBTC stays held in escrow until then.\n\nYou can still open the withdrawal form for your available balance.'**
+  String get tkbWithdrawalCancellationPending;
+
+  /// No description provided for @tkbOpenWithdrawalForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Withdrawal Form'**
+  String get tkbOpenWithdrawalForm;
+
   /// No description provided for @tkbPercentages.
   ///
   /// In en, this message translates to:
@@ -20366,6 +20432,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This file extension (.{extension}) is not permitted.'**
   String assetExtensionNotPermittedBody(String extension);
+
+  /// Shown when the node refused an action because the encrypted wallet is locked and the user cancelled (or failed) the password prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet is locked. Unlock it with your password and try again.'**
+  String get errWalletLocked;
+
+  /// Shown when a request to the node or Spyglass failed without a response (connection error or timeout).
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Check your connection and try again.'**
+  String get errNodeUnreachable;
+
+  /// Generic error when a node or Spyglass request failed and gave no readable reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The request failed. Please try again.'**
+  String get errRequestFailed;
+
+  /// Wraps an untranslated error message returned by the node or Spyglass. English shows the message as is; other languages add a lead-in saying the text comes from the node.
+  ///
+  /// In en, this message translates to:
+  /// **'{reason}'**
+  String errNodeReason(String reason);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
