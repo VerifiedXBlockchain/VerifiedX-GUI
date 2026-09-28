@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
@@ -189,7 +190,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
       data: (preflight) {
         if (preflight == null || !preflight.success) {
           return _ErrorState(
-            message: preflight?.message ?? l10n.prvBridgeCantLoadInfo,
+            message: nodeRefusalMessage(preflight?.message, fallback: l10n.prvBridgeCantLoadInfo, l10n: l10n),
             onCancel: widget.onCancel,
             onRetry: _refetch,
           );

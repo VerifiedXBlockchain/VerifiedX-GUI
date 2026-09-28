@@ -121,5 +121,24 @@ void main() {
     expect(userErrorMessage(WalletLockedException(badResponse(401, lockedWalletNodeMessage))),
         'Tu billetera está bloqueada. Desbloquéala con tu contraseña e inténtalo de nuevo.');
     expect(userErrorMessage(badResponse(500, null)), 'La solicitud falló. Inténtalo de nuevo.');
+
+    // A refusal inside a 200 reply ({"Success": false, "Message": ...}) gets the same lead-in (QA T2c).
+    const floor = 'vBTC V2 withdrawal request: 0.0000001 BTC cannot pay a Bitcoin withdrawal at 12 sat/vB.';
+    expect(nodeRefusalMessage({'Success': false, 'Message': floor}, fallback: 'x'), 'Mensaje del nodo: $floor');
+    expect(nodeRefusalMessage(floor, fallback: 'x'), 'Mensaje del nodo: $floor');
+    expect(nodeRefusalMessage({'Success': false}, fallback: 'Sin motivo'), 'Sin motivo');
+  });
+
+  group('nodeRefusalMessage (English)', () {
+    test('shows the Message of a 2xx refusal as is', () {
+      expect(nodeRefusalMessage({'Success': false, 'Message': 'Insufficient balance. Available: -0.00070'}, fallback: 'x'),
+          'Insufficient balance. Available: -0.00070');
+    });
+
+    test('falls back when there is no readable reason', () {
+      expect(nodeRefusalMessage(null, fallback: 'Failed to request withdrawal.'), 'Failed to request withdrawal.');
+      expect(nodeRefusalMessage({'Success': false, 'Message': '  '}, fallback: 'fb'), 'fb');
+      expect(nodeRefusalMessage('DioException [bad response]: ...', fallback: 'fb'), 'fb');
+    });
   });
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 
+import '../../l10n/generated/app_localizations.dart';
 import '../../l10n/l10n_helper.dart';
 import '../services/locked_wallet_gate.dart';
 
@@ -58,6 +59,25 @@ String userErrorMessage(Object error, {String? fallback, bool withLeadIn = true}
     return fallback ?? l10n.errRequestFailed;
   }
   return withLeadIn ? l10n.errNodeReason(detail) : detail;
+}
+
+/// Text for a node refusal that arrives in a successful (2xx) reply, such as
+/// `{"Success": false, "Message": "..."}`. Same treatment as
+/// [userErrorMessage] gives error replies: the node's reason with the
+/// translated `errNodeReason` lead-in, or [fallback] when there is no readable
+/// reason. [data] is the decoded body or the message string itself. Widgets
+/// pass their own [l10n]; services use the global one.
+String nodeRefusalMessage(
+  dynamic data, {
+  required String fallback,
+  bool withLeadIn = true,
+  AppLocalizations? l10n,
+}) {
+  final detail = nodeErrorText(data);
+  if (detail == null || detail.contains('DioException') || detail.contains('DioError')) {
+    return fallback;
+  }
+  return withLeadIn ? (l10n ?? globalL10n).errNodeReason(detail) : detail;
 }
 
 /// Extracts the readable reason from a node / Spyglass response body, or null
