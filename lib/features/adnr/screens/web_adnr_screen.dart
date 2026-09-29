@@ -22,6 +22,7 @@ import '../providers/adnr_pending_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../raw/raw_service.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../utils/domain_display.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -179,6 +180,7 @@ class _VfxDomain extends BaseComponent {
                 height: 16,
               ),
               AppButton(
+                key: const Key('adnr:create'),
                 label: AppLocalizations.of(context).adnrCreateDomain,
                 variant: AppColorVariant.Success,
                 onPressed: () async {
@@ -233,6 +235,7 @@ class _VfxDomain extends BaseComponent {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     AppButton(
+                      key: const Key('adnr:transfer'),
                       label: AppLocalizations.of(context).adnrTransfer,
                       onPressed: () async {
                         if (balance < (ADNR_TRANSFER_COST + MIN_RBX_FOR_SC_ACTION)) {
@@ -246,10 +249,12 @@ class _VfxDomain extends BaseComponent {
                             body: AppLocalizations.of(context).adnrTransferDomainBody(ADNR_TRANSFER_COST.toString()),
                             validator: (value) => formValidatorRbxAddress(value, false),
                             labelText: AppLocalizations.of(context).adnrAddressFieldLabel,
+                            fieldKey: const ValueKey('adnr:transfer_address'),
+                            submitKey: const Key('adnr:transfer_submit'),
                             onValidSubmission: (toAddress) async {
                               ref.read(globalLoadingProvider.notifier).start();
 
-                              final txData = await RawTransaction.generate(
+                              final generated = await RawTransaction.generate(
                                 keypair: ref.read(webSessionProvider).keypair!,
                                 amount: ADNR_TRANSFER_COST,
                                 toAddress: toAddress,
@@ -257,10 +262,12 @@ class _VfxDomain extends BaseComponent {
                                 data: {"Function": "AdnrTransfer()", "Name": adnr},
                               );
 
+                              final txData = generated.txData;
+
                               ref.read(globalLoadingProvider.notifier).complete();
 
                               if (txData == null) {
-                                Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                                Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
                                 return;
                               }
 
@@ -268,8 +275,12 @@ class _VfxDomain extends BaseComponent {
 
                               final confirmed = await ConfirmDialog.show(
                                 title: AppLocalizations.of(context).btcValidTxTitle,
-                                body:
-                                    "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
+                                body: AppLocalizations.of(context).r3eVfxDomainValidBody(
+                                  domainWithSuffix(adnr, ".vfx"),
+                                  ADNR_TRANSFER_COST.toString(),
+                                  txFee.toString(),
+                                  (ADNR_TRANSFER_COST + txFee).toString(),
+                                ),
                                 confirmText: AppLocalizations.of(context).actionSend,
                                 cancelText: AppLocalizations.of(context).actionCancel,
                               );
@@ -302,6 +313,7 @@ class _VfxDomain extends BaseComponent {
                       },
                     ),
                     AppButton(
+                      key: const Key('adnr:delete'),
                       label: AppLocalizations.of(context).adnrDelete,
                       variant: AppColorVariant.Danger,
                       onPressed: () async {
@@ -324,17 +336,18 @@ class _VfxDomain extends BaseComponent {
 
                         if (confirmed == true) {
                           ref.read(globalLoadingProvider.notifier).start();
-                          final txData = await RawTransaction.generate(
+                          final generated = await RawTransaction.generate(
                             keypair: ref.read(webSessionProvider).keypair!,
                             amount: ADNR_DELETE_COST,
                             toAddress: "Adnr_Base",
                             txType: TxType.adnr,
                             data: {"Function": "AdnrDelete()", "Name": adnr},
                           );
+                          final txData = generated.txData;
 
                           ref.read(globalLoadingProvider.notifier).complete();
                           if (txData == null) {
-                            Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                            Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
 
                             return;
                           }
@@ -343,8 +356,12 @@ class _VfxDomain extends BaseComponent {
 
                           final confirmed = await ConfirmDialog.show(
                             title: AppLocalizations.of(context).btcValidTxTitle,
-                            body:
-                                "The VFX Domain transaction is valid.\nAre you sure you want to proceed?\n\nDomain: $adnr.vfx\nAmount: $ADNR_COST VFX\nFee: $txFee RBX\nTotal: ${ADNR_COST + txFee} VFX",
+                            body: AppLocalizations.of(context).r3eVfxDomainValidBody(
+                              domainWithSuffix(adnr, ".vfx"),
+                              ADNR_DELETE_COST.toString(),
+                              txFee.toString(),
+                              (ADNR_DELETE_COST + txFee).toString(),
+                            ),
                             confirmText: AppLocalizations.of(context).actionSend,
                             cancelText: AppLocalizations.of(context).actionCancel,
                           );

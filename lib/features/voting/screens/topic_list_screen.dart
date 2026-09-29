@@ -41,6 +41,7 @@ class TopicListScreen extends BaseScreen {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
+              key: const Key('voting:create_topic'),
               label: AppLocalizations.of(context).votingCreateTopic,
               variant: AppColorVariant.Light,
               onPressed: () async {
@@ -82,6 +83,7 @@ class TopicListScreen extends BaseScreen {
                 ref.read(topicSearchProvider.notifier).clear();
               },
               icon: const Icon(Icons.search),
+              tooltip: AppLocalizations.of(context).actionSearch,
             ),
             if (!isGrid)
               IconButton(
@@ -89,6 +91,7 @@ class TopicListScreen extends BaseScreen {
                   provider.setGrid();
                 },
                 icon: const Icon(Icons.grid_on, color: Colors.white),
+                tooltip: AppLocalizations.of(context).actionGridView,
               ),
             if (isGrid)
               IconButton(
@@ -96,6 +99,7 @@ class TopicListScreen extends BaseScreen {
                   provider.setList();
                 },
                 icon: const Icon(Icons.list_outlined, color: Colors.white),
+                tooltip: AppLocalizations.of(context).actionListView,
               ),
           ],
         )

@@ -87,7 +87,8 @@ class WebShopListScreen extends BaseScreen {
             ref.read(webShopFullListProvider.notifier).pauseTimer();
             AutoRouter.of(context).pop();
           },
-          icon: Icon(Icons.chevron_left)),
+          icon: Icon(Icons.chevron_left),
+          tooltip: AppLocalizations.of(context).actionBack),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       title: Text(AppLocalizations.of(context).shopAuctionHousesTitle),
@@ -107,7 +108,8 @@ class WebShopListScreen extends BaseScreen {
             onPressed: () {
               ref.read(webShopListProvider(WebShopListType.public).notifier).refresh();
             },
-            icon: Icon(Icons.refresh)),
+            icon: Icon(Icons.refresh),
+            tooltip: AppLocalizations.of(context).actionRefresh),
       ],
     );
   }

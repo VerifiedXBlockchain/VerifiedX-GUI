@@ -129,6 +129,7 @@ class _ButterflyLinkFormState extends ConsumerState<ButterflyLinkForm> {
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Navigator.pop(context),
+                      tooltip: AppLocalizations.of(context).actionClose,
                     ),
                   ],
                 ),

@@ -42,7 +42,7 @@ class RootContainerSideNav extends BaseComponent {
             if (onToggleExpanded != null)
               Align(
                 alignment: Alignment.centerLeft,
-                child: RootContainerExpander(onToggleExpanded: onToggleExpanded!, isExpanded: isExpanded),
+                child: RootContainerExpander(key: const ValueKey('nav:expander'), onToggleExpanded: onToggleExpanded!, isExpanded: isExpanded),
               )
           ],
         ),

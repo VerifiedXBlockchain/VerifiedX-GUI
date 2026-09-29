@@ -1,10 +1,19 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rbx_wallet/app.dart';
 import 'package:rbx_wallet/features/btc/utils.dart';
 
 /// The app defaults to mainnet in tests — `Env.btcIsTestNet` is driven by a
 /// compile-time define that is absent here — so these cover the mainnet rules
 /// the validator applies to a vBTC withdrawal destination.
 void main() {
+  // The messages come from `globalL10n`; a detached navigator key with the
+  // test binding makes it fall back to English without get_it.
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    rootNavigatorKey = GlobalKey<NavigatorState>();
+  });
+
   group('formValidatorBtcAddress', () {
     test('accepts a P2PKH address', () {
       expect(
@@ -67,6 +76,17 @@ void main() {
       expect(
         formValidatorBtcAddress('tb1qw508d6qejxtdg4y5r3zarvaryvaxxpcs'),
         isNotNull,
+      );
+      expect(
+        formValidatorBtcAddress('tb1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3q0sl5k7'),
+        'This is a testnet BTC address. A mainnet address is required.',
+      );
+    });
+
+    test('names the problem for a malformed address', () {
+      expect(
+        formValidatorBtcAddress('bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t5'),
+        'Invalid BTC address.',
       );
     });
 

@@ -48,38 +48,41 @@ class BuyerChatThreadList extends BaseComponent {
             ),
             child: Card(
               color: Colors.black,
-              child: ListTile(
-                title: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    // if (!hasRead)
-                    //   Padding(
-                    //     padding: const EdgeInsets.only(right: 6.0),
-                    //     child: Container(
-                    //       width: 12,
-                    //       height: 12,
-                    //       decoration: BoxDecoration(
-                    //         color: Theme.of(context).colorScheme.secondary,
-                    //         borderRadius: BorderRadius.circular(6.0),
-                    //       ),
-                    //     ),
-                    //   ),
-                    Text(thread.user),
-                  ],
+              child: Semantics(
+                button: true,
+                child: ListTile(
+                  title: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // if (!hasRead)
+                      //   Padding(
+                      //     padding: const EdgeInsets.only(right: 6.0),
+                      //     child: Container(
+                      //       width: 12,
+                      //       height: 12,
+                      //       decoration: BoxDecoration(
+                      //         color: Theme.of(context).colorScheme.secondary,
+                      //         borderRadius: BorderRadius.circular(6.0),
+                      //       ),
+                      //     ),
+                      //   ),
+                      Text(thread.user),
+                    ],
+                  ),
+                  subtitle: Text(
+                    message.message,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () async {
+                    final currentUrl = ref.read(connectedShopProvider).url;
+                    if (currentUrl != thread.user) {
+                      await ref.read(connectedShopProvider.notifier).loadShop(context, ref, thread.user);
+                    }
+                    AutoRouter.of(context).push(ShopChatScreenRoute(url: thread.user));
+                  },
                 ),
-                subtitle: Text(
-                  message.message,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () async {
-                  final currentUrl = ref.read(connectedShopProvider).url;
-                  if (currentUrl != thread.user) {
-                    await ref.read(connectedShopProvider.notifier).loadShop(context, ref, thread.user);
-                  }
-                  AutoRouter.of(context).push(ShopChatScreenRoute(url: thread.user));
-                },
               ),
             ),
           ),

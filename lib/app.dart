@@ -31,8 +31,13 @@ import 'core/providers/web_session_provider.dart';
 import 'core/singletons.dart';
 import 'core/storage.dart';
 import 'core/theme/app_theme.dart';
+import 'core/web_route_information_parser.dart';
 import 'core/web_router.gr.dart';
+import 'core/services/locked_wallet_gate.dart';
+import 'features/encrypt/components/unlock_wallet.dart';
+import 'features/encrypt/utils.dart';
 import 'features/encrypt/providers/password_required_provider.dart';
+import 'features/encrypt/providers/startup_password_required_provider.dart';
 import 'features/encrypt/providers/wallet_is_encrypted_provider.dart';
 import 'features/global_loader/global_loading_provider.dart';
 import 'features/transactions/components/notification_overlay.dart';
@@ -83,6 +88,10 @@ class App extends ConsumerWidget {
     ref.read(passwordRequiredProvider.notifier);
     ref.read(walletIsEncryptedProvider.notifier);
 
+    // A node call refused because the wallet is locked prompts for the
+    // password and is retried once (MTI#8).
+    LockedWalletGate.unlocker = () => unlockForLockedRequest(ref);
+
     singleton<Storage>().setStringList(Storage.BURNED_NFT_IDS, []);
     singleton<Storage>().setStringList(Storage.TRANSFERRED_NFT_IDS, []);
     singleton<Storage>().setStringList(Storage.PENDING_ADNRS, []);
@@ -113,7 +122,7 @@ class AppContainer extends ConsumerWidget {
       locale: appLocale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routeInformationParser: router.defaultRouteParser(includePrefixMatches: true),
+      routeInformationParser: Env.isWeb ? WebRouteInformationParser(webRouter) : appRouter.defaultRouteParser(includePrefixMatches: true),
       routerDelegate: AutoRouterDelegate(
         router,
         navigatorObservers: () => [AutoRouteObserver()],
@@ -129,6 +138,21 @@ class AppContainer extends ConsumerWidget {
             return const Material(
               color: Colors.black87,
               child: Center(child: BootContainer()),
+            );
+          }
+
+          // The CLI reported /CheckPasswordNeeded, so authenticate() held back
+          // finishSetup. UnlockWallet unlocks through the CLI, clears this
+          // flag and runs finishSetup; a wrong password toasts and stays here.
+          // The Scaffold hosts its toasts and the Overlay its tooltips, since
+          // the router's navigator is not mounted in this branch.
+          if (ref.watch(startupPasswordRequiredProvider)) {
+            return Overlay(
+              initialEntries: [
+                OverlayEntry(
+                  builder: (_) => Scaffold(body: UnlockWallet(ref: ref)),
+                ),
+              ],
             );
           }
         }

@@ -60,164 +60,172 @@ class TokenListTile extends BaseComponent {
 
     return AppCard(
       padding: 8,
-      child: ListTile(
-          leading: token != null && token!.imageBase64 != null
-              ? Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(17.0),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.5),
-                    ),
-                  ),
-                  child: Container(
-                    width: 32,
-                    height: 32,
+      child: Semantics(
+        button: interactive,
+        child: ListTile(
+            leading: token != null && token!.imageBase64 != null
+                ? Container(
+                    width: 34,
+                    height: 34,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    clipBehavior: Clip.antiAlias,
-                    child: Image(
-                      image: CacheMemoryImageProvider(
-                        tokenAccount.smartContractId,
-                        Base64Decoder().convert(token!.imageBase64!),
+                      borderRadius: BorderRadius.circular(17.0),
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.5),
                       ),
+                    ),
+                    child: Container(
                       width: 32,
                       height: 32,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.0),
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Image(
+                        image: CacheMemoryImageProvider(
+                          tokenAccount.smartContractId,
+                          Base64Decoder().convert(token!.imageBase64!),
+                        ),
+                        width: 32,
+                        height: 32,
+                      ),
+                    ),
+                  )
+                : Icon(Icons.toll),
+            title: Text(
+              titleOverride ?? tokenAccount.label,
+              style: TextStyle(
+                color: isOwnedByRA ? Theme.of(context).colorScheme.reserve : null,
+              ),
+            ),
+            subtitle: Text(l10n.tkbBalanceValue(tokenAccount.balance.toString())),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TransferTokensButton(
+                  scId: tokenAccount.smartContractId,
+                  fromAddress: address,
+                  currentBalance: tokenAccount.balance,
+                  isOwnedByRA: isOwnedByRA,
+                  showRaErrorMessage: showRaErrorMessage,
+                ),
+                if (canBurn)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6.0),
+                    child: BurnTokensButton(
+                      scId: tokenAccount.smartContractId,
+                      fromAddress: address,
+                      currentBalance: tokenAccount.balance,
+                      isOwnedByRA: isOwnedByRA,
+                      showRaErrorMessage: showRaErrorMessage,
                     ),
                   ),
-                )
-              : Icon(Icons.toll),
-          title: Text(
-            titleOverride ?? tokenAccount.label,
-            style: TextStyle(
-              color: isOwnedByRA ? Theme.of(context).colorScheme.reserve : null,
-            ),
-          ),
-          subtitle: Text(l10n.tkbBalanceValue(tokenAccount.balance.toString())),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TransferTokensButton(
-                scId: tokenAccount.smartContractId,
-                fromAddress: address,
-                currentBalance: tokenAccount.balance,
-              ),
-              if (canBurn)
-                Padding(
-                  padding: const EdgeInsets.only(left: 6.0),
-                  child: BurnTokensButton(
-                    scId: tokenAccount.smartContractId,
-                    fromAddress: address,
-                    currentBalance: tokenAccount.balance,
-                    isOwnedByRA: isOwnedByRA,
-                    showRaErrorMessage: showRaErrorMessage,
-                  ),
-                ),
-              if (canVote)
-                Padding(
-                  padding: const EdgeInsets.only(left: 6.0),
-                  child: AppButton(
-                    label: l10n.tokenVoting,
-                    variant: AppColorVariant.Light,
-                    onPressed: () async {
-                      final nft = await NftService().getNftData(tokenAccount.smartContractId);
-                      if (nft != null && nft.tokenStateDetails != null) {
-                        if (nft.tokenStateDetails!.topicList.isEmpty) {
-                          InfoDialog.show(title: l10n.tokenNoTopicsTitle, body: l10n.tokenNoTopicsBody);
+                if (canVote)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6.0),
+                    child: AppButton(
+                      label: l10n.tokenVoting,
+                      variant: AppColorVariant.Light,
+                      onPressed: () async {
+                        final nft = await NftService().getNftData(tokenAccount.smartContractId);
+                        if (nft != null && nft.tokenStateDetails != null) {
+                          if (nft.tokenStateDetails!.topicList.isEmpty) {
+                            InfoDialog.show(title: l10n.tokenNoTopicsTitle, body: l10n.tokenNoTopicsBody);
+                            return;
+                          }
+
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return ModalContainer(
+                                color: Colors.black,
+                                withDecor: false,
+                                withClose: true,
+                                children: nft.tokenStateDetails!.topicList.map((t) {
+                                  return Semantics(
+                                    button: true,
+                                    child: ListTile(
+                                      title: Text(t.topicName),
+                                      subtitle: Text(
+                                        t.topicDescription,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      trailing: Icon(Icons.chevron_right),
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => TokenTopicDetailScreen(
+                                              t,
+                                              address,
+                                              tokenAccount.balance,
+                                              nft.currentOwner == address,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            },
+                          );
+
                           return;
                         }
 
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) {
-                            return ModalContainer(
-                              color: Colors.black,
-                              withDecor: false,
-                              withClose: true,
-                              children: nft.tokenStateDetails!.topicList.map((t) {
-                                return ListTile(
-                                  title: Text(t.topicName),
-                                  subtitle: Text(
-                                    t.topicDescription,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  trailing: Icon(Icons.chevron_right),
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => TokenTopicDetailScreen(
-                                          t,
-                                          address,
-                                          tokenAccount.balance,
-                                          nft.currentOwner == address,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              }).toList(),
-                            );
-                          },
-                        );
-
-                        return;
-                      }
-
-                      Toast.error();
-                    },
+                        Toast.error();
+                      },
+                    ),
                   ),
-                ),
-            ],
-          ),
-          onTap: interactive
-              ? () async {
-                  final nft = await NftService().getNftData(tokenAccount.smartContractId);
+              ],
+            ),
+            onTap: interactive
+                ? () async {
+                    final nft = await NftService().getNftData(tokenAccount.smartContractId);
 
-                  if (!ref.read(transferredProvider).contains(tokenAccount.smartContractId)) {
-                    if (nft != null && nft.isToken) {
-                      if (nft.currentOwner == address) {
-                        final tokenAccount = TokenAccount.fromNft(nft, ref);
-                        final tokenFeature = TokenScFeature.fromNft(nft);
-                        if (tokenAccount != null && tokenFeature != null) {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) => TokenManagementScreenContainer(
-                                nftId: tokenAccount.smartContractId,
-                                address: address,
-                                tokenAccount: tokenAccount,
-                                tokenFeature: tokenFeature,
-                                ref: ref,
-                                nft: nft,
+                    if (!ref.read(transferredProvider).contains(tokenAccount.smartContractId)) {
+                      if (nft != null && nft.isToken) {
+                        if (nft.currentOwner == address) {
+                          final tokenAccount = TokenAccount.fromNft(nft, ref);
+                          final tokenFeature = TokenScFeature.fromNft(nft);
+                          if (tokenAccount != null && tokenFeature != null) {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => TokenManagementScreenContainer(
+                                  nftId: tokenAccount.smartContractId,
+                                  address: address,
+                                  tokenAccount: tokenAccount,
+                                  tokenFeature: tokenFeature,
+                                  ref: ref,
+                                  nft: nft,
+                                ),
                               ),
-                            ),
-                          );
-                          return;
+                            );
+                            return;
+                          }
                         }
                       }
                     }
-                  }
 
-                  // final nft = await NftService().retrieve(tokenAccount.smartContractId);
+                    // final nft = await NftService().retrieve(tokenAccount.smartContractId);
 
-                  if (nft != null && nft.tokenStateDetails != null) {
-                    InfoDialog.show(
-                      title: l10n.tkbTokenDetails,
-                      content: TokenDetailsContent(
-                        token: nft.tokenStateDetails!,
-                        tokenAccount: tokenAccount,
-                        owner: nft.currentOwner,
-                        nft: nft,
-                      ),
-                    );
+                    if (nft != null && nft.tokenStateDetails != null) {
+                      InfoDialog.show(
+                        title: l10n.tkbTokenDetails,
+                        content: TokenDetailsContent(
+                          token: nft.tokenStateDetails!,
+                          tokenAccount: tokenAccount,
+                          owner: nft.currentOwner,
+                          nft: nft,
+                        ),
+                      );
+                    }
                   }
-                }
-              : null),
+                : null),
+      ),
     );
   }
 }

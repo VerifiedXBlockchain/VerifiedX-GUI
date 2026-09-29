@@ -78,18 +78,22 @@ class ScWizardCardPreview extends BaseComponent {
             width: 24,
             height: 24,
             child: addButtonAbove
-                ? InkWell(
-                    onTap: () {
-                      createNew(
-                        context: context,
-                        provider: provider,
-                        index: items.length,
-                        x: item.x,
-                        y: item.y - 1,
-                        item: item,
-                      );
-                    },
-                    child: const Icon(Icons.add, size: 12),
+                ? Semantics(
+                    label: l10n.r3aCreateInstance,
+                    button: true,
+                    child: InkWell(
+                      onTap: () {
+                        createNew(
+                          context: context,
+                          provider: provider,
+                          index: items.length,
+                          x: item.x,
+                          y: item.y - 1,
+                          item: item,
+                        );
+                      },
+                      child: const Icon(Icons.add, size: 12),
+                    ),
                   )
                 : const SizedBox.shrink(),
           ),
@@ -99,18 +103,22 @@ class ScWizardCardPreview extends BaseComponent {
                 width: 24,
                 height: 24,
                 child: addButtonLeft
-                    ? InkWell(
-                        onTap: () {
-                          createNew(
-                            context: context,
-                            provider: provider,
-                            index: items.length,
-                            x: item.x - 1,
-                            y: item.y,
-                            item: item,
-                          );
-                        },
-                        child: const Icon(Icons.add, size: 12),
+                    ? Semantics(
+                        label: l10n.r3aCreateInstance,
+                        button: true,
+                        child: InkWell(
+                          onTap: () {
+                            createNew(
+                              context: context,
+                              provider: provider,
+                              index: items.length,
+                              x: item.x - 1,
+                              y: item.y,
+                              item: item,
+                            );
+                          },
+                          child: const Icon(Icons.add, size: 12),
+                        ),
                       )
                     : const SizedBox.shrink(),
               ),
@@ -119,80 +127,83 @@ class ScWizardCardPreview extends BaseComponent {
                 height: 200,
                 decoration: BoxDecoration(color: Colors.black45, borderRadius: BorderRadius.circular(6.0)),
                 clipBehavior: Clip.antiAlias,
-                child: InkWell(
-                  onTap: () {
-                    if (item == null) {
-                      provider.insert(
-                        entry: BulkSmartContractEntry.empty(),
-                        index: 0,
-                        y: 1,
-                        x: 1,
-                      );
+                child: Semantics(
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      if (item == null) {
+                        provider.insert(
+                          entry: BulkSmartContractEntry.empty(),
+                          index: 0,
+                          y: 1,
+                          x: 1,
+                        );
 
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ScWizardEditItemScreen(
-                            title: l10n.r3aCreateCollectionBlueprint,
-                            index: 0,
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ScWizardEditItemScreen(
+                              title: l10n.r3aCreateCollectionBlueprint,
+                              index: 0,
+                            ),
+                          ),
+                        );
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ScWizardEditItemScreen(
+                              title: l10n.r3aEditInstance,
+                              index: item.index,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        if (item != null) ScWizardAssetPreview(entry: item.entry),
+                        Container(
+                          color: Colors.black38,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                "",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Icon(
+                                item == null ? Icons.add : Icons.edit,
+                              ),
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    } else {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ScWizardEditItemScreen(
-                            title: l10n.r3aEditInstance,
-                            index: item.index,
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      if (item != null) ScWizardAssetPreview(entry: item.entry),
-                      Container(
-                        color: Colors.black38,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "",
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Icon(
-                              item == null ? Icons.add : Icons.edit,
-                            ),
-                            Text(
-                              title,
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                        if (item != null)
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "x${item.entry.quantity}",
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      if (item != null)
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "x${item.entry.quantity}",
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        )
-                    ],
+                          )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -200,18 +211,22 @@ class ScWizardCardPreview extends BaseComponent {
                 width: 24,
                 height: 24,
                 child: addButtonRight
-                    ? InkWell(
-                        onTap: () {
-                          createNew(
-                            context: context,
-                            provider: provider,
-                            index: items.length,
-                            x: item.x + 1,
-                            y: item.y,
-                            item: item,
-                          );
-                        },
-                        child: const Icon(Icons.add, size: 12),
+                    ? Semantics(
+                        label: l10n.r3aCreateInstance,
+                        button: true,
+                        child: InkWell(
+                          onTap: () {
+                            createNew(
+                              context: context,
+                              provider: provider,
+                              index: items.length,
+                              x: item.x + 1,
+                              y: item.y,
+                              item: item,
+                            );
+                          },
+                          child: const Icon(Icons.add, size: 12),
+                        ),
                       )
                     : const SizedBox.shrink(),
               ),
@@ -221,18 +236,22 @@ class ScWizardCardPreview extends BaseComponent {
             width: 24,
             height: 24,
             child: addButtonBelow
-                ? InkWell(
-                    onTap: () {
-                      createNew(
-                        context: context,
-                        provider: provider,
-                        index: items.length,
-                        x: item.x,
-                        y: item.y + 1,
-                        item: item,
-                      );
-                    },
-                    child: const Icon(Icons.add, size: 12),
+                ? Semantics(
+                    label: l10n.r3aCreateInstance,
+                    button: true,
+                    child: InkWell(
+                      onTap: () {
+                        createNew(
+                          context: context,
+                          provider: provider,
+                          index: items.length,
+                          x: item.x,
+                          y: item.y + 1,
+                          item: item,
+                        );
+                      },
+                      child: const Icon(Icons.add, size: 12),
+                    ),
                   )
                 : const SizedBox.shrink(),
           ),

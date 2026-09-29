@@ -85,6 +85,7 @@ class ScWizedCard extends BaseComponent {
                         Icons.edit,
                         size: 16,
                       ),
+                      tooltip: entry.name.isEmpty ? l10n.scwAddName : l10n.scwEditName,
                     ),
                     const HelpButton(
                       HelpType.smartContractName,
@@ -141,6 +142,7 @@ class ScWizedCard extends BaseComponent {
                         Icons.edit,
                         size: 16,
                       ),
+                      tooltip: l10n.scwQuantityToMint,
                     ),
                     const HelpButton(
                       HelpType.mintQuantity,
@@ -192,6 +194,7 @@ class ScWizedCard extends BaseComponent {
                                               openFile(entry.primaryAsset!.file);
                                             }
                                           },
+                                          tooltip: l10n.actionOpenAsset,
                                           icon: const Icon(Icons.open_in_new)),
                                     ),
                                   ),
@@ -220,6 +223,7 @@ class ScWizedCard extends BaseComponent {
                                               provider.updatePrimaryAsset(item.index, null);
                                             }
                                           },
+                                          tooltip: l10n.scwDeletePrimaryAsset,
                                           icon: const Icon(Icons.delete)),
                                     ),
                                   ),
@@ -260,6 +264,7 @@ class ScWizedCard extends BaseComponent {
                         Icons.edit,
                         size: 16,
                       ),
+                      tooltip: entry.creatorName.isEmpty ? l10n.scwAddCreatorName : l10n.scwEditCreatorName,
                     ),
                     const HelpButton(
                       HelpType.minterName,
@@ -288,7 +293,7 @@ class ScWizedCard extends BaseComponent {
                       onPressed: () async {
                         final value = await PromptModal.show(
                           contextOverride: context,
-                          title: entry.name.isEmpty ? l10n.scwAddDescription : l10n.scwEditDescription,
+                          title: entry.description.isEmpty ? l10n.scwAddDescription : l10n.scwEditDescription,
                           validator: (value) => formValidatorNotEmpty(value, "Description"),
                           labelText: l10n.scwDescription,
                           initialValue: entry.description,
@@ -302,6 +307,7 @@ class ScWizedCard extends BaseComponent {
                         Icons.edit,
                         size: 16,
                       ),
+                      tooltip: entry.description.isEmpty ? l10n.scwAddDescription : l10n.scwEditDescription,
                     ),
                     const HelpButton(
                       HelpType.description,
@@ -340,6 +346,7 @@ class ScWizedCard extends BaseComponent {
                           Icons.add,
                           size: 16,
                         ),
+                        tooltip: l10n.scwAddRoyalty,
                       ),
                     if (entry.royalty != null)
                       IconButton(
@@ -363,6 +370,7 @@ class ScWizedCard extends BaseComponent {
                           Icons.delete,
                           size: 16,
                         ),
+                        tooltip: l10n.scwRemoveRoyalty,
                       ),
                   ],
                 ),
@@ -396,6 +404,7 @@ class ScWizedCard extends BaseComponent {
                         Icons.add,
                         size: 16,
                       ),
+                      tooltip: l10n.scwAddAdditionalAsset,
                     ),
                   ],
                 ),
@@ -416,6 +425,46 @@ class ScWizedCard extends BaseComponent {
                                     ? Expanded(
                                         child: Align(
                                           alignment: Alignment.centerLeft,
+                                          child: Semantics(
+                                            button: true,
+                                            child: InkWell(
+                                              onTap: () {
+                                                if (kIsWeb) {
+                                                  launchUrlString(asset.location!);
+                                                } else {
+                                                  openFile(asset.file);
+                                                }
+                                              },
+                                              child: Row(
+                                                children: [
+                                                  kIsWeb
+                                                      ? CachedNetworkImage(
+                                                          imageUrl: asset.location!,
+                                                          width: 32,
+                                                          height: 32,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Image.asset(
+                                                          asset.file.path,
+                                                          width: 32,
+                                                          height: 32,
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                  const SizedBox(width: 6),
+                                                  Text(
+                                                    asset.truncatedFileName(),
+                                                    maxLines: 1,
+                                                    overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Expanded(
+                                        child: Semantics(
+                                          button: true,
                                           child: InkWell(
                                             onTap: () {
                                               if (kIsWeb) {
@@ -424,45 +473,11 @@ class ScWizedCard extends BaseComponent {
                                                 openFile(asset.file);
                                               }
                                             },
-                                            child: Row(
-                                              children: [
-                                                kIsWeb
-                                                    ? CachedNetworkImage(
-                                                        imageUrl: asset.location!,
-                                                        width: 32,
-                                                        height: 32,
-                                                        fit: BoxFit.cover,
-                                                      )
-                                                    : Image.asset(
-                                                        asset.file.path,
-                                                        width: 32,
-                                                        height: 32,
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                const SizedBox(width: 6),
-                                                Text(
-                                                  asset.truncatedFileName(),
-                                                  maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ],
+                                            child: Text(
+                                              asset.fileName,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                          ),
-                                        ),
-                                      )
-                                    : Expanded(
-                                        child: InkWell(
-                                          onTap: () {
-                                            if (kIsWeb) {
-                                              launchUrlString(asset.location!);
-                                            } else {
-                                              openFile(asset.file);
-                                            }
-                                          },
-                                          child: Text(
-                                            asset.fileName,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ),
@@ -487,6 +502,7 @@ class ScWizedCard extends BaseComponent {
                                     Icons.delete,
                                     size: 16,
                                   ),
+                                  tooltip: l10n.scwRemoveAsset,
                                 ),
                               ],
                             ),
@@ -541,6 +557,7 @@ class ScWizedCard extends BaseComponent {
                             Icons.add,
                             size: 16,
                           ),
+                          tooltip: l10n.scwAddEvolvingPhase,
                         ),
                       ],
                     ),
@@ -579,6 +596,7 @@ class ScWizedCard extends BaseComponent {
                                         Icons.delete,
                                         size: 16,
                                       ),
+                                      tooltip: l10n.scwRemovePhase,
                                     ),
                                   ],
                                 ),
@@ -646,6 +664,7 @@ class ScWizedCard extends BaseComponent {
                 Icons.add,
                 size: 16,
               ),
+              tooltip: l10n.scwAddProperty,
             ),
           ],
         ),
@@ -712,6 +731,7 @@ class ScWizedCard extends BaseComponent {
                             Icons.delete,
                             size: 16,
                           ),
+                          tooltip: l10n.scwRemoveProperty,
                         ),
                       ],
                     ),

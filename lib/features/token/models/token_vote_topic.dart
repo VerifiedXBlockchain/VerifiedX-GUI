@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:intl/intl.dart';
 
@@ -50,6 +51,14 @@ class TokenVoteTopic with _$TokenVoteTopic {
 
   bool get isActive {
     return endsAt.isAfter(DateTime.now());
+  }
+
+  /// The vote [address] cast on this topic, from the Spyglass vote list that
+  /// the web topic carries. Null when the address has not voted, or on
+  /// desktop, where the vote comes from GetVotesByAddress instead.
+  WebTokenVoteTopicVoteDataItem? webVoteFor(String address) {
+    final normalized = address.trim().toLowerCase();
+    return webVoteList?.firstWhereOrNull((vote) => vote.address.trim().toLowerCase() == normalized);
   }
 }
 

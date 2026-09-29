@@ -17,6 +17,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../models/btc_transaction.dart';
 import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import '../../encrypt/utils.dart';
 
 class BtcTransactionListTile extends BaseStatefulComponent {
   final BtcTransaction transaction;
@@ -98,29 +99,37 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                         const SizedBox(
                           width: 4,
                         ),
-                        InkWell(
-                          onTap: () {
-                            _copy(widget.transaction.hash, l10n.bw2LabelHash);
-                          },
-                          child: const Icon(
-                            Icons.copy,
-                            size: 12,
+                        Semantics(
+                          label: l10n.actionCopyTransactionHash,
+                          button: true,
+                          child: InkWell(
+                            onTap: () {
+                              _copy(widget.transaction.hash, l10n.bw2LabelHash);
+                            },
+                            child: const Icon(
+                              Icons.copy,
+                              size: 12,
+                            ),
                           ),
                         ),
                         const SizedBox(
                           width: 4,
                         ),
-                        InkWell(
-                          onTap: () async {
-                            if (Env.btcIsTestNet) {
-                              launchUrlString("https://mempool.space/testnet4/tx/${transaction.hash}");
-                            } else {
-                              launchUrlString("https://mempool.space/tx/${transaction.hash}");
-                            }
-                          },
-                          child: const Icon(
-                            Icons.open_in_new,
-                            size: 12,
+                        Semantics(
+                          label: l10n.btcOpenInExplorer,
+                          button: true,
+                          child: InkWell(
+                            onTap: () async {
+                              if (Env.btcIsTestNet) {
+                                launchUrlString("https://mempool.space/testnet4/tx/${transaction.hash}");
+                              } else {
+                                launchUrlString("https://mempool.space/tx/${transaction.hash}");
+                              }
+                            },
+                            child: const Icon(
+                              Icons.open_in_new,
+                              size: 12,
+                            ),
                           ),
                         ),
                       ],
@@ -197,6 +206,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                             child: AppButton(
                               label: AppLocalizations.of(context).btcReplaceByFee,
                               onPressed: () async {
+                                if (!await passwordRequiredGuard(context, ref)) return;
                                 final feeRateStr = await PromptModal.show(
                                     title: AppLocalizations.of(context).btcRbfFeeRateTitle,
                                     body: l10n.bw2RbfFeeRateBody,
@@ -217,7 +227,18 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                                   return;
                                 }
 
-                                final hash = await BtcService().replaceByFee(widget.transaction.hash, feeRate);
+                                final hash = await BtcService().replaceByFee(
+                                  widget.transaction.hash,
+                                  feeRate,
+                                  confirmHighFee: (reason) async =>
+                                      await ConfirmDialog.show(
+                                        title: l10n.btcRbfHighFeeTitle,
+                                        body: l10n.btcRbfHighFeeBody(reason),
+                                        confirmText: l10n.btcRbfHighFeeConfirm,
+                                        cancelText: l10n.actionCancel,
+                                      ) ==
+                                      true,
+                                );
 
                                 if (hash != null) {
                                   final message = l10n.bw2ReplacedByFeeMessage(feeRate.toString(), hash);
@@ -301,6 +322,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                                     Icons.copy,
                                     size: 14,
                                   ),
+                                  tooltip: l10n.actionCopySignature,
                                 ),
                               )
                             ],
@@ -332,6 +354,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
               ),
               IconButton(
                 icon: Icon(_expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined),
+                tooltip: _expanded ? l10n.actionHideDetails : l10n.actionShowDetails,
                 onPressed: () {
                   setState(() {
                     _expanded = !_expanded;

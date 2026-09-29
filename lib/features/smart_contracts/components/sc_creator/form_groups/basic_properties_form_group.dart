@@ -125,7 +125,7 @@ class _CreatorName extends StatelessWidget {
         suffixIcon: const HelpButton(HelpType.minterName),
       ),
       onChanged: (val) {
-        provider.setName(val);
+        provider.setMinterName(val);
       },
     );
   }

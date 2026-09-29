@@ -44,6 +44,7 @@ class InfoDialog {
                 Navigator.of(context).pop();
               },
               icon: Icon(Icons.navigate_before),
+              tooltip: AppLocalizations.of(context).actionBack,
             ),
           if (icon != null)
             Padding(
@@ -304,6 +305,8 @@ class PromptModal {
     TextEditingController? controller,
     bool showUsdValue = false,
     CurrencyType currencyType = CurrencyType.vfx,
+    Key? fieldKey,
+    Key? submitKey,
   }) async {
     // final context = rootNavigatorKey.currentContext!;
     final context = contextOverride ?? rootNavigatorKey.currentContext!;
@@ -413,6 +416,7 @@ class PromptModal {
                           children: [
                             Expanded(
                               child: TextFormField(
+                                key: fieldKey,
                                 controller: _controller,
                                 obscureText: _obscureText,
                                 autofocus: true,
@@ -453,6 +457,9 @@ class PromptModal {
                                       ? Icons.remove_red_eye
                                       : Icons.hide_source_outlined,
                                 ),
+                                tooltip: _obscureText
+                                    ? AppLocalizations.of(context).actionShowPassword
+                                    : AppLocalizations.of(context).actionHidePassword,
                               )
                           ],
                         );
@@ -489,6 +496,7 @@ class PromptModal {
                 ),
               ),
             TextButton(
+              key: submitKey,
               style: TextButton.styleFrom(
                 primary: destructive
                     ? Colors.red.shade600
@@ -629,6 +637,9 @@ class AuthModal {
                                   ? Icons.remove_red_eye
                                   : Icons.hide_source_outlined,
                             ),
+                            tooltip: obscuringPassword
+                                ? AppLocalizations.of(context).actionShowPassword
+                                : AppLocalizations.of(context).actionHidePassword,
                           )
                         ],
                       );
@@ -878,6 +889,7 @@ class SpecialDialog<T> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
+                                tooltip: AppLocalizations.of(context).actionClose,
                               ),
                             ),
                           )
@@ -910,6 +922,7 @@ class ButterflyOptionsDialog {
                 color: Colors.white38,
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(),
+                tooltip: AppLocalizations.of(context).actionClose,
               ),
             ],
           ),

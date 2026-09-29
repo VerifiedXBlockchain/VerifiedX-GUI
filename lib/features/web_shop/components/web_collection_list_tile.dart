@@ -23,25 +23,28 @@ class WebCollectionTile extends BaseComponent {
         ),
         child: Card(
           color: Colors.black,
-          child: ListTile(
-            title: Text(collection.name),
-            subtitle: Text(
-              collection.description,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+          child: Semantics(
+            button: true,
+            child: ListTile(
+              title: Text(collection.name),
+              subtitle: Text(
+                collection.description,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                if (collection.shop == null) {
+                  print("Shop is null");
+                  return;
+                }
+                if (kIsWeb) {
+                  AutoRouter.of(context).push(webRouter.WebCollectionDetailScreenRoute(shopId: collection.shop!.id, collectionId: collection.id));
+                } else {
+                  AutoRouter.of(context).push(WebCollectionDetailScreenRoute(shopId: collection.shop!.id, collectionId: collection.id));
+                }
+              },
             ),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              if (collection.shop == null) {
-                print("Shop is null");
-                return;
-              }
-              if (kIsWeb) {
-                AutoRouter.of(context).push(webRouter.WebCollectionDetailScreenRoute(shopId: collection.shop!.id, collectionId: collection.id));
-              } else {
-                AutoRouter.of(context).push(WebCollectionDetailScreenRoute(shopId: collection.shop!.id, collectionId: collection.id));
-              }
-            },
           ),
         ),
       ),

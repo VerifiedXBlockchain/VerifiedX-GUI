@@ -186,14 +186,18 @@ class ListingDetails extends BaseComponent {
                                           ]),
                                         ),
                                         SizedBox(width: 8),
-                                        InkWell(
-                                          onTap: () async {
-                                            await Clipboard.setData(ClipboardData(text: listing.auction!.currentWinningAddress));
-                                            Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                                          },
-                                          child: Icon(
-                                            Icons.copy,
-                                            size: 16,
+                                        Semantics(
+                                          label: AppLocalizations.of(context).actionCopyAddress,
+                                          button: true,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              await Clipboard.setData(ClipboardData(text: listing.auction!.currentWinningAddress));
+                                              Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                                            },
+                                            child: Icon(
+                                              Icons.copy,
+                                              size: 16,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -304,60 +308,64 @@ class _PreviewState extends State<_Preview> {
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0),
-                  child: GestureDetector(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Image.file(
-                                    File(path
-                                        .replaceAll(".pdf", ".jpg")
-                                        .replaceAll(".png", ".jpg")
-                                        .replaceAll(".jpeg", ".jpg")
-                                        .replaceAll(".gif", ".jpg")
-                                        .replaceAll(".webp", ".jpg")),
-                                    fit: BoxFit.contain,
-                                    width: 512,
-                                    height: 512,
+                  child: Semantics(
+                    label: showThumbnail ? AppLocalizations.of(context).actionViewAsset : null,
+                    button: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Image.file(
+                                      File(path
+                                          .replaceAll(".pdf", ".jpg")
+                                          .replaceAll(".png", ".jpg")
+                                          .replaceAll(".jpeg", ".jpg")
+                                          .replaceAll(".gif", ".jpg")
+                                          .replaceAll(".webp", ".jpg")),
+                                      fit: BoxFit.contain,
+                                      width: 512,
+                                      height: 512,
+                                    ),
                                   ),
                                 ),
+                              );
+                            });
+                      },
+                      child: showThumbnail
+                          ? Consumer(builder: (context, ref, _) {
+                              return _Thumbnail(
+                                path: path,
+                                scId: widget.nft.id,
+                                ref: ref,
+                                fileNames: fileNames,
+                                fallbackIcon: icon,
+                                // originalExtension: extension.toLowerCase(),
+                              );
+                            })
+                          : Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    icon,
+                                    size: 32,
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(fileNameFromPath(path)),
+                                ],
                               ),
-                            );
-                          });
-                    },
-                    child: showThumbnail
-                        ? Consumer(builder: (context, ref, _) {
-                            return _Thumbnail(
-                              path: path,
-                              scId: widget.nft.id,
-                              ref: ref,
-                              fileNames: fileNames,
-                              fallbackIcon: icon,
-                              // originalExtension: extension.toLowerCase(),
-                            );
-                          })
-                        : Center(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  icon,
-                                  size: 32,
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(fileNameFromPath(path)),
-                              ],
                             ),
-                          ),
+                    ),
                   ),
                 );
               }).toList(),
@@ -377,6 +385,7 @@ class _PreviewState extends State<_Preview> {
                   onPressed: () {
                     controller.previousPage();
                   },
+                  tooltip: AppLocalizations.of(context).actionPrevious,
                 ),
                 DotsIndicator(
                   dotsCount: paths.length,
@@ -397,6 +406,7 @@ class _PreviewState extends State<_Preview> {
                   onPressed: () {
                     controller.nextPage();
                   },
+                  tooltip: AppLocalizations.of(context).actionNext,
                 ),
               ],
             ),
@@ -600,13 +610,17 @@ class _NftData extends StatelessWidget {
               Text(value),
               const SizedBox(width: 8),
               if (copyValue)
-                InkWell(
-                    onTap: () async {
-                      await Clipboard.setData(ClipboardData(text: value));
+                Semantics(
+                  label: AppLocalizations.of(context).actionCopy,
+                  button: true,
+                  child: InkWell(
+                      onTap: () async {
+                        await Clipboard.setData(ClipboardData(text: value));
 
-                      Toast.message(AppLocalizations.of(context).r3gLabelCopiedToClipboard(label));
-                    },
-                    child: const Icon(Icons.copy, size: 12)),
+                        Toast.message(AppLocalizations.of(context).r3gLabelCopiedToClipboard(label));
+                      },
+                      child: const Icon(Icons.copy, size: 12)),
+                ),
             ],
           ),
         ),
@@ -686,6 +700,7 @@ class _BuyNow extends BaseComponent {
         ),
         const SizedBox(height: 16),
         AppButton(
+          key: const Key('remote_shop:buy_now'),
           label: AppLocalizations.of(context).shopBuyNow,
           icon: Icons.money,
           size: AppSizeVariant.Lg,
@@ -796,6 +811,7 @@ class _Auction extends BaseComponent {
           Row(
             children: [
               AppButton(
+                  key: const Key('remote_shop:bid_now'),
                   label: AppLocalizations.of(context).shopBidNow,
                   icon: Icons.gavel,
                   size: AppSizeVariant.Lg,
@@ -815,6 +831,7 @@ class _Auction extends BaseComponent {
               const SizedBox(width: 8),
               if (listing.auction != null)
                 AppButton(
+                  key: const Key('remote_shop:auction_details'),
                   label: AppLocalizations.of(context).shopDetailsLabel,
                   icon: Icons.info,
                   size: AppSizeVariant.Lg,
@@ -853,6 +870,7 @@ class BidHistoryButton extends BaseComponent {
     final provider = ref.read(bidListProvider(listing.familyIdentifier).notifier);
 
     return AppButton(
+      key: const Key('remote_shop:bid_history'),
       label: AppLocalizations.of(context).shopBidHistory,
       icon: Icons.punch_clock,
       size: AppSizeVariant.Lg,
@@ -1109,6 +1127,7 @@ class __ThumbnailState extends State<_Thumbnail> {
                   FileImage(File(updatedFileName)).evict();
                   widget.ref.read(thumbnailFetcherProvider.notifier).addToQueue(widget.scId, widget.fileNames, true);
                 },
+                tooltip: AppLocalizations.of(context).actionRefresh,
               ),
               Text(
                 err.toString(),

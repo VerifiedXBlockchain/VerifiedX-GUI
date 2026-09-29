@@ -36,23 +36,26 @@ class WebListingDetailsListTile extends BaseComponent {
             child: Card(
               margin: EdgeInsets.zero,
               color: Colors.white.withOpacity(0.03),
-              child: ListTile(
-                title: Text(nft.name),
-                subtitle: Text(
-                  nft.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: isExpanded ? Icon(Icons.arrow_drop_up) : Icon(Icons.arrow_drop_down),
-                onTap: () {
-                  if (isExpanded) {
-                    ref.read(remoteShopExpandedListingsProvider.notifier).remove(listing.id.toString());
-                  } else {
-                    ref.read(remoteShopExpandedListingsProvider.notifier).add(listing.id.toString());
-                  }
-                },
-                leading: _Thumbnail(
-                  listing: listing,
+              child: Semantics(
+                button: true,
+                child: ListTile(
+                  title: Text(nft.name),
+                  subtitle: Text(
+                    nft.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: isExpanded ? Icon(Icons.arrow_drop_up) : Icon(Icons.arrow_drop_down),
+                  onTap: () {
+                    if (isExpanded) {
+                      ref.read(remoteShopExpandedListingsProvider.notifier).remove(listing.id.toString());
+                    } else {
+                      ref.read(remoteShopExpandedListingsProvider.notifier).add(listing.id.toString());
+                    }
+                  },
+                  leading: _Thumbnail(
+                    listing: listing,
+                  ),
                 ),
               ),
             ),

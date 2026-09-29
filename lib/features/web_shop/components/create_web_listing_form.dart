@@ -90,6 +90,7 @@ class CreateListingFormGroup extends BaseComponent {
             padding: const EdgeInsets.only(top: 16.0),
             child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               AppButton(
+                key: const Key('web_shop:listing_save'),
                 label: l10n.actionSave,
                 variant: AppColorVariant.Success,
                 onPressed: () {
@@ -511,6 +512,7 @@ class _StartDate extends BaseComponent {
                     onPressed: () {
                       _showDatePicker(context, ref, true);
                     },
+                    tooltip: l10n.actionPickDate,
                   ),
                 ),
               ),
@@ -536,6 +538,7 @@ class _StartDate extends BaseComponent {
                     onPressed: () {
                       _showTimePicker(context, ref, true);
                     },
+                    tooltip: l10n.actionPickTime,
                   ),
                 ),
               ),
@@ -586,6 +589,7 @@ class _EndDate extends BaseComponent {
                     onPressed: () {
                       _showDatePicker(context, ref, false);
                     },
+                    tooltip: l10n.actionPickDate,
                   ),
                 ),
               ),
@@ -611,6 +615,7 @@ class _EndDate extends BaseComponent {
                     onPressed: () {
                       _showTimePicker(context, ref, false);
                     },
+                    tooltip: l10n.actionPickTime,
                   ),
                 ),
               ),

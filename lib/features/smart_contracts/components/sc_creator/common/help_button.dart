@@ -74,6 +74,7 @@ class HelpButton extends StatelessWidget {
         color: color != null ? color! : Theme.of(context).colorScheme.secondary.withOpacity(subtle ? 0.7 : 1),
         size: subtle ? 16 : 22,
       ),
+      tooltip: globalL10n.actionHelp,
       onPressed: () {
         InfoDialog.show(title: _title, body: _body, closeText: globalL10n.actionClose, icon: Icons.help, headerColor: Theme.of(context).colorScheme.secondary);
       },

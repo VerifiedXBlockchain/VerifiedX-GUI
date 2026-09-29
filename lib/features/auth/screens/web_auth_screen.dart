@@ -5,10 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/colors.dart';
 import '../../../core/utils.dart';
 import '../../../utils/toast.dart';
+import '../../../utils/web_route_paths.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../../core/models/web_session_model.dart';
 import '../../web/components/web_wordmark.dart';
 import '../../../core/services/password_prompt_service.dart';
+import '../../../core/services/web_account_password_store.dart';
 
 import '../../../core/app_constants.dart';
 import '../../../core/app_router.gr.dart';
@@ -157,7 +159,9 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
 
     // Check for pending redirect URL
     final storage = singleton<Storage>();
-    final pendingRedirect = storage.getString(Storage.PENDING_REDIRECT_URL);
+    final storedRedirect = storage.getString(Storage.PENDING_REDIRECT_URL);
+    final pendingRedirect =
+        storedRedirect != null ? normalizeWebRoutePath(storedRedirect) : null;
 
     if (pendingRedirect != null && pendingRedirect.isNotEmpty) {
       // Clear the pending redirect
@@ -242,7 +246,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
               ),
             ),
             Text(
-              storage.getString(Storage.WEB_PRIMARY_ADDRESS) ??
+              WebAccountPasswordStore(storage).unlockTargetAddress() ??
                   l10n.authUnknownAddress,
               style: TextStyle(
                 color: Colors.white.withOpacity(0.7),
@@ -252,14 +256,16 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             ),
             const SizedBox(height: 16),
             AppButton(
+              key: const Key('auth:enter_password'),
               label: l10n.authEnterPassword,
               icon: Icons.lock,
               onPressed: () async {
-                final password =
-                    await PasswordPromptService.promptAndVerifyPassword(
+                final password = await PasswordPromptService.promptPassword(
                   context,
                   title: l10n.authEnterPassword,
                   customMessage: l10n.authEnterPasswordBody,
+                  fieldKey: const ValueKey('auth:password'),
+                  submitKey: const Key('auth:password_submit'),
                 );
 
                 if (password != null) {
@@ -269,7 +275,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
                   if (success) {
                     redirectToDashboard(false);
                   } else {
-                    Toast.error(l10n.authDecryptFailed);
+                    Toast.error(l10n.r3eIncorrectPassword);
                   }
                 }
               },
@@ -278,6 +284,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: AppButton(
+                key: const Key('auth:logout'),
                 label: l10n.authLogout,
                 type: AppButtonType.Text,
                 underlined: true,
@@ -289,6 +296,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             ),
           ] else
             AppButton(
+              key: const Key('auth:login'),
               label: l10n.authLoginCreateAccount,
               icon: Icons.upload,
               onPressed: () {
@@ -314,6 +322,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 12.0),
               child: AppButton(
+                key: const Key('auth:resume_session'),
                 label: l10n.authResumeSession,
                 variant: AppColorVariant.Light,
                 type: AppButtonType.Text,

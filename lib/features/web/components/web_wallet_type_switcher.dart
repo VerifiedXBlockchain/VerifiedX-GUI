@@ -78,17 +78,21 @@ class WebWalletTypeSwitcher extends BaseComponent {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        InkWell(
-          onTap: () async {
-            await Clipboard.setData(
-              ClipboardData(text: selectedAddress),
-            );
-            Toast.message("$selectedAddress copied to clipboard");
-          },
-          child: Icon(
-            Icons.copy,
-            size: 12,
-            color: color,
+        Semantics(
+          label: AppLocalizations.of(context).actionCopyAddress,
+          button: true,
+          child: InkWell(
+            onTap: () async {
+              await Clipboard.setData(
+                ClipboardData(text: selectedAddress),
+              );
+              Toast.message("$selectedAddress copied to clipboard");
+            },
+            child: Icon(
+              Icons.copy,
+              size: 12,
+              color: color,
+            ),
           ),
         ),
         SizedBox(width: 4),
@@ -409,6 +413,7 @@ class _ManageAccountRow extends StatelessWidget {
           handleReveal();
         },
         icon: Icon(Icons.remove_red_eye),
+        tooltip: AppLocalizations.of(context).walletRevealPrivateKey,
       )
     ]);
   }

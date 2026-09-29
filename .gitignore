@@ -69,3 +69,6 @@ app.*.map.json
 # Scratch files
 scratch-in.txt
 scratch-out.txt
+
+# Waypoint review pointer (local)
+.waypoint/

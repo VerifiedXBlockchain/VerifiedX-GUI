@@ -14,13 +14,13 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/generators.dart';
 import '../../../utils/guards.dart';
 import '../../asset/asset.dart';
-import '../../bridge/providers/wallet_info_provider.dart';
 import '../../nft/providers/minted_nft_list_provider.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../nft/services/nft_service.dart';
 import '../../wallet/models/wallet.dart';
 import '../components/sc_creator/common/compile_animation.dart';
 import '../features/evolve/evolve.dart';
+import '../features/evolve/evolve_block_height.dart';
 import '../features/evolve/evolve_form_provider.dart';
 import '../features/multi_asset/multi_asset_provider.dart';
 import '../features/royalty/royalty.dart';
@@ -38,6 +38,7 @@ import '../services/smart_contract_service.dart';
 import 'draft_smart_contracts_provider.dart';
 import 'my_smart_contracts_provider.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../../l10n/l10n_helper.dart';
 
 class CreateSmartContractProvider extends StateNotifier<SmartContract> {
   final Ref ref;
@@ -67,7 +68,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
     ref.read(multiAssetFormProvider.notifier).clear();
 
     final sc = SmartContract(
-      owner: kIsWeb ? ref.read(webSessionProvider).currentWallet! : ref.read(sessionProvider).currentWallet!,
+      owner: kIsWeb ? ref.read(webSessionProvider).vfxWallet! : ref.read(sessionProvider).currentWallet!,
     );
 
     setSmartContract(sc);
@@ -86,7 +87,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
   }
 
   void setDescription(String value) {
-    state = state.copyWith(name: value);
+    state = state.copyWith(description: value);
   }
 
   void setPrimaryAsset(Asset? asset) {
@@ -259,6 +260,9 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
 
   void removeMultiAsset(MultiAsset multiAsset) {
     final index = state.multiAssets.indexWhere((m) => m.id == multiAsset.id);
+    if (index == -1) {
+      return;
+    }
     state = state.copyWith(multiAssets: [...state.multiAssets]..removeAt(index));
   }
 
@@ -361,18 +365,18 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
     final List<String> errors = [];
 
     if (state.primaryAsset == null) {
-      errors.add("- Asset is required");
+      errors.add("- ${globalL10n.r3aAssetIsRequired}");
     }
     if (state.name.isEmpty) {
-      errors.add("- Name is required");
+      errors.add("- ${globalL10n.r3aNameIsRequired}");
     }
 
     if (state.minterName.isEmpty) {
-      errors.add("- Minter name is required");
+      errors.add("- ${globalL10n.r3aMinterNameIsRequired}");
     }
 
     if (state.description.isEmpty) {
-      errors.add("- Description is required");
+      errors.add("- ${globalL10n.r3aDescriptionIsRequired}");
     }
 
     // int filesize = 0;
@@ -394,10 +398,11 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
       return false;
     }
 
+    final currentBlockHeight = currentEvolveBlockHeight(ref);
     for (final evo in state.evolves) {
       for (final phase in evo.phases) {
-        if (phase.blockHeight != null && ref.read(walletInfoProvider) != null) {
-          if (phase.blockHeight! < ref.read(walletInfoProvider)!.blockHeight) {
+        if (phase.blockHeight != null && currentBlockHeight != null) {
+          if (phase.blockHeight! < currentBlockHeight) {
             return true;
           }
         }
@@ -507,7 +512,7 @@ class CreateSmartContractProvider extends StateNotifier<SmartContract> {
         : ref.read(nftListProvider.notifier).reloadCurrentPage();
 
     if (details != null) {
-      final wallet = kIsWeb ? ref.read(webSessionProvider).currentWallet! : ref.read(sessionProvider).currentWallet!;
+      final wallet = kIsWeb ? ref.read(webSessionProvider).vfxWallet! : ref.read(sessionProvider).currentWallet!;
       final sc = SmartContract.fromCompiled(details, wallet);
       ref.read(createSmartContractProvider.notifier).setSmartContract(
             sc.copyWith(
@@ -565,7 +570,7 @@ final createSmartContractProvider = StateNotifierProvider<CreateSmartContractPro
   (ref) {
     if (kIsWeb) {
       final initial = SmartContract(
-        owner: ref.read(webSessionProvider).currentWallet!,
+        owner: ref.read(webSessionProvider).vfxWallet!,
       );
       return CreateSmartContractProvider(ref, initial);
     } else {

@@ -19,7 +19,6 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../auth/screens/web_auth_screen.dart';
 import '../../btc_web/services/btc_web_service.dart';
-import '../../faucet/screens/faucet_screen.dart';
 import '../../navigation/constants.dart';
 import '../../navigation/root_container.dart';
 import '../../price/components/coin_price_summary.dart';
@@ -129,69 +128,75 @@ class WebHomeScreen extends BaseScreen {
                   SizedBox(
                     height: 4,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      ref
-                          .read(currencySegementedButtonProvider.notifier)
-                          .set(CurrencyType.vfx);
-                      Navigator.of(webDashboardScaffoldKey.currentContext!)
-                          .push(
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (_) => WebPriceChartScreen(
-                            isBtc: false,
+                  Semantics(
+                    button: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(currencySegementedButtonProvider.notifier)
+                            .set(CurrencyType.vfx);
+                        Navigator.of(webDashboardScaffoldKey.currentContext!)
+                            .push(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (_) => WebPriceChartScreen(
+                              isBtc: false,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: CoinPriceSummary(
-                      mini: true,
-                      type: CoinPriceSummaryType.vfx,
-                      actions: [
-                        AppButton(
-                          onPressed: () async {
-                            AccountUtils.getCoin(
-                                context, ref, VfxOrBtcOption.vfx);
-                          },
-                          variant: AppColorVariant.Secondary,
-                          type: AppButtonType.Outlined,
-                          label: AppLocalizations.of(context).bw2StepGetVfx,
-                        ),
-                      ],
+                        );
+                      },
+                      child: CoinPriceSummary(
+                        mini: true,
+                        type: CoinPriceSummaryType.vfx,
+                        actions: [
+                          AppButton(
+                            onPressed: () async {
+                              AccountUtils.getCoin(
+                                  context, ref, VfxOrBtcOption.vfx);
+                            },
+                            variant: AppColorVariant.Secondary,
+                            type: AppButtonType.Outlined,
+                            label: AppLocalizations.of(context).bw2StepGetVfx,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   SizedBox(
                     height: 16,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      ref
-                          .read(currencySegementedButtonProvider.notifier)
-                          .set(CurrencyType.btc);
-                      Navigator.of(webDashboardScaffoldKey.currentContext!)
-                          .push(
-                        MaterialPageRoute(
-                          fullscreenDialog: true,
-                          builder: (_) => WebPriceChartScreen(
-                            isBtc: true,
+                  Semantics(
+                    button: true,
+                    child: GestureDetector(
+                      onTap: () {
+                        ref
+                            .read(currencySegementedButtonProvider.notifier)
+                            .set(CurrencyType.btc);
+                        Navigator.of(webDashboardScaffoldKey.currentContext!)
+                            .push(
+                          MaterialPageRoute(
+                            fullscreenDialog: true,
+                            builder: (_) => WebPriceChartScreen(
+                              isBtc: true,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    child: CoinPriceSummary(
-                      mini: true,
-                      type: CoinPriceSummaryType.btc,
-                      actions: [
-                        AppButton(
-                          onPressed: () {
-                            AccountUtils.getCoin(
-                                context, ref, VfxOrBtcOption.btc);
-                          },
-                          label: AppLocalizations.of(context).r3eGetBtc,
-                          variant: AppColorVariant.Btc,
-                          type: AppButtonType.Outlined,
-                        ),
-                      ],
+                        );
+                      },
+                      child: CoinPriceSummary(
+                        mini: true,
+                        type: CoinPriceSummaryType.btc,
+                        actions: [
+                          AppButton(
+                            onPressed: () {
+                              AccountUtils.getCoin(
+                                  context, ref, VfxOrBtcOption.btc);
+                            },
+                            label: AppLocalizations.of(context).r3eGetBtc,
+                            variant: AppColorVariant.Btc,
+                            type: AppButtonType.Outlined,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const _Actions(),
@@ -487,48 +492,57 @@ class _Actions extends BaseComponent {
                           children: [
                             AppCard(
                               padding: 0,
-                              child: ListTile(
-                                  title: Text(AppLocalizations.of(context).homeJoinDiscord),
-                                  leading: Icon(
-                                    FontAwesomeIcons.discord,
-                                    size: 18,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString(
-                                        "https://discord.gg/7cd5ebDQCj");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                    title: Text(AppLocalizations.of(context).homeJoinDiscord),
+                                    leading: Icon(
+                                      FontAwesomeIcons.discord,
+                                      size: 18,
+                                    ),
+                                    onTap: () {
+                                      launchUrlString(
+                                          "https://discord.gg/7cd5ebDQCj");
+                                    },
+                                    trailing: Icon(Icons.open_in_new, size: 16)),
+                              ),
                             ),
                             SizedBox(
                               height: 6,
                             ),
                             AppCard(
                               padding: 0,
-                              child: ListTile(
-                                  title: Text(AppLocalizations.of(context).homeVisitWebsite),
-                                  leading: Icon(
-                                    Icons.link,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString("https://verifiedx.io");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                    title: Text(AppLocalizations.of(context).homeVisitWebsite),
+                                    leading: Icon(
+                                      Icons.link,
+                                    ),
+                                    onTap: () {
+                                      launchUrlString("https://verifiedx.io");
+                                    },
+                                    trailing: Icon(Icons.open_in_new, size: 16)),
+                              ),
                             ),
                             SizedBox(
                               height: 6,
                             ),
                             AppCard(
                               padding: 0,
-                              child: ListTile(
-                                  title: Text(AppLocalizations.of(context).homeReadDocs),
-                                  leading: Icon(
-                                    Icons.read_more,
-                                  ),
-                                  onTap: () {
-                                    launchUrlString(
-                                        "https://docs.verifiedx.io");
-                                  },
-                                  trailing: Icon(Icons.open_in_new, size: 16)),
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                    title: Text(AppLocalizations.of(context).homeReadDocs),
+                                    leading: Icon(
+                                      Icons.read_more,
+                                    ),
+                                    onTap: () {
+                                      launchUrlString(
+                                          "https://docs.verifiedx.io");
+                                    },
+                                    trailing: Icon(Icons.open_in_new, size: 16)),
+                              ),
                             )
                           ],
                         );
@@ -601,16 +615,6 @@ class _Actions extends BaseComponent {
                       );
                     }
                   }),
-              // AppVerticalIconButton(
-              //   label: "Faucet",
-              //   icon: FontAwesomeIcons.faucet,
-              //   prettyIconType: PrettyIconType.custom,
-              //   onPressed: () {
-              //     Navigator.of(rootNavigatorKey.currentContext!).push(MaterialPageRoute(
-              //       builder: (context) => FaucetScreen(),
-              //     ));
-              //   },
-              // ),
 
               if (ref.read(webSessionProvider).keypair != null && !isMobile)
                 AppVerticalIconButton(

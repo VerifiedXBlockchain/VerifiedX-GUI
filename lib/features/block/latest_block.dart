@@ -31,21 +31,24 @@ class LatestBlock extends BaseComponent {
     }
     return Transform.translate(
       offset: Offset(1, 1),
-      child: GestureDetector(
-        onTap: () {
-          ref.read(walletInfoProvider.notifier).infoLoop(false);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.getGray(ColorShade.s300),
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0)),
-            border: Border.all(
-              color: Colors.white.withOpacity(0.15),
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () {
+            ref.read(walletInfoProvider.notifier).infoLoop(false);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.getGray(ColorShade.s300),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(16.0)),
+              border: Border.all(
+                color: Colors.white.withOpacity(0.15),
+              ),
             ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: LatestBlockContent(latestBlock: latestBlock),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: LatestBlockContent(latestBlock: latestBlock),
+            ),
           ),
         ),
       ),
@@ -107,22 +110,25 @@ class LatestBlockContent extends StatelessWidget {
             ),
             if (latestBlock.transactions.isNotEmpty)
               Expanded(
-                child: InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                        context: context,
-                        builder: (context) {
-                          return BlockTransactionListBottomSheet(transactions: latestBlock.transactions);
-                        });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Text(
-                      l10n.r3dViewTxs,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: 10, color: Theme.of(context).colorScheme.secondary, decoration: TextDecoration.underline),
+                child: Semantics(
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return BlockTransactionListBottomSheet(transactions: latestBlock.transactions);
+                          });
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 4.0),
+                      child: Text(
+                        l10n.r3dViewTxs,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontSize: 10, color: Theme.of(context).colorScheme.secondary, decoration: TextDecoration.underline),
+                      ),
                     ),
                   ),
                 ),
@@ -156,66 +162,72 @@ class LatestBlockContent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            InkWell(
-              onTap: () {
-                launchUrlString(Env.explorerWebsiteBaseUrl);
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    l10n.r3dVfxExplorer,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Theme.of(context).colorScheme.secondary,
-                      decoration: TextDecoration.underline,
+            Semantics(
+              button: true,
+              child: InkWell(
+                onTap: () {
+                  launchUrlString(Env.explorerWebsiteBaseUrl);
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.r3dVfxExplorer,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Theme.of(context).colorScheme.secondary,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Transform.translate(
-                    offset: Offset(0, 1),
-                    child: Icon(
-                      Icons.open_in_new,
-                      size: 10,
-                      color: Theme.of(context).colorScheme.secondary,
+                    SizedBox(
+                      width: 2,
                     ),
-                  ),
-                ],
+                    Transform.translate(
+                      offset: Offset(0, 1),
+                      child: Icon(
+                        Icons.open_in_new,
+                        size: 10,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            InkWell(
-              onTap: () {
-                if (Env.btcIsTestNet) {
-                  launchUrlString("https://mempool.space/testnet4/");
-                } else {
-                  launchUrlString("https://mempool.space/");
-                }
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    l10n.r3dBtcExplorer,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Theme.of(context).colorScheme.btcOrange,
-                      decoration: TextDecoration.underline,
+            Semantics(
+              button: true,
+              child: InkWell(
+                onTap: () {
+                  if (Env.btcIsTestNet) {
+                    launchUrlString("https://mempool.space/testnet4/");
+                  } else {
+                    launchUrlString("https://mempool.space/");
+                  }
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      l10n.r3dBtcExplorer,
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: Theme.of(context).colorScheme.btcOrange,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 2,
-                  ),
-                  Transform.translate(
-                    offset: Offset(0, 1),
-                    child: Icon(
-                      Icons.open_in_new,
-                      size: 10,
-                      color: Theme.of(context).colorScheme.btcOrange,
+                    SizedBox(
+                      width: 2,
                     ),
-                  ),
-                ],
+                    Transform.translate(
+                      offset: Offset(0, 1),
+                      child: Icon(
+                        Icons.open_in_new,
+                        size: 10,
+                        color: Theme.of(context).colorScheme.btcOrange,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

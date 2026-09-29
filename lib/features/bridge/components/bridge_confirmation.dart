@@ -115,6 +115,7 @@ class BridgeConfirmation extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppButton(
+                key: const Key('bridge:back'),
                 label: l10n.prvBack,
                 type: AppButtonType.Text,
                 variant: AppColorVariant.Light,
@@ -123,6 +124,7 @@ class BridgeConfirmation extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               AppButton(
+                key: const Key('bridge:confirm'),
                 label: l10n.prvBridgeConfirmAndBridge,
                 variant: AppColorVariant.Success,
                 processing: isSubmitting,

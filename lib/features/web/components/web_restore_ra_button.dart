@@ -50,27 +50,31 @@ class WebRestoreRaButton extends BaseComponent {
           return;
         }
 
-        final data = utf8.decode(base64.decode(restoreCode));
+        final privateKeys = decodeVaultRestoreCode(restoreCode);
+        if (privateKeys == null) {
+          Toast.error(l10n.webVaultRestoreCodeInvalid);
+          return;
+        }
 
-        final primaryPrivateKey = data.split("//")[0];
+        final RaKeypair raKeypair;
+        try {
+          final tempKeypair = await KeygenService.importReserveAccountPrivateKey(privateKeys.primary);
+          final recoveryKeypair = await KeygenService.importPrivateKey(privateKeys.recovery);
 
-        final tempKeypair = await KeygenService.importReserveAccountPrivateKey(
-            primaryPrivateKey);
-
-        final recoveryPrivateKey = data.split("//")[1];
-
-        final recoveryKeypair =
-            await KeygenService.importPrivateKey(recoveryPrivateKey);
-
-        final raKeypair = RaKeypair(
-          private: tempKeypair.private,
-          address: tempKeypair.address,
-          public: tempKeypair.public,
-          recoveryPrivate: recoveryKeypair.private,
-          recoveryAddress: recoveryKeypair.address,
-          recoveryPublic: recoveryKeypair.public,
-          restoreCode: restoreCode,
-        );
+          raKeypair = RaKeypair(
+            private: tempKeypair.private,
+            address: tempKeypair.address,
+            public: tempKeypair.public,
+            recoveryPrivate: recoveryKeypair.private,
+            recoveryAddress: recoveryKeypair.address,
+            recoveryPublic: recoveryKeypair.public,
+            restoreCode: restoreCode.trim(),
+          );
+        } catch (e) {
+          print("Vault restore key import failed: $e");
+          Toast.error(l10n.webVaultRestoreCodeInvalid);
+          return;
+        }
 
         ref.read(webSessionProvider.notifier).setRaKeypair(raKeypair);
 
@@ -84,4 +88,30 @@ class WebRestoreRaButton extends BaseComponent {
       },
     );
   }
+}
+
+/// The primary and recovery private keys packed in a Vault restore code
+/// (base64 of "<primary>//<recovery>").
+class VaultRestoreKeys {
+  final String primary;
+  final String recovery;
+
+  const VaultRestoreKeys(this.primary, this.recovery);
+}
+
+/// Decodes a pasted restore code, or returns null when it is not valid base64,
+/// not UTF-8, or does not hold two non-empty keys.
+VaultRestoreKeys? decodeVaultRestoreCode(String restoreCode) {
+  final String data;
+  try {
+    data = utf8.decode(base64.decode(restoreCode.trim()));
+  } on FormatException {
+    return null;
+  }
+
+  final parts = data.split("//");
+  if (parts.length < 2 || parts[0].isEmpty || parts[1].isEmpty) {
+    return null;
+  }
+  return VaultRestoreKeys(parts[0], parts[1]);
 }

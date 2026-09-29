@@ -1,3 +1,4 @@
+import '../../../l10n/generated/app_localizations.dart';
 import '../../../l10n/l10n_helper.dart';
 
 enum BtcFeeRatePreset {
@@ -12,20 +13,24 @@ enum BtcFeeRatePreset {
   final String apiValue;
   const BtcFeeRatePreset(this.apiValue);
 
-  String get label {
+  String get label => labelWith(globalL10n);
+
+  /// Label from an explicit localizations instance, for widgets that already
+  /// hold one (and for tests, which have no root navigator to resolve).
+  String labelWith(AppLocalizations l10n) {
     switch (this) {
       case BtcFeeRatePreset.minimum:
-        return globalL10n.r3fFeePresetMinimum;
+        return l10n.r3fFeePresetMinimum;
       case BtcFeeRatePreset.economy:
-        return globalL10n.r3fFeePresetEconomy;
+        return l10n.r3fFeePresetEconomy;
       case BtcFeeRatePreset.hour:
-        return globalL10n.r3fFeePresetHour;
+        return l10n.r3fFeePresetHour;
       case BtcFeeRatePreset.halfHour:
-        return globalL10n.r3fFeePresetHalfHour;
+        return l10n.r3fFeePresetHalfHour;
       case BtcFeeRatePreset.fastest:
-        return globalL10n.r3fFeePresetFastest;
+        return l10n.r3fFeePresetFastest;
       case BtcFeeRatePreset.custom:
-        return globalL10n.r3fFeePresetCustom;
+        return l10n.r3fFeePresetCustom;
     }
   }
 }

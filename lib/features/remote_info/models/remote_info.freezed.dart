@@ -409,8 +409,8 @@ RemoteInfoSnapshot _$RemoteInfoSnapshotFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$RemoteInfoSnapshot {
   int get height => throw _privateConstructorUsedError;
-  String get url => throw _privateConstructorUsedError;
-  String get date => throw _privateConstructorUsedError;
+  String? get url => throw _privateConstructorUsedError;
+  String? get date => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -424,7 +424,7 @@ abstract class $RemoteInfoSnapshotCopyWith<$Res> {
           RemoteInfoSnapshot value, $Res Function(RemoteInfoSnapshot) then) =
       _$RemoteInfoSnapshotCopyWithImpl<$Res, RemoteInfoSnapshot>;
   @useResult
-  $Res call({int height, String url, String date});
+  $Res call({int height, String? url, String? date});
 }
 
 /// @nodoc
@@ -441,22 +441,22 @@ class _$RemoteInfoSnapshotCopyWithImpl<$Res, $Val extends RemoteInfoSnapshot>
   @override
   $Res call({
     Object? height = null,
-    Object? url = null,
-    Object? date = null,
+    Object? url = freezed,
+    Object? date = freezed,
   }) {
     return _then(_value.copyWith(
       height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
-      url: null == url
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: null == date
+              as String?,
+      date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ) as $Val);
   }
 }
@@ -469,7 +469,7 @@ abstract class _$$_RemoteInfoSnapshotCopyWith<$Res>
       __$$_RemoteInfoSnapshotCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int height, String url, String date});
+  $Res call({int height, String? url, String? date});
 }
 
 /// @nodoc
@@ -484,22 +484,22 @@ class __$$_RemoteInfoSnapshotCopyWithImpl<$Res>
   @override
   $Res call({
     Object? height = null,
-    Object? url = null,
-    Object? date = null,
+    Object? url = freezed,
+    Object? date = freezed,
   }) {
     return _then(_$_RemoteInfoSnapshot(
       height: null == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
               as int,
-      url: null == url
+      url: freezed == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: null == date
+              as String?,
+      date: freezed == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
     ));
   }
 }
@@ -507,8 +507,7 @@ class __$$_RemoteInfoSnapshotCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_RemoteInfoSnapshot extends _RemoteInfoSnapshot {
-  _$_RemoteInfoSnapshot(
-      {required this.height, required this.url, required this.date})
+  _$_RemoteInfoSnapshot({required this.height, this.url, this.date})
       : super._();
 
   factory _$_RemoteInfoSnapshot.fromJson(Map<String, dynamic> json) =>
@@ -517,9 +516,9 @@ class _$_RemoteInfoSnapshot extends _RemoteInfoSnapshot {
   @override
   final int height;
   @override
-  final String url;
+  final String? url;
   @override
-  final String date;
+  final String? date;
 
   @override
   String toString() {
@@ -558,8 +557,8 @@ class _$_RemoteInfoSnapshot extends _RemoteInfoSnapshot {
 abstract class _RemoteInfoSnapshot extends RemoteInfoSnapshot {
   factory _RemoteInfoSnapshot(
       {required final int height,
-      required final String url,
-      required final String date}) = _$_RemoteInfoSnapshot;
+      final String? url,
+      final String? date}) = _$_RemoteInfoSnapshot;
   _RemoteInfoSnapshot._() : super._();
 
   factory _RemoteInfoSnapshot.fromJson(Map<String, dynamic> json) =
@@ -568,9 +567,9 @@ abstract class _RemoteInfoSnapshot extends RemoteInfoSnapshot {
   @override
   int get height;
   @override
-  String get url;
+  String? get url;
   @override
-  String get date;
+  String? get date;
   @override
   @JsonKey(ignore: true)
   _$$_RemoteInfoSnapshotCopyWith<_$_RemoteInfoSnapshot> get copyWith =>
@@ -585,7 +584,7 @@ RemoteInfo _$RemoteInfoFromJson(Map<String, dynamic> json) {
 mixin _$RemoteInfo {
   RemoteInfoGui get gui => throw _privateConstructorUsedError;
   RemoteInfoCli get cli => throw _privateConstructorUsedError;
-  RemoteInfoSnapshot get snapshot => throw _privateConstructorUsedError;
+  RemoteInfoSnapshot? get snapshot => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -600,11 +599,11 @@ abstract class $RemoteInfoCopyWith<$Res> {
       _$RemoteInfoCopyWithImpl<$Res, RemoteInfo>;
   @useResult
   $Res call(
-      {RemoteInfoGui gui, RemoteInfoCli cli, RemoteInfoSnapshot snapshot});
+      {RemoteInfoGui gui, RemoteInfoCli cli, RemoteInfoSnapshot? snapshot});
 
   $RemoteInfoGuiCopyWith<$Res> get gui;
   $RemoteInfoCliCopyWith<$Res> get cli;
-  $RemoteInfoSnapshotCopyWith<$Res> get snapshot;
+  $RemoteInfoSnapshotCopyWith<$Res>? get snapshot;
 }
 
 /// @nodoc
@@ -622,7 +621,7 @@ class _$RemoteInfoCopyWithImpl<$Res, $Val extends RemoteInfo>
   $Res call({
     Object? gui = null,
     Object? cli = null,
-    Object? snapshot = null,
+    Object? snapshot = freezed,
   }) {
     return _then(_value.copyWith(
       gui: null == gui
@@ -633,10 +632,10 @@ class _$RemoteInfoCopyWithImpl<$Res, $Val extends RemoteInfo>
           ? _value.cli
           : cli // ignore: cast_nullable_to_non_nullable
               as RemoteInfoCli,
-      snapshot: null == snapshot
+      snapshot: freezed == snapshot
           ? _value.snapshot
           : snapshot // ignore: cast_nullable_to_non_nullable
-              as RemoteInfoSnapshot,
+              as RemoteInfoSnapshot?,
     ) as $Val);
   }
 
@@ -658,8 +657,12 @@ class _$RemoteInfoCopyWithImpl<$Res, $Val extends RemoteInfo>
 
   @override
   @pragma('vm:prefer-inline')
-  $RemoteInfoSnapshotCopyWith<$Res> get snapshot {
-    return $RemoteInfoSnapshotCopyWith<$Res>(_value.snapshot, (value) {
+  $RemoteInfoSnapshotCopyWith<$Res>? get snapshot {
+    if (_value.snapshot == null) {
+      return null;
+    }
+
+    return $RemoteInfoSnapshotCopyWith<$Res>(_value.snapshot!, (value) {
       return _then(_value.copyWith(snapshot: value) as $Val);
     });
   }
@@ -674,14 +677,14 @@ abstract class _$$_RemoteInfoCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {RemoteInfoGui gui, RemoteInfoCli cli, RemoteInfoSnapshot snapshot});
+      {RemoteInfoGui gui, RemoteInfoCli cli, RemoteInfoSnapshot? snapshot});
 
   @override
   $RemoteInfoGuiCopyWith<$Res> get gui;
   @override
   $RemoteInfoCliCopyWith<$Res> get cli;
   @override
-  $RemoteInfoSnapshotCopyWith<$Res> get snapshot;
+  $RemoteInfoSnapshotCopyWith<$Res>? get snapshot;
 }
 
 /// @nodoc
@@ -697,7 +700,7 @@ class __$$_RemoteInfoCopyWithImpl<$Res>
   $Res call({
     Object? gui = null,
     Object? cli = null,
-    Object? snapshot = null,
+    Object? snapshot = freezed,
   }) {
     return _then(_$_RemoteInfo(
       gui: null == gui
@@ -708,10 +711,10 @@ class __$$_RemoteInfoCopyWithImpl<$Res>
           ? _value.cli
           : cli // ignore: cast_nullable_to_non_nullable
               as RemoteInfoCli,
-      snapshot: null == snapshot
+      snapshot: freezed == snapshot
           ? _value.snapshot
           : snapshot // ignore: cast_nullable_to_non_nullable
-              as RemoteInfoSnapshot,
+              as RemoteInfoSnapshot?,
     ));
   }
 }
@@ -719,7 +722,7 @@ class __$$_RemoteInfoCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_RemoteInfo extends _RemoteInfo {
-  _$_RemoteInfo({required this.gui, required this.cli, required this.snapshot})
+  _$_RemoteInfo({required this.gui, required this.cli, this.snapshot})
       : super._();
 
   factory _$_RemoteInfo.fromJson(Map<String, dynamic> json) =>
@@ -730,7 +733,7 @@ class _$_RemoteInfo extends _RemoteInfo {
   @override
   final RemoteInfoCli cli;
   @override
-  final RemoteInfoSnapshot snapshot;
+  final RemoteInfoSnapshot? snapshot;
 
   @override
   String toString() {
@@ -770,7 +773,7 @@ abstract class _RemoteInfo extends RemoteInfo {
   factory _RemoteInfo(
       {required final RemoteInfoGui gui,
       required final RemoteInfoCli cli,
-      required final RemoteInfoSnapshot snapshot}) = _$_RemoteInfo;
+      final RemoteInfoSnapshot? snapshot}) = _$_RemoteInfo;
   _RemoteInfo._() : super._();
 
   factory _RemoteInfo.fromJson(Map<String, dynamic> json) =
@@ -781,7 +784,7 @@ abstract class _RemoteInfo extends RemoteInfo {
   @override
   RemoteInfoCli get cli;
   @override
-  RemoteInfoSnapshot get snapshot;
+  RemoteInfoSnapshot? get snapshot;
   @override
   @JsonKey(ignore: true)
   _$$_RemoteInfoCopyWith<_$_RemoteInfo> get copyWith =>

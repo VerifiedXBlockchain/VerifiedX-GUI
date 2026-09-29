@@ -88,7 +88,7 @@ class SmartContractCreatorMain extends BaseComponent {
     }
 
     if (kIsWeb) {
-      if (ref.read(webSessionProvider).currentWallet == null) {
+      if (ref.read(webSessionProvider).vfxWallet == null) {
         Toast.error(globalL10n.adnrNoAccountToast);
         return;
       }
@@ -155,7 +155,7 @@ class SmartContractCreatorMain extends BaseComponent {
       final extraConfirm = await ConfirmDialog.show(
         title: globalL10n.tokenFormConfirmAddressTitle,
         body: globalL10n.r3aWillBeMintedBy(
-            kIsWeb ? ref.read(webSessionProvider).currentWallet!.labelWithoutTruncation : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation),
+            kIsWeb ? ref.read(webSessionProvider).vfxWallet!.labelWithoutTruncation : ref.read(sessionProvider).currentWallet!.labelWithoutTruncation),
         confirmText: globalL10n.btcCompileMint,
         cancelText: globalL10n.actionCancel,
       );
@@ -245,6 +245,8 @@ class SmartContractCreatorMain extends BaseComponent {
           if (!kIsWeb) {
             ref.read(sessionProvider.notifier).setIsMintingOrCompiling(false);
           }
+
+          Toast.error(globalL10n.r3aProblemCompilingOrMintingSc(e.toString()));
         }
       }
     }
@@ -391,62 +393,66 @@ class SmartContractCreatorMain extends BaseComponent {
             hovering = false;
           });
         },
-        child: InkWell(
-          onTap: disabled || _model.isPublished
-              ? null
-              : () async {
-                  if (!await passwordRequiredGuard(context, ref)) return;
-                  compileAndMint(context, ref);
-                },
-          child: AnimatedContainer(
-            duration: Duration(milliseconds: 300),
-            decoration: BoxDecoration(
-              color: disabled ? Colors.white54 : Theme.of(context).colorScheme.secondary,
-              borderRadius: BorderRadius.circular(4.0),
-              border: Border.all(color: Theme.of(context).colorScheme.secondary.withOpacity(hovering ? 0.5 : 0.3), width: 1),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Theme.of(context).colorScheme.secondary.withOpacity(hovering ? 0.3 : 0.5),
-                  Theme.of(context).colorScheme.secondary.withOpacity(hovering ? 0.1 : 0.3),
+        child: Semantics(
+          button: true,
+          child: InkWell(
+            key: const ValueKey('sc:compile_mint'),
+            onTap: disabled || _model.isPublished
+                ? null
+                : () async {
+                    if (!await passwordRequiredGuard(context, ref)) return;
+                    compileAndMint(context, ref);
+                  },
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              decoration: BoxDecoration(
+                color: disabled ? Colors.white54 : Theme.of(context).colorScheme.secondary,
+                borderRadius: BorderRadius.circular(4.0),
+                border: Border.all(color: Theme.of(context).colorScheme.secondary.withOpacity(hovering ? 0.5 : 0.3), width: 1),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Theme.of(context).colorScheme.secondary.withOpacity(hovering ? 0.3 : 0.5),
+                    Theme.of(context).colorScheme.secondary.withOpacity(hovering ? 0.1 : 0.3),
+                  ],
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 8,
+                  )
                 ],
               ),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black,
-                  blurRadius: 8,
-                )
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12).copyWith(top: 9),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Transform.translate(
-                    offset: Offset(0, -2),
-                    child: Icon(
-                      FontAwesomeIcons.gear,
-                      size: 16,
-                      color: Colors.white70,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12).copyWith(top: 9),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Transform.translate(
+                      offset: Offset(0, -2),
+                      child: Icon(
+                        FontAwesomeIcons.gear,
+                        size: 16,
+                        color: Colors.white70,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 4,
-                  ),
-                  Text(
-                    globalL10n.btcCompileMint,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Mukta',
-                      height: 1,
-                      letterSpacing: 0.5,
+                    SizedBox(
+                      width: 4,
                     ),
-                  ),
-                ],
+                    Text(
+                      globalL10n.btcCompileMint,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: 'Mukta',
+                        height: 1,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -27,63 +27,83 @@ class AuthTypeModal extends StatelessWidget {
       withClose: false,
       padding: 16.0,
       children: [
-        ListTile(
-          leading: const Icon(Icons.email),
-          title: Text(l10n.authTypeEmailPassword),
-          trailing: const Icon(
-            Icons.chevron_right,
-            size: 32,
+        Semantics(
+          button: true,
+          child: ListTile(
+            key: const ValueKey('auth:type_email_password'),
+            leading: const Icon(Icons.email),
+            title: Text(l10n.authTypeEmailPassword),
+            trailing: const Icon(
+              Icons.chevron_right,
+              size: 32,
+            ),
+            onTap: handleUsername,
           ),
-          onTap: handleUsername,
         ),
         const Divider(height: 1),
-        ListTile(
-          leading: const Icon(FontAwesomeIcons.paragraph),
-          title: Text(l10n.authTypeMnemonic),
-          trailing: const Icon(
-            Icons.chevron_right,
-            size: 32,
+        Semantics(
+          button: true,
+          child: ListTile(
+            key: const ValueKey('auth:type_mnemonic'),
+            leading: const Icon(FontAwesomeIcons.paragraph),
+            title: Text(l10n.authTypeMnemonic),
+            trailing: const Icon(
+              Icons.chevron_right,
+              size: 32,
+            ),
+            onTap: handleMnemonic,
           ),
-          onTap: handleMnemonic,
         ),
         if (handlePrivateKey != null) const Divider(height: 1),
         if (handlePrivateKey != null)
-          ListTile(
-            leading: const Icon(FontAwesomeIcons.key),
-            title: Text(l10n.authTypeVfxPrivateKey),
-            trailing: const Icon(
-              Icons.chevron_right,
-              size: 32,
+          Semantics(
+            button: true,
+            child: ListTile(
+              key: const ValueKey('auth:type_vfx_private_key'),
+              leading: const Icon(FontAwesomeIcons.key),
+              title: Text(l10n.authTypeVfxPrivateKey),
+              trailing: const Icon(
+                Icons.chevron_right,
+                size: 32,
+              ),
+              onTap: () {
+                handlePrivateKey!(context);
+              },
             ),
-            onTap: () {
-              handlePrivateKey!(context);
-            },
           ),
         if (handleBtcPrivateKey != null) const Divider(height: 1),
         if (handleBtcPrivateKey != null)
-          ListTile(
-            leading: const Icon(FontAwesomeIcons.bitcoin),
-            title: Text(l10n.authTypeBtcPrivateKey),
-            trailing: const Icon(
-              Icons.chevron_right,
-              size: 32,
+          Semantics(
+            button: true,
+            child: ListTile(
+              key: const ValueKey('auth:type_btc_private_key'),
+              leading: const Icon(FontAwesomeIcons.bitcoin),
+              title: Text(l10n.authTypeBtcPrivateKey),
+              trailing: const Icon(
+                Icons.chevron_right,
+                size: 32,
+              ),
+              onTap: () {
+                handleBtcPrivateKey!(context);
+              },
             ),
-            onTap: () {
-              handleBtcPrivateKey!(context);
-            },
           ),
         if (handleExtension != null) const Divider(height: 1),
         if (handleExtension != null)
-          ListTile(
-            leading: const Icon(Icons.extension),
-            title: Text(l10n.authTypeVfxExtension),
-            trailing: const Icon(
-              Icons.chevron_right,
-              size: 32,
+          Semantics(
+            button: true,
+            child: ListTile(
+              key: const ValueKey('auth:type_extension'),
+              leading: const Icon(Icons.extension),
+              title: Text(l10n.authTypeVfxExtension),
+              trailing: const Icon(
+                Icons.chevron_right,
+                size: 32,
+              ),
+              onTap: () {
+                handleExtension!(context);
+              },
             ),
-            onTap: () {
-              handleExtension!(context);
-            },
           ),
       ],
     );

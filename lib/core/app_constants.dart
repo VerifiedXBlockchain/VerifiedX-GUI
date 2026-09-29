@@ -3,7 +3,7 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "7.0.0";
+const APP_V = "8.0.2";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
@@ -20,6 +20,9 @@ const VALIDATOR_NAV_ENABLED = false;
 const BULK_VBTC_TRANSFER_ENABLED = true;
 // Shielded vBTC is disabled in the CLI; VFX private txs remain supported.
 const VBTC_PRIVACY_ENABLED = false;
+// Imported view-only wallets cannot be opened from the privacy dashboard yet
+// (TC-PRV-020), so Import Viewing Key is hidden for this release.
+const IMPORT_VIEWING_KEY_ENABLED = false;
 const WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED = true;
 // CLI consensus cap on inputs in one multi-contract vBTC transfer.
 const VBTC_MULTI_MAX_INPUTS = 25;

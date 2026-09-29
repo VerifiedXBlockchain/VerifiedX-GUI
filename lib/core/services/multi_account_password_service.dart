@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/web/models/multi_account_instance.dart';
@@ -11,6 +10,7 @@ import '../singletons.dart';
 import '../storage.dart';
 import 'multi_account_encryption_service.dart';
 import 'password_prompt_service.dart';
+import 'web_account_password_store.dart';
 import 'package:collection/collection.dart';
 
 class MultiAccountPasswordService {
@@ -22,16 +22,8 @@ class MultiAccountPasswordService {
   ) async {
     try {
       // Check if the stored version has encrypted keys by looking at storage
-      final storage = singleton<Storage>();
-      final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
-
-      bool hasEncryptedKeys = false;
-      if (savedData != null) {
-        // Find the stored JSON for this account
-        final storedAccountJson = savedData.map((e) => jsonDecode(e) as Map<String, dynamic>).where((json) => json['id'] == account.id).firstOrNull;
-
-        hasEncryptedKeys = storedAccountJson != null && MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson);
-      }
+      final storedAccountJson = WebAccountPasswordStore(singleton<Storage>()).storedAccount(account.id);
+      final hasEncryptedKeys = storedAccountJson != null && MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson);
 
       if (hasEncryptedKeys) {
         // Prompt for password without confirmation (since it's an existing password, not a new one)

@@ -5,20 +5,35 @@ import '../models/mother_child.dart';
 
 class MotherData {
   final String name;
-  final String password;
 
-  const MotherData(this.name, this.password);
+  const MotherData(this.name);
+
+  /// Reads the GetMother reply. The node answers {Id, Name, StartDate} for a
+  /// host and {} otherwise; it no longer returns the password (VX-17).
+  static MotherData? fromResponse(Map<String, dynamic> data) {
+    final name = data['Name'];
+    if (name is String) {
+      return MotherData(name);
+    }
+    return null;
+  }
+}
+
+/// The reason in a StartMother or JoinMother reply ({Result, Message}), or
+/// null when the node reports success.
+String? motherActionFailure(Map<String, dynamic> data) {
+  if (data['Result'] == "Success") {
+    return null;
+  }
+  final message = data['Message'];
+  return message is String && message.trim().isNotEmpty ? message.trim() : "";
 }
 
 class MotherService extends BaseService {
   Future<MotherData?> getHost() async {
     try {
       final data = await getJson('/GetMother');
-
-      if (data.containsKey("Name") && data.containsKey("Password")) {
-        return MotherData(data['Name'], data['Password']);
-      }
-      return null;
+      return MotherData.fromResponse(data);
     } catch (e) {
       print(e);
       return null;
@@ -42,32 +57,35 @@ class MotherService extends BaseService {
     }
   }
 
-  Future<bool> createHost(String name, String password) async {
+  /// Sets this wallet up as a Mother host. Returns null on success, or the
+  /// node's reason (empty when it gave none).
+  Future<String?> createHost(String name, String password) async {
     final params = {
       'Name': name,
       'Password': password,
     };
     try {
-      final data = await postJson('/StartMother', params: params);
-      print(data);
-      return true;
+      final response = await postJson('/StartMother', params: params);
+      return motherActionFailure(response['data']);
     } catch (e) {
       print(e);
-      return false;
+      return "";
     }
   }
 
-  Future<bool> joinHost(String ipAddress, String password) async {
+  /// Joins a Mother host. Returns null on success, or the node's reason
+  /// (empty when it gave none).
+  Future<String?> joinHost(String ipAddress, String password) async {
     final params = {
       'IPAddress': ipAddress,
       'Password': password,
     };
     try {
-      await postJson('/JoinMother', params: params);
-      return true;
+      final response = await postJson('/JoinMother', params: params);
+      return motherActionFailure(response['data']);
     } catch (e) {
       print(e);
-      return false;
+      return "";
     }
   }
 

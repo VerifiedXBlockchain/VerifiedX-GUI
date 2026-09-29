@@ -55,6 +55,7 @@ class CreateAdnrDialog extends BaseComponent {
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               TextFormField(
+                key: const ValueKey('adnr:domain_name'),
                 controller: controller,
                 validator: (value) =>
                     formValidatorAlphaNumeric(value, l10n.adnrDomainNameLabel),
@@ -101,6 +102,7 @@ class CreateAdnrDialog extends BaseComponent {
                       Toast.error(
                           l10n.adnrInsufficientFundsCreateBtc(ADNR_COST.toString()));
                       Navigator.of(context).pop();
+                      return;
                     }
 
                     await InfoDialog.show(
@@ -114,12 +116,13 @@ class CreateAdnrDialog extends BaseComponent {
                   child:
                       Text(l10n.adnrFaucetContinue, style: const TextStyle(color: Colors.white)))
               : TextButton(
+                  key: const Key('adnr:create_submit'),
                   onPressed: () async {
                     if (!formKey.currentState!.validate()) {
                       return;
                     }
 
-                    if (address.length > 65) {
+                    if (controller.text.length > 65) {
                       Toast.error(l10n.adnrMaxLengthToast);
                       return;
                     }
@@ -190,7 +193,7 @@ class CreateAdnrDialog extends BaseComponent {
 
                       print(data);
 
-                      final txData = await RawTransaction.generate(
+                      final generated = await RawTransaction.generate(
                         keypair: ref.read(webSessionProvider).keypair!,
                         amount: ADNR_COST,
                         toAddress: "Adnr_Base",
@@ -198,10 +201,12 @@ class CreateAdnrDialog extends BaseComponent {
                         data: data,
                       );
 
+                      final txData = generated.txData;
+
                       ref.read(globalLoadingProvider.notifier).complete();
 
                       if (txData == null) {
-                        Toast.error(l10n.btcInvalidTxData);
+                        Toast.error(generated.refusalMessage ?? l10n.btcInvalidTxData);
                         return;
                       }
 

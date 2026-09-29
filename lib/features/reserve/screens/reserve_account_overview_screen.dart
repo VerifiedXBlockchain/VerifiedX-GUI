@@ -108,57 +108,65 @@ class ReserveAccountOverviewScreen extends BaseScreen {
                           padding: const EdgeInsets.only(bottom: 16.0),
                           child: MouseRegion(
                             cursor: wallet.isNetworkProtected ? SystemMouseCursors.click : MouseCursor.defer,
-                            child: GestureDetector(
-                              onTap: wallet.isNetworkProtected
-                                  ? () {
-                                      showModalBottomSheet(
-                                          context: context,
-                                          builder: (context) {
-                                            return ModalContainer(
-                                              children: [
-                                                ReserveAccountManageCard(wallet),
-                                              ],
-                                            );
-                                          });
-                                    }
-                                  : null,
-                              child: AppCard(
-                                padding: 4,
-                                child: ListTile(
-                                  title: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        wallet.address,
-                                        style: TextStyle(color: AppColors.getReserve()),
-                                      ),
-                                      IconButton(
-                                          onPressed: () async {
-                                            await Clipboard.setData(ClipboardData(text: wallet.address));
-                                            Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                            child: Semantics(
+                              button: wallet.isNetworkProtected,
+                              child: GestureDetector(
+                                onTap: wallet.isNetworkProtected
+                                    ? () {
+                                        showModalBottomSheet(
+                                            context: context,
+                                            builder: (context) {
+                                              return ModalContainer(
+                                                children: [
+                                                  ReserveAccountManageCard(wallet),
+                                                ],
+                                              );
+                                            });
+                                      }
+                                    : null,
+                                child: AppCard(
+                                  padding: 4,
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          wallet.address,
+                                          style: TextStyle(color: AppColors.getReserve()),
+                                        ),
+                                        IconButton(
+                                            onPressed: () async {
+                                              await Clipboard.setData(ClipboardData(text: wallet.address));
+                                              Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                                            },
+                                            icon: Icon(
+                                              Icons.copy,
+                                              size: 16,
+                                              color: AppColors.getReserve(),
+                                            ),
+                                            tooltip: AppLocalizations.of(context).actionCopyAddress)
+                                      ],
+                                    ),
+                                    subtitle: Row(mainAxisSize: MainAxisSize.min, children: [
+                                      Text(AppLocalizations.of(context).reserveAvailableLabel(wallet.availableBalance.toString())),
+                                      SizedBox(width: 4),
+                                      Semantics(
+                                        label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                                        button: true,
+                                        child: InkWell(
+                                          onTap: () {
+                                            provider.showBalanceInfo(context, wallet);
                                           },
-                                          icon: Icon(
-                                            Icons.copy,
+                                          child: Icon(
+                                            Icons.help,
                                             size: 16,
-                                            color: AppColors.getReserve(),
-                                          ))
-                                    ],
+                                            color: Theme.of(context).colorScheme.secondary,
+                                          ),
+                                        ),
+                                      )
+                                    ]),
+                                    trailing: ReserveAccountStatusBadge(wallet: wallet),
                                   ),
-                                  subtitle: Row(mainAxisSize: MainAxisSize.min, children: [
-                                    Text(AppLocalizations.of(context).reserveAvailableLabel(wallet.availableBalance.toString())),
-                                    SizedBox(width: 4),
-                                    InkWell(
-                                      onTap: () {
-                                        provider.showBalanceInfo(context, wallet);
-                                      },
-                                      child: Icon(
-                                        Icons.help,
-                                        size: 16,
-                                        color: Theme.of(context).colorScheme.secondary,
-                                      ),
-                                    )
-                                  ]),
-                                  trailing: ReserveAccountStatusBadge(wallet: wallet),
                                 ),
                               ),
                             ),
@@ -170,6 +178,7 @@ class ReserveAccountOverviewScreen extends BaseScreen {
                 ),
               ),
               AppButton(
+                key: const Key('reserve:restore'),
                 label: AppLocalizations.of(context).reserveRestoreVaultAccount,
                 icon: Icons.refresh,
                 type: AppButtonType.Text,
@@ -219,6 +228,7 @@ class ReserveAccountStatusBadge extends BaseComponent {
 
     if (wallet.balance < 5) {
       return AppButton(
+        key: Key('reserve:awaiting_funds:${wallet.address}'),
         label: AppLocalizations.of(context).reserveAwaitingFunds,
         variant: AppColorVariant.Danger,
         onPressed: () async {
@@ -233,6 +243,7 @@ class ReserveAccountStatusBadge extends BaseComponent {
     }
 
     return AppButton(
+      key: Key('reserve:activate:${wallet.address}'),
       label: AppLocalizations.of(context).reserveActivateNow,
       variant: AppColorVariant.Light,
       onPressed: () {
@@ -257,6 +268,7 @@ class ReserveAccountRecoverButton extends BaseComponent {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: AppButton(
+        key: Key('reserve:recover:${wallet.address}'),
         label: AppLocalizations.of(context).reserveRecoverLabel,
         icon: FontAwesomeIcons.triangleExclamation,
         type: AppButtonType.Elevated,
@@ -316,6 +328,7 @@ class _Top extends BaseComponent {
             Padding(
               padding: const EdgeInsets.only(right: 8.0),
               child: AppButton(
+                key: const Key('reserve:manage_vault_accounts'),
                 label: AppLocalizations.of(context).reserveManageVaultAccounts,
                 icon: Icons.settings,
                 variant: AppColorVariant.Reserve,
@@ -325,6 +338,7 @@ class _Top extends BaseComponent {
               ),
             ),
           AppButton(
+            key: const Key('reserve:setup_new_account'),
             label: AppLocalizations.of(context).reserveSetupNewAccount,
             icon: Icons.add,
             variant: AppColorVariant.Success,
@@ -349,6 +363,7 @@ class _Top extends BaseComponent {
       if (wallets.isEmpty) Text(AppLocalizations.of(context).reserveNoVaultAccounts),
       if (wallets.isEmpty)
         AppButton(
+          key: const Key('reserve:restore'),
           label: AppLocalizations.of(context).reserveRestoreVaultAccount,
           icon: Icons.refresh,
           type: AppButtonType.Text,

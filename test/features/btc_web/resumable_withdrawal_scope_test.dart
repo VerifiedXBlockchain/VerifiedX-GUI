@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/features/btc_web/models/btc_web_vbtc_token.dart';
+import 'package:rbx_wallet/features/btc_web/utils/withdrawal_liveness.dart';
 import 'package:rbx_wallet/features/nft/models/web_nft.dart';
 
 const _owner = 'ROwnerAddress0000000000000000000';
@@ -144,6 +145,86 @@ void main() {
         final row = {..._request(requestor: _holder), 'created_at': value};
         expect(withdrawalIsStale(row, now: now), isFalse, reason: '$value');
       }
+    });
+  });
+
+  group('block heights decide staleness when known', () {
+    // The chain's rule is height-based: a request blocks while
+    // currentHeight - RequestBlockHeight <= 360. Wall-clock time is only a
+    // guess at that, and slow blocks make it release a request too early.
+    final now = DateTime.utc(2026, 8, 2, 12, 0);
+    final oldRow = {
+      ..._request(requestor: _holder, hash: 'req-old'),
+      'created_at': '2026-08-02T08:00:00Z', // 4 hours ago: stale by the clock
+    };
+
+    test('slow blocks keep an old request live', () {
+      // 4 hours, but only 200 blocks mined since the request.
+      expect(
+        withdrawalIsStale(oldRow, now: now, currentBlockHeight: 1200, requestBlockHeight: 1000),
+        isFalse,
+      );
+    });
+
+    test('the expiry boundary is inclusive, as on the node', () {
+      final fresh = {..._request(requestor: _holder), 'created_at': '2026-08-02T11:59:00Z'};
+      expect(
+        withdrawalIsStale(fresh, now: now, currentBlockHeight: 1000 + kWithdrawalExpiryBlocks, requestBlockHeight: 1000),
+        isFalse,
+      );
+      expect(
+        withdrawalIsStale(fresh, now: now, currentBlockHeight: 1001 + kWithdrawalExpiryBlocks, requestBlockHeight: 1000),
+        isTrue,
+      );
+    });
+
+    test('an unknown or unmined request height falls back to the clock', () {
+      expect(withdrawalIsStale(oldRow, now: now, currentBlockHeight: 1200), isTrue);
+      expect(withdrawalIsStale(oldRow, now: now, currentBlockHeight: 1200, requestBlockHeight: 0), isTrue);
+      expect(withdrawalIsStale(oldRow, now: now, requestBlockHeight: 1000), isTrue);
+    });
+
+    test('fetchLiveResumableWithdrawals looks the heights up', () async {
+      final token = _token([oldRow]);
+      final looked = <String>[];
+
+      final live = await fetchLiveResumableWithdrawals(
+        token,
+        _holder,
+        now: now,
+        latestBlockHeight: () async => 1200,
+        transactionHeight: (hash) async {
+          looked.add(hash);
+          return 1000;
+        },
+      );
+
+      expect(looked, ['req-old']);
+      expect(live, hasLength(1));
+    });
+
+    test('fetchLiveResumableWithdrawals uses the clock when the explorer is unreachable', () async {
+      final token = _token([oldRow]);
+
+      final live = await fetchLiveResumableWithdrawals(
+        token,
+        _holder,
+        now: now,
+        latestBlockHeight: () async => null,
+        transactionHeight: (_) async => fail('no tip, so no per-request lookup'),
+      );
+
+      expect(live, isEmpty);
+    });
+
+    test('fetchLiveResumableWithdrawals skips lookups when nothing is resumable', () async {
+      final live = await fetchLiveResumableWithdrawals(
+        _token([_request(requestor: _owner)]),
+        _holder,
+        latestBlockHeight: () async => fail('nothing to judge'),
+      );
+
+      expect(live, isEmpty);
     });
   });
 }

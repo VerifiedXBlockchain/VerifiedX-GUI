@@ -7,6 +7,10 @@ class Env {
   static bool _isTestnet = const String.fromEnvironment('TESTNET') ==
       'true'; // TEMP: hardcoded for testnet archive build
   static bool _isDevnet = const String.fromEnvironment('DEVNET') == 'true';
+  // Automation builds (integration tests, Claude-driven sessions). Set only
+  // via dart-define; there is no CLI arg override.
+  static const bool _isAutomation =
+      String.fromEnvironment('AUTOMATION') == 'true';
 
   static void setTestnetFromArgs(List<String> args) {
     // CLI args override dart-define
@@ -86,6 +90,12 @@ class Env {
     return 'https://spyglass.verifiedx.io';
   }
 
+  /// Spyglass page for a VFX transaction. Built on [explorerWebsiteBaseUrl]
+  /// because [baseExplorerUrl] ends in '/' and doubled the slash.
+  static String explorerTransactionUrl(String hash) {
+    return "$explorerWebsiteBaseUrl/transaction/$hash";
+  }
+
   static bool get launchCli {
     // Only launch CLI on desktop (non-web)
     return !kIsWeb;
@@ -106,6 +116,10 @@ class Env {
 
   static bool get btcIsTestNet {
     return _isTestnet;
+  }
+
+  static bool get isAutomation {
+    return _isAutomation;
   }
 
   static bool get promptForUpdates {

@@ -40,25 +40,28 @@ class SellerChatThreadList extends BaseComponent {
             ),
             child: Card(
               color: Colors.black,
-              child: ListTile(
-                title: Text(thread.user),
-                subtitle: Text(
-                  message?.message ?? l10n.mktNoMessagesYet,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Icon(Icons.chevron_right),
-                onTap: () {
-                  if (kIsWeb) {
-                    AutoRouter.of(context).push(web_router.WebSellerChatScreenRoute(address: thread.user, shopId: shopId));
-                  } else {
-                    if (thread.isThirdParty) {
-                      AutoRouter.of(context).push(WebSellerChatScreenRoute(address: thread.user, shopId: 0));
+              child: Semantics(
+                button: true,
+                child: ListTile(
+                  title: Text(thread.user),
+                  subtitle: Text(
+                    message?.message ?? l10n.mktNoMessagesYet,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Icon(Icons.chevron_right),
+                  onTap: () {
+                    if (kIsWeb) {
+                      AutoRouter.of(context).push(web_router.WebSellerChatScreenRoute(address: thread.user, shopId: shopId));
                     } else {
-                      AutoRouter.of(context).push(SellerChatScreenRoute(address: thread.user));
+                      if (thread.isThirdParty) {
+                        AutoRouter.of(context).push(WebSellerChatScreenRoute(address: thread.user, shopId: 0));
+                      } else {
+                        AutoRouter.of(context).push(SellerChatScreenRoute(address: thread.user));
+                      }
                     }
-                  }
-                },
+                  },
+                ),
               ),
             ),
           ),

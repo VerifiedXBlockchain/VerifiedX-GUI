@@ -38,6 +38,7 @@ class MyCreateCollectionContainerScreen extends BaseScreen {
           }
         },
         icon: const Icon(Icons.close),
+        tooltip: l10n.actionClose,
       ),
     );
   }
@@ -70,6 +71,7 @@ class MyCreateCollectionContainerScreen extends BaseScreen {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
+                  key: const Key('web_shop:collection_discard'),
                   label: l10n.dstDiscardChanges,
                   variant: AppColorVariant.Danger,
                   onPressed: () async {
@@ -88,6 +90,7 @@ class MyCreateCollectionContainerScreen extends BaseScreen {
                   },
                 ),
                 AppButton(
+                  key: const Key('web_shop:collection_save'),
                   label: model.id != 0 ? l10n.actionSave : l10n.txpCreate,
                   variant: AppColorVariant.Success,
                   onPressed: () async {

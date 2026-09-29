@@ -13,26 +13,38 @@ import '../../../utils/validation.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../../core/utils/tx_refresh.dart';
 import '../services/token_service.dart';
+import '../token_rules.dart';
 
 class TransferTokensButton extends BaseComponent {
   final String scId;
   final String fromAddress;
   final double currentBalance;
+  final bool isOwnedByRA;
+  final VoidCallback showRaErrorMessage;
 
   const TransferTokensButton({
     super.key,
     required this.scId,
     required this.fromAddress,
     required this.currentBalance,
+    required this.isOwnedByRA,
+    required this.showRaErrorMessage,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     return AppButton(
+      key: const Key('token:transfer'),
       label: l10n.tokenTransfer,
       variant: AppColorVariant.Primary,
+      useDisabledColor: isOwnedByRA,
       onPressed: () async {
+        if (isOwnedByRA) {
+          showRaErrorMessage();
+          return;
+        }
+
         final amount = await PromptModal.show(
           title: l10n.tokenAmountToTransferTitle,
           validator: (val) => formValidatorNumber(val, l10n.tokenAmountLabel),
@@ -65,6 +77,12 @@ class TransferTokensButton extends BaseComponent {
         if (toAddress == null || toAddress.isEmpty) {
           return;
         }
+
+        if (isTokenTransferToSelf(fromAddress, toAddress)) {
+          Toast.error(l10n.tokenWebTransferToSelf);
+          return;
+        }
+
         ref.read(globalLoadingProvider.notifier).start();
         final success = await TokenService().transfer(
           scId: scId,

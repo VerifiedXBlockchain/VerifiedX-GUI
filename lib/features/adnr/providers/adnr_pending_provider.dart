@@ -3,6 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/singletons.dart';
 import '../../../core/storage.dart';
 
+/// [current] with `"$id.$type.$adnr"` as the only pending entry for address
+/// [id]. An address holds one domain and has one domain action in flight, so
+/// any older entry for it is stale; left in place it resurfaces once the
+/// domain changes again. A web delete (type `delete`, where desktop uses
+/// `burn`) used to leave the create's `.create.null` key behind, which
+/// matched again as soon as the deleted domain was gone.
+List<String> pendingAdnrKeysAfterAdd(List<String> current, String id, String type, String adnr) {
+  final prefix = "$id.";
+  return [
+    ...current.where((element) => !element.startsWith(prefix)),
+    "$id.$type.$adnr",
+  ];
+}
+
 class AdnrPendingProvider extends StateNotifier<List<String>> {
   AdnrPendingProvider() : super([]) {
     // final items = singleton<Storage>().getStringList(Storage.PENDING_ADNRS) ?? [];
@@ -10,25 +24,7 @@ class AdnrPendingProvider extends StateNotifier<List<String>> {
   }
 
   addId(String id, String type, String adnr) {
-    final value = "$id.$type.$adnr";
-
-    List<String> removes = [];
-    if (type == "burn") {
-      removes = ["transfer", "create"];
-    } else if (type == "transfer") {
-      removes = ["burn", "create"];
-    } else if (type == "create") {
-      removes = ["burn", "transfer"];
-    }
-
-    final List<String> removeKeys = [];
-
-    for (final r in removes) {
-      removeKeys.add("$id.$r.$adnr");
-      removeKeys.add("$id.$r.null");
-    }
-
-    final update = [...state, value]..removeWhere((element) => removeKeys.contains(element));
+    final update = pendingAdnrKeysAfterAdd(state, id, type, adnr);
 
     singleton<Storage>().setStringList(Storage.PENDING_ADNRS, update);
 

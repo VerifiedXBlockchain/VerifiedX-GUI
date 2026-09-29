@@ -106,14 +106,18 @@ class NftDetailScreen extends BaseScreen {
               ),
             ),
             const SizedBox(width: 6),
-            InkWell(
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: nft.id));
-                Toast.message(AppLocalizations.of(context).r3gSmartContractIdCopied);
-              },
-              child: const Icon(
-                Icons.copy,
-                size: 14,
+            Semantics(
+              label: AppLocalizations.of(context).nftCopySmartContractId,
+              button: true,
+              child: InkWell(
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: nft.id));
+                  Toast.message(AppLocalizations.of(context).r3gSmartContractIdCopied);
+                },
+                child: const Icon(
+                  Icons.copy,
+                  size: 14,
+                ),
               ),
             )
           ],
@@ -306,6 +310,7 @@ class NftDetailScreen extends BaseScreen {
                             trailing: IconButton(
                               iconSize: 16,
                               icon: const Icon(Icons.copy),
+                              tooltip: AppLocalizations.of(context).actionCopyAddress,
                               onPressed: () {
                                 copyToClipboard(nft.currentOwner);
                               },
@@ -330,6 +335,7 @@ class NftDetailScreen extends BaseScreen {
                               subtitle: Text(AppLocalizations.of(context).nftMinterAddressLabel),
                               trailing: IconButton(
                                 icon: const Icon(Icons.copy),
+                                tooltip: AppLocalizations.of(context).actionCopyAddress,
                                 iconSize: 16,
                                 onPressed: () {
                                   copyToClipboard(nft.minterAddress);
@@ -359,6 +365,7 @@ class NftDetailScreen extends BaseScreen {
                         ),
                         leading: IconButton(
                           icon: const Icon(Icons.copy),
+                          tooltip: AppLocalizations.of(context).actionCopyAddress,
                           onPressed: () {
                             copyToClipboard(nft.nextOwner!);
                           },
@@ -652,6 +659,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: AppButton(
+                      key: const Key('nft:transfer'),
                       label: AppLocalizations.of(context).nftTransfer,
                       // helpType: HelpType.transfer,
                       icon: Icons.send,
@@ -871,21 +879,39 @@ class NftDetailScreen extends BaseScreen {
                         icon: Icons.sync,
                         variant: AppColorVariant.Primary,
                         onPressed: () async {
+                          final l10n = AppLocalizations.of(context);
                           final assets = [
                             nft.primaryAsset,
                             ...nft.additionalAssets
                           ];
-                          Map<String, String> mediaMap = {};
-                          for (final a in assets) {
-                            final bytes = await a.file.readAsBytes();
-                            final url = await ExplorerService()
-                                .uploadAsset(bytes, a.fileName, a.extension);
+                          ref.read(globalLoadingProvider.notifier).start();
+                          try {
+                            final Map<String, String> mediaMap = {};
+                            for (final a in assets) {
+                              final bytes = await a.file.readAsBytes();
+                              final url = await ExplorerService()
+                                  .uploadAsset(bytes, a.fileName, a.extension);
 
-                            mediaMap[a.fileName] = url ?? 'ERROR';
+                              if (url == null) {
+                                Toast.error(l10n.nftSyncMediaUploadFailed(a.fileName));
+                                return;
+                              }
+                              mediaMap[a.fileName] = url;
+                            }
+
+                            final associated = await ExplorerService()
+                                .associateMedia(nft.id, mediaMap);
+                            if (associated) {
+                              Toast.message(l10n.nftSyncMediaSuccess);
+                            } else {
+                              Toast.error(l10n.nftSyncMediaFailed);
+                            }
+                          } catch (e) {
+                            print("Sync media failed: $e");
+                            Toast.error(l10n.nftSyncMediaError(e.toString()));
+                          } finally {
+                            ref.read(globalLoadingProvider.notifier).complete();
                           }
-
-                          await ExplorerService()
-                              .associateMedia(nft.id, mediaMap);
                         },
                       ),
                     ),
@@ -989,6 +1015,7 @@ class NftDetailScreen extends BaseScreen {
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: AppButton(
+                      key: const Key('nft:transfer_now'),
                       label: AppLocalizations.of(context).nftTransferNow,
                       onPressed: () async {
                         final success = await _provider.transferWebIn();
@@ -1050,10 +1077,8 @@ class NftDetailScreen extends BaseScreen {
               icon: Icons.lock_open,
               variant: AppColorVariant.Success,
               onPressed: () async {
-                final success = await provider.decryptMessage();
-                if (!success) {
-                  // Error toast already shown in provider
-                }
+                if (!await passwordRequiredGuard(context, ref)) return;
+                await provider.decryptMessage();
               },
             ),
           ),
@@ -1116,13 +1141,16 @@ class NftPropertiesWrap extends StatelessWidget {
                       .replaceAll("http//", 'http://');
                   return Tooltip(
                     message: url,
-                    child: InkWell(
-                      onTap: () {
-                        launchUrlString(url);
-                      },
-                      child: Text(
-                        AppLocalizations.of(context).nftQrOpen,
-                        style: TextStyle(decoration: TextDecoration.underline),
+                    child: Semantics(
+                      button: true,
+                      child: InkWell(
+                        onTap: () {
+                          launchUrlString(url);
+                        },
+                        child: Text(
+                          AppLocalizations.of(context).nftQrOpen,
+                          style: TextStyle(decoration: TextDecoration.underline),
+                        ),
                       ),
                     ),
                   );

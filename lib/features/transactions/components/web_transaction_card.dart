@@ -28,11 +28,10 @@ class WebTransactionCard extends BaseComponent {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
-    var date1 = DateTime.fromMillisecondsSinceEpoch((tx.date.millisecondsSinceEpoch).round());
-    String date = DateFormat('MM-dd-yyyy hh:mm a').format(date1);
+    String date = DateFormat('MM-dd-yyyy hh:mm a').format(tx.localDate);
 
     if (tx.isPendingSettlement) {
-      final settlementDate = DateFormat('MM-dd-yyyy hh:mm a').format(tx.unlockTime!);
+      final settlementDate = DateFormat('MM-dd-yyyy hh:mm a').format(tx.localUnlockTime!);
       date = "$date | ${l10n.txpTileSettlementDateLabel(settlementDate)}";
     }
 
@@ -61,88 +60,91 @@ class WebTransactionCard extends BaseComponent {
 
     return AppCard(
       padding: 0,
-      child: ListTile(
-        leading: isMobile
-            ? null
-            : toMe
-                ? const Icon(Icons.move_to_inbox)
-                : const Icon(Icons.outbox),
-        title: Text(
-          text,
-          style: TextStyle(color: color),
-        ),
-        subtitle: sameWalletTx
-            ? RichText(
-                text: TextSpan(
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                  children: [
-                    TextSpan(text: "${l10n.sendFormLabelFrom} "),
-                    TextSpan(
-                        text: "${tx.fromAddress}\n",
-                        style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                    TextSpan(text: "${l10n.sendFormLabelTo} "),
-                    TextSpan(
-                        text: "${tx.toAddress}\n",
-                        style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                    TextSpan(text: date)
-                  ],
-                ),
-              )
-            : toMe
-                ? RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                      children: [
-                        TextSpan(text: "${l10n.sendFormLabelFrom} "),
-                        TextSpan(
-                            text: "${tx.fromAddress}\n",
-                            style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                        TextSpan(text: date)
-                      ],
-                    ),
-                  )
-                : RichText(
-                    text: TextSpan(
-                      style: TextStyle(color: Colors.white70, fontSize: 12),
-                      children: [
-                        TextSpan(text: "${l10n.sendFormLabelTo} "),
-                        TextSpan(
-                            text: "${tx.toAddress}\n",
-                            style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
-                        TextSpan(text: date)
-                      ],
-                    ),
+      child: Semantics(
+        button: !tx.isPending,
+        child: ListTile(
+          leading: isMobile
+              ? null
+              : toMe
+                  ? const Icon(Icons.move_to_inbox)
+                  : const Icon(Icons.outbox),
+          title: Text(
+            text,
+            style: TextStyle(color: color),
+          ),
+          subtitle: sameWalletTx
+              ? RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                    children: [
+                      TextSpan(text: "${l10n.sendFormLabelFrom} "),
+                      TextSpan(
+                          text: "${tx.fromAddress}\n",
+                          style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                      TextSpan(text: "${l10n.sendFormLabelTo} "),
+                      TextSpan(
+                          text: "${tx.toAddress}\n",
+                          style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                      TextSpan(text: date)
+                    ],
                   ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (tx.isPending)
-              AppBadge(
-                label: l10n.statusPending,
-                variant: AppColorVariant.Warning,
+                )
+              : toMe
+                  ? RichText(
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                        children: [
+                          TextSpan(text: "${l10n.sendFormLabelFrom} "),
+                          TextSpan(
+                              text: "${tx.fromAddress}\n",
+                              style: TextStyle(color: tx.fromAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                          TextSpan(text: date)
+                        ],
+                      ),
+                    )
+                  : RichText(
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.white70, fontSize: 12),
+                        children: [
+                          TextSpan(text: "${l10n.sendFormLabelTo} "),
+                          TextSpan(
+                              text: "${tx.toAddress}\n",
+                              style: TextStyle(color: tx.toAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white60)),
+                          TextSpan(text: date)
+                        ],
+                      ),
+                    ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (tx.isPending)
+                AppBadge(
+                  label: l10n.statusPending,
+                  variant: AppColorVariant.Warning,
+                ),
+              if (tx.callbackHash != null)
+                AppButton(
+                  label: l10n.txpOriginalTx,
+                  onPressed: () {
+                    AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.callbackHash!));
+                  },
+                ),
+              WebCallbackButton(tx),
+              CompleteSaleButton(
+                tx: tx,
+                fallbackWidget: Icon(Icons.chevron_right),
               ),
-            if (tx.callbackHash != null)
-              AppButton(
-                label: l10n.txpOriginalTx,
-                onPressed: () {
-                  AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.callbackHash!));
+            ],
+          ),
+          onTap: tx.isPending
+              ? null
+              : () {
+                  AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.hash));
+                  // if (kDebugMode) {
+                  //   ref.read(transactionSignalProvider.notifier).insert(tx.toNative());
+                  // }
                 },
-              ),
-            WebCallbackButton(tx),
-            CompleteSaleButton(
-              tx: tx,
-              fallbackWidget: Icon(Icons.chevron_right),
-            ),
-          ],
         ),
-        onTap: tx.isPending
-            ? null
-            : () {
-                AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.hash));
-                // if (kDebugMode) {
-                //   ref.read(transactionSignalProvider.notifier).insert(tx.toNative());
-                // }
-              },
       ),
     );
   }

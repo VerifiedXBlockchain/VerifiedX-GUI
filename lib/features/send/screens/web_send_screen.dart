@@ -139,13 +139,14 @@ class WebSendScreen extends BaseScreen {
                                     wallet?.address ?? keypair.address,
                                 sendTransaction: (amount, toAddress) async {
                                   try {
-                                    final txData =
+                                    final generated =
                                         await RawTransaction.generate(
                                       keypair: keypair,
                                       amount: amount,
                                       toAddress: toAddress,
                                       txType: TxType.rbxTransfer,
                                     );
+                                    final txData = generated.txData;
 
                                     if (txData == null) {
                                       return null;

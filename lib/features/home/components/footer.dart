@@ -9,6 +9,7 @@ import '../../../core/app_constants.dart';
 import '../../../core/app_router.gr.dart';
 import '../../../core/base_component.dart';
 import '../../../core/env.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../easter/secret_button.dart';
 
 class Footer extends BaseComponent {
@@ -33,6 +34,7 @@ class Footer extends BaseComponent {
                     children: [
                       IconButton(
                         iconSize: 16,
+                        tooltip: AppLocalizations.of(context).homeJoinDiscord,
                         onPressed: () {
                           launchUrl(Uri.parse("https://discord.gg/7cd5ebDQCj"));
                         },
@@ -43,6 +45,7 @@ class Footer extends BaseComponent {
                       ),
                       IconButton(
                         iconSize: 16,
+                        tooltip: AppLocalizations.of(context).homeFooterGithubTooltip,
                         onPressed: () {
                           launchUrl(Uri.parse(
                               "https://github.com/VerifiedXBlockchain"));
@@ -52,16 +55,19 @@ class Footer extends BaseComponent {
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          launchUrlString("https://docs.verifiedx.io");
-                        },
-                        child: Text(
-                          "Wiki",
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontSize: 12,
-                              decoration: TextDecoration.underline),
+                      Semantics(
+                        button: true,
+                        child: InkWell(
+                          onTap: () {
+                            launchUrlString("https://docs.verifiedx.io");
+                          },
+                          child: Text(
+                            "Wiki",
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 12,
+                                decoration: TextDecoration.underline),
+                          ),
                         ),
                       ),
                     ],

@@ -43,6 +43,7 @@ class MintTokensButton extends BaseComponent {
 
     final l10n = AppLocalizations.of(context);
     return AppButton(
+      key: const Key('token:mint'),
       label: l10n.tokenMintTokens,
       variant: AppColorVariant.Success,
       useDisabledColor: isOwnedByRA,

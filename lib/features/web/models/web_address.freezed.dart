@@ -21,10 +21,13 @@ WebAddress _$WebAddressFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$WebAddress {
   String get address => throw _privateConstructorUsedError;
+  @NumOrStringDoubleConverter()
   double get balance => throw _privateConstructorUsedError;
   @JsonKey(name: "balance_total")
+  @NumOrStringDoubleConverter()
   double get balanceTotal => throw _privateConstructorUsedError;
   @JsonKey(name: "balance_locked")
+  @NumOrStringDoubleConverter()
   double get balanceLocked => throw _privateConstructorUsedError;
   String? get adnr => throw _privateConstructorUsedError;
   bool get activated => throw _privateConstructorUsedError;
@@ -44,9 +47,14 @@ abstract class $WebAddressCopyWith<$Res> {
   @useResult
   $Res call(
       {String address,
-      double balance,
-      @JsonKey(name: "balance_total") double balanceTotal,
-      @JsonKey(name: "balance_locked") double balanceLocked,
+      @NumOrStringDoubleConverter()
+          double balance,
+      @JsonKey(name: "balance_total")
+      @NumOrStringDoubleConverter()
+          double balanceTotal,
+      @JsonKey(name: "balance_locked")
+      @NumOrStringDoubleConverter()
+          double balanceLocked,
       String? adnr,
       bool activated,
       bool deactivated});
@@ -116,9 +124,14 @@ abstract class _$$_WebAddressCopyWith<$Res>
   @useResult
   $Res call(
       {String address,
-      double balance,
-      @JsonKey(name: "balance_total") double balanceTotal,
-      @JsonKey(name: "balance_locked") double balanceLocked,
+      @NumOrStringDoubleConverter()
+          double balance,
+      @JsonKey(name: "balance_total")
+      @NumOrStringDoubleConverter()
+          double balanceTotal,
+      @JsonKey(name: "balance_locked")
+      @NumOrStringDoubleConverter()
+          double balanceLocked,
       String? adnr,
       bool activated,
       bool deactivated});
@@ -181,9 +194,14 @@ class __$$_WebAddressCopyWithImpl<$Res>
 class _$_WebAddress extends _WebAddress {
   _$_WebAddress(
       {required this.address,
-      required this.balance,
-      @JsonKey(name: "balance_total") this.balanceTotal = 0,
-      @JsonKey(name: "balance_locked") this.balanceLocked = 0,
+      @NumOrStringDoubleConverter()
+          required this.balance,
+      @JsonKey(name: "balance_total")
+      @NumOrStringDoubleConverter()
+          this.balanceTotal = 0,
+      @JsonKey(name: "balance_locked")
+      @NumOrStringDoubleConverter()
+          this.balanceLocked = 0,
       this.adnr,
       this.activated = false,
       this.deactivated = false})
@@ -195,12 +213,15 @@ class _$_WebAddress extends _WebAddress {
   @override
   final String address;
   @override
+  @NumOrStringDoubleConverter()
   final double balance;
   @override
   @JsonKey(name: "balance_total")
+  @NumOrStringDoubleConverter()
   final double balanceTotal;
   @override
   @JsonKey(name: "balance_locked")
+  @NumOrStringDoubleConverter()
   final double balanceLocked;
   @override
   final String? adnr;
@@ -256,9 +277,14 @@ class _$_WebAddress extends _WebAddress {
 abstract class _WebAddress extends WebAddress {
   factory _WebAddress(
       {required final String address,
-      required final double balance,
-      @JsonKey(name: "balance_total") final double balanceTotal,
-      @JsonKey(name: "balance_locked") final double balanceLocked,
+      @NumOrStringDoubleConverter()
+          required final double balance,
+      @JsonKey(name: "balance_total")
+      @NumOrStringDoubleConverter()
+          final double balanceTotal,
+      @JsonKey(name: "balance_locked")
+      @NumOrStringDoubleConverter()
+          final double balanceLocked,
       final String? adnr,
       final bool activated,
       final bool deactivated}) = _$_WebAddress;
@@ -270,12 +296,15 @@ abstract class _WebAddress extends WebAddress {
   @override
   String get address;
   @override
+  @NumOrStringDoubleConverter()
   double get balance;
   @override
   @JsonKey(name: "balance_total")
+  @NumOrStringDoubleConverter()
   double get balanceTotal;
   @override
   @JsonKey(name: "balance_locked")
+  @NumOrStringDoubleConverter()
   double get balanceLocked;
   @override
   String? get adnr;

@@ -65,80 +65,83 @@ class NftListTile extends BaseComponent {
       padding: const EdgeInsets.all(8),
       child: AppCard(
         padding: 0,
-        child: ListTile(
-          onTap: onPressedOverride ??
-              (isBurned || (isTransferred && !manageOnPress)
-                  ? null
-                  : () {
-                      _showDetails(context, ref);
-                    }),
-          title: Text("${nft.currentEvolveName}${isBurned ? ' (Burned)' : ''} ${showListedStatus && nft.isListed(ref) ? ' (Listed)' : ''}"),
-          subtitle: Text(nft.id),
-          leading: SizedBox(
-            height: 32,
-            child: kIsWeb
-                ? Stack(
-                    children: [
-                      Builder(
-                        builder: (context) {
-                          if (nft.currentEvolveAssetWeb != null && nft.currentEvolveAssetWeb!.isImage) {
-                            return SizedBox(
-                              width: 32,
-                              height: 32,
-                              child: AspectRatio(
-                                aspectRatio: 1,
-                                child: CachedNetworkImage(
-                                  imageUrl: nft.currentEvolveAssetWeb!.location,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            );
-                          }
-
-                          if (nft.primaryAssetWeb != null) {
-                            return Icon(Icons.file_present_outlined);
-                          }
-
-                          return SizedBox(
-                            width: 32,
-                            height: 32,
-                          );
-                        },
-                      ),
-                    ],
-                  )
-                : Stack(
-                    children: [
-                      Builder(
-                        builder: (context) {
-                          if (nft.currentEvolveAsset.isImage) {
-                            if (nft.currentEvolveAsset.localPath == null) {
-                              return const SizedBox(
+        child: Semantics(
+          button: onPressedOverride != null || !(isBurned || (isTransferred && !manageOnPress)),
+          child: ListTile(
+            onTap: onPressedOverride ??
+                (isBurned || (isTransferred && !manageOnPress)
+                    ? null
+                    : () {
+                        _showDetails(context, ref);
+                      }),
+            title: Text("${nft.currentEvolveName}${isBurned ? ' (Burned)' : ''} ${showListedStatus && nft.isListed(ref) ? ' (Listed)' : ''}"),
+            subtitle: Text(nft.id),
+            leading: SizedBox(
+              height: 32,
+              child: kIsWeb
+                  ? Stack(
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            if (nft.currentEvolveAssetWeb != null && nft.currentEvolveAssetWeb!.isImage) {
+                              return SizedBox(
                                 width: 32,
                                 height: 32,
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: CachedNetworkImage(
+                                    imageUrl: nft.currentEvolveAssetWeb!.location,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               );
+                            }
+
+                            if (nft.primaryAssetWeb != null) {
+                              return Icon(Icons.file_present_outlined);
                             }
 
                             return SizedBox(
                               width: 32,
                               height: 32,
-                              child: PollingImagePreview(
-                                localPath: nft.currentEvolveAsset.localPath!,
-                                expectedSize: nft.currentEvolveAsset.fileSize,
-                                withProgress: false,
-                              ),
                             );
-                          }
-                          return const Icon(Icons.file_present_outlined);
-                        },
-                      ),
-                      if (isTransferred && !manageOnPress && onPressedOverride == null) TransferingOverlay(nft, small: true)
-                      // TransferingOverlay(nft, small: true)
-                    ],
-                  ),
+                          },
+                        ),
+                      ],
+                    )
+                  : Stack(
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            if (nft.currentEvolveAsset.isImage) {
+                              if (nft.currentEvolveAsset.localPath == null) {
+                                return const SizedBox(
+                                  width: 32,
+                                  height: 32,
+                                );
+                              }
+
+                              return SizedBox(
+                                width: 32,
+                                height: 32,
+                                child: PollingImagePreview(
+                                  localPath: nft.currentEvolveAsset.localPath!,
+                                  expectedSize: nft.currentEvolveAsset.fileSize,
+                                  withProgress: false,
+                                ),
+                              );
+                            }
+                            return const Icon(Icons.file_present_outlined);
+                          },
+                        ),
+                        if (isTransferred && !manageOnPress && onPressedOverride == null) TransferingOverlay(nft, small: true)
+                        // TransferingOverlay(nft, small: true)
+                      ],
+                    ),
+            ),
+            trailing: trailingOverride ?? const Icon(Icons.chevron_right),
           ),
-          trailing: trailingOverride ?? const Icon(Icons.chevron_right),
         ),
       ),
     );

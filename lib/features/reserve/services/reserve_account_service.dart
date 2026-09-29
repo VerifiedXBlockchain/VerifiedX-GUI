@@ -7,6 +7,7 @@ import '../../../utils/toast.dart';
 
 import '../../../core/services/base_service.dart';
 import '../../../l10n/l10n_helper.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class ReserveAccountService extends BaseService {
   ReserveAccountService() : super(apiBasePathOverride: "/rsapi/RSV1");
@@ -50,20 +51,18 @@ class ReserveAccountService extends BaseService {
       "OnlyRestoreRecovery": false,
     };
 
-    final response = await postJson('/RestoreReserveAddress', params: payload);
-    print(response);
-    print("****");
-    final data = response['data'];
-    if (data != null) {
-      print(jsonEncode(data));
-      if (data['Success'] == true) {
-        if (data['ReserveAccount'] != null && data['ReserveAccount']['Result'] != null) {
-          return NewReserveAccount.fromJson(data['ReserveAccount']['Result']);
-        }
+    try {
+      final response = await postJson('/RestoreReserveAddress', params: payload);
+      final data = response['data'];
+      final account = restoredReserveAccountFromResponse(data);
+      if (account != null) {
+        return account;
       }
+      Toast.error(reserveResponseErrorMessage(data));
+    } catch (e) {
+      print("Vault restore failed: $e");
+      Toast.error(globalL10n.mktProblemOccurredToast);
     }
-
-    Toast.error(data['Message'] ?? globalL10n.mktProblemOccurredToast);
 
     return null;
   }
@@ -112,7 +111,8 @@ class ReserveAccountService extends BaseService {
       OverlayToast.error(data['Message']);
       return false;
     } catch (e) {
-      print(e);
+      print("Vault activation request failed: ${e.runtimeType}");
+      OverlayToast.error(globalL10n.mktProblemOccurredToast);
       return false;
     }
   }
@@ -204,10 +204,6 @@ class ReserveAccountService extends BaseService {
         params['BackupURL'] = backupUrl;
       }
 
-      print("**********");
-      print(jsonEncode(params));
-      print("**********");
-
       final response = await postJson(url, timeout: 0, params: params, cleanPath: false);
       final data = response['data'];
 
@@ -222,7 +218,7 @@ class ReserveAccountService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }
@@ -247,20 +243,54 @@ class ReserveAccountService extends BaseService {
   }
 
   Future<bool> isUnlockedV2(String address) async {
-    final response = await getText("/UnlockReserveAccount/$address/0/checking", cleanPath: false);
-    final data = jsonDecode(response);
-
-    print(data);
-
-    return data['AlreadyUnlocked'] == true;
+    try {
+      final response = await getText("/UnlockReserveAccount/$address/0/checking", cleanPath: false);
+      final data = jsonDecode(response);
+      return data['AlreadyUnlocked'] == true;
+    } catch (e) {
+      print("Reserve unlock check failed: $e");
+      return false;
+    }
   }
 
   Future<bool> unlockV2(String address, String password) async {
-    final response = await getText("/UnlockReserveAccount/$address/0/$password", cleanPath: false);
-    final data = jsonDecode(response);
-
-    print(data);
-
-    return data['Success'] == true;
+    try {
+      final response = await getText("/UnlockReserveAccount/$address/0/$password", cleanPath: false);
+      final data = jsonDecode(response);
+      return data['Success'] == true;
+    } catch (e) {
+      print("Reserve unlock failed: $e");
+      return false;
+    }
   }
+}
+
+/// The restored Vault in a `RestoreReserveAddress` response, or null when the
+/// CLI refused. An undecodable restore code gets a bare `[]` instead of the
+/// usual `{Success, Message}` map.
+NewReserveAccount? restoredReserveAccountFromResponse(dynamic data) {
+  if (data is! Map || data['Success'] != true) {
+    return null;
+  }
+  final reserveAccount = data['ReserveAccount'];
+  if (reserveAccount is! Map) {
+    return null;
+  }
+  final result = reserveAccount['Result'];
+  if (result is! Map<String, dynamic>) {
+    return null;
+  }
+  return NewReserveAccount.fromJson(result);
+}
+
+/// The CLI's message from a failed reserve response, falling back to the
+/// generic error when there is none or the response is not a map at all.
+String reserveResponseErrorMessage(dynamic data) {
+  if (data is Map) {
+    final message = data['Message'];
+    if (message is String && message.trim().isNotEmpty) {
+      return message;
+    }
+  }
+  return globalL10n.mktProblemOccurredToast;
 }

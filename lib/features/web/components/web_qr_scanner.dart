@@ -150,18 +150,22 @@ class _WebQrScannerState extends State<WebQrScanner> {
           Positioned(
             top: 50,
             right: 20,
-            child: GestureDetector(
-              onTap: widget.onClose,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.7),
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 24,
+            child: Semantics(
+              label: AppLocalizations.of(context).actionClose,
+              button: true,
+              child: GestureDetector(
+                onTap: widget.onClose,
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                    size: 24,
+                  ),
                 ),
               ),
             ),

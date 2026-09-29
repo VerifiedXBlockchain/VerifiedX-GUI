@@ -73,6 +73,7 @@ class RemoteShopCollectionScreen extends BaseScreen {
             ref.read(connectedShopProvider.notifier).refresh(true);
           },
           icon: Icon(Icons.refresh),
+          tooltip: AppLocalizations.of(context).actionRefresh,
         ),
         AppButton(
           type: AppButtonType.Text,
@@ -180,6 +181,7 @@ class _Header extends BaseComponent {
                   Icons.grid_on,
                   color: isExpanded ? Colors.white : Colors.white38,
                 ),
+                tooltip: AppLocalizations.of(context).actionGridView,
               ),
               IconButton(
                 onPressed: () {
@@ -189,6 +191,7 @@ class _Header extends BaseComponent {
                   Icons.list_outlined,
                   color: !isExpanded ? Colors.white : Colors.white38,
                 ),
+                tooltip: AppLocalizations.of(context).actionListView,
               ),
             ],
           )

@@ -40,6 +40,7 @@ class CreateWebShopContainerScreen extends BaseScreen {
           }
         },
         icon: const Icon(Icons.close),
+        tooltip: l10n.actionClose,
       ),
       actions: [
         Padding(
@@ -78,6 +79,7 @@ class CreateWebShopContainerScreen extends BaseScreen {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 AppButton(
+                  key: const Key('web_shop:shop_discard'),
                   label: l10n.dstDiscardChanges,
                   variant: AppColorVariant.Danger,
                   onPressed: () async {
@@ -97,6 +99,7 @@ class CreateWebShopContainerScreen extends BaseScreen {
                 ),
                 if (model.id != 0) DecPublishShopButton(),
                 AppButton(
+                  key: const Key('web_shop:shop_save'),
                   label: model.id != 0 ? l10n.r3bSaveChanges : l10n.txpCreate,
                   variant: AppColorVariant.Success,
                   onPressed: () {

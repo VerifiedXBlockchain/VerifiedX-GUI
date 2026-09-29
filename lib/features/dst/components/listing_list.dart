@@ -40,113 +40,116 @@ class ListingList extends BaseComponent {
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       child: AppCard(
                         padding: 0,
-                        child: ListTile(
-                          // leading: Builder(
-                          //   builder: (context) {
-                          //     if (nft == null) {
-                          //       return SizedBox.shrink();
-                          //     }
+                        child: Semantics(
+                          button: true,
+                          child: ListTile(
+                            // leading: Builder(
+                            //   builder: (context) {
+                            //     if (nft == null) {
+                            //       return SizedBox.shrink();
+                            //     }
 
-                          //     if (nft.currentEvolveAsset.isImage) {
-                          //       if (nft.currentEvolveAsset.localPath == null) {
-                          //         return const SizedBox(
-                          //           width: 32,
-                          //           height: 32,
-                          //         );
-                          //       }
+                            //     if (nft.currentEvolveAsset.isImage) {
+                            //       if (nft.currentEvolveAsset.localPath == null) {
+                            //         return const SizedBox(
+                            //           width: 32,
+                            //           height: 32,
+                            //         );
+                            //       }
 
-                          //       return SizedBox(
-                          //         width: 32,
-                          //         height: 32,
-                          //         child: PollingImagePreview(
-                          //           localPath: nft.currentEvolveAsset.localPath!,
-                          //           expectedSize: nft.currentEvolveAsset.fileSize,
-                          //           withProgress: false,
-                          //         ),
-                          //       );
-                          //     }
-                          //     return const Icon(Icons.file_present_outlined);
-                          //   },
-                          // ),
-                          leading: FutureBuilder(
-                            future: listing.thumbnail(),
-                            builder: (context, AsyncSnapshot<Widget> snapshot) {
-                              if (snapshot.hasData) {
-                                return snapshot.data!;
-                              }
+                            //       return SizedBox(
+                            //         width: 32,
+                            //         height: 32,
+                            //         child: PollingImagePreview(
+                            //           localPath: nft.currentEvolveAsset.localPath!,
+                            //           expectedSize: nft.currentEvolveAsset.fileSize,
+                            //           withProgress: false,
+                            //         ),
+                            //       );
+                            //     }
+                            //     return const Icon(Icons.file_present_outlined);
+                            //   },
+                            // ),
+                            leading: FutureBuilder(
+                              future: listing.thumbnail(),
+                              builder: (context, AsyncSnapshot<Widget> snapshot) {
+                                if (snapshot.hasData) {
+                                  return snapshot.data!;
+                                }
 
-                              return SizedBox();
-                            },
-                          ),
-                          title: Text(listing.nft != null ? listing.nft!.name : listing.smartContractUid),
-                          subtitle: listing.deactivateForSeller
-                              ? Text(
-                                  listing.saleHasFailed ? l10n.r3dSaleCompleteTxFailed : l10n.dstCompleted,
-                                  style: TextStyle(
-                                    color: listing.saleHasFailed ? Theme.of(context).colorScheme.danger : Theme.of(context).colorScheme.success,
-                                    fontWeight: FontWeight.w600,
+                                return SizedBox();
+                              },
+                            ),
+                            title: Text(listing.nft != null ? listing.nft!.name : listing.smartContractUid),
+                            subtitle: listing.deactivateForSeller
+                                ? Text(
+                                    listing.saleHasFailed ? l10n.r3dSaleCompleteTxFailed : l10n.dstCompleted,
+                                    style: TextStyle(
+                                      color: listing.saleHasFailed ? Theme.of(context).colorScheme.danger : Theme.of(context).colorScheme.success,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  )
+                                : Text(listing.label),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (listing.saleHasFailed)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: AppButton(
+                                      label: l10n.txpCompleteSale,
+                                      variant: AppColorVariant.Warning,
+                                      onPressed: () {
+                                        DstService().retrySale(listing.id);
+                                      },
+                                    ),
                                   ),
-                                )
-                              : Text(listing.label),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (listing.saleHasFailed)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: AppButton(
-                                    label: l10n.txpCompleteSale,
-                                    variant: AppColorVariant.Warning,
-                                    onPressed: () {
-                                      DstService().retrySale(listing.id);
-                                    },
+                                if (listing.isAuction)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: AppButton(
+                                      label: l10n.r3dActivity,
+                                      variant: AppColorVariant.Success,
+                                      onPressed: () {
+                                        AutoRouter.of(context).push(ListingAuctionDetailScreenRoute(listingId: listing.id));
+                                      },
+                                    ),
                                   ),
-                                ),
-                              if (listing.isAuction)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: AppButton(
-                                    label: l10n.r3dActivity,
-                                    variant: AppColorVariant.Success,
-                                    onPressed: () {
-                                      AutoRouter.of(context).push(ListingAuctionDetailScreenRoute(listingId: listing.id));
-                                    },
-                                  ),
-                                ),
-                              AppButton(
-                                label: l10n.actionDelete,
-                                variant: AppColorVariant.Danger,
-                                onPressed: () {
-                                  ref.read(listingFormProvider.notifier).delete(context, listing.collectionId, listing, false);
-                                },
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              if (!listing.deactivateForSeller)
                                 AppButton(
-                                  label: l10n.scwEdit,
-                                  variant: AppColorVariant.Light,
-                                  onPressed: () async {
-                                    final l = await DstService().retreiveListing(listing.id);
-                                    ref.read(listingFormProvider.notifier).load(l ?? listing);
-                                    AutoRouter.of(context).push(CreateListingContainerScreenRoute(collectionId: listing.collectionId));
+                                  label: l10n.actionDelete,
+                                  variant: AppColorVariant.Danger,
+                                  onPressed: () {
+                                    ref.read(listingFormProvider.notifier).delete(context, listing.collectionId, listing, false);
                                   },
                                 ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              AppButton(
-                                label: l10n.shopDetailsLabel,
-                                onPressed: () {
-                                  AutoRouter.of(context).push(ListingDetailScreenRoute(listingId: listing.id));
-                                },
-                              )
-                            ],
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                if (!listing.deactivateForSeller)
+                                  AppButton(
+                                    label: l10n.scwEdit,
+                                    variant: AppColorVariant.Light,
+                                    onPressed: () async {
+                                      final l = await DstService().retreiveListing(listing.id);
+                                      ref.read(listingFormProvider.notifier).load(l ?? listing);
+                                      AutoRouter.of(context).push(CreateListingContainerScreenRoute(collectionId: listing.collectionId));
+                                    },
+                                  ),
+                                SizedBox(
+                                  width: 8,
+                                ),
+                                AppButton(
+                                  label: l10n.shopDetailsLabel,
+                                  onPressed: () {
+                                    AutoRouter.of(context).push(ListingDetailScreenRoute(listingId: listing.id));
+                                  },
+                                )
+                              ],
+                            ),
+                            onTap: () {
+                              AutoRouter.of(context).push(ListingDetailScreenRoute(listingId: listing.id));
+                            },
                           ),
-                          onTap: () {
-                            AutoRouter.of(context).push(ListingDetailScreenRoute(listingId: listing.id));
-                          },
                         ),
                       ),
                     );

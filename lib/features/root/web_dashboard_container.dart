@@ -51,7 +51,9 @@ import '../keygen/models/keypair.dart';
 import '../keygen/models/ra_keypair.dart';
 import '../navigation/components/root_container_balance_row.dart';
 import '../navigation/constants.dart';
+import '../navigation/providers/side_nav_expanded_provider.dart';
 import '../transactions/providers/web_transaction_list_provider.dart';
+import '../transactions/providers/web_transactions_tab_provider.dart';
 import '../web/components/web_latest_block.dart';
 import '../web/components/web_qr_scanner.dart';
 import 'navigation/components/web_drawer.dart';
@@ -59,8 +61,19 @@ import 'package:collection/collection.dart';
 import '../../utils/html_helpers.dart';
 import '../../core/storage.dart';
 import '../../core/singletons.dart';
+import '../../utils/web_route_paths.dart';
+import '../../utils/formatting.dart';
 
 GlobalKey<ScaffoldState> webDashboardScaffoldKey = GlobalKey<ScaffoldState>();
+
+/// Opens the Transactions screen at its list (not a detail left open there)
+/// on [tab].
+void openTransactionsTab(BuildContext context, WidgetRef ref, WebTransactionsTab tab) {
+  ref.read(webTransactionsTabRequestProvider.notifier).state = tab;
+  final tabsRouter = AutoTabsRouter.of(context);
+  tabsRouter.stackRouterOfIndex(WebRouteIndex.transactions)?.popUntilRoot();
+  tabsRouter.setActiveIndex(WebRouteIndex.transactions);
+}
 
 class WebRouteIndex {
   static get home => 0;
@@ -102,16 +115,11 @@ class WebDashboardContainer extends ConsumerWidget {
     // If not authenticated, save the current URL and redirect to auth screen
     if (!session.isAuthenticated) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final currentUrl = HtmlHelpers().getUrl();
-
         // Save the intended destination if it's a dashboard route
-        if (currentUrl.contains('/dashboard')) {
-          final hashIndex = currentUrl.indexOf('#');
-          if (hashIndex != -1) {
-            final hashPath = currentUrl.substring(hashIndex + 1);
-            singleton<Storage>()
-                .setString(Storage.PENDING_REDIRECT_URL, hashPath);
-          }
+        final redirectPath = dashboardRedirectPath(HtmlHelpers().getUrl());
+        if (redirectPath != null) {
+          singleton<Storage>()
+              .setString(Storage.PENDING_REDIRECT_URL, redirectPath);
         }
 
         // Redirect to auth screen
@@ -145,7 +153,9 @@ class _ContentWrapper extends BaseComponent {
 
   @override
   Widget desktopBody(BuildContext context, WidgetRef ref) {
-    bool sideNavExpanded = true;
+    // From a provider: a local here reset to expanded on every rebuild of
+    // this wrapper, which each navigation triggers.
+    final sideNavExpanded = ref.watch(sideNavExpandedProvider);
     bool isHoveringTopBalance = false;
     bool walletInfoIsHovering = false;
     bool walletInfoIsExpanded = false;
@@ -233,9 +243,9 @@ class _ContentWrapper extends BaseComponent {
                             child: RootContainerSideNav(
                                 isExpanded: sideNavExpanded,
                                 onToggleExpanded: () {
-                                  setState(() {
-                                    sideNavExpanded = !sideNavExpanded;
-                                  });
+                                  ref
+                                      .read(sideNavExpandedProvider.notifier)
+                                      .toggle();
                                 }),
                           ),
                         ],
@@ -403,8 +413,8 @@ class _ContentWrapper extends BaseComponent {
                                           value.btcBalanceInfo?.btcBalance));
                                   final btcBalanceString = btcKeypair?.adnr !=
                                           null
-                                      ? "${btcBalance ?? ""} BTC | @${btcKeypair!.adnr!}"
-                                      : "${(btcBalance ?? 0).toString()} BTC";
+                                      ? "${btcBalance != null ? formatBtcAmount(btcBalance) : ""} BTC | @${btcKeypair!.adnr!}"
+                                      : "${formatBtcAmount(btcBalance ?? 0)} BTC";
                                   return Column(
                                     children: [
                                       if (vfxKeypair != null)
@@ -649,10 +659,6 @@ class WebAccountInfoExpanderRow extends BaseComponent {
     final forceExpand = ref.watch(globalBalancesExpandedProvider);
 
     return LayoutBuilder(builder: (context, constraints) {
-      final availableWidth = constraints.maxWidth;
-
-      final connector1Left = (availableWidth / 3) - 10;
-      final connector2Left = (availableWidth / 3) + (availableWidth / 3) - 5;
       return Stack(
         children: [
           Row(
@@ -673,41 +679,6 @@ class WebAccountInfoExpanderRow extends BaseComponent {
               ),
             ],
           ),
-          // AnimatedPositioned(
-          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          //   curve: Curves.easeInOut,
-          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-          //   child: IgnorePointer(
-          //     ignoring: true,
-          //     child: Padding(
-          //       padding: EdgeInsets.only(left: connector1Left),
-          //       // child: RootContainerBalanceRowConnector(),
-          //       child: Transform.translate(
-          //         offset: Offset(-33, 4),
-          //         child: ConnectorVisual(
-          //           isBtc: false,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedPositioned(
-          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          //   curve: Curves.easeInOut,
-          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-          //   child: IgnorePointer(
-          //     ignoring: true,
-          //     child: Padding(
-          //       padding: EdgeInsets.only(left: connector2Left),
-          //       child: Transform.translate(
-          //         offset: Offset(-6, 4),
-          //         child: ConnectorVisual(
-          //           isBtc: true,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       );
     });
@@ -751,61 +722,64 @@ class WebAccountInfoBtc extends BaseComponent {
               .read(webSessionProvider.notifier)
               .setSelectedWalletType(WalletType.btc);
 
-          AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+          openTransactionsTab(context, ref, webTransactionsTabFor(WalletType.btc));
         },
         latestTx: latestBtcTx != null
             ? MouseRegion(
                 cursor: SystemMouseCursors.click,
-                child: GestureDetector(
-                  onTap: () {
-                    ref
-                        .read(webSessionProvider.notifier)
-                        .setSelectedWalletType(WalletType.btc);
-                    AutoTabsRouter.of(context)
-                        .setActiveIndex(WebRouteIndex.transactions);
-                  },
-                  child: AppCard(
-                    padding: 12,
-                    fullWidth: true,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "${latestBtcTx.amountBtc()} BTC",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
+                child: Semantics(
+                  button: true,
+                  child: GestureDetector(
+                    onTap: () {
+                      ref
+                          .read(webSessionProvider.notifier)
+                          .setSelectedWalletType(WalletType.btc);
+                      AutoTabsRouter.of(context)
+                          .setActiveIndex(WebRouteIndex.transactions);
+                    },
+                    child: AppCard(
+                      padding: 12,
+                      fullWidth: true,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "${formatBtcAmount(latestBtcTx.amountBtc())} BTC",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "${AppLocalizations.of(context).labelFrom}: ${latestBtcTx.fromAddress()}\n${AppLocalizations.of(context).labelTo}: ${latestBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
-                          maxLines: 2,
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.white.withOpacity(0.9),
+                          Text(
+                            "${AppLocalizations.of(context).labelFrom}: ${latestBtcTx.fromAddress()}\n${AppLocalizations.of(context).labelTo}: ${latestBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                            maxLines: 2,
+                            overflow: TextOverflow.fade,
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.white.withOpacity(0.9),
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        latestBtcTx.status.confirmed
-                            ? Text(
-                                AppLocalizations.of(context).statusConfirmed,
-                                style: TextStyle(
-                                  color: AppColors.getSpringGreen(),
-                                  fontWeight: FontWeight.w600,
+                          SizedBox(
+                            height: 2,
+                          ),
+                          latestBtcTx.status.confirmed
+                              ? Text(
+                                  AppLocalizations.of(context).statusConfirmed,
+                                  style: TextStyle(
+                                    color: AppColors.getSpringGreen(),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                )
+                              : Text(
+                                  AppLocalizations.of(context).statusPending,
+                                  style: TextStyle(
+                                    color: Theme.of(context).colorScheme.warning,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              )
-                            : Text(
-                                AppLocalizations.of(context).statusPending,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.warning,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -909,61 +883,64 @@ class WebAccountInfoVbtc extends BaseComponent {
       latestTx: latestVbtcBtcTx != null
           ? MouseRegion(
               cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  if (Env.btcIsTestNet) {
-                    launchUrlString(
-                        "https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
-                  } else {
-                    launchUrlString(
-                        "https://mempool.space/tx/${latestVbtcBtcTx!.txid}");
-                  }
+              child: Semantics(
+                button: true,
+                child: GestureDetector(
+                  onTap: () {
+                    if (Env.btcIsTestNet) {
+                      launchUrlString(
+                          "https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
+                    } else {
+                      launchUrlString(
+                          "https://mempool.space/tx/${latestVbtcBtcTx!.txid}");
+                    }
 
-                  // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
-                  // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
-                },
-                child: AppCard(
-                  padding: 12,
-                  fullWidth: true,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "${latestVbtcBtcTx.amountBtc()} vBTC",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
+                    // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
+                    // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+                  },
+                  child: AppCard(
+                    padding: 12,
+                    fullWidth: true,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "${formatBtcAmount(latestVbtcBtcTx.amountBtc())} vBTC",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "${AppLocalizations.of(context).labelFrom}: ${latestVbtcBtcTx.fromAddress()}\n${AppLocalizations.of(context).labelTo}: ${latestVbtcBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
-                        maxLines: 2,
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.white.withOpacity(0.9),
+                        Text(
+                          "${AppLocalizations.of(context).labelFrom}: ${latestVbtcBtcTx.fromAddress()}\n${AppLocalizations.of(context).labelTo}: ${latestVbtcBtcTx.toAddress(ref.watch(allBtcAddressesProvider))}",
+                          maxLines: 2,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.white.withOpacity(0.9),
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 2,
-                      ),
-                      latestVbtcBtcTx.status.confirmed
-                          ? Text(
-                              AppLocalizations.of(context).statusConfirmed,
-                              style: TextStyle(
-                                color: AppColors.getSpringGreen(),
-                                fontWeight: FontWeight.w600,
+                        SizedBox(
+                          height: 2,
+                        ),
+                        latestVbtcBtcTx.status.confirmed
+                            ? Text(
+                                AppLocalizations.of(context).statusConfirmed,
+                                style: TextStyle(
+                                  color: AppColors.getSpringGreen(),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            : Text(
+                                AppLocalizations.of(context).statusPending,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.warning,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
-                            )
-                          : Text(
-                              AppLocalizations.of(context).statusPending,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.warning,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -1038,7 +1015,7 @@ class WebAccountInfoVfx extends BaseComponent {
             .read(webSessionProvider.notifier)
             .setSelectedWalletType(WalletType.rbx);
 
-        AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+        openTransactionsTab(context, ref, webTransactionsTabFor(WalletType.rbx));
       },
       topIndicator: Image.asset(
         "assets/images/cube_still.png",
@@ -1094,78 +1071,81 @@ class _LatestVfxTx extends BaseComponent {
   Widget build(BuildContext context, WidgetRef ref) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () {
+            // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.rbx);
 
-          // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
-          if (!latestVfxTx.isPending) {
-            AutoTabsRouter.of(context)
-                .setActiveIndex(WebRouteIndex.transactions);
+            // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
+            if (!latestVfxTx.isPending) {
+              AutoTabsRouter.of(context)
+                  .setActiveIndex(WebRouteIndex.transactions);
 
-            Future.delayed(Duration(milliseconds: 100), () {
-              AutoRouter.of(context).push(
-                  WebTransactionDetailScreenRoute(hash: latestVfxTx.hash));
-            });
-          }
-        },
-        child: AppCard(
-          padding: 12,
-          fullWidth: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (latestVfxTx.type == TxType.rbxTransfer)
+              Future.delayed(Duration(milliseconds: 100), () {
+                AutoRouter.of(context).push(
+                    WebTransactionDetailScreenRoute(hash: latestVfxTx.hash));
+              });
+            }
+          },
+          child: AppCard(
+            padding: 12,
+            fullWidth: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (latestVfxTx.type == TxType.rbxTransfer)
+                  Text(
+                    "${latestVfxTx.amount} VFX",
+                    style: TextStyle(
+                      color: latestVfxTx.amount != null && latestVfxTx.amount! < 0
+                          ? Colors.red.shade500
+                          : Theme.of(context).colorScheme.success,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                else
+                  Text(
+                    latestVfxTx.typeLabel,
+                    style: TextStyle(
+                      color: AppColors.getBlue(),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 Text(
-                  "${latestVfxTx.amount} VFX",
+                  "${AppLocalizations.of(context).labelFrom}: ${latestVfxTx.fromAddress}",
                   style: TextStyle(
-                    color: latestVfxTx.amount != null && latestVfxTx.amount! < 0
-                        ? Colors.red.shade500
-                        : Theme.of(context).colorScheme.success,
+                    fontSize: 11,
+                    color: latestVfxTx.fromAddress.startsWith('xRBX')
+                        ? AppColors.getReserve()
+                        : Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "${AppLocalizations.of(context).labelTo}: ${latestVfxTx.toAddress}",
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: latestVfxTx.toAddress.startsWith('xRBX')
+                        ? AppColors.getReserve()
+                        : Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  latestVfxTx.isPending ? AppLocalizations.of(context).statusPending : AppLocalizations.of(context).statusSuccess,
+                  style: TextStyle(
+                    color: latestVfxTx.isPending
+                        ? Theme.of(context).colorScheme.warning
+                        : AppColors.getSpringGreen(),
                     fontWeight: FontWeight.w600,
                   ),
-                )
-              else
-                Text(
-                  latestVfxTx.typeLabel,
-                  style: TextStyle(
-                    color: AppColors.getBlue(),
-                    fontWeight: FontWeight.w600,
-                  ),
                 ),
-              Text(
-                "${AppLocalizations.of(context).labelFrom}: ${latestVfxTx.fromAddress}",
-                style: TextStyle(
-                  fontSize: 11,
-                  color: latestVfxTx.fromAddress.startsWith('xRBX')
-                      ? AppColors.getReserve()
-                      : Colors.white.withOpacity(0.9),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              Text(
-                "${AppLocalizations.of(context).labelTo}: ${latestVfxTx.toAddress}",
-                style: TextStyle(
-                  fontSize: 11,
-                  color: latestVfxTx.toAddress.startsWith('xRBX')
-                      ? AppColors.getReserve()
-                      : Colors.white.withOpacity(0.9),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Text(
-                latestVfxTx.isPending ? AppLocalizations.of(context).statusPending : AppLocalizations.of(context).statusSuccess,
-                style: TextStyle(
-                  color: latestVfxTx.isPending
-                      ? Theme.of(context).colorScheme.warning
-                      : AppColors.getSpringGreen(),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -1228,15 +1208,19 @@ class _WalletListItem extends StatelessWidget {
             SizedBox(
               width: 6,
             ),
-            InkWell(
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: address));
-                Toast.message(l10n.webAddressesAddressCopiedDot);
-              },
-              child: Icon(
-                Icons.copy,
-                color: color,
-                size: 18,
+            Semantics(
+              label: l10n.actionCopyAddress,
+              button: true,
+              child: InkWell(
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: address));
+                  Toast.message(l10n.webAddressesAddressCopiedDot);
+                },
+                child: Icon(
+                  Icons.copy,
+                  color: color,
+                  size: 18,
+                ),
               ),
             ),
           ],
@@ -1276,7 +1260,8 @@ class _WalletListItem extends StatelessWidget {
                 }
 
                 if (keypair != null) {
-                  showKeys(context, keypair!);
+                  showKeys(context, keypair!, true);
+                  return;
                 }
 
                 if (raKeypair != null) {

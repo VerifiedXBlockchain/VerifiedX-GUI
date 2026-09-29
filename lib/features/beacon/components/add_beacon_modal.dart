@@ -32,6 +32,7 @@ class AddBeaconModal extends BaseComponent {
             children: [
               Expanded(
                 child: TextFormField(
+                  key: const ValueKey('beacon:add_name'),
                   controller: provider.nameController,
                   validator: provider.nameValidator,
                   decoration: InputDecoration(
@@ -47,6 +48,7 @@ class AddBeaconModal extends BaseComponent {
               ),
               Expanded(
                 child: TextFormField(
+                  key: const ValueKey('beacon:add_ip'),
                   controller: provider.ipController,
                   validator: provider.ipAddressValidator,
                   decoration: InputDecoration(
@@ -63,6 +65,7 @@ class AddBeaconModal extends BaseComponent {
               SizedBox(
                 width: 240,
                 child: TextFormField(
+                  key: const ValueKey('beacon:add_port'),
                   controller: provider.portController,
                   decoration: InputDecoration(label: Text(l10n.beaconPortLabel)),
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -87,6 +90,7 @@ class AddBeaconModal extends BaseComponent {
               },
             ),
             AppButton(
+              key: const Key('beacon:add_submit'),
               label: l10n.beaconAdd,
               variant: AppColorVariant.Success,
               onPressed: () async {

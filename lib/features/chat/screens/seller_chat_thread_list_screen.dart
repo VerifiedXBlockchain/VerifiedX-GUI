@@ -24,6 +24,7 @@ class SellerChatThreadListScreen extends BaseScreen {
             ref.read(sellerChatThreadListProvider.notifier).fetch();
           },
           icon: Icon(Icons.refresh),
+          tooltip: l10n.actionRefresh,
         )
       ],
     );

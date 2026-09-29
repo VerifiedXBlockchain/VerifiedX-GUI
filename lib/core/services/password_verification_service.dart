@@ -1,22 +1,23 @@
 import '../singletons.dart';
 import '../storage.dart';
 import 'encryption_service.dart';
+import 'web_account_password_store.dart';
 
 class PasswordVerificationService {
-  static final Storage _storage = singleton<Storage>();
+  static Storage get _storage => singleton<Storage>();
 
-  /// Stores a password hash for future verification
+  /// Stores the wallet-wide password hash. Passwords are per account (see
+  /// [WebAccountPasswordStore]); this hash backs the legacy fallback and marks
+  /// the wallet as password protected.
   static void storePasswordHash(String password) {
     final hash = EncryptionService.hashPassword(password);
     _storage.setString(Storage.STORED_PASSWORD_HASH, hash);
   }
 
-  /// Verifies if the provided password matches the stored hash
+  /// Verifies [password] against the active account's password.
   static bool verifyPassword(String password) {
-    final storedHash = _storage.getString(Storage.STORED_PASSWORD_HASH);
-    if (storedHash == null) return false;
-    
-    return EncryptionService.verifyPassword(password, storedHash);
+    return WebAccountPasswordStore(_storage)
+        .verifyActiveAccountPassword(password);
   }
 
   /// Checks if there's a stored password hash

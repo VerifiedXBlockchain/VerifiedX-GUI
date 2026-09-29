@@ -83,21 +83,29 @@ class _Success extends StatelessWidget {
                   style: const TextStyle(color: Colors.white54, fontSize: 12, fontFamily: 'monospace'),
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  await Clipboard.setData(ClipboardData(text: record.evmDestination));
-                  Toast.message(l10n.messageCopiedToClipboard);
-                },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: Icon(Icons.copy, size: 14, color: Colors.white54),
+              Semantics(
+                label: l10n.actionCopyAddress,
+                button: true,
+                child: InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: record.evmDestination));
+                    Toast.message(l10n.messageCopiedToClipboard);
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                  ),
                 ),
               ),
-              InkWell(
-                onTap: () => launchUrlString(basescanUrl),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: Icon(Icons.open_in_new, size: 14, color: Colors.white54),
+              Semantics(
+                label: l10n.prvBridgeViewOnBasescan,
+                button: true,
+                child: InkWell(
+                  onTap: () => launchUrlString(basescanUrl),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    child: Icon(Icons.open_in_new, size: 14, color: Colors.white54),
+                  ),
                 ),
               ),
             ],
@@ -142,6 +150,7 @@ class _Success extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               AppButton(
+                key: const Key('bridge:done'),
                 label: l10n.actionDone,
                 variant: AppColorVariant.Success,
                 onPressed: onDone,

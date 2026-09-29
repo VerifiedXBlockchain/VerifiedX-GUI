@@ -24,101 +24,104 @@ class ButterflyLinkCard extends ConsumerWidget {
     final l10n = AppLocalizations.of(context);
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
+      child: Semantics(
+        button: true,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondary.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        link.iconData,
+                        color: Theme.of(context).colorScheme.secondary,
+                        size: 24,
+                      ),
                     ),
-                    child: Icon(
-                      link.iconData,
-                      color: Theme.of(context).colorScheme.secondary,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          link.displayAmount,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (link.message.isNotEmpty)
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            link.message,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[400],
+                            link.displayAmount,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                      ],
+                          if (link.message.isNotEmpty)
+                            Text(
+                              link.message,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey[400],
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                        ],
+                      ),
                     ),
-                  ),
-                  ButterflyStatusBadge(status: link.status),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    size: 14,
-                    color: Colors.grey[500],
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    timeago.format(link.createdAt),
-                    style: TextStyle(
-                      fontSize: 12,
+                    ButterflyStatusBadge(status: link.status),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.access_time,
+                      size: 14,
                       color: Colors.grey[500],
                     ),
-                  ),
-                  const Spacer(),
-                  if (link.status == ButterflyLinkStatus.pending ||
-                      link.status == ButterflyLinkStatus.readyForRedemption)
+                    const SizedBox(width: 4),
+                    Text(
+                      timeago.format(link.createdAt),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                    const Spacer(),
+                    if (link.status == ButterflyLinkStatus.pending ||
+                        link.status == ButterflyLinkStatus.readyForRedemption)
+                      IconButton(
+                        icon: const Icon(Icons.refresh, size: 18),
+                        onPressed: () {
+                          ref
+                              .read(butterflyLinksProvider.notifier)
+                              .refreshLinkStatus(link.linkId);
+                          Toast.message(l10n.r3dRefreshingStatus);
+                        },
+                        tooltip: l10n.r3dRefreshStatus,
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                    const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.refresh, size: 18),
+                      icon: const Icon(Icons.copy, size: 18),
                       onPressed: () {
-                        ref
-                            .read(butterflyLinksProvider.notifier)
-                            .refreshLinkStatus(link.linkId);
-                        Toast.message(l10n.r3dRefreshingStatus);
+                        Clipboard.setData(ClipboardData(text: link.fullUrl));
+                        Toast.message(l10n.r3dLinkCopiedClipboard);
                       },
-                      tooltip: l10n.r3dRefreshStatus,
+                      tooltip: l10n.r3dCopyLink,
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
                     ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    icon: const Icon(Icons.copy, size: 18),
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: link.fullUrl));
-                      Toast.message(l10n.r3dLinkCopiedClipboard);
-                    },
-                    tooltip: l10n.r3dCopyLink,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints(),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -38,6 +38,8 @@ import '../../web/components/web_wallet_type_switcher.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../providers/send_form_provider.dart';
+import '../utils.dart';
+import '../../../utils/formatting.dart';
 
 class SendForm extends BaseComponent {
   final Wallet? wallet;
@@ -58,7 +60,7 @@ class SendForm extends BaseComponent {
   Future<void> _pasteAddress(BuildContext context, SendFormProvider formProvider) async {
     ClipboardData? clipboardData = await Clipboard.getData(Clipboard.kTextPlain);
     if (clipboardData != null && clipboardData.text != null) {
-      final normalizedText = clipboardData.text!.replaceAll(RegExp('[^a-zA-Z0-9]'), "");
+      final normalizedText = sanitizePastedSendAddress(clipboardData.text!);
       formProvider.addressController.text = normalizedText;
     } else {
       Toast.error(AppLocalizations.of(context).messageClipboardInvalid);
@@ -121,6 +123,8 @@ class SendForm extends BaseComponent {
 
     bool isWeb = kIsWeb;
     bool isBtc = kIsWeb ? webAccountType?.type == WebCurrencyType.btc : ref.watch(sessionProvider.select((v) => v.btcSelected));
+    final webVaultNotActivated =
+        kIsWeb && webAccountType?.type == WebCurrencyType.vault && !ref.watch(webSessionProvider.select((v) => v.raActivated));
 
     const leadingWidth = 70.0;
 
@@ -192,7 +196,7 @@ class SendForm extends BaseComponent {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (!isBtc && wallet!.isReserved && !wallet!.isNetworkProtected)
+                          if (!isBtc && (wallet!.isReserved && !wallet!.isNetworkProtected || webVaultNotActivated))
                             AppBadge(
                               label: AppLocalizations.of(context).sendBadgeNotActivated,
                               variant: AppColorVariant.Danger,
@@ -336,8 +340,8 @@ class SendForm extends BaseComponent {
                                 children: [
                                   AppBadge(
                                     label: kIsWeb
-                                        ? "${ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance)) ?? 0} BTC"
-                                        : "${btcAccount!.balance} BTC",
+                                        ? "${formatBtcAmount(ref.watch(webSessionProvider.select((v) => v.btcBalanceInfo?.btcBalance)) ?? 0)} BTC"
+                                        : "${formatBtcAmount(btcAccount!.balance)} BTC",
                                     variant: AppColorVariant.Btc,
                                   ),
                                 ],
@@ -372,6 +376,7 @@ class SendForm extends BaseComponent {
               ListTile(
                 leading: isMobile ? null : SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelTo)),
                 title: TextFormField(
+                  key: const ValueKey('send:address'),
                   controller: formProvider.addressController,
                   validator: formProvider.addressValidator,
                   decoration: InputDecoration(hintText: AppLocalizations.of(context).sendRecipientHint),
@@ -385,15 +390,18 @@ class SendForm extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(pasteMessage),
-                      InkWell(
-                        onTap: () {
-                          _pasteAddress(context, formProvider);
-                        },
-                        child: Text(
-                          AppLocalizations.of(context).sendPasteHelperHereLink,
-                          style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Theme.of(context).colorScheme.secondary,
+                      Semantics(
+                        button: true,
+                        child: InkWell(
+                          onTap: () {
+                            _pasteAddress(context, formProvider);
+                          },
+                          child: Text(
+                            AppLocalizations.of(context).sendPasteHelperHereLink,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
                           ),
                         ),
                       ),
@@ -409,6 +417,7 @@ class SendForm extends BaseComponent {
                           PrettyIconButton(
                             type: PrettyIconType.custom,
                             customIcon: Icons.paste,
+                            label: AppLocalizations.of(context).actionPaste,
                             onPressed: () {
                               _pasteAddress(context, formProvider);
                             },
@@ -418,6 +427,7 @@ class SendForm extends BaseComponent {
                               type: PrettyIconType.custom,
                               iconScale: .75,
                               customIcon: FontAwesomeIcons.folderOpen,
+                              label: AppLocalizations.of(context).sendChooseAddressTitle,
                               onPressed: () {
                                 chooseAddress(context, ref, formProvider);
                               },
@@ -428,6 +438,7 @@ class SendForm extends BaseComponent {
               ListTile(
                 leading: isMobile ? null : SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelAmount)),
                 title: TextFormField(
+                  key: const ValueKey('send:amount'),
                   controller: formProvider.amountController,
                   validator: formProvider.amountValidator,
                   inputFormatters: [FilteringTextInputFormatter.allow(RegExp("[0-9.]"))],
@@ -566,6 +577,7 @@ class SendForm extends BaseComponent {
                     ),
                     Consumer(builder: (context, ref, _) {
                       return AppButton(
+                        key: const Key('send:submit'),
                         label: AppLocalizations.of(context).actionSend,
                         type: AppButtonType.Elevated,
                         variant: isBtc ? AppColorVariant.Btc : AppColorVariant.Primary,

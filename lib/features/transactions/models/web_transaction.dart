@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../web/models/web_recovery_details.dart';
 import '../../../l10n/l10n_helper.dart';
+import '../../../utils/json_converters.dart';
 import 'transaction.dart';
 
 part 'web_transaction.freezed.dart';
@@ -19,8 +20,8 @@ class WebTransaction with _$WebTransaction {
     @JsonKey(name: 'to_address') required String toAddress,
     @JsonKey(name: 'from_address') required String fromAddress,
     required int type,
-    @JsonKey(name: "total_amount") required double? amount,
-    @JsonKey(name: "total_fee") required double? fee,
+    @JsonKey(name: "total_amount") @NullableNumOrStringDoubleConverter() required double? amount,
+    @JsonKey(name: "total_fee") @NullableNumOrStringDoubleConverter() required double? fee,
     @JsonKey(name: 'date_crafted') required DateTime date,
     @JsonKey(name: 'unlock_time') DateTime? unlockTime,
     @Default(false) bool isPending,
@@ -49,6 +50,14 @@ class WebTransaction with _$WebTransaction {
       height: height,
     );
   }
+
+  /// [date] in the viewer's time zone. `date_crafted` parses as UTC, and the
+  /// list card and explorer both show local time.
+  DateTime get localDate => date.toLocal();
+
+  /// [unlockTime] (the Vault settlement time) in the viewer's time zone,
+  /// matching [localDate]. `unlock_time` parses as UTC too.
+  DateTime? get localUnlockTime => unlockTime?.toLocal();
 
   String get parseTimeStamp {
     //TODO: fix this;

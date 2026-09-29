@@ -75,6 +75,7 @@ class TopicVoteActions extends BaseComponent {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AppButton(
+              key: const Key('voting:vote_yes'),
               label: l10n.tokenVoteYes,
               onPressed: () async {
                 if (!await passwordRequiredGuard(context, ref)) return;
@@ -95,6 +96,7 @@ class TopicVoteActions extends BaseComponent {
               width: 16,
             ),
             AppButton(
+              key: const Key('voting:vote_no'),
               label: l10n.tokenVoteNo,
               onPressed: () async {
                 if (!await passwordRequiredGuard(context, ref)) return;

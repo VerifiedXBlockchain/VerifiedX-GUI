@@ -28,6 +28,7 @@ import '../../smart_contracts/components/sc_creator/common/modal_container.dart'
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../../wallet/utils.dart';
+import '../models/escrowed_withdrawal.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../providers/btc_account_list_provider.dart';
 import '../providers/btc_pending_tokenized_address_list_provider.dart';
@@ -57,8 +58,6 @@ class TokenizedBtcActionButtons extends BaseComponent {
     final pendingIds = ref.watch(btcPendingTokenizedAddressListProvider);
 
     bool debuggingAddressExists = true;
-
-    final isRa = token.rbxAddress.startsWith("xRBX");
 
     return Builder(
       builder: (context) {
@@ -165,222 +164,232 @@ class TokenizedBtcActionButtons extends BaseComponent {
                               AppCard(
                                 padding: 0,
                                 margin: EdgeInsets.symmetric(vertical: 8),
-                                child: ListTile(
-                                  title: Text(l10n.bw2BuyBtcOnRamp),
-                                  subtitle: Text(
-                                      l10n.bw2BuyBtcOnRampSubtitle),
-                                  trailing: Icon(Icons.credit_card),
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-                                    AccountUtils.getCoin(
-                                      parentContext,
-                                      ref,
-                                      VfxOrBtcOption.btc,
-                                      btcAddressOverride: token.btcAddress!,
-                                    );
-                                  },
+                                child: Semantics(
+                                  button: true,
+                                  child: ListTile(
+                                    title: Text(l10n.bw2BuyBtcOnRamp),
+                                    subtitle: Text(
+                                        l10n.bw2BuyBtcOnRampSubtitle),
+                                    trailing: Icon(Icons.credit_card),
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      AccountUtils.getCoin(
+                                        parentContext,
+                                        ref,
+                                        VfxOrBtcOption.btc,
+                                        btcAddressOverride: token.btcAddress!,
+                                      );
+                                    },
+                                  ),
                                 ),
                               ),
                               ...btcAccounts.map((account) {
                                 return AppCard(
                                   padding: 0,
                                   margin: EdgeInsets.symmetric(vertical: 8),
-                                  child: ListTile(
-                                    title: Text(account.address),
-                                    subtitle: Text("${account.balance} BTC"),
-                                    trailing: Icon(Icons.send),
-                                    onTap: () async {
-                                      if (isSending) return;
-                                      isSending = true;
-                                      Navigator.of(context).pop();
+                                  child: Semantics(
+                                    button: true,
+                                    child: ListTile(
+                                      title: Text(account.address),
+                                      subtitle: Text("${account.balance} BTC"),
+                                      trailing: Icon(Icons.send),
+                                      onTap: () async {
+                                        if (isSending) return;
+                                        isSending = true;
+                                        Navigator.of(context).pop();
 
-                                      final amount = await PromptModal.show(
-                                        title: l10n.tkbBtcAmount,
-                                        validator: (v) =>
-                                            formValidatorNumber(v, l10n.labelAmount),
-                                        labelText: l10n.labelAmount,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp("[0-9.]"))
-                                        ],
-                                        showUsdValue: true,
-                                        currencyType: CurrencyType.btc,
-                                      );
-
-                                      if (amount != null) {
-                                        final parsedAmount =
-                                            double.tryParse(amount);
-
-                                        if (parsedAmount == null) {
-                                          Toast.error(l10n.btcInvalidAmount);
-                                          return;
-                                        }
-
-                                        if (parsedAmount <= 0) {
-                                          Toast.error(
-                                              l10n.tkbAmountGreaterThanZero);
-                                          return;
-                                        }
-
-                                        if (parsedAmount >= account.balance) {
-                                          Toast.error(
-                                              l10n.tkbInsufficientBalanceAccount(account.balance.toString()));
-                                          return;
-                                        }
-
-                                        final feeRate =
-                                            await promptForFeeRate(context);
-
-                                        if (feeRate == null) {
-                                          return;
-                                        }
-
-                                        // final amountRequired = parsedAmount + satashisToBtc(feeRate);
-
-                                        // if (amountRequired > account.balance) {
-                                        //   Toast.error(
-                                        //       "Insufficient Balance. This account only has ${account.balance} BTC. With the fee, the amount required is ${amountRequired.toStringAsFixed(9)} BTC.");
-                                        //   return;
-                                        // }
-
-                                        final calculatedFeeRate =
-                                            await BtcService().getFee(
-                                                account.address,
-                                                token.btcAddress!,
-                                                parsedAmount,
-                                                feeRate);
-
-                                        if (calculatedFeeRate == null) {
-                                          return;
-                                        }
-
-                                        final confirmed =
-                                            await ConfirmDialog.show(
-                                          title: l10n.tkbConfirmTransaction,
-                                          body: l10n.tkbConfirmSendBtcBody(
-                                            parsedAmount.toStringAsFixed(9),
-                                            account.address,
-                                            token.btcAddress!,
-                                            calculatedFeeRate.toStringAsFixed(8),
-                                          ),
-                                          confirmText: l10n.actionSend,
-                                          cancelText: l10n.actionCancel,
+                                        final amount = await PromptModal.show(
+                                          title: l10n.tkbBtcAmount,
+                                          validator: (v) =>
+                                              formValidatorNumber(v, l10n.labelAmount),
+                                          labelText: l10n.labelAmount,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter.allow(
+                                                RegExp("[0-9.]"))
+                                          ],
+                                          showUsdValue: true,
+                                          currencyType: CurrencyType.btc,
                                         );
 
-                                        if (confirmed != true) {
-                                          return;
-                                        }
-                                        ref
-                                            .read(
-                                                globalLoadingProvider.notifier)
-                                            .start();
+                                        if (amount != null) {
+                                          final parsedAmount =
+                                              double.tryParse(amount);
 
-                                        final result =
-                                            await BtcService().sendTransaction(
-                                          amount: parsedAmount,
-                                          feeRate: feeRate,
-                                          fromAddress: account.address,
-                                          toAddress: token.btcAddress!,
-                                        );
-                                        ref
-                                            .read(
-                                                globalLoadingProvider.notifier)
-                                            .complete();
+                                          if (parsedAmount == null) {
+                                            Toast.error(l10n.btcInvalidAmount);
+                                            return;
+                                          }
 
-                                        if (!result.success) {
-                                          Toast.error(result.message);
-                                          return;
-                                        }
-                                        final txHash = result.message;
-                                        final message =
-                                            "BTC TX broadcasted with hash of $txHash";
-                                        ref.read(logProvider.notifier).append(
-                                              LogEntry(
-                                                message: message,
-                                                textToCopy: txHash,
-                                                variant: AppColorVariant.Btc,
-                                              ),
-                                            );
-                                        Toast.message(
-                                            l10n.tkbBtcSentTo(amount, token.btcAddress!));
-                                        notifyTransactionSubmitted();
+                                          if (parsedAmount <= 0) {
+                                            Toast.error(
+                                                l10n.tkbAmountGreaterThanZero);
+                                            return;
+                                          }
 
-                                        InfoDialog.show(
-                                            title: l10n.btcTransactionBroadcastedTitle,
-                                            buttonColorOverride:
-                                                Color(0xfff7931a),
-                                            content: ConstrainedBox(
-                                              constraints:
-                                                  BoxConstraints(maxWidth: 600),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  TextFormField(
-                                                    initialValue: txHash,
-                                                    readOnly: true,
-                                                    decoration: InputDecoration(
-                                                      label: Text(
-                                                        l10n.tkbTransactionHash,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Color(0xfff7931a),
+                                          if (parsedAmount >= account.balance) {
+                                            Toast.error(
+                                                l10n.tkbInsufficientBalanceAccount(account.balance.toString()));
+                                            return;
+                                          }
+
+                                          final feeRate =
+                                              await promptForFeeRate(context);
+
+                                          if (feeRate == null) {
+                                            return;
+                                          }
+
+                                          // final amountRequired = parsedAmount + satashisToBtc(feeRate);
+
+                                          // if (amountRequired > account.balance) {
+                                          //   Toast.error(
+                                          //       "Insufficient Balance. This account only has ${account.balance} BTC. With the fee, the amount required is ${amountRequired.toStringAsFixed(9)} BTC.");
+                                          //   return;
+                                          // }
+
+                                          final calculatedFeeRate =
+                                              await BtcService().getFee(
+                                                  account.address,
+                                                  token.btcAddress!,
+                                                  parsedAmount,
+                                                  feeRate);
+
+                                          if (calculatedFeeRate == null) {
+                                            return;
+                                          }
+
+                                          final confirmed =
+                                              await ConfirmDialog.show(
+                                            title: l10n.tkbConfirmTransaction,
+                                            body: l10n.tkbConfirmSendBtcBody(
+                                              parsedAmount.toStringAsFixed(9),
+                                              account.address,
+                                              token.btcAddress!,
+                                              calculatedFeeRate.toStringAsFixed(8),
+                                            ),
+                                            confirmText: l10n.actionSend,
+                                            cancelText: l10n.actionCancel,
+                                          );
+
+                                          if (confirmed != true) {
+                                            return;
+                                          }
+                                          ref
+                                              .read(
+                                                  globalLoadingProvider.notifier)
+                                              .start();
+
+                                          final result =
+                                              await BtcService().sendTransaction(
+                                            amount: parsedAmount,
+                                            feeRate: feeRate,
+                                            fromAddress: account.address,
+                                            toAddress: token.btcAddress!,
+                                          );
+                                          ref
+                                              .read(
+                                                  globalLoadingProvider.notifier)
+                                              .complete();
+
+                                          if (!result.success) {
+                                            Toast.error(result.message);
+                                            return;
+                                          }
+                                          final txHash = result.message;
+                                          final message =
+                                              "BTC TX broadcasted with hash of $txHash";
+                                          ref.read(logProvider.notifier).append(
+                                                LogEntry(
+                                                  message: message,
+                                                  textToCopy: txHash,
+                                                  variant: AppColorVariant.Btc,
+                                                ),
+                                              );
+                                          Toast.message(
+                                              l10n.tkbBtcSentTo(amount, token.btcAddress!));
+                                          notifyTransactionSubmitted();
+
+                                          InfoDialog.show(
+                                              title: l10n.btcTransactionBroadcastedTitle,
+                                              buttonColorOverride:
+                                                  Color(0xfff7931a),
+                                              content: ConstrainedBox(
+                                                constraints:
+                                                    BoxConstraints(maxWidth: 600),
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    TextFormField(
+                                                      initialValue: txHash,
+                                                      readOnly: true,
+                                                      decoration: InputDecoration(
+                                                        label: Text(
+                                                          l10n.tkbTransactionHash,
+                                                          style: TextStyle(
+                                                            color:
+                                                                Color(0xfff7931a),
+                                                          ),
+                                                        ),
+                                                        suffix: IconButton(
+                                                          icon: Icon(Icons.copy),
+                                                          tooltip: l10n.actionCopyTransactionHash,
+                                                          onPressed: () async {
+                                                            await Clipboard.setData(
+                                                                ClipboardData(
+                                                                    text:
+                                                                        txHash));
+                                                            Toast.message(
+                                                                l10n.tkbTransactionHashCopied);
+                                                          },
                                                         ),
                                                       ),
-                                                      suffix: IconButton(
-                                                        icon: Icon(Icons.copy),
-                                                        onPressed: () async {
-                                                          await Clipboard.setData(
-                                                              ClipboardData(
-                                                                  text:
-                                                                      txHash));
-                                                          Toast.message(
-                                                              l10n.tkbTransactionHashCopied);
-                                                        },
-                                                      ),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 12,
-                                                  ),
-                                                  AppButton(
-                                                    label:
-                                                        l10n.btcOpenInExplorer,
-                                                    variant:
-                                                        AppColorVariant.Btc,
-                                                    type: AppButtonType.Text,
-                                                    onPressed: () {
-                                                      if (Env.btcIsTestNet) {
-                                                        launchUrlString(
-                                                            "https://mempool.space/testnet4/tx/$txHash");
-                                                      } else {
-                                                        launchUrlString(
-                                                            "https://mempool.space/tx/$txHash");
-                                                      }
-                                                    },
-                                                  )
-                                                ],
-                                              ),
-                                            ));
-                                      }
-                                    },
+                                                    SizedBox(
+                                                      height: 12,
+                                                    ),
+                                                    AppButton(
+                                                      label:
+                                                          l10n.btcOpenInExplorer,
+                                                      variant:
+                                                          AppColorVariant.Btc,
+                                                      type: AppButtonType.Text,
+                                                      onPressed: () {
+                                                        if (Env.btcIsTestNet) {
+                                                          launchUrlString(
+                                                              "https://mempool.space/testnet4/tx/$txHash");
+                                                        } else {
+                                                          launchUrlString(
+                                                              "https://mempool.space/tx/$txHash");
+                                                        }
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                              ));
+                                        }
+                                      },
+                                    ),
                                   ),
                                 );
                               }).toList(),
                               AppCard(
                                 padding: 0,
                                 margin: EdgeInsets.symmetric(vertical: 8),
-                                child: ListTile(
-                                  title: Text(l10n.btcManualSendTitle),
-                                  subtitle: Text(
-                                      l10n.tkbManualSendExchangeSubtitle),
-                                  trailing: Icon(Icons.content_copy),
-                                  onTap: () {
-                                    Navigator.of(context).pop();
-                                    _showManualSendDialog(
-                                        parentContext, token.btcAddress!);
-                                  },
+                                child: Semantics(
+                                  button: true,
+                                  child: ListTile(
+                                    title: Text(l10n.btcManualSendTitle),
+                                    subtitle: Text(
+                                        l10n.tkbManualSendExchangeSubtitle),
+                                    trailing: Icon(Icons.content_copy),
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                      _showManualSendDialog(
+                                          parentContext, token.btcAddress!);
+                                    },
+                                  ),
                                 ),
                               ),
                             ],
@@ -394,21 +403,24 @@ class TokenizedBtcActionButtons extends BaseComponent {
               ),
 
             AppButton(
+              key: const Key('vbtc:withdraw'),
               label: l10n.btcWithdrawLabel,
               icon: Icons.download,
               variant: AppColorVariant.Primary,
               onPressed: () async {
-                if (isRa) {
-                  Toast.error(l10n.tkbVaultCannotWithdraw);
-                  return;
-                }
-
                 // The withdrawal requestor is the wallet pressing the button, NOT
                 // token.rbxAddress (the contract owner) — non-owner holders withdraw
                 // their own balance, and the node holds only this wallet's key.
                 final currentWallet = ref.read(sessionProvider).currentWallet;
                 if (currentWallet == null) {
                   Toast.error(l10n.tkbFailedRequestWithdrawal);
+                  return;
+                }
+
+                // Vault accounts cannot withdraw. Test the sender, not the
+                // contract owner, as the transfer does (vbtcTransferSenderAddress).
+                if (vbtcSenderIsVault(currentWallet.address)) {
+                  Toast.error(l10n.tkbVaultCannotWithdraw);
                   return;
                 }
 
@@ -422,7 +434,53 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   final freshToken = freshContracts.firstWhereOrNull(
                     (t) => t.smartContractUid == token.smartContractUid,
                   );
+
+                  // Core clears the active hash on expiry, but the request's
+                  // escrow remains. Ask even if there is no active request or
+                  // the holder's token dropped out of the spendable list.
+                  final escrowed = await VbtcV2Service().getEscrowedWithdrawals(
+                    address: currentWallet.address,
+                    scUid: token.smartContractUid,
+                  );
                   ref.read(globalLoadingProvider.notifier).complete();
+
+                  final pendingAction = classifyPendingWithdrawal(
+                    activeRequestHash: freshToken?.activeWithdrawalRequestHash,
+                    escrowed: escrowed,
+                  );
+
+                  // Explain outstanding escrow before opening another form
+                  // (QA MTI#2.5), including after the active hash is cleared.
+                  if (pendingAction == PendingWithdrawalAction.expired ||
+                      pendingAction == PendingWithdrawalAction.unpayable) {
+                    final entry = pendingEscrowedWithdrawal(
+                      activeRequestHash: freshToken?.activeWithdrawalRequestHash,
+                      escrowed: escrowed,
+                    )!;
+                    final amount = entry.amount.toString();
+                    final destination = entry.btcDestination ??
+                        freshToken?.activeWithdrawalBtcDestination ??
+                        '';
+                    final isExpired = pendingAction == PendingWithdrawalAction.expired;
+                    final body = [
+                      isExpired
+                          ? l10n.tkbExpiredWithdrawalBody(amount, destination)
+                          : l10n.tkbUnpayableWithdrawalBody(amount, destination),
+                      entry.cancellationPending
+                          ? l10n.tkbWithdrawalCancellationPending
+                          : l10n.tkbWithdrawalCancelNeedsVote,
+                    ].join('\n\n');
+
+                    final openForm = await ConfirmDialog.show(
+                      title: isExpired
+                          ? l10n.tkbExpiredWithdrawalTitle
+                          : l10n.tkbUnpayableWithdrawalTitle,
+                      body: body,
+                      confirmText: l10n.tkbOpenWithdrawalForm,
+                      cancelText: l10n.actionClose,
+                    );
+                    if (openForm != true) return;
+                  }
 
                   // NOTE: `hasPendingWithdrawal` comes from the contract's
                   // ActiveWithdrawal* fields, which are a single slot shared by
@@ -430,7 +488,8 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   // this cannot be scoped to the current wallet the way the web
                   // build scopes it. The copy therefore does not claim the
                   // withdrawal belongs to this account.
-                  if (freshToken != null && freshToken.hasPendingWithdrawal) {
+                  if (freshToken != null &&
+                      pendingAction == PendingWithdrawalAction.offerComplete) {
                     final shouldComplete = await ConfirmDialog.show(
                       title: l10n.tkbPendingWithdrawalFound,
                       body: l10n.tkbPendingWithdrawalBody(freshToken.activeWithdrawalAmount.toString(), freshToken.activeWithdrawalBtcDestination.toString()),
@@ -575,6 +634,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
             // SizedBox makes the surrounding `Wrap` start a new run.
             const SizedBox(width: double.infinity, height: 0),
             AppButton(
+              key: const Key('vbtc:transfer'),
               label: l10n.btcTransferLabel,
               variant: AppColorVariant.Primary,
               icon: Icons.send,
@@ -596,39 +656,48 @@ class TokenizedBtcActionButtons extends BaseComponent {
                           AppCard(
                             padding: 0,
                             margin: EdgeInsets.symmetric(vertical: 4),
-                            child: ListTile(
-                              title: Text(l10n.tkbTransferVbtc),
-                              subtitle: Text(l10n.tkbTransferVbtcSubtitle),
-                              trailing: Icon(Icons.chevron_right),
-                              onTap: () {
-                                Navigator.of(context).pop(2);
-                              },
+                            child: Semantics(
+                              button: true,
+                              child: ListTile(
+                                title: Text(l10n.tkbTransferVbtc),
+                                subtitle: Text(l10n.tkbTransferVbtcSubtitle),
+                                trailing: Icon(Icons.chevron_right),
+                                onTap: () {
+                                  Navigator.of(context).pop(2);
+                                },
+                              ),
                             ),
                           ),
                           if (isOwner)
                             AppCard(
                               padding: 0,
                               margin: EdgeInsets.symmetric(vertical: 4),
-                              child: ListTile(
-                                title: Text(l10n.tkbTransferTokenOwnership),
-                                subtitle: Text(l10n.tkbTransferTokenOwnershipSubtitle),
-                                trailing: Icon(Icons.chevron_right),
-                                onTap: () {
-                                  Navigator.of(context).pop(1);
-                                },
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                  title: Text(l10n.tkbTransferTokenOwnership),
+                                  subtitle: Text(l10n.tkbTransferTokenOwnershipSubtitle),
+                                  trailing: Icon(Icons.chevron_right),
+                                  onTap: () {
+                                    Navigator.of(context).pop(1);
+                                  },
+                                ),
                               ),
                             ),
                           if (isOwner)
                             AppCard(
                               padding: 0,
                               margin: EdgeInsets.symmetric(vertical: 4),
-                              child: ListTile(
-                                title: Text(l10n.tkbTransferOwnershipToReserve),
-                                subtitle: Text(l10n.tkbTransferOwnershipToReserveSubtitle),
-                                trailing: Icon(Icons.chevron_right),
-                                onTap: () {
-                                  Navigator.of(context).pop(4);
-                                },
+                              child: Semantics(
+                                button: true,
+                                child: ListTile(
+                                  title: Text(l10n.tkbTransferOwnershipToReserve),
+                                  subtitle: Text(l10n.tkbTransferOwnershipToReserveSubtitle),
+                                  trailing: Icon(Icons.chevron_right),
+                                  onTap: () {
+                                    Navigator.of(context).pop(4);
+                                  },
+                                ),
                               ),
                             ),
                         ],
@@ -703,6 +772,17 @@ class TokenizedBtcActionButtons extends BaseComponent {
                   }
                 }
                 if (option == 2) {
+                  final fromAddress = vbtcTransferSenderAddress(
+                    version: token.version,
+                    ownerAddress: token.rbxAddress,
+                    currentWalletAddress:
+                        ref.read(sessionProvider).currentWallet?.address,
+                  );
+                  if (fromAddress == null) {
+                    Toast.error(l10n.r3fFailedTransferVbtc);
+                    return;
+                  }
+
                   final result = await showModalBottomSheet(
                     context: context,
                     builder: (context) {
@@ -723,9 +803,9 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       return;
                     }
 
-                    if (isRa) {
+                    if (fromAddress.startsWith("xRBX")) {
                       if (!await passwordRequiredGuardV2(
-                          context, ref, token.rbxAddress)) {
+                          context, ref, fromAddress)) {
                         return;
                       }
                     }
@@ -735,7 +815,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       ref.read(globalLoadingProvider.notifier).start();
                       final txHash = await VbtcV2Service().transferVbtc(
                         scUid: token.smartContractUid,
-                        fromAddress: token.rbxAddress,
+                        fromAddress: fromAddress,
                         toAddress: result.toAddress,
                         amount: result.amount,
                       );
@@ -762,7 +842,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
                       final success = await BtcService().transferTokenShares(
                         token.smartContractUid,
                         result.toAddress,
-                        token.rbxAddress,
+                        fromAddress,
                         result.amount,
                       );
                       ref.read(globalLoadingProvider.notifier).complete();
@@ -807,14 +887,17 @@ class TokenizedBtcActionButtons extends BaseComponent {
                                     ),
                                     child: Card(
                                       color: Colors.black,
-                                      child: ListTile(
-                                        title: Text(w.fullLabel),
-                                        subtitle: Text(w.balanceLabel),
-                                        leading: Icon(Icons.security),
-                                        trailing: Icon(Icons.chevron_right),
-                                        onTap: () {
-                                          Navigator.of(context).pop(w);
-                                        },
+                                      child: Semantics(
+                                        button: true,
+                                        child: ListTile(
+                                          title: Text(w.fullLabel),
+                                          subtitle: Text(w.balanceLabel),
+                                          leading: Icon(Icons.security),
+                                          trailing: Icon(Icons.chevron_right),
+                                          onTap: () {
+                                            Navigator.of(context).pop(w);
+                                          },
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1167,6 +1250,7 @@ class _TransferSharesModal extends BaseComponent {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextFormField(
+                key: const ValueKey('vbtc:address'),
                 controller: toAddressController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: forWithdrawl
@@ -1184,7 +1268,10 @@ class _TransferSharesModal extends BaseComponent {
                 ),
               ),
               TextFormField(
+                key: const ValueKey('vbtc:amount'),
                 controller: amountControlller,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                validator: (value) => value != null && vbtcAmountHasTooManyDecimals(value) ? l10n.btcBulkMaxDecimals : null,
                 decoration: InputDecoration(
                   label: Text(
                     l10n.tkbAmountOfVbtcTo(forWithdrawl ? l10n.btcWithdrawLabel : l10n.actionSend),
@@ -1317,6 +1404,7 @@ class _TransferSharesModal extends BaseComponent {
                     },
                   ),
                   AppButton(
+                    key: const Key('vbtc:submit'),
                     label: forWithdrawl ? l10n.btcWithdrawLabel : l10n.btcTransferLabel,
                     variant: forWithdrawl
                         ? AppColorVariant.Secondary
@@ -1337,6 +1425,11 @@ class _TransferSharesModal extends BaseComponent {
 
                       if (amount == null || amount <= 0) {
                         Toast.error(l10n.btcInvalidAmount);
+                        return;
+                      }
+
+                      if (vbtcAmountHasTooManyDecimals(amountControlller.text)) {
+                        Toast.error(l10n.btcBulkMaxDecimals);
                         return;
                       }
 

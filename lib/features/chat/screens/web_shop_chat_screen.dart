@@ -36,9 +36,11 @@ class WebShopChatScreen extends BaseScreen {
                     ref.read(webShopChatListProvider(identifier).notifier).fetch();
                   },
                   icon: Icon(Icons.refresh),
+                  tooltip: l10n.actionRefresh,
                 ),
                 IconButton(
                   icon: Icon(Icons.delete),
+                  tooltip: l10n.chatDeleteThread,
                   onPressed: () async {
                     final confirmed = await ConfirmDialog.show(
                       title: l10n.chatDeleteThread,

@@ -33,46 +33,6 @@ class NftMangementModal extends BaseComponent {
   final bool showViewNft;
   const NftMangementModal(this.id, this.nft, {Key? key, this.showViewNft = true}) : super(key: key);
 
-  void evolve(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await ConfirmDialog.show(
-      title: l10n.nftEvolveTitle,
-      body: l10n.r3gConfirmEvolveOneStage,
-      confirmText: l10n.nftEvolve,
-      cancelText: l10n.actionCancel,
-    );
-    if (confirmed == true) {
-      final _provider = ref.read(nftDetailProvider(id).notifier);
-      final success = await _provider.evolve();
-      if (success) {
-        Toast.message(l10n.nftEvolveSentToast);
-        showEvolveMessage();
-      } else {
-        Toast.error();
-      }
-    }
-  }
-
-  void devolve(BuildContext context, WidgetRef ref) async {
-    final l10n = AppLocalizations.of(context);
-    final confirmed = await ConfirmDialog.show(
-      title: l10n.nftDevolveTitle,
-      body: l10n.r3gConfirmDevolveOneStage,
-      confirmText: l10n.r3gDevolve,
-      cancelText: l10n.actionCancel,
-    );
-    if (confirmed == true) {
-      final _provider = ref.read(nftDetailProvider(id).notifier);
-      final success = await _provider.devolve();
-      if (success) {
-        Toast.message(AppLocalizations.of(context).nftDevolveSentToast);
-        showEvolveMessage(context);
-      } else {
-        Toast.error();
-      }
-    }
-  }
-
   void setEvolve(
     BuildContext context,
     WidgetRef ref,
@@ -329,103 +289,107 @@ class EvolutionStateRow extends BaseComponent {
                         ),
                       ),
                     if (showMedia)
-                      InkWell(
-                        onTap: kIsWeb
-                            ? null
-                            : () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AssetThumbnailDialog(
-                                      asset: phase.asset!,
-                                      nftId: nftId,
-                                      ownerAddress: nft.currentOwner,
-                                      isPrimaryAsset: index == 0,
-                                      onAssociate: () {
-                                        if (onAssociate != null) {
-                                          onAssociate!();
-                                        }
-                                      },
-                                    );
-                                  },
-                                );
-                              },
-                        child: SizedBox(
-                          width: 100,
-                          height: 100,
-                          child: Stack(
-                            alignment: Alignment.bottomCenter,
-                            children: [
-                              if (kIsWeb)
-                                phase.webAsset != null
-                                    ? SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: CachedNetworkImage(
-                                          imageUrl: phase.webAsset!.location,
+                      Semantics(
+                        label: kIsWeb ? null : l10n.actionViewAsset,
+                        button: !kIsWeb,
+                        child: InkWell(
+                          onTap: kIsWeb
+                              ? null
+                              : () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AssetThumbnailDialog(
+                                        asset: phase.asset!,
+                                        nftId: nftId,
+                                        ownerAddress: nft.currentOwner,
+                                        isPrimaryAsset: index == 0,
+                                        onAssociate: () {
+                                          if (onAssociate != null) {
+                                            onAssociate!();
+                                          }
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                          child: SizedBox(
+                            width: 100,
+                            height: 100,
+                            child: Stack(
+                              alignment: Alignment.bottomCenter,
+                              children: [
+                                if (kIsWeb)
+                                  phase.webAsset != null
+                                      ? SizedBox(
                                           width: 100,
                                           height: 100,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : Text(""),
-                              if (!kIsWeb && phase.asset != null && phase.asset!.isImage)
-                                phase.asset!.localPath != null
-                                    ? SizedBox(
-                                        width: 100,
-                                        height: 100,
-                                        child: PollingImagePreview(
-                                          localPath: phase.asset!.localPath!,
-                                          expectedSize: phase.asset!.fileSize,
-                                          withProgress: false,
-                                        ),
-                                      )
-                                    : const Text(""),
-                              if (phase.asset == null)
-                                const SizedBox(
-                                  width: 100,
-                                  height: 100,
+                                          child: CachedNetworkImage(
+                                            imageUrl: phase.webAsset!.location,
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Text(""),
+                                if (!kIsWeb && phase.asset != null && phase.asset!.isImage)
+                                  phase.asset!.localPath != null
+                                      ? SizedBox(
+                                          width: 100,
+                                          height: 100,
+                                          child: PollingImagePreview(
+                                            localPath: phase.asset!.localPath!,
+                                            expectedSize: phase.asset!.fileSize,
+                                            withProgress: false,
+                                          ),
+                                        )
+                                      : const Text(""),
+                                if (phase.asset == null)
+                                  const SizedBox(
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                Container(
+                                  color: Colors.black38,
                                 ),
-                              Container(
-                                color: Colors.black38,
-                              ),
-                              if (phase.asset != null && phase.asset!.localPath == null && !kIsWeb)
-                                AppButton(
-                                  label: AppLocalizations.of(context).nftAssociate,
-                                  type: AppButtonType.Text,
-                                  variant: AppColorVariant.Light,
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AssetThumbnailDialog(
-                                          asset: phase.asset!,
-                                          nftId: nftId,
-                                          isPrimaryAsset: index == 0,
-                                          ownerAddress: nft.currentOwner,
-                                          onAssociate: () {
-                                            if (onAssociate != null) {
-                                              onAssociate!();
-                                            }
-                                          },
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              if (phase.asset?.localPath != null)
-                                AppButton(
-                                  label: AppLocalizations.of(context).nftOpenFile,
-                                  type: AppButtonType.Text,
-                                  variant: AppColorVariant.Light,
-                                  onPressed: () async {
-                                    final path = await SmartContractService().getAssetPath(nftId, phase.asset!.name!);
-                                    if (path != null) {
-                                      openFile(File(path));
-                                    }
-                                  },
-                                )
-                            ],
+                                if (phase.asset != null && phase.asset!.localPath == null && !kIsWeb)
+                                  AppButton(
+                                    label: AppLocalizations.of(context).nftAssociate,
+                                    type: AppButtonType.Text,
+                                    variant: AppColorVariant.Light,
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AssetThumbnailDialog(
+                                            asset: phase.asset!,
+                                            nftId: nftId,
+                                            isPrimaryAsset: index == 0,
+                                            ownerAddress: nft.currentOwner,
+                                            onAssociate: () {
+                                              if (onAssociate != null) {
+                                                onAssociate!();
+                                              }
+                                            },
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                if (phase.asset?.localPath != null)
+                                  AppButton(
+                                    label: AppLocalizations.of(context).nftOpenFile,
+                                    type: AppButtonType.Text,
+                                    variant: AppColorVariant.Light,
+                                    onPressed: () async {
+                                      final path = await SmartContractService().getAssetPath(nftId, phase.asset!.name!);
+                                      if (path != null) {
+                                        openFile(File(path));
+                                      }
+                                    },
+                                  )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -447,29 +411,32 @@ class EvolutionStateRow extends BaseComponent {
                               ),
                             ),
                             if (phase.properties.isNotEmpty)
-                              InkWell(
-                                onTap: showMedia
-                                    ? () {
-                                        showModalBottomSheet(
-                                            context: context,
-                                            builder: (context) {
-                                              return ModalContainer(
-                                                withDecor: false,
-                                                withClose: true,
-                                                children: [
-                                                  NftPropertiesWrap(
-                                                    properties: phase.properties,
-                                                  )
-                                                ],
-                                              );
-                                            });
-                                      }
-                                    : null,
-                                child: Text(
-                                  "${phase.properties.length} ${phase.properties.length == 1 ? l10n.r3gPropertySingular : l10n.scwProperties}",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    decoration: showMedia ? TextDecoration.underline : TextDecoration.none,
+                              Semantics(
+                                button: showMedia,
+                                child: InkWell(
+                                  onTap: showMedia
+                                      ? () {
+                                          showModalBottomSheet(
+                                              context: context,
+                                              builder: (context) {
+                                                return ModalContainer(
+                                                  withDecor: false,
+                                                  withClose: true,
+                                                  children: [
+                                                    NftPropertiesWrap(
+                                                      properties: phase.properties,
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                        }
+                                      : null,
+                                  child: Text(
+                                    "${phase.properties.length} ${phase.properties.length == 1 ? l10n.r3gPropertySingular : l10n.scwProperties}",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      decoration: showMedia ? TextDecoration.underline : TextDecoration.none,
+                                    ),
                                   ),
                                 ),
                               )

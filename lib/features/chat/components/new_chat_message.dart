@@ -42,6 +42,7 @@ class NewChatMessage extends BaseComponent {
           children: [
             Expanded(
               child: TextFormField(
+                key: const ValueKey('chat:message'),
                 controller: provider.newMessageController,
                 focusNode: provider.newMessageFocusNode,
                 decoration: InputDecoration(
@@ -58,10 +59,12 @@ class NewChatMessage extends BaseComponent {
               ),
             ),
             IconButton(
+              key: const Key('chat:send'),
               onPressed: () {
                 provider.sendMessage();
               },
               icon: Icon(Icons.send),
+              tooltip: AppLocalizations.of(context).chatSendMessage,
             )
           ],
         ),

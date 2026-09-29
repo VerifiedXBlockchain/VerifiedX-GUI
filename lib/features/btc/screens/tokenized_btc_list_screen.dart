@@ -366,33 +366,36 @@ class TokenizedBtcListTile extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ListTile(
-            title: Text(
-              token.tokenName,
-              style: TextStyle(
-                fontSize: 22,
-              ),
-            ),
-            // subtitle: Text("${token.myBalance} vBTC"),
-            subtitle: Text(
-              token.rbxAddress,
-              style: TextStyle(
-                color: token.rbxAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : null,
-                fontSize: 16,
-              ),
-            ),
-
-            trailing: Text(
-              AppLocalizations.of(context).bw2VbtcAmount(token.myBalance.toString()),
-              style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
-            ),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
+          child: Semantics(
+            button: true,
+            child: ListTile(
+              title: Text(
+                token.tokenName,
+                style: TextStyle(
+                  fontSize: 22,
                 ),
-              );
-            },
+              ),
+              // subtitle: Text("${token.myBalance} vBTC"),
+              subtitle: Text(
+                token.rbxAddress,
+                style: TextStyle(
+                  color: token.rbxAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : null,
+                  fontSize: 16,
+                ),
+              ),
+
+              trailing: Text(
+                AppLocalizations.of(context).bw2VbtcAmount(token.myBalance.toString()),
+                style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],
@@ -412,139 +415,145 @@ class GroupedTokenizedBtcListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final token = entry.token;
 
-    return InkWell(
-      onTap: entry.addresses.length == 1
-          ? () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
+    return Semantics(
+      button: entry.addresses.length == 1,
+      child: InkWell(
+        onTap: entry.addresses.length == 1
+            ? () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
+                  ),
+                );
+              }
+            : null,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
+                clipBehavior: Clip.antiAlias,
+                child: BtcTokenImage(
+                  nftId: token.smartContractUid,
+                  size: 100,
                 ),
-              );
-            }
-          : null,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(50)),
-              clipBehavior: Clip.antiAlias,
-              child: BtcTokenImage(
-                nftId: token.smartContractUid,
-                size: 100,
               ),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            token.tokenName,
-                            style: TextStyle(
-                              fontSize: 22,
-                            ),
-                          ),
-                          if (entry.addresses.length == 1)
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text(
-                              token.rbxAddress,
+                              token.tokenName,
                               style: TextStyle(
-                                color: token.rbxAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white70,
-                                fontSize: 16,
+                                fontSize: 22,
                               ),
                             ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (entry.addresses.length > 1)
+                            if (entry.addresses.length == 1)
+                              Text(
+                                token.rbxAddress,
+                                style: TextStyle(
+                                  color: token.rbxAddress.startsWith("xRBX") ? Colors.deepPurple.shade200 : Colors.white70,
+                                  fontSize: 16,
+                                ),
+                              ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            if (entry.addresses.length > 1)
+                              Text(
+                                "${AppLocalizations.of(context).bw2MyTotalBalance}  ",
+                                style: TextStyle(color: Colors.white70),
+                              ),
                             Text(
-                              "${AppLocalizations.of(context).bw2MyTotalBalance}  ",
-                              style: TextStyle(color: Colors.white70),
+                              AppLocalizations.of(context).bw2VbtcAmount(entry.addresses.fold<double>(0.0, (previousValue, element) => previousValue + element.balance).toString()),
+                              style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
                             ),
-                          Text(
-                            AppLocalizations.of(context).bw2VbtcAmount(entry.addresses.fold<double>(0.0, (previousValue, element) => previousValue + element.balance).toString()),
-                            style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  if (entry.addresses.length > 1) ...[
-                    Divider(),
-                    ...entry.addresses.map((item) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.02),
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                          ],
+                        ),
+                      ],
+                    ),
+                    if (entry.addresses.length > 1) ...[
+                      Divider(),
+                      ...entry.addresses.map((item) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Semantics(
+                            button: true,
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.02),
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 8),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "${AppLocalizations.of(context).bw2VbtcAmount(item.balance.toString())}  ",
-                                        style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${AppLocalizations.of(context).bw2VbtcAmount(item.balance.toString())}  ",
+                                            style: TextStyle(color: Theme.of(context).colorScheme.btcOrange),
+                                          ),
+                                          Text(
+                                            item.address,
+                                            style: TextStyle(color: Colors.white70),
+                                          ),
+                                        ],
                                       ),
-                                      Text(
-                                        item.address,
-                                        style: TextStyle(color: Colors.white70),
-                                      ),
+                                      AppButton(
+                                        label: AppLocalizations.of(context).btcDetailsLabel,
+                                        variant: AppColorVariant.Btc,
+                                        icon: Icons.chevron_right,
+                                        type: AppButtonType.Text,
+                                        underlined: true,
+                                        iconTrails: true,
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
+                                            ),
+                                          );
+                                        },
+                                      )
                                     ],
                                   ),
-                                  AppButton(
-                                    label: AppLocalizations.of(context).btcDetailsLabel,
-                                    variant: AppColorVariant.Btc,
-                                    icon: Icons.chevron_right,
-                                    type: AppButtonType.Text,
-                                    underlined: true,
-                                    iconTrails: true,
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${item.token.smartContractUid}|${item.token.rbxAddress}"),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                    })
-                  ]
-                ],
+                        );
+                      })
+                    ]
+                  ],
+                ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }

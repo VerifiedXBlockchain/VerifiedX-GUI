@@ -26,7 +26,8 @@ class MyWebShopListScreen extends BaseScreen {
             onPressed: () {
               ref.read(webShopListProvider(WebShopListType.mine).notifier).refresh();
             },
-            icon: Icon(Icons.refresh)),
+            icon: Icon(Icons.refresh),
+            tooltip: AppLocalizations.of(context).actionRefresh),
 
         // IconButton(
         //     onPressed: () async {

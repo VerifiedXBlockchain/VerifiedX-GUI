@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
 import '../../btc/models/tokenized_bitcoin.dart';
@@ -71,7 +72,12 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
     // tick up after they fund the address from an exchange / external wallet.
     _refreshTimer = Timer.periodic(_preflightRefreshInterval, (_) {
       if (!mounted) return;
-      ref.invalidate(bridgePreflightProvider(_args));
+      // Skip the tick while a preflight is still running: refreshing would
+      // throw its result away, so a node that takes longer than the interval
+      // to answer (25-35 s right after it starts) would never get a result
+      // on screen. Retry and the Refresh button still force a new request.
+      if (ref.read(bridgePreflightProvider(_args)).isLoading) return;
+      _refetch();
     });
   }
 
@@ -96,8 +102,21 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
   /// Force an immediate preflight refresh — used by the "Refresh" button in
   /// the gas funding section so users don't have to wait for the next poll
   /// tick after sending a gas tx.
-  void refreshPreflight() {
-    ref.invalidate(bridgePreflightProvider(_args));
+  void refreshPreflight() => _refetch();
+
+  /// Re-runs the preflight request now.
+  ///
+  /// Uses `ref.refresh` rather than `ref.invalidate`. In Riverpod 2.3,
+  /// `invalidate` only marks the provider dirty and leaves the refetch to the
+  /// container's scheduler, which runs when the ProviderScope rebuilds on the
+  /// next frame. While that refetch is still pending, later `invalidate` calls
+  /// return early. If the pending refetch never runs, the 10 s timer and Retry
+  /// both do nothing and the modal stays on the error until it is reopened
+  /// (QA MTI#7.3). `refresh` reads the provider right away, so the request is
+  /// sent synchronously whatever the scheduler state.
+  void _refetch() {
+    // ignore: unused_result
+    ref.refresh(bridgePreflightProvider(_args));
   }
 
   void _toggleDetails() {
@@ -171,14 +190,14 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
       error: (err, _) => _ErrorState(
         message: l10n.prvBridgeCantReach,
         onCancel: widget.onCancel,
-        onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
+        onRetry: _refetch,
       ),
       data: (preflight) {
         if (preflight == null || !preflight.success) {
           return _ErrorState(
-            message: preflight?.message ?? l10n.prvBridgeCantLoadInfo,
+            message: nodeRefusalMessage(preflight?.message, fallback: l10n.prvBridgeCantLoadInfo, l10n: l10n),
             onCancel: widget.onCancel,
-            onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
+            onRetry: _refetch,
           );
         }
         if (!preflight.bridgeConfigured) {
@@ -211,7 +230,7 @@ class _BridgePreflightFormState extends ConsumerState<BridgePreflightForm> {
           return _BlockedState(
             message: message,
             onCancel: widget.onCancel,
-            onRetry: () => ref.invalidate(bridgePreflightProvider(_args)),
+            onRetry: _refetch,
           );
         }
         return _Form(
@@ -252,6 +271,7 @@ class _Form extends StatelessWidget {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      key: const ValueKey('bridge:amount'),
                       controller: state.widget.amountController,
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       inputFormatters: [
@@ -277,6 +297,7 @@ class _Form extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   TextButton(
+                    key: const Key('bridge:max'),
                     onPressed: () => state._setMax(preflight),
                     child: Text(l10n.prvMax),
                   ),
@@ -293,6 +314,7 @@ class _Form extends StatelessWidget {
               Text(l10n.prvBridgeBaseEvmAddress, style: const TextStyle(color: Colors.white70, fontSize: 12)),
               const SizedBox(height: 4),
               TextFormField(
+                key: const ValueKey('bridge:destination'),
                 controller: state.widget.destinationController,
                 decoration: InputDecoration(
                   hintText: "0x…",
@@ -337,6 +359,7 @@ class _Form extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   AppButton(
+                    key: const Key('bridge:review'),
                     label: l10n.prvBridgeReviewBridge,
                     variant: AppColorVariant.Success,
                     onPressed: () => state._submit(preflight),
@@ -423,21 +446,24 @@ class _GasFundingSection extends StatelessWidget {
                   style: const TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
                 ),
               ),
-              InkWell(
-                onTap: onRefresh,
-                borderRadius: BorderRadius.circular(4),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(Icons.refresh, size: 14, color: Colors.white54),
-                      const SizedBox(width: 4),
-                      Text(
-                        l10n.prvRefresh,
-                        style: const TextStyle(color: Colors.white54, fontSize: 11),
-                      ),
-                    ],
+              Semantics(
+                button: true,
+                child: InkWell(
+                  onTap: onRefresh,
+                  borderRadius: BorderRadius.circular(4),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.refresh, size: 14, color: Colors.white54),
+                        const SizedBox(width: 4),
+                        Text(
+                          l10n.actionRefresh,
+                          style: const TextStyle(color: Colors.white54, fontSize: 11),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -464,16 +490,20 @@ class _GasFundingSection extends StatelessWidget {
                 ),
               ),
               if (preflight.derivedBaseAddress.isNotEmpty)
-                InkWell(
-                  onTap: () async {
-                    await Clipboard.setData(
-                      ClipboardData(text: preflight.derivedBaseAddress),
-                    );
-                    Toast.message(l10n.messageCopiedToClipboard);
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-                    child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                Semantics(
+                  label: l10n.actionCopyAddress,
+                  button: true,
+                  child: InkWell(
+                    onTap: () async {
+                      await Clipboard.setData(
+                        ClipboardData(text: preflight.derivedBaseAddress),
+                      );
+                      Toast.message(l10n.messageCopiedToClipboard);
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                    ),
                   ),
                 ),
             ],
@@ -511,24 +541,27 @@ class _DetailsToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onToggle,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              expanded ? AppLocalizations.of(context).prvBridgeHideDetails : AppLocalizations.of(context).prvBridgeShowDetails,
-              style: const TextStyle(color: Colors.white54, fontSize: 12),
-            ),
-            const SizedBox(width: 4),
-            Icon(
-              expanded ? Icons.expand_less : Icons.expand_more,
-              size: 16,
-              color: Colors.white54,
-            ),
-          ],
+    return Semantics(
+      button: true,
+      child: InkWell(
+        onTap: onToggle,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                expanded ? AppLocalizations.of(context).actionHideDetails : AppLocalizations.of(context).actionShowDetails,
+                style: const TextStyle(color: Colors.white54, fontSize: 12),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                expanded ? Icons.expand_less : Icons.expand_more,
+                size: 16,
+                color: Colors.white54,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -615,22 +648,30 @@ class _NetworkInfo extends StatelessWidget {
             ),
           ),
           if (copyValue != null)
-            InkWell(
-              onTap: () async {
-                await Clipboard.setData(ClipboardData(text: copyValue));
-                Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
-              },
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: Icon(Icons.copy, size: 14, color: Colors.white54),
+            Semantics(
+              label: AppLocalizations.of(context).actionCopyAddress,
+              button: true,
+              child: InkWell(
+                onTap: () async {
+                  await Clipboard.setData(ClipboardData(text: copyValue));
+                  Toast.message(AppLocalizations.of(context).messageCopiedToClipboard);
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(Icons.copy, size: 14, color: Colors.white54),
+                ),
               ),
             ),
           if (explorerUrl != null)
-            InkWell(
-              onTap: () => launchUrlString(explorerUrl),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: Icon(Icons.open_in_new, size: 14, color: Colors.white54),
+            Semantics(
+              label: AppLocalizations.of(context).prvBridgeViewOnBasescan,
+              button: true,
+              child: InkWell(
+                onTap: () => launchUrlString(explorerUrl),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: Icon(Icons.open_in_new, size: 14, color: Colors.white54),
+                ),
               ),
             ),
         ],

@@ -8,6 +8,7 @@ import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/components.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../providers/account_info_visible_provider.dart';
+import '../../../utils/formatting.dart';
 
 class WebMobileAccountInfo extends BaseComponent {
   const WebMobileAccountInfo({
@@ -22,30 +23,33 @@ class WebMobileAccountInfo extends BaseComponent {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        InkWell(
-          onTap: () {
-            visibilityProvider.setVisible(0);
-          },
-          child: AppCard(
-            margin: EdgeInsets.symmetric(vertical: 8.0),
-            fullWidth: true,
-            padding: 8,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  "assets/images/cube_still.png",
-                  width: 32,
-                  height: 32,
-                ),
-                Text(
-                  '${(sessionModel.balance ?? 0) + (sessionModel.raBalance ?? 0)} VFX',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: AppColors.getBlue(),
+        Semantics(
+          button: true,
+          child: InkWell(
+            onTap: () {
+              visibilityProvider.setVisible(0);
+            },
+            child: AppCard(
+              margin: EdgeInsets.symmetric(vertical: 8.0),
+              fullWidth: true,
+              padding: 8,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    "assets/images/cube_still.png",
+                    width: 32,
+                    height: 32,
                   ),
-                ),
-              ],
+                  Text(
+                    '${(sessionModel.balance ?? 0) + (sessionModel.raBalance ?? 0)} VFX',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors.getBlue(),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -76,30 +80,33 @@ class WebMobileAccountInfo extends BaseComponent {
         //     ),
         //   ),
         // ),
-        InkWell(
-          onTap: () {
-            visibilityProvider.setVisible(2);
-          },
-          child: AppCard(
-            margin: EdgeInsets.symmetric(vertical: 8),
-            fullWidth: true,
-            padding: 8,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                FaIcon(
-                  FontAwesomeIcons.bitcoin,
-                  color: AppColors.getBtc(),
-                  size: 28,
-                ),
-                Text(
-                  '${(sessionModel.btcBalanceInfo?.btcBalance ?? 0)} BTC',
-                  style: TextStyle(
-                    fontSize: 20,
+        Semantics(
+          button: true,
+          child: InkWell(
+            onTap: () {
+              visibilityProvider.setVisible(2);
+            },
+            child: AppCard(
+              margin: EdgeInsets.symmetric(vertical: 8),
+              fullWidth: true,
+              padding: 8,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.bitcoin,
                     color: AppColors.getBtc(),
+                    size: 28,
                   ),
-                ),
-              ],
+                  Text(
+                    '${formatBtcAmount(sessionModel.btcBalanceInfo?.btcBalance ?? 0)} BTC',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: AppColors.getBtc(),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

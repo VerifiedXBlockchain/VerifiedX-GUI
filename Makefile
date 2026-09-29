@@ -31,6 +31,22 @@ build_core:
 	cd ../Core-CLI && git pull && cd /Users/tylersavery/Projects/rbx/rbx_wallet/
 	dotnet publish -c Release -r osx-x64 ../Core-CLI/VerifiedXCore/VerifiedXCore.csproj --self-contained true -f net6.0 -p:PublishSingleFile=true
 
+# One command per network: builds the app and the Core CLI, assembles the
+# bundle, signs and notarizes. Options pass through ARGS, for example
+# make release_macos_testnet ARGS="--skip-notarize".
+release_macos_mainnet:
+	./scripts/package_macos.sh mainnet $(ARGS)
+
+release_macos_testnet:
+	./scripts/package_macos.sh testnet $(ARGS)
+
+release_macos_devnet:
+	./scripts/package_macos.sh devnet $(ARGS)
+
+# macOS packaging signs last: the CLI and wordlists go into the bundle first,
+# then sign_macos_app.sh seals it and notarize_macos.sh clears the disk image
+# with Apple. Both read MACOS_SIGN_IDENTITY (and MACOS_NOTARY_PROFILE); see
+# docs/macos-release-signing.md.
 package_mac:
 	rm -rf ../Core-CLI/bin/Release
 	cd ../Core-CLI && git pull && cd /Users/tylersavery/Projects/rbx/rbx_wallet/
@@ -43,8 +59,11 @@ package_mac:
 	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	cp -r ../Core-CLI/VerifiedXCore/bin/Release/net6.0/osx-x64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
-	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39
+	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
+	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
+	./scripts/sign_macos_app.sh ./installers/resources/Runner/VFXWallet.app
 	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-Intel-Installer.dmg
+	./scripts/notarize_macos.sh ./installers/exports/VFX-OSX-Intel-Installer.dmg
 	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
 	rm -f ./installers/exports/vfx-corecli-mac-arm.zip
 	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tylersavery/Projects/rbx/rbx_wallet/installers/exports/vfx-corecli-mac-intel.zip ./VFXCore/
@@ -79,8 +98,11 @@ package_m1:
 	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	mkdir ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
 	cp -r ../Core-CLI/VerifiedXCore/bin/Release/net6.0/osx-arm64/publish/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/VFXCore
-	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/MacOS/BIP39
+	rm -rf ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
+	cp -r ./installers/resources/BIP39/ ./installers/resources/Runner/VFXWallet.app/Contents/Resources/BIP39
+	./scripts/sign_macos_app.sh ./installers/resources/Runner/VFXWallet.app
 	appdmg ./installers/dmg/config.json ./installers/exports/VFX-OSX-ARM-Installer.dmg
+	./scripts/notarize_macos.sh ./installers/exports/VFX-OSX-ARM-Installer.dmg
 	rm -f ./installers/exports/rbx-corecli-mac-arm.zip
 	rm -f ./installers/exports/vfx-corecli-mac-arm.zip
 	cd ./installers/resources/Runner/VFXWallet.app/Contents/Resources/ && zip -r /Users/tyler/prj/vfx/vfx-gui/installers/exports/vfx-corecli-mac-arm.zip ./VFXCore/
@@ -157,6 +179,22 @@ run_web:
 
 run_web_cors:
 	fvm flutter run -d chrome --web-browser-flag "--disable-web-security" --web-port 42069
+
+# Automation builds: TESTNET selects the network, AUTOMATION flips Env.isAutomation.
+# web-server (not chrome) so an external Chrome with the Claude extension can attach.
+run_web_automation:
+	fvm flutter run -d web-server --web-port 42069 --dart-define TESTNET=true --dart-define AUTOMATION=true
+
+run_macos_automation:
+	fvm flutter run -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
+
+# Driver flavor: the same automation build with the Flutter Driver extension
+# compiled in (lib/main_automation.dart); drive it with tool/drive.dart.
+run_macos_driver:
+	fvm flutter run -t lib/main_automation.dart -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
+
+test_integration_macos:
+	fvm flutter test integration_test -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
 
 run_cli_mainnet:
 	/Applications/VFXWallet.app/Contents/Resources/VFXCore/VerifiedXCore enableapi gui

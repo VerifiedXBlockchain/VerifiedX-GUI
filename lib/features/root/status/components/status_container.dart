@@ -118,60 +118,63 @@ class StatusContainer extends BaseComponent {
                       value: "",
                       content: Align(
                         alignment: Alignment.centerLeft,
-                        child: InkWell(
-                          child: Text(
-                            AppLocalizations.of(context).operationsViewMetrics,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              decoration: TextDecoration.underline,
-                              fontSize: 13,
+                        child: Semantics(
+                          button: true,
+                          child: InkWell(
+                            child: Text(
+                              AppLocalizations.of(context).operationsViewMetrics,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                decoration: TextDecoration.underline,
+                                fontSize: 13,
+                              ),
                             ),
-                          ),
-                          onTap: () async {
-                            final m = await BridgeService().networkMetrics();
+                            onTap: () async {
+                              final m = await BridgeService().networkMetrics();
 
-                            final validatorCount = await ExplorerService().validatorCount();
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  final metrics = m ?? walletInfo!.networkMetrics!;
+                              final validatorCount = await ExplorerService().validatorCount();
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    final metrics = m ?? walletInfo!.networkMetrics!;
 
-                                  const style = TextStyle(
-                                    fontSize: 14,
-                                    fontFamily: 'RobotoMono',
-                                    height: 1.5,
-                                  );
+                                    const style = TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'RobotoMono',
+                                      height: 1.5,
+                                    );
 
-                                  return AlertDialog(
-                                    title: Text(AppLocalizations.of(context).statusNetworkMetrics),
-                                    content: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("Block Diff Avg: ${metrics.blockDiffAvg}", style: style),
-                                        Text("Block Last Received: ${metrics.blockLastReceived.toLocal()}", style: style),
-                                        Text("Block Last Delay: ${metrics.blockLastDelay}", style: style),
-                                        Text("Time Since Last Block: ${metrics.timeSinceLastBlockSeconds}s", style: style),
-                                        Text("Blocks Averaged: ${metrics.blocksAveraged}", style: style),
-                                        if (validatorCount != null) Text(AppLocalizations.of(context).r3hActiveValidators(validatorCount.toString()), style: style),
-                                      ],
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context).actionClose,
-                                          style: const TextStyle(
-                                            color: Colors.white70,
+                                    return AlertDialog(
+                                      title: Text(AppLocalizations.of(context).statusNetworkMetrics),
+                                      content: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Block Diff Avg: ${metrics.blockDiffAvg}", style: style),
+                                          Text("Block Last Received: ${metrics.blockLastReceived.toLocal()}", style: style),
+                                          Text("Block Last Delay: ${metrics.blockLastDelay}", style: style),
+                                          Text("Time Since Last Block: ${metrics.timeSinceLastBlockSeconds}s", style: style),
+                                          Text("Blocks Averaged: ${metrics.blocksAveraged}", style: style),
+                                          if (validatorCount != null) Text(AppLocalizations.of(context).r3hActiveValidators(validatorCount.toString()), style: style),
+                                        ],
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text(
+                                            AppLocalizations.of(context).actionClose,
+                                            style: const TextStyle(
+                                              color: Colors.white70,
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    ],
-                                  );
-                                });
-                          },
+                                        )
+                                      ],
+                                    );
+                                  });
+                            },
+                          ),
                         ),
                       ),
                       icon: Icons.analytics,

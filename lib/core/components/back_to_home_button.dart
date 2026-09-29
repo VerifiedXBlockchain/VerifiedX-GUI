@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
+import '../../l10n/generated/app_localizations.dart';
+
 class BackToHomeButton extends StatelessWidget {
   const BackToHomeButton({super.key});
 
@@ -14,6 +16,7 @@ class BackToHomeButton extends StatelessWidget {
         Icons.navigate_before,
         size: 32,
       ),
+      tooltip: AppLocalizations.of(context).actionBack,
     );
   }
 }

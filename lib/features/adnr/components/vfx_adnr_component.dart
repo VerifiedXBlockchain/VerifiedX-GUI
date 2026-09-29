@@ -89,6 +89,7 @@ class VfxAdnrCard extends BaseComponent {
 
               if (wallet.adnr == null) {
                 return AppButton(
+                  key: const Key('adnr:create'),
                   label: l10n.adnrCreateDomain,
                   // type: AppButtonType.Text,
                   variant: AppColorVariant.Success,
@@ -117,6 +118,7 @@ class VfxAdnrCard extends BaseComponent {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     AppButton(
+                      key: const Key('adnr:transfer'),
                       label: l10n.adnrTransfer,
                       onPressed: !adnrVerified
                           ? null
@@ -136,6 +138,8 @@ class VfxAdnrCard extends BaseComponent {
                                   body: l10n.adnrTransferDomainBody(ADNR_TRANSFER_COST.toString()),
                                   validator: (value) => formValidatorRbxAddress(value, false),
                                   labelText: l10n.adnrAddressFieldLabel,
+                                  fieldKey: const ValueKey('adnr:transfer_address'),
+                                  submitKey: const Key('adnr:transfer_submit'),
                                   onValidSubmission: (toAddress) async {
                                     final result = await AdnrService().transferAdnr(wallet.address, toAddress);
                                     if (result.success) {
@@ -164,6 +168,7 @@ class VfxAdnrCard extends BaseComponent {
                       width: 8,
                     ),
                     AppButton(
+                      key: const Key('adnr:delete'),
                       label: l10n.adnrDelete,
                       // type: AppButtonType.Text,
                       variant: AppColorVariant.Danger,
@@ -204,7 +209,10 @@ class VfxAdnrCard extends BaseComponent {
                               ref.read(adnrPendingProvider.notifier).addId(wallet.address, "burn", wallet.adnr ?? "null");
                             }
                             notifyTransactionSubmitted();
+                            return;
                           }
+
+                          Toast.error(result.message);
                         }
                       },
                     ),

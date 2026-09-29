@@ -106,6 +106,7 @@ class _ShieldVbtcDialogState extends ConsumerState<ShieldVbtcDialog> {
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const ValueKey('privacy:shield_vbtc_amount'),
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
@@ -129,6 +130,7 @@ class _ShieldVbtcDialogState extends ConsumerState<ShieldVbtcDialog> {
           child: Text(l10n.actionCancel),
         ),
         TextButton(
+          key: const ValueKey('privacy:shield_vbtc_submit'),
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))

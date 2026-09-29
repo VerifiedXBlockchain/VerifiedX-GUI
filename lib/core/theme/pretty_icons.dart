@@ -99,6 +99,7 @@ class PrettyIconButton extends StatefulWidget {
   final IconData? customIcon;
   final Color? customIconColor;
   final double iconScale;
+  final String? label;
 
   const PrettyIconButton({
     super.key,
@@ -107,6 +108,7 @@ class PrettyIconButton extends StatefulWidget {
     this.customIcon,
     this.customIconColor,
     this.iconScale = 1.0,
+    this.label,
   });
 
   @override
@@ -136,14 +138,18 @@ class _PrettyIconButtonState extends State<PrettyIconButton> {
             isHovering = false;
           });
         },
-        child: GestureDetector(
-          onTap: widget.onPressed,
-          child: PrettyIcon(
-            type: widget.type,
-            customIcon: widget.customIcon,
-            customIconColor: widget.customIconColor,
-            glow: isHovering,
-            iconScale: widget.iconScale,
+        child: Semantics(
+          label: widget.label,
+          button: true,
+          child: GestureDetector(
+            onTap: widget.onPressed,
+            child: PrettyIcon(
+              type: widget.type,
+              customIcon: widget.customIcon,
+              customIconColor: widget.customIconColor,
+              glow: isHovering,
+              iconScale: widget.iconScale,
+            ),
           ),
         ),
       ),

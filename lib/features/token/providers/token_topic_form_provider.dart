@@ -58,8 +58,10 @@ class TokenTopicFormProvider extends StateNotifier<NewTokenTopic> {
     load(NewTokenTopic.empty(state.smartContractUid, state.fromAddress));
   }
 
+  bool validate() => formKey.currentState!.validate();
+
   Future<bool?> submit() async {
-    if (!formKey.currentState!.validate()) {
+    if (!validate()) {
       return null;
     }
 

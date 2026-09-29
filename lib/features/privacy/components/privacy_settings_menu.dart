@@ -53,16 +53,17 @@ class PrivacySettingsMenu extends ConsumerWidget {
             ],
           ),
         ),
-        PopupMenuItem(
-          value: 'import_viewing_key',
-          child: Row(
-            children: [
-              const Icon(Icons.download, size: 18, color: Colors.white70),
-              const SizedBox(width: 8),
-              Text(l10n.prvImportViewingKey),
-            ],
+        if (IMPORT_VIEWING_KEY_ENABLED)
+          PopupMenuItem(
+            value: 'import_viewing_key',
+            child: Row(
+              children: [
+                const Icon(Icons.download, size: 18, color: Colors.white70),
+                const SizedBox(width: 8),
+                Text(l10n.prvImportViewingKey),
+              ],
+            ),
           ),
-        ),
         const PopupMenuDivider(),
         PopupMenuItem(
           value: 'resync',
@@ -143,6 +144,7 @@ class PrivacySettingsMenu extends ConsumerWidget {
                     ),
                     IconButton(
                       icon: const Icon(Icons.copy, size: 16),
+                      tooltip: l10n.prvCopyViewingKey,
                       color: Colors.white54,
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: key));
@@ -242,13 +244,16 @@ class PrivacySettingsMenu extends ConsumerWidget {
                 const SizedBox(height: 12),
                 ...List.generate(vbtcTokens.length, (i) {
                   final token = vbtcTokens[i];
-                  return ListTile(
-                    title: Text(token.tokenName, style: TextStyle(color: AppColors.getBtc())),
-                    subtitle: Text(
-                      token.smartContractUid,
-                      style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: Colors.white38),
+                  return Semantics(
+                    button: true,
+                    child: ListTile(
+                      title: Text(token.tokenName, style: TextStyle(color: AppColors.getBtc())),
+                      subtitle: Text(
+                        token.smartContractUid,
+                        style: const TextStyle(fontFamily: 'monospace', fontSize: 11, color: Colors.white38),
+                      ),
+                      onTap: () => Navigator.of(ctx).pop(i),
                     ),
-                    onTap: () => Navigator.of(ctx).pop(i),
                   );
                 }),
               ],

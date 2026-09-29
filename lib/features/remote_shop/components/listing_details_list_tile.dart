@@ -33,23 +33,26 @@ class ListingDetailsListTile extends BaseComponent {
           child: AppCard(
             padding: 0,
             margin: EdgeInsets.zero,
-            child: ListTile(
-              title: Text(nft.name),
-              subtitle: Text(
-                nft.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: isExpanded ? Icon(Icons.arrow_drop_up) : Icon(Icons.arrow_drop_down),
-              onTap: () {
-                if (isExpanded) {
-                  ref.read(remoteShopExpandedListingsProvider.notifier).remove(nft.id);
-                } else {
-                  ref.read(remoteShopExpandedListingsProvider.notifier).add(nft.id);
-                }
-              },
-              leading: _Thumbnail(
-                nft: nft,
+            child: Semantics(
+              button: true,
+              child: ListTile(
+                title: Text(nft.name),
+                subtitle: Text(
+                  nft.description,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                trailing: isExpanded ? Icon(Icons.arrow_drop_up) : Icon(Icons.arrow_drop_down),
+                onTap: () {
+                  if (isExpanded) {
+                    ref.read(remoteShopExpandedListingsProvider.notifier).remove(nft.id);
+                  } else {
+                    ref.read(remoteShopExpandedListingsProvider.notifier).add(nft.id);
+                  }
+                },
+                leading: _Thumbnail(
+                  nft: nft,
+                ),
               ),
             ),
           ),

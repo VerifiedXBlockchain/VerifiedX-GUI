@@ -89,6 +89,7 @@ class _PrivateTransferDialogState extends ConsumerState<PrivateTransferDialog> {
             ),
             const SizedBox(height: 16),
             TextField(
+              key: const ValueKey('privacy:transfer_recipient'),
               controller: _recipientController,
               decoration: InputDecoration(
                 labelText: l10n.prvRecipientZfxLabel,
@@ -99,6 +100,7 @@ class _PrivateTransferDialogState extends ConsumerState<PrivateTransferDialog> {
             ),
             const SizedBox(height: 12),
             TextField(
+              key: const ValueKey('privacy:transfer_amount'),
               controller: _amountController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
@@ -127,6 +129,7 @@ class _PrivateTransferDialogState extends ConsumerState<PrivateTransferDialog> {
           ),
         ),
         TextButton(
+          key: const ValueKey('privacy:transfer_submit'),
           onPressed: _isSubmitting ? null : _submit,
           child: _isSubmitting
               ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))

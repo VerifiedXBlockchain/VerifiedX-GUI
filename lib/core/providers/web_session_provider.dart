@@ -14,14 +14,18 @@ import '../../features/keygen/models/ra_keypair.dart';
 import '../../features/nft/providers/minted_nft_list_provider.dart';
 import 'package:collection/collection.dart';
 import '../../features/web/models/multi_account_instance.dart';
+import '../../features/web/models/web_address.dart';
 import '../../features/web/providers/multi_account_provider.dart';
 import '../../features/web/providers/web_selected_account_provider.dart';
 import '../models/web_session_model.dart';
+import '../../features/transactions/providers/web_transaction_detail_provider.dart';
 import '../../features/transactions/providers/web_transaction_list_provider.dart';
 import '../../features/web_shop/providers/web_listed_nfts_provider.dart';
 import '../../utils/html_helpers.dart';
+import '../../utils/web_route_paths.dart';
 import '../services/encryption_service.dart';
 import '../services/password_verification_service.dart';
+import '../services/web_account_password_store.dart';
 
 import '../../app.dart';
 import '../../features/keygen/models/keypair.dart';
@@ -69,19 +73,16 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         isAuthenticated: false,
         ready: true,
       );
+      // Save the dashboard page the app was opened on (a reload or a
+      // payment link) so unlocking returns to it. The URL is the one main()
+      // captured, since the router has rewritten the hash by now.
+      final initialRedirect = InitialWebUrl.takeDashboardRedirect();
+      if (initialRedirect != null) {
+        storage.setString(Storage.PENDING_REDIRECT_URL, initialRedirect);
+      }
+
       // Redirect to auth screen for password entry
       Future.delayed(const Duration(milliseconds: 100), () {
-        // Save current URL if it's a dashboard route
-        final currentUrl = HtmlHelpers().getUrl();
-
-        if (currentUrl.contains('/dashboard')) {
-          final hashIndex = currentUrl.indexOf('#');
-          if (hashIndex != -1) {
-            final hashPath = currentUrl.substring(hashIndex + 1);
-            storage.setString(Storage.PENDING_REDIRECT_URL, hashPath);
-          }
-        }
-
         final context = rootNavigatorKey.currentContext;
         if (context != null) {
           AutoRouter.of(context).replace(const WebAuthRouter());
@@ -143,65 +144,48 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     }
   }
 
-  /// Login with encrypted keys using password
+  /// Unlocks the wallet with [password].
+  ///
+  /// Unlock targets the last active account: the password must be that
+  /// account's own. A wallet saved before passwords were per account also
+  /// opens with the password of its wallet-wide slot, which then loads and
+  /// activates the account that slot holds. See [WebAccountPasswordStore].
   Future<bool> loginWithPassword(String password) async {
     final storage = singleton<Storage>();
 
-    // Verify password first
-    if (!PasswordVerificationService.verifyPassword(password)) {
+    final unlocked = WebAccountPasswordStore(storage).unlock(password);
+    if (unlocked == null) {
       return false;
     }
 
-    try {
-      // Decrypt VFX keypair
-      final encryptedVfx = storage.getMap(Storage.WEB_KEYPAIR);
-      if (encryptedVfx != null) {
-        final decryptedVfx = EncryptionService.decrypt(encryptedVfx, password);
-        final keypair = Keypair.fromJson(decryptedVfx);
+    final accountId = unlocked.accountId;
+    if (accountId != null) {
+      ref.read(selectedMultiAccountProvider.notifier).markActive(accountId);
+    }
 
-        // Decrypt RA keypair if exists
-        RaKeypair? raKeypair;
-        final encryptedRa = storage.getMap(Storage.WEB_RA_KEYPAIR);
-        if (encryptedRa != null) {
-          final decryptedRa = EncryptionService.decrypt(encryptedRa, password);
-          raKeypair = RaKeypair.fromJson(decryptedRa);
-        }
+    // Load keys into session
+    login(unlocked.keypair, unlocked.raKeypair, unlocked.btcKeypair,
+        andSave: false, encryptionPassword: password);
 
-        // Decrypt BTC keypair if exists
-        BtcWebAccount? btcKeypair;
-        final encryptedBtc = storage.getMap(Storage.WEB_BTC_KEYPAIR);
-        if (encryptedBtc != null) {
-          final decryptedBtc =
-              EncryptionService.decrypt(encryptedBtc, password);
-          btcKeypair = BtcWebAccount.fromJson(decryptedBtc);
-        }
-
-        // Load keys into session
-        login(keypair, raKeypair, btcKeypair, andSave: false, encryptionPassword: password);
-
-        // Restore wallet type selection
-        final savedSelectedWalletType =
-            storage.getString(Storage.WEB_SELECTED_WALLET_TYPE);
-        if (savedSelectedWalletType != null) {
-          final walletType = WalletType.values.firstWhereOrNull(
-              (t) => t.storageName == savedSelectedWalletType);
-          if (walletType != null) {
-            setSelectedWalletType(walletType, false);
-          }
-        }
-
-        return true;
+    // Restore wallet type selection
+    final savedSelectedWalletType =
+        storage.getString(Storage.WEB_SELECTED_WALLET_TYPE);
+    if (savedSelectedWalletType != null) {
+      final walletType = WalletType.values
+          .firstWhereOrNull((t) => t.storageName == savedSelectedWalletType);
+      if (walletType != null) {
+        setSelectedWalletType(walletType, false);
       }
-    } catch (e, st) {
-      print("Failed to decrypt keys: $e");
-      print(st);
-      return false;
     }
 
-    return false;
+    return true;
   }
 
-  /// Encrypt and save keys with password
+  /// Encrypts and saves the newest account's keys in the wallet-wide slot.
+  ///
+  /// Each account's own password lives with its entry in the multi-account
+  /// store (written by [login]); this slot is the legacy unlock fallback and
+  /// marks the wallet as password protected. See [WebAccountPasswordStore].
   void encryptAndSaveKeys(Keypair keypair, RaKeypair? raKeypair,
       BtcWebAccount? btcKeyPair, String password) {
     final storage = singleton<Storage>();
@@ -267,14 +251,16 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       isAuthenticated: true,
     );
 
-    final webAddress = await ExplorerService().getWebAddress(keypair.address);
+    // Zero until the lookup succeeds; the refresh loop fills in the real
+    // balances via syncWithSession once Spyglass answers.
+    final webAddress = await _fetchWebAddress(keypair.address);
 
     ref.read(webSelectedAccountProvider.notifier).setVfx(
         keypair,
-        webAddress.balance,
-        webAddress.balanceLocked,
-        webAddress.balanceTotal,
-        webAddress.adnr);
+        webAddress?.balance ?? 0,
+        webAddress?.balanceLocked ?? 0,
+        webAddress?.balanceTotal ?? 0,
+        webAddress?.adnr);
 
     refreshBtcBalanceInfo();
 
@@ -299,10 +285,23 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
   // }
 
   void setMultiAccountInstance(MultiAccountInstance account) async {
+    // Clear the previous account's chain state along with its keys, so a
+    // lookup that fails right after the switch can't leave the old account's
+    // balances, domain or Vault status showing for the new one.
     state = state.copyWith(
       keypair: account.keypair,
       raKeypair: account.raKeypair,
       btcKeypair: account.btcKeypair,
+      balance: null,
+      balanceLocked: null,
+      balanceTotal: null,
+      adnr: null,
+      raBalance: null,
+      raBalanceLocked: null,
+      raBalanceTotal: null,
+      raActivated: false,
+      raDeactivated: false,
+      raStatusUnavailable: false,
     );
 
     // Only save unencrypted keys if encryption is NOT enabled (legacy mode)
@@ -320,15 +319,14 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     }
 
     if (account.keypair != null) {
-      final webAddress =
-          await ExplorerService().getWebAddress(account.keypair!.address);
+      final webAddress = await _fetchWebAddress(account.keypair!.address);
 
       ref.read(webSelectedAccountProvider.notifier).setVfx(
           account.keypair!,
-          webAddress.balance,
-          webAddress.balanceLocked,
-          webAddress.balanceTotal,
-          webAddress.adnr);
+          webAddress?.balance ?? 0,
+          webAddress?.balanceLocked ?? 0,
+          webAddress?.balanceTotal ?? 0,
+          webAddress?.adnr);
     }
 
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -372,6 +370,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     // only moves when this fires. autoDispose keeps it free when no detail
     // screen is open.
     ref.invalidate(btcWebVbtcTokenDetailProvider);
+    // Same for the transaction detail screen, so a pending status updates.
+    ref.invalidate(webTransactionDetailProvider);
   }
 
   void btcLoop() async {
@@ -382,8 +382,15 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     if (state.keypair == null) {
       return;
     }
-    final webAddress =
-        await ExplorerService().getWebAddress(state.keypair!.address);
+    final address = state.keypair!.address;
+    final webAddress = await _fetchWebAddress(address);
+
+    // The account may have changed while the request was in flight; a stale
+    // answer must not overwrite the new account's balance. A failed lookup
+    // keeps the last known values rather than zeroing them.
+    if (webAddress == null || state.keypair?.address != address) {
+      return;
+    }
 
     state = state.copyWith(
       balance: webAddress.balance,
@@ -391,6 +398,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       balanceTotal: webAddress.balanceTotal,
       adnr: webAddress.adnr,
     );
+    ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
   }
 
   Future<void> lookupBtcAdnr() async {
@@ -413,14 +421,27 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         btcKeypair: state.btcKeypair!.copyWith(adnr: null),
       );
     }
+    ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
   }
 
   Future<void> getRaAddress() async {
     if (state.raKeypair == null) {
       return;
     }
-    final webAddress =
-        await ExplorerService().getWebAddress(state.raKeypair!.address);
+    final raAddress = state.raKeypair!.address;
+    final webAddress = await _fetchWebAddress(raAddress);
+
+    if (state.raKeypair?.address != raAddress) {
+      return;
+    }
+
+    // Without an answer the Vault's activated/deactivated flags are unknown;
+    // flag that instead of guessing, so the Vault screen does not offer to
+    // fund or recover a Vault that may already be recovered.
+    if (webAddress == null) {
+      state = state.copyWith(raStatusUnavailable: true);
+      return;
+    }
 
     state = state.copyWith(
       raBalance: webAddress.balance,
@@ -428,7 +449,19 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       raBalanceTotal: webAddress.balanceTotal,
       raActivated: webAddress.activated,
       raDeactivated: webAddress.deactivated,
+      raStatusUnavailable: false,
     );
+    ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
+  }
+
+  /// [ExplorerService.getWebAddress] already logs the failure; null tells the
+  /// caller the address state is unknown.
+  Future<WebAddress?> _fetchWebAddress(String address) async {
+    try {
+      return await ExplorerService().getWebAddress(address);
+    } catch (_) {
+      return null;
+    }
   }
 
   Future<void> getFungibleTokens() async {
@@ -501,6 +534,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
       state = state.copyWith(
         btcBalanceInfo: btcBalanceInfo,
       );
+      ref.read(webSelectedAccountProvider.notifier).syncWithSession(state);
     }
   }
 
@@ -540,6 +574,8 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
     singleton<Storage>().remove(Storage.ENCRYPTION_ENABLED);
     singleton<Storage>().remove(Storage.ENCRYPTION_VERSION);
     singleton<Storage>().remove(Storage.WEB_AUTH_TOKEN);
+    // A page saved for after unlock belongs to the session being logged out.
+    singleton<Storage>().remove(Storage.PENDING_REDIRECT_URL);
 
     // state = WebSessionModel();
 

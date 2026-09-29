@@ -27,8 +27,21 @@ class RawTxValue {
   });
 }
 
+/// Outcome of [RawTransaction.generate]: the signed transaction when the node
+/// accepted it at verification, otherwise the node's refusal reason when it
+/// gave one. [refusalMessage] is null when the failure happened before the
+/// node was asked (timestamp, nonce, fee, hash or signing).
+class RawTransactionResult {
+  final Map<String, dynamic>? txData;
+  final String? refusalMessage;
+
+  const RawTransactionResult.verified(Map<String, dynamic> this.txData) : refusalMessage = null;
+
+  const RawTransactionResult.failed([this.refusalMessage]) : txData = null;
+}
+
 class RawTransaction {
-  static Future<Map<String, dynamic>?> generate({
+  static Future<RawTransactionResult> generate({
     required Keypair keypair,
     required String toAddress,
     required double amount,
@@ -48,7 +61,7 @@ class RawTransaction {
     );
 
     if (rawTx == null) {
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     final hash = rawTx.hash;
@@ -60,7 +73,7 @@ class RawTransaction {
     );
 
     if (signature == null) {
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     final rawTxService = RawService();
@@ -73,7 +86,7 @@ class RawTransaction {
 
     if (!signatureIsValid) {
       print("Signature not valid");
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     final txData = buildTransaction(
@@ -97,16 +110,58 @@ class RawTransaction {
 
     if (verifyTransactionData == null) {
       print("Transaction not valid");
-      return null;
+      return const RawTransactionResult.failed();
     }
 
     if (verifyTransactionData['Result'] == "Fail") {
-      print("Transaction Not Verified");
-      print(verifyTransactionData['Message']);
+      final message = verifyTransactionData['Message'];
+      print("Transaction Not Verified: $message");
+      return RawTransactionResult.failed(message is String && message.trim().isNotEmpty ? message : null);
+    }
+
+    return RawTransactionResult.verified(txData);
+  }
+
+  /// The fee the node quotes for this transaction, without hashing or
+  /// signing it: the same timestamp, nonce and fee calls [generate] makes
+  /// first. The send form uses it to fit the amount and fee in the balance
+  /// before the user confirms. Null when any call fails.
+  static Future<double?> estimateFee({
+    required String fromAddress,
+    required String toAddress,
+    required double amount,
+    required int txType,
+    dynamic data,
+    int? unlockHours,
+  }) async {
+    final rawTxService = RawService();
+
+    final timestamp = await rawTxService.getTimestamp();
+    if (timestamp == null) {
+      print("Failed to retrieve timestamp for the fee estimate");
       return null;
     }
 
-    return txData;
+    final nonce = await rawTxService.getNonce(fromAddress);
+    if (nonce == null) {
+      print("Failed to retrieve nonce for the fee estimate");
+      return null;
+    }
+
+    final unlockTimestamp = unlockHours != null ? (DateTime.now().add(Duration(hours: unlockHours)).millisecondsSinceEpoch / 1000).round() : null;
+
+    return rawTxService.getFee(
+      buildTransaction(
+        toAddress: toAddress,
+        fromAddress: fromAddress,
+        amount: amount,
+        nonce: nonce,
+        timestamp: timestamp,
+        type: txType,
+        data: data,
+        unlockTimestamp: unlockTimestamp,
+      ),
+    );
   }
 
   static Future<RawTxValue?> _getTransactionForSignature({

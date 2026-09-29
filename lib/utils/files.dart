@@ -13,17 +13,29 @@ import 'package:image/image.dart' as IMG;
 import 'dart:convert' show base64Encode;
 
 import '../core/app_constants.dart';
+import '../core/data_home.dart';
 import '../core/dialogs.dart';
 import '../core/env.dart';
 import '../features/asset/asset.dart';
 import '../features/config/providers/config_provider.dart';
+import '../l10n/l10n_helper.dart';
+import 'asset_extensions.dart';
 
-Future<void> openFile(File file) async {
+/// Opens [file] with the system handler, falling back to its folder.
+/// Returns false when neither could be opened.
+Future<bool> openFile(File file) async {
   try {
-    await launchUrl(file.uri);
+    if (await launchUrl(file.uri)) {
+      return true;
+    }
   } catch (e) {
     print(e);
-    launchUrl(File(file.parent.path).uri);
+  }
+  try {
+    return await launchUrl(File(file.parent.path).uri);
+  } catch (e) {
+    print(e);
+    return false;
   }
 }
 
@@ -50,7 +62,7 @@ Future<String> dbPath() async {
   String appDocPath = appDocDir.path;
 
   if (Platform.isMacOS) {
-    appDocPath = appDocPath.replaceAll("/Documents", Env.isTestNet ? "/rbxtest" : "/rbx");
+    appDocPath = DataHome.fromDocuments(appDocPath, Env.isTestNet ? "/rbxtest" : "/rbx");
   } else {
     final winDir = await getApplicationSupportDirectory();
     appDocPath = winDir.path;
@@ -58,6 +70,14 @@ Future<String> dbPath() async {
   }
 
   return appDocPath;
+}
+
+/// The CLI's `Databases` folder for this network (`DatabasesTestNet` on
+/// testnet and devnet).
+Future<String> databasesPath() async {
+  final root = await dbPath();
+  final separator = Platform.isWindows ? '\\' : '/';
+  return "$root${separator}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
 }
 
 Future<String> assetsPath() async {
@@ -77,7 +97,7 @@ Future<String> configPath() async {
   String path = appDocDir.path;
 
   if (Platform.isMacOS) {
-    path = path.replaceAll("/Documents", Env.isTestNet ? "/RBXTest/ConfigTestNet/config.txt" : "/RBX/Config/config.txt");
+    path = DataHome.fromDocuments(path, Env.isTestNet ? "/RBXTest/ConfigTestNet/config.txt" : "/RBX/Config/config.txt");
   } else {
     final winDir = await getApplicationSupportDirectory();
     path = winDir.path;
@@ -92,7 +112,7 @@ Future<String> startupProgressPath() async {
   String path = appDocDir.path;
 
   if (Platform.isMacOS) {
-    path = path.replaceAll("/Documents", Env.isTestNet ? "/RBXTest/DatabasesTestNet/statesynclog.txt" : "/RBX/Databases/statesynclog.txt");
+    path = DataHome.fromDocuments(path, Env.isTestNet ? "/RBXTest/DatabasesTestNet/statesynclog.txt" : "/RBX/Databases/statesynclog.txt");
   } else {
     final winDir = await getApplicationSupportDirectory();
     path = winDir.path;
@@ -100,6 +120,23 @@ Future<String> startupProgressPath() async {
         "\\Local\\${Env.isTestNet ? 'RBXTest\\DatabasesTestNet\\statesynclog.txt' : 'RBX\\Databases\\statesynclog.txt'}");
   }
   return path;
+}
+
+/// Shows the "Unsupported File" dialog and returns true when [extension] may
+/// not be used as an NFT asset. Call it before uploading or attaching a file.
+bool rejectIfBlockedAssetExtension(WidgetRef ref, String? extension) {
+  final blocked = isBlockedAssetExtension(
+    extension,
+    rejectedExtensions: ref.read(configProvider).rejectAssetExtensionTypes,
+  );
+  if (!blocked) {
+    return false;
+  }
+  InfoDialog.show(
+    title: globalL10n.assetUnsupportedFileTitle,
+    body: globalL10n.assetExtensionNotPermittedBody(extension!),
+  );
+  return true;
 }
 
 Future<Asset?> selectAsset(WidgetRef ref) async {
@@ -128,6 +165,10 @@ Future<Asset?> selectAsset(WidgetRef ref) async {
     final ext = result.files.single.extension;
     final filename = result.files.single.name;
 
+    if (rejectIfBlockedAssetExtension(ref, ext)) {
+      return null;
+    }
+
     final url = await ExplorerService().uploadAsset(bytes, filename, ext);
 
     if (url == null) return null;
@@ -154,8 +195,7 @@ Future<Asset?> selectAsset(WidgetRef ref) async {
       return null;
     }
 
-    if (MALWARE_FILE_EXTENSIONS.contains(extension) || ref.read(configProvider).rejectAssetExtensionTypes.contains(extension.toLowerCase())) {
-      InfoDialog.show(title: "Unsupported File", body: "This file extension (.$extension) is not permitted.");
+    if (rejectIfBlockedAssetExtension(ref, extension)) {
       return null;
     }
 

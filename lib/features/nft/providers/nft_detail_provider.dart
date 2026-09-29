@@ -24,6 +24,7 @@ import '../../../core/utils/tx_refresh.dart';
 import 'burned_provider.dart';
 import 'transferred_provider.dart';
 import '../../web/providers/multi_account_provider.dart';
+import '../../bridge/services/bridge_service.dart';
 
 class NftDetailProvider extends StateNotifier<Nft?> {
   final Ref ref;
@@ -689,18 +690,17 @@ class NftDetailProvider extends StateNotifier<Nft?> {
         privateKey = account?.keypair?.private;
       }
     } else {
-      // Desktop: Get private key from wallet list via CLI
+      // Desktop: the node exports the key on request; the caller unlocks an
+      // encrypted wallet first.
       final wallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == recipientAddress);
 
       if (wallet != null) {
-        // Check if we already have the private key
-        if (wallet.privateKey != null && wallet.privateKey!.isNotEmpty) {
-          privateKey = wallet.privateKey;
-        } else {
-          // Need to request from CLI - this requires the wallet to be unlocked
-          Toast.error(globalL10n.svcPrivateKeyNotAvailableUnlock);
+        final export = await BridgeService().getPrivateKey(wallet.address);
+        if (!export.isExported) {
+          Toast.error(export.message ?? globalL10n.walletKeyExportUnavailable);
           return false;
         }
+        privateKey = export.privateKey;
       }
     }
 

@@ -8,6 +8,7 @@ import '../../features/nft/models/web_nft.dart';
 import '../../features/token/models/token_vote_topic.dart';
 import '../../features/token/models/web_fungible_token.dart';
 import '../../features/web/models/web_address.dart';
+import '../../utils/json_converters.dart';
 import '../../utils/toast.dart';
 
 import '../../features/nft/models/nft.dart';
@@ -18,11 +19,13 @@ import '../../features/web/models/web_block.dart';
 import '../env.dart';
 import 'base_service.dart';
 import 'package:dio/dio.dart';
+import '../utils/user_error_message.dart';
 
 class ExplorerService extends BaseService {
-  ExplorerService()
+  /// [hostOverride] is for tests; the app always talks to Spyglass.
+  ExplorerService({String? hostOverride})
       : super(
-          hostOverride: Env.explorerApiBaseUrl,
+          hostOverride: hostOverride ?? Env.explorerApiBaseUrl,
         );
 
   Future<List<Masternode>> searchValidators(String query) async {
@@ -73,12 +76,24 @@ class ExplorerService extends BaseService {
     }
   }
 
+  /// Spyglass answers 404 for an address it has never seen on chain, which is
+  /// a genuinely empty address. Any other failure (network, server error,
+  /// unparseable payload) is logged and rethrown: an empty default here would
+  /// claim a zero balance and, for a Vault, "not deactivated", which is what
+  /// hid a recovered Vault's state.
   Future<WebAddress> getWebAddress(String address) async {
     try {
       final data = await getJson('/addresses/$address');
       return WebAddress.fromJson(data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return WebAddress(address: address, balance: 0.0);
+      }
+      print("getWebAddress($address) failed: $e");
+      rethrow;
     } catch (e) {
-      return WebAddress(address: address, balance: 0.0);
+      print("getWebAddress($address) failed: $e");
+      rethrow;
     }
   }
 
@@ -164,6 +179,21 @@ class ExplorerService extends BaseService {
       print(e);
       return PaginatedResponse.empty();
     }
+  }
+
+  /// Whether [address] has any transaction on record. Unlike [getTransactions]
+  /// it throws when the explorer cannot answer, so a caller can tell an
+  /// unused address from a failed lookup.
+  Future<bool> addressHasHistory(String address) async {
+    final response = await getJson(
+      '/transaction/address/$address',
+      params: {'page': 1, 'limit': 1},
+    );
+    final count = response['count'];
+    if (count is! int) {
+      throw "Unexpected transaction count for $address";
+    }
+    return count > 0;
   }
 
   Future<PaginatedResponse<WebTransaction>>
@@ -440,7 +470,7 @@ class ExplorerService extends BaseService {
       Toast.error(data['message']);
       throw Exception(data['message']);
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       throw Exception(e);
     }
   }
@@ -482,7 +512,7 @@ class ExplorerService extends BaseService {
       final List<WebFungibleTokenBalance> tokenBalances = [];
       for (final tokenData in tokenDataList) {
         final token = WebFungibleToken.fromJson(tokenData['token']);
-        final balance = tokenData['balance'];
+        final balance = parseJsonDouble(tokenData['balance']);
 
         tokenBalances.add(WebFungibleTokenBalance(
             address: response['address'], token: token, balance: balance));
@@ -490,6 +520,7 @@ class ExplorerService extends BaseService {
 
       return tokenBalances;
     } catch (e) {
+      print("getTokenBalances($address) failed: $e");
       return [];
     }
   }
@@ -596,7 +627,7 @@ class ExplorerService extends BaseService {
       Toast.error();
       return null;
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -801,7 +832,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error preparing V2 transfer";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -822,7 +855,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error sending V2 transfer";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -849,7 +884,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error preparing V2 withdrawal request";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -870,7 +907,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error sending V2 withdrawal request";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -1049,7 +1088,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error preparing V2 withdrawal cancellation";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 
@@ -1070,7 +1111,9 @@ class ExplorerService extends BaseService {
       return response['data'];
     } catch (e) {
       print(e);
-      throw "Error sending V2 withdrawal cancellation";
+      // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
+      // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
     }
   }
 }

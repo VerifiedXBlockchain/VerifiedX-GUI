@@ -41,6 +41,11 @@ class ReceiveScreen extends BaseScreen {
     Toast.message(AppLocalizations.of(context).messageAddressCopied);
   }
 
+  Future<void> _handleCopyDomain(BuildContext context, String domain) async {
+    await Clipboard.setData(ClipboardData(text: domain));
+    Toast.message(AppLocalizations.of(context).r3fCopiedToClipboard(domain));
+  }
+
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final session = ref.watch(sessionProvider);
@@ -105,7 +110,9 @@ class ReceiveScreen extends BaseScreen {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
+                                key: const ValueKey('receive:copy_address'),
                                 icon: const Icon(Icons.copy),
+                                tooltip: AppLocalizations.of(context).actionCopyAddress,
                                 onPressed: () async {
                                   if (currentWallet.isReserved &&
                                       !currentWallet.isNetworkProtected) {
@@ -119,6 +126,23 @@ class ReceiveScreen extends BaseScreen {
                             ],
                           ),
                         ),
+                        if (currentWallet.adnr != null && currentWallet.adnr!.isNotEmpty)
+                          ListTile(
+                            leading: const Icon(Icons.link),
+                            subtitle: Text(AppLocalizations.of(context).webYourDomain),
+                            title: SelectableText(
+                              currentWallet.adnr!,
+                              style: TextStyle(
+                                color: currentWallet.isReserved ? AppColors.getReserve() : AppColors.getBlue(),
+                              ),
+                            ),
+                            trailing: IconButton(
+                              key: const ValueKey('receive:copy_domain'),
+                              icon: const Icon(Icons.copy),
+                              tooltip: AppLocalizations.of(context).actionCopyDomain,
+                              onPressed: () => _handleCopyDomain(context, currentWallet.adnr!),
+                            ),
+                          ),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: Divider(),
@@ -223,7 +247,9 @@ class ReceiveScreen extends BaseScreen {
                             btcAccount.address,
                           ),
                           trailing: IconButton(
+                            key: const ValueKey('receive:copy_btc_address'),
                             icon: const Icon(Icons.copy),
+                            tooltip: AppLocalizations.of(context).actionCopyAddress,
                             onPressed: () async {
                               _handleCopyAddress(context, btcAccount.address);
                             },
@@ -312,6 +338,7 @@ class ReceiveScreen extends BaseScreen {
                                                     .colorScheme
                                                     .btcOrange,
                                               ),
+                                              tooltip: AppLocalizations.of(context).actionCopyPrivateKey,
                                               onPressed: () async {
                                                 await Clipboard.setData(
                                                     ClipboardData(

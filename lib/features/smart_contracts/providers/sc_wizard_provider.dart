@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:mime/mime.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:collection/collection.dart';
-import 'package:csv/csv.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -34,6 +33,8 @@ import '../components/sc_wizard_minting_progress_dialog.dart';
 import '../features/royalty/royalty.dart';
 import '../models/bulk_smart_contract_entry.dart';
 import '../models/smart_contract.dart';
+import '../services/asset_url_checker.dart';
+import '../services/wizard_csv.dart';
 import '../services/smart_contract_service.dart';
 import 'my_smart_contracts_provider.dart';
 import 'property_wizard_form_provider.dart';
@@ -77,6 +78,7 @@ class ScWizardItem {
 class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
   final Ref ref;
   final ScrollController scrollController = ScrollController();
+  final AssetUrlChecker _assetUrlChecker = AssetUrlChecker();
 
   ScWizardProvider(this.ref, [List<ScWizardItem> model = const []]) : super(model);
 
@@ -427,11 +429,13 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       }
     }
 
-    // final input = File(file.path!).openRead();
+    final content = kIsWeb ? utf8.decode(file.bytes!.toList()) : await File(file.path!).readAsString();
+    final fields = parseWizardCsv(content);
 
-    final List<List<dynamic>> fields = kIsWeb
-        ? CsvToListConverter().convert(utf8.decode(file.bytes!.toList()))
-        : await File(file.path!).openRead().transform(utf8.decoder).transform(const CsvToListConverter()).toList();
+    if (fields.isEmpty) {
+      Toast.error(globalL10n.svcCsvNoRows);
+      return false;
+    }
 
     final headers = fields.first;
     if (!headers
@@ -443,6 +447,11 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     }
 
     final rows = [...fields]..removeAt(0);
+    if (rows.isEmpty) {
+      Toast.error(globalL10n.svcCsvNoRows);
+      return false;
+    }
+
     final List<BulkSmartContractEntry> entries = [];
     for (final row in rows) {
       final name = row[0].toString();
@@ -528,11 +537,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     logProvider.append("Downloading $primaryAssetUrl...");
 
     final primaryAsset = kIsWeb
-        ? Asset(
-            id: '',
-            fileSize: 0,
-            location: primaryAssetUrl,
-          )
+        ? await _webUrlToAsset(primaryAssetUrl)
         : await urlToAsset(
             primaryAssetUrl,
             creatorName,
@@ -620,11 +625,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     if (additionalAssetUrls != null && additionalAssetUrls.isNotEmpty) {
       for (final url in additionalAssetUrls) {
         final a = kIsWeb
-            ? Asset(
-                id: '',
-                fileSize: 0,
-                location: url,
-              )
+            ? await _webUrlToAsset(url)
             : await urlToAsset(
                 url,
                 creatorName,
@@ -651,6 +652,20 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
 
   EvolveType getEvolveType(int index) {
     return state[index].entry.evolve.type;
+  }
+
+  /// Web keeps the URL as the asset location instead of downloading it, so it
+  /// checks the URL answers first. Returns null for an unreachable URL, which
+  /// the caller skips the same way the desktop skips a failed download.
+  Future<Asset?> _webUrlToAsset(String url) async {
+    if (!await _assetUrlChecker.isReachable(url)) {
+      return null;
+    }
+    return Asset(
+      id: '',
+      fileSize: 0,
+      location: url,
+    );
   }
 
   Future<Asset?> urlToAsset(String url, String creatorName) async {
@@ -721,6 +736,10 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     state = [];
   }
 
+  void _failMinting(int minted, int total) {
+    ref.read(scWizardMintingProgress.notifier).fail(globalL10n.svcMintingStopped('$minted', '$total'));
+  }
+
   Future<void> mint(BuildContext context) async {
     if (!kDebugMode && !kIsWeb) {
       if (!guardWalletIsSynced(ref)) {
@@ -728,7 +747,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
       }
     }
 
-    ref.read(scWizardMintingProgress.notifier).setPercent(0);
+    ref.read(scWizardMintingProgress.notifier).start();
 
     showDialog(
       context: context,
@@ -738,7 +757,9 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
         );
       },
     ).then((value) {
-      if (kIsWeb) {
+      // After a failed run, stay on the wizard so the entries can be fixed
+      // or minted again.
+      if (kIsWeb && !ref.read(scWizardMintingProgress).failed) {
         AutoRouter.of(context).pop();
       }
     });
@@ -749,10 +770,11 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
     for (final item in state) {
       final entry = item.entry;
 
-      final owner = kIsWeb ? ref.read(webSessionProvider).currentWallet : ref.read(sessionProvider).currentWallet;
+      final owner = kIsWeb ? ref.read(webSessionProvider).vfxWallet : ref.read(sessionProvider).currentWallet;
 
       if (owner == null) {
         Toast.error(globalL10n.svcNoAccountSelectedPeriod);
+        _failMinting(totalProgress, totalItems);
         return;
       }
 
@@ -782,6 +804,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (!success) {
             Toast.error();
             print("Mint error");
+            _failMinting(totalProgress, totalItems);
             return;
           }
         } else {
@@ -790,12 +813,14 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (csc == null) {
             Toast.error();
             print("CSC was null");
+            _failMinting(totalProgress, totalItems);
             return;
           }
 
           if (!csc.success) {
             Toast.error();
             print("CSC not successful");
+            _failMinting(totalProgress, totalItems);
             return;
           }
 
@@ -803,6 +828,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (details == null) {
             Toast.error();
             print("Details null");
+            _failMinting(totalProgress, totalItems);
             return;
           }
           final id = details.smartContract.id;
@@ -811,6 +837,7 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
           if (!success) {
             Toast.error();
             print("Mint error");
+            _failMinting(totalProgress, totalItems);
             return;
           }
 

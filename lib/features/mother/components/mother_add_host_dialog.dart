@@ -73,10 +73,10 @@ class MotherAddHostDialog extends BaseComponent {
               return;
             }
 
-            final success = await MotherService().joinHost(ipAddressController.text.trim(), passwordController.text);
+            final failure = await MotherService().joinHost(ipAddressController.text.trim(), passwordController.text);
 
-            if (success != true) {
-              Toast.error();
+            if (failure != null) {
+              Toast.error(failure.isEmpty ? null : failure);
               return;
             }
 

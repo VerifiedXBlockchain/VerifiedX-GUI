@@ -7,6 +7,7 @@ import '../../../core/components/buttons.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../adnr/components/create_adnr_dialog.dart';
 import '../../adnr/providers/adnr_pending_provider.dart';
+import '../../adnr/utils/domain_display.dart';
 import '../models/btc_web_account.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -191,7 +192,7 @@ class WebBtcAdnrContent extends BaseComponent {
 
                         ref.read(globalLoadingProvider.notifier).start();
 
-                        final txData = await RawTransaction.generate(
+                        final generated = await RawTransaction.generate(
                           keypair: ref.read(webSessionProvider).keypair!,
                           amount: ADNR_TRANSFER_COST,
                           toAddress: vfxToAddress,
@@ -203,10 +204,12 @@ class WebBtcAdnrContent extends BaseComponent {
                           },
                         );
 
+                        final txData = generated.txData;
+
                         ref.read(globalLoadingProvider.notifier).complete();
 
                         if (txData == null) {
-                          Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                          Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
                           return;
                         }
 
@@ -216,10 +219,10 @@ class WebBtcAdnrContent extends BaseComponent {
                           title: AppLocalizations.of(context).btcValidTxTitle,
                           body: AppLocalizations.of(context)
                               .r3eBtcDomainValidBody(
-                                  "$adnr.vfx",
-                                  ADNR_COST.toString(),
+                                  domainWithSuffix(adnr, ".btc"),
+                                  ADNR_TRANSFER_COST.toString(),
                                   txFee.toString(),
-                                  (ADNR_COST + txFee).toString()),
+                                  (ADNR_TRANSFER_COST + txFee).toString()),
                           confirmText: AppLocalizations.of(context).actionSend,
                           cancelText: AppLocalizations.of(context).actionCancel,
                         );
@@ -279,7 +282,7 @@ class WebBtcAdnrContent extends BaseComponent {
 
                         if (confirmed == true) {
                           ref.read(globalLoadingProvider.notifier).start();
-                          final txData = await RawTransaction.generate(
+                          final generated = await RawTransaction.generate(
                             keypair: ref.read(webSessionProvider).keypair!,
                             amount: ADNR_DELETE_COST,
                             toAddress: "Adnr_Base",
@@ -289,10 +292,11 @@ class WebBtcAdnrContent extends BaseComponent {
                               "BTCFromAddress": account.address
                             },
                           );
+                          final txData = generated.txData;
 
                           ref.read(globalLoadingProvider.notifier).complete();
                           if (txData == null) {
-                            Toast.error(AppLocalizations.of(context).btcInvalidTxData);
+                            Toast.error(generated.refusalMessage ?? AppLocalizations.of(context).btcInvalidTxData);
 
                             return;
                           }
@@ -302,11 +306,11 @@ class WebBtcAdnrContent extends BaseComponent {
                           final confirmed = await ConfirmDialog.show(
                             title: AppLocalizations.of(context).btcValidTxTitle,
                             body:
-                                AppLocalizations.of(context).r3eVfxDomainValidBody(
-                                  "$adnr.btc",
-                                  ADNR_COST.toString(),
+                                AppLocalizations.of(context).r3eBtcDomainValidBody(
+                                  domainWithSuffix(adnr, ".btc"),
+                                  ADNR_DELETE_COST.toString(),
                                   txFee.toString(),
-                                  (ADNR_COST + txFee).toString()),
+                                  (ADNR_DELETE_COST + txFee).toString()),
                             confirmText: AppLocalizations.of(context).actionSend,
                             cancelText: AppLocalizations.of(context).actionCancel,
                           );

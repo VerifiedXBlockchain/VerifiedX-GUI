@@ -60,6 +60,7 @@ class WebShopDetailScreen extends BaseScreen {
                   ref.read(webCollectionFullListProvider(shopId).notifier).pauseTimer();
                   AutoRouter.of(context).pop();
                 },
+                tooltip: AppLocalizations.of(context).actionBack,
               ),
               actions: [
                 if (address != null)
@@ -106,7 +107,8 @@ class WebShopDetailScreen extends BaseScreen {
                       ref.read(webCollectionListProvider(shopId).notifier).refresh();
                       ref.read(webCollectionFullListProvider(shopId).notifier).reload();
                     },
-                    icon: Icon(Icons.refresh))
+                    icon: Icon(Icons.refresh),
+                    tooltip: AppLocalizations.of(context).actionRefresh)
               ],
             )
           : AppBar(
@@ -181,6 +183,7 @@ class WebShopDetailScreen extends BaseScreen {
                             }
 
                             return AppButton(
+                              key: const Key('web_shop:publish_shop'),
                               label: AppLocalizations.of(context).shopPublishShop,
                               onPressed: () async {
                                 final l10n = AppLocalizations.of(context);
@@ -230,6 +233,7 @@ class WebShopDetailScreen extends BaseScreen {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           AppButton(
+                            key: const Key('web_shop:delete_shop'),
                             label: isMobile ? AppLocalizations.of(context).actionDelete : AppLocalizations.of(context).dstDeleteShop,
                             icon: Icons.delete,
                             variant: AppColorVariant.Danger,
@@ -261,6 +265,7 @@ class WebShopDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
+                            key: const Key('web_shop:edit_shop'),
                             label: isMobile ? AppLocalizations.of(context).scwEdit : AppLocalizations.of(context).r3bEditAuctionHouse,
                             icon: Icons.edit,
                             variant: AppColorVariant.Light,
@@ -272,6 +277,7 @@ class WebShopDetailScreen extends BaseScreen {
                             },
                           ),
                           AppButton(
+                            key: const Key('web_shop:create_collection'),
                             label: AppLocalizations.of(context).shopCreateCollection,
                             icon: Icons.add,
                             variant: AppColorVariant.Success,

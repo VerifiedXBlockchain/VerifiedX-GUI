@@ -81,27 +81,30 @@ class WebTokenList extends BaseComponent {
             padding: const EdgeInsets.only(bottom: 16),
             child: AppCard(
               padding: 0,
-              child: ListTile(
-                leading: token.imageUrl != null && token.imageUrl!.isNotEmpty
-                    ? Image.network(token.imageUrl!, width: 48, height: 48, fit: BoxFit.cover)
-                    : PrettyIcon(
-                        type: PrettyIconType.fungibleToken,
-                      ),
-                title: Text("[${token.ticker}] ${token.name}"),
-                subtitle: Text(
-                  account.address,
-                  style: TextStyle(
-                    color: isOwnedByRA ? Theme.of(context).colorScheme.reserve : null,
+              child: Semantics(
+                button: true,
+                child: ListTile(
+                  leading: token.imageUrl != null && token.imageUrl!.isNotEmpty
+                      ? Image.network(token.imageUrl!, width: 48, height: 48, fit: BoxFit.cover)
+                      : PrettyIcon(
+                          type: PrettyIconType.fungibleToken,
+                        ),
+                  title: Text("[${token.ticker}] ${token.name}"),
+                  subtitle: Text(
+                    account.address,
+                    style: TextStyle(
+                      color: isOwnedByRA ? Theme.of(context).colorScheme.reserve : null,
+                    ),
                   ),
+                  trailing: AppBadge(
+                    label: "${account.balance} ${token.ticker}",
+                    variant: account.address.startsWith("xRBX") ? AppColorVariant.Reserve : AppColorVariant.Secondary,
+                  ),
+                  onTap: () {
+                    ref.invalidate(webTokenDetailProvider(token.smartContractId));
+                    AutoRouter.of(context).push(WebTokenDetailScreenRoute(scId: token.smartContractId));
+                  },
                 ),
-                trailing: AppBadge(
-                  label: "${account.balance} ${token.ticker}",
-                  variant: account.address.startsWith("xRBX") ? AppColorVariant.Reserve : AppColorVariant.Secondary,
-                ),
-                onTap: () {
-                  ref.invalidate(webTokenDetailProvider(token.smartContractId));
-                  AutoRouter.of(context).push(WebTokenDetailScreenRoute(scId: token.smartContractId));
-                },
               ),
             ),
           );

@@ -13,7 +13,6 @@ import '../../global_loader/global_loading_provider.dart';
 import '../../nft/providers/nft_detail_watcher.dart';
 import '../../nft/providers/sale_provider.dart';
 import '../../reserve/providers/ra_auto_activate_provider.dart';
-import '../../reserve/services/reserve_account_service.dart';
 import '../../reserve/vault_web_utils.dart';
 import '../../token/providers/auto_mint_provider.dart';
 import '../../token/providers/pending_token_pause_provider.dart';
@@ -138,27 +137,22 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
       final autoActivateData = ref.read(reserveAccountAutoActivateProvider);
 
       if (autoActivateData.containsKey(transaction.hash)) {
-        final data = autoActivateData[transaction.hash];
-        final String? address = data['address'];
-        final String? password = data['password'];
-
         if (kIsWeb) {
+          final data = autoActivateData[transaction.hash];
+          final String? address = data['address'];
           if (address != null) {
             final keypair = ref.read(webSessionProvider).raKeypair;
             if (keypair != null && keypair.address == address) {
               activateVaultAccountWeb(ref: ref, keypair: keypair, promptForConfirmation: false, silent: true);
             }
           }
+          ref.read(reserveAccountAutoActivateProvider.notifier).remove(transaction.hash);
         } else {
-          if (address != null && password != null) {
-            ReserveAccountService().publish(address: address, password: password).then((success) {
-              if (success) {
-                Toast.message(globalL10n.svcVaultAutoActivationInitiated);
-              }
-            });
-          }
+          // Desktop also sweeps the queue against Vault balances on every
+          // wallet refresh (ReserveAccountProvider.set), which covers a
+          // funding transaction that confirmed before it was queued.
+          publishQueuedAutoActivation(ref, transaction.hash);
         }
-        ref.read(reserveAccountAutoActivateProvider.notifier).remove(transaction.hash);
       }
     }
     if (isOutgoing) {

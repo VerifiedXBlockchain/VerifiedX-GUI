@@ -79,13 +79,13 @@ class MotherCreateHostDialog extends BaseComponent {
               return;
             }
 
-            final success = await MotherService().createHost(
+            final failure = await MotherService().createHost(
               nameController.text,
               passwordController.text,
             );
 
-            if (success != true) {
-              Toast.error();
+            if (failure != null) {
+              Toast.error(failure.isEmpty ? null : failure);
               return;
             }
 

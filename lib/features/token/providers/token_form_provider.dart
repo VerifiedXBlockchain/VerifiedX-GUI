@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../core/dialogs.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
@@ -15,6 +16,7 @@ import '../../smart_contracts/models/smart_contract.dart';
 import '../../smart_contracts/services/smart_contract_service.dart';
 import '../constants.dart';
 import '../models/token_sc_feature.dart';
+import '../token_rules.dart';
 import 'auto_mint_provider.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -36,19 +38,26 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
   late final TextEditingController tickerController;
   late final TextEditingController descriptionController;
   late final TextEditingController supplyController;
-  late final TextEditingController imageUrlController;
 
   TokenFormProvider(this.ref, TokenScFeature model) : super(model) {
     nameController = TextEditingController(text: model.name);
     tickerController = TextEditingController(text: model.ticker);
     descriptionController = TextEditingController(text: "");
     supplyController = TextEditingController(text: model.supply == 0 ? '0' : model.supply.toString());
-    imageUrlController = TextEditingController(text: model.imageUrl ?? '');
   }
 
   String? nameValidator(String? val) => formValidatorNotEmpty(val, globalL10n.tokenNameLabel);
   String? tickerValidator(String? val) => formValidatorNotEmpty(val, globalL10n.tokenTickerLabel);
-  String? supplyValidator(String? val) => formValidatorNumber(val, globalL10n.bw2SupplyAmount);
+  String? supplyValidator(String? val) {
+    final numberError = formValidatorNumber(val, globalL10n.bw2SupplyAmount);
+    if (numberError != null) {
+      return numberError;
+    }
+    if (!isValidTokenSupply(val!)) {
+      return globalL10n.bw2SupplyWholeNumberMax(NumberFormat.decimalPattern().format(kTokenMaxSupply));
+    }
+    return null;
+  }
 
   load(TokenScFeature model) {
     state = model;
@@ -56,7 +65,6 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     tickerController.text = model.ticker;
     descriptionController.text = "";
     supplyController.text = model.supply == 0 ? '0' : model.supply.toString();
-    imageUrlController.text = model.imageUrl ?? '';
   }
 
   clear() {
@@ -114,7 +122,6 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     final token = state.copyWith(
       name: nameController.text,
       ticker: tickerController.text.toUpperCase(),
-      imageUrl: imageUrlController.text,
       supply: state.mintable || supply == 0 ? 0 : supply,
       description: descriptionController.text.isNotEmpty ? descriptionController.text : nameController.text,
     );
@@ -231,7 +238,6 @@ class TokenFormProvider extends StateNotifier<TokenScFeature> {
     final token = state.copyWith(
       name: nameController.text,
       ticker: tickerController.text.toUpperCase(),
-      imageUrl: imageUrlController.text,
       supply: state.mintable || supply == 0 ? 0 : supply,
       description: descriptionController.text.isNotEmpty ? descriptionController.text : tickerController.text,
     );

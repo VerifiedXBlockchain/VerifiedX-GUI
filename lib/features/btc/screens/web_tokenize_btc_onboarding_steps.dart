@@ -194,6 +194,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
                   ),
                   suffix: IconButton(
                     icon: Icon(Icons.copy),
+                    tooltip: l10n.btcCopyDepositAddress,
                     onPressed: () async {
                       await Clipboard.setData(ClipboardData(text: state.tokenizedBtc!.depositAddress));
                       Toast.message(l10n.btcAddressCopiedToast);
@@ -274,9 +275,10 @@ class _TransferBtcStep extends BaseComponent {
               label: Text(l10n.btcAddressLabel),
               suffix: IconButton(
                 icon: Icon(Icons.copy),
+                tooltip: l10n.actionCopyAddress,
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: state.btcAccount!.address));
-                  Toast.message(l10n.btcWifCopiedToast);
+                  Toast.message(l10n.btcAddressCopiedToast);
                 },
               ),
             ),

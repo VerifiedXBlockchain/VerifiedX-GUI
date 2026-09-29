@@ -25,39 +25,42 @@ class CollectionList extends BaseComponent {
         final collection = collections[index];
         return Card(
           color: Colors.white.withOpacity(0.03),
-          child: ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(collection.name),
-                Expanded(
-                  child: SizedBox.shrink(),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppBadge(
-                      label: collection.isLive ? l10n.r3dLive : l10n.r3dHidden,
-                      variant: collection.isLive ? AppColorVariant.Success : AppColorVariant.Danger,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Switch(
-                        value: collection.isLive,
-                        activeColor: Theme.of(context).colorScheme.success,
-                        inactiveThumbColor: Theme.of(context).colorScheme.danger,
-                        onChanged: (val) {
-                          ref.read(storeFormProvider.notifier).switchLiveState(collection, val);
-                        }),
-                  ],
-                ),
-              ],
+          child: Semantics(
+            button: true,
+            child: ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(collection.name),
+                  Expanded(
+                    child: SizedBox.shrink(),
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AppBadge(
+                        label: collection.isLive ? l10n.r3dLive : l10n.r3dHidden,
+                        variant: collection.isLive ? AppColorVariant.Success : AppColorVariant.Danger,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Switch(
+                          value: collection.isLive,
+                          activeColor: Theme.of(context).colorScheme.success,
+                          inactiveThumbColor: Theme.of(context).colorScheme.danger,
+                          onChanged: (val) {
+                            ref.read(storeFormProvider.notifier).switchLiveState(collection, val);
+                          }),
+                    ],
+                  ),
+                ],
+              ),
+              trailing: Icon(Icons.chevron_right),
+              onTap: () {
+                AutoRouter.of(context).push(MyCollectionDetailScreenRoute(collectionId: collection.id));
+              },
             ),
-            trailing: Icon(Icons.chevron_right),
-            onTap: () {
-              AutoRouter.of(context).push(MyCollectionDetailScreenRoute(collectionId: collection.id));
-            },
           ),
         );
       },

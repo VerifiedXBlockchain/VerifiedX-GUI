@@ -137,6 +137,7 @@ class BulkVbtcTransferScreenState
                   children: [
                     Expanded(
                       child: TextFormField(
+                        key: const ValueKey('vbtc:bulk_amount'),
                         controller: amountController,
                         validator: (value) =>
                             formValidatorVbtcMultiAmount(value, available),
@@ -169,6 +170,7 @@ class BulkVbtcTransferScreenState
                 ),
                 SizedBox(height: 12),
                 TextFormField(
+                  key: const ValueKey('vbtc:bulk_address'),
                   controller: addressController,
                   validator: formValidatorVbtcRecipient,
                   decoration: InputDecoration(
@@ -196,6 +198,7 @@ class BulkVbtcTransferScreenState
               ),
               SizedBox(width: 8),
               AppButton(
+                key: const Key('vbtc:bulk_submit'),
                 label: l10n.actionSend,
                 onPressed: () => _send(context, tokens),
                 variant: AppColorVariant.Btc,

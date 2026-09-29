@@ -151,7 +151,7 @@ class _CompileAnimationCompleteState extends State<CompileAnimationComplete> wit
                   clockwise: false,
                 ),
                 Text(
-                  widget.mint ? "Minted!" : "Compiled!",
+                  widget.mint ? AppLocalizations.of(context).r3aMintedExclaim : AppLocalizations.of(context).r3aCompiledExclaim,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(color: Colors.white, letterSpacing: 1),
                 ),
               ],

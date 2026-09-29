@@ -74,8 +74,30 @@
   <script src="assets/assets/js/keygen-v3.js?v=5.0.0" defer=""></script>
   <script src="assets/assets/js/btc.js?v=5.0.9" defer=""></script>
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-  <!-- <script src="assets/assets/js/btc-testnet.js?v=5.0.5" defer=""></script> -->
-  <script src="assets/assets/js/btc-mainnet.js?v=5.0.5" defer=""></script>
+  <!-- btc-testnet.js / btc-mainnet.js is loaded from Dart at startup to match
+       the build's network (lib/features/btc_web/utils/btc_network_script.dart). -->
+
+  <!-- Automation builds only (?automation in the URL): keep the Flutter engine
+       out of shadow DOM so page readers can traverse its semantics tree. The
+       engine (3.7.12) falls back to a light-DOM host node when the glass pane
+       element has no attachShadow property. Nothing changes without the
+       query param. -->
+  <script>
+    (function () {
+      if (!new URLSearchParams(location.search).has("automation")) {
+        return;
+      }
+      var createElement = document.createElement.bind(document);
+      document.createElement = function (tagName) {
+        var element = createElement.apply(document, arguments);
+        if (typeof tagName === "string" && tagName.toLowerCase() === "flt-glass-pane") {
+          element.attachShadow = undefined;
+        }
+        return element;
+      };
+      console.log("[automation] light-DOM semantics enabled");
+    })();
+  </script>
 
   <!-- This script installs service_worker.js to provide PWA functionality to
        application. For more information, see:
@@ -89,7 +111,7 @@
       }
       scriptLoaded = true;
       var scriptTag = document.createElement("script");
-      scriptTag.src = "main.dart.js?version=7.0.0c";
+      scriptTag.src = "main.dart.js?version=8.0.2";
       scriptTag.type = "application/javascript";
       document.body.append(scriptTag);
     }

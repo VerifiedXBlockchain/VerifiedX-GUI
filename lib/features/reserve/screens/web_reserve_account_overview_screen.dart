@@ -134,6 +134,33 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
         ),
       );
     }
+    if (ref.watch(webSessionProvider.select((v) => v.raStatusUnavailable))) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.warning,
+                color: Theme.of(context).colorScheme.warning,
+              ),
+              Text(
+                AppLocalizations.of(context).hnavWarningTitle,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                AppLocalizations.of(context).reserveWebStatusUnavailable,
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
+        ),
+      );
+    }
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 800),
@@ -185,16 +212,20 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       SizedBox(
                         width: 4,
                       ),
-                      InkWell(
-                        onTap: () async {
-                          await Clipboard.setData(
-                              ClipboardData(text: keypair.address));
-                          Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                        },
-                        child: Icon(
-                          Icons.copy,
-                          color: Theme.of(context).colorScheme.reserve,
-                          size: 14,
+                      Semantics(
+                        label: AppLocalizations.of(context).actionCopyAddress,
+                        button: true,
+                        child: InkWell(
+                          onTap: () async {
+                            await Clipboard.setData(
+                                ClipboardData(text: keypair.address));
+                            Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                          },
+                          child: Icon(
+                            Icons.copy,
+                            color: Theme.of(context).colorScheme.reserve,
+                            size: 14,
+                          ),
                         ),
                       )
                     ],
@@ -217,18 +248,22 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           color: Colors.white,
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          final session = ref.read(webSessionProvider);
-                          final body =
-                              "Available: ${session.raBalance} VFX\nLocked: ${session.raBalanceLocked} VFX\nTotal: ${session.raBalanceTotal} VFX";
-                          InfoDialog.show(
-                              title: AppLocalizations.of(context).reserveWebVaultBalanceTitle, body: body);
-                        },
-                        child: Icon(
-                          Icons.help,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.secondary,
+                      Semantics(
+                        label: AppLocalizations.of(context).reserveWebVaultBalanceTitle,
+                        button: true,
+                        child: InkWell(
+                          onTap: () {
+                            final session = ref.read(webSessionProvider);
+                            final body =
+                                "Available: ${session.raBalance} VFX\nLocked: ${session.raBalanceLocked} VFX\nTotal: ${session.raBalanceTotal} VFX";
+                            InfoDialog.show(
+                                title: AppLocalizations.of(context).reserveWebVaultBalanceTitle, body: body);
+                          },
+                          child: Icon(
+                            Icons.help,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
                         ),
                       )
                     ],
@@ -274,6 +309,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                   height: 12,
                                 ),
                                 AppButton(
+                                  key: const Key('reserve:reveal_keys'),
                                   label: AppLocalizations.of(context).reserveWebRevealKeys,
                                   onPressed: () {
                                     showRaKeys(context, keypair);
@@ -321,6 +357,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                       runSpacing: 12,
                       children: [
                         AppButton(
+                          key: const Key('reserve:send_funds'),
                           label: AppLocalizations.of(context).reserveSendFunds,
                           variant: AppColorVariant.Light,
                           icon: Icons.arrow_upward,
@@ -335,6 +372,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           },
                         ),
                         AppButton(
+                          key: const Key('reserve:manage_assets'),
                           label: AppLocalizations.of(context).reserveManageAssets,
                           icon: Icons.toll,
                           variant: AppColorVariant.Light,
@@ -347,39 +385,48 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                     children: [
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsNfts),
-                                          leading:
-                                              Icon(Icons.lightbulb_outline),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("nfts");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsNfts),
+                                            leading:
+                                                Icon(Icons.lightbulb_outline),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("nfts");
+                                            },
+                                          ),
                                         ),
                                       ),
                                       SizedBox(height: 10),
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsTokens),
-                                          leading: Icon(Icons.toll),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("tokens");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsTokens),
+                                            leading: Icon(Icons.toll),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("tokens");
+                                            },
+                                          ),
                                         ),
                                       ),
                                       SizedBox(height: 10),
                                       AppCard(
                                         padding: 0,
-                                        child: ListTile(
-                                          title: Text(AppLocalizations.of(context).reserveAssetsBtc),
-                                          leading:
-                                              Icon(FontAwesomeIcons.bitcoin),
-                                          trailing: Icon(Icons.chevron_right),
-                                          onTap: () {
-                                            Navigator.of(context).pop("btc");
-                                          },
+                                        child: Semantics(
+                                          button: true,
+                                          child: ListTile(
+                                            title: Text(AppLocalizations.of(context).reserveAssetsBtc),
+                                            leading:
+                                                Icon(FontAwesomeIcons.bitcoin),
+                                            trailing: Icon(Icons.chevron_right),
+                                            onTap: () {
+                                              Navigator.of(context).pop("btc");
+                                            },
+                                          ),
                                         ),
                                       )
                                     ],
@@ -412,63 +459,66 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               vertical: 8),
                                           child: AppCard(
                                             padding: 0,
-                                            child: ListTile(
-                                              title: Text(nft.name),
-                                              subtitle: Text(
-                                                nft.description,
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              trailing:
-                                                  Icon(Icons.chevron_right),
-                                              leading: Stack(
-                                                children: [
-                                                  Builder(
-                                                    builder: (context) {
-                                                      if (nft.currentEvolveAssetWeb !=
-                                                              null &&
-                                                          nft.currentEvolveAssetWeb!
-                                                              .isImage) {
+                                            child: Semantics(
+                                              button: true,
+                                              child: ListTile(
+                                                title: Text(nft.name),
+                                                subtitle: Text(
+                                                  nft.description,
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                trailing:
+                                                    Icon(Icons.chevron_right),
+                                                leading: Stack(
+                                                  children: [
+                                                    Builder(
+                                                      builder: (context) {
+                                                        if (nft.currentEvolveAssetWeb !=
+                                                                null &&
+                                                            nft.currentEvolveAssetWeb!
+                                                                .isImage) {
+                                                          return SizedBox(
+                                                            width: 32,
+                                                            height: 32,
+                                                            child: AspectRatio(
+                                                              aspectRatio: 1,
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: nft
+                                                                    .currentEvolveAssetWeb!
+                                                                    .location,
+                                                                width: double
+                                                                    .infinity,
+                                                                fit: BoxFit.cover,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
+
+                                                        if (nft.primaryAssetWeb !=
+                                                            null) {
+                                                          return Icon(Icons
+                                                              .file_present_outlined);
+                                                        }
+
                                                         return SizedBox(
                                                           width: 32,
                                                           height: 32,
-                                                          child: AspectRatio(
-                                                            aspectRatio: 1,
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl: nft
-                                                                  .currentEvolveAssetWeb!
-                                                                  .location,
-                                                              width: double
-                                                                  .infinity,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
                                                         );
-                                                      }
-
-                                                      if (nft.primaryAssetWeb !=
-                                                          null) {
-                                                        return Icon(Icons
-                                                            .file_present_outlined);
-                                                      }
-
-                                                      return SizedBox(
-                                                        width: 32,
-                                                        height: 32,
-                                                      );
-                                                    },
-                                                  ),
-                                                ],
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              NftDetailScreen(
+                                                                  id: nft.id)));
+                                                },
                                               ),
-                                              onTap: () {
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            NftDetailScreen(
-                                                                id: nft.id)));
-                                              },
                                             ),
                                           ),
                                         );
@@ -510,42 +560,45 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               vertical: 8),
                                           child: AppCard(
                                             padding: 0,
-                                            child: ListTile(
-                                              title: Text(item.token.name),
-                                              subtitle: Text(
-                                                "$balance ${item.token.ticker}",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              trailing:
-                                                  Icon(Icons.chevron_right),
-                                              leading:
-                                                  item.token.imageUrl != null &&
-                                                          item.token.imageUrl!
-                                                              .isNotEmpty
-                                                      ? Image.network(
-                                                          item.token.imageUrl!,
-                                                          width: 48,
-                                                          height: 48,
-                                                          fit: BoxFit.cover)
-                                                      : PrettyIcon(
-                                                          type: PrettyIconType
-                                                              .fungibleToken,
-                                                        ),
-                                              onTap: () {
-                                                Navigator.of(context).pop();
+                                            child: Semantics(
+                                              button: true,
+                                              child: ListTile(
+                                                title: Text(item.token.name),
+                                                subtitle: Text(
+                                                  "$balance ${item.token.ticker}",
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                trailing:
+                                                    Icon(Icons.chevron_right),
+                                                leading:
+                                                    item.token.imageUrl != null &&
+                                                            item.token.imageUrl!
+                                                                .isNotEmpty
+                                                        ? Image.network(
+                                                            item.token.imageUrl!,
+                                                            width: 48,
+                                                            height: 48,
+                                                            fit: BoxFit.cover)
+                                                        : PrettyIcon(
+                                                            type: PrettyIconType
+                                                                .fungibleToken,
+                                                          ),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
 
-                                                ref.invalidate(
-                                                    webTokenDetailProvider(item
-                                                        .token
-                                                        .smartContractId));
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (_) =>
-                                                            WebTokenDetailScreen(
-                                                                scId: item.token
-                                                                    .smartContractId)));
-                                              },
+                                                  ref.invalidate(
+                                                      webTokenDetailProvider(item
+                                                          .token
+                                                          .smartContractId));
+                                                  Navigator.of(context).push(
+                                                      MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              WebTokenDetailScreen(
+                                                                  scId: item.token
+                                                                      .smartContractId)));
+                                                },
+                                              ),
                                             ),
                                           ),
                                         );
@@ -579,42 +632,45 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                                               vertical: 8),
                                           child: AppCard(
                                             padding: 0,
-                                            child: ListTile(
-                                              title: Text(item.name),
-                                              subtitle: Text(
-                                                "${item.balanceForAddress(keypair.address)} vBTC",
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              trailing:
-                                                  Icon(Icons.chevron_right),
-                                              leading: CachedNetworkImage(
-                                                imageUrl: item.imageUrl,
-                                                height: 32,
-                                                width: 32,
-                                                errorWidget: (context, _, __) {
-                                                  return Image.asset(
-                                                    Assets.images.vbtcPng.path,
-                                                    width: 32,
-                                                    height: 32,
-                                                  );
+                                            child: Semantics(
+                                              button: true,
+                                              child: ListTile(
+                                                title: Text(item.name),
+                                                subtitle: Text(
+                                                  "${item.balanceForAddress(keypair.address)} vBTC",
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                trailing:
+                                                    Icon(Icons.chevron_right),
+                                                leading: CachedNetworkImage(
+                                                  imageUrl: item.imageUrl,
+                                                  height: 32,
+                                                  width: 32,
+                                                  errorWidget: (context, _, __) {
+                                                    return Image.asset(
+                                                      Assets.images.vbtcPng.path,
+                                                      width: 32,
+                                                      height: 32,
+                                                    );
+                                                  },
+                                                ),
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+
+                                                  Navigator.of(context).push(MaterialPageRoute(
+                                                      builder: (_) =>
+                                                          WebTokenizedBtcDetailScreen(
+                                                              scIdentifier: item
+                                                                  .scIdentifier,
+                                                              address: ref
+                                                                      .read(
+                                                                          webSessionProvider)
+                                                                      .raKeypair
+                                                                      ?.address ??
+                                                                  '')));
                                                 },
                                               ),
-                                              onTap: () {
-                                                Navigator.of(context).pop();
-
-                                                Navigator.of(context).push(MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        WebTokenizedBtcDetailScreen(
-                                                            scIdentifier: item
-                                                                .scIdentifier,
-                                                            address: ref
-                                                                    .read(
-                                                                        webSessionProvider)
-                                                                    .raKeypair
-                                                                    ?.address ??
-                                                                '')));
-                                              },
                                             ),
                                           ),
                                         );
@@ -625,6 +681,7 @@ class WebReserveAccountOverviewScreen extends BaseScreen {
                           },
                         ),
                         AppButton(
+                          key: const Key('reserve:receive_assets'),
                           label: AppLocalizations.of(context).reserveReceiveAssets,
                           icon: Icons.arrow_downward,
                           variant: AppColorVariant.Light,

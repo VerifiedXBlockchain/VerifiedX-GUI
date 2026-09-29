@@ -321,3 +321,21 @@ VerifiedXSendLink? parseVerifiedXSendLink(
     uri: uri,
   );
 }
+
+/// Clipboard text reduced to the characters the send form's address field
+/// accepts (letters, digits and '.'), so pasting 'name.vfx' keeps the domain
+/// intact while stray whitespace and punctuation are dropped.
+String sanitizePastedSendAddress(String input) {
+  return input.replaceAll(RegExp('[^a-zA-Z0-9.]'), "");
+}
+
+/// Amount text for the prefilled send route's `amount` path segment. The
+/// segment comes straight from a link, so anything that is not a positive,
+/// finite number yields an empty field for the form's validator to handle.
+String prefilledSendAmountText(String rawAmount) {
+  final amount = double.tryParse(rawAmount.trim());
+  if (amount == null || amount.isNaN || amount.isInfinite || amount <= 0) {
+    return "";
+  }
+  return amount.toString();
+}

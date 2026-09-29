@@ -8,6 +8,7 @@ import 'package:rbx_wallet/features/keygen/models/ra_keypair.dart';
 import '../../../core/singletons.dart';
 import '../../../core/storage.dart';
 import '../../../core/services/multi_account_encryption_service.dart';
+import '../../../core/services/web_account_password_store.dart';
 import '../../keygen/models/keypair.dart';
 import '../models/multi_account_instance.dart';
 import "package:collection/collection.dart";
@@ -151,25 +152,17 @@ class MultiAccountProvider extends StateNotifier<List<MultiAccountInstance>> {
   ) {
     final merged = Map<String, dynamic>.from(currentAccountJson);
 
-    // Preserve each encrypted keypair from storage
-    _preserveEncryptedKeypair(merged, storedAccount, 'keypair', 'private');
-    _preserveEncryptedKeypair(merged, storedAccount, 'raKeypair', 'private');
-    _preserveEncryptedKeypair(
-        merged, storedAccount, 'btcKeypair', 'privateKey');
+    // Preserve each keypair that storage holds with encrypted fields
+    for (final keypairKey in MultiAccountEncryptionService.secretFields.keys) {
+      final storedKeypair = storedAccount[keypairKey];
+      if (storedKeypair is Map &&
+          MultiAccountEncryptionService.hasEncryptedPrivateKeys(
+              {keypairKey: storedKeypair})) {
+        merged[keypairKey] = storedKeypair;
+      }
+    }
 
     return merged;
-  }
-
-  /// Preserves an encrypted keypair field from stored account
-  void _preserveEncryptedKeypair(
-    Map<String, dynamic> merged,
-    Map<String, dynamic> storedAccount,
-    String keypairKey,
-    String privateKeyField,
-  ) {
-    if (storedAccount[keypairKey]?['_isPrivateEncrypted'] == true) {
-      merged[keypairKey] = storedAccount[keypairKey];
-    }
   }
 }
 
@@ -184,41 +177,10 @@ MultiAccountInstance _createAccountFromStoredJson(Map<String, dynamic> json) {
     return MultiAccountInstance.fromJson(json);
   }
 
-  // Has encrypted keys - we need to create the account with placeholder/null private keys
-  // The actual decryption will happen when the user switches to this account and enters password
-
-  // Create a copy of the JSON with placeholder private keys
-  final modifiedJson = Map<String, dynamic>.from(json);
-
-  if (modifiedJson['keypair'] != null) {
-    final keypairJson = Map<String, dynamic>.from(modifiedJson['keypair']);
-    if (keypairJson['_isPrivateEncrypted'] == true) {
-      keypairJson['private'] =
-          ''; // Placeholder - will be decrypted when needed
-    }
-    modifiedJson['keypair'] = keypairJson;
-  }
-
-  if (modifiedJson['raKeypair'] != null) {
-    final raKeypairJson = Map<String, dynamic>.from(modifiedJson['raKeypair']);
-    if (raKeypairJson['_isPrivateEncrypted'] == true) {
-      raKeypairJson['private'] =
-          ''; // Placeholder - will be decrypted when needed
-    }
-    modifiedJson['raKeypair'] = raKeypairJson;
-  }
-
-  if (modifiedJson['btcKeypair'] != null) {
-    final btcKeypairJson =
-        Map<String, dynamic>.from(modifiedJson['btcKeypair']);
-    if (btcKeypairJson['_isPrivateEncrypted'] == true) {
-      btcKeypairJson['privateKey'] =
-          ''; // Placeholder - will be decrypted when needed
-    }
-    modifiedJson['btcKeypair'] = btcKeypairJson;
-  }
-
-  return MultiAccountInstance.fromJson(modifiedJson);
+  // Encrypted fields get empty placeholders. They are decrypted when the user
+  // switches to this account or reveals its keys and enters its password.
+  return MultiAccountInstance.fromJson(
+      MultiAccountEncryptionService.withEncryptedFieldsBlank(json));
 }
 
 final multiAccountProvider =
@@ -263,11 +225,13 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
           throw Exception("Password required for encrypted account");
         }
 
-        // Decrypt private keys from the stored JSON
-        final decryptedJson =
-            MultiAccountEncryptionService.decryptAccountPrivateKeys(
-                storedAccountJson, password);
-        accountToUse = MultiAccountInstance.fromJson(decryptedJson);
+        // Decrypts the stored keys and upgrades the stored entry's format.
+        final decrypted = WebAccountPasswordStore(storage)
+            .decryptStoredAccount(account.id, password);
+        if (decrypted == null) {
+          throw Exception("Failed to decrypt account keys");
+        }
+        accountToUse = decrypted;
       }
     }
 
@@ -277,6 +241,13 @@ class SelectedMultiAccountProvider extends StateNotifier<int> {
       storage.setString(
           Storage.WEB_PRIMARY_ADDRESS, accountToUse.keypair!.address);
     }
+    syncWithStorage();
+  }
+
+  /// Records [id] as the active account without loading its keys, for when
+  /// the session already holds them (unlock).
+  void markActive(int id) {
+    state = id;
     syncWithStorage();
   }
 

@@ -2,31 +2,26 @@
     "title": "VFXWallet Installer",
     "icon": "AppIcon.icns",
     "background": "background.png",
-    "background-color": "#000000",
+    "background-color": "#0F1923",
+    "icon-size": 80,
     "window": {
         "size": {
             "width": 600,
-            "height": 490
+            "height": 400
         }
     },
     "contents": [
         {
-            "x": 400,
-            "y": 130,
+            "x": 430,
+            "y": 220,
             "type": "link",
             "path": "/Applications"
         },
         {
-            "x": 20,
-            "y": 130,
+            "x": 170,
+            "y": 220,
             "type": "file",
             "path": "../resources/Runner/VFXWallet.app"
-        },
-        {
-            "x": 205,
-            "y": 290,
-            "type": "file",
-            "path": "./install.command"
         },
         {
             "x": 600,

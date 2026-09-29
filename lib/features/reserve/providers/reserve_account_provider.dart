@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +35,20 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
 
   set(List<Wallet> wallets) {
     state = wallets.reversed.toList();
+    if (!kIsWeb) {
+      runQueuedAutoActivations();
+    }
+  }
+
+  /// Publishes queued auto-activations whose Vault is funded and clears
+  /// pending badges that no longer apply. Runs on every wallet refresh, so it
+  /// does not depend on seeing the funding transaction's signal.
+  void runQueuedAutoActivations() {
+    final autoActivate = ref.read(reserveAccountAutoActivateProvider.notifier);
+    for (final txHash in autoActivate.sweep(state)) {
+      publishQueuedAutoActivation(ref, txHash);
+    }
+    ref.read(pendingActivationProvider.notifier).prune(state, queuedAddresses: autoActivate.queuedAddresses);
   }
 
   Future<void> newAccount(BuildContext context) async {
@@ -174,6 +189,8 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
               ref.read(reserveAccountAutoActivateProvider.notifier).add(txHash, walletAddress, password);
               ref.read(pendingActivationProvider.notifier).addId(walletAddress);
               Toast.message(l10n.txpAutoActivateQueued);
+              // The funding may have confirmed during the dialogs above.
+              runQueuedAutoActivations();
             }
           }
         } else {
@@ -359,6 +376,12 @@ class ReserveAccountProvider extends StateNotifier<List<Wallet>> {
     final l10n = AppLocalizations.of(context);
     if (!wallet.isReserved) {
       Toast.error(l10n.txpNotVaultAccount);
+      return;
+    }
+
+    // A second activation would burn another 5 VFX.
+    if (wallet.isNetworkProtected) {
+      Toast.error(l10n.txpVaultAlreadyActivated);
       return;
     }
 

@@ -22,17 +22,31 @@ class UnlockWallet extends StatefulWidget {
 class _UnlockWalletState extends State<UnlockWallet> {
   final FocusNode focusNode = FocusNode();
   String password = "";
+  bool submitting = false;
 
   Future<void> submit() async {
+    // Enter and the unlock button can both fire; a second unlock would run
+    // finishSetup again and start every polling loop twice.
+    if (submitting || password.isEmpty) {
+      return;
+    }
+    setState(() => submitting = true);
     final l10n = AppLocalizations.of(context);
-    final success = await widget.ref.read(passwordRequiredProvider.notifier).unlock(password);
-    if (success == true) {
-      Toast.message(l10n.encryptUnlockedToast);
-      widget.ref.read(startupPasswordRequiredProvider.notifier).set(false);
-      widget.ref.read(sessionProvider.notifier).finishSetup(true);
-      await widget.ref.read(sessionProvider.notifier).loadWallets();
-    } else {
-      Toast.error(l10n.encryptIncorrectPasswordToast);
+    try {
+      final success = await widget.ref.read(passwordRequiredProvider.notifier).unlock(password);
+      if (success == true) {
+        Toast.message(l10n.encryptUnlockedToast);
+        widget.ref.read(startupPasswordRequiredProvider.notifier).set(false);
+        final session = widget.ref.read(sessionProvider.notifier);
+        session.finishSetup(session.lastInitInLoop);
+        await session.loadWallets();
+      } else {
+        Toast.error(l10n.encryptIncorrectPasswordToast);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => submitting = false);
+      }
     }
   }
 
@@ -104,6 +118,7 @@ class _UnlockWalletState extends State<UnlockWallet> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextFormField(
+                    key: const ValueKey('auth:password'),
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context).encryptPasswordHint,
@@ -152,7 +167,8 @@ class _UnlockWalletState extends State<UnlockWallet> {
                 padding: const EdgeInsets.all(8.0),
                 child: Center(
                   child: IconButton(
-                    onPressed: password.isEmpty
+                    key: const Key('auth:password_submit'),
+                    onPressed: password.isEmpty || submitting
                         ? null
                         : () {
                             submit();
@@ -162,6 +178,7 @@ class _UnlockWalletState extends State<UnlockWallet> {
                       color: Colors.black,
                       // color: Colors.white,
                     ),
+                    tooltip: AppLocalizations.of(context).r3gUnlockAccount,
                   ),
                 ),
               ),

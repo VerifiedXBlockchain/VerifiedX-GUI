@@ -24,6 +24,7 @@ import '../../../utils/validation.dart';
 import 'package:collection/collection.dart';
 
 import '../providers/tokenized_btc_onboard_provider.dart';
+import '../../encrypt/utils.dart';
 
 part './tokenize_btc_onboarding_steps.dart';
 
@@ -42,6 +43,7 @@ class TokenizeBtcOnboardingScreen extends BaseScreen {
           Icons.navigate_before,
           size: 32,
         ),
+        tooltip: l10n.actionBack,
         onPressed: () async {
           final confirmed = await ConfirmDialog.show(
             title: l10n.btcExitOnboardingTitle,

@@ -159,32 +159,38 @@ class _DownloadOrAssociateState extends State<DownloadOrAssociate> {
                           withDecor: false,
                           withClose: true,
                           children: [
-                            ListTile(
-                              leading: Icon(Icons.wifi_tethering_outlined),
-                              title: Text(l10n.tkbCallMediaFromBeacon),
-                              trailing: Icon(Icons.chevron_right),
-                              onTap: () async {
-                                final success = await NftService().requestMediaFromBeacon(widget.nftId);
-                                if (success == true) {
-                                  widget.onComplete();
+                            Semantics(
+                              button: true,
+                              child: ListTile(
+                                leading: Icon(Icons.wifi_tethering_outlined),
+                                title: Text(l10n.tkbCallMediaFromBeacon),
+                                trailing: Icon(Icons.chevron_right),
+                                onTap: () async {
+                                  final success = await NftService().requestMediaFromBeacon(widget.nftId);
+                                  if (success == true) {
+                                    widget.onComplete();
 
-                                  InfoDialog.show(
-                                      contextOverride: context,
-                                      title: l10n.tkbCallToBeaconStartedTitle,
-                                      body: l10n.tkbCallToBeaconStartedBody);
+                                    InfoDialog.show(
+                                        contextOverride: context,
+                                        title: l10n.tkbCallToBeaconStartedTitle,
+                                        body: l10n.tkbCallToBeaconStartedBody);
 
-                                  Toast.message(l10n.tkbCallToBeaconStartedToast);
-                                  Navigator.of(context).pop();
-                                }
-                              },
+                                    Toast.message(l10n.tkbCallToBeaconStartedToast);
+                                    Navigator.of(context).pop();
+                                  }
+                                },
+                              ),
                             ),
-                            ListTile(
-                              leading: Icon(Icons.file_upload),
-                              title: Text(l10n.tkbAssociateLocalFile),
-                              trailing: Icon(Icons.chevron_right),
-                              onTap: () async {
-                                chooseLocalFiles(ref);
-                              },
+                            Semantics(
+                              button: true,
+                              child: ListTile(
+                                leading: Icon(Icons.file_upload),
+                                title: Text(l10n.tkbAssociateLocalFile),
+                                trailing: Icon(Icons.chevron_right),
+                                onTap: () async {
+                                  chooseLocalFiles(ref);
+                                },
+                              ),
                             ),
                           ],
                         );

@@ -18,6 +18,7 @@ import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../providers/btc_web_vbtc_token_list_provider.dart';
+import '../../../utils/formatting.dart';
 
 class WebBtcTransactionListTile extends BaseComponent {
   final BtcWebTransaction transaction;
@@ -65,27 +66,30 @@ class WebBtcTransactionListTile extends BaseComponent {
       padding: 0,
       color: AppColors.getGray(ColorShade.s100),
       // glowOpacity: 0,
-      child: ListTile(
-        onTap: () {
-          openTxOnExplorer(tx);
-        },
-        title: Text(
-          "${amount.toString()} ${isVbtc ? 'vBTC' : 'BTC'}",
-        ),
-        subtitle: Text("Date: ${tx.blockTimeLabel} \nFee: ${tx.fee} SATS | ${tx.feeBtc} BTC"),
-        leading: tx.status.confirmed
-            ? Text(
-                "Confirmed",
-                style: TextStyle(color: Theme.of(context).colorScheme.success, fontWeight: FontWeight.bold),
-              )
-            : Text(
-                "Pending",
-                style: TextStyle(color: Theme.of(context).colorScheme.warning, fontWeight: FontWeight.bold),
-              ),
-        trailing: Icon(
-          Icons.open_in_new,
-          size: 12,
-          color: Colors.white70,
+      child: Semantics(
+        button: true,
+        child: ListTile(
+          onTap: () {
+            openTxOnExplorer(tx);
+          },
+          title: Text(
+            "${formatBtcAmount(amount)} ${isVbtc ? 'vBTC' : 'BTC'}",
+          ),
+          subtitle: Text("Date: ${tx.blockTimeLabel} \nFee: ${tx.fee} SATS | ${formatBtcAmount(tx.feeBtc)} BTC"),
+          leading: tx.status.confirmed
+              ? Text(
+                  "Confirmed",
+                  style: TextStyle(color: Theme.of(context).colorScheme.success, fontWeight: FontWeight.bold),
+                )
+              : Text(
+                  "Pending",
+                  style: TextStyle(color: Theme.of(context).colorScheme.warning, fontWeight: FontWeight.bold),
+                ),
+          trailing: Icon(
+            Icons.open_in_new,
+            size: 12,
+            color: Colors.white70,
+          ),
         ),
       ),
     );
@@ -146,7 +150,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                         ),
                       ),
                     Text(
-                      "${widget.amount} ${widget.isVbtc ? 'v' : ''}BTC",
+                      "${formatBtcAmount(widget.amount)} ${widget.isVbtc ? 'v' : ''}BTC",
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -155,38 +159,41 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                     ),
                   ],
                 ),
-                InkWell(
-                  onTap: () {
-                    openTxOnExplorer(widget.tx);
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "TX ID: ",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
+                Semantics(
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      openTxOnExplorer(widget.tx);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "TX ID: ",
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white70,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        widget.tx.txid,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white70,
-                          decoration: TextDecoration.underline,
+                        Text(
+                          widget.tx.txid,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white70,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Icon(
-                        Icons.open_in_new,
-                        size: 12,
-                        color: Colors.white70,
-                      ),
-                    ],
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Icon(
+                          Icons.open_in_new,
+                          size: 12,
+                          color: Colors.white70,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -225,7 +232,7 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                   color: AppColors.getGray(ColorShade.s100),
                   glowOpacity: 0,
                   child: ListTile(
-                    title: Text("${widget.tx.fee} SATS | ${widget.tx.feeBtc} BTC"),
+                    title: Text("${widget.tx.fee} SATS | ${formatBtcAmount(widget.tx.feeBtc)} BTC"),
                     subtitle: Text(AppLocalizations.of(context).btcFeeLabel),
                   ),
                 ),
@@ -261,13 +268,16 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
               SizedBox(
                 width: 8,
               ),
-              InkWell(
-                  onTap: () {
-                    setState(() {
-                      expanded = !expanded;
-                    });
-                  },
-                  child: Icon(expanded ? Icons.arrow_drop_up : Icons.arrow_drop_down))
+              Semantics(
+                  label: expanded ? AppLocalizations.of(context).actionHideDetails : AppLocalizations.of(context).actionShowDetails,
+                  button: true,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        expanded = !expanded;
+                      });
+                    },
+                    child: Icon(expanded ? Icons.arrow_drop_up : Icons.arrow_drop_down)))
             ],
           ),
           if (expanded) ...[
@@ -307,28 +317,34 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(right: 4.0),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        await Clipboard.setData(ClipboardData(text: input.prevout.scriptpubkeyAddress));
-                                        Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                                      },
-                                      child: Icon(
-                                        Icons.copy,
-                                        size: 12,
-                                        color: Colors.white70,
+                                    child: Semantics(
+                                      label: AppLocalizations.of(context).actionCopyAddress,
+                                      button: true,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final address = input.prevout.scriptpubkeyAddress;
+                                          if (address == null) return;
+                                          await Clipboard.setData(ClipboardData(text: address));
+                                          Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                                        },
+                                        child: Icon(
+                                          Icons.copy,
+                                          size: 12,
+                                          color: Colors.white70,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
-                                      input.prevout.scriptpubkeyAddress,
+                                      input.prevout.scriptpubkeyAddress ?? input.prevout.scriptpubkeyType,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
-                              trailing: Text("${input.prevout.value * BTC_SATOSHI_MULTIPLIER} BTC"),
+                              trailing: Text("${formatBtcAmount(input.prevout.value * BTC_SATOSHI_MULTIPLIER)} BTC"),
                             ),
                           ),
                         );
@@ -366,28 +382,34 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(left: 4.0),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        await Clipboard.setData(ClipboardData(text: output.scriptpubkeyAddress));
-                                        Toast.message(AppLocalizations.of(context).messageAddressCopied);
-                                      },
-                                      child: Icon(
-                                        Icons.copy,
-                                        size: 12,
-                                        color: Colors.white70,
+                                    child: Semantics(
+                                      label: AppLocalizations.of(context).actionCopyAddress,
+                                      button: true,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final address = output.scriptpubkeyAddress;
+                                          if (address == null) return;
+                                          await Clipboard.setData(ClipboardData(text: address));
+                                          Toast.message(AppLocalizations.of(context).messageAddressCopied);
+                                        },
+                                        child: Icon(
+                                          Icons.copy,
+                                          size: 12,
+                                          color: Colors.white70,
+                                        ),
                                       ),
                                     ),
                                   ),
                                   Expanded(
                                     child: Text(
-                                      output.scriptpubkeyAddress,
+                                      output.scriptpubkeyAddress ?? output.scriptpubkeyType,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
                               trailing: Text(
-                                "${output.value * BTC_SATOSHI_MULTIPLIER} BTC",
+                                "${formatBtcAmount(output.value * BTC_SATOSHI_MULTIPLIER)} BTC",
                                 style: TextStyle(
                                   // color: isToMe ? Theme.of(context).colorScheme.success : Colors.white,
                                   fontWeight: FontWeight.bold,

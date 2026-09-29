@@ -91,6 +91,7 @@ class RemoteShopListScreen extends BaseScreen {
         onPressed: () {
           AutoRouter.of(context).pop();
         },
+        tooltip: AppLocalizations.of(context).actionBack,
       ),
       actions: [
         AppButton(
@@ -103,6 +104,7 @@ class RemoteShopListScreen extends BaseScreen {
           },
         ),
         AppButton(
+          key: const Key('remote_shop:connect'),
           onPressed: () async {
             await loadShopWithPrompt(context, ref);
           },
@@ -123,6 +125,7 @@ class RemoteShopListScreen extends BaseScreen {
     if (globalShops.isEmpty) {
       return Center(
         child: AppButton(
+          key: const Key('remote_shop:connect_empty'),
           label: AppLocalizations.of(context).shopConnectToShop,
           variant: AppColorVariant.Success,
           onPressed: () async {
@@ -162,6 +165,7 @@ class RemoteShopListScreen extends BaseScreen {
                     onPressed: () {
                       ref.read(remoteShopSearchProvider.notifier).clear();
                     },
+                    tooltip: AppLocalizations.of(context).actionClear,
                   ),
                 ),
                 onChanged: (val) {
@@ -173,7 +177,8 @@ class RemoteShopListScreen extends BaseScreen {
                 onPressed: () {
                   ref.read(globalRemoteShopListProvider.notifier).load();
                 },
-                icon: Icon(Icons.refresh))
+                icon: Icon(Icons.refresh),
+                tooltip: AppLocalizations.of(context).actionRefresh)
           ],
         ),
         Expanded(

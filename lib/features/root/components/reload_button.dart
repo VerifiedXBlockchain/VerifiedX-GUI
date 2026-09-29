@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/base_component.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
+import '../../../l10n/generated/app_localizations.dart';
 
 class ReloadButton extends BaseStatefulComponent {
   const ReloadButton({Key? key}) : super(key: key);
@@ -36,6 +37,7 @@ class ReloadButtonState extends BaseComponentState<ReloadButton> {
             _isLoading = false;
           });
         },
+        tooltip: AppLocalizations.of(context).statusReloadWalletInfoTooltip,
         icon: const Icon(Icons.refresh));
   }
 }

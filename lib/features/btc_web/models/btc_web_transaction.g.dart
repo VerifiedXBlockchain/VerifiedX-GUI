@@ -53,7 +53,7 @@ _$_BtcWebVout _$$_BtcWebVoutFromJson(Map<String, dynamic> json) =>
       scriptpubkey: json['scriptpubkey'] as String,
       scriptpubkeyAsm: json['scriptpubkey_asm'] as String,
       scriptpubkeyType: json['scriptpubkey_type'] as String,
-      scriptpubkeyAddress: json['scriptpubkey_address'] as String,
+      scriptpubkeyAddress: json['scriptpubkey_address'] as String?,
       value: json['value'] as int,
     );
 

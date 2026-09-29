@@ -64,24 +64,27 @@ class RemoteShopDetails extends BaseComponent {
                       child: AppCard(
                         padding: 0,
                         margin: EdgeInsets.zero,
-                        child: ListTile(
-                          title: Text(collection.name),
-                          subtitle: Text(
-                            collection.description,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                        child: Semantics(
+                          button: true,
+                          child: ListTile(
+                            title: Text(collection.name),
+                            subtitle: Text(
+                              collection.description,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: Icon(Icons.chevron_right),
+                            onTap: () {
+                              // final List<String> scIds = [];
+
+                              // bulkGetNftAssets(service: RemoteShopService(), scIds: scIds);
+
+                              AutoRouter.of(context).push(RemoteShopCollectionScreenRoute(
+                                collectionId: collection.id,
+                                url: shop.decShop.url,
+                              ));
+                            },
                           ),
-                          trailing: Icon(Icons.chevron_right),
-                          onTap: () {
-                            // final List<String> scIds = [];
-
-                            // bulkGetNftAssets(service: RemoteShopService(), scIds: scIds);
-
-                            AutoRouter.of(context).push(RemoteShopCollectionScreenRoute(
-                              collectionId: collection.id,
-                              url: shop.decShop.url,
-                            ));
-                          },
                         ),
                       ),
                     );

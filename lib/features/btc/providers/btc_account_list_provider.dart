@@ -29,13 +29,19 @@ class BtcAccountList extends _$BtcAccountList {
   }
 
   Future<BtcAccount?> create() async {
-    final account = await BtcService().createAccount();
-    if (account != null) {
-      await load();
-      return await BtcService().retrieveAccount(account.address, omitPrivateKey: false);
+    final created = await BtcService().createAccount();
+    if (created == null) {
+      return null;
     }
-
-    return null;
+    await load();
+    // The node returns the private key only in the create reply (Core
+    // VX-13); a re-fetch would come back without it. Carry the keys onto
+    // the listed record so the "account created" dialog can show them.
+    final listed = getAccount(created.address);
+    if (listed == null) {
+      return created;
+    }
+    return listed.copyWith(privateKey: created.privateKey, wifKey: created.wifKey);
   }
 
   Future<bool> importPrivateKey(String privateKey, BtcAddressType addressType) async {

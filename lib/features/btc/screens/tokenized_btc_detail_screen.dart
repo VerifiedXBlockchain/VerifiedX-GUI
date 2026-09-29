@@ -390,14 +390,18 @@ class _DetailRow extends StatelessWidget {
           if (withCopy)
             Transform.translate(
               offset: Offset(0, 2),
-              child: InkWell(
-                onTap: () async {
-                  await Clipboard.setData(ClipboardData(text: value));
-                  Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
-                },
-                child: Icon(
-                  Icons.copy,
-                  size: 12,
+              child: Semantics(
+                label: AppLocalizations.of(context).actionCopy,
+                button: true,
+                child: InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: value));
+                    Toast.message(AppLocalizations.of(context).btcLabelCopiedToast(label));
+                  },
+                  child: Icon(
+                    Icons.copy,
+                    size: 12,
+                  ),
                 ),
               ),
             )
@@ -474,6 +478,10 @@ class _BtcTokenImageState extends State<BtcTokenImage> {
 
   @override
   Widget build(BuildContext context) {
+    // Decode at display size (QA MTI#5). The native engine only applies this
+    // to single-frame images; animated GIFs still decode at their own size.
+    final decodeWidth = (widget.size * MediaQuery.of(context).devicePixelRatio).round();
+
     return SizedBox(
       width: widget.size,
       height: widget.size,
@@ -484,6 +492,7 @@ class _BtcTokenImageState extends State<BtcTokenImage> {
               Uint8List.fromList(bytes!),
               width: widget.size,
               height: widget.size,
+              cacheWidth: decodeWidth,
               fit: BoxFit.contain,
             );
           }
@@ -493,6 +502,7 @@ class _BtcTokenImageState extends State<BtcTokenImage> {
             Assets.images.vbtcGif.path,
             width: widget.size,
             height: widget.size,
+            cacheWidth: decodeWidth,
           );
         },
       ),

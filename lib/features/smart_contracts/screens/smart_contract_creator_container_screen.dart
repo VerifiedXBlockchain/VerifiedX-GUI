@@ -6,7 +6,7 @@ import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 
 import '../../../core/base_screen.dart';
-import '../../../core/dialogs.dart';
+import '../components/sc_creator/common/close_creator_button.dart';
 import '../providers/create_smart_contract_provider.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
@@ -24,22 +24,7 @@ class SmartContractCreatorContainerScreen extends BaseScreen {
     return AppBar(
         title: Text(_model.isCompiled ? l10n.r3aViewCompiledSmartContract : l10n.scwCreateSmartContractTitle),
         backgroundColor: Colors.black,
-        leading: IconButton(
-          onPressed: () async {
-            final confirmed = await ConfirmDialog.show(
-              title: l10n.r3aCloseScCreatorConfirm,
-              body: l10n.configCloseDialogBody,
-              cancelText: l10n.actionCancel,
-              confirmText: l10n.actionContinue,
-            );
-
-            if (confirmed == true) {
-              ref.read(createSmartContractProvider.notifier).clearSmartContract();
-              AutoRouter.of(context).pop();
-            }
-          },
-          icon: const Icon(Icons.close),
-        ),
+        leading: const CloseSmartContractCreatorButton(),
         // actions: [HelpButton(HelpType.smartContract)],
         actions: [
           Padding(

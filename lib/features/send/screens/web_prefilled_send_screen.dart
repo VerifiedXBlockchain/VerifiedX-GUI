@@ -10,12 +10,15 @@ import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../components/send_form.dart';
 import '../providers/send_form_provider.dart';
+import '../utils.dart';
 import '../../../l10n/generated/app_localizations.dart';
 
 class WebPrefilledSendScreen extends BaseScreen {
   final String currency;
   final String toAddress;
-  final double amount;
+  /// Raw path segment; parsed with [prefilledSendAmountText] so a link with a
+  /// non-numeric amount opens the form instead of failing in the router.
+  final String amount;
 
   const WebPrefilledSendScreen({
     Key? key,
@@ -47,7 +50,7 @@ class WebPrefilledSendScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     ref.read(sendFormProvider.notifier).addressController.text = toAddress;
     ref.read(sendFormProvider.notifier).amountController.text =
-        amount.toString();
+        prefilledSendAmountText(amount);
 
     final keypair = ref.watch(webSessionProvider.select((v) => v.keypair));
     if (keypair == null) {

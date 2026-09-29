@@ -41,7 +41,7 @@ class BtcWebTransaction with _$BtcWebTransaction {
   }
 
   List<String> get toAddresses {
-    return vout.map((e) => e.scriptpubkeyAddress).toList();
+    return vout.map((e) => e.scriptpubkeyAddress).whereType<String>().toList();
   }
 
   int get totalSent {
@@ -91,7 +91,7 @@ class BtcWebTransaction with _$BtcWebTransaction {
   }
 
   String fromAddress() {
-    return vin.first.prevout.scriptpubkeyAddress;
+    return vin.first.prevout.scriptpubkeyAddress ?? '';
   }
 
   String toAddress(List<String> myAddresses) {
@@ -150,7 +150,9 @@ class BtcWebVout with _$BtcWebVout {
     required String scriptpubkey,
     @JsonKey(name: 'scriptpubkey_asm') required String scriptpubkeyAsm,
     @JsonKey(name: 'scriptpubkey_type') required String scriptpubkeyType,
-    @JsonKey(name: 'scriptpubkey_address') required String scriptpubkeyAddress,
+    // Null for outputs that pay no address (OP_RETURN). A required String here
+    // threw on the first such output and emptied the whole transaction list.
+    @JsonKey(name: 'scriptpubkey_address') String? scriptpubkeyAddress,
     required int value,
   }) = _BtcWebVout;
 

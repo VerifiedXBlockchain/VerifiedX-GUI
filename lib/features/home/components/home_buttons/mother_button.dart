@@ -7,6 +7,7 @@ import '../../../../core/providers/session_provider.dart';
 import '../../../mother/models/mother_child.dart';
 import '../../../mother/services/mother_service.dart';
 import '../../../mother/components/mother_modal.dart';
+import '../../../encrypt/utils.dart';
 
 class MotherButton extends BaseComponent {
   const MotherButton({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class MotherButton extends BaseComponent {
       icon: Icons.hub_outlined,
       onPressed: ref.watch(sessionProvider.select((v) => v.cliStarted))
           ? () async {
+              if (!await passwordRequiredGuard(context, ref)) return;
               final data = await MotherService().getHost();
               final List<MotherChild> children = data != null ? await MotherService().getChildren() : [];
 

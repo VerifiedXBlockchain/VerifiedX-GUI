@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/providers/web_session_provider.dart';
+import '../../../core/web_router.gr.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../web/components/web_no_wallet.dart';
+import '../components/sc_creator/common/close_creator_button.dart';
 import '../components/sc_creator/smart_contract_creator_main.dart';
 
 class WebCreateSmartContractScreen extends BaseScreen {
@@ -20,6 +23,9 @@ class WebCreateSmartContractScreen extends BaseScreen {
   @override
   AppBar? appBar(BuildContext context, WidgetRef ref) {
     return AppBar(
+      leading: CloseSmartContractCreatorButton(
+        onCannotPop: () => AutoRouter.of(context).navigate(const WebSmartContractLandingScreenRoute()),
+      ),
       title: Text(AppLocalizations.of(context).scwCreateSmartContractTitle),
       backgroundColor: Colors.black,
       shadowColor: Colors.transparent,

@@ -30,6 +30,8 @@ import '../../keygen/models/ra_keypair.dart';
 import '../../raw/raw_service.dart';
 import '../../transactions/models/web_transaction.dart';
 import '../../transactions/providers/web_transaction_list_provider.dart';
+import '../../web/utils/pending_debits.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../models/new_token_topic.dart';
 
 class WebTokenActionsManager {
@@ -59,7 +61,7 @@ class WebTokenActionsManager {
       ref.read(globalLoadingProvider.notifier).start();
     }
 
-    final txData = await RawTransaction.generate(
+    final generated = await RawTransaction.generate(
       keypair: keypair,
       toAddress: toAddress,
       amount: amount,
@@ -67,12 +69,14 @@ class WebTokenActionsManager {
       data: data,
       unlockHours: unlockHours,
     );
+
+    final txData = generated.txData;
     if (showLoader) {
       ref.read(globalLoadingProvider.notifier).complete();
     }
     if (txData == null) {
       if (showToasts) {
-        Toast.error(globalL10n.btcInvalidTxData);
+        Toast.error(generated.refusalMessage ?? globalL10n.btcInvalidTxData);
       }
       return false;
     }
@@ -397,7 +401,7 @@ class WebTokenActionsManager {
       );
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error(globalL10n.bw2OwnershipTransferFailed(e.toString()));
+      Toast.error(globalL10n.bw2OwnershipTransferFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     }
   }
@@ -434,8 +438,9 @@ class WebTokenActionsManager {
         publicKey: keypair.public,
       );
     } catch (e) {
-      Toast.error(globalL10n.bw2TransactionFailed(e.toString()));
-      return null;
+      // Handed back rather than toasted, so each caller shows Spyglass's
+      // reason once (MTI#2.2).
+      return {'success': false, 'message': userErrorMessage(e)};
     }
   }
 
@@ -494,6 +499,13 @@ class WebTokenActionsManager {
             fee: 0,
             date: DateTime.now(),
             height: 0,
+            data: jsonEncode({
+              "Function": "TransferVBTCV2()",
+              "ContractUID": token.scIdentifier,
+              "FromAddress": fromAddress,
+              "ToAddress": toAddress,
+              "Amount": amount,
+            }),
           ),
         );
         return true;
@@ -503,7 +515,7 @@ class WebTokenActionsManager {
       return false;
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      Toast.error(globalL10n.bw2TransferFailedError(e.toString()));
+      Toast.error(globalL10n.bw2TransferFailedError(userErrorMessage(e, withLeadIn: false)));
       return false;
     }
   }
@@ -574,7 +586,7 @@ class WebTokenActionsManager {
       return {'success': false, 'message': result?['message'] ?? globalL10n.bw2WithdrawalRequestFailed};
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
-      return {'success': false, 'message': 'Withdrawal request failed: $e'};
+      return {'success': false, 'message': globalL10n.bw2WithdrawalRequestFailedError(userErrorMessage(e, withLeadIn: false))};
     }
   }
 
@@ -1113,9 +1125,13 @@ class WebTokenActionsManager {
         );
         return true;
       }
+      // A null result was already toasted (no keypair / signing failed).
+      if (result != null) {
+        Toast.error(globalL10n.bw2CancellationFailedError(result['message'] ?? globalL10n.errRequestFailed));
+      }
       return false;
     } catch (e) {
-      Toast.error(globalL10n.bw2CancellationFailedError(e.toString()));
+      Toast.error(globalL10n.bw2CancellationFailedError(userErrorMessage(e, withLeadIn: false)));
       return false;
     }
   }
@@ -1143,7 +1159,8 @@ class WebTokenActionsManager {
     final tokens = ref.read(btcWebVbtcTokenListProvider);
     final balances = {
       for (final token in tokens)
-        token.scIdentifier: token.availableBalanceForAddress(keypair.address),
+        token.scIdentifier: spendableContractBalance(
+            keypair.address, token.scIdentifier, token.availableBalanceForAddress(keypair.address)),
     };
     final allocation = allocateVbtcInputs(balances, totalAmount);
     if (!allocation.ok) {
@@ -1202,9 +1219,27 @@ class WebTokenActionsManager {
     return allocation.inputs;
   }
 
+  /// VFX the address can still spend on fees: its balance less this session's
+  /// unconfirmed sends from it and, for the Vault, the 0.5 VFX it must keep.
+  double _spendableVfx(String? address, double balance, {required bool isVault}) {
+    final pendingDebit = address == null
+        ? 0.0
+        : pendingVfxDebit(ref.read(webTransactionListProvider(address)).transactions, address);
+    return spendableVfx(balance: balance, pendingDebit: pendingDebit, isVault: isVault);
+  }
+
+  /// Balance of [contractUid] the address can still move: [balance] less this
+  /// session's unconfirmed transfers and burns of it.
+  double spendableContractBalance(String address, String contractUid, double balance) {
+    final pending = pendingContractDebit(ref.read(webTransactionListProvider(address)).transactions, address, contractUid);
+    final available = balance - pending;
+    return available > 0 ? available : 0.0;
+  }
+
   bool verifyBalance({bool isRa = false}) {
+    final session = ref.read(webSessionProvider);
     if (isRa) {
-      if ((ref.read(webSessionProvider).raBalance ?? 0) <
+      if (_spendableVfx(session.raKeypair?.address, session.raBalance ?? 0, isVault: true) <
           MIN_RBX_FOR_SC_ACTION) {
         Toast.error(
             globalL10n.bw2VaultBalanceRequired);
@@ -1214,7 +1249,7 @@ class WebTokenActionsManager {
       return true;
     }
 
-    if ((ref.read(webSessionProvider).balance ?? 0) < MIN_RBX_FOR_SC_ACTION) {
+    if (_spendableVfx(session.keypair?.address, session.balance ?? 0, isVault: false) < MIN_RBX_FOR_SC_ACTION) {
       Toast.error(
           globalL10n.bw2VfxBalanceRequiredBroadcast);
 

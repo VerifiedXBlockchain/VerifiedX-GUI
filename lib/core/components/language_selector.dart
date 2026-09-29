@@ -37,22 +37,25 @@ class LanguageButton extends ConsumerWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: options.entries.map((entry) {
                       final selected = current == entry.key;
-                      return ListTile(
-                        dense: true,
-                        leading: Icon(
-                          selected
-                              ? Icons.radio_button_checked
-                              : Icons.radio_button_unchecked,
-                          size: 18,
-                          color: selected
-                              ? Theme.of(context).colorScheme.secondary
-                              : Colors.white54,
+                      return Semantics(
+                        button: true,
+                        child: ListTile(
+                          dense: true,
+                          leading: Icon(
+                            selected
+                                ? Icons.radio_button_checked
+                                : Icons.radio_button_unchecked,
+                            size: 18,
+                            color: selected
+                                ? Theme.of(context).colorScheme.secondary
+                                : Colors.white54,
+                          ),
+                          title: Text(entry.value),
+                          onTap: () {
+                            ref.read(localeProvider.notifier).setLocale(entry.key);
+                            Navigator.of(dialogContext).pop();
+                          },
                         ),
-                        title: Text(entry.value),
-                        onTap: () {
-                          ref.read(localeProvider.notifier).setLocale(entry.key);
-                          Navigator.of(dialogContext).pop();
-                        },
                       );
                     }).toList(),
                   ),

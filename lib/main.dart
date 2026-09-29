@@ -10,9 +10,13 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:uni_links_desktop/uni_links_desktop.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'app.dart';
+import 'core/automation/prefs_isolation.dart';
+import 'core/automation/web_semantics.dart';
 import 'core/env.dart';
 import 'core/singletons.dart';
 import 'features/bridge/services/bridge_service.dart';
+import 'features/btc_web/utils/btc_network_script.dart';
+import 'utils/web_route_paths.dart';
 
 const DEFAULT_WIDTH = 1200.0;
 const DEFAULT_HEIGHT = 780.0;
@@ -24,9 +28,19 @@ late final Box rbxBox;
 final rootAppWindow = appWindow;
 
 void main(List<String> args) async {
+  if (kIsWeb) {
+    // Read the page URL before anything async runs: once the router starts
+    // it rewrites the hash, and the page to open after unlock is lost.
+    InitialWebUrl.capture();
+  }
   timeago.setLocaleMessages('es', timeago.EsMessages());
   timeago.setLocaleMessages('es_short', timeago.EsShortMessages());
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Desktop automation builds keep their preferences apart from the installed
+  // wallet's. This must precede the first SharedPreferences.getInstance,
+  // which initSingletons() below performs.
+  isolatePreferencesForAutomation();
 
   // Parse command-line args for --testnet flag (desktop only)
   if (!kIsWeb) {
@@ -41,6 +55,7 @@ void main(List<String> args) async {
   if (kIsWeb) {
     await Hive.initFlutter();
     rbxBox = await Hive.openBox('VFX');
+    await loadBtcNetworkScript();
   }
   await initSingletons();
 
@@ -58,6 +73,8 @@ void main(List<String> args) async {
       child: App(),
     ),
   ));
+
+  enableWebSemanticsForAutomation();
 
   doWhenWindowReady(() {
     rootAppWindow.size = Size(DEFAULT_WIDTH, DEFAULT_HEIGHT);

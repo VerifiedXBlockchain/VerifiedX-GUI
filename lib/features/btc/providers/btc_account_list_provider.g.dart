@@ -6,7 +6,7 @@ part of 'btc_account_list_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$btcAccountListHash() => r'3c65bef5cb77abdea24b047b9fc2a5a0fa3c93d7';
+String _$btcAccountListHash() => r'4fb41e1f9e4bd73c89077b71509cc38065576bdf';
 
 /// See also [BtcAccountList].
 @ProviderFor(BtcAccountList)

@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../nft/models/web_nft.dart';
+import '../../../utils/json_converters.dart';
 
 part 'btc_web_vbtc_token.freezed.dart';
 part 'btc_web_vbtc_token.g.dart';
@@ -27,13 +28,20 @@ bool withdrawalIsResumable(Map<String, dynamic> withdrawalRequest) {
   return kResumableWithdrawalStatuses.contains(status.trim().toLowerCase());
 }
 
-/// How long before the chain stops treating a request as the contract's active
-/// one (VBTCWithdrawalRequest.EXPIRY_BLOCKS = 360, at ~12s blocks ≈ 72 min).
+/// Blocks after its request is mined that the chain keeps treating a request
+/// as the contract's active one (VBTCWithdrawalRequest.EXPIRY_BLOCKS; the
+/// node's check is `currentHeight - RequestBlockHeight <= EXPIRY_BLOCKS`).
+const kWithdrawalExpiryBlocks = 360;
+
+/// Wall-clock stand-in for [kWithdrawalExpiryBlocks] (≈ 72 min at ~12s
+/// blocks), used only when a block height is unavailable.
 ///
 /// Judged from `created_at` because the explorer's withdrawal rows carry no
 /// block height. Deliberately longer than the real window: being late only
 /// means a user waits a little before starting fresh, whereas being early
-/// would stop them resuming a request the chain still considers live.
+/// would stop them resuming a request the chain still considers live. It is
+/// still a guess — if blocks slow down the window outlasts it — so callers
+/// that can reach the chain pass heights instead.
 const kWithdrawalStaleAfter = Duration(minutes: 90);
 
 /// True once the chain no longer treats this request as the contract's active
@@ -43,7 +51,19 @@ const kWithdrawalStaleAfter = Duration(minutes: 90);
 /// dead — nothing stops a completion — but the user has to be able to start a
 /// new withdrawal instead of being routed forever into resuming one the chain
 /// has already moved past.
-bool withdrawalIsStale(Map<String, dynamic> withdrawalRequest, {DateTime? now}) {
+///
+/// With [currentBlockHeight] and the request's mined [requestBlockHeight] this
+/// applies the chain's own rule. Without both it falls back to
+/// [kWithdrawalStaleAfter] since `created_at`.
+bool withdrawalIsStale(
+  Map<String, dynamic> withdrawalRequest, {
+  DateTime? now,
+  int? currentBlockHeight,
+  int? requestBlockHeight,
+}) {
+  if (currentBlockHeight != null && requestBlockHeight != null && requestBlockHeight > 0) {
+    return currentBlockHeight - requestBlockHeight > kWithdrawalExpiryBlocks;
+  }
   final created = withdrawalRequest['created_at'];
   if (created is! String) return false;
   final at = DateTime.tryParse(created);
@@ -66,7 +86,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     @JsonKey(name: 'image_url') required String imageUrl,
     @JsonKey(name: 'deposit_address') required String depositAddress,
     @JsonKey(name: 'public_key_proofs') String? publicKeyProofs,
-    @JsonKey(name: 'global_balance') required double globalBalance,
+    @JsonKey(name: 'global_balance') @NumOrStringDoubleConverter() required double globalBalance,
     @JsonKey(name: 'created_at') required DateTime createdAt,
     required WebNft nft,
     @Default(1) int version,
@@ -105,9 +125,22 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
   /// Once a request goes stale the next one overwrites it, so it must not keep
   /// capturing the withdraw button — otherwise a request that will not finish
   /// leaves the holder unable to start another.
-  List<Map<String, dynamic>> liveResumableWithdrawalRequestsFor(String? address, {DateTime? now}) =>
+  ///
+  /// [requestBlockHeights] maps `request_transaction_hash` to the height the
+  /// request was mined at; see [withdrawalIsStale] for how heights are used.
+  List<Map<String, dynamic>> liveResumableWithdrawalRequestsFor(
+    String? address, {
+    DateTime? now,
+    int? currentBlockHeight,
+    Map<String, int> requestBlockHeights = const {},
+  }) =>
       resumableWithdrawalRequestsFor(address)
-          .where((w) => !withdrawalIsStale(w, now: now))
+          .where((w) => !withdrawalIsStale(
+                w,
+                now: now,
+                currentBlockHeight: currentBlockHeight,
+                requestBlockHeight: requestBlockHeights[w['request_transaction_hash']],
+              ))
           .toList();
 
   /// True when `address` has a withdrawal of its own still to finish.
@@ -124,7 +157,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     }
     final available = availableBalances;
     if (available != null && available.containsKey(address)) {
-      return (available[address] as num).toDouble();
+      return parseJsonDouble(available[address]);
     }
     return balanceForAddress(address);
   }
@@ -134,7 +167,7 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
       return 0.0;
     }
     if (addresses.containsKey(address)) {
-      return addresses[address];
+      return parseJsonDouble(addresses[address]);
     }
 
     return 0.0;

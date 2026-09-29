@@ -93,6 +93,12 @@ abstract class AppLocalizations {
     Locale('es')
   ];
 
+  /// Tooltip on a back arrow icon button that returns to the previous screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get actionBack;
+
   /// Cancel action — dismisses the current action.
   ///
   /// In en, this message translates to:
@@ -129,6 +135,72 @@ abstract class AppLocalizations {
   /// **'Copy'**
   String get actionCopy;
 
+  /// Tooltip / accessibility label on a copy icon next to an account address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy address'**
+  String get actionCopyAddress;
+
+  /// Tooltip on the copy icon next to an amount field.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy amount'**
+  String get actionCopyAmount;
+
+  /// Tooltip on the copy icon next to a domain name.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy domain'**
+  String get actionCopyDomain;
+
+  /// Tooltip on the copy icon next to a recovery mnemonic.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy mnemonic'**
+  String get actionCopyMnemonic;
+
+  /// Tooltip on the copy icon next to a private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy private key'**
+  String get actionCopyPrivateKey;
+
+  /// Tooltip on the copy icon next to a Vault recovery address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy recovery address'**
+  String get actionCopyRecoveryAddress;
+
+  /// Tooltip on the copy icon next to a Vault recovery private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy recovery private key'**
+  String get actionCopyRecoveryPrivateKey;
+
+  /// Tooltip on the copy icon next to a Vault restore code.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy restore code'**
+  String get actionCopyRestoreCode;
+
+  /// Tooltip on the copy icon next to a transaction signature.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy signature'**
+  String get actionCopySignature;
+
+  /// Tooltip on the copy icon next to a transaction hash.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy transaction hash'**
+  String get actionCopyTransactionHash;
+
+  /// Tooltip on the copy icon next to a Bitcoin WIF private key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy WIF private key'**
+  String get actionCopyWifPrivateKey;
+
   /// Delete action — destructive, removes an item.
   ///
   /// In en, this message translates to:
@@ -141,11 +213,35 @@ abstract class AppLocalizations {
   /// **'Done'**
   String get actionDone;
 
+  /// Tooltip on the icon button that switches a list to the grid layout.
+  ///
+  /// In en, this message translates to:
+  /// **'Grid view'**
+  String get actionGridView;
+
+  /// Tooltip on the help icon button that opens an explanation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get actionHelp;
+
+  /// Tooltip / accessibility label on the collapse arrow of an expanded transaction tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide details'**
+  String get actionHideDetails;
+
   /// Import action — imports a wallet or key.
   ///
   /// In en, this message translates to:
   /// **'Import'**
   String get actionImport;
+
+  /// Tooltip on the icon button that switches a grid to the list layout.
+  ///
+  /// In en, this message translates to:
+  /// **'List view'**
+  String get actionListView;
 
   /// Negative response in a confirmation dialog.
   ///
@@ -165,6 +261,12 @@ abstract class AppLocalizations {
   /// **'Receive'**
   String get actionReceive;
 
+  /// Tooltip on a refresh icon button that reloads the current list.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
+  String get actionRefresh;
+
   /// Save action — persists current form state.
   ///
   /// In en, this message translates to:
@@ -182,6 +284,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Send'**
   String get actionSend;
+
+  /// Tooltip / accessibility label on the expand arrow of a collapsed transaction tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Show details'**
+  String get actionShowDetails;
 
   /// Affirmative response in a confirmation dialog.
   ///
@@ -399,10 +507,10 @@ abstract class AppLocalizations {
   /// **'No Thanks'**
   String get adnrFaucetNoThanks;
 
-  /// Body of the faucet-required dialog. Preserves original typo 'Woud' to match existing copy.
+  /// Body of the faucet-required dialog.
   ///
   /// In en, this message translates to:
-  /// **'There is a {cost} VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWoud you like to proceed?'**
+  /// **'There is a {cost} VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWould you like to proceed?'**
   String adnrFaucetRequiredBody(String cost);
 
   /// Title of the faucet-required dialog when creating a BTC domain.
@@ -615,12 +723,6 @@ abstract class AppLocalizations {
   /// **'Backup Keys'**
   String get authBackupKeys;
 
-  /// Toast shown when key decryption fails on the auth screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to decrypt keys'**
-  String get authDecryptFailed;
-
   /// Button and prompt-title to enter the wallet password.
   ///
   /// In en, this message translates to:
@@ -630,7 +732,7 @@ abstract class AppLocalizations {
   /// Body text shown in the password prompt to decrypt stored keys.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to decrypt your stored keys.'**
+  /// **'Enter this account\'s password to decrypt its stored keys.'**
   String get authEnterPasswordBody;
 
   /// Primary CTA on the web auth screen to log in or create an account.
@@ -1485,6 +1587,24 @@ abstract class AppLocalizations {
   /// **'Fee Rate'**
   String get btcRbfFeeRateTitle;
 
+  /// Confirm body when the node refuses a Bitcoin replace-by-fee whose total fee is more than 10% of the amount. The reason is the node's message.
+  ///
+  /// In en, this message translates to:
+  /// **'{reason} Replace the transaction anyway?'**
+  String btcRbfHighFeeBody(String reason);
+
+  /// Confirm button that retries a Bitcoin replace-by-fee with a fee above 10% of the amount.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace anyway'**
+  String get btcRbfHighFeeConfirm;
+
+  /// Confirm title when a Bitcoin replace-by-fee fee is more than 10% of the amount.
+  ///
+  /// In en, this message translates to:
+  /// **'High Fee'**
+  String get btcRbfHighFeeTitle;
+
   /// Field label for the receiving address on a withdrawal.
   ///
   /// In en, this message translates to:
@@ -1971,6 +2091,18 @@ abstract class AppLocalizations {
   /// **'Cancel withdrawal'**
   String get bw2CancelWithdrawalTooltip;
 
+  /// No description provided for @bw2NoCancelNoBtcTx.
+  ///
+  /// In en, this message translates to:
+  /// **'No Bitcoin transaction hash was returned for this withdrawal, so it cannot be cancelled from here. Cancelling a request without one needs a vote by the contract\'s validators, which the wallet cannot start yet.'**
+  String get bw2NoCancelNoBtcTx;
+
+  /// No description provided for @bw2NoCancelUnpayable.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdrawal can never be paid at its fee rate, so retrying will keep failing. There is no Cancel button because cancelling it needs a vote by the contract\'s validators, which the wallet cannot start yet. Its vBTC stays held in escrow until then.'**
+  String get bw2NoCancelUnpayable;
+
   /// No description provided for @bw2CeremonyCompleted.
   ///
   /// In en, this message translates to:
@@ -2136,7 +2268,7 @@ abstract class AppLocalizations {
   /// No description provided for @bw2DomainTooLong.
   ///
   /// In en, this message translates to:
-  /// **'Domain must be less than {max} charcters.'**
+  /// **'Domain must be less than {max} characters.'**
   String bw2DomainTooLong(String max);
 
   /// No description provided for @bw2DoNotCloseApp.
@@ -2841,6 +2973,12 @@ abstract class AppLocalizations {
   /// **'Supply Amount'**
   String get bw2SupplyAmount;
 
+  /// Validation error for a token supply that has decimals or exceeds the largest supply the network accepts.
+  ///
+  /// In en, this message translates to:
+  /// **'Supply must be a whole number from 0 to {max}.'**
+  String bw2SupplyWholeNumberMax(String max);
+
   /// No description provided for @bw2SupplyLabel.
   ///
   /// In en, this message translates to:
@@ -3261,6 +3399,12 @@ abstract class AppLocalizations {
   /// **'Send message...'**
   String get chatSendHint;
 
+  /// Tooltip on the send icon button next to the message-compose field.
+  ///
+  /// In en, this message translates to:
+  /// **'Send message'**
+  String get chatSendMessage;
+
   /// App bar title for the chats list.
   ///
   /// In en, this message translates to:
@@ -3596,12 +3740,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Request VFX'**
   String get faucetRequestVfx;
-
-  /// App bar title for the VFX faucet screen.
-  ///
-  /// In en, this message translates to:
-  /// **'VFX Faucet'**
-  String get faucetTitle;
 
   /// Field label for the SMS verification code input.
   ///
@@ -4257,16 +4395,16 @@ abstract class AppLocalizations {
   /// **'Resyncing...'**
   String get hnavResyncing;
 
-  /// No description provided for @hnavRevealPrivateKeysPasswordMessage.
+  /// Password prompt body before revealing the active web account's private keys; the password is that account's own.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to reveal private keys.'**
+  /// **'Enter this account\'s password to reveal its private keys.'**
   String get hnavRevealPrivateKeysPasswordMessage;
 
-  /// No description provided for @hnavRevealVaultKeysPasswordMessage.
+  /// Password prompt body before revealing the active web account's Vault keys; the password is that account's own.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to reveal Vault account private keys.'**
+  /// **'Enter this account\'s password to reveal its Vault account private keys.'**
   String get hnavRevealVaultKeysPasswordMessage;
 
   /// No description provided for @hnavSectionAccountSecurity.
@@ -4521,6 +4659,12 @@ abstract class AppLocalizations {
   /// **'does NOT own'**
   String get homeDoesNotOwn;
 
+  /// Tooltip on the GitHub icon in the desktop footer.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub'**
+  String get homeFooterGithubTooltip;
+
   /// Title for the Get Help bottom sheet.
   ///
   /// In en, this message translates to:
@@ -4617,53 +4761,71 @@ abstract class AppLocalizations {
   /// **'Visit Website'**
   String get homeVisitWebsite;
 
-  /// Field label for the generated address.
+  /// Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it.
   ///
   /// In en, this message translates to:
-  /// **'Address'**
-  String get keygenAddressLabel;
+  /// **'Activity found'**
+  String get keyImportActivityFound;
 
-  /// Done button label on the keygen result dialog.
+  /// Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed.
   ///
   /// In en, this message translates to:
-  /// **'Done'**
-  String get keygenDone;
+  /// **'Could not check activity'**
+  String get keyImportActivityUnknown;
+
+  /// Bitcoin address line of a pair in the import chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin: {address}'**
+  String keyImportBitcoinLine(String address);
+
+  /// Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.'**
+  String get keyImportChooseAccountsBody;
+
+  /// Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose accounts to restore'**
+  String get keyImportChooseAccountsTitle;
+
+  /// Label of a pair in the import chooser that comes from a historical text form of the key.
+  ///
+  /// In en, this message translates to:
+  /// **'Earlier key form'**
+  String get keyImportEarlierForm;
+
+  /// Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a valid private key. Paste the hexadecimal key.'**
+  String get keyImportInvalidKey;
+
+  /// Status of a Vault and Bitcoin pair in the import chooser: no transactions found.
+  ///
+  /// In en, this message translates to:
+  /// **'No activity found'**
+  String get keyImportNoActivity;
+
+  /// Label of the pair in the import chooser that comes from the canonical 64-digit key.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard key form'**
+  String get keyImportStandardForm;
+
+  /// Vault address line of a pair in the import chooser.
+  ///
+  /// In en, this message translates to:
+  /// **'Vault: {address}'**
+  String keyImportVaultLine(String address);
 
   /// Prompt title for the email-address step of the keygen flow.
   ///
   /// In en, this message translates to:
   /// **'Email Address'**
   String get keygenEmailAddressTitle;
-
-  /// Field label for the email input.
-  ///
-  /// In en, this message translates to:
-  /// **'Email'**
-  String get keygenEmailLabel;
-
-  /// Button to generate a new keypair from the keygen CTA.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate Keypair'**
-  String get keygenGenerateKeypair;
-
-  /// Button to import a private key from the keygen CTA.
-  ///
-  /// In en, this message translates to:
-  /// **'Import Private Key'**
-  String get keygenImportPrivateKey;
-
-  /// Prompt title for importing a wallet via private key on the web keygen flow.
-  ///
-  /// In en, this message translates to:
-  /// **'Import Wallet'**
-  String get keygenImportWalletTitle;
-
-  /// Dialog body shown after a key is generated.
-  ///
-  /// In en, this message translates to:
-  /// **'Here is your account details. Please ensure to back up your private key in a safe place.'**
-  String get keygenKeyGeneratedBody;
 
   /// Dialog title shown after a key is generated.
   ///
@@ -4683,23 +4845,11 @@ abstract class AppLocalizations {
   /// **'Private key copied to clipboard'**
   String get keygenPrivateKeyCopiedToast;
 
-  /// Field label for the private key input.
-  ///
-  /// In en, this message translates to:
-  /// **'Private Key'**
-  String get keygenPrivateKeyLabel;
-
   /// Toast confirming the public key was copied.
   ///
   /// In en, this message translates to:
   /// **'Public key copied to clipboard'**
   String get keygenPublicKeyCopiedToast;
-
-  /// Button to recover an account via mnemonic from the keygen CTA.
-  ///
-  /// In en, this message translates to:
-  /// **'Recover Account'**
-  String get keygenRecoverAccount;
 
   /// Field label for the recovery mnemonic input.
   ///
@@ -4766,6 +4916,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total'**
   String get labelTotal;
+
+  /// Tooltip on the eye icon button that obscures a revealed password field.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get actionHidePassword;
+
+  /// Tooltip on the right chevron icon button that shows the next item in a carousel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get actionNext;
+
+  /// Label on the control that opens an asset file in the system viewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Open asset'**
+  String get actionOpenAsset;
+
+  /// Tooltip on the calendar icon button that opens a date picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a date'**
+  String get actionPickDate;
+
+  /// Tooltip on the clock icon button that opens a time picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a time'**
+  String get actionPickTime;
+
+  /// Tooltip on the left chevron icon button that shows the previous item in a carousel.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous'**
+  String get actionPrevious;
+
+  /// Tooltip on the eye icon button that reveals an obscured password field.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get actionShowPassword;
+
+  /// Accessibility label on an asset thumbnail that opens the asset preview.
+  ///
+  /// In en, this message translates to:
+  /// **'View asset'**
+  String get actionViewAsset;
+
+  /// Tooltip on the open-in-new icon that opens a transaction on the block explorer website.
+  ///
+  /// In en, this message translates to:
+  /// **'View on explorer'**
+  String get actionViewOnExplorer;
 
   /// Transient toast shown after copying a wallet address.
   ///
@@ -4964,6 +5168,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Collection Name'**
   String get mktCollectionNameLabel;
+
+  /// Tooltip on the copy icon next to the auction house URL on the my-collections screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy shop URL'**
+  String get mktCopyShopUrl;
 
   /// No description provided for @mktCouldNotGenerateHashToast.
   ///
@@ -5625,6 +5835,12 @@ abstract class AppLocalizations {
   /// **'{count} Address'**
   String navAddressSingular(String count);
 
+  /// Accessibility label on the side navigation expander while the menu is expanded.
+  ///
+  /// In en, this message translates to:
+  /// **'Collapse navigation'**
+  String get navCollapseMenuTooltip;
+
   /// Status label for confirmed transactions.
   ///
   /// In en, this message translates to:
@@ -5642,6 +5858,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Domains'**
   String get navDomains;
+
+  /// Accessibility label on the side navigation expander while the menu is collapsed.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand navigation'**
+  String get navExpandMenuTooltip;
 
   /// Vertical icon button label: acquire BTC.
   ///
@@ -5672,18 +5894,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Crypto.com'**
   String get navMenuCryptoCom;
-
-  /// Side-nav label for the dashboard.
-  ///
-  /// In en, this message translates to:
-  /// **'Dashboard'**
-  String get navMenuDashboard;
-
-  /// Side-nav label for the domains screen.
-  ///
-  /// In en, this message translates to:
-  /// **'VFX/BTC Domains'**
-  String get navMenuDomains;
 
   /// Side-nav label for the fungible tokens section.
   ///
@@ -5721,18 +5931,6 @@ abstract class AppLocalizations {
   /// **'Launch BFLY'**
   String get navMenuPayWithButterfly;
 
-  /// Side-nav label for the receive screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Receive'**
-  String get navMenuReceive;
-
-  /// Side-nav label for the send screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Send'**
-  String get navMenuSend;
-
   /// Side nav label for sign out (web).
   ///
   /// In en, this message translates to:
@@ -5750,12 +5948,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'vBTC Tokens'**
   String get navMenuTokenizeBitcoin;
-
-  /// Side-nav label for the transactions screen.
-  ///
-  /// In en, this message translates to:
-  /// **'Transactions'**
-  String get navMenuTransactions;
 
   /// Side-nav label for the validator screen.
   ///
@@ -5822,12 +6014,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pending'**
   String get navPendingStatus;
-
-  /// Error toast when private key is not available.
-  ///
-  /// In en, this message translates to:
-  /// **'Private key not available.'**
-  String get navPrivateKeyNotAvailable;
 
   /// Primary navigation label for settings.
   ///
@@ -5955,6 +6141,12 @@ abstract class AppLocalizations {
   /// **'Confirm Sale Start'**
   String get nftConfirmSaleStartTitle;
 
+  /// Accessibility label on the copy icon next to an NFT's smart contract ID.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy smart contract ID'**
+  String get nftCopySmartContractId;
+
   /// Button to copy a media-backup URL.
   ///
   /// In en, this message translates to:
@@ -5978,18 +6170,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'NFT'**
   String get nftDetailFallback;
-
-  /// Toast confirming a devolve transaction was broadcast.
-  ///
-  /// In en, this message translates to:
-  /// **'Devolve transaction sent successfully!'**
-  String get nftDevolveSentToast;
-
-  /// Confirm dialog title before devolving an NFT.
-  ///
-  /// In en, this message translates to:
-  /// **'Devolve?'**
-  String get nftDevolveTitle;
 
   /// Button to evolve an NFT phase.
   ///
@@ -6135,11 +6315,23 @@ abstract class AppLocalizations {
   /// **'Owned by Me'**
   String get nftOwnedByMe;
 
+  /// Tooltip on the pause button of an NFT video asset.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get nftPauseMedia;
+
   /// Phase name label inside the NFT management modal.
   ///
   /// In en, this message translates to:
   /// **'Name: {name}'**
   String nftPhaseNameLabel(String name);
+
+  /// Tooltip on the play button of an NFT video asset.
+  ///
+  /// In en, this message translates to:
+  /// **'Play'**
+  String get nftPlayMedia;
 
   /// Section heading for NFT properties.
   ///
@@ -6218,6 +6410,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sync Media'**
   String get nftSyncMedia;
+
+  /// Toast after Sync Media uploads and associates all NFT media.
+  ///
+  /// In en, this message translates to:
+  /// **'Media synced.'**
+  String get nftSyncMediaSuccess;
+
+  /// Toast when the explorer refuses to associate the uploaded NFT media.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t sync media. Please try again.'**
+  String get nftSyncMediaFailed;
+
+  /// Toast when Sync Media throws, for example when a local media file is missing; error is the exception message.
+  ///
+  /// In en, this message translates to:
+  /// **'Media sync failed: {error}'**
+  String nftSyncMediaError(String error);
+
+  /// Toast when one NFT media file fails to upload during Sync Media; nothing is associated.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t upload {fileName}. Media was not synced.'**
+  String nftSyncMediaUploadFailed(String fileName);
 
   /// Tab label for managing minted NFTs.
   ///
@@ -6807,12 +7023,6 @@ abstract class AppLocalizations {
   /// **'This address pays the gas fee for the mint transaction on Base. Send a small amount of Base ETH (≈ 0.001 ETH) to the address above before bridging. You can fund it from any exchange or Base wallet that supports withdrawing to Base mainnet. Balance updates automatically every 10s — tap Refresh for an immediate check.'**
   String get prvBridgeGasZeroEth;
 
-  /// No description provided for @prvBridgeHideDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Hide details'**
-  String get prvBridgeHideDetails;
-
   /// No description provided for @prvBridgeHistoryLoadError.
   ///
   /// In en, this message translates to:
@@ -6950,12 +7160,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Safe to close this dialog — your bridge will continue in the background. Track progress in Bridge History.'**
   String get prvBridgeSafeToClose;
-
-  /// No description provided for @prvBridgeShowDetails.
-  ///
-  /// In en, this message translates to:
-  /// **'Show details'**
-  String get prvBridgeShowDetails;
 
   /// No description provided for @prvBridgeSigsProgress.
   ///
@@ -7220,6 +7424,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copy address'**
   String get prvCopyAddress;
+
+  /// Tooltip on the copy icon next to the exported privacy viewing key.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy viewing key'**
+  String get prvCopyViewingKey;
 
   /// No description provided for @prvCreatePasswordBody.
   ///
@@ -7497,12 +7707,6 @@ abstract class AppLocalizations {
   /// **'Recipient (zfx_ address)'**
   String get prvRecipientZfxLabel;
 
-  /// No description provided for @prvRefresh.
-  ///
-  /// In en, this message translates to:
-  /// **'Refresh'**
-  String get prvRefresh;
-
   /// No description provided for @prvResetAction.
   ///
   /// In en, this message translates to:
@@ -7638,7 +7842,7 @@ abstract class AppLocalizations {
   /// No description provided for @prvShieldedVfxRequiredBody.
   ///
   /// In en, this message translates to:
-  /// **'vBTC privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.'**
+  /// **'Privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have {balance} shielded VFX.\nPlease shield at least {fee} first.'**
   String prvShieldedVfxRequiredBody(String balance, String fee);
 
   /// No description provided for @prvShieldedVfxRequiredTitle.
@@ -7989,6 +8193,12 @@ abstract class AppLocalizations {
   /// **'Block height must be greater than {currentBh}.'**
   String r3aBlockHeightMustBeGreaterThan(String currentBh);
 
+  /// Validation error on an evolve stage block height when the current chain height has not been loaded
+  ///
+  /// In en, this message translates to:
+  /// **'The current block height is not known yet. Try again in a moment.'**
+  String get r3aBlockHeightUnknown;
+
   /// No description provided for @r3aBlockHeightVariable.
   ///
   /// In en, this message translates to:
@@ -8066,6 +8276,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Compiling & Minting…'**
   String get r3aCompilingMintingEllipsis;
+
+  /// Headline shown when the smart contract compile animation finishes (compile only).
+  ///
+  /// In en, this message translates to:
+  /// **'Compiled!'**
+  String get r3aCompiledExclaim;
+
+  /// Headline shown when the smart contract compile animation finishes after minting.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted!'**
+  String get r3aMintedExclaim;
 
   /// No description provided for @r3aConfiguration.
   ///
@@ -8160,7 +8382,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aDeleteDraftConfirm.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you wan\'t to delete this smart contract draft?'**
+  /// **'Are you sure you want to delete this smart contract draft?'**
   String get r3aDeleteDraftConfirm;
 
   /// No description provided for @r3aDeleteInstanceConfirm.
@@ -8208,7 +8430,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aDraftDeleted.
   ///
   /// In en, this message translates to:
-  /// **'Draft Delete'**
+  /// **'Draft deleted'**
   String get r3aDraftDeleted;
 
   /// No description provided for @r3aDraftSaved.
@@ -8640,7 +8862,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aMaxMintAtOnce.
   ///
   /// In en, this message translates to:
-  /// **'The maxium number you can mint at one time is {max}.'**
+  /// **'The maximum number you can mint at one time is {max}.'**
   String r3aMaxMintAtOnce(String max);
 
   /// No description provided for @r3aMint.
@@ -8700,7 +8922,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3aMintTxSent.
   ///
   /// In en, this message translates to:
-  /// **'Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.'**
+  /// **'Mint transaction sent successfully. Please wait until the smart contract is minted on-chain.'**
   String get r3aMintTxSent;
 
   /// No description provided for @r3aMotherAddress.
@@ -8828,6 +9050,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'A problem occurred minting this smart contract.'**
   String get r3aProblemMintingSc;
+
+  /// Toast when compiling or minting a smart contract throws; error is the exception message.
+  ///
+  /// In en, this message translates to:
+  /// **'A problem occurred compiling or minting this smart contract: {error}'**
+  String r3aProblemCompilingOrMintingSc(String error);
 
   /// No description provided for @r3aProperty.
   ///
@@ -9225,12 +9453,6 @@ abstract class AppLocalizations {
   /// **'Now you can create collections and then add listings to them.'**
   String get r3bCreateCollectionsHint;
 
-  /// No description provided for @r3bCreateListingsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'Now you can create listings for the NFTs you own.'**
-  String get r3bCreateListingsHint;
-
   /// No description provided for @r3bCreateNewCollection.
   ///
   /// In en, this message translates to:
@@ -9440,12 +9662,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Collections'**
   String get r3bNoCollections;
-
-  /// No description provided for @r3bNoListings.
-  ///
-  /// In en, this message translates to:
-  /// **'No Listings'**
-  String get r3bNoListings;
 
   /// No description provided for @r3bNoPrivateKey.
   ///
@@ -11343,10 +11559,10 @@ abstract class AppLocalizations {
   /// **'This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.'**
   String get r3eEncryptWalletBody;
 
-  /// No description provided for @r3eEnterPasswordBackup.
+  /// Password prompt body before backing up the active web account's keys; the password is that account's own.
   ///
   /// In en, this message translates to:
-  /// **'Enter your password to backup your keys.'**
+  /// **'Enter this account\'s password to back up its keys.'**
   String get r3eEnterPasswordBackup;
 
   /// No description provided for @r3eExportNftMedia.
@@ -11372,12 +11588,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to download {filename} after {attempts} attempts'**
   String r3eFailedDownloadFile(String filename, String attempts);
-
-  /// No description provided for @r3eFaucetIntro.
-  ///
-  /// In en, this message translates to:
-  /// **'The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.'**
-  String get r3eFaucetIntro;
 
   /// No description provided for @r3eFaucetSuccess.
   ///
@@ -11468,12 +11678,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Login with this Account'**
   String get r3eLoginWithThisAccount;
-
-  /// No description provided for @r3eMaxAmount.
-  ///
-  /// In en, this message translates to:
-  /// **'Max Amount: {amount} VFX'**
-  String r3eMaxAmount(String amount);
 
   /// No description provided for @r3eMediaBackedUp.
   ///
@@ -11636,18 +11840,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Progress: {percent}'**
   String r3eProgressLabel(String percent);
-
-  /// No description provided for @r3eReadLess.
-  ///
-  /// In en, this message translates to:
-  /// **'Read Less'**
-  String get r3eReadLess;
-
-  /// No description provided for @r3eReadMore.
-  ///
-  /// In en, this message translates to:
-  /// **'Read More'**
-  String get r3eReadMore;
 
   /// No description provided for @r3eRecentTransactions.
   ///
@@ -12336,7 +12528,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3gAdnrDeleteWithCost.
   ///
   /// In en, this message translates to:
-  /// **'There is a cost of {cost} RBX to delete an RBX Domain.'**
+  /// **'There is a cost of {cost} VFX to delete a VFX Domain.'**
   String r3gAdnrDeleteWithCost(String cost);
 
   /// No description provided for @r3gAssetListedInAuctionHouse.
@@ -12459,18 +12651,6 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to buy now for {price} VFX?'**
   String r3gConfirmBuyNowBody(String price);
 
-  /// No description provided for @r3gConfirmDevolveOneStage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to devolve this NFT one stage?'**
-  String get r3gConfirmDevolveOneStage;
-
-  /// No description provided for @r3gConfirmEvolveOneStage.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to evolve this NFT one stage?'**
-  String get r3gConfirmEvolveOneStage;
-
   /// No description provided for @r3gConfirmEvolveToStage.
   ///
   /// In en, this message translates to:
@@ -12560,12 +12740,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Current Stage: {name}'**
   String r3gCurrentStage(String name);
-
-  /// No description provided for @r3gDevolve.
-  ///
-  /// In en, this message translates to:
-  /// **'Devolve'**
-  String get r3gDevolve;
 
   /// No description provided for @r3gEncryptionPasswordRequired.
   ///
@@ -13344,7 +13518,7 @@ abstract class AppLocalizations {
   /// No description provided for @r3hInsufficientBalanceForTopic.
   ///
   /// In en, this message translates to:
-  /// **'Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)'**
+  /// **'Balance will not be sufficient to validate due to the cost of creating a topic (1 VFX + fee)'**
   String get r3hInsufficientBalanceForTopic;
 
   /// No description provided for @r3hInternetSpeedDown.
@@ -13376,12 +13550,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Minimum Token Requirement'**
   String get r3hLabelMinTokenRequirement;
-
-  /// No description provided for @r3hLogoutConfirmBody.
-  ///
-  /// In en, this message translates to:
-  /// **'Are you sure you want to logout of the VFX Web Wallet?'**
-  String get r3hLogoutConfirmBody;
 
   /// No description provided for @r3hMachineOs.
   ///
@@ -13532,12 +13700,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Only one active topic per address is allowed.'**
   String get r3hOneActiveTopicPerAddress;
-
-  /// No description provided for @r3hOptional.
-  ///
-  /// In en, this message translates to:
-  /// **'Optional'**
-  String get r3hOptional;
 
   /// No description provided for @r3hPasswordRequired.
   ///
@@ -13700,12 +13862,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Token Has Fixed Supply:'**
   String get r3hTokenHasFixedSupply;
-
-  /// No description provided for @r3hTokenIconUrlLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Token Icon URL:'**
-  String get r3hTokenIconUrlLabel;
 
   /// No description provided for @r3hTokenNameFieldLabel.
   ///
@@ -14169,6 +14325,12 @@ abstract class AppLocalizations {
   /// **'No Vault Account Found'**
   String get reserveWebNoAccount;
 
+  /// Shown on the web Vault overview screen when the Vault's activation/recovery status could not be fetched.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load this Vault\'s status from the network. Retrying automatically.'**
+  String get reserveWebStatusUnavailable;
+
   /// Toast shown when the web Vault account has no NFTs to manage.
   ///
   /// In en, this message translates to:
@@ -14306,6 +14468,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault Accounts cannot mint smart contracts'**
   String get scVaultCannotMintToast;
+
+  /// Tooltip on the add icon button in the additional assets section of the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Add additional asset'**
+  String get scwAddAdditionalAsset;
 
   /// No description provided for @scwAddAFeature.
   ///
@@ -14529,6 +14697,12 @@ abstract class AppLocalizations {
   /// **'Creator: {name}'**
   String scwCreatorValue(String name);
 
+  /// Tooltip on the delete icon button over the primary asset in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete primary asset'**
+  String get scwDeletePrimaryAsset;
+
   /// No description provided for @scwDeletePrimaryAssetBody.
   ///
   /// In en, this message translates to:
@@ -14564,6 +14738,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Download Example JSON'**
   String get scwDownloadExampleJson;
+
+  /// Toast when the bundled example NFT metadata file cannot be saved.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t save the example file.'**
+  String get scwDownloadExampleFailed;
 
   /// No description provided for @scwEdit.
   ///
@@ -14889,6 +15069,12 @@ abstract class AppLocalizations {
   /// **'Physical/Digital Good Name'**
   String get scwPhysicalDigitalGoodName;
 
+  /// Tooltip on the palette icon button that opens the color picker for a property value.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a color'**
+  String get scwPickColor;
+
   /// No description provided for @scwPrimaryAsset.
   ///
   /// In en, this message translates to:
@@ -14979,6 +15165,12 @@ abstract class AppLocalizations {
   /// **'Remove'**
   String get scwRemove;
 
+  /// Tooltip on the delete icon button next to an additional asset in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove asset'**
+  String get scwRemoveAsset;
+
   /// No description provided for @scwRemoveAssetBody.
   ///
   /// In en, this message translates to:
@@ -14990,6 +15182,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove Asset?'**
   String get scwRemoveAssetTitle;
+
+  /// Tooltip on the delete icon button next to an evolution phase in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove phase'**
+  String get scwRemovePhase;
 
   /// No description provided for @scwRemovePhaseBody.
   ///
@@ -15003,6 +15201,12 @@ abstract class AppLocalizations {
   /// **'Remove Phase?'**
   String get scwRemovePhaseTitle;
 
+  /// Tooltip / accessibility label on the delete icon next to a property in the wizard card or evolve modal.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove property'**
+  String get scwRemoveProperty;
+
   /// No description provided for @scwRemovePropertyBody.
   ///
   /// In en, this message translates to:
@@ -15014,6 +15218,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Remove Property?'**
   String get scwRemovePropertyTitle;
+
+  /// Tooltip on the delete icon button next to the royalty in the wizard card.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove royalty'**
+  String get scwRemoveRoyalty;
 
   /// No description provided for @scwRemoveRoyaltyBody.
   ///
@@ -15171,6 +15381,18 @@ abstract class AppLocalizations {
   /// **'Amount of {currency} to send'**
   String sendAmountHint(String currency);
 
+  /// Notice at the top of the send confirmation when the VFX amount was lowered automatically so the network fee fits in the balance.
+  ///
+  /// In en, this message translates to:
+  /// **'Your balance does not cover this amount plus the {fee} VFX network fee, so the amount was lowered to {amount} VFX.'**
+  String sendAmountLoweredForFee(String fee, String amount);
+
+  /// Send form amount error when the amount has more decimal places than the currency supports (8 for VFX and BTC).
+  ///
+  /// In en, this message translates to:
+  /// **'{currency} amounts can have at most {decimals} decimal places.'**
+  String sendAmountTooManyDecimals(String currency, String decimals);
+
   /// Send screen app bar title — currency is VFX or BTC.
   ///
   /// In en, this message translates to:
@@ -15183,11 +15405,35 @@ abstract class AppLocalizations {
   /// **'Not Activated'**
   String get sendBadgeNotActivated;
 
+  /// Form error when a BTC destination address is malformed or its checksum does not match.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid BTC address.'**
+  String get sendBtcAddressInvalid;
+
+  /// Form error when a testnet BTC address is entered while the app runs on mainnet.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a testnet BTC address. A mainnet address is required.'**
+  String get sendBtcAddressMainnetRequired;
+
+  /// Form error when a mainnet BTC address is entered while the app runs on testnet.
+  ///
+  /// In en, this message translates to:
+  /// **'This is a mainnet BTC address. A testnet address is required.'**
+  String get sendBtcAddressTestnetRequired;
+
   /// Title of the dialog used to pick one of the user's own addresses as recipient.
   ///
   /// In en, this message translates to:
   /// **'Choose an address'**
   String get sendChooseAddressTitle;
+
+  /// Send error when the balance is too small to pay even the network fee.
+  ///
+  /// In en, this message translates to:
+  /// **'Your available balance of {available} VFX does not cover the {fee} VFX network fee.'**
+  String sendFeeNotCovered(String available, String fee);
 
   /// Amount label (with colon) in the send form.
   ///
@@ -15212,6 +15458,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'To:'**
   String get sendFormLabelTo;
+
+  /// Body of the warning shown before sending VFX or BTC to one of the user's own addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'{address} is one of your own addresses. The funds stay in your wallet and only the network fee is spent.\n\nSend anyway?'**
+  String sendOwnAddressBody(String address);
+
+  /// Title of the warning shown before sending VFX or BTC to one of the user's own addresses.
+  ///
+  /// In en, this message translates to:
+  /// **'Send to Your Own Address?'**
+  String get sendOwnAddressTitle;
 
   /// Helper text beneath the recipient address field on macOS. Intentionally ends with a trailing space.
   ///
@@ -15591,6 +15849,12 @@ abstract class AppLocalizations {
   /// **'Pending'**
   String get statusPending;
 
+  /// Tooltip on the refresh icon button that reloads the wallet info.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload wallet info'**
+  String get statusReloadWalletInfoTooltip;
+
   /// Success status for a completed transaction.
   ///
   /// In en, this message translates to:
@@ -15660,7 +15924,7 @@ abstract class AppLocalizations {
   /// No description provided for @svcAdnrDeleteWithCost.
   ///
   /// In en, this message translates to:
-  /// **'There is a cost of {cost} RBX to delete an RBX Domain.'**
+  /// **'There is a cost of {cost} VFX to delete a VFX Domain.'**
   String svcAdnrDeleteWithCost(String cost);
 
   /// No description provided for @svcAdnrFundNeededBody.
@@ -15765,6 +16029,12 @@ abstract class AppLocalizations {
   /// **'The CSV headers are not in the correct format, please check the example file'**
   String get svcCsvHeadersInvalid;
 
+  /// Error when an NFT collection wizard CSV import contains no data rows
+  ///
+  /// In en, this message translates to:
+  /// **'No rows were found in this CSV file. Add at least one NFT below the header row.'**
+  String get svcCsvNoRows;
+
   /// No description provided for @svcDecryptFailed.
   ///
   /// In en, this message translates to:
@@ -15861,12 +16131,6 @@ abstract class AppLocalizations {
   /// **'Locators request failed.'**
   String get svcLocatorsRequestFailed;
 
-  /// No description provided for @svcMainMenuSyncTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Last Sync: {lastSync}\nNext Sync: {nextSync}'**
-  String svcMainMenuSyncTooltip(String lastSync, String nextSync);
-
   /// No description provided for @svcMessageDecryptedSuccess.
   ///
   /// In en, this message translates to:
@@ -15878,6 +16142,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Minting {current}/{total}...'**
   String svcMintingProgress(String current, String total);
+
+  /// Collection wizard progress dialog message when a mint fails and the run stops
+  ///
+  /// In en, this message translates to:
+  /// **'Minting stopped after an error. {minted} of {total} minted.'**
+  String svcMintingStopped(String minted, String total);
 
   /// No description provided for @svcMinTxAmountBtc.
   ///
@@ -16214,12 +16484,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Not a valid amount'**
   String get svcNotValidAmount;
-
-  /// No description provided for @svcPrivateKeyNotAvailableUnlock.
-  ///
-  /// In en, this message translates to:
-  /// **'Private key not available. Please ensure wallet is unlocked.'**
-  String get svcPrivateKeyNotAvailableUnlock;
 
   /// No description provided for @svcPrivateKeyNotFoundRecipient.
   ///
@@ -16566,7 +16830,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbDeleteDomainWithCost.
   ///
   /// In en, this message translates to:
-  /// **'There is a cost of {cost} VFX to delete an RBX Domain.'**
+  /// **'There is a cost of {cost} VFX to delete a BTC Domain.'**
   String tkbDeleteDomainWithCost(String cost);
 
   /// No description provided for @tkbDeletePending.
@@ -16740,7 +17004,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbInvalidFeeRate.
   ///
   /// In en, this message translates to:
-  /// **'Invalid Fee Rate. Must be atleast 1 satoshi.'**
+  /// **'Invalid Fee Rate. Must be at least 1 satoshi.'**
   String get tkbInvalidFeeRate;
 
   /// No description provided for @tkbManualSendExchangeSubtitle.
@@ -16851,7 +17115,7 @@ abstract class AppLocalizations {
   /// **'No votes yet.'**
   String get tkbNoVotesYet;
 
-  /// No description provided for @tkbOpenAsset.
+  /// Visible label of the asset card button that opens the asset file (title case, unlike the actionOpenAsset tooltip)
   ///
   /// In en, this message translates to:
   /// **'Open Asset'**
@@ -16892,6 +17156,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pending Withdrawal Found'**
   String get tkbPendingWithdrawalFound;
+
+  /// No description provided for @tkbExpiredWithdrawalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Request Expired'**
+  String get tkbExpiredWithdrawalTitle;
+
+  /// No description provided for @tkbExpiredWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal of {amount} vBTC to {destination} has expired. It no longer blocks a new withdrawal, but its vBTC is still held in escrow.'**
+  String tkbExpiredWithdrawalBody(String amount, String destination);
+
+  /// No description provided for @tkbUnpayableWithdrawalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Cannot Be Paid'**
+  String get tkbUnpayableWithdrawalTitle;
+
+  /// No description provided for @tkbUnpayableWithdrawalBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal of {amount} vBTC to {destination} is too small to pay at its fee rate, so completing it will keep failing.'**
+  String tkbUnpayableWithdrawalBody(String amount, String destination);
+
+  /// No description provided for @tkbWithdrawalCancelNeedsVote.
+  ///
+  /// In en, this message translates to:
+  /// **'Its vBTC stays held in escrow until the request is cancelled. Cancelling needs a vote by the contract\'s validators, which the wallet cannot start yet.\n\nYou can still open the withdrawal form for your available balance.'**
+  String get tkbWithdrawalCancelNeedsVote;
+
+  /// No description provided for @tkbWithdrawalCancellationPending.
+  ///
+  /// In en, this message translates to:
+  /// **'A cancellation has already been requested and is awaiting the validators\' vote. Its vBTC stays held in escrow until then.\n\nYou can still open the withdrawal form for your available balance.'**
+  String get tkbWithdrawalCancellationPending;
+
+  /// No description provided for @tkbOpenWithdrawalForm.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Withdrawal Form'**
+  String get tkbOpenWithdrawalForm;
 
   /// No description provided for @tkbPercentages.
   ///
@@ -17361,6 +17667,12 @@ abstract class AppLocalizations {
   /// **'Create Fungible Token'**
   String get tokenCreateTitle;
 
+  /// Tooltip on the down arrow that lowers the decimal places of a new token.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease decimal places'**
+  String get tokenDecreaseDecimalPlaces;
+
   /// Cancel button label in the token create form.
   ///
   /// In en, this message translates to:
@@ -17414,6 +17726,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ABC'**
   String get tokenFormTickerHint;
+
+  /// Tooltip on the up arrow that raises the decimal places of a new token.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase decimal places'**
+  String get tokenIncreaseDecimalPlaces;
 
   /// Toast shown when balance is insufficient for a token transaction.
   ///
@@ -17660,6 +17978,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This address\'\'s ({address}) {ticker} balance is insufficient.'**
   String tokenWebInsufficient(String address, String ticker);
+
+  /// Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.'**
+  String get tokenWebVaultRowActionsUnavailable;
+
+  /// Error when a web token transfer names the sending address as the recipient.
+  ///
+  /// In en, this message translates to:
+  /// **'Tokens cannot be transferred to the address that holds them.'**
+  String get tokenWebTransferToSelf;
 
   /// Transactions screen title when viewing both VFX and BTC.
   ///
@@ -18320,6 +18650,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Vault Account activation transaction sent.\n\nPlease wait for it to reflect as \"Activated\".'**
   String get txpVaultActivationSent;
+
+  /// Error toast when Activate is used on a Vault account that is already activated on the network.
+  ///
+  /// In en, this message translates to:
+  /// **'This Vault Account is already activated.'**
+  String get txpVaultAlreadyActivated;
 
   /// No description provided for @txpVfxAmount.
   ///
@@ -19353,6 +19689,12 @@ abstract class AppLocalizations {
   /// **'Private Key Imported!'**
   String get walletPrivateKeyImportedToast;
 
+  /// Error shown when the node refuses to export a VFX private key and gives no reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The node did not return a private key.'**
+  String get walletKeyExportUnavailable;
+
   /// Field label for the private key input/display.
   ///
   /// In en, this message translates to:
@@ -19472,6 +19814,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reveal Private Key'**
   String get walletRevealPrivateKey;
+
+  /// Shown when revealing a BTC private key that the node no longer returns.
+  ///
+  /// In en, this message translates to:
+  /// **'The node only shares a Bitcoin private key when the account is created. Use the backup you saved at that time.'**
+  String get walletBtcPrivateKeyNotExported;
 
   /// Button label to export Vault-account backup data as a file.
   ///
@@ -19797,6 +20145,18 @@ abstract class AppLocalizations {
   /// **'Invalid amount'**
   String get webInvalidAmount;
 
+  /// Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.
+  ///
+  /// In en, this message translates to:
+  /// **'Not enough balance once pending sends are counted. Available: {available} {unit}'**
+  String webPendingBalanceInsufficient(String available, String unit);
+
+  /// Error when a web send from the Vault would leave it below the minimum balance the network requires.
+  ///
+  /// In en, this message translates to:
+  /// **'A Vault must keep {minimum} VFX. Available to send: {available} VFX'**
+  String webVaultMinimumBalance(String minimum, String available);
+
   /// Menu item label for the language picker.
   ///
   /// In en, this message translates to:
@@ -19820,6 +20180,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No Wallet detected.'**
   String get webNoWalletDetected;
+
+  /// Tooltip on the hamburger icon button that opens the navigation drawer on the mobile web wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Open menu'**
+  String get webOpenMenu;
 
   /// Badge for a Vault account whose activation is in progress on the web.
   ///
@@ -20025,6 +20391,12 @@ abstract class AppLocalizations {
   /// **'Vault Account restored'**
   String get webVaultRestoredToast;
 
+  /// Error toast when a pasted Vault restore code cannot be decoded on the web.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid restore code'**
+  String get webVaultRestoreCodeInvalid;
+
   /// Input label for a BTC WIF private key.
   ///
   /// In en, this message translates to:
@@ -20042,6 +20414,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Your Domain'**
   String get webYourDomain;
+
+  /// Error toast when Open Log cannot find or open the CLI log file.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not open the log file: {path}'**
+  String r3eLogFileNotFound(String path);
+
+  /// Title of the dialog shown when a chosen NFT asset file has a blocked extension (desktop and web).
+  ///
+  /// In en, this message translates to:
+  /// **'Unsupported File'**
+  String get assetUnsupportedFileTitle;
+
+  /// Body of the dialog shown when a chosen NFT asset file has a blocked extension. {extension} is the file extension without the dot.
+  ///
+  /// In en, this message translates to:
+  /// **'This file extension (.{extension}) is not permitted.'**
+  String assetExtensionNotPermittedBody(String extension);
+
+  /// Shown when the node refused an action because the encrypted wallet is locked and the user cancelled (or failed) the password prompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Your wallet is locked. Unlock it with your password and try again.'**
+  String get errWalletLocked;
+
+  /// Shown when a request to the node or Spyglass failed without a response (connection error or timeout).
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Check your connection and try again.'**
+  String get errNodeUnreachable;
+
+  /// Generic error when a node or Spyglass request failed and gave no readable reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The request failed. Please try again.'**
+  String get errRequestFailed;
+
+  /// Wraps an untranslated error message returned by the node or Spyglass. English shows the message as is; other languages add a lead-in saying the text comes from the node.
+  ///
+  /// In en, this message translates to:
+  /// **'{reason}'**
+  String errNodeReason(String reason);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

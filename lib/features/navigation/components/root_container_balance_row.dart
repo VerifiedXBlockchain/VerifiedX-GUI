@@ -27,7 +27,6 @@ import '../../btc/providers/btc_account_list_provider.dart';
 import '../../btc/providers/btc_balance_provider.dart';
 import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
 import '../../btc/screens/tokenized_btc_list_screen.dart';
-import '../../image_sequencer/image_sequencer.dart';
 import '../../misc/providers/global_balances_expanded_provider.dart';
 import '../../transactions/providers/transaction_list_provider.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
@@ -88,10 +87,6 @@ class RootContainerBalanceRow extends BaseComponent {
     }
 
     return LayoutBuilder(builder: (context, constraints) {
-      final availableWidth = constraints.maxWidth;
-
-      final connector1Left = (availableWidth / 3) - 10;
-      final connector2Left = (availableWidth / 3) + (availableWidth / 3) - 5;
       return Stack(
         children: [
           Row(
@@ -263,41 +258,6 @@ class RootContainerBalanceRow extends BaseComponent {
               ),
             ],
           ),
-          // AnimatedPositioned(
-          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          //   curve: Curves.easeInOut,
-          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-          //   child: IgnorePointer(
-          //     ignoring: true,
-          //     child: Padding(
-          //       padding: EdgeInsets.only(left: connector1Left),
-          //       // child: RootContainerBalanceRowConnector(),
-          //       child: Transform.translate(
-          //         offset: Offset(-33, 4),
-          //         child: ConnectorVisual(
-          //           isBtc: false,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // AnimatedPositioned(
-          //   duration: ROOT_CONTAINER_TRANSITION_DURATION,
-          //   curve: Curves.easeInOut,
-          //   top: forceExpand ? ROOT_CONTAINER_BALANCE_ITEM_EXPANDED_HEIGHT / 2 : 0,
-          //   child: IgnorePointer(
-          //     ignoring: true,
-          //     child: Padding(
-          //       padding: EdgeInsets.only(left: connector2Left),
-          //       child: Transform.translate(
-          //         offset: Offset(-6, 4),
-          //         child: ConnectorVisual(
-          //           isBtc: true,
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ],
       );
     });
@@ -316,46 +276,49 @@ class _LatestBtcTx extends BaseComponent {
     final l10n = AppLocalizations.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
-          RootContainerUtils.navigateToTab(context, RootTab.transactions);
-        },
-        child: AppCard(
-          fullWidth: true,
-          padding: 8,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "${tx.amount} BTC",
-                style: TextStyle(
-                  color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
-                style: TextStyle(
-                  fontSize: 10,
-                  color: Colors.white.withOpacity(0.9),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Builder(builder: (context) {
-                final isConfirmed = (kDebugMode && Env.isTestNet) ? true : tx.isConfirmed;
-                return Text(
-                  isConfirmed ? l10n.statusSuccess : l10n.statusPending,
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () {
+            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.btc);
+            RootContainerUtils.navigateToTab(context, RootTab.transactions);
+          },
+          child: AppCard(
+            fullWidth: true,
+            padding: 8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "${tx.amount} BTC",
                   style: TextStyle(
+                    color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
                     fontWeight: FontWeight.w600,
-                    color: isConfirmed ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.warning,
                   ),
-                );
-              })
-            ],
+                ),
+                Text(
+                  l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+                Builder(builder: (context) {
+                  final isConfirmed = (kDebugMode && Env.isTestNet) ? true : tx.isConfirmed;
+                  return Text(
+                    isConfirmed ? l10n.statusSuccess : l10n.statusPending,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: isConfirmed ? Theme.of(context).colorScheme.success : Theme.of(context).colorScheme.warning,
+                    ),
+                  );
+                })
+              ],
+            ),
           ),
         ),
       ),
@@ -375,93 +338,59 @@ class _LatestVfxTx extends BaseComponent {
     final l10n = AppLocalizations.of(context);
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () {
-          ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () {
+            ref.read(currencySegementedButtonProvider.notifier).set(CurrencyType.vfx);
 
-          RootContainerUtils.navigateToTab(context, RootTab.transactions);
-        },
-        child: AppCard(
-          padding: 12,
-          fullWidth: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (tx.type == TxType.rbxTransfer)
+            RootContainerUtils.navigateToTab(context, RootTab.transactions);
+          },
+          child: AppCard(
+            padding: 12,
+            fullWidth: true,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (tx.type == TxType.rbxTransfer)
+                  Text(
+                    "${tx.amount} VFX",
+                    style: TextStyle(
+                      color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                else
+                  Text(
+                    tx.typeLabel,
+                    style: TextStyle(
+                      color: AppColors.getBlue(),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 Text(
-                  "${tx.amount} VFX",
+                  l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
                   style: TextStyle(
-                    color: tx.amount < 0 ? Colors.red.shade500 : Theme.of(context).colorScheme.success,
+                    fontSize: 11,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  tx.statusLabel,
+                  style: TextStyle(
+                    color: tx.statusColor(context),
                     fontWeight: FontWeight.w600,
                   ),
-                )
-              else
-                Text(
-                  tx.typeLabel,
-                  style: TextStyle(
-                    color: AppColors.getBlue(),
-                    fontWeight: FontWeight.w600,
-                  ),
                 ),
-              Text(
-                l10n.svcBalanceRowFromTo(tx.fromAddress, tx.toAddress),
-                style: TextStyle(
-                  fontSize: 11,
-                  color: Colors.white.withOpacity(0.9),
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Text(
-                tx.statusLabel,
-                style: TextStyle(
-                  color: tx.statusColor(context),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class ConnectorVisual extends StatelessWidget {
-  final bool isBtc;
-  final bool isAnimated;
-  const ConnectorVisual({
-    super.key,
-    required this.isBtc,
-    this.isAnimated = true,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    if (isAnimated) {
-      return SizedBox(
-        width: 155 / 3,
-        height: 118 / 3,
-        child: ImageSequenceAnimator(
-          isOnline: false,
-          folderName: 'assets/images/connector',
-          fileName: isBtc ? "connectorb_" : "connectora_",
-          fileFormat: 'png',
-          frameCount: isBtc ? 45 : 30,
-          fps: 30,
-          suffixStart: 1,
-          suffixCount: 2,
-          isLooping: true,
-          isAutoPlay: true,
-        ),
-      );
-    }
-    return Image.asset(
-      isBtc ? 'assets/images/connector2.png' : 'assets/images/connector1.png',
-      width: 155 / 3,
-      height: 118 / 3,
     );
   }
 }

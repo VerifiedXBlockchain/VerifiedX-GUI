@@ -14,6 +14,8 @@ import 'package:collection/collection.dart';
 import '../models/btc_send_tx_result.dart';
 import '../models/btc_transaction.dart';
 import '../models/btc_utxo.dart';
+import '../utils.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class BtcService extends BaseService {
   BtcService() : super(apiBasePathOverride: "/btcapi/BTCV2");
@@ -205,7 +207,7 @@ class BtcService extends BaseService {
       print(e);
       return BtcSendTxResult(
         success: false,
-        message: e.toString(),
+        message: userErrorMessage(e),
       );
     }
   }
@@ -293,6 +295,18 @@ class BtcService extends BaseService {
     }
   }
 
+  /// The tx hash from a BTC domain transfer/delete reply
+  /// (`{Success, Message, Hash}`), or null after showing the node's message.
+  String? _adnrTxHashOrToast(Map<String, dynamic> result) {
+    final hash = result['Hash'];
+    if (result['Success'] == true && hash is String && hash.isNotEmpty) {
+      return hash;
+    }
+
+    Toast.error(result['Message']);
+    return null;
+  }
+
   Future<String?> transferAdnr({
     required String toRbxAddress,
     required String fromBtcAddress,
@@ -300,7 +314,7 @@ class BtcService extends BaseService {
   }) async {
     try {
       final result = await getJson("/TransferAdnr/$toRbxAddress/$fromBtcAddress/$toBtcAddress", cleanPath: false);
-      return null;
+      return _adnrTxHashOrToast(result);
     } catch (e, st) {
       print(e);
       print(st);
@@ -314,14 +328,7 @@ class BtcService extends BaseService {
   }) async {
     try {
       final result = await getJson("/DeleteAdnr/$btcAddress", cleanPath: false);
-      return null;
-      // if (result['Result'] == "Success") {
-      //   if (result.containsKey('Hash')) {
-      //     return result['Hash'];
-      //   }
-      // }
-
-      // Toast.error(result['Message']);
+      return _adnrTxHashOrToast(result);
     } catch (e, st) {
       print(e);
       print(st);
@@ -379,7 +386,7 @@ class BtcService extends BaseService {
     } catch (e, st) {
       print(e);
       print(st);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -427,7 +434,7 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }
@@ -446,7 +453,7 @@ class BtcService extends BaseService {
       Toast.error(result['Message']);
       return false;
     } catch (e) {
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       print(e);
       return false;
     }
@@ -475,7 +482,7 @@ class BtcService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return false;
     }
@@ -510,18 +517,38 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }
   }
 
-  Future<String?> replaceByFee(String txId, int feeRate) async {
+  /// Replaces a pending Bitcoin transaction at [feeRate] and returns the new
+  /// hash, or null after showing the node's refusal. The node refuses a
+  /// replacement whose total fee is more than 10% of the amount unless
+  /// allowHighFee is passed; [confirmHighFee] is asked with the node's reason
+  /// and a yes retries with it.
+  Future<String?> replaceByFee(
+    String txId,
+    int feeRate, {
+    Future<bool> Function(String reason)? confirmHighFee,
+  }) async {
     try {
-      final result = await getJson(
+      var result = await getJson(
         "/ReplaceByFee/$txId/$feeRate",
         cleanPath: false,
       );
+
+      final highFeeReason = rbfHighFeeReason(result['Message']?.toString());
+      if (result['Success'] != true && highFeeReason != null && confirmHighFee != null) {
+        if (!await confirmHighFee(highFeeReason)) {
+          return null;
+        }
+        result = await getJson(
+          "/ReplaceByFee/$txId/$feeRate/true",
+          cleanPath: false,
+        );
+      }
 
       if (result.containsKey("Success") && result['Success'] == true) {
         return result['Hash'];
@@ -532,7 +559,7 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }
@@ -554,7 +581,7 @@ class BtcService extends BaseService {
       return null;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
 
       return null;
     }

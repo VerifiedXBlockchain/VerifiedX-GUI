@@ -31,9 +31,16 @@ import '../../bridge/providers/log_provider.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
+import '../../web/utils/pending_debits.dart';
 import '../../web/utils/raw_transaction.dart';
 import '../../raw/raw_service.dart';
+import '../../transactions/providers/web_transaction_list_provider.dart';
 import '../../../core/utils/tx_refresh.dart';
+import '../../btc/providers/btc_account_list_provider.dart';
+import '../../transactions/services/local_transaction_service.dart';
+import '../../wallet/providers/wallet_list_provider.dart';
+import '../../web/providers/multi_account_provider.dart';
+import '../send_amount.dart';
 // import 'package:rbx_wallet/features/wallet/models/wallet.dart';
 
 class SendFormModel {
@@ -72,6 +79,14 @@ class SendFormModel {
   }
 }
 
+/// Outcome of reserving the network fee in a VFX send that can go ahead:
+/// the notice for the confirmation when the amount was lowered.
+class _FittedVfxAmount {
+  final String? notice;
+
+  const _FittedVfxAmount([this.notice]);
+}
+
 class SendFormProvider extends StateNotifier<SendFormModel> {
   final Ref ref;
 
@@ -101,6 +116,27 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
   String get amount => amountController.value.text;
   String get address => addressController.value.text;
 
+  /// Web only. The node counts the sender's unconfirmed transactions at
+  /// admission and keeps a Vault at 0.5 VFX, so the confirmed balance alone
+  /// can accept a send the node then refuses.
+  String? _webVfxShortfallMessage(WebSelectedAccount account, double amount) {
+    final pendingDebit = pendingVfxDebit(ref.read(webTransactionListProvider(account.address)).transactions, account.address);
+    final isVault = account.address.startsWith("xRBX");
+    final shortfall = vfxSendShortfall(amount: amount, balance: account.balance, pendingDebit: pendingDebit, isVault: isVault);
+    if (shortfall == null) {
+      return null;
+    }
+    final available = formatDebitAmount(spendableVfx(balance: account.balance, pendingDebit: pendingDebit, isVault: isVault));
+    switch (shortfall) {
+      case VfxSendShortfall.balance:
+        return globalL10n.svcNotEnoughBalanceAccount;
+      case VfxSendShortfall.pending:
+        return globalL10n.webPendingBalanceInsufficient(available, "VFX");
+      case VfxSendShortfall.vaultMinimum:
+        return globalL10n.webVaultMinimumBalance(formatDebitAmount(kVaultMinimumBalance), available);
+    }
+  }
+
   String? amountValidator(String? value) {
     if (value == null || value.isEmpty) {
       return globalL10n.svcAmountRequired;
@@ -118,6 +154,15 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     }
 
     final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
+
+    final decimals = amountDecimalPlaces(value);
+    if (decimals == null) {
+      return globalL10n.svcNotValidAmount;
+    }
+    final maxDecimals = isBtc ? kBtcMaxDecimals : kVfxMaxDecimals;
+    if (decimals > maxDecimals) {
+      return globalL10n.sendAmountTooManyDecimals(isBtc ? "BTC" : "VFX", '$maxDecimals');
+    }
 
     if (isBtc) {
       if (kIsWeb) {
@@ -164,8 +209,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         return globalL10n.messageNoAccountSelected;
       }
 
-      if (account.balance < parsed) {
-        return globalL10n.svcNotEnoughBalanceAccount;
+      final shortfall = _webVfxShortfallMessage(account, parsed);
+      if (shortfall != null) {
+        return shortfall;
       }
     } else {
       final currentWallet = ref.read(sessionProvider).currentWallet;
@@ -184,10 +230,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
     if (isBtc) {
-      if (value == null || value.isEmpty) {
-        return globalL10n.svcBtcAddressRequired;
-      }
-      return null;
+      return formValidatorBtcAddress(value);
     } else {
       if (value == null || value.isEmpty) {
         return globalL10n.svcAddressOrDomainRequired;
@@ -312,9 +355,82 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     return feeRateInt;
   }
 
+  /// The user's own addresses (and VFX domains) for the selected currency.
+  List<String?> _ownAddresses(bool isBtc) {
+    if (kIsWeb) {
+      final session = ref.read(webSessionProvider);
+      final accounts = ref.read(multiAccountProvider);
+      if (isBtc) {
+        return [
+          session.btcKeypair?.address,
+          ...accounts.map((a) => a.btcKeypair?.address),
+        ];
+      }
+      return [
+        session.keypair?.address,
+        session.raKeypair?.asKeypair.address,
+        session.adnr,
+        ...accounts.expand((a) => [a.keypair?.address, a.raKeypair?.asKeypair.address]),
+      ];
+    }
+    if (isBtc) {
+      return ref.read(btcAccountListProvider).map((a) => a.address).toList();
+    }
+    return ref.read(walletListProvider).expand((w) => [w.address, w.adnr]).toList();
+  }
+
+  /// False when the destination is one of the user's own addresses and they
+  /// decline the warning; such a send only spends the network fee.
+  Future<bool> _confirmSendToOwnAddress(bool isBtc) async {
+    if (!isOwnSendAddress(address, _ownAddresses(isBtc))) {
+      return true;
+    }
+    final confirmed = await ConfirmDialog.show(
+      title: globalL10n.sendOwnAddressTitle,
+      body: globalL10n.sendOwnAddressBody(address.trim()),
+      confirmText: globalL10n.actionContinue,
+      cancelText: globalL10n.actionCancel,
+    );
+    return confirmed == true;
+  }
+
+  /// Lowers [amount] so that it and its network fee fit in [spendable], and
+  /// writes the lowered amount back into the field so every later step sends
+  /// it. Returns null (after a toast) when the fee alone exceeds [spendable].
+  /// When no fee can be quoted the amount is kept and the node's own balance
+  /// check decides.
+  Future<_FittedVfxAmount?> _fitVfxAmountWithFee({
+    required double amount,
+    required double spendable,
+    required Future<double?> Function(double amount) feeFor,
+  }) async {
+    state = state.copyWith(isProcessing: true);
+    final FeeAdjustedAmount? fitted;
+    try {
+      fitted = await fitAmountWithFee(amount: amount, spendable: spendable, feeFor: feeFor);
+    } finally {
+      state = state.copyWith(isProcessing: false);
+    }
+    if (fitted == null) {
+      print("Could not quote the VFX network fee; sending $amount as entered.");
+      return const _FittedVfxAmount();
+    }
+    if (fitted.feeNotCovered) {
+      Toast.error(globalL10n.sendFeeNotCovered(formatSendAmount(spendable), formatSendAmount(fitted.fee)));
+      return null;
+    }
+    if (!fitted.adjusted) {
+      return const _FittedVfxAmount();
+    }
+    final adjusted = formatSendAmount(fitted.amount);
+    amountController.text = adjusted;
+    return _FittedVfxAmount(globalL10n.sendAmountLoweredForFee(formatSendAmount(fitted.fee), adjusted));
+  }
+
   Future<void> submit() async {
     String senderAddress = "";
     Wallet? currentWallet;
+    String? feeNotice;
 
     final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
@@ -340,6 +456,10 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         final senderWif = account.wif;
         senderAddress = account.address;
+
+        if (!await _confirmSendToOwnAddress(true)) {
+          return;
+        }
 
         final feeRate = await promptForFeeRate(rootNavigatorKey.currentContext!);
 
@@ -394,6 +514,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                       ),
                       suffix: IconButton(
                         icon: Icon(Icons.copy),
+                        tooltip: globalL10n.actionCopyTransactionHash,
                         onPressed: () async {
                           await Clipboard.setData(ClipboardData(text: txHash));
                           Toast.message(globalL10n.tkbTransactionHashCopied);
@@ -440,6 +561,10 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         if (amountDouble < BTC_MINIMUM_TX_AMOUNT) {
           Toast.error(globalL10n.svcMinTxAmountBtc('$BTC_MINIMUM_TX_AMOUNT'));
+          return;
+        }
+
+        if (!await _confirmSendToOwnAddress(true)) {
           return;
         }
 
@@ -512,6 +637,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                         ),
                         suffix: IconButton(
                           icon: Icon(Icons.copy),
+                          tooltip: globalL10n.actionCopyTransactionHash,
                           onPressed: () async {
                             await Clipboard.setData(ClipboardData(text: txHash));
                             Toast.message(globalL10n.tkbTransactionHashCopied);
@@ -586,11 +712,38 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
           return;
         }
       }
+
+      if (!await _confirmSendToOwnAddress(false)) {
+        return;
+      }
+
+      // Vault sends go through ReserveAccountService with a timelock, which the
+      // plain-transfer fee quote does not cover; the node checks those.
+      if (!currentWallet.isReserved) {
+        final fromAddress = currentWallet.address;
+        final toAddress = address.trim().replaceAll("\n", "");
+        final fitted = await _fitVfxAmountWithFee(
+          amount: amountDouble,
+          spendable: currentWallet.balance,
+          feeFor: (value) => LocalTransactionService().vfxTransferFee(fromAddress: fromAddress, toAddress: toAddress, amount: value),
+        );
+        if (fitted == null) {
+          return;
+        }
+        feeNotice = fitted.notice;
+      }
     } else {
       final selectedAccount = ref.read(webSelectedAccountProvider);
 
       if (selectedAccount == null) {
         Toast.error(globalL10n.messageNoAccountSelected);
+        return;
+      }
+
+      final isVault = selectedAccount.address.startsWith("xRBX");
+
+      if (isVault && !ref.read(webSessionProvider).raActivated) {
+        Toast.error(globalL10n.svcActivateVaultBeforeProceeding);
         return;
       }
 
@@ -600,17 +753,42 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         return;
       }
 
-      if (selectedAccount.balance < amountDouble) {
-        Toast.error(globalL10n.svcInsufficientBalanceToSend);
+      final shortfall = _webVfxShortfallMessage(selectedAccount, amountDouble);
+      if (shortfall != null) {
+        Toast.error(shortfall);
         return;
       }
 
       senderAddress = selectedAccount.address;
+
+      if (!await _confirmSendToOwnAddress(false)) {
+        return;
+      }
+
+      final fromAddress = senderAddress;
+      final pendingDebit = pendingVfxDebit(ref.read(webTransactionListProvider(fromAddress)).transactions, fromAddress);
+      final fitted = await _fitVfxAmountWithFee(
+        amount: amountDouble,
+        spendable: spendableVfx(balance: selectedAccount.balance, pendingDebit: pendingDebit, isVault: isVault),
+        feeFor: (value) => RawTransaction.estimateFee(
+          fromAddress: fromAddress,
+          toAddress: address,
+          amount: value,
+          txType: TxType.rbxTransfer,
+          // Only the timelock's presence changes the fee, not its length.
+          unlockHours: isVault ? 24 : null,
+        ),
+      );
+      if (fitted == null) {
+        return;
+      }
+      feeNotice = fitted.notice;
     }
 
+    final confirmBody = globalL10n.txpSendingConfirmBody('$amount', address, senderAddress);
     final confirmed = await ConfirmDialog.show(
       title: globalL10n.btcPleaseConfirmTitle,
-      body: globalL10n.txpSendingConfirmBody('$amount', address, senderAddress),
+      body: feeNotice != null ? "$feeNotice\n\n$confirmBody" : confirmBody,
       confirmText: globalL10n.actionSend,
       cancelText: globalL10n.actionCancel,
     );
@@ -696,7 +874,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       }
 
       final amountDouble = double.parse(amount);
-      final txData = await RawTransaction.generate(
+      final generated = await RawTransaction.generate(
         // keypair: ref.read(webSessionProvider).usingRa ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         keypair: senderAddress.startsWith("xRBX") ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         amount: amountDouble,
@@ -704,6 +882,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         unlockHours: unlockHours,
         txType: TxType.rbxTransfer,
       );
+      final txData = generated.txData;
 
       state = state.copyWith(isProcessing: false);
 
@@ -740,6 +919,8 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
           Toast.error();
         }
+      } else {
+        Toast.error(generated.refusalMessage);
       }
     } else {
       try {

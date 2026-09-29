@@ -46,18 +46,21 @@ class _SecretButtonState extends State<SecretButton> {
   Widget build(BuildContext context) {
     return IgnorePointer(
       ignoring: opacity != 1.0,
-      child: InkWell(
-        onTap: () {
-          widget.onPressed();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: AnimatedOpacity(
-            opacity: opacity,
-            duration: const Duration(milliseconds: 300),
-            child: Text(
-              widget.label,
-              style: Theme.of(context).textTheme.bodySmall,
+      child: Semantics(
+        button: true,
+        child: InkWell(
+          onTap: () {
+            widget.onPressed();
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: AnimatedOpacity(
+              opacity: opacity,
+              duration: const Duration(milliseconds: 300),
+              child: Text(
+                widget.label,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
             ),
           ),
         ),

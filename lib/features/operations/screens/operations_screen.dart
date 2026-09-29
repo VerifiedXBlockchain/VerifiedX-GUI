@@ -120,6 +120,7 @@ class OperationsScreen extends BaseScreen {
                               FontAwesomeIcons.discord,
                               color: Colors.white.withOpacity(0.8),
                             ),
+                            tooltip: l10n.homeJoinDiscord,
                           ),
                           IconButton(
                             iconSize: 16,
@@ -131,17 +132,21 @@ class OperationsScreen extends BaseScreen {
                               FontAwesomeIcons.github,
                               color: Colors.white.withOpacity(0.8),
                             ),
+                            tooltip: l10n.homeFooterGithubTooltip,
                           ),
-                          InkWell(
-                            onTap: () {
-                              launchUrlString("https://docs.verifiedx.io");
-                            },
-                            child: Text(
-                              l10n.operationsDocs,
-                              style: TextStyle(
-                                  color: Colors.white.withOpacity(0.8),
-                                  fontSize: 12,
-                                  decoration: TextDecoration.underline),
+                          Semantics(
+                            button: true,
+                            child: InkWell(
+                              onTap: () {
+                                launchUrlString("https://docs.verifiedx.io");
+                              },
+                              child: Text(
+                                l10n.operationsDocs,
+                                style: TextStyle(
+                                    color: Colors.white.withOpacity(0.8),
+                                    fontSize: 12,
+                                    decoration: TextDecoration.underline),
+                              ),
                             ),
                           ),
 
@@ -231,80 +236,83 @@ class NewStatusContainer extends ConsumerWidget {
             value: "",
             content: Align(
               alignment: Alignment.centerLeft,
-              child: InkWell(
-                child: Text(
-                  l10n.operationsViewMetrics,
-                  style: TextStyle(
-                    // color: Theme.of(context).colorScheme.secondary,
-                    decoration: TextDecoration.underline,
-                    fontSize: 13,
+              child: Semantics(
+                button: true,
+                child: InkWell(
+                  child: Text(
+                    l10n.operationsViewMetrics,
+                    style: TextStyle(
+                      // color: Theme.of(context).colorScheme.secondary,
+                      decoration: TextDecoration.underline,
+                      fontSize: 13,
+                    ),
                   ),
-                ),
-                onTap: () async {
-                  final m = await BridgeService().networkMetrics();
+                  onTap: () async {
+                    final m = await BridgeService().networkMetrics();
 
-                  final validatorCount =
-                      await ExplorerService().validatorCount();
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        final metrics = m ?? walletInfo!.networkMetrics!;
+                    final validatorCount =
+                        await ExplorerService().validatorCount();
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          final metrics = m ?? walletInfo!.networkMetrics!;
 
-                        const style = TextStyle(
-                          fontSize: 14,
-                          fontFamily: 'RobotoMono',
-                          height: 1.5,
-                        );
+                          const style = TextStyle(
+                            fontSize: 14,
+                            fontFamily: 'RobotoMono',
+                            height: 1.5,
+                          );
 
-                        return AlertDialog(
-                          title: Text(l10n.operationsNetworkMetrics),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                  l10n.txpBlockDiffAvg(
-                                      "${metrics.blockDiffAvg}"),
-                                  style: style),
-                              Text(
-                                  l10n.txpBlockLastReceived(
-                                      "${metrics.blockLastReceived.toLocal()}"),
-                                  style: style),
-                              Text(
-                                  l10n.txpBlockLastDelay(
-                                      metrics.blockLastDelay),
-                                  style: style),
-                              Text(
-                                  l10n.txpTimeSinceLastBlock(
-                                      metrics.timeSinceLastBlockSeconds),
-                                  style: style),
-                              Text(
-                                  l10n.txpBlocksAveraged(
-                                      metrics.blocksAveraged),
-                                  style: style),
-                              if (validatorCount != null)
+                          return AlertDialog(
+                            title: Text(l10n.operationsNetworkMetrics),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                                 Text(
-                                    l10n.operationsActiveValidators(
-                                        "$validatorCount"),
+                                    l10n.txpBlockDiffAvg(
+                                        "${metrics.blockDiffAvg}"),
                                     style: style),
-                            ],
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: Text(
-                                l10n.actionClose,
-                                style: const TextStyle(
-                                  color: Colors.white70,
+                                Text(
+                                    l10n.txpBlockLastReceived(
+                                        "${metrics.blockLastReceived.toLocal()}"),
+                                    style: style),
+                                Text(
+                                    l10n.txpBlockLastDelay(
+                                        metrics.blockLastDelay),
+                                    style: style),
+                                Text(
+                                    l10n.txpTimeSinceLastBlock(
+                                        metrics.timeSinceLastBlockSeconds),
+                                    style: style),
+                                Text(
+                                    l10n.txpBlocksAveraged(
+                                        metrics.blocksAveraged),
+                                    style: style),
+                                if (validatorCount != null)
+                                  Text(
+                                      l10n.operationsActiveValidators(
+                                          "$validatorCount"),
+                                      style: style),
+                              ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  l10n.actionClose,
+                                  style: const TextStyle(
+                                    color: Colors.white70,
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
-                        );
-                      });
-                },
+                              )
+                            ],
+                          );
+                        });
+                  },
+                ),
               ),
             ),
             icon: Icons.analytics,

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/theme/app_theme.dart';
 import '../../../utils/toast.dart';
+import '../../../l10n/generated/app_localizations.dart';
 import '../../bridge/models/log_entry.dart';
 
 class LogItem extends StatelessWidget {
@@ -28,16 +29,20 @@ class LogItem extends StatelessWidget {
         if (entry.textToCopy != null)
           Padding(
             padding: const EdgeInsets.only(left: 4, right: 12),
-            child: InkWell(
-              onTap: () async {
-                await Clipboard.setData(
-                  ClipboardData(text: entry.textToCopy),
-                );
-                Toast.message("${entry.textToCopy} copied to clipboard");
-              },
-              child: const Icon(
-                Icons.copy,
-                size: 12,
+            child: Semantics(
+              label: AppLocalizations.of(context).actionCopy,
+              button: true,
+              child: InkWell(
+                onTap: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: entry.textToCopy),
+                  );
+                  Toast.message("${entry.textToCopy} copied to clipboard");
+                },
+                child: const Icon(
+                  Icons.copy,
+                  size: 12,
+                ),
               ),
             ),
           ),

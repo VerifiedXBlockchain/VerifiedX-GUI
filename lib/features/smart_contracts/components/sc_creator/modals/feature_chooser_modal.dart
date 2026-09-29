@@ -166,21 +166,24 @@ class _FeatureOptionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.transparent,
-      child: ListTile(
-        dense: !feature.isAvailable,
-        contentPadding: EdgeInsets.zero,
-        leading: Icon(
-          feature.icon,
-          color: Theme.of(context).colorScheme.warning,
+      child: Semantics(
+        button: feature.isAvailable,
+        child: ListTile(
+          dense: !feature.isAvailable,
+          contentPadding: EdgeInsets.zero,
+          leading: Icon(
+            feature.icon,
+            color: Theme.of(context).colorScheme.warning,
+          ),
+          title: Text(feature.nameLabel),
+          subtitle: Text(feature.genericDescription),
+          trailing: feature.isAvailable ? const Icon(Icons.chevron_right) : null,
+          onTap: feature.isAvailable
+              ? () {
+                  onPressed(feature);
+                }
+              : null,
         ),
-        title: Text(feature.nameLabel),
-        subtitle: Text(feature.genericDescription),
-        trailing: feature.isAvailable ? const Icon(Icons.chevron_right) : null,
-        onTap: feature.isAvailable
-            ? () {
-                onPressed(feature);
-              }
-            : null,
       ),
     );
   }

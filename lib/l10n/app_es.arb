@@ -1,4 +1,8 @@
 {
+  "actionBack": "Atrás",
+  "@actionBack": {
+    "description": "Tooltip on a back arrow icon button that returns to the previous screen."
+  },
   "actionCancel": "Cancelar",
   "@actionCancel": {
     "description": "Cancel action — dismisses the current action."
@@ -23,6 +27,50 @@
   "@actionCopy": {
     "description": "Generic copy-to-clipboard action."
   },
+  "actionCopyAddress": "Copiar dirección",
+  "@actionCopyAddress": {
+    "description": "Tooltip / accessibility label on a copy icon next to an account address."
+  },
+  "actionCopyAmount": "Copiar monto",
+  "@actionCopyAmount": {
+    "description": "Tooltip on the copy icon next to an amount field."
+  },
+  "actionCopyDomain": "Copiar dominio",
+  "@actionCopyDomain": {
+    "description": "Tooltip on the copy icon next to a domain name."
+  },
+  "actionCopyMnemonic": "Copiar mnemónico",
+  "@actionCopyMnemonic": {
+    "description": "Tooltip on the copy icon next to a recovery mnemonic."
+  },
+  "actionCopyPrivateKey": "Copiar clave privada",
+  "@actionCopyPrivateKey": {
+    "description": "Tooltip on the copy icon next to a private key."
+  },
+  "actionCopyRecoveryAddress": "Copiar dirección de recuperación",
+  "@actionCopyRecoveryAddress": {
+    "description": "Tooltip on the copy icon next to a Vault recovery address."
+  },
+  "actionCopyRecoveryPrivateKey": "Copiar clave privada de recuperación",
+  "@actionCopyRecoveryPrivateKey": {
+    "description": "Tooltip on the copy icon next to a Vault recovery private key."
+  },
+  "actionCopyRestoreCode": "Copiar código de restauración",
+  "@actionCopyRestoreCode": {
+    "description": "Tooltip on the copy icon next to a Vault restore code."
+  },
+  "actionCopySignature": "Copiar firma",
+  "@actionCopySignature": {
+    "description": "Tooltip on the copy icon next to a transaction signature."
+  },
+  "actionCopyTransactionHash": "Copiar hash de la transacción",
+  "@actionCopyTransactionHash": {
+    "description": "Tooltip on the copy icon next to a transaction hash."
+  },
+  "actionCopyWifPrivateKey": "Copiar clave privada WIF",
+  "@actionCopyWifPrivateKey": {
+    "description": "Tooltip on the copy icon next to a Bitcoin WIF private key."
+  },
   "actionDelete": "Eliminar",
   "@actionDelete": {
     "description": "Delete action — destructive, removes an item."
@@ -31,9 +79,25 @@
   "@actionDone": {
     "description": "Done action — dismisses a completion dialog."
   },
+  "actionGridView": "Vista de cuadrícula",
+  "@actionGridView": {
+    "description": "Tooltip on the icon button that switches a list to the grid layout."
+  },
+  "actionHelp": "Ayuda",
+  "@actionHelp": {
+    "description": "Tooltip on the help icon button that opens an explanation dialog."
+  },
+  "actionHideDetails": "Ocultar detalles",
+  "@actionHideDetails": {
+    "description": "Tooltip / accessibility label on the collapse arrow of an expanded transaction tile."
+  },
   "actionImport": "Importar",
   "@actionImport": {
     "description": "Import action — imports a wallet or key."
+  },
+  "actionListView": "Vista de lista",
+  "@actionListView": {
+    "description": "Tooltip on the icon button that switches a grid to the list layout."
   },
   "actionNo": "No",
   "@actionNo": {
@@ -47,6 +111,10 @@
   "@actionReceive": {
     "description": "Receive funds button."
   },
+  "actionRefresh": "Actualizar",
+  "@actionRefresh": {
+    "description": "Tooltip on a refresh icon button that reloads the current list."
+  },
   "actionSave": "Guardar",
   "@actionSave": {
     "description": "Save action — persists current form state."
@@ -58,6 +126,10 @@
   "actionSend": "Enviar",
   "@actionSend": {
     "description": "Send funds / send transaction button."
+  },
+  "actionShowDetails": "Mostrar detalles",
+  "@actionShowDetails": {
+    "description": "Tooltip / accessibility label on the expand arrow of a collapsed transaction tile."
   },
   "actionYes": "Sí",
   "@actionYes": {
@@ -250,7 +322,7 @@
   },
   "adnrFaucetRequiredBody": "Crear un dominio BTC tiene un costo de {cost} VFX (más la comisión de TX).\n\nLa comunidad ha asignado algo de VFX para reducir la barrera de entrada y probar esta función. Para evitar abusos, se requiere un número de teléfono para una autorización por SMS. Solo se almacenará un hash de tu número de teléfono.\n\n¿Quieres continuar?",
   "@adnrFaucetRequiredBody": {
-    "description": "Body of the faucet-required dialog. Preserves original typo 'Woud' to match existing copy.",
+    "description": "Body of the faucet-required dialog.",
     "placeholders": {
       "cost": {
         "type": "String"
@@ -445,15 +517,11 @@
   "@authBackupKeys": {
     "description": "Welcome dialog action that opens the backup keys flow."
   },
-  "authDecryptFailed": "No se pudieron descifrar las claves",
-  "@authDecryptFailed": {
-    "description": "Toast shown when key decryption fails on the auth screen."
-  },
   "authEnterPassword": "Ingresa la contraseña",
   "@authEnterPassword": {
     "description": "Button and prompt-title to enter the wallet password."
   },
-  "authEnterPasswordBody": "Ingresa tu contraseña para descifrar tus claves almacenadas.",
+  "authEnterPasswordBody": "Ingresa la contraseña de esta cuenta para descifrar sus claves almacenadas.",
   "@authEnterPasswordBody": {
     "description": "Body text shown in the password prompt to decrypt stored keys."
   },
@@ -1068,6 +1136,9 @@
   "@btcRbfFeeRateTitle": {
     "description": "Prompt title for the replace-by-fee fee-rate input."
   },
+  "btcRbfHighFeeBody": "{reason} ¿Reemplazar la transacción de todos modos?",
+  "btcRbfHighFeeConfirm": "Reemplazar de todos modos",
+  "btcRbfHighFeeTitle": "Comisión alta",
   "btcReceivingAddressLabel": "Dirección receptora",
   "@btcReceivingAddressLabel": {
     "description": "Field label for the receiving address on a withdrawal."
@@ -1368,6 +1439,8 @@
   "bw2CancelWithdrawalBody": "¿Seguro que deseas cancelar esta solicitud de retiro?",
   "bw2CancelWithdrawalQuestion": "¿Cancelar retiro?",
   "bw2CancelWithdrawalTooltip": "Cancelar retiro",
+  "bw2NoCancelNoBtcTx": "No se recibió un hash de transacción de Bitcoin para este retiro, así que no se puede cancelar desde aquí. Cancelar una solicitud sin él requiere una votación de los validadores del contrato, que la billetera todavía no puede iniciar.",
+  "bw2NoCancelUnpayable": "Este retiro nunca se podrá pagar con su tarifa, así que reintentarlo seguirá fallando. No hay botón de Cancelar porque cancelarlo requiere una votación de los validadores del contrato, que la billetera todavía no puede iniciar. Sus vBTC siguen retenidos en custodia hasta entonces.",
   "bw2CeremonyCompleted": "Ceremonia completada",
   "bw2CeremonyDismissHint": "Puedes cerrar este cuadro de diálogo. La ceremonia continuará en segundo plano.",
   "bw2CeremonyFailed": "Ceremonia fallida",
@@ -1626,6 +1699,15 @@
   "bw2StepValidating": "Validando",
   "bw2SubmittingTxVfx": "Enviando una transacción a la red VFX.",
   "bw2SupplyAmount": "Cantidad de suministro",
+  "bw2SupplyWholeNumberMax": "El suministro debe ser un número entero de 0 a {max}.",
+  "@bw2SupplyWholeNumberMax": {
+    "description": "Validation error for a token supply that has decimals or exceeds the largest supply the network accepts.",
+    "placeholders": {
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "bw2SupplyLabel": "Suministro",
   "bw2ToBtcAddressRequired": "Dirección BTC de destino obligatoria.",
   "bw2TokenAppearWhenIndexed": "El token aparecerá en tu lista una vez indexado (normalmente unos segundos).",
@@ -1804,6 +1886,10 @@
   "chatSendHint": "Enviar mensaje...",
   "@chatSendHint": {
     "description": "Hint inside the message-compose field."
+  },
+  "chatSendMessage": "Enviar mensaje",
+  "@chatSendMessage": {
+    "description": "Tooltip on the send icon button next to the message-compose field."
   },
   "chatTitle": "Chats",
   "@chatTitle": {
@@ -2047,10 +2133,6 @@
   "@faucetRequestVfx": {
     "description": "Button to submit a faucet request."
   },
-  "faucetTitle": "Faucet de VFX",
-  "@faucetTitle": {
-    "description": "App bar title for the VFX faucet screen."
-  },
   "faucetVerificationCodeLabel": "Código de verificación",
   "@faucetVerificationCodeLabel": {
     "description": "Field label for the SMS verification code input."
@@ -2227,8 +2309,14 @@
     "description": "Shown in place of the VFX balance while VFXCore rebuilds its chain state."
   },
   "hnavResyncing": "Resincronizando...",
-  "hnavRevealPrivateKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas.",
-  "hnavRevealVaultKeysPasswordMessage": "Ingresa tu contraseña para revelar las claves privadas de la cuenta de bóveda.",
+  "hnavRevealPrivateKeysPasswordMessage": "Ingresa la contraseña de esta cuenta para revelar sus claves privadas.",
+  "@hnavRevealPrivateKeysPasswordMessage": {
+    "description": "Password prompt body before revealing the active web account's private keys; the password is that account's own."
+  },
+  "hnavRevealVaultKeysPasswordMessage": "Ingresa la contraseña de esta cuenta para revelar las claves privadas de su cuenta de bóveda.",
+  "@hnavRevealVaultKeysPasswordMessage": {
+    "description": "Password prompt body before revealing the active web account's Vault keys; the password is that account's own."
+  },
   "hnavSectionAccountSecurity": "Seguridad de la cuenta",
   "hnavSectionDiagnose": "Diagnóstico",
   "hnavSectionTokensNfts": "Tokens / NFTs",
@@ -2335,6 +2423,10 @@
   "@homeDoesNotOwn": {
     "description": "Connector phrase between address and smartContractId when ownership is NOT verified."
   },
+  "homeFooterGithubTooltip": "GitHub",
+  "@homeFooterGithubTooltip": {
+    "description": "Tooltip on the GitHub icon in the desktop footer."
+  },
   "homeGetHelpTitle": "Obtener ayuda",
   "@homeGetHelpTitle": {
     "description": "Title for the Get Help bottom sheet."
@@ -2399,37 +2491,59 @@
   "@homeVisitWebsite": {
     "description": "Get Help option: visit the VerifiedX website."
   },
-  "keygenAddressLabel": "Dirección",
-  "@keygenAddressLabel": {
-    "description": "Field label for the generated address."
+  "keyImportActivityFound": "Se encontró actividad",
+  "@keyImportActivityFound": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: the explorers show transactions for it."
   },
-  "keygenDone": "Listo",
-  "@keygenDone": {
-    "description": "Done button label on the keygen result dialog."
+  "keyImportActivityUnknown": "No se pudo comprobar la actividad",
+  "@keyImportActivityUnknown": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: an explorer lookup failed."
+  },
+  "keyImportBitcoinLine": "Bitcoin: {address}",
+  "@keyImportBitcoinLine": {
+    "description": "Bitcoin address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "keyImportChooseAccountsBody": "Versiones anteriores de la billetera escribieron esta clave de más de una forma, y cada forma lleva a una cuenta de Bóveda y de Bitcoin distinta. Tu cuenta VFX es la misma en todos los casos. Elige el par que quieres restaurar.",
+  "@keyImportChooseAccountsBody": {
+    "description": "Body of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportChooseAccountsTitle": "Elige las cuentas que quieres restaurar",
+  "@keyImportChooseAccountsTitle": {
+    "description": "Title of the dialog shown when an imported private key's text forms lead to more than one Vault and Bitcoin pair."
+  },
+  "keyImportEarlierForm": "Forma anterior de la clave",
+  "@keyImportEarlierForm": {
+    "description": "Label of a pair in the import chooser that comes from a historical text form of the key."
+  },
+  "keyImportInvalidKey": "Esta no es una clave privada válida. Pega la clave hexadecimal.",
+  "@keyImportInvalidKey": {
+    "description": "Validation error when the pasted private key is not hexadecimal or not a valid secp256k1 key."
+  },
+  "keyImportNoActivity": "No se encontró actividad",
+  "@keyImportNoActivity": {
+    "description": "Status of a Vault and Bitcoin pair in the import chooser: no transactions found."
+  },
+  "keyImportStandardForm": "Forma estándar de la clave",
+  "@keyImportStandardForm": {
+    "description": "Label of the pair in the import chooser that comes from the canonical 64-digit key."
+  },
+  "keyImportVaultLine": "Bóveda: {address}",
+  "@keyImportVaultLine": {
+    "description": "Vault address line of a pair in the import chooser.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
   },
   "keygenEmailAddressTitle": "Correo electrónico",
   "@keygenEmailAddressTitle": {
     "description": "Prompt title for the email-address step of the keygen flow."
-  },
-  "keygenEmailLabel": "Correo",
-  "@keygenEmailLabel": {
-    "description": "Field label for the email input."
-  },
-  "keygenGenerateKeypair": "Generar par de claves",
-  "@keygenGenerateKeypair": {
-    "description": "Button to generate a new keypair from the keygen CTA."
-  },
-  "keygenImportPrivateKey": "Importar clave privada",
-  "@keygenImportPrivateKey": {
-    "description": "Button to import a private key from the keygen CTA."
-  },
-  "keygenImportWalletTitle": "Importar billetera",
-  "@keygenImportWalletTitle": {
-    "description": "Prompt title for importing a wallet via private key on the web keygen flow."
-  },
-  "keygenKeyGeneratedBody": "Aquí están los detalles de tu cuenta. Asegúrate de respaldar tu clave privada en un lugar seguro.",
-  "@keygenKeyGeneratedBody": {
-    "description": "Dialog body shown after a key is generated."
   },
   "keygenKeyGeneratedTitle": "Clave generada",
   "@keygenKeyGeneratedTitle": {
@@ -2443,17 +2557,9 @@
   "@keygenPrivateKeyCopiedToast": {
     "description": "Toast confirming the private key was copied."
   },
-  "keygenPrivateKeyLabel": "Clave privada",
-  "@keygenPrivateKeyLabel": {
-    "description": "Field label for the private key input."
-  },
   "keygenPublicKeyCopiedToast": "Clave pública copiada al portapapeles",
   "@keygenPublicKeyCopiedToast": {
     "description": "Toast confirming the public key was copied."
-  },
-  "keygenRecoverAccount": "Recuperar cuenta",
-  "@keygenRecoverAccount": {
-    "description": "Button to recover an account via mnemonic from the keygen CTA."
   },
   "keygenRecoveryMnemonicLabel": "Mnemónico de recuperación",
   "@keygenRecoveryMnemonicLabel": {
@@ -2500,6 +2606,42 @@
     "description": "Generic total label."
   },
   "@@locale": "es",
+  "actionHidePassword": "Ocultar contraseña",
+  "@actionHidePassword": {
+    "description": "Tooltip on the eye icon button that obscures a revealed password field."
+  },
+  "actionNext": "Siguiente",
+  "@actionNext": {
+    "description": "Tooltip on the right chevron icon button that shows the next item in a carousel."
+  },
+  "actionOpenAsset": "Abrir archivo",
+  "@actionOpenAsset": {
+    "description": "Label on the control that opens an asset file in the system viewer."
+  },
+  "actionPickDate": "Elegir una fecha",
+  "@actionPickDate": {
+    "description": "Tooltip on the calendar icon button that opens a date picker."
+  },
+  "actionPickTime": "Elegir una hora",
+  "@actionPickTime": {
+    "description": "Tooltip on the clock icon button that opens a time picker."
+  },
+  "actionPrevious": "Anterior",
+  "@actionPrevious": {
+    "description": "Tooltip on the left chevron icon button that shows the previous item in a carousel."
+  },
+  "actionShowPassword": "Mostrar contraseña",
+  "@actionShowPassword": {
+    "description": "Tooltip on the eye icon button that reveals an obscured password field."
+  },
+  "actionViewAsset": "Ver archivo",
+  "@actionViewAsset": {
+    "description": "Accessibility label on an asset thumbnail that opens the asset preview."
+  },
+  "actionViewOnExplorer": "Ver en el explorador",
+  "@actionViewOnExplorer": {
+    "description": "Tooltip on the open-in-new icon that opens a transaction on the block explorer website."
+  },
   "messageAddressCopied": "Dirección copiada al portapapeles",
   "@messageAddressCopied": {
     "description": "Transient toast shown after copying a wallet address."
@@ -2596,6 +2738,10 @@
   "mktCollectionDeletedToast": "Colección eliminada.",
   "mktCollectionDescriptionLabel": "Descripción de la colección",
   "mktCollectionNameLabel": "Nombre de la colección",
+  "mktCopyShopUrl": "Copiar URL de la tienda",
+  "@mktCopyShopUrl": {
+    "description": "Tooltip on the copy icon next to the auction house URL on the my-collections screen."
+  },
   "mktCouldNotGenerateHashToast": "No se pudo generar el hash",
   "mktCouldNotGetFeeToast": "No se pudo obtener la comisión",
   "mktCouldNotGetNonceToast": "No se pudo obtener el nonce",
@@ -2925,6 +3071,10 @@
       }
     }
   },
+  "navCollapseMenuTooltip": "Contraer navegación",
+  "@navCollapseMenuTooltip": {
+    "description": "Accessibility label on the side navigation expander while the menu is expanded."
+  },
   "navConfirmedStatus": "Confirmada",
   "@navConfirmedStatus": {
     "description": "Status label for confirmed transactions."
@@ -2936,6 +3086,10 @@
   "navDomains": "Dominios",
   "@navDomains": {
     "description": "Primary navigation label for VFX domains (ADNR)."
+  },
+  "navExpandMenuTooltip": "Expandir navegación",
+  "@navExpandMenuTooltip": {
+    "description": "Accessibility label on the side navigation expander while the menu is collapsed."
   },
   "navGetBtc": "Obtener\nBTC",
   "@navGetBtc": {
@@ -2956,14 +3110,6 @@
   "navMenuCryptoCom": "Crypto.com",
   "@navMenuCryptoCom": {
     "description": "Side nav label for Crypto.com onramp."
-  },
-  "navMenuDashboard": "Panel",
-  "@navMenuDashboard": {
-    "description": "Side-nav label for the dashboard."
-  },
-  "navMenuDomains": "Dominios VFX/BTC",
-  "@navMenuDomains": {
-    "description": "Side-nav label for the domains screen."
   },
   "navMenuFungibleTokens": "Tokens fungibles",
   "@navMenuFungibleTokens": {
@@ -2989,14 +3135,6 @@
   "@navMenuPayWithButterfly": {
     "description": "Side nav label that launches Butterfly (BFLY)."
   },
-  "navMenuReceive": "Recibir",
-  "@navMenuReceive": {
-    "description": "Side-nav label for the receive screen."
-  },
-  "navMenuSend": "Enviar",
-  "@navMenuSend": {
-    "description": "Side-nav label for the send screen."
-  },
   "navMenuSignOut": "Cerrar sesión",
   "@navMenuSignOut": {
     "description": "Side nav label for sign out (web)."
@@ -3008,10 +3146,6 @@
   "navMenuTokenizeBitcoin": "Tokens vBTC",
   "@navMenuTokenizeBitcoin": {
     "description": "Side-nav label for the vBTC tokens section."
-  },
-  "navMenuTransactions": "Transacciones",
-  "@navMenuTransactions": {
-    "description": "Side-nav label for the transactions screen."
   },
   "navMenuValidator": "Validador",
   "@navMenuValidator": {
@@ -3056,10 +3190,6 @@
   "navPendingStatus": "Pendiente",
   "@navPendingStatus": {
     "description": "Status label for pending transactions."
-  },
-  "navPrivateKeyNotAvailable": "Clave privada no disponible.",
-  "@navPrivateKeyNotAvailable": {
-    "description": "Error toast when private key is not available."
   },
   "navSettings": "Configuración",
   "@navSettings": {
@@ -3155,6 +3285,10 @@
   "@nftConfirmSaleStartTitle": {
     "description": "Confirm dialog title before starting an NFT sale."
   },
+  "nftCopySmartContractId": "Copiar identificador del contrato inteligente",
+  "@nftCopySmartContractId": {
+    "description": "Accessibility label on the copy icon next to an NFT's smart contract ID."
+  },
   "nftCopyUrl": "Copiar URL",
   "@nftCopyUrl": {
     "description": "Button to copy a media-backup URL."
@@ -3170,14 +3304,6 @@
   "nftDetailFallback": "NFT",
   "@nftDetailFallback": {
     "description": "App bar title fallback for the NFT detail screen when no NFT is loaded yet."
-  },
-  "nftDevolveSentToast": "¡Transacción de devolución enviada exitosamente!",
-  "@nftDevolveSentToast": {
-    "description": "Toast confirming a devolve transaction was broadcast."
-  },
-  "nftDevolveTitle": "¿Devolucionar?",
-  "@nftDevolveTitle": {
-    "description": "Confirm dialog title before devolving an NFT."
   },
   "nftEvolve": "Evolucionar",
   "@nftEvolve": {
@@ -3275,6 +3401,10 @@
   "@nftOwnedByMe": {
     "description": "Badge shown on the NFT-management modal when the user owns the NFT."
   },
+  "nftPauseMedia": "Pausar",
+  "@nftPauseMedia": {
+    "description": "Tooltip on the pause button of an NFT video asset."
+  },
   "nftPhaseNameLabel": "Nombre: {name}",
   "@nftPhaseNameLabel": {
     "description": "Phase name label inside the NFT management modal.",
@@ -3283,6 +3413,10 @@
         "type": "String"
       }
     }
+  },
+  "nftPlayMedia": "Reproducir",
+  "@nftPlayMedia": {
+    "description": "Tooltip on the play button of an NFT video asset."
   },
   "nftPropertiesHeading": "Propiedades:",
   "@nftPropertiesHeading": {
@@ -3335,6 +3469,32 @@
   "nftSyncMedia": "Sincronizar medios",
   "@nftSyncMedia": {
     "description": "Button to sync remote NFT media."
+  },
+  "nftSyncMediaSuccess": "Medios sincronizados.",
+  "@nftSyncMediaSuccess": {
+    "description": "Toast after Sync Media uploads and associates all NFT media."
+  },
+  "nftSyncMediaFailed": "No se pudieron sincronizar los medios. Inténtalo de nuevo.",
+  "@nftSyncMediaFailed": {
+    "description": "Toast when the explorer refuses to associate the uploaded NFT media."
+  },
+  "nftSyncMediaError": "Error al sincronizar los medios: {error}",
+  "@nftSyncMediaError": {
+    "description": "Toast when Sync Media throws, for example when a local media file is missing; error is the exception message.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "nftSyncMediaUploadFailed": "No se pudo subir {fileName}. Los medios no se sincronizaron.",
+  "@nftSyncMediaUploadFailed": {
+    "description": "Toast when one NFT media file fails to upload during Sync Media; nothing is associated.",
+    "placeholders": {
+      "fileName": {
+        "type": "String"
+      }
+    }
   },
   "nftTabManageMinted": "Administrar NFTs emitidos",
   "@nftTabManageMinted": {
@@ -3689,7 +3849,6 @@
   "prvBridgeGasLowBalance": "Saldo bajo: los costos de gas varían. Recarga la dirección de arriba si la acuñación falla.",
   "prvBridgeGasTitle": "Gas (pagado en Base)",
   "prvBridgeGasZeroEth": "Esta dirección paga la comisión de gas de la transacción de acuñación en Base. Envía una pequeña cantidad de ETH de Base (≈ 0.001 ETH) a la dirección de arriba antes de transferir. Puedes financiarla desde cualquier exchange o billetera Base que admita retiros a la red principal de Base. El saldo se actualiza automáticamente cada 10 s; toca Actualizar para comprobarlo de inmediato.",
-  "prvBridgeHideDetails": "Ocultar detalles",
   "prvBridgeHistoryLoadError": "No se pudo cargar el historial del puente. Comprueba tu conexión e inténtalo de nuevo.",
   "prvBridgeHistoryLoading": "Cargando el historial del puente…",
   "prvBridgeHistoryTitle": "Historial del puente",
@@ -3748,7 +3907,6 @@
   "prvBridgeRetrySubmitted": "Reintento enviado. Vigilando las actualizaciones de estado.",
   "prvBridgeReviewBridge": "Revisar puente",
   "prvBridgeSafeToClose": "Puedes cerrar este diálogo de forma segura: tu puente continuará en segundo plano. Sigue el progreso en el historial del puente.",
-  "prvBridgeShowDetails": "Mostrar detalles",
   "prvBridgeSigsProgress": "{collected} / {required} firmas recopiladas",
   "@prvBridgeSigsProgress": {
     "placeholders": {
@@ -3845,6 +4003,10 @@
     }
   },
   "prvCopyAddress": "Copiar dirección",
+  "prvCopyViewingKey": "Copiar clave de visualización",
+  "@prvCopyViewingKey": {
+    "description": "Tooltip on the copy icon next to the exported privacy viewing key."
+  },
   "prvCreatePasswordBody": "Crea una contraseña para proteger la clave de gasto de tu billetera blindada. Necesitarás esta contraseña para desblindar, transferir o consolidar fondos.",
   "prvCreatePasswordTitle": "Crear contraseña de privacidad",
   "prvCurrentNotes": "Notas actuales: {count}",
@@ -3968,7 +4130,6 @@
   "prvPrivateTransferVfxBody": "Transfiere VFX blindado a otra dirección zfx_. Totalmente privado.",
   "prvRecipientInvalidZfx": "El destinatario debe ser una dirección zfx_ válida",
   "prvRecipientZfxLabel": "Destinatario (dirección zfx_)",
-  "prvRefresh": "Actualizar",
   "prvResetAction": "Restablecer",
   "prvResetPrivacyWallet": "Restablecer billetera privada",
   "prvResetWalletBody": "Esto borrará el estado local de tu billetera privada y volverá a la pantalla de activación. Tus fondos blindados en la red no se ven afectados: puedes reactivar con la misma cuenta para recuperarlos.\n\n¿Continuar?",
@@ -3998,7 +4159,7 @@
   "prvShieldedAddressLabel": "Dirección blindada",
   "prvShieldedBalanceLabel": "Saldo blindado",
   "prvShieldedVbtcHeading": "vBTC blindado",
-  "prvShieldedVfxRequiredBody": "Las operaciones de privacidad de vBTC requieren una pequeña comisión que se paga con tu saldo de VFX blindado.\n\nActualmente tienes {balance} VFX blindado.\nPrimero blinda al menos {fee}.",
+  "prvShieldedVfxRequiredBody": "Las operaciones de privacidad requieren una pequeña comisión que se paga con tu saldo de VFX blindado.\n\nActualmente tienes {balance} VFX blindado.\nPrimero blinda al menos {fee}.",
   "@prvShieldedVfxRequiredBody": {
     "placeholders": {
       "balance": {
@@ -4144,6 +4305,10 @@
       }
     }
   },
+  "r3aBlockHeightUnknown": "Todavía no se conoce la altura de bloque actual. Inténtalo de nuevo en un momento.",
+  "@r3aBlockHeightUnknown": {
+    "description": "Validation error on an evolve stage block height when the current chain height has not been loaded"
+  },
   "r3aBlockHeightVariable": "Variable de altura de bloque",
   "r3aBtcTokenization": "Tokenización de BTC",
   "r3aBurnNft": "Quemar NFT",
@@ -4157,6 +4322,14 @@
   "r3aCompileMintScConfirm": "¿Compilar y emitir el contrato inteligente?",
   "r3aCompilingMinting": "Compilando y emitiendo",
   "r3aCompilingMintingEllipsis": "Compilando y emitiendo…",
+  "r3aCompiledExclaim": "¡Compilado!",
+  "@r3aCompiledExclaim": {
+    "description": "Headline shown when the smart contract compile animation finishes (compile only)."
+  },
+  "r3aMintedExclaim": "¡Emitido!",
+  "@r3aMintedExclaim": {
+    "description": "Headline shown when the smart contract compile animation finishes after minting."
+  },
   "r3aConfiguration": "Configuración",
   "r3aConfirmMintBody": "¿Seguro que deseas emitir {amount} contrato(s) inteligente(s)?\n\nUna vez compilado no podrás hacer cambios\ny el contrato se desplegará en la cadena.",
   "@r3aConfirmMintBody": {
@@ -4319,6 +4492,15 @@
   "r3aPrimaryAssetOverride": "Reemplazo del archivo principal",
   "r3aProblemCompilingSc": "Ocurrió un problema al compilar este contrato inteligente.",
   "r3aProblemMintingSc": "Ocurrió un problema al emitir este contrato inteligente.",
+  "r3aProblemCompilingOrMintingSc": "Ocurrió un problema al compilar o emitir este contrato inteligente: {error}",
+  "@r3aProblemCompilingOrMintingSc": {
+    "description": "Toast when compiling or minting a smart contract throws; error is the exception message.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "r3aProperty": "Propiedad",
   "r3aPropertyTypes": "Tipos de propiedad",
   "r3aRareness": "Rareza",
@@ -4427,7 +4609,6 @@
   "r3bCouldNotVerifyTx": "No se pudo verificar la transacción.",
   "r3bCreateAuctionHouse": "Crear casa de subastas",
   "r3bCreateCollectionsHint": "Ahora puedes crear colecciones y agregarles publicaciones.",
-  "r3bCreateListingsHint": "Ahora puedes crear publicaciones para los NFT que tienes.",
   "r3bCreateNewCollection": "Crear colección nueva",
   "r3bCurrentBidPrice": "Precio de oferta actual:",
   "r3bCurrentBids": "Ofertas actuales",
@@ -4491,7 +4672,6 @@
   "r3bNoAuctionHouses": "Sin casas de subastas",
   "r3bNoBids": "Sin ofertas.",
   "r3bNoCollections": "Sin colecciones",
-  "r3bNoListings": "Sin publicaciones",
   "r3bNoPrivateKey": "No hay clave privada.",
   "r3bNoPublicKey": "No hay clave pública.",
   "r3bNotAuthorized": "No autorizado",
@@ -4976,7 +5156,10 @@
   "r3eEncryptAccountPasswordBody": "Ingresa una contraseña para cifrar las claves privadas de esta cuenta.",
   "r3eEncryptWallet": "Cifrar billetera",
   "r3eEncryptWalletBody": "Esta función cifrará TODAS las claves privadas de esta billetera. Asegúrate de tener respaldadas TODAS las claves privadas antes de continuar.\n\nEsta acción es irreversible y la contraseña que crees será la única forma de acceder a esta billetera una vez completado el cifrado.\n\nTambién se recomienda respaldar tu contraseña además de tus claves privadas.",
-  "r3eEnterPasswordBackup": "Ingresa tu contraseña para respaldar tus claves.",
+  "r3eEnterPasswordBackup": "Ingresa la contraseña de esta cuenta para respaldar sus claves.",
+  "@r3eEnterPasswordBackup": {
+    "description": "Password prompt body before backing up the active web account's keys; the password is that account's own."
+  },
   "r3eExportNftMedia": "Exportar multimedia del NFT",
   "r3eFailedDecryptKeys": "No se pudieron descifrar las claves. Revisa tu contraseña.",
   "r3eFailedDeleteDb": "No se pudo eliminar {path}: la carpeta sigue existiendo tras el borrado",
@@ -4998,7 +5181,6 @@
       }
     }
   },
-  "r3eFaucetIntro": "La comunidad ha asignado algo de VFX para facilitar probar esta función. Para evitar abusos, se requiere un número de teléfono para una autorización por SMS. Solo se guardará un hash de tu número.",
   "r3eFaucetSuccess": "¡Listo! Los fondos están en camino. Hash de TX: {result}",
   "@r3eFaucetSuccess": {
     "placeholders": {
@@ -5031,14 +5213,6 @@
   "r3eLockNow": "Bloquear ahora",
   "r3eLogin": "Iniciar sesión",
   "r3eLoginWithThisAccount": "Iniciar sesión con esta cuenta",
-  "r3eMaxAmount": "Monto máximo: {amount} VFX",
-  "@r3eMaxAmount": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      }
-    }
-  },
   "r3eMediaBackedUp": "Contenido multimedia respaldado correctamente.",
   "r3eMediaImported": "Multimedia importado correctamente",
   "r3eMustAgreeTerms": "Debes aceptar los términos antes de continuar.",
@@ -5083,8 +5257,6 @@
       }
     }
   },
-  "r3eReadLess": "Ver menos",
-  "r3eReadMore": "Ver más",
   "r3eRecentTransactions": "Transacciones recientes",
   "r3eRecoveryBody": "Tu cuenta de bóveda (protegida) se está recuperando a tu dirección de recuperación.\n\nHash de la transacción: {hash}\n\nSe transferirán todas las transacciones no liquidadas de fondos y activos, además de tu saldo disponible actual.\n\nSe recomienda importar tu clave privada de recuperación en una máquina nueva. El contenido multimedia de los NFT no se transferirá, así que expórtalo con el botón de abajo e impórtalo en tu nuevo entorno.",
   "@r3eRecoveryBody": {
@@ -5379,7 +5551,7 @@
     }
   },
   "r3gAdnrDeleteNoCost": "Eliminar un dominio VFX no tiene costo (aparte de la comisión de TX).",
-  "r3gAdnrDeleteWithCost": "Eliminar un dominio RBX tiene un costo de {cost} RBX.",
+  "r3gAdnrDeleteWithCost": "Hay un costo de {cost} VFX para eliminar un dominio VFX.",
   "@r3gAdnrDeleteWithCost": {
     "placeholders": {
       "cost": {
@@ -5462,8 +5634,6 @@
       }
     }
   },
-  "r3gConfirmDevolveOneStage": "¿Seguro que quieres retroceder este NFT una etapa?",
-  "r3gConfirmEvolveOneStage": "¿Seguro que quieres evolucionar este NFT una etapa?",
   "r3gConfirmEvolveToStage": "¿Seguro que quieres evolucionar a la etapa {index}?",
   "@r3gConfirmEvolveToStage": {
     "placeholders": {
@@ -5550,7 +5720,6 @@
       }
     }
   },
-  "r3gDevolve": "Retroceder",
   "r3gEncryptionPasswordRequired": "Se requiere contraseña de cifrado para seguir validando.",
   "r3gEndsIn": "Termina en",
   "r3gEvolution": "Evolución",
@@ -5866,7 +6035,6 @@
   "r3hInvalid": "Inválido",
   "r3hIsBurnableLabel": "Quemable:",
   "r3hLabelMinTokenRequirement": "Requisito mínimo de tokens",
-  "r3hLogoutConfirmBody": "¿Seguro que quieres cerrar sesión de la Billetera Web VFX?",
   "r3hMachineOs": "SO de máquina",
   "r3hMachineProvider": "Proveedor de máquina",
   "r3hMachineType": "Tipo de máquina",
@@ -5899,7 +6067,6 @@
   "r3hNoUpper": "NO",
   "r3hNoVotingTopics": "Sin temas de votación",
   "r3hOneActiveTopicPerAddress": "Solo se permite un tema activo por dirección.",
-  "r3hOptional": "Opcional",
   "r3hPasswordRequired": "Contraseña requerida.",
   "r3hPasswordWeak": "Contraseña muy débil.",
   "r3hPause": "Pausar",
@@ -5927,7 +6094,6 @@
   "r3hTechnicalBackground": "Experiencia técnica",
   "r3hTokenAccounts": "Cuentas del token",
   "r3hTokenHasFixedSupply": "Token con suministro fijo:",
-  "r3hTokenIconUrlLabel": "URL del ícono:",
   "r3hTokenNameFieldLabel": "Nombre del token:",
   "r3hTokenNameHelper": "El nombre de este nuevo token.",
   "r3hTokenOwnerLabel": "Dueño del token: ",
@@ -6226,6 +6392,10 @@
   "@reserveWebNoAccount": {
     "description": "Empty-state on the web Vault overview screen."
   },
+  "reserveWebStatusUnavailable": "No se pudo cargar el estado de esta bóveda desde la red. Reintentando automáticamente.",
+  "@reserveWebStatusUnavailable": {
+    "description": "Shown on the web Vault overview screen when the Vault's activation/recovery status could not be fetched."
+  },
   "reserveWebNoNftsToast": "Tu cuenta de bóveda no tiene NFTs.",
   "@reserveWebNoNftsToast": {
     "description": "Toast shown when the web Vault account has no NFTs to manage."
@@ -6318,6 +6488,10 @@
   "@scVaultCannotMintToast": {
     "description": "Toast shown when a vault account attempts to mint a smart contract."
   },
+  "scwAddAdditionalAsset": "Agregar archivo adicional",
+  "@scwAddAdditionalAsset": {
+    "description": "Tooltip on the add icon button in the additional assets section of the wizard card."
+  },
   "scwAddAFeature": "Agregar una función",
   "scwAddAnotherFeature": "Agregar otra función",
   "scwAddCreatorName": "Agregar nombre del creador",
@@ -6362,12 +6536,20 @@
       }
     }
   },
+  "scwDeletePrimaryAsset": "Eliminar archivo principal",
+  "@scwDeletePrimaryAsset": {
+    "description": "Tooltip on the delete icon button over the primary asset in the wizard card."
+  },
   "scwDeletePrimaryAssetBody": "¿Estás seguro de que quieres eliminar el archivo principal?",
   "scwDeletePrimaryAssetTitle": "¿Eliminar archivo principal?",
   "scwDescription": "Descripción",
   "scwDescriptionOfPhysicalDigitalGood": "Descripción del bien físico/digital",
   "scwDownloadExampleCsv": "Descargar CSV de ejemplo",
   "scwDownloadExampleJson": "Descargar JSON de ejemplo",
+  "scwDownloadExampleFailed": "No se pudo guardar el archivo de ejemplo.",
+  "@scwDownloadExampleFailed": {
+    "description": "Toast when the bundled example NFT metadata file cannot be saved."
+  },
   "scwEdit": "Editar",
   "scwEditCreatorName": "Editar nombre del creador",
   "scwEditDescription": "Editar descripción",
@@ -6453,6 +6635,10 @@
     }
   },
   "scwPhysicalDigitalGoodName": "Nombre del bien físico/digital",
+  "scwPickColor": "Elegir un color",
+  "@scwPickColor": {
+    "description": "Tooltip on the palette icon button that opens the color picker for a property value."
+  },
   "scwPrimaryAsset": "Archivo principal",
   "scwProperties": "Propiedades",
   "scwPropertiesOptional": "Propiedades (opcional)",
@@ -6475,12 +6661,28 @@
   },
   "scwReasonForPairingWrapping": "Motivo del emparejamiento/envoltura",
   "scwRemove": "Eliminar",
+  "scwRemoveAsset": "Quitar archivo",
+  "@scwRemoveAsset": {
+    "description": "Tooltip on the delete icon button next to an additional asset in the wizard card."
+  },
   "scwRemoveAssetBody": "¿Estás seguro de que quieres quitar este archivo adicional?",
   "scwRemoveAssetTitle": "¿Quitar archivo?",
+  "scwRemovePhase": "Eliminar fase",
+  "@scwRemovePhase": {
+    "description": "Tooltip on the delete icon button next to an evolution phase in the wizard card."
+  },
   "scwRemovePhaseBody": "¿Estás seguro de que quieres eliminar esta fase de evolución?",
   "scwRemovePhaseTitle": "¿Eliminar fase?",
+  "scwRemoveProperty": "Eliminar propiedad",
+  "@scwRemoveProperty": {
+    "description": "Tooltip / accessibility label on the delete icon next to a property in the wizard card or evolve modal."
+  },
   "scwRemovePropertyBody": "¿Estás seguro de que quieres eliminar esta propiedad?",
   "scwRemovePropertyTitle": "¿Eliminar propiedad?",
+  "scwRemoveRoyalty": "Eliminar regalía",
+  "@scwRemoveRoyalty": {
+    "description": "Tooltip on the delete icon button next to the royalty in the wizard card."
+  },
   "scwRemoveRoyaltyBody": "¿Estás seguro de que quieres eliminar la regalía?",
   "scwRemoveRoyaltyTitle": "¿Eliminar regalía?",
   "scwRoyaltyTitle": "Regalía",
@@ -6526,6 +6728,30 @@
       }
     }
   },
+  "sendAmountLoweredForFee": "Tu saldo no cubre este monto más la comisión de red de {fee} VFX, así que el monto se redujo a {amount} VFX.",
+  "@sendAmountLoweredForFee": {
+    "description": "Notice at the top of the send confirmation when the VFX amount was lowered automatically so the network fee fits in the balance.",
+    "placeholders": {
+      "fee": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "sendAmountTooManyDecimals": "Los montos de {currency} pueden tener como máximo {decimals} decimales.",
+  "@sendAmountTooManyDecimals": {
+    "description": "Send form amount error when the amount has more decimal places than the currency supports (8 for VFX and BTC).",
+    "placeholders": {
+      "currency": {
+        "type": "String"
+      },
+      "decimals": {
+        "type": "String"
+      }
+    }
+  },
   "sendAppBarTitle": "Enviar {currency}",
   "@sendAppBarTitle": {
     "description": "Send screen app bar title — currency is VFX or BTC.",
@@ -6540,9 +6766,33 @@
   "@sendBadgeNotActivated": {
     "description": "Warning badge shown when a Vault account is not yet activated."
   },
+  "sendBtcAddressInvalid": "Dirección de BTC no válida.",
+  "@sendBtcAddressInvalid": {
+    "description": "Form error when a BTC destination address is malformed or its checksum does not match."
+  },
+  "sendBtcAddressMainnetRequired": "Esta es una dirección de BTC de testnet. Se requiere una dirección de mainnet.",
+  "@sendBtcAddressMainnetRequired": {
+    "description": "Form error when a testnet BTC address is entered while the app runs on mainnet."
+  },
+  "sendBtcAddressTestnetRequired": "Esta es una dirección de BTC de mainnet. Se requiere una dirección de testnet.",
+  "@sendBtcAddressTestnetRequired": {
+    "description": "Form error when a mainnet BTC address is entered while the app runs on testnet."
+  },
   "sendChooseAddressTitle": "Elige una dirección",
   "@sendChooseAddressTitle": {
     "description": "Title of the dialog used to pick one of the user's own addresses as recipient."
+  },
+  "sendFeeNotCovered": "Tu saldo disponible de {available} VFX no cubre la comisión de red de {fee} VFX.",
+  "@sendFeeNotCovered": {
+    "description": "Send error when the balance is too small to pay even the network fee.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
   },
   "sendFormLabelAmount": "Monto:",
   "@sendFormLabelAmount": {
@@ -6559,6 +6809,19 @@
   "sendFormLabelTo": "Para:",
   "@sendFormLabelTo": {
     "description": "Recipient label (with colon) in the send form."
+  },
+  "sendOwnAddressBody": "{address} es una de tus propias direcciones. Los fondos se quedan en tu billetera y solo se gasta la comisión de red.\n\n¿Enviar de todos modos?",
+  "@sendOwnAddressBody": {
+    "description": "Body of the warning shown before sending VFX or BTC to one of the user's own addresses.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "sendOwnAddressTitle": "¿Enviar a tu propia dirección?",
+  "@sendOwnAddressTitle": {
+    "description": "Title of the warning shown before sending VFX or BTC to one of the user's own addresses."
   },
   "sendPasteHelperCmd": "Usa cmd+v para pegar o haz clic ",
   "@sendPasteHelperCmd": {
@@ -6818,6 +7081,10 @@
   "@statusPending": {
     "description": "Pending status for transactions or operations."
   },
+  "statusReloadWalletInfoTooltip": "Recargar información de la billetera",
+  "@statusReloadWalletInfoTooltip": {
+    "description": "Tooltip on the refresh icon button that reloads the wallet info."
+  },
   "statusSuccess": "Éxito",
   "@statusSuccess": {
     "description": "Success status for a completed transaction."
@@ -6854,7 +7121,7 @@
     }
   },
   "svcAdnrDeleteNoCost": "No hay costo por eliminar un dominio VFX (aparte de la comisión de transacción).",
-  "svcAdnrDeleteWithCost": "Hay un costo de {cost} RBX para eliminar un dominio RBX.",
+  "svcAdnrDeleteWithCost": "Hay un costo de {cost} VFX para eliminar un dominio VFX.",
   "@svcAdnrDeleteWithCost": {
     "placeholders": {
       "cost": {
@@ -6909,6 +7176,10 @@
   "svcComplete": "Completado",
   "svcCouldNotParseEncryptedMessage": "No se pudo procesar el mensaje cifrado",
   "svcCsvHeadersInvalid": "Los encabezados del CSV no tienen el formato correcto, por favor revisa el archivo de ejemplo",
+  "svcCsvNoRows": "No se encontraron filas en este archivo CSV. Agrega al menos un NFT debajo de la fila de encabezados.",
+  "@svcCsvNoRows": {
+    "description": "Error when an NFT collection wizard CSV import contains no data rows"
+  },
   "svcDecryptFailed": "No se pudo descifrar el mensaje. Clave inválida o datos corruptos.",
   "svcFailedParseFee": "No se pudo procesar la comisión",
   "svcFailedParseHash": "No se pudo procesar el hash",
@@ -6935,22 +7206,23 @@
   "svcInsufficientBalanceToSend": "Saldo insuficiente para enviar",
   "svcInvalidJson": "JSON no válido",
   "svcLocatorsRequestFailed": "Falló la solicitud de localizadores.",
-  "svcMainMenuSyncTooltip": "Última sincronización: {lastSync}\nPróxima sincronización: {nextSync}",
-  "@svcMainMenuSyncTooltip": {
-    "placeholders": {
-      "lastSync": {
-        "type": "String"
-      },
-      "nextSync": {
-        "type": "String"
-      }
-    }
-  },
   "svcMessageDecryptedSuccess": "¡Mensaje descifrado con éxito!",
   "svcMintingProgress": "Acuñando {current}/{total}...",
   "@svcMintingProgress": {
     "placeholders": {
       "current": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "svcMintingStopped": "La emisión se detuvo por un error. {minted} de {total} emitidos.",
+  "@svcMintingStopped": {
+    "description": "Collection wizard progress dialog message when a mint fails and the run stops",
+    "placeholders": {
+      "minted": {
         "type": "String"
       },
       "total": {
@@ -7111,7 +7383,6 @@
   },
   "svcNotifVoteCastedTitle": "Voto emitido",
   "svcNotValidAmount": "No es un monto válido",
-  "svcPrivateKeyNotAvailableUnlock": "Clave privada no disponible. Asegúrate de que la billetera esté desbloqueada.",
   "svcPrivateKeyNotFoundRecipient": "No se encontró la clave privada para la dirección del destinatario",
   "svcProblemDownloadingSkipping": "Problema al descargar {url}. Se omite.",
   "@svcProblemDownloadingSkipping": {
@@ -7354,7 +7625,7 @@
     }
   },
   "tkbDeleteDomainNoCost": "No hay costo para eliminar un dominio VFX (aparte de la comisión de la TX).",
-  "tkbDeleteDomainWithCost": "Hay un costo de {cost} VFX para eliminar un dominio RBX.",
+  "tkbDeleteDomainWithCost": "Hay un costo de {cost} VFX para eliminar un dominio BTC.",
   "@tkbDeleteDomainWithCost": {
     "placeholders": {
       "cost": {
@@ -7495,6 +7766,9 @@
   "tkbNoVaultAccounts": "No tienes ninguna Cuenta de bóveda en esta billetera",
   "tkbNoVotesYet": "Aún no hay votos.",
   "tkbOpenAsset": "Abrir recurso",
+  "@tkbOpenAsset": {
+    "description": "Visible label of the asset card button that opens the asset file (title case, unlike the actionOpenAsset tooltip)"
+  },
   "tkbOpenFolder": "Abrir carpeta",
   "tkbOwnershipTransferInitiated": "Transferencia de propiedad iniciada.",
   "tkbPassword": "Contraseña",
@@ -7511,6 +7785,33 @@
   },
   "tkbPendingWithdrawalContractBody": "Tienes un retiro pendiente para este contrato. ¿Quieres completarlo?",
   "tkbPendingWithdrawalFound": "Retiro pendiente encontrado",
+  "tkbExpiredWithdrawalTitle": "Solicitud de retiro vencida",
+  "tkbExpiredWithdrawalBody": "Tu retiro de {amount} vBTC a {destination} venció. Ya no bloquea un nuevo retiro, pero sus vBTC siguen retenidos en depósito.",
+  "@tkbExpiredWithdrawalBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbUnpayableWithdrawalTitle": "El retiro no se puede pagar",
+  "tkbUnpayableWithdrawalBody": "Tu retiro de {amount} vBTC a {destination} es demasiado pequeño para pagarse con su tarifa, así que completarlo seguirá fallando.",
+  "@tkbUnpayableWithdrawalBody": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "destination": {
+        "type": "String"
+      }
+    }
+  },
+  "tkbWithdrawalCancelNeedsVote": "Sus vBTC siguen retenidos en custodia hasta que se cancele la solicitud. Cancelarla requiere una votación de los validadores del contrato, que la billetera todavía no puede iniciar.\n\nAún puedes abrir el formulario de retiro para tu saldo disponible.",
+  "tkbWithdrawalCancellationPending": "Ya se solicitó una cancelación y está esperando la votación de los validadores. Sus vBTC siguen retenidos en custodia hasta entonces.\n\nAún puedes abrir el formulario de retiro para tu saldo disponible.",
+  "tkbOpenWithdrawalForm": "Abrir formulario de retiro",
   "tkbPercentages": "Porcentajes",
   "tkbResult": "Resultado",
   "tkbResultFail": "Rechazado",
@@ -7769,6 +8070,10 @@
   "@tokenCreateTitle": {
     "description": "App bar title for the create-token screen."
   },
+  "tokenDecreaseDecimalPlaces": "Reducir decimales",
+  "@tokenDecreaseDecimalPlaces": {
+    "description": "Tooltip on the down arrow that lowers the decimal places of a new token."
+  },
   "tokenFormCancel": "Cancelar",
   "@tokenFormCancel": {
     "description": "Cancel button label in the token create form."
@@ -7804,6 +8109,10 @@
   "tokenFormTickerHint": "ABC",
   "@tokenFormTickerHint": {
     "description": "Hint shown in the token ticker field."
+  },
+  "tokenIncreaseDecimalPlaces": "Aumentar decimales",
+  "@tokenIncreaseDecimalPlaces": {
+    "description": "Tooltip on the up arrow that raises the decimal places of a new token."
   },
   "tokenInsufficientBalanceToast": "Saldo insuficiente para realizar esta transacción",
   "@tokenInsufficientBalanceToast": {
@@ -7986,6 +8295,14 @@
         "type": "String"
       }
     }
+  },
+  "tokenWebVaultRowActionsUnavailable": "Transferir, quemar y votar no están disponibles para los tokens guardados en la Bóveda. Primero muévelos fuera de la Bóveda.",
+  "@tokenWebVaultRowActionsUnavailable": {
+    "description": "Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons."
+  },
+  "tokenWebTransferToSelf": "Los tokens no se pueden transferir a la misma dirección que los tiene.",
+  "@tokenWebTransferToSelf": {
+    "description": "Error when a web token transfer names the sending address as the recipient."
   },
   "txAppBarAll": "Todas las transacciones",
   "@txAppBarAll": {
@@ -8304,6 +8621,10 @@
     }
   },
   "txpVaultActivationSent": "Se envió la transacción de activación de la cuenta de bóveda.\n\nEspera a que se refleje como \"Activada\".",
+  "txpVaultAlreadyActivated": "Esta cuenta de bóveda ya está activada.",
+  "@txpVaultAlreadyActivated": {
+    "description": "Error toast when Activate is used on a Vault account that is already activated on the network."
+  },
   "txpVfxAmount": "Monto de VFX",
   "txpVfxOffRampSoon": "La función de retiro de VFX estará disponible pronto",
   "txpVfxQuote": "Cotización de VFX",
@@ -9145,6 +9466,7 @@
   "@walletPrivateKeyImportedToast": {
     "description": "Toast confirming a BTC private key was imported."
   },
+  "walletKeyExportUnavailable": "El nodo no devolvió una clave privada.",
   "walletPrivateKeyLabel": "Clave privada",
   "@walletPrivateKeyLabel": {
     "description": "Field label for the private key input/display."
@@ -9229,6 +9551,10 @@
   "walletRevealPrivateKey": "Revelar clave privada",
   "@walletRevealPrivateKey": {
     "description": "Button to reveal the private key for an account."
+  },
+  "walletBtcPrivateKeyNotExported": "El nodo solo comparte la clave privada de Bitcoin al crear la cuenta. Usa la copia de seguridad que guardaste en ese momento.",
+  "@walletBtcPrivateKeyNotExported": {
+    "description": "Shown when revealing a BTC private key that the node no longer returns."
   },
   "walletSaveAsFile": "Guardar como archivo",
   "@walletSaveAsFile": {
@@ -9472,6 +9798,30 @@
     "description": "Title for import-BTC-WIF dialog."
   },
   "webInvalidAmount": "Monto inválido",
+  "webPendingBalanceInsufficient": "Saldo insuficiente al contar los envíos pendientes. Disponible: {available} {unit}",
+  "@webPendingBalanceInsufficient": {
+    "description": "Error when a web send fits the confirmed balance but not the balance left after this session's unconfirmed sends from the same address.",
+    "placeholders": {
+      "available": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "webVaultMinimumBalance": "Una Bóveda debe conservar {minimum} VFX. Disponible para enviar: {available} VFX",
+  "@webVaultMinimumBalance": {
+    "description": "Error when a web send from the Vault would leave it below the minimum balance the network requires.",
+    "placeholders": {
+      "minimum": {
+        "type": "String"
+      },
+      "available": {
+        "type": "String"
+      }
+    }
+  },
   "webLanguageLabel": "Idioma",
   "@webLanguageLabel": {
     "description": "Menu item label for the language picker."
@@ -9487,6 +9837,10 @@
   "webNoWalletDetected": "No se detectó billetera.",
   "@webNoWalletDetected": {
     "description": "Empty-state shown on web when no wallet is loaded."
+  },
+  "webOpenMenu": "Abrir menú",
+  "@webOpenMenu": {
+    "description": "Tooltip on the hamburger icon button that opens the navigation drawer on the mobile web wallet."
   },
   "webPendingActivation": "Activación pendiente",
   "@webPendingActivation": {
@@ -9627,10 +9981,59 @@
   "@webVaultRestoredToast": {
     "description": "Toast confirming a Vault account was restored on the web."
   },
+  "webVaultRestoreCodeInvalid": "Código de restauración no válido",
+  "@webVaultRestoreCodeInvalid": {
+    "description": "Error toast when a pasted Vault restore code cannot be decoded on the web."
+  },
   "webWifPrivateKey": "Clave privada WIF",
   "@webWifPrivateKey": {
     "description": "Input label for a BTC WIF private key."
   },
   "webYourAddress": "Tu dirección",
-  "webYourDomain": "Tu dominio"
+  "webYourDomain": "Tu dominio",
+  "r3eLogFileNotFound": "No se pudo abrir el archivo de registro: {path}",
+  "@r3eLogFileNotFound": {
+    "description": "Error toast when Open Log cannot find or open the CLI log file.",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "assetUnsupportedFileTitle": "Archivo no compatible",
+  "@assetUnsupportedFileTitle": {
+    "description": "Title of the dialog shown when a chosen NFT asset file has a blocked extension (desktop and web)."
+  },
+  "assetExtensionNotPermittedBody": "Esta extensión de archivo (.{extension}) no está permitida.",
+  "@assetExtensionNotPermittedBody": {
+    "description": "Body of the dialog shown when a chosen NFT asset file has a blocked extension. {extension} is the file extension without the dot.",
+    "placeholders": {
+      "extension": {
+        "type": "String",
+        "example": "exe"
+      }
+    }
+  },
+  "errWalletLocked": "Tu billetera está bloqueada. Desbloquéala con tu contraseña e inténtalo de nuevo.",
+  "@errWalletLocked": {
+    "description": "Shown when the node refused an action because the encrypted wallet is locked and the user cancelled (or failed) the password prompt."
+  },
+  "errNodeUnreachable": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+  "@errNodeUnreachable": {
+    "description": "Shown when a request to the node or Spyglass failed without a response (connection error or timeout)."
+  },
+  "errRequestFailed": "La solicitud falló. Inténtalo de nuevo.",
+  "@errRequestFailed": {
+    "description": "Generic error when a node or Spyglass request failed and gave no readable reason."
+  },
+  "errNodeReason": "Mensaje del nodo: {reason}",
+  "@errNodeReason": {
+    "description": "Wraps an untranslated error message returned by the node or Spyglass. English shows the message as is; other languages add a lead-in saying the text comes from the node.",
+    "placeholders": {
+      "reason": {
+        "type": "String",
+        "example": "A withdrawal is already in progress for this contract."
+      }
+    }
+  }
 }

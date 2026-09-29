@@ -39,6 +39,7 @@ class ListingAuctionDetailScreen extends BaseScreen {
                   final identifier = "${listing.collectionId}_${listing.id}";
                   ref.read(sellerBidListProvider(identifier).notifier).fetchBids();
                 },
+                tooltip: l10n.actionRefresh,
                 icon: Icon(Icons.refresh))
           ],
         );

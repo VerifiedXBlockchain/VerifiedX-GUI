@@ -78,6 +78,12 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
     );
 
     ref.read(globalLoadingProvider.notifier).complete();
+
+    // BtcService has already shown the node's error message.
+    if (hash == null) {
+      return false;
+    }
+
     ref.read(adnrPendingProvider.notifier).addId(state.fromBtcAddress!, "transfer", state.domainName ?? 'null');
 
     notifyTransactionSubmitted();

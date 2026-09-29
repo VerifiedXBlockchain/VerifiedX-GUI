@@ -8,15 +8,18 @@ import 'password_verification_service.dart';
 import '../../core/app_constants.dart';
 
 class PasswordPromptService {
-  /// Prompts user for password and verifies it against stored hash
-  static Future<String?> promptAndVerifyPassword(
+  /// Prompts for an existing password without checking it, for callers that
+  /// verify it themselves (unlock tries more than one stored secret).
+  static Future<String?> promptPassword(
     BuildContext context, {
     String? title,
     String? labelText,
     String? customMessage,
-  }) async {
+    Key? fieldKey,
+    Key? submitKey,
+  }) {
     final l10n = AppLocalizations.of(context);
-    final password = await PromptModal.show(
+    return PromptModal.show(
       contextOverride: context,
       title: title ?? l10n.authEnterPassword,
       labelText: labelText ?? l10n.tkbPassword,
@@ -26,6 +29,29 @@ class PasswordPromptService {
       revealObscure: true,
       lines: 1, // Ensure single line for password
       initialValue: DEBUG_ENCRYPTION_PASSWORD,
+      fieldKey: fieldKey,
+      submitKey: submitKey,
+    );
+  }
+
+  /// Prompts for a password and verifies it against the active account's
+  /// password.
+  static Future<String?> promptAndVerifyPassword(
+    BuildContext context, {
+    String? title,
+    String? labelText,
+    String? customMessage,
+    Key? fieldKey,
+    Key? submitKey,
+  }) async {
+    final l10n = AppLocalizations.of(context);
+    final password = await promptPassword(
+      context,
+      title: title,
+      labelText: labelText,
+      customMessage: customMessage,
+      fieldKey: fieldKey,
+      submitKey: submitKey,
     );
 
     if (password != null) {
@@ -100,6 +126,8 @@ class PasswordPromptService {
       title: l10n.txpConfirmPassword,
       customMessage:
           customMessage ?? l10n.r3eSensitiveOperationPassword,
+      fieldKey: const ValueKey('auth:password'),
+      submitKey: const Key('auth:password_submit'),
     );
 
     if (password != null) {

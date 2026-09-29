@@ -108,42 +108,50 @@ class NftQrCode extends StatelessWidget {
           SizedBox(
             height: iconButtons ? 6 : 16,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              iconButtons
-                  ? IconButton(
-                      icon: Icon(Icons.download),
-                      iconSize: 22,
-                      onPressed: () {
-                        handleDownload();
-                      },
-                    )
-                  : AppButton(
-                      label: AppLocalizations.of(context).nftQrSave,
-                      onPressed: () async {
-                        handleDownload();
-                      },
-                      icon: Icons.download,
-                    ),
-              if (withOpen && !iconButtons)
-                AppButton(
-                  icon: Icons.open_in_new,
-                  label: AppLocalizations.of(context).nftQrOpen,
-                  onPressed: () {
-                    print("OPEN: $data");
-                    launchUrlString(data);
-                  },
-                ),
-              if (withOpen && iconButtons)
-                IconButton(
-                  icon: Icon(Icons.open_in_new),
-                  iconSize: 22,
-                  onPressed: () {
-                    launchUrlString(data);
-                  },
-                )
-            ],
+          // The row is as wide as the QR code. Unconstrained, it stretches to
+          // the full dialog width and a lone Save button lands at the window
+          // edge.
+          SizedBox(
+            width: size,
+            child: Row(
+              mainAxisAlignment: center && !withOpen ? MainAxisAlignment.center : MainAxisAlignment.spaceBetween,
+              children: [
+                iconButtons
+                    ? IconButton(
+                        icon: Icon(Icons.download),
+                        tooltip: AppLocalizations.of(context).nftQrSave,
+                        iconSize: 22,
+                        onPressed: () {
+                          handleDownload();
+                        },
+                      )
+                    : AppButton(
+                        label: AppLocalizations.of(context).nftQrSave,
+                        onPressed: () async {
+                          handleDownload();
+                        },
+                        icon: Icons.download,
+                      ),
+                if (withOpen && !iconButtons)
+                  AppButton(
+                    icon: Icons.open_in_new,
+                    label: AppLocalizations.of(context).nftQrOpen,
+                    onPressed: () {
+                      print("OPEN: $data");
+                      launchUrlString(data);
+                    },
+                  ),
+                if (withOpen && iconButtons)
+                  IconButton(
+                    icon: Icon(Icons.open_in_new),
+                    tooltip: AppLocalizations.of(context).nftQrOpen,
+                    iconSize: 22,
+                    onPressed: () {
+                      launchUrlString(data);
+                    },
+                  )
+              ],
+            ),
           ),
           if (withClose)
             TextButton(

@@ -34,8 +34,13 @@ import '../keygen/models/keypair.dart';
 import '../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../web/models/multi_account_instance.dart';
 import '../../core/services/multi_account_encryption_service.dart';
-import 'package:collection/collection.dart';
+import '../../core/services/web_account_password_store.dart';
+import '../../core/env.dart';
 import 'components/auth_type_modal.dart';
+import 'models/web_btc_address_type.dart';
+import 'components/imported_key_accounts_dialog.dart';
+import 'services/imported_key_accounts.dart';
+import '../keygen/utils/private_key_text.dart';
 import 'services/extension_crypto_service.dart';
 import 'services/verifiedx_extension_service.dart'
     if (dart.library.io) 'services/verifiedx_extension_service_stub.dart';
@@ -78,11 +83,20 @@ Future<void> handleImportWithPrivateKey(
     tightPadding: true,
     title: l10n.walletImportTitle,
     validator: (String? value) =>
-        formValidatorNotEmpty(value, l10n.authTypeVfxPrivateKey),
+        formValidatorNotEmpty(value, l10n.authTypeVfxPrivateKey) ??
+        (canonicalPrivateKeyHex(value!) == null
+            ? l10n.keyImportInvalidKey
+            : null),
     labelText: l10n.authTypeVfxPrivateKey,
   );
 
   if (privateKey != null) {
+    final canonicalKey = canonicalPrivateKeyHex(privateKey);
+    if (canonicalKey == null) {
+      Toast.error(l10n.keyImportInvalidKey);
+      return;
+    }
+
     // Auto-enable Remember Me since keys will be encrypted
 
     // Collect encryption password
@@ -94,57 +108,48 @@ Future<void> handleImportWithPrivateKey(
 
     if (encryptionPassword == null) return; // User cancelled
 
-    final keypair = await KeygenService.importPrivateKey(privateKey);
+    final keypair = await KeygenService.importPrivateKey(canonicalKey);
 
-    RaKeypair? reserveKeyPair;
-    int append = 0;
-    while (true) {
-      String input = keypair.private;
-      if (input.startsWith("00")) {
-        input = input.substring(2);
-      }
-      String seed = "${input.substring(0, 32)}$append";
+    final accounts = await _resolveImportedKeyAccounts(
+        context, ref, canonicalKey, privateKey);
+    if (accounts == null) return;
 
-      final kp = await KeygenService.seedToKeypair(seed);
-      if (kp == null) {
-        continue;
-      }
-
-      reserveKeyPair =
-          await KeygenService.importReserveAccountPrivateKey(kp.private);
-
-      if (reserveKeyPair.address.startsWith("xRBX")) {
-        break;
-      }
-
-      append += 1;
-    }
-
-    final btcGeneratedEmail =
-        btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-    final btcGeneratedPassword =
-        btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
-
-    final btcKeypair = await BtcWebService()
-        .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
-
-    await loginWithEncryption(
-        context, ref, keypair, reserveKeyPair, btcKeypair, encryptionPassword);
+    await loginWithEncryption(context, ref, keypair, accounts.reserveKeypair,
+        accounts.btcAccount, encryptionPassword);
   }
+}
+
+/// Restores the Vault and Bitcoin accounts of an imported key. They are cut
+/// from the key's text, which older nodes, the remediated node and this wallet
+/// have written differently for the same key (VX-11), so every text form is
+/// tried: the pair with activity is restored, the canonical pair when none has
+/// any, and the user chooses when several do or a lookup failed. Returns null
+/// when the user closes the chooser.
+Future<DerivedAccounts?> _resolveImportedKeyAccounts(
+  BuildContext context,
+  WidgetRef ref,
+  String canonicalKey,
+  String enteredText,
+) async {
+  ref.read(globalLoadingProvider.notifier).start();
+  final ImportedKeyAccountOptions accountOptions;
+  try {
+    accountOptions =
+        await importedKeyAccountOptions(canonicalKey, enteredText: enteredText);
+  } finally {
+    ref.read(globalLoadingProvider.notifier).complete();
+  }
+
+  return accountOptions.autoSelected ??
+      await chooseImportedKeyAccounts(context, accountOptions);
 }
 
 String btcGeneratedEmailFromPrivateKey(String privateKey) {
-  if (privateKey.startsWith("00")) {
-    privateKey = privateKey.replaceFirst("00", "");
-  }
-  return "${privateKey.substring(0, 8)}@${privateKey.substring(privateKey.length - 8)}.com";
+  return btcEmailFromDerivationText(derivationTextFromKeyText(privateKey));
 }
 
 String btcGeneratedPasswordFromPrivateKey(String privateKey) {
-  if (privateKey.startsWith("00")) {
-    privateKey = privateKey.replaceFirst("00", "");
-  }
-  return "${privateKey.substring(0, 12)}${privateKey.substring(privateKey.length - 12)}";
+  return btcPasswordFromDerivationText(derivationTextFromKeyText(privateKey));
 }
 
 /// Handle login with VFX Browser Extension
@@ -229,44 +234,23 @@ Future<void> handleLoginWithExtension(
     return;
   }
 
-  // Import the private key to create keypair
-  final keypair = await KeygenService.importPrivateKey(privateKey);
-
-  // Generate Reserve Account keypair (same logic as other import methods)
-  RaKeypair? reserveKeyPair;
-  int append = 0;
-  while (true) {
-    String input = keypair.private;
-    if (input.startsWith("00")) {
-      input = input.substring(2);
-    }
-    String seed = "${input.substring(0, 32)}$append";
-
-    final kp = await KeygenService.seedToKeypair(seed);
-    if (kp == null) {
-      continue;
-    }
-
-    reserveKeyPair =
-        await KeygenService.importReserveAccountPrivateKey(kp.private);
-
-    if (reserveKeyPair.address.startsWith("xRBX")) {
-      break;
-    }
-
-    append += 1;
+  final canonicalKey = canonicalPrivateKeyHex(privateKey);
+  if (canonicalKey == null) {
+    ref.read(globalLoadingProvider.notifier).complete();
+    Toast.error(l10n.keyImportInvalidKey);
+    return;
   }
 
-  // Generate BTC keypair
-  final btcGeneratedEmail =
-      btcGeneratedEmailFromPrivateKey(keypair.privateCorrected);
-  final btcGeneratedPassword =
-      btcGeneratedPasswordFromPrivateKey(keypair.privateCorrected);
-
-  final btcKeypair = await BtcWebService()
-      .keypairFromEmailPassword(btcGeneratedEmail, btcGeneratedPassword);
-
+  // Import the private key to create keypair
+  final keypair = await KeygenService.importPrivateKey(canonicalKey);
   ref.read(globalLoadingProvider.notifier).complete();
+
+  // Vault and BTC accounts (same logic as the private key import)
+  final accounts =
+      await _resolveImportedKeyAccounts(context, ref, canonicalKey, privateKey);
+  if (accounts == null) return;
+  final reserveKeyPair = accounts.reserveKeypair;
+  final btcKeypair = accounts.btcAccount;
 
   // Login with encryption using the same password from the extension
   await loginWithEncryption(
@@ -373,19 +357,6 @@ class BtcPrivateKeyImportModalResult {
   });
 }
 
-enum WebBtcAddressType {
-  p2pkh("p2pkh", "P2PKH (Legacy)"),
-  p2sh("p2sh", "P2SH (Nested SegWit)"),
-  bech32("bech32", "Bech32 (Native SegWit - P2WPKH)"),
-  bech32m("bech32m", "Bech32m (Taproot - P2TR)"),
-  ;
-
-  final String value;
-  final String label;
-
-  const WebBtcAddressType(this.value, this.label);
-}
-
 class BtcPrivateKeyImportModal extends StatefulWidget {
   const BtcPrivateKeyImportModal({
     super.key,
@@ -467,20 +438,16 @@ class _BtcPrivateKeyImportModalState extends State<BtcPrivateKeyImportModal> {
               variant: AppColorVariant.Btc,
               onPressed: () {
                 if (_selectedAddressType == null) {
-                  final address = _addressController.text;
-                  if (address.startsWith("1")) {
-                    _selectedAddressType = WebBtcAddressType.p2pkh;
-                  } else if (address.startsWith('3')) {
-                    _selectedAddressType = WebBtcAddressType.p2sh;
-                  } else if (address.startsWith('bc1q')) {
-                    _selectedAddressType = WebBtcAddressType.bech32;
-                  } else if (address.startsWith('bc1p')) {
-                    _selectedAddressType = WebBtcAddressType.bech32m;
-                  } else {
+                  final detectedType = btcAddressTypeFromAddress(
+                    _addressController.text,
+                    isTestNet: Env.isTestNet,
+                  );
+                  if (detectedType == null) {
                     Toast.error(l10n.hnavInvalidBtcAddress);
                     Navigator.of(context).pop(null);
                     return;
                   }
+                  _selectedAddressType = detectedType;
                 }
                 final result = BtcPrivateKeyImportModalResult(
                   addressType: _selectedAddressType!.value,
@@ -622,8 +589,8 @@ Future<void> handleCreateWithMnemonic(
     String seed = "${input.substring(0, 32)}$append";
 
     final kp = await KeygenService.seedToKeypair(seed);
-    print(kp);
     if (kp == null) {
+      append += 1;
       continue;
     }
     reserveKeyPair =
@@ -761,15 +728,8 @@ Future<MultiAccountInstance?> _getDecryptedAccount(
   BuildContext context,
   MultiAccountInstance account,
 ) async {
-  final storage = singleton<Storage>();
-  final savedData = storage.getList(Storage.MULTIPLE_ACCOUNTS);
-
-  if (savedData == null) return account;
-
-  final storedAccountJson = savedData
-      .map((e) => jsonDecode(e) as Map<String, dynamic>)
-      .where((json) => json['id'] == account.id)
-      .firstOrNull;
+  final store = WebAccountPasswordStore(singleton<Storage>());
+  final storedAccountJson = store.storedAccount(account.id);
 
   final hasEncryptedKeys = storedAccountJson != null &&
       MultiAccountEncryptionService.hasEncryptedPrivateKeys(storedAccountJson);
@@ -790,15 +750,12 @@ Future<MultiAccountInstance?> _getDecryptedAccount(
 
   if (password == null) return null;
 
-  try {
-    final decryptedJson =
-        MultiAccountEncryptionService.decryptAccountPrivateKeys(
-            storedAccountJson, password);
-    return MultiAccountInstance.fromJson(decryptedJson);
-  } catch (e) {
+  // Decrypts every secret field and upgrades the stored entry's format.
+  final decrypted = store.decryptStoredAccount(account.id, password);
+  if (decrypted == null) {
     Toast.error(l10n.hnavFailedDecryptAccountKeys);
-    return null;
   }
+  return decrypted;
 }
 
 Future<void> _showKeysForType(
@@ -892,6 +849,7 @@ Future<void> _showKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyMnemonic,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.mneumonic));
@@ -918,9 +876,10 @@ Future<void> _showKeysInternal(
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.copy),
+                tooltip: l10n.actionCopyAddress,
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(text: keypair.address));
-                  Toast.message(l10n.keygenPublicKeyCopiedToast);
+                  Toast.message(l10n.messageAddressCopied);
                 },
               ),
             ),
@@ -942,6 +901,7 @@ Future<void> _showKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyWifPrivateKey,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.btcWif));
@@ -971,6 +931,7 @@ Future<void> _showKeysInternal(
               ),
               trailing: IconButton(
                 icon: const Icon(Icons.copy),
+                tooltip: l10n.actionCopyPrivateKey,
                 onPressed: () async {
                   await Clipboard.setData(ClipboardData(
                       text: keypair.btcWif != null
@@ -1058,10 +1019,11 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyAddress,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.address));
-                    Toast.message(l10n.keygenPublicKeyCopiedToast);
+                    Toast.message(l10n.messageAddressCopied);
                   },
                 ),
               ),
@@ -1077,6 +1039,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyPrivateKey,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.privateCorrected));
@@ -1097,6 +1060,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyRecoveryAddress,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.recoveryAddress));
@@ -1116,6 +1080,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyRecoveryPrivateKey,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.recoveryPrivateCorrected));
@@ -1137,6 +1102,7 @@ Future<void> _showRaKeysInternal(
                 ),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy),
+                  tooltip: l10n.actionCopyRestoreCode,
                   onPressed: () async {
                     await Clipboard.setData(
                         ClipboardData(text: keypair.restoreCode));
@@ -1204,12 +1170,15 @@ showWebLoginModal(
                 children: [
                   AppCard(
                     padding: 0,
-                    child: ListTile(
-                      onTap: () {
-                        Navigator.of(context).pop("new");
-                      },
-                      title: Text(l10n.hnavCreateNewMnemonic),
-                      trailing: Icon(Icons.chevron_right),
+                    child: Semantics(
+                      button: true,
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).pop("new");
+                        },
+                        title: Text(l10n.hnavCreateNewMnemonic),
+                        trailing: Icon(Icons.chevron_right),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -1217,12 +1186,15 @@ showWebLoginModal(
                   ),
                   AppCard(
                     padding: 0,
-                    child: ListTile(
-                      title: Text(l10n.hnavRecoverFromMnemonic),
-                      trailing: Icon(Icons.chevron_right),
-                      onTap: () {
-                        Navigator.of(context).pop("recover");
-                      },
+                    child: Semantics(
+                      button: true,
+                      child: ListTile(
+                        title: Text(l10n.hnavRecoverFromMnemonic),
+                        trailing: Icon(Icons.chevron_right),
+                        onTap: () {
+                          Navigator.of(context).pop("recover");
+                        },
+                      ),
                     ),
                   ),
                 ],

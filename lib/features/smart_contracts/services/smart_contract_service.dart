@@ -14,6 +14,7 @@ import '../models/compiled_smart_contract.dart';
 import '../models/compiler_response.dart';
 import '../models/detailed_smart_contract.dart';
 import '../models/smart_contract.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class SmartContractService extends BaseService {
   SmartContractService() : super(apiBasePathOverride: "/scapi/scv1");
@@ -155,7 +156,7 @@ class SmartContractService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }
@@ -181,7 +182,7 @@ class SmartContractService extends BaseService {
       return false;
     } catch (e) {
       print(e);
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }

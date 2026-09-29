@@ -130,6 +130,10 @@ class BtcAdnrCard extends BaseComponent {
                       if (!widgetGuardWalletIsSynced(ref)) {
                         return;
                       }
+                      if (!_ownerCanAfford(ref, ADNR_TRANSFER_COST)) {
+                        Toast.error(l10n.adnrInsufficientFundsTransfer);
+                        return;
+                      }
 
                       ref
                           .read(btcAdnrTransferFormProvider.notifier)
@@ -148,6 +152,15 @@ class BtcAdnrCard extends BaseComponent {
                   AppButton(
                     label: l10n.actionDelete,
                     onPressed: () async {
+                      if (!await passwordRequiredGuard(context, ref)) return;
+                      if (!widgetGuardWalletIsSynced(ref)) {
+                        return;
+                      }
+                      if (!_ownerCanAfford(ref, ADNR_DELETE_COST)) {
+                        Toast.error(l10n.adnrInsufficientFundsTransfer);
+                        return;
+                      }
+
                       final confirmed = await ConfirmDialog.show(
                         title: l10n.btcDeleteDomainTitle,
                         body: l10n.tkbDeleteBtcDomainBody(
@@ -163,6 +176,11 @@ class BtcAdnrCard extends BaseComponent {
                       }
 
                       final hash = await BtcService().deleteAdnr(btcAddress: account.address);
+                      // BtcService has already shown the node's error message.
+                      if (hash == null) {
+                        return;
+                      }
+
                       ref.read(adnrPendingProvider.notifier).addId(account.address, "burn", account.adnr!);
                       Toast.message(l10n.tkbTxBroadcasted);
                       notifyTransactionSubmitted();
@@ -176,6 +194,17 @@ class BtcAdnrCard extends BaseComponent {
         );
       },
     );
+  }
+
+  /// Whether the VFX wallet that controls this BTC domain (and pays for the
+  /// transaction) holds [cost] plus the smart-contract fee. When that wallet is
+  /// not in this node's list the check is left to the node.
+  bool _ownerCanAfford(WidgetRef ref, double cost) {
+    final ownerWallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.address == account.adnrOwnerAddress);
+    if (ownerWallet == null) {
+      return true;
+    }
+    return ownerWallet.balance >= cost + MIN_RBX_FOR_SC_ACTION;
   }
 }
 
@@ -248,8 +277,9 @@ class TransferBtcAdnrModal extends BaseComponent {
                 onPressed: () async {
                   final success = await formProvider.submit();
 
-                  if (success == false) {
-                    Toast.error();
+                  // null: the form did not validate; false: submit already
+                  // showed why the transfer was refused.
+                  if (success != true) {
                     return;
                   }
 
@@ -390,7 +420,9 @@ class CreateBtcAdnrModal extends BaseComponent {
                 onPressed: () async {
                   final success = await formProvider.submit();
 
-                  if (success == false) {
+                  // null: the form did not validate; false: submit already
+                  // showed why the domain was not created.
+                  if (success != true) {
                     return;
                   }
 

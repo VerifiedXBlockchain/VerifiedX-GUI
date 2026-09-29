@@ -336,6 +336,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
             IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.close, size: 20),
+              tooltip: l10n.actionClose,
               color: Colors.white38,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints(),
@@ -449,12 +450,16 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
             children: [
               Expanded(child: SelectableText(_transactionHash!, style: const TextStyle(color: Colors.white, fontSize: 13))),
               const SizedBox(width: 8),
-              InkWell(
-                onTap: () async {
-                  await Clipboard.setData(ClipboardData(text: _transactionHash!));
-                  Toast.message(l10n.messageCopiedToClipboard);
-                },
-                child: const Icon(Icons.copy, size: 16, color: Colors.white54),
+              Semantics(
+                label: l10n.actionCopyTransactionHash,
+                button: true,
+                child: InkWell(
+                  onTap: () async {
+                    await Clipboard.setData(ClipboardData(text: _transactionHash!));
+                    Toast.message(l10n.messageCopiedToClipboard);
+                  },
+                  child: const Icon(Icons.copy, size: 16, color: Colors.white54),
+                ),
               ),
             ],
           ),

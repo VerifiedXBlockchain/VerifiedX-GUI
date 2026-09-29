@@ -1,12 +1,16 @@
 
 import 'package:flutter/foundation.dart';
+import 'package:file_saver/file_saver.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base_component.dart';
+import '../../../generated/assets.gen.dart';
+import '../../../l10n/l10n_helper.dart';
+import '../../../utils/toast.dart';
 import '../providers/sc_wizard_log_provider.dart';
 import '../providers/sc_wizard_log_visible_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
@@ -15,6 +19,33 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../providers/sc_wizard_provider.dart';
 import 'smart_contract_wizard_screen.dart';
+
+/// Saves one of the example metadata files bundled under assets/docs.
+/// Web downloads it through the browser, macOS shows a save dialog, and
+/// Windows/Linux write it to the Downloads folder.
+Future<void> _saveBundledExample(String assetPath, {required String ext, required MimeType mimeType}) async {
+  try {
+    final data = await rootBundle.load(assetPath);
+    final bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    const name = "nft-metadata-example";
+
+    if (kIsWeb) {
+      await FileSaver.instance.saveFile(name: name, bytes: bytes, ext: ext, mimeType: mimeType);
+      return;
+    }
+
+    if (defaultTargetPlatform == TargetPlatform.macOS) {
+      await FileSaver.instance.saveAs(name: name, bytes: bytes, ext: ext, mimeType: mimeType);
+      return;
+    }
+
+    final savedPath = await FileSaver.instance.saveFile(name: name, bytes: bytes, ext: ext, mimeType: mimeType);
+    Toast.message(globalL10n.r3eSavedTo(savedPath));
+  } catch (e) {
+    print("Failed to save example file $assetPath: $e");
+    Toast.error(globalL10n.scwDownloadExampleFailed);
+  }
+}
 
 class BulkCreateScreen extends BaseScreen {
   const BulkCreateScreen({Key? key})
@@ -207,8 +238,11 @@ class BulkCreateScreen extends BaseScreen {
                                     AppButton(
                                       label: l10n.scwDownloadExampleJson,
                                       onPressed: () {
-                                        launchUrlString(
-                                            "https://firebasestorage.googleapis.com/v0/b/vfx-storage.appspot.com/o/nft-metadata-example.json?alt=media&token=6ce020f6-81e4-49ce-aa52-983f51a077f7");
+                                        _saveBundledExample(
+                                          Assets.docs.nftMetadataExampleJson,
+                                          ext: "json",
+                                          mimeType: MimeType.json,
+                                        );
                                       },
                                       variant: AppColorVariant.Light,
                                       icon: Icons.download,
@@ -275,9 +309,11 @@ class BulkCreateScreen extends BaseScreen {
                                     AppButton(
                                       label: l10n.scwDownloadExampleCsv,
                                       onPressed: () {
-                                        // openFile(File(Assets.docs.nftMetadataExampleCsv));
-                                        launchUrlString(
-                                            "https://firebasestorage.googleapis.com/v0/b/vfx-storage.appspot.com/o/nft-metadata-example.csv?alt=media&token=3c6613c3-362b-4cda-982e-edf2757e1bdd");
+                                        _saveBundledExample(
+                                          Assets.docs.nftMetadataExampleCsv,
+                                          ext: "csv",
+                                          mimeType: MimeType.csv,
+                                        );
                                       },
                                       variant: AppColorVariant.Light,
                                       icon: Icons.download,

@@ -8,11 +8,17 @@ import '../../../l10n/l10n_helper.dart';
 import '../../../core/services/base_service.dart';
 import '../../nft/models/nft.dart';
 import '../../nft/services/nft_service.dart';
+import '../models/escrowed_withdrawal.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../models/vbtc_multi_transfer_result.dart';
 import '../models/withdrawal_result.dart';
+import '../../../core/utils/user_error_message.dart';
 
 const _tag = '[vBTC-V2]';
+
+/// Prefix Core puts on the message of a withdrawal that can never be paid
+/// (VBTCService.UnpayableWithdrawalMarker).
+const unpayableWithdrawalMarker = '[UNPAYABLE-WITHDRAWAL]';
 
 void _log(String method, String message, [Map<String, dynamic>? json]) {
   final prefix = '$_tag $method';
@@ -205,6 +211,36 @@ class VbtcV2Service extends BaseService {
     }
   }
 
+  /// [address]'s open withdrawal requests on [scUid] (`EscrowedWithdrawals`
+  /// from `GetVBTCBalance`), each flagged Expired / Unpayable /
+  /// CancellationPending. Null when the node could not be asked or predates
+  /// the escrow API.
+  Future<List<EscrowedWithdrawal>?> getEscrowedWithdrawals({
+    required String address,
+    required String scUid,
+  }) async {
+    const method = 'GetVBTCBalance(escrow)';
+
+    if (address.isEmpty || scUid.isEmpty) return null;
+
+    try {
+      final result = await getJson(
+        "/GetVBTCBalance/$address/$scUid",
+        cleanPath: false,
+      );
+
+      if (result['Success'] != true) {
+        _log(method, 'FAILED for $address / $scUid: ${result['Message']}');
+        return null;
+      }
+
+      return EscrowedWithdrawal.listFromJson(result['EscrowedWithdrawals']);
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      return null;
+    }
+  }
+
   Future<String?> initiateCeremony(String ownerAddress) async {
     const method = 'InitiateMPCCeremony';
     _log(method, 'REQUEST POST /InitiateMPCCeremony/$ownerAddress');
@@ -225,11 +261,11 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? globalL10n.r3fFailedInitiateCeremony);
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedInitiateCeremony));
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -252,7 +288,7 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${result['Message']}');
-      Toast.error(result['Message'] ?? globalL10n.r3fFailedCeremonyStatus);
+      Toast.error(nodeRefusalMessage(result, fallback: globalL10n.r3fFailedCeremonyStatus));
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -299,11 +335,11 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? globalL10n.r3fFailedCreateContract);
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedCreateContract));
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -343,11 +379,11 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? globalL10n.r3fFailedTransferVbtc);
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedTransferVbtc));
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -394,11 +430,11 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? globalL10n.r3fFailedTransferVbtc);
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedTransferVbtc));
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return null;
     }
   }
@@ -426,11 +462,11 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${result['Message']}');
-      Toast.error(result['Message'] ?? globalL10n.r3fFailedTransferOwnership);
+      Toast.error(nodeRefusalMessage(result, fallback: globalL10n.r3fFailedTransferOwnership));
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }
@@ -479,13 +515,13 @@ class VbtcV2Service extends BaseService {
       _log(method, 'FAILED: ${data['Message']}');
       return WithdrawalResult(
         success: false,
-        message: data['Message'] ?? globalL10n.r3fFailedRequestWithdrawal,
+        message: nodeRefusalMessage(data, fallback: globalL10n.r3fFailedRequestWithdrawal),
       );
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
       return WithdrawalResult(
         success: false,
-        message: e.toString(),
+        message: userErrorMessage(e),
       );
     }
   }
@@ -531,10 +567,17 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
+      final String? message = data['Message'];
+      final unpayable = data['Unpayable'] == true ||
+          (message?.startsWith(unpayableWithdrawalMarker) ?? false);
       return WithdrawalResult(
         success: false,
-        message: data['Message'] ?? globalL10n.r3fFailedCompleteWithdrawal,
+        message: nodeRefusalMessage(
+          message?.replaceFirst(unpayableWithdrawalMarker, '').trim(),
+          fallback: globalL10n.r3fFailedCompleteWithdrawal,
+        ),
         requestHash: withdrawalRequestHash,
+        unpayable: unpayable,
       );
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -543,7 +586,7 @@ class VbtcV2Service extends BaseService {
         success: false,
         message: timedOut
             ? "Timed out waiting for the signing ceremony to finish. The withdrawal may still be in progress."
-            : e.toString(),
+            : userErrorMessage(e),
         requestHash: withdrawalRequestHash,
         timedOut: timedOut,
       );
@@ -653,11 +696,11 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(data['Message'] ?? globalL10n.r3fFailedCancelWithdrawal);
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedCancelWithdrawal));
       return false;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
-      Toast.error(e.toString());
+      Toast.error(userErrorMessage(e));
       return false;
     }
   }

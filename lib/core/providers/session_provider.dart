@@ -29,6 +29,8 @@ import '../../features/btc/services/btc_fee_rate_service.dart';
 import '../../features/btc/services/btc_service.dart';
 
 import '../api_token_manager.dart';
+import '../data_home.dart';
+import '../services/launched_cli.dart';
 import '../utils.dart';
 import '../../features/chat/providers/chat_notification_provider.dart';
 import '../../features/dst/providers/listed_nfts_provider.dart';
@@ -218,9 +220,18 @@ class SessionProvider extends StateNotifier<SessionModel> {
     init(true);
   }
 
+  /// The loop mode of the most recent [init]. The startup unlock prompt
+  /// finishes setup with the same mode, so a restart (for example after a
+  /// snapshot import) never starts a second set of polling loops.
+  bool lastInitInLoop = true;
+
   Future<void> init(bool inLoop) async {
-    final token =
-        kDebugMode ? DEV_API_TOKEN : generateRandomString(8).toLowerCase();
+    lastInitInLoop = inLoop;
+    final token = cliApiToken(
+      isMainnet: !Env.isTestNet && !Env.isDevnet,
+      isDebug: kDebugMode,
+      randomToken: () => generateRandomString(8).toLowerCase(),
+    );
 
     ref.read(logProvider.notifier).append(
         LogEntry(message: "Welcome to VerifiedX Wallet version $APP_VERSION"));
@@ -385,7 +396,9 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     await Future.delayed(const Duration(seconds: 3));
 
-    if (remoteInfo != null) {
+    // Automation builds never offer GUI or CLI updates, so an update dialog
+    // can't interrupt a scripted run. The snapshot prompt below still shows.
+    if (remoteInfo != null && !Env.isAutomation) {
       if (remoteInfo.gui.updateAvailable) {
         updateGui();
         return;
@@ -399,8 +412,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       }
     }
 
-    if (remoteInfo != null) {
-
+    if (remoteInfo != null && !Env.isAutomation) {
       final cliUpdateAvailable = await BridgeService().updateCli(false);
       if (cliUpdateAvailable == true) {
         final confirmed = await ConfirmDialog.show(
@@ -426,6 +438,17 @@ class SessionProvider extends StateNotifier<SessionModel> {
         }
       }
     }
+  }
+
+  /// Fetches the latest snapshot for this network from the snapshot fleet and
+  /// stores it for [promptForSnapshotImport]. Returns null when it could not
+  /// be fetched.
+  Future<SnapshotInfo?> refreshSnapshotInfo() async {
+    final snapshotInfo = await SnapshotService().fetchLatest();
+    if (snapshotInfo != null) {
+      state = state.copyWith(snapshotInfo: snapshotInfo);
+    }
+    return snapshotInfo;
   }
 
   Future<void> promptForSnapshotImport() async {
@@ -649,9 +672,12 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     ref.read(walletListProvider.notifier).set(wallets);
 
-    if (wallets.isNotEmpty) {
-      final totalBalance = wallets.map((e) => e.balance).toList().sum;
+    // Set on every load (0 for an empty list) so the balance row does not
+    // stay on 'Loading...' or keep a stale total after the last account goes.
+    final totalBalance = wallets.map((e) => e.balance).toList().sum;
+    state = state.copyWith(totalBalance: totalBalance);
 
+    if (wallets.isNotEmpty) {
       final currentWalletAddress =
           singleton<Storage>().getString(Storage.CURRENT_WALLET_ADDRESS_KEY);
 
@@ -660,15 +686,11 @@ class SessionProvider extends StateNotifier<SessionModel> {
             (element) => element.address == currentWalletAddress);
 
         if (currentWallet != null) {
-          state = state.copyWith(
-              currentWallet: currentWallet, totalBalance: totalBalance);
+          state = state.copyWith(currentWallet: currentWallet);
           ref.read(currentValidatorProvider.notifier).set(currentWallet);
-        } else {
-          state = state.copyWith(totalBalance: totalBalance);
         }
       } else {
-        state = state.copyWith(
-            currentWallet: wallets.first, totalBalance: totalBalance);
+        state = state.copyWith(currentWallet: wallets.first);
         ref.read(currentValidatorProvider.notifier).set(wallets.first);
       }
 
@@ -826,6 +848,24 @@ class SessionProvider extends StateNotifier<SessionModel> {
     }
   }
 
+  /// Reads the CLI version and the wallet's password and encryption state.
+  /// Runs once the CLI answers, whether this session launched it or attached
+  /// to one that was already running.
+  Future<void> _loadCliDetails() async {
+    try {
+      final cliVersion = await BridgeService().getCliVersion();
+      ref.read(logProvider.notifier).append(LogEntry(
+          message: "CLI Version: $cliVersion", variant: AppColorVariant.Info));
+      state = state.copyWith(cliVersion: cliVersion);
+    } catch (e) {
+      ref.read(logProvider.notifier).append(LogEntry(
+          message: "Could not read the CLI version: $e",
+          variant: AppColorVariant.Warning));
+    }
+    ref.read(passwordRequiredProvider.notifier).check();
+    ref.read(walletIsEncryptedProvider.notifier).check();
+  }
+
   Future<bool> _cliCheck([int attempt = 1, int maxAttempts = 500]) async {
     if (attempt > maxAttempts) {
       ref.read(logProvider.notifier).append(
@@ -840,12 +880,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
           message: "VerifedX Wallet Started Successfully",
           variant: AppColorVariant.Success));
       await fetchConfig();
-      final cliVersion = await BridgeService().getCliVersion();
-      ref.read(logProvider.notifier).append(LogEntry(
-          message: "CLI Version: $cliVersion", variant: AppColorVariant.Info));
-      state = state.copyWith(cliVersion: cliVersion);
-      ref.read(passwordRequiredProvider.notifier).check();
-      ref.read(walletIsEncryptedProvider.notifier).check();
+      await _loadCliDetails();
       return true;
     }
 
@@ -869,10 +904,15 @@ class SessionProvider extends StateNotifier<SessionModel> {
   Future<bool> _startCli(String apiToken) async {
     if (Env.launchCli) {
       if (await _cliIsActive()) {
+        // A CLI launched by an earlier session holds that session's token.
+        // The fixed non-mainnet and debug tokens match it; a mainnet release
+        // token is random per launch and cannot.
+        singleton<ApiTokenManager>().set(apiToken);
         await fetchConfig();
         ref
             .read(logProvider.notifier)
             .append(LogEntry(message: "CLI is already running!"));
+        await _loadCliDetails();
 
         return true;
       }
@@ -880,10 +920,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       startupDataLoop();
 
       final cliPath = Env.cliPathOverride ?? getCliPath();
-      List<String> options = Env.isTestNet || Env.isDevnet || kDebugMode
-          ? ['enableapi', 'gui']
-          : ['enableapi', 'gui', 'apitoken=$apiToken'];
-      // List<String> options = ['enableapi', 'gui'];
+      List<String> options = ['enableapi', 'gui', 'apitoken=$apiToken'];
 
       if (Env.isTestNet || Env.isDevnet) {
         options.add("testnet");
@@ -921,6 +958,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
               .read(logProvider.notifier)
               .append(LogEntry(message: "Launching CLI in the background."));
           final List<String> params = [cliPath, ...options];
+          LaunchedCli.launchedOnWindows(cliExePath);
           pm.run(params, workingDirectory: appPath).then((result) {
             final output = "${result.stdout}${result.stderr}".trim();
             final snippet =
@@ -956,11 +994,35 @@ class SessionProvider extends StateNotifier<SessionModel> {
           return false;
         }
       } else {
+        Map<String, String>? environment;
+        if (Env.isAutomation) {
+          // The CLI derives its data folders from HOME (see DataHome), so an
+          // automation build points it at the isolated folder. The folder must
+          // exist before the launch: .NET verifies the home directory and
+          // treats a missing one as empty, which sends the CLI to `/rbxtest`.
+          try {
+            final cliHome = DataHome.cliHome();
+            Directory(cliHome).createSync(recursive: true);
+            environment = {'HOME': cliHome};
+            ref.read(logProvider.notifier).append(LogEntry(
+                message: "Automation: CLI data isolated under $cliHome",
+                variant: AppColorVariant.Info));
+          } catch (e) {
+            ref.read(logProvider.notifier).append(
+                LogEntry(message: "$e", variant: AppColorVariant.Danger));
+            return false;
+          }
+        }
+
         var stdOutController = ShellLinesController();
         final shell = Shell(
           throwOnError: false,
           stdout: Env.hideCliOutput ? stdOutController.sink : null,
-          workingDirectory: "/Applications/VFXWallet.app/Contents/MacOS/",
+          // The CLI reads BIP39/wordlist relative to its working directory.
+          // The wordlists sit in Contents/Resources because a signed bundle
+          // may hold only executables in Contents/MacOS.
+          workingDirectory: "/Applications/VFXWallet.app/Contents/Resources/",
+          environment: environment,
         );
         cmd = '"$cliPath" ${options.join(' ')}';
 
@@ -970,6 +1032,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
         try {
           shell.run(cmd);
+          LaunchedCli.launchedOnMac(shell);
           singleton<ApiTokenManager>().set(apiToken);
 
           await Future.delayed(const Duration(seconds: 3));

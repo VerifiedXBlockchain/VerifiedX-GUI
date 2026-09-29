@@ -19,10 +19,11 @@ dependencies:
   flutter_riverpod: ^2.3.4
   get_it: ^7.2.0
   intl: ^0.17.0
+  image: ^4.0.17
   json_annotation: ^4.8.0
   logger: ^1.1.0
   responsive_framework: ^0.2.0
-  shared_preferences: ^2.0.15
+  shared_preferences: ^2.1.2
   timeago: ^3.2.2
   url_launcher: ^6.1.4
   process_run: ^0.12.3+2
@@ -83,11 +84,15 @@ dependencies:
 dev_dependencies:
   auto_route_generator: ^5.0.3
   build_runner: ^2.3.2
+  flutter_driver:
+    sdk: flutter
   flutter_gen_runner: ^5.2.0
   flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
   freezed: ^2.3.2
+  integration_test:
+    sdk: flutter
   json_serializable: ^6.3.1
   msix: ^3.6.2
 
@@ -99,7 +104,6 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
-    - assets/images/connector/
     - assets/images/icons/
     - assets/fonts/
     - assets/js/
@@ -143,3 +147,8 @@ flutter_icons:
 # flutter_native_splash:
 #   background_image: 'resources/splash-bg.png'
 #   image: 'resources/splash-fg.png'
+
+# integration_test and flutter_driver (SDK 3.7.12) pin archive to 3.3.2, which
+# would downgrade the production dependency. Keep the version the app shipped with.
+dependency_overrides:
+  archive: 3.3.6

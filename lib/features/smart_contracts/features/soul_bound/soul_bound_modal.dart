@@ -145,6 +145,7 @@ class SoulBoundModal extends BaseComponent {
                       _provider.ownerAddressController.text = address;
                     }
                   },
+                  tooltip: AppLocalizations.of(context).scwUseMyAddress,
                   icon: const Icon(Icons.import_export))
               : IconButton(
                   icon: const Icon(
@@ -152,6 +153,7 @@ class SoulBoundModal extends BaseComponent {
                     size: 16,
                     color: Colors.white,
                   ),
+                  tooltip: AppLocalizations.of(context).scwChooseAnAddress,
                   onPressed: () {
                     chooseAddress(context, ref, _provider.ownerAddressController);
                   },
@@ -176,6 +178,7 @@ class SoulBoundModal extends BaseComponent {
                       _provider.beneficiaryAddressController.text = address;
                     }
                   },
+                  tooltip: AppLocalizations.of(context).scwUseMyAddress,
                   icon: const Icon(Icons.import_export))
               : IconButton(
                   icon: const Icon(
@@ -183,6 +186,7 @@ class SoulBoundModal extends BaseComponent {
                     size: 16,
                     color: Colors.white,
                   ),
+                  tooltip: AppLocalizations.of(context).scwChooseAnAddress,
                   onPressed: () {
                     chooseAddress(context, ref, _provider.beneficiaryAddressController);
                   },

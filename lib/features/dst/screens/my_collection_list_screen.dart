@@ -105,6 +105,7 @@ class MyCollectionsListScreen extends BaseScreen {
                                         await Clipboard.setData(ClipboardData(text: shop.url));
                                         Toast.message(AppLocalizations.of(context).r3dShopUrlCopied);
                                       },
+                                      tooltip: AppLocalizations.of(context).mktCopyShopUrl,
                                       icon: Icon(
                                         Icons.copy,
                                         size: 16,

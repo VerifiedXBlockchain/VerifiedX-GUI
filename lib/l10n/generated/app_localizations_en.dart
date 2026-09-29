@@ -7,6 +7,9 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get actionBack => 'Back';
+
+  @override
   String get actionCancel => 'Cancel';
 
   @override
@@ -25,13 +28,58 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionCopy => 'Copy';
 
   @override
+  String get actionCopyAddress => 'Copy address';
+
+  @override
+  String get actionCopyAmount => 'Copy amount';
+
+  @override
+  String get actionCopyDomain => 'Copy domain';
+
+  @override
+  String get actionCopyMnemonic => 'Copy mnemonic';
+
+  @override
+  String get actionCopyPrivateKey => 'Copy private key';
+
+  @override
+  String get actionCopyRecoveryAddress => 'Copy recovery address';
+
+  @override
+  String get actionCopyRecoveryPrivateKey => 'Copy recovery private key';
+
+  @override
+  String get actionCopyRestoreCode => 'Copy restore code';
+
+  @override
+  String get actionCopySignature => 'Copy signature';
+
+  @override
+  String get actionCopyTransactionHash => 'Copy transaction hash';
+
+  @override
+  String get actionCopyWifPrivateKey => 'Copy WIF private key';
+
+  @override
   String get actionDelete => 'Delete';
 
   @override
   String get actionDone => 'Done';
 
   @override
+  String get actionGridView => 'Grid view';
+
+  @override
+  String get actionHelp => 'Help';
+
+  @override
+  String get actionHideDetails => 'Hide details';
+
+  @override
   String get actionImport => 'Import';
+
+  @override
+  String get actionListView => 'List view';
 
   @override
   String get actionNo => 'No';
@@ -43,6 +91,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionReceive => 'Receive';
 
   @override
+  String get actionRefresh => 'Refresh';
+
+  @override
   String get actionSave => 'Save';
 
   @override
@@ -50,6 +101,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionSend => 'Send';
+
+  @override
+  String get actionShowDetails => 'Show details';
 
   @override
   String get actionYes => 'Yes';
@@ -179,7 +233,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String adnrFaucetRequiredBody(String cost) {
-    return 'There is a $cost VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWoud you like to proceed?';
+    return 'There is a $cost VFX cost (plus TX fee) to create a BTC domain.\n\nThe community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.\n\nWould you like to proceed?';
   }
 
   @override
@@ -306,13 +360,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authBackupKeys => 'Backup Keys';
 
   @override
-  String get authDecryptFailed => 'Failed to decrypt keys';
-
-  @override
   String get authEnterPassword => 'Enter Password';
 
   @override
-  String get authEnterPasswordBody => 'Enter your password to decrypt your stored keys.';
+  String get authEnterPasswordBody => 'Enter this account\'s password to decrypt its stored keys.';
 
   @override
   String get authLoginCreateAccount => 'Login / Create Account';
@@ -757,6 +808,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get btcRbfFeeRateTitle => 'Fee Rate';
 
   @override
+  String btcRbfHighFeeBody(String reason) {
+    return '$reason Replace the transaction anyway?';
+  }
+
+  @override
+  String get btcRbfHighFeeConfirm => 'Replace anyway';
+
+  @override
+  String get btcRbfHighFeeTitle => 'High Fee';
+
+  @override
   String get btcReceivingAddressLabel => 'Receiving Address';
 
   @override
@@ -1018,6 +1080,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2CancelWithdrawalTooltip => 'Cancel withdrawal';
 
   @override
+  String get bw2NoCancelNoBtcTx => 'No Bitcoin transaction hash was returned for this withdrawal, so it cannot be cancelled from here. Cancelling a request without one needs a vote by the contract\'s validators, which the wallet cannot start yet.';
+
+  @override
+  String get bw2NoCancelUnpayable => 'This withdrawal can never be paid at its fee rate, so retrying will keep failing. There is no Cancel button because cancelling it needs a vote by the contract\'s validators, which the wallet cannot start yet. Its vBTC stays held in escrow until then.';
+
+  @override
   String get bw2CeremonyCompleted => 'Ceremony Completed';
 
   @override
@@ -1104,7 +1172,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String bw2DomainTooLong(String max) {
-    return 'Domain must be less than $max charcters.';
+    return 'Domain must be less than $max characters.';
   }
 
   @override
@@ -1481,6 +1549,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2SupplyAmount => 'Supply Amount';
 
   @override
+  String bw2SupplyWholeNumberMax(String max) {
+    return 'Supply must be a whole number from 0 to $max.';
+  }
+
+  @override
   String get bw2SupplyLabel => 'Supply';
 
   @override
@@ -1715,6 +1788,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chatSendHint => 'Send message...';
 
   @override
+  String get chatSendMessage => 'Send message';
+
+  @override
   String get chatTitle => 'Chats';
 
   @override
@@ -1893,9 +1969,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get faucetRequestVfx => 'Request VFX';
-
-  @override
-  String get faucetTitle => 'VFX Faucet';
 
   @override
   String get faucetVerificationCodeLabel => 'Verification Code';
@@ -2239,10 +2312,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hnavResyncing => 'Resyncing...';
 
   @override
-  String get hnavRevealPrivateKeysPasswordMessage => 'Enter your password to reveal private keys.';
+  String get hnavRevealPrivateKeysPasswordMessage => 'Enter this account\'s password to reveal its private keys.';
 
   @override
-  String get hnavRevealVaultKeysPasswordMessage => 'Enter your password to reveal Vault account private keys.';
+  String get hnavRevealVaultKeysPasswordMessage => 'Enter this account\'s password to reveal its Vault account private keys.';
 
   @override
   String get hnavSectionAccountSecurity => 'Account Security';
@@ -2379,6 +2452,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeDoesNotOwn => 'does NOT own';
 
   @override
+  String get homeFooterGithubTooltip => 'GitHub';
+
+  @override
   String get homeGetHelpTitle => 'Get Help';
 
   @override
@@ -2427,28 +2503,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeVisitWebsite => 'Visit Website';
 
   @override
-  String get keygenAddressLabel => 'Address';
+  String get keyImportActivityFound => 'Activity found';
 
   @override
-  String get keygenDone => 'Done';
+  String get keyImportActivityUnknown => 'Could not check activity';
+
+  @override
+  String keyImportBitcoinLine(String address) {
+    return 'Bitcoin: $address';
+  }
+
+  @override
+  String get keyImportChooseAccountsBody => 'Earlier wallet versions wrote this key in more than one form, and each form leads to a different Vault and Bitcoin account. Your VFX account is the same for all of them. Choose the pair to restore.';
+
+  @override
+  String get keyImportChooseAccountsTitle => 'Choose accounts to restore';
+
+  @override
+  String get keyImportEarlierForm => 'Earlier key form';
+
+  @override
+  String get keyImportInvalidKey => 'This is not a valid private key. Paste the hexadecimal key.';
+
+  @override
+  String get keyImportNoActivity => 'No activity found';
+
+  @override
+  String get keyImportStandardForm => 'Standard key form';
+
+  @override
+  String keyImportVaultLine(String address) {
+    return 'Vault: $address';
+  }
 
   @override
   String get keygenEmailAddressTitle => 'Email Address';
-
-  @override
-  String get keygenEmailLabel => 'Email';
-
-  @override
-  String get keygenGenerateKeypair => 'Generate Keypair';
-
-  @override
-  String get keygenImportPrivateKey => 'Import Private Key';
-
-  @override
-  String get keygenImportWalletTitle => 'Import Wallet';
-
-  @override
-  String get keygenKeyGeneratedBody => 'Here is your account details. Please ensure to back up your private key in a safe place.';
 
   @override
   String get keygenKeyGeneratedTitle => 'Key Generated';
@@ -2460,13 +2549,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get keygenPrivateKeyCopiedToast => 'Private key copied to clipboard';
 
   @override
-  String get keygenPrivateKeyLabel => 'Private Key';
-
-  @override
   String get keygenPublicKeyCopiedToast => 'Public key copied to clipboard';
-
-  @override
-  String get keygenRecoverAccount => 'Recover Account';
 
   @override
   String get keygenRecoveryMnemonicLabel => 'Recovery Mnemonic';
@@ -2500,6 +2583,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get labelTotal => 'Total';
+
+  @override
+  String get actionHidePassword => 'Hide password';
+
+  @override
+  String get actionNext => 'Next';
+
+  @override
+  String get actionOpenAsset => 'Open asset';
+
+  @override
+  String get actionPickDate => 'Pick a date';
+
+  @override
+  String get actionPickTime => 'Pick a time';
+
+  @override
+  String get actionPrevious => 'Previous';
+
+  @override
+  String get actionShowPassword => 'Show password';
+
+  @override
+  String get actionViewAsset => 'View asset';
+
+  @override
+  String get actionViewOnExplorer => 'View on explorer';
 
   @override
   String get messageAddressCopied => 'Address copied to clipboard';
@@ -2611,6 +2721,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mktCollectionNameLabel => 'Collection Name';
+
+  @override
+  String get mktCopyShopUrl => 'Copy shop URL';
 
   @override
   String get mktCouldNotGenerateHashToast => 'Could not generate hash';
@@ -2967,6 +3080,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get navCollapseMenuTooltip => 'Collapse navigation';
+
+  @override
   String get navConfirmedStatus => 'Confirmed';
 
   @override
@@ -2974,6 +3090,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navDomains => 'Domains';
+
+  @override
+  String get navExpandMenuTooltip => 'Expand navigation';
 
   @override
   String get navGetBtc => 'Get\nBTC';
@@ -2989,12 +3108,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navMenuCryptoCom => 'Crypto.com';
-
-  @override
-  String get navMenuDashboard => 'Dashboard';
-
-  @override
-  String get navMenuDomains => 'VFX/BTC Domains';
 
   @override
   String get navMenuFungibleTokens => 'Fungible Tokens';
@@ -3015,12 +3128,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navMenuPayWithButterfly => 'Launch BFLY';
 
   @override
-  String get navMenuReceive => 'Receive';
-
-  @override
-  String get navMenuSend => 'Send';
-
-  @override
   String get navMenuSignOut => 'Sign Out';
 
   @override
@@ -3028,9 +3135,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navMenuTokenizeBitcoin => 'vBTC Tokens';
-
-  @override
-  String get navMenuTransactions => 'Transactions';
 
   @override
   String get navMenuValidator => 'Validator';
@@ -3064,9 +3168,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navPendingStatus => 'Pending';
-
-  @override
-  String get navPrivateKeyNotAvailable => 'Private key not available.';
 
   @override
   String get navSettings => 'Settings';
@@ -3136,6 +3237,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nftConfirmSaleStartTitle => 'Confirm Sale Start';
 
   @override
+  String get nftCopySmartContractId => 'Copy smart contract ID';
+
+  @override
   String get nftCopyUrl => 'Copy URL';
 
   @override
@@ -3146,12 +3250,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nftDetailFallback => 'NFT';
-
-  @override
-  String get nftDevolveSentToast => 'Devolve transaction sent successfully!';
-
-  @override
-  String get nftDevolveTitle => 'Devolve?';
 
   @override
   String get nftEvolve => 'Evolve';
@@ -3226,9 +3324,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nftOwnedByMe => 'Owned by Me';
 
   @override
+  String get nftPauseMedia => 'Pause';
+
+  @override
   String nftPhaseNameLabel(String name) {
     return 'Name: $name';
   }
+
+  @override
+  String get nftPlayMedia => 'Play';
 
   @override
   String get nftPropertiesHeading => 'Properties:';
@@ -3268,6 +3372,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nftSyncMedia => 'Sync Media';
+
+  @override
+  String get nftSyncMediaSuccess => 'Media synced.';
+
+  @override
+  String get nftSyncMediaFailed => 'Couldn\'t sync media. Please try again.';
+
+  @override
+  String nftSyncMediaError(String error) {
+    return 'Media sync failed: $error';
+  }
+
+  @override
+  String nftSyncMediaUploadFailed(String fileName) {
+    return 'Couldn\'t upload $fileName. Media was not synced.';
+  }
 
   @override
   String get nftTabManageMinted => 'Manage Minted NFTs';
@@ -3594,9 +3714,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prvBridgeGasZeroEth => 'This address pays the gas fee for the mint transaction on Base. Send a small amount of Base ETH (≈ 0.001 ETH) to the address above before bridging. You can fund it from any exchange or Base wallet that supports withdrawing to Base mainnet. Balance updates automatically every 10s — tap Refresh for an immediate check.';
 
   @override
-  String get prvBridgeHideDetails => 'Hide details';
-
-  @override
   String get prvBridgeHistoryLoadError => 'Couldn\'t load bridge history. Check your connection and try again.';
 
   @override
@@ -3674,9 +3791,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prvBridgeSafeToClose => 'Safe to close this dialog — your bridge will continue in the background. Track progress in Bridge History.';
-
-  @override
-  String get prvBridgeShowDetails => 'Show details';
 
   @override
   String prvBridgeSigsProgress(int collected, int required) {
@@ -3823,6 +3937,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get prvCopyAddress => 'Copy address';
+
+  @override
+  String get prvCopyViewingKey => 'Copy viewing key';
 
   @override
   String get prvCreatePasswordBody => 'Create a password to secure your shielded wallet\'s spending key. You\'ll need this password to unshield, transfer, or consolidate funds.';
@@ -3991,9 +4108,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prvRecipientZfxLabel => 'Recipient (zfx_ address)';
 
   @override
-  String get prvRefresh => 'Refresh';
-
-  @override
   String get prvResetAction => 'Reset';
 
   @override
@@ -4063,7 +4177,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String prvShieldedVfxRequiredBody(String balance, String fee) {
-    return 'vBTC privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have $balance shielded VFX.\nPlease shield at least $fee first.';
+    return 'Privacy operations require a small fee paid from your shielded VFX balance.\n\nYou currently have $balance shielded VFX.\nPlease shield at least $fee first.';
   }
 
   @override
@@ -4263,6 +4377,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get r3aBlockHeightUnknown => 'The current block height is not known yet. Try again in a moment.';
+
+  @override
   String get r3aBlockHeightVariable => 'Block Height Variable';
 
   @override
@@ -4300,6 +4417,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3aCompilingMintingEllipsis => 'Compiling & Minting…';
+
+  @override
+  String get r3aCompiledExclaim => 'Compiled!';
+
+  @override
+  String get r3aMintedExclaim => 'Minted!';
 
   @override
   String get r3aConfiguration => 'Configuration';
@@ -4349,7 +4472,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3aDeleteDraft => 'Delete Draft';
 
   @override
-  String get r3aDeleteDraftConfirm => 'Are you sure you wan\'t to delete this smart contract draft?';
+  String get r3aDeleteDraftConfirm => 'Are you sure you want to delete this smart contract draft?';
 
   @override
   String get r3aDeleteInstanceConfirm => 'Are you sure you want to delete this instance?';
@@ -4373,7 +4496,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3aDescriptionIsRequired => 'Description is required';
 
   @override
-  String get r3aDraftDeleted => 'Draft Delete';
+  String get r3aDraftDeleted => 'Draft deleted';
 
   @override
   String get r3aDraftSaved => 'Draft saved!';
@@ -4596,7 +4719,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String r3aMaxMintAtOnce(String max) {
-    return 'The maxium number you can mint at one time is $max.';
+    return 'The maximum number you can mint at one time is $max.';
   }
 
   @override
@@ -4627,7 +4750,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3aMintPhysicalRwa => 'Mint a physical or Real World Asset';
 
   @override
-  String get r3aMintTxSent => 'Mint transaction sent successfully. Please wait until the the smart contract is minted on-chain.';
+  String get r3aMintTxSent => 'Mint transaction sent successfully. Please wait until the smart contract is minted on-chain.';
 
   @override
   String get r3aMotherAddress => 'Mother Address';
@@ -4691,6 +4814,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3aProblemMintingSc => 'A problem occurred minting this smart contract.';
+
+  @override
+  String r3aProblemCompilingOrMintingSc(String error) {
+    return 'A problem occurred compiling or minting this smart contract: $error';
+  }
 
   @override
   String get r3aProperty => 'Property';
@@ -4903,9 +5031,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3bCreateCollectionsHint => 'Now you can create collections and then add listings to them.';
 
   @override
-  String get r3bCreateListingsHint => 'Now you can create listings for the NFTs you own.';
-
-  @override
   String get r3bCreateNewCollection => 'Create New Collection';
 
   @override
@@ -5017,9 +5142,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3bNoCollections => 'No Collections';
-
-  @override
-  String get r3bNoListings => 'No Listings';
 
   @override
   String get r3bNoPrivateKey => 'No private key.';
@@ -6012,7 +6134,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3eEncryptWalletBody => 'This function will encrypt ALL private keys in this wallet. Please ensure you have ALL private keys in this wallet backed up before proceeding.\n\nThis is an irreversible action and the password that you create will be the only way to gain access to this wallet once you complete this encryption.\n\nIt is also recommended to backup your password in addition to your private keys.';
 
   @override
-  String get r3eEnterPasswordBackup => 'Enter your password to backup your keys.';
+  String get r3eEnterPasswordBackup => 'Enter this account\'s password to back up its keys.';
 
   @override
   String get r3eExportNftMedia => 'Export NFT Media';
@@ -6029,9 +6151,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String r3eFailedDownloadFile(String filename, String attempts) {
     return 'Failed to download $filename after $attempts attempts';
   }
-
-  @override
-  String get r3eFaucetIntro => 'The community has allocated some VFX to lower the barrier to entry for trying out this feature. In order to prevent abuse, a phone number is required for an SMS authorization. Only a hash of your phone number will be stored.';
 
   @override
   String r3eFaucetSuccess(String result) {
@@ -6081,11 +6200,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3eLoginWithThisAccount => 'Login with this Account';
-
-  @override
-  String r3eMaxAmount(String amount) {
-    return 'Max Amount: $amount VFX';
-  }
 
   @override
   String get r3eMediaBackedUp => 'Media backed up successfully.';
@@ -6171,12 +6285,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String r3eProgressLabel(String percent) {
     return 'Progress: $percent';
   }
-
-  @override
-  String get r3eReadLess => 'Read Less';
-
-  @override
-  String get r3eReadMore => 'Read More';
 
   @override
   String get r3eRecentTransactions => 'Recent Transactions';
@@ -6564,7 +6672,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String r3gAdnrDeleteWithCost(String cost) {
-    return 'There is a cost of $cost RBX to delete an RBX Domain.';
+    return 'There is a cost of $cost VFX to delete a VFX Domain.';
   }
 
   @override
@@ -6642,12 +6750,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get r3gConfirmDevolveOneStage => 'Are you sure you want to devolve this NFT one stage?';
-
-  @override
-  String get r3gConfirmEvolveOneStage => 'Are you sure you want to evolve this NFT one stage?';
-
-  @override
   String r3gConfirmEvolveToStage(String index) {
     return 'Are you sure you want to evolve to stage $index?';
   }
@@ -6707,9 +6809,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String r3gCurrentStage(String name) {
     return 'Current Stage: $name';
   }
-
-  @override
-  String get r3gDevolve => 'Devolve';
 
   @override
   String get r3gEncryptionPasswordRequired => 'Encryption Password Required to continue validating.';
@@ -7141,7 +7240,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3hHours24Minimum => 'Hours (24 Minimum)';
 
   @override
-  String get r3hInsufficientBalanceForTopic => 'Balance will not be sufficent to validate due to the cost of creating a topic (1 VFX + fee)';
+  String get r3hInsufficientBalanceForTopic => 'Balance will not be sufficient to validate due to the cost of creating a topic (1 VFX + fee)';
 
   @override
   String get r3hInternetSpeedDown => 'Internet Speed Down (in Gbps)';
@@ -7157,9 +7256,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3hLabelMinTokenRequirement => 'Minimum Token Requirement';
-
-  @override
-  String get r3hLogoutConfirmBody => 'Are you sure you want to logout of the VFX Web Wallet?';
 
   @override
   String get r3hMachineOs => 'Machine OS';
@@ -7237,9 +7333,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3hOneActiveTopicPerAddress => 'Only one active topic per address is allowed.';
-
-  @override
-  String get r3hOptional => 'Optional';
 
   @override
   String get r3hPasswordRequired => 'Password required.';
@@ -7321,9 +7414,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3hTokenHasFixedSupply => 'Token Has Fixed Supply:';
-
-  @override
-  String get r3hTokenIconUrlLabel => 'Token Icon URL:';
 
   @override
   String get r3hTokenNameFieldLabel => 'Token Name:';
@@ -7577,6 +7667,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reserveWebNoAccount => 'No Vault Account Found';
 
   @override
+  String get reserveWebStatusUnavailable => 'Could not load this Vault\'s status from the network. Retrying automatically.';
+
+  @override
   String get reserveWebNoNftsToast => 'Your Vault Account has no NFTS.';
 
   @override
@@ -7644,6 +7737,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scVaultCannotMintToast => 'Vault Accounts cannot mint smart contracts';
+
+  @override
+  String get scwAddAdditionalAsset => 'Add additional asset';
 
   @override
   String get scwAddAFeature => 'Add a Feature';
@@ -7759,6 +7855,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get scwDeletePrimaryAsset => 'Delete primary asset';
+
+  @override
   String get scwDeletePrimaryAssetBody => 'Are you sure you want to delete the primary asset?';
 
   @override
@@ -7775,6 +7874,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scwDownloadExampleJson => 'Download Example JSON';
+
+  @override
+  String get scwDownloadExampleFailed => 'Couldn\'t save the example file.';
 
   @override
   String get scwEdit => 'Edit';
@@ -7947,6 +8049,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scwPhysicalDigitalGoodName => 'Physical/Digital Good Name';
 
   @override
+  String get scwPickColor => 'Pick a color';
+
+  @override
   String get scwPrimaryAsset => 'Primary Asset';
 
   @override
@@ -7994,10 +8099,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scwRemove => 'Remove';
 
   @override
+  String get scwRemoveAsset => 'Remove asset';
+
+  @override
   String get scwRemoveAssetBody => 'Are you sure you want to remove this additional asset?';
 
   @override
   String get scwRemoveAssetTitle => 'Remove Asset?';
+
+  @override
+  String get scwRemovePhase => 'Remove phase';
 
   @override
   String get scwRemovePhaseBody => 'Are you sure you want to remove this evolution phase?';
@@ -8006,10 +8117,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get scwRemovePhaseTitle => 'Remove Phase?';
 
   @override
+  String get scwRemoveProperty => 'Remove property';
+
+  @override
   String get scwRemovePropertyBody => 'Are you sure you want to remove this property?';
 
   @override
   String get scwRemovePropertyTitle => 'Remove Property?';
+
+  @override
+  String get scwRemoveRoyalty => 'Remove royalty';
 
   @override
   String get scwRemoveRoyaltyBody => 'Are you sure you want to remove the royalty?';
@@ -8094,6 +8211,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String sendAmountLoweredForFee(String fee, String amount) {
+    return 'Your balance does not cover this amount plus the $fee VFX network fee, so the amount was lowered to $amount VFX.';
+  }
+
+  @override
+  String sendAmountTooManyDecimals(String currency, String decimals) {
+    return '$currency amounts can have at most $decimals decimal places.';
+  }
+
+  @override
   String sendAppBarTitle(String currency) {
     return 'Send $currency';
   }
@@ -8102,7 +8229,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendBadgeNotActivated => 'Not Activated';
 
   @override
+  String get sendBtcAddressInvalid => 'Invalid BTC address.';
+
+  @override
+  String get sendBtcAddressMainnetRequired => 'This is a testnet BTC address. A mainnet address is required.';
+
+  @override
+  String get sendBtcAddressTestnetRequired => 'This is a mainnet BTC address. A testnet address is required.';
+
+  @override
   String get sendChooseAddressTitle => 'Choose an address';
+
+  @override
+  String sendFeeNotCovered(String available, String fee) {
+    return 'Your available balance of $available VFX does not cover the $fee VFX network fee.';
+  }
 
   @override
   String get sendFormLabelAmount => 'Amount:';
@@ -8115,6 +8256,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sendFormLabelTo => 'To:';
+
+  @override
+  String sendOwnAddressBody(String address) {
+    return '$address is one of your own addresses. The funds stay in your wallet and only the network fee is spent.\n\nSend anyway?';
+  }
+
+  @override
+  String get sendOwnAddressTitle => 'Send to Your Own Address?';
 
   @override
   String get sendPasteHelperCmd => 'Use cmd+v to paste or click ';
@@ -8308,6 +8457,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statusPending => 'Pending';
 
   @override
+  String get statusReloadWalletInfoTooltip => 'Reload wallet info';
+
+  @override
   String get statusSuccess => 'Success';
 
   @override
@@ -8344,7 +8496,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String svcAdnrDeleteWithCost(String cost) {
-    return 'There is a cost of $cost RBX to delete an RBX Domain.';
+    return 'There is a cost of $cost VFX to delete a VFX Domain.';
   }
 
   @override
@@ -8405,6 +8557,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcCsvHeadersInvalid => 'The CSV headers are not in the correct format, please check the example file';
 
   @override
+  String get svcCsvNoRows => 'No rows were found in this CSV file. Add at least one NFT below the header row.';
+
+  @override
   String get svcDecryptFailed => 'Failed to decrypt message. Invalid key or corrupted data.';
 
   @override
@@ -8455,16 +8610,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcLocatorsRequestFailed => 'Locators request failed.';
 
   @override
-  String svcMainMenuSyncTooltip(String lastSync, String nextSync) {
-    return 'Last Sync: $lastSync\nNext Sync: $nextSync';
-  }
-
-  @override
   String get svcMessageDecryptedSuccess => 'Message decrypted successfully!';
 
   @override
   String svcMintingProgress(String current, String total) {
     return 'Minting $current/$total...';
+  }
+
+  @override
+  String svcMintingStopped(String minted, String total) {
+    return 'Minting stopped after an error. $minted of $total minted.';
   }
 
   @override
@@ -8660,9 +8815,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get svcNotValidAmount => 'Not a valid amount';
-
-  @override
-  String get svcPrivateKeyNotAvailableUnlock => 'Private key not available. Please ensure wallet is unlocked.';
 
   @override
   String get svcPrivateKeyNotFoundRecipient => 'Private key not found for recipient address';
@@ -8877,7 +9029,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tkbDeleteDomainWithCost(String cost) {
-    return 'There is a cost of $cost VFX to delete an RBX Domain.';
+    return 'There is a cost of $cost VFX to delete a BTC Domain.';
   }
 
   @override
@@ -8977,7 +9129,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get tkbInvalidFeeRate => 'Invalid Fee Rate. Must be atleast 1 satoshi.';
+  String get tkbInvalidFeeRate => 'Invalid Fee Rate. Must be at least 1 satoshi.';
 
   @override
   String get tkbManualSendExchangeSubtitle => 'Send BTC from any exchange or wallet to this token\'s deposit address';
@@ -9063,6 +9215,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tkbPendingWithdrawalFound => 'Pending Withdrawal Found';
+
+  @override
+  String get tkbExpiredWithdrawalTitle => 'Withdrawal Request Expired';
+
+  @override
+  String tkbExpiredWithdrawalBody(String amount, String destination) {
+    return 'Your withdrawal of $amount vBTC to $destination has expired. It no longer blocks a new withdrawal, but its vBTC is still held in escrow.';
+  }
+
+  @override
+  String get tkbUnpayableWithdrawalTitle => 'Withdrawal Cannot Be Paid';
+
+  @override
+  String tkbUnpayableWithdrawalBody(String amount, String destination) {
+    return 'Your withdrawal of $amount vBTC to $destination is too small to pay at its fee rate, so completing it will keep failing.';
+  }
+
+  @override
+  String get tkbWithdrawalCancelNeedsVote => 'Its vBTC stays held in escrow until the request is cancelled. Cancelling needs a vote by the contract\'s validators, which the wallet cannot start yet.\n\nYou can still open the withdrawal form for your available balance.';
+
+  @override
+  String get tkbWithdrawalCancellationPending => 'A cancellation has already been requested and is awaiting the validators\' vote. Its vBTC stays held in escrow until then.\n\nYou can still open the withdrawal form for your available balance.';
+
+  @override
+  String get tkbOpenWithdrawalForm => 'Open Withdrawal Form';
 
   @override
   String get tkbPercentages => 'Percentages';
@@ -9327,6 +9504,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tokenCreateTitle => 'Create Fungible Token';
 
   @override
+  String get tokenDecreaseDecimalPlaces => 'Decrease decimal places';
+
+  @override
   String get tokenFormCancel => 'Cancel';
 
   @override
@@ -9352,6 +9532,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tokenFormTickerHint => 'ABC';
+
+  @override
+  String get tokenIncreaseDecimalPlaces => 'Increase decimal places';
 
   @override
   String get tokenInsufficientBalanceToast => 'Not enough balance to perform this transaction';
@@ -9481,6 +9664,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String tokenWebInsufficient(String address, String ticker) {
     return 'This address\'\'s ($address) $ticker balance is insufficient.';
   }
+
+  @override
+  String get tokenWebVaultRowActionsUnavailable => 'Transfer, burn and voting are not available for tokens held in the Vault. Move them out of the Vault first.';
+
+  @override
+  String get tokenWebTransferToSelf => 'Tokens cannot be transferred to the address that holds them.';
 
   @override
   String get txAppBarAll => 'All Transactions';
@@ -9857,6 +10046,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get txpVaultActivationSent => 'Vault Account activation transaction sent.\n\nPlease wait for it to reflect as \"Activated\".';
+
+  @override
+  String get txpVaultAlreadyActivated => 'This Vault Account is already activated.';
 
   @override
   String get txpVfxAmount => 'VFX Amount';
@@ -10437,6 +10629,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walletPrivateKeyImportedToast => 'Private Key Imported!';
 
   @override
+  String get walletKeyExportUnavailable => 'The node did not return a private key.';
+
+  @override
   String get walletPrivateKeyLabel => 'Private Key';
 
   @override
@@ -10497,6 +10692,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walletRevealPrivateKey => 'Reveal Private Key';
+
+  @override
+  String get walletBtcPrivateKeyNotExported => 'The node only shares a Bitcoin private key when the account is created. Use the backup you saved at that time.';
 
   @override
   String get walletSaveAsFile => 'Save as File';
@@ -10677,6 +10875,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webInvalidAmount => 'Invalid amount';
 
   @override
+  String webPendingBalanceInsufficient(String available, String unit) {
+    return 'Not enough balance once pending sends are counted. Available: $available $unit';
+  }
+
+  @override
+  String webVaultMinimumBalance(String minimum, String available) {
+    return 'A Vault must keep $minimum VFX. Available to send: $available VFX';
+  }
+
+  @override
   String get webLanguageLabel => 'Language';
 
   @override
@@ -10687,6 +10895,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webNoWalletDetected => 'No Wallet detected.';
+
+  @override
+  String get webOpenMenu => 'Open menu';
 
   @override
   String get webPendingActivation => 'Pending Activation';
@@ -10797,6 +11008,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get webVaultRestoredToast => 'Vault Account restored';
 
   @override
+  String get webVaultRestoreCodeInvalid => 'Invalid restore code';
+
+  @override
   String get webWifPrivateKey => 'WIF Private Key';
 
   @override
@@ -10804,4 +11018,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get webYourDomain => 'Your Domain';
+
+  @override
+  String r3eLogFileNotFound(String path) {
+    return 'Could not open the log file: $path';
+  }
+
+  @override
+  String get assetUnsupportedFileTitle => 'Unsupported File';
+
+  @override
+  String assetExtensionNotPermittedBody(String extension) {
+    return 'This file extension (.$extension) is not permitted.';
+  }
+
+  @override
+  String get errWalletLocked => 'Your wallet is locked. Unlock it with your password and try again.';
+
+  @override
+  String get errNodeUnreachable => 'Could not reach the server. Check your connection and try again.';
+
+  @override
+  String get errRequestFailed => 'The request failed. Please try again.';
+
+  @override
+  String errNodeReason(String reason) {
+    return '$reason';
+  }
 }

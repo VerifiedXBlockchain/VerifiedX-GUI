@@ -43,9 +43,10 @@ class WebTransactionDetailScreen extends BaseScreen {
       actions: [
         IconButton(
           onPressed: () {
-            launchUrl(Uri.parse("${Env.baseExplorerUrl}/transaction/$hash"));
+            launchUrl(Uri.parse(Env.explorerTransactionUrl(hash)));
           },
           icon: const Icon(Icons.open_in_new),
+          tooltip: l10n.actionViewOnExplorer,
         )
       ],
     );
@@ -120,6 +121,7 @@ class _TransactionDetails extends BaseComponent {
                   onPressed: () {
                     copyToClipboard(tx.hash);
                   },
+                  tooltip: l10n.actionCopyTransactionHash,
                 ),
               ),
             ),
@@ -129,7 +131,7 @@ class _TransactionDetails extends BaseComponent {
             child: AppCard(
               padding: 0,
               child: ListTile(
-                title: Text(formatter.format(tx.date)),
+                title: Text(formatter.format(tx.localDate)),
                 subtitle: Text(l10n.txpDate),
               ),
             ),
@@ -166,6 +168,7 @@ class _TransactionDetails extends BaseComponent {
                   onPressed: () {
                     copyToClipboard(tx.toAddress);
                   },
+                  tooltip: l10n.actionCopyAddress,
                 ),
               ),
             ),
@@ -182,6 +185,7 @@ class _TransactionDetails extends BaseComponent {
                   onPressed: () {
                     copyToClipboard(tx.fromAddress);
                   },
+                  tooltip: l10n.actionCopyAddress,
                 ),
               ),
             ),

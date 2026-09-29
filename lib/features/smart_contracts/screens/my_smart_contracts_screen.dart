@@ -29,6 +29,7 @@ class MySmartContractsScreen extends BaseScreen {
           AutoRouter.of(context).pop();
         },
         icon: const Icon(Icons.close),
+        tooltip: AppLocalizations.of(context).actionClose,
       ),
       actions: [
         IconButton(
@@ -36,6 +37,7 @@ class MySmartContractsScreen extends BaseScreen {
               ref.read(mySmartContractsProvider.notifier).load();
               ref.read(draftsSmartContractProvider.notifier).load();
             },
+            tooltip: AppLocalizations.of(context).actionRefresh,
             icon: const Icon(Icons.refresh))
       ],
     );
@@ -87,20 +89,23 @@ class _DraftList extends BaseComponent {
       itemCount: _model.length,
       itemBuilder: (context, index) {
         final sc = _model[index];
-        return ListTile(
-          leading: const Icon(Icons.document_scanner_sharp),
-          title: Text(sc.name),
-          subtitle: Text(
-            sc.description,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () async {
-            ref.read(createSmartContractProvider.notifier).setSmartContract(sc);
+        return Semantics(
+          button: true,
+          child: ListTile(
+            leading: const Icon(Icons.document_scanner_sharp),
+            title: Text(sc.name),
+            subtitle: Text(
+              sc.description,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              ref.read(createSmartContractProvider.notifier).setSmartContract(sc);
 
-            AutoRouter.of(context).push(const SmartContractCreatorContainerScreenRoute());
-          },
+              AutoRouter.of(context).push(const SmartContractCreatorContainerScreenRoute());
+            },
+          ),
         );
       },
     );
@@ -123,28 +128,31 @@ class _CompiledList extends BaseComponent {
       itemCount: _model.length,
       itemBuilder: (context, index) {
         final sc = _model[index];
-        return ListTile(
-          leading: const Icon(Icons.document_scanner_sharp),
-          title: Text(sc.name),
-          subtitle: Text(sc.id),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () async {
-            final details = await SmartContractService().retrieve(sc.id);
-            if (details == null) {
-              Toast.error();
-              return;
-            }
-            final wallet = kIsWeb
-                ? Wallet.fromWebWallet(
-                    keypair: ref.read(webSessionProvider).keypair!,
-                    balance: ref.read(webSessionProvider).balance ?? 0,
-                  )
-                : ref.read(sessionProvider).currentWallet!;
+        return Semantics(
+          button: true,
+          child: ListTile(
+            leading: const Icon(Icons.document_scanner_sharp),
+            title: Text(sc.name),
+            subtitle: Text(sc.id),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () async {
+              final details = await SmartContractService().retrieve(sc.id);
+              if (details == null) {
+                Toast.error();
+                return;
+              }
+              final wallet = kIsWeb
+                  ? Wallet.fromWebWallet(
+                      keypair: ref.read(webSessionProvider).keypair!,
+                      balance: ref.read(webSessionProvider).balance ?? 0,
+                    )
+                  : ref.read(sessionProvider).currentWallet!;
 
-            final smartContract = SmartContract.fromCompiled(details, wallet);
-            ref.read(createSmartContractProvider.notifier).setSmartContract(smartContract);
-            AutoRouter.of(context).push(const SmartContractCreatorContainerScreenRoute());
-          },
+              final smartContract = SmartContract.fromCompiled(details, wallet);
+              ref.read(createSmartContractProvider.notifier).setSmartContract(smartContract);
+              AutoRouter.of(context).push(const SmartContractCreatorContainerScreenRoute());
+            },
+          ),
         );
       },
     );

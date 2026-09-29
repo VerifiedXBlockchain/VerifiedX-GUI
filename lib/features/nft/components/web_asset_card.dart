@@ -145,6 +145,7 @@ class _VideoPreviewState extends State<VideoPreview> {
                       _controller.value.isPlaying ? _controller.pause() : _controller.play();
                     });
                   },
+                  tooltip: _controller.value.isPlaying ? AppLocalizations.of(context).nftPauseMedia : AppLocalizations.of(context).nftPlayMedia,
                   icon: Icon(
                     _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
                   ))

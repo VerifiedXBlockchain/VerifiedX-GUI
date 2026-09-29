@@ -489,38 +489,45 @@ class _EvolvePhaseContainer extends BaseComponent {
                     color: Theme.of(context).colorScheme.secondary,
                     margin: EdgeInsets.zero,
                     key: Key("${p.name}|${p.value}"),
-                    child: InkWell(
-                      onTap: () async {
-                        final property = await _handlePropertyEdit(context, ref, property: p);
-                        if (property != null) {
-                          phaseProvider.updateProperty(property, index);
-                        }
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              "${truncatedText(p.name)}: ${truncatedText(p.value)}",
-                              style: TextStyle(
-                                color: Colors.black,
+                    child: Semantics(
+                      button: true,
+                      child: InkWell(
+                        onTap: () async {
+                          final property = await _handlePropertyEdit(context, ref, property: p);
+                          if (property != null) {
+                            phaseProvider.updateProperty(property, index);
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "${truncatedText(p.name)}: ${truncatedText(p.value)}",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
                               ),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                phaseProvider.removeProperty(index);
-                              },
-                              child: Icon(
-                                Icons.delete,
-                                size: 14,
-                                color: Colors.black,
+                              SizedBox(
+                                width: 4,
                               ),
-                            ),
-                          ],
+                              Semantics(
+                                label: globalL10n.scwRemoveProperty,
+                                button: true,
+                                child: InkWell(
+                                  onTap: () {
+                                    phaseProvider.removeProperty(index);
+                                  },
+                                  child: Icon(
+                                    Icons.delete,
+                                    size: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ));
@@ -573,6 +580,7 @@ class _EvolvePhaseContainer extends BaseComponent {
         Icons.delete,
         color: Theme.of(context).colorScheme.danger,
       ),
+      tooltip: globalL10n.r3aDeleteStage,
     );
   }
 
@@ -667,6 +675,7 @@ class _EvolvePhaseContainer extends BaseComponent {
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.watch),
+          tooltip: globalL10n.actionPickTime,
           onPressed: () {
             _showTimePicker();
           },
@@ -695,6 +704,7 @@ class _EvolvePhaseContainer extends BaseComponent {
         ),
         suffixIcon: IconButton(
           icon: const Icon(Icons.calendar_month),
+          tooltip: globalL10n.actionPickDate,
           onPressed: () {
             _showDatePicker();
           },

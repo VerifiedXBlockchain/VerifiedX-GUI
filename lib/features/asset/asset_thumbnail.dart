@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/generated/app_localizations.dart';
 
 import 'asset.dart';
 import 'asset_card.dart';
@@ -22,32 +23,53 @@ class AssetThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AssetThumbnailDialog(
-              asset: asset,
-              nftId: nftId,
-              ownerAddress: ownerAddress,
-              isPrimaryAsset: isPrimaryAsset,
-            );
-          },
-        );
-      },
-      child: SizedBox(
-        width: size,
-        height: size,
-        child: asset.localPath != null
-            ? asset.isImage
-                ? PollingImagePreview(
-                    localPath: asset.localPath!,
-                    expectedSize: asset.fileSize,
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
+    return Semantics(
+      label: asset.localPath != null && asset.isImage ? AppLocalizations.of(context).actionViewAsset : null,
+      button: true,
+      child: InkWell(
+        onTap: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AssetThumbnailDialog(
+                asset: asset,
+                nftId: nftId,
+                ownerAddress: ownerAddress,
+                isPrimaryAsset: isPrimaryAsset,
+              );
+            },
+          );
+        },
+        child: SizedBox(
+          width: size,
+          height: size,
+          child: asset.localPath != null
+              ? asset.isImage
+                  ? PollingImagePreview(
+                      localPath: asset.localPath!,
+                      expectedSize: asset.fileSize,
+                    )
+                  : Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(asset.icon),
+                        SizedBox(height: 4),
+                        SizedBox(
+                          height: 30,
+                          child: Text(
+                            asset.fileName,
+                            style: TextStyle(fontSize: 12, height: 1.2),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    )
+              : Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(asset.icon),
                       SizedBox(height: 4),
@@ -62,26 +84,9 @@ class AssetThumbnail extends StatelessWidget {
                         ),
                       ),
                     ],
-                  )
-            : Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(asset.icon),
-                    SizedBox(height: 4),
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        asset.fileName,
-                        style: TextStyle(fontSize: 12, height: 1.2),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+        ),
       ),
     );
   }

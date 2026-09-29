@@ -11,8 +11,10 @@ _$_WebBlock _$$_WebBlockFromJson(Map<String, dynamic> json) => _$_WebBlock(
       dateCrafted: DateTime.parse(json['date_crafted'] as String),
       hash: json['hash'] as String,
       validator: json['validator_address'] as String,
-      totalAmount: (json['total_amount'] as num).toDouble(),
-      totalReward: (json['total_reward'] as num).toDouble(),
+      totalAmount: const NumOrStringDoubleConverter()
+          .fromJson(json['total_amount'] as Object),
+      totalReward: const NumOrStringDoubleConverter()
+          .fromJson(json['total_reward'] as Object),
       transactions: (json['transactions'] as List<dynamic>?)
               ?.map((e) => WebTransaction.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -28,8 +30,10 @@ Map<String, dynamic> _$$_WebBlockToJson(_$_WebBlock instance) =>
       'date_crafted': instance.dateCrafted.toIso8601String(),
       'hash': instance.hash,
       'validator_address': instance.validator,
-      'total_amount': instance.totalAmount,
-      'total_reward': instance.totalReward,
+      'total_amount':
+          const NumOrStringDoubleConverter().toJson(instance.totalAmount),
+      'total_reward':
+          const NumOrStringDoubleConverter().toJson(instance.totalReward),
       'transactions': instance.transactions,
       'size': instance.size,
       'craft_time': instance.craftTime,

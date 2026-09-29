@@ -37,6 +37,7 @@ class RemoteShopDetailScreen extends BaseScreen {
                   ref.read(connectedShopProvider.notifier).disconnect();
                   Navigator.of(context).pop();
                 },
+                tooltip: AppLocalizations.of(context).actionBack,
               ),
               actions: [
                 Align(
@@ -50,6 +51,7 @@ class RemoteShopDetailScreen extends BaseScreen {
                     ref.read(connectedShopProvider.notifier).refresh(true);
                   },
                   icon: Icon(Icons.refresh),
+                  tooltip: AppLocalizations.of(context).actionRefresh,
                 ),
                 AppButton(
                   type: AppButtonType.Text,

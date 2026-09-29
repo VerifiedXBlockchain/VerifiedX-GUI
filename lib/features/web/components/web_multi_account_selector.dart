@@ -150,24 +150,28 @@ class WebMultiAccountSelector extends BaseComponent {
                   Text(account.name ?? (accounts.length == 1 ? AppLocalizations.of(context).webDefaultAccount : AppLocalizations.of(context).webAccountN(account.id.toString()))),
                   if (accounts.length > 1) ...[
                     SizedBox(width: 6),
-                    InkWell(
-                      onTap: () async {
-                        final newName = await PromptModal.show(
-                          title: AppLocalizations.of(context).webRenameAccountTitle,
-                          validator: (v) => formValidatorNotEmpty(v, AppLocalizations.of(context).webAccountName),
-                          labelText: AppLocalizations.of(context).webAccountName,
-                          body: AppLocalizations.of(context).webRenameAccountBody,
-                          initialValue: account.name ?? "",
-                        );
+                    Semantics(
+                      label: AppLocalizations.of(context).webRenameAccountTitle,
+                      button: true,
+                      child: InkWell(
+                        onTap: () async {
+                          final newName = await PromptModal.show(
+                            title: AppLocalizations.of(context).webRenameAccountTitle,
+                            validator: (v) => formValidatorNotEmpty(v, AppLocalizations.of(context).webAccountName),
+                            labelText: AppLocalizations.of(context).webAccountName,
+                            body: AppLocalizations.of(context).webRenameAccountBody,
+                            initialValue: account.name ?? "",
+                          );
 
-                        if (newName != null && newName.isNotEmpty) {
-                          ref.read(multiAccountProvider.notifier).rename(account.id, newName);
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      child: Icon(
-                        Icons.edit,
-                        size: 12,
+                          if (newName != null && newName.isNotEmpty) {
+                            ref.read(multiAccountProvider.notifier).rename(account.id, newName);
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        child: Icon(
+                          Icons.edit,
+                          size: 12,
+                        ),
                       ),
                     ),
                   ]
@@ -269,38 +273,47 @@ void _showLanguagePicker(BuildContext context, WidgetRef ref) {
                   ),
                 ),
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.check,
-                  color: currentLocale == null ? AppColors.getBlue() : Colors.transparent,
+              Semantics(
+                button: true,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.check,
+                    color: currentLocale == null ? AppColors.getBlue() : Colors.transparent,
+                  ),
+                  title: Text(l10n.settingsLanguageSystemDefault),
+                  onTap: () {
+                    ref.read(localeProvider.notifier).setLocale(null);
+                    Navigator.of(context).pop();
+                  },
                 ),
-                title: Text(l10n.settingsLanguageSystemDefault),
-                onTap: () {
-                  ref.read(localeProvider.notifier).setLocale(null);
-                  Navigator.of(context).pop();
-                },
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.check,
-                  color: currentLocale?.languageCode == 'en' ? AppColors.getBlue() : Colors.transparent,
+              Semantics(
+                button: true,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.check,
+                    color: currentLocale?.languageCode == 'en' ? AppColors.getBlue() : Colors.transparent,
+                  ),
+                  title: Text(l10n.settingsLanguageEnglish),
+                  onTap: () {
+                    ref.read(localeProvider.notifier).setLocale(const Locale('en'));
+                    Navigator.of(context).pop();
+                  },
                 ),
-                title: Text(l10n.settingsLanguageEnglish),
-                onTap: () {
-                  ref.read(localeProvider.notifier).setLocale(const Locale('en'));
-                  Navigator.of(context).pop();
-                },
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.check,
-                  color: currentLocale?.languageCode == 'es' ? AppColors.getBlue() : Colors.transparent,
+              Semantics(
+                button: true,
+                child: ListTile(
+                  leading: Icon(
+                    Icons.check,
+                    color: currentLocale?.languageCode == 'es' ? AppColors.getBlue() : Colors.transparent,
+                  ),
+                  title: Text(l10n.settingsLanguageSpanish),
+                  onTap: () {
+                    ref.read(localeProvider.notifier).setLocale(const Locale('es'));
+                    Navigator.of(context).pop();
+                  },
                 ),
-                title: Text(l10n.settingsLanguageSpanish),
-                onTap: () {
-                  ref.read(localeProvider.notifier).setLocale(const Locale('es'));
-                  Navigator.of(context).pop();
-                },
               ),
               SizedBox(height: 8),
             ],
@@ -335,244 +348,271 @@ class WebManageAccountsBottomSheet extends BaseComponent {
 
           return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: InkWell(
-                onTap: () {
-                  MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
-                },
-                child: AppCard(
-                  borderColor: selected ? Colors.white24 : null,
-                  padding: 8,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 12,
-                      ),
-                      SizedBox(
-                        width: 32,
-                        child: Text(
-                          "${account.id}.",
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+              child: Semantics(
+                button: true,
+                child: InkWell(
+                  onTap: () {
+                    MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
+                  },
+                  child: AppCard(
+                    borderColor: selected ? Colors.white24 : null,
+                    padding: 8,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 12,
+                        ),
+                        SizedBox(
+                          width: 32,
+                          child: Text(
+                            "${account.id}.",
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (keypair != null)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 2),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: InkWell(
-                                          onTap: () async {
-                                            await Clipboard.setData(ClipboardData(text: keypair.address));
-                                            Toast.message(l10n.messageAddressCopied);
-                                          },
-                                          child: Icon(
-                                            Icons.copy,
-                                            size: 16,
-                                            color: AppColors.getBlue(),
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          showKeysForAccount(context, ref, account, KeypairType.vfx);
-                                        },
-                                        child: Icon(
-                                          Icons.remove_red_eye,
-                                          size: 16,
-                                          color: AppColors.getBlue(),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (keypair != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 2),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                                        child: Semantics(
+                                          label: l10n.actionCopyAddress,
+                                          button: true,
+                                          child: InkWell(
+                                              onTap: () async {
+                                                await Clipboard.setData(ClipboardData(text: keypair.address));
+                                                Toast.message(l10n.messageAddressCopied);
+                                              },
+                                              child: Icon(
+                                                Icons.copy,
+                                                size: 16,
+                                                color: AppColors.getBlue(),
+                                              )),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      keypair.address,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: AppColors.getBlue(), fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            if (raKeypair != null)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 2),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: InkWell(
-                                          onTap: () async {
-                                            await Clipboard.setData(ClipboardData(text: raKeypair.address));
-                                            Toast.message(l10n.messageAddressCopied);
-                                          },
-                                          child: Icon(
-                                            Icons.copy,
-                                            size: 16,
-                                            color: AppColors.getReserve(),
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          showKeysForAccount(context, ref, account, KeypairType.ra);
-                                        },
-                                        child: Icon(
-                                          Icons.remove_red_eye,
-                                          size: 16,
-                                          color: AppColors.getReserve(),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                                        child: Semantics(
+                                          label: l10n.walletRevealPrivateKey,
+                                          button: true,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              showKeysForAccount(context, ref, account, KeypairType.vfx);
+                                            },
+                                            child: Icon(
+                                              Icons.remove_red_eye,
+                                              size: 16,
+                                              color: AppColors.getBlue(),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      raKeypair.address,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: AppColors.getReserve(), fontSize: 16),
-                                    ),
-                                  ],
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        keypair.address,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(color: AppColors.getBlue(), fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            if (btcKeypair != null)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 2),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: InkWell(
-                                          onTap: () async {
-                                            await Clipboard.setData(ClipboardData(text: btcKeypair.address));
-                                            Toast.message(l10n.messageAddressCopied);
-                                          },
-                                          child: Icon(
-                                            Icons.copy,
-                                            size: 16,
-                                            color: AppColors.getBtc(),
-                                          )),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          showKeysForAccount(context, ref, account, KeypairType.btc, true);
-                                        },
-                                        child: Icon(
-                                          Icons.remove_red_eye,
-                                          size: 16,
-                                          color: AppColors.getBtc(),
+                              if (raKeypair != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 2),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                                        child: Semantics(
+                                          label: l10n.actionCopyAddress,
+                                          button: true,
+                                          child: InkWell(
+                                              onTap: () async {
+                                                await Clipboard.setData(ClipboardData(text: raKeypair.address));
+                                                Toast.message(l10n.messageAddressCopied);
+                                              },
+                                              child: Icon(
+                                                Icons.copy,
+                                                size: 16,
+                                                color: AppColors.getReserve(),
+                                              )),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 4,
-                                    ),
-                                    Text(
-                                      btcKeypair.address,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(color: AppColors.getBtc(), fontSize: 16),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                                        child: Semantics(
+                                          label: l10n.walletRevealPrivateKey,
+                                          button: true,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              showKeysForAccount(context, ref, account, KeypairType.ra);
+                                            },
+                                            child: Icon(
+                                              Icons.remove_red_eye,
+                                              size: 16,
+                                              color: AppColors.getReserve(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        raKeypair.address,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(color: AppColors.getReserve(), fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              )
-                          ],
+                              if (btcKeypair != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 2),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                                        child: Semantics(
+                                          label: l10n.actionCopyAddress,
+                                          button: true,
+                                          child: InkWell(
+                                              onTap: () async {
+                                                await Clipboard.setData(ClipboardData(text: btcKeypair.address));
+                                                Toast.message(l10n.messageAddressCopied);
+                                              },
+                                              child: Icon(
+                                                Icons.copy,
+                                                size: 16,
+                                                color: AppColors.getBtc(),
+                                              )),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                                        child: Semantics(
+                                          label: l10n.walletRevealPrivateKey,
+                                          button: true,
+                                          child: InkWell(
+                                            onTap: () async {
+                                              showKeysForAccount(context, ref, account, KeypairType.btc, true);
+                                            },
+                                            child: Icon(
+                                              Icons.remove_red_eye,
+                                              size: 16,
+                                              color: AppColors.getBtc(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 4,
+                                      ),
+                                      Text(
+                                        btcKeypair.address,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(color: AppColors.getBtc(), fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (!selected)
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (!selected)
+                                AppButton(
+                                  label: l10n.webSetActive,
+                                  variant: AppColorVariant.Light,
+                                  type: AppButtonType.Outlined,
+                                  onPressed: () {
+                                    MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
+                                  },
+                                ),
+                              SizedBox(
+                                width: 8,
+                              ),
                               AppButton(
-                                label: l10n.webSetActive,
-                                variant: AppColorVariant.Light,
+                                label: l10n.webBackupKeys,
+                                variant: AppColorVariant.Secondary,
                                 type: AppButtonType.Outlined,
-                                onPressed: () {
-                                  MultiAccountPasswordService.switchToAccountById(context, ref, account.id);
+                                onPressed: () async {
+                                  await backupWebKeys(context, ref);
                                 },
                               ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            AppButton(
-                              label: l10n.webBackupKeys,
-                              variant: AppColorVariant.Secondary,
-                              type: AppButtonType.Outlined,
-                              onPressed: () async {
-                                await backupWebKeys(context, ref);
-                              },
-                            ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            AppButton(
-                              label: l10n.webForget,
-                              type: AppButtonType.Outlined,
-                              variant: AppColorVariant.Danger,
-                              onPressed: () async {
-                                MultiAccountInstance? otherAccount;
+                              SizedBox(
+                                width: 8,
+                              ),
+                              AppButton(
+                                label: l10n.webForget,
+                                type: AppButtonType.Outlined,
+                                variant: AppColorVariant.Danger,
+                                onPressed: () async {
+                                  MultiAccountInstance? otherAccount;
 
-                                if (selected) {
-                                  otherAccount = accounts.firstWhereOrNull((a) => a.id != account.id);
+                                  if (selected) {
+                                    otherAccount = accounts.firstWhereOrNull((a) => a.id != account.id);
 
-                                  if (otherAccount == null) {
-                                    final confimed = await ConfirmDialog.show(
-                                      title: l10n.webForgetTitle(account.id.toString()),
-                                      body: l10n.webForgetBodyLastAccount,
-                                      destructive: true,
-                                      confirmText: l10n.webForgetAndLogout,
-                                    );
+                                    if (otherAccount == null) {
+                                      final confimed = await ConfirmDialog.show(
+                                        title: l10n.webForgetTitle(account.id.toString()),
+                                        body: l10n.webForgetBodyLastAccount,
+                                        destructive: true,
+                                        confirmText: l10n.webForgetAndLogout,
+                                      );
 
-                                    if (confimed == true) {
-                                      await ref.read(webSessionProvider.notifier).logout();
+                                      if (confimed == true) {
+                                        await ref.read(webSessionProvider.notifier).logout();
 
-                                      AutoRouter.of(context).replace(const WebAuthRouter());
+                                        AutoRouter.of(context).replace(const WebAuthRouter());
+                                      }
+                                      return;
                                     }
-                                    return;
                                   }
-                                }
-                                final confimed = await ConfirmDialog.show(
-                                  title: l10n.webForgetTitle(account.id.toString()),
-                                  body: l10n.webForgetBody,
-                                  destructive: true,
-                                  confirmText: l10n.webForget,
-                                );
-                                if (confimed == true) {
-                                  ref.read(multiAccountProvider.notifier).remove(account.id);
-                                  if (otherAccount != null) {
-                                    MultiAccountPasswordService.switchToAccountById(context, ref, otherAccount.id);
+                                  final confimed = await ConfirmDialog.show(
+                                    title: l10n.webForgetTitle(account.id.toString()),
+                                    body: l10n.webForgetBody,
+                                    destructive: true,
+                                    confirmText: l10n.webForget,
+                                  );
+                                  if (confimed == true) {
+                                    ref.read(multiAccountProvider.notifier).remove(account.id);
+                                    if (otherAccount != null) {
+                                      MultiAccountPasswordService.switchToAccountById(context, ref, otherAccount.id);
+                                    }
                                   }
-                                }
-                              },
-                            ),
-                          ],
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ));

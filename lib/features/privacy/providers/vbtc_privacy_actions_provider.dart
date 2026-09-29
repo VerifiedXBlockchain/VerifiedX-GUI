@@ -8,9 +8,14 @@ import '../services/privacy_service.dart';
 import 'shielded_address_provider.dart';
 import 'shielded_balance_provider.dart';
 import 'shielded_vbtc_balance_provider.dart';
+import '../../../core/services/locked_wallet_gate.dart';
+import '../../../core/utils/user_error_message.dart';
 
 /// Heuristic: does this error message suggest a wrong password?
 bool _isAuthError(Object e) {
+  // The transparent wallet being locked says nothing about the shielded
+  // password.
+  if (e is WalletLockedException) return false;
   final msg = e.toString().toLowerCase();
   return msg.contains('password') || msg.contains('unauthorized') || msg.contains('authentication');
 }
@@ -60,7 +65,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       _refreshTxList();
       return true;
     } catch (e) {
-      Toast.error(globalL10n.prvVbtcShieldFailed(e.toString()));
+      Toast.error(globalL10n.prvVbtcShieldFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;
@@ -99,7 +104,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error(globalL10n.prvVbtcUnshieldFailed(e.toString()));
+      Toast.error(globalL10n.prvVbtcUnshieldFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;
@@ -138,7 +143,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error(globalL10n.prvVbtcTransferFailed(e.toString()));
+      Toast.error(globalL10n.prvVbtcTransferFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;
@@ -173,7 +178,7 @@ class VbtcPrivacyActionsNotifier extends StateNotifier<bool> {
       return true;
     } catch (e) {
       _handleAuthError(e);
-      Toast.error(globalL10n.prvVbtcConsolidationFailed(e.toString()));
+      Toast.error(globalL10n.prvVbtcConsolidationFailed(userErrorMessage(e, withLeadIn: false)));
       return false;
     } finally {
       state = false;

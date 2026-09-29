@@ -12,6 +12,17 @@ String formatIntWithCommas(int number, {String? locale}) {
 
 // }
 
+/// A BTC amount with at most 8 decimals (satoshi precision) and no trailing
+/// zeros. BTC amounts are derived as `sats * 0.00000001`, so plain
+/// `toString()` shows float noise like `0.013661920000000001` or switches to
+/// scientific notation (`5e-8`).
+String formatBtcAmount(double amount) {
+  final fixed = amount.toStringAsFixed(8);
+  final trimmed = fixed.replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
+  // "-0.00000000" rounds to "-0"; show it as "0".
+  return trimmed == '-0' ? '0' : trimmed;
+}
+
 String getPrettyJSONString(jsonObject) {
   var encoder = const JsonEncoder.withIndent("     ");
   return encoder.convert(jsonObject);

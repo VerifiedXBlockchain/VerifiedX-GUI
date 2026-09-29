@@ -151,6 +151,7 @@ class ValidatorScreen extends BaseScreen {
                 height: 16,
               ),
               AppButton(
+                key: const Key('validator:start'),
                 label: l10n.validatorStartValidating,
                 icon: Icons.check,
                 variant: AppColorVariant.Success,
@@ -210,6 +211,7 @@ class ValidatorScreen extends BaseScreen {
             ),
             const SizedBox(height: 8),
             AppButton(
+              key: const Key('validator:check_again'),
               label: l10n.validatorCheckAgain,
               onPressed: () {
                 ref.read(validatingStatusProvider.notifier).check();
@@ -333,6 +335,7 @@ class ValidatorScreen extends BaseScreen {
                 height: 8,
               ),
               AppButton(
+                key: const Key('validator:stop'),
                 label: l10n.validatorStopValidating,
                 icon: Icons.stop,
                 variant: AppColorVariant.Danger,
@@ -438,41 +441,44 @@ class _BlockPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return MouseRegion(
       cursor: SystemMouseCursors.click,
-      child: GestureDetector(
-        onTap: () async {
-          final blockInfo = await BridgeService().blockInfo(block.height, null);
-          if (blockInfo != null) {
-            SpecialDialog<void>().show(
-              context,
-              title: AppLocalizations.of(context).validatorBlockTitle(block.height.toString()),
-              maxWidth: 320,
-              content: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: LatestBlockContent(
-                  latestBlock: blockInfo,
-                ),
-              ),
-            );
-          }
-        },
-        child: AppCard(
-          padding: 8,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  formatIntWithCommas(block.height),
-                  style: TextStyle(
-                    color: AppColors.getBlue(),
-                    fontSize: 20,
+      child: Semantics(
+        button: true,
+        child: GestureDetector(
+          onTap: () async {
+            final blockInfo = await BridgeService().blockInfo(block.height, null);
+            if (blockInfo != null) {
+              SpecialDialog<void>().show(
+                context,
+                title: AppLocalizations.of(context).validatorBlockTitle(block.height.toString()),
+                maxWidth: 320,
+                content: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: LatestBlockContent(
+                    latestBlock: blockInfo,
                   ),
                 ),
-                Text(
-                  block.parseTimeStamp,
-                  style: TextStyle(fontSize: 14, color: Colors.white54),
-                )
-              ],
+              );
+            }
+          },
+          child: AppCard(
+            padding: 8,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    formatIntWithCommas(block.height),
+                    style: TextStyle(
+                      color: AppColors.getBlue(),
+                      fontSize: 20,
+                    ),
+                  ),
+                  Text(
+                    block.parseTimeStamp,
+                    style: TextStyle(fontSize: 14, color: Colors.white54),
+                  )
+                ],
+              ),
             ),
           ),
         ),
