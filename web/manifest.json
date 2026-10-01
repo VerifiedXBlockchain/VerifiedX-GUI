@@ -1,26 +1,21 @@
 {
-    "name": "RBX Wallet",
-    "short_name": "RBX Wallet",
+    "name": "VFX Switchblade",
+    "short_name": "Switchblade",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#031745",
     "theme_color": "#031745",
-    "description": "DEMOCRATIZING NFTs FOR EVERYONE",
+    "description": "Tokenized Commerce and Self-Custody for Everyone",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
-            "src": "favicon.ico",
-            "sizes": "64x64 32x32 24x24 16x16",
-            "type": "image/x-icon"
-        },
-        {
-            "src": "logo192.png",
+            "src": "icons/icon-192.png",
             "type": "image/png",
             "sizes": "192x192"
         },
         {
-            "src": "logo512.png",
+            "src": "icons/icon-512.png",
             "type": "image/png",
             "sizes": "512x512"
         }
