@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:dio/io.dart';
 import 'package:flutter/foundation.dart';
 import '../api_token_manager.dart';
 import '../singletons.dart';
@@ -80,11 +79,6 @@ class BaseService {
     final adapterOverride = httpClientAdapterOverride;
     if (adapterOverride != null) {
       dio.httpClientAdapter = adapterOverride;
-    } else if (!kIsWeb) {
-      (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-        client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
-        return client;
-      };
     }
     return dio;
   }
