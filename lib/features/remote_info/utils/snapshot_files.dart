@@ -1,4 +1,36 @@
+import 'dart:io';
+
 import 'package:path/path.dart' as p;
+
+/// Core databases that hold keys or other data a snapshot cannot recreate:
+/// accounts and reserve accounts, the HD seed, the keystore, BTC accounts,
+/// vBTC validator key shares, arbiter shares, shielded wallets and node
+/// settings. A snapshot import keeps these in place and never overwrites
+/// them. Names are lower case; Core's LiteDB log companion for each is
+/// `<name>-log.db`.
+const snapshotPreservedDatabases = {
+  'rsrvwaldata.db',
+  'rsrvhdwaldata.db',
+  'rsrvkeystore.db',
+  'rsrvbitcoin.db',
+  'rsrvvbtc.db',
+  'rsrvshares.db',
+  'db_privacy.db',
+  'rsrvsettings.db',
+};
+
+/// Whether [fileName] (a bare file name, any case) is one of
+/// [snapshotPreservedDatabases] or its log file.
+bool isSnapshotPreservedDatabase(String fileName) {
+  final lower = fileName.toLowerCase();
+  if (snapshotPreservedDatabases.contains(lower)) {
+    return true;
+  }
+  if (lower.endsWith('-log.db')) {
+    return snapshotPreservedDatabases.contains(lower.replaceFirst(RegExp(r'-log\.db$'), '.db'));
+  }
+  return false;
+}
 
 final _snapshotFileNamePattern = RegExp(r'^[A-Za-z0-9_][A-Za-z0-9_.-]*\.db$');
 
@@ -29,7 +61,8 @@ class SnapshotFileRejected implements Exception {
 /// Resolves a snapshot download [url] to a file inside [databasesFolder].
 ///
 /// The URL must be HTTPS and its last path segment a plain database file
-/// name (no separators, drive letters or `..`). As a last check the joined
+/// name (no separators, drive letters or `..`). Preserved databases are
+/// refused so a snapshot can never replace them. As a last check the joined
 /// path is normalized and must still sit directly inside [databasesFolder].
 /// [context] defaults to the host platform's path rules.
 SnapshotFileTarget resolveSnapshotFile(
@@ -52,6 +85,10 @@ SnapshotFileTarget resolveSnapshotFile(
   final fileName = segments.last;
   if (!_snapshotFileNamePattern.hasMatch(fileName) || fileName.contains('..')) {
     throw SnapshotFileRejected(url, 'unsupported file name');
+  }
+
+  if (isSnapshotPreservedDatabase(fileName)) {
+    throw SnapshotFileRejected(url, 'would replace a preserved database');
   }
 
   final folder = pathContext.normalize(databasesFolder);
@@ -80,4 +117,62 @@ List<SnapshotFileTarget> resolveSnapshotFiles(
     targets.add(target);
   }
   return targets;
+}
+
+/// Gets [databasesFolder] ready for a snapshot download.
+///
+/// Every preserved database found there is first copied into a new
+/// timestamped folder under [backupRoot] and the copy's size checked; then
+/// everything else in [databasesFolder] (chain data and anything derived
+/// from it) is deleted. The preserved databases stay where they are. Returns
+/// the backup folder, or null when there was nothing to back up. Throws if
+/// the backup cannot be made, before anything is deleted.
+Future<String?> prepareDatabasesFolderForSnapshot({
+  required String databasesFolder,
+  required String backupRoot,
+  DateTime? now,
+}) async {
+  final folder = Directory(databasesFolder);
+  if (!await folder.exists()) {
+    await folder.create(recursive: true);
+    return null;
+  }
+
+  final entries = await folder.list(followLinks: false).toList();
+  final preserved = entries.whereType<File>().where((f) => isSnapshotPreservedDatabase(p.basename(f.path))).toList();
+
+  String? backupPath;
+  if (preserved.isNotEmpty) {
+    backupPath = await _createBackupFolder(backupRoot, now ?? DateTime.now());
+    for (final file in preserved) {
+      final copy = await file.copy(p.join(backupPath, p.basename(file.path)));
+      final originalSize = await file.length();
+      final copySize = await copy.length();
+      if (copySize != originalSize) {
+        throw FileSystemException('Backup copy is $copySize bytes, expected $originalSize', copy.path);
+      }
+    }
+  }
+
+  for (final entry in entries) {
+    if (entry is File && isSnapshotPreservedDatabase(p.basename(entry.path))) {
+      continue;
+    }
+    await entry.delete(recursive: true);
+  }
+
+  return backupPath;
+}
+
+Future<String> _createBackupFolder(String backupRoot, DateTime now) async {
+  String two(int n) => n.toString().padLeft(2, '0');
+  final stamp = '${now.year}${two(now.month)}${two(now.day)}-${two(now.hour)}${two(now.minute)}${two(now.second)}';
+  var candidate = p.join(backupRoot, 'snapshot-import-$stamp');
+  var suffix = 1;
+  while (await Directory(candidate).exists()) {
+    candidate = p.join(backupRoot, 'snapshot-import-$stamp-$suffix');
+    suffix++;
+  }
+  await Directory(candidate).create(recursive: true);
+  return candidate;
 }

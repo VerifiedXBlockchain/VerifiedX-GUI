@@ -2372,6 +2372,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hnavSnapshotInitializing => 'Inicializando...';
 
   @override
+  String hnavSnapshotKeyBackupSaved(String path) {
+    return 'Se guardó una copia de tus bases de datos de cuentas y claves en:\n$path';
+  }
+
+  @override
   String get hnavSnapshotShuttingDown => 'Cerrando el CLI...';
 
   @override
@@ -6143,11 +6148,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3eFailedDecryptKeys => 'No se pudieron descifrar las claves. Revisa tu contraseña.';
 
   @override
-  String r3eFailedDeleteDb(String path) {
-    return 'No se pudo eliminar $path: la carpeta sigue existiendo tras el borrado';
-  }
-
-  @override
   String r3eFailedDownloadFile(String filename, String attempts) {
     return 'No se pudo descargar $filename tras $attempts intentos';
   }
@@ -6332,6 +6332,11 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String r3eSnapshotFileRejected(String url) {
     return 'El snapshot incluye un archivo que no se puede importar de forma segura, así que no se cambió nada: $url';
+  }
+
+  @override
+  String r3eSnapshotKeyBackupFailed(String error) {
+    return 'No se pudo respaldar tus bases de datos de cuentas y claves, así que no se eliminó nada: $error';
   }
 
   @override
@@ -8846,7 +8851,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcSignatureNotValid => 'Firma no válida';
 
   @override
-  String get svcSnapshotBackupWarningBody => 'Asegúrate de tener una copia de seguridad de tus claves privadas, ya que este proceso borrará la carpeta de tu base de datos.\n\nSi NO tienes copia de seguridad, haz clic en cancelar ahora, haz la copia y luego reinicia tu billetera para que se te vuelva a preguntar.';
+  String get svcSnapshotBackupWarningBody => 'Importar un snapshot reemplaza los datos locales de la blockchain. Tus bases de datos de cuentas, claves y bóvedas se conservan, y antes de cambiar nada se guarda una copia en una carpeta SnapshotBackups dentro de tu carpeta de datos.\n\nAun así, asegúrate de tener una copia de seguridad de tus claves privadas antes de continuar. Si NO tienes copia de seguridad, haz clic en cancelar ahora, haz la copia y luego reinicia tu billetera para que se te vuelva a preguntar.';
 
   @override
   String get svcSnapshotDetermineStateError => 'No se pudo determinar el estado del último snapshot';

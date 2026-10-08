@@ -4503,6 +4503,12 @@ abstract class AppLocalizations {
   /// **'Initializing...'**
   String get hnavSnapshotInitializing;
 
+  /// Shown after a snapshot import with the folder holding the copy of the key databases
+  ///
+  /// In en, this message translates to:
+  /// **'A copy of your account and key databases was saved to:\n{path}'**
+  String hnavSnapshotKeyBackupSaved(String path);
+
   /// No description provided for @hnavSnapshotShuttingDown.
   ///
   /// In en, this message translates to:
@@ -11577,12 +11583,6 @@ abstract class AppLocalizations {
   /// **'Failed to decrypt account keys. Check your password.'**
   String get r3eFailedDecryptKeys;
 
-  /// No description provided for @r3eFailedDeleteDb.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to delete {path} — folder still exists after delete'**
-  String r3eFailedDeleteDb(String path);
-
   /// No description provided for @r3eFailedDownloadFile.
   ///
   /// In en, this message translates to:
@@ -11924,6 +11924,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The snapshot lists a file that can\'t be imported safely, so nothing was changed: {url}'**
   String r3eSnapshotFileRejected(String url);
+
+  /// Snapshot import stopped because the key databases could not be backed up
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t back up your account and key databases, so nothing was deleted: {error}'**
+  String r3eSnapshotKeyBackupFailed(String error);
 
   /// No description provided for @r3eSnapshotNoUrls.
   ///
@@ -16530,7 +16536,7 @@ abstract class AppLocalizations {
   /// No description provided for @svcSnapshotBackupWarningBody.
   ///
   /// In en, this message translates to:
-  /// **'Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.'**
+  /// **'Importing a snapshot replaces your local blockchain data. Your account, key and vault databases are kept, and a copy of them is saved to a SnapshotBackups folder in your data folder before anything is changed.\n\nStill, make sure your private keys are backed up before you continue. If they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.'**
   String get svcSnapshotBackupWarningBody;
 
   /// No description provided for @svcSnapshotDetermineStateError.

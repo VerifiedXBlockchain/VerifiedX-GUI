@@ -42,6 +42,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
   String? errorMessage;
   int filesDownloaded = 0;
   int totalFiles = 0;
+  String? backupFolder;
   DateTime _lastProgressUpdate = DateTime.now();
 
   @override
@@ -92,23 +93,21 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
         return;
       }
 
-      // --- Step 3: Delete existing folder ---
-      print('[Snapshot] === STEP 3: DELETE ~/rbx ===');
-      print('[Snapshot] dbPath: $_dbPath');
-      final dir = Directory(_dbPath);
-
-      if (await dir.exists()) {
-        await dir.delete(recursive: true);
-        print('[Snapshot] Deleted $_dbPath');
-      }
-
-      if (await Directory(_dbPath).exists()) {
-        _fail(globalL10n.r3eFailedDeleteDb(_dbPath));
+      // --- Step 3: Back up key databases, clear chain data ---
+      print('[Snapshot] === STEP 3: PREPARE $dbFolder ===');
+      try {
+        backupFolder = await prepareDatabasesFolderForSnapshot(
+          databasesFolder: dbFolder,
+          backupRoot: "$_dbPath${sep}SnapshotBackups",
+        );
+      } on FileSystemException catch (e) {
+        print('[Snapshot] Key database backup failed: $e');
+        _fail(globalL10n.r3eSnapshotKeyBackupFailed(e.toString()));
         return;
       }
-
-      await Directory(dbFolder).create(recursive: true);
-      print('[Snapshot] Created $dbFolder');
+      if (backupFolder != null) {
+        print('[Snapshot] Key databases copied to $backupFolder');
+      }
 
       // --- Step 4: Download files ---
       print('[Snapshot] === STEP 4: DOWNLOAD ${targets.length} FILES ===');
@@ -377,6 +376,19 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
     print('[Snapshot] === SNAPSHOT IMPORT COMPLETE ===');
   }
 
+  Widget _backupNotice(BuildContext context, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0),
+      child: SelectableText(
+        l10n.hnavSnapshotKeyBackupSaved(backupFolder!),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Colors.white70,
+            ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -452,6 +464,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                 ),
                 const SizedBox(height: 8),
                 Text(l10n.svcSnapshotImportFailedBody),
+                if (backupFolder != null) _backupNotice(context, l10n),
                 if (errorMessage != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
@@ -493,6 +506,7 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
                 ),
                 const SizedBox(height: 8),
                 Text(l10n.hnavSnapshotImported),
+                if (backupFolder != null) _backupNotice(context, l10n),
                 const SizedBox(height: 4),
                 Text(
                   l10n.hnavSnapshotStartingUp,

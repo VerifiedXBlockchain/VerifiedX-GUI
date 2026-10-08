@@ -2372,6 +2372,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hnavSnapshotInitializing => 'Initializing...';
 
   @override
+  String hnavSnapshotKeyBackupSaved(String path) {
+    return 'A copy of your account and key databases was saved to:\n$path';
+  }
+
+  @override
   String get hnavSnapshotShuttingDown => 'Shutting down CLI...';
 
   @override
@@ -6143,11 +6148,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3eFailedDecryptKeys => 'Failed to decrypt account keys. Check your password.';
 
   @override
-  String r3eFailedDeleteDb(String path) {
-    return 'Failed to delete $path — folder still exists after delete';
-  }
-
-  @override
   String r3eFailedDownloadFile(String filename, String attempts) {
     return 'Failed to download $filename after $attempts attempts';
   }
@@ -6332,6 +6332,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String r3eSnapshotFileRejected(String url) {
     return 'The snapshot lists a file that can\'t be imported safely, so nothing was changed: $url';
+  }
+
+  @override
+  String r3eSnapshotKeyBackupFailed(String error) {
+    return 'Couldn\'t back up your account and key databases, so nothing was deleted: $error';
   }
 
   @override
@@ -8846,7 +8851,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcSignatureNotValid => 'Signature not valid';
 
   @override
-  String get svcSnapshotBackupWarningBody => 'Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.';
+  String get svcSnapshotBackupWarningBody => 'Importing a snapshot replaces your local blockchain data. Your account, key and vault databases are kept, and a copy of them is saved to a SnapshotBackups folder in your data folder before anything is changed.\n\nStill, make sure your private keys are backed up before you continue. If they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.';
 
   @override
   String get svcSnapshotDetermineStateError => 'Could not determine latest snapshot state';
