@@ -9,6 +9,7 @@ import '../../web/components/web_no_wallet.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../components/send_form.dart';
+import '../components/send_form_prefill.dart';
 import '../providers/send_form_provider.dart';
 import '../utils.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -48,10 +49,17 @@ class WebPrefilledSendScreen extends BaseScreen {
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
-    ref.read(sendFormProvider.notifier).addressController.text = toAddress;
-    ref.read(sendFormProvider.notifier).amountController.text =
-        prefilledSendAmountText(amount);
+    final sendForm = ref.read(sendFormProvider.notifier);
+    return SendFormPrefill(
+      addressController: sendForm.addressController,
+      amountController: sendForm.amountController,
+      address: toAddress,
+      amount: prefilledSendAmountText(amount),
+      child: _body(ref),
+    );
+  }
 
+  Widget _body(WidgetRef ref) {
     final keypair = ref.watch(webSessionProvider.select((v) => v.keypair));
     if (keypair == null) {
       return const Center(child: WebNotWallet());
