@@ -2360,6 +2360,15 @@
   "hnavSnapshotError": "Ocurrió un error. Reinicia e inténtalo de nuevo.",
   "hnavSnapshotImported": "Snapshot de la base de datos importado.",
   "hnavSnapshotInitializing": "Inicializando...",
+  "hnavSnapshotKeyBackupSaved": "Se guardó una copia de tus bases de datos de cuentas y claves en:\n{path}",
+  "@hnavSnapshotKeyBackupSaved": {
+    "description": "Shown after a snapshot import with the folder holding the copy of the key databases",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
   "hnavSnapshotShuttingDown": "Cerrando el CLI...",
   "hnavSnapshotStartingUp": "Iniciando el CLI ahora...",
   "hnavStartAdjudicating": "Iniciar adjudicación",
@@ -5162,14 +5171,6 @@
   },
   "r3eExportNftMedia": "Exportar multimedia del NFT",
   "r3eFailedDecryptKeys": "No se pudieron descifrar las claves. Revisa tu contraseña.",
-  "r3eFailedDeleteDb": "No se pudo eliminar {path}: la carpeta sigue existiendo tras el borrado",
-  "@r3eFailedDeleteDb": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
   "r3eFailedDownloadFile": "No se pudo descargar {filename} tras {attempts} intentos",
   "@r3eFailedDownloadFile": {
     "placeholders": {
@@ -5284,6 +5285,24 @@
   "r3eSetPassword": "Establecer contraseña",
   "r3eShowDebugData": "Ver datos de depuración",
   "r3eSignatureCopied": "Firma de verificación copiada al portapapeles.",
+  "r3eSnapshotFileRejected": "El snapshot incluye un archivo que no se puede importar de forma segura, así que no se cambió nada: {url}",
+  "@r3eSnapshotFileRejected": {
+    "description": "Snapshot import refused because the manifest lists an unsafe file",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eSnapshotKeyBackupFailed": "No se pudo respaldar tus bases de datos de cuentas y claves, así que no se eliminó nada: {error}",
+  "@r3eSnapshotKeyBackupFailed": {
+    "description": "Snapshot import stopped because the key databases could not be backed up",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "r3eSnapshotNoUrls": "El snapshot no tiene URLs de descarga",
   "r3eStatusLog": "Registro de estado",
   "r3eStayLoggedIn": "Seguir conectado",
@@ -7428,7 +7447,7 @@
   },
   "svcSignatureGenerationFailed": "Falló la generación de la firma.",
   "svcSignatureNotValid": "Firma no válida",
-  "svcSnapshotBackupWarningBody": "Asegúrate de tener una copia de seguridad de tus claves privadas, ya que este proceso borrará la carpeta de tu base de datos.\n\nSi NO tienes copia de seguridad, haz clic en cancelar ahora, haz la copia y luego reinicia tu billetera para que se te vuelva a preguntar.",
+  "svcSnapshotBackupWarningBody": "Importar un snapshot reemplaza los datos locales de la blockchain. Tus bases de datos de cuentas, claves y bóvedas se conservan, y antes de cambiar nada se guarda una copia en una carpeta SnapshotBackups dentro de tu carpeta de datos.\n\nAun así, asegúrate de tener una copia de seguridad de tus claves privadas antes de continuar. Si NO tienes copia de seguridad, haz clic en cancelar ahora, haz la copia y luego reinicia tu billetera para que se te vuelva a preguntar.",
   "svcSnapshotDetermineStateError": "No se pudo determinar el estado del último snapshot",
   "svcSnapshotImportFailedBody": "Falló la importación del snapshot.",
   "svcSnapshotImportFailedTitle": "Error de importación",

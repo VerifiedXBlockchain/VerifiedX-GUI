@@ -2386,6 +2386,15 @@
   "hnavSnapshotError": "An error occurred. Please restart and try again.",
   "hnavSnapshotImported": "Database Snapshot Imported.",
   "hnavSnapshotInitializing": "Initializing...",
+  "hnavSnapshotKeyBackupSaved": "A copy of your account and key databases was saved to:\n{path}",
+  "@hnavSnapshotKeyBackupSaved": {
+    "description": "Shown after a snapshot import with the folder holding the copy of the key databases",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
   "hnavSnapshotShuttingDown": "Shutting down CLI...",
   "hnavSnapshotStartingUp": "Starting up CLI now...",
   "hnavStartAdjudicating": "Start Adjudicating",
@@ -5188,14 +5197,6 @@
   },
   "r3eExportNftMedia": "Export NFT Media",
   "r3eFailedDecryptKeys": "Failed to decrypt account keys. Check your password.",
-  "r3eFailedDeleteDb": "Failed to delete {path} — folder still exists after delete",
-  "@r3eFailedDeleteDb": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
   "r3eFailedDownloadFile": "Failed to download {filename} after {attempts} attempts",
   "@r3eFailedDownloadFile": {
     "placeholders": {
@@ -5310,6 +5311,24 @@
   "r3eSetPassword": "Set Password",
   "r3eShowDebugData": "Show Debug Data",
   "r3eSignatureCopied": "Signature Verification copied to clipboard.",
+  "r3eSnapshotFileRejected": "The snapshot lists a file that can't be imported safely, so nothing was changed: {url}",
+  "@r3eSnapshotFileRejected": {
+    "description": "Snapshot import refused because the manifest lists an unsafe file",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eSnapshotKeyBackupFailed": "Couldn't back up your account and key databases, so nothing was deleted: {error}",
+  "@r3eSnapshotKeyBackupFailed": {
+    "description": "Snapshot import stopped because the key databases could not be backed up",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "r3eSnapshotNoUrls": "Snapshot has no download URLs",
   "r3eStatusLog": "Status Log",
   "r3eStayLoggedIn": "Stay Logged In",
@@ -7460,7 +7479,7 @@
   },
   "svcSignatureGenerationFailed": "Signature generation failed.",
   "svcSignatureNotValid": "Signature not valid",
-  "svcSnapshotBackupWarningBody": "Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.",
+  "svcSnapshotBackupWarningBody": "Importing a snapshot replaces your local blockchain data. Your account, key and vault databases are kept, and a copy of them is saved to a SnapshotBackups folder in your data folder before anything is changed.\n\nStill, make sure your private keys are backed up before you continue. If they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.",
   "svcSnapshotDetermineStateError": "Could not determine latest snapshot state",
   "svcSnapshotImportFailedBody": "Snapshot import failed.",
   "svcSnapshotImportFailedTitle": "Import Failed",

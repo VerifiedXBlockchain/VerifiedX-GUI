@@ -123,15 +123,18 @@ class TokenizedBtcActionButtons extends BaseComponent {
           spacing: 8,
           runSpacing: 8,
           children: [
-            AppButton(
-              label: l10n.btcCopyDepositAddress,
-              icon: Icons.copy,
-              variant: AppColorVariant.Primary,
-              onPressed: () async {
-                await Clipboard.setData(ClipboardData(text: token.btcAddress));
-                Toast.message(l10n.btcAddressCopiedShort);
-              },
-            ),
+            // A deposit credits the vault owner, so only the owner is offered
+            // the address.
+            if (isOwner)
+              AppButton(
+                label: l10n.btcCopyDepositAddress,
+                icon: Icons.copy,
+                variant: AppColorVariant.Primary,
+                onPressed: () async {
+                  await Clipboard.setData(ClipboardData(text: token.btcAddress));
+                  Toast.message(l10n.btcAddressCopiedShort);
+                },
+              ),
             if (isOwner && token.btcAddress != null)
               AppButton(
                 label: l10n.btcFundLabel,

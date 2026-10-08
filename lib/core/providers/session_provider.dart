@@ -471,15 +471,14 @@ class SessionProvider extends StateNotifier<SessionModel> {
     state = state.copyWith(snapshotRequested: true);
 
     if (confirmed == true) {
-      bool? shouldContinue = true;
-      if (ref.read(walletListProvider).isNotEmpty) {
-        shouldContinue = await ConfirmDialog.show(
-          title: globalL10n.hnavWarningTitle,
-          body: globalL10n.svcSnapshotBackupWarningBody,
-          confirmText: globalL10n.svcImBackedUp,
-          cancelText: globalL10n.actionCancel,
-        );
-      }
+      // Shown on every import: key-only accounts (BTC, hidden, vault) are not
+      // in the wallet list, so its emptiness says nothing about what is at stake.
+      final shouldContinue = await ConfirmDialog.show(
+        title: globalL10n.hnavWarningTitle,
+        body: globalL10n.svcSnapshotBackupWarningBody,
+        confirmText: globalL10n.svcImBackedUp,
+        cancelText: globalL10n.actionCancel,
+      );
 
       if (shouldContinue == true) {
         importSnapshot();

@@ -34,6 +34,7 @@ dependencies:
   flutter_launcher_icons: ^0.12.0
   process: ^4.2.4
   flutter_awesome_select: ^6.4.0
+  path: ^1.8.2
   path_provider: ^2.0.11
   uuid: ^3.0.6
   file_picker: ^4.6.1
