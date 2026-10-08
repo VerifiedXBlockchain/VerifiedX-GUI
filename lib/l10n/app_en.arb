@@ -5310,6 +5310,15 @@
   "r3eSetPassword": "Set Password",
   "r3eShowDebugData": "Show Debug Data",
   "r3eSignatureCopied": "Signature Verification copied to clipboard.",
+  "r3eSnapshotFileRejected": "The snapshot lists a file that can't be imported safely, so nothing was changed: {url}",
+  "@r3eSnapshotFileRejected": {
+    "description": "Snapshot import refused because the manifest lists an unsafe file",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "r3eSnapshotNoUrls": "Snapshot has no download URLs",
   "r3eStatusLog": "Status Log",
   "r3eStayLoggedIn": "Stay Logged In",

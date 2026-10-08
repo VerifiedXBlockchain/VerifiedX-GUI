@@ -6330,6 +6330,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3eSignatureCopied => 'Firma de verificación copiada al portapapeles.';
 
   @override
+  String r3eSnapshotFileRejected(String url) {
+    return 'El snapshot incluye un archivo que no se puede importar de forma segura, así que no se cambió nada: $url';
+  }
+
+  @override
   String get r3eSnapshotNoUrls => 'El snapshot no tiene URLs de descarga';
 
   @override

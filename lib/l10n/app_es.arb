@@ -5284,6 +5284,15 @@
   "r3eSetPassword": "Establecer contraseña",
   "r3eShowDebugData": "Ver datos de depuración",
   "r3eSignatureCopied": "Firma de verificación copiada al portapapeles.",
+  "r3eSnapshotFileRejected": "El snapshot incluye un archivo que no se puede importar de forma segura, así que no se cambió nada: {url}",
+  "@r3eSnapshotFileRejected": {
+    "description": "Snapshot import refused because the manifest lists an unsafe file",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
   "r3eSnapshotNoUrls": "El snapshot no tiene URLs de descarga",
   "r3eStatusLog": "Registro de estado",
   "r3eStayLoggedIn": "Seguir conectado",

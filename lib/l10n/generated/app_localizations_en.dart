@@ -6330,6 +6330,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3eSignatureCopied => 'Signature Verification copied to clipboard.';
 
   @override
+  String r3eSnapshotFileRejected(String url) {
+    return 'The snapshot lists a file that can\'t be imported safely, so nothing was changed: $url';
+  }
+
+  @override
   String get r3eSnapshotNoUrls => 'Snapshot has no download URLs';
 
   @override

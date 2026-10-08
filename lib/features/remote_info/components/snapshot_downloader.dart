@@ -12,6 +12,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/files.dart';
 import '../../../utils/formatting.dart';
+import '../utils/snapshot_files.dart';
 
 class SnapshotDownloader extends StatefulWidget {
   final SnapshotInfo snapshotInfo;
@@ -74,8 +75,25 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
         "$_dbPath${sep}Databases${Env.isTestNet || Env.isDevnet ? 'TestNet' : ''}";
 
     try {
-      // --- Step 2: Delete existing folder ---
-      print('[Snapshot] === STEP 2: DELETE ~/rbx ===');
+      // --- Step 2: Check the manifest before touching anything ---
+      print('[Snapshot] === STEP 2: CHECK MANIFEST ===');
+      final urls = widget.snapshotInfo.urls ?? [];
+      if (urls.isEmpty) {
+        _fail(globalL10n.r3eSnapshotNoUrls);
+        return;
+      }
+
+      final List<SnapshotFileTarget> targets;
+      try {
+        targets = resolveSnapshotFiles(urls, dbFolder);
+      } on SnapshotFileRejected catch (e) {
+        print('[Snapshot] Refusing manifest: $e');
+        _fail(globalL10n.r3eSnapshotFileRejected(e.url));
+        return;
+      }
+
+      // --- Step 3: Delete existing folder ---
+      print('[Snapshot] === STEP 3: DELETE ~/rbx ===');
       print('[Snapshot] dbPath: $_dbPath');
       final dir = Directory(_dbPath);
 
@@ -89,19 +107,11 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
         return;
       }
 
-      // --- Step 3: Create fresh folders ---
-      print('[Snapshot] === STEP 3: CREATE FRESH FOLDERS ===');
       await Directory(dbFolder).create(recursive: true);
       print('[Snapshot] Created $dbFolder');
 
       // --- Step 4: Download files ---
-      final urls = widget.snapshotInfo.urls ?? [];
-      print('[Snapshot] === STEP 4: DOWNLOAD ${urls.length} FILES ===');
-
-      if (urls.isEmpty) {
-        _fail(globalL10n.r3eSnapshotNoUrls);
-        return;
-      }
+      print('[Snapshot] === STEP 4: DOWNLOAD ${targets.length} FILES ===');
 
       final dio = Dio(BaseOptions(
         connectTimeout: const Duration(seconds: 30),
@@ -109,10 +119,9 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       ));
       int cumulativeBytes = 0;
 
-      for (int i = 0; i < urls.length; i++) {
-        final url = urls[i];
-        final filename = url.split('/').last;
-        final filePath = "$dbFolder$sep$filename";
+      for (int i = 0; i < targets.length; i++) {
+        final target = targets[i];
+        final filename = target.fileName;
 
         setState(() {
           currentFile = filename;
@@ -120,10 +129,11 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
 
         final fileSize = await _downloadFileWithRetry(
           dio: dio,
-          url: url,
-          filePath: filePath,
+          url: target.url,
+          filename: filename,
+          filePath: target.filePath,
           fileIndex: i + 1,
-          fileCount: urls.length,
+          fileCount: targets.length,
           cumulativeBytes: cumulativeBytes,
         );
 
@@ -144,22 +154,24 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
       print('[Snapshot] === DOWNLOAD COMPLETE ===');
       print('[Snapshot] All ${urls.length} files downloaded');
 
-      final entries = Directory(dbFolder).listSync();
       int totalDiskBytes = 0;
-      for (final f in entries) {
-        if (f is File) {
+      int filesOnDisk = 0;
+      for (final target in targets) {
+        final f = File(target.filePath);
+        if (await f.exists()) {
+          filesOnDisk++;
           final size = await f.length();
           totalDiskBytes += size;
           print(
-              '[Snapshot]   ${f.path.split(sep).last} — ${(size / 1048576).toStringAsFixed(1)} MB');
+              '[Snapshot]   ${target.fileName} — ${(size / 1048576).toStringAsFixed(1)} MB');
         }
       }
       print(
           '[Snapshot] Total on disk: ${(totalDiskBytes / 1073741824).toStringAsFixed(2)} GB (expected: ${(totalBytes / 1073741824).toStringAsFixed(2)} GB)');
 
-      if (entries.length < urls.length) {
+      if (filesOnDisk < targets.length) {
         _fail(globalL10n.r3eFilesOnDiskMismatch(
-            entries.length.toString(), urls.length.toString()));
+            filesOnDisk.toString(), targets.length.toString()));
         return;
       }
 
@@ -177,13 +189,12 @@ class _SnapshotDownloaderState extends State<SnapshotDownloader> {
   Future<int?> _downloadFileWithRetry({
     required Dio dio,
     required String url,
+    required String filename,
     required String filePath,
     required int fileIndex,
     required int fileCount,
     required int cumulativeBytes,
   }) async {
-    final filename = url.split('/').last;
-
     // Get expected file size via HEAD request
     int? expectedSize;
     try {

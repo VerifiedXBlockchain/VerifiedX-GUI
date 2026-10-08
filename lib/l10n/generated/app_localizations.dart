@@ -11919,6 +11919,12 @@ abstract class AppLocalizations {
   /// **'Signature Verification copied to clipboard.'**
   String get r3eSignatureCopied;
 
+  /// Snapshot import refused because the manifest lists an unsafe file
+  ///
+  /// In en, this message translates to:
+  /// **'The snapshot lists a file that can\'t be imported safely, so nothing was changed: {url}'**
+  String r3eSnapshotFileRejected(String url);
+
   /// No description provided for @r3eSnapshotNoUrls.
   ///
   /// In en, this message translates to:
