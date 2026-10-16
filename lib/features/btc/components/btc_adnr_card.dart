@@ -15,9 +15,11 @@ import '../../../utils/guards.dart';
 import '../../../utils/toast.dart';
 import '../../adnr/providers/adnr_pending_provider.dart';
 import '../../encrypt/utils.dart';
+import '../../global_loader/global_loading_provider.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../models/btc_account.dart';
+import 'accept_btc_name_transfer.dart';
 import '../providers/btc_adnr_create_form_provider.dart';
 import '../providers/btc_adnr_transfer_form_provider.dart';
 import '../services/btc_service.dart';
@@ -87,36 +89,69 @@ class BtcAdnrCard extends BaseComponent {
                 );
               }
               if (account.adnr == null) {
-                return AppButton(
-                  label: l10n.btcCreateDomain,
-                  variant: AppColorVariant.Btc,
-                  onPressed: () async {
-                    if (!await passwordRequiredGuard(context, ref)) return;
-                    if (!widgetGuardWalletIsSynced(ref)) {
-                      return;
-                    }
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppButton(
+                      label: l10n.btcAcceptTransferLabel,
+                      type: AppButtonType.Text,
+                      variant: AppColorVariant.Btc,
+                      onPressed: () async {
+                        if (!await passwordRequiredGuard(context, ref)) return;
 
-                    if (ref.read(walletListProvider).isEmpty) {
-                      Toast.error(l10n.tkbVfxWalletRequired);
-                      return;
-                    }
-
-                    ref.read(btcAdnrCreateFormProvider.notifier).initWithData(
+                        await acceptBtcNameTransfer(
+                          context: context,
                           btcAddress: account.address,
+                          initialOwner: ref.read(walletListProvider).firstOrNull?.address ?? "",
+                          ownerPicker: (controller) => AddressChoosingIconButton(controller: controller),
+                          sign: (name, newOwner) async {
+                            ref.read(globalLoadingProvider.notifier).start();
+                            final code = await BtcService().signAdnrTransferAcceptance(
+                              btcAddress: account.address,
+                              name: name,
+                              newOwner: newOwner,
+                            );
+                            ref.read(globalLoadingProvider.notifier).complete();
+                            return code;
+                          },
                         );
-
-                    final initialWallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.balance >= ADNR_COST + MIN_RBX_FOR_SC_ACTION);
-                    if (initialWallet != null) {
-                      ref.read(btcAdnrCreateFormProvider.notifier).setSelectedAddress(initialWallet.address);
-                    }
-
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return CreateBtcAdnrModal();
                       },
-                    );
-                  },
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    AppButton(
+                      label: l10n.btcCreateDomain,
+                      variant: AppColorVariant.Btc,
+                      onPressed: () async {
+                        if (!await passwordRequiredGuard(context, ref)) return;
+                        if (!widgetGuardWalletIsSynced(ref)) {
+                          return;
+                        }
+
+                        if (ref.read(walletListProvider).isEmpty) {
+                          Toast.error(l10n.tkbVfxWalletRequired);
+                          return;
+                        }
+
+                        ref.read(btcAdnrCreateFormProvider.notifier).initWithData(
+                              btcAddress: account.address,
+                            );
+
+                        final initialWallet = ref.read(walletListProvider).firstWhereOrNull((w) => w.balance >= ADNR_COST + MIN_RBX_FOR_SC_ACTION);
+                        if (initialWallet != null) {
+                          ref.read(btcAdnrCreateFormProvider.notifier).setSelectedAddress(initialWallet.address);
+                        }
+
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return CreateBtcAdnrModal();
+                          },
+                        );
+                      },
+                    ),
+                  ],
                 );
               }
 
@@ -257,6 +292,20 @@ class TransferBtcAdnrModal extends BaseComponent {
               label: Text(
                 l10n.tkbToVfxAddress,
               ),
+            ),
+          ),
+          SizedBox(
+            height: 16,
+          ),
+          TextFormField(
+            controller: formProvider.acceptanceCodeController,
+            validator: formProvider.acceptanceCodeValidator,
+            decoration: InputDecoration(
+              label: Text(
+                l10n.btcAcceptanceCodeLabel,
+              ),
+              helperText: l10n.btcAcceptanceCodeHelpDesktop,
+              helperMaxLines: 3,
             ),
           ),
           Divider(),

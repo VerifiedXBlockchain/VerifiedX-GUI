@@ -20468,6 +20468,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{reason}'**
   String errNodeReason(String reason);
+
+  /// Toast when the latest block height needed to sign a BTC domain message is unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read the latest block height. Please try again.'**
+  String get btcNameHeightUnknown;
+
+  /// Button on a BTC address to accept a BTC domain being transferred to it.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Transfer'**
+  String get btcAcceptTransferLabel;
+
+  /// Title of the prompts that create a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept a BTC Domain Transfer'**
+  String get btcAcceptTransferTitle;
+
+  /// Body of the prompt asking which BTC domain is being received.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the BTC domain being transferred to {btcAddress}.'**
+  String btcAcceptTransferNameBody(String btcAddress);
+
+  /// Field label for the BTC domain being received.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain'**
+  String get btcAcceptTransferNameLabel;
+
+  /// Body of the prompt asking for the new VFX owner of a received BTC domain.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the VFX address that will control the domain. The sender must use this same VFX address.'**
+  String get btcAcceptTransferOwnerBody;
+
+  /// Field label for the new VFX owner of a received BTC domain.
+  ///
+  /// In en, this message translates to:
+  /// **'New VFX Owner Address'**
+  String get btcAcceptTransferOwnerLabel;
+
+  /// Title of the dialog showing a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Acceptance Code'**
+  String get btcAcceptanceCodeTitle;
+
+  /// Body of the dialog showing a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Send this code to the person transferring {name} to you. It is valid for 24 hours and only for the VFX owner {owner}.'**
+  String btcAcceptanceCodeBody(String name, String owner);
+
+  /// Button copying a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Code'**
+  String get btcCopyAcceptanceCode;
+
+  /// Toast after copying a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Acceptance code copied to clipboard'**
+  String get btcAcceptanceCodeCopied;
+
+  /// Toast when signing a BTC domain transfer acceptance fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign the acceptance.'**
+  String get btcAcceptanceSignFailed;
+
+  /// Field label for the acceptance code the BTC domain receiver provides.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiver\'s Acceptance Code'**
+  String get btcAcceptanceCodeLabel;
+
+  /// Helper text under the acceptance code field in the desktop BTC domain transfer form.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional when this wallet holds the receiving BTC address. Otherwise the receiver creates the code with \"Accept Transfer\" on their BTC address in their wallet.'**
+  String get btcAcceptanceCodeHelpDesktop;
+
+  /// Body of the web prompt asking for the BTC domain receiver's acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'The receiver creates this code with \"Accept Transfer\" on their BTC address in their wallet. It must name {owner} as the new VFX owner.'**
+  String btcAcceptanceCodeHelpWeb(String owner);
+
+  /// Validation error when the acceptance code is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Acceptance code is required'**
+  String get btcAcceptanceCodeRequired;
+
+  /// Validation error when the acceptance code cannot be read.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a valid acceptance code'**
+  String get btcAcceptanceCodeInvalid;
+
+  /// Validation error when the acceptance code names another domain or VFX owner.
+  ///
+  /// In en, this message translates to:
+  /// **'This acceptance code is for a different domain or VFX owner'**
+  String get btcAcceptanceCodeMismatch;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

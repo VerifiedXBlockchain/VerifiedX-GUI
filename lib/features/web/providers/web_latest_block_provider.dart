@@ -30,3 +30,10 @@ class WebLatestBlockProvider extends StateNotifier<WebBlock?> {
 final webLatestBlockProvider = StateNotifierProvider<WebLatestBlockProvider, WebBlock?>(
   (ref) => WebLatestBlockProvider(ref),
 );
+
+/// The chain's latest block height, read fresh from the explorer and falling
+/// back to the last polled block. Null when neither is known.
+Future<int?> fetchWebLatestBlockHeight(WidgetRef ref) async {
+  final block = await ExplorerService().getLatestBlock();
+  return block?.height ?? ref.read(webLatestBlockProvider)?.height;
+}

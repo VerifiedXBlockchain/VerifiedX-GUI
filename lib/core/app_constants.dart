@@ -45,6 +45,21 @@ const ADNR_COST = 5.0;
 const ADNR_TRANSFER_COST = 5.0;
 const ADNR_DELETE_COST = 5.0;
 const BTC_ADNR_MAX_LENGTH = 65;
+// From this block height BTC domains (.btc) are signed for their VFX owner and
+// name: the create message becomes "<unix seconds>:<VFX owner>:<name>.btc",
+// and a transfer carries the receiving BTC address's signed acceptance.
+// Set each value to the node's BtcNameSignerOwnsAddressHeight for that network
+// once it is chosen. 999999999999 means not active yet.
+const BTC_NAME_SIGNED_MESSAGE_HEIGHT_MAINNET = 999999999999;
+const BTC_NAME_SIGNED_MESSAGE_HEIGHT_TESTNET = 999999999999;
+int get BTC_NAME_SIGNED_MESSAGE_HEIGHT =>
+    Env.isTestNet ? BTC_NAME_SIGNED_MESSAGE_HEIGHT_TESTNET : BTC_NAME_SIGNED_MESSAGE_HEIGHT_MAINNET;
+
+/// Whether the next block after [latestBlockHeight] requires signed BTC
+/// domain messages.
+bool btcNameSignedMessagesActive(int latestBlockHeight) {
+  return latestBlockHeight + 1 >= BTC_NAME_SIGNED_MESSAGE_HEIGHT;
+}
 
 const VOTE_TOPIC_COST = 10.0;
 const MAX_COMPILE_QUANTITY = 10;
