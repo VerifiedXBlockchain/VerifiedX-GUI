@@ -11055,4 +11055,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String errNodeReason(String reason) {
     return '$reason';
   }
+
+  @override
+  String get btcNameHeightUnknown => 'Could not read the latest block height. Please try again.';
+
+  @override
+  String get btcAcceptTransferLabel => 'Accept Transfer';
+
+  @override
+  String get btcAcceptTransferTitle => 'Accept a BTC Domain Transfer';
+
+  @override
+  String btcAcceptTransferNameBody(String btcAddress) {
+    return 'Enter the BTC domain being transferred to $btcAddress.';
+  }
+
+  @override
+  String get btcAcceptTransferNameLabel => 'BTC Domain';
+
+  @override
+  String get btcAcceptTransferOwnerBody => 'Enter the VFX address that will control the domain. The sender must use this same VFX address.';
+
+  @override
+  String get btcAcceptTransferOwnerLabel => 'New VFX Owner Address';
+
+  @override
+  String get btcAcceptanceCodeTitle => 'Acceptance Code';
+
+  @override
+  String btcAcceptanceCodeBody(String name, String owner) {
+    return 'Send this code to the person transferring $name to you. It is valid for 24 hours and only for the VFX owner $owner.';
+  }
+
+  @override
+  String get btcCopyAcceptanceCode => 'Copy Code';
+
+  @override
+  String get btcAcceptanceCodeCopied => 'Acceptance code copied to clipboard';
+
+  @override
+  String get btcAcceptanceSignFailed => 'Could not sign the acceptance.';
+
+  @override
+  String get btcAcceptanceCodeLabel => 'Receiver\'s Acceptance Code';
+
+  @override
+  String get btcAcceptanceCodeHelpDesktop => 'Optional when this wallet holds the receiving BTC address. Otherwise the receiver creates the code with \"Accept Transfer\" on their BTC address in their wallet.';
+
+  @override
+  String btcAcceptanceCodeHelpWeb(String owner) {
+    return 'The receiver creates this code with \"Accept Transfer\" on their BTC address in their wallet. It must name $owner as the new VFX owner.';
+  }
+
+  @override
+  String get btcAcceptanceCodeRequired => 'Acceptance code is required';
+
+  @override
+  String get btcAcceptanceCodeInvalid => 'This is not a valid acceptance code';
+
+  @override
+  String get btcAcceptanceCodeMismatch => 'This acceptance code is for a different domain or VFX owner';
 }

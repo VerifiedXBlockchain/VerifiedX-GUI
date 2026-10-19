@@ -11055,4 +11055,64 @@ class AppLocalizationsEs extends AppLocalizations {
   String errNodeReason(String reason) {
     return 'Mensaje del nodo: $reason';
   }
+
+  @override
+  String get btcNameHeightUnknown => 'No se pudo leer la altura del último bloque. Inténtalo de nuevo.';
+
+  @override
+  String get btcAcceptTransferLabel => 'Aceptar transferencia';
+
+  @override
+  String get btcAcceptTransferTitle => 'Aceptar una transferencia de dominio BTC';
+
+  @override
+  String btcAcceptTransferNameBody(String btcAddress) {
+    return 'Introduce el dominio BTC que se transfiere a $btcAddress.';
+  }
+
+  @override
+  String get btcAcceptTransferNameLabel => 'Dominio BTC';
+
+  @override
+  String get btcAcceptTransferOwnerBody => 'Introduce la dirección VFX que controlará el dominio. El remitente debe usar esta misma dirección VFX.';
+
+  @override
+  String get btcAcceptTransferOwnerLabel => 'Dirección VFX del nuevo propietario';
+
+  @override
+  String get btcAcceptanceCodeTitle => 'Código de aceptación';
+
+  @override
+  String btcAcceptanceCodeBody(String name, String owner) {
+    return 'Envía este código a la persona que te transfiere $name. Es válido durante 24 horas y solo para el propietario VFX $owner.';
+  }
+
+  @override
+  String get btcCopyAcceptanceCode => 'Copiar código';
+
+  @override
+  String get btcAcceptanceCodeCopied => 'Código de aceptación copiado al portapapeles';
+
+  @override
+  String get btcAcceptanceSignFailed => 'No se pudo firmar la aceptación.';
+
+  @override
+  String get btcAcceptanceCodeLabel => 'Código de aceptación del receptor';
+
+  @override
+  String get btcAcceptanceCodeHelpDesktop => 'Opcional si esta billetera tiene la dirección BTC receptora. Si no, el receptor crea el código con \"Aceptar transferencia\" en su dirección BTC, en su billetera.';
+
+  @override
+  String btcAcceptanceCodeHelpWeb(String owner) {
+    return 'El receptor crea este código con \"Aceptar transferencia\" en su dirección BTC, en su billetera. Debe indicar $owner como nuevo propietario VFX.';
+  }
+
+  @override
+  String get btcAcceptanceCodeRequired => 'El código de aceptación es obligatorio';
+
+  @override
+  String get btcAcceptanceCodeInvalid => 'Este no es un código de aceptación válido';
+
+  @override
+  String get btcAcceptanceCodeMismatch => 'Este código de aceptación es para otro dominio u otro propietario VFX';
 }

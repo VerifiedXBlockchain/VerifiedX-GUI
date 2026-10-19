@@ -10054,5 +10054,99 @@
         "example": "A withdrawal is already in progress for this contract."
       }
     }
+  },
+  "btcNameHeightUnknown": "No se pudo leer la altura del último bloque. Inténtalo de nuevo.",
+  "@btcNameHeightUnknown": {
+    "description": "Toast when the latest block height needed to sign a BTC domain message is unknown."
+  },
+  "btcAcceptTransferLabel": "Aceptar transferencia",
+  "@btcAcceptTransferLabel": {
+    "description": "Button on a BTC address to accept a BTC domain being transferred to it."
+  },
+  "btcAcceptTransferTitle": "Aceptar una transferencia de dominio BTC",
+  "@btcAcceptTransferTitle": {
+    "description": "Title of the prompts that create a BTC domain transfer acceptance code."
+  },
+  "btcAcceptTransferNameBody": "Introduce el dominio BTC que se transfiere a {btcAddress}.",
+  "@btcAcceptTransferNameBody": {
+    "description": "Body of the prompt asking which BTC domain is being received.",
+    "placeholders": {
+      "btcAddress": {
+        "type": "String",
+        "example": "bc1q..."
+      }
+    }
+  },
+  "btcAcceptTransferNameLabel": "Dominio BTC",
+  "@btcAcceptTransferNameLabel": {
+    "description": "Field label for the BTC domain being received."
+  },
+  "btcAcceptTransferOwnerBody": "Introduce la dirección VFX que controlará el dominio. El remitente debe usar esta misma dirección VFX.",
+  "@btcAcceptTransferOwnerBody": {
+    "description": "Body of the prompt asking for the new VFX owner of a received BTC domain."
+  },
+  "btcAcceptTransferOwnerLabel": "Dirección VFX del nuevo propietario",
+  "@btcAcceptTransferOwnerLabel": {
+    "description": "Field label for the new VFX owner of a received BTC domain."
+  },
+  "btcAcceptanceCodeTitle": "Código de aceptación",
+  "@btcAcceptanceCodeTitle": {
+    "description": "Title of the dialog showing a BTC domain transfer acceptance code."
+  },
+  "btcAcceptanceCodeBody": "Envía este código a la persona que te transfiere {name}. Es válido durante 24 horas y solo para el propietario VFX {owner}.",
+  "@btcAcceptanceCodeBody": {
+    "description": "Body of the dialog showing a BTC domain transfer acceptance code.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "satoshi.btc"
+      },
+      "owner": {
+        "type": "String",
+        "example": "xAbc..."
+      }
+    }
+  },
+  "btcCopyAcceptanceCode": "Copiar código",
+  "@btcCopyAcceptanceCode": {
+    "description": "Button copying a BTC domain transfer acceptance code."
+  },
+  "btcAcceptanceCodeCopied": "Código de aceptación copiado al portapapeles",
+  "@btcAcceptanceCodeCopied": {
+    "description": "Toast after copying a BTC domain transfer acceptance code."
+  },
+  "btcAcceptanceSignFailed": "No se pudo firmar la aceptación.",
+  "@btcAcceptanceSignFailed": {
+    "description": "Toast when signing a BTC domain transfer acceptance fails."
+  },
+  "btcAcceptanceCodeLabel": "Código de aceptación del receptor",
+  "@btcAcceptanceCodeLabel": {
+    "description": "Field label for the acceptance code the BTC domain receiver provides."
+  },
+  "btcAcceptanceCodeHelpDesktop": "Opcional si esta billetera tiene la dirección BTC receptora. Si no, el receptor crea el código con \"Aceptar transferencia\" en su dirección BTC, en su billetera.",
+  "@btcAcceptanceCodeHelpDesktop": {
+    "description": "Helper text under the acceptance code field in the desktop BTC domain transfer form."
+  },
+  "btcAcceptanceCodeHelpWeb": "El receptor crea este código con \"Aceptar transferencia\" en su dirección BTC, en su billetera. Debe indicar {owner} como nuevo propietario VFX.",
+  "@btcAcceptanceCodeHelpWeb": {
+    "description": "Body of the web prompt asking for the BTC domain receiver's acceptance code.",
+    "placeholders": {
+      "owner": {
+        "type": "String",
+        "example": "xAbc..."
+      }
+    }
+  },
+  "btcAcceptanceCodeRequired": "El código de aceptación es obligatorio",
+  "@btcAcceptanceCodeRequired": {
+    "description": "Validation error when the acceptance code is empty."
+  },
+  "btcAcceptanceCodeInvalid": "Este no es un código de aceptación válido",
+  "@btcAcceptanceCodeInvalid": {
+    "description": "Validation error when the acceptance code cannot be read."
+  },
+  "btcAcceptanceCodeMismatch": "Este código de aceptación es para otro dominio u otro propietario VFX",
+  "@btcAcceptanceCodeMismatch": {
+    "description": "Validation error when the acceptance code names another domain or VFX owner."
   }
 }
