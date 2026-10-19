@@ -95,6 +95,13 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
       return;
     }
 
+    // Admission refuses an unshield to another network's address at every
+    // height (Core's RecipientIsThisNetworks covers unshields).
+    if (isOtherNetworksVfxAddress(toAddress)) {
+      Toast.error(globalL10n.r3hAddressOtherNetwork);
+      return;
+    }
+
     final amount = double.tryParse(_amountController.text.trim());
     if (amount == null || amount <= 0) {
       Toast.error(globalL10n.prvEnterValidAmount);

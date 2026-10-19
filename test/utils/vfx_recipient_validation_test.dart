@@ -86,6 +86,13 @@ void main() {
     });
   });
 
+  group('formValidatorVbtcRecipient', () {
+    test("refuses the other network's address, as it refuses a vault", () {
+      expect(formValidatorVbtcRecipient(_address(vfxAddressVersionByte)), isNull);
+      expect(formValidatorVbtcRecipient(_address(vfxAddressVersionByte + 1)), contains('another network'));
+    });
+  });
+
   group('looksLikeVfxName', () {
     test('a name is resolved before sending, whatever its case', () {
       expect(looksLikeVfxName('alice.vfx'), isTrue);

@@ -231,6 +231,10 @@ String? formValidatorVbtcRecipient(String? value) {
     return globalL10n.r3hAddressInvalid;
   }
 
+  if (isOtherNetworksVfxAddress(address)) {
+    return globalL10n.r3hAddressOtherNetwork;
+  }
+
   return null;
 }
 
