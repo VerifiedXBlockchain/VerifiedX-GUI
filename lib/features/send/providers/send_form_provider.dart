@@ -435,6 +435,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     // Desktop only: where the VFX goes. A name is replaced by the address it
     // resolves to, since the node refuses a transaction addressed to a name.
     String recipient = address.trim().replaceAll("\n", "");
+    // What the user typed when the send started, kept with [recipient] so the
+    // confirmation names what is sent even if the field is edited meanwhile.
+    final typedRecipient = recipient;
 
     final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
@@ -803,8 +806,13 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       feeNotice = fitted.notice;
     }
 
-    final typedRecipient = address.trim().replaceAll("\n", "");
-    final shownRecipient = recipient == typedRecipient ? address : "$typedRecipient ($recipient)";
+    // Web sends the field as it stands, so it shows that; desktop sends the
+    // captured [recipient].
+    final shownRecipient = kIsWeb
+        ? address
+        : recipient == typedRecipient
+            ? recipient
+            : "$typedRecipient ($recipient)";
     final confirmBody = globalL10n.txpSendingConfirmBody('$amount', shownRecipient, senderAddress);
     final confirmed = await ConfirmDialog.show(
       title: globalL10n.btcPleaseConfirmTitle,
