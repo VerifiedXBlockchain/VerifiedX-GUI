@@ -11170,7 +11170,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get bw2WatchedChangeSent => 'Sent. The actions come back once the chain shows the change. If nothing changes after a few blocks, close this and open the withdrawal again.';
+  String get bw2WatchedChangeSent => 'Sent. The actions come back once the chain shows the change. If nothing changes within a few minutes, they come back so you can send again.';
 
   @override
   String get bw2WatchedCancel => 'Cancel Withdrawal';
@@ -11208,4 +11208,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3cTypeVbtcWithdrawalPin => 'vBTC Withdrawal Pin';
+
+  @override
+  String get bw2WatchedChangeNotSeen => 'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.';
 }

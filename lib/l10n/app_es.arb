@@ -10229,7 +10229,7 @@
       }
     }
   },
-  "bw2WatchedChangeSent": "Enviado. Las acciones vuelven cuando la cadena muestre el cambio. Si nada cambia tras unos bloques, cierra esto y vuelve a abrir el retiro.",
+  "bw2WatchedChangeSent": "Enviado. Las acciones vuelven cuando la cadena muestre el cambio. Si nada cambia en unos minutos, vuelven para que puedas enviarlo de nuevo.",
   "@bw2WatchedChangeSent": {
     "description": "Watched-vault withdrawal: a raise, release or cancel was sent and the actions are off until the chain applies it."
   },
@@ -10286,5 +10286,9 @@
   "r3cTypeVbtcWithdrawalPin": "Fijación de retiro vBTC",
   "@r3cTypeVbtcWithdrawalPin": {
     "description": "Transaction type 44 (VBTC_V2_COIN_PIN) when its data cannot be read to tell a fee raise from a release."
+  },
+  "bw2WatchedChangeNotSeen": "El último cambio no apareció en la cadena en unos minutos, así que probablemente se descartó. Puedes enviarlo de nuevo.",
+  "@bw2WatchedChangeNotSeen": {
+    "description": "Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on."
   }
 }

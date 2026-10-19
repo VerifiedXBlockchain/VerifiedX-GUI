@@ -49,6 +49,18 @@ void main() {
     });
   });
 
+  group('parse requires the full name', () {
+    test('a code signed for the bare name is refused, as Core refuses it', () {
+      // BtcNameSignatures.Check compares the signed name with "satoshi.btc".
+      expect(BtcNameAcceptance.parse('1760000000:$owner:satoshi|$signature'), isNull);
+      expect(BtcNameAcceptance.parse('1760000000:$owner:.btc|$signature'), isNull);
+    });
+
+    test('the suffix may be in any case, since Core ignores case', () {
+      expect(BtcNameAcceptance.parse('1760000000:$owner:Satoshi.BTC|$signature'), isNotNull);
+    });
+  });
+
   group('matches', () {
     final acceptance = BtcNameAcceptance.parse('1760000000:$owner:satoshi.btc|$signature')!;
 

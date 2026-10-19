@@ -125,6 +125,26 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   /// check against a second Type 44 for the same withdrawal, so another press
   /// would pay another VFX fee for nothing.
   WatchedWithdrawal? _sentAgainst;
+  DateTime? _sentAt;
+
+  /// The withdrawal as it stood when the last change was sent, kept after the
+  /// lock above is released: the "probably dropped" note holds only until a
+  /// refresh shows that change, or the withdrawal closes.
+  WatchedWithdrawal? _sentSnapshot;
+
+  /// The sent Type 44's hash, so a lapsed wait can ask whether it was mined
+  /// before calling it dropped. Null for a cancel, whose hash is not returned.
+  String? _sentTxHash;
+  bool _checkingSentTx = false;
+
+  /// Set when a sent change never showed up within [kWatchedActionWait] and
+  /// the actions were given back.
+  bool _sentNotSeen = false;
+
+  /// The newest refresh asked for. A reply to an older one is dropped, so a
+  /// slow answer cannot overwrite a newer state.
+  int _refreshSeq = 0;
+  bool _timerRefreshInFlight = false;
   static const _watchedRefreshInterval = Duration(seconds: 20);
 
   @override
@@ -359,26 +379,68 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   }
 
   void _showWatched(WatchedWithdrawal watched) {
+    final waitOver = _sentAgainst != null && watched.samePinAs(_sentAgainst!) && watchedActionWaitIsOver(_sentAt, DateTime.now());
     setState(() {
-      if (_sentAgainst != null && !watched.samePinAs(_sentAgainst!)) {
+      // The change showed up, or nothing more can happen: no lock, no note.
+      if (watched.settlesChangeSentAgainst(_sentSnapshot)) {
         _sentAgainst = null;
+        _sentSnapshot = null;
+        _sentNotSeen = false;
       }
       _watched = watched;
       _step = _DialogStep.watched;
     });
+    if (waitOver) _onSentWaitOver();
     _watchedTimer?.cancel();
     if (!watched.isClosed) {
-      _watchedTimer = Timer.periodic(_watchedRefreshInterval, (_) => _refreshWatched());
+      _watchedTimer = Timer.periodic(_watchedRefreshInterval, (_) => _refreshWatchedOnTimer());
+    }
+  }
+
+  /// The chain showed no change in [kWatchedActionWait]. The actions come
+  /// back either way; the "probably dropped" note is shown only when the sent
+  /// transaction is not known to be mined (Spyglass has no mempool lookup, so
+  /// one still waiting in the pool also reads as not mined).
+  Future<void> _onSentWaitOver() async {
+    if (_checkingSentTx) return;
+    _checkingSentTx = true;
+    final hash = _sentTxHash;
+    final mined = hash != null && await ExplorerService().retrieveTransaction(hash) != null;
+    _checkingSentTx = false;
+    if (!mounted || _sentAgainst == null) return;
+    setState(() {
+      _sentAgainst = null;
+      _sentNotSeen = !mined;
+    });
+  }
+
+  /// A tick waits for the previous tick's answer (each can take up to 30 s).
+  Future<void> _refreshWatchedOnTimer() async {
+    if (_timerRefreshInFlight) return;
+    _timerRefreshInFlight = true;
+    try {
+      await _refreshWatched();
+    } finally {
+      _timerRefreshInFlight = false;
     }
   }
 
   Future<void> _refreshWatched() async {
+    final seq = ++_refreshSeq;
     final watched = await ref.read(webTokenActionsManager).watchedV2Withdrawal(
           scIdentifier: widget.scIdentifier,
           requestHash: _requestHash!,
         );
-    if (!mounted || watched == null) return;
+    if (!mounted || watched == null || seq != _refreshSeq) return;
     _showWatched(watched);
+  }
+
+  void _markSent(WatchedWithdrawal against, {String? txHash}) {
+    _sentAgainst = against;
+    _sentSnapshot = against;
+    _sentAt = DateTime.now();
+    _sentTxHash = txHash;
+    _sentNotSeen = false;
   }
 
   /// Whether the active wallet made the request. Core refuses a raise,
@@ -407,16 +469,18 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
       _busy = true;
       _feeRateError = null;
     });
+    String? sentHash;
     final sent = await ref.read(webTokenActionsManager).raiseWatchedWithdrawalFee(
           scIdentifier: widget.scIdentifier,
           requestHash: _requestHash!,
           feeRate: feeRate!,
           release: release,
+          onSent: (hash) => sentHash = hash,
         );
     if (!mounted) return;
     setState(() {
       _busy = false;
-      if (sent == true) _sentAgainst = watched;
+      if (sent == true) _markSent(watched, txHash: sentHash);
     });
     if (sent == true) {
       _feeRateController.clear();
@@ -448,7 +512,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     if (!mounted) return;
     setState(() {
       _busy = false;
-      if (sent) _sentAgainst = watched;
+      if (sent) _markSent(watched);
     });
     if (sent) _refreshWatched();
   }
@@ -613,9 +677,12 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           const SizedBox(height: 12),
           Text(l10n.bw2WatchedCurrentFeeRate(watched.feeRate!), style: const TextStyle(color: Colors.white70, fontSize: 12)),
         ],
-        if (awaitingChange) ...[
+        if (awaitingChange || _sentNotSeen) ...[
           const SizedBox(height: 16),
-          Text(l10n.bw2WatchedChangeSent, style: const TextStyle(color: Color(0xFFE0A32E), fontSize: 12)),
+          Text(
+            awaitingChange ? l10n.bw2WatchedChangeSent : l10n.bw2WatchedChangeNotSeen,
+            style: const TextStyle(color: Color(0xFFE0A32E), fontSize: 12),
+          ),
         ],
         if (canAct) ...[
           const SizedBox(height: 16),

@@ -20670,7 +20670,7 @@ abstract class AppLocalizations {
   /// Watched-vault withdrawal: a raise, release or cancel was sent and the actions are off until the chain applies it.
   ///
   /// In en, this message translates to:
-  /// **'Sent. The actions come back once the chain shows the change. If nothing changes after a few blocks, close this and open the withdrawal again.'**
+  /// **'Sent. The actions come back once the chain shows the change. If nothing changes within a few minutes, they come back so you can send again.'**
   String get bw2WatchedChangeSent;
 
   /// Button: cancel a watched-vault withdrawal that still waits for its Bitcoin transaction.
@@ -20738,6 +20738,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'vBTC Withdrawal Pin'**
   String get r3cTypeVbtcWithdrawalPin;
+
+  /// Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on.
+  ///
+  /// In en, this message translates to:
+  /// **'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.'**
+  String get bw2WatchedChangeNotSeen;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

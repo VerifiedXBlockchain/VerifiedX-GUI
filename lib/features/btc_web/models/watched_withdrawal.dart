@@ -113,6 +113,11 @@ class WatchedWithdrawal {
   bool samePinAs(WatchedWithdrawal other) =>
       state == other.state && feeRate == other.feeRate && releasing == other.releasing && bitcoinTxHash == other.bitcoinTxHash;
 
+  /// Whether this state settles a change sent against [sentAgainst]: the
+  /// chain shows a different pin, or the withdrawal is closed. Either way no
+  /// "probably dropped" note or lock should outlive it.
+  bool settlesChangeSentAgainst(WatchedWithdrawal? sentAgainst) => isClosed || (sentAgainst != null && !samePinAs(sentAgainst));
+
   bool get isPinned => state == 'Pinned';
   bool get isWaiting => state == 'Waiting';
 
@@ -141,6 +146,15 @@ class WatchedWithdrawal {
     return message.replaceFirst(RegExp(r'^\[[A-Z-]+\]\s*'), '');
   }
 }
+
+/// How long a sent raise, release or cancel keeps the actions off when the
+/// chain shows no change: about ten VFX blocks and a refresh. After that the
+/// transaction was most likely dropped or refused, and may be sent again.
+const kWatchedActionWait = Duration(minutes: 3);
+
+/// Whether a change sent at [sentAt] has had [kWatchedActionWait] to show up.
+bool watchedActionWaitIsOver(DateTime? sentAt, DateTime now) =>
+    sentAt != null && now.difference(sentAt) >= kWatchedActionWait;
 
 /// Core's `BtcCanonicalWithdrawal.MaxFeeRate`: a request or raise naming more is refused.
 const kWatchedWithdrawalMaxFeeRate = 5000;
