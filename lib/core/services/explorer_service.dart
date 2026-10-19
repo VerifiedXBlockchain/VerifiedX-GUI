@@ -23,6 +23,9 @@ import 'package:dio/dio.dart';
 import '../utils/user_error_message.dart';
 
 class ExplorerService extends BaseService {
+  /// Vaults the node answered with a FROST preparation: not watched, for good.
+  static final Set<String> _vaultsNotWatched = {};
+
   /// [hostOverride] is for tests; the app always talks to Spyglass.
   ExplorerService({String? hostOverride})
       : super(
@@ -922,6 +925,8 @@ class ExplorerService extends BaseService {
     required String ownerAddress,
   }) async {
     try {
+      // A refusal, or a watched vault's answer for a closed withdrawal, comes
+      // back as HTTP 500 with a body the caller reads.
       final response = await postJson(
         '/btc/vbtc-v2/withdraw/complete/prepare/',
         params: {
@@ -929,6 +934,7 @@ class ExplorerService extends BaseService {
           'withdrawal_request_hash': withdrawalRequestHash,
           'owner_address': ownerAddress,
         },
+        validateStatus: (status) => status != null && status < 600,
       );
       return response['data'];
     } catch (e) {
@@ -945,12 +951,14 @@ class ExplorerService extends BaseService {
   /// withdrawal's state instead; for any other vault the answer is a FROST
   /// preparation with no side effects, which this ignores. A watched answer
   /// for a closed withdrawal comes back as HTTP 500, so statuses below 600 are
-  /// read as data.
+  /// read as data. A vault found not to be watched is remembered for the
+  /// session, so later resumes skip the full preparation.
   Future<WatchedWithdrawal?> getV2WatchedWithdrawal({
     required String scIdentifier,
     required String withdrawalRequestHash,
     required String ownerAddress,
   }) async {
+    if (_vaultsNotWatched.contains(scIdentifier)) return null;
     try {
       final response = await postJson(
         '/btc/vbtc-v2/withdraw/complete/prepare/',
@@ -961,8 +969,12 @@ class ExplorerService extends BaseService {
         },
         validateStatus: (status) => status != null && status < 600,
       );
-      final data = response['data'];
-      return WatchedWithdrawal.fromCompletionAnswer(data is Map ? Map<String, dynamic>.from(data) : null);
+      final data = response['data'] is Map ? Map<String, dynamic>.from(response['data']) : null;
+      if (WatchedWithdrawal.isFrostPreparation(data)) {
+        _vaultsNotWatched.add(scIdentifier);
+        return null;
+      }
+      return WatchedWithdrawal.fromCompletionAnswer(data);
     } catch (e) {
       print(e);
       return null;

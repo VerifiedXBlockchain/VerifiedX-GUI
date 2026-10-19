@@ -27,6 +27,10 @@ class WatchedWithdrawal {
   final String? state;
   final String? summary;
 
+  /// The address that made the request: the only one that may raise its fee,
+  /// release it or cancel it.
+  final String? requester;
+
   /// The fee rate (sat/vB) the newest live Bitcoin transaction pays.
   final int? feeRate;
   final bool canRaiseFee;
@@ -44,6 +48,7 @@ class WatchedWithdrawal {
     this.message,
     this.state,
     this.summary,
+    this.requester,
     this.feeRate,
     this.canRaiseFee = false,
     this.canRelease = false,
@@ -85,6 +90,7 @@ class WatchedWithdrawal {
       message: _withoutMarker(answer['Message'] as String?),
       state: withdrawal?['State'] as String?,
       summary: withdrawal?['Summary'] as String?,
+      requester: withdrawal?['Requester'] as String?,
       feeRate: (withdrawal?['FeeRate'] as num?)?.toInt(),
       canRaiseFee: withdrawal?['CanRaiseFee'] == true,
       canRelease: withdrawal?['CanRelease'] == true,
@@ -95,6 +101,17 @@ class WatchedWithdrawal {
       transactions: transactions,
     );
   }
+
+  /// Whether [response] is a FROST preparation, the answer for a vault the
+  /// chain does not watch. Whether a vault is watched is fixed when it is
+  /// created, so that answer holds for the vault from then on.
+  static bool isFrostPreparation(Map<String, dynamic>? response) =>
+      response != null && response['Attested'] != true && response['success'] == true && response['StartMessage'] != null;
+
+  /// Whether [other] shows the same Bitcoin transaction at the same rate in
+  /// the same state: an action sent against [other] has not been applied yet.
+  bool samePinAs(WatchedWithdrawal other) =>
+      state == other.state && feeRate == other.feeRate && releasing == other.releasing && bitcoinTxHash == other.bitcoinTxHash;
 
   bool get isPinned => state == 'Pinned';
   bool get isWaiting => state == 'Waiting';

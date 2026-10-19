@@ -11163,4 +11163,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bw2WatchedRelease => 'Release';
+
+  @override
+  String bw2WatchedNotRequester(String address) {
+    return 'Only the account that requested this withdrawal can change it. Switch to $address first.';
+  }
+
+  @override
+  String get bw2WatchedChangeSent => 'Sent. The actions come back once the chain shows the change. If nothing changes after a few blocks, close this and open the withdrawal again.';
+
+  @override
+  String get bw2WatchedCancel => 'Cancel Withdrawal';
+
+  @override
+  String get bw2WatchedCancelBody => 'Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.';
 }
