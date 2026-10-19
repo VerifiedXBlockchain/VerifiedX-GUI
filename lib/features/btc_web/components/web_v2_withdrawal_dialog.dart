@@ -137,6 +137,10 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   String? _sentTxHash;
   bool _checkingSentTx = false;
 
+  /// Counts sends, so a "was it mined" lookup that returns after a newer send
+  /// leaves that send's lock and note alone.
+  int _sendSeq = 0;
+
   /// Set when a sent change never showed up within [kWatchedActionWait] and
   /// the actions were given back.
   bool _sentNotSeen = false;
@@ -404,10 +408,13 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   Future<void> _onSentWaitOver() async {
     if (_checkingSentTx) return;
     _checkingSentTx = true;
+    final seq = _sendSeq;
     final hash = _sentTxHash;
     final mined = hash != null && await ExplorerService().retrieveTransaction(hash) != null;
     _checkingSentTx = false;
-    if (!mounted || _sentAgainst == null) return;
+    // Meanwhile the change may have shown up and another been sent: this
+    // answer is about the earlier one.
+    if (!mounted || _sentAgainst == null || seq != _sendSeq) return;
     setState(() {
       _sentAgainst = null;
       _sentNotSeen = !mined;
@@ -436,6 +443,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   }
 
   void _markSent(WatchedWithdrawal against, {String? txHash}) {
+    _sendSeq++;
     _sentAgainst = against;
     _sentSnapshot = against;
     _sentAt = DateTime.now();
