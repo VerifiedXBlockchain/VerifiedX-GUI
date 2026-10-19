@@ -20577,6 +20577,90 @@ abstract class AppLocalizations {
   /// **'This acceptance code is for a different domain or VFX owner'**
   String get btcAcceptanceCodeMismatch;
 
+  /// Title of the withdrawal dialog for a vault the chain watches, while the withdrawal is not paid yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal in Progress'**
+  String get bw2WatchedWithdrawalTitle;
+
+  /// Watched-vault withdrawal: the node has not mined the request yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal request is not in a block yet. This updates by itself.'**
+  String get bw2WatchedNotMinedYet;
+
+  /// Watched-vault withdrawal: waiting for its Bitcoin transaction to be pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.'**
+  String get bw2WatchedWaiting;
+
+  /// Watched-vault withdrawal: its Bitcoin transaction is pinned and will be signed and sent by the vault's signers.
+  ///
+  /// In en, this message translates to:
+  /// **'The Bitcoin transaction that pays this withdrawal is fixed. The vault\'s signers send it on their own, and the withdrawal completes when Bitcoin confirms it.'**
+  String get bw2WatchedPinned;
+
+  /// Watched-vault withdrawal: the requester has released it and the release transaction is pending.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdrawal is being released. When Bitcoin confirms the release, its Bitcoin is back in the vault and your vBTC is refunded, less the release\'s Bitcoin fee.'**
+  String get bw2WatchedReleasing;
+
+  /// Watched-vault withdrawal: closed without payment (released, cancelled or expired).
+  ///
+  /// In en, this message translates to:
+  /// **'This withdrawal is closed. Its vBTC was returned to you.'**
+  String get bw2WatchedClosed;
+
+  /// Watched-vault withdrawal: the fee rate its newest Bitcoin transaction pays.
+  ///
+  /// In en, this message translates to:
+  /// **'Current fee rate: {feeRate} sat/vB'**
+  String bw2WatchedCurrentFeeRate(int feeRate);
+
+  /// Watched-vault withdrawal: explains the fee raise and release actions.
+  ///
+  /// In en, this message translates to:
+  /// **'If it is not confirming, raise its fee (paid out of the withdrawal), or release it to get your vBTC back, less the release\'s Bitcoin fee.'**
+  String get bw2WatchedNotConfirmingHint;
+
+  /// Label of the fee rate field for raising or releasing a watched-vault withdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'New fee rate (sat/vB)'**
+  String get bw2WatchedNewFeeRateLabel;
+
+  /// Hint and error: the new fee rate must be above the current one.
+  ///
+  /// In en, this message translates to:
+  /// **'At least {minimum} sat/vB'**
+  String bw2WatchedFeeRateTooLow(int minimum);
+
+  /// Error: the new fee rate is above the chain's maximum.
+  ///
+  /// In en, this message translates to:
+  /// **'At most {maximum} sat/vB'**
+  String bw2WatchedFeeRateTooHigh(int maximum);
+
+  /// Error: the fee rate field is empty or not a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a fee rate in sat/vB'**
+  String get bw2WatchedFeeRateInvalid;
+
+  /// Button: raise the Bitcoin fee of a pinned watched-vault withdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Raise Fee'**
+  String get bw2WatchedRaiseFee;
+
+  /// Button: give a pinned watched-vault withdrawal up and have the vBTC refunded, less the Bitcoin fee.
+  ///
+  /// In en, this message translates to:
+  /// **'Release'**
+  String get bw2WatchedRelease;
+
   /// Transaction type 43 (VBTC_V2_BTC_REPORT): validators report a Bitcoin block's vault transactions to the chain.
   ///
   /// In en, this message translates to:

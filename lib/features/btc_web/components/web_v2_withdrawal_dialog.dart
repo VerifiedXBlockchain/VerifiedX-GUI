@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../app.dart';
+import '../models/watched_withdrawal.dart';
 import '../services/withdrawal_in_progress_notice.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/env.dart';
@@ -19,6 +20,11 @@ import '../services/pending_withdrawal_completion_service.dart';
 enum _DialogStep {
   broadcasting,
   waitingForBlock,
+  /// Asking whether the vault is one the chain watches before choosing a path.
+  checkingStatus,
+  /// A watched vault: the chain pays the withdrawal; the requester can only
+  /// follow it, raise its fee or release it.
+  watched,
   frostSigning,
   recordingCompletion,
   success,
@@ -107,14 +113,18 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   /// cannot be resumed after the page closes.
   bool _completionRecoverable = true;
 
+  WatchedWithdrawal? _watched;
+  Timer? _watchedTimer;
+  final _feeRateController = TextEditingController();
+  String? _feeRateError;
+  static const _watchedRefreshInterval = Duration(seconds: 20);
+
   @override
   void initState() {
     super.initState();
     if (widget.existingRequestHash != null) {
       _requestHash = widget.existingRequestHash;
-      _step = PendingWithdrawalCompletionService().get(_requestHash!) != null
-          ? _DialogStep.recordingCompletion
-          : _DialogStep.frostSigning;
+      _step = _DialogStep.checkingStatus;
       Future(_startCompletion);
     } else {
       Future(_broadcastRequest);
@@ -124,6 +134,8 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   @override
   void dispose() {
     _pollTimer?.cancel();
+    _watchedTimer?.cancel();
+    _feeRateController.dispose();
     super.dispose();
   }
 
@@ -192,7 +204,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         if (match.isNotEmpty) {
           timer.cancel();
           if (!mounted) return;
-          _runFrostSigning();
+          _startCompletion();
         }
       } catch (_) {
         // Keep polling
@@ -200,10 +212,23 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     });
   }
 
-  /// Resume point for an existing request. If a previous attempt already
-  /// broadcast the Bitcoin transaction, only the completion TX is retried —
-  /// re-running FROST would sign against spent inputs.
+  /// Next step once the request is on chain, and the resume point for an
+  /// existing request. A watched vault is paid by the chain, so it is only
+  /// followed. Otherwise, if a previous attempt already broadcast the Bitcoin
+  /// transaction, only the completion TX is retried — re-running FROST would
+  /// sign against spent inputs.
   Future<void> _startCompletion() async {
+    setState(() => _step = _DialogStep.checkingStatus);
+    final watched = await ref.read(webTokenActionsManager).watchedV2Withdrawal(
+          scIdentifier: widget.scIdentifier,
+          requestHash: _requestHash!,
+        );
+    if (!mounted) return;
+    if (watched != null) {
+      _showWatched(watched);
+      return;
+    }
+
     final stored = PendingWithdrawalCompletionService().get(_requestHash!);
     if (stored != null) {
       _pendingCompletion = stored;
@@ -229,6 +254,12 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
 
     _busy = false;
     if (!mounted) return;
+
+    final watched = result?['watched_withdrawal'];
+    if (watched is WatchedWithdrawal) {
+      _showWatched(watched);
+      return;
+    }
 
     if (result != null && result['success'] == true) {
       final btcTxHash = result['btc_transaction_hash'] as String?;
@@ -319,6 +350,64 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     await _recordCompletion(pending);
   }
 
+  void _showWatched(WatchedWithdrawal watched) {
+    setState(() {
+      _watched = watched;
+      _step = _DialogStep.watched;
+    });
+    _watchedTimer?.cancel();
+    if (!watched.isClosed) {
+      _watchedTimer = Timer.periodic(_watchedRefreshInterval, (_) => _refreshWatched());
+    }
+  }
+
+  Future<void> _refreshWatched() async {
+    final watched = await ref.read(webTokenActionsManager).watchedV2Withdrawal(
+          scIdentifier: widget.scIdentifier,
+          requestHash: _requestHash!,
+        );
+    if (!mounted || watched == null) return;
+    _showWatched(watched);
+  }
+
+  Future<void> _sendFeeRaise({required bool release}) async {
+    final watched = _watched;
+    if (watched == null || _busy) return;
+    final feeRate = int.tryParse(_feeRateController.text.trim());
+    final problem = watched.feeRateProblem(feeRate);
+    if (problem != null) {
+      setState(() => _feeRateError = _feeRateProblemText(problem, watched));
+      return;
+    }
+
+    setState(() {
+      _busy = true;
+      _feeRateError = null;
+    });
+    final sent = await ref.read(webTokenActionsManager).raiseWatchedWithdrawalFee(
+          scIdentifier: widget.scIdentifier,
+          requestHash: _requestHash!,
+          feeRate: feeRate!,
+          release: release,
+        );
+    if (!mounted) return;
+    setState(() => _busy = false);
+    if (sent == true) {
+      _feeRateController.clear();
+    }
+  }
+
+  String _feeRateProblemText(WatchedFeeRateProblem problem, WatchedWithdrawal watched) {
+    switch (problem) {
+      case WatchedFeeRateProblem.invalid:
+        return AppLocalizations.of(context).bw2WatchedFeeRateInvalid;
+      case WatchedFeeRateProblem.notAboveCurrent:
+        return AppLocalizations.of(context).bw2WatchedFeeRateTooLow(watched.minimumNextFeeRate);
+      case WatchedFeeRateProblem.aboveMaximum:
+        return AppLocalizations.of(context).bw2WatchedFeeRateTooHigh(kWatchedWithdrawalMaxFeeRate);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -348,6 +437,8 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           children: [
             if (_step == _DialogStep.broadcasting) _buildBroadcastingSection(),
             if (_step == _DialogStep.waitingForBlock) _buildWaitingSection(),
+            if (_step == _DialogStep.checkingStatus) _buildCheckingSection(),
+            if (_step == _DialogStep.watched) _buildWatchedSection(),
             if (_step == _DialogStep.frostSigning) _buildFrostSigningSection(),
             if (_step == _DialogStep.recordingCompletion) _buildRecordingSection(),
             if (_step == _DialogStep.success) _buildSuccessSection(),
@@ -362,7 +453,9 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   bool get _isTerminal =>
       _step == _DialogStep.success ||
       _step == _DialogStep.failure ||
-      _step == _DialogStep.completionPending;
+      _step == _DialogStep.completionPending ||
+      // Nothing is asked of the requester while the chain pays it.
+      _step == _DialogStep.watched;
 
   String _titleForStep() {
     switch (_step) {
@@ -370,6 +463,12 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         return AppLocalizations.of(context).bw2BroadcastingRequest;
       case _DialogStep.waitingForBlock:
         return AppLocalizations.of(context).bw2WaitingForConfirmation;
+      case _DialogStep.checkingStatus:
+        return AppLocalizations.of(context).bw2CheckingWithdrawalStatus;
+      case _DialogStep.watched:
+        return _watched?.paid == true
+            ? AppLocalizations.of(context).bw2WithdrawalComplete
+            : AppLocalizations.of(context).bw2WatchedWithdrawalTitle;
       case _DialogStep.frostSigning:
         return AppLocalizations.of(context).bw2FrostSigning;
       case _DialogStep.recordingCompletion:
@@ -407,6 +506,107 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         Text(AppLocalizations.of(context).bw2FrostConfirmHintWeb, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
+  }
+
+  Widget _buildCheckingSection() {
+    return const Center(child: SizedBox(width: 32, height: 32, child: CircularProgressIndicator(strokeWidth: 3)));
+  }
+
+  Widget _buildWatchedSection() {
+    final watched = _watched!;
+    final l10n = AppLocalizations.of(context);
+    final btcTxHash = watched.bitcoinTxHash;
+    final canAct = watched.canRaiseFee || watched.canRelease;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              watched.paid ? Icons.check_circle : Icons.schedule,
+              color: watched.paid ? const Color(0xFF43ae52) : Colors.white70,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                _watchedHeadline(watched),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+        if (watched.summary != null || watched.message != null) ...[
+          const SizedBox(height: 12),
+          // The node's own account of the withdrawal (English, as the node gives it).
+          Text(watched.summary ?? watched.message!, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+        ],
+        if (btcTxHash != null) ...[
+          const SizedBox(height: 16),
+          _buildHashRow(
+            l10n.bw2BtcTransactionLabel,
+            btcTxHash,
+            explorerUrl: Env.btcIsTestNet ? "https://mempool.space/testnet4/tx/$btcTxHash" : "https://mempool.space/tx/$btcTxHash",
+          ),
+        ],
+        if (watched.isPinned && watched.feeRate != null) ...[
+          const SizedBox(height: 12),
+          Text(l10n.bw2WatchedCurrentFeeRate(watched.feeRate!), style: const TextStyle(color: Colors.white70, fontSize: 12)),
+        ],
+        if (canAct) ...[
+          const SizedBox(height: 16),
+          Text(l10n.bw2WatchedNotConfirmingHint, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _feeRateController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: InputDecoration(
+              labelText: l10n.bw2WatchedNewFeeRateLabel,
+              hintText: l10n.bw2WatchedFeeRateTooLow(watched.minimumNextFeeRate),
+              errorText: _feeRateError,
+            ),
+          ),
+        ],
+        const SizedBox(height: 20),
+        Wrap(
+          alignment: WrapAlignment.end,
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            if (watched.canRelease)
+              AppButton(
+                label: l10n.bw2WatchedRelease,
+                variant: AppColorVariant.Warning,
+                onPressed: _busy ? null : () => _sendFeeRaise(release: true),
+              ),
+            if (watched.canRaiseFee)
+              AppButton(
+                label: l10n.bw2WatchedRaiseFee,
+                variant: AppColorVariant.Primary,
+                onPressed: _busy ? null : () => _sendFeeRaise(release: false),
+              ),
+            AppButton(
+              label: l10n.actionDone,
+              variant: watched.paid ? AppColorVariant.Success : AppColorVariant.Light,
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  String _watchedHeadline(WatchedWithdrawal watched) {
+    final l10n = AppLocalizations.of(context);
+    if (watched.paid) return l10n.bw2WithdrawalCompletedSuccess;
+    if (watched.notMinedYet) return l10n.bw2WatchedNotMinedYet;
+    if (watched.releasing) return l10n.bw2WatchedReleasing;
+    if (watched.isPinned) return l10n.bw2WatchedPinned;
+    if (watched.isWaiting) return l10n.bw2WatchedWaiting;
+    return l10n.bw2WatchedClosed;
   }
 
   Widget _buildFrostSigningSection() {

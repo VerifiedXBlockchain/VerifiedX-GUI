@@ -131,6 +131,10 @@ class TxType {
   static const int vbtcV2PrivateTransfer = 36;
   static const int vbtcV2BridgeLock = 37;
   static const int vbtcV2BridgeUnlock = 38;
+
+  /// Raises the Bitcoin fee of, or releases, a pinned withdrawal on a vault
+  /// the chain watches.
+  static const int vbtcV2CoinPin = 44;
 }
 
 const DEFAULT_REJECTED_EXTENIONS = [
