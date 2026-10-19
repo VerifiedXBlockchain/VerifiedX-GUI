@@ -398,6 +398,26 @@ class ExplorerService extends BaseService {
     }
   }
 
+  /// The address a VFX name resolves to, or null when Spyglass knows no such
+  /// name (HTTP 404, or an answer without an address). Other failures are
+  /// rethrown, so a send is never made on a guess. The lookup is
+  /// case-sensitive and names are stored lowercase, so [name] is trimmed and
+  /// lowercased first.
+  Future<String?> resolveAdnr(String name) async {
+    final normalized = name.trim().toLowerCase();
+    try {
+      final data = await getJson('/addresses/adnr/${Uri.encodeComponent(normalized)}');
+      final address = data['address'];
+      return address is String && address.trim().isNotEmpty ? address.trim() : null;
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
+      print("resolveAdnr($normalized) failed: $e");
+      rethrow;
+    }
+  }
+
   Future<bool> adnrAvailable(String adnr) async {
     try {
       await getJson('/addresses/adnr/$adnr');

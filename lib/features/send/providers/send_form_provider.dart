@@ -30,6 +30,8 @@ import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../bridge/services/bridge_service_v2.dart';
+import '../../../core/services/explorer_service.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../../web/utils/pending_debits.dart';
@@ -434,8 +436,8 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     String senderAddress = "";
     Wallet? currentWallet;
     String? feeNotice;
-    // Desktop only: where the VFX goes. A name is replaced by the address it
-    // resolves to, since the node refuses a transaction addressed to a name.
+    // Where the VFX goes. A name is replaced by the address it resolves to,
+    // since the node refuses a transaction addressed to a name.
     String recipient = address.trim().replaceAll("\n", "");
     // What the user typed when the send started, kept with [recipient] so the
     // confirmation names what is sent even if the field is edited meanwhile.
@@ -788,7 +790,29 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
       senderAddress = selectedAccount.address;
 
-      if (!await _confirmSendToOwnAddress(false)) {
+      // Resolved here rather than left to the node's raw endpoints, which
+      // also normalize a name today: the fee, hash and signature are then all
+      // for the address the confirmation shows.
+      if (looksLikeVfxName(recipient)) {
+        final String? resolved;
+        try {
+          resolved = await ExplorerService().resolveAdnr(recipient);
+        } catch (e) {
+          Toast.error(userErrorMessage(e));
+          return;
+        }
+        if (resolved == null) {
+          Toast.error(globalL10n.svcNameNotResolved(recipient));
+          return;
+        }
+        recipient = resolved;
+      }
+
+      if (!await _confirmSendToOwnAddress(
+        false,
+        destination: recipient,
+        shown: recipient == typedRecipient ? recipient : "$typedRecipient ($recipient)",
+      )) {
         return;
       }
 
@@ -799,7 +823,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         spendable: spendableVfx(balance: selectedAccount.balance, pendingDebit: pendingDebit, isVault: isVault),
         feeFor: (value) => RawTransaction.estimateFee(
           fromAddress: fromAddress,
-          toAddress: address,
+          toAddress: recipient,
           amount: value,
           txType: TxType.rbxTransfer,
           // Only the timelock's presence changes the fee, not its length.
@@ -812,13 +836,8 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       feeNotice = fitted.notice;
     }
 
-    // Web sends the field as it stands, so it shows that; desktop sends the
-    // captured [recipient].
-    final shownRecipient = kIsWeb
-        ? address
-        : recipient == typedRecipient
-            ? recipient
-            : "$typedRecipient ($recipient)";
+    // The captured [recipient] is what is sent, on both builds.
+    final shownRecipient = recipient == typedRecipient ? recipient : "$typedRecipient ($recipient)";
     final confirmBody = globalL10n.txpSendingConfirmBody('$amount', shownRecipient, senderAddress);
     final confirmed = await ConfirmDialog.show(
       title: globalL10n.btcPleaseConfirmTitle,
@@ -912,7 +931,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         // keypair: ref.read(webSessionProvider).usingRa ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         keypair: senderAddress.startsWith("xRBX") ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         amount: amountDouble,
-        toAddress: address,
+        toAddress: recipient,
         unlockHours: unlockHours,
         txType: TxType.rbxTransfer,
       );
@@ -929,7 +948,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         final confirmed = await ConfirmDialog.show(
           title: globalL10n.btcValidTxTitle,
-          body: globalL10n.svcValidTxConfirmBody(address, '$amountDouble') +
+          body: globalL10n.svcValidTxConfirmBody(shownRecipient, '$amountDouble') +
               (txFee != null
                   ? globalL10n.svcValidTxFeeSuffix('$txFee', '${amountDouble + txFee}')
                   : ''),
