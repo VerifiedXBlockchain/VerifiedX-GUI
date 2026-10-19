@@ -10223,6 +10223,77 @@
   "@btcAcceptanceCodeMismatch": {
     "description": "Validation error when the acceptance code names another domain or VFX owner."
   },
+  "bw2WatchedWithdrawalTitle": "Withdrawal in Progress",
+  "@bw2WatchedWithdrawalTitle": {
+    "description": "Title of the withdrawal dialog for a vault the chain watches, while the withdrawal is not paid yet."
+  },
+  "bw2WatchedNotMinedYet": "Your withdrawal request is not in a block yet. This updates by itself.",
+  "@bw2WatchedNotMinedYet": {
+    "description": "Watched-vault withdrawal: the node has not mined the request yet."
+  },
+  "bw2WatchedWaiting": "The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.",
+  "@bw2WatchedWaiting": {
+    "description": "Watched-vault withdrawal: waiting for its Bitcoin transaction to be pinned."
+  },
+  "bw2WatchedPinned": "The Bitcoin transaction that pays this withdrawal is fixed. The vault's signers send it on their own, and the withdrawal completes when Bitcoin confirms it.",
+  "@bw2WatchedPinned": {
+    "description": "Watched-vault withdrawal: its Bitcoin transaction is pinned and will be signed and sent by the vault's signers."
+  },
+  "bw2WatchedReleasing": "This withdrawal is being released. When Bitcoin confirms the release, its Bitcoin is back in the vault and your vBTC is refunded, less the release's Bitcoin fee.",
+  "@bw2WatchedReleasing": {
+    "description": "Watched-vault withdrawal: the requester has released it and the release transaction is pending."
+  },
+  "bw2WatchedClosed": "This withdrawal is closed. Its vBTC was returned to you.",
+  "@bw2WatchedClosed": {
+    "description": "Watched-vault withdrawal: closed without payment (released, cancelled or expired)."
+  },
+  "bw2WatchedCurrentFeeRate": "Current fee rate: {feeRate} sat/vB",
+  "@bw2WatchedCurrentFeeRate": {
+    "description": "Watched-vault withdrawal: the fee rate its newest Bitcoin transaction pays.",
+    "placeholders": {
+      "feeRate": {
+        "type": "int"
+      }
+    }
+  },
+  "bw2WatchedNotConfirmingHint": "If it is not confirming, raise its fee (paid out of the withdrawal), or release it to get your vBTC back, less the release's Bitcoin fee.",
+  "@bw2WatchedNotConfirmingHint": {
+    "description": "Watched-vault withdrawal: explains the fee raise and release actions."
+  },
+  "bw2WatchedNewFeeRateLabel": "New fee rate (sat/vB)",
+  "@bw2WatchedNewFeeRateLabel": {
+    "description": "Label of the fee rate field for raising or releasing a watched-vault withdrawal."
+  },
+  "bw2WatchedFeeRateTooLow": "At least {minimum} sat/vB",
+  "@bw2WatchedFeeRateTooLow": {
+    "description": "Hint and error: the new fee rate must be above the current one.",
+    "placeholders": {
+      "minimum": {
+        "type": "int"
+      }
+    }
+  },
+  "bw2WatchedFeeRateTooHigh": "At most {maximum} sat/vB",
+  "@bw2WatchedFeeRateTooHigh": {
+    "description": "Error: the new fee rate is above the chain's maximum.",
+    "placeholders": {
+      "maximum": {
+        "type": "int"
+      }
+    }
+  },
+  "bw2WatchedFeeRateInvalid": "Enter a fee rate in sat/vB",
+  "@bw2WatchedFeeRateInvalid": {
+    "description": "Error: the fee rate field is empty or not a number."
+  },
+  "bw2WatchedRaiseFee": "Raise Fee",
+  "@bw2WatchedRaiseFee": {
+    "description": "Button: raise the Bitcoin fee of a pinned watched-vault withdrawal."
+  },
+  "bw2WatchedRelease": "Release",
+  "@bw2WatchedRelease": {
+    "description": "Button: give a pinned watched-vault withdrawal up and have the vBTC refunded, less the Bitcoin fee."
+  },
   "r3hAddressOtherNetwork": "This address belongs to another network. Anything sent there could never be spent.",
   "@r3hAddressOtherNetwork": {
     "description": "Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet)."
