@@ -11190,4 +11190,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String prvUnshieldMaxDecimals(int places) {
     return 'An unshield amount has at most $places decimal places.';
   }
+
+  @override
+  String get r3cTypeVbtcBtcReport => 'Bitcoin Report';
+
+  @override
+  String get r3cTypeVbtcWithdrawalFeeRaise => 'vBTC Withdrawal Fee Raise';
+
+  @override
+  String get r3cTypeVbtcWithdrawalRelease => 'vBTC Withdrawal Release';
+
+  @override
+  String get r3cTypeVbtcBtcReorg => 'Bitcoin Reorg';
+
+  @override
+  String get r3cTypeVbtcVaultRekey => 'vBTC Vault Rekey';
+
+  @override
+  String get r3cTypeVbtcWithdrawalPin => 'vBTC Withdrawal Pin';
 }

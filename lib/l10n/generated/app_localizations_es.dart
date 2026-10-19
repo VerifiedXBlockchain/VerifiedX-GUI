@@ -11190,4 +11190,22 @@ class AppLocalizationsEs extends AppLocalizations {
   String prvUnshieldMaxDecimals(int places) {
     return 'Un monto a desblindar tiene como máximo $places decimales.';
   }
+
+  @override
+  String get r3cTypeVbtcBtcReport => 'Informe de Bitcoin';
+
+  @override
+  String get r3cTypeVbtcWithdrawalFeeRaise => 'Aumento de comisión de retiro vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalRelease => 'Liberación de retiro vBTC';
+
+  @override
+  String get r3cTypeVbtcBtcReorg => 'Reorganización de Bitcoin';
+
+  @override
+  String get r3cTypeVbtcVaultRekey => 'Cambio de clave de bóveda vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalPin => 'Fijación de retiro vBTC';
 }
