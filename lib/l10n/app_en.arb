@@ -10293,5 +10293,26 @@
   "bw2WatchedRelease": "Release",
   "@bw2WatchedRelease": {
     "description": "Button: give a pinned watched-vault withdrawal up and have the vBTC refunded, less the Bitcoin fee."
+  },
+  "bw2WatchedNotRequester": "Only the account that requested this withdrawal can change it. Switch to {address} first.",
+  "@bw2WatchedNotRequester": {
+    "description": "Watched-vault withdrawal: the active wallet is not the requester, so it cannot raise the fee, release or cancel.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2WatchedChangeSent": "Sent. The actions come back once the chain shows the change. If nothing changes after a few blocks, close this and open the withdrawal again.",
+  "@bw2WatchedChangeSent": {
+    "description": "Watched-vault withdrawal: a raise, release or cancel was sent and the actions are off until the chain applies it."
+  },
+  "bw2WatchedCancel": "Cancel Withdrawal",
+  "@bw2WatchedCancel": {
+    "description": "Button: cancel a watched-vault withdrawal that still waits for its Bitcoin transaction."
+  },
+  "bw2WatchedCancelBody": "Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.",
+  "@bw2WatchedCancelBody": {
+    "description": "Confirmation body for cancelling a watched-vault withdrawal."
   }
 }
