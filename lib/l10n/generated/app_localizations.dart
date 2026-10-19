@@ -20703,6 +20703,42 @@ abstract class AppLocalizations {
   /// **'An unshield amount has at most {places} decimal places.'**
   String prvUnshieldMaxDecimals(int places);
 
+  /// Transaction type 43 (VBTC_V2_BTC_REPORT): validators report a Bitcoin block's vault transactions to the chain.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin Report'**
+  String get r3cTypeVbtcBtcReport;
+
+  /// Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalFeeBump(): the requester raises a pinned withdrawal's Bitcoin fee.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Fee Raise'**
+  String get r3cTypeVbtcWithdrawalFeeRaise;
+
+  /// Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalRelease(): the requester gives a pinned withdrawal up for a refund.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Release'**
+  String get r3cTypeVbtcWithdrawalRelease;
+
+  /// Transaction type 45 (VBTC_V2_BTC_REORG): reported Bitcoin events are taken back after a Bitcoin reorganisation.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin Reorg'**
+  String get r3cTypeVbtcBtcReorg;
+
+  /// Transaction type 46 (VBTC_V2_VAULT_REKEY): a vault's key is replaced by one the validators made.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Vault Rekey'**
+  String get r3cTypeVbtcVaultRekey;
+
+  /// Transaction type 44 (VBTC_V2_COIN_PIN) when its data cannot be read to tell a fee raise from a release.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Pin'**
+  String get r3cTypeVbtcWithdrawalPin;
+
   /// Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on.
   ///
   /// In en, this message translates to:

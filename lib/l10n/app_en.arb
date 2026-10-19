@@ -10337,6 +10337,30 @@
       }
     }
   },
+  "r3cTypeVbtcBtcReport": "Bitcoin Report",
+  "@r3cTypeVbtcBtcReport": {
+    "description": "Transaction type 43 (VBTC_V2_BTC_REPORT): validators report a Bitcoin block's vault transactions to the chain."
+  },
+  "r3cTypeVbtcWithdrawalFeeRaise": "vBTC Withdrawal Fee Raise",
+  "@r3cTypeVbtcWithdrawalFeeRaise": {
+    "description": "Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalFeeBump(): the requester raises a pinned withdrawal's Bitcoin fee."
+  },
+  "r3cTypeVbtcWithdrawalRelease": "vBTC Withdrawal Release",
+  "@r3cTypeVbtcWithdrawalRelease": {
+    "description": "Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalRelease(): the requester gives a pinned withdrawal up for a refund."
+  },
+  "r3cTypeVbtcBtcReorg": "Bitcoin Reorg",
+  "@r3cTypeVbtcBtcReorg": {
+    "description": "Transaction type 45 (VBTC_V2_BTC_REORG): reported Bitcoin events are taken back after a Bitcoin reorganisation."
+  },
+  "r3cTypeVbtcVaultRekey": "vBTC Vault Rekey",
+  "@r3cTypeVbtcVaultRekey": {
+    "description": "Transaction type 46 (VBTC_V2_VAULT_REKEY): a vault's key is replaced by one the validators made."
+  },
+  "r3cTypeVbtcWithdrawalPin": "vBTC Withdrawal Pin",
+  "@r3cTypeVbtcWithdrawalPin": {
+    "description": "Transaction type 44 (VBTC_V2_COIN_PIN) when its data cannot be read to tell a fee raise from a release."
+  },
   "bw2WatchedChangeNotSeen": "The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.",
   "@bw2WatchedChangeNotSeen": {
     "description": "Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on."

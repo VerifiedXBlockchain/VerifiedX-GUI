@@ -11192,5 +11192,23 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get r3cTypeVbtcBtcReport => 'Bitcoin Report';
+
+  @override
+  String get r3cTypeVbtcWithdrawalFeeRaise => 'vBTC Withdrawal Fee Raise';
+
+  @override
+  String get r3cTypeVbtcWithdrawalRelease => 'vBTC Withdrawal Release';
+
+  @override
+  String get r3cTypeVbtcBtcReorg => 'Bitcoin Reorg';
+
+  @override
+  String get r3cTypeVbtcVaultRekey => 'vBTC Vault Rekey';
+
+  @override
+  String get r3cTypeVbtcWithdrawalPin => 'vBTC Withdrawal Pin';
+
+  @override
   String get bw2WatchedChangeNotSeen => 'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.';
 }
