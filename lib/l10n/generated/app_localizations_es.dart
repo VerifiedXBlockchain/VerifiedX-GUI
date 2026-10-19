@@ -11165,6 +11165,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2WatchedRelease => 'Liberar';
 
   @override
+  String bw2WatchedNotRequester(String address) {
+    return 'Solo la cuenta que solicitó este retiro puede cambiarlo. Cambia primero a $address.';
+  }
+
+  @override
+  String get bw2WatchedChangeSent => 'Enviado. Las acciones vuelven cuando la cadena muestre el cambio. Si nada cambia tras unos bloques, cierra esto y vuelve a abrir el retiro.';
+
+  @override
+  String get bw2WatchedCancel => 'Cancelar retiro';
+
+  @override
+  String get bw2WatchedCancelBody => 'Su transacción de Bitcoin aún no está fijada, así que todavía se puede cancelar. Cuando se mine la cancelación, el retiro se cierra y se te devuelve el vBTC; no hay votación.';
+
+  @override
   String get r3hAddressOtherNetwork => 'Esta dirección pertenece a otra red. Lo que se envíe allí nunca podría gastarse.';
 
   @override

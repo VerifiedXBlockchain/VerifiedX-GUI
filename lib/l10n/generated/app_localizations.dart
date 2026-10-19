@@ -20661,6 +20661,30 @@ abstract class AppLocalizations {
   /// **'Release'**
   String get bw2WatchedRelease;
 
+  /// Watched-vault withdrawal: the active wallet is not the requester, so it cannot raise the fee, release or cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the account that requested this withdrawal can change it. Switch to {address} first.'**
+  String bw2WatchedNotRequester(String address);
+
+  /// Watched-vault withdrawal: a raise, release or cancel was sent and the actions are off until the chain applies it.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent. The actions come back once the chain shows the change. If nothing changes after a few blocks, close this and open the withdrawal again.'**
+  String get bw2WatchedChangeSent;
+
+  /// Button: cancel a watched-vault withdrawal that still waits for its Bitcoin transaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Withdrawal'**
+  String get bw2WatchedCancel;
+
+  /// Confirmation body for cancelling a watched-vault withdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.'**
+  String get bw2WatchedCancelBody;
+
   /// Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet).
   ///
   /// In en, this message translates to:

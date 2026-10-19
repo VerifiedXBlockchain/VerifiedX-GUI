@@ -133,6 +133,30 @@ void main() {
     });
   });
 
+  group('WatchedWithdrawal.samePinAs', () {
+    test('an action stays unapplied until the rate, state or transaction changes', () {
+      final before = WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 4))!;
+
+      expect(WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 4))!.samePinAs(before), isTrue);
+      expect(WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 9))!.samePinAs(before), isFalse);
+      expect(WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 4, releasing: true))!.samePinAs(before), isFalse);
+    });
+
+    test('reads the requester', () {
+      expect(WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer())!.requester, 'xRequester');
+    });
+  });
+
+  group('WatchedWithdrawal.isFrostPreparation', () {
+    test('only a successful FROST preparation marks a vault as not watched', () {
+      expect(WatchedWithdrawal.isFrostPreparation({'success': true, 'StartMessage': 's.x.1'}), isTrue);
+      // A watched answer, a refusal or an error says nothing permanent.
+      expect(WatchedWithdrawal.isFrostPreparation(_pinnedAnswer()), isFalse);
+      expect(WatchedWithdrawal.isFrostPreparation({'success': false, 'message': 'Error: timeout', 'raw': {'Success': false}}), isFalse);
+      expect(WatchedWithdrawal.isFrostPreparation(null), isFalse);
+    });
+  });
+
   group('WatchedWithdrawal.feeRateProblem', () {
     final watched = WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 4))!;
 

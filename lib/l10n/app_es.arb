@@ -10220,6 +10220,27 @@
   "@bw2WatchedRelease": {
     "description": "Button: give a pinned watched-vault withdrawal up and have the vBTC refunded, less the Bitcoin fee."
   },
+  "bw2WatchedNotRequester": "Solo la cuenta que solicitó este retiro puede cambiarlo. Cambia primero a {address}.",
+  "@bw2WatchedNotRequester": {
+    "description": "Watched-vault withdrawal: the active wallet is not the requester, so it cannot raise the fee, release or cancel.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2WatchedChangeSent": "Enviado. Las acciones vuelven cuando la cadena muestre el cambio. Si nada cambia tras unos bloques, cierra esto y vuelve a abrir el retiro.",
+  "@bw2WatchedChangeSent": {
+    "description": "Watched-vault withdrawal: a raise, release or cancel was sent and the actions are off until the chain applies it."
+  },
+  "bw2WatchedCancel": "Cancelar retiro",
+  "@bw2WatchedCancel": {
+    "description": "Button: cancel a watched-vault withdrawal that still waits for its Bitcoin transaction."
+  },
+  "bw2WatchedCancelBody": "Su transacción de Bitcoin aún no está fijada, así que todavía se puede cancelar. Cuando se mine la cancelación, el retiro se cierra y se te devuelve el vBTC; no hay votación.",
+  "@bw2WatchedCancelBody": {
+    "description": "Confirmation body for cancelling a watched-vault withdrawal."
+  },
   "r3hAddressOtherNetwork": "Esta dirección pertenece a otra red. Lo que se envíe allí nunca podría gastarse.",
   "@r3hAddressOtherNetwork": {
     "description": "Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet)."
