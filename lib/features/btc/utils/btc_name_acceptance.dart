@@ -62,6 +62,12 @@ class BtcNameAcceptance {
     if (timestamp == null || timestamp <= 0 || owner.isEmpty || name.isEmpty) {
       return null;
     }
+    // Core compares the signed name with the stored full name, "alice.btc",
+    // ignoring case (BtcNameSignatures.Check): a code signed for "alice" is
+    // refused, so it is not accepted here either.
+    if (!name.toLowerCase().endsWith(".btc") || name.length <= ".btc".length) {
+      return null;
+    }
 
     return BtcNameAcceptance._(
       message: message,
