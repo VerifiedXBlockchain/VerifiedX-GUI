@@ -192,7 +192,8 @@ String? formValidatorRbxAddress(String? value, [bool allowAdnr = false]) {
     return allowAdnr ? globalL10n.r3hAddressOrDomainRequired : globalL10n.r3hAddressRequired;
   }
 
-  if (allowAdnr && value.contains(".vfx")) {
+  // Any name the sender resolves, whatever its case: Alice.VFX, legacy.rbx.
+  if (allowAdnr && looksLikeVfxName(value)) {
     return null;
   }
 

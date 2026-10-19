@@ -68,6 +68,24 @@ void main() {
     });
   });
 
+  group('formValidatorRbxAddress with names allowed', () {
+    test('passes any name the send resolves, whatever its case', () {
+      expect(formValidatorRbxAddress('legacy.rbx', true), isNull);
+      expect(formValidatorRbxAddress('Alice.VFX', true), isNull);
+      expect(formValidatorRbxAddress('alice.vfx', true), isNull);
+    });
+
+    test('still checks a plain address', () {
+      expect(formValidatorRbxAddress(_address(vfxAddressVersionByte), true), isNull);
+      expect(formValidatorRbxAddress('notanaddress', true), isNotNull);
+      expect(formValidatorRbxAddress(_address(vfxAddressVersionByte + 1), true), contains('another network'));
+    });
+
+    test('a name is not an address where names are not allowed', () {
+      expect(formValidatorRbxAddress('Alice.VFX'), isNotNull);
+    });
+  });
+
   group('looksLikeVfxName', () {
     test('a name is resolved before sending, whatever its case', () {
       expect(looksLikeVfxName('alice.vfx'), isTrue);
