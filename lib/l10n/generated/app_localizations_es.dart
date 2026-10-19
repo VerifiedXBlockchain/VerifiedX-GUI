@@ -11115,4 +11115,52 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get btcAcceptanceCodeMismatch => 'Este código de aceptación es para otro dominio u otro propietario VFX';
+
+  @override
+  String get bw2WatchedWithdrawalTitle => 'Retiro en curso';
+
+  @override
+  String get bw2WatchedNotMinedYet => 'Tu solicitud de retiro aún no está en un bloque. Esto se actualiza solo.';
+
+  @override
+  String get bw2WatchedWaiting => 'La cadena está fijando la transacción de Bitcoin que paga este retiro. No hace falta hacer nada.';
+
+  @override
+  String get bw2WatchedPinned => 'La transacción de Bitcoin que paga este retiro está fijada. Los firmantes de la bóveda la envían por su cuenta y el retiro se completa cuando Bitcoin la confirma.';
+
+  @override
+  String get bw2WatchedReleasing => 'Este retiro se está liberando. Cuando Bitcoin confirme la liberación, su Bitcoin vuelve a la bóveda y se te reembolsa el vBTC, menos la comisión de Bitcoin de la liberación.';
+
+  @override
+  String get bw2WatchedClosed => 'Este retiro está cerrado. Su vBTC se te devolvió.';
+
+  @override
+  String bw2WatchedCurrentFeeRate(int feeRate) {
+    return 'Comisión actual: $feeRate sat/vB';
+  }
+
+  @override
+  String get bw2WatchedNotConfirmingHint => 'Si no se confirma, sube su comisión (se paga del retiro) o libéralo para recuperar tu vBTC, menos la comisión de Bitcoin de la liberación.';
+
+  @override
+  String get bw2WatchedNewFeeRateLabel => 'Nueva comisión (sat/vB)';
+
+  @override
+  String bw2WatchedFeeRateTooLow(int minimum) {
+    return 'Al menos $minimum sat/vB';
+  }
+
+  @override
+  String bw2WatchedFeeRateTooHigh(int maximum) {
+    return 'Como máximo $maximum sat/vB';
+  }
+
+  @override
+  String get bw2WatchedFeeRateInvalid => 'Introduce una comisión en sat/vB';
+
+  @override
+  String get bw2WatchedRaiseFee => 'Subir comisión';
+
+  @override
+  String get bw2WatchedRelease => 'Liberar';
 }

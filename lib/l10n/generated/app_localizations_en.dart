@@ -11115,4 +11115,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btcAcceptanceCodeMismatch => 'This acceptance code is for a different domain or VFX owner';
+
+  @override
+  String get bw2WatchedWithdrawalTitle => 'Withdrawal in Progress';
+
+  @override
+  String get bw2WatchedNotMinedYet => 'Your withdrawal request is not in a block yet. This updates by itself.';
+
+  @override
+  String get bw2WatchedWaiting => 'The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.';
+
+  @override
+  String get bw2WatchedPinned => 'The Bitcoin transaction that pays this withdrawal is fixed. The vault\'s signers send it on their own, and the withdrawal completes when Bitcoin confirms it.';
+
+  @override
+  String get bw2WatchedReleasing => 'This withdrawal is being released. When Bitcoin confirms the release, its Bitcoin is back in the vault and your vBTC is refunded, less the release\'s Bitcoin fee.';
+
+  @override
+  String get bw2WatchedClosed => 'This withdrawal is closed. Its vBTC was returned to you.';
+
+  @override
+  String bw2WatchedCurrentFeeRate(int feeRate) {
+    return 'Current fee rate: $feeRate sat/vB';
+  }
+
+  @override
+  String get bw2WatchedNotConfirmingHint => 'If it is not confirming, raise its fee (paid out of the withdrawal), or release it to get your vBTC back, less the release\'s Bitcoin fee.';
+
+  @override
+  String get bw2WatchedNewFeeRateLabel => 'New fee rate (sat/vB)';
+
+  @override
+  String bw2WatchedFeeRateTooLow(int minimum) {
+    return 'At least $minimum sat/vB';
+  }
+
+  @override
+  String bw2WatchedFeeRateTooHigh(int maximum) {
+    return 'At most $maximum sat/vB';
+  }
+
+  @override
+  String get bw2WatchedFeeRateInvalid => 'Enter a fee rate in sat/vB';
+
+  @override
+  String get bw2WatchedRaiseFee => 'Raise Fee';
+
+  @override
+  String get bw2WatchedRelease => 'Release';
 }
