@@ -9,7 +9,9 @@ import '../../../app.dart';
 import '../models/watched_withdrawal.dart';
 import '../services/withdrawal_in_progress_notice.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -117,6 +119,12 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
   Timer? _watchedTimer;
   final _feeRateController = TextEditingController();
   String? _feeRateError;
+
+  /// The withdrawal as it stood when a raise, release or cancel was sent.
+  /// Actions stay off until the chain shows a change: Core keeps no mempool
+  /// check against a second Type 44 for the same withdrawal, so another press
+  /// would pay another VFX fee for nothing.
+  WatchedWithdrawal? _sentAgainst;
   static const _watchedRefreshInterval = Duration(seconds: 20);
 
   @override
@@ -352,6 +360,9 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
 
   void _showWatched(WatchedWithdrawal watched) {
     setState(() {
+      if (_sentAgainst != null && !watched.samePinAs(_sentAgainst!)) {
+        _sentAgainst = null;
+      }
       _watched = watched;
       _step = _DialogStep.watched;
     });
@@ -370,9 +381,21 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     _showWatched(watched);
   }
 
+  /// Whether the active wallet made the request. Core refuses a raise,
+  /// release or cancel from anyone else ("Only the requester"), so say so
+  /// before building anything.
+  bool _activeWalletIsRequester(WatchedWithdrawal watched) {
+    final requester = watched.requester ?? widget.requestorAddress;
+    final active = ref.read(webSessionProvider).keypair?.address;
+    if (active == requester) return true;
+    Toast.error(AppLocalizations.of(context).bw2WatchedNotRequester(requester));
+    return false;
+  }
+
   Future<void> _sendFeeRaise({required bool release}) async {
     final watched = _watched;
     if (watched == null || _busy) return;
+    if (!_activeWalletIsRequester(watched)) return;
     final feeRate = int.tryParse(_feeRateController.text.trim());
     final problem = watched.feeRateProblem(feeRate);
     if (problem != null) {
@@ -391,10 +414,43 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           release: release,
         );
     if (!mounted) return;
-    setState(() => _busy = false);
+    setState(() {
+      _busy = false;
+      if (sent == true) _sentAgainst = watched;
+    });
     if (sent == true) {
       _feeRateController.clear();
+      _refreshWatched();
     }
+  }
+
+  /// Cancels a watched withdrawal that still waits for its Bitcoin
+  /// transaction: an ordinary Type 29 from the requester, with no vote; when it
+  /// is mined the withdrawal is closed and the vBTC returned.
+  Future<void> _cancelWatched() async {
+    final watched = _watched;
+    if (watched == null || _busy) return;
+    if (!_activeWalletIsRequester(watched)) return;
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await ConfirmDialog.show(
+      title: l10n.bw2CancelWithdrawalQuestion,
+      body: l10n.bw2WatchedCancelBody,
+      destructive: true,
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _busy = true);
+    final sent = await ref.read(webTokenActionsManager).cancelV2Withdrawal(
+          scIdentifier: widget.scIdentifier,
+          requestorAddress: watched.requester ?? widget.requestorAddress,
+          requestHash: _requestHash!,
+        );
+    if (!mounted) return;
+    setState(() {
+      _busy = false;
+      if (sent) _sentAgainst = watched;
+    });
+    if (sent) _refreshWatched();
   }
 
   String _feeRateProblemText(WatchedFeeRateProblem problem, WatchedWithdrawal watched) {
@@ -516,7 +572,9 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
     final watched = _watched!;
     final l10n = AppLocalizations.of(context);
     final btcTxHash = watched.bitcoinTxHash;
-    final canAct = watched.canRaiseFee || watched.canRelease;
+    final awaitingChange = _sentAgainst != null;
+    final canAct = (watched.canRaiseFee || watched.canRelease) && !awaitingChange;
+    final actionsEnabled = !_busy && !awaitingChange;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -555,6 +613,10 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           const SizedBox(height: 12),
           Text(l10n.bw2WatchedCurrentFeeRate(watched.feeRate!), style: const TextStyle(color: Colors.white70, fontSize: 12)),
         ],
+        if (awaitingChange) ...[
+          const SizedBox(height: 16),
+          Text(l10n.bw2WatchedChangeSent, style: const TextStyle(color: Color(0xFFE0A32E), fontSize: 12)),
+        ],
         if (canAct) ...[
           const SizedBox(height: 16),
           Text(l10n.bw2WatchedNotConfirmingHint, style: const TextStyle(color: Colors.white38, fontSize: 12)),
@@ -576,17 +638,23 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           spacing: 8,
           runSpacing: 8,
           children: [
+            if (watched.canCancel)
+              AppButton(
+                label: l10n.bw2WatchedCancel,
+                variant: AppColorVariant.Danger,
+                onPressed: actionsEnabled ? _cancelWatched : null,
+              ),
             if (watched.canRelease)
               AppButton(
                 label: l10n.bw2WatchedRelease,
                 variant: AppColorVariant.Warning,
-                onPressed: _busy ? null : () => _sendFeeRaise(release: true),
+                onPressed: actionsEnabled ? () => _sendFeeRaise(release: true) : null,
               ),
             if (watched.canRaiseFee)
               AppButton(
                 label: l10n.bw2WatchedRaiseFee,
                 variant: AppColorVariant.Primary,
-                onPressed: _busy ? null : () => _sendFeeRaise(release: false),
+                onPressed: actionsEnabled ? () => _sendFeeRaise(release: false) : null,
               ),
             AppButton(
               label: l10n.actionDone,

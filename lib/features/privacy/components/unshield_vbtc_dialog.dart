@@ -15,6 +15,7 @@ import '../../wallet/providers/wallet_list_provider.dart';
 import '../providers/shielded_address_provider.dart';
 import '../providers/vbtc_privacy_actions_provider.dart';
 import '../utils/vfx_fee_guard.dart';
+import '../utils/unshield_amount.dart';
 
 
 class UnshieldVbtcDialog extends ConsumerStatefulWidget {
@@ -98,9 +99,21 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
       return;
     }
 
+    // Admission refuses an unshield to another network's address at every
+    // height (Core's RecipientIsThisNetworks covers unshields).
+    if (isOtherNetworksVfxAddress(toAddress)) {
+      Toast.error(globalL10n.r3hAddressOtherNetwork);
+      return;
+    }
+
     final amount = double.tryParse(_amountController.text.trim());
     if (amount == null || amount <= 0) {
       Toast.error(globalL10n.prvEnterValidAmount);
+      return;
+    }
+
+    if (!unshieldAmountFitsProof(_amountController.text)) {
+      Toast.error(globalL10n.prvUnshieldMaxDecimals(kUnshieldMaxDecimals));
       return;
     }
 
