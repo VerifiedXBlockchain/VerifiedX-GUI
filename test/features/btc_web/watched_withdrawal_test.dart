@@ -157,6 +157,19 @@ void main() {
     });
   });
 
+  group('watchedActionWaitIsOver', () {
+    final sentAt = DateTime(2026, 10, 19, 15, 0);
+
+    test('actions stay off while a sent change may still be mined', () {
+      expect(watchedActionWaitIsOver(sentAt, sentAt.add(const Duration(minutes: 1))), isFalse);
+    });
+
+    test('they come back once the change has had its time', () {
+      expect(watchedActionWaitIsOver(sentAt, sentAt.add(kWatchedActionWait)), isTrue);
+      expect(watchedActionWaitIsOver(null, sentAt), isFalse);
+    });
+  });
+
   group('WatchedWithdrawal.feeRateProblem', () {
     final watched = WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 4))!;
 

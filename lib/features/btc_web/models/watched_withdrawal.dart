@@ -142,6 +142,15 @@ class WatchedWithdrawal {
   }
 }
 
+/// How long a sent raise, release or cancel keeps the actions off when the
+/// chain shows no change: about ten VFX blocks and a refresh. After that the
+/// transaction was most likely dropped or refused, and may be sent again.
+const kWatchedActionWait = Duration(minutes: 3);
+
+/// Whether a change sent at [sentAt] has had [kWatchedActionWait] to show up.
+bool watchedActionWaitIsOver(DateTime? sentAt, DateTime now) =>
+    sentAt != null && now.difference(sentAt) >= kWatchedActionWait;
+
 /// Core's `BtcCanonicalWithdrawal.MaxFeeRate`: a request or raise naming more is refused.
 const kWatchedWithdrawalMaxFeeRate = 5000;
 

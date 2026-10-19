@@ -11170,11 +11170,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get bw2WatchedChangeSent => 'Sent. The actions come back once the chain shows the change. If nothing changes after a few blocks, close this and open the withdrawal again.';
+  String get bw2WatchedChangeSent => 'Sent. The actions come back once the chain shows the change. If nothing changes within a few minutes, they come back so you can send again.';
 
   @override
   String get bw2WatchedCancel => 'Cancel Withdrawal';
 
   @override
   String get bw2WatchedCancelBody => 'Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.';
+
+  @override
+  String get bw2WatchedChangeNotSeen => 'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.';
 }
