@@ -22,6 +22,8 @@ class WebFungibleToken with _$WebFungibleToken {
     @JsonKey(name: "is_paused") required bool isPaused,
     @JsonKey(name: "circulating_supply") @NumOrStringDoubleConverter() required double circulatingSupply,
     @JsonKey(name: "initial_supply") @NumOrStringDoubleConverter() required double initialSupply,
+    // Null when Spyglass does not send it; the node then judges the decimals.
+    @JsonKey(name: "decimal_places") int? decimalPlaces,
     @JsonKey(name: "banned_addresses") required List<String> bannedAddresses,
     @JsonKey(name: "created_at") required DateTime createdAt,
   }) = _WebFungibleToken;

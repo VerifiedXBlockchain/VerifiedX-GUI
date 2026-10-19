@@ -10364,5 +10364,22 @@
   "bw2WatchedChangeNotSeen": "The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.",
   "@bw2WatchedChangeNotSeen": {
     "description": "Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on."
+  },
+  "tokenMintPaused": "This token contract is paused, so no tokens can be minted.",
+  "@tokenMintPaused": {
+    "description": "Mint refused before sending: the token contract is paused."
+  },
+  "tokenMintTooManyDecimals": "This token allows at most {places} decimal places.",
+  "@tokenMintTooManyDecimals": {
+    "description": "Mint refused before sending: the amount has more decimal places than the token's DecimalPlaces.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "tokenMintOverflow": "This mint would take the supply or the balance past the largest amount the chain can hold.",
+  "@tokenMintOverflow": {
+    "description": "Mint refused before sending: the supply or the minter's balance would overflow."
   }
 }
