@@ -10222,5 +10222,27 @@
   "btcAcceptanceCodeMismatch": "This acceptance code is for a different domain or VFX owner",
   "@btcAcceptanceCodeMismatch": {
     "description": "Validation error when the acceptance code names another domain or VFX owner."
+  },
+  "r3hAddressOtherNetwork": "This address belongs to another network. Anything sent there could never be spent.",
+  "@r3hAddressOtherNetwork": {
+    "description": "Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet)."
+  },
+  "svcNameNotResolved": "{name} could not be resolved to an address. Check the name, or send to the address itself.",
+  "@svcNameNotResolved": {
+    "description": "Send form error: a VFX name (ADNR) entered as the recipient resolves to no address.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "prvUnshieldMaxDecimals": "An unshield amount has at most {places} decimal places.",
+  "@prvUnshieldMaxDecimals": {
+    "description": "Unshield dialog error: the amount has more decimal places than the proof binds.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
   }
 }

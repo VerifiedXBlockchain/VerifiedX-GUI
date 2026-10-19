@@ -29,6 +29,7 @@ import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../bridge/services/bridge_service.dart';
+import '../../bridge/services/bridge_service_v2.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../../web/utils/pending_debits.dart';
@@ -431,6 +432,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     String senderAddress = "";
     Wallet? currentWallet;
     String? feeNotice;
+    // Desktop only: where the VFX goes. A name is replaced by the address it
+    // resolves to, since the node refuses a transaction addressed to a name.
+    String recipient = address.trim().replaceAll("\n", "");
 
     final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
@@ -688,7 +692,21 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       if (!guardWalletIsSynced(ref)) return;
       if (!guardWalletIsNotResyncing(ref)) return;
 
-      final addressIsValid = await BridgeService().validateSendToAddress(address.trim().replaceAll("\n", ""));
+      if (looksLikeVfxName(recipient)) {
+        final resolved = await BridgeServiceV2().resolveAdnr(recipient);
+        if (resolved == null) {
+          Toast.error(globalL10n.svcNameNotResolved(recipient));
+          return;
+        }
+        recipient = resolved;
+      }
+
+      if (isOtherNetworksVfxAddress(recipient)) {
+        Toast.error(globalL10n.r3hAddressOtherNetwork);
+        return;
+      }
+
+      final addressIsValid = await BridgeService().validateSendToAddress(recipient);
 
       if (!addressIsValid) {
         Toast.error(globalL10n.nftInvalidAddressToast);
@@ -721,7 +739,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       // plain-transfer fee quote does not cover; the node checks those.
       if (!currentWallet.isReserved) {
         final fromAddress = currentWallet.address;
-        final toAddress = address.trim().replaceAll("\n", "");
+        final toAddress = recipient;
         final fitted = await _fitVfxAmountWithFee(
           amount: amountDouble,
           spendable: currentWallet.balance,
@@ -785,7 +803,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       feeNotice = fitted.notice;
     }
 
-    final confirmBody = globalL10n.txpSendingConfirmBody('$amount', address, senderAddress);
+    final typedRecipient = address.trim().replaceAll("\n", "");
+    final shownRecipient = recipient == typedRecipient ? address : "$typedRecipient ($recipient)";
+    final confirmBody = globalL10n.txpSendingConfirmBody('$amount', shownRecipient, senderAddress);
     final confirmed = await ConfirmDialog.show(
       title: globalL10n.btcPleaseConfirmTitle,
       body: feeNotice != null ? "$feeNotice\n\n$confirmBody" : confirmBody,
@@ -828,7 +848,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         final message = await ReserveAccountService().sendTx(
           fromAddress: currentWallet.address,
-          toAddress: address.trim().replaceAll("\n", ""),
+          toAddress: recipient,
           amount: double.parse(amount),
           password: password,
           unlockDelayHours: hours - 24,
@@ -926,7 +946,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       try {
         final message = await BridgeService().sendFunds(
           amount: double.parse(amount),
-          to: address.trim().replaceAll("\n", ""),
+          to: recipient,
           from: ref.read(sessionProvider).currentWallet!.address,
         );
         state = state.copyWith(isProcessing: false);

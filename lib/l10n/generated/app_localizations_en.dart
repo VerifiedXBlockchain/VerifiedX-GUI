@@ -11115,4 +11115,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btcAcceptanceCodeMismatch => 'This acceptance code is for a different domain or VFX owner';
+
+  @override
+  String get r3hAddressOtherNetwork => 'This address belongs to another network. Anything sent there could never be spent.';
+
+  @override
+  String svcNameNotResolved(String name) {
+    return '$name could not be resolved to an address. Check the name, or send to the address itself.';
+  }
+
+  @override
+  String prvUnshieldMaxDecimals(int places) {
+    return 'An unshield amount has at most $places decimal places.';
+  }
 }

@@ -1,3 +1,5 @@
+import 'package:base58check/base58check.dart';
+
 import '../features/config/constants.dart';
 
 import '../core/env.dart';
@@ -54,6 +56,39 @@ bool isValidRbxAddress(String address) {
   }
 
   return true;
+}
+
+/// Core's `Globals.AddressPrefix`: the version byte of this network's
+/// addresses (0x3C, "R", on mainnet; 0x89, "x", on testnet).
+int get vfxAddressVersionByte => Env.isTestNet ? 0x89 : 0x3C;
+
+/// Whether [address] is a well-formed Base58Check address of another network,
+/// such as a mainnet address on testnet or a Bitcoin-style version-0 one. The
+/// node refuses a transaction to such an address at admission, at every
+/// height, since nothing sent there could be spent. Mirrors Core's
+/// `AddressValidateUtility.IsOtherNetworksAddress`: vault (xRBX) and shielded
+/// (zfx_) addresses keep their own rules, and anything that does not decode is
+/// left to the other checks.
+bool isOtherNetworksVfxAddress(String address, {int? versionByte}) {
+  final value = address.trim().replaceAll("\n", "");
+  if (value.isEmpty || value.startsWith("xRBX") || value.startsWith("zfx_")) {
+    return false;
+  }
+  try {
+    final decoded = Base58CheckCodec.bitcoin().decode(value);
+    return decoded.version != (versionByte ?? vfxAddressVersionByte);
+  } catch (_) {
+    return false;
+  }
+}
+
+/// Whether [value] is a VFX name (ADNR) rather than an address. The node
+/// refuses a transaction addressed to a name from `PathAuditRulesHeight`, so
+/// a name is resolved to its address before anything is sent. Matches Core's
+/// `RecipientIsNotAName` test.
+bool looksLikeVfxName(String value) {
+  final lower = value.trim().toLowerCase();
+  return lower.contains(".vfx") || lower.contains(".rbx");
 }
 
 bool isValidPhoneNumber(String value) {
@@ -163,6 +198,10 @@ String? formValidatorRbxAddress(String? value, [bool allowAdnr = false]) {
 
   if (!isValidRbxAddress(value)) {
     return globalL10n.r3hAddressInvalid;
+  }
+
+  if (isOtherNetworksVfxAddress(value)) {
+    return globalL10n.r3hAddressOtherNetwork;
   }
 
   return null;

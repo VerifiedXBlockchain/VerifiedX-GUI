@@ -20576,6 +20576,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This acceptance code is for a different domain or VFX owner'**
   String get btcAcceptanceCodeMismatch;
+
+  /// Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet).
+  ///
+  /// In en, this message translates to:
+  /// **'This address belongs to another network. Anything sent there could never be spent.'**
+  String get r3hAddressOtherNetwork;
+
+  /// Send form error: a VFX name (ADNR) entered as the recipient resolves to no address.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} could not be resolved to an address. Check the name, or send to the address itself.'**
+  String svcNameNotResolved(String name);
+
+  /// Unshield dialog error: the amount has more decimal places than the proof binds.
+  ///
+  /// In en, this message translates to:
+  /// **'An unshield amount has at most {places} decimal places.'**
+  String prvUnshieldMaxDecimals(int places);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -14,6 +14,7 @@ import '../../wallet/providers/wallet_list_provider.dart';
 import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
 import '../utils/vfx_fee_guard.dart';
+import '../utils/unshield_amount.dart';
 
 class UnshieldDialog extends ConsumerStatefulWidget {
   const UnshieldDialog({super.key});
@@ -97,6 +98,11 @@ class _UnshieldDialogState extends ConsumerState<UnshieldDialog> {
     final amount = double.tryParse(_amountController.text.trim());
     if (amount == null || amount <= 0) {
       Toast.error(globalL10n.prvEnterValidAmount);
+      return;
+    }
+
+    if (!unshieldAmountFitsProof(_amountController.text)) {
+      Toast.error(globalL10n.prvUnshieldMaxDecimals(kUnshieldMaxDecimals));
       return;
     }
 

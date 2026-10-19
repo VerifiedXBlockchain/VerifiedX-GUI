@@ -1,0 +1,83 @@
+import 'package:base58check/base58check.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:rbx_wallet/app.dart';
+import 'package:rbx_wallet/utils/validation.dart';
+
+/// A well-formed Base58Check address with [version] as its network byte.
+String _address(int version) => Base58CheckCodec.bitcoin().encode(Base58CheckPayload(version, List<int>.generate(20, (i) => i * 7 + 3)));
+
+void main() {
+  setUpAll(() {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    rootNavigatorKey = GlobalKey<NavigatorState>();
+  });
+
+  group('isOtherNetworksVfxAddress', () {
+    const mainnet = 0x3C;
+    const testnet = 0x89;
+
+    test("accepts this network's address", () {
+      expect(_address(mainnet), startsWith('R'));
+      expect(_address(testnet), startsWith('x'));
+      expect(isOtherNetworksVfxAddress(_address(mainnet), versionByte: mainnet), isFalse);
+      expect(isOtherNetworksVfxAddress(_address(testnet), versionByte: testnet), isFalse);
+    });
+
+    test("refuses the other network's address, either way", () {
+      expect(isOtherNetworksVfxAddress(_address(testnet), versionByte: mainnet), isTrue);
+      expect(isOtherNetworksVfxAddress(_address(mainnet), versionByte: testnet), isTrue);
+    });
+
+    test('refuses a Bitcoin-style version-0 address', () {
+      expect(isOtherNetworksVfxAddress(_address(0x00), versionByte: mainnet), isTrue);
+    });
+
+    test('refuses a version byte that still encodes to the network letter', () {
+      // 0x3D also encodes to an "R..." address, so the first letter alone
+      // (isValidRbxAddress) lets it through.
+      final lookalike = _address(0x3D);
+      expect(lookalike, startsWith('R'));
+      expect(isOtherNetworksVfxAddress(lookalike, versionByte: mainnet), isTrue);
+    });
+
+    test('leaves vault, shielded, names and undecodable input to the other rules', () {
+      expect(isOtherNetworksVfxAddress('xRBXabcdefghijkmnopqrstuvwxyz12345', versionByte: mainnet), isFalse);
+      expect(isOtherNetworksVfxAddress('zfx_abc', versionByte: mainnet), isFalse);
+      expect(isOtherNetworksVfxAddress('alice.vfx', versionByte: mainnet), isFalse);
+      expect(isOtherNetworksVfxAddress('', versionByte: mainnet), isFalse);
+      // A broken checksum does not decode.
+      final good = _address(testnet);
+      final broken = good.substring(0, good.length - 1) + (good.endsWith('1') ? '2' : '1');
+      expect(isOtherNetworksVfxAddress(broken, versionByte: mainnet), isFalse);
+    });
+  });
+
+  group('formValidatorRbxAddress', () {
+    test("refuses the other network's address with its own message", () {
+      final other = _address(vfxAddressVersionByte == 0x3C ? 0x89 : 0x3C);
+      final ours = _address(vfxAddressVersionByte);
+      // The other network's letter fails the first-letter check first; the
+      // look-alike byte reaches the network check.
+      expect(formValidatorRbxAddress(other), isNotNull);
+      expect(formValidatorRbxAddress(ours), isNull);
+
+      final lookalike = _address(vfxAddressVersionByte + 1);
+      expect(lookalike[0], ours[0]);
+      expect(formValidatorRbxAddress(lookalike), contains('another network'));
+    });
+  });
+
+  group('looksLikeVfxName', () {
+    test('a name is resolved before sending, whatever its case', () {
+      expect(looksLikeVfxName('alice.vfx'), isTrue);
+      expect(looksLikeVfxName(' Alice.VFX '), isTrue);
+      expect(looksLikeVfxName('legacy.rbx'), isTrue);
+    });
+
+    test('an address is not a name', () {
+      expect(looksLikeVfxName(_address(0x3C)), isFalse);
+      expect(looksLikeVfxName('xRBXabcdefghijkmnopqrstuvwxyz12345'), isFalse);
+    });
+  });
+}
