@@ -58,9 +58,18 @@ TokenMintProblem? tokenMintProblem({
   if (decimalPlaces != null && (decimalPlaces < 0 || decimalPlacesOf(amount) > decimalPlaces)) {
     return TokenMintProblem.tooManyDecimals;
   }
-  if (currentSupply != null && amount > kTokenMaxAmount - currentSupply) return TokenMintProblem.overflow;
-  if (holderBalance != null && amount > kTokenMaxAmount - holderBalance) return TokenMintProblem.overflow;
+  if (currentSupply != null && _wouldOverflow(amount, currentSupply)) return TokenMintProblem.overflow;
+  if (holderBalance != null && _wouldOverflow(amount, holderBalance)) return TokenMintProblem.overflow;
   return null;
+}
+
+/// Whether adding [amount] to [held] passes [kTokenMaxAmount]. Near the limit
+/// a double cannot tell how much room is left (decimal.MaxValue - 1000 rounds
+/// to the limit itself), so there the check is skipped and the node judges
+/// it: double rounding must never refuse a mint Core would take.
+bool _wouldOverflow(double amount, double held) {
+  if (held > kTokenMaxAmount * (1 - 1e-12)) return false;
+  return amount > kTokenMaxAmount - held;
 }
 
 /// Significant decimal places of [value] as Dart prints it (the shortest

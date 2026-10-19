@@ -49,6 +49,15 @@ void main() {
       expect(tokenMintProblem(amount: 1e28, decimalPlaces: 0, currentSupply: 1e28, holderBalance: 1e28), isNull);
     });
 
+    test('double rounding near the limit never refuses a mint', () {
+      // decimal.MaxValue - 1000 has room for 1, but as a double it is the
+      // limit itself, so the wallet leaves the call to the node.
+      const supply = 79228162514264337593543950335.0 - 1000;
+      expect(supply, kTokenMaxAmount);
+      expect(tokenMintProblem(amount: 1, decimalPlaces: 0, currentSupply: supply), isNull);
+      expect(tokenMintProblem(amount: 1, decimalPlaces: 0, currentSupply: 0, holderBalance: supply), isNull);
+    });
+
     test('unknown state is left to the node', () {
       expect(tokenMintProblem(amount: 1e29, decimalPlaces: 0), isNull);
       expect(tokenMintProblem(amount: 1.123456789, decimalPlaces: null), isNull);
