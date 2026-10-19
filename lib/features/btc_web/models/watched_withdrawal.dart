@@ -113,6 +113,11 @@ class WatchedWithdrawal {
   bool samePinAs(WatchedWithdrawal other) =>
       state == other.state && feeRate == other.feeRate && releasing == other.releasing && bitcoinTxHash == other.bitcoinTxHash;
 
+  /// Whether this state settles a change sent against [sentAgainst]: the
+  /// chain shows a different pin, or the withdrawal is closed. Either way no
+  /// "probably dropped" note or lock should outlive it.
+  bool settlesChangeSentAgainst(WatchedWithdrawal? sentAgainst) => isClosed || (sentAgainst != null && !samePinAs(sentAgainst));
+
   bool get isPinned => state == 'Pinned';
   bool get isWaiting => state == 'Waiting';
 

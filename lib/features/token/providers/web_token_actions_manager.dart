@@ -619,6 +619,7 @@ class WebTokenActionsManager {
     required String requestHash,
     required int feeRate,
     required bool release,
+    void Function(String hash)? onSent,
   }) async {
     final keypair = ref.read(webSessionProvider).keypair;
     if (keypair == null) {
@@ -636,6 +637,7 @@ class WebTokenActionsManager {
         release: release,
       ),
       onBroadcast: (hash) {
+        onSent?.call(hash);
         ref.read(webTransactionListProvider(keypair.address).notifier).insertPendingTx(
               WebTransaction(
                 hash: hash,

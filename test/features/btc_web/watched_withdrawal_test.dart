@@ -157,6 +157,28 @@ void main() {
     });
   });
 
+  group('WatchedWithdrawal.settlesChangeSentAgainst', () {
+    final sent = WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 4))!;
+
+    test('a change that lands after the wait still clears the note', () {
+      expect(WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 9))!.settlesChangeSentAgainst(sent), isTrue);
+    });
+
+    test('a closed withdrawal never keeps the note', () {
+      final closed = WatchedWithdrawal.fromCompletionAnswer({
+        'success': false,
+        'raw': {'Attested': true, 'Status': 'Closed', 'Withdrawal': {'State': 'Released'}},
+      })!;
+      expect(closed.settlesChangeSentAgainst(sent), isTrue);
+      expect(closed.settlesChangeSentAgainst(null), isTrue);
+    });
+
+    test('the same pin settles nothing', () {
+      expect(WatchedWithdrawal.fromCompletionAnswer(_pinnedAnswer(feeRate: 4))!.settlesChangeSentAgainst(sent), isFalse);
+      expect(sent.settlesChangeSentAgainst(null), isFalse);
+    });
+  });
+
   group('watchedActionWaitIsOver', () {
     final sentAt = DateTime(2026, 10, 19, 15, 0);
 
