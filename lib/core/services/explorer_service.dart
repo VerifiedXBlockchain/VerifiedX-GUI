@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import '../../features/price/models/price_data.dart';
 import '../../features/btc_web/models/btc_web_vbtc_token.dart';
 import '../../features/btc_web/models/vbtc_compile_data.dart';
+import '../../features/btc_web/models/watched_withdrawal.dart';
 import '../../features/price/models/price_history_item.dart';
 import '../../features/nft/models/web_nft.dart';
 import '../../features/token/models/token_vote_topic.dart';
@@ -933,6 +934,38 @@ class ExplorerService extends BaseService {
     } catch (e) {
       print(e);
       throw "Error preparing V2 withdrawal completion";
+    }
+  }
+
+  /// Where a withdrawal stands if its vault is one the chain watches, or null
+  /// when it is not (or the explorer gave no usable answer).
+  ///
+  /// Asks the same route as [prepareV2WithdrawalComplete]: for a watched vault
+  /// the node signs and records nothing there and answers with the
+  /// withdrawal's state instead; for any other vault the answer is a FROST
+  /// preparation with no side effects, which this ignores. A watched answer
+  /// for a closed withdrawal comes back as HTTP 500, so statuses below 600 are
+  /// read as data.
+  Future<WatchedWithdrawal?> getV2WatchedWithdrawal({
+    required String scIdentifier,
+    required String withdrawalRequestHash,
+    required String ownerAddress,
+  }) async {
+    try {
+      final response = await postJson(
+        '/btc/vbtc-v2/withdraw/complete/prepare/',
+        params: {
+          'sc_identifier': scIdentifier,
+          'withdrawal_request_hash': withdrawalRequestHash,
+          'owner_address': ownerAddress,
+        },
+        validateStatus: (status) => status != null && status < 600,
+      );
+      final data = response['data'];
+      return WatchedWithdrawal.fromCompletionAnswer(data is Map ? Map<String, dynamic>.from(data) : null);
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 
