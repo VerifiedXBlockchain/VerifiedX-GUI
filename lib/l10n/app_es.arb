@@ -10290,5 +10290,22 @@
   "bw2WatchedChangeNotSeen": "El último cambio no apareció en la cadena en unos minutos, así que probablemente se descartó. Puedes enviarlo de nuevo.",
   "@bw2WatchedChangeNotSeen": {
     "description": "Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on."
+  },
+  "tokenMintPaused": "Este contrato de token está en pausa, así que no se pueden acuñar tokens.",
+  "@tokenMintPaused": {
+    "description": "Mint refused before sending: the token contract is paused."
+  },
+  "tokenMintTooManyDecimals": "Este token admite como máximo {places} decimales.",
+  "@tokenMintTooManyDecimals": {
+    "description": "Mint refused before sending: the amount has more decimal places than the token's DecimalPlaces.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "tokenMintOverflow": "Esta acuñación llevaría el suministro o el saldo por encima de la cantidad máxima que admite la cadena.",
+  "@tokenMintOverflow": {
+    "description": "Mint refused before sending: the supply or the minter's balance would overflow."
   }
 }

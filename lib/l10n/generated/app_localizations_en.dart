@@ -11211,4 +11211,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bw2WatchedChangeNotSeen => 'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.';
+
+  @override
+  String get tokenMintPaused => 'This token contract is paused, so no tokens can be minted.';
+
+  @override
+  String tokenMintTooManyDecimals(int places) {
+    return 'This token allows at most $places decimal places.';
+  }
+
+  @override
+  String get tokenMintOverflow => 'This mint would take the supply or the balance past the largest amount the chain can hold.';
 }

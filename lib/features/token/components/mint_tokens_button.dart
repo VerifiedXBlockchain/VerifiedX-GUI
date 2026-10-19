@@ -11,6 +11,8 @@ import '../../nft/models/nft.dart';
 import '../models/token_account.dart';
 import '../models/token_sc_feature.dart';
 import '../services/token_service.dart';
+import '../token_rules.dart';
+import '../utils/token_mint_messages.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../../core/utils/tx_refresh.dart';
@@ -67,6 +69,22 @@ class MintTokensButton extends BaseComponent {
 
               if (amountDouble == null) {
                 Toast.error(l10n.tokenInvalidAmountToast);
+                return;
+              }
+
+              // Core refuses these from TokenMintRulesHeight. The live state
+              // (pause, supply) is read when the token's state was loaded.
+              final state = nft.tokenStateDetails;
+              final decimalPlaces = state?.decimalPlaces ?? token.decimalPlaces;
+              final problem = tokenMintProblem(
+                amount: amountDouble,
+                decimalPlaces: decimalPlaces,
+                isPaused: state?.isPaused,
+                currentSupply: state?.currentSupply,
+                holderBalance: tokenAccount.balance,
+              );
+              if (problem != null) {
+                Toast.error(tokenMintProblemMessage(problem, decimalPlaces));
                 return;
               }
               ref.read(globalLoadingProvider.notifier).start();

@@ -11211,4 +11211,15 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get bw2WatchedChangeNotSeen => 'El último cambio no apareció en la cadena en unos minutos, así que probablemente se descartó. Puedes enviarlo de nuevo.';
+
+  @override
+  String get tokenMintPaused => 'Este contrato de token está en pausa, así que no se pueden acuñar tokens.';
+
+  @override
+  String tokenMintTooManyDecimals(int places) {
+    return 'Este token admite como máximo $places decimales.';
+  }
+
+  @override
+  String get tokenMintOverflow => 'Esta acuñación llevaría el suministro o el saldo por encima de la cantidad máxima que admite la cadena.';
 }

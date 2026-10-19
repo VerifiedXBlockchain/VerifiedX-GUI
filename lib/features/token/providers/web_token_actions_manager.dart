@@ -9,6 +9,9 @@ import '../../../core/utils.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../nft/models/nft.dart';
 import '../models/web_fungible_token.dart';
+import '../token_rules.dart';
+import '../utils/token_mint_messages.dart';
+import 'web_token_list_provider.dart';
 import '../../web/utils/raw_transaction.dart';
 
 import '../../../core/app_constants.dart';
@@ -123,6 +126,24 @@ class WebTokenActionsManager {
   Future<bool?> mintTokens(
       WebFungibleToken token, String address, double amount,
       [bool silent = false]) async {
+    // Core refuses these from TokenMintRulesHeight; say why before sending.
+    final holderBalance = ref
+        .read(webTokenListProvider)
+        .where((b) => b.address == address && b.token.smartContractId == token.smartContractId)
+        .map((b) => b.balance)
+        .fold<double?>(null, (sum, b) => (sum ?? 0) + b);
+    final problem = tokenMintProblem(
+      amount: amount,
+      decimalPlaces: token.decimalPlaces,
+      isPaused: token.isPaused,
+      currentSupply: token.circulatingSupply,
+      holderBalance: holderBalance,
+    );
+    if (problem != null) {
+      if (!silent) Toast.error(tokenMintProblemMessage(problem, token.decimalPlaces ?? 0));
+      return false;
+    }
+
     final data = {
       "Function": "TokenMint()",
       "ContractUID": token.smartContractId,

@@ -42,7 +42,10 @@ mixin _$WebFungibleToken {
   double get circulatingSupply => throw _privateConstructorUsedError;
   @JsonKey(name: "initial_supply")
   @NumOrStringDoubleConverter()
-  double get initialSupply => throw _privateConstructorUsedError;
+  double get initialSupply =>
+      throw _privateConstructorUsedError; // Null when Spyglass does not send it; the node then judges the decimals.
+  @JsonKey(name: "decimal_places")
+  int? get decimalPlaces => throw _privateConstructorUsedError;
   @JsonKey(name: "banned_addresses")
   List<String> get bannedAddresses => throw _privateConstructorUsedError;
   @JsonKey(name: "created_at")
@@ -84,6 +87,8 @@ abstract class $WebFungibleTokenCopyWith<$Res> {
       @JsonKey(name: "initial_supply")
       @NumOrStringDoubleConverter()
           double initialSupply,
+      @JsonKey(name: "decimal_places")
+          int? decimalPlaces,
       @JsonKey(name: "banned_addresses")
           List<String> bannedAddresses,
       @JsonKey(name: "created_at")
@@ -115,6 +120,7 @@ class _$WebFungibleTokenCopyWithImpl<$Res, $Val extends WebFungibleToken>
     Object? isPaused = null,
     Object? circulatingSupply = null,
     Object? initialSupply = null,
+    Object? decimalPlaces = freezed,
     Object? bannedAddresses = null,
     Object? createdAt = null,
   }) {
@@ -167,6 +173,10 @@ class _$WebFungibleTokenCopyWithImpl<$Res, $Val extends WebFungibleToken>
           ? _value.initialSupply
           : initialSupply // ignore: cast_nullable_to_non_nullable
               as double,
+      decimalPlaces: freezed == decimalPlaces
+          ? _value.decimalPlaces
+          : decimalPlaces // ignore: cast_nullable_to_non_nullable
+              as int?,
       bannedAddresses: null == bannedAddresses
           ? _value.bannedAddresses
           : bannedAddresses // ignore: cast_nullable_to_non_nullable
@@ -211,6 +221,8 @@ abstract class _$$_WebFungibleTokenCopyWith<$Res>
       @JsonKey(name: "initial_supply")
       @NumOrStringDoubleConverter()
           double initialSupply,
+      @JsonKey(name: "decimal_places")
+          int? decimalPlaces,
       @JsonKey(name: "banned_addresses")
           List<String> bannedAddresses,
       @JsonKey(name: "created_at")
@@ -240,6 +252,7 @@ class __$$_WebFungibleTokenCopyWithImpl<$Res>
     Object? isPaused = null,
     Object? circulatingSupply = null,
     Object? initialSupply = null,
+    Object? decimalPlaces = freezed,
     Object? bannedAddresses = null,
     Object? createdAt = null,
   }) {
@@ -292,6 +305,10 @@ class __$$_WebFungibleTokenCopyWithImpl<$Res>
           ? _value.initialSupply
           : initialSupply // ignore: cast_nullable_to_non_nullable
               as double,
+      decimalPlaces: freezed == decimalPlaces
+          ? _value.decimalPlaces
+          : decimalPlaces // ignore: cast_nullable_to_non_nullable
+              as int?,
       bannedAddresses: null == bannedAddresses
           ? _value._bannedAddresses
           : bannedAddresses // ignore: cast_nullable_to_non_nullable
@@ -331,6 +348,8 @@ class _$_WebFungibleToken extends _WebFungibleToken {
       @JsonKey(name: "initial_supply")
       @NumOrStringDoubleConverter()
           required this.initialSupply,
+      @JsonKey(name: "decimal_places")
+          this.decimalPlaces,
       @JsonKey(name: "banned_addresses")
           required final List<String> bannedAddresses,
       @JsonKey(name: "created_at")
@@ -376,6 +395,10 @@ class _$_WebFungibleToken extends _WebFungibleToken {
   @JsonKey(name: "initial_supply")
   @NumOrStringDoubleConverter()
   final double initialSupply;
+// Null when Spyglass does not send it; the node then judges the decimals.
+  @override
+  @JsonKey(name: "decimal_places")
+  final int? decimalPlaces;
   final List<String> _bannedAddresses;
   @override
   @JsonKey(name: "banned_addresses")
@@ -391,7 +414,7 @@ class _$_WebFungibleToken extends _WebFungibleToken {
 
   @override
   String toString() {
-    return 'WebFungibleToken(smartContractId: $smartContractId, name: $name, ticker: $ticker, description: $description, ownerAddress: $ownerAddress, imageUrl: $imageUrl, canMint: $canMint, canBurn: $canBurn, canVote: $canVote, isPaused: $isPaused, circulatingSupply: $circulatingSupply, initialSupply: $initialSupply, bannedAddresses: $bannedAddresses, createdAt: $createdAt)';
+    return 'WebFungibleToken(smartContractId: $smartContractId, name: $name, ticker: $ticker, description: $description, ownerAddress: $ownerAddress, imageUrl: $imageUrl, canMint: $canMint, canBurn: $canBurn, canVote: $canVote, isPaused: $isPaused, circulatingSupply: $circulatingSupply, initialSupply: $initialSupply, decimalPlaces: $decimalPlaces, bannedAddresses: $bannedAddresses, createdAt: $createdAt)';
   }
 
   @override
@@ -418,6 +441,8 @@ class _$_WebFungibleToken extends _WebFungibleToken {
                 other.circulatingSupply == circulatingSupply) &&
             (identical(other.initialSupply, initialSupply) ||
                 other.initialSupply == initialSupply) &&
+            (identical(other.decimalPlaces, decimalPlaces) ||
+                other.decimalPlaces == decimalPlaces) &&
             const DeepCollectionEquality()
                 .equals(other._bannedAddresses, _bannedAddresses) &&
             (identical(other.createdAt, createdAt) ||
@@ -440,6 +465,7 @@ class _$_WebFungibleToken extends _WebFungibleToken {
       isPaused,
       circulatingSupply,
       initialSupply,
+      decimalPlaces,
       const DeepCollectionEquality().hash(_bannedAddresses),
       createdAt);
 
@@ -482,6 +508,8 @@ abstract class _WebFungibleToken extends WebFungibleToken {
       @JsonKey(name: "initial_supply")
       @NumOrStringDoubleConverter()
           required final double initialSupply,
+      @JsonKey(name: "decimal_places")
+          final int? decimalPlaces,
       @JsonKey(name: "banned_addresses")
           required final List<String> bannedAddresses,
       @JsonKey(name: "created_at")
@@ -526,6 +554,9 @@ abstract class _WebFungibleToken extends WebFungibleToken {
   @JsonKey(name: "initial_supply")
   @NumOrStringDoubleConverter()
   double get initialSupply;
+  @override // Null when Spyglass does not send it; the node then judges the decimals.
+  @JsonKey(name: "decimal_places")
+  int? get decimalPlaces;
   @override
   @JsonKey(name: "banned_addresses")
   List<String> get bannedAddresses;

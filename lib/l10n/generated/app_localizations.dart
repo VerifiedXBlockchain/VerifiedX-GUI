@@ -20744,6 +20744,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.'**
   String get bw2WatchedChangeNotSeen;
+
+  /// Mint refused before sending: the token contract is paused.
+  ///
+  /// In en, this message translates to:
+  /// **'This token contract is paused, so no tokens can be minted.'**
+  String get tokenMintPaused;
+
+  /// Mint refused before sending: the amount has more decimal places than the token's DecimalPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'This token allows at most {places} decimal places.'**
+  String tokenMintTooManyDecimals(int places);
+
+  /// Mint refused before sending: the supply or the minter's balance would overflow.
+  ///
+  /// In en, this message translates to:
+  /// **'This mint would take the supply or the balance past the largest amount the chain can hold.'**
+  String get tokenMintOverflow;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
