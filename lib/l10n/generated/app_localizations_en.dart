@@ -11115,4 +11115,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btcAcceptanceCodeMismatch => 'This acceptance code is for a different domain or VFX owner';
+
+  @override
+  String get r3cTypeVbtcBtcReport => 'Bitcoin Report';
+
+  @override
+  String get r3cTypeVbtcWithdrawalFeeRaise => 'vBTC Withdrawal Fee Raise';
+
+  @override
+  String get r3cTypeVbtcWithdrawalRelease => 'vBTC Withdrawal Release';
+
+  @override
+  String get r3cTypeVbtcBtcReorg => 'Bitcoin Reorg';
+
+  @override
+  String get r3cTypeVbtcVaultRekey => 'vBTC Vault Rekey';
 }

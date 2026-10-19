@@ -305,6 +305,20 @@ class WebTransaction with _$WebTransaction {
         return l10n.r3cTypeVbtcBridgeExitToBtcComplete;
       case 42:
         return l10n.r3cTypeVbtcBridgeExitToBtcFailed;
+      // Bitcoin attestation (Core 9.0). 43, 45 and 46 are sender-less: from and
+      // to are "BTC_Attestation", so they reach no user's own history.
+      case 43:
+        return l10n.r3cTypeVbtcBtcReport;
+      case 44:
+        // One type for both: the requester raises a pinned withdrawal's fee,
+        // or gives the withdrawal up.
+        return nftDataValue('Function') == "VBTCWithdrawalRelease()"
+            ? l10n.r3cTypeVbtcWithdrawalRelease
+            : l10n.r3cTypeVbtcWithdrawalFeeRaise;
+      case 45:
+        return l10n.r3cTypeVbtcBtcReorg;
+      case 46:
+        return l10n.r3cTypeVbtcVaultRekey;
       default:
         return type.toString();
     }
@@ -347,6 +361,8 @@ class WebTransaction with _$WebTransaction {
     // V2 vBTC transaction types (mint, transfer, withdrawal, cancel, vote, bridge)
     if (type >= 25 && type <= 30) return true;
     if (type == 37 || type == 38) return true;
+    // A watched-vault withdrawal's fee raise or release.
+    if (type == 44) return true;
 
     return false;
   }
