@@ -310,9 +310,15 @@ class Transaction with _$Transaction {
       case 44:
         // One type for both: the requester raises a pinned withdrawal's fee,
         // or gives the withdrawal up.
-        return nftDataValue(parseNftData(this) ?? const {}, 'Function') == "VBTCWithdrawalRelease()"
-            ? l10n.r3cTypeVbtcWithdrawalRelease
-            : l10n.r3cTypeVbtcWithdrawalFeeRaise;
+        // Unreadable data gets the neutral name rather than a guess.
+        switch (nftDataValue(parseNftData(this) ?? const {}, 'Function')) {
+          case "VBTCWithdrawalRelease()":
+            return l10n.r3cTypeVbtcWithdrawalRelease;
+          case "VBTCWithdrawalFeeBump()":
+            return l10n.r3cTypeVbtcWithdrawalFeeRaise;
+          default:
+            return l10n.r3cTypeVbtcWithdrawalPin;
+        }
       case 45:
         return l10n.r3cTypeVbtcBtcReorg;
       case 46:

@@ -64,9 +64,11 @@ void main() {
     expect(_desktop(44, data: _coinPinData('VBTCWithdrawalRelease()')).typeLabel, 'vBTC Withdrawal Release');
     expect(_web(44, data: _coinPinData('VBTCWithdrawalFeeBump()')).typeLabel, 'vBTC Withdrawal Fee Raise');
     expect(_web(44, data: _coinPinData('VBTCWithdrawalRelease()')).typeLabel, 'vBTC Withdrawal Release');
-    // Unreadable data still gets a name.
-    expect(_desktop(44).typeLabel, 'vBTC Withdrawal Fee Raise');
-    expect(_web(44).typeLabel, 'vBTC Withdrawal Fee Raise');
+    // Unreadable or unknown data gets the neutral name, not a guess.
+    expect(_desktop(44).typeLabel, 'vBTC Withdrawal Pin');
+    expect(_web(44).typeLabel, 'vBTC Withdrawal Pin');
+    expect(_desktop(44, data: _coinPinData('Other()')).typeLabel, 'vBTC Withdrawal Pin');
+    expect(_web(44, data: 'not json').typeLabel, 'vBTC Withdrawal Pin');
   });
 
   test('type 44 is a vBTC transaction', () {

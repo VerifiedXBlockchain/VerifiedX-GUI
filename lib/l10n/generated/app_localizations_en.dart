@@ -11178,4 +11178,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3cTypeVbtcVaultRekey => 'vBTC Vault Rekey';
+
+  @override
+  String get r3cTypeVbtcWithdrawalPin => 'vBTC Withdrawal Pin';
 }

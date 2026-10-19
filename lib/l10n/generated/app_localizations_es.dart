@@ -11178,4 +11178,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3cTypeVbtcVaultRekey => 'Cambio de clave de bóveda vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalPin => 'Fijación de retiro vBTC';
 }

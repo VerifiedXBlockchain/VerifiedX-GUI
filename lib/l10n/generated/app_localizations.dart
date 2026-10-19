@@ -20690,6 +20690,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'vBTC Vault Rekey'**
   String get r3cTypeVbtcVaultRekey;
+
+  /// Transaction type 44 (VBTC_V2_COIN_PIN) when its data cannot be read to tell a fee raise from a release.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Pin'**
+  String get r3cTypeVbtcWithdrawalPin;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

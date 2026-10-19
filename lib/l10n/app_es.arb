@@ -10239,5 +10239,9 @@
   "r3cTypeVbtcVaultRekey": "Cambio de clave de bóveda vBTC",
   "@r3cTypeVbtcVaultRekey": {
     "description": "Transaction type 46 (VBTC_V2_VAULT_REKEY): a vault's key is replaced by one the validators made."
+  },
+  "r3cTypeVbtcWithdrawalPin": "Fijación de retiro vBTC",
+  "@r3cTypeVbtcWithdrawalPin": {
+    "description": "Transaction type 44 (VBTC_V2_COIN_PIN) when its data cannot be read to tell a fee raise from a release."
   }
 }
