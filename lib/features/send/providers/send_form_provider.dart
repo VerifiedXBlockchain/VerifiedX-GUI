@@ -382,13 +382,15 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
   /// False when the destination is one of the user's own addresses and they
   /// decline the warning; such a send only spends the network fee.
-  Future<bool> _confirmSendToOwnAddress(bool isBtc) async {
-    if (!isOwnSendAddress(address, _ownAddresses(isBtc))) {
+  /// [destination] is where the send goes when it is not the field as typed
+  /// (desktop: the address a name resolves to), and [shown] how to name it.
+  Future<bool> _confirmSendToOwnAddress(bool isBtc, {String? destination, String? shown}) async {
+    if (!isOwnSendAddress(destination ?? address, _ownAddresses(isBtc))) {
       return true;
     }
     final confirmed = await ConfirmDialog.show(
       title: globalL10n.sendOwnAddressTitle,
-      body: globalL10n.sendOwnAddressBody(address.trim()),
+      body: globalL10n.sendOwnAddressBody(shown ?? (destination ?? address).trim()),
       confirmText: globalL10n.actionContinue,
       cancelText: globalL10n.actionCancel,
     );
@@ -734,7 +736,11 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
       }
 
-      if (!await _confirmSendToOwnAddress(false)) {
+      if (!await _confirmSendToOwnAddress(
+        false,
+        destination: recipient,
+        shown: recipient == typedRecipient ? recipient : "$typedRecipient ($recipient)",
+      )) {
         return;
       }
 
