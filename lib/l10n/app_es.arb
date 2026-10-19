@@ -10241,6 +10241,28 @@
   "@bw2WatchedCancelBody": {
     "description": "Confirmation body for cancelling a watched-vault withdrawal."
   },
+  "r3hAddressOtherNetwork": "Esta dirección pertenece a otra red. Lo que se envíe allí nunca podría gastarse.",
+  "@r3hAddressOtherNetwork": {
+    "description": "Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet)."
+  },
+  "svcNameNotResolved": "No se pudo resolver {name} a una dirección. Revisa el nombre o envía a la dirección directamente.",
+  "@svcNameNotResolved": {
+    "description": "Send form error: a VFX name (ADNR) entered as the recipient resolves to no address.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "prvUnshieldMaxDecimals": "Un monto a desblindar tiene como máximo {places} decimales.",
+  "@prvUnshieldMaxDecimals": {
+    "description": "Unshield dialog error: the amount has more decimal places than the proof binds.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
   "bw2WatchedChangeNotSeen": "El último cambio no apareció en la cadena en unos minutos, así que probablemente se descartó. Puedes enviarlo de nuevo.",
   "@bw2WatchedChangeNotSeen": {
     "description": "Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on."

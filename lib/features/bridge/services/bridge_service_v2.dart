@@ -31,6 +31,22 @@ class BridgeServiceV2 extends BaseService {
     return null;
   }
 
+  /// The address a VFX name (ADNR) resolves to on this node, or null when it
+  /// resolves to nothing or the node cannot be asked.
+  Future<String?> resolveAdnr(String name) async {
+    try {
+      final response = await getText("/ResolveAdnr/${Uri.encodeComponent(name.trim().toLowerCase())}", cleanPath: false);
+      final data = jsonDecode(response);
+      if (data is Map && data['Success'] == true && data['Address'] is String && (data['Address'] as String).isNotEmpty) {
+        return data['Address'] as String;
+      }
+      return null;
+    } catch (e) {
+      print(e);
+      return null;
+    }
+  }
+
   // Future<String?> decompressData(String compressedData) async {
 
   //   await postJson("/GetImageUncompressedByte", body )

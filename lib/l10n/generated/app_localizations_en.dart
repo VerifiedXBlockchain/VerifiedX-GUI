@@ -11179,5 +11179,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2WatchedCancelBody => 'Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.';
 
   @override
+  String get r3hAddressOtherNetwork => 'This address belongs to another network. Anything sent there could never be spent.';
+
+  @override
+  String svcNameNotResolved(String name) {
+    return '$name could not be resolved to an address. Check the name, or send to the address itself.';
+  }
+
+  @override
+  String prvUnshieldMaxDecimals(int places) {
+    return 'An unshield amount has at most $places decimal places.';
+  }
+
+  @override
   String get bw2WatchedChangeNotSeen => 'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.';
 }

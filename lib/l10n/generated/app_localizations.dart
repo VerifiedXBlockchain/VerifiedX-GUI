@@ -20685,6 +20685,24 @@ abstract class AppLocalizations {
   /// **'Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.'**
   String get bw2WatchedCancelBody;
 
+  /// Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet).
+  ///
+  /// In en, this message translates to:
+  /// **'This address belongs to another network. Anything sent there could never be spent.'**
+  String get r3hAddressOtherNetwork;
+
+  /// Send form error: a VFX name (ADNR) entered as the recipient resolves to no address.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} could not be resolved to an address. Check the name, or send to the address itself.'**
+  String svcNameNotResolved(String name);
+
+  /// Unshield dialog error: the amount has more decimal places than the proof binds.
+  ///
+  /// In en, this message translates to:
+  /// **'An unshield amount has at most {places} decimal places.'**
+  String prvUnshieldMaxDecimals(int places);
+
   /// Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on.
   ///
   /// In en, this message translates to:
