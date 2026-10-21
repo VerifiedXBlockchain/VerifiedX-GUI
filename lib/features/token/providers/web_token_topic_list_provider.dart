@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/explorer_service.dart';
+import '../../web/models/paginated_response.dart';
 import '../models/token_vote_topic.dart';
 
 class WebTokenTopicListModel {
@@ -34,13 +35,18 @@ class WebTokenTopicListProvider extends StateNotifier<WebTokenTopicListModel> {
   final Ref ref;
   final String scId;
 
-  WebTokenTopicListProvider(this.ref, this.scId) : super(const WebTokenTopicListModel()) {
+  /// [fetchTopics] is for tests; the app reads the topics from Spyglass.
+  final Future<PaginatedResponse<WebTokenVoteTopic>> Function(String scId) fetchTopics;
+
+  WebTokenTopicListProvider(this.ref, this.scId, {Future<PaginatedResponse<WebTokenVoteTopic>> Function(String scId)? fetchTopics})
+      : fetchTopics = fetchTopics ?? ExplorerService().listTokenVotingTopics,
+        super(const WebTokenTopicListModel()) {
     load(1);
   }
 
   load(int page) async {
     state = state.copyWith(isLoading: true);
-    final data = await ExplorerService().listTokenVotingTopics(scId);
+    final data = await fetchTopics(scId);
     if (!mounted) {
       return;
     }
