@@ -8,6 +8,14 @@ class SendFormPrefill extends StatefulWidget {
   final TextEditingController amountController;
   final String address;
   final String amount;
+
+  /// Runs just before the fill, for steps that clear the form (selecting the
+  /// link's currency does).
+  final VoidCallback? beforeFill;
+
+  /// Runs once the form holds the link's recipient and amount.
+  final VoidCallback? afterFill;
+
   final Widget child;
 
   const SendFormPrefill({
@@ -16,6 +24,8 @@ class SendFormPrefill extends StatefulWidget {
     required this.amountController,
     required this.address,
     required this.amount,
+    this.beforeFill,
+    this.afterFill,
     required this.child,
   }) : super(key: key);
 
@@ -33,8 +43,10 @@ class _SendFormPrefillState extends State<SendFormPrefill> {
       if (!mounted) {
         return;
       }
+      widget.beforeFill?.call();
       widget.addressController.text = widget.address;
       widget.amountController.text = widget.amount;
+      widget.afterFill?.call();
     });
   }
 
