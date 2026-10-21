@@ -41,6 +41,9 @@ class WebTokenTopicListProvider extends StateNotifier<WebTokenTopicListModel> {
   load(int page) async {
     state = state.copyWith(isLoading: true);
     final data = await ExplorerService().listTokenVotingTopics(scId);
+    if (!mounted) {
+      return;
+    }
 
     state = state.copyWith(
       topics: [...state.topics, ...data.results],
@@ -51,6 +54,9 @@ class WebTokenTopicListProvider extends StateNotifier<WebTokenTopicListModel> {
   }
 }
 
-final webTokenTopicListProvider = StateNotifierProvider.family<WebTokenTopicListProvider, WebTokenTopicListModel, String>((ref, scId) {
+// autoDispose so the list is fetched again each time the voting sheet opens;
+// a topic created or confirmed since the last open would otherwise never show
+// until a page reload.
+final webTokenTopicListProvider = StateNotifierProvider.autoDispose.family<WebTokenTopicListProvider, WebTokenTopicListModel, String>((ref, scId) {
   return WebTokenTopicListProvider(ref, scId);
 });
