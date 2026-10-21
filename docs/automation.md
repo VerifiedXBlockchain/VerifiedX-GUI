@@ -85,3 +85,7 @@ Each `$HOME/fvm/versions/3.7.12/bin/dart run tool/drive.dart --vm-service-url <u
 - `screenshot <path>` writes a PNG of the current frame to `<path>` (the driver waits two seconds before capturing).
 
 A finder that matches more than one widget fails with "Too many elements"; use a key. Text matches are exact, so `wait-for-text VFX` finds the boot screen's `VFX` label while a string that only appears inside a longer label does not match.
+
+### Driver on the real data folder
+
+`make run_macos_driver_real` runs the same driver flavor without the `AUTOMATION` define. The driver extension and the `ByLabel` finder are compiled in by `lib/main_automation.dart` regardless of the define, so `tool/drive.dart` works the same; what changes is everything the define isolates: the Core CLI runs on the real `~/rbxtest` folder with the installed wallet's config, accounts and keys, preferences use the installed wallet's own keys (no `automation.` prefix), log, config and media paths are the real ones, and the GUI and CLI update dialogs can appear at boot (decline them). Nothing is isolated, so before using it: quit the installed wallet (the CLI holds the databases open), back up `~/rbxtest` and the wallet's preferences (`defaults export io.reserveblock.wallet <file>`), and keep the wallet closed until the driver app has quit. Used by the smoke pass's macOS lane (`docs/testing/SMOKE.md`) at Tyler's request on 2026-10-21.
