@@ -57,9 +57,10 @@ void main() {
     test("refuses the other network's address with its own message", () {
       final other = _address(vfxAddressVersionByte == 0x3C ? 0x89 : 0x3C);
       final ours = _address(vfxAddressVersionByte);
-      // The other network's letter fails the first-letter check first; the
-      // look-alike byte reaches the network check.
-      expect(formValidatorRbxAddress(other), isNotNull);
+      // A real address from the other network starts with that network's
+      // letter, and still gets the network message rather than "invalid".
+      expect(other[0], isNot(ours[0]));
+      expect(formValidatorRbxAddress(other), contains('another network'));
       expect(formValidatorRbxAddress(ours), isNull);
 
       final lookalike = _address(vfxAddressVersionByte + 1);
@@ -77,7 +78,7 @@ void main() {
 
     test('still checks a plain address', () {
       expect(formValidatorRbxAddress(_address(vfxAddressVersionByte), true), isNull);
-      expect(formValidatorRbxAddress('notanaddress', true), isNotNull);
+      expect(formValidatorRbxAddress('notanaddress', true), contains('Invalid'));
       expect(formValidatorRbxAddress(_address(vfxAddressVersionByte + 1), true), contains('another network'));
     });
 
@@ -90,6 +91,7 @@ void main() {
     test("refuses the other network's address, as it refuses a vault", () {
       expect(formValidatorVbtcRecipient(_address(vfxAddressVersionByte)), isNull);
       expect(formValidatorVbtcRecipient(_address(vfxAddressVersionByte + 1)), contains('another network'));
+      expect(formValidatorVbtcRecipient(_address(vfxAddressVersionByte == 0x3C ? 0x89 : 0x3C)), contains('another network'));
     });
   });
 
