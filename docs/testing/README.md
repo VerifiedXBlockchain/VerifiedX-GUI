@@ -7,32 +7,33 @@ This suite lists every feature of the desktop GUI (macOS) and the web wallet tha
 - **Platforms:** the web wallet and the macOS desktop GUI. Windows is out of scope.
 - **Out of scope:** P2P shop features (P2P Auctions, web shops, desktop auction houses, remote shops, listings, bids and shop chat), the vBTC to Base bridge, and the MOTHER dashboard.
 - **Network:** testnet, with real transactions. Every flow that moves funds is executed end to end on testnet and confirmed on chain. Mainnet gets only the read-only checks marked `Mainnet smoke`, and nothing is ever signed or sent on mainnet.
-- **Runner:** Claude. Web cases run through Claude in Chrome; macOS cases run through `tool/drive.dart` against the Flutter Driver build. Both are described in `docs/automation.md`, which is required reading before a run.
+- **Runner:** Claude. Web cases run through a browser Claude drives (Claude in Chrome, or the built-in browser pane of the Claude desktop app; the hooks are the same); macOS cases run through `tool/drive.dart` against the Flutter Driver build. Both are described in `docs/automation.md`, which is required reading before a run.
+- **Smoke pass.** A prioritised, agent-owned-account variant of this suite for checking one build quickly is defined in [SMOKE.md](SMOKE.md). It reuses every case and convention here and changes only the account ownership, the targets, the order and where findings go.
 - **Lanes:** the web lane and the macOS lane run in parallel, each with its own test accounts, so neither can disturb the other's balances or objects. A final cross-platform phase then moves funds and assets between the two lanes' accounts. See "Running a release pass".
 
 ## Areas
 
 | File | Area | Cases | P0 | P1 | P2 |
 |---|---|---|---|---|---|
-| [01-launch-auth.md](01-launch-auth.md) | Desktop boot and Core CLI, wallet creation and import, encryption, unlock, logout, key export | 62 | 27 | 26 | 9 |
+| [01-launch-auth.md](01-launch-auth.md) | Desktop boot and Core CLI, wallet creation and import, encryption, unlock, logout, key export | 63 | 28 | 26 | 9 |
 | [02-dashboard-navigation-settings.md](02-dashboard-navigation-settings.md) | Dashboard, balances, navigation, status bar and sync, settings, language | 42 | 7 | 22 | 13 |
 | [03-send-receive-transactions.md](03-send-receive-transactions.md) | VFX send, prefilled send, receive, transaction list, filters, detail | 39 | 4 | 24 | 11 |
-| [04-btc-vbtc.md](04-btc-vbtc.md) | BTC accounts, vBTC tokenization, transfers, multi-transfer, withdrawals | 52 | 19 | 28 | 5 |
+| [04-btc-vbtc.md](04-btc-vbtc.md) | BTC accounts, vBTC tokenization, transfers, multi-transfer, withdrawals | 59 | 21 | 32 | 6 |
 | [05-privacy.md](05-privacy.md) | Shield, unshield, private transfer, consolidate, for VFX and vBTC | 29 | 5 | 12 | 12 |
 | [06-vault-accounts.md](06-vault-accounts.md) | Vault (reserve) accounts: create, activate, send, recover, manage | 32 | 11 | 14 | 7 |
-| [07-domains.md](07-domains.md) | VFX and BTC domains (ADNR): create, transfer, delete | 23 | 4 | 17 | 2 |
-| [08-fungible-tokens.md](08-fungible-tokens.md) | Fungible tokens: create, mint, transfer, burn, pause, voting topics | 34 | 2 | 19 | 13 |
+| [07-domains.md](07-domains.md) | VFX and BTC domains (ADNR): create, transfer, delete | 23 | 4 | 18 | 1 |
+| [08-fungible-tokens.md](08-fungible-tokens.md) | Fungible tokens: create, mint, transfer, burn, pause, voting topics | 34 | 2 | 20 | 12 |
 | [09-smart-contracts-nfts.md](09-smart-contracts-nfts.md) | Smart contract wizard, templates, drafts, bulk create, NFTs, evolve, transfer, burn | 60 | 4 | 30 | 26 |
 | [11-network-operations.md](11-network-operations.md) | Validator, operations, beacons, adjudicator, nodes, data node, network voting | 41 | 1 | 19 | 21 |
 | [12-payments-faucet-keygen.md](12-payments-faucet-keygen.md) | On-ramp payments, Butterfly, faucet | 20 | 0 | 13 | 7 |
 | [13-cross-platform.md](13-cross-platform.md) | Transfers between the web lane and the macOS lane: VFX, BTC, vBTC, NFTs, tokens, domains, vaults | 16 | 7 | 9 | 0 |
-| **Total** | | **450** | **91** | **233** | **126** |
+| **Total** | | **458** | **94** | **239** | **125** |
 
 Findings from writing the cases are triaged into three files: [BUGS-TO-FIX.md](BUGS-TO-FIX.md) lists confirmed defects with file and line, [QUESTIONS-FOR-TYLER.md](QUESTIONS-FOR-TYLER.md) lists the product decisions, and [OPEN-QUESTIONS.md](OPEN-QUESTIONS.md) is the full index, including the facts the first run will establish.
 
 ## Environment
 
-**Web.** Build or serve the testnet automation build (`make run_web_automation`, or a `flutter build web --dart-define TESTNET=true --dart-define AUTOMATION=true` served from `build/web` on port 42069) and open `http://localhost:42069/?automation=1`. The parameter must be present on every fresh load. Keep the tab visible. Screens that embed an iframe (on-ramp and payment providers) do not render in automation mode; the cases that need them say so and are run against the deployed testnet web wallet instead, read-only.
+**Web.** Build or serve the testnet automation build (`make run_web_automation`, or a `flutter build web --dart-define TESTNET=true --dart-define AUTOMATION=true` served from `build/web` on port 42069) and open `http://localhost:42069/?automation=1`. The parameter must be present on every fresh load. A deployed build (`https://wallet-testnet.verifiedx.io/?automation=1`) can be driven the same way after `fltA11y.enable()`; see `docs/automation.md`, "Deployed web wallet". Where a case names `localhost:42069`, read the origin under test. Keep the tab visible. Screens that embed an iframe (on-ramp and payment providers) do not render in automation mode; the cases that need them say so and are run against the deployed testnet web wallet instead, read-only.
 
 **macOS.** Quit any running VFX wallet first; `pgrep -fl VerifiedXCore` must be empty. Start `make run_macos_driver` with its output redirected to a file, read the Observatory URL from it, and drive the app with `tool/drive.dart`. Automation builds keep the Core CLI data under `~/Library/Application Support/vfx-gui-automation` and the preferences under an `automation.` prefix, so the real wallet is never touched. Delete that folder for a clean-state run. The first run in a fresh folder downloads about 250 MB and syncs testnet, so allow time before cases that need a synced chain.
 
@@ -62,6 +63,8 @@ Some cases need data that only a few areas use. They read these optional variabl
 | `TEST_REMOTE_BEACON_IP`, `TEST_REMOTE_BEACON_PORT` | Beacon cases (11) |
 
 No account appears in both files.
+
+**Agent-owned accounts.** A smoke pass ([SMOKE.md](SMOKE.md)) does not use these files. Its lanes create their own accounts in the app under test and keep them, with the same variable names, in `~/.config/vfx-release-tests/agent/accounts.<lane>.env` (mode 600), so the agent may type those passwords and keys freely; Tyler funds the addresses once after setup.
 
 Bitcoin for both lanes comes from one shared testnet4 treasury in `~/.config/vfx-release-tests/treasury.env` (mode 600), which Tyler funds from a testnet4 faucet:
 
@@ -143,3 +146,7 @@ A pass has two phases. Phase 1 runs the two lanes in parallel, one Claude agent 
 6. Each phase writes its own results file: `docs/testing/runs/<run-id>-web.md`, `docs/testing/runs/<run-id>-macos.md` and `docs/testing/runs/<run-id>-cross.md`. Each has one row per case run in that phase: id, result (`pass`, `fail`, `blocked`, `skipped`), and a one-line note for anything other than pass. A case listing both platforms therefore has a row in each lane's file.
 7. **Return leftover BTC.** After phase 2, the same agent logs in with each lane's BTC key in turn and sends anything above 0.0002 testnet BTC back to `TEST_BTC_TREASURY_ADDRESS`, so the treasury keeps the balance between runs. Record the treasury balance at the start and end of the run in the cross-platform results file.
 8. The release is blocked while any `P0` case fails in any of the three files.
+
+## Running a smoke pass
+
+See [SMOKE.md](SMOKE.md): same cases and conventions, agent-owned accounts, the deployed web wallet as the web target, core functionality first and Bitcoin last, and one tracker issue per defect on the `E2E Testing` board.

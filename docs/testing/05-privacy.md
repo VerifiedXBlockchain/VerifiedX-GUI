@@ -220,11 +220,13 @@ This area covers the PRISM privacy layer on the desktop GUI: the PLONK proof-sys
 1. Open `Unshield VFX`, type `abc` as the address and `0.1` as the amount, submit.
 2. Enter a valid address (the value of `TEST_VFX_B_ADDRESS`) and amount `0`, submit.
 3. Enter an amount larger than the shielded balance, submit.
+4. Enter B's address and amount `0.123456789`, submit; then change the amount to `0.12345678` and cancel at the confirmation if one appears.
 
 **Expected**
 - Step 1: toast `Please enter a valid VFX address`.
 - Step 2: toast `Please enter a valid amount`.
 - Step 3: toast `Unshield failed: <node message>`; nothing is sent.
+- Step 4 (9.0): `0.123456789` is refused with `An unshield amount has at most 8 decimal places.` and nothing is sent (GUI PR #44; Core enforces the same from testnet block 1,172,000). `0.12345678` passes the field validation.
 
 **Cleanup:** none.
 

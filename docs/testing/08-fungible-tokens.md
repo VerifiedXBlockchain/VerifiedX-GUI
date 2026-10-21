@@ -265,18 +265,22 @@ This area covers fungible tokens on the web wallet and the macOS desktop GUI: th
 **Cleanup:** none.
 
 ### TC-TOKEN-015 · Mint amount validation
-**Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no
+**Platforms:** Web, macOS · **Priority:** P1 · **Moves funds:** yes (step 6 resumes the token)
 
-**Preconditions:** On the owner view of T1.
+**Preconditions:** On the owner view of T1. Steps 5 and 6 need a mintable token with 2 decimal places owned by A: create `qa-<run id>-<lane>-2dp` as in TC-TOKEN-009 with `Decimal Places` set to 2 if T1 uses more.
 
 **Steps**
 1. Open `Mint Tokens`, submit an empty amount.
 2. Enter `1.2.3` and submit.
 3. Try to type `abc`.
 4. Cancel.
+5. (9.0) On the 2-decimal token, open `Mint Tokens`, enter `0.001`, submit.
+6. (9.0) Pause that token (`Pause TXs`, as in TC-TOKEN-021), open `Mint Tokens`, enter `1`, submit; then resume it and mint `1` again.
 
 **Expected**
 - Empty: "Amount is required.". `1.2.3`: "Invalid Amount.". Letters cannot be typed. Nothing is sent.
+- Step 5: `This token allows at most 2 decimal places.` and nothing is sent (GUI PR #50 checks Core's `TokenMintRulesHeight` rules client-side before sending; the height itself is still unset on both networks).
+- Step 6: `This token contract is paused, so no tokens can be minted.` while paused; after the resume confirms, the mint of `1` is sent and the supply rises by 1.
 
 **Cleanup:** none.
 

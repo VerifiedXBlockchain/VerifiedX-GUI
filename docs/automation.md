@@ -28,6 +28,16 @@ How Claude drives it when the tree is inside the shadow root, or when it needs v
 
 Chrome pauses `requestAnimationFrame` for a hidden tab (another tab in front, or the window fully covered), and Flutter then renders nothing: a click or tap is accepted, but the screen and the semantics tree only change once frames run again. Keep the automation tab visible. A screenshot through the extension forces a few frames even while the tab stays hidden, which is enough to flush a pending change and is what the verification below relied on.
 
+## Deployed web wallet
+
+The deployed builds (`https://wallet-testnet.verifiedx.io`, and the mainnet wallet) ship the same `web/index.html`, so `?automation=1` puts the engine in light DOM there too (checked on 2026-10-21 against the 8.0.6 testnet deploy: the `flt-glass-pane` wrapper is in the served page). Those builds are made without `AUTOMATION=true`, so nothing clicks the semantics placeholder for them: after the page loads, inject `tool/automation/flt_semantics.js` and call `fltA11y.enable()`, then wait for `fltA11y.status()` to report `mode: "light"` and a node count above zero (a few seconds). Everything in "Web wallet" above then applies, including the hash router dropping the parameter on reload and the `HtmlElementView` limitation.
+
+Two things differ from the local build. The service worker caches `main.dart.js?version=<APP_V>`, so right after a redeploy that kept the same version string the browser can hold the previous bundle: clear site data once and record the version from the landing screen and from `main.dart.js?version=` in the page source. And the deployed build is a release build: no debug prefill in password prompts, and BTC transactions show their real pending state (unlike the debug builds, see `docs/testing/README.md`, "Known limits").
+
+## Built-in browser pane
+
+Claude's built-in browser pane (tools `mcp__Claude_Browser__*`) drives the wallet exactly as the Chrome extension does: `navigate`, `read_page`, `find`, `form_input`, `computer` (clicks, typing, screenshots) and `javascript_tool` have the same names and the case hooks (`button "Send"`, `textbox "Amount"`, `fltA11y.tap(...)`, `await fltA11y.type(...)`) apply unchanged. The pane has no password-manager or other extensions, keeps the origin's site data for the session, and its tab is visible while the pane is open, so frames are not paused. Site access may need a one-time approval from the person at the machine.
+
 ## Desktop (macOS)
 
 `make test_integration_macos` runs `flutter test integration_test -d macos` with `TESTNET=true` and `AUTOMATION=true`. `make run_macos_automation` runs the app itself with the same defines. Both need a build of the macOS runner.

@@ -13,6 +13,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 - Debug builds and pending BTC transactions: `BtcTransactionListTile` forces every transaction to show as confirmed when `kDebugMode && Env.isTestNet`, which is true for both `make run_web_automation` and `make run_macos_driver`. On those builds the BTC Pending badge, Replace By Fee and Rebroadcast TX never appear on desktop. Cases that need them say so and run on a testnet profile or release build instead.
 - Dialog buttons without keys are tapped by text on macOS (`tap-text Yes`). Where the same text is also on screen (for example `Send` in the side nav) and `drive.dart` reports "Too many elements", record the step as blocked with that note: it is an automation gap, not a product failure.
 - Bulk vBTC transfer: `BULK_VBTC_TRANSFER_ENABLED` is now `true` on every network (the comment in `app_constants.dart` says the multi-contract transfer went live on mainnet at block 7,281,000 on 2026-09-11). Earlier notes describe it as testnet-only; this suite still only sends on testnet.
+- **9.0 watched vaults (testnet from block 1,172,000, 2026-10-20).** A vBTC V2 contract created from that height is *watched*: the chain pins the Bitcoin transaction that pays each withdrawal and the vault's signers send it; the requester runs no FROST ceremony and records no completion (the node refuses a type 28 on such a vault), and can raise the fee or release the withdrawal (type 44) or cancel it while it is still `Waiting` (type 29, no vote). Contracts created before that height keep the legacy FROST path described in TC-BTC-042 to TC-BTC-052 until testnet block 1,192,500, when legacy vaults freeze. Every contract a run creates on testnet now is watched, so the legacy withdrawal cases are recorded `skipped` unless a legacy vault is at hand, and the watched cases in "Watched-vault withdrawals (9.0)" run instead. The web wallet tells the two apart from Spyglass `GET /btc/vbtc-v2/withdraw/complete/prepare/` (a watched vault answers with the withdrawal's state instead of a FROST preparation; GUI PRs #43, #46, #47, #49). The desktop dialog has no watched-vault branch (VerifiedX-Issues #284 listed none), which TC-BTC-059 establishes.
 
 ## BTC accounts
 
@@ -979,5 +980,130 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 - `Cancel Withdrawal` shows `Cancellation request submitted. Awaiting validator votes.` and closes the dialog.
 - If signing outlasts the 3-minute request, the dialog shows `Checking Withdrawal Status` with `The request timed out. Checking whether the withdrawal completed anyway...` and `Signing can outlast the request. Please wait rather than retrying — retrying can broadcast a second Bitcoin transaction.`, then success or failure within 2 minutes.
 - Starting a new request while one is open returns the node's `You already have an active withdrawal request...` message and offers `Pending Withdrawal Found` / `You have a pending withdrawal for this contract. Would you like to complete it?`
+
+**Cleanup:** none.
+
+## Watched-vault withdrawals (9.0)
+
+These cases cover withdrawals from a vault created after testnet block 1,172,000 (see the area preconditions). On web they replace TC-BTC-043 and TC-BTC-048 to TC-BTC-051; on desktop TC-BTC-059 replaces TC-BTC-042 and TC-BTC-052. Both lanes' contracts in a current run are watched, so run these and record the legacy cases `skipped`. Strings are the web wallet's `bw2Watched*` l10n keys (GUI PRs #43, #46, #47).
+
+### TC-BTC-053 · Withdraw from a watched vault: status step, no FROST (web)
+**Platforms:** Web · **Priority:** P0 · **Moves funds:** yes · **Needs BTC confirmations**
+
+**Preconditions:** Logged in as account A, holding at least 0.00003 vBTC on a contract created after block 1,172,000 (`qa-<runid>-w1`), no open withdrawal on it, at least 0.001 VFX.
+
+**Steps**
+1. Open the token detail and click `button "Withdraw"`.
+2. In `Amount`, type `0.00002` into `textbox "Withdrawal Amount"`, click `button "Submit"`. In `BTC Address`, type the value of `TEST_BTC_TREASURY_ADDRESS` into `textbox "Receiving BTC Address"`, click `button "Submit"`.
+3. In the `Fee Rate` picker keep `Economy`, click `button "Continue"`, then `button "Yes"` in `Confirm Withdrawal Request`.
+4. Keep the tab visible. Wait up to 5 minutes for `Waiting for Confirmation` to end, then screenshot every state the dialog shows over the next 10 minutes (it refreshes every 20 seconds).
+5. Close the dialog. Open `Transactions`, then the token detail's `Withdrawal History:`.
+6. Add the pinned Bitcoin transaction to the `Pending BTC` table and check mempool.space for up to 60 minutes.
+
+**Expected**
+- After `Waiting for Confirmation` the dialog reads `Checking Withdrawal Status`, then `Withdrawal in Progress` with one of `Your withdrawal request is not in a block yet. This updates by itself.`, `The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.`, or, once pinned, `The Bitcoin transaction that pays this withdrawal is fixed. The vault's signers send it on their own, and the withdrawal completes when Bitcoin confirms it.` together with the txid (mempool link), `Current fee rate: <n> sat/vB`, the hint `If it is not confirming, raise its fee…`, a `New fee rate (sat/vB)` field and the buttons `Raise Fee` and `Release`.
+- No `FROST Signing`, `Recording Completion` or `Action Required` step appears, and the dialog can be closed at any point.
+- The pinned transaction appears on mempool.space paying `TEST_BTC_TREASURY_ADDRESS`; when it confirms the dialog (reopened from the history row) reads completed or closed and `My Balance` drops by 0.00002. The transactions list shows the request and no completion transaction.
+- The history row never offers `Pending — tap to resume`.
+
+**Cleanup:** none.
+
+### TC-BTC-054 · Raise the fee of a pinned watched withdrawal (web)
+**Platforms:** Web · **Priority:** P1 · **Moves funds:** yes
+
+**Preconditions:** TC-BTC-053's withdrawal is pinned (the dialog shows a txid and `Current fee rate: N sat/vB`) and Bitcoin has not confirmed it yet. Account A has at least 0.001 VFX.
+
+**Steps**
+1. Type `N` into `New fee rate (sat/vB)` and click `button "Raise Fee"`.
+2. Type `5001`, click `button "Raise Fee"`.
+3. Type `N+5`, click `button "Raise Fee"`, confirm the fee dialog.
+4. Watch the dialog for up to 3 minutes. Then open `Transactions`.
+
+**Expected**
+- Step 1: `At least N+1 sat/vB` under the field, nothing sent. Step 2: `At most 5000 sat/vB`, nothing sent.
+- Step 3: a type 44 transaction (`VBTC_V2_COIN_PIN`, fee bump) is sent from A to A through Spyglass `/raw/*`; both buttons grey out with `Sent. The actions come back once the chain shows the change. If nothing changes within a few minutes, they come back so you can send again.`
+- Within a block or two the txid changes and the rate reads `N+5`; the buttons return. If nothing changes within 3 minutes the note reads `The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.` and the buttons return: record that with the transaction hash as a finding.
+- The transactions list labels the type 44 row `vBTC Withdrawal Fee Raise`.
+
+**Cleanup:** none.
+
+### TC-BTC-055 · Release a pinned watched withdrawal (web)
+**Platforms:** Web · **Priority:** P1 · **Moves funds:** yes · **Needs BTC confirmations**
+
+**Preconditions:** A second withdrawal of `0.00001` from the same contract, started as in TC-BTC-053, is pinned and unconfirmed.
+
+**Steps**
+1. Type a rate above the current one into `New fee rate (sat/vB)` and click `button "Release"`; confirm.
+2. Watch the dialog; add the release transaction to the `Pending BTC` table and check mempool.space for up to 60 minutes.
+3. Open `Transactions`.
+
+**Expected**
+- The dialog reads `This withdrawal is being released. When Bitcoin confirms the release, its Bitcoin is back in the vault and your vBTC is refunded, less the release's Bitcoin fee.`, then, once Bitcoin confirms, `This withdrawal is closed. Its vBTC was returned to you.`
+- `My Balance` is back to its value before the request, less the release's Bitcoin fee.
+- A release whose rate does not beat the relay cost is refused with the node's message and nothing changes. The transactions list labels the row `vBTC Withdrawal Release`.
+
+**Cleanup:** none.
+
+### TC-BTC-056 · Close and resume the watched-withdrawal dialog (web)
+**Platforms:** Web · **Priority:** P1 · **Moves funds:** no
+
+**Preconditions:** A watched withdrawal of A's is in progress (TC-BTC-053 or TC-BTC-055, not yet closed).
+
+**Steps**
+1. Close the dialog while it reads `Withdrawal in Progress`.
+2. Reload with `?automation=1`, log back in as A, open the token detail and click the withdrawal's row in `Withdrawal History:`.
+3. Close it again and click `button "Withdraw"` on the same token.
+
+**Expected**
+- Step 2 reopens the dialog at `Withdrawal in Progress` with the same state, txid and rate, with no amount or address prompt.
+- Step 3 either reopens the same open withdrawal or starts a new request (the node allows several per vault from 9.0); record which, and that no FROST step appears either way.
+
+**Cleanup:** none.
+
+### TC-BTC-057 · Cancel a watched withdrawal while it is Waiting (web)
+**Platforms:** Web · **Priority:** P1 · **Moves funds:** yes
+
+**Preconditions:** A fresh withdrawal of `0.00001` from A's contract, started as in TC-BTC-053, whose dialog still reads `…not in a block yet…` or `The chain is fixing…` (no txid pinned).
+
+**Steps**
+1. Click `button "Cancel Withdrawal"`, read the body, confirm with `button "Yes"`.
+2. Wait up to 2 minutes, watching the dialog.
+
+**Expected**
+- The body reads `Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.`
+- A type 29 from A is sent (Spyglass `withdraw/cancel/prepare`, then send); once it is mined the dialog reads `This withdrawal is closed. Its vBTC was returned to you.` and `My Balance` is back.
+- `Cancel Withdrawal` is absent once a txid is pinned.
+
+**Cleanup:** none.
+
+### TC-BTC-058 · Watched withdrawal actions from a second account (web)
+**Platforms:** Web · **Priority:** P2 · **Moves funds:** no
+
+**Preconditions:** An open watched withdrawal requested by A; account B holds vBTC on the same contract (TC-BTC-033) and is the active account (TC-AUTH-033).
+
+**Steps**
+1. Open the contract's detail as B and open A's withdrawal from `Withdrawal History:`.
+2. Try `Raise Fee`, `Release` and, if shown, `Cancel Withdrawal`.
+
+**Expected**
+- Each action is refused with `Only the account that requested this withdrawal can change it. Switch to <A's address> first.` and nothing is sent.
+
+**Cleanup:** switch back to A.
+
+### TC-BTC-059 · Withdraw from a watched vault on desktop (macOS)
+**Platforms:** macOS · **Priority:** P0 · **Moves funds:** yes · **Needs BTC confirmations**
+
+**Preconditions:** As TC-BTC-042, on a contract created after block 1,172,000 (`qa-<runid>-m1`).
+
+**Steps**
+1. Run TC-BTC-042 steps 1 to 4 (`vbtc:withdraw`, treasury address, `0.00002`, `Half Hour`, `vbtc:submit`, `Yes`).
+2. Watch the processing dialog for up to 10 minutes and screenshot every state it shows; copy any error text verbatim.
+3. Dismiss or finish the dialog. Open `Transactions` and the token detail.
+4. Add the withdrawal to the `Pending BTC` table; check mempool.space for a transaction paying `TEST_BTC_TREASURY_ADDRESS` for up to 60 minutes.
+
+**Expected**
+- **Behaviour to establish on this run.** The desktop dialog was written for the FROST path (`Waiting for Confirmation` → `Processing Withdrawal` → `Withdrawal Complete`), and the 9.0 integration listed no desktop watched-vault item, so what happens depends on what the local Core CLI does with a request on a watched vault. Record exactly what the dialog shows at each stage.
+- Pass when: the request confirms, the chain pins and pays a Bitcoin transaction to the treasury (visible on mempool.space), `My Balance` drops by 0.00002 once Bitcoin confirms, and the dialog does not report a failure for a withdrawal that is in fact progressing.
+- File a P0 issue when: the dialog reports `Withdrawal Failed` (or `Checking Withdrawal Status` without end) while the chain pays; the wallet attempts FROST signing or a completion transaction on the watched vault; or vBTC is debited with no Bitcoin paid within 60 minutes of the pin.
 
 **Cleanup:** none.
