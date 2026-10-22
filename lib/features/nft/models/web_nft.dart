@@ -13,6 +13,18 @@ import 'nft.dart';
 part 'web_nft.freezed.dart';
 part 'web_nft.g.dart';
 
+/// A stage's `EvolveDate` from Spyglass's contract data: an ISO 8601 string
+/// as the chain stores it ("2026-10-22T04:00:00Z"), or epoch seconds.
+DateTime? webEvolveDate(dynamic value) {
+  if (value is num) {
+    return DateTime.fromMillisecondsSinceEpoch((value * 1000).round());
+  }
+  if (value is String) {
+    return DateTime.tryParse(value);
+  }
+  return null;
+}
+
 @freezed
 abstract class WebNft with _$WebNft {
   const WebNft._();
@@ -109,9 +121,7 @@ abstract class WebNft with _$WebNft {
                 description: phase["Description"],
                 evolutionState: phase["EvolutionState"],
                 isCurrentState: phase['IsCurrentState'] ?? false,
-                dateTime: phase['EvolveDate'] != null && phase['EvolveDate'] is num
-                    ? DateTime.fromMillisecondsSinceEpoch(phase['EvolveDate'] * 1000)
-                    : null,
+                dateTime: webEvolveDate(phase['EvolveDate']),
                 blockHeight: phase['EvolveBlockHeight'],
                 properties: properties,
                 webAsset: webAsset,
