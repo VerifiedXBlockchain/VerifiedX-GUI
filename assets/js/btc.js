@@ -45831,11 +45831,12 @@
               outputSize += P2WPKH_OUTPUT_SIZE;
               const txSize = inputSize + outputSize + 10;
               if (!feeRate) {
-                const feeRates = await this.getFeeRates();
-                feeRate = feeRates?.economyFee || (this.network == TESTNET2 ? 2 : 5);
-              }
-              if (this.network == TESTNET2) {
-                feeRate = 5;
+                if (this.network == TESTNET2) {
+                  feeRate = 5;
+                } else {
+                  const feeRates = await this.getFeeRates();
+                  feeRate = feeRates?.economyFee || 5;
+                }
               }
               const fee = txSize * feeRate;
               const change = inputSum - amount - fee;
