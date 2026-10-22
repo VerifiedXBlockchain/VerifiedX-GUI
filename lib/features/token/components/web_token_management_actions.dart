@@ -260,7 +260,7 @@ class WebPauseTokenButton extends BaseComponent {
         label: token.isPaused ? l10n.r3hPendingResume : l10n.r3hPendingPause,
         processing: true,
         variant: AppColorVariant.Light,
-        onPressed: () {
+        onPressedWhileProcessing: () {
           Toast.message(l10n.tokenStateChangePendingToast);
         },
       );

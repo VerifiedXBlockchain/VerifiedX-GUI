@@ -14,23 +14,34 @@ class CurrencySegementedButton extends BaseComponent {
   final Function(CurrencyType)? onChange;
   final bool shouldToggleGlobal;
   final bool includeAny;
+
+  /// For Send and Receive, which render the session's selected account: the
+  /// segment shows that account's currency when the app-wide choice names
+  /// another (the price chart, the balance cards and the account list set it
+  /// on their own). The app-wide choice is not written back: tabs stay
+  /// mounted when hidden, and other screens use it as their filter.
+  final bool followSession;
   const CurrencySegementedButton({
     super.key,
     this.onChange,
     this.includeAny = true,
     this.shouldToggleGlobal = true,
+    this.followSession = false,
   });
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(currencySegementedButtonProvider.notifier);
     final state = ref.watch(currencySegementedButtonProvider);
+    final shown = followSession
+        ? currencyMatchingSession(state, btcSelected: ref.watch(sessionProvider.select((v) => v.btcSelected)), includeAny: includeAny) ?? state
+        : state;
 
     return SegmentedButton<CurrencyType>(
       multiSelectionEnabled: false,
       selectedIcon: null,
       showSelectedIcon: false,
-      selected: {state},
+      selected: {shown},
       style: ButtonStyle(
         side: MaterialStateProperty.all(
           BorderSide(
@@ -41,7 +52,7 @@ class CurrencySegementedButton extends BaseComponent {
         backgroundColor: MaterialStateProperty.resolveWith(
           (states) {
             if (states.contains(MaterialState.selected)) {
-              switch (state) {
+              switch (shown) {
                 case CurrencyType.any:
                   return Colors.white;
                 case CurrencyType.vfx:

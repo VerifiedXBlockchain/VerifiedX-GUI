@@ -51,6 +51,19 @@ class CurrencySegementedButtonProvider extends StateNotifier<WebCurrencyType> {
     }
     ref.read(sendFormProvider.notifier).clear();
   }
+
+  /// For a login or an account switch, which select the account's VFX
+  /// address: shows VFX without selecting it again or clearing the send form.
+  void followVfxSelection() {
+    state = currencyAfterVfxSelection(state);
+  }
+}
+
+/// The segment to show once an account's VFX address is the selected account.
+/// BTC or Vault left over from the previous account would label the VFX form,
+/// address and domain as another currency; "All" covers VFX and stays.
+WebCurrencyType currencyAfterVfxSelection(WebCurrencyType current) {
+  return current == WebCurrencyType.any ? current : WebCurrencyType.vfx;
 }
 
 final webCurrencySegementedButtonProvider = StateNotifierProvider<CurrencySegementedButtonProvider, WebCurrencyType>((ref) {

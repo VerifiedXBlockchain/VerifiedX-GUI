@@ -82,11 +82,13 @@ class NftNavigator extends BaseComponent {
                         ? () {
                             if (minted) {
                               ref.read(mintedNftListProvider.notifier).clearSearch();
-                              ref.read(mintedNftListProvider.notifier).load(1);
                             } else {
                               ref.read(nftListProvider.notifier).clearSearch();
-                              ref.read(nftListProvider.notifier).load(1);
                             }
+                            // Reloads as Search does, with the account's
+                            // addresses on web; without them the web list
+                            // kept the last search's results.
+                            handleSearch();
                           }
                         : null,
                   ),

@@ -94,15 +94,16 @@ class _UnshieldVbtcDialogState extends ConsumerState<UnshieldVbtcDialog> {
     if (!await VfxFeeGuard.check(ref)) return;
 
     final toAddress = _toAddressController.text.trim();
-    if (!isValidRbxAddress(toAddress)) {
-      Toast.error(globalL10n.prvEnterValidVfxAddress);
+    // Admission refuses an unshield to another network's address at every
+    // height (Core's RecipientIsThisNetworks covers unshields). Checked before
+    // the first-letter rule, which such an address would fail first.
+    if (isOtherNetworksVfxAddress(toAddress)) {
+      Toast.error(globalL10n.r3hAddressOtherNetwork);
       return;
     }
 
-    // Admission refuses an unshield to another network's address at every
-    // height (Core's RecipientIsThisNetworks covers unshields).
-    if (isOtherNetworksVfxAddress(toAddress)) {
-      Toast.error(globalL10n.r3hAddressOtherNetwork);
+    if (!isValidRbxAddress(toAddress)) {
+      Toast.error(globalL10n.prvEnterValidVfxAddress);
       return;
     }
 

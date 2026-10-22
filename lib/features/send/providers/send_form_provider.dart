@@ -221,7 +221,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       if (currentWallet == null) {
         return globalL10n.messageNoAccountSelected;
       }
-      if (currentWallet.balance < parsed) {
+      if (currentWallet.spendableBalance < parsed) {
         return globalL10n.svcNotEnoughBalanceAccount;
       }
     }
@@ -726,7 +726,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         return;
       }
 
-      if (amountDouble > currentWallet.balance) {
+      if (amountDouble > currentWallet.spendableBalance) {
         Toast.error(globalL10n.svcInsufficientBalanceToSend);
         return;
       }

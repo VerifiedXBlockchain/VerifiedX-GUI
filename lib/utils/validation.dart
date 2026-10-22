@@ -197,12 +197,14 @@ String? formValidatorRbxAddress(String? value, [bool allowAdnr = false]) {
     return null;
   }
 
-  if (!isValidRbxAddress(value)) {
-    return globalL10n.r3hAddressInvalid;
-  }
-
+  // Before the first-letter rule: a real address from the other network
+  // starts with the other network's letter, so that rule would answer first.
   if (isOtherNetworksVfxAddress(value)) {
     return globalL10n.r3hAddressOtherNetwork;
+  }
+
+  if (!isValidRbxAddress(value)) {
+    return globalL10n.r3hAddressInvalid;
   }
 
   return null;
@@ -227,12 +229,12 @@ String? formValidatorVbtcRecipient(String? value) {
     return globalL10n.r3hVbtcPrivacyRecipientInvalid;
   }
 
-  if (!isValidRbxAddress(address)) {
-    return globalL10n.r3hAddressInvalid;
-  }
-
   if (isOtherNetworksVfxAddress(address)) {
     return globalL10n.r3hAddressOtherNetwork;
+  }
+
+  if (!isValidRbxAddress(address)) {
+    return globalL10n.r3hAddressInvalid;
   }
 
   return null;

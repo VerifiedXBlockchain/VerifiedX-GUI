@@ -1069,6 +1069,11 @@ class _LatestVfxTx extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isIncoming = latestVfxTx.isIncomingFor(
+      address: ref.watch(webSessionProvider.select((v) => v.keypair?.address)),
+      raAddress: ref.watch(webSessionProvider.select((v) => v.raKeypair?.address)),
+    );
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Semantics(
@@ -1098,9 +1103,9 @@ class _LatestVfxTx extends BaseComponent {
                   Text(
                     "${latestVfxTx.amount} VFX",
                     style: TextStyle(
-                      color: latestVfxTx.amount != null && latestVfxTx.amount! < 0
-                          ? Colors.red.shade500
-                          : Theme.of(context).colorScheme.success,
+                      color: isIncoming
+                          ? Theme.of(context).colorScheme.success
+                          : Colors.red.shade500,
                       fontWeight: FontWeight.w600,
                     ),
                   )

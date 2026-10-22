@@ -45,7 +45,7 @@ class PauseTokenButton extends BaseComponent {
               label: isPaused ? l10n.r3hPendingResume : l10n.r3hPendingPause,
               processing: true,
               variant: AppColorVariant.Light,
-              onPressed: () {
+              onPressedWhileProcessing: () {
                 Toast.message(AppLocalizations.of(context).tokenStateChangePendingToast);
               },
             );

@@ -498,8 +498,10 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
     if (nftData != null) {
       function = _nftDataValue(nftData, 'Function');
     }
+    // The chain's function names, parentheses included (Core's
+    // "AdnrCreate()", "BTCAdnrCreate()", ...).
     if (function != null) {
-      if (function == 'AdnrCreate') {
+      if (function == 'AdnrCreate()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
 
@@ -516,7 +518,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         return;
       }
 
-      if (function == 'AdnrDelete') {
+      if (function == 'AdnrDelete()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifVfxDomainDeletedBody(name);
@@ -531,7 +533,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function == 'AdnrTransfer') {
+      if (function == 'AdnrTransfer()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifVfxDomainTransferBody(name);
@@ -550,7 +552,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
 
       //BTC
 
-      if (function == 'BtcAdnrCreate') {
+      if (function == 'BTCAdnrCreate()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifBtcDomainCreatedBody(name);
@@ -565,8 +567,10 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function == 'BtcAdnrDelete') {
-        final name = _nftDataValue(nftData!, 'Name');
+      if (function == 'BTCAdnrDelete()') {
+        // A BTC domain delete names the BTC address that held the domain,
+        // not the domain.
+        final name = _nftDataValue(nftData!, 'Name') ?? _nftDataValue(nftData, 'BTCFromAddress');
         if (name == null) return;
         body = globalL10n.svcNotifBtcDomainDeletedBody(name);
         _broadcastNotification(
@@ -580,10 +584,11 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function == 'BtcAdnrTransfer') {
-        final name = _nftDataValue(nftData!, 'Name');
-        if (name == null) return;
-        body = globalL10n.svcNotifVfxDomainTransferBody(name);
+      if (function == 'BTCAdnrTransfer()') {
+        // A BTC domain transfer names the BTC addresses, not the domain.
+        final toAddress = _nftDataValue(nftData!, 'BTCToAddress');
+        if (toAddress == null) return;
+        body = globalL10n.svcNotifBtcDomainTransferBody(toAddress);
         _broadcastNotification(
           TransactionNotification(
             identifier: transaction.hash,

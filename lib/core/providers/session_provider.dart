@@ -75,6 +75,7 @@ import '../../features/voting/providers/topic_list_provider.dart';
 import '../../features/wallet/models/wallet.dart';
 import '../../features/wallet/providers/wallet_list_provider.dart';
 import '../../utils/files.dart';
+import '../../utils/formatting.dart';
 import '../app_constants.dart';
 import '../dialogs.dart';
 import '../env.dart';
@@ -673,7 +674,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
 
     // Set on every load (0 for an empty list) so the balance row does not
     // stay on 'Loading...' or keep a stale total after the last account goes.
-    final totalBalance = wallets.map((e) => e.balance).toList().sum;
+    final totalBalance = sumVfxAmounts(wallets.map((e) => e.balance));
     state = state.copyWith(totalBalance: totalBalance);
 
     if (wallets.isNotEmpty) {
@@ -765,6 +766,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       TransactionListType.Failed,
       TransactionListType.Pending,
       TransactionListType.Validated,
+      TransactionListType.Reserved,
     ]) {
       await ref.read(transactionListProvider(type).notifier).load();
     }

@@ -19,6 +19,24 @@ bool _isAuthError(Object e) {
   return msg.contains('password') || msg.contains('unauthorized') || msg.contains('authentication');
 }
 
+/// A viewing key as the node exported it. Core 9.0 reports [canSpend]: the
+/// key also moves the wallet's shielded funds. An answer without the flag is
+/// read as spend-capable, the reading that warns.
+class ExportedViewingKey {
+  final String key;
+  final bool canSpend;
+
+  const ExportedViewingKey({required this.key, required this.canSpend});
+
+  static ExportedViewingKey? fromResult(Map<String, dynamic> result) {
+    final key = result['ViewingKeyBase64'];
+    if (key is! String || key.isEmpty) {
+      return null;
+    }
+    return ExportedViewingKey(key: key, canSpend: result['CanSpend'] != false);
+  }
+}
+
 class PrivacyActionsNotifier extends StateNotifier<bool> {
   final Ref ref;
 
@@ -152,6 +170,33 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       return false;
     } finally {
       state = false;
+    }
+  }
+
+  /// The viewing key of [zfxAddress], or null once the user has been told
+  /// why not. Exporting it needs the wallet password, as a spend does.
+  Future<ExportedViewingKey?> exportViewingKey({
+    required String zfxAddress,
+  }) async {
+    if (_password == null) {
+      Toast.error(globalL10n.prvPasswordRequired);
+      return null;
+    }
+    _resetTimer();
+    try {
+      final result = await PrivacyService().exportViewingKey(
+        zfxAddress: zfxAddress,
+        walletPassword: _password!,
+      );
+      final exported = ExportedViewingKey.fromResult(result);
+      if (exported == null) {
+        Toast.error(globalL10n.prvFailedExportViewingKey(globalL10n.r3hProblemOccurred));
+      }
+      return exported;
+    } catch (e) {
+      _handleAuthError(e);
+      Toast.error(globalL10n.prvFailedExportViewingKey(userErrorMessage(e, withLeadIn: false)));
+      return null;
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rbx_wallet/app.dart';
 import 'package:rbx_wallet/core/components/buttons.dart';
 import 'package:rbx_wallet/features/token/components/web_token_management_actions.dart';
 import 'package:rbx_wallet/features/token/models/web_fungible_token.dart';
@@ -65,9 +66,12 @@ void main() {
         container.read(webPendingTokenPauseProvider.notifier).add(scId, requestedPaused: requestedPaused);
       }
 
+      rootNavigatorKey = GlobalKey<NavigatorState>();
       await tester.pumpWidget(UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
+          navigatorKey: rootNavigatorKey,
+          scaffoldMessengerKey: rootScaffoldMessengerKey,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
           home: Scaffold(body: WebPauseTokenButton(token: token)),
@@ -90,6 +94,15 @@ void main() {
       final button = tester.widget<AppButton>(find.byKey(const Key('token:pause-pending')));
       expect(button.processing, isTrue);
       expect(button.label, 'Pending Pause');
+    });
+
+    testWidgets('tapping Pending Pause says the change is pending and sends nothing', (tester) async {
+      await pump(tester, isPaused: false, requestedPaused: true);
+
+      await tester.tap(find.byKey(const Key('token:pause-pending')));
+      await tester.pump();
+
+      expect(find.text('Token state change is pending. Please wait'), findsOneWidget);
     });
 
     testWidgets('shows Pending Resume after a resume was broadcast', (tester) async {

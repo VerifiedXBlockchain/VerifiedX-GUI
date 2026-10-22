@@ -34,6 +34,11 @@ import '../../token/models/token_sc_feature.dart';
 import '../../token/providers/web_token_detail_provider.dart';
 import '../../token/screens/token_management_screen.dart';
 
+/// True while the desktop dashboard's Tokens action is refreshing the lists
+/// this screen shows, so an empty list reads as loading rather than as no
+/// tokens.
+final allTokensRefreshingProvider = StateProvider<bool>((ref) => false);
+
 class AllTokensScreen extends BaseScreen {
   const AllTokensScreen({super.key});
 
@@ -141,6 +146,10 @@ class AllTokensScreen extends BaseScreen {
         ),
         Expanded(
           child: Builder(builder: (context) {
+            if (tokens.isEmpty && ref.watch(allTokensRefreshingProvider)) {
+              return Center(child: Text(l10n.statusLoading));
+            }
+
             if (tokens.isEmpty) {
               return Center(
                 child: Text(

@@ -33,7 +33,8 @@ class BeaconFormProvider extends StateNotifier<Beacon> {
   load(Beacon beacon) {
     state = beacon;
     nameController.text = beacon.name;
-    // portController.text = topic.port.toString();
+    // Empty for port 0, which the field's hint calls the default.
+    portController.text = beacon.port == 0 ? '' : beacon.port.toString();
     periodController.text = beacon.fileCachePeriodDays.toString();
   }
 

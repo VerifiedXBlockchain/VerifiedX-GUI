@@ -2094,11 +2094,11 @@
   "@dstManageMyAuctionHouse": {
     "description": "Big-button title to manage the user's own auction house."
   },
-  "dstManageMyAuctionHouseBody": "Manage your account''s auction house and trade NFTs.",
+  "dstManageMyAuctionHouseBody": "Manage your account's auction house and trade NFTs.",
   "@dstManageMyAuctionHouseBody": {
     "description": "Big-button body for the manage-my-auction-house action. Apostrophe escaped per ICU."
   },
-  "dstManageMyAuctionHouseBodyWeb": "Manage your wallet''s auction house and trade NFTs.",
+  "dstManageMyAuctionHouseBodyWeb": "Manage your wallet's auction house and trade NFTs.",
   "@dstManageMyAuctionHouseBodyWeb": {
     "description": "Big-button body for the manage-my-auction-house action on the web wallet. Apostrophe escaped per ICU."
   },
@@ -3749,7 +3749,7 @@
   "@paymentLinkTitle": {
     "description": "App bar title for the Butterfly payment link screen."
   },
-  "paymentMessageHint": "What''s this payment for?",
+  "paymentMessageHint": "What's this payment for?",
   "@paymentMessageHint": {
     "description": "Hint inside the optional message field. Apostrophe escaped per ICU."
   },
@@ -4067,7 +4067,15 @@
   },
   "prvExportViewingKey": "Export Viewing Key",
   "prvExportViewingKeyBody": "Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.",
-  "prvFailedExportViewingKey": "Failed to export viewing key",
+  "prvFailedExportViewingKey": "Failed to export viewing key: {error}",
+  "@prvFailedExportViewingKey": {
+    "description": "Toast when the node refuses to export the privacy wallet's viewing key; the placeholder is the node's reason.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "prvFailedGenerateShieldedAddress": "Failed to generate shielded address",
   "prvFailedImportViewingKey": "Failed to import viewing key",
   "prvFeeDeductedFromShielded": "Fee: {fee} (deducted from shielded balance)",
@@ -4305,8 +4313,20 @@
     }
   },
   "prvViewingKeyBase64Label": "Viewing Key (Base64)",
+  "prvViewingKeyCanSpendBody": "Anyone holding this key can move this wallet's shielded funds. Share it only as you would the wallet itself.",
+  "@prvViewingKeyCanSpendBody": {
+    "description": "Shown before and with an exported viewing key that the node reports can spend the wallet's shielded funds."
+  },
+  "prvViewingKeyCanSpendTitle": "This key can spend your shielded funds",
+  "@prvViewingKeyCanSpendTitle": {
+    "description": "Title of the warning shown before revealing a spend-capable viewing key."
+  },
   "prvViewingKeyCopied": "Viewing key copied to clipboard",
   "prvViewingKeyImported": "Viewing key imported successfully",
+  "prvViewingKeyShowAction": "Show key",
+  "@prvViewingKeyShowAction": {
+    "description": "Confirm button of the spend-capable viewing key warning; reveals the key."
+  },
   "prvViewingKeyTitle": "Viewing Key",
   "prvViewOnly": "VIEW ONLY",
   "prvWalletActivated": "Privacy wallet activated: {address}",
@@ -7317,6 +7337,15 @@
     }
   },
   "svcNotifBtcDomainDeletedTitle": "BTC Domain Name Deleted",
+  "svcNotifBtcDomainTransferBody": "BTC Domain transferred to {address}",
+  "@svcNotifBtcDomainTransferBody": {
+    "description": "Body of the notification for a confirmed BTC domain transfer; the placeholder is the BTC address that receives the domain.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
   "svcNotifBtcDomainTransferredTitle": "BTC Domain Name Transferred",
   "svcNotifDecShopTxBody": "DecShop TX Complete",
   "svcNotifDecShopTxTitle": "DecShop TX",
@@ -7749,7 +7778,7 @@
   "tkbFungibleToken": "Fungible Token",
   "tkbGenerate": "Generate",
   "tkbGenerateBtcAddress": "Generate BTC Address",
-  "tkbGenerateBtcAddressBody": "Are you sure you want to generate this token''s BTC address?",
+  "tkbGenerateBtcAddressBody": "Are you sure you want to generate this token's BTC address?",
   "tkbHashLabel": "Hash: {hash}",
   "@tkbHashLabel": {
     "placeholders": {
@@ -7771,7 +7800,7 @@
   },
   "tkbInvalidFeeRate": "Invalid Fee Rate. Must be at least 1 satoshi.",
   "tkbManualSendExchangeSubtitle": "Send BTC from any exchange or wallet to this token's deposit address",
-  "tkbManualSendSubtitle": "Send coin manually to this token''s BTC deposit address",
+  "tkbManualSendSubtitle": "Send coin manually to this token's BTC deposit address",
   "tkbMediaNotFound": "Media asset file not found on your machine ({fileName}).",
   "@tkbMediaNotFound": {
     "placeholders": {
@@ -7814,7 +7843,7 @@
   "tkbNotFound": "Not Found.",
   "tkbNoUpper": "NO",
   "tkbNoUtxos": "No UTXOs",
-  "tkbNoVaultAccounts": "You don''t have any Vault Accounts in this wallet",
+  "tkbNoVaultAccounts": "You don't have any Vault Accounts in this wallet",
   "tkbNoVotesYet": "No votes yet.",
   "tkbOpenAsset": "Open Asset",
   "@tkbOpenAsset": {
@@ -7963,7 +7992,7 @@
   "tkbUtxoUnused": "Unused",
   "tkbUtxoUsed": "Used",
   "tkbVaultAccountPassword": "Vault Account Password",
-  "tkbVaultAuthorizeDownload": "Since this is a Vault Account you''ll need to authorize the download.",
+  "tkbVaultAuthorizeDownload": "Since this is a Vault Account you'll need to authorize the download.",
   "tkbVaultCannotWithdraw": "Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address",
   "tkbVaultOwnedCannotAction": "Vault Account owned tokens can not perform this action.",
   "tkbVbtcTransferBroadcasted": "vBTC V2 Transfer TX Broadcasted. Hash: {hash}",
@@ -8222,7 +8251,7 @@
   "@tokenNotBurnableToast": {
     "description": "Toast shown when burning is attempted on a non-burnable token."
   },
-  "tokenNoTopicsBody": "This token doesn''t have any voting topics yet.",
+  "tokenNoTopicsBody": "This token doesn't have any voting topics yet.",
   "@tokenNoTopicsBody": {
     "description": "Info dialog body when a token has no voting topics. Apostrophe escaped per ICU."
   },
@@ -8335,7 +8364,7 @@
   "@tokenVotingEndsLabel": {
     "description": "Field label showing when voting on a topic ends."
   },
-  "tokenWebInsufficient": "This address''s ({address}) {ticker} balance is insufficient.",
+  "tokenWebInsufficient": "This address's ({address}) {ticker} balance is insufficient.",
   "@tokenWebInsufficient": {
     "description": "Toast shown when the web account does not have enough tokens to perform an action. Apostrophe escaped per ICU.",
     "placeholders": {

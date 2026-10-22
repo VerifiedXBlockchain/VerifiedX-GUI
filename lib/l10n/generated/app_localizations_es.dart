@@ -3984,7 +3984,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvExportViewingKeyBody => 'Copia esta clave para importar una billetera de solo lectura en otro dispositivo. Esta clave puede ver saldos pero no puede gastar.';
 
   @override
-  String get prvFailedExportViewingKey => 'No se pudo exportar la clave de visualización';
+  String prvFailedExportViewingKey(String error) {
+    return 'No se pudo exportar la clave de visualización: $error';
+  }
 
   @override
   String get prvFailedGenerateShieldedAddress => 'No se pudo generar la dirección blindada';
@@ -4315,10 +4317,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvViewingKeyBase64Label => 'Clave de visualización (Base64)';
 
   @override
+  String get prvViewingKeyCanSpendBody => 'Quien tenga esta clave puede mover los fondos blindados de esta billetera. Compártela solo como compartirías la billetera misma.';
+
+  @override
+  String get prvViewingKeyCanSpendTitle => 'Esta clave puede gastar tus fondos blindados';
+
+  @override
   String get prvViewingKeyCopied => 'Clave de visualización copiada al portapapeles';
 
   @override
   String get prvViewingKeyImported => 'Clave de visualización importada correctamente';
+
+  @override
+  String get prvViewingKeyShowAction => 'Mostrar clave';
 
   @override
   String get prvViewingKeyTitle => 'Clave de visualización';
@@ -8682,6 +8693,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get svcNotifBtcDomainDeletedTitle => 'Nombre de dominio BTC eliminado';
+
+  @override
+  String svcNotifBtcDomainTransferBody(String address) {
+    return 'Dominio BTC transferido a $address';
+  }
 
   @override
   String get svcNotifBtcDomainTransferredTitle => 'Nombre de dominio BTC transferido';

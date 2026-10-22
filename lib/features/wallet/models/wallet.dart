@@ -57,6 +57,14 @@ class Wallet with _$Wallet {
     return recoveryAddress != null;
   }
 
+  /// What this account can send now. A Vault's [balance] is its total, set
+  /// from TotalBalance when the wallet list loads, which still counts VFX
+  /// locked in an outgoing timelocked send; its spendable figure is
+  /// [availableBalance].
+  double get spendableBalance {
+    return isReserved ? availableBalance : balance;
+  }
+
   String get balanceLabel {
     if (isReserved) {
       return globalL10n.r3hAvailableBalance(availableBalance.toString());

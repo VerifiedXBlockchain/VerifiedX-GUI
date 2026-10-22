@@ -42,4 +42,32 @@ void main() {
       expect(_topic(null).webVoteFor(voter), isNull);
     });
   });
+
+  group('WebTokenVoteTopic.toNative', () {
+    TokenVoteTopic topicWithShares(double yes, double no) => WebTokenVoteTopic(
+          smartContractUid: 'sc-1',
+          topicUid: 'topic-1',
+          topicName: 'Topic',
+          topicDescription: 'Description',
+          minimumVoteRequirement: 50,
+          topicCreateDate: DateTime.utc(2026, 10, 21),
+          votingEndDate: DateTime.utc(2026, 11, 20),
+          voteData: WebTokenVoteTopicVoteData(votes: const [], voteYes: 1, voteNo: 1, totalVotes: 2, percentYes: yes, percentNo: no),
+        ).toNative();
+
+    test("turns Spyglass's fractions into the percentages the screen shows", () {
+      final allYes = topicWithShares(1.0, 0.0);
+      expect(allYes.percentVotesYes, 100);
+      expect(allYes.percentVotesNo, 0);
+
+      final split = topicWithShares(0.5, 0.5);
+      expect(split.percentVotesYes, 50);
+      expect(split.percentVotesNo, 50);
+    });
+
+    test('rounds a share to 2 decimals, as Core does', () {
+      expect(topicWithShares(1 / 3, 2 / 3).percentVotesYes, 33.33);
+      expect(topicWithShares(1 / 3, 2 / 3).percentAgainst, 66.67);
+    });
+  });
 }

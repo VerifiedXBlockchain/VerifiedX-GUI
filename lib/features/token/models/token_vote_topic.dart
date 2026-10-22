@@ -96,6 +96,12 @@ class WebTokenVoteTopicVoteData with _$WebTokenVoteTopicVoteData {
   factory WebTokenVoteTopicVoteData.fromJson(Map<String, dynamic> json) => _$WebTokenVoteTopicVoteDataFromJson(json);
 }
 
+/// A vote share Spyglass reports as a fraction (0.5) as the percentage the
+/// native topic holds, rounded to 2 decimals as Core rounds its own (50.0).
+double percentFromFraction(double fraction) {
+  return (fraction * 10000).round() / 100;
+}
+
 @freezed
 class WebTokenVoteTopic with _$WebTokenVoteTopic {
   const WebTokenVoteTopic._();
@@ -126,10 +132,10 @@ class WebTokenVoteTopic with _$WebTokenVoteTopic {
       voteYes: voteData.voteYes,
       voteNo: voteData.voteNo,
       totalVotes: voteData.totalVotes.toDouble(),
-      percentVotesYes: voteData.percentYes,
-      percentVotesNo: voteData.percentNo,
-      percentInFavor: voteData.percentYes,
-      percentAgainst: voteData.percentNo,
+      percentVotesYes: percentFromFraction(voteData.percentYes),
+      percentVotesNo: percentFromFraction(voteData.percentNo),
+      percentInFavor: percentFromFraction(voteData.percentYes),
+      percentAgainst: percentFromFraction(voteData.percentNo),
       blockHeight: 0,
       webVoteList: voteData.votes,
     );
