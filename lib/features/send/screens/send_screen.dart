@@ -42,7 +42,7 @@ class SendScreen extends BaseScreen {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
-          child: CurrencySegementedButton(),
+          child: CurrencySegementedButton(followSession: true),
         ),
         Builder(builder: (context) {
           final isBtc = ref.watch(sessionProvider.select((v) => v.btcSelected));

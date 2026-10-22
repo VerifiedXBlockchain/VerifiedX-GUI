@@ -17,6 +17,23 @@ class CurrencySegementedButtonProvider extends StateNotifier<CurrencyType> {
     state = type;
     ref.read(sendFormProvider.notifier).clear();
   }
+
+  /// Shows [type] without clearing the send form, for a screen whose form
+  /// already belongs to that currency.
+  void follow(CurrencyType type) {
+    state = type;
+  }
+}
+
+/// The segment Send or Receive should show for the account they render (BTC
+/// when [btcSelected]), or null when [current] already agrees with it. "All"
+/// agrees with either where the screen offers it.
+CurrencyType? currencyMatchingSession(CurrencyType current, {required bool btcSelected, required bool includeAny}) {
+  final shown = btcSelected ? CurrencyType.btc : CurrencyType.vfx;
+  if (current == shown || (includeAny && current == CurrencyType.any)) {
+    return null;
+  }
+  return shown;
 }
 
 final currencySegementedButtonProvider = StateNotifierProvider<CurrencySegementedButtonProvider, CurrencyType>((ref) {

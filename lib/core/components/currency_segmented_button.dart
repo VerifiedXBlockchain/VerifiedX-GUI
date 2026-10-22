@@ -14,17 +14,31 @@ class CurrencySegementedButton extends BaseComponent {
   final Function(CurrencyType)? onChange;
   final bool shouldToggleGlobal;
   final bool includeAny;
+
+  /// For Send and Receive, which render the session's selected account: the
+  /// segment is put back in step with that account when something else (the
+  /// price chart, the balance cards, the account list) changed it alone.
+  final bool followSession;
   const CurrencySegementedButton({
     super.key,
     this.onChange,
     this.includeAny = true,
     this.shouldToggleGlobal = true,
+    this.followSession = false,
   });
 
   @override
   Widget body(BuildContext context, WidgetRef ref) {
     final provider = ref.read(currencySegementedButtonProvider.notifier);
     final state = ref.watch(currencySegementedButtonProvider);
+
+    if (followSession) {
+      final btcSelected = ref.watch(sessionProvider.select((v) => v.btcSelected));
+      final matching = currencyMatchingSession(state, btcSelected: btcSelected, includeAny: includeAny);
+      if (matching != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => provider.follow(matching));
+      }
+    }
 
     return SegmentedButton<CurrencyType>(
       multiSelectionEnabled: false,
