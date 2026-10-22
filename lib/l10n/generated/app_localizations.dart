@@ -16443,6 +16443,12 @@ abstract class AppLocalizations {
   /// **'Token Pause'**
   String get svcNotifTokenPauseTitle;
 
+  /// Title of the notification for a confirmed transaction that resumes a paused token.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Resume'**
+  String get svcNotifTokenResumeTitle;
+
   /// No description provided for @svcNotifTokensMintedTitle.
   ///
   /// In en, this message translates to:

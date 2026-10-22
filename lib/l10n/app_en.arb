@@ -7415,6 +7415,10 @@
   "svcNotifTokenChangeOwnershipTitle": "Token Change Ownership",
   "svcNotifTokenDeployedTitle": "Token Deployed",
   "svcNotifTokenPauseTitle": "Token Pause",
+  "svcNotifTokenResumeTitle": "Token Resume",
+  "@svcNotifTokenResumeTitle": {
+    "description": "Title of the notification for a confirmed transaction that resumes a paused token."
+  },
   "svcNotifTokensMintedTitle": "Tokens Minted",
   "svcNotifTokenTopicCreatedTitle": "Token Topic Created",
   "svcNotifTokenTransferTitle": "Token Transfer",

@@ -8794,6 +8794,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcNotifTokenPauseTitle => 'Token Pause';
 
   @override
+  String get svcNotifTokenResumeTitle => 'Token Resume';
+
+  @override
   String get svcNotifTokensMintedTitle => 'Tokens Minted';
 
   @override
