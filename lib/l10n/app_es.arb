@@ -4041,7 +4041,15 @@
   },
   "prvExportViewingKey": "Exportar clave de visualización",
   "prvExportViewingKeyBody": "Copia esta clave para importar una billetera de solo lectura en otro dispositivo. Esta clave puede ver saldos pero no puede gastar.",
-  "prvFailedExportViewingKey": "No se pudo exportar la clave de visualización",
+  "prvFailedExportViewingKey": "No se pudo exportar la clave de visualización: {error}",
+  "@prvFailedExportViewingKey": {
+    "description": "Toast when the node refuses to export the privacy wallet's viewing key; the placeholder is the node's reason.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "prvFailedGenerateShieldedAddress": "No se pudo generar la dirección blindada",
   "prvFailedImportViewingKey": "No se pudo importar la clave de visualización",
   "prvFeeDeductedFromShielded": "Comisión: {fee} (deducida del saldo blindado)",
@@ -4279,8 +4287,20 @@
     }
   },
   "prvViewingKeyBase64Label": "Clave de visualización (Base64)",
+  "prvViewingKeyCanSpendBody": "Quien tenga esta clave puede mover los fondos blindados de esta billetera. Compártela solo como compartirías la billetera misma.",
+  "@prvViewingKeyCanSpendBody": {
+    "description": "Shown before and with an exported viewing key that the node reports can spend the wallet's shielded funds."
+  },
+  "prvViewingKeyCanSpendTitle": "Esta clave puede gastar tus fondos blindados",
+  "@prvViewingKeyCanSpendTitle": {
+    "description": "Title of the warning shown before revealing a spend-capable viewing key."
+  },
   "prvViewingKeyCopied": "Clave de visualización copiada al portapapeles",
   "prvViewingKeyImported": "Clave de visualización importada correctamente",
+  "prvViewingKeyShowAction": "Mostrar clave",
+  "@prvViewingKeyShowAction": {
+    "description": "Confirm button of the spend-capable viewing key warning; reveals the key."
+  },
   "prvViewingKeyTitle": "Clave de visualización",
   "prvViewOnly": "SOLO LECTURA",
   "prvWalletActivated": "Billetera privada activada: {address}",
@@ -7285,6 +7305,15 @@
     }
   },
   "svcNotifBtcDomainDeletedTitle": "Nombre de dominio BTC eliminado",
+  "svcNotifBtcDomainTransferBody": "Dominio BTC transferido a {address}",
+  "@svcNotifBtcDomainTransferBody": {
+    "description": "Body of the notification for a confirmed BTC domain transfer; the placeholder is the BTC address that receives the domain.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
   "svcNotifBtcDomainTransferredTitle": "Nombre de dominio BTC transferido",
   "svcNotifDecShopTxBody": "TX de DecShop completada",
   "svcNotifDecShopTxTitle": "TX de DecShop",

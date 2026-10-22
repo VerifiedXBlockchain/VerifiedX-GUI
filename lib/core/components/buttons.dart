@@ -16,6 +16,11 @@ class AppButton extends StatelessWidget {
   final AppColorVariant variant;
   final AppSizeVariant size;
   final bool processing;
+
+  /// Runs instead of [onPressed] while [processing], for a busy button that
+  /// still answers a tap (with a "please wait" message, say). Without it a tap
+  /// on a busy button does nothing.
+  final Function()? onPressedWhileProcessing;
   final IconData? icon;
   final bool iconTrails;
   final HelpType? helpType;
@@ -33,6 +38,7 @@ class AppButton extends StatelessWidget {
     this.variant = AppColorVariant.Primary,
     this.size = AppSizeVariant.Md,
     this.processing = false,
+    this.onPressedWhileProcessing,
     this.icon,
     this.iconTrails = false,
     this.helpType,
@@ -420,6 +426,13 @@ class AppButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final key = "$variant:$type:$size:$processing:$icon:$iconTrails:$disabled";
+    // A busy or disabled button keeps its enabled look with a tap that does
+    // nothing, unless a busy one has [onPressedWhileProcessing].
+    final Function()? handleTap = processing && !disabled
+        ? onPressedWhileProcessing ?? () {}
+        : disabled
+            ? () {}
+            : onPressed;
 
     return IgnorePointer(
       ignoring: disabled,
@@ -432,21 +445,21 @@ class AppButton extends StatelessWidget {
                 case AppButtonType.Elevated:
                   return ElevatedButton(
                     key: Key('elevated:$key'),
-                    onPressed: processing || disabled ? () {} : onPressed,
+                    onPressed: handleTap,
                     style: _styleElevated(context),
                     child: _child(context),
                   );
                 case AppButtonType.Outlined:
                   return OutlinedButton(
                     key: Key('outlined:$key'),
-                    onPressed: processing || disabled ? () {} : onPressed,
+                    onPressed: handleTap,
                     style: _styleOutlined(context),
                     child: _child(context),
                   );
                 case AppButtonType.Text:
                   return TextButton(
                     key: Key('text:$key'),
-                    onPressed: processing || disabled ? () {} : onPressed,
+                    onPressed: handleTap,
                     style: _styleText(context),
                     child: _child(context),
                   );

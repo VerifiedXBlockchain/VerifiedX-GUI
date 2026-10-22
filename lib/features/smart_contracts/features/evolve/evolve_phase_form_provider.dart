@@ -150,7 +150,10 @@ class EvolvePhaseFormProvider extends StateNotifier<EvolvePhase> {
     dateController.text = "";
     timeController.text = "";
     blockHeightController.text = "";
-    setAsset(null);
+    // The whole stage, not only what the fields show: the provider for each
+    // index outlives the contract, so properties or a date left in its state
+    // would be compiled into the next contract's stage.
+    state = const EvolvePhase();
   }
 }
 

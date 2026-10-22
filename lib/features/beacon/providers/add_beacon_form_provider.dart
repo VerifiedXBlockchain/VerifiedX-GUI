@@ -36,7 +36,8 @@ class AddBeaconFormProvider extends StateNotifier<Beacon> {
     state = beacon;
     nameController.text = beacon.name;
     ipController.text = beacon.ipAddress;
-    // portController.text = beacon.port.toString();
+    // Empty for port 0, which the field's hint calls the default.
+    portController.text = beacon.port == 0 ? '' : beacon.port.toString();
   }
 
   String? nameValidator(String? val) => formValidatorNotEmpty(val, globalL10n.beaconNameLabel);

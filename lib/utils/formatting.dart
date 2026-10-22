@@ -23,6 +23,14 @@ String formatBtcAmount(double amount) {
   return trimmed == '-0' ? '0' : trimmed;
 }
 
+/// The sum of VFX [amounts] rounded to 8 decimals, the chain's precision.
+/// Adding the doubles directly shows binary float noise, such as
+/// `274.99998786000003` for balances of 248.87653108 and 26.12345678.
+double sumVfxAmounts(Iterable<double> amounts) {
+  final sum = amounts.fold<double>(0, (total, amount) => total + amount);
+  return double.parse(sum.toStringAsFixed(8));
+}
+
 String getPrettyJSONString(jsonObject) {
   var encoder = const JsonEncoder.withIndent("     ");
   return encoder.convert(jsonObject);

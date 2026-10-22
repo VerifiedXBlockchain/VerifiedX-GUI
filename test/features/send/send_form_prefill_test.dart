@@ -57,5 +57,29 @@ void main() {
       expect(addressController.text, 'xEditedRecipient');
       expect(amountController.text, '1.25');
     });
+
+    testWidgets('fills after a step that clears the form, and reports once filled', (tester) async {
+      final filledWith = <String>[];
+      await tester.pumpWidget(MaterialApp(
+        home: SendFormPrefill(
+          addressController: addressController,
+          amountController: amountController,
+          address: 'xLinkRecipient',
+          amount: '2.5',
+          // Stands in for selecting the link's currency, which clears the form.
+          beforeFill: () {
+            addressController.text = '';
+            amountController.text = '';
+          },
+          afterFill: () => filledWith.add('${addressController.text} ${amountController.text}'),
+          child: const SizedBox(),
+        ),
+      ));
+      await tester.pump();
+
+      expect(addressController.text, 'xLinkRecipient');
+      expect(amountController.text, '2.5');
+      expect(filledWith, ['xLinkRecipient 2.5']);
+    });
   });
 }
