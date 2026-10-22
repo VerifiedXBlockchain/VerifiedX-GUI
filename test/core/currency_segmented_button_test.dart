@@ -14,6 +14,13 @@ class StubSession extends SessionProvider {
   Future<void> init(bool inLoop) async {}
 }
 
+/// The app-wide choice the BTC price card's View Chart leaves behind.
+class BtcChosenElsewhere extends CurrencySegementedButtonProvider {
+  BtcChosenElsewhere(Ref ref) : super(ref) {
+    state = CurrencyType.btc;
+  }
+}
+
 void main() {
   group('currencyMatchingSession', () {
     test('BTC shown over a VFX account goes back to VFX, and the reverse', () {
@@ -36,10 +43,9 @@ void main() {
     Future<ProviderContainer> pump(WidgetTester tester, {required bool followSession}) async {
       final container = ProviderContainer(overrides: [
         sessionProvider.overrideWith((ref) => StubSession(ref)),
+        currencySegementedButtonProvider.overrideWith((ref) => BtcChosenElsewhere(ref)),
       ]);
       addTearDown(container.dispose);
-      // What the BTC price card's View Chart leaves behind.
-      container.read(currencySegementedButtonProvider.notifier).follow(CurrencyType.btc);
 
       await tester.pumpWidget(UncontrolledProviderScope(
         container: container,
@@ -53,14 +59,20 @@ void main() {
       return container;
     }
 
+    Set<CurrencyType> highlighted(WidgetTester tester) {
+      return tester.widget<SegmentedButton<CurrencyType>>(find.byType(SegmentedButton<CurrencyType>)).selected;
+    }
+
     testWidgets('on Send and Receive it shows the currency of the account on screen', (tester) async {
       final container = await pump(tester, followSession: true);
-      expect(container.read(currencySegementedButtonProvider), CurrencyType.vfx);
+      expect(highlighted(tester), {CurrencyType.vfx});
+      // Hidden tabs stay mounted; the choice other screens filter by is kept.
+      expect(container.read(currencySegementedButtonProvider), CurrencyType.btc);
     });
 
-    testWidgets('elsewhere it keeps the app-wide choice', (tester) async {
-      final container = await pump(tester, followSession: false);
-      expect(container.read(currencySegementedButtonProvider), CurrencyType.btc);
+    testWidgets('elsewhere it shows the app-wide choice', (tester) async {
+      await pump(tester, followSession: false);
+      expect(highlighted(tester), {CurrencyType.btc});
     });
   });
 }

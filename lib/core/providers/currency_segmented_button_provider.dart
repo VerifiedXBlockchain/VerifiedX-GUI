@@ -17,12 +17,6 @@ class CurrencySegementedButtonProvider extends StateNotifier<CurrencyType> {
     state = type;
     ref.read(sendFormProvider.notifier).clear();
   }
-
-  /// Shows [type] without clearing the send form, for a screen whose form
-  /// already belongs to that currency.
-  void follow(CurrencyType type) {
-    state = type;
-  }
 }
 
 /// The segment Send or Receive should show for the account they render (BTC
