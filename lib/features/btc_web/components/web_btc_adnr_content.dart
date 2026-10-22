@@ -105,47 +105,48 @@ class WebBtcAdnrContent extends BaseComponent {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    AppButton(
-                      label: AppLocalizations.of(context).btcAcceptTransferLabel,
-                      type: AppButtonType.Text,
-                      variant: AppColorVariant.Btc,
-                      onPressed: () async {
-                        final btcKeypair = ref.read(webSessionProvider).btcKeypair;
-                        if (btcKeypair == null) {
-                          Toast.error(AppLocalizations.of(context).adnrNoBtcWif);
-                          return;
-                        }
+                    if (btcNameAcceptanceAvailable(ref.watch(webLatestBlockProvider)?.height))
+                      AppButton(
+                        label: AppLocalizations.of(context).btcAcceptTransferLabel,
+                        type: AppButtonType.Text,
+                        variant: AppColorVariant.Btc,
+                        onPressed: () async {
+                          final btcKeypair = ref.read(webSessionProvider).btcKeypair;
+                          if (btcKeypair == null) {
+                            Toast.error(AppLocalizations.of(context).adnrNoBtcWif);
+                            return;
+                          }
 
-                        await acceptBtcNameTransfer(
-                          context: context,
-                          btcAddress: btcKeypair.address,
-                          initialOwner:
-                              ref.read(webSessionProvider).keypair?.address ?? "",
-                          sign: (name, newOwner) async {
-                            try {
-                              final timestamp =
-                                  (DateTime.now().millisecondsSinceEpoch / 1000)
-                                      .round();
-                              final message = BtcNameAcceptance.boundMessage(
-                                  timestamp, newOwner, name);
-                              final signature = await BtcWebService()
-                                  .signMessage(btcKeypair.wif, message);
-                              if (signature.isEmpty) {
+                          await acceptBtcNameTransfer(
+                            context: context,
+                            btcAddress: btcKeypair.address,
+                            initialOwner:
+                                ref.read(webSessionProvider).keypair?.address ?? "",
+                            sign: (name, newOwner) async {
+                              try {
+                                final timestamp =
+                                    (DateTime.now().millisecondsSinceEpoch / 1000)
+                                        .round();
+                                final message = BtcNameAcceptance.boundMessage(
+                                    timestamp, newOwner, name);
+                                final signature = await BtcWebService()
+                                    .signMessage(btcKeypair.wif, message);
+                                if (signature.isEmpty) {
+                                  Toast.error(AppLocalizations.of(context)
+                                      .btcAcceptanceSignFailed);
+                                  return null;
+                                }
+                                return BtcNameAcceptance.build(message, signature);
+                              } catch (e) {
+                                print(e);
                                 Toast.error(AppLocalizations.of(context)
                                     .btcAcceptanceSignFailed);
                                 return null;
                               }
-                              return BtcNameAcceptance.build(message, signature);
-                            } catch (e) {
-                              print(e);
-                              Toast.error(AppLocalizations.of(context)
-                                  .btcAcceptanceSignFailed);
-                              return null;
-                            }
-                          },
-                        );
-                      },
-                    ),
+                            },
+                          );
+                        },
+                      ),
                     AppButton(
                       label: AppLocalizations.of(context).btcCreateDomain,
                       variant: AppColorVariant.Btc,
