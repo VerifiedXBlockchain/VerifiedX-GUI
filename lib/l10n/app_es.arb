@@ -7285,6 +7285,15 @@
     }
   },
   "svcNotifBtcDomainDeletedTitle": "Nombre de dominio BTC eliminado",
+  "svcNotifBtcDomainTransferBody": "Dominio BTC transferido a {address}",
+  "@svcNotifBtcDomainTransferBody": {
+    "description": "Body of the notification for a confirmed BTC domain transfer; the placeholder is the BTC address that receives the domain.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
   "svcNotifBtcDomainTransferredTitle": "Nombre de dominio BTC transferido",
   "svcNotifDecShopTxBody": "TX de DecShop completada",
   "svcNotifDecShopTxTitle": "TX de DecShop",

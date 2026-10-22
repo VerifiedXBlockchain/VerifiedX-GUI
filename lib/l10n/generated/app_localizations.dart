@@ -16251,6 +16251,12 @@ abstract class AppLocalizations {
   /// **'BTC Domain Name Deleted'**
   String get svcNotifBtcDomainDeletedTitle;
 
+  /// Body of the notification for a confirmed BTC domain transfer; the placeholder is the BTC address that receives the domain.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain transferred to {address}'**
+  String svcNotifBtcDomainTransferBody(String address);
+
   /// No description provided for @svcNotifBtcDomainTransferredTitle.
   ///
   /// In en, this message translates to:

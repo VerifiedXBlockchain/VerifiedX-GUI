@@ -40,12 +40,15 @@ void main() {
     signals.insert(domainTx('transfer', {'Function': 'AdnrTransfer()', 'Name': 'qa20261021aw1.vfx'}));
     signals.insert(domainTx('delete', {'Function': 'AdnrDelete()', 'Name': 'qa20261021aw1.vfx'}));
     signals.insert(domainTx('btc-create', {'Function': 'BTCAdnrCreate()', 'Name': 'qa20261021aw1'}));
-    signals.insert(domainTx('btc-transfer', {'Function': 'BTCAdnrTransfer()', 'Name': 'qa20261021aw1.btc'}));
-    signals.insert(domainTx('btc-delete', {'Function': 'BTCAdnrDelete()', 'Name': 'qa20261021aw1.btc'}));
+    // BTC transfers and deletes carry the BTC addresses rather than a name.
+    signals.insert(domainTx('btc-transfer', {'Function': 'BTCAdnrTransfer()', 'BTCToAddress': 'tb1qreceiver', 'BTCFromAddress': 'tb1qholder'}));
+    signals.insert(domainTx('btc-delete', {'Function': 'BTCAdnrDelete()', 'BTCFromAddress': 'tb1qholder'}));
 
     final notifications = container.read(transactionNotificationProvider);
     expect(notifications.map((n) => n.identifier), ['create', 'transfer', 'delete', 'btc-create', 'btc-transfer', 'btc-delete']);
     expect(notifications.first.title, 'Domain Name Created');
     expect(notifications.first.body, contains('qa20261021aw1'));
+    expect(notifications[4].body, 'BTC Domain transferred to tb1qreceiver');
+    expect(notifications[5].body, 'BTC Domain deleted for tb1qholder');
   });
 }

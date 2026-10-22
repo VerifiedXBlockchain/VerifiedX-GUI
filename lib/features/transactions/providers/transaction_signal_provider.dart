@@ -568,7 +568,9 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         return;
       }
       if (function == 'BTCAdnrDelete()') {
-        final name = _nftDataValue(nftData!, 'Name');
+        // A BTC domain delete names the BTC address that held the domain,
+        // not the domain.
+        final name = _nftDataValue(nftData!, 'Name') ?? _nftDataValue(nftData, 'BTCFromAddress');
         if (name == null) return;
         body = globalL10n.svcNotifBtcDomainDeletedBody(name);
         _broadcastNotification(
@@ -583,9 +585,10 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         return;
       }
       if (function == 'BTCAdnrTransfer()') {
-        final name = _nftDataValue(nftData!, 'Name');
-        if (name == null) return;
-        body = globalL10n.svcNotifVfxDomainTransferBody(name);
+        // A BTC domain transfer names the BTC addresses, not the domain.
+        final toAddress = _nftDataValue(nftData!, 'BTCToAddress');
+        if (toAddress == null) return;
+        body = globalL10n.svcNotifBtcDomainTransferBody(toAddress);
         _broadcastNotification(
           TransactionNotification(
             identifier: transaction.hash,

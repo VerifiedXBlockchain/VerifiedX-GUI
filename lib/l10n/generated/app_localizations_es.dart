@@ -8684,6 +8684,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcNotifBtcDomainDeletedTitle => 'Nombre de dominio BTC eliminado';
 
   @override
+  String svcNotifBtcDomainTransferBody(String address) {
+    return 'Dominio BTC transferido a $address';
+  }
+
+  @override
   String get svcNotifBtcDomainTransferredTitle => 'Nombre de dominio BTC transferido';
 
   @override
