@@ -498,8 +498,10 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
     if (nftData != null) {
       function = _nftDataValue(nftData, 'Function');
     }
+    // The chain's function names, parentheses included (Core's
+    // "AdnrCreate()", "BTCAdnrCreate()", ...).
     if (function != null) {
-      if (function == 'AdnrCreate') {
+      if (function == 'AdnrCreate()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
 
@@ -516,7 +518,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         return;
       }
 
-      if (function == 'AdnrDelete') {
+      if (function == 'AdnrDelete()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifVfxDomainDeletedBody(name);
@@ -531,7 +533,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function == 'AdnrTransfer') {
+      if (function == 'AdnrTransfer()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifVfxDomainTransferBody(name);
@@ -550,7 +552,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
 
       //BTC
 
-      if (function == 'BtcAdnrCreate') {
+      if (function == 'BTCAdnrCreate()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifBtcDomainCreatedBody(name);
@@ -565,7 +567,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function == 'BtcAdnrDelete') {
+      if (function == 'BTCAdnrDelete()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifBtcDomainDeletedBody(name);
@@ -580,7 +582,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
         );
         return;
       }
-      if (function == 'BtcAdnrTransfer') {
+      if (function == 'BTCAdnrTransfer()') {
         final name = _nftDataValue(nftData!, 'Name');
         if (name == null) return;
         body = globalL10n.svcNotifVfxDomainTransferBody(name);
