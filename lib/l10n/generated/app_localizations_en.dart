@@ -1924,10 +1924,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dstManageMyAuctionHouse => 'Manage my Auction House';
 
   @override
-  String get dstManageMyAuctionHouseBody => 'Manage your account\'\'s auction house and trade NFTs.';
+  String get dstManageMyAuctionHouseBody => 'Manage your account\'s auction house and trade NFTs.';
 
   @override
-  String get dstManageMyAuctionHouseBodyWeb => 'Manage your wallet\'\'s auction house and trade NFTs.';
+  String get dstManageMyAuctionHouseBodyWeb => 'Manage your wallet\'s auction house and trade NFTs.';
 
   @override
   String get dstModeCreation => 'creation';
@@ -3548,7 +3548,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentLinkTitle => 'Payment Link';
 
   @override
-  String get paymentMessageHint => 'What\'\'s this payment for?';
+  String get paymentMessageHint => 'What\'s this payment for?';
 
   @override
   String get paymentMessageLabel => 'Message (Optional)';
@@ -9117,7 +9117,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbGenerateBtcAddress => 'Generate BTC Address';
 
   @override
-  String get tkbGenerateBtcAddressBody => 'Are you sure you want to generate this token\'\'s BTC address?';
+  String get tkbGenerateBtcAddressBody => 'Are you sure you want to generate this token\'s BTC address?';
 
   @override
   String tkbHashLabel(String hash) {
@@ -9145,7 +9145,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbManualSendExchangeSubtitle => 'Send BTC from any exchange or wallet to this token\'s deposit address';
 
   @override
-  String get tkbManualSendSubtitle => 'Send coin manually to this token\'\'s BTC deposit address';
+  String get tkbManualSendSubtitle => 'Send coin manually to this token\'s BTC deposit address';
 
   @override
   String tkbMediaNotFound(String fileName) {
@@ -9198,7 +9198,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbNoUtxos => 'No UTXOs';
 
   @override
-  String get tkbNoVaultAccounts => 'You don\'\'t have any Vault Accounts in this wallet';
+  String get tkbNoVaultAccounts => 'You don\'t have any Vault Accounts in this wallet';
 
   @override
   String get tkbNoVotesYet => 'No votes yet.';
@@ -9382,7 +9382,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbVaultAccountPassword => 'Vault Account Password';
 
   @override
-  String get tkbVaultAuthorizeDownload => 'Since this is a Vault Account you\'\'ll need to authorize the download.';
+  String get tkbVaultAuthorizeDownload => 'Since this is a Vault Account you\'ll need to authorize the download.';
 
   @override
   String get tkbVaultCannotWithdraw => 'Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address';
@@ -9588,7 +9588,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tokenNotBurnableToast => 'This token is not burnable';
 
   @override
-  String get tokenNoTopicsBody => 'This token doesn\'\'t have any voting topics yet.';
+  String get tokenNoTopicsBody => 'This token doesn\'t have any voting topics yet.';
 
   @override
   String get tokenNoTopicsTitle => 'No Topics';
@@ -9672,7 +9672,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tokenWebInsufficient(String address, String ticker) {
-    return 'This address\'\'s ($address) $ticker balance is insufficient.';
+    return 'This address\'s ($address) $ticker balance is insufficient.';
   }
 
   @override

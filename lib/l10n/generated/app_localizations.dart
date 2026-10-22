@@ -3654,13 +3654,13 @@ abstract class AppLocalizations {
   /// Big-button body for the manage-my-auction-house action. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'Manage your account\'\'s auction house and trade NFTs.'**
+  /// **'Manage your account\'s auction house and trade NFTs.'**
   String get dstManageMyAuctionHouseBody;
 
   /// Big-button body for the manage-my-auction-house action on the web wallet. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'Manage your wallet\'\'s auction house and trade NFTs.'**
+  /// **'Manage your wallet\'s auction house and trade NFTs.'**
   String get dstManageMyAuctionHouseBodyWeb;
 
   /// Inline word inserted into close-confirm titles when creating new items.
@@ -6726,7 +6726,7 @@ abstract class AppLocalizations {
   /// Hint inside the optional message field. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'What\'\'s this payment for?'**
+  /// **'What\'s this payment for?'**
   String get paymentMessageHint;
 
   /// Field label for the optional message attached to a payment link.
@@ -16980,7 +16980,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbGenerateBtcAddressBody.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to generate this token\'\'s BTC address?'**
+  /// **'Are you sure you want to generate this token\'s BTC address?'**
   String get tkbGenerateBtcAddressBody;
 
   /// No description provided for @tkbHashLabel.
@@ -17028,7 +17028,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbManualSendSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Send coin manually to this token\'\'s BTC deposit address'**
+  /// **'Send coin manually to this token\'s BTC deposit address'**
   String get tkbManualSendSubtitle;
 
   /// No description provided for @tkbMediaNotFound.
@@ -17118,7 +17118,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbNoVaultAccounts.
   ///
   /// In en, this message translates to:
-  /// **'You don\'\'t have any Vault Accounts in this wallet'**
+  /// **'You don\'t have any Vault Accounts in this wallet'**
   String get tkbNoVaultAccounts;
 
   /// No description provided for @tkbNoVotesYet.
@@ -17442,7 +17442,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbVaultAuthorizeDownload.
   ///
   /// In en, this message translates to:
-  /// **'Since this is a Vault Account you\'\'ll need to authorize the download.'**
+  /// **'Since this is a Vault Account you\'ll need to authorize the download.'**
   String get tkbVaultAuthorizeDownload;
 
   /// No description provided for @tkbVaultCannotWithdraw.
@@ -17826,7 +17826,7 @@ abstract class AppLocalizations {
   /// Info dialog body when a token has no voting topics. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'This token doesn\'\'t have any voting topics yet.'**
+  /// **'This token doesn\'t have any voting topics yet.'**
   String get tokenNoTopicsBody;
 
   /// Info dialog title when a token has no voting topics.
@@ -17988,7 +17988,7 @@ abstract class AppLocalizations {
   /// Toast shown when the web account does not have enough tokens to perform an action. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'This address\'\'s ({address}) {ticker} balance is insufficient.'**
+  /// **'This address\'s ({address}) {ticker} balance is insufficient.'**
   String tokenWebInsufficient(String address, String ticker);
 
   /// Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons.
