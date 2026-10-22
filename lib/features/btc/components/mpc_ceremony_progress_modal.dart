@@ -179,7 +179,7 @@ class MpcCeremonyProgressModal extends ConsumerWidget {
           l10n.bw2PercentComplete(ceremony.progressPercentage.toString()),
           style: const TextStyle(color: Colors.white70, fontSize: 13),
         ),
-        if (ceremony.validatorCount != null) ...[
+        if (ceremony.hasValidatorCount) ...[
           const SizedBox(height: 4),
           Text(
             l10n.bw2ValidatorsThreshold(ceremony.validatorCount.toString(), (ceremony.requiredThreshold ?? '-').toString()),

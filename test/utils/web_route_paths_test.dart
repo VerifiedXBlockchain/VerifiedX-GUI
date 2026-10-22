@@ -38,6 +38,21 @@ void main() {
     });
   });
 
+  group('isDashboardHomePath', () {
+    test('accepts Home and the bare dashboard route', () {
+      expect(isDashboardHomePath('dashboard/home'), isTrue);
+      expect(isDashboardHomePath('/dashboard/home/'), isTrue);
+      expect(isDashboardHomePath('dashboard'), isTrue);
+    });
+
+    test('rejects other dashboard pages and Home sub-pages', () {
+      expect(isDashboardHomePath('dashboard/send/vfx/xAbc/2.5'), isFalse);
+      expect(isDashboardHomePath('dashboard/transactions'), isFalse);
+      expect(isDashboardHomePath('dashboard/home/all-tokens'), isFalse);
+      expect(isDashboardHomePath('dashboard/homes'), isFalse);
+    });
+  });
+
   group('InitialWebUrl', () {
     tearDown(() => InitialWebUrl.set(null));
 

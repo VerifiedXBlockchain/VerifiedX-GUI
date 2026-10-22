@@ -182,7 +182,9 @@ class TokenizeBtcForm extends BaseComponent {
 
           if (success == true) {
             formProvider.clear();
-            if (context.mounted) Navigator.of(context).pop();
+            // The standalone screen pops here; the vBTC wizard moves on to
+            // waiting for the token and then to its funding step.
+            onSuccess();
           }
         },
       );

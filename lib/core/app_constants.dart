@@ -61,6 +61,13 @@ bool btcNameSignedMessagesActive(int latestBlockHeight) {
   return latestBlockHeight + 1 >= BTC_NAME_SIGNED_MESSAGE_HEIGHT;
 }
 
+/// Whether to offer the signed BTC domain acceptance (Accept Transfer, the
+/// receiver's acceptance code): only once [latestBlockHeight] is known and
+/// the signed messages are active. Before that nothing consumes a code.
+bool btcNameAcceptanceAvailable(int? latestBlockHeight) {
+  return latestBlockHeight != null && btcNameSignedMessagesActive(latestBlockHeight);
+}
+
 const VOTE_TOPIC_COST = 10.0;
 const MAX_COMPILE_QUANTITY = 10;
 const MAX_ASSET_BYTES = 157286400;

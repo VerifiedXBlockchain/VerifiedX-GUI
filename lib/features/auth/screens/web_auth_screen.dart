@@ -155,13 +155,22 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
       await _showWelcomeMessage();
     }
 
-    ref.read(globalBalancesExpandedProvider.notifier).expand();
-
     // Check for pending redirect URL
     final storage = singleton<Storage>();
     final storedRedirect = storage.getString(Storage.PENDING_REDIRECT_URL);
     final pendingRedirect =
         storedRedirect != null ? normalizeWebRoutePath(storedRedirect) : null;
+
+    // The balance cards open expanded only on Home. Over any other page
+    // (a send link, a reload on Transactions) they would cover its top.
+    final balancesExpanded = ref.read(globalBalancesExpandedProvider.notifier);
+    if (pendingRedirect == null ||
+        pendingRedirect.isEmpty ||
+        isDashboardHomePath(pendingRedirect)) {
+      balancesExpanded.expand();
+    } else {
+      balancesExpanded.detract();
+    }
 
     if (pendingRedirect != null && pendingRedirect.isNotEmpty) {
       // Clear the pending redirect
@@ -176,6 +185,7 @@ class WebAuthScreenScreenState extends BaseScreenState<WebAuthScreen> {
           await AutoRouter.of(context).pushNamed(pendingRedirect);
         } catch (e) {
           // If both fail, go to dashboard
+          balancesExpanded.expand();
           AutoRouter.of(context).push(WebDashboardContainerRoute());
         }
       }

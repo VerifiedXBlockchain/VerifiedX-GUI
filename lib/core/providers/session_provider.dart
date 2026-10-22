@@ -208,6 +208,26 @@ class SessionModel {
   }
 }
 
+/// [current] with what [accounts] now lists for its address (the balance
+/// moves as deposits confirm), or null when there is nothing newer or the
+/// account is no longer listed. The keys the node hands out once, at
+/// creation, stay: listings leave them out.
+BtcAccount? btcAccountRefreshedFromList(
+    BtcAccount? current, List<BtcAccount> accounts) {
+  if (current == null) {
+    return null;
+  }
+  final listed = accounts.firstWhereOrNull((a) => a.address == current.address);
+  if (listed == null) {
+    return null;
+  }
+  final refreshed = listed.copyWith(
+    privateKey: listed.hasPrivateKey ? listed.privateKey : current.privateKey,
+    wifKey: listed.wifKey ?? current.wifKey,
+  );
+  return refreshed == current ? null : refreshed;
+}
+
 class SessionProvider extends StateNotifier<SessionModel> {
   final Ref ref;
 
@@ -218,6 +238,15 @@ class SessionProvider extends StateNotifier<SessionModel> {
     if (kIsWeb) {
       return;
     }
+    // The selected BTC account is a copy taken when it was selected; follow
+    // the list as it reloads, or its balance stays at what it was then.
+    ref.listen<List<BtcAccount>>(btcAccountListProvider, (_, accounts) {
+      final refreshed =
+          btcAccountRefreshedFromList(state.currentBtcAccount, accounts);
+      if (refreshed != null) {
+        state = state.copyWith(currentBtcAccount: refreshed);
+      }
+    });
     init(true);
   }
 

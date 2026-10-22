@@ -45831,11 +45831,12 @@
               outputSize += P2WPKH_OUTPUT_SIZE;
               const txSize = inputSize + outputSize + 10;
               if (!feeRate) {
-                const feeRates = await this.getFeeRates();
-                feeRate = feeRates?.economyFee || (this.network == TESTNET2 ? 2 : 5);
-              }
-              if (this.network == TESTNET2) {
-                feeRate = 5;
+                if (this.network == TESTNET2) {
+                  feeRate = 5;
+                } else {
+                  const feeRates = await this.getFeeRates();
+                  feeRate = feeRates?.economyFee || 5;
+                }
               }
               const fee = txSize * feeRate;
               const change = inputSum - amount - fee;
@@ -45877,14 +45878,19 @@
               const url = `https://mempool.space${this.network == TESTNET3 ? "/testnet4" : ""}/api/address/${address2}`;
               const response = await fetch(url);
               const result = await response.json();
-              const data = result["chain_stats"];
-              const totalRecieved = inSatoshis ? data.funded_txo_sum : data.funded_txo_sum * SATOSHI_TO_BTC_MULTIPLIER;
-              const totalSent = inSatoshis ? data.spent_txo_sum : data.spent_txo_sum * SATOSHI_TO_BTC_MULTIPLIER;
+              const chain = result["chain_stats"];
+              // Unconfirmed transactions count too: sends spend unconfirmed
+              // outputs, so this is what the address can send now.
+              const mempool = result["mempool_stats"] || { funded_txo_sum: 0, spent_txo_sum: 0, tx_count: 0 };
+              const funded = chain.funded_txo_sum + mempool.funded_txo_sum;
+              const spent = chain.spent_txo_sum + mempool.spent_txo_sum;
+              const totalRecieved = inSatoshis ? funded : funded * SATOSHI_TO_BTC_MULTIPLIER;
+              const totalSent = inSatoshis ? spent : spent * SATOSHI_TO_BTC_MULTIPLIER;
               return {
                 totalRecieved,
                 totalSent,
                 balance: totalRecieved - totalSent,
-                txCount: data.tx_count
+                txCount: chain.tx_count + mempool.tx_count
               };
             }
             async transactions(address2, limit = 50, before = null) {

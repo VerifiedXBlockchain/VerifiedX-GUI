@@ -12,7 +12,6 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../generated/assets.gen.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../web/providers/all_btc_addresses_provider.dart';
 import '../models/btc_web_transaction.dart';
 import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -36,15 +35,11 @@ class WebBtcTransactionListTile extends BaseComponent {
   Widget desktopBody(BuildContext context, WidgetRef ref) {
     final tx = transaction;
 
-    final myAddresses = ref.watch(allBtcAddressesProvider);
     final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
     final amount = tx.amountBtc();
 
-    final toAddress = tx.toAddress(myAddresses);
-    final fromAddress = tx.fromAddress();
-
-    final isVbtc = vbtcTokenAddresses.contains(toAddress) || vbtcTokenAddresses.contains(fromAddress);
+    final isVbtc = tx.touchesAnyAddress(vbtcTokenAddresses);
 
     return _WebBtcTransactionListTileContent(amount: amount, tx: tx, compact: compact, isVbtc: isVbtc);
   }
@@ -53,15 +48,11 @@ class WebBtcTransactionListTile extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final tx = transaction;
 
-    final myAddresses = ref.watch(allBtcAddressesProvider);
     final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
     final amount = tx.amountBtc();
 
-    final toAddress = tx.toAddress(myAddresses);
-    final fromAddress = tx.fromAddress();
-
-    final isVbtc = vbtcTokenAddresses.contains(toAddress) || vbtcTokenAddresses.contains(fromAddress);
+    final isVbtc = tx.touchesAnyAddress(vbtcTokenAddresses);
     return AppCard(
       padding: 0,
       color: AppColors.getGray(ColorShade.s100),
