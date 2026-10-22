@@ -70,10 +70,11 @@ class SendForm extends BaseComponent {
   Future<void> chooseAddress(BuildContext context, WidgetRef ref, SendFormProvider formProvider) async {
     List<String> addresses = [];
 
-    if (ref.read(currencySegementedButtonProvider) == CurrencyType.btc || ref.read(currencySegementedButtonProvider) == CurrencyType.any) {
+    final currency = ref.read(sendCurrencyProvider);
+    if (currency == CurrencyType.btc || currency == CurrencyType.any) {
       addresses.addAll(ref.read(btcAccountListProvider).map((a) => a.address));
     }
-    if (ref.read(currencySegementedButtonProvider) == CurrencyType.vfx || ref.read(currencySegementedButtonProvider) == CurrencyType.any) {
+    if (currency == CurrencyType.vfx || currency == CurrencyType.any) {
       addresses.addAll(ref.read(walletListProvider).map((a) => a.address));
     }
 
@@ -214,7 +215,7 @@ class SendForm extends BaseComponent {
                                     final allWallets = ref.watch(walletListProvider);
                                     final allBtcAccounts = ref.watch(btcAccountListProvider);
 
-                                    final currencyType = ref.watch(currencySegementedButtonProvider);
+                                    final currencyType = ref.watch(sendCurrencyProvider);
 
                                     final list = <PopupMenuEntry<int>>[];
                                     if (currencyType != CurrencyType.btc) {

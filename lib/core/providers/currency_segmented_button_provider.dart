@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'session_provider.dart';
+
 import '../../features/send/providers/send_form_provider.dart';
 
 enum CurrencyType {
@@ -32,4 +34,13 @@ CurrencyType? currencyMatchingSession(CurrencyType current, {required bool btcSe
 
 final currencySegementedButtonProvider = StateNotifierProvider<CurrencySegementedButtonProvider, CurrencyType>((ref) {
   return CurrencySegementedButtonProvider(ref);
+});
+
+/// The currency the desktop Send screen shows, which its account lists follow
+/// too: the app-wide choice, or the selected account's currency when the two
+/// disagree (see [currencyMatchingSession]).
+final sendCurrencyProvider = Provider<CurrencyType>((ref) {
+  final current = ref.watch(currencySegementedButtonProvider);
+  final btcSelected = ref.watch(sessionProvider.select((v) => v.btcSelected));
+  return currencyMatchingSession(current, btcSelected: btcSelected, includeAny: true) ?? current;
 });

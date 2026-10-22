@@ -39,6 +39,17 @@ void main() {
     });
   });
 
+  test("Send's account lists follow the currency Send shows, and the shared choice stays", () {
+    final container = ProviderContainer(overrides: [
+      sessionProvider.overrideWith((ref) => StubSession(ref)),
+      currencySegementedButtonProvider.overrideWith((ref) => BtcChosenElsewhere(ref)),
+    ]);
+    addTearDown(container.dispose);
+
+    expect(container.read(sendCurrencyProvider), CurrencyType.vfx);
+    expect(container.read(currencySegementedButtonProvider), CurrencyType.btc);
+  });
+
   group('CurrencySegementedButton', () {
     Future<ProviderContainer> pump(WidgetTester tester, {required bool followSession}) async {
       final container = ProviderContainer(overrides: [
