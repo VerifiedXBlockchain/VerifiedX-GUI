@@ -766,6 +766,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       TransactionListType.Failed,
       TransactionListType.Pending,
       TransactionListType.Validated,
+      TransactionListType.Reserved,
     ]) {
       await ref.read(transactionListProvider(type).notifier).load();
     }
