@@ -27,6 +27,18 @@ String? dashboardRedirectPath(String url) {
   return null;
 }
 
+/// Whether the web route [path] opens the dashboard Home page, the only page
+/// that shows the global balance cards expanded. The bare `dashboard` route
+/// lands on Home too; Home's sub-pages such as `dashboard/home/all-tokens`
+/// do not count.
+bool isDashboardHomePath(String path) {
+  var normalized = normalizeWebRoutePath(path);
+  if (normalized.endsWith('/')) {
+    normalized = normalized.substring(0, normalized.length - 1);
+  }
+  return normalized == 'dashboard' || normalized == 'dashboard/home';
+}
+
 /// The page URL as it was when the app started, before the router rewrote
 /// the hash. Payment links and reloads on a dashboard page need it to know
 /// where to go once the wallet is unlocked.

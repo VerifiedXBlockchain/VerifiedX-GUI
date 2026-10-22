@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/app_constants.dart';
+import '../../bridge/providers/wallet_info_provider.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/badges.dart';
 import '../../../core/components/buttons.dart';
@@ -92,31 +93,32 @@ class BtcAdnrCard extends BaseComponent {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    AppButton(
-                      label: l10n.btcAcceptTransferLabel,
-                      type: AppButtonType.Text,
-                      variant: AppColorVariant.Btc,
-                      onPressed: () async {
-                        if (!await passwordRequiredGuard(context, ref)) return;
+                    if (btcNameAcceptanceAvailable(ref.watch(walletInfoProvider)?.blockHeight))
+                      AppButton(
+                        label: l10n.btcAcceptTransferLabel,
+                        type: AppButtonType.Text,
+                        variant: AppColorVariant.Btc,
+                        onPressed: () async {
+                          if (!await passwordRequiredGuard(context, ref)) return;
 
-                        await acceptBtcNameTransfer(
-                          context: context,
-                          btcAddress: account.address,
-                          initialOwner: ref.read(walletListProvider).firstOrNull?.address ?? "",
-                          ownerPicker: (controller) => AddressChoosingIconButton(controller: controller),
-                          sign: (name, newOwner) async {
-                            ref.read(globalLoadingProvider.notifier).start();
-                            final code = await BtcService().signAdnrTransferAcceptance(
-                              btcAddress: account.address,
-                              name: name,
-                              newOwner: newOwner,
-                            );
-                            ref.read(globalLoadingProvider.notifier).complete();
-                            return code;
-                          },
-                        );
-                      },
-                    ),
+                          await acceptBtcNameTransfer(
+                            context: context,
+                            btcAddress: account.address,
+                            initialOwner: ref.read(walletListProvider).firstOrNull?.address ?? "",
+                            ownerPicker: (controller) => AddressChoosingIconButton(controller: controller),
+                            sign: (name, newOwner) async {
+                              ref.read(globalLoadingProvider.notifier).start();
+                              final code = await BtcService().signAdnrTransferAcceptance(
+                                btcAddress: account.address,
+                                name: name,
+                                newOwner: newOwner,
+                              );
+                              ref.read(globalLoadingProvider.notifier).complete();
+                              return code;
+                            },
+                          );
+                        },
+                      ),
                     SizedBox(
                       width: 8,
                     ),
@@ -297,17 +299,18 @@ class TransferBtcAdnrModal extends BaseComponent {
           SizedBox(
             height: 16,
           ),
-          TextFormField(
-            controller: formProvider.acceptanceCodeController,
-            validator: formProvider.acceptanceCodeValidator,
-            decoration: InputDecoration(
-              label: Text(
-                l10n.btcAcceptanceCodeLabel,
+          if (btcNameAcceptanceAvailable(ref.watch(walletInfoProvider)?.blockHeight))
+            TextFormField(
+              controller: formProvider.acceptanceCodeController,
+              validator: formProvider.acceptanceCodeValidator,
+              decoration: InputDecoration(
+                label: Text(
+                  l10n.btcAcceptanceCodeLabel,
+                ),
+                helperText: l10n.btcAcceptanceCodeHelpDesktop,
+                helperMaxLines: 3,
               ),
-              helperText: l10n.btcAcceptanceCodeHelpDesktop,
-              helperMaxLines: 3,
             ),
-          ),
           Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

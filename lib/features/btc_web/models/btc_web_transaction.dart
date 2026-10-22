@@ -98,6 +98,14 @@ class BtcWebTransaction with _$BtcWebTransaction {
     return toAddresses.where((element) => myAddresses.contains(element)).join(',');
   }
 
+  /// Whether any input or output is one of [addresses]. A deposit into a
+  /// vBTC contract pays its deposit address from the wallet's own, so
+  /// neither [toAddress] (the wallet's outputs) nor [fromAddress] shows it.
+  bool touchesAnyAddress(Iterable<String> addresses) {
+    final wanted = addresses.toSet();
+    return vout.any((o) => wanted.contains(o.scriptpubkeyAddress)) || vin.any((i) => wanted.contains(i.prevout.scriptpubkeyAddress));
+  }
+
   // bool isIncoming(String myAddress) {
   //   if (vin.first.prevout.scriptpubkeyAddress == myAddress) {
   //     return false;

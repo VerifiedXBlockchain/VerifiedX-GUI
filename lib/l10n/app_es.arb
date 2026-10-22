@@ -7383,6 +7383,10 @@
   "svcNotifTokenChangeOwnershipTitle": "Cambio de propiedad del token",
   "svcNotifTokenDeployedTitle": "Token desplegado",
   "svcNotifTokenPauseTitle": "Pausa de token",
+  "svcNotifTokenResumeTitle": "Reanudación de token",
+  "@svcNotifTokenResumeTitle": {
+    "description": "Title of the notification for a confirmed transaction that resumes a paused token."
+  },
   "svcNotifTokensMintedTitle": "Tokens acuñados",
   "svcNotifTokenTopicCreatedTitle": "Tema de token creado",
   "svcNotifTokenTransferTitle": "Transferencia de token",

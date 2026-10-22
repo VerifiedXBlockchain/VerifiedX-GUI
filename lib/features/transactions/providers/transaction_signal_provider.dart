@@ -357,7 +357,7 @@ class TransactionSignalProvider extends StateNotifier<List<Transaction>> {
           TransactionNotification(
             identifier: "${transaction.hash}_outgoing",
             transaction: transaction,
-            title: globalL10n.svcNotifTokenPauseTitle,
+            title: isPause ? globalL10n.svcNotifTokenPauseTitle : globalL10n.svcNotifTokenResumeTitle,
             body: isPause ? globalL10n.svcNotifPaused : globalL10n.svcNotifResumed,
             icon: Icons.toll,
           ),
