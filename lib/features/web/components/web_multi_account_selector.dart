@@ -408,7 +408,7 @@ class WebManageAccountsBottomSheet extends BaseComponent {
                                           button: true,
                                           child: InkWell(
                                             onTap: () async {
-                                              showKeysForAccount(context, ref, account, KeypairType.vfx);
+                                              showKeysForAccount(context, ref, account, KeypairType.vfx, true);
                                             },
                                             child: Icon(
                                               Icons.remove_red_eye,
