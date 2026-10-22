@@ -96,84 +96,89 @@ class OperationsScreen extends BaseScreen {
                 ),
                 SizedBox(
                   width: 250,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(l10n.operationsStatus),
-                      ),
-                      NewStatusContainer(),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            iconSize: 16,
-                            onPressed: () {
-                              launchUrl(
-                                  Uri.parse("https://discord.gg/7cd5ebDQCj"));
-                            },
-                            icon: FaIcon(
-                              FontAwesomeIcons.discord,
-                              color: Colors.white.withOpacity(0.8),
-                            ),
-                            tooltip: l10n.homeJoinDiscord,
-                          ),
-                          IconButton(
-                            iconSize: 16,
-                            onPressed: () {
-                              launchUrl(Uri.parse(
-                                  "https://github.com/VerifiedXBlockchain"));
-                            },
-                            icon: FaIcon(
-                              FontAwesomeIcons.github,
-                              color: Colors.white.withOpacity(0.8),
-                            ),
-                            tooltip: l10n.homeFooterGithubTooltip,
-                          ),
-                          Semantics(
-                            button: true,
-                            child: InkWell(
-                              onTap: () {
-                                launchUrlString("https://docs.verifiedx.io");
+                  // Scrolls when the column is taller than the room left
+                  // under the tool buttons, which wrap onto a second row in
+                  // longer languages such as Spanish.
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(l10n.operationsStatus),
+                        ),
+                        NewStatusContainer(),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              iconSize: 16,
+                              onPressed: () {
+                                launchUrl(
+                                    Uri.parse("https://discord.gg/7cd5ebDQCj"));
                               },
-                              child: Text(
-                                l10n.operationsDocs,
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.8),
-                                    fontSize: 12,
-                                    decoration: TextDecoration.underline),
+                              icon: FaIcon(
+                                FontAwesomeIcons.discord,
+                                color: Colors.white.withOpacity(0.8),
+                              ),
+                              tooltip: l10n.homeJoinDiscord,
+                            ),
+                            IconButton(
+                              iconSize: 16,
+                              onPressed: () {
+                                launchUrl(Uri.parse(
+                                    "https://github.com/VerifiedXBlockchain"));
+                              },
+                              icon: FaIcon(
+                                FontAwesomeIcons.github,
+                                color: Colors.white.withOpacity(0.8),
+                              ),
+                              tooltip: l10n.homeFooterGithubTooltip,
+                            ),
+                            Semantics(
+                              button: true,
+                              child: InkWell(
+                                onTap: () {
+                                  launchUrlString("https://docs.verifiedx.io");
+                                },
+                                child: Text(
+                                  l10n.operationsDocs,
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.8),
+                                      fontSize: 12,
+                                      decoration: TextDecoration.underline),
+                                ),
                               ),
                             ),
-                          ),
 
-                          // RootContainerRotatingCube(),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 12,
-                      ),
-                      Text(
-                        l10n.txpWalletVersionInfo(
-                          Env.isDevnet
-                              ? '[DEVNET]'
-                              : Env.isTestNet
-                                  ? ' [TESTNET]'
-                                  : '',
-                          APP_VERSION,
-                          APP_VERSION_NICKNAME,
+                            // RootContainerRotatingCube(),
+                          ],
                         ),
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.getBlue(ColorShade.s50),
-                          height: 1.5,
+                        SizedBox(
+                          height: 12,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                        Text(
+                          l10n.txpWalletVersionInfo(
+                            Env.isDevnet
+                                ? '[DEVNET]'
+                                : Env.isTestNet
+                                    ? ' [TESTNET]'
+                                    : '',
+                            APP_VERSION,
+                            APP_VERSION_NICKNAME,
+                          ),
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: AppColors.getBlue(ColorShade.s50),
+                            height: 1.5,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
