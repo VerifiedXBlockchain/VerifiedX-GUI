@@ -168,7 +168,7 @@ class SendForm extends BaseComponent {
         balance = btcAccount?.balance ?? 0.0;
         color = AppColors.getBtc();
       }
-      balance = wallet?.balance ?? 0;
+      balance = wallet?.spendableBalance ?? 0;
       totalBalance = wallet?.totalBalance ?? 0.0;
       lockedBalance = wallet?.lockedBalance ?? 0.0;
       color = wallet?.isReserved == true ? Colors.deepPurple.shade200 : Colors.white;
