@@ -7503,11 +7503,11 @@ abstract class AppLocalizations {
   /// **'Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.'**
   String get prvExportViewingKeyBody;
 
-  /// No description provided for @prvFailedExportViewingKey.
+  /// Toast when the node refuses to export the privacy wallet's viewing key; the placeholder is the node's reason.
   ///
   /// In en, this message translates to:
-  /// **'Failed to export viewing key'**
-  String get prvFailedExportViewingKey;
+  /// **'Failed to export viewing key: {error}'**
+  String prvFailedExportViewingKey(String error);
 
   /// No description provided for @prvFailedGenerateShieldedAddress.
   ///

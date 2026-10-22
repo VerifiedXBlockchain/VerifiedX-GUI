@@ -4041,7 +4041,15 @@
   },
   "prvExportViewingKey": "Exportar clave de visualización",
   "prvExportViewingKeyBody": "Copia esta clave para importar una billetera de solo lectura en otro dispositivo. Esta clave puede ver saldos pero no puede gastar.",
-  "prvFailedExportViewingKey": "No se pudo exportar la clave de visualización",
+  "prvFailedExportViewingKey": "No se pudo exportar la clave de visualización: {error}",
+  "@prvFailedExportViewingKey": {
+    "description": "Toast when the node refuses to export the privacy wallet's viewing key; the placeholder is the node's reason.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "prvFailedGenerateShieldedAddress": "No se pudo generar la dirección blindada",
   "prvFailedImportViewingKey": "No se pudo importar la clave de visualización",
   "prvFeeDeductedFromShielded": "Comisión: {fee} (deducida del saldo blindado)",

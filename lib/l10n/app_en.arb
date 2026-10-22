@@ -4067,7 +4067,15 @@
   },
   "prvExportViewingKey": "Export Viewing Key",
   "prvExportViewingKeyBody": "Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.",
-  "prvFailedExportViewingKey": "Failed to export viewing key",
+  "prvFailedExportViewingKey": "Failed to export viewing key: {error}",
+  "@prvFailedExportViewingKey": {
+    "description": "Toast when the node refuses to export the privacy wallet's viewing key; the placeholder is the node's reason.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "prvFailedGenerateShieldedAddress": "Failed to generate shielded address",
   "prvFailedImportViewingKey": "Failed to import viewing key",
   "prvFeeDeductedFromShielded": "Fee: {fee} (deducted from shielded balance)",

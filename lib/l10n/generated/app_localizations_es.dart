@@ -3984,7 +3984,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvExportViewingKeyBody => 'Copia esta clave para importar una billetera de solo lectura en otro dispositivo. Esta clave puede ver saldos pero no puede gastar.';
 
   @override
-  String get prvFailedExportViewingKey => 'No se pudo exportar la clave de visualización';
+  String prvFailedExportViewingKey(String error) {
+    return 'No se pudo exportar la clave de visualización: $error';
+  }
 
   @override
   String get prvFailedGenerateShieldedAddress => 'No se pudo generar la dirección blindada';

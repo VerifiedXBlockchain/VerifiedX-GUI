@@ -20,7 +20,8 @@ void _log(String method, String message, [Map<String, dynamic>? json]) {
 }
 
 class PrivacyService extends BaseService {
-  PrivacyService() : super(apiBasePathOverride: "/privacyapi/PrivacyV1");
+  /// [hostOverride] is for tests; the app always talks to the local CLI.
+  PrivacyService({String? hostOverride}) : super(apiBasePathOverride: "/privacyapi/PrivacyV1", hostOverride: hostOverride);
 
   Future<PlonkStatus?> getPlonkStatus() async {
     try {
@@ -211,25 +212,31 @@ class PrivacyService extends BaseService {
     }
   }
 
-  Future<Map<String, dynamic>?> exportViewingKey({
+  /// Core 9.0 asks for [walletPassword], as for a spend. Throws with the
+  /// node's message when the export is refused.
+  Future<Map<String, dynamic>> exportViewingKey({
     required String zfxAddress,
+    required String walletPassword,
   }) async {
     try {
       final result = await postJson(
         '/ExportViewingKey',
         params: {
           "ZfxAddress": zfxAddress,
+          "WalletPassword": walletPassword,
         },
       );
 
       final data = result['data'];
-      if (data != null && data['Success'] == true && data['Result'] != null) {
-        return data['Result'];
+      _log('ExportViewingKey', 'success=${data?['Success']}');
+      if (data == null) throw Exception("No response data from server");
+      if (data['Success'] != true || data['Result'] == null) {
+        throw Exception(data['Message'] ?? 'Unknown error');
       }
-      return null;
+      return data['Result'];
     } catch (e) {
       _log('ExportViewingKey', 'error: $e');
-      return null;
+      rethrow;
     }
   }
 

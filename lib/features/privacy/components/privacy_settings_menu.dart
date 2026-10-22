@@ -10,7 +10,9 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
+import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
+import '../utils/privacy_unlock.dart';
 import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
 
 class PrivacySettingsMenu extends ConsumerWidget {
@@ -108,9 +110,13 @@ class PrivacySettingsMenu extends ConsumerWidget {
       return;
     }
 
-    final result = await PrivacyService().exportViewingKey(zfxAddress: zfxAddress);
-    if (result != null && result['ViewingKeyBase64'] != null) {
-      final key = result['ViewingKeyBase64'] as String;
+    await requirePrivacyUnlock(ref);
+    if (!ref.read(privacyUnlockedProvider)) {
+      return;
+    }
+
+    final key = await ref.read(privacyActionsProvider.notifier).exportViewingKey(zfxAddress: zfxAddress);
+    if (key != null) {
       await InfoDialog.show(
         title: l10n.prvViewingKeyTitle,
         content: ConstrainedBox(
@@ -158,8 +164,6 @@ class PrivacySettingsMenu extends ConsumerWidget {
           ),
         ),
       );
-    } else {
-      Toast.error(l10n.prvFailedExportViewingKey);
     }
   }
 

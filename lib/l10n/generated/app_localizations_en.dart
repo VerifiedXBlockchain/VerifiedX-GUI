@@ -3984,7 +3984,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prvExportViewingKeyBody => 'Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.';
 
   @override
-  String get prvFailedExportViewingKey => 'Failed to export viewing key';
+  String prvFailedExportViewingKey(String error) {
+    return 'Failed to export viewing key: $error';
+  }
 
   @override
   String get prvFailedGenerateShieldedAddress => 'Failed to generate shielded address';

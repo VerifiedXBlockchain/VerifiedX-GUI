@@ -154,6 +154,29 @@ class PrivacyActionsNotifier extends StateNotifier<bool> {
       state = false;
     }
   }
+
+  /// The viewing key of [zfxAddress], or null once the user has been told
+  /// why not. Exporting it needs the wallet password, as a spend does.
+  Future<String?> exportViewingKey({
+    required String zfxAddress,
+  }) async {
+    if (_password == null) {
+      Toast.error(globalL10n.prvPasswordRequired);
+      return null;
+    }
+    _resetTimer();
+    try {
+      final result = await PrivacyService().exportViewingKey(
+        zfxAddress: zfxAddress,
+        walletPassword: _password!,
+      );
+      return result['ViewingKeyBase64'] as String?;
+    } catch (e) {
+      _handleAuthError(e);
+      Toast.error(globalL10n.prvFailedExportViewingKey(userErrorMessage(e, withLeadIn: false)));
+      return null;
+    }
+  }
 }
 
 final privacyActionsProvider = StateNotifierProvider<PrivacyActionsNotifier, bool>((ref) {
