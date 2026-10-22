@@ -55,6 +55,13 @@ class WebTransaction with _$WebTransaction {
   /// list card and explorer both show local time.
   DateTime get localDate => date.toLocal();
 
+  /// Whether this transaction paid into [address] or [raAddress], the
+  /// viewer's VFX and Vault accounts. Spyglass amounts are positive whichever
+  /// way the funds moved, so the direction comes from the addresses.
+  bool isIncomingFor({required String? address, required String? raAddress}) {
+    return toAddress == address || toAddress == raAddress;
+  }
+
   /// [unlockTime] (the Vault settlement time) in the viewer's time zone,
   /// matching [localDate]. `unlock_time` parses as UTC too.
   DateTime? get localUnlockTime => unlockTime?.toLocal();
