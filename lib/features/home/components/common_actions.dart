@@ -20,6 +20,7 @@ import '../../navigation/utils.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../nft/services/nft_service.dart';
 import '../../token/providers/token_list_provider.dart';
+import '../screens/all_tokens_screen.dart';
 
 import '../../../core/theme/pretty_icons.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -108,9 +109,13 @@ class CommonActions extends BaseComponent {
                   // for all three first left the tap unanswered while one was
                   // slow, and the late push then stacked the screen wherever
                   // the user had gone since.
-                  ref.read(tokenizedBitcoinListProvider.notifier).load();
-                  ref.read(tokenListProvider.notifier).load(1);
-                  ref.read(nftListProvider.notifier).load(1);
+                  final refreshing = ref.read(allTokensRefreshingProvider.notifier);
+                  refreshing.state = true;
+                  Future.wait([
+                    ref.read(tokenizedBitcoinListProvider.notifier).load(),
+                    ref.read(tokenListProvider.notifier).load(1),
+                    ref.read(nftListProvider.notifier).load(1),
+                  ]).whenComplete(() => refreshing.state = false);
 
                   ref.read(globalBalancesExpandedProvider.notifier).detract();
                   AutoRouter.of(context).push(AllTokensScreenRoute());
