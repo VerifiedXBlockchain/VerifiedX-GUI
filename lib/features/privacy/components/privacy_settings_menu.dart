@@ -115,56 +115,74 @@ class PrivacySettingsMenu extends ConsumerWidget {
       return;
     }
 
-    final key = await ref.read(privacyActionsProvider.notifier).exportViewingKey(zfxAddress: zfxAddress);
-    if (key != null) {
-      await InfoDialog.show(
-        title: l10n.prvViewingKeyTitle,
-        content: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 450),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.prvExportViewingKeyBody,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
+    final exported = await ref.read(privacyActionsProvider.notifier).exportViewingKey(zfxAddress: zfxAddress);
+    if (exported == null) {
+      return;
+    }
+
+    // Core 9.0 exports a key that can spend: say so before showing it, and
+    // not under the view-only wording.
+    if (exported.canSpend) {
+      final confirmed = await ConfirmDialog.show(
+        title: l10n.prvViewingKeyCanSpendTitle,
+        body: l10n.prvViewingKeyCanSpendBody,
+        confirmText: l10n.prvViewingKeyShowAction,
+        cancelText: l10n.actionCancel,
+        destructive: true,
+      );
+      if (confirmed != true) {
+        return;
+      }
+    }
+
+    final key = exported.key;
+    await InfoDialog.show(
+      title: l10n.prvViewingKeyTitle,
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 450),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              exported.canSpend ? l10n.prvViewingKeyCanSpendBody : l10n.prvExportViewingKeyBody,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.black26,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SelectableText(
-                        key,
-                        style: const TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SelectableText(
+                      key,
+                      style: const TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 12,
+                        color: Colors.white,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.copy, size: 16),
-                      tooltip: l10n.prvCopyViewingKey,
-                      color: Colors.white54,
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: key));
-                        Toast.message(l10n.prvViewingKeyCopied);
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 16),
+                    tooltip: l10n.prvCopyViewingKey,
+                    color: Colors.white54,
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: key));
+                      Toast.message(l10n.prvViewingKeyCopied);
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 
   Future<void> _importViewingKey() async {

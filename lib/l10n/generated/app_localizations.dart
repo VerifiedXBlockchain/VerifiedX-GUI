@@ -8073,6 +8073,18 @@ abstract class AppLocalizations {
   /// **'Viewing Key (Base64)'**
   String get prvViewingKeyBase64Label;
 
+  /// Shown before and with an exported viewing key that the node reports can spend the wallet's shielded funds.
+  ///
+  /// In en, this message translates to:
+  /// **'Anyone holding this key can move this wallet\'s shielded funds. Share it only as you would the wallet itself.'**
+  String get prvViewingKeyCanSpendBody;
+
+  /// Title of the warning shown before revealing a spend-capable viewing key.
+  ///
+  /// In en, this message translates to:
+  /// **'This key can spend your shielded funds'**
+  String get prvViewingKeyCanSpendTitle;
+
   /// No description provided for @prvViewingKeyCopied.
   ///
   /// In en, this message translates to:
@@ -8084,6 +8096,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Viewing key imported successfully'**
   String get prvViewingKeyImported;
+
+  /// Confirm button of the spend-capable viewing key warning; reveals the key.
+  ///
+  /// In en, this message translates to:
+  /// **'Show key'**
+  String get prvViewingKeyShowAction;
 
   /// No description provided for @prvViewingKeyTitle.
   ///

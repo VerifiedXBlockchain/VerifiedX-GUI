@@ -4287,8 +4287,20 @@
     }
   },
   "prvViewingKeyBase64Label": "Clave de visualización (Base64)",
+  "prvViewingKeyCanSpendBody": "Quien tenga esta clave puede mover los fondos blindados de esta billetera. Compártela solo como compartirías la billetera misma.",
+  "@prvViewingKeyCanSpendBody": {
+    "description": "Shown before and with an exported viewing key that the node reports can spend the wallet's shielded funds."
+  },
+  "prvViewingKeyCanSpendTitle": "Esta clave puede gastar tus fondos blindados",
+  "@prvViewingKeyCanSpendTitle": {
+    "description": "Title of the warning shown before revealing a spend-capable viewing key."
+  },
   "prvViewingKeyCopied": "Clave de visualización copiada al portapapeles",
   "prvViewingKeyImported": "Clave de visualización importada correctamente",
+  "prvViewingKeyShowAction": "Mostrar clave",
+  "@prvViewingKeyShowAction": {
+    "description": "Confirm button of the spend-capable viewing key warning; reveals the key."
+  },
   "prvViewingKeyTitle": "Clave de visualización",
   "prvViewOnly": "SOLO LECTURA",
   "prvWalletActivated": "Billetera privada activada: {address}",

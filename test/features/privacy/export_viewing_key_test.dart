@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/api_token_manager.dart';
 import 'package:rbx_wallet/core/singletons.dart';
+import 'package:rbx_wallet/features/privacy/providers/privacy_actions_provider.dart';
 import 'package:rbx_wallet/features/privacy/services/privacy_service.dart';
 
 /// Answers every request with [body] and records the JSON bodies it received.
@@ -53,6 +54,24 @@ void main() {
         serviceFor(server).exportViewingKey(zfxAddress: 'zfx_abc', walletPassword: 'wrong'),
         throwsA(predicate((e) => e.toString().contains('GCM authentication failed'))),
       );
+    });
+  });
+
+  group('ExportedViewingKey.fromResult', () {
+    test("keeps Core 9.0's word that the key can spend", () {
+      final exported = ExportedViewingKey.fromResult({'ViewingKeyBase64': 'a2V5', 'CanSpend': true})!;
+      expect(exported.key, 'a2V5');
+      expect(exported.canSpend, isTrue);
+    });
+
+    test('reads an answer without the flag as spend-capable, and only false as view-only', () {
+      expect(ExportedViewingKey.fromResult({'ViewingKeyBase64': 'a2V5'})!.canSpend, isTrue);
+      expect(ExportedViewingKey.fromResult({'ViewingKeyBase64': 'a2V5', 'CanSpend': false})!.canSpend, isFalse);
+    });
+
+    test('an answer without a key is no export', () {
+      expect(ExportedViewingKey.fromResult({'CanSpend': true}), isNull);
+      expect(ExportedViewingKey.fromResult({'ViewingKeyBase64': ''}), isNull);
     });
   });
 }

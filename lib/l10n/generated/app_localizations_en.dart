@@ -4317,10 +4317,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prvViewingKeyBase64Label => 'Viewing Key (Base64)';
 
   @override
+  String get prvViewingKeyCanSpendBody => 'Anyone holding this key can move this wallet\'s shielded funds. Share it only as you would the wallet itself.';
+
+  @override
+  String get prvViewingKeyCanSpendTitle => 'This key can spend your shielded funds';
+
+  @override
   String get prvViewingKeyCopied => 'Viewing key copied to clipboard';
 
   @override
   String get prvViewingKeyImported => 'Viewing key imported successfully';
+
+  @override
+  String get prvViewingKeyShowAction => 'Show key';
 
   @override
   String get prvViewingKeyTitle => 'Viewing Key';

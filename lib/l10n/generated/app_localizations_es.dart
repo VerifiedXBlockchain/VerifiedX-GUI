@@ -4317,10 +4317,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvViewingKeyBase64Label => 'Clave de visualización (Base64)';
 
   @override
+  String get prvViewingKeyCanSpendBody => 'Quien tenga esta clave puede mover los fondos blindados de esta billetera. Compártela solo como compartirías la billetera misma.';
+
+  @override
+  String get prvViewingKeyCanSpendTitle => 'Esta clave puede gastar tus fondos blindados';
+
+  @override
   String get prvViewingKeyCopied => 'Clave de visualización copiada al portapapeles';
 
   @override
   String get prvViewingKeyImported => 'Clave de visualización importada correctamente';
+
+  @override
+  String get prvViewingKeyShowAction => 'Mostrar clave';
 
   @override
   String get prvViewingKeyTitle => 'Clave de visualización';
