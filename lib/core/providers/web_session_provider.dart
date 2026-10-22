@@ -16,6 +16,7 @@ import 'package:collection/collection.dart';
 import '../../features/web/models/multi_account_instance.dart';
 import '../../features/web/models/web_address.dart';
 import '../../features/web/providers/multi_account_provider.dart';
+import '../../features/web/providers/web_currency_segmented_button_provider.dart';
 import '../../features/web/providers/web_selected_account_provider.dart';
 import '../models/web_session_model.dart';
 import '../../features/transactions/providers/web_transaction_detail_provider.dart';
@@ -261,6 +262,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
         webAddress?.balanceLocked ?? 0,
         webAddress?.balanceTotal ?? 0,
         webAddress?.adnr);
+    ref.read(webCurrencySegementedButtonProvider.notifier).followVfxSelection();
 
     refreshBtcBalanceInfo();
 
@@ -327,6 +329,7 @@ class WebSessionProvider extends StateNotifier<WebSessionModel> {
           webAddress?.balanceLocked ?? 0,
           webAddress?.balanceTotal ?? 0,
           webAddress?.adnr);
+      ref.read(webCurrencySegementedButtonProvider.notifier).followVfxSelection();
     }
 
     Future.delayed(const Duration(milliseconds: 100), () {
