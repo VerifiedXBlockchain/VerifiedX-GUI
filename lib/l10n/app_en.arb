@@ -1537,8 +1537,6 @@
   "bw2FailedSignOwnershipProof": "Failed to sign ownership proof.",
   "bw2FailedSignTransaction": "Failed to sign transaction",
   "bw2FailedStartFrost": "Failed to start FROST signing",
-  "bw2FrostConfirmHint": "This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.",
-  "bw2FrostConfirmHintWeb": "This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.",
   "bw2FrostFailedOrTimedOut": "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.",
   "bw2FrostGroupKey": "FROST Group Key",
   "bw2FrostJobNotFound": "FROST signing job not found",
@@ -10415,5 +10413,13 @@
   "tokenMintOverflow": "This mint would take the supply or the balance past the largest amount the chain can hold.",
   "@tokenMintOverflow": {
     "description": "Mint refused before sending: the supply or the minter's balance would overflow."
+  },
+  "bw2RequestConfirmHint": "This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.",
+  "@bw2RequestConfirmHint": {
+    "description": "Withdrawal dialog while the request waits for its VFX block; true for FROST and watched vaults alike, so it names no signing."
+  },
+  "bw2WatchedChangeFailed": "The fee change could not be sent.",
+  "@bw2WatchedChangeFailed": {
+    "description": "Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason."
   }
 }

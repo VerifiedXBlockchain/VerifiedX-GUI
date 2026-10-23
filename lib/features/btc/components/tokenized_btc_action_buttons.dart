@@ -504,7 +504,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
 
-                    if (dialogResult != null && dialogResult.success) {
+                    if (dialogResult != null && dialogResult.isPaid) {
                       ref.read(logProvider.notifier).append(
                             LogEntry(
                               message: "vBTC Withdrawal completed successfully.",
@@ -587,7 +587,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
 
-                    if (dialogResult != null && dialogResult.success) {
+                    if (dialogResult != null && dialogResult.isPaid) {
                       final message = "vBTC Withdrawal completed successfully.";
                       ref.read(logProvider.notifier).append(
                             LogEntry(

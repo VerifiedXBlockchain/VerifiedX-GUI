@@ -1,3 +1,5 @@
+import '../../btc_web/models/watched_withdrawal.dart';
+
 class WithdrawalResult {
   final bool success;
   final String? message;
@@ -16,6 +18,10 @@ class WithdrawalResult {
   /// CompleteWithdrawal), so retrying will keep failing.
   final bool unpayable;
 
+  /// Set when the vault is one the chain watches: the chain pays the
+  /// withdrawal, so [success] means only that it is paid or being paid.
+  final WatchedWithdrawal? watched;
+
   const WithdrawalResult({
     required this.success,
     this.message,
@@ -25,5 +31,22 @@ class WithdrawalResult {
     this.status,
     this.timedOut = false,
     this.unpayable = false,
+    this.watched,
   });
+
+  /// Whether the Bitcoin has been paid. On a watched vault that is only once
+  /// Bitcoin confirms the payout, not when the request is accepted.
+  bool get isPaid => watched != null ? watched!.paid : success;
+
+  WithdrawalResult withWatched(WatchedWithdrawal? latest) => WithdrawalResult(
+        success: success,
+        message: message,
+        requestHash: requestHash,
+        vfxTransactionHash: vfxTransactionHash,
+        btcTransactionHash: latest?.bitcoinTxHash ?? btcTransactionHash,
+        status: latest?.status ?? status,
+        timedOut: timedOut,
+        unpayable: unpayable,
+        watched: latest ?? watched,
+      );
 }

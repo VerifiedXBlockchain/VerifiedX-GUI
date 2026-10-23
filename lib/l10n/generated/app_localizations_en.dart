@@ -1239,12 +1239,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2FailedStartFrost => 'Failed to start FROST signing';
 
   @override
-  String get bw2FrostConfirmHint => 'This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.';
-
-  @override
-  String get bw2FrostConfirmHintWeb => 'This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.';
-
-  @override
   String get bw2FrostFailedOrTimedOut => 'FROST signing failed or timed out. The withdrawal may still complete — check back shortly.';
 
   @override
@@ -11244,4 +11238,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tokenMintOverflow => 'This mint would take the supply or the balance past the largest amount the chain can hold.';
+
+  @override
+  String get bw2RequestConfirmHint => 'This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.';
+
+  @override
+  String get bw2WatchedChangeFailed => 'The fee change could not be sent.';
 }

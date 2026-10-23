@@ -1523,8 +1523,6 @@
   "bw2FailedSignOwnershipProof": "No se pudo firmar la prueba de propiedad.",
   "bw2FailedSignTransaction": "No se pudo firmar la transacción",
   "bw2FailedStartFrost": "No se pudo iniciar la firma FROST",
-  "bw2FrostConfirmHint": "Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.",
-  "bw2FrostConfirmHintWeb": "Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.",
   "bw2FrostFailedOrTimedOut": "La firma FROST falló o agotó el tiempo de espera. Es posible que el retiro aún se complete: vuelve a verificar en breve.",
   "bw2FrostGroupKey": "Clave de grupo FROST",
   "bw2FrostJobNotFound": "No se encontró el trabajo de firma FROST",
@@ -10341,5 +10339,13 @@
   "tokenMintOverflow": "Esta acuñación llevaría el suministro o el saldo por encima de la cantidad máxima que admite la cadena.",
   "@tokenMintOverflow": {
     "description": "Mint refused before sending: the supply or the minter's balance would overflow."
+  },
+  "bw2RequestConfirmHint": "Esto suele tardar entre 10 y 20 segundos. El retiro continúa automáticamente una vez confirmado.",
+  "@bw2RequestConfirmHint": {
+    "description": "Withdrawal dialog while the request waits for its VFX block; true for FROST and watched vaults alike, so it names no signing."
+  },
+  "bw2WatchedChangeFailed": "No se pudo enviar el cambio de comisión.",
+  "@bw2WatchedChangeFailed": {
+    "description": "Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason."
   }
 }

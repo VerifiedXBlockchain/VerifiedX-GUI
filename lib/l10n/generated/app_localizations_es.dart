@@ -1239,12 +1239,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2FailedStartFrost => 'No se pudo iniciar la firma FROST';
 
   @override
-  String get bw2FrostConfirmHint => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
-
-  @override
-  String get bw2FrostConfirmHintWeb => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
-
-  @override
   String get bw2FrostFailedOrTimedOut => 'La firma FROST falló o agotó el tiempo de espera. Es posible que el retiro aún se complete: vuelve a verificar en breve.';
 
   @override
@@ -11244,4 +11238,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tokenMintOverflow => 'Esta acuñación llevaría el suministro o el saldo por encima de la cantidad máxima que admite la cadena.';
+
+  @override
+  String get bw2RequestConfirmHint => 'Esto suele tardar entre 10 y 20 segundos. El retiro continúa automáticamente una vez confirmado.';
+
+  @override
+  String get bw2WatchedChangeFailed => 'No se pudo enviar el cambio de comisión.';
 }

@@ -2397,18 +2397,6 @@ abstract class AppLocalizations {
   /// **'Failed to start FROST signing'**
   String get bw2FailedStartFrost;
 
-  /// No description provided for @bw2FrostConfirmHint.
-  ///
-  /// In en, this message translates to:
-  /// **'This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.'**
-  String get bw2FrostConfirmHint;
-
-  /// No description provided for @bw2FrostConfirmHintWeb.
-  ///
-  /// In en, this message translates to:
-  /// **'This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.'**
-  String get bw2FrostConfirmHintWeb;
-
   /// No description provided for @bw2FrostFailedOrTimedOut.
   ///
   /// In en, this message translates to:
@@ -20798,6 +20786,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This mint would take the supply or the balance past the largest amount the chain can hold.'**
   String get tokenMintOverflow;
+
+  /// Withdrawal dialog while the request waits for its VFX block; true for FROST and watched vaults alike, so it names no signing.
+  ///
+  /// In en, this message translates to:
+  /// **'This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.'**
+  String get bw2RequestConfirmHint;
+
+  /// Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The fee change could not be sent.'**
+  String get bw2WatchedChangeFailed;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

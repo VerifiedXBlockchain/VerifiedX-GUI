@@ -631,7 +631,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
         const SizedBox(height: 16),
         Text(AppLocalizations.of(context).bw2WaitingBlockConfirmation, style: const TextStyle(color: Colors.white70)),
         const SizedBox(height: 8),
-        Text(AppLocalizations.of(context).bw2FrostConfirmHintWeb, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+        Text(AppLocalizations.of(context).bw2RequestConfirmHint, style: const TextStyle(color: Colors.white38, fontSize: 12)),
       ],
     );
   }
