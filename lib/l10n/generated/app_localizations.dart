@@ -18567,6 +18567,12 @@ abstract class AppLocalizations {
   /// **'Terms of Use'**
   String get txpTermsOfUse;
 
+  /// No description provided for @txpTestnetBtcFaucetAskTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Test BTC for the VerifiedX testnet is not available from a public faucet yet. Ask the VerifiedX team to send some to your BTC address.'**
+  String get txpTestnetBtcFaucetAskTeam;
+
   /// No description provided for @txpTestnetFaucet.
   ///
   /// In en, this message translates to:

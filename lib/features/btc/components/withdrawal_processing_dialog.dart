@@ -376,9 +376,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           _buildHashRow(
             l10n.bw2BtcTransactionLabel,
             _result!.btcTransactionHash!,
-            explorerUrl: Env.isTestNet
-                ? "https://mempool.space/testnet4/tx/${_result!.btcTransactionHash!}"
-                : "https://mempool.space/tx/${_result!.btcTransactionHash!}",
+            explorerUrl: Env.btcExplorerTxUrl(_result!.btcTransactionHash!),
           ),
         ],
         const SizedBox(height: 20),

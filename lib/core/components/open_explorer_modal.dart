@@ -42,11 +42,7 @@ class OpenExplorerModal extends BaseComponent {
               label: l10n.r3eBtcExplorer,
               variant: AppColorVariant.Btc,
               onPressed: () {
-                if (Env.isTestNet) {
-                  launchUrlString("https://mempool.space/testnet4/");
-                } else {
-                  launchUrlString("https://mempool.space/");
-                }
+                launchUrlString(Env.btcExplorerBaseUrl);
               },
             )
           ],

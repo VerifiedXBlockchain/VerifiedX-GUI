@@ -887,13 +887,7 @@ class WebAccountInfoVbtc extends BaseComponent {
                 button: true,
                 child: GestureDetector(
                   onTap: () {
-                    if (Env.btcIsTestNet) {
-                      launchUrlString(
-                          "https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
-                    } else {
-                      launchUrlString(
-                          "https://mempool.space/tx/${latestVbtcBtcTx!.txid}");
-                    }
+                    launchUrlString(Env.btcExplorerTxUrl(latestVbtcBtcTx!.txid));
 
                     // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
                     // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);

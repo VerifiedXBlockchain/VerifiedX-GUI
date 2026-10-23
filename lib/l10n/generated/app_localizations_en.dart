@@ -10002,6 +10002,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get txpTermsOfUse => 'Terms of Use';
 
   @override
+  String get txpTestnetBtcFaucetAskTeam => 'Test BTC for the VerifiedX testnet is not available from a public faucet yet. Ask the VerifiedX team to send some to your BTC address.';
+
+  @override
   String get txpTestnetFaucet => 'Testnet Faucet';
 
   @override

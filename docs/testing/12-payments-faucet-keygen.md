@@ -205,9 +205,9 @@ This area covers the features that reach outside the VFX chain or that no other 
 1. Click `Get BTC`, then `Testnet Faucet`.
 
 **Expected**
-- No terms dialog; `https://mempool.space/testnet4/faucet` opens in a new tab / the default browser.
+- No terms dialog; an info dialog says test BTC is not on a public faucet yet and to ask the VerifiedX team. No browser opens.
 
-**Cleanup:** Close the tab.
+**Cleanup:** Close the dialog.
 
 ### TC-MISC-028 · MoonPay sandbox purchase page opens (read-only)
 **Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no
