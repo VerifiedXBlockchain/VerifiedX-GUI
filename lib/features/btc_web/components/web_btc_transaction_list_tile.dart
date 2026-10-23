@@ -17,6 +17,7 @@ import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../providers/btc_web_vbtc_token_list_provider.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/formatting.dart';
 
 class WebBtcTransactionListTile extends BaseComponent {
@@ -37,7 +38,7 @@ class WebBtcTransactionListTile extends BaseComponent {
 
     final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
-    final amount = tx.amountBtc();
+    final amount = tx.amountBtcFor(ref.watch(webSessionProvider.select((v) => v.btcKeypair?.address)));
 
     final isVbtc = tx.touchesAnyAddress(vbtcTokenAddresses);
 
@@ -50,7 +51,7 @@ class WebBtcTransactionListTile extends BaseComponent {
 
     final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
-    final amount = tx.amountBtc();
+    final amount = tx.amountBtcFor(ref.watch(webSessionProvider.select((v) => v.btcKeypair?.address)));
 
     final isVbtc = tx.touchesAnyAddress(vbtcTokenAddresses);
     return AppCard(
