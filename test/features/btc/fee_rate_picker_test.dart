@@ -140,4 +140,21 @@ void main() {
 
     expect(await result, 9);
   });
+
+  testWidgets('live fees show no estimate note', (tester) async {
+    final context = await pumpHost(tester);
+    showFeeRatePicker(context, fees);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('btcFeeRate:estimate-note')), findsNothing);
+  });
+
+  testWidgets('the fallback table says its rates are estimates', (tester) async {
+    final context = await pumpHost(tester);
+    showFeeRatePicker(context, BtcRecommendedFees.fallback());
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('btcFeeRate:estimate-note')), findsOneWidget);
+    expect(find.textContaining('These rates are estimates'), findsOneWidget);
+  });
 }

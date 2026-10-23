@@ -43,9 +43,14 @@ class UtxoListTile extends StatelessWidget {
   const UtxoListTile({
     super.key,
     required this.utxo,
+    this.showUsage = true,
   });
 
   final BtcUtxo utxo;
+
+  /// False where the coin is listed as a transaction's input: the CLI's
+  /// `IsUsed` there is a snapshot from before that transaction spent it.
+  final bool showUsage;
 
   @override
   Widget build(BuildContext context) {
@@ -58,15 +63,17 @@ class UtxoListTile extends StatelessWidget {
           dense: true,
           title: Text(l10n.tkbUtxoAddress(utxo.address)),
           subtitle: Text(l10n.tkbUtxoDetails(utxo.hash, utxo.valueBtcLabel)),
-          trailing: utxo.isUsed
-              ? AppBadge(
-                  label: l10n.tkbUtxoUsed,
-                  variant: AppColorVariant.Btc,
-                )
-              : AppBadge(
-                  label: l10n.tkbUtxoUnused,
-                  variant: AppColorVariant.Primary,
-                ),
+          trailing: !showUsage
+              ? null
+              : utxo.isUsed
+                  ? AppBadge(
+                      label: l10n.tkbUtxoUsed,
+                      variant: AppColorVariant.Btc,
+                    )
+                  : AppBadge(
+                      label: l10n.tkbUtxoUnused,
+                      variant: AppColorVariant.Primary,
+                    ),
         ),
       ),
     );

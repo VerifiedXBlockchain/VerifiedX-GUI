@@ -23,6 +23,7 @@ _$_BtcWebVbtcToken _$$_BtcWebVbtcTokenFromJson(Map<String, dynamic> json) =>
       nft: WebNft.fromJson(json['nft'] as Map<String, dynamic>),
       version: json['version'] as int? ?? 1,
       isPendingWithdrawal: json['is_pending_withdrawal'] as bool? ?? false,
+      isWatched: json['is_watched'] as bool? ?? false,
       frostGroupPublicKey: json['frost_group_public_key'] as String?,
       requiredThreshold: json['required_threshold'] as int?,
       withdrawalRequests: (json['withdrawal_requests'] as List<dynamic>?)
@@ -48,6 +49,7 @@ Map<String, dynamic> _$$_BtcWebVbtcTokenToJson(_$_BtcWebVbtcToken instance) =>
       'nft': instance.nft,
       'version': instance.version,
       'is_pending_withdrawal': instance.isPendingWithdrawal,
+      'is_watched': instance.isWatched,
       'frost_group_public_key': instance.frostGroupPublicKey,
       'required_threshold': instance.requiredThreshold,
       'withdrawal_requests': instance.withdrawalRequests,

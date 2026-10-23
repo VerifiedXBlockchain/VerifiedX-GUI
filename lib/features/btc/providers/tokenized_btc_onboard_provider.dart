@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/providers/session_provider.dart';
 import '../models/btc_account.dart';
 import '../models/btc_fee_rate_preset.dart';
 import '../models/tokenized_bitcoin.dart';
@@ -352,6 +353,10 @@ class VBtcOnboard extends _$VBtcOnboard {
   }
 
   void setVfxWallet(Wallet vfxWallet) {
+    // The token list, the token detail and the wizard's own waits all follow
+    // the selected account, so the wizard's account becomes the selected one;
+    // otherwise its new contract never shows up and the wizard never advances.
+    ref.read(sessionProvider.notifier).setCurrentWallet(vfxWallet, false);
     if (vfxWallet.balance >= VBTC_ONBOARD_VFX_AMOUNT) {
       state = state.copyWith(
           vfxWallet: vfxWallet, step: VBtcOnboardStep.createOrImportBtcAccount);

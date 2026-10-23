@@ -27,6 +27,7 @@ import '../utils/withdrawal_liveness.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../web/utils/pending_debits.dart';
 import 'web_v2_withdrawal_dialog.dart';
+import '../../../utils/formatting.dart';
 
 class WebTokenizedBtcActionButtons extends BaseComponent {
   final BtcWebVbtcToken token;
@@ -332,6 +333,14 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
 
             final feeRate = await promptForFeeRate(context);
             if (feeRate == null) return;
+            if (vbtcWithdrawalLeavesDust(withdrawAmount, feeRate)) {
+              Toast.error(l10n.btcWithdrawalBelowDust(
+                feeRate,
+                kVbtcWithdrawalMinVsize * feeRate,
+                formatBtcAmount(vbtcWithdrawalMinimumSats(feeRate) * BTC_SATOSHI_MULTIPLIER),
+              ));
+              return;
+            }
 
             WebV2WithdrawalDialog.show(
               scIdentifier: token.scIdentifier,

@@ -40,6 +40,7 @@ import '../../web/providers/web_selected_account_provider.dart';
 import '../providers/send_form_provider.dart';
 import '../utils.dart';
 import '../../../utils/formatting.dart';
+import '../../btc/components/btc_fee_estimate_note.dart';
 
 class SendForm extends BaseComponent {
   final Wallet? wallet;
@@ -484,6 +485,7 @@ class SendForm extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BtcFeeEstimateNote(recommendedFees),
                       ListTile(
                         leading: SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelFeeRate)),
                         title: Row(

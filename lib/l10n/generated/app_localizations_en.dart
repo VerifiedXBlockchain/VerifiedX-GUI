@@ -1239,12 +1239,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2FailedStartFrost => 'Failed to start FROST signing';
 
   @override
-  String get bw2FrostConfirmHint => 'This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.';
-
-  @override
-  String get bw2FrostConfirmHintWeb => 'This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.';
-
-  @override
   String get bw2FrostFailedOrTimedOut => 'FROST signing failed or timed out. The withdrawal may still complete — check back shortly.';
 
   @override
@@ -11244,4 +11238,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tokenMintOverflow => 'This mint would take the supply or the balance past the largest amount the chain can hold.';
+
+  @override
+  String get bw2RequestConfirmHint => 'This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.';
+
+  @override
+  String get bw2WatchedChangeFailed => 'The fee change could not be sent.';
+
+  @override
+  String get bw2WatchedRowWaiting => 'Waiting for its Bitcoin transaction';
+
+  @override
+  String get bw2WatchedRowPinned => 'Bitcoin transaction fixed, waiting for Bitcoin to confirm it';
+
+  @override
+  String get bw2WatchedRowReleasing => 'Being released';
+
+  @override
+  String get bw2WatchedRowInProgress => 'In progress';
+
+  @override
+  String get btcFeeRatesAreEstimates => 'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.';
+
+  @override
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
+    return 'At $feeRate sat/vB this withdrawal\'s Bitcoin transaction costs at least $feeSats sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least $minimum BTC, or lower the fee rate.';
+  }
 }
