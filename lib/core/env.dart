@@ -12,6 +12,13 @@ class Env {
   static const bool _isAutomation =
       String.fromEnvironment('AUTOMATION') == 'true';
 
+  /// Tests only: puts the network flags back to their build-time values.
+  @visibleForTesting
+  static void resetNetworkForTesting() {
+    _isTestnet = const String.fromEnvironment('TESTNET') == 'true';
+    _isDevnet = const String.fromEnvironment('DEVNET') == 'true';
+  }
+
   static void setTestnetFromArgs(List<String> args) {
     // CLI args override dart-define
     if (args.contains('--testnet')) {

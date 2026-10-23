@@ -17,6 +17,10 @@ void main() {
   });
 
   group('Env BTC explorer', () {
+    // setTestnetFromArgs changes process-wide state: put it back after each
+    // case so the result never depends on test order.
+    tearDown(Env.resetNetworkForTesting);
+
     // Tests run without the TESTNET dart-define, so these are the mainnet
     // URLs, which must stay exactly as they were before the signet move.
     test('mainnet keeps mempool.space', () {
