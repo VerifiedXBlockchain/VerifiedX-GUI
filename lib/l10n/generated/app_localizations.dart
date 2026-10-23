@@ -20798,6 +20798,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The fee change could not be sent.'**
   String get bw2WatchedChangeFailed;
+
+  /// Web vBTC withdrawal history row on a watched vault: open request whose Bitcoin transaction is not fixed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for its Bitcoin transaction'**
+  String get bw2WatchedRowWaiting;
+
+  /// Web vBTC withdrawal history row on a watched vault: the paying Bitcoin transaction is pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin transaction fixed, waiting for Bitcoin to confirm it'**
+  String get bw2WatchedRowPinned;
+
+  /// Web vBTC withdrawal history row on a watched vault: the requester released it and the release is not confirmed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Being released'**
+  String get bw2WatchedRowReleasing;
+
+  /// Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get bw2WatchedRowInProgress;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

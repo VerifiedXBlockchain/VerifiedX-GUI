@@ -11244,4 +11244,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get bw2WatchedChangeFailed => 'No se pudo enviar el cambio de comisión.';
+
+  @override
+  String get bw2WatchedRowWaiting => 'Esperando su transacción de Bitcoin';
+
+  @override
+  String get bw2WatchedRowPinned => 'Transacción de Bitcoin fijada, esperando a que Bitcoin la confirme';
+
+  @override
+  String get bw2WatchedRowReleasing => 'Liberándose';
+
+  @override
+  String get bw2WatchedRowInProgress => 'En curso';
 }

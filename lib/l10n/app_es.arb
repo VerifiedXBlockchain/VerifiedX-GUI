@@ -10347,5 +10347,21 @@
   "bw2WatchedChangeFailed": "No se pudo enviar el cambio de comisión.",
   "@bw2WatchedChangeFailed": {
     "description": "Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason."
+  },
+  "bw2WatchedRowWaiting": "Esperando su transacción de Bitcoin",
+  "@bw2WatchedRowWaiting": {
+    "description": "Web vBTC withdrawal history row on a watched vault: open request whose Bitcoin transaction is not fixed yet."
+  },
+  "bw2WatchedRowPinned": "Transacción de Bitcoin fijada, esperando a que Bitcoin la confirme",
+  "@bw2WatchedRowPinned": {
+    "description": "Web vBTC withdrawal history row on a watched vault: the paying Bitcoin transaction is pinned."
+  },
+  "bw2WatchedRowReleasing": "Liberándose",
+  "@bw2WatchedRowReleasing": {
+    "description": "Web vBTC withdrawal history row on a watched vault: the requester released it and the release is not confirmed yet."
+  },
+  "bw2WatchedRowInProgress": "En curso",
+  "@bw2WatchedRowInProgress": {
+    "description": "Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet."
   }
 }
