@@ -8642,6 +8642,7 @@
     }
   },
   "txpTermsOfUse": "Terms of Use",
+  "txpTestnetBtcFaucetAskTeam": "Test BTC for the VerifiedX testnet is not available from a public faucet yet. Ask the VerifiedX team to send some to your BTC address.",
   "txpTestnetFaucet": "Testnet Faucet",
   "txpTestnetFaucetNoTerms": "Testnet Faucet does not have any terms. Have fun!",
   "txpTileAmountLabel": "Amount: ",

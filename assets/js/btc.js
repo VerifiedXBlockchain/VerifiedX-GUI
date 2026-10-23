@@ -45745,7 +45745,7 @@
           var TransactionService = class {
             constructor(isTestnet) {
               this.network = isTestnet ? TESTNET2 : MAINNET2;
-              this.apiBaseUrl = isTestnet ? "https://mempool.space/testnet4/api" : "https://mempool.space/api";
+              this.apiBaseUrl = isTestnet ? "https://signet.verifiedx.io/api" : "https://mempool.space/api";
             }
             _buildCreateResponse(success, result, error = null) {
               if (!success) {
@@ -45875,7 +45875,7 @@
               this.network = isTestnet ? TESTNET3 : MAINNET3;
             }
             async addressInfo(address2, inSatoshis = true) {
-              const url = `https://mempool.space${this.network == TESTNET3 ? "/testnet4" : ""}/api/address/${address2}`;
+              const url = `${this.network == TESTNET3 ? "https://signet.verifiedx.io/api" : "https://mempool.space/api"}/address/${address2}`;
               const response = await fetch(url);
               const result = await response.json();
               const chain = result["chain_stats"];
@@ -45894,7 +45894,7 @@
               };
             }
             async transactions(address2, limit = 50, before = null) {
-              const url = `https://mempool.space${this.network == TESTNET3 ? "/testnet4" : ""}/api/address/${address2}/txs`;
+              const url = `${this.network == TESTNET3 ? "https://signet.verifiedx.io/api" : "https://mempool.space/api"}/address/${address2}/txs`;
               console.log(url);
               const response = await fetch(url);
               const results = await response.json();

@@ -187,7 +187,7 @@ This file covers what a logged-in user sees around every screen: the dashboard o
 **Expected**
 - Tutorials opens `https://docs.verifiedx.io/docs/tutorials/video-tutorials/` in the browser.
 - Get Help opens a sheet `Get Help` with `Join Discord` (`https://discord.gg/7cd5ebDQCj`), `Visit Website` (`https://verifiedx.io`) and `Read Docs` (`https://docs.verifiedx.io`). There is no Get Help action on macOS.
-- Open Explorer opens a sheet `Open Explorer`; `VFX Explorer` opens the network's Spyglass explorer and `BTC Explorer` opens `https://mempool.space/testnet4/` on testnet (`https://mempool.space/` on mainnet).
+- Open Explorer opens a sheet `Open Explorer`; `VFX Explorer` opens the network's Spyglass explorer and `BTC Explorer` opens `https://signet.verifiedx.io/` on testnet (`https://mempool.space/` on mainnet).
 
 **Cleanup:** Close the opened browser tabs.
 

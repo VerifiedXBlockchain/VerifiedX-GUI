@@ -225,13 +225,7 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                                               variant: AppColorVariant.Btc,
                                               type: AppButtonType.Text,
                                               onPressed: () {
-                                                if (Env.btcIsTestNet) {
-                                                  launchUrlString(
-                                                      "https://mempool.space/testnet4/tx/$txHash");
-                                                } else {
-                                                  launchUrlString(
-                                                      "https://mempool.space/tx/$txHash");
-                                                }
+                                                launchUrlString(Env.btcExplorerTxUrl(txHash));
                                               },
                                             )
                                           ],

@@ -120,11 +120,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                           button: true,
                           child: InkWell(
                             onTap: () async {
-                              if (Env.btcIsTestNet) {
-                                launchUrlString("https://mempool.space/testnet4/tx/${transaction.hash}");
-                              } else {
-                                launchUrlString("https://mempool.space/tx/${transaction.hash}");
-                              }
+                              launchUrlString(Env.btcExplorerTxUrl(transaction.hash));
                             },
                             child: const Icon(
                               Icons.open_in_new,

@@ -181,7 +181,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 - The confirmation body reads `Sending:` / `0.0001 BTC` / `To:` / receiver / `From:` / BTC account / `Fee:` / `<fee> BTC` with 8 decimals.
 - After Send: a green toast `0.0001 BTC has been sent to <receiver>.`, the form clears, the log panel gains `BTC TX broadcasted with hash of <hash>`, and the dialog `Transaction Broadcasted` shows a read-only `Transaction Hash` field.
 - The copy icon shows the toast `Transaction Hash copied to clipboard` and `pbpaste` returns the hash.
-- `Open in BTC Explorer` opens `https://mempool.space/testnet4/tx/<hash>` in the default browser.
+- `Open in BTC Explorer` opens `https://signet.verifiedx.io/tx/<hash>` in the default browser.
 - Within 2 minutes the transaction is listed on the BTC transactions tab (`nav:transactions`, `BTC`, tab `Transactions`).
 
 **Cleanup:** none.
@@ -203,7 +203,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 - No fee-rate row is shown on the web form; the fee rate is chosen in the `Fee Rate` dialog, which lists each preset with `<n> SATS | <x> BTC`.
 - The confirmation body reads `Sending:` / `0.0001 BTC` / `To:` / receiver / `From:` / BTC address / `FeeRate:` / `<n> SATS`.
 - After Send: green toast `0.0001 BTC has been sent to <receiver>.`, the `Transaction Broadcasted` dialog with the hash, and the form clears.
-- Copy shows `Transaction Hash copied to clipboard`; the explorer button opens a new tab on `https://mempool.space/testnet4/tx/<hash>`.
+- Copy shows `Transaction Hash copied to clipboard`; the explorer button opens a new tab on `https://signet.verifiedx.io/tx/<hash>`.
 - The BTC balance refreshes within about 2 seconds of the send and the transaction appears on the Transactions `BTC` tab within 2 minutes.
 
 **Cleanup:** close the explorer tab.

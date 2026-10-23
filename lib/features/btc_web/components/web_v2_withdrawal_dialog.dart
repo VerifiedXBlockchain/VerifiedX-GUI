@@ -678,7 +678,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           _buildHashRow(
             l10n.bw2BtcTransactionLabel,
             btcTxHash,
-            explorerUrl: Env.btcIsTestNet ? "https://mempool.space/testnet4/tx/$btcTxHash" : "https://mempool.space/tx/$btcTxHash",
+            explorerUrl: Env.btcExplorerTxUrl(btcTxHash),
           ),
         ],
         if (watched.isPinned && watched.feeRate != null) ...[
@@ -815,9 +815,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           _buildHashRow(
             AppLocalizations.of(context).bw2BtcTransactionLabel,
             _btcTxHash!,
-            explorerUrl: Env.btcIsTestNet
-                ? "https://mempool.space/testnet4/tx/$_btcTxHash"
-                : "https://mempool.space/tx/$_btcTxHash",
+            explorerUrl: Env.btcExplorerTxUrl(_btcTxHash!),
           ),
         ],
         const SizedBox(height: 20),
@@ -861,9 +859,7 @@ class _WebV2WithdrawalDialogState extends ConsumerState<WebV2WithdrawalDialog> {
           _buildHashRow(
             AppLocalizations.of(context).bw2BtcTransactionLabel,
             _btcTxHash!,
-            explorerUrl: Env.btcIsTestNet
-                ? "https://mempool.space/testnet4/tx/$_btcTxHash"
-                : "https://mempool.space/tx/$_btcTxHash",
+            explorerUrl: Env.btcExplorerTxUrl(_btcTxHash!),
           ),
         ],
         const SizedBox(height: 20),

@@ -198,11 +198,7 @@ class LatestBlockContent extends StatelessWidget {
               button: true,
               child: InkWell(
                 onTap: () {
-                  if (Env.btcIsTestNet) {
-                    launchUrlString("https://mempool.space/testnet4/");
-                  } else {
-                    launchUrlString("https://mempool.space/");
-                  }
+                  launchUrlString(Env.btcExplorerBaseUrl);
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
