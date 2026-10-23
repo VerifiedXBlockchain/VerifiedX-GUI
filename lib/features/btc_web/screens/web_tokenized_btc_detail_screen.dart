@@ -605,7 +605,13 @@ class __TokenDetailRefresherState extends ConsumerState<_TokenDetailRefresher> {
   void initState() {
     timer = Timer.periodic(Duration(seconds: 10), (timer) {
       final family = "${widget.scId}_${widget.address}";
+      // The vault's Bitcoin history is a session-long list that loads once,
+      // so a deposit made while the screen is open would stay hidden.
+      final depositAddress = ref.read(btcWebVbtcTokenDetailProvider(family)).valueOrNull?.depositAddress;
       ref.invalidate(btcWebVbtcTokenDetailProvider(family));
+      if (depositAddress != null) {
+        ref.read(btcWebTransactionListProvider(depositAddress).notifier).reload();
+      }
     });
     super.initState();
   }
