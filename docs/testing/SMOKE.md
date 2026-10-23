@@ -109,7 +109,7 @@ Each lane runs its cases in this order. Within a stage, `P0` cases first, then `
 | S6 cross-platform | `13-cross-platform.md` `P0` and `P1` plus the `Phase: cross-platform` cases; run by whichever lane finishes last, with the other lane's app still open | 18 cases | 16 cases |
 | Close-out | Pending BTC table drained (60 minutes max), leftover BTC returned to the treasury, results file finished, last commit | | |
 
-Chain waits as in the area files: 2 to 3 minutes for a VFX transaction, up to 60 minutes for a testnet4 confirmation (blocks were about 20 minutes apart with a handful of transactions each on 2026-10-21).
+Chain waits as in the area files: 2 to 3 minutes for a VFX transaction, about 10 minutes per Bitcoin confirmation on the VerifiedX signet (depth 3 for a vault credit); the 20261021a pass ran on Bitcoin testnet4, whose stalls blocked its S5.
 
 ## Case lists
 
@@ -648,7 +648,7 @@ A failure is blocking when the lane cannot usefully continue its current stage b
 2. Records the state in the results file (`## Paused` with the case, the issue number, what still works), commits it.
 3. Ends its turn with one question for Tyler: fix now (the lane waits, then re-runs the failed case on the new build) or skip the area and continue.
 
-Anything else is filed and the lane moves on to the next case. A failing precondition that no case covers (Spyglass down, no testnet4 blocks, no funding yet) is recorded `blocked` with the reason and the lane keeps going with what it can run.
+Anything else is filed and the lane moves on to the next case. A failing precondition that no case covers (Spyglass down, no Bitcoin blocks, no funding yet) is recorded `blocked` with the reason and the lane keeps going with what it can run.
 
 ## Results and commits
 

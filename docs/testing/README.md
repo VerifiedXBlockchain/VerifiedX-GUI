@@ -66,7 +66,7 @@ No account appears in both files.
 
 **Agent-owned accounts.** A smoke pass ([SMOKE.md](SMOKE.md)) does not use these files. Its lanes create their own accounts in the app under test and keep them, with the same variable names, in `~/.config/vfx-release-tests/agent/accounts.<lane>.env` (mode 600), so the agent may type those passwords and keys freely; Tyler funds the addresses once after setup.
 
-Bitcoin for both lanes comes from one shared testnet4 treasury in `~/.config/vfx-release-tests/treasury.env` (mode 600), which Tyler funds from a testnet4 faucet:
+Bitcoin for both lanes comes from one shared treasury in `~/.config/vfx-release-tests/treasury.env` (mode 600), which Tyler funds. Since 2026-10-23 the VFX testnet's Bitcoin is the VerifiedX signet (`https://signet.verifiedx.io/`, Esplora API at `/api`, 10-minute blocks, no reorgs, no public faucet); before that it was Bitcoin testnet4. Testnet addresses and keys are the same on both:
 
 | Variable | Meaning |
 |---|---|
@@ -119,7 +119,7 @@ Each area file groups its cases under `##` feature headings, and each case is a 
 
 ## Lane schedule
 
-Bitcoin testnet4 confirmations take from a few minutes to an hour, and vBTC deposits and withdrawals each need them. Each lane therefore starts its Bitcoin work first and fills the waits with the rest of the suite. Case order within a file is not run order.
+Bitcoin confirmations on the VerifiedX signet come every 10 minutes (a watched vault credits a deposit at depth 3, about 30 minutes), and vBTC deposits and withdrawals each need them. Each lane therefore starts its Bitcoin work first and fills the waits with the rest of the suite. Case order within a file is not run order.
 
 1. **Setup.** Sign in and import the lane's accounts: the account A and B cases in `01-launch-auth.md` that the lane needs (TC-AUTH-016 on web; the desktop import cases on macOS), then the lane's BTC account (TC-BTC-001 on macOS, TC-BTC-002 on web).
 2. **Bitcoin kickoff.** Start everything that waits on Bitcoin, without waiting for any of it:
@@ -127,7 +127,7 @@ Bitcoin testnet4 confirmations take from a few minutes to an hour, and vBTC depo
    - Fund both contracts from the lane's BTC account (TC-BTC-026 on macOS, TC-BTC-027 on web), 0.0001 BTC each.
    - Start the lane's plain BTC send (TC-BTC-010 and TC-SEND-009 on macOS, TC-BTC-011 and TC-SEND-010 on web).
    - Write each started item into a **Pending BTC** table at the top of the lane's results file: case id, what was sent, the transaction id, the time started, and the check to run.
-3. **Main body.** Run every other area of the lane, `P0` then `P1` then `P2`, following file order within a priority. At the end of each area file, and at least every 15 minutes, check the Pending BTC table: for each item whose transaction has confirmed on mempool.space, finish that case's remaining steps and expected checks, and mark it done.
+3. **Main body.** Run every other area of the lane, `P0` then `P1` then `P2`, following file order within a priority. At the end of each area file, and at least every 15 minutes, check the Pending BTC table: for each item whose transaction has confirmed on the Bitcoin explorer (`https://signet.verifiedx.io/tx/<txid>` on testnet), finish that case's remaining steps and expected checks, and mark it done.
 4. **vBTC follow-ups.** As soon as both contracts show their deposited balance, interrupt the main body at the next case boundary and run the vBTC cases that need a funded contract: token list and detail, transfers, transfer validation, ownership, and bulk transfers (TC-BTC-030 to TC-BTC-041). These only need the VFX chain, so they finish quickly.
 5. **Withdrawal kickoff.** Straight after the follow-ups, start the withdrawals to the treasury (TC-BTC-042 on macOS, TC-BTC-043 on web, then TC-BTC-044 and TC-BTC-047 to TC-BTC-052). Let the FROST signing finish, add each payout transaction to the Pending BTC table, and return to the main body.
 6. **Close-out.** When the main body is done, wait for anything still pending, checking every 5 minutes for up to 60 minutes. An item still unconfirmed after that is recorded as `blocked` with its transaction id, not as a failure, unless the app itself reported an error.

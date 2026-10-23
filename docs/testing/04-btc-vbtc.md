@@ -9,7 +9,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 - Balances: account A holds at least 5 testnet VFX (every vBTC action pays a VFX fee and the web actions refuse below 0.001 VFX); the `TEST_BTC_ADDRESS` account holds at least 0.0005 testnet BTC. Suggested amounts in this file are deliberately small (0.00002 BTC sends, 0.0001 BTC funding, 0.00002 vBTC transfers) so one funded BTC account covers a full pass.
 - Two funded V2 contracts owned by the lane's account A are needed for the multi-transfer path. Each lane creates both in its Bitcoin kickoff (see "Lane schedule" in `README.md`): the macOS lane runs TC-BTC-022 twice and funds both with TC-BTC-026, the web lane runs TC-BTC-023 twice and funds both with TC-BTC-027. Contract names use the run id, the lane and a number, for example `qa-20261001a-m1` and `qa-20261001a-m2`.
 - Scheduling. The contract creation, the deposits and the BTC sends in this file are started at the very beginning of a lane and checked later; the transfer cases run once the deposits have confirmed; the withdrawals are started after the transfers, and their payouts are checked at the end of the lane. The order of cases in this file is not the order they run in.
-- Chain timing. VFX blocks land about every 12 seconds; allow up to 2 minutes for a VFX transaction to confirm. Bitcoin testnet4 blocks are irregular; allow up to 60 minutes for a BTC confirmation even at the app's floored testnet fee rates (5 to 10 sat/vB). The CLI rescans vBTC deposit addresses about every 5 minutes after a BTC confirmation. Cases marked **Needs BTC confirmations** should be started early in a run and checked later, so their waits overlap.
+- Chain timing. VFX blocks land about every 12 seconds; allow up to 2 minutes for a VFX transaction to confirm. The VFX testnet's Bitcoin is the VerifiedX signet (since 2026-10-23; Bitcoin testnet4 before): blocks every 10 minutes, no reorgs, fees 1 sat/vB (the app's testnet fee floors still apply); a transaction confirms within about 10 minutes and a watched vault credits a deposit at depth 3, about 30 minutes. Explorer `https://signet.verifiedx.io/tx/<txid>`, API `https://signet.verifiedx.io/api/tx/<txid>/status`. The CLI rescans vBTC deposit addresses about every 5 minutes after a BTC confirmation. Cases marked **Needs BTC confirmations** should be started early in a run and checked later, so their waits overlap.
 - Debug builds and pending BTC transactions: `BtcTransactionListTile` forces every transaction to show as confirmed when `kDebugMode && Env.isTestNet`, which is true for both `make run_web_automation` and `make run_macos_driver`. On those builds the BTC Pending badge, Replace By Fee and Rebroadcast TX never appear on desktop. Cases that need them say so and run on a testnet profile or release build instead.
 - Dialog buttons without keys are tapped by text on macOS (`tap-text Yes`). Where the same text is also on screen (for example `Send` in the side nav) and `drive.dart` reports "Too many elements", record the step as blocked with that note: it is an automation gap, not a product failure.
 - Bulk vBTC transfer: `BULK_VBTC_TRANSFER_ENABLED` is now `true` on every network (the comment in `app_constants.dart` says the multi-contract transfer went live on mainnet at block 7,281,000 on 2026-09-11). Earlier notes describe it as testnet-only; this suite still only sends on testnet.
@@ -179,7 +179,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 4. Tap the `Fee Rate:` preset menu (it shows `Economy` by default) and choose `Hour` (`tap-text Hour`).
 5. `tap-key send:submit`.
 6. In `Please Confirm` check the body, then `tap-text Send` (see the area note on text collisions).
-7. Wait up to 60 minutes for the transaction to show a `Confirmed` badge in BTC Transactions (on the debug driver build it shows as confirmed at once; verify on mempool.space via the tile's `Open in BTC Explorer`).
+7. Wait up to 60 minutes for the transaction to show a `Confirmed` badge in BTC Transactions (on the debug driver build it shows as confirmed at once; verify on the Bitcoin explorer via the tile's `Open in BTC Explorer`).
 
 **Expected**
 - The fee line under the preset reads `Fee Rate: <n> SATS /byte [<btc> BTC /byte]` and `Fee Estimate: ~<n*140> SATS [~<btc> BTC]`, and changes when the preset changes. Presets offered: `Minimum`, `Economy`, `Hour`, `Half Hour`, `Fastest`, `Custom`. On testnet the Hour value is at least 5.
@@ -805,7 +805,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 - The sheet shows `To BTC Address`, `Amount of vBTC to Withdraw`, the fee preset menu (no `Custom` entry) and `Fee Estimate: ~<n> SATS | ~<n> BTC    (<n> SATS /byte | <n> BTC /byte)`.
 - The confirm body reads `Are you sure you want to withdraw 0.00002 BTC to <address>?`
 - The dialog moves from `Waiting for Confirmation` (`Waiting for the withdrawal request to be confirmed in a block...`, `This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.`) to `Processing Withdrawal` (`Validators are signing the Bitcoin transaction...`, `This may take a minute. Please do not close the application.`) to `Withdrawal Complete` (`Withdrawal completed successfully!`, `VFX Transaction:` and `BTC Transaction:` hashes with copy and explorer links).
-- A log entry `vBTC Withdrawal completed successfully.` with the BTC hash; `My Balance` drops by 0.00002 after the list refreshes; the BTC transaction confirms on mempool.space within 60 minutes and `TEST_BTC_TREASURY_ADDRESS` receives the amount less the network fee.
+- A log entry `vBTC Withdrawal completed successfully.` with the BTC hash; `My Balance` drops by 0.00002 after the list refreshes; the BTC transaction confirms on the Bitcoin explorer within 60 minutes and `TEST_BTC_TREASURY_ADDRESS` receives the amount less the network fee.
 
 **Cleanup:** none.
 
@@ -941,7 +941,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 
 **Expected**
 - The dialog title is `Action Required` with `Your Bitcoin was sent, but the withdrawal has not been settled on the VFX chain yet.` and `Retry below to finish. This only submits the completion transaction — your Bitcoin will not be sent again. You can also come back to this from the token's withdrawal history.`, the `BTC Transaction:` hash, `Later` and `Retry Completion`.
-- `Retry Completion` settles the withdrawal and shows `Withdrawal Complete`; no second Bitcoin transaction appears on mempool.space.
+- `Retry Completion` settles the withdrawal and shows `Withdrawal Complete`; no second Bitcoin transaction appears on the Bitcoin explorer.
 - When signing fails instead, the failure view shows `FROST signing failed or timed out. The withdrawal may still complete — check back shortly.` with `Dismiss` and `Retry Signing`; `Retry Signing` is absent when the Bitcoin broadcast returned no txid or the explorer reports the request already signed.
 
 **Cleanup:** none.
@@ -998,12 +998,12 @@ These cases cover withdrawals from a vault created after testnet block 1,172,000
 3. In the `Fee Rate` picker keep `Economy`, click `button "Continue"`, then `button "Yes"` in `Confirm Withdrawal Request`.
 4. Keep the tab visible. Wait up to 5 minutes for `Waiting for Confirmation` to end, then screenshot every state the dialog shows over the next 10 minutes (it refreshes every 20 seconds).
 5. Close the dialog. Open `Transactions`, then the token detail's `Withdrawal History:`.
-6. Add the pinned Bitcoin transaction to the `Pending BTC` table and check mempool.space for up to 60 minutes.
+6. Add the pinned Bitcoin transaction to the `Pending BTC` table and check the Bitcoin explorer for up to 60 minutes.
 
 **Expected**
 - After `Waiting for Confirmation` the dialog reads `Checking Withdrawal Status`, then `Withdrawal in Progress` with one of `Your withdrawal request is not in a block yet. This updates by itself.`, `The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.`, or, once pinned, `The Bitcoin transaction that pays this withdrawal is fixed. The vault's signers send it on their own, and the withdrawal completes when Bitcoin confirms it.` together with the txid (mempool link), `Current fee rate: <n> sat/vB`, the hint `If it is not confirming, raise its fee…`, a `New fee rate (sat/vB)` field and the buttons `Raise Fee` and `Release`.
 - No `FROST Signing`, `Recording Completion` or `Action Required` step appears, and the dialog can be closed at any point.
-- The pinned transaction appears on mempool.space paying `TEST_BTC_TREASURY_ADDRESS`; when it confirms the dialog (reopened from the history row) reads completed or closed and `My Balance` drops by 0.00002. The transactions list shows the request and no completion transaction.
+- The pinned transaction appears on the Bitcoin explorer paying `TEST_BTC_TREASURY_ADDRESS`; when it confirms the dialog (reopened from the history row) reads completed or closed and `My Balance` drops by 0.00002. The transactions list shows the request and no completion transaction.
 - The history row never offers `Pending — tap to resume`.
 
 **Cleanup:** none.
@@ -1034,7 +1034,7 @@ These cases cover withdrawals from a vault created after testnet block 1,172,000
 
 **Steps**
 1. Type a rate above the current one into `New fee rate (sat/vB)` and click `button "Release"`; confirm.
-2. Watch the dialog; add the release transaction to the `Pending BTC` table and check mempool.space for up to 60 minutes.
+2. Watch the dialog; add the release transaction to the `Pending BTC` table and check the Bitcoin explorer for up to 60 minutes.
 3. Open `Transactions`.
 
 **Expected**
@@ -1099,11 +1099,11 @@ These cases cover withdrawals from a vault created after testnet block 1,172,000
 1. Run TC-BTC-042 steps 1 to 4 (`vbtc:withdraw`, treasury address, `0.00002`, `Half Hour`, `vbtc:submit`, `Yes`).
 2. Watch the processing dialog for up to 10 minutes and screenshot every state it shows; copy any error text verbatim.
 3. Dismiss or finish the dialog. Open `Transactions` and the token detail.
-4. Add the withdrawal to the `Pending BTC` table; check mempool.space for a transaction paying `TEST_BTC_TREASURY_ADDRESS` for up to 60 minutes.
+4. Add the withdrawal to the `Pending BTC` table; check the Bitcoin explorer for a transaction paying `TEST_BTC_TREASURY_ADDRESS` for up to 60 minutes.
 
 **Expected**
 - **Behaviour to establish on this run.** The desktop dialog was written for the FROST path (`Waiting for Confirmation` → `Processing Withdrawal` → `Withdrawal Complete`), and the 9.0 integration listed no desktop watched-vault item, so what happens depends on what the local Core CLI does with a request on a watched vault. Record exactly what the dialog shows at each stage.
-- Pass when: the request confirms, the chain pins and pays a Bitcoin transaction to the treasury (visible on mempool.space), `My Balance` drops by 0.00002 once Bitcoin confirms, and the dialog does not report a failure for a withdrawal that is in fact progressing.
+- Pass when: the request confirms, the chain pins and pays a Bitcoin transaction to the treasury (visible on the Bitcoin explorer), `My Balance` drops by 0.00002 once Bitcoin confirms, and the dialog does not report a failure for a withdrawal that is in fact progressing.
 - File a P0 issue when: the dialog reports `Withdrawal Failed` (or `Checking Withdrawal Status` without end) while the chain pays; the wallet attempts FROST signing or a completion transaction on the watched vault; or vBTC is debited with no Bitcoin paid within 60 minutes of the pin.
 
 **Cleanup:** none.

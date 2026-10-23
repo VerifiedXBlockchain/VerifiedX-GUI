@@ -163,7 +163,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 ### TC-SEND-009 · Send BTC with a fee-rate preset (macOS)
 **Platforms:** macOS · **Priority:** P0 · **Moves funds:** yes
 
-**Preconditions:** The BTC account from `TEST_BTC_WIF` is imported and holds at least 0.0002 testnet BTC plus fees. A second BTC address to receive: use a fresh BTC account created with `New Account` on Receive (BTC), or any testnet4 address Tyler provides.
+**Preconditions:** The BTC account from `TEST_BTC_WIF` is imported and holds at least 0.0002 testnet BTC plus fees (VerifiedX signet since 2026-10-23). A second BTC address to receive: use a fresh BTC account created with `New Account` on Receive (BTC), or any testnet4 address Tyler provides.
 
 **Steps**
 1. `tap-key nav:send`, then `tap-text BTC` in the currency switch.
@@ -189,7 +189,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 ### TC-SEND-010 · Send BTC from the web wallet
 **Platforms:** Web · **Priority:** P0 · **Moves funds:** yes
 
-**Preconditions:** Web session holds the BTC key from `TEST_BTC_WIF` with at least 0.0002 testnet BTC. A receiving testnet4 address as in TC-SEND-009.
+**Preconditions:** Web session holds the BTC key from `TEST_BTC_WIF` with at least 0.0002 testnet BTC. A receiving testnet BTC address as in TC-SEND-009.
 
 **Steps**
 1. Open Send and click `button "BTC"`.
@@ -265,7 +265,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 **Preconditions:** Web session with the BTC key loaded.
 
 **Steps**
-1. Load `http://localhost:42069/?automation=1#dashboard/send/btc/<a testnet4 address>/0.0001`.
+1. Load `http://localhost:42069/?automation=1#dashboard/send/btc/<a testnet BTC address>/0.0001`.
 
 **Expected**
 - The app bar reads `Send BTC`, the currency switch shows BTC selected, and the fields hold the address and `0.0001`.
