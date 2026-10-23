@@ -25,6 +25,7 @@ import 'package:collection/collection.dart';
 
 import '../providers/tokenized_btc_onboard_provider.dart';
 import '../../encrypt/utils.dart';
+import '../components/btc_fee_estimate_note.dart';
 
 part './tokenize_btc_onboarding_steps.dart';
 

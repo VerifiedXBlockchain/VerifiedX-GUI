@@ -2397,18 +2397,6 @@ abstract class AppLocalizations {
   /// **'Failed to start FROST signing'**
   String get bw2FailedStartFrost;
 
-  /// No description provided for @bw2FrostConfirmHint.
-  ///
-  /// In en, this message translates to:
-  /// **'This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.'**
-  String get bw2FrostConfirmHint;
-
-  /// No description provided for @bw2FrostConfirmHintWeb.
-  ///
-  /// In en, this message translates to:
-  /// **'This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.'**
-  String get bw2FrostConfirmHintWeb;
-
   /// No description provided for @bw2FrostFailedOrTimedOut.
   ///
   /// In en, this message translates to:
@@ -20798,6 +20786,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This mint would take the supply or the balance past the largest amount the chain can hold.'**
   String get tokenMintOverflow;
+
+  /// Withdrawal dialog while the request waits for its VFX block; true for FROST and watched vaults alike, so it names no signing.
+  ///
+  /// In en, this message translates to:
+  /// **'This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.'**
+  String get bw2RequestConfirmHint;
+
+  /// Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The fee change could not be sent.'**
+  String get bw2WatchedChangeFailed;
+
+  /// Web vBTC withdrawal history row on a watched vault: open request whose Bitcoin transaction is not fixed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for its Bitcoin transaction'**
+  String get bw2WatchedRowWaiting;
+
+  /// Web vBTC withdrawal history row on a watched vault: the paying Bitcoin transaction is pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin transaction fixed, waiting for Bitcoin to confirm it'**
+  String get bw2WatchedRowPinned;
+
+  /// Web vBTC withdrawal history row on a watched vault: the requester released it and the release is not confirmed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Being released'**
+  String get bw2WatchedRowReleasing;
+
+  /// Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get bw2WatchedRowInProgress;
+
+  /// Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.'**
+  String get btcFeeRatesAreEstimates;
+
+  /// vBTC withdraw form, before the confirm: the amount minus the smallest Bitcoin fee at the chosen rate is under the 546-sat dust limit, which the node would refuse.
+  ///
+  /// In en, this message translates to:
+  /// **'At {feeRate} sat/vB this withdrawal\'s Bitcoin transaction costs at least {feeSats} sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least {minimum} BTC, or lower the fee rate.'**
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

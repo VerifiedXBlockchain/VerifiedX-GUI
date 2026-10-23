@@ -10,6 +10,7 @@ import '../../l10n/l10n_helper.dart';
 import 'btc_address_validator.dart';
 import 'models/btc_fee_rate_preset.dart';
 import 'models/btc_recommended_fees.dart';
+import 'components/btc_fee_estimate_note.dart';
 
 double satashisToBtc(int satashis) {
   return satashis * BTC_SATOSHI_MULTIPLIER;
@@ -85,6 +86,7 @@ Future<int?> showFeeRatePicker(BuildContext dialogContext, BtcRecommendedFees re
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  BtcFeeEstimateNote(recommendedFees),
                   ...BtcFeeRatePreset.values.map((p) {
                     final rowFee = feeRateForPreset(p, recommendedFees);
 

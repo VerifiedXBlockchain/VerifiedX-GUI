@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +30,8 @@ import 'package:collection/collection.dart';
 
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/components.dart';
+import '../../../core/web_router.gr.dart';
+import '../../btc_web/models/btc_web_vbtc_token.dart';
 import '../../btc_web/components/web_tokenized_btc_list_tile.dart';
 import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../providers/btc_pending_tokenized_address_list_provider.dart';
@@ -218,6 +221,13 @@ class TokenizeBtcListScreen extends BaseScreen {
                           MaterialPageRoute(
                             builder: (_) => TokenizedBtcDetailScreen(tokenKey: "${token.smartContractUid}|${token.rbxAddress}"),
                           ),
+                        );
+                        return;
+                      }
+
+                      if (token is BtcWebVbtcToken) {
+                        AutoRouter.of(context).push(
+                          WebTokenizedBtcDetailScreenRoute(scIdentifier: token.scIdentifier, address: token.address),
                         );
                         return;
                       }

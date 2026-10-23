@@ -341,7 +341,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                             height: 12,
                           ),
                           ...transaction.utxos.map((utxo) {
-                            return UtxoListTile(utxo: utxo);
+                            return UtxoListTile(utxo: utxo, showUsage: false);
                           }).toList(),
                         ],
                       ),

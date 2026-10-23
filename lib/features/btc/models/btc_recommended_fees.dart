@@ -13,6 +13,10 @@ class BtcRecommendedFees with _$BtcRecommendedFees {
     required int hourFee,
     required int economyFee,
     required int minimumFee,
+
+    /// The fee API could not be reached and these are fixed stand-ins, not
+    /// what the network is asking for now.
+    @JsonKey(includeFromJson: false, includeToJson: false) @Default(false) bool isEstimate,
   }) = _BtcRecommendedFees;
 
   factory BtcRecommendedFees.fromJson(Map<String, dynamic> json) => _$BtcRecommendedFeesFromJson(json);
@@ -24,6 +28,7 @@ class BtcRecommendedFees with _$BtcRecommendedFees {
       hourFee: 25,
       economyFee: 12,
       minimumFee: 6,
+      isEstimate: true,
     );
   }
 }

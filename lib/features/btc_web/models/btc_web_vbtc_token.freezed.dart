@@ -43,6 +43,11 @@ mixin _$BtcWebVbtcToken {
   int get version => throw _privateConstructorUsedError;
   @JsonKey(name: 'is_pending_withdrawal')
   bool get isPendingWithdrawal => throw _privateConstructorUsedError;
+
+  /// The chain watches this vault's Bitcoin (minted from the attestation
+  /// recording height on): its withdrawals are paid by the chain, not FROST.
+  @JsonKey(name: 'is_watched')
+  bool get isWatched => throw _privateConstructorUsedError;
   @JsonKey(name: 'frost_group_public_key')
   String? get frostGroupPublicKey => throw _privateConstructorUsedError;
   @JsonKey(name: 'required_threshold')
@@ -90,6 +95,8 @@ abstract class $BtcWebVbtcTokenCopyWith<$Res> {
       int version,
       @JsonKey(name: 'is_pending_withdrawal')
           bool isPendingWithdrawal,
+      @JsonKey(name: 'is_watched')
+          bool isWatched,
       @JsonKey(name: 'frost_group_public_key')
           String? frostGroupPublicKey,
       @JsonKey(name: 'required_threshold')
@@ -129,6 +136,7 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
     Object? nft = null,
     Object? version = null,
     Object? isPendingWithdrawal = null,
+    Object? isWatched = null,
     Object? frostGroupPublicKey = freezed,
     Object? requiredThreshold = freezed,
     Object? withdrawalRequests = freezed,
@@ -191,6 +199,10 @@ class _$BtcWebVbtcTokenCopyWithImpl<$Res, $Val extends BtcWebVbtcToken>
           ? _value.isPendingWithdrawal
           : isPendingWithdrawal // ignore: cast_nullable_to_non_nullable
               as bool,
+      isWatched: null == isWatched
+          ? _value.isWatched
+          : isWatched // ignore: cast_nullable_to_non_nullable
+              as bool,
       frostGroupPublicKey: freezed == frostGroupPublicKey
           ? _value.frostGroupPublicKey
           : frostGroupPublicKey // ignore: cast_nullable_to_non_nullable
@@ -251,6 +263,8 @@ abstract class _$$_BtcWebVbtcTokenCopyWith<$Res>
       int version,
       @JsonKey(name: 'is_pending_withdrawal')
           bool isPendingWithdrawal,
+      @JsonKey(name: 'is_watched')
+          bool isWatched,
       @JsonKey(name: 'frost_group_public_key')
           String? frostGroupPublicKey,
       @JsonKey(name: 'required_threshold')
@@ -289,6 +303,7 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
     Object? nft = null,
     Object? version = null,
     Object? isPendingWithdrawal = null,
+    Object? isWatched = null,
     Object? frostGroupPublicKey = freezed,
     Object? requiredThreshold = freezed,
     Object? withdrawalRequests = freezed,
@@ -351,6 +366,10 @@ class __$$_BtcWebVbtcTokenCopyWithImpl<$Res>
           ? _value.isPendingWithdrawal
           : isPendingWithdrawal // ignore: cast_nullable_to_non_nullable
               as bool,
+      isWatched: null == isWatched
+          ? _value.isWatched
+          : isWatched // ignore: cast_nullable_to_non_nullable
+              as bool,
       frostGroupPublicKey: freezed == frostGroupPublicKey
           ? _value.frostGroupPublicKey
           : frostGroupPublicKey // ignore: cast_nullable_to_non_nullable
@@ -398,6 +417,8 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
       this.version = 1,
       @JsonKey(name: 'is_pending_withdrawal')
           this.isPendingWithdrawal = false,
+      @JsonKey(name: 'is_watched')
+          this.isWatched = false,
       @JsonKey(name: 'frost_group_public_key')
           this.frostGroupPublicKey,
       @JsonKey(name: 'required_threshold')
@@ -458,6 +479,12 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
   @override
   @JsonKey(name: 'is_pending_withdrawal')
   final bool isPendingWithdrawal;
+
+  /// The chain watches this vault's Bitcoin (minted from the attestation
+  /// recording height on): its withdrawals are paid by the chain, not FROST.
+  @override
+  @JsonKey(name: 'is_watched')
+  final bool isWatched;
   @override
   @JsonKey(name: 'frost_group_public_key')
   final String? frostGroupPublicKey;
@@ -490,7 +517,7 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
 
   @override
   String toString() {
-    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, address: $address, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt, nft: $nft, version: $version, isPendingWithdrawal: $isPendingWithdrawal, frostGroupPublicKey: $frostGroupPublicKey, requiredThreshold: $requiredThreshold, withdrawalRequests: $withdrawalRequests, availableBalances: $availableBalances)';
+    return 'BtcWebVbtcToken(name: $name, description: $description, addresses: $addresses, address: $address, scIdentifier: $scIdentifier, ownerAddress: $ownerAddress, imageUrl: $imageUrl, depositAddress: $depositAddress, publicKeyProofs: $publicKeyProofs, globalBalance: $globalBalance, createdAt: $createdAt, nft: $nft, version: $version, isPendingWithdrawal: $isPendingWithdrawal, isWatched: $isWatched, frostGroupPublicKey: $frostGroupPublicKey, requiredThreshold: $requiredThreshold, withdrawalRequests: $withdrawalRequests, availableBalances: $availableBalances)';
   }
 
   @override
@@ -522,6 +549,8 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
             (identical(other.version, version) || other.version == version) &&
             (identical(other.isPendingWithdrawal, isPendingWithdrawal) ||
                 other.isPendingWithdrawal == isPendingWithdrawal) &&
+            (identical(other.isWatched, isWatched) ||
+                other.isWatched == isWatched) &&
             (identical(other.frostGroupPublicKey, frostGroupPublicKey) ||
                 other.frostGroupPublicKey == frostGroupPublicKey) &&
             (identical(other.requiredThreshold, requiredThreshold) ||
@@ -534,26 +563,28 @@ class _$_BtcWebVbtcToken extends _BtcWebVbtcToken {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      name,
-      description,
-      const DeepCollectionEquality().hash(_addresses),
-      address,
-      scIdentifier,
-      ownerAddress,
-      imageUrl,
-      depositAddress,
-      publicKeyProofs,
-      globalBalance,
-      createdAt,
-      nft,
-      version,
-      isPendingWithdrawal,
-      frostGroupPublicKey,
-      requiredThreshold,
-      const DeepCollectionEquality().hash(_withdrawalRequests),
-      const DeepCollectionEquality().hash(_availableBalances));
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        name,
+        description,
+        const DeepCollectionEquality().hash(_addresses),
+        address,
+        scIdentifier,
+        ownerAddress,
+        imageUrl,
+        depositAddress,
+        publicKeyProofs,
+        globalBalance,
+        createdAt,
+        nft,
+        version,
+        isPendingWithdrawal,
+        isWatched,
+        frostGroupPublicKey,
+        requiredThreshold,
+        const DeepCollectionEquality().hash(_withdrawalRequests),
+        const DeepCollectionEquality().hash(_availableBalances)
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -594,6 +625,8 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
       final int version,
       @JsonKey(name: 'is_pending_withdrawal')
           final bool isPendingWithdrawal,
+      @JsonKey(name: 'is_watched')
+          final bool isWatched,
       @JsonKey(name: 'frost_group_public_key')
           final String? frostGroupPublicKey,
       @JsonKey(name: 'required_threshold')
@@ -644,6 +677,12 @@ abstract class _BtcWebVbtcToken extends BtcWebVbtcToken {
   @override
   @JsonKey(name: 'is_pending_withdrawal')
   bool get isPendingWithdrawal;
+  @override
+
+  /// The chain watches this vault's Bitcoin (minted from the attestation
+  /// recording height on): its withdrawals are paid by the chain, not FROST.
+  @JsonKey(name: 'is_watched')
+  bool get isWatched;
   @override
   @JsonKey(name: 'frost_group_public_key')
   String? get frostGroupPublicKey;

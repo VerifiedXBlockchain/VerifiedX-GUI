@@ -1523,8 +1523,6 @@
   "bw2FailedSignOwnershipProof": "No se pudo firmar la prueba de propiedad.",
   "bw2FailedSignTransaction": "No se pudo firmar la transacción",
   "bw2FailedStartFrost": "No se pudo iniciar la firma FROST",
-  "bw2FrostConfirmHint": "Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.",
-  "bw2FrostConfirmHintWeb": "Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.",
   "bw2FrostFailedOrTimedOut": "La firma FROST falló o agotó el tiempo de espera. Es posible que el retiro aún se complete: vuelve a verificar en breve.",
   "bw2FrostGroupKey": "Clave de grupo FROST",
   "bw2FrostJobNotFound": "No se encontró el trabajo de firma FROST",
@@ -10341,5 +10339,48 @@
   "tokenMintOverflow": "Esta acuñación llevaría el suministro o el saldo por encima de la cantidad máxima que admite la cadena.",
   "@tokenMintOverflow": {
     "description": "Mint refused before sending: the supply or the minter's balance would overflow."
+  },
+  "bw2RequestConfirmHint": "Esto suele tardar entre 10 y 20 segundos. El retiro continúa automáticamente una vez confirmado.",
+  "@bw2RequestConfirmHint": {
+    "description": "Withdrawal dialog while the request waits for its VFX block; true for FROST and watched vaults alike, so it names no signing."
+  },
+  "bw2WatchedChangeFailed": "No se pudo enviar el cambio de comisión.",
+  "@bw2WatchedChangeFailed": {
+    "description": "Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason."
+  },
+  "bw2WatchedRowWaiting": "Esperando su transacción de Bitcoin",
+  "@bw2WatchedRowWaiting": {
+    "description": "Web vBTC withdrawal history row on a watched vault: open request whose Bitcoin transaction is not fixed yet."
+  },
+  "bw2WatchedRowPinned": "Transacción de Bitcoin fijada, esperando a que Bitcoin la confirme",
+  "@bw2WatchedRowPinned": {
+    "description": "Web vBTC withdrawal history row on a watched vault: the paying Bitcoin transaction is pinned."
+  },
+  "bw2WatchedRowReleasing": "Liberándose",
+  "@bw2WatchedRowReleasing": {
+    "description": "Web vBTC withdrawal history row on a watched vault: the requester released it and the release is not confirmed yet."
+  },
+  "bw2WatchedRowInProgress": "En curso",
+  "@bw2WatchedRowInProgress": {
+    "description": "Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet."
+  },
+  "btcFeeRatesAreEstimates": "No se pudieron cargar las comisiones actuales. Estas comisiones son estimaciones, no lo que pide la red ahora; revísalas o define una comisión personalizada.",
+  "@btcFeeRatesAreEstimates": {
+    "description": "Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown."
+  },
+  "btcWithdrawalBelowDust": "A {feeRate} sat/vB la transacción de Bitcoin de este retiro cuesta al menos {feeSats} sats, que se descuentan del monto, y deben quedar al menos 546 sats para pagar. Retira al menos {minimum} BTC o baja la comisión.",
+  "@btcWithdrawalBelowDust": {
+    "description": "vBTC withdraw form, before the confirm: the amount minus the smallest Bitcoin fee at the chosen rate is under the 546-sat dust limit, which the node would refuse.",
+    "placeholders": {
+      "feeRate": {
+        "type": "int"
+      },
+      "feeSats": {
+        "type": "int"
+      },
+      "minimum": {
+        "type": "String"
+      }
+    }
   }
 }

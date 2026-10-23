@@ -33,4 +33,26 @@ void main() {
       expect(vbtcAmountWithinSatoshiPrecision('abc'), isFalse);
     });
   });
+
+  group('vbtcWithdrawalLeavesDust (Core: amount - VSize(1) x rate >= 546)', () {
+    test('TC-BTC-044: 1,000 sats at 3 sat/vB leaves 538, refused', () {
+      expect(vbtcWithdrawalMinimumSats(3), 1008);
+      expect(vbtcWithdrawalLeavesDust(0.00001, 3), isTrue);
+    });
+
+    test('the minimum itself, and the run\'s 0.00002 at 3 sat/vB, pass', () {
+      expect(vbtcWithdrawalLeavesDust(0.00001008, 3), isFalse);
+      expect(vbtcWithdrawalLeavesDust(0.00002, 3), isFalse);
+    });
+
+    test('a higher rate raises the minimum', () {
+      // 2,000 sats: 154 x 9 + 546 = 1,932 fits, 154 x 10 + 546 = 2,086 does not.
+      expect(vbtcWithdrawalLeavesDust(0.00002, 9), isFalse);
+      expect(vbtcWithdrawalLeavesDust(0.00002, 10), isTrue);
+    });
+
+    test('no fee rate is left to the node', () {
+      expect(vbtcWithdrawalLeavesDust(0.000001, 0), isFalse);
+    });
+  });
 }

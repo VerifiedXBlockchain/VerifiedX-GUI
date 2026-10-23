@@ -229,4 +229,49 @@ void main() {
       );
     });
   });
+
+  group('fromPinAnswer (CLI GetWithdrawalPin)', () {
+    Map<String, dynamic> pinAnswer(Map<String, dynamic>? withdrawal) => {
+          'Success': withdrawal != null,
+          'Attested': true,
+          'Message': 'Withdrawal retrieved',
+          'Withdrawal': withdrawal,
+        };
+
+    test('a pinned withdrawal carries its txid as the pinned one and is not paid', () {
+      final w = WatchedWithdrawal.fromPinAnswer(pinAnswer({
+        'State': 'Pinned',
+        'Requester': 'xA',
+        'FeeRate': 8,
+        'CanRaiseFee': true,
+        'CanRelease': true,
+        'BitcoinTxid': 'abc',
+        'SettledTxid': null,
+      }))!;
+      expect(w.status, 'Awaiting_BTC_Confirmation');
+      expect(w.paid, isFalse);
+      expect(w.pinnedBtcTxHash, 'abc');
+      expect(w.paidBtcTxHash, isNull);
+      expect(w.feeRate, 8);
+      expect(w.canRaiseFee && w.canRelease, isTrue);
+    });
+
+    test('a settled withdrawal is paid by its settled txid', () {
+      final w = WatchedWithdrawal.fromPinAnswer(pinAnswer({'State': 'Settled', 'BitcoinTxid': 'def', 'SettledTxid': 'def'}))!;
+      expect(w.paid, isTrue);
+      expect(w.status, 'Completed');
+      expect(w.bitcoinTxHash, 'def');
+      expect(w.isClosed, isTrue);
+    });
+
+    test('a request not mined yet', () {
+      final w = WatchedWithdrawal.fromPinAnswer(pinAnswer(null))!;
+      expect(w.notMinedYet, isTrue);
+      expect(w.status, 'Unknown');
+    });
+
+    test('a vault the chain does not watch', () {
+      expect(WatchedWithdrawal.fromPinAnswer({'Success': false, 'Attested': false}), isNull);
+    });
+  });
 }

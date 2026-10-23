@@ -1239,12 +1239,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2FailedStartFrost => 'No se pudo iniciar la firma FROST';
 
   @override
-  String get bw2FrostConfirmHint => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
-
-  @override
-  String get bw2FrostConfirmHintWeb => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
-
-  @override
   String get bw2FrostFailedOrTimedOut => 'La firma FROST falló o agotó el tiempo de espera. Es posible que el retiro aún se complete: vuelve a verificar en breve.';
 
   @override
@@ -11244,4 +11238,30 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get tokenMintOverflow => 'Esta acuñación llevaría el suministro o el saldo por encima de la cantidad máxima que admite la cadena.';
+
+  @override
+  String get bw2RequestConfirmHint => 'Esto suele tardar entre 10 y 20 segundos. El retiro continúa automáticamente una vez confirmado.';
+
+  @override
+  String get bw2WatchedChangeFailed => 'No se pudo enviar el cambio de comisión.';
+
+  @override
+  String get bw2WatchedRowWaiting => 'Esperando su transacción de Bitcoin';
+
+  @override
+  String get bw2WatchedRowPinned => 'Transacción de Bitcoin fijada, esperando a que Bitcoin la confirme';
+
+  @override
+  String get bw2WatchedRowReleasing => 'Liberándose';
+
+  @override
+  String get bw2WatchedRowInProgress => 'En curso';
+
+  @override
+  String get btcFeeRatesAreEstimates => 'No se pudieron cargar las comisiones actuales. Estas comisiones son estimaciones, no lo que pide la red ahora; revísalas o define una comisión personalizada.';
+
+  @override
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
+    return 'A $feeRate sat/vB la transacción de Bitcoin de este retiro cuesta al menos $feeSats sats, que se descuentan del monto, y deben quedar al menos 546 sats para pagar. Retira al menos $minimum BTC o baja la comisión.';
+  }
 }

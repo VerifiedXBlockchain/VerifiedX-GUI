@@ -90,6 +90,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BtcFeeEstimateNote(recommendedFees),
                       ListTile(
                         leading: SizedBox(
                             width: 100, child: Text(l10n.btcFeeRateLabel)),

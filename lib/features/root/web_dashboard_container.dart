@@ -744,7 +744,7 @@ class WebAccountInfoBtc extends BaseComponent {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "${formatBtcAmount(latestBtcTx.amountBtc())} BTC",
+                            "${formatBtcAmount(latestBtcTx.amountBtcFor(ref.watch(webSessionProvider).btcKeypair?.address))} BTC",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -899,7 +899,7 @@ class WebAccountInfoVbtc extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "${formatBtcAmount(latestVbtcBtcTx.amountBtc())} vBTC",
+                          "${formatBtcAmount(latestVbtcBtcTx.amountBtcFor(ref.watch(webSessionProvider).btcKeypair?.address))} vBTC",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

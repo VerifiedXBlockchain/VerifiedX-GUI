@@ -28,6 +28,33 @@ bool withdrawalIsResumable(Map<String, dynamic> withdrawalRequest) {
   return kResumableWithdrawalStatuses.contains(status.trim().toLowerCase());
 }
 
+/// Where an open withdrawal on a watched vault stands, as Spyglass last read
+/// it from the node (`pin_state`, null once closed or before it was read).
+enum WatchedRowState { waiting, pinned, releasing, unknown }
+
+WatchedRowState watchedRowState(Map<String, dynamic> withdrawalRequest) {
+  if (withdrawalRequest['releasing'] == true) return WatchedRowState.releasing;
+  final pinState = withdrawalRequest['pin_state'];
+  if (pinState is! String) return WatchedRowState.unknown;
+  switch (pinState.trim().toLowerCase()) {
+    case 'waiting':
+      return WatchedRowState.waiting;
+    case 'pinned':
+      return WatchedRowState.pinned;
+    default:
+      return WatchedRowState.unknown;
+  }
+}
+
+/// Whether a history row may offer Cancel. On a watched vault the chain takes
+/// a cancel only while no Bitcoin transaction is fixed (`Waiting`); once one
+/// is pinned only a release can give the withdrawal up.
+bool withdrawalRowCanCancel(Map<String, dynamic> withdrawalRequest, {required bool vaultIsWatched}) {
+  if (!withdrawalIsResumable(withdrawalRequest)) return false;
+  if (!vaultIsWatched && withdrawalRequest['pin_state'] == null) return true;
+  return watchedRowState(withdrawalRequest) == WatchedRowState.waiting;
+}
+
 /// Blocks after its request is mined that the chain keeps treating a request
 /// as the contract's active one (VBTCWithdrawalRequest.EXPIRY_BLOCKS; the
 /// node's check is `currentHeight - RequestBlockHeight <= EXPIRY_BLOCKS`).
@@ -91,6 +118,9 @@ class BtcWebVbtcToken with _$BtcWebVbtcToken {
     required WebNft nft,
     @Default(1) int version,
     @JsonKey(name: 'is_pending_withdrawal') @Default(false) bool isPendingWithdrawal,
+    /// The chain watches this vault's Bitcoin (minted from the attestation
+    /// recording height on): its withdrawals are paid by the chain, not FROST.
+    @JsonKey(name: 'is_watched') @Default(false) bool isWatched,
     @JsonKey(name: 'frost_group_public_key') String? frostGroupPublicKey,
     @JsonKey(name: 'required_threshold') int? requiredThreshold,
     @JsonKey(name: 'withdrawal_requests') List<Map<String, dynamic>>? withdrawalRequests,

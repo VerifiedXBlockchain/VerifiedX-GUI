@@ -12,6 +12,7 @@ import '../models/escrowed_withdrawal.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../models/vbtc_multi_transfer_result.dart';
 import '../models/withdrawal_result.dart';
+import '../../btc_web/models/watched_withdrawal.dart';
 import '../../../core/utils/user_error_message.dart';
 
 const _tag = '[vBTC-V2]';
@@ -554,6 +555,21 @@ class VbtcV2Service extends BaseService {
       final Map<String, dynamic> data = response['data'];
       _log(method, 'RESPONSE (${stopwatch.elapsedMilliseconds}ms)', data);
 
+      // A vault the chain watches: nothing was signed or sent, the answer only
+      // says where the withdrawal stands.
+      final watched = WatchedWithdrawal.fromCompletionAnswer(data);
+      if (watched != null) {
+        _log(method, 'Watched vault — state: ${watched.state} | paid: ${watched.paid} | btcTx: ${watched.bitcoinTxHash}');
+        return WithdrawalResult(
+          success: data['Success'] == true,
+          message: watched.message,
+          requestHash: withdrawalRequestHash,
+          btcTransactionHash: watched.bitcoinTxHash,
+          status: watched.status,
+          watched: watched,
+        );
+      }
+
       if (data['Success'] == true) {
         _log(method, 'Withdrawal complete — vfxTx: ${data['VFXTransactionHash']} | btcTx: ${data['BTCTransactionHash']}');
         return WithdrawalResult(
@@ -590,6 +606,74 @@ class VbtcV2Service extends BaseService {
         requestHash: withdrawalRequestHash,
         timedOut: timedOut,
       );
+    }
+  }
+
+  /// Where a withdrawal from a vault the chain watches stands, from
+  /// `GetWithdrawalPin`, which reads chain state and signs nothing. Null when
+  /// the vault is not watched or the node could not be asked.
+  Future<WatchedWithdrawal?> watchedWithdrawal({
+    required String scUid,
+    required String withdrawalRequestHash,
+  }) async {
+    const method = 'GetWithdrawalPin';
+
+    try {
+      final result = await getJson(
+        "/GetWithdrawalPin/$scUid/$withdrawalRequestHash",
+        cleanPath: false,
+      );
+      final watched = WatchedWithdrawal.fromPinAnswer(Map<String, dynamic>.from(result));
+      _log(method, watched == null ? 'Not a watched vault — ${result['Message']}' : 'state: ${watched.state} | paid: ${watched.paid} | btcTx: ${watched.bitcoinTxHash}');
+      return watched;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      return null;
+    }
+  }
+
+  /// Raises the Bitcoin fee of a pinned withdrawal on a watched vault, or with
+  /// [release] gives it up (`BumpWithdrawalFee` / `ReleaseWithdrawal`, signed
+  /// by the requester's account on this node). Returns the sent transaction's
+  /// hash, or null after showing why it was refused.
+  Future<String?> changeWatchedWithdrawal({
+    required String scUid,
+    required String requestorAddress,
+    required String withdrawalRequestHash,
+    required int feeRate,
+    required bool release,
+  }) async {
+    final method = release ? 'ReleaseWithdrawal' : 'BumpWithdrawalFee';
+    final params = {
+      'SmartContractUID': scUid,
+      'RequestorAddress': requestorAddress,
+      'WithdrawalRequestHash': withdrawalRequestHash,
+      'FeeRate': feeRate,
+    };
+
+    _log(method, 'REQUEST POST /$method', params);
+
+    try {
+      final response = await postJson(
+        "/$method",
+        params: params,
+        cleanPath: false,
+        inspect: true,
+      );
+
+      final Map<String, dynamic> data = response['data'];
+      _log(method, 'RESPONSE', data);
+
+      if (data['Success'] == true) {
+        return data['FeeBumpTxHash'] as String? ?? '';
+      }
+
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.bw2WatchedChangeFailed));
+      return null;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      Toast.error(userErrorMessage(e));
+      return null;
     }
   }
 
@@ -659,22 +743,25 @@ class VbtcV2Service extends BaseService {
     }
   }
 
-  /// Cancel a stuck withdrawal. Only available to the contract owner
-  /// when a BTC transaction hash exists.
+  /// Cancel a stuck withdrawal (the requester, when a BTC transaction hash
+  /// exists), or a watched vault's withdrawal still waiting for its Bitcoin
+  /// transaction.
   Future<bool> cancelWithdrawal({
     required String scUid,
     required String ownerAddress,
     required String withdrawalRequestHash,
-    required String btcTxHash,
-    required String failureProof,
+    String? btcTxHash,
+    String? failureProof,
   }) async {
     const method = 'CancelWithdrawal';
+    // A watched vault's cancel needs neither: no Bitcoin transaction is fixed
+    // yet and no vote is held.
     final params = {
       'SmartContractUID': scUid,
       'OwnerAddress': ownerAddress,
       'WithdrawalRequestHash': withdrawalRequestHash,
-      'BTCTxHash': btcTxHash,
-      'FailureProof': failureProof,
+      if (btcTxHash != null) 'BTCTxHash': btcTxHash,
+      if (failureProof != null) 'FailureProof': failureProof,
     };
 
     _log(method, 'REQUEST POST /CancelWithdrawal', params);

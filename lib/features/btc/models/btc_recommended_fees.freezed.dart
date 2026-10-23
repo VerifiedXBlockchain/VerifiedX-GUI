@@ -26,6 +26,11 @@ mixin _$BtcRecommendedFees {
   int get economyFee => throw _privateConstructorUsedError;
   int get minimumFee => throw _privateConstructorUsedError;
 
+  /// The fee API could not be reached and these are fixed stand-ins, not
+  /// what the network is asking for now.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  bool get isEstimate => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $BtcRecommendedFeesCopyWith<BtcRecommendedFees> get copyWith =>
@@ -43,7 +48,8 @@ abstract class $BtcRecommendedFeesCopyWith<$Res> {
       int halfHourFee,
       int hourFee,
       int economyFee,
-      int minimumFee});
+      int minimumFee,
+      @JsonKey(includeFromJson: false, includeToJson: false) bool isEstimate});
 }
 
 /// @nodoc
@@ -64,6 +70,7 @@ class _$BtcRecommendedFeesCopyWithImpl<$Res, $Val extends BtcRecommendedFees>
     Object? hourFee = null,
     Object? economyFee = null,
     Object? minimumFee = null,
+    Object? isEstimate = null,
   }) {
     return _then(_value.copyWith(
       fastestFee: null == fastestFee
@@ -86,6 +93,10 @@ class _$BtcRecommendedFeesCopyWithImpl<$Res, $Val extends BtcRecommendedFees>
           ? _value.minimumFee
           : minimumFee // ignore: cast_nullable_to_non_nullable
               as int,
+      isEstimate: null == isEstimate
+          ? _value.isEstimate
+          : isEstimate // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -103,7 +114,8 @@ abstract class _$$_BtcRecommendedFeesCopyWith<$Res>
       int halfHourFee,
       int hourFee,
       int economyFee,
-      int minimumFee});
+      int minimumFee,
+      @JsonKey(includeFromJson: false, includeToJson: false) bool isEstimate});
 }
 
 /// @nodoc
@@ -122,6 +134,7 @@ class __$$_BtcRecommendedFeesCopyWithImpl<$Res>
     Object? hourFee = null,
     Object? economyFee = null,
     Object? minimumFee = null,
+    Object? isEstimate = null,
   }) {
     return _then(_$_BtcRecommendedFees(
       fastestFee: null == fastestFee
@@ -144,6 +157,10 @@ class __$$_BtcRecommendedFeesCopyWithImpl<$Res>
           ? _value.minimumFee
           : minimumFee // ignore: cast_nullable_to_non_nullable
               as int,
+      isEstimate: null == isEstimate
+          ? _value.isEstimate
+          : isEstimate // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -156,7 +173,9 @@ class _$_BtcRecommendedFees extends _BtcRecommendedFees {
       required this.halfHourFee,
       required this.hourFee,
       required this.economyFee,
-      required this.minimumFee})
+      required this.minimumFee,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.isEstimate = false})
       : super._();
 
   factory _$_BtcRecommendedFees.fromJson(Map<String, dynamic> json) =>
@@ -173,9 +192,15 @@ class _$_BtcRecommendedFees extends _BtcRecommendedFees {
   @override
   final int minimumFee;
 
+  /// The fee API could not be reached and these are fixed stand-ins, not
+  /// what the network is asking for now.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final bool isEstimate;
+
   @override
   String toString() {
-    return 'BtcRecommendedFees(fastestFee: $fastestFee, halfHourFee: $halfHourFee, hourFee: $hourFee, economyFee: $economyFee, minimumFee: $minimumFee)';
+    return 'BtcRecommendedFees(fastestFee: $fastestFee, halfHourFee: $halfHourFee, hourFee: $hourFee, economyFee: $economyFee, minimumFee: $minimumFee, isEstimate: $isEstimate)';
   }
 
   @override
@@ -191,13 +216,15 @@ class _$_BtcRecommendedFees extends _BtcRecommendedFees {
             (identical(other.economyFee, economyFee) ||
                 other.economyFee == economyFee) &&
             (identical(other.minimumFee, minimumFee) ||
-                other.minimumFee == minimumFee));
+                other.minimumFee == minimumFee) &&
+            (identical(other.isEstimate, isEstimate) ||
+                other.isEstimate == isEstimate));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, fastestFee, halfHourFee, hourFee, economyFee, minimumFee);
+  int get hashCode => Object.hash(runtimeType, fastestFee, halfHourFee, hourFee,
+      economyFee, minimumFee, isEstimate);
 
   @JsonKey(ignore: true)
   @override
@@ -220,7 +247,9 @@ abstract class _BtcRecommendedFees extends BtcRecommendedFees {
       required final int halfHourFee,
       required final int hourFee,
       required final int economyFee,
-      required final int minimumFee}) = _$_BtcRecommendedFees;
+      required final int minimumFee,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final bool isEstimate}) = _$_BtcRecommendedFees;
   _BtcRecommendedFees._() : super._();
 
   factory _BtcRecommendedFees.fromJson(Map<String, dynamic> json) =
@@ -236,6 +265,12 @@ abstract class _BtcRecommendedFees extends BtcRecommendedFees {
   int get economyFee;
   @override
   int get minimumFee;
+  @override
+
+  /// The fee API could not be reached and these are fixed stand-ins, not
+  /// what the network is asking for now.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  bool get isEstimate;
   @override
   @JsonKey(ignore: true)
   _$$_BtcRecommendedFeesCopyWith<_$_BtcRecommendedFees> get copyWith =>

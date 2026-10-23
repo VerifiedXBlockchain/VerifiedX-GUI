@@ -6,10 +6,12 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../app.dart';
 import '../../../core/components/buttons.dart';
+import '../../../core/dialogs.dart';
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
+import '../../btc_web/models/watched_withdrawal.dart';
 import '../models/withdrawal_result.dart';
 import '../services/vbtc_v2_service.dart';
 import '../../transactions/services/local_transaction_service.dart';
@@ -30,6 +32,10 @@ class WithdrawalProcessingDialog extends StatefulWidget {
   @visibleForTesting
   final Future<WithdrawalResult> Function()? completeWithdrawalOverride;
 
+  /// Replaces the GetWithdrawalPin lookup in widget tests.
+  @visibleForTesting
+  final Future<WatchedWithdrawal?> Function()? watchedWithdrawalOverride;
+
   const WithdrawalProcessingDialog({
     super.key,
     required this.scUid,
@@ -37,6 +43,7 @@ class WithdrawalProcessingDialog extends StatefulWidget {
     this.ownerAddress,
     this.waitForConfirmation = false,
     this.completeWithdrawalOverride,
+    this.watchedWithdrawalOverride,
   });
 
   /// Show the dialog and begin the completeWithdrawal call immediately.
@@ -63,7 +70,20 @@ class WithdrawalProcessingDialog extends StatefulWidget {
   State<WithdrawalProcessingDialog> createState() => _WithdrawalProcessingDialogState();
 }
 
-enum _DialogState { waitingForBlock, processing, verifying, success, failure }
+enum _DialogState {
+  waitingForBlock,
+
+  /// Asking whether the vault is one the chain watches before choosing a path.
+  checkingStatus,
+  processing,
+  verifying,
+
+  /// A watched vault: the chain pays the withdrawal; the requester can only
+  /// follow it, raise its fee, release it or (before it is pinned) cancel it.
+  watched,
+  success,
+  failure,
+}
 
 class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog> {
   _DialogState _state = _DialogState.processing;
@@ -77,19 +97,50 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   /// Guards Retry against a double tap starting two signing ceremonies.
   bool _busy = false;
 
+  WatchedWithdrawal? _watched;
+  Timer? _watchedTimer;
+  bool _watchedRefreshInFlight = false;
+  static const _watchedRefreshInterval = Duration(seconds: 20);
+  final _feeRateController = TextEditingController();
+  String? _feeRateError;
+
+  /// The withdrawal as it stood when a raise, release or cancel was sent.
+  /// Actions stay off until the chain shows a change, or [kWatchedActionWait]
+  /// passes: each send costs a VFX fee, and a second one for the same change
+  /// does nothing.
+  WatchedWithdrawal? _sentAgainst;
+  DateTime? _sentAt;
+
+  /// Kept after the lock above is released, so the "probably dropped" note
+  /// holds until a refresh shows the change or the withdrawal closes.
+  WatchedWithdrawal? _sentSnapshot;
+  bool _sentNotSeen = false;
+
+  /// The sent raise or release's hash, so a lapsed wait can ask whether it was
+  /// mined before calling it dropped. Null for a cancel, whose hash the CLI
+  /// route does not return to the service.
+  String? _sentTxHash;
+  bool _checkingSentTx = false;
+
+  /// Counts sends, so a "was it mined" lookup that returns after a newer send
+  /// leaves that send's lock and note alone.
+  int _sendSeq = 0;
+
   @override
   void initState() {
     super.initState();
     if (widget.waitForConfirmation) {
       _waitForRequestConfirmation();
     } else {
-      _runCompleteWithdrawal();
+      _startCompletion();
     }
   }
 
   @override
   void dispose() {
     _confirmationTimer?.cancel();
+    _watchedTimer?.cancel();
+    _feeRateController.dispose();
     super.dispose();
   }
 
@@ -124,14 +175,38 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
 
         if (match.isNotEmpty) {
           timer.cancel();
-          debugPrint('$_tag Request tx confirmed in block ${match.first.height} — proceeding to completeWithdrawal');
+          debugPrint('$_tag Request tx confirmed in block ${match.first.height} — checking the vault');
           if (!mounted) return;
-          _runCompleteWithdrawal();
+          _startCompletion();
         }
       } catch (e) {
         debugPrint('$_tag Confirmation poll error: $e');
       }
     });
+  }
+
+  /// A watched vault is paid by the chain, so it is only followed and
+  /// CompleteWithdrawal (the FROST ceremony) is never called for it. When the
+  /// lookup fails, CompleteWithdrawal still answers a watched vault with its
+  /// state rather than signing, and that answer is handled the same way.
+  Future<void> _startCompletion() async {
+    setState(() => _state = _DialogState.checkingStatus);
+    final watched = await _lookUpWatched();
+    if (!mounted) return;
+    if (watched != null) {
+      _result = WithdrawalResult(success: true, requestHash: widget.requestHash, watched: watched);
+      _showWatched(watched);
+      return;
+    }
+    await _runCompleteWithdrawal();
+  }
+
+  Future<WatchedWithdrawal?> _lookUpWatched() {
+    return widget.watchedWithdrawalOverride?.call() ??
+        VbtcV2Service().watchedWithdrawal(
+          scUid: widget.scUid,
+          withdrawalRequestHash: widget.requestHash,
+        );
   }
 
   Future<void> _runCompleteWithdrawal() async {
@@ -150,6 +225,12 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     if (!mounted) return;
 
     debugPrint('$_tag completeWithdrawal result — success: ${result.success}, vfxTx: ${result.vfxTransactionHash}, btcTx: ${result.btcTransactionHash}, message: ${result.message}');
+
+    if (result.watched != null) {
+      _result = result;
+      _showWatched(result.watched!);
+      return;
+    }
 
     // A client-side timeout does not mean the ceremony failed — the CLI may
     // still be signing and broadcasting. Offering Retry here risks a second
@@ -217,6 +298,148 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     });
   }
 
+  void _showWatched(WatchedWithdrawal watched) {
+    final waitOver = _sentAgainst != null && watched.samePinAs(_sentAgainst!) && watchedActionWaitIsOver(_sentAt, DateTime.now());
+    setState(() {
+      if (watched.settlesChangeSentAgainst(_sentSnapshot)) {
+        _sentAgainst = null;
+        _sentSnapshot = null;
+        _sentNotSeen = false;
+      }
+      _watched = watched;
+      _state = _DialogState.watched;
+    });
+    if (waitOver) _onSentWaitOver();
+    _watchedTimer?.cancel();
+    if (!watched.isClosed) {
+      _watchedTimer = Timer.periodic(_watchedRefreshInterval, (_) => _refreshWatched());
+    }
+  }
+
+  /// A tick waits for the previous tick's answer.
+  Future<void> _refreshWatched() async {
+    if (_watchedRefreshInFlight) return;
+    _watchedRefreshInFlight = true;
+    try {
+      final watched = await _lookUpWatched();
+      if (!mounted || watched == null) return;
+      _showWatched(watched);
+    } finally {
+      _watchedRefreshInFlight = false;
+    }
+  }
+
+  /// The chain showed no change in [kWatchedActionWait]. The actions come
+  /// back either way; the "probably dropped" note is shown only when the sent
+  /// transaction is not in a block on this node.
+  Future<void> _onSentWaitOver() async {
+    if (_checkingSentTx) return;
+    _checkingSentTx = true;
+    final seq = _sendSeq;
+    final hash = _sentTxHash;
+    var mined = false;
+    if (hash != null && hash.isNotEmpty) {
+      try {
+        final transactions = await LocalTransactionService().transactionsAll();
+        mined = transactions.any((tx) => tx.hash == hash && tx.height > 0);
+      } catch (e) {
+        debugPrint('$_tag Sent change lookup error: $e');
+      }
+    }
+    _checkingSentTx = false;
+    if (!mounted || _sentAgainst == null || seq != _sendSeq) return;
+    setState(() {
+      _sentAgainst = null;
+      _sentNotSeen = !mined;
+    });
+  }
+
+  void _markSent(WatchedWithdrawal against, {String? txHash}) {
+    _sendSeq++;
+    _sentAgainst = against;
+    _sentSnapshot = against;
+    _sentAt = DateTime.now();
+    _sentTxHash = txHash;
+    _sentNotSeen = false;
+  }
+
+  String get _requester => _watched?.requester ?? widget.ownerAddress ?? '';
+
+  Future<void> _sendWatchedChange({required bool release}) async {
+    final watched = _watched;
+    if (watched == null || _busy) return;
+    final feeRate = int.tryParse(_feeRateController.text.trim());
+    final problem = watched.feeRateProblem(feeRate);
+    if (problem != null) {
+      setState(() => _feeRateError = _feeRateProblemText(problem, watched));
+      return;
+    }
+
+    setState(() {
+      _busy = true;
+      _feeRateError = null;
+    });
+    final sentHash = await VbtcV2Service().changeWatchedWithdrawal(
+      scUid: widget.scUid,
+      requestorAddress: _requester,
+      withdrawalRequestHash: widget.requestHash,
+      feeRate: feeRate!,
+      release: release,
+    );
+    if (!mounted) return;
+    setState(() {
+      _busy = false;
+      if (sentHash != null) _markSent(watched, txHash: sentHash);
+    });
+    if (sentHash != null) {
+      _feeRateController.clear();
+      _refreshWatched();
+    }
+  }
+
+  /// Cancels a watched withdrawal still waiting for its Bitcoin transaction:
+  /// when the cancel is mined the withdrawal closes and the vBTC is returned.
+  Future<void> _cancelWatched() async {
+    final watched = _watched;
+    if (watched == null || _busy) return;
+    final l10n = AppLocalizations.of(context);
+    final confirmed = await ConfirmDialog.show(
+      title: l10n.bw2CancelWithdrawalQuestion,
+      body: l10n.bw2WatchedCancelBody,
+      destructive: true,
+    );
+    if (confirmed != true || !mounted) return;
+
+    setState(() => _busy = true);
+    final sent = await VbtcV2Service().cancelWithdrawal(
+      scUid: widget.scUid,
+      ownerAddress: _requester,
+      withdrawalRequestHash: widget.requestHash,
+    );
+    if (!mounted) return;
+    setState(() {
+      _busy = false;
+      if (sent) _markSent(watched);
+    });
+    if (sent) _refreshWatched();
+  }
+
+  String _feeRateProblemText(WatchedFeeRateProblem problem, WatchedWithdrawal watched) {
+    final l10n = AppLocalizations.of(context);
+    switch (problem) {
+      case WatchedFeeRateProblem.invalid:
+        return l10n.bw2WatchedFeeRateInvalid;
+      case WatchedFeeRateProblem.notAboveCurrent:
+        return l10n.bw2WatchedFeeRateTooLow(watched.minimumNextFeeRate);
+      case WatchedFeeRateProblem.aboveMaximum:
+        return l10n.bw2WatchedFeeRateTooHigh(kWatchedWithdrawalMaxFeeRate);
+    }
+  }
+
+  /// What the caller gets back: the latest watched state, so a withdrawal
+  /// still unconfirmed on Bitcoin is not reported as paid.
+  void _close() => Navigator.of(context).pop(_result?.withWatched(_watched));
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
@@ -230,7 +453,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           ),
           if (_isTerminal)
             IconButton(
-              onPressed: () => Navigator.of(context).pop(_result),
+              onPressed: _close,
               icon: const Icon(Icons.close, size: 20),
               tooltip: l10n.actionClose,
               color: Colors.white38,
@@ -246,6 +469,8 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (_state == _DialogState.waitingForBlock) _buildWaitingForBlockSection(l10n),
+            if (_state == _DialogState.checkingStatus) _buildCheckingSection(),
+            if (_state == _DialogState.watched) _buildWatchedSection(l10n),
             if (_state == _DialogState.processing) _buildProcessingSection(l10n),
             if (_state == _DialogState.verifying) _buildVerifyingSection(l10n),
             if (_state == _DialogState.success) _buildSuccessSection(l10n),
@@ -257,12 +482,19 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   }
 
   bool get _isTerminal =>
-      _state == _DialogState.success || _state == _DialogState.failure;
+      _state == _DialogState.success ||
+      _state == _DialogState.failure ||
+      // Nothing is asked of the requester while the chain pays it.
+      _state == _DialogState.watched;
 
   String _titleForState(AppLocalizations l10n) {
     switch (_state) {
       case _DialogState.waitingForBlock:
         return l10n.bw2WaitingForConfirmation;
+      case _DialogState.checkingStatus:
+        return l10n.bw2CheckingWithdrawalStatus;
+      case _DialogState.watched:
+        return _watched?.paid == true ? l10n.bw2WithdrawalComplete : l10n.bw2WatchedWithdrawalTitle;
       case _DialogState.processing:
         return l10n.bw2ProcessingWithdrawal;
       case _DialogState.verifying:
@@ -292,11 +524,135 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
         ),
         const SizedBox(height: 8),
         Text(
-          l10n.bw2FrostConfirmHint,
+          l10n.bw2RequestConfirmHint,
           style: const TextStyle(color: Colors.white38, fontSize: 12),
         ),
       ],
     );
+  }
+
+  Widget _buildCheckingSection() {
+    return const Center(
+      child: SizedBox(
+        width: 32,
+        height: 32,
+        child: CircularProgressIndicator(strokeWidth: 3),
+      ),
+    );
+  }
+
+  Widget _buildWatchedSection(AppLocalizations l10n) {
+    final watched = _watched!;
+    final btcTxHash = watched.bitcoinTxHash;
+    final awaitingChange = _sentAgainst != null;
+    final canAct = (watched.canRaiseFee || watched.canRelease) && !awaitingChange;
+    final actionsEnabled = !_busy && !awaitingChange;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              watched.paid ? Icons.check_circle : Icons.schedule,
+              color: watched.paid ? _successColor : Colors.white70,
+              size: 20,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                _watchedHeadline(watched, l10n),
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
+        ),
+        if (watched.summary != null || watched.message != null) ...[
+          const SizedBox(height: 12),
+          // The node's own account of the withdrawal (English, as the node gives it).
+          Text(watched.summary ?? watched.message!, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+        ],
+        if (btcTxHash != null) ...[
+          const SizedBox(height: 16),
+          _buildHashRow(
+            l10n.bw2BtcTransactionLabel,
+            btcTxHash,
+            explorerUrl: Env.btcExplorerTxUrl(btcTxHash),
+          ),
+        ],
+        if (watched.isPinned && watched.feeRate != null) ...[
+          const SizedBox(height: 12),
+          Text(l10n.bw2WatchedCurrentFeeRate(watched.feeRate!), style: const TextStyle(color: Colors.white70, fontSize: 12)),
+        ],
+        if (awaitingChange || _sentNotSeen) ...[
+          const SizedBox(height: 16),
+          Text(
+            awaitingChange ? l10n.bw2WatchedChangeSent : l10n.bw2WatchedChangeNotSeen,
+            style: const TextStyle(color: Color(0xFFE0A32E), fontSize: 12),
+          ),
+        ],
+        if (canAct) ...[
+          const SizedBox(height: 16),
+          Text(l10n.bw2WatchedNotConfirmingHint, style: const TextStyle(color: Colors.white38, fontSize: 12)),
+          const SizedBox(height: 8),
+          TextField(
+            key: const Key('withdrawal:watched-fee-rate'),
+            controller: _feeRateController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            decoration: InputDecoration(
+              labelText: l10n.bw2WatchedNewFeeRateLabel,
+              hintText: l10n.bw2WatchedFeeRateTooLow(watched.minimumNextFeeRate),
+              errorText: _feeRateError,
+            ),
+          ),
+        ],
+        const SizedBox(height: 20),
+        Align(
+          alignment: Alignment.centerRight,
+          child: Wrap(
+            alignment: WrapAlignment.end,
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              if (watched.canCancel)
+                AppButton(
+                  label: l10n.bw2WatchedCancel,
+                  variant: AppColorVariant.Danger,
+                  onPressed: actionsEnabled ? _cancelWatched : null,
+                ),
+              if (watched.canRelease)
+                AppButton(
+                  label: l10n.bw2WatchedRelease,
+                  variant: AppColorVariant.Warning,
+                  onPressed: actionsEnabled ? () => _sendWatchedChange(release: true) : null,
+                ),
+              if (watched.canRaiseFee)
+                AppButton(
+                  label: l10n.bw2WatchedRaiseFee,
+                  variant: AppColorVariant.Primary,
+                  onPressed: actionsEnabled ? () => _sendWatchedChange(release: false) : null,
+                ),
+              AppButton(
+                label: l10n.actionDone,
+                variant: watched.paid ? AppColorVariant.Success : AppColorVariant.Light,
+                onPressed: _close,
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _watchedHeadline(WatchedWithdrawal watched, AppLocalizations l10n) {
+    if (watched.paid) return l10n.bw2WithdrawalCompletedSuccess;
+    if (watched.notMinedYet) return l10n.bw2WatchedNotMinedYet;
+    if (watched.releasing) return l10n.bw2WatchedReleasing;
+    if (watched.isPinned) return l10n.bw2WatchedPinned;
+    if (watched.isWaiting) return l10n.bw2WatchedWaiting;
+    return l10n.bw2WatchedClosed;
   }
 
   Widget _buildProcessingSection(AppLocalizations l10n) {
@@ -385,7 +741,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
           child: AppButton(
             label: l10n.actionDone,
             variant: AppColorVariant.Success,
-            onPressed: () => Navigator.of(context).pop(_result),
+            onPressed: _close,
           ),
         ),
       ],
@@ -441,7 +797,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
               AppButton(
                 label: l10n.tkbDismiss,
                 variant: AppColorVariant.Light,
-                onPressed: () => Navigator.of(context).pop(_result),
+                onPressed: _close,
               ),
               if (canCancel)
                 AppButton(

@@ -37,6 +37,16 @@ class WebTransactionListModel {
   }
 }
 
+/// [transactions] with [tx] added on top as pending, unless a transaction
+/// with its hash is already listed. A send can be reported twice (the raw
+/// send inserts it, then the caller's own broadcast hook), and each pending
+/// copy is later swapped for the confirmed one, so a second copy would list
+/// the transaction twice for the rest of the session.
+List<WebTransaction> withPendingTx(List<WebTransaction> transactions, WebTransaction tx) {
+  if (tx.hash.isNotEmpty && transactions.any((t) => t.hash == tx.hash)) return transactions;
+  return [tx.copyWith(isPending: true), ...transactions];
+}
+
 class WebTransactionListProvider extends StateNotifier<WebTransactionListModel> {
   final Ref ref;
   final String address;
@@ -74,10 +84,7 @@ class WebTransactionListProvider extends StateNotifier<WebTransactionListModel> 
   }
 
   void insertPendingTx(WebTransaction tx) {
-    state = state.copyWith(transactions: [
-      tx.copyWith(isPending: true),
-      ...state.transactions,
-    ]);
+    state = state.copyWith(transactions: withPendingTx(state.transactions, tx));
   }
 
   void fetchNextPage() {

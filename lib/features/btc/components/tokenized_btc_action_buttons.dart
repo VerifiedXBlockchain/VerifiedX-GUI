@@ -42,6 +42,9 @@ import '../../../core/providers/session_provider.dart';
 import './withdrawal_processing_dialog.dart';
 import '../../price/providers/price_detail_providers.dart';
 import '../../../core/utils/tx_refresh.dart';
+import 'btc_fee_estimate_note.dart';
+import '../../btc_web/utils/vbtc_amount.dart';
+import '../../../utils/formatting.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -504,7 +507,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
 
-                    if (dialogResult != null && dialogResult.success) {
+                    if (dialogResult != null && dialogResult.isPaid) {
                       ref.read(logProvider.notifier).append(
                             LogEntry(
                               message: "vBTC Withdrawal completed successfully.",
@@ -587,7 +590,7 @@ class TokenizedBtcActionButtons extends BaseComponent {
 
                     ref.read(tokenizedBitcoinListProvider.notifier).refresh();
 
-                    if (dialogResult != null && dialogResult.success) {
+                    if (dialogResult != null && dialogResult.isPaid) {
                       final message = "vBTC Withdrawal completed successfully.";
                       ref.read(logProvider.notifier).append(
                             LogEntry(
@@ -1331,6 +1334,7 @@ class _TransferSharesModal extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        BtcFeeEstimateNote(recommendedFees),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: SizedBox(width: 100, child: Text(l10n.btcFeeRateLabel)),
@@ -1460,6 +1464,15 @@ class _TransferSharesModal extends BaseComponent {
                             resolvedFee = recommendedFees.fastestFee;
                             break;
                         }
+                      }
+
+                      if (forWithdrawl && token.version >= 2 && vbtcWithdrawalLeavesDust(amount, resolvedFee)) {
+                        Toast.error(l10n.btcWithdrawalBelowDust(
+                          resolvedFee,
+                          kVbtcWithdrawalMinVsize * resolvedFee,
+                          formatBtcAmount(vbtcWithdrawalMinimumSats(resolvedFee) * BTC_SATOSHI_MULTIPLIER),
+                        ));
+                        return;
                       }
 
                       final result = _TransferShareModalResponse(

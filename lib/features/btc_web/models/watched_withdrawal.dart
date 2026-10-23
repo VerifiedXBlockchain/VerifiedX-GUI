@@ -76,12 +76,6 @@ class WatchedWithdrawal {
     if (answer == null) return null;
 
     final withdrawal = answer['Withdrawal'] is Map ? Map<String, dynamic>.from(answer['Withdrawal']) : null;
-    final transactions = withdrawal?['Transactions'] is List
-        ? (withdrawal!['Transactions'] as List)
-            .whereType<Map>()
-            .map((t) => WatchedWithdrawalTransaction.fromJson(Map<String, dynamic>.from(t)))
-            .toList()
-        : <WatchedWithdrawalTransaction>[];
 
     return WatchedWithdrawal(
       status: answer['Status'] as String? ?? 'Unknown',
@@ -98,7 +92,44 @@ class WatchedWithdrawal {
       canCancel: withdrawal?['CanCancel'] == true,
       pinnedBtcTxHash: answer['PinnedBTCTransactionHash'] as String?,
       paidBtcTxHash: answer['BTCTransactionHash'] as String?,
-      transactions: transactions,
+      transactions: _transactionsOf(withdrawal),
+    );
+  }
+
+  /// Parses the CLI's `GetWithdrawalPin` answer, which reads chain state and
+  /// signs nothing, or null when the vault is not one the chain watches. It
+  /// carries the withdrawal alone, so the completion answer's status, paid
+  /// flag and transaction hashes are derived from its state the way Core
+  /// derives them (`BtcVaultView.CompletionAnswer`).
+  static WatchedWithdrawal? fromPinAnswer(Map<String, dynamic>? response) {
+    if (response == null || response['Attested'] != true) return null;
+    final withdrawal = response['Withdrawal'] is Map ? Map<String, dynamic>.from(response['Withdrawal']) : null;
+    final state = withdrawal?['State'] as String?;
+    final txid = withdrawal?['BitcoinTxid'] as String?;
+
+    return WatchedWithdrawal(
+      status: state == null
+          ? 'Unknown'
+          : state == 'Settled'
+              ? 'Completed'
+              : state == 'Pinned'
+                  ? 'Awaiting_BTC_Confirmation'
+                  : state == 'Waiting'
+                      ? 'Awaiting_BTC_Transaction'
+                      : 'Closed',
+      paid: state == 'Settled',
+      notMinedYet: withdrawal == null,
+      state: state,
+      summary: withdrawal?['Summary'] as String?,
+      requester: withdrawal?['Requester'] as String?,
+      feeRate: (withdrawal?['FeeRate'] as num?)?.toInt(),
+      canRaiseFee: withdrawal?['CanRaiseFee'] == true,
+      canRelease: withdrawal?['CanRelease'] == true,
+      releasing: withdrawal?['Releasing'] == true,
+      canCancel: withdrawal?['CanCancel'] == true,
+      pinnedBtcTxHash: state == 'Pinned' ? txid : null,
+      paidBtcTxHash: state == 'Settled' ? (withdrawal?['SettledTxid'] as String? ?? txid) : null,
+      transactions: _transactionsOf(withdrawal),
     );
   }
 
@@ -139,6 +170,15 @@ class WatchedWithdrawal {
     if (requested < minimumNextFeeRate) return WatchedFeeRateProblem.notAboveCurrent;
     if (requested > kWatchedWithdrawalMaxFeeRate) return WatchedFeeRateProblem.aboveMaximum;
     return null;
+  }
+
+  static List<WatchedWithdrawalTransaction> _transactionsOf(Map<String, dynamic>? withdrawal) {
+    final transactions = withdrawal?['Transactions'];
+    if (transactions is! List) return const [];
+    return transactions
+        .whereType<Map>()
+        .map((t) => WatchedWithdrawalTransaction.fromJson(Map<String, dynamic>.from(t)))
+        .toList();
   }
 
   static String? _withoutMarker(String? message) {
