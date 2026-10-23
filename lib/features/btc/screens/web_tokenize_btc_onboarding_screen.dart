@@ -25,6 +25,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import 'package:collection/collection.dart';
 import '../components/btc_fee_estimate_note.dart';
+import '../services/btc_fee_rate_service.dart';
 
 part './web_tokenize_btc_onboarding_steps.dart';
 
