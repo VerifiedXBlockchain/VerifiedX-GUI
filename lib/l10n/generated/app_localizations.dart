@@ -20822,6 +20822,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'In progress'**
   String get bw2WatchedRowInProgress;
+
+  /// Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.'**
+  String get btcFeeRatesAreEstimates;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -11256,4 +11256,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get bw2WatchedRowInProgress => 'En curso';
+
+  @override
+  String get btcFeeRatesAreEstimates => 'No se pudieron cargar las comisiones actuales. Estas comisiones son estimaciones, no lo que pide la red ahora; revísalas o define una comisión personalizada.';
 }

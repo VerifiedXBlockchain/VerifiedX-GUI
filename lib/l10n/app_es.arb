@@ -10363,5 +10363,9 @@
   "bw2WatchedRowInProgress": "En curso",
   "@bw2WatchedRowInProgress": {
     "description": "Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet."
+  },
+  "btcFeeRatesAreEstimates": "No se pudieron cargar las comisiones actuales. Estas comisiones son estimaciones, no lo que pide la red ahora; revísalas o define una comisión personalizada.",
+  "@btcFeeRatesAreEstimates": {
+    "description": "Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown."
   }
 }

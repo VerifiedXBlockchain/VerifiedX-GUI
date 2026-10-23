@@ -42,6 +42,7 @@ import '../../../core/providers/session_provider.dart';
 import './withdrawal_processing_dialog.dart';
 import '../../price/providers/price_detail_providers.dart';
 import '../../../core/utils/tx_refresh.dart';
+import 'btc_fee_estimate_note.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -1331,6 +1332,7 @@ class _TransferSharesModal extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        BtcFeeEstimateNote(recommendedFees),
                         ListTile(
                           contentPadding: EdgeInsets.zero,
                           leading: SizedBox(width: 100, child: Text(l10n.btcFeeRateLabel)),

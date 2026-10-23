@@ -24,6 +24,7 @@ import '../../wallet/providers/wallet_list_provider.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import 'package:collection/collection.dart';
+import '../components/btc_fee_estimate_note.dart';
 
 part './web_tokenize_btc_onboarding_steps.dart';
 

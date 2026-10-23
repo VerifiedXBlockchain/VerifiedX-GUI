@@ -10437,5 +10437,9 @@
   "bw2WatchedRowInProgress": "In progress",
   "@bw2WatchedRowInProgress": {
     "description": "Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet."
+  },
+  "btcFeeRatesAreEstimates": "Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.",
+  "@btcFeeRatesAreEstimates": {
+    "description": "Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown."
   }
 }

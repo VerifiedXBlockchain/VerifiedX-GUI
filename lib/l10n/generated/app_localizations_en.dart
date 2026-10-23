@@ -11256,4 +11256,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get bw2WatchedRowInProgress => 'In progress';
+
+  @override
+  String get btcFeeRatesAreEstimates => 'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.';
 }
