@@ -6,7 +6,6 @@ import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/dialogs.dart';
-import '../../../core/providers/session_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/services/explorer_service.dart';
 import '../../../core/theme/app_theme.dart';
@@ -25,6 +24,7 @@ import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import 'package:collection/collection.dart';
 import '../components/btc_fee_estimate_note.dart';
+import '../services/btc_fee_rate_service.dart';
 
 part './web_tokenize_btc_onboarding_steps.dart';
 

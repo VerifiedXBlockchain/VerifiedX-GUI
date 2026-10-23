@@ -196,6 +196,18 @@ class VBtcOnboardState {
   }
 }
 
+/// The contract this wizard run created, found by the deposit address its
+/// ceremony produced, which is the address Step 6 funds. Matching on the
+/// owner took the account's first vault, an older one whenever the account
+/// already owned a vault. Null until the new contract is listed.
+TokenizedBitcoin? wizardCreatedToken(
+  List<TokenizedBitcoin> tokens, {
+  required String? depositAddress,
+}) {
+  if (depositAddress == null || depositAddress.isEmpty) return null;
+  return tokens.firstWhereOrNull((t) => t.btcAddress == depositAddress);
+}
+
 @Riverpod(keepAlive: true)
 class VBtcOnboard extends _$VBtcOnboard {
   ProviderSubscription<List<Transaction>>? vfxTransferListener;
@@ -283,8 +295,10 @@ class VBtcOnboard extends _$VBtcOnboard {
     tokenInListListener = ref.listen(tokenizedBitcoinListProvider,
         (previous, List<TokenizedBitcoin> tokens) {
       if (state.step == VBtcOnboardStep.tokenize) {
-        final token = tokens
-            .firstWhereOrNull((t) => t.rbxAddress == state.vfxWallet?.address);
+        final token = wizardCreatedToken(
+          tokens,
+          depositAddress: ref.read(mpcCeremonyProvider).ceremony?.depositAddress,
+        );
 
         if (token != null) {
           Toast.message(globalL10n.bw2TokenDeployed);
@@ -307,8 +321,9 @@ class VBtcOnboard extends _$VBtcOnboard {
 
           return;
         }
-        final token = tokens.firstWhereOrNull(
-            (t) => t.id == state.tokenizedBtc!.id && t.balance > 0);
+        final token = tokens.firstWhereOrNull((t) =>
+            t.smartContractUid == state.tokenizedBtc!.smartContractUid &&
+            t.balance > 0);
         if (token != null) {
           Toast.message(globalL10n.bw2TransferComplete);
           state = state.copyWith(
