@@ -116,6 +116,16 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   WatchedWithdrawal? _sentSnapshot;
   bool _sentNotSeen = false;
 
+  /// The sent raise or release's hash, so a lapsed wait can ask whether it was
+  /// mined before calling it dropped. Null for a cancel, whose hash the CLI
+  /// route does not return to the service.
+  String? _sentTxHash;
+  bool _checkingSentTx = false;
+
+  /// Counts sends, so a "was it mined" lookup that returns after a newer send
+  /// leaves that send's lock and note alone.
+  int _sendSeq = 0;
+
   @override
   void initState() {
     super.initState();
@@ -289,18 +299,17 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
   }
 
   void _showWatched(WatchedWithdrawal watched) {
+    final waitOver = _sentAgainst != null && watched.samePinAs(_sentAgainst!) && watchedActionWaitIsOver(_sentAt, DateTime.now());
     setState(() {
       if (watched.settlesChangeSentAgainst(_sentSnapshot)) {
         _sentAgainst = null;
         _sentSnapshot = null;
         _sentNotSeen = false;
-      } else if (_sentAgainst != null && watchedActionWaitIsOver(_sentAt, DateTime.now())) {
-        _sentAgainst = null;
-        _sentNotSeen = true;
       }
       _watched = watched;
       _state = _DialogState.watched;
     });
+    if (waitOver) _onSentWaitOver();
     _watchedTimer?.cancel();
     if (!watched.isClosed) {
       _watchedTimer = Timer.periodic(_watchedRefreshInterval, (_) => _refreshWatched());
@@ -320,10 +329,37 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     }
   }
 
-  void _markSent(WatchedWithdrawal against) {
+  /// The chain showed no change in [kWatchedActionWait]. The actions come
+  /// back either way; the "probably dropped" note is shown only when the sent
+  /// transaction is not in a block on this node.
+  Future<void> _onSentWaitOver() async {
+    if (_checkingSentTx) return;
+    _checkingSentTx = true;
+    final seq = _sendSeq;
+    final hash = _sentTxHash;
+    var mined = false;
+    if (hash != null && hash.isNotEmpty) {
+      try {
+        final transactions = await LocalTransactionService().transactionsAll();
+        mined = transactions.any((tx) => tx.hash == hash && tx.height > 0);
+      } catch (e) {
+        debugPrint('$_tag Sent change lookup error: $e');
+      }
+    }
+    _checkingSentTx = false;
+    if (!mounted || _sentAgainst == null || seq != _sendSeq) return;
+    setState(() {
+      _sentAgainst = null;
+      _sentNotSeen = !mined;
+    });
+  }
+
+  void _markSent(WatchedWithdrawal against, {String? txHash}) {
+    _sendSeq++;
     _sentAgainst = against;
     _sentSnapshot = against;
     _sentAt = DateTime.now();
+    _sentTxHash = txHash;
     _sentNotSeen = false;
   }
 
@@ -353,7 +389,7 @@ class _WithdrawalProcessingDialogState extends State<WithdrawalProcessingDialog>
     if (!mounted) return;
     setState(() {
       _busy = false;
-      if (sentHash != null) _markSent(watched);
+      if (sentHash != null) _markSent(watched, txHash: sentHash);
     });
     if (sentHash != null) {
       _feeRateController.clear();

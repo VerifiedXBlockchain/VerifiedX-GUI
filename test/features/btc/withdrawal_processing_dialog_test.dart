@@ -72,6 +72,10 @@ void main() {
   });
 
   group('a vault the chain watches', () {
+    // A pinned dialog refreshes on a timer while mounted; unmount it so the
+    // timer is disposed inside the test.
+    Future<void> unmount(WidgetTester tester) => tester.pumpWidget(const SizedBox.shrink());
+
     const pinned = WatchedWithdrawal(
       status: 'Awaiting_BTC_Confirmation',
       paid: false,
@@ -102,6 +106,7 @@ void main() {
       expect(find.text('Release'), findsOneWidget);
       expect(find.text('Withdrawal completed successfully!'), findsNothing);
       expect(find.textContaining('FROST'), findsNothing);
+      await unmount(tester);
     });
 
     testWidgets('a CompleteWithdrawal answer for a watched vault shows its state, not completion', (tester) async {
@@ -113,6 +118,7 @@ void main() {
       expect(find.text('Withdrawal in Progress'), findsOneWidget);
       expect(find.text('Raise Fee'), findsOneWidget);
       expect(find.text('Withdrawal completed successfully!'), findsNothing);
+      await unmount(tester);
     });
 
     testWidgets('a fee rate not above the current one is refused before anything is sent', (tester) async {
@@ -123,6 +129,7 @@ void main() {
       await tester.pump();
 
       expect(find.text('At least 9 sat/vB'), findsWidgets);
+      await unmount(tester);
     });
 
     testWidgets('a paid withdrawal reads as complete', (tester) async {
