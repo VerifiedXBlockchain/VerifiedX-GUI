@@ -20828,6 +20828,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.'**
   String get btcFeeRatesAreEstimates;
+
+  /// vBTC withdraw form, before the confirm: the amount minus the smallest Bitcoin fee at the chosen rate is under the 546-sat dust limit, which the node would refuse.
+  ///
+  /// In en, this message translates to:
+  /// **'At {feeRate} sat/vB this withdrawal\'s Bitcoin transaction costs at least {feeSats} sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least {minimum} BTC, or lower the fee rate.'**
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

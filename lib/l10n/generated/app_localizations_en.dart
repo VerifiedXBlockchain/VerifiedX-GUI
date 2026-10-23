@@ -11259,4 +11259,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btcFeeRatesAreEstimates => 'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.';
+
+  @override
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
+    return 'At $feeRate sat/vB this withdrawal\'s Bitcoin transaction costs at least $feeSats sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least $minimum BTC, or lower the fee rate.';
+  }
 }

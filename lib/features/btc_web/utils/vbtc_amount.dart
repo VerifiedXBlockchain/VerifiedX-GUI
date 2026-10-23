@@ -25,3 +25,23 @@ bool vbtcAmountWithinSatoshiPrecision(String text) {
   }
   return double.parse(value.toStringAsFixed(kVbtcMaxDecimals)) == value;
 }
+
+/// Bitcoin's dust limit: the least a withdrawal may pay out once its fee is
+/// taken (Core's `BtcCanonicalWithdrawal.DustSats`).
+const int kBtcDustSats = 546;
+
+/// Virtual size of the smallest withdrawal transaction, one input (Core's
+/// `BtcCanonicalWithdrawal.VSize(1)`).
+const int kVbtcWithdrawalMinVsize = 154;
+
+/// The smallest withdrawal, in sats, the node accepts at [feeRate]: its
+/// Bitcoin fee comes out of the amount, and what is left must be at least
+/// [kBtcDustSats]. The node checks this only once the request is sent.
+int vbtcWithdrawalMinimumSats(int feeRate) => kVbtcWithdrawalMinVsize * feeRate + kBtcDustSats;
+
+/// Whether a withdrawal of [amountBtc] at [feeRate] would be refused for
+/// leaving less than [kBtcDustSats] to pay.
+bool vbtcWithdrawalLeavesDust(double amountBtc, int feeRate) {
+  if (feeRate <= 0) return false;
+  return (amountBtc * 100000000).round() < vbtcWithdrawalMinimumSats(feeRate);
+}

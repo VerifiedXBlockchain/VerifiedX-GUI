@@ -43,6 +43,8 @@ import './withdrawal_processing_dialog.dart';
 import '../../price/providers/price_detail_providers.dart';
 import '../../../core/utils/tx_refresh.dart';
 import 'btc_fee_estimate_note.dart';
+import '../../btc_web/utils/vbtc_amount.dart';
+import '../../../utils/formatting.dart';
 
 class TokenizedBtcActionButtons extends BaseComponent {
   final TokenizedBitcoin token;
@@ -1462,6 +1464,15 @@ class _TransferSharesModal extends BaseComponent {
                             resolvedFee = recommendedFees.fastestFee;
                             break;
                         }
+                      }
+
+                      if (forWithdrawl && token.version >= 2 && vbtcWithdrawalLeavesDust(amount, resolvedFee)) {
+                        Toast.error(l10n.btcWithdrawalBelowDust(
+                          resolvedFee,
+                          kVbtcWithdrawalMinVsize * resolvedFee,
+                          formatBtcAmount(vbtcWithdrawalMinimumSats(resolvedFee) * BTC_SATOSHI_MULTIPLIER),
+                        ));
+                        return;
                       }
 
                       final result = _TransferShareModalResponse(

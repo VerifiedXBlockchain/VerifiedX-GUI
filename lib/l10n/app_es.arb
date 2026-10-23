@@ -10367,5 +10367,20 @@
   "btcFeeRatesAreEstimates": "No se pudieron cargar las comisiones actuales. Estas comisiones son estimaciones, no lo que pide la red ahora; revísalas o define una comisión personalizada.",
   "@btcFeeRatesAreEstimates": {
     "description": "Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown."
+  },
+  "btcWithdrawalBelowDust": "A {feeRate} sat/vB la transacción de Bitcoin de este retiro cuesta al menos {feeSats} sats, que se descuentan del monto, y deben quedar al menos 546 sats para pagar. Retira al menos {minimum} BTC o baja la comisión.",
+  "@btcWithdrawalBelowDust": {
+    "description": "vBTC withdraw form, before the confirm: the amount minus the smallest Bitcoin fee at the chosen rate is under the 546-sat dust limit, which the node would refuse.",
+    "placeholders": {
+      "feeRate": {
+        "type": "int"
+      },
+      "feeSats": {
+        "type": "int"
+      },
+      "minimum": {
+        "type": "String"
+      }
+    }
   }
 }

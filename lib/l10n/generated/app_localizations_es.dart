@@ -11259,4 +11259,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get btcFeeRatesAreEstimates => 'No se pudieron cargar las comisiones actuales. Estas comisiones son estimaciones, no lo que pide la red ahora; revísalas o define una comisión personalizada.';
+
+  @override
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
+    return 'A $feeRate sat/vB la transacción de Bitcoin de este retiro cuesta al menos $feeSats sats, que se descuentan del monto, y deben quedar al menos 546 sats para pagar. Retira al menos $minimum BTC o baja la comisión.';
+  }
 }
