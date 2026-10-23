@@ -896,8 +896,11 @@ class AccountUtils {
           Toast.error(l10n.sendBadgeNotActivated);
           break;
         case PaymentGateway.testnetFaucet:
-          // launchUrlString("https://testnet.rbx.network/faucet");
-          launchUrlString("https://mempool.space/testnet4/faucet");
+          // The VerifiedX signet has no public faucet yet.
+          InfoDialog.show(
+            title: l10n.txpTestnetFaucet,
+            body: l10n.txpTestnetBtcFaucetAskTeam,
+          );
           break;
       }
     }
@@ -1244,11 +1247,7 @@ class AccountUtils {
                             variant: AppColorVariant.Btc,
                             type: AppButtonType.Text,
                             onPressed: () {
-                              if (Env.btcIsTestNet) {
-                                launchUrlString("https://mempool.space/testnet4/tx/$txHash");
-                              } else {
-                                launchUrlString("https://mempool.space/tx/$txHash");
-                              }
+                              launchUrlString(Env.btcExplorerTxUrl(txHash));
                             },
                           ),
                         ],

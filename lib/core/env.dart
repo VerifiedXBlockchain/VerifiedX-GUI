@@ -118,6 +118,23 @@ class Env {
     return _isTestnet;
   }
 
+  /// Bitcoin explorer for BTC links, with a trailing '/'. Testnet runs on the
+  /// VerifiedX private signet, which only our own explorer carries.
+  static String get btcExplorerBaseUrl {
+    if (btcIsTestNet) return 'https://signet.verifiedx.io/';
+    return 'https://mempool.space/';
+  }
+
+  /// Esplora REST API for [btcExplorerBaseUrl], without a trailing '/'.
+  static String get btcExplorerApiBaseUrl {
+    return '${btcExplorerBaseUrl}api';
+  }
+
+  /// Explorer page for a Bitcoin transaction.
+  static String btcExplorerTxUrl(String txid) {
+    return '${btcExplorerBaseUrl}tx/$txid';
+  }
+
   static bool get isAutomation {
     return _isAutomation;
   }

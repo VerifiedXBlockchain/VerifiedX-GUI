@@ -798,7 +798,7 @@ This area covers the desktop GUI's network-facing tools: the Operations screen (
 2. Return and click `BTC Explorer`.
 
 **Expected**
-- On testnet `VFX Explorer` opens `https://spyglass-testnet.verifiedx.io` and `BTC Explorer` opens `https://mempool.space/testnet4/`.
+- On testnet `VFX Explorer` opens `https://spyglass-testnet.verifiedx.io` and `BTC Explorer` opens `https://signet.verifiedx.io/`.
 - On mainnet they open `https://spyglass.verifiedx.io` and `https://mempool.space/`.
 - Both open in a new tab or the default browser; the wallet stays where it was.
 
