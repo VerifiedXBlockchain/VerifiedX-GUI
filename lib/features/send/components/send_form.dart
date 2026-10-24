@@ -383,7 +383,7 @@ class SendForm extends BaseComponent {
                   validator: formProvider.addressValidator,
                   decoration: InputDecoration(hintText: AppLocalizations.of(context).sendRecipientHint),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.-]')),
                   ],
                 ),
                 subtitle: Padding(
