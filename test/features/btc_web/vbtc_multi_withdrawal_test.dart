@@ -35,9 +35,9 @@ void main() {
       expect(plan.ok, isTrue);
       expect(plan.shares.map((s) => s.scIdentifier), ['big:2', 'small:1']);
       expect(plan.shares.map((s) => s.amount), [0.00005, 0.00002]);
-      expect(plan.perShareFeeSats, 462);
-      expect(plan.totalFeeSats, 924);
-      expect(plan.netAmount, 0.00006076);
+      expect(plan.minPerShareFeeSats, 462);
+      expect(plan.minTotalFeeSats, 924);
+      expect(plan.maxNetAmount, 0.00006076);
     });
 
     test('one vault that covers the amount is one share', () {
@@ -45,7 +45,7 @@ void main() {
 
       expect(plan.ok, isTrue);
       expect(plan.shares, hasLength(1));
-      expect(plan.totalFeeSats, 308);
+      expect(plan.minTotalFeeSats, 308);
     });
 
     test('names the part that would fall below the fee floor', () {
@@ -80,6 +80,25 @@ void main() {
       final plan = planVbtcMultiWithdrawal(balances, 0.0011, 1);
       expect(plan.failure, VbtcWithdrawalPlanFailure.tooManyVaults);
       expect(plan.shares, isEmpty);
+    });
+
+    test('refuses a zero, negative or sub-satoshi total with no shares', () {
+      final balances = {'a:1': 0.0001};
+      for (final total in [0.0, -0.00001, 0.000010001]) {
+        final plan = planVbtcMultiWithdrawal(balances, total, 3);
+        expect(plan.ok, isFalse, reason: '$total');
+        expect(plan.failure, VbtcWithdrawalPlanFailure.invalidAmount, reason: '$total');
+        expect(plan.shares, isEmpty);
+        expect(plan.available, 0.0001);
+      }
+    });
+
+    test('refuses a zero or negative fee rate', () {
+      for (final feeRate in [0, -1]) {
+        final plan = planVbtcMultiWithdrawal({'a:1': 0.0001}, 0.00005, feeRate);
+        expect(plan.failure, VbtcWithdrawalPlanFailure.invalidFeeRate, reason: '$feeRate');
+        expect(plan.shares, isEmpty);
+      }
     });
 
     test('refuses more than the combined balance', () {
