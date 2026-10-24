@@ -6,6 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/app_constants.dart';
 import '../../core/dialogs.dart';
+import '../../core/providers/web_session_provider.dart';
+import '../../core/services/explorer_service.dart';
+import '../../core/utils/user_error_message.dart';
+import '../../l10n/l10n_helper.dart';
 import '../../core/utils.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../utils/toast.dart';
@@ -161,7 +165,7 @@ Future<dynamic> initTransferNftProcess(
     labelText: l10n.bw2LabelVfxAddress,
     confirmText: l10n.actionContinue,
     inputFormatters: [
-      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
+      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.-]')),
     ],
     lines: 1,
     sufixIcon: AddressChoosingIconButton(controller: controller),
@@ -171,17 +175,51 @@ Future<dynamic> initTransferNftProcess(
       address = address.trim().replaceAll("\n", "");
 
       if (kIsWeb) {
-        ref.read(globalLoadingProvider.notifier).start();
-        success = await _provider.transferWebOut(address, delayHours);
-        if (success == true) {
-          ref.read(transferredProvider.notifier).addId(id);
+        // The overlay covers the name lookup too, so the page and account
+        // can't change under it; the account is still checked before sending.
+        final session = ref.read(webSessionProvider);
+        final submittingAccount = "${session.keypair?.address}|${session.raKeypair?.address}";
+        // Taken now: if the page is left during the lookup, its ref is disposed
+        // and could no longer clear the overlay.
+        final loading = ref.read(globalLoadingProvider.notifier);
+        loading.start();
+        try {
+          // Core refuses a transaction addressed to a name, so a .vfx name is
+          // resolved here, as the web Send form does (desktop: Core resolves it).
+          if (looksLikeVfxName(address)) {
+            final String? resolved;
+            try {
+              resolved = await ExplorerService().resolveAdnr(address);
+            } catch (e) {
+              Toast.error(userErrorMessage(e));
+              return;
+            }
+            if (resolved == null) {
+              Toast.error(globalL10n.svcNameNotResolved(address));
+              return;
+            }
+            address = resolved;
+          }
+          if (!context.mounted) {
+            return;
+          }
+          final current = ref.read(webSessionProvider);
+          if ("${current.keypair?.address}|${current.raKeypair?.address}" != submittingAccount) {
+            Toast.error();
+            return;
+          }
+          success = await _provider.transferWebOut(address, delayHours);
+          if (success == true) {
+            ref.read(transferredProvider.notifier).addId(id);
 
-          Toast.message(l10n.r3gAssetTransferSentSuccess(assetLabel, address));
-          Navigator.of(context).pop();
-        } else {
-          Toast.error();
+            Toast.message(l10n.r3gAssetTransferSentSuccess(assetLabel, address));
+            Navigator.of(context).pop();
+          } else {
+            Toast.error();
+          }
+        } finally {
+          loading.complete();
         }
-        ref.read(globalLoadingProvider.notifier).complete();
       } else {
         final isValid = await BridgeService().validateSendToAddress(address);
         if (!isValid) {

@@ -3,7 +3,7 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "9.0.0";
+const APP_V = "9.0.1";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
@@ -50,8 +50,8 @@ const BTC_ADNR_MAX_LENGTH = 65;
 // and a transfer carries the receiving BTC address's signed acceptance.
 // Set each value to the node's BtcNameSignerOwnsAddressHeight for that network
 // once it is chosen. 999999999999 means not active yet.
-const BTC_NAME_SIGNED_MESSAGE_HEIGHT_MAINNET = 999999999999;
-const BTC_NAME_SIGNED_MESSAGE_HEIGHT_TESTNET = 999999999999;
+const BTC_NAME_SIGNED_MESSAGE_HEIGHT_MAINNET = 7575250;
+const BTC_NAME_SIGNED_MESSAGE_HEIGHT_TESTNET = 7400;
 int get BTC_NAME_SIGNED_MESSAGE_HEIGHT =>
     Env.isTestNet ? BTC_NAME_SIGNED_MESSAGE_HEIGHT_TESTNET : BTC_NAME_SIGNED_MESSAGE_HEIGHT_MAINNET;
 
