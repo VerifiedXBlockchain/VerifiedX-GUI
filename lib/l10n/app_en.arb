@@ -10579,9 +10579,9 @@
       }
     }
   },
-  "btcMultiWdConfirmNet": "Arrives at the address: about {amount} BTC",
+  "btcMultiWdConfirmNet": "Arrives at the address: at most {amount} BTC",
   "@btcMultiWdConfirmNet": {
-    "description": "Multi-vault withdrawal confirmation: the total less the total fees.",
+    "description": "Multi-vault withdrawal confirmation: the most that arrives, the total less the smallest total fees.",
     "placeholders": {
       "amount": {
         "type": "String"

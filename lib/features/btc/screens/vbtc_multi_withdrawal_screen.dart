@@ -52,9 +52,13 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
   late final amountController = TextEditingController(text: widget.initialAmount?.toString() ?? '');
   final addressController = TextEditingController();
 
-  /// Desktop: each held vault's kind, read from the node once. Null until
-  /// loaded; a vault the node could not answer for stays out.
+  /// Desktop: each held vault's kind, read from the node. Null until the
+  /// first load; a vault the node could not answer for stays out of the
+  /// available amount until a later load gets an answer. Used only for the
+  /// available amount and Max: what is sent is checked against Core's own
+  /// allocation.
   Map<String, VbtcVaultKind?>? _kinds;
+  bool _loadingKinds = false;
 
   @override
   void initState() {
@@ -69,20 +73,37 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
     super.dispose();
   }
 
+  /// Reads the kind of every held vault not known yet: new since the last
+  /// load, or one the node could not answer for. Runs on open and whenever
+  /// the vault list refreshes.
   Future<void> _loadKinds() async {
     // Web: Spyglass marks each token `is_watched` already.
     if (kIsWeb) {
       _kinds = const {};
       return;
     }
+    if (_loadingKinds) return;
     final address = ref.read(sessionProvider).currentWallet?.address ?? '';
-    final tokens = ref.read(tokenizedBitcoinListProvider).where((t) => t.version >= 2 && t.myBalance > 0).toList();
+    final known = _kinds ?? const {};
+    final tokens = ref
+        .read(tokenizedBitcoinListProvider)
+        .where((t) => t.version >= 2 && t.myBalance > 0 && known[t.smartContractUid] == null)
+        .toList();
+    if (tokens.isEmpty) {
+      if (_kinds == null) setState(() => _kinds = {});
+      return;
+    }
+    _loadingKinds = true;
     final kinds = await Future.wait(
       tokens.map((t) => VbtcV2Service().getVaultKind(address: address, scUid: t.smartContractUid)),
     );
+    _loadingKinds = false;
     if (!mounted) return;
     setState(() {
-      _kinds = {for (var i = 0; i < tokens.length; i++) tokens[i].smartContractUid: kinds[i]};
+      _kinds = {
+        ...known,
+        for (var i = 0; i < tokens.length; i++) tokens[i].smartContractUid: kinds[i],
+      };
     });
   }
 
@@ -136,6 +157,7 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
   @override
   Widget body(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    ref.listen(tokenizedBitcoinListProvider, (_, __) => _loadKinds());
     if (_kinds == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -264,27 +286,24 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
 
     final amount = double.parse(amountController.text.trim());
     final btcAddress = addressController.text.trim();
-    final watched = _watchedBalances(vaults);
-
-    // Desktop: Core allocates over every unfrozen vault, legacy ones
-    // included until they freeze; a legacy share would need a FROST
-    // completion. Web names its shares, so it never gets one.
-    if (!kIsWeb) {
-      final unfrozen = {
-        for (final v in vaults.where((v) => v.kind != VbtcVaultKind.frozen)) v.scIdentifier: v.balance,
-      };
-      if (vbtcCoreAllocationTouchesUnwatched(unfrozen, watched.keys.toSet(), amount)) {
-        Toast.error(l10n.btcMultiWdLegacyVault);
-        return;
-      }
-    }
 
     final feeRate = await promptForFeeRate(context);
     if (feeRate == null || !mounted) {
       return;
     }
 
-    final plan = planVbtcMultiWithdrawal(watched, amount, feeRate);
+    final VbtcWithdrawalPlan plan;
+    if (kIsWeb) {
+      // Web names its shares, watched vaults only, and checks Core's answer
+      // against them before signing.
+      plan = planVbtcMultiWithdrawal(_watchedBalances(vaults), amount, feeRate);
+    } else {
+      final shares = await _desktopCoreShares(l10n, requestorAddress, btcAddress, amount, feeRate);
+      if (shares == null || !mounted) {
+        return;
+      }
+      plan = vbtcWithdrawalPlanForShares(shares, feeRate, vbtcMultiWithdrawalMax(_watchedBalances(vaults)));
+    }
     if (!plan.ok) {
       Toast.error(vbtcWithdrawalPlanError(l10n, plan, amount));
       return;
@@ -310,6 +329,39 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
     } else {
       await _sendDesktop(l10n, requestorAddress, plan, amount, btcAddress, vaults);
     }
+  }
+
+  /// Desktop: the shares Core would send. RequestWithdrawalMulti sends only
+  /// the total and Core picks the vaults, legacy ones included until they
+  /// freeze, from its own view of the balances. So the shares shown and
+  /// checked are Core's, asked for first without sending anything, never a
+  /// guess from balances this screen may not have read. Null after telling
+  /// the user why not.
+  Future<List<VbtcAllocationInput>?> _desktopCoreShares(
+    AppLocalizations l10n,
+    String requestorAddress,
+    String btcAddress,
+    double amount,
+    int feeRate,
+  ) async {
+    ref.read(globalLoadingProvider.notifier).start();
+    final preview = await VbtcV2Service().previewWithdrawalMulti(
+      requestorAddress: requestorAddress,
+      btcAddress: btcAddress,
+      amount: amount,
+      feeRate: feeRate,
+    );
+    ref.read(globalLoadingProvider.notifier).complete();
+    if (preview == null) {
+      return null;
+    }
+    // A share on a vault the chain does not watch would need a FROST
+    // completion, which this flow does not run.
+    if (preview.unwatchedVaults.isNotEmpty) {
+      Toast.error(l10n.btcMultiWdLegacyVault);
+      return null;
+    }
+    return preview.allocations;
   }
 
   String? _desktopRequestor(AppLocalizations l10n) {
@@ -438,6 +490,10 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
 /// Why [plan] cannot be sent, in the words the form shows.
 String vbtcWithdrawalPlanError(AppLocalizations l10n, VbtcWithdrawalPlan plan, double amount) {
   switch (plan.failure!) {
+    case VbtcWithdrawalPlanFailure.invalidAmount:
+      return l10n.btcInvalidAmount;
+    case VbtcWithdrawalPlanFailure.invalidFeeRate:
+      return l10n.tkbInvalidFeeRate;
     case VbtcWithdrawalPlanFailure.insufficientBalance:
       return l10n.btcBulkInsufficientCombined(plan.available.toString(), amount.toString());
     case VbtcWithdrawalPlanFailure.tooManyVaults:
@@ -492,16 +548,23 @@ class VbtcMultiWithdrawalSummary extends StatelessWidget {
               ),
             SizedBox(height: 12),
             Text(
-              l10n.btcMultiWdConfirmPerPartFee(plan.perShareFeeSats, formatBtcAmount(plan.perShareFeeSats / 100000000)),
+              l10n.btcMultiWdConfirmPerPartFee(
+                plan.minPerShareFeeSats,
+                formatBtcAmount(plan.minPerShareFeeSats / 100000000),
+              ),
               style: muted,
             ),
             Text(
-              l10n.btcMultiWdConfirmTotalFee(plan.totalFeeSats, formatBtcAmount(plan.totalFeeSats / 100000000), parts.length),
+              l10n.btcMultiWdConfirmTotalFee(
+                plan.minTotalFeeSats,
+                formatBtcAmount(plan.minTotalFeeSats / 100000000),
+                parts.length,
+              ),
               style: muted,
             ),
             SizedBox(height: 8),
             Text(
-              l10n.btcMultiWdConfirmNet(formatBtcAmount(plan.netAmount)),
+              l10n.btcMultiWdConfirmNet(formatBtcAmount(plan.maxNetAmount)),
               style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).colorScheme.btcOrange),
             ),
             SizedBox(height: 12),

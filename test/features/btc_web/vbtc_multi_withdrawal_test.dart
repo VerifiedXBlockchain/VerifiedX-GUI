@@ -36,9 +36,9 @@ void main() {
       expect(plan.ok, isTrue);
       expect(plan.shares.map((s) => s.scIdentifier), ['big:2', 'small:1']);
       expect(plan.shares.map((s) => s.amount), [0.00005, 0.00002]);
-      expect(plan.perShareFeeSats, 462);
-      expect(plan.totalFeeSats, 924);
-      expect(plan.netAmount, 0.00006076);
+      expect(plan.minPerShareFeeSats, 462);
+      expect(plan.minTotalFeeSats, 924);
+      expect(plan.maxNetAmount, 0.00006076);
     });
 
     test('one vault that covers the amount is one share', () {
@@ -46,7 +46,7 @@ void main() {
 
       expect(plan.ok, isTrue);
       expect(plan.shares, hasLength(1));
-      expect(plan.totalFeeSats, 308);
+      expect(plan.minTotalFeeSats, 308);
     });
 
     test('names the part that would fall below the fee floor', () {
@@ -83,6 +83,25 @@ void main() {
       expect(plan.shares, isEmpty);
     });
 
+    test('refuses a zero, negative or sub-satoshi total with no shares', () {
+      final balances = {'a:1': 0.0001};
+      for (final total in [0.0, -0.00001, 0.000010001]) {
+        final plan = planVbtcMultiWithdrawal(balances, total, 3);
+        expect(plan.ok, isFalse, reason: '$total');
+        expect(plan.failure, VbtcWithdrawalPlanFailure.invalidAmount, reason: '$total');
+        expect(plan.shares, isEmpty);
+        expect(plan.available, 0.0001);
+      }
+    });
+
+    test('refuses a zero or negative fee rate', () {
+      for (final feeRate in [0, -1]) {
+        final plan = planVbtcMultiWithdrawal({'a:1': 0.0001}, 0.00005, feeRate);
+        expect(plan.failure, VbtcWithdrawalPlanFailure.invalidFeeRate, reason: '$feeRate');
+        expect(plan.shares, isEmpty);
+      }
+    });
+
     test('refuses more than the combined balance', () {
       final plan = planVbtcMultiWithdrawal({'a:1': 0.00002, 'b:2': 0.00003}, 0.00006, 1);
 
@@ -91,20 +110,39 @@ void main() {
     });
   });
 
-  group('vbtcCoreAllocationTouchesUnwatched', () {
-    final balances = {'legacy:1': 0.0003, 'watched:2': 0.0002, 'watched:3': 0.0001};
-    final watched = {'watched:2', 'watched:3'};
-
-    test('is true when the largest vault is not watched', () {
-      expect(vbtcCoreAllocationTouchesUnwatched(balances, watched, 0.0001), isTrue);
+  group('vbtcWithdrawalPlanForShares', () {
+    test("accepts Core's shares when each clears the 546-sat floor", () {
+      final plan = vbtcWithdrawalPlanForShares(
+        const [
+          VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.00005),
+          VbtcAllocationInput(scIdentifier: 'b:2', amount: 0.00001008)
+        ],
+        3,
+        0.0001,
+      );
+      expect(plan.ok, isTrue);
+      expect(plan.minTotalFeeSats, 924);
     });
 
-    test('is false when Core would use watched vaults only', () {
-      expect(vbtcCoreAllocationTouchesUnwatched({'legacy:1': 0.00005, 'watched:2': 0.0002}, watched, 0.0002), isFalse);
+    test("refuses a share Core's 330-sat builder check lets through", () {
+      // 792 sats at 3 sat/vB leaves 330: the builder accepts it, a watched vault refuses it at send.
+      final plan = vbtcWithdrawalPlanForShares(
+        const [
+          VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.00005),
+          VbtcAllocationInput(scIdentifier: 'b:2', amount: 0.00000792)
+        ],
+        3,
+        0.0001,
+      );
+      expect(plan.failure, VbtcWithdrawalPlanFailure.shareBelowFeeFloor);
+      expect(plan.belowFloorPart, 2);
     });
 
-    test('is true when the amount reaches past the watched vaults', () {
-      expect(vbtcCoreAllocationTouchesUnwatched({'legacy:1': 0.00005, 'watched:2': 0.0002}, watched, 0.00021), isTrue);
+    test('refuses more than 10 shares and a fee rate of zero', () {
+      final eleven = [for (var i = 0; i < 11; i++) VbtcAllocationInput(scIdentifier: 'c:$i', amount: 0.0001)];
+      expect(vbtcWithdrawalPlanForShares(eleven, 1, 0.0011).failure, VbtcWithdrawalPlanFailure.tooManyVaults);
+      expect(vbtcWithdrawalPlanForShares(eleven.take(2).toList(), 0, 0.0002).failure,
+          VbtcWithdrawalPlanFailure.invalidFeeRate);
     });
   });
 

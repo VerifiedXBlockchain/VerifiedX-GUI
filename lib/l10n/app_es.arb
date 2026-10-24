@@ -10505,7 +10505,7 @@
       }
     }
   },
-  "btcMultiWdConfirmNet": "Llega a la dirección: unos {amount} BTC",
+  "btcMultiWdConfirmNet": "Llega a la dirección: como máximo {amount} BTC",
   "@btcMultiWdConfirmNet": {
     "description": "Multi-vault withdrawal confirmation: the total less the total fees.",
     "placeholders": {
