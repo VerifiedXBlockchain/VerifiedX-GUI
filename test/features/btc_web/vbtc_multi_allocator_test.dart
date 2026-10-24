@@ -81,6 +81,17 @@ void main() {
       expect(result.ok, isTrue);
       expect(result.inputs, hasLength(25));
     });
+
+    test('takes a lower input cap when given one', () {
+      final balances = {
+        for (var i = 0; i < 12; i++) 'c:${i.toString().padLeft(2, '0')}': 0.01
+      };
+
+      expect(allocateVbtcInputs(balances, 0.1, maxInputs: 10).inputs,
+          hasLength(10));
+      expect(allocateVbtcInputs(balances, 0.11, maxInputs: 10).failure,
+          VbtcAllocationFailure.tooManyInputs);
+    });
   });
 
   group('buildVbtcMultiTransferData', () {
