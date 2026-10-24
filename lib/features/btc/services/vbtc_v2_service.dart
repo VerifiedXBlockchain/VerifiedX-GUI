@@ -11,6 +11,7 @@ import '../../nft/services/nft_service.dart';
 import '../models/escrowed_withdrawal.dart';
 import '../models/tokenized_bitcoin.dart';
 import '../models/vbtc_multi_transfer_result.dart';
+import '../models/vbtc_multi_withdrawal_result.dart';
 import '../models/withdrawal_result.dart';
 import '../../btc_web/models/watched_withdrawal.dart';
 import '../../../core/utils/user_error_message.dart';
@@ -30,6 +31,10 @@ void _log(String method, String message, [Map<String, dynamic>? json]) {
     debugPrint('$prefix $message');
   }
 }
+
+/// A vault the chain watches, one made before Bitcoin attestation, or such a
+/// vault once frozen (it pays nothing).
+enum VbtcVaultKind { watched, legacy, frozen }
 
 class VbtcV2Service extends BaseService {
   VbtcV2Service() : super(apiBasePathOverride: "/vbtcapi/vbtc");
@@ -206,6 +211,38 @@ class VbtcV2Service extends BaseService {
       }
 
       return available;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      return null;
+    }
+  }
+
+  /// What kind of vault [scUid] is (`Attested` / `Frozen` from
+  /// `GetVBTCBalance`), or null when the node could not be asked. Only
+  /// watched vaults go into a multi-vault withdrawal: a share on an older
+  /// vault would need a FROST completion. Core leaves frozen vaults out of
+  /// its own allocation.
+  Future<VbtcVaultKind?> getVaultKind({
+    required String address,
+    required String scUid,
+  }) async {
+    const method = 'GetVBTCBalance(kind)';
+
+    if (address.isEmpty || scUid.isEmpty) return null;
+
+    try {
+      final result = await getJson(
+        "/GetVBTCBalance/$address/$scUid",
+        cleanPath: false,
+      );
+
+      if (result['Success'] != true) {
+        _log(method, 'FAILED for $address / $scUid: ${result['Message']}');
+        return null;
+      }
+
+      if (result['Attested'] == true) return VbtcVaultKind.watched;
+      return result['Frozen'] == true ? VbtcVaultKind.frozen : VbtcVaultKind.legacy;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
       return null;
@@ -524,6 +561,104 @@ class VbtcV2Service extends BaseService {
         success: false,
         message: userErrorMessage(e),
       );
+    }
+  }
+
+  /// Which vaults Core would draw [amount] from, asked before anything is
+  /// signed: `GetRawRequestWithdrawalMultiTxData` without inputs runs the
+  /// same allocation as [requestWithdrawalMulti] over the node's own vaults
+  /// and builds the transaction without sending it.
+  ///
+  /// Returns null after surfacing Core's message on failure.
+  Future<VbtcMultiWithdrawalPreview?> previewWithdrawalMulti({
+    required String requestorAddress,
+    required String btcAddress,
+    required double amount,
+    required int feeRate,
+  }) async {
+    const method = 'GetRawRequestWithdrawalMultiTxData(preview)';
+    final params = {
+      'RequestorAddress': requestorAddress,
+      'BTCAddress': btcAddress,
+      'TotalAmount': amount,
+      'FeeRate': feeRate,
+    };
+
+    _log(method, 'REQUEST POST /GetRawRequestWithdrawalMultiTxData', params);
+
+    try {
+      final response = await postJson(
+        "/GetRawRequestWithdrawalMultiTxData",
+        params: params,
+        cleanPath: false,
+        inspect: true,
+      );
+
+      final Map<String, dynamic> data = response['data'];
+      _log(method, 'RESPONSE', data);
+
+      if (data['Success'] == true) {
+        return VbtcMultiWithdrawalPreview.fromJson(data);
+      }
+
+      _log(method, 'FAILED: ${data['Message']}');
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedRequestWithdrawal));
+      return null;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      Toast.error(userErrorMessage(e));
+      return null;
+    }
+  }
+
+  /// One withdrawal request of [amount] drawn from several vaults. Core
+  /// allocates largest first across every vault [requestorAddress] holds,
+  /// checks each share against the fee floor and sends one transaction; each
+  /// share is then paid by its own vault's Bitcoin transaction.
+  ///
+  /// Returns null after surfacing Core's message on failure.
+  Future<VbtcMultiWithdrawalResult?> requestWithdrawalMulti({
+    required String requestorAddress,
+    required String btcAddress,
+    required double amount,
+    required int feeRate,
+  }) async {
+    const method = 'RequestWithdrawalMulti';
+    final params = {
+      // Unused by this route, but 9.0.0 nodes refuse a body without it (VerifiedX-Issues 359).
+      'SmartContractUID': '',
+      'RequestorAddress': requestorAddress,
+      'BTCAddress': btcAddress,
+      'Amount': amount,
+      'FeeRate': feeRate,
+    };
+
+    _log(method, 'REQUEST POST /RequestWithdrawalMulti', params);
+
+    try {
+      final response = await postJson(
+        "/RequestWithdrawalMulti",
+        params: params,
+        cleanPath: false,
+        inspect: true,
+      );
+
+      final Map<String, dynamic> data = response['data'];
+      _log(method, 'RESPONSE', data);
+
+      if (data['Success'] == true) {
+        final result = VbtcMultiWithdrawalResult.fromJson(data);
+        _log(method, 'Withdrawal requested — requestHash: ${result.requestHash}, shares: ${result.allocations.length}');
+        return result;
+      }
+
+      _log(method, 'FAILED: ${data['Message']}');
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedRequestWithdrawal));
+      return null;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      Toast.error(userErrorMessage(e));
+      return null;
     }
   }
 

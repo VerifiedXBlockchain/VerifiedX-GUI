@@ -109,18 +109,34 @@ VbtcWithdrawalPlan planVbtcMultiWithdrawal(Map<String, double> balances, double 
     );
   }
 
+  return vbtcWithdrawalPlanForShares(allocation.inputs, feeRate, allocation.available);
+}
+
+/// Checks shares already chosen (Core's own allocation, on desktop) the way
+/// [planVbtcMultiWithdrawal] checks its own: at most
+/// [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS], and each able to pay its fee at
+/// [feeRate] and leave [kBtcDustSats]. Core's builder checks only 330 sats,
+/// so its allocation can hold a share a watched vault refuses at send.
+VbtcWithdrawalPlan vbtcWithdrawalPlanForShares(List<VbtcAllocationInput> shares, int feeRate, double available) {
+  if (feeRate <= 0) {
+    return VbtcWithdrawalPlan(
+        shares: const [], feeRate: feeRate, available: available, failure: VbtcWithdrawalPlanFailure.invalidFeeRate);
+  }
+  if (shares.length > VBTC_MULTI_WITHDRAWAL_MAX_VAULTS) {
+    return VbtcWithdrawalPlan(
+        shares: const [], feeRate: feeRate, available: available, failure: VbtcWithdrawalPlanFailure.tooManyVaults);
+  }
   final floor = vbtcWithdrawalMinimumSats(feeRate);
-  for (var i = 0; i < allocation.inputs.length; i++) {
-    if (_toSats(allocation.inputs[i].amount) < floor) {
+  for (var i = 0; i < shares.length; i++) {
+    if (_toSats(shares[i].amount) < floor) {
       return VbtcWithdrawalPlan(
-        shares: allocation.inputs,
+        shares: shares,
         feeRate: feeRate,
-        available: allocation.available,
+        available: available,
         failure: VbtcWithdrawalPlanFailure.shareBelowFeeFloor,
         belowFloorPart: i + 1,
       );
     }
   }
-
-  return VbtcWithdrawalPlan(shares: allocation.inputs, feeRate: feeRate, available: allocation.available);
+  return VbtcWithdrawalPlan(shares: shares, feeRate: feeRate, available: available);
 }

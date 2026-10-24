@@ -22,6 +22,7 @@ import '../providers/tokenized_btc_onboard_provider.dart';
 
 import 'bulk_vbtc_transfer_screen.dart';
 import 'tokenize_btc_screen.dart';
+import 'vbtc_multi_withdrawal_screen.dart';
 import 'tokenized_btc_detail_screen.dart';
 
 import '../../wallet/models/wallet.dart';
@@ -95,38 +96,67 @@ class TokenizeBtcListScreen extends BaseScreen {
                   ),
                 ],
               ),
-              // Testnet-only until the network upgrade activates
-              // multi-contract transfers on mainnet.
-              if (BULK_VBTC_TRANSFER_ENABLED)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: AppButton(
-                    label: AppLocalizations.of(context).btcBulkTransferLabel,
-                    onPressed: () {
-                      final webAddress = ref.read(webSessionProvider).keypair?.address;
-                      final hasSpendable = kIsWeb
-                          ? ref
-                              .read(btcWebVbtcTokenListProvider)
-                              .any((t) => t.availableBalanceForAddress(webAddress) > 0)
-                          : ref
-                              .read(tokenizedBitcoinListProvider)
-                              .any((t) => t.version >= 2 && t.myBalance > 0);
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (!kIsWeb)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+                      child: AppButton(
+                        key: const Key('vbtc:multi_withdraw'),
+                        label: AppLocalizations.of(context).btcMultiWdButton,
+                        onPressed: () {
+                          final hasSpendable = ref.read(tokenizedBitcoinListProvider).any((t) => t.version >= 2 && t.myBalance > 0);
 
-                      if (!hasSpendable) {
-                        Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
-                        return;
-                      }
+                          if (!hasSpendable) {
+                            Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
+                            return;
+                          }
 
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => BulkVbtcTransferScreen(),
-                        ),
-                      );
-                    },
-                    variant: AppColorVariant.Btc,
-                    type: AppButtonType.Elevated,
-                  ),
-                )
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => VbtcMultiWithdrawalScreen(),
+                            ),
+                          );
+                        },
+                        variant: AppColorVariant.Btc,
+                        type: AppButtonType.Elevated,
+                      ),
+                    ),
+                  // Testnet-only until the network upgrade activates
+                  // multi-contract transfers on mainnet.
+                  if (BULK_VBTC_TRANSFER_ENABLED)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: AppButton(
+                        label: AppLocalizations.of(context).btcBulkTransferLabel,
+                        onPressed: () {
+                          final webAddress = ref.read(webSessionProvider).keypair?.address;
+                          final hasSpendable = kIsWeb
+                              ? ref
+                                  .read(btcWebVbtcTokenListProvider)
+                                  .any((t) => t.availableBalanceForAddress(webAddress) > 0)
+                              : ref
+                                  .read(tokenizedBitcoinListProvider)
+                                  .any((t) => t.version >= 2 && t.myBalance > 0);
+
+                          if (!hasSpendable) {
+                            Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
+                            return;
+                          }
+
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => BulkVbtcTransferScreen(),
+                            ),
+                          );
+                        },
+                        variant: AppColorVariant.Btc,
+                        type: AppButtonType.Elevated,
+                      ),
+                    )
+                ],
+              ),
             ],
           ),
         AppCard(
