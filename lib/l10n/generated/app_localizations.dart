@@ -1488,7 +1488,7 @@ abstract class AppLocalizations {
   /// Confirm dialog body line about the network fee for vBTC mint.
   ///
   /// In en, this message translates to:
-  /// **'A network fee of ~0.000028 VFX is required.'**
+  /// **'A network fee of ~0.00025 VFX is required.'**
   String get btcNetworkFeeBody;
 
   /// Empty-state shown when the user has no BTC account.

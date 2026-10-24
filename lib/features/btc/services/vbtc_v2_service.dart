@@ -890,13 +890,15 @@ class VbtcV2Service extends BaseService {
   }) async {
     const method = 'CancelWithdrawal';
     // A watched vault's cancel needs neither: no Bitcoin transaction is fixed
-    // yet and no vote is held.
+    // yet and no vote is held. Core 9.0.1's request model still requires both
+    // fields, and refuses a body without them before the cancel runs; it
+    // accepts them empty (VerifiedX-Issues 369).
     final params = {
       'SmartContractUID': scUid,
       'OwnerAddress': ownerAddress,
       'WithdrawalRequestHash': withdrawalRequestHash,
-      if (btcTxHash != null) 'BTCTxHash': btcTxHash,
-      if (failureProof != null) 'FailureProof': failureProof,
+      'BTCTxHash': btcTxHash ?? '',
+      'FailureProof': failureProof ?? '',
     };
 
     _log(method, 'REQUEST POST /CancelWithdrawal', params);

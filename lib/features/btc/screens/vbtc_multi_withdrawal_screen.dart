@@ -298,6 +298,15 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
       // against them before signing.
       plan = planVbtcMultiWithdrawal(_watchedBalances(vaults), amount, feeRate);
     } else {
+      // Core's builder checks only a 330-sat floor and answers with its own
+      // text, so a split that leaves a part under the 546-sat floor is named
+      // here first, by part, before Core is asked (VerifiedX-Issues 370).
+      // Core's allocation is checked again below.
+      final local = planVbtcMultiWithdrawal(_watchedBalances(vaults), amount, feeRate);
+      if (local.failure == VbtcWithdrawalPlanFailure.shareBelowFeeFloor) {
+        Toast.error(vbtcWithdrawalPlanError(l10n, local, amount));
+        return;
+      }
       final shares = await _desktopCoreShares(l10n, requestorAddress, btcAddress, amount, feeRate);
       if (shares == null || !mounted) {
         return;

@@ -755,7 +755,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get btcMpcStartBody => 'This will start an MPC ceremony to create your vBTC token.';
 
   @override
-  String get btcNetworkFeeBody => 'A network fee of ~0.000028 VFX is required.';
+  String get btcNetworkFeeBody => 'A network fee of ~0.00025 VFX is required.';
 
   @override
   String get btcNoBtcAccount => 'No BTC Account Found.';
