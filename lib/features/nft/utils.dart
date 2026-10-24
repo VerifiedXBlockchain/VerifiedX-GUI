@@ -179,7 +179,10 @@ Future<dynamic> initTransferNftProcess(
         // can't change under it; the account is still checked before sending.
         final session = ref.read(webSessionProvider);
         final submittingAccount = "${session.keypair?.address}|${session.raKeypair?.address}";
-        ref.read(globalLoadingProvider.notifier).start();
+        // Taken now: if the page is left during the lookup, its ref is disposed
+        // and could no longer clear the overlay.
+        final loading = ref.read(globalLoadingProvider.notifier);
+        loading.start();
         try {
           // Core refuses a transaction addressed to a name, so a .vfx name is
           // resolved here, as the web Send form does (desktop: Core resolves it).
@@ -197,8 +200,11 @@ Future<dynamic> initTransferNftProcess(
             }
             address = resolved;
           }
+          if (!context.mounted) {
+            return;
+          }
           final current = ref.read(webSessionProvider);
-          if (!context.mounted || "${current.keypair?.address}|${current.raKeypair?.address}" != submittingAccount) {
+          if ("${current.keypair?.address}|${current.raKeypair?.address}" != submittingAccount) {
             Toast.error();
             return;
           }
@@ -212,7 +218,7 @@ Future<dynamic> initTransferNftProcess(
             Toast.error();
           }
         } finally {
-          ref.read(globalLoadingProvider.notifier).complete();
+          loading.complete();
         }
       } else {
         final isValid = await BridgeService().validateSendToAddress(address);
