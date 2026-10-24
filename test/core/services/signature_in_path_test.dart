@@ -62,14 +62,16 @@ void main() {
   const signature = 'MEUCIQDab//cd+ef/gh==.pubkey';
 
   test("beaconUpload keeps a signature's '//' on the explorer's raw host", () async {
-    await RawService().beaconUpload('sc:1', 'xTo', signature);
+    adapter.body = '{"success":true,"locator":"test-locator"}';
+    final locator = await RawService().beaconUpload('sc:1', 'xTo', signature);
+    expect(locator, 'test-locator');
     final uri = adapter.requests.single.uri.toString();
     expect(uri, startsWith('${Env.explorerApiBaseUrl}/raw/beacon/upload/'));
     expect(uri, contains('/sc:1/xTo/$signature'));
   });
 
   test("beaconAssets keeps a signature's '//' on the explorer's raw host", () async {
-    await RawService().beaconAssets('sc:1', 'loc', 'xAddr', signature);
+    expect(await RawService().beaconAssets('sc:1', 'loc', 'xAddr', signature), isTrue);
     final uri = adapter.requests.single.uri.toString();
     expect(uri, startsWith('${Env.explorerApiBaseUrl}/raw/beacon-assets/'));
     expect(uri, contains('/sc:1/loc/xAddr/$signature'));
@@ -79,7 +81,7 @@ void main() {
     // verifyOwnership reads the answer as text and decodes it itself.
     adapter.body = '{"Success":true}';
     adapter.contentType = 'text/plain; charset=utf-8';
-    await NftService().verifyOwnership(signature);
+    expect(await NftService().verifyOwnership(signature), isTrue);
     final uri = adapter.requests.single.uri.toString();
     expect(uri, contains('/scapi/scv1/VerifyOwnership/$signature'));
   });
