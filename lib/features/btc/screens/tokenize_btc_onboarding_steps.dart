@@ -258,7 +258,7 @@ class _TokenizeBtcStep extends BaseComponent {
     final state = ref.watch(vBtcOnboardProvider);
 
     return TokenizeBtcForm(
-      onSuccess: () {
+      onSuccess: (_) {
         provider.setProcessingState(VBtcProcessingState.waitingForTokenization);
       },
     );

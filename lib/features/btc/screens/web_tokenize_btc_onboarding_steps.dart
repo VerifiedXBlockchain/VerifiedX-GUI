@@ -234,8 +234,8 @@ class _TokenizeBtcStep extends BaseComponent {
     final state = ref.watch(webVBtcOnboardProvider);
 
     return TokenizeBtcForm(
-      onSuccess: () {
-        provider.setProcessingState(VBtcProcessingState.waitingForTokenization);
+      onSuccess: (createdScIdentifier) {
+        provider.waitForCreatedToken(createdScIdentifier);
       },
     );
   }
