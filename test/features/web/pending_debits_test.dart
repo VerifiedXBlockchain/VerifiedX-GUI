@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rbx_wallet/features/btc_web/utils/vbtc_multi_allocator.dart';
 import 'package:rbx_wallet/features/transactions/models/web_transaction.dart';
 import 'package:rbx_wallet/features/web/utils/pending_debits.dart';
 
@@ -83,6 +84,23 @@ void main() {
       expect(pendingContractDebit(txs, _me, 'v2'), closeTo(0.3, 1e-12));
     });
 
+    test('counts pending withdrawal requests, single and multi-vault, against their vaults', () {
+      final txs = [
+        _tx(hash: 'a', data: {"Function": "VBTCWithdrawalRequest()", "ContractUID": "v1", "Amount": 0.1}),
+        _tx(hash: 'b', data: {
+          "Function": "VBTCWithdrawalRequestMultiV2()",
+          "TotalAmount": 0.5,
+          "Inputs": [
+            {"SCUID": "v1", "Amount": 0.2},
+            {"SCUID": "v2", "Amount": 0.3},
+          ],
+        }),
+      ];
+      // A second withdrawal or transfer before these confirm sees only what is left.
+      expect(pendingContractDebit(txs, _me, 'v1'), closeTo(0.3, 1e-12));
+      expect(pendingContractDebit(txs, _me, 'v2'), closeTo(0.3, 1e-12));
+    });
+
     test('takes the copy with data when a hash was recorded twice', () {
       final txs = [
         _tx(hash: 'a'),
@@ -132,6 +150,42 @@ void main() {
       expect(formatDebitAmount(0.1 + 0.2), '0.3');
       expect(formatDebitAmount(0), '0');
       expect(formatDebitAmount(100.12345678), '100.12345678');
+    });
+  });
+
+  group('vbtcWithdrawalPendingData', () {
+    const shares = [
+      VbtcAllocationInput(scIdentifier: 'v1', amount: 0.2),
+      VbtcAllocationInput(scIdentifier: 'v2', amount: 0.3),
+    ];
+
+    WebTransaction pendingWith(String data) => WebTransaction(
+          hash: 'h',
+          toAddress: _me,
+          fromAddress: _me,
+          type: 0,
+          amount: 0,
+          fee: 0,
+          date: DateTime(2026, 10, 24),
+          height: 0,
+          isPending: true,
+          data: data,
+        );
+
+    test("keeps Core's Data string as it is", () {
+      const core = '{"Function":"VBTCWithdrawalRequestMultiV2()","Inputs":[{"SCUID":"v1","Amount":0.2}]}';
+      expect(vbtcWithdrawalPendingData(core, shares), core);
+    });
+
+    test('encodes Data that came back as JSON', () {
+      final data = vbtcWithdrawalPendingData({"Function": "VBTCWithdrawalRequest()", "ContractUID": "v1", "Amount": 0.2}, shares);
+      expect(pendingContractDebit([pendingWith(data)], _me, 'v1'), closeTo(0.2, 1e-12));
+    });
+
+    test('falls back to the shares when the prepare answer has no Data', () {
+      final data = vbtcWithdrawalPendingData(null, shares);
+      expect(pendingContractDebit([pendingWith(data)], _me, 'v1'), closeTo(0.2, 1e-12));
+      expect(pendingContractDebit([pendingWith(data)], _me, 'v2'), closeTo(0.3, 1e-12));
     });
   });
 }
