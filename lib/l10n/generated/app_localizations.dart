@@ -21050,6 +21050,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Withdraw from Several Vaults'**
   String get btcMultiWdOfferConfirm;
+
+  /// Web multi-vault withdrawal: Core's prepared request names other shares or another address than the confirmation showed, so the wallet refused to sign.
+  ///
+  /// In en, this message translates to:
+  /// **'The withdrawal the network prepared does not match what you confirmed (vaults, amounts or address). Nothing was signed or sent.'**
+  String get btcMultiWdPreparedMismatch;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

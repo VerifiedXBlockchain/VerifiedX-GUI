@@ -140,3 +140,32 @@ VbtcWithdrawalPlan vbtcWithdrawalPlanForShares(List<VbtcAllocationInput> shares,
   }
   return VbtcWithdrawalPlan(shares: shares, feeRate: feeRate, available: available);
 }
+
+/// Whether Core's prepared request (Spyglass `withdraw/multi/prepare/`) is
+/// the one the user confirmed: the same vaults with the same amounts, to the
+/// same Bitcoin address. The wallet signs only the hash, so this is its last
+/// look at what that hash commits to.
+bool vbtcPreparedWithdrawalMatches(
+  Map<String, dynamic> prepared, {
+  required List<VbtcAllocationInput> shares,
+  required String btcAddress,
+}) {
+  final destination = prepared['Destination'];
+  if (destination is! String || destination.toLowerCase() != btcAddress.trim().toLowerCase()) {
+    return false;
+  }
+  final allocations = prepared['Allocations'];
+  if (allocations is! List || allocations.length != shares.length) {
+    return false;
+  }
+  for (var i = 0; i < shares.length; i++) {
+    final allocation = allocations[i];
+    if (allocation is! Map ||
+        allocation['SCUID'] != shares[i].scIdentifier ||
+        allocation['Amount'] is! num ||
+        _toSats((allocation['Amount'] as num).toDouble()) != _toSats(shares[i].amount)) {
+      return false;
+    }
+  }
+  return true;
+}

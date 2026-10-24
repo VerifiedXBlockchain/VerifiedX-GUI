@@ -914,6 +914,37 @@ class ExplorerService extends BaseService {
     }
   }
 
+  /// One withdrawal request drawn from several vaults (Core's
+  /// `GetRawRequestWithdrawalMultiTxData`). [inputs] are the wallet's shares
+  /// (`sc_identifier`, `amount`); Core checks each against chain state before
+  /// handing out the hash, which goes through [sendV2WithdrawalRequest].
+  Future<Map<String, dynamic>> prepareV2WithdrawalRequestMulti({
+    required String requestorAddress,
+    required String btcAddress,
+    required double totalAmount,
+    required int feeRate,
+    required List<Map<String, dynamic>> inputs,
+  }) async {
+    try {
+      final response = await postJson(
+        '/btc/vbtc-v2/withdraw/multi/prepare/',
+        params: {
+          'requestor_address': requestorAddress,
+          'btc_address': btcAddress,
+          'total_amount': totalAmount,
+          'fee_rate': feeRate,
+          'inputs': inputs,
+        },
+      );
+      return response['data'];
+    } catch (e) {
+      print(e);
+      // Keep Spyglass's reason for userErrorMessage instead of a fixed
+      // English string.
+      rethrow;
+    }
+  }
+
   Future<Map<String, dynamic>> sendV2WithdrawalRequest({
     required String hash,
     required String signature,

@@ -10607,5 +10607,9 @@
   "btcMultiWdOfferConfirm": "Retirar de varias bóvedas",
   "@btcMultiWdOfferConfirm": {
     "description": "Per-vault withdraw form: button that opens the multi-vault withdrawal with the amount filled in."
+  },
+  "btcMultiWdPreparedMismatch": "El retiro que preparó la red no coincide con lo que confirmaste (bóvedas, montos o dirección). No se firmó ni se envió nada.",
+  "@btcMultiWdPreparedMismatch": {
+    "description": "Web multi-vault withdrawal: Core's prepared request names other shares or another address than the confirmation showed, so the wallet refused to sign."
   }
 }

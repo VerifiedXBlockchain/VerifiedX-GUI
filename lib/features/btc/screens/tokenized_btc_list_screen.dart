@@ -99,30 +99,16 @@ class TokenizeBtcListScreen extends BaseScreen {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (!kIsWeb)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0, right: 8.0),
-                      child: AppButton(
-                        key: const Key('vbtc:multi_withdraw'),
-                        label: AppLocalizations.of(context).btcMultiWdButton,
-                        onPressed: () {
-                          final hasSpendable = ref.read(tokenizedBitcoinListProvider).any((t) => t.version >= 2 && t.myBalance > 0);
-
-                          if (!hasSpendable) {
-                            Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
-                            return;
-                          }
-
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => VbtcMultiWithdrawalScreen(),
-                            ),
-                          );
-                        },
-                        variant: AppColorVariant.Btc,
-                        type: AppButtonType.Elevated,
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+                    child: AppButton(
+                      key: const Key('vbtc:multi_withdraw'),
+                      label: AppLocalizations.of(context).btcMultiWdButton,
+                      onPressed: () => _openMultiWithdrawal(context, ref),
+                      variant: AppColorVariant.Btc,
+                      type: AppButtonType.Elevated,
                     ),
+                  ),
                   // Testnet-only until the network upgrade activates
                   // multi-contract transfers on mainnet.
                   if (BULK_VBTC_TRANSFER_ENABLED)
@@ -158,6 +144,21 @@ class TokenizeBtcListScreen extends BaseScreen {
                 ],
               ),
             ],
+          ),
+        // The header above is desktop-only; mobile still needs a way in.
+        if (isMobile)
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: AppButton(
+                key: const Key('vbtc:multi_withdraw_mobile'),
+                label: AppLocalizations.of(context).btcMultiWdButton,
+                onPressed: () => _openMultiWithdrawal(context, ref),
+                variant: AppColorVariant.Btc,
+                type: AppButtonType.Elevated,
+              ),
+            ),
           ),
         AppCard(
           fullWidth: true,
@@ -635,4 +636,24 @@ List<CombinedVbtcToken> groupTokens(List<TokenizedBitcoin> input) {
   }
 
   return grouped.values.toList();
+}
+
+/// Opens the multi-vault withdrawal when the account has vBTC it can
+/// withdraw there (on web, a watched vault with a spendable balance).
+void _openMultiWithdrawal(BuildContext context, WidgetRef ref) {
+  final webAddress = ref.read(webSessionProvider).keypair?.address;
+  final hasSpendable = kIsWeb
+      ? ref.read(btcWebVbtcTokenListProvider).any((t) => t.isWatched && t.availableBalanceForAddress(webAddress) > 0)
+      : ref.read(tokenizedBitcoinListProvider).any((t) => t.version >= 2 && t.myBalance > 0);
+
+  if (!hasSpendable) {
+    Toast.error(AppLocalizations.of(context).btcNoVbtcWithBalance);
+    return;
+  }
+
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => VbtcMultiWithdrawalScreen(),
+    ),
+  );
 }

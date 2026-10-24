@@ -145,4 +145,63 @@ void main() {
           VbtcWithdrawalPlanFailure.invalidFeeRate);
     });
   });
+
+  group('vbtcPreparedWithdrawalMatches', () {
+    const shares = [
+      VbtcAllocationInput(scIdentifier: 'big:2', amount: 0.00005),
+      VbtcAllocationInput(scIdentifier: 'small:1', amount: 0.00002),
+    ];
+    Map<String, dynamic> prepared({String destination = 'tb1qdest', List<dynamic>? allocations}) => {
+          'success': true,
+          'Hash': 'abc',
+          'Destination': destination,
+          'Allocations': allocations ??
+              [
+                {'SCUID': 'big:2', 'Amount': 0.00005},
+                {'SCUID': 'small:1', 'Amount': 2e-05},
+              ],
+        };
+
+    test('accepts the confirmed shares and address', () {
+      expect(vbtcPreparedWithdrawalMatches(prepared(), shares: shares, btcAddress: 'tb1qdest'), isTrue);
+      expect(vbtcPreparedWithdrawalMatches(prepared(destination: 'TB1QDEST'), shares: shares, btcAddress: 'tb1qdest '), isTrue);
+    });
+
+    test('refuses another address, vault, amount or share count', () {
+      expect(vbtcPreparedWithdrawalMatches(prepared(destination: 'tb1qother'), shares: shares, btcAddress: 'tb1qdest'), isFalse);
+      expect(
+        vbtcPreparedWithdrawalMatches(
+          prepared(allocations: [
+            {'SCUID': 'big:2', 'Amount': 0.00005},
+            {'SCUID': 'other:3', 'Amount': 0.00002},
+          ]),
+          shares: shares,
+          btcAddress: 'tb1qdest',
+        ),
+        isFalse,
+      );
+      expect(
+        vbtcPreparedWithdrawalMatches(
+          prepared(allocations: [
+            {'SCUID': 'big:2', 'Amount': 0.00006},
+            {'SCUID': 'small:1', 'Amount': 0.00001},
+          ]),
+          shares: shares,
+          btcAddress: 'tb1qdest',
+        ),
+        isFalse,
+      );
+      expect(
+        vbtcPreparedWithdrawalMatches(
+          prepared(allocations: [
+            {'SCUID': 'big:2', 'Amount': 0.00007},
+          ]),
+          shares: shares,
+          btcAddress: 'tb1qdest',
+        ),
+        isFalse,
+      );
+      expect(vbtcPreparedWithdrawalMatches({'Destination': 'tb1qdest'}, shares: shares, btcAddress: 'tb1qdest'), isFalse);
+    });
+  });
 }
