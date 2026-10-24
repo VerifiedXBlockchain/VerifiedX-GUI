@@ -20931,10 +20931,10 @@ abstract class AppLocalizations {
   /// **'Total Bitcoin fees: at least {sats} sats ({btc} BTC) for {count} parts'**
   String btcMultiWdConfirmTotalFee(int sats, String btc, int count);
 
-  /// Multi-vault withdrawal confirmation: the total less the total fees.
+  /// Multi-vault withdrawal confirmation: the most that arrives, the total less the smallest total fees.
   ///
   /// In en, this message translates to:
-  /// **'Arrives at the address: about {amount} BTC'**
+  /// **'Arrives at the address: at most {amount} BTC'**
   String btcMultiWdConfirmNet(String amount);
 
   /// Multi-vault withdrawal confirmation: shares are independent.

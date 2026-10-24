@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import '../../btc_web/utils/vbtc_multi_allocator.dart';
 import '../../transactions/models/web_transaction.dart';
 
 /// VFX a reserve (Vault) account must keep across a block. The node refuses a
@@ -50,8 +53,10 @@ double _contractDebit(WebTransaction tx, String contractUid) {
     case 'TokenTransfer()':
     case 'TokenBurn()':
     case 'TransferVBTCV2()':
+    case 'VBTCWithdrawalRequest()':
       return data['ContractUID'] == contractUid ? _asDouble(data['Amount']) : 0.0;
     case 'TransferVBTCMultiV2()':
+    case 'VBTCWithdrawalRequestMultiV2()':
       final inputs = data['Inputs'];
       if (inputs is! List) {
         return 0.0;
@@ -67,12 +72,32 @@ double _contractDebit(WebTransaction tx, String contractUid) {
 }
 
 /// Fungible-token or vBTC V2 balance of [contractUid] that [address] has
-/// already committed in pending transfers and burns this session broadcast.
+/// already committed in pending transfers, burns and withdrawal requests this
+/// session broadcast.
 double pendingContractDebit(Iterable<WebTransaction> transactions, String address, String contractUid) {
   return _pendingFrom(transactions, address)
       .values
       .map((copies) => _maxOf(copies.map((tx) => _contractDebit(tx, contractUid))))
       .fold(0.0, (a, b) => a + b);
+}
+
+/// The `Data` to record on a pending vBTC withdrawal request, so its shares
+/// count against their vaults until it confirms: Core's own [preparedData]
+/// when the prepare answer carried it (a string, or JSON to encode), else the
+/// [shares] in the multi-vault shape, which debits the same amounts.
+String vbtcWithdrawalPendingData(dynamic preparedData, List<VbtcAllocationInput> shares) {
+  if (preparedData is String && preparedData.isNotEmpty) {
+    return preparedData;
+  }
+  if (preparedData is Map || preparedData is List) {
+    return jsonEncode(preparedData);
+  }
+  return jsonEncode({
+    'Function': 'VBTCWithdrawalRequestMultiV2()',
+    'Inputs': [
+      for (final share in shares) {'SCUID': share.scIdentifier, 'Amount': share.amount},
+    ],
+  });
 }
 
 /// VFX [address] can still send: its confirmed [balance] less pending debits

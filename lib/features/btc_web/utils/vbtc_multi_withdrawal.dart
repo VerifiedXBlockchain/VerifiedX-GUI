@@ -19,7 +19,16 @@ double vbtcMultiWithdrawalMax(Map<String, double> balances) {
   return _fromSats(sats.take(VBTC_MULTI_WITHDRAWAL_MAX_VAULTS).fold<int>(0, (sum, s) => sum + s));
 }
 
-enum VbtcWithdrawalPlanFailure { insufficientBalance, tooManyVaults, shareBelowFeeFloor }
+enum VbtcWithdrawalPlanFailure {
+  /// The total is zero, negative or more precise than a satoshi.
+  invalidAmount,
+
+  /// The fee rate is not a positive number of sats/vB.
+  invalidFeeRate,
+  insufficientBalance,
+  tooManyVaults,
+  shareBelowFeeFloor,
+}
 
 /// How one withdrawal request of a total would be split across vaults, with
 /// what it costs in Bitcoin fees, or why Core would refuse it.
@@ -45,15 +54,23 @@ class VbtcWithdrawalPlan {
 
   bool get ok => failure == null;
 
-  int get perShareFeeSats => vbtcWithdrawalShareFeeSats(feeRate);
+  /// The least Bitcoin fee one share pays: the smallest withdrawal
+  /// transaction at [feeRate]. A vault whose coins are small may need a
+  /// bigger transaction and pay more.
+  int get minPerShareFeeSats => vbtcWithdrawalShareFeeSats(feeRate);
 
-  int get totalFeeSats => perShareFeeSats * shares.length;
+  /// The least the shares pay in Bitcoin fees together.
+  int get minTotalFeeSats => minPerShareFeeSats * shares.length;
 
   int get floorSats => vbtcWithdrawalMinimumSats(feeRate);
 
-  /// What reaches the Bitcoin address: the total less one fee per share.
-  double get netAmount => _fromSats(shares.fold<int>(0, (sum, s) => sum + _toSats(s.amount)) - totalFeeSats);
+  /// The most that reaches the Bitcoin address: the total less the least
+  /// fee per share. Less arrives when a share needs a bigger transaction.
+  double get maxNetAmount => _fromSats(shares.fold<int>(0, (sum, s) => sum + _toSats(s.amount)) - minTotalFeeSats);
 }
+
+double _available(Map<String, double> balances) =>
+    _fromSats(balances.values.map(_toSats).where((s) => s > 0).fold<int>(0, (sum, s) => sum + s));
 
 /// Splits [total] across [balances] (vault id to spendable vBTC) by Core's
 /// rule, largest first and ties by id, then checks what Core checks before it
@@ -63,6 +80,23 @@ class VbtcWithdrawalPlan {
 /// (BtcWithdrawals in Core), stricter than the request builder's 330-sat
 /// floor. The last share is the one that runs small.
 VbtcWithdrawalPlan planVbtcMultiWithdrawal(Map<String, double> balances, double total, int feeRate) {
+  if (feeRate <= 0) {
+    return VbtcWithdrawalPlan(
+      shares: const [],
+      feeRate: feeRate,
+      available: _available(balances),
+      failure: VbtcWithdrawalPlanFailure.invalidFeeRate,
+    );
+  }
+  if (!(total > 0) || _fromSats(_toSats(total)) != total) {
+    return VbtcWithdrawalPlan(
+      shares: const [],
+      feeRate: feeRate,
+      available: _available(balances),
+      failure: VbtcWithdrawalPlanFailure.invalidAmount,
+    );
+  }
+
   final allocation = allocateVbtcInputs(balances, total, maxInputs: VBTC_MULTI_WITHDRAWAL_MAX_VAULTS);
   if (!allocation.ok) {
     return VbtcWithdrawalPlan(
@@ -75,30 +109,36 @@ VbtcWithdrawalPlan planVbtcMultiWithdrawal(Map<String, double> balances, double 
     );
   }
 
+  return vbtcWithdrawalPlanForShares(allocation.inputs, feeRate, allocation.available);
+}
+
+/// Checks shares already chosen (Core's own allocation, on desktop) the way
+/// [planVbtcMultiWithdrawal] checks its own: at most
+/// [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS], and each able to pay its fee at
+/// [feeRate] and leave [kBtcDustSats]. Core's builder checks only 330 sats,
+/// so its allocation can hold a share a watched vault refuses at send.
+VbtcWithdrawalPlan vbtcWithdrawalPlanForShares(List<VbtcAllocationInput> shares, int feeRate, double available) {
+  if (feeRate <= 0) {
+    return VbtcWithdrawalPlan(
+        shares: const [], feeRate: feeRate, available: available, failure: VbtcWithdrawalPlanFailure.invalidFeeRate);
+  }
+  if (shares.length > VBTC_MULTI_WITHDRAWAL_MAX_VAULTS) {
+    return VbtcWithdrawalPlan(
+        shares: const [], feeRate: feeRate, available: available, failure: VbtcWithdrawalPlanFailure.tooManyVaults);
+  }
   final floor = vbtcWithdrawalMinimumSats(feeRate);
-  for (var i = 0; i < allocation.inputs.length; i++) {
-    if (_toSats(allocation.inputs[i].amount) < floor) {
+  for (var i = 0; i < shares.length; i++) {
+    if (_toSats(shares[i].amount) < floor) {
       return VbtcWithdrawalPlan(
-        shares: allocation.inputs,
+        shares: shares,
         feeRate: feeRate,
-        available: allocation.available,
+        available: available,
         failure: VbtcWithdrawalPlanFailure.shareBelowFeeFloor,
         belowFloorPart: i + 1,
       );
     }
   }
-
-  return VbtcWithdrawalPlan(shares: allocation.inputs, feeRate: feeRate, available: allocation.available);
-}
-
-/// Whether Core's own allocation of [total] would draw on a vault outside
-/// [watched]. Desktop sends only the total (`RequestWithdrawalMulti`), and
-/// Core allocates across every vault it has not frozen, so a legacy vault
-/// among the largest would get a share this flow cannot complete.
-/// [balances] is every unfrozen vault with its spendable balance.
-bool vbtcCoreAllocationTouchesUnwatched(Map<String, double> balances, Set<String> watched, double total) {
-  final allocation = allocateVbtcInputs(balances, total, maxInputs: VBTC_MULTI_WITHDRAWAL_MAX_VAULTS);
-  return allocation.inputs.any((input) => !watched.contains(input.scIdentifier));
+  return VbtcWithdrawalPlan(shares: shares, feeRate: feeRate, available: available);
 }
 
 /// Whether Core's prepared request (Spyglass `withdraw/multi/prepare/`) is

@@ -11331,7 +11331,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String btcMultiWdConfirmNet(String amount) {
-    return 'Llega a la dirección: unos $amount BTC';
+    return 'Llega a la dirección: como máximo $amount BTC';
   }
 
   @override

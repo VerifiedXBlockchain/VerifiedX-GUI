@@ -600,6 +600,10 @@ class WebTokenActionsManager {
               fee: 0,
               date: DateTime.now(),
               height: 0,
+              data: vbtcWithdrawalPendingData(
+                prepared['Data'],
+                [VbtcAllocationInput(scIdentifier: scIdentifier, amount: amount)],
+              ),
             ),
           );
         }
@@ -679,7 +683,7 @@ class WebTokenActionsManager {
               fee: 0,
               date: DateTime.now(),
               height: 0,
-              data: prepared['Data'] is String ? prepared['Data'] : null,
+              data: vbtcWithdrawalPendingData(prepared['Data'], shares),
             ),
           );
       return hash;

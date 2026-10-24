@@ -26,6 +26,38 @@ class VbtcMultiWithdrawalResult {
   }
 }
 
+/// What the node would send for a multi-vault withdrawal, from
+/// `POST /vbtcapi/vbtc/GetRawRequestWithdrawalMultiTxData` without inputs:
+/// Core's own allocation (the same plan `RequestWithdrawalMulti` uses) and
+/// which of those vaults the chain watches. Nothing is signed or sent.
+class VbtcMultiWithdrawalPreview {
+  final List<VbtcAllocationInput> allocations;
+  final Set<String> attestedContracts;
+
+  const VbtcMultiWithdrawalPreview({
+    required this.allocations,
+    required this.attestedContracts,
+  });
+
+  factory VbtcMultiWithdrawalPreview.fromJson(Map<String, dynamic> json) {
+    final rawAllocations = json['Allocations'];
+    final rawAttested = json['AttestedContracts'];
+    return VbtcMultiWithdrawalPreview(
+      allocations: rawAllocations is List ? vbtcWithdrawalSharesFromJson(rawAllocations) : const [],
+      attestedContracts: rawAttested is List ? rawAttested.whereType<String>().toSet() : const {},
+    );
+  }
+
+  /// Vaults in the allocation the chain does not watch. A share on one
+  /// would need a FROST completion this flow does not run, so the request
+  /// is refused while this is not empty. An allocation Core did not report
+  /// counts as unwatched too.
+  List<String> get unwatchedVaults {
+    if (allocations.isEmpty) return const ['(none reported)'];
+    return allocations.map((a) => a.scIdentifier).where((id) => !attestedContracts.contains(id)).toList();
+  }
+}
+
 /// Core's `VBTCV2MultiWithdrawalInput` list (`{SCUID, Amount}`), as in a
 /// request's answer or a multi request's transaction `Data.Inputs`.
 List<VbtcAllocationInput> vbtcWithdrawalSharesFromJson(List<dynamic> json) {
