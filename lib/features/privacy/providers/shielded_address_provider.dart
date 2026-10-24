@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/app_constants.dart';
 import '../../../core/singletons.dart';
 import '../../../core/storage.dart';
+import '../../../l10n/l10n_helper.dart';
+import '../../../utils/toast.dart';
 import '../models/shielded_address.dart';
 import '../services/privacy_service.dart';
 import 'shielded_balance_provider.dart';
@@ -35,7 +37,13 @@ class ShieldedAddressNotifier extends StateNotifier<ShieldedAddress?> {
       ref.read(shieldedBalanceProvider.notifier).start(address.zfxAddress);
       // The node starts the wallet at block 0 without scanning, so notes sent to
       // this address earlier (a re-activation) stay hidden until a rescan.
-      unawaited(PrivacyService().resyncShieldedWallet(zfxAddress: address.zfxAddress));
+      unawaited(PrivacyService().resyncShieldedWallet(zfxAddress: address.zfxAddress).then((ok) {
+        if (!ok) {
+          // Earlier notes stay hidden until a rescan succeeds: say so, and the
+          // settings menu's Resync Wallet retries it.
+          Toast.error(globalL10n.prvResyncFailed);
+        }
+      }));
     }
     return address;
   }

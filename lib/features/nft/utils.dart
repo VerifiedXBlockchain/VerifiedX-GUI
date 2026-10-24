@@ -6,6 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/app_constants.dart';
 import '../../core/dialogs.dart';
+import '../../core/services/explorer_service.dart';
+import '../../core/utils/user_error_message.dart';
+import '../../l10n/l10n_helper.dart';
 import '../../core/utils.dart';
 import '../../l10n/generated/app_localizations.dart';
 import '../../utils/toast.dart';
@@ -171,6 +174,22 @@ Future<dynamic> initTransferNftProcess(
       address = address.trim().replaceAll("\n", "");
 
       if (kIsWeb) {
+        // Core refuses a transaction addressed to a name, so a .vfx name is
+        // resolved here, as the web Send form does (desktop: Core resolves it).
+        if (looksLikeVfxName(address)) {
+          final String? resolved;
+          try {
+            resolved = await ExplorerService().resolveAdnr(address);
+          } catch (e) {
+            Toast.error(userErrorMessage(e));
+            return;
+          }
+          if (resolved == null) {
+            Toast.error(globalL10n.svcNameNotResolved(address));
+            return;
+          }
+          address = resolved;
+        }
         ref.read(globalLoadingProvider.notifier).start();
         success = await _provider.transferWebOut(address, delayHours);
         if (success == true) {
