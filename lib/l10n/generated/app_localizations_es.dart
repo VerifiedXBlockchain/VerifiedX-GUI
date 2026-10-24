@@ -11264,4 +11264,136 @@ class AppLocalizationsEs extends AppLocalizations {
   String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
     return 'A $feeRate sat/vB la transacción de Bitcoin de este retiro cuesta al menos $feeSats sats, que se descuentan del monto, y deben quedar al menos 546 sats para pagar. Retira al menos $minimum BTC o baja la comisión.';
   }
+
+  @override
+  String get btcMultiWdButton => 'Retirar vBTC';
+
+  @override
+  String get btcMultiWdTitle => 'Retirar vBTC';
+
+  @override
+  String btcMultiWdIntro(int max) {
+    return 'Retira BTC de tus bóvedas en una sola solicitud. El monto se toma automáticamente, empezando por el saldo más grande, de hasta $max bóvedas. Cada bóveda paga con su propia transacción de Bitcoin y su propia comisión.';
+  }
+
+  @override
+  String get btcMultiWdAvailable => 'Disponible para retirar en una solicitud:';
+
+  @override
+  String get btcMultiWdAmountLabel => 'Monto a retirar';
+
+  @override
+  String get btcMultiWdAddressLabel => 'Dirección de Bitcoin';
+
+  @override
+  String get btcMultiWdAddressHint => 'La dirección BTC que recibe el retiro';
+
+  @override
+  String btcMultiWdTooManyVaults(int max) {
+    return 'Este monto necesita más de $max bóvedas. Retira un monto menor.';
+  }
+
+  @override
+  String btcMultiWdBelowFloor(int part, String amount, int feeRate, String minimum) {
+    return 'La parte $part sería de $amount BTC, por debajo del mínimo para la comisión de Bitcoin a $feeRate sat/vB (cada parte necesita al menos $minimum BTC). Baja la tasa de comisión o el monto.';
+  }
+
+  @override
+  String get btcMultiWdLegacyVault => 'Parte de este monto saldría de una bóveda creada antes de la atestación de Bitcoin, y esta pantalla no retira de ella. Retira primero desde la página de esa bóveda, o retira menos.';
+
+  @override
+  String get btcMultiWdConfirmTitle => 'Confirmar retiro';
+
+  @override
+  String btcMultiWdConfirmDestination(String address) {
+    return 'Para: $address';
+  }
+
+  @override
+  String btcMultiWdConfirmFeeRate(int feeRate) {
+    return 'Tasa de comisión: $feeRate sat/vB';
+  }
+
+  @override
+  String btcMultiWdPartLabel(int number) {
+    return 'Parte $number';
+  }
+
+  @override
+  String btcMultiWdConfirmPerPartFee(int sats, String btc) {
+    return 'Comisión de Bitcoin por parte: al menos $sats sats ($btc BTC), descontada de esa parte';
+  }
+
+  @override
+  String btcMultiWdConfirmTotalFee(int sats, String btc, int count) {
+    return 'Comisiones de Bitcoin en total: al menos $sats sats ($btc BTC) por $count partes';
+  }
+
+  @override
+  String btcMultiWdConfirmNet(String amount) {
+    return 'Llega a la dirección: unos $amount BTC';
+  }
+
+  @override
+  String get btcMultiWdConfirmNote => 'Cada parte se liquida por separado, así que una parte puede pagarse antes que otra.';
+
+  @override
+  String get btcMultiWdOverallNotMined => 'Esperando a que se mine la solicitud';
+
+  @override
+  String get btcMultiWdOverallInProgress => 'Retiro en curso';
+
+  @override
+  String get btcMultiWdOverallSent => 'Retiro enviado';
+
+  @override
+  String get btcMultiWdOverallPartlySent => 'Retiro enviado en parte';
+
+  @override
+  String get btcMultiWdOverallReturned => 'Retiro devuelto';
+
+  @override
+  String get btcMultiWdPartChecking => 'Comprobando…';
+
+  @override
+  String get btcMultiWdPartNotMined => 'La solicitud aún no está en un bloque';
+
+  @override
+  String get btcMultiWdPartWaiting => 'Esperando su transacción de Bitcoin';
+
+  @override
+  String get btcMultiWdPartPinned => 'Transacción de Bitcoin fijada, esperando que Bitcoin la confirme';
+
+  @override
+  String get btcMultiWdPartReleasing => 'Liberándose: su vBTC vuelve, menos la comisión de la liberación';
+
+  @override
+  String get btcMultiWdPartPaid => 'Enviado';
+
+  @override
+  String get btcMultiWdPartReturned => 'Cerrada, su vBTC se te devolvió';
+
+  @override
+  String btcMultiWdRaiseFeeTitle(int number) {
+    return 'Subir la comisión de la parte $number';
+  }
+
+  @override
+  String btcMultiWdReleaseTitle(int number) {
+    return 'Liberar la parte $number';
+  }
+
+  @override
+  String get btcMultiWdReleaseBody => 'Su Bitcoin vuelve a la bóveda y el vBTC de esta parte se te reembolsa, menos la comisión de Bitcoin de la liberación. Las demás partes no cambian.';
+
+  @override
+  String get btcMultiWdOfferTitle => 'Más de lo que tiene esta bóveda';
+
+  @override
+  String btcMultiWdOfferBody(String balance, String amount) {
+    return 'Esta bóveda tiene $balance vBTC. ¿Retirar $amount vBTC de varias de tus bóvedas en una sola solicitud?';
+  }
+
+  @override
+  String get btcMultiWdOfferConfirm => 'Retirar de varias bóvedas';
 }

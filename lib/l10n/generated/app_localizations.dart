@@ -20834,6 +20834,222 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'At {feeRate} sat/vB this withdrawal\'s Bitcoin transaction costs at least {feeSats} sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least {minimum} BTC, or lower the fee rate.'**
   String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum);
+
+  /// vBTC list screen: button next to Bulk Transfer that opens the multi-vault withdrawal screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw vBTC'**
+  String get btcMultiWdButton;
+
+  /// App bar title of the multi-vault vBTC withdrawal screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw vBTC'**
+  String get btcMultiWdTitle;
+
+  /// Intro text on the multi-vault withdrawal screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw BTC from your vaults in one request. The amount is drawn automatically, largest balance first, from up to {max} vaults. Each vault pays out with its own Bitcoin transaction and its own fee.'**
+  String btcMultiWdIntro(int max);
+
+  /// Label above the most one multi-vault withdrawal can take (the 10 largest watched vault balances).
+  ///
+  /// In en, this message translates to:
+  /// **'Available to withdraw in one request:'**
+  String get btcMultiWdAvailable;
+
+  /// Amount field label on the multi-vault withdrawal screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount to Withdraw'**
+  String get btcMultiWdAmountLabel;
+
+  /// Destination field label on the multi-vault withdrawal screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin Address'**
+  String get btcMultiWdAddressLabel;
+
+  /// Destination field hint on the multi-vault withdrawal screen.
+  ///
+  /// In en, this message translates to:
+  /// **'The BTC address that receives the withdrawal'**
+  String get btcMultiWdAddressHint;
+
+  /// Multi-vault withdrawal refused before signing: the amount would need more vaults than Core allows in one request.
+  ///
+  /// In en, this message translates to:
+  /// **'This amount needs more than {max} vaults. Withdraw a smaller amount.'**
+  String btcMultiWdTooManyVaults(int max);
+
+  /// Multi-vault withdrawal refused before signing: one vault's share cannot pay its own Bitcoin fee and leave a payout.
+  ///
+  /// In en, this message translates to:
+  /// **'Part {part} would be {amount} BTC, below the Bitcoin fee floor at {feeRate} sat/vB (each part needs at least {minimum} BTC). Lower the fee rate or the amount.'**
+  String btcMultiWdBelowFloor(int part, String amount, int feeRate, String minimum);
+
+  /// Desktop multi-vault withdrawal refused: the node's own allocation would include a legacy (pre-attestation) vault.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of this amount would come from a vault made before Bitcoin attestation, which this screen does not withdraw from. Withdraw that vault from its own page first, or withdraw less.'**
+  String get btcMultiWdLegacyVault;
+
+  /// Title of the confirmation dialog before a multi-vault withdrawal is signed.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Withdrawal'**
+  String get btcMultiWdConfirmTitle;
+
+  /// Multi-vault withdrawal confirmation: the Bitcoin destination.
+  ///
+  /// In en, this message translates to:
+  /// **'To: {address}'**
+  String btcMultiWdConfirmDestination(String address);
+
+  /// Multi-vault withdrawal confirmation: the chosen Bitcoin fee rate.
+  ///
+  /// In en, this message translates to:
+  /// **'Fee rate: {feeRate} sat/vB'**
+  String btcMultiWdConfirmFeeRate(int feeRate);
+
+  /// Label of one vault's share in a multi-vault withdrawal (confirmation and status dialog).
+  ///
+  /// In en, this message translates to:
+  /// **'Part {number}'**
+  String btcMultiWdPartLabel(int number);
+
+  /// Multi-vault withdrawal confirmation: the smallest Bitcoin fee each share pays.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin fee per part: at least {sats} sats ({btc} BTC), taken out of that part'**
+  String btcMultiWdConfirmPerPartFee(int sats, String btc);
+
+  /// Multi-vault withdrawal confirmation: the per-part fee times the number of parts.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Bitcoin fees: at least {sats} sats ({btc} BTC) for {count} parts'**
+  String btcMultiWdConfirmTotalFee(int sats, String btc, int count);
+
+  /// Multi-vault withdrawal confirmation: the total less the total fees.
+  ///
+  /// In en, this message translates to:
+  /// **'Arrives at the address: about {amount} BTC'**
+  String btcMultiWdConfirmNet(String amount);
+
+  /// Multi-vault withdrawal confirmation: shares are independent.
+  ///
+  /// In en, this message translates to:
+  /// **'Each part settles on its own, so one part may be paid before another.'**
+  String get btcMultiWdConfirmNote;
+
+  /// Multi-vault withdrawal status dialog title: the request is not in a block yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the Request to Be Mined'**
+  String get btcMultiWdOverallNotMined;
+
+  /// Multi-vault withdrawal status dialog title: some parts are still being paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal in Progress'**
+  String get btcMultiWdOverallInProgress;
+
+  /// Multi-vault withdrawal status dialog title: every part was paid.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Sent'**
+  String get btcMultiWdOverallSent;
+
+  /// Multi-vault withdrawal status dialog title: some parts were paid, the others returned.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Partly Sent'**
+  String get btcMultiWdOverallPartlySent;
+
+  /// Multi-vault withdrawal status dialog title: no part was paid; every part's vBTC was returned.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Returned'**
+  String get btcMultiWdOverallReturned;
+
+  /// Multi-vault withdrawal part state: not read yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get btcMultiWdPartChecking;
+
+  /// Multi-vault withdrawal part state.
+  ///
+  /// In en, this message translates to:
+  /// **'The request is not in a block yet'**
+  String get btcMultiWdPartNotMined;
+
+  /// Multi-vault withdrawal part state: the chain has not fixed (pinned) the paying transaction yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for its Bitcoin transaction'**
+  String get btcMultiWdPartWaiting;
+
+  /// Multi-vault withdrawal part state: pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin transaction fixed, waiting for Bitcoin to confirm it'**
+  String get btcMultiWdPartPinned;
+
+  /// Multi-vault withdrawal part state: a release is in progress.
+  ///
+  /// In en, this message translates to:
+  /// **'Being released: its vBTC comes back, less the release\'s fee'**
+  String get btcMultiWdPartReleasing;
+
+  /// Multi-vault withdrawal part state: paid on Bitcoin.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get btcMultiWdPartPaid;
+
+  /// Multi-vault withdrawal part state: closed without payment (cancelled, released, expired).
+  ///
+  /// In en, this message translates to:
+  /// **'Closed, its vBTC was returned to you'**
+  String get btcMultiWdPartReturned;
+
+  /// Title of the fee-rate prompt for one part's fee raise.
+  ///
+  /// In en, this message translates to:
+  /// **'Raise the Fee of Part {number}'**
+  String btcMultiWdRaiseFeeTitle(int number);
+
+  /// Title of the fee-rate prompt for one part's release.
+  ///
+  /// In en, this message translates to:
+  /// **'Release Part {number}'**
+  String btcMultiWdReleaseTitle(int number);
+
+  /// Body of the fee-rate prompt for one part's release.
+  ///
+  /// In en, this message translates to:
+  /// **'Its Bitcoin goes back to the vault and this part\'s vBTC is refunded to you, less the release\'s Bitcoin fee. The other parts are not affected.'**
+  String get btcMultiWdReleaseBody;
+
+  /// Per-vault withdraw form: the amount is above this vault's balance but several vaults could cover it.
+  ///
+  /// In en, this message translates to:
+  /// **'More Than This Vault Holds'**
+  String get btcMultiWdOfferTitle;
+
+  /// Per-vault withdraw form: offer of the multi-vault flow.
+  ///
+  /// In en, this message translates to:
+  /// **'This vault holds {balance} vBTC. Withdraw {amount} vBTC from several of your vaults in one request instead?'**
+  String btcMultiWdOfferBody(String balance, String amount);
+
+  /// Per-vault withdraw form: button that opens the multi-vault withdrawal with the amount filled in.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw from Several Vaults'**
+  String get btcMultiWdOfferConfirm;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

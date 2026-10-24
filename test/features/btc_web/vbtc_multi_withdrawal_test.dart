@@ -89,4 +89,21 @@ void main() {
       expect(plan.available, 0.00005);
     });
   });
+
+  group('vbtcCoreAllocationTouchesUnwatched', () {
+    final balances = {'legacy:1': 0.0003, 'watched:2': 0.0002, 'watched:3': 0.0001};
+    final watched = {'watched:2', 'watched:3'};
+
+    test('is true when the largest vault is not watched', () {
+      expect(vbtcCoreAllocationTouchesUnwatched(balances, watched, 0.0001), isTrue);
+    });
+
+    test('is false when Core would use watched vaults only', () {
+      expect(vbtcCoreAllocationTouchesUnwatched({'legacy:1': 0.00005, 'watched:2': 0.0002}, watched, 0.0002), isFalse);
+    });
+
+    test('is true when the amount reaches past the watched vaults', () {
+      expect(vbtcCoreAllocationTouchesUnwatched({'legacy:1': 0.00005, 'watched:2': 0.0002}, watched, 0.00021), isTrue);
+    });
+  });
 }

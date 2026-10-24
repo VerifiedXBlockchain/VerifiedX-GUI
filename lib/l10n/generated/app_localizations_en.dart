@@ -11264,4 +11264,136 @@ class AppLocalizationsEn extends AppLocalizations {
   String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
     return 'At $feeRate sat/vB this withdrawal\'s Bitcoin transaction costs at least $feeSats sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least $minimum BTC, or lower the fee rate.';
   }
+
+  @override
+  String get btcMultiWdButton => 'Withdraw vBTC';
+
+  @override
+  String get btcMultiWdTitle => 'Withdraw vBTC';
+
+  @override
+  String btcMultiWdIntro(int max) {
+    return 'Withdraw BTC from your vaults in one request. The amount is drawn automatically, largest balance first, from up to $max vaults. Each vault pays out with its own Bitcoin transaction and its own fee.';
+  }
+
+  @override
+  String get btcMultiWdAvailable => 'Available to withdraw in one request:';
+
+  @override
+  String get btcMultiWdAmountLabel => 'Amount to Withdraw';
+
+  @override
+  String get btcMultiWdAddressLabel => 'Bitcoin Address';
+
+  @override
+  String get btcMultiWdAddressHint => 'The BTC address that receives the withdrawal';
+
+  @override
+  String btcMultiWdTooManyVaults(int max) {
+    return 'This amount needs more than $max vaults. Withdraw a smaller amount.';
+  }
+
+  @override
+  String btcMultiWdBelowFloor(int part, String amount, int feeRate, String minimum) {
+    return 'Part $part would be $amount BTC, below the Bitcoin fee floor at $feeRate sat/vB (each part needs at least $minimum BTC). Lower the fee rate or the amount.';
+  }
+
+  @override
+  String get btcMultiWdLegacyVault => 'Part of this amount would come from a vault made before Bitcoin attestation, which this screen does not withdraw from. Withdraw that vault from its own page first, or withdraw less.';
+
+  @override
+  String get btcMultiWdConfirmTitle => 'Confirm Withdrawal';
+
+  @override
+  String btcMultiWdConfirmDestination(String address) {
+    return 'To: $address';
+  }
+
+  @override
+  String btcMultiWdConfirmFeeRate(int feeRate) {
+    return 'Fee rate: $feeRate sat/vB';
+  }
+
+  @override
+  String btcMultiWdPartLabel(int number) {
+    return 'Part $number';
+  }
+
+  @override
+  String btcMultiWdConfirmPerPartFee(int sats, String btc) {
+    return 'Bitcoin fee per part: at least $sats sats ($btc BTC), taken out of that part';
+  }
+
+  @override
+  String btcMultiWdConfirmTotalFee(int sats, String btc, int count) {
+    return 'Total Bitcoin fees: at least $sats sats ($btc BTC) for $count parts';
+  }
+
+  @override
+  String btcMultiWdConfirmNet(String amount) {
+    return 'Arrives at the address: about $amount BTC';
+  }
+
+  @override
+  String get btcMultiWdConfirmNote => 'Each part settles on its own, so one part may be paid before another.';
+
+  @override
+  String get btcMultiWdOverallNotMined => 'Waiting for the Request to Be Mined';
+
+  @override
+  String get btcMultiWdOverallInProgress => 'Withdrawal in Progress';
+
+  @override
+  String get btcMultiWdOverallSent => 'Withdrawal Sent';
+
+  @override
+  String get btcMultiWdOverallPartlySent => 'Withdrawal Partly Sent';
+
+  @override
+  String get btcMultiWdOverallReturned => 'Withdrawal Returned';
+
+  @override
+  String get btcMultiWdPartChecking => 'Checking…';
+
+  @override
+  String get btcMultiWdPartNotMined => 'The request is not in a block yet';
+
+  @override
+  String get btcMultiWdPartWaiting => 'Waiting for its Bitcoin transaction';
+
+  @override
+  String get btcMultiWdPartPinned => 'Bitcoin transaction fixed, waiting for Bitcoin to confirm it';
+
+  @override
+  String get btcMultiWdPartReleasing => 'Being released: its vBTC comes back, less the release\'s fee';
+
+  @override
+  String get btcMultiWdPartPaid => 'Sent';
+
+  @override
+  String get btcMultiWdPartReturned => 'Closed, its vBTC was returned to you';
+
+  @override
+  String btcMultiWdRaiseFeeTitle(int number) {
+    return 'Raise the Fee of Part $number';
+  }
+
+  @override
+  String btcMultiWdReleaseTitle(int number) {
+    return 'Release Part $number';
+  }
+
+  @override
+  String get btcMultiWdReleaseBody => 'Its Bitcoin goes back to the vault and this part\'s vBTC is refunded to you, less the release\'s Bitcoin fee. The other parts are not affected.';
+
+  @override
+  String get btcMultiWdOfferTitle => 'More Than This Vault Holds';
+
+  @override
+  String btcMultiWdOfferBody(String balance, String amount) {
+    return 'This vault holds $balance vBTC. Withdraw $amount vBTC from several of your vaults in one request instead?';
+  }
+
+  @override
+  String get btcMultiWdOfferConfirm => 'Withdraw from Several Vaults';
 }

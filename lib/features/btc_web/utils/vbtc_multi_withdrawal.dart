@@ -90,3 +90,13 @@ VbtcWithdrawalPlan planVbtcMultiWithdrawal(Map<String, double> balances, double 
 
   return VbtcWithdrawalPlan(shares: allocation.inputs, feeRate: feeRate, available: allocation.available);
 }
+
+/// Whether Core's own allocation of [total] would draw on a vault outside
+/// [watched]. Desktop sends only the total (`RequestWithdrawalMulti`), and
+/// Core allocates across every vault it has not frozen, so a legacy vault
+/// among the largest would get a share this flow cannot complete.
+/// [balances] is every unfrozen vault with its spendable balance.
+bool vbtcCoreAllocationTouchesUnwatched(Map<String, double> balances, Set<String> watched, double total) {
+  final allocation = allocateVbtcInputs(balances, total, maxInputs: VBTC_MULTI_WITHDRAWAL_MAX_VAULTS);
+  return allocation.inputs.any((input) => !watched.contains(input.scIdentifier));
+}

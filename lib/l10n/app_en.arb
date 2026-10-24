@@ -10456,5 +10456,230 @@
         "type": "String"
       }
     }
+  },
+  "btcMultiWdButton": "Withdraw vBTC",
+  "@btcMultiWdButton": {
+    "description": "vBTC list screen: button next to Bulk Transfer that opens the multi-vault withdrawal screen."
+  },
+  "btcMultiWdTitle": "Withdraw vBTC",
+  "@btcMultiWdTitle": {
+    "description": "App bar title of the multi-vault vBTC withdrawal screen."
+  },
+  "btcMultiWdIntro": "Withdraw BTC from your vaults in one request. The amount is drawn automatically, largest balance first, from up to {max} vaults. Each vault pays out with its own Bitcoin transaction and its own fee.",
+  "@btcMultiWdIntro": {
+    "description": "Intro text on the multi-vault withdrawal screen.",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdAvailable": "Available to withdraw in one request:",
+  "@btcMultiWdAvailable": {
+    "description": "Label above the most one multi-vault withdrawal can take (the 10 largest watched vault balances)."
+  },
+  "btcMultiWdAmountLabel": "Amount to Withdraw",
+  "@btcMultiWdAmountLabel": {
+    "description": "Amount field label on the multi-vault withdrawal screen."
+  },
+  "btcMultiWdAddressLabel": "Bitcoin Address",
+  "@btcMultiWdAddressLabel": {
+    "description": "Destination field label on the multi-vault withdrawal screen."
+  },
+  "btcMultiWdAddressHint": "The BTC address that receives the withdrawal",
+  "@btcMultiWdAddressHint": {
+    "description": "Destination field hint on the multi-vault withdrawal screen."
+  },
+  "btcMultiWdTooManyVaults": "This amount needs more than {max} vaults. Withdraw a smaller amount.",
+  "@btcMultiWdTooManyVaults": {
+    "description": "Multi-vault withdrawal refused before signing: the amount would need more vaults than Core allows in one request.",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdBelowFloor": "Part {part} would be {amount} BTC, below the Bitcoin fee floor at {feeRate} sat/vB (each part needs at least {minimum} BTC). Lower the fee rate or the amount.",
+  "@btcMultiWdBelowFloor": {
+    "description": "Multi-vault withdrawal refused before signing: one vault's share cannot pay its own Bitcoin fee and leave a payout.",
+    "placeholders": {
+      "part": {
+        "type": "int"
+      },
+      "amount": {
+        "type": "String"
+      },
+      "feeRate": {
+        "type": "int"
+      },
+      "minimum": {
+        "type": "String"
+      }
+    }
+  },
+  "btcMultiWdLegacyVault": "Part of this amount would come from a vault made before Bitcoin attestation, which this screen does not withdraw from. Withdraw that vault from its own page first, or withdraw less.",
+  "@btcMultiWdLegacyVault": {
+    "description": "Desktop multi-vault withdrawal refused: the node's own allocation would include a legacy (pre-attestation) vault."
+  },
+  "btcMultiWdConfirmTitle": "Confirm Withdrawal",
+  "@btcMultiWdConfirmTitle": {
+    "description": "Title of the confirmation dialog before a multi-vault withdrawal is signed."
+  },
+  "btcMultiWdConfirmDestination": "To: {address}",
+  "@btcMultiWdConfirmDestination": {
+    "description": "Multi-vault withdrawal confirmation: the Bitcoin destination.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "btcMultiWdConfirmFeeRate": "Fee rate: {feeRate} sat/vB",
+  "@btcMultiWdConfirmFeeRate": {
+    "description": "Multi-vault withdrawal confirmation: the chosen Bitcoin fee rate.",
+    "placeholders": {
+      "feeRate": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdPartLabel": "Part {number}",
+  "@btcMultiWdPartLabel": {
+    "description": "Label of one vault's share in a multi-vault withdrawal (confirmation and status dialog).",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdConfirmPerPartFee": "Bitcoin fee per part: at least {sats} sats ({btc} BTC), taken out of that part",
+  "@btcMultiWdConfirmPerPartFee": {
+    "description": "Multi-vault withdrawal confirmation: the smallest Bitcoin fee each share pays.",
+    "placeholders": {
+      "sats": {
+        "type": "int"
+      },
+      "btc": {
+        "type": "String"
+      }
+    }
+  },
+  "btcMultiWdConfirmTotalFee": "Total Bitcoin fees: at least {sats} sats ({btc} BTC) for {count} parts",
+  "@btcMultiWdConfirmTotalFee": {
+    "description": "Multi-vault withdrawal confirmation: the per-part fee times the number of parts.",
+    "placeholders": {
+      "sats": {
+        "type": "int"
+      },
+      "btc": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdConfirmNet": "Arrives at the address: about {amount} BTC",
+  "@btcMultiWdConfirmNet": {
+    "description": "Multi-vault withdrawal confirmation: the total less the total fees.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "btcMultiWdConfirmNote": "Each part settles on its own, so one part may be paid before another.",
+  "@btcMultiWdConfirmNote": {
+    "description": "Multi-vault withdrawal confirmation: shares are independent."
+  },
+  "btcMultiWdOverallNotMined": "Waiting for the Request to Be Mined",
+  "@btcMultiWdOverallNotMined": {
+    "description": "Multi-vault withdrawal status dialog title: the request is not in a block yet."
+  },
+  "btcMultiWdOverallInProgress": "Withdrawal in Progress",
+  "@btcMultiWdOverallInProgress": {
+    "description": "Multi-vault withdrawal status dialog title: some parts are still being paid."
+  },
+  "btcMultiWdOverallSent": "Withdrawal Sent",
+  "@btcMultiWdOverallSent": {
+    "description": "Multi-vault withdrawal status dialog title: every part was paid."
+  },
+  "btcMultiWdOverallPartlySent": "Withdrawal Partly Sent",
+  "@btcMultiWdOverallPartlySent": {
+    "description": "Multi-vault withdrawal status dialog title: some parts were paid, the others returned."
+  },
+  "btcMultiWdOverallReturned": "Withdrawal Returned",
+  "@btcMultiWdOverallReturned": {
+    "description": "Multi-vault withdrawal status dialog title: no part was paid; every part's vBTC was returned."
+  },
+  "btcMultiWdPartChecking": "Checking…",
+  "@btcMultiWdPartChecking": {
+    "description": "Multi-vault withdrawal part state: not read yet."
+  },
+  "btcMultiWdPartNotMined": "The request is not in a block yet",
+  "@btcMultiWdPartNotMined": {
+    "description": "Multi-vault withdrawal part state."
+  },
+  "btcMultiWdPartWaiting": "Waiting for its Bitcoin transaction",
+  "@btcMultiWdPartWaiting": {
+    "description": "Multi-vault withdrawal part state: the chain has not fixed (pinned) the paying transaction yet."
+  },
+  "btcMultiWdPartPinned": "Bitcoin transaction fixed, waiting for Bitcoin to confirm it",
+  "@btcMultiWdPartPinned": {
+    "description": "Multi-vault withdrawal part state: pinned."
+  },
+  "btcMultiWdPartReleasing": "Being released: its vBTC comes back, less the release's fee",
+  "@btcMultiWdPartReleasing": {
+    "description": "Multi-vault withdrawal part state: a release is in progress."
+  },
+  "btcMultiWdPartPaid": "Sent",
+  "@btcMultiWdPartPaid": {
+    "description": "Multi-vault withdrawal part state: paid on Bitcoin."
+  },
+  "btcMultiWdPartReturned": "Closed, its vBTC was returned to you",
+  "@btcMultiWdPartReturned": {
+    "description": "Multi-vault withdrawal part state: closed without payment (cancelled, released, expired)."
+  },
+  "btcMultiWdRaiseFeeTitle": "Raise the Fee of Part {number}",
+  "@btcMultiWdRaiseFeeTitle": {
+    "description": "Title of the fee-rate prompt for one part's fee raise.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdReleaseTitle": "Release Part {number}",
+  "@btcMultiWdReleaseTitle": {
+    "description": "Title of the fee-rate prompt for one part's release.",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdReleaseBody": "Its Bitcoin goes back to the vault and this part's vBTC is refunded to you, less the release's Bitcoin fee. The other parts are not affected.",
+  "@btcMultiWdReleaseBody": {
+    "description": "Body of the fee-rate prompt for one part's release."
+  },
+  "btcMultiWdOfferTitle": "More Than This Vault Holds",
+  "@btcMultiWdOfferTitle": {
+    "description": "Per-vault withdraw form: the amount is above this vault's balance but several vaults could cover it."
+  },
+  "btcMultiWdOfferBody": "This vault holds {balance} vBTC. Withdraw {amount} vBTC from several of your vaults in one request instead?",
+  "@btcMultiWdOfferBody": {
+    "description": "Per-vault withdraw form: offer of the multi-vault flow.",
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "btcMultiWdOfferConfirm": "Withdraw from Several Vaults",
+  "@btcMultiWdOfferConfirm": {
+    "description": "Per-vault withdraw form: button that opens the multi-vault withdrawal with the amount filled in."
   }
 }
