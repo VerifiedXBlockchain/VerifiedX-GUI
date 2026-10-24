@@ -24,6 +24,7 @@ import '../../btc_web/models/btc_web_vbtc_token.dart';
 import '../../btc_web/models/watched_withdrawal.dart';
 import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../../btc_web/utils/vbtc_multi_allocator.dart';
+import '../../btc_web/utils/vbtc_multi_withdrawal.dart';
 import '../../btc_web/services/frost_resume_guard.dart';
 import '../../btc_web/services/vbtc_media_detection.dart';
 import '../../btc_web/services/pending_frost_signing_job_service.dart';
@@ -609,6 +610,83 @@ class WebTokenActionsManager {
     } catch (e) {
       ref.read(globalLoadingProvider.notifier).complete();
       return {'success': false, 'message': globalL10n.bw2WithdrawalRequestFailedError(userErrorMessage(e, withLeadIn: false))};
+    }
+  }
+
+  /// One withdrawal request drawn from several watched vaults. Core builds it
+  /// from the wallet's own [shares] (Spyglass `withdraw/multi/prepare/`); the
+  /// wallet checks it names the vaults, amounts and address the user
+  /// confirmed, signs the hash and sends it through the single-vault send
+  /// route. Returns the request hash, or null after showing why not.
+  Future<String?> requestV2WithdrawalMulti({
+    required List<VbtcAllocationInput> shares,
+    required String btcAddress,
+    required double totalAmount,
+    required int feeRate,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error(globalL10n.bw2NoKeypairToSign);
+      return null;
+    }
+
+    ref.read(globalLoadingProvider.notifier).start();
+
+    try {
+      final prepared = await ExplorerService().prepareV2WithdrawalRequestMulti(
+        requestorAddress: keypair.address,
+        btcAddress: btcAddress,
+        totalAmount: totalAmount,
+        feeRate: feeRate,
+        inputs: shares.map((s) => {'sc_identifier': s.scIdentifier, 'amount': s.amount}).toList(),
+      );
+
+      ref.read(globalLoadingProvider.notifier).complete();
+
+      if (prepared['success'] != true || prepared['Hash'] == null) {
+        Toast.error(prepared['message'] ?? globalL10n.bw2FailedPrepareWithdrawalRequest);
+        return null;
+      }
+      if (!vbtcPreparedWithdrawalMatches(prepared, shares: shares, btcAddress: btcAddress)) {
+        Toast.error(globalL10n.btcMultiWdPreparedMismatch);
+        return null;
+      }
+
+      ref.read(globalLoadingProvider.notifier).start();
+
+      final result = await _signAndSend(
+        hash: prepared['Hash'],
+        sendFn: ExplorerService().sendV2WithdrawalRequest,
+      );
+
+      ref.read(globalLoadingProvider.notifier).complete();
+
+      // A null result was already toasted (no keypair / signing failed).
+      if (result == null) return null;
+      if (result['success'] != true) {
+        Toast.error(result['message'] ?? globalL10n.bw2WithdrawalRequestFailed);
+        return null;
+      }
+
+      final hash = (result['Hash'] ?? prepared['Hash']) as String;
+      ref.read(webTransactionListProvider(keypair.address).notifier).insertPendingTx(
+            WebTransaction(
+              hash: hash,
+              toAddress: keypair.address,
+              fromAddress: keypair.address,
+              type: TxType.vbtcV2WithdrawalRequest,
+              amount: 0,
+              fee: 0,
+              date: DateTime.now(),
+              height: 0,
+              data: prepared['Data'] is String ? prepared['Data'] : null,
+            ),
+          );
+      return hash;
+    } catch (e) {
+      ref.read(globalLoadingProvider.notifier).complete();
+      Toast.error(globalL10n.bw2WithdrawalRequestFailedError(userErrorMessage(e, withLeadIn: false)));
+      return null;
     }
   }
 

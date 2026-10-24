@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rbx_wallet/core/app_constants.dart';
@@ -5,6 +6,7 @@ import 'package:rbx_wallet/core/base_screen.dart';
 import 'package:rbx_wallet/core/components/buttons.dart';
 import 'package:rbx_wallet/core/dialogs.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
+import 'package:rbx_wallet/core/providers/web_session_provider.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
 import 'package:rbx_wallet/core/theme/components.dart';
 import 'package:rbx_wallet/features/btc/providers/tokenized_bitcoin_list_provider.dart';
@@ -15,8 +17,11 @@ import '../../../utils/formatting.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
+import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import '../../btc_web/services/web_vbtc_withdrawal_part_actions.dart';
 import '../../btc_web/utils/vbtc_multi_allocator.dart';
 import '../../btc_web/utils/vbtc_multi_withdrawal.dart';
+import '../../token/providers/web_token_actions_manager.dart';
 import '../components/vbtc_multi_withdrawal_dialog.dart';
 import '../models/vbtc_withdrawal_part.dart';
 import '../services/desktop_vbtc_withdrawal_part_actions.dart';
@@ -27,7 +32,9 @@ import '../utils.dart';
 /// vaults in a single request, the withdrawal counterpart of Bulk Transfer.
 /// The user picks a total, a Bitcoin address and a fee rate; the vaults are
 /// chosen largest first, shown before signing, and each pays out with its
-/// own Bitcoin transaction.
+/// own Bitcoin transaction. Desktop sends the total to the node, which
+/// allocates the same way; web sends the shown shares to Core's raw builder
+/// through Spyglass and signs the result itself.
 class VbtcMultiWithdrawalScreen extends BaseStatefulScreen {
   /// Prefilled when the per-vault Withdraw sends the user here because one
   /// vault cannot cover the amount.
@@ -63,6 +70,11 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
   }
 
   Future<void> _loadKinds() async {
+    // Web: Spyglass marks each token `is_watched` already.
+    if (kIsWeb) {
+      _kinds = const {};
+      return;
+    }
     final address = ref.read(sessionProvider).currentWallet?.address ?? '';
     final tokens = ref.read(tokenizedBitcoinListProvider).where((t) => t.version >= 2 && t.myBalance > 0).toList();
     final kinds = await Future.wait(
@@ -76,8 +88,25 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
 
   /// Every vault the account holds a spendable balance on, with whether it
   /// may go into this request. Balances already net out withdrawals in
-  /// progress (the CLI's AvailableBalance).
+  /// progress (the CLI's AvailableBalance, the explorer's
+  /// available_balances, less this session's unconfirmed spends on web).
   List<_Vault> _vaults() {
+    if (kIsWeb) {
+      final address = ref.watch(webSessionProvider).keypair?.address;
+      if (address == null) return const [];
+      final manager = ref.read(webTokenActionsManager);
+      // The web list holds one entry per (contract, loaded address).
+      final byContract = <String, _Vault>{};
+      for (final t in ref.watch(btcWebVbtcTokenListProvider)) {
+        byContract[t.scIdentifier] = _Vault(
+          scIdentifier: t.scIdentifier,
+          name: t.name,
+          balance: manager.spendableContractBalance(address, t.scIdentifier, t.availableBalanceForAddress(address)),
+          kind: t.isWatched ? VbtcVaultKind.watched : VbtcVaultKind.legacy,
+        );
+      }
+      return byContract.values.where((v) => v.balance > 0).toList();
+    }
     final kinds = _kinds ?? const {};
     return ref
         .watch(tokenizedBitcoinListProvider)
@@ -228,33 +257,26 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
       return;
     }
 
-    final currentWallet = ref.read(sessionProvider).currentWallet;
-    if (currentWallet == null) {
-      Toast.error(l10n.btcBulkNoVfxSelectedToast);
-      return;
-    }
-    // Core refuses reserve requesters too, after the round-trip.
-    if (vbtcSenderIsVault(currentWallet.address)) {
-      Toast.error(l10n.tkbVaultCannotWithdraw);
-      return;
-    }
-    if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
-      Toast.error(l10n.r3fInsufficientVfxBalance);
+    final requestorAddress = kIsWeb ? _webRequestor(l10n) : _desktopRequestor(l10n);
+    if (requestorAddress == null) {
       return;
     }
 
     final amount = double.parse(amountController.text.trim());
     final btcAddress = addressController.text.trim();
-
-    // Core allocates over every unfrozen vault, legacy ones included until
-    // they freeze; a legacy share would need a FROST completion.
-    final unfrozen = {
-      for (final v in vaults.where((v) => v.kind != VbtcVaultKind.frozen)) v.scIdentifier: v.balance,
-    };
     final watched = _watchedBalances(vaults);
-    if (vbtcCoreAllocationTouchesUnwatched(unfrozen, watched.keys.toSet(), amount)) {
-      Toast.error(l10n.btcMultiWdLegacyVault);
-      return;
+
+    // Desktop: Core allocates over every unfrozen vault, legacy ones
+    // included until they freeze; a legacy share would need a FROST
+    // completion. Web names its shares, so it never gets one.
+    if (!kIsWeb) {
+      final unfrozen = {
+        for (final v in vaults.where((v) => v.kind != VbtcVaultKind.frozen)) v.scIdentifier: v.balance,
+      };
+      if (vbtcCoreAllocationTouchesUnwatched(unfrozen, watched.keys.toSet(), amount)) {
+        Toast.error(l10n.btcMultiWdLegacyVault);
+        return;
+      }
     }
 
     final feeRate = await promptForFeeRate(context);
@@ -283,12 +305,60 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
       return;
     }
 
+    if (kIsWeb) {
+      await _sendWeb(l10n, requestorAddress, plan, amount, btcAddress, vaults);
+    } else {
+      await _sendDesktop(l10n, requestorAddress, plan, amount, btcAddress, vaults);
+    }
+  }
+
+  String? _desktopRequestor(AppLocalizations l10n) {
+    final currentWallet = ref.read(sessionProvider).currentWallet;
+    if (currentWallet == null) {
+      Toast.error(l10n.btcBulkNoVfxSelectedToast);
+      return null;
+    }
+    // Core refuses reserve requesters too, after the round-trip.
+    if (vbtcSenderIsVault(currentWallet.address)) {
+      Toast.error(l10n.tkbVaultCannotWithdraw);
+      return null;
+    }
+    if (currentWallet.balance < MIN_RBX_FOR_SC_ACTION) {
+      Toast.error(l10n.r3fInsufficientVfxBalance);
+      return null;
+    }
+    return currentWallet.address;
+  }
+
+  /// The primary account: the Vault (xRBX) address cannot request a
+  /// withdrawal, and its balances are not offered here.
+  String? _webRequestor(AppLocalizations l10n) {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error(l10n.btcBulkNoVfxSelectedToast);
+      return null;
+    }
+    if (!ref.read(webTokenActionsManager).verifyBalance()) {
+      return null;
+    }
+    return keypair.address;
+  }
+
+  /// Desktop: the node allocates, signs and broadcasts in one call.
+  Future<void> _sendDesktop(
+    AppLocalizations l10n,
+    String requestorAddress,
+    VbtcWithdrawalPlan plan,
+    double amount,
+    String btcAddress,
+    List<_Vault> vaults,
+  ) async {
     ref.read(globalLoadingProvider.notifier).start();
     final result = await VbtcV2Service().requestWithdrawalMulti(
-      requestorAddress: currentWallet.address,
+      requestorAddress: requestorAddress,
       btcAddress: btcAddress,
       amount: amount,
-      feeRate: feeRate,
+      feeRate: plan.feeRate,
     );
     ref.read(globalLoadingProvider.notifier).complete();
     if (result == null || !mounted) {
@@ -312,7 +382,43 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
       parts: _partsFor(result.allocations, vaults),
       actions: DesktopVbtcWithdrawalPartActions(
         requestHash: result.requestHash,
-        requestorAddress: currentWallet.address,
+        requestorAddress: requestorAddress,
+      ),
+    );
+  }
+
+  /// Web: Core builds the request from the confirmed shares; the wallet
+  /// checks, signs and sends it.
+  Future<void> _sendWeb(
+    AppLocalizations l10n,
+    String requestorAddress,
+    VbtcWithdrawalPlan plan,
+    double amount,
+    String btcAddress,
+    List<_Vault> vaults,
+  ) async {
+    final manager = ref.read(webTokenActionsManager);
+    final requestHash = await manager.requestV2WithdrawalMulti(
+      shares: plan.shares,
+      btcAddress: btcAddress,
+      totalAmount: amount,
+      feeRate: plan.feeRate,
+    );
+    if (requestHash == null || !mounted) {
+      return;
+    }
+
+    final session = ref.read(webSessionProvider);
+    ref.read(btcWebVbtcTokenListProvider.notifier).reload(requestorAddress, raAddress: session.raKeypair?.address);
+    Navigator.of(context).pop();
+
+    await VbtcMultiWithdrawalDialog.show(
+      requestHash: requestHash,
+      parts: _partsFor(plan.shares, vaults),
+      actions: WebVbtcWithdrawalPartActions(
+        manager: manager,
+        requestHash: requestHash,
+        requestorAddress: requestorAddress,
       ),
     );
   }

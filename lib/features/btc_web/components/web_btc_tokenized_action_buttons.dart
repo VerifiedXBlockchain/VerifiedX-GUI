@@ -8,6 +8,8 @@ import '../../../core/app_constants.dart';
 import '../../../core/base_component.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/dialogs.dart';
+import '../../btc/screens/vbtc_multi_withdrawal_screen.dart';
+import '../providers/btc_web_vbtc_token_list_provider.dart';
 import '../../../core/env.dart';
 import '../../../core/providers/currency_segmented_button_provider.dart';
 import '../../../core/providers/web_session_provider.dart';
@@ -320,6 +322,30 @@ class WebTokenizedBtcActionButtons extends BaseComponent {
                 ? 0.0
                 : manager.spendableContractBalance(myAddress, token.scIdentifier, token.balanceForAddress(myAddress));
             if (withdrawAmount > available) {
+              // Several watched vaults together may cover it: offer the
+              // multi-vault withdrawal instead of refusing.
+              final heldOnWatched = myAddress == null || !token.isWatched
+                  ? 0.0
+                  : {
+                      for (final t in ref.read(btcWebVbtcTokenListProvider).where((t) => t.isWatched))
+                        t.scIdentifier: manager.spendableContractBalance(myAddress, t.scIdentifier, t.availableBalanceForAddress(myAddress)),
+                    }.values.fold<double>(0, (sum, b) => sum + b);
+              if (withdrawAmount <= heldOnWatched) {
+                final openMulti = await ConfirmDialog.show(
+                  title: l10n.btcMultiWdOfferTitle,
+                  body: l10n.btcMultiWdOfferBody(available.toString(), withdrawAmount.toString()),
+                  confirmText: l10n.btcMultiWdOfferConfirm,
+                  cancelText: l10n.actionCancel,
+                );
+                if (openMulti == true) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => VbtcMultiWithdrawalScreen(initialAmount: withdrawAmount),
+                    ),
+                  );
+                }
+                return;
+              }
               Toast.error(l10n.bw2InsufficientBalanceAvailable(available.toString()));
               return;
             }

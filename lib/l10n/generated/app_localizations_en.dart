@@ -11396,4 +11396,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get btcMultiWdOfferConfirm => 'Withdraw from Several Vaults';
+
+  @override
+  String get btcMultiWdPreparedMismatch => 'The withdrawal the network prepared does not match what you confirmed (vaults, amounts or address). Nothing was signed or sent.';
 }

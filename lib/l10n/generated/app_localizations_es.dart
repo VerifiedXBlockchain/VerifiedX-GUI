@@ -11396,4 +11396,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get btcMultiWdOfferConfirm => 'Retirar de varias bóvedas';
+
+  @override
+  String get btcMultiWdPreparedMismatch => 'El retiro que preparó la red no coincide con lo que confirmaste (bóvedas, montos o dirección). No se firmó ni se envió nada.';
 }
