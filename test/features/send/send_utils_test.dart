@@ -27,6 +27,10 @@ void main() {
       expect(sanitizePastedSendAddress('name.vfx'), 'name.vfx');
     });
 
+    test('keeps the hyphen in a .vfx domain', () {
+      expect(sanitizePastedSendAddress('lrapi-18300.vfx'), 'lrapi-18300.vfx');
+    });
+
     test('strips whitespace and characters invalid in addresses and domains', () {
       expect(sanitizePastedSendAddress('  xAbc123\n'), 'xAbc123');
       expect(sanitizePastedSendAddress('"name.vfx",'), 'name.vfx');

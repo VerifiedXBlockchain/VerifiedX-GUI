@@ -212,6 +212,23 @@ class PrivacyService extends BaseService {
     }
   }
 
+  /// Whether the node holds a shielded wallet for [zfxAddress]: true when it
+  /// does, false when it answers without one (a new or reset data folder),
+  /// null when it could not be asked.
+  Future<bool?> nodeHoldsShieldedWallet(String zfxAddress) async {
+    try {
+      final result = await getJson(
+        '/GetShieldedBalance',
+        params: {"zfxAddress": zfxAddress},
+        cleanPath: false,
+      );
+      return shieldedWalletHeldFromResult(result);
+    } catch (e) {
+      _log('GetShieldedBalance', 'held check error: $e');
+      return null;
+    }
+  }
+
   /// Core 9.0 asks for [walletPassword], as for a spend. Throws with the
   /// node's message when the export is refused.
   Future<Map<String, dynamic>> exportViewingKey({
@@ -494,4 +511,14 @@ class PrivacyService extends BaseService {
       return false;
     }
   }
+}
+
+/// Reads Core's GetShieldedBalance answer: a wallet the node holds reports its
+/// LastScannedBlock; for an address it does not hold the node answers success
+/// with an empty balance and nothing else. Null when the answer is not usable.
+bool? shieldedWalletHeldFromResult(Map<String, dynamic> result) {
+  if (result['Success'] != true) return null;
+  final body = result['Result'];
+  if (body is! Map) return null;
+  return body.containsKey('LastScannedBlock');
 }
