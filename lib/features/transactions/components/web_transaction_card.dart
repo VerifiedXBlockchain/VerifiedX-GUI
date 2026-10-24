@@ -15,6 +15,13 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/web_router.gr.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../models/web_transaction.dart';
+import '../../btc/components/vbtc_multi_withdrawal_dialog.dart';
+import '../../btc/models/vbtc_multi_withdrawal_result.dart';
+import '../../btc/models/vbtc_withdrawal_part.dart';
+import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
+import '../../btc_web/services/web_vbtc_withdrawal_part_actions.dart';
+import '../../token/providers/web_token_actions_manager.dart';
+import 'package:collection/collection.dart';
 import '../../web_shop/components/complete_sale_button.dart';
 
 class WebTransactionCard extends BaseComponent {
@@ -24,6 +31,29 @@ class WebTransactionCard extends BaseComponent {
     this.tx, {
     Key? key,
   }) : super(key: key);
+
+  /// One row per multi-vault request: its parts come from the transaction's
+  /// own Data, their states from Spyglass.
+  void _openMultiWithdrawal(WidgetRef ref) {
+    final shares = vbtcMultiWithdrawalSharesOf(tx.data) ?? const [];
+    final tokens = ref.read(btcWebVbtcTokenListProvider);
+    VbtcMultiWithdrawalDialog.show(
+      requestHash: tx.hash,
+      parts: shares.map((share) {
+        final token = tokens.firstWhereOrNull((t) => t.scIdentifier == share.scIdentifier);
+        return VbtcWithdrawalPart(
+          scIdentifier: share.scIdentifier,
+          name: token?.name ?? share.scIdentifier,
+          amount: share.amount,
+        );
+      }).toList(),
+      actions: WebVbtcWithdrawalPartActions(
+        manager: ref.read(webTokenActionsManager),
+        requestHash: tx.hash,
+        requestorAddress: tx.fromAddress,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -128,6 +158,12 @@ class WebTransactionCard extends BaseComponent {
                   onPressed: () {
                     AutoRouter.of(context).push(WebTransactionDetailScreenRoute(hash: tx.callbackHash!));
                   },
+                ),
+              if (tx.fromAddress == address && vbtcMultiWithdrawalSharesOf(tx.data) != null)
+                AppButton(
+                  key: const Key('vbtc:multi_wd_status'),
+                  label: l10n.btcMultiWdStatusButton,
+                  onPressed: () => _openMultiWithdrawal(ref),
                 ),
               WebCallbackButton(tx),
               CompleteSaleButton(

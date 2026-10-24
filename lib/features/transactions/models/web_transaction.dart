@@ -4,6 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../web/models/web_recovery_details.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/json_converters.dart';
+import '../../btc/models/vbtc_multi_withdrawal_result.dart';
 import 'transaction.dart';
 
 part 'web_transaction.freezed.dart';
@@ -281,6 +282,12 @@ class WebTransaction with _$WebTransaction {
         }
         return l10n.r3cTypeVbtcTransfer;
       case 27:
+        if (nftDataValue('Function') == vbtcMultiWithdrawalFunction) {
+          final inputs = parseNftData()?['Inputs'];
+          final total = nftDataValue('TotalAmount');
+          final label = l10n.r3cTypeVbtcMultiWithdrawalRequest(inputs is List ? inputs.length : 0);
+          return total != null ? "$label ($total vBTC)" : label;
+        }
         return l10n.r3cTypeVbtcWithdrawalRequest;
       case 28:
         return l10n.r3cTypeVbtcWithdrawalComplete;

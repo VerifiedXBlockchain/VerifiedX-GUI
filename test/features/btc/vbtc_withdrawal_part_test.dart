@@ -80,4 +80,39 @@ void main() {
       );
     });
   });
+
+  group('vbtcMultiWithdrawalSharesOf', () {
+    const multiData =
+        '{"Function":"VBTCWithdrawalRequestMultiV2()","RequestorAddress":"xA","BTCAddress":"tb1q","TotalAmount":0.000035,"FeeRate":3,"Inputs":[{"SCUID":"web1:1","Amount":0.00002},{"SCUID":"m1:2","Amount":0.000015}],"UniqueId":null}';
+
+    test("reads the parts from a multi request's Data", () {
+      final shares = vbtcMultiWithdrawalSharesOf(multiData)!;
+
+      expect(shares.map((s) => s.scIdentifier), ['web1:1', 'm1:2']);
+      expect(shares.map((s) => s.amount), [0.00002, 0.000015]);
+    });
+
+    test('accepts Data wrapped in a list or already decoded', () {
+      expect(vbtcMultiWithdrawalSharesOf('[$multiData]'), hasLength(2));
+      expect(
+        vbtcMultiWithdrawalSharesOf({
+          'Function': 'VBTCWithdrawalRequestMultiV2()',
+          'Inputs': [
+            {'SCUID': 'a:1', 'Amount': 0.1}
+          ],
+        }),
+        hasLength(1),
+      );
+    });
+
+    test('is null for a single-vault request and for unreadable Data', () {
+      expect(
+        vbtcMultiWithdrawalSharesOf('{"Function":"VBTCWithdrawalRequest()","ContractUID":"a:1","Amount":0.1}'),
+        isNull,
+      );
+      expect(vbtcMultiWithdrawalSharesOf('not json'), isNull);
+      expect(vbtcMultiWithdrawalSharesOf(null), isNull);
+      expect(vbtcMultiWithdrawalSharesOf(''), isNull);
+    });
+  });
 }
