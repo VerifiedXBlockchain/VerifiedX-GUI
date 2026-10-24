@@ -323,10 +323,11 @@ VerifiedXSendLink? parseVerifiedXSendLink(
 }
 
 /// Clipboard text reduced to the characters the send form's address field
-/// accepts (letters, digits and '.'), so pasting 'name.vfx' keeps the domain
-/// intact while stray whitespace and punctuation are dropped.
+/// accepts (letters, digits, '.' and '-', which a .vfx name may contain), so
+/// pasting 'my-name.vfx' keeps the domain intact while stray whitespace and
+/// punctuation are dropped.
 String sanitizePastedSendAddress(String input) {
-  return input.replaceAll(RegExp('[^a-zA-Z0-9.]'), "");
+  return input.replaceAll(RegExp('[^a-zA-Z0-9.-]'), "");
 }
 
 /// Amount text for the prefilled send route's `amount` path segment. The

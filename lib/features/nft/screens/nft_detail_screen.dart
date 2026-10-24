@@ -721,7 +721,7 @@ class NftDetailScreen extends BaseScreen {
                           confirmText: l10n.actionContinue,
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(
-                                RegExp('[a-zA-Z0-9.]')),
+                                RegExp('[a-zA-Z0-9.-]')),
                           ],
                           lines: 1,
                         );
