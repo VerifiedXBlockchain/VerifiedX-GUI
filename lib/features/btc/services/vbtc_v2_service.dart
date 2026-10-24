@@ -569,12 +569,14 @@ class VbtcV2Service extends BaseService {
   /// same allocation as [requestWithdrawalMulti] over the node's own vaults
   /// and builds the transaction without sending it.
   ///
-  /// Returns null after surfacing Core's message on failure.
+  /// Returns null after surfacing Core's message on failure. With
+  /// [onRefusal], a refusal from Core is handed to it to show instead.
   Future<VbtcMultiWithdrawalPreview?> previewWithdrawalMulti({
     required String requestorAddress,
     required String btcAddress,
     required double amount,
     required int feeRate,
+    void Function(String message)? onRefusal,
   }) async {
     const method = 'GetRawRequestWithdrawalMultiTxData(preview)';
     final params = {
@@ -602,7 +604,8 @@ class VbtcV2Service extends BaseService {
       }
 
       _log(method, 'FAILED: ${data['Message']}');
-      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedRequestWithdrawal));
+      final message = nodeRefusalMessage(data, fallback: globalL10n.r3fFailedRequestWithdrawal);
+      onRefusal != null ? onRefusal(message) : Toast.error(message);
       return null;
     } catch (e, st) {
       _log(method, 'EXCEPTION: $e\n$st');
@@ -890,13 +893,15 @@ class VbtcV2Service extends BaseService {
   }) async {
     const method = 'CancelWithdrawal';
     // A watched vault's cancel needs neither: no Bitcoin transaction is fixed
-    // yet and no vote is held.
+    // yet and no vote is held. Core 9.0.1's request model still requires both
+    // fields, and refuses a body without them before the cancel runs; it
+    // accepts them empty (VerifiedX-Issues 369).
     final params = {
       'SmartContractUID': scUid,
       'OwnerAddress': ownerAddress,
       'WithdrawalRequestHash': withdrawalRequestHash,
-      if (btcTxHash != null) 'BTCTxHash': btcTxHash,
-      if (failureProof != null) 'FailureProof': failureProof,
+      'BTCTxHash': btcTxHash ?? '',
+      'FailureProof': failureProof ?? '',
     };
 
     _log(method, 'REQUEST POST /CancelWithdrawal', params);

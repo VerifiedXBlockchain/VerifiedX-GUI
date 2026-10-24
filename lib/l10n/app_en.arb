@@ -1063,7 +1063,7 @@
   "@btcMpcStartBody": {
     "description": "Confirm dialog body line about the MPC ceremony."
   },
-  "btcNetworkFeeBody": "A network fee of ~0.000028 VFX is required.",
+  "btcNetworkFeeBody": "A network fee of ~0.00025 VFX is required.",
   "@btcNetworkFeeBody": {
     "description": "Confirm dialog body line about the network fee for vBTC mint."
   },
