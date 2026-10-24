@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rbx_wallet/core/app_router.gr.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/core/theme/app_theme.dart';
-import 'package:rbx_wallet/features/global_loader/global_loading_provider.dart';
 import 'package:rbx_wallet/utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../app.dart';
@@ -21,6 +20,7 @@ import '../../navigation/utils.dart';
 import '../../nft/providers/nft_list_provider.dart';
 import '../../nft/services/nft_service.dart';
 import '../../token/providers/token_list_provider.dart';
+import '../screens/all_tokens_screen.dart';
 
 import '../../../core/theme/pretty_icons.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -98,18 +98,25 @@ class CommonActions extends BaseComponent {
                 label: AppLocalizations.of(context).homeActionTokens,
                 prettyIconType: PrettyIconType.fungibleToken,
                 icon: Icons.toll,
-                onPressed: () async {
+                onPressed: () {
                   if (ref.read(sessionProvider).currentWallet == null) {
                     Toast.error(AppLocalizations.of(context).messageNoAccountSelected);
                     return;
                   }
 
-                  ref.read(globalLoadingProvider.notifier).start();
-                  await ref.read(tokenizedBitcoinListProvider.notifier).load();
-                  await ref.read(tokenListProvider.notifier).load(1);
-                  await ref.read(nftListProvider.notifier).load(1);
+                  // The screen opens at once on the lists already held and
+                  // watches them, so each refresh shows as it lands. Waiting
+                  // for all three first left the tap unanswered while one was
+                  // slow, and the late push then stacked the screen wherever
+                  // the user had gone since.
+                  final refreshing = ref.read(allTokensRefreshingProvider.notifier);
+                  refreshing.state = true;
+                  Future.wait([
+                    ref.read(tokenizedBitcoinListProvider.notifier).load(),
+                    ref.read(tokenListProvider.notifier).load(1),
+                    ref.read(nftListProvider.notifier).load(1),
+                  ]).whenComplete(() => refreshing.state = false);
 
-                  ref.read(globalLoadingProvider.notifier).complete();
                   ref.read(globalBalancesExpandedProvider.notifier).detract();
                   AutoRouter.of(context).push(AllTokensScreenRoute());
                 },

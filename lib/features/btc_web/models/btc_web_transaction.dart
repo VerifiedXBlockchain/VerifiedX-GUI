@@ -90,12 +90,36 @@ class BtcWebTransaction with _$BtcWebTransaction {
     return amount() * BTC_SATOSHI_MULTIPLIER;
   }
 
+  /// What this transaction moved for [myAddress]: what it paid others when
+  /// [myAddress] spent in it, otherwise what it paid [myAddress]. [amount]
+  /// only drops change sent back to an input's own address, so a sender that
+  /// returns change to a fresh address (most wallets) has it counted. Falls
+  /// back to [amount] when [myAddress] is unknown or gets nothing either way.
+  int amountFor(String? myAddress) {
+    if (myAddress == null || myAddress.isEmpty) return amount();
+    final spentFromMe = vin.any((i) => i.prevout.scriptpubkeyAddress == myAddress);
+    final value = spentFromMe ? totalValueToOthers(myAddress) : totalValueToMe(myAddress);
+    return value > 0 ? value : amount();
+  }
+
+  double amountBtcFor(String? myAddress) {
+    return amountFor(myAddress) * BTC_SATOSHI_MULTIPLIER;
+  }
+
   String fromAddress() {
     return vin.first.prevout.scriptpubkeyAddress ?? '';
   }
 
   String toAddress(List<String> myAddresses) {
     return toAddresses.where((element) => myAddresses.contains(element)).join(',');
+  }
+
+  /// Whether any input or output is one of [addresses]. A deposit into a
+  /// vBTC contract pays its deposit address from the wallet's own, so
+  /// neither [toAddress] (the wallet's outputs) nor [fromAddress] shows it.
+  bool touchesAnyAddress(Iterable<String> addresses) {
+    final wanted = addresses.toSet();
+    return vout.any((o) => wanted.contains(o.scriptpubkeyAddress)) || vin.any((i) => wanted.contains(i.prevout.scriptpubkeyAddress));
   }
 
   // bool isIncoming(String myAddress) {

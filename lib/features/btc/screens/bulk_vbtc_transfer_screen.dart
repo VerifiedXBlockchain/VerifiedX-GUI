@@ -178,7 +178,9 @@ class BulkVbtcTransferScreenState
                     hintText: l10n.btcBulkTransferToHint,
                   ),
                   inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
+                    // The underscore lets a zfx_ address through to the validator, which
+                    // says why vBTC cannot go there instead of "Invalid Address."
+                    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9._]')),
                   ],
                 ),
               ],

@@ -62,7 +62,7 @@ class ReceiveScreen extends BaseScreen {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
-          child: CurrencySegementedButton(includeAny: false),
+          child: CurrencySegementedButton(includeAny: false, followSession: true),
         ),
         Builder(
           builder: (context) {

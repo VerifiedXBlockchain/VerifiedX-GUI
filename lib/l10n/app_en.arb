@@ -1537,8 +1537,6 @@
   "bw2FailedSignOwnershipProof": "Failed to sign ownership proof.",
   "bw2FailedSignTransaction": "Failed to sign transaction",
   "bw2FailedStartFrost": "Failed to start FROST signing",
-  "bw2FrostConfirmHint": "This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.",
-  "bw2FrostConfirmHintWeb": "This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.",
   "bw2FrostFailedOrTimedOut": "FROST signing failed or timed out. The withdrawal may still complete — check back shortly.",
   "bw2FrostGroupKey": "FROST Group Key",
   "bw2FrostJobNotFound": "FROST signing job not found",
@@ -2094,11 +2092,11 @@
   "@dstManageMyAuctionHouse": {
     "description": "Big-button title to manage the user's own auction house."
   },
-  "dstManageMyAuctionHouseBody": "Manage your account''s auction house and trade NFTs.",
+  "dstManageMyAuctionHouseBody": "Manage your account's auction house and trade NFTs.",
   "@dstManageMyAuctionHouseBody": {
     "description": "Big-button body for the manage-my-auction-house action. Apostrophe escaped per ICU."
   },
-  "dstManageMyAuctionHouseBodyWeb": "Manage your wallet''s auction house and trade NFTs.",
+  "dstManageMyAuctionHouseBodyWeb": "Manage your wallet's auction house and trade NFTs.",
   "@dstManageMyAuctionHouseBodyWeb": {
     "description": "Big-button body for the manage-my-auction-house action on the web wallet. Apostrophe escaped per ICU."
   },
@@ -2386,6 +2384,15 @@
   "hnavSnapshotError": "An error occurred. Please restart and try again.",
   "hnavSnapshotImported": "Database Snapshot Imported.",
   "hnavSnapshotInitializing": "Initializing...",
+  "hnavSnapshotKeyBackupSaved": "A copy of your account and key databases was saved to:\n{path}",
+  "@hnavSnapshotKeyBackupSaved": {
+    "description": "Shown after a snapshot import with the folder holding the copy of the key databases",
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
   "hnavSnapshotShuttingDown": "Shutting down CLI...",
   "hnavSnapshotStartingUp": "Starting up CLI now...",
   "hnavStartAdjudicating": "Start Adjudicating",
@@ -3740,7 +3747,7 @@
   "@paymentLinkTitle": {
     "description": "App bar title for the Butterfly payment link screen."
   },
-  "paymentMessageHint": "What''s this payment for?",
+  "paymentMessageHint": "What's this payment for?",
   "@paymentMessageHint": {
     "description": "Hint inside the optional message field. Apostrophe escaped per ICU."
   },
@@ -4058,7 +4065,15 @@
   },
   "prvExportViewingKey": "Export Viewing Key",
   "prvExportViewingKeyBody": "Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.",
-  "prvFailedExportViewingKey": "Failed to export viewing key",
+  "prvFailedExportViewingKey": "Failed to export viewing key: {error}",
+  "@prvFailedExportViewingKey": {
+    "description": "Toast when the node refuses to export the privacy wallet's viewing key; the placeholder is the node's reason.",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "prvFailedGenerateShieldedAddress": "Failed to generate shielded address",
   "prvFailedImportViewingKey": "Failed to import viewing key",
   "prvFeeDeductedFromShielded": "Fee: {fee} (deducted from shielded balance)",
@@ -4296,8 +4311,20 @@
     }
   },
   "prvViewingKeyBase64Label": "Viewing Key (Base64)",
+  "prvViewingKeyCanSpendBody": "Anyone holding this key can move this wallet's shielded funds. Share it only as you would the wallet itself.",
+  "@prvViewingKeyCanSpendBody": {
+    "description": "Shown before and with an exported viewing key that the node reports can spend the wallet's shielded funds."
+  },
+  "prvViewingKeyCanSpendTitle": "This key can spend your shielded funds",
+  "@prvViewingKeyCanSpendTitle": {
+    "description": "Title of the warning shown before revealing a spend-capable viewing key."
+  },
   "prvViewingKeyCopied": "Viewing key copied to clipboard",
   "prvViewingKeyImported": "Viewing key imported successfully",
+  "prvViewingKeyShowAction": "Show key",
+  "@prvViewingKeyShowAction": {
+    "description": "Confirm button of the spend-capable viewing key warning; reveals the key."
+  },
   "prvViewingKeyTitle": "Viewing Key",
   "prvViewOnly": "VIEW ONLY",
   "prvWalletActivated": "Privacy wallet activated: {address}",
@@ -5188,14 +5215,6 @@
   },
   "r3eExportNftMedia": "Export NFT Media",
   "r3eFailedDecryptKeys": "Failed to decrypt account keys. Check your password.",
-  "r3eFailedDeleteDb": "Failed to delete {path} — folder still exists after delete",
-  "@r3eFailedDeleteDb": {
-    "placeholders": {
-      "path": {
-        "type": "String"
-      }
-    }
-  },
   "r3eFailedDownloadFile": "Failed to download {filename} after {attempts} attempts",
   "@r3eFailedDownloadFile": {
     "placeholders": {
@@ -5310,6 +5329,24 @@
   "r3eSetPassword": "Set Password",
   "r3eShowDebugData": "Show Debug Data",
   "r3eSignatureCopied": "Signature Verification copied to clipboard.",
+  "r3eSnapshotFileRejected": "The snapshot lists a file that can't be imported safely, so nothing was changed: {url}",
+  "@r3eSnapshotFileRejected": {
+    "description": "Snapshot import refused because the manifest lists an unsafe file",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "r3eSnapshotKeyBackupFailed": "Couldn't back up your account and key databases, so nothing was deleted: {error}",
+  "@r3eSnapshotKeyBackupFailed": {
+    "description": "Snapshot import stopped because the key databases could not be backed up",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "r3eSnapshotNoUrls": "Snapshot has no download URLs",
   "r3eStatusLog": "Status Log",
   "r3eStayLoggedIn": "Stay Logged In",
@@ -7298,6 +7335,15 @@
     }
   },
   "svcNotifBtcDomainDeletedTitle": "BTC Domain Name Deleted",
+  "svcNotifBtcDomainTransferBody": "BTC Domain transferred to {address}",
+  "@svcNotifBtcDomainTransferBody": {
+    "description": "Body of the notification for a confirmed BTC domain transfer; the placeholder is the BTC address that receives the domain.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
   "svcNotifBtcDomainTransferredTitle": "BTC Domain Name Transferred",
   "svcNotifDecShopTxBody": "DecShop TX Complete",
   "svcNotifDecShopTxTitle": "DecShop TX",
@@ -7367,6 +7413,10 @@
   "svcNotifTokenChangeOwnershipTitle": "Token Change Ownership",
   "svcNotifTokenDeployedTitle": "Token Deployed",
   "svcNotifTokenPauseTitle": "Token Pause",
+  "svcNotifTokenResumeTitle": "Token Resume",
+  "@svcNotifTokenResumeTitle": {
+    "description": "Title of the notification for a confirmed transaction that resumes a paused token."
+  },
   "svcNotifTokensMintedTitle": "Tokens Minted",
   "svcNotifTokenTopicCreatedTitle": "Token Topic Created",
   "svcNotifTokenTransferTitle": "Token Transfer",
@@ -7460,7 +7510,7 @@
   },
   "svcSignatureGenerationFailed": "Signature generation failed.",
   "svcSignatureNotValid": "Signature not valid",
-  "svcSnapshotBackupWarningBody": "Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.",
+  "svcSnapshotBackupWarningBody": "Importing a snapshot replaces your local blockchain data. Your account, key and vault databases are kept, and a copy of them is saved to a SnapshotBackups folder in your data folder before anything is changed.\n\nStill, make sure your private keys are backed up before you continue. If they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.",
   "svcSnapshotDetermineStateError": "Could not determine latest snapshot state",
   "svcSnapshotImportFailedBody": "Snapshot import failed.",
   "svcSnapshotImportFailedTitle": "Import Failed",
@@ -7730,7 +7780,7 @@
   "tkbFungibleToken": "Fungible Token",
   "tkbGenerate": "Generate",
   "tkbGenerateBtcAddress": "Generate BTC Address",
-  "tkbGenerateBtcAddressBody": "Are you sure you want to generate this token''s BTC address?",
+  "tkbGenerateBtcAddressBody": "Are you sure you want to generate this token's BTC address?",
   "tkbHashLabel": "Hash: {hash}",
   "@tkbHashLabel": {
     "placeholders": {
@@ -7752,7 +7802,7 @@
   },
   "tkbInvalidFeeRate": "Invalid Fee Rate. Must be at least 1 satoshi.",
   "tkbManualSendExchangeSubtitle": "Send BTC from any exchange or wallet to this token's deposit address",
-  "tkbManualSendSubtitle": "Send coin manually to this token''s BTC deposit address",
+  "tkbManualSendSubtitle": "Send coin manually to this token's BTC deposit address",
   "tkbMediaNotFound": "Media asset file not found on your machine ({fileName}).",
   "@tkbMediaNotFound": {
     "placeholders": {
@@ -7795,7 +7845,7 @@
   "tkbNotFound": "Not Found.",
   "tkbNoUpper": "NO",
   "tkbNoUtxos": "No UTXOs",
-  "tkbNoVaultAccounts": "You don''t have any Vault Accounts in this wallet",
+  "tkbNoVaultAccounts": "You don't have any Vault Accounts in this wallet",
   "tkbNoVotesYet": "No votes yet.",
   "tkbOpenAsset": "Open Asset",
   "@tkbOpenAsset": {
@@ -7944,7 +7994,7 @@
   "tkbUtxoUnused": "Unused",
   "tkbUtxoUsed": "Used",
   "tkbVaultAccountPassword": "Vault Account Password",
-  "tkbVaultAuthorizeDownload": "Since this is a Vault Account you''ll need to authorize the download.",
+  "tkbVaultAuthorizeDownload": "Since this is a Vault Account you'll need to authorize the download.",
   "tkbVaultCannotWithdraw": "Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address",
   "tkbVaultOwnedCannotAction": "Vault Account owned tokens can not perform this action.",
   "tkbVbtcTransferBroadcasted": "vBTC V2 Transfer TX Broadcasted. Hash: {hash}",
@@ -8203,7 +8253,7 @@
   "@tokenNotBurnableToast": {
     "description": "Toast shown when burning is attempted on a non-burnable token."
   },
-  "tokenNoTopicsBody": "This token doesn''t have any voting topics yet.",
+  "tokenNoTopicsBody": "This token doesn't have any voting topics yet.",
   "@tokenNoTopicsBody": {
     "description": "Info dialog body when a token has no voting topics. Apostrophe escaped per ICU."
   },
@@ -8316,7 +8366,7 @@
   "@tokenVotingEndsLabel": {
     "description": "Field label showing when voting on a topic ends."
   },
-  "tokenWebInsufficient": "This address''s ({address}) {ticker} balance is insufficient.",
+  "tokenWebInsufficient": "This address's ({address}) {ticker} balance is insufficient.",
   "@tokenWebInsufficient": {
     "description": "Toast shown when the web account does not have enough tokens to perform an action. Apostrophe escaped per ICU.",
     "placeholders": {
@@ -8590,6 +8640,7 @@
     }
   },
   "txpTermsOfUse": "Terms of Use",
+  "txpTestnetBtcFaucetAskTeam": "Test BTC for the VerifiedX testnet is not available from a public faucet yet. Ask the VerifiedX team to send some to your BTC address.",
   "txpTestnetFaucet": "Testnet Faucet",
   "txpTestnetFaucetNoTerms": "Testnet Faucet does not have any terms. Have fun!",
   "txpTileAmountLabel": "Amount: ",
@@ -10107,6 +10158,302 @@
       "reason": {
         "type": "String",
         "example": "A withdrawal is already in progress for this contract."
+      }
+    }
+  },
+  "btcNameHeightUnknown": "Could not read the latest block height. Please try again.",
+  "@btcNameHeightUnknown": {
+    "description": "Toast when the latest block height needed to sign a BTC domain message is unknown."
+  },
+  "btcAcceptTransferLabel": "Accept Transfer",
+  "@btcAcceptTransferLabel": {
+    "description": "Button on a BTC address to accept a BTC domain being transferred to it."
+  },
+  "btcAcceptTransferTitle": "Accept a BTC Domain Transfer",
+  "@btcAcceptTransferTitle": {
+    "description": "Title of the prompts that create a BTC domain transfer acceptance code."
+  },
+  "btcAcceptTransferNameBody": "Enter the BTC domain being transferred to {btcAddress}.",
+  "@btcAcceptTransferNameBody": {
+    "description": "Body of the prompt asking which BTC domain is being received.",
+    "placeholders": {
+      "btcAddress": {
+        "type": "String",
+        "example": "bc1q..."
+      }
+    }
+  },
+  "btcAcceptTransferNameLabel": "BTC Domain",
+  "@btcAcceptTransferNameLabel": {
+    "description": "Field label for the BTC domain being received."
+  },
+  "btcAcceptTransferOwnerBody": "Enter the VFX address that will control the domain. The sender must use this same VFX address.",
+  "@btcAcceptTransferOwnerBody": {
+    "description": "Body of the prompt asking for the new VFX owner of a received BTC domain."
+  },
+  "btcAcceptTransferOwnerLabel": "New VFX Owner Address",
+  "@btcAcceptTransferOwnerLabel": {
+    "description": "Field label for the new VFX owner of a received BTC domain."
+  },
+  "btcAcceptanceCodeTitle": "Acceptance Code",
+  "@btcAcceptanceCodeTitle": {
+    "description": "Title of the dialog showing a BTC domain transfer acceptance code."
+  },
+  "btcAcceptanceCodeBody": "Send this code to the person transferring {name} to you. It is valid for 24 hours and only for the VFX owner {owner}.",
+  "@btcAcceptanceCodeBody": {
+    "description": "Body of the dialog showing a BTC domain transfer acceptance code.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "satoshi.btc"
+      },
+      "owner": {
+        "type": "String",
+        "example": "xAbc..."
+      }
+    }
+  },
+  "btcCopyAcceptanceCode": "Copy Code",
+  "@btcCopyAcceptanceCode": {
+    "description": "Button copying a BTC domain transfer acceptance code."
+  },
+  "btcAcceptanceCodeCopied": "Acceptance code copied to clipboard",
+  "@btcAcceptanceCodeCopied": {
+    "description": "Toast after copying a BTC domain transfer acceptance code."
+  },
+  "btcAcceptanceSignFailed": "Could not sign the acceptance.",
+  "@btcAcceptanceSignFailed": {
+    "description": "Toast when signing a BTC domain transfer acceptance fails."
+  },
+  "btcAcceptanceCodeLabel": "Receiver's Acceptance Code",
+  "@btcAcceptanceCodeLabel": {
+    "description": "Field label for the acceptance code the BTC domain receiver provides."
+  },
+  "btcAcceptanceCodeHelpDesktop": "Optional when this wallet holds the receiving BTC address. Otherwise the receiver creates the code with \"Accept Transfer\" on their BTC address in their wallet.",
+  "@btcAcceptanceCodeHelpDesktop": {
+    "description": "Helper text under the acceptance code field in the desktop BTC domain transfer form."
+  },
+  "btcAcceptanceCodeHelpWeb": "The receiver creates this code with \"Accept Transfer\" on their BTC address in their wallet. It must name {owner} as the new VFX owner.",
+  "@btcAcceptanceCodeHelpWeb": {
+    "description": "Body of the web prompt asking for the BTC domain receiver's acceptance code.",
+    "placeholders": {
+      "owner": {
+        "type": "String",
+        "example": "xAbc..."
+      }
+    }
+  },
+  "btcAcceptanceCodeRequired": "Acceptance code is required",
+  "@btcAcceptanceCodeRequired": {
+    "description": "Validation error when the acceptance code is empty."
+  },
+  "btcAcceptanceCodeInvalid": "This is not a valid acceptance code",
+  "@btcAcceptanceCodeInvalid": {
+    "description": "Validation error when the acceptance code cannot be read."
+  },
+  "btcAcceptanceCodeMismatch": "This acceptance code is for a different domain or VFX owner",
+  "@btcAcceptanceCodeMismatch": {
+    "description": "Validation error when the acceptance code names another domain or VFX owner."
+  },
+  "bw2WatchedWithdrawalTitle": "Withdrawal in Progress",
+  "@bw2WatchedWithdrawalTitle": {
+    "description": "Title of the withdrawal dialog for a vault the chain watches, while the withdrawal is not paid yet."
+  },
+  "bw2WatchedNotMinedYet": "Your withdrawal request is not in a block yet. This updates by itself.",
+  "@bw2WatchedNotMinedYet": {
+    "description": "Watched-vault withdrawal: the node has not mined the request yet."
+  },
+  "bw2WatchedWaiting": "The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.",
+  "@bw2WatchedWaiting": {
+    "description": "Watched-vault withdrawal: waiting for its Bitcoin transaction to be pinned."
+  },
+  "bw2WatchedPinned": "The Bitcoin transaction that pays this withdrawal is fixed. The vault's signers send it on their own, and the withdrawal completes when Bitcoin confirms it.",
+  "@bw2WatchedPinned": {
+    "description": "Watched-vault withdrawal: its Bitcoin transaction is pinned and will be signed and sent by the vault's signers."
+  },
+  "bw2WatchedReleasing": "This withdrawal is being released. When Bitcoin confirms the release, its Bitcoin is back in the vault and your vBTC is refunded, less the release's Bitcoin fee.",
+  "@bw2WatchedReleasing": {
+    "description": "Watched-vault withdrawal: the requester has released it and the release transaction is pending."
+  },
+  "bw2WatchedClosed": "This withdrawal is closed. Its vBTC was returned to you.",
+  "@bw2WatchedClosed": {
+    "description": "Watched-vault withdrawal: closed without payment (released, cancelled or expired)."
+  },
+  "bw2WatchedCurrentFeeRate": "Current fee rate: {feeRate} sat/vB",
+  "@bw2WatchedCurrentFeeRate": {
+    "description": "Watched-vault withdrawal: the fee rate its newest Bitcoin transaction pays.",
+    "placeholders": {
+      "feeRate": {
+        "type": "int"
+      }
+    }
+  },
+  "bw2WatchedNotConfirmingHint": "If it is not confirming, raise its fee (paid out of the withdrawal), or release it to get your vBTC back, less the release's Bitcoin fee.",
+  "@bw2WatchedNotConfirmingHint": {
+    "description": "Watched-vault withdrawal: explains the fee raise and release actions."
+  },
+  "bw2WatchedNewFeeRateLabel": "New fee rate (sat/vB)",
+  "@bw2WatchedNewFeeRateLabel": {
+    "description": "Label of the fee rate field for raising or releasing a watched-vault withdrawal."
+  },
+  "bw2WatchedFeeRateTooLow": "At least {minimum} sat/vB",
+  "@bw2WatchedFeeRateTooLow": {
+    "description": "Hint and error: the new fee rate must be above the current one.",
+    "placeholders": {
+      "minimum": {
+        "type": "int"
+      }
+    }
+  },
+  "bw2WatchedFeeRateTooHigh": "At most {maximum} sat/vB",
+  "@bw2WatchedFeeRateTooHigh": {
+    "description": "Error: the new fee rate is above the chain's maximum.",
+    "placeholders": {
+      "maximum": {
+        "type": "int"
+      }
+    }
+  },
+  "bw2WatchedFeeRateInvalid": "Enter a fee rate in sat/vB",
+  "@bw2WatchedFeeRateInvalid": {
+    "description": "Error: the fee rate field is empty or not a number."
+  },
+  "bw2WatchedRaiseFee": "Raise Fee",
+  "@bw2WatchedRaiseFee": {
+    "description": "Button: raise the Bitcoin fee of a pinned watched-vault withdrawal."
+  },
+  "bw2WatchedRelease": "Release",
+  "@bw2WatchedRelease": {
+    "description": "Button: give a pinned watched-vault withdrawal up and have the vBTC refunded, less the Bitcoin fee."
+  },
+  "bw2WatchedNotRequester": "Only the account that requested this withdrawal can change it. Switch to {address} first.",
+  "@bw2WatchedNotRequester": {
+    "description": "Watched-vault withdrawal: the active wallet is not the requester, so it cannot raise the fee, release or cancel.",
+    "placeholders": {
+      "address": {
+        "type": "String"
+      }
+    }
+  },
+  "bw2WatchedChangeSent": "Sent. The actions come back once the chain shows the change. If nothing changes within a few minutes, they come back so you can send again.",
+  "@bw2WatchedChangeSent": {
+    "description": "Watched-vault withdrawal: a raise, release or cancel was sent and the actions are off until the chain applies it."
+  },
+  "bw2WatchedCancel": "Cancel Withdrawal",
+  "@bw2WatchedCancel": {
+    "description": "Button: cancel a watched-vault withdrawal that still waits for its Bitcoin transaction."
+  },
+  "bw2WatchedCancelBody": "Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.",
+  "@bw2WatchedCancelBody": {
+    "description": "Confirmation body for cancelling a watched-vault withdrawal."
+  },
+  "r3hAddressOtherNetwork": "This address belongs to another network. Anything sent there could never be spent.",
+  "@r3hAddressOtherNetwork": {
+    "description": "Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet)."
+  },
+  "svcNameNotResolved": "{name} could not be resolved to an address. Check the name, or send to the address itself.",
+  "@svcNameNotResolved": {
+    "description": "Send form error: a VFX name (ADNR) entered as the recipient resolves to no address.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "prvUnshieldMaxDecimals": "An unshield amount has at most {places} decimal places.",
+  "@prvUnshieldMaxDecimals": {
+    "description": "Unshield dialog error: the amount has more decimal places than the proof binds.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "r3cTypeVbtcBtcReport": "Bitcoin Report",
+  "@r3cTypeVbtcBtcReport": {
+    "description": "Transaction type 43 (VBTC_V2_BTC_REPORT): validators report a Bitcoin block's vault transactions to the chain."
+  },
+  "r3cTypeVbtcWithdrawalFeeRaise": "vBTC Withdrawal Fee Raise",
+  "@r3cTypeVbtcWithdrawalFeeRaise": {
+    "description": "Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalFeeBump(): the requester raises a pinned withdrawal's Bitcoin fee."
+  },
+  "r3cTypeVbtcWithdrawalRelease": "vBTC Withdrawal Release",
+  "@r3cTypeVbtcWithdrawalRelease": {
+    "description": "Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalRelease(): the requester gives a pinned withdrawal up for a refund."
+  },
+  "r3cTypeVbtcBtcReorg": "Bitcoin Reorg",
+  "@r3cTypeVbtcBtcReorg": {
+    "description": "Transaction type 45 (VBTC_V2_BTC_REORG): reported Bitcoin events are taken back after a Bitcoin reorganisation."
+  },
+  "r3cTypeVbtcVaultRekey": "vBTC Vault Rekey",
+  "@r3cTypeVbtcVaultRekey": {
+    "description": "Transaction type 46 (VBTC_V2_VAULT_REKEY): a vault's key is replaced by one the validators made."
+  },
+  "r3cTypeVbtcWithdrawalPin": "vBTC Withdrawal Pin",
+  "@r3cTypeVbtcWithdrawalPin": {
+    "description": "Transaction type 44 (VBTC_V2_COIN_PIN) when its data cannot be read to tell a fee raise from a release."
+  },
+  "bw2WatchedChangeNotSeen": "The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.",
+  "@bw2WatchedChangeNotSeen": {
+    "description": "Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on."
+  },
+  "tokenMintPaused": "This token contract is paused, so no tokens can be minted.",
+  "@tokenMintPaused": {
+    "description": "Mint refused before sending: the token contract is paused."
+  },
+  "tokenMintTooManyDecimals": "This token allows at most {places} decimal places.",
+  "@tokenMintTooManyDecimals": {
+    "description": "Mint refused before sending: the amount has more decimal places than the token's DecimalPlaces.",
+    "placeholders": {
+      "places": {
+        "type": "int"
+      }
+    }
+  },
+  "tokenMintOverflow": "This mint would take the supply or the balance past the largest amount the chain can hold.",
+  "@tokenMintOverflow": {
+    "description": "Mint refused before sending: the supply or the minter's balance would overflow."
+  },
+  "bw2RequestConfirmHint": "This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.",
+  "@bw2RequestConfirmHint": {
+    "description": "Withdrawal dialog while the request waits for its VFX block; true for FROST and watched vaults alike, so it names no signing."
+  },
+  "bw2WatchedChangeFailed": "The fee change could not be sent.",
+  "@bw2WatchedChangeFailed": {
+    "description": "Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason."
+  },
+  "bw2WatchedRowWaiting": "Waiting for its Bitcoin transaction",
+  "@bw2WatchedRowWaiting": {
+    "description": "Web vBTC withdrawal history row on a watched vault: open request whose Bitcoin transaction is not fixed yet."
+  },
+  "bw2WatchedRowPinned": "Bitcoin transaction fixed, waiting for Bitcoin to confirm it",
+  "@bw2WatchedRowPinned": {
+    "description": "Web vBTC withdrawal history row on a watched vault: the paying Bitcoin transaction is pinned."
+  },
+  "bw2WatchedRowReleasing": "Being released",
+  "@bw2WatchedRowReleasing": {
+    "description": "Web vBTC withdrawal history row on a watched vault: the requester released it and the release is not confirmed yet."
+  },
+  "bw2WatchedRowInProgress": "In progress",
+  "@bw2WatchedRowInProgress": {
+    "description": "Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet."
+  },
+  "btcFeeRatesAreEstimates": "Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.",
+  "@btcFeeRatesAreEstimates": {
+    "description": "Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown."
+  },
+  "btcWithdrawalBelowDust": "At {feeRate} sat/vB this withdrawal's Bitcoin transaction costs at least {feeSats} sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least {minimum} BTC, or lower the fee rate.",
+  "@btcWithdrawalBelowDust": {
+    "description": "vBTC withdraw form, before the confirm: the amount minus the smallest Bitcoin fee at the chosen rate is under the 546-sat dust limit, which the node would refuse.",
+    "placeholders": {
+      "feeRate": {
+        "type": "int"
+      },
+      "feeSats": {
+        "type": "int"
+      },
+      "minimum": {
+        "type": "String"
       }
     }
   }

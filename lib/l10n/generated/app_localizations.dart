@@ -2397,18 +2397,6 @@ abstract class AppLocalizations {
   /// **'Failed to start FROST signing'**
   String get bw2FailedStartFrost;
 
-  /// No description provided for @bw2FrostConfirmHint.
-  ///
-  /// In en, this message translates to:
-  /// **'This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.'**
-  String get bw2FrostConfirmHint;
-
-  /// No description provided for @bw2FrostConfirmHintWeb.
-  ///
-  /// In en, this message translates to:
-  /// **'This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.'**
-  String get bw2FrostConfirmHintWeb;
-
   /// No description provided for @bw2FrostFailedOrTimedOut.
   ///
   /// In en, this message translates to:
@@ -3654,13 +3642,13 @@ abstract class AppLocalizations {
   /// Big-button body for the manage-my-auction-house action. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'Manage your account\'\'s auction house and trade NFTs.'**
+  /// **'Manage your account\'s auction house and trade NFTs.'**
   String get dstManageMyAuctionHouseBody;
 
   /// Big-button body for the manage-my-auction-house action on the web wallet. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'Manage your wallet\'\'s auction house and trade NFTs.'**
+  /// **'Manage your wallet\'s auction house and trade NFTs.'**
   String get dstManageMyAuctionHouseBodyWeb;
 
   /// Inline word inserted into close-confirm titles when creating new items.
@@ -4502,6 +4490,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Initializing...'**
   String get hnavSnapshotInitializing;
+
+  /// Shown after a snapshot import with the folder holding the copy of the key databases
+  ///
+  /// In en, this message translates to:
+  /// **'A copy of your account and key databases was saved to:\n{path}'**
+  String hnavSnapshotKeyBackupSaved(String path);
 
   /// No description provided for @hnavSnapshotShuttingDown.
   ///
@@ -6720,7 +6714,7 @@ abstract class AppLocalizations {
   /// Hint inside the optional message field. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'What\'\'s this payment for?'**
+  /// **'What\'s this payment for?'**
   String get paymentMessageHint;
 
   /// Field label for the optional message attached to a payment link.
@@ -7497,11 +7491,11 @@ abstract class AppLocalizations {
   /// **'Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.'**
   String get prvExportViewingKeyBody;
 
-  /// No description provided for @prvFailedExportViewingKey.
+  /// Toast when the node refuses to export the privacy wallet's viewing key; the placeholder is the node's reason.
   ///
   /// In en, this message translates to:
-  /// **'Failed to export viewing key'**
-  String get prvFailedExportViewingKey;
+  /// **'Failed to export viewing key: {error}'**
+  String prvFailedExportViewingKey(String error);
 
   /// No description provided for @prvFailedGenerateShieldedAddress.
   ///
@@ -8067,6 +8061,18 @@ abstract class AppLocalizations {
   /// **'Viewing Key (Base64)'**
   String get prvViewingKeyBase64Label;
 
+  /// Shown before and with an exported viewing key that the node reports can spend the wallet's shielded funds.
+  ///
+  /// In en, this message translates to:
+  /// **'Anyone holding this key can move this wallet\'s shielded funds. Share it only as you would the wallet itself.'**
+  String get prvViewingKeyCanSpendBody;
+
+  /// Title of the warning shown before revealing a spend-capable viewing key.
+  ///
+  /// In en, this message translates to:
+  /// **'This key can spend your shielded funds'**
+  String get prvViewingKeyCanSpendTitle;
+
   /// No description provided for @prvViewingKeyCopied.
   ///
   /// In en, this message translates to:
@@ -8078,6 +8084,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Viewing key imported successfully'**
   String get prvViewingKeyImported;
+
+  /// Confirm button of the spend-capable viewing key warning; reveals the key.
+  ///
+  /// In en, this message translates to:
+  /// **'Show key'**
+  String get prvViewingKeyShowAction;
 
   /// No description provided for @prvViewingKeyTitle.
   ///
@@ -11577,12 +11589,6 @@ abstract class AppLocalizations {
   /// **'Failed to decrypt account keys. Check your password.'**
   String get r3eFailedDecryptKeys;
 
-  /// No description provided for @r3eFailedDeleteDb.
-  ///
-  /// In en, this message translates to:
-  /// **'Failed to delete {path} — folder still exists after delete'**
-  String r3eFailedDeleteDb(String path);
-
   /// No description provided for @r3eFailedDownloadFile.
   ///
   /// In en, this message translates to:
@@ -11918,6 +11924,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Signature Verification copied to clipboard.'**
   String get r3eSignatureCopied;
+
+  /// Snapshot import refused because the manifest lists an unsafe file
+  ///
+  /// In en, this message translates to:
+  /// **'The snapshot lists a file that can\'t be imported safely, so nothing was changed: {url}'**
+  String r3eSnapshotFileRejected(String url);
+
+  /// Snapshot import stopped because the key databases could not be backed up
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t back up your account and key databases, so nothing was deleted: {error}'**
+  String r3eSnapshotKeyBackupFailed(String error);
 
   /// No description provided for @r3eSnapshotNoUrls.
   ///
@@ -16239,6 +16257,12 @@ abstract class AppLocalizations {
   /// **'BTC Domain Name Deleted'**
   String get svcNotifBtcDomainDeletedTitle;
 
+  /// Body of the notification for a confirmed BTC domain transfer; the placeholder is the BTC address that receives the domain.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain transferred to {address}'**
+  String svcNotifBtcDomainTransferBody(String address);
+
   /// No description provided for @svcNotifBtcDomainTransferredTitle.
   ///
   /// In en, this message translates to:
@@ -16407,6 +16431,12 @@ abstract class AppLocalizations {
   /// **'Token Pause'**
   String get svcNotifTokenPauseTitle;
 
+  /// Title of the notification for a confirmed transaction that resumes a paused token.
+  ///
+  /// In en, this message translates to:
+  /// **'Token Resume'**
+  String get svcNotifTokenResumeTitle;
+
   /// No description provided for @svcNotifTokensMintedTitle.
   ///
   /// In en, this message translates to:
@@ -16524,7 +16554,7 @@ abstract class AppLocalizations {
   /// No description provided for @svcSnapshotBackupWarningBody.
   ///
   /// In en, this message translates to:
-  /// **'Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.'**
+  /// **'Importing a snapshot replaces your local blockchain data. Your account, key and vault databases are kept, and a copy of them is saved to a SnapshotBackups folder in your data folder before anything is changed.\n\nStill, make sure your private keys are backed up before you continue. If they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.'**
   String get svcSnapshotBackupWarningBody;
 
   /// No description provided for @svcSnapshotDetermineStateError.
@@ -16968,7 +16998,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbGenerateBtcAddressBody.
   ///
   /// In en, this message translates to:
-  /// **'Are you sure you want to generate this token\'\'s BTC address?'**
+  /// **'Are you sure you want to generate this token\'s BTC address?'**
   String get tkbGenerateBtcAddressBody;
 
   /// No description provided for @tkbHashLabel.
@@ -17016,7 +17046,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbManualSendSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Send coin manually to this token\'\'s BTC deposit address'**
+  /// **'Send coin manually to this token\'s BTC deposit address'**
   String get tkbManualSendSubtitle;
 
   /// No description provided for @tkbMediaNotFound.
@@ -17106,7 +17136,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbNoVaultAccounts.
   ///
   /// In en, this message translates to:
-  /// **'You don\'\'t have any Vault Accounts in this wallet'**
+  /// **'You don\'t have any Vault Accounts in this wallet'**
   String get tkbNoVaultAccounts;
 
   /// No description provided for @tkbNoVotesYet.
@@ -17430,7 +17460,7 @@ abstract class AppLocalizations {
   /// No description provided for @tkbVaultAuthorizeDownload.
   ///
   /// In en, this message translates to:
-  /// **'Since this is a Vault Account you\'\'ll need to authorize the download.'**
+  /// **'Since this is a Vault Account you\'ll need to authorize the download.'**
   String get tkbVaultAuthorizeDownload;
 
   /// No description provided for @tkbVaultCannotWithdraw.
@@ -17814,7 +17844,7 @@ abstract class AppLocalizations {
   /// Info dialog body when a token has no voting topics. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'This token doesn\'\'t have any voting topics yet.'**
+  /// **'This token doesn\'t have any voting topics yet.'**
   String get tokenNoTopicsBody;
 
   /// Info dialog title when a token has no voting topics.
@@ -17976,7 +18006,7 @@ abstract class AppLocalizations {
   /// Toast shown when the web account does not have enough tokens to perform an action. Apostrophe escaped per ICU.
   ///
   /// In en, this message translates to:
-  /// **'This address\'\'s ({address}) {ticker} balance is insufficient.'**
+  /// **'This address\'s ({address}) {ticker} balance is insufficient.'**
   String tokenWebInsufficient(String address, String ticker);
 
   /// Shown on a Vault token balance row in the web wallet in place of the Transfer, Burn and Voting buttons.
@@ -18524,6 +18554,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Terms of Use'**
   String get txpTermsOfUse;
+
+  /// No description provided for @txpTestnetBtcFaucetAskTeam.
+  ///
+  /// In en, this message translates to:
+  /// **'Test BTC for the VerifiedX testnet is not available from a public faucet yet. Ask the VerifiedX team to send some to your BTC address.'**
+  String get txpTestnetBtcFaucetAskTeam;
 
   /// No description provided for @txpTestnetFaucet.
   ///
@@ -20456,6 +20492,348 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{reason}'**
   String errNodeReason(String reason);
+
+  /// Toast when the latest block height needed to sign a BTC domain message is unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not read the latest block height. Please try again.'**
+  String get btcNameHeightUnknown;
+
+  /// Button on a BTC address to accept a BTC domain being transferred to it.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept Transfer'**
+  String get btcAcceptTransferLabel;
+
+  /// Title of the prompts that create a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Accept a BTC Domain Transfer'**
+  String get btcAcceptTransferTitle;
+
+  /// Body of the prompt asking which BTC domain is being received.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the BTC domain being transferred to {btcAddress}.'**
+  String btcAcceptTransferNameBody(String btcAddress);
+
+  /// Field label for the BTC domain being received.
+  ///
+  /// In en, this message translates to:
+  /// **'BTC Domain'**
+  String get btcAcceptTransferNameLabel;
+
+  /// Body of the prompt asking for the new VFX owner of a received BTC domain.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the VFX address that will control the domain. The sender must use this same VFX address.'**
+  String get btcAcceptTransferOwnerBody;
+
+  /// Field label for the new VFX owner of a received BTC domain.
+  ///
+  /// In en, this message translates to:
+  /// **'New VFX Owner Address'**
+  String get btcAcceptTransferOwnerLabel;
+
+  /// Title of the dialog showing a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Acceptance Code'**
+  String get btcAcceptanceCodeTitle;
+
+  /// Body of the dialog showing a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Send this code to the person transferring {name} to you. It is valid for 24 hours and only for the VFX owner {owner}.'**
+  String btcAcceptanceCodeBody(String name, String owner);
+
+  /// Button copying a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Code'**
+  String get btcCopyAcceptanceCode;
+
+  /// Toast after copying a BTC domain transfer acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'Acceptance code copied to clipboard'**
+  String get btcAcceptanceCodeCopied;
+
+  /// Toast when signing a BTC domain transfer acceptance fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not sign the acceptance.'**
+  String get btcAcceptanceSignFailed;
+
+  /// Field label for the acceptance code the BTC domain receiver provides.
+  ///
+  /// In en, this message translates to:
+  /// **'Receiver\'s Acceptance Code'**
+  String get btcAcceptanceCodeLabel;
+
+  /// Helper text under the acceptance code field in the desktop BTC domain transfer form.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional when this wallet holds the receiving BTC address. Otherwise the receiver creates the code with \"Accept Transfer\" on their BTC address in their wallet.'**
+  String get btcAcceptanceCodeHelpDesktop;
+
+  /// Body of the web prompt asking for the BTC domain receiver's acceptance code.
+  ///
+  /// In en, this message translates to:
+  /// **'The receiver creates this code with \"Accept Transfer\" on their BTC address in their wallet. It must name {owner} as the new VFX owner.'**
+  String btcAcceptanceCodeHelpWeb(String owner);
+
+  /// Validation error when the acceptance code is empty.
+  ///
+  /// In en, this message translates to:
+  /// **'Acceptance code is required'**
+  String get btcAcceptanceCodeRequired;
+
+  /// Validation error when the acceptance code cannot be read.
+  ///
+  /// In en, this message translates to:
+  /// **'This is not a valid acceptance code'**
+  String get btcAcceptanceCodeInvalid;
+
+  /// Validation error when the acceptance code names another domain or VFX owner.
+  ///
+  /// In en, this message translates to:
+  /// **'This acceptance code is for a different domain or VFX owner'**
+  String get btcAcceptanceCodeMismatch;
+
+  /// Title of the withdrawal dialog for a vault the chain watches, while the withdrawal is not paid yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal in Progress'**
+  String get bw2WatchedWithdrawalTitle;
+
+  /// Watched-vault withdrawal: the node has not mined the request yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Your withdrawal request is not in a block yet. This updates by itself.'**
+  String get bw2WatchedNotMinedYet;
+
+  /// Watched-vault withdrawal: waiting for its Bitcoin transaction to be pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.'**
+  String get bw2WatchedWaiting;
+
+  /// Watched-vault withdrawal: its Bitcoin transaction is pinned and will be signed and sent by the vault's signers.
+  ///
+  /// In en, this message translates to:
+  /// **'The Bitcoin transaction that pays this withdrawal is fixed. The vault\'s signers send it on their own, and the withdrawal completes when Bitcoin confirms it.'**
+  String get bw2WatchedPinned;
+
+  /// Watched-vault withdrawal: the requester has released it and the release transaction is pending.
+  ///
+  /// In en, this message translates to:
+  /// **'This withdrawal is being released. When Bitcoin confirms the release, its Bitcoin is back in the vault and your vBTC is refunded, less the release\'s Bitcoin fee.'**
+  String get bw2WatchedReleasing;
+
+  /// Watched-vault withdrawal: closed without payment (released, cancelled or expired).
+  ///
+  /// In en, this message translates to:
+  /// **'This withdrawal is closed. Its vBTC was returned to you.'**
+  String get bw2WatchedClosed;
+
+  /// Watched-vault withdrawal: the fee rate its newest Bitcoin transaction pays.
+  ///
+  /// In en, this message translates to:
+  /// **'Current fee rate: {feeRate} sat/vB'**
+  String bw2WatchedCurrentFeeRate(int feeRate);
+
+  /// Watched-vault withdrawal: explains the fee raise and release actions.
+  ///
+  /// In en, this message translates to:
+  /// **'If it is not confirming, raise its fee (paid out of the withdrawal), or release it to get your vBTC back, less the release\'s Bitcoin fee.'**
+  String get bw2WatchedNotConfirmingHint;
+
+  /// Label of the fee rate field for raising or releasing a watched-vault withdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'New fee rate (sat/vB)'**
+  String get bw2WatchedNewFeeRateLabel;
+
+  /// Hint and error: the new fee rate must be above the current one.
+  ///
+  /// In en, this message translates to:
+  /// **'At least {minimum} sat/vB'**
+  String bw2WatchedFeeRateTooLow(int minimum);
+
+  /// Error: the new fee rate is above the chain's maximum.
+  ///
+  /// In en, this message translates to:
+  /// **'At most {maximum} sat/vB'**
+  String bw2WatchedFeeRateTooHigh(int maximum);
+
+  /// Error: the fee rate field is empty or not a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a fee rate in sat/vB'**
+  String get bw2WatchedFeeRateInvalid;
+
+  /// Button: raise the Bitcoin fee of a pinned watched-vault withdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Raise Fee'**
+  String get bw2WatchedRaiseFee;
+
+  /// Button: give a pinned watched-vault withdrawal up and have the vBTC refunded, less the Bitcoin fee.
+  ///
+  /// In en, this message translates to:
+  /// **'Release'**
+  String get bw2WatchedRelease;
+
+  /// Watched-vault withdrawal: the active wallet is not the requester, so it cannot raise the fee, release or cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the account that requested this withdrawal can change it. Switch to {address} first.'**
+  String bw2WatchedNotRequester(String address);
+
+  /// Watched-vault withdrawal: a raise, release or cancel was sent and the actions are off until the chain applies it.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent. The actions come back once the chain shows the change. If nothing changes within a few minutes, they come back so you can send again.'**
+  String get bw2WatchedChangeSent;
+
+  /// Button: cancel a watched-vault withdrawal that still waits for its Bitcoin transaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Withdrawal'**
+  String get bw2WatchedCancel;
+
+  /// Confirmation body for cancelling a watched-vault withdrawal.
+  ///
+  /// In en, this message translates to:
+  /// **'Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.'**
+  String get bw2WatchedCancelBody;
+
+  /// Validation error: the recipient is a well-formed address with another network's version byte (for example a mainnet address on testnet).
+  ///
+  /// In en, this message translates to:
+  /// **'This address belongs to another network. Anything sent there could never be spent.'**
+  String get r3hAddressOtherNetwork;
+
+  /// Send form error: a VFX name (ADNR) entered as the recipient resolves to no address.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} could not be resolved to an address. Check the name, or send to the address itself.'**
+  String svcNameNotResolved(String name);
+
+  /// Unshield dialog error: the amount has more decimal places than the proof binds.
+  ///
+  /// In en, this message translates to:
+  /// **'An unshield amount has at most {places} decimal places.'**
+  String prvUnshieldMaxDecimals(int places);
+
+  /// Transaction type 43 (VBTC_V2_BTC_REPORT): validators report a Bitcoin block's vault transactions to the chain.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin Report'**
+  String get r3cTypeVbtcBtcReport;
+
+  /// Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalFeeBump(): the requester raises a pinned withdrawal's Bitcoin fee.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Fee Raise'**
+  String get r3cTypeVbtcWithdrawalFeeRaise;
+
+  /// Transaction type 44 (VBTC_V2_COIN_PIN) with VBTCWithdrawalRelease(): the requester gives a pinned withdrawal up for a refund.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Release'**
+  String get r3cTypeVbtcWithdrawalRelease;
+
+  /// Transaction type 45 (VBTC_V2_BTC_REORG): reported Bitcoin events are taken back after a Bitcoin reorganisation.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin Reorg'**
+  String get r3cTypeVbtcBtcReorg;
+
+  /// Transaction type 46 (VBTC_V2_VAULT_REKEY): a vault's key is replaced by one the validators made.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Vault Rekey'**
+  String get r3cTypeVbtcVaultRekey;
+
+  /// Transaction type 44 (VBTC_V2_COIN_PIN) when its data cannot be read to tell a fee raise from a release.
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Pin'**
+  String get r3cTypeVbtcWithdrawalPin;
+
+  /// Watched-vault withdrawal: a sent raise, release or cancel never showed up, and the actions are back on.
+  ///
+  /// In en, this message translates to:
+  /// **'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.'**
+  String get bw2WatchedChangeNotSeen;
+
+  /// Mint refused before sending: the token contract is paused.
+  ///
+  /// In en, this message translates to:
+  /// **'This token contract is paused, so no tokens can be minted.'**
+  String get tokenMintPaused;
+
+  /// Mint refused before sending: the amount has more decimal places than the token's DecimalPlaces.
+  ///
+  /// In en, this message translates to:
+  /// **'This token allows at most {places} decimal places.'**
+  String tokenMintTooManyDecimals(int places);
+
+  /// Mint refused before sending: the supply or the minter's balance would overflow.
+  ///
+  /// In en, this message translates to:
+  /// **'This mint would take the supply or the balance past the largest amount the chain can hold.'**
+  String get tokenMintOverflow;
+
+  /// Withdrawal dialog while the request waits for its VFX block; true for FROST and watched vaults alike, so it names no signing.
+  ///
+  /// In en, this message translates to:
+  /// **'This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.'**
+  String get bw2RequestConfirmHint;
+
+  /// Desktop watched-vault withdrawal: fallback when the CLI refuses a Raise Fee or Release without a reason.
+  ///
+  /// In en, this message translates to:
+  /// **'The fee change could not be sent.'**
+  String get bw2WatchedChangeFailed;
+
+  /// Web vBTC withdrawal history row on a watched vault: open request whose Bitcoin transaction is not fixed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for its Bitcoin transaction'**
+  String get bw2WatchedRowWaiting;
+
+  /// Web vBTC withdrawal history row on a watched vault: the paying Bitcoin transaction is pinned.
+  ///
+  /// In en, this message translates to:
+  /// **'Bitcoin transaction fixed, waiting for Bitcoin to confirm it'**
+  String get bw2WatchedRowPinned;
+
+  /// Web vBTC withdrawal history row on a watched vault: the requester released it and the release is not confirmed yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Being released'**
+  String get bw2WatchedRowReleasing;
+
+  /// Web vBTC withdrawal history row on a watched vault: open request whose pin state the explorer has not read yet.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress'**
+  String get bw2WatchedRowInProgress;
+
+  /// Shown with a BTC fee-rate picker when the recommended-fees API failed and the fixed fallback table is shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.'**
+  String get btcFeeRatesAreEstimates;
+
+  /// vBTC withdraw form, before the confirm: the amount minus the smallest Bitcoin fee at the chosen rate is under the 546-sat dust limit, which the node would refuse.
+  ///
+  /// In en, this message translates to:
+  /// **'At {feeRate} sat/vB this withdrawal\'s Bitcoin transaction costs at least {feeSats} sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least {minimum} BTC, or lower the fee rate.'**
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

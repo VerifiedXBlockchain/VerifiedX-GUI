@@ -15,6 +15,7 @@ import '../models/btc_send_tx_result.dart';
 import '../models/btc_transaction.dart';
 import '../models/btc_utxo.dart';
 import '../utils.dart';
+import '../utils/btc_name_acceptance.dart';
 import '../../../core/utils/user_error_message.dart';
 
 class BtcService extends BaseService {
@@ -307,14 +308,57 @@ class BtcService extends BaseService {
     return null;
   }
 
+  /// Transfers the BTC domain of [fromBtcAddress]. [acceptance] is the
+  /// receiving BTC address's signed acceptance; without it the node signs
+  /// itself when it holds the receiving key.
   Future<String?> transferAdnr({
     required String toRbxAddress,
     required String fromBtcAddress,
     required String toBtcAddress,
+    BtcNameAcceptance? acceptance,
   }) async {
     try {
-      final result = await getJson("/TransferAdnr/$toRbxAddress/$fromBtcAddress/$toBtcAddress", cleanPath: false);
+      final result = await getJson(
+        "/TransferAdnr/$toRbxAddress/$fromBtcAddress/$toBtcAddress",
+        cleanPath: false,
+        params: acceptance == null
+            ? const {}
+            : {
+                'btcToMessage': acceptance.message,
+                'btcToSignature': acceptance.signature,
+              },
+      );
       return _adnrTxHashOrToast(result);
+    } catch (e, st) {
+      print(e);
+      print(st);
+      Toast.error();
+      return null;
+    }
+  }
+
+  /// Signs, with this wallet's key for [btcAddress], acceptance of [name]
+  /// being transferred to it with [newOwner] as the VFX owner. Returns the
+  /// acceptance code, or null after showing the node's message.
+  Future<String?> signAdnrTransferAcceptance({
+    required String btcAddress,
+    required String name,
+    required String newOwner,
+  }) async {
+    try {
+      final result = await getJson(
+        "/SignAdnrTransferAcceptance/$btcAddress/${Uri.encodeComponent(BtcNameAcceptance.normalizeName(name))}/$newOwner",
+        cleanPath: false,
+      );
+
+      final message = result['BTCToMessage'];
+      final signature = result['BTCToSignature'];
+      if (result['Success'] == true && message is String && message.isNotEmpty && signature is String && signature.isNotEmpty) {
+        return BtcNameAcceptance.build(message, signature);
+      }
+
+      Toast.error(result['Message'] ?? globalL10n.btcAcceptanceSignFailed);
+      return null;
     } catch (e, st) {
       print(e);
       print(st);

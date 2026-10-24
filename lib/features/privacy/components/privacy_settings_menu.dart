@@ -10,7 +10,9 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../services/privacy_service.dart';
+import '../providers/privacy_actions_provider.dart';
 import '../providers/shielded_address_provider.dart';
+import '../utils/privacy_unlock.dart';
 import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
 
 class PrivacySettingsMenu extends ConsumerWidget {
@@ -108,59 +110,79 @@ class PrivacySettingsMenu extends ConsumerWidget {
       return;
     }
 
-    final result = await PrivacyService().exportViewingKey(zfxAddress: zfxAddress);
-    if (result != null && result['ViewingKeyBase64'] != null) {
-      final key = result['ViewingKeyBase64'] as String;
-      await InfoDialog.show(
-        title: l10n.prvViewingKeyTitle,
-        content: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 450),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                l10n.prvExportViewingKeyBody,
-                style: const TextStyle(color: Colors.white70, fontSize: 13),
+    await requirePrivacyUnlock(ref);
+    if (!ref.read(privacyUnlockedProvider)) {
+      return;
+    }
+
+    final exported = await ref.read(privacyActionsProvider.notifier).exportViewingKey(zfxAddress: zfxAddress);
+    if (exported == null) {
+      return;
+    }
+
+    // Core 9.0 exports a key that can spend: say so before showing it, and
+    // not under the view-only wording.
+    if (exported.canSpend) {
+      final confirmed = await ConfirmDialog.show(
+        title: l10n.prvViewingKeyCanSpendTitle,
+        body: l10n.prvViewingKeyCanSpendBody,
+        confirmText: l10n.prvViewingKeyShowAction,
+        cancelText: l10n.actionCancel,
+        destructive: true,
+      );
+      if (confirmed != true) {
+        return;
+      }
+    }
+
+    final key = exported.key;
+    await InfoDialog.show(
+      title: l10n.prvViewingKeyTitle,
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 450),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              exported.canSpend ? l10n.prvViewingKeyCanSpendBody : l10n.prvExportViewingKeyBody,
+              style: const TextStyle(color: Colors.white70, fontSize: 13),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(8),
               ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.black26,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SelectableText(
-                        key,
-                        style: const TextStyle(
-                          fontFamily: 'monospace',
-                          fontSize: 12,
-                          color: Colors.white,
-                        ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SelectableText(
+                      key,
+                      style: const TextStyle(
+                        fontFamily: 'monospace',
+                        fontSize: 12,
+                        color: Colors.white,
                       ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.copy, size: 16),
-                      tooltip: l10n.prvCopyViewingKey,
-                      color: Colors.white54,
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: key));
-                        Toast.message(l10n.prvViewingKeyCopied);
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.copy, size: 16),
+                    tooltip: l10n.prvCopyViewingKey,
+                    color: Colors.white54,
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: key));
+                      Toast.message(l10n.prvViewingKeyCopied);
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      );
-    } else {
-      Toast.error(l10n.prvFailedExportViewingKey);
-    }
+      ),
+    );
   }
 
   Future<void> _importViewingKey() async {

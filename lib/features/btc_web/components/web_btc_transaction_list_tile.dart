@@ -12,12 +12,12 @@ import '../../../core/theme/app_theme.dart';
 import '../../../core/theme/colors.dart';
 import '../../../generated/assets.gen.dart';
 import '../../../l10n/generated/app_localizations.dart';
-import '../../web/providers/all_btc_addresses_provider.dart';
 import '../models/btc_web_transaction.dart';
 import '../../../utils/toast.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../providers/btc_web_vbtc_token_list_provider.dart';
+import '../../../core/providers/web_session_provider.dart';
 import '../../../utils/formatting.dart';
 
 class WebBtcTransactionListTile extends BaseComponent {
@@ -36,15 +36,11 @@ class WebBtcTransactionListTile extends BaseComponent {
   Widget desktopBody(BuildContext context, WidgetRef ref) {
     final tx = transaction;
 
-    final myAddresses = ref.watch(allBtcAddressesProvider);
     final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
-    final amount = tx.amountBtc();
+    final amount = tx.amountBtcFor(ref.watch(webSessionProvider.select((v) => v.btcKeypair?.address)));
 
-    final toAddress = tx.toAddress(myAddresses);
-    final fromAddress = tx.fromAddress();
-
-    final isVbtc = vbtcTokenAddresses.contains(toAddress) || vbtcTokenAddresses.contains(fromAddress);
+    final isVbtc = tx.touchesAnyAddress(vbtcTokenAddresses);
 
     return _WebBtcTransactionListTileContent(amount: amount, tx: tx, compact: compact, isVbtc: isVbtc);
   }
@@ -53,15 +49,11 @@ class WebBtcTransactionListTile extends BaseComponent {
   Widget body(BuildContext context, WidgetRef ref) {
     final tx = transaction;
 
-    final myAddresses = ref.watch(allBtcAddressesProvider);
     final vbtcTokenAddresses = ref.watch(btcWebVbtcTokenListProvider).map((v) => v.depositAddress).toList();
 
-    final amount = tx.amountBtc();
+    final amount = tx.amountBtcFor(ref.watch(webSessionProvider.select((v) => v.btcKeypair?.address)));
 
-    final toAddress = tx.toAddress(myAddresses);
-    final fromAddress = tx.fromAddress();
-
-    final isVbtc = vbtcTokenAddresses.contains(toAddress) || vbtcTokenAddresses.contains(fromAddress);
+    final isVbtc = tx.touchesAnyAddress(vbtcTokenAddresses);
     return AppCard(
       padding: 0,
       color: AppColors.getGray(ColorShade.s100),
@@ -433,9 +425,5 @@ class _WebBtcTransactionListTileContentState extends State<_WebBtcTransactionLis
 }
 
 openTxOnExplorer(BtcWebTransaction tx) {
-  if (Env.btcIsTestNet) {
-    launchUrlString("https://mempool.space/testnet4/tx/${tx.txid}");
-  } else {
-    launchUrlString("https://mempool.space/tx/${tx.txid}");
-  }
+  launchUrlString(Env.btcExplorerTxUrl(tx.txid));
 }

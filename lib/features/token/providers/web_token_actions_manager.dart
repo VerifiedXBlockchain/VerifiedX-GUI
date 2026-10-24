@@ -9,6 +9,9 @@ import '../../../core/utils.dart';
 import '../../bridge/providers/wallet_info_provider.dart';
 import '../../nft/models/nft.dart';
 import '../models/web_fungible_token.dart';
+import '../token_rules.dart';
+import '../utils/token_mint_messages.dart';
+import 'web_token_list_provider.dart';
 import '../../web/utils/raw_transaction.dart';
 
 import '../../../core/app_constants.dart';
@@ -18,6 +21,7 @@ import '../../../l10n/l10n_helper.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
 import '../../btc_web/models/btc_web_vbtc_token.dart';
+import '../../btc_web/models/watched_withdrawal.dart';
 import '../../btc_web/providers/btc_web_vbtc_token_list_provider.dart';
 import '../../btc_web/utils/vbtc_multi_allocator.dart';
 import '../../btc_web/services/frost_resume_guard.dart';
@@ -122,6 +126,24 @@ class WebTokenActionsManager {
   Future<bool?> mintTokens(
       WebFungibleToken token, String address, double amount,
       [bool silent = false]) async {
+    // Core refuses these from TokenMintRulesHeight; say why before sending.
+    final holderBalance = ref
+        .read(webTokenListProvider)
+        .where((b) => b.address == address && b.token.smartContractId == token.smartContractId)
+        .map((b) => b.balance)
+        .fold<double?>(null, (sum, b) => (sum ?? 0) + b);
+    final problem = tokenMintProblem(
+      amount: amount,
+      decimalPlaces: token.decimalPlaces,
+      isPaused: token.isPaused,
+      currentSupply: token.circulatingSupply,
+      holderBalance: holderBalance,
+    );
+    if (problem != null) {
+      if (!silent) Toast.error(tokenMintProblemMessage(problem, token.decimalPlaces ?? 0));
+      return false;
+    }
+
     final data = {
       "Function": "TokenMint()",
       "ContractUID": token.smartContractId,
@@ -590,6 +612,69 @@ class WebTokenActionsManager {
     }
   }
 
+  /// Where [requestHash] stands if its vault is one the chain watches, or null
+  /// for any other vault, whose withdrawal is completed with FROST and a
+  /// Type 28 transaction as before. Null also when the explorer cannot be
+  /// read; the FROST path cannot sign for a watched vault either, since the
+  /// node gives it nothing to sign.
+  Future<WatchedWithdrawal?> watchedV2Withdrawal({
+    required String scIdentifier,
+    required String requestHash,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) return null;
+    return ExplorerService().getV2WatchedWithdrawal(
+      scIdentifier: scIdentifier,
+      withdrawalRequestHash: requestHash,
+      ownerAddress: keypair.address,
+    );
+  }
+
+  /// Raises the Bitcoin fee of a pinned withdrawal on a watched vault, or with
+  /// [release] gives the withdrawal up so its coins return to the vault and the
+  /// vBTC is refunded, less that Bitcoin fee. One Type 44 transaction from the
+  /// requester to itself; the chain then fixes the replacement. [feeRate] must
+  /// be above the rate the newest transaction pays.
+  Future<bool?> raiseWatchedWithdrawalFee({
+    required String scIdentifier,
+    required String requestHash,
+    required int feeRate,
+    required bool release,
+    void Function(String hash)? onSent,
+  }) async {
+    final keypair = ref.read(webSessionProvider).keypair;
+    if (keypair == null) {
+      Toast.error(globalL10n.bw2NoKeypairToSign);
+      return false;
+    }
+
+    return await _verifyConfirmAndSendTx(
+      toAddress: keypair.address,
+      txType: TxType.vbtcV2CoinPin,
+      data: watchedWithdrawalFeeBumpData(
+        scIdentifier: scIdentifier,
+        withdrawalRequestHash: requestHash,
+        feeRate: feeRate,
+        release: release,
+      ),
+      onBroadcast: (hash) {
+        onSent?.call(hash);
+        ref.read(webTransactionListProvider(keypair.address).notifier).insertPendingTx(
+              WebTransaction(
+                hash: hash,
+                toAddress: keypair.address,
+                fromAddress: keypair.address,
+                type: TxType.vbtcV2CoinPin,
+                amount: 0,
+                fee: 0,
+                date: DateTime.now(),
+                height: 0,
+              ),
+            );
+      },
+    );
+  }
+
   /// Records the Type 28 completion TX on the VFX chain for a withdrawal whose
   /// Bitcoin transaction has already been broadcast.
   ///
@@ -873,6 +958,14 @@ class WebTokenActionsManager {
           withdrawalRequestHash: requestHash,
           ownerAddress: keypair.address,
         );
+
+        // A watched vault answers with the withdrawal's state and nothing to
+        // sign. Callers check first (watchedV2Withdrawal); this catches a vault
+        // that became watched between the check and here.
+        final watched = WatchedWithdrawal.fromCompletionAnswer(prepared);
+        if (watched != null) {
+          return {'success': false, 'watched_withdrawal': watched, 'message': watched.summary ?? watched.message};
+        }
 
         if (prepared['success'] != true || prepared['StartMessage'] == null) {
           return {'success': false, 'message': prepared['message'] ?? globalL10n.bw2FailedPrepareFrost};

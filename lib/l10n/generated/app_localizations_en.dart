@@ -1239,12 +1239,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bw2FailedStartFrost => 'Failed to start FROST signing';
 
   @override
-  String get bw2FrostConfirmHint => 'This typically takes 10-20 seconds. The FROST signing will begin automatically once confirmed.';
-
-  @override
-  String get bw2FrostConfirmHintWeb => 'This typically takes 10-20 seconds. FROST signing will begin automatically once confirmed.';
-
-  @override
   String get bw2FrostFailedOrTimedOut => 'FROST signing failed or timed out. The withdrawal may still complete — check back shortly.';
 
   @override
@@ -1924,10 +1918,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dstManageMyAuctionHouse => 'Manage my Auction House';
 
   @override
-  String get dstManageMyAuctionHouseBody => 'Manage your account\'\'s auction house and trade NFTs.';
+  String get dstManageMyAuctionHouseBody => 'Manage your account\'s auction house and trade NFTs.';
 
   @override
-  String get dstManageMyAuctionHouseBodyWeb => 'Manage your wallet\'\'s auction house and trade NFTs.';
+  String get dstManageMyAuctionHouseBodyWeb => 'Manage your wallet\'s auction house and trade NFTs.';
 
   @override
   String get dstModeCreation => 'creation';
@@ -2370,6 +2364,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hnavSnapshotInitializing => 'Initializing...';
+
+  @override
+  String hnavSnapshotKeyBackupSaved(String path) {
+    return 'A copy of your account and key databases was saved to:\n$path';
+  }
 
   @override
   String get hnavSnapshotShuttingDown => 'Shutting down CLI...';
@@ -3543,7 +3542,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentLinkTitle => 'Payment Link';
 
   @override
-  String get paymentMessageHint => 'What\'\'s this payment for?';
+  String get paymentMessageHint => 'What\'s this payment for?';
 
   @override
   String get paymentMessageLabel => 'Message (Optional)';
@@ -3979,7 +3978,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prvExportViewingKeyBody => 'Copy this key to import a view-only wallet on another device. This key can see balances but cannot spend.';
 
   @override
-  String get prvFailedExportViewingKey => 'Failed to export viewing key';
+  String prvFailedExportViewingKey(String error) {
+    return 'Failed to export viewing key: $error';
+  }
 
   @override
   String get prvFailedGenerateShieldedAddress => 'Failed to generate shielded address';
@@ -4310,10 +4311,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get prvViewingKeyBase64Label => 'Viewing Key (Base64)';
 
   @override
+  String get prvViewingKeyCanSpendBody => 'Anyone holding this key can move this wallet\'s shielded funds. Share it only as you would the wallet itself.';
+
+  @override
+  String get prvViewingKeyCanSpendTitle => 'This key can spend your shielded funds';
+
+  @override
   String get prvViewingKeyCopied => 'Viewing key copied to clipboard';
 
   @override
   String get prvViewingKeyImported => 'Viewing key imported successfully';
+
+  @override
+  String get prvViewingKeyShowAction => 'Show key';
 
   @override
   String get prvViewingKeyTitle => 'Viewing Key';
@@ -6143,11 +6153,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get r3eFailedDecryptKeys => 'Failed to decrypt account keys. Check your password.';
 
   @override
-  String r3eFailedDeleteDb(String path) {
-    return 'Failed to delete $path — folder still exists after delete';
-  }
-
-  @override
   String r3eFailedDownloadFile(String filename, String attempts) {
     return 'Failed to download $filename after $attempts attempts';
   }
@@ -6328,6 +6333,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get r3eSignatureCopied => 'Signature Verification copied to clipboard.';
+
+  @override
+  String r3eSnapshotFileRejected(String url) {
+    return 'The snapshot lists a file that can\'t be imported safely, so nothing was changed: $url';
+  }
+
+  @override
+  String r3eSnapshotKeyBackupFailed(String error) {
+    return 'Couldn\'t back up your account and key databases, so nothing was deleted: $error';
+  }
 
   @override
   String get r3eSnapshotNoUrls => 'Snapshot has no download URLs';
@@ -8674,6 +8689,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcNotifBtcDomainDeletedTitle => 'BTC Domain Name Deleted';
 
   @override
+  String svcNotifBtcDomainTransferBody(String address) {
+    return 'BTC Domain transferred to $address';
+  }
+
+  @override
   String get svcNotifBtcDomainTransferredTitle => 'BTC Domain Name Transferred';
 
   @override
@@ -8768,6 +8788,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcNotifTokenPauseTitle => 'Token Pause';
 
   @override
+  String get svcNotifTokenResumeTitle => 'Token Resume';
+
+  @override
   String get svcNotifTokensMintedTitle => 'Tokens Minted';
 
   @override
@@ -8841,7 +8864,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get svcSignatureNotValid => 'Signature not valid';
 
   @override
-  String get svcSnapshotBackupWarningBody => 'Be sure your private keys are backed up as this process will wipe your database folder.\n\nIf they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.';
+  String get svcSnapshotBackupWarningBody => 'Importing a snapshot replaces your local blockchain data. Your account, key and vault databases are kept, and a copy of them is saved to a SnapshotBackups folder in your data folder before anything is changed.\n\nStill, make sure your private keys are backed up before you continue. If they are NOT backed up, click cancel now, back them up, and then restart your wallet to be prompted with this again.';
 
   @override
   String get svcSnapshotDetermineStateError => 'Could not determine latest snapshot state';
@@ -9107,7 +9130,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbGenerateBtcAddress => 'Generate BTC Address';
 
   @override
-  String get tkbGenerateBtcAddressBody => 'Are you sure you want to generate this token\'\'s BTC address?';
+  String get tkbGenerateBtcAddressBody => 'Are you sure you want to generate this token\'s BTC address?';
 
   @override
   String tkbHashLabel(String hash) {
@@ -9135,7 +9158,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbManualSendExchangeSubtitle => 'Send BTC from any exchange or wallet to this token\'s deposit address';
 
   @override
-  String get tkbManualSendSubtitle => 'Send coin manually to this token\'\'s BTC deposit address';
+  String get tkbManualSendSubtitle => 'Send coin manually to this token\'s BTC deposit address';
 
   @override
   String tkbMediaNotFound(String fileName) {
@@ -9188,7 +9211,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbNoUtxos => 'No UTXOs';
 
   @override
-  String get tkbNoVaultAccounts => 'You don\'\'t have any Vault Accounts in this wallet';
+  String get tkbNoVaultAccounts => 'You don\'t have any Vault Accounts in this wallet';
 
   @override
   String get tkbNoVotesYet => 'No votes yet.';
@@ -9372,7 +9395,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tkbVaultAccountPassword => 'Vault Account Password';
 
   @override
-  String get tkbVaultAuthorizeDownload => 'Since this is a Vault Account you\'\'ll need to authorize the download.';
+  String get tkbVaultAuthorizeDownload => 'Since this is a Vault Account you\'ll need to authorize the download.';
 
   @override
   String get tkbVaultCannotWithdraw => 'Vault Accounts can not withdrawl. Please transfer vBTC to a standard VFX address';
@@ -9578,7 +9601,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tokenNotBurnableToast => 'This token is not burnable';
 
   @override
-  String get tokenNoTopicsBody => 'This token doesn\'\'t have any voting topics yet.';
+  String get tokenNoTopicsBody => 'This token doesn\'t have any voting topics yet.';
 
   @override
   String get tokenNoTopicsTitle => 'No Topics';
@@ -9662,7 +9685,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String tokenWebInsufficient(String address, String ticker) {
-    return 'This address\'\'s ($address) $ticker balance is insufficient.';
+    return 'This address\'s ($address) $ticker balance is insufficient.';
   }
 
   @override
@@ -9971,6 +9994,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get txpTermsOfUse => 'Terms of Use';
+
+  @override
+  String get txpTestnetBtcFaucetAskTeam => 'Test BTC for the VerifiedX testnet is not available from a public faucet yet. Ask the VerifiedX team to send some to your BTC address.';
 
   @override
   String get txpTestnetFaucet => 'Testnet Faucet';
@@ -11044,5 +11070,198 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String errNodeReason(String reason) {
     return '$reason';
+  }
+
+  @override
+  String get btcNameHeightUnknown => 'Could not read the latest block height. Please try again.';
+
+  @override
+  String get btcAcceptTransferLabel => 'Accept Transfer';
+
+  @override
+  String get btcAcceptTransferTitle => 'Accept a BTC Domain Transfer';
+
+  @override
+  String btcAcceptTransferNameBody(String btcAddress) {
+    return 'Enter the BTC domain being transferred to $btcAddress.';
+  }
+
+  @override
+  String get btcAcceptTransferNameLabel => 'BTC Domain';
+
+  @override
+  String get btcAcceptTransferOwnerBody => 'Enter the VFX address that will control the domain. The sender must use this same VFX address.';
+
+  @override
+  String get btcAcceptTransferOwnerLabel => 'New VFX Owner Address';
+
+  @override
+  String get btcAcceptanceCodeTitle => 'Acceptance Code';
+
+  @override
+  String btcAcceptanceCodeBody(String name, String owner) {
+    return 'Send this code to the person transferring $name to you. It is valid for 24 hours and only for the VFX owner $owner.';
+  }
+
+  @override
+  String get btcCopyAcceptanceCode => 'Copy Code';
+
+  @override
+  String get btcAcceptanceCodeCopied => 'Acceptance code copied to clipboard';
+
+  @override
+  String get btcAcceptanceSignFailed => 'Could not sign the acceptance.';
+
+  @override
+  String get btcAcceptanceCodeLabel => 'Receiver\'s Acceptance Code';
+
+  @override
+  String get btcAcceptanceCodeHelpDesktop => 'Optional when this wallet holds the receiving BTC address. Otherwise the receiver creates the code with \"Accept Transfer\" on their BTC address in their wallet.';
+
+  @override
+  String btcAcceptanceCodeHelpWeb(String owner) {
+    return 'The receiver creates this code with \"Accept Transfer\" on their BTC address in their wallet. It must name $owner as the new VFX owner.';
+  }
+
+  @override
+  String get btcAcceptanceCodeRequired => 'Acceptance code is required';
+
+  @override
+  String get btcAcceptanceCodeInvalid => 'This is not a valid acceptance code';
+
+  @override
+  String get btcAcceptanceCodeMismatch => 'This acceptance code is for a different domain or VFX owner';
+
+  @override
+  String get bw2WatchedWithdrawalTitle => 'Withdrawal in Progress';
+
+  @override
+  String get bw2WatchedNotMinedYet => 'Your withdrawal request is not in a block yet. This updates by itself.';
+
+  @override
+  String get bw2WatchedWaiting => 'The chain is fixing the Bitcoin transaction that pays this withdrawal. Nothing needs to be done.';
+
+  @override
+  String get bw2WatchedPinned => 'The Bitcoin transaction that pays this withdrawal is fixed. The vault\'s signers send it on their own, and the withdrawal completes when Bitcoin confirms it.';
+
+  @override
+  String get bw2WatchedReleasing => 'This withdrawal is being released. When Bitcoin confirms the release, its Bitcoin is back in the vault and your vBTC is refunded, less the release\'s Bitcoin fee.';
+
+  @override
+  String get bw2WatchedClosed => 'This withdrawal is closed. Its vBTC was returned to you.';
+
+  @override
+  String bw2WatchedCurrentFeeRate(int feeRate) {
+    return 'Current fee rate: $feeRate sat/vB';
+  }
+
+  @override
+  String get bw2WatchedNotConfirmingHint => 'If it is not confirming, raise its fee (paid out of the withdrawal), or release it to get your vBTC back, less the release\'s Bitcoin fee.';
+
+  @override
+  String get bw2WatchedNewFeeRateLabel => 'New fee rate (sat/vB)';
+
+  @override
+  String bw2WatchedFeeRateTooLow(int minimum) {
+    return 'At least $minimum sat/vB';
+  }
+
+  @override
+  String bw2WatchedFeeRateTooHigh(int maximum) {
+    return 'At most $maximum sat/vB';
+  }
+
+  @override
+  String get bw2WatchedFeeRateInvalid => 'Enter a fee rate in sat/vB';
+
+  @override
+  String get bw2WatchedRaiseFee => 'Raise Fee';
+
+  @override
+  String get bw2WatchedRelease => 'Release';
+
+  @override
+  String bw2WatchedNotRequester(String address) {
+    return 'Only the account that requested this withdrawal can change it. Switch to $address first.';
+  }
+
+  @override
+  String get bw2WatchedChangeSent => 'Sent. The actions come back once the chain shows the change. If nothing changes within a few minutes, they come back so you can send again.';
+
+  @override
+  String get bw2WatchedCancel => 'Cancel Withdrawal';
+
+  @override
+  String get bw2WatchedCancelBody => 'Its Bitcoin transaction is not fixed yet, so it can still be cancelled. When the cancel is mined the withdrawal is closed and your vBTC is returned; no vote is held.';
+
+  @override
+  String get r3hAddressOtherNetwork => 'This address belongs to another network. Anything sent there could never be spent.';
+
+  @override
+  String svcNameNotResolved(String name) {
+    return '$name could not be resolved to an address. Check the name, or send to the address itself.';
+  }
+
+  @override
+  String prvUnshieldMaxDecimals(int places) {
+    return 'An unshield amount has at most $places decimal places.';
+  }
+
+  @override
+  String get r3cTypeVbtcBtcReport => 'Bitcoin Report';
+
+  @override
+  String get r3cTypeVbtcWithdrawalFeeRaise => 'vBTC Withdrawal Fee Raise';
+
+  @override
+  String get r3cTypeVbtcWithdrawalRelease => 'vBTC Withdrawal Release';
+
+  @override
+  String get r3cTypeVbtcBtcReorg => 'Bitcoin Reorg';
+
+  @override
+  String get r3cTypeVbtcVaultRekey => 'vBTC Vault Rekey';
+
+  @override
+  String get r3cTypeVbtcWithdrawalPin => 'vBTC Withdrawal Pin';
+
+  @override
+  String get bw2WatchedChangeNotSeen => 'The last change did not show up on the chain within a few minutes, so it was probably dropped. You can send it again.';
+
+  @override
+  String get tokenMintPaused => 'This token contract is paused, so no tokens can be minted.';
+
+  @override
+  String tokenMintTooManyDecimals(int places) {
+    return 'This token allows at most $places decimal places.';
+  }
+
+  @override
+  String get tokenMintOverflow => 'This mint would take the supply or the balance past the largest amount the chain can hold.';
+
+  @override
+  String get bw2RequestConfirmHint => 'This typically takes 10-20 seconds. The withdrawal continues automatically once confirmed.';
+
+  @override
+  String get bw2WatchedChangeFailed => 'The fee change could not be sent.';
+
+  @override
+  String get bw2WatchedRowWaiting => 'Waiting for its Bitcoin transaction';
+
+  @override
+  String get bw2WatchedRowPinned => 'Bitcoin transaction fixed, waiting for Bitcoin to confirm it';
+
+  @override
+  String get bw2WatchedRowReleasing => 'Being released';
+
+  @override
+  String get bw2WatchedRowInProgress => 'In progress';
+
+  @override
+  String get btcFeeRatesAreEstimates => 'Live fee rates could not be loaded. These rates are estimates, not what the network is asking for now; check them or set a custom rate.';
+
+  @override
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
+    return 'At $feeRate sat/vB this withdrawal\'s Bitcoin transaction costs at least $feeSats sats, taken out of the amount, and at least 546 sats must be left to pay. Withdraw at least $minimum BTC, or lower the fee rate.';
   }
 }

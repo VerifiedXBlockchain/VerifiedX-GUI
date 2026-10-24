@@ -1239,12 +1239,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get bw2FailedStartFrost => 'No se pudo iniciar la firma FROST';
 
   @override
-  String get bw2FrostConfirmHint => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
-
-  @override
-  String get bw2FrostConfirmHintWeb => 'Esto suele tardar entre 10 y 20 segundos. La firma FROST comenzará automáticamente una vez confirmada.';
-
-  @override
   String get bw2FrostFailedOrTimedOut => 'La firma FROST falló o agotó el tiempo de espera. Es posible que el retiro aún se complete: vuelve a verificar en breve.';
 
   @override
@@ -2370,6 +2364,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hnavSnapshotInitializing => 'Inicializando...';
+
+  @override
+  String hnavSnapshotKeyBackupSaved(String path) {
+    return 'Se guardó una copia de tus bases de datos de cuentas y claves en:\n$path';
+  }
 
   @override
   String get hnavSnapshotShuttingDown => 'Cerrando el CLI...';
@@ -3979,7 +3978,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvExportViewingKeyBody => 'Copia esta clave para importar una billetera de solo lectura en otro dispositivo. Esta clave puede ver saldos pero no puede gastar.';
 
   @override
-  String get prvFailedExportViewingKey => 'No se pudo exportar la clave de visualización';
+  String prvFailedExportViewingKey(String error) {
+    return 'No se pudo exportar la clave de visualización: $error';
+  }
 
   @override
   String get prvFailedGenerateShieldedAddress => 'No se pudo generar la dirección blindada';
@@ -4310,10 +4311,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get prvViewingKeyBase64Label => 'Clave de visualización (Base64)';
 
   @override
+  String get prvViewingKeyCanSpendBody => 'Quien tenga esta clave puede mover los fondos blindados de esta billetera. Compártela solo como compartirías la billetera misma.';
+
+  @override
+  String get prvViewingKeyCanSpendTitle => 'Esta clave puede gastar tus fondos blindados';
+
+  @override
   String get prvViewingKeyCopied => 'Clave de visualización copiada al portapapeles';
 
   @override
   String get prvViewingKeyImported => 'Clave de visualización importada correctamente';
+
+  @override
+  String get prvViewingKeyShowAction => 'Mostrar clave';
 
   @override
   String get prvViewingKeyTitle => 'Clave de visualización';
@@ -6143,11 +6153,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get r3eFailedDecryptKeys => 'No se pudieron descifrar las claves. Revisa tu contraseña.';
 
   @override
-  String r3eFailedDeleteDb(String path) {
-    return 'No se pudo eliminar $path: la carpeta sigue existiendo tras el borrado';
-  }
-
-  @override
   String r3eFailedDownloadFile(String filename, String attempts) {
     return 'No se pudo descargar $filename tras $attempts intentos';
   }
@@ -6328,6 +6333,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get r3eSignatureCopied => 'Firma de verificación copiada al portapapeles.';
+
+  @override
+  String r3eSnapshotFileRejected(String url) {
+    return 'El snapshot incluye un archivo que no se puede importar de forma segura, así que no se cambió nada: $url';
+  }
+
+  @override
+  String r3eSnapshotKeyBackupFailed(String error) {
+    return 'No se pudo respaldar tus bases de datos de cuentas y claves, así que no se eliminó nada: $error';
+  }
 
   @override
   String get r3eSnapshotNoUrls => 'El snapshot no tiene URLs de descarga';
@@ -8674,6 +8689,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcNotifBtcDomainDeletedTitle => 'Nombre de dominio BTC eliminado';
 
   @override
+  String svcNotifBtcDomainTransferBody(String address) {
+    return 'Dominio BTC transferido a $address';
+  }
+
+  @override
   String get svcNotifBtcDomainTransferredTitle => 'Nombre de dominio BTC transferido';
 
   @override
@@ -8768,6 +8788,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcNotifTokenPauseTitle => 'Pausa de token';
 
   @override
+  String get svcNotifTokenResumeTitle => 'Reanudación de token';
+
+  @override
   String get svcNotifTokensMintedTitle => 'Tokens acuñados';
 
   @override
@@ -8841,7 +8864,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get svcSignatureNotValid => 'Firma no válida';
 
   @override
-  String get svcSnapshotBackupWarningBody => 'Asegúrate de tener una copia de seguridad de tus claves privadas, ya que este proceso borrará la carpeta de tu base de datos.\n\nSi NO tienes copia de seguridad, haz clic en cancelar ahora, haz la copia y luego reinicia tu billetera para que se te vuelva a preguntar.';
+  String get svcSnapshotBackupWarningBody => 'Importar un snapshot reemplaza los datos locales de la blockchain. Tus bases de datos de cuentas, claves y bóvedas se conservan, y antes de cambiar nada se guarda una copia en una carpeta SnapshotBackups dentro de tu carpeta de datos.\n\nAun así, asegúrate de tener una copia de seguridad de tus claves privadas antes de continuar. Si NO tienes copia de seguridad, haz clic en cancelar ahora, haz la copia y luego reinicia tu billetera para que se te vuelva a preguntar.';
 
   @override
   String get svcSnapshotDetermineStateError => 'No se pudo determinar el estado del último snapshot';
@@ -9973,6 +9996,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get txpTermsOfUse => 'Términos de uso';
 
   @override
+  String get txpTestnetBtcFaucetAskTeam => 'El BTC de prueba para la testnet de VerifiedX aún no está disponible en un faucet público. Pide al equipo de VerifiedX que envíe algo a tu dirección BTC.';
+
+  @override
   String get txpTestnetFaucet => 'Faucet de testnet';
 
   @override
@@ -11044,5 +11070,198 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String errNodeReason(String reason) {
     return 'Mensaje del nodo: $reason';
+  }
+
+  @override
+  String get btcNameHeightUnknown => 'No se pudo leer la altura del último bloque. Inténtalo de nuevo.';
+
+  @override
+  String get btcAcceptTransferLabel => 'Aceptar transferencia';
+
+  @override
+  String get btcAcceptTransferTitle => 'Aceptar una transferencia de dominio BTC';
+
+  @override
+  String btcAcceptTransferNameBody(String btcAddress) {
+    return 'Introduce el dominio BTC que se transfiere a $btcAddress.';
+  }
+
+  @override
+  String get btcAcceptTransferNameLabel => 'Dominio BTC';
+
+  @override
+  String get btcAcceptTransferOwnerBody => 'Introduce la dirección VFX que controlará el dominio. El remitente debe usar esta misma dirección VFX.';
+
+  @override
+  String get btcAcceptTransferOwnerLabel => 'Dirección VFX del nuevo propietario';
+
+  @override
+  String get btcAcceptanceCodeTitle => 'Código de aceptación';
+
+  @override
+  String btcAcceptanceCodeBody(String name, String owner) {
+    return 'Envía este código a la persona que te transfiere $name. Es válido durante 24 horas y solo para el propietario VFX $owner.';
+  }
+
+  @override
+  String get btcCopyAcceptanceCode => 'Copiar código';
+
+  @override
+  String get btcAcceptanceCodeCopied => 'Código de aceptación copiado al portapapeles';
+
+  @override
+  String get btcAcceptanceSignFailed => 'No se pudo firmar la aceptación.';
+
+  @override
+  String get btcAcceptanceCodeLabel => 'Código de aceptación del receptor';
+
+  @override
+  String get btcAcceptanceCodeHelpDesktop => 'Opcional si esta billetera tiene la dirección BTC receptora. Si no, el receptor crea el código con \"Aceptar transferencia\" en su dirección BTC, en su billetera.';
+
+  @override
+  String btcAcceptanceCodeHelpWeb(String owner) {
+    return 'El receptor crea este código con \"Aceptar transferencia\" en su dirección BTC, en su billetera. Debe indicar $owner como nuevo propietario VFX.';
+  }
+
+  @override
+  String get btcAcceptanceCodeRequired => 'El código de aceptación es obligatorio';
+
+  @override
+  String get btcAcceptanceCodeInvalid => 'Este no es un código de aceptación válido';
+
+  @override
+  String get btcAcceptanceCodeMismatch => 'Este código de aceptación es para otro dominio u otro propietario VFX';
+
+  @override
+  String get bw2WatchedWithdrawalTitle => 'Retiro en curso';
+
+  @override
+  String get bw2WatchedNotMinedYet => 'Tu solicitud de retiro aún no está en un bloque. Esto se actualiza solo.';
+
+  @override
+  String get bw2WatchedWaiting => 'La cadena está fijando la transacción de Bitcoin que paga este retiro. No hace falta hacer nada.';
+
+  @override
+  String get bw2WatchedPinned => 'La transacción de Bitcoin que paga este retiro está fijada. Los firmantes de la bóveda la envían por su cuenta y el retiro se completa cuando Bitcoin la confirma.';
+
+  @override
+  String get bw2WatchedReleasing => 'Este retiro se está liberando. Cuando Bitcoin confirme la liberación, su Bitcoin vuelve a la bóveda y se te reembolsa el vBTC, menos la comisión de Bitcoin de la liberación.';
+
+  @override
+  String get bw2WatchedClosed => 'Este retiro está cerrado. Su vBTC se te devolvió.';
+
+  @override
+  String bw2WatchedCurrentFeeRate(int feeRate) {
+    return 'Comisión actual: $feeRate sat/vB';
+  }
+
+  @override
+  String get bw2WatchedNotConfirmingHint => 'Si no se confirma, sube su comisión (se paga del retiro) o libéralo para recuperar tu vBTC, menos la comisión de Bitcoin de la liberación.';
+
+  @override
+  String get bw2WatchedNewFeeRateLabel => 'Nueva comisión (sat/vB)';
+
+  @override
+  String bw2WatchedFeeRateTooLow(int minimum) {
+    return 'Al menos $minimum sat/vB';
+  }
+
+  @override
+  String bw2WatchedFeeRateTooHigh(int maximum) {
+    return 'Como máximo $maximum sat/vB';
+  }
+
+  @override
+  String get bw2WatchedFeeRateInvalid => 'Introduce una comisión en sat/vB';
+
+  @override
+  String get bw2WatchedRaiseFee => 'Subir comisión';
+
+  @override
+  String get bw2WatchedRelease => 'Liberar';
+
+  @override
+  String bw2WatchedNotRequester(String address) {
+    return 'Solo la cuenta que solicitó este retiro puede cambiarlo. Cambia primero a $address.';
+  }
+
+  @override
+  String get bw2WatchedChangeSent => 'Enviado. Las acciones vuelven cuando la cadena muestre el cambio. Si nada cambia en unos minutos, vuelven para que puedas enviarlo de nuevo.';
+
+  @override
+  String get bw2WatchedCancel => 'Cancelar retiro';
+
+  @override
+  String get bw2WatchedCancelBody => 'Su transacción de Bitcoin aún no está fijada, así que todavía se puede cancelar. Cuando se mine la cancelación, el retiro se cierra y se te devuelve el vBTC; no hay votación.';
+
+  @override
+  String get r3hAddressOtherNetwork => 'Esta dirección pertenece a otra red. Lo que se envíe allí nunca podría gastarse.';
+
+  @override
+  String svcNameNotResolved(String name) {
+    return 'No se pudo resolver $name a una dirección. Revisa el nombre o envía a la dirección directamente.';
+  }
+
+  @override
+  String prvUnshieldMaxDecimals(int places) {
+    return 'Un monto a desblindar tiene como máximo $places decimales.';
+  }
+
+  @override
+  String get r3cTypeVbtcBtcReport => 'Informe de Bitcoin';
+
+  @override
+  String get r3cTypeVbtcWithdrawalFeeRaise => 'Aumento de comisión de retiro vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalRelease => 'Liberación de retiro vBTC';
+
+  @override
+  String get r3cTypeVbtcBtcReorg => 'Reorganización de Bitcoin';
+
+  @override
+  String get r3cTypeVbtcVaultRekey => 'Cambio de clave de bóveda vBTC';
+
+  @override
+  String get r3cTypeVbtcWithdrawalPin => 'Fijación de retiro vBTC';
+
+  @override
+  String get bw2WatchedChangeNotSeen => 'El último cambio no apareció en la cadena en unos minutos, así que probablemente se descartó. Puedes enviarlo de nuevo.';
+
+  @override
+  String get tokenMintPaused => 'Este contrato de token está en pausa, así que no se pueden acuñar tokens.';
+
+  @override
+  String tokenMintTooManyDecimals(int places) {
+    return 'Este token admite como máximo $places decimales.';
+  }
+
+  @override
+  String get tokenMintOverflow => 'Esta acuñación llevaría el suministro o el saldo por encima de la cantidad máxima que admite la cadena.';
+
+  @override
+  String get bw2RequestConfirmHint => 'Esto suele tardar entre 10 y 20 segundos. El retiro continúa automáticamente una vez confirmado.';
+
+  @override
+  String get bw2WatchedChangeFailed => 'No se pudo enviar el cambio de comisión.';
+
+  @override
+  String get bw2WatchedRowWaiting => 'Esperando su transacción de Bitcoin';
+
+  @override
+  String get bw2WatchedRowPinned => 'Transacción de Bitcoin fijada, esperando a que Bitcoin la confirme';
+
+  @override
+  String get bw2WatchedRowReleasing => 'Liberándose';
+
+  @override
+  String get bw2WatchedRowInProgress => 'En curso';
+
+  @override
+  String get btcFeeRatesAreEstimates => 'No se pudieron cargar las comisiones actuales. Estas comisiones son estimaciones, no lo que pide la red ahora; revísalas o define una comisión personalizada.';
+
+  @override
+  String btcWithdrawalBelowDust(int feeRate, int feeSats, String minimum) {
+    return 'A $feeRate sat/vB la transacción de Bitcoin de este retiro cuesta al menos $feeSats sats, que se descuentan del monto, y deben quedar al menos 546 sats para pagar. Retira al menos $minimum BTC o baja la comisión.';
   }
 }

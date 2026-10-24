@@ -18,7 +18,9 @@ import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../raw/raw_service.dart';
+import '../../web/providers/web_latest_block_provider.dart';
 import '../../web/utils/raw_transaction.dart';
+import '../../btc/utils/btc_name_acceptance.dart';
 import '../providers/adnr_pending_provider.dart';
 import '../services/adnr_service.dart';
 
@@ -167,11 +169,24 @@ class CreateAdnrDialog extends BaseComponent {
                       String? btcSignature;
 
                       if (isBtc) {
-                        // btcMessage = "1711996047";
-                        btcMessage =
+                        final latestHeight =
+                            await fetchWebLatestBlockHeight(ref);
+                        if (latestHeight == null) {
+                          ref.read(globalLoadingProvider.notifier).complete();
+                          Toast.error(l10n.btcNameHeightUnknown);
+                          return;
+                        }
+
+                        final timestamp =
                             (DateTime.now().millisecondsSinceEpoch / 1000)
-                                .round()
-                                .toString();
+                                .round();
+                        // Once active, the signed message names the VFX
+                        // sender and the domain; before that it is the
+                        // timestamp alone.
+                        btcMessage = btcNameSignedMessagesActive(latestHeight)
+                            ? BtcNameAcceptance.boundMessage(
+                                timestamp, keyPair.address, domainWithoutSuffix)
+                            : timestamp.toString();
                         btcSignature = await BtcWebService().signMessage(
                             ref.read(webSessionProvider).btcKeypair!.wif,
                             btcMessage);

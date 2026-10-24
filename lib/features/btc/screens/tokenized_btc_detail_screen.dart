@@ -194,11 +194,12 @@ class TokenizedBtcDetailScreen extends BaseScreen {
                           value: scOwner,
                           withCopy: true,
                         ),
-                      _DetailRow(
-                        label: AppLocalizations.of(context).btcDetailDepositAddressLabel,
-                        value: token.btcAddress ?? AppLocalizations.of(context).r3fNotGenerated,
-                        withCopy: token.btcAddress != null,
-                      ),
+                      if (scOwner == token.rbxAddress)
+                        _DetailRow(
+                          label: AppLocalizations.of(context).btcDetailDepositAddressLabel,
+                          value: token.btcAddress ?? AppLocalizations.of(context).r3fNotGenerated,
+                          withCopy: token.btcAddress != null,
+                        ),
                       _DetailRow(
                         label: AppLocalizations.of(context).btcDetailScIdLabel,
                         value: token.smartContractUid,

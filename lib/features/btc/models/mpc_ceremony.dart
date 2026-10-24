@@ -59,4 +59,8 @@ class MpcCeremony with _$MpcCeremony {
       status == MpcCeremonyStatus.completed ||
       status == MpcCeremonyStatus.failed ||
       status == MpcCeremonyStatus.timedOut;
+
+  /// Whether [validatorCount] says how many validators took part. Core fills
+  /// it from the DKG result, so it reads 0 until the ceremony has run.
+  bool get hasValidatorCount => (validatorCount ?? 0) > 0;
 }

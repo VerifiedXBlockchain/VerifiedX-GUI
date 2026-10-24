@@ -219,6 +219,11 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                       // makes validators reject a ceremony that then hangs.
                       final isMine = wr['requestor_address'] == address;
                       final isRequested = withdrawalIsResumable(wr) && isMine;
+                      // A watched vault's request is paid by the chain:
+                      // nothing to resume, only to follow, and a cancel is
+                      // taken only until its Bitcoin transaction is fixed.
+                      final watched = token.isWatched || wr['pin_state'] != null;
+                      final canCancel = isRequested && withdrawalRowCanCancel(wr, vaultIsWatched: token.isWatched);
                       final unrecorded = PendingWithdrawalCompletionService().get(
                         wr['request_transaction_hash'] ?? '',
                       );
@@ -233,9 +238,11 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                               subtitle: Text(
                                 unrecorded != null
                                     ? AppLocalizations.of(context).bw2BtcSentTapToSettle
-                                    : isRequested
-                                        ? AppLocalizations.of(context).bw2PendingTapResume
-                                        : AppLocalizations.of(context).bw2StatusWithValue(status.toString()),
+                                    : watched && withdrawalIsResumable(wr)
+                                        ? _watchedRowSubtitle(context, wr)
+                                        : isRequested
+                                            ? AppLocalizations.of(context).bw2PendingTapResume
+                                            : AppLocalizations.of(context).bw2StatusWithValue(status.toString()),
                                 style: unrecorded != null
                                     ? const TextStyle(color: Color(0xFFE0A32E))
                                     : null,
@@ -260,14 +267,16 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
                               // out; once it has, the request must be settled.
                               trailing: unrecorded != null
                                   ? const Icon(Icons.warning_amber_rounded, color: Color(0xFFE0A32E))
-                                  : isRequested
+                                  : canCancel
                                       ? IconButton(
                                           icon: const Icon(Icons.cancel, color: Colors.redAccent, size: 20),
                                           tooltip: AppLocalizations.of(context).bw2CancelWithdrawalTooltip,
                                           onPressed: () async {
                                             final confirmed = await ConfirmDialog.show(
                                               title: AppLocalizations.of(context).bw2CancelWithdrawalQuestion,
-                                              body: AppLocalizations.of(context).bw2CancelWithdrawalBody,
+                                              body: watched
+                                                  ? AppLocalizations.of(context).bw2WatchedCancelBody
+                                                  : AppLocalizations.of(context).bw2CancelWithdrawalBody,
                                             );
                                             if (confirmed == true) {
                                               final manager = ref.read(webTokenActionsManager);
@@ -321,6 +330,20 @@ class WebTokenizedBtcDetailScreen extends BaseScreen {
         },
         error: (_, __) => Text(AppLocalizations.of(context).btcWebError),
         loading: () => const CenteredLoader());
+  }
+}
+
+String _watchedRowSubtitle(BuildContext context, Map<String, dynamic> withdrawalRequest) {
+  final l10n = AppLocalizations.of(context);
+  switch (watchedRowState(withdrawalRequest)) {
+    case WatchedRowState.waiting:
+      return l10n.bw2WatchedRowWaiting;
+    case WatchedRowState.pinned:
+      return l10n.bw2WatchedRowPinned;
+    case WatchedRowState.releasing:
+      return l10n.bw2WatchedRowReleasing;
+    case WatchedRowState.unknown:
+      return l10n.bw2WatchedRowInProgress;
   }
 }
 
@@ -582,7 +605,13 @@ class __TokenDetailRefresherState extends ConsumerState<_TokenDetailRefresher> {
   void initState() {
     timer = Timer.periodic(Duration(seconds: 10), (timer) {
       final family = "${widget.scId}_${widget.address}";
+      // The vault's Bitcoin history is a session-long list that loads once,
+      // so a deposit made while the screen is open would stay hidden.
+      final depositAddress = ref.read(btcWebVbtcTokenDetailProvider(family)).valueOrNull?.depositAddress;
       ref.invalidate(btcWebVbtcTokenDetailProvider(family));
+      if (depositAddress != null) {
+        ref.read(btcWebTransactionListProvider(depositAddress).notifier).reload();
+      }
     });
     super.initState();
   }

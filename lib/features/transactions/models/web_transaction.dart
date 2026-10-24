@@ -55,6 +55,13 @@ class WebTransaction with _$WebTransaction {
   /// list card and explorer both show local time.
   DateTime get localDate => date.toLocal();
 
+  /// Whether this transaction paid into [address] or [raAddress], the
+  /// viewer's VFX and Vault accounts. Spyglass amounts are positive whichever
+  /// way the funds moved, so the direction comes from the addresses.
+  bool isIncomingFor({required String? address, required String? raAddress}) {
+    return toAddress == address || toAddress == raAddress;
+  }
+
   /// [unlockTime] (the Vault settlement time) in the viewer's time zone,
   /// matching [localDate]. `unlock_time` parses as UTC too.
   DateTime? get localUnlockTime => unlockTime?.toLocal();
@@ -305,6 +312,26 @@ class WebTransaction with _$WebTransaction {
         return l10n.r3cTypeVbtcBridgeExitToBtcComplete;
       case 42:
         return l10n.r3cTypeVbtcBridgeExitToBtcFailed;
+      // Bitcoin attestation (Core 9.0). 43, 45 and 46 are sender-less: from and
+      // to are "BTC_Attestation", so they reach no user's own history.
+      case 43:
+        return l10n.r3cTypeVbtcBtcReport;
+      case 44:
+        // One type for both: the requester raises a pinned withdrawal's fee,
+        // or gives the withdrawal up.
+        // Unreadable data gets the neutral name rather than a guess.
+        switch (nftDataValue('Function')) {
+          case "VBTCWithdrawalRelease()":
+            return l10n.r3cTypeVbtcWithdrawalRelease;
+          case "VBTCWithdrawalFeeBump()":
+            return l10n.r3cTypeVbtcWithdrawalFeeRaise;
+          default:
+            return l10n.r3cTypeVbtcWithdrawalPin;
+        }
+      case 45:
+        return l10n.r3cTypeVbtcBtcReorg;
+      case 46:
+        return l10n.r3cTypeVbtcVaultRekey;
       default:
         return type.toString();
     }
@@ -347,6 +374,8 @@ class WebTransaction with _$WebTransaction {
     // V2 vBTC transaction types (mint, transfer, withdrawal, cancel, vote, bridge)
     if (type >= 25 && type <= 30) return true;
     if (type == 37 || type == 38) return true;
+    // A watched-vault withdrawal's fee raise or release.
+    if (type == 44) return true;
 
     return false;
   }

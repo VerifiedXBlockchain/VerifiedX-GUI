@@ -120,11 +120,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                           button: true,
                           child: InkWell(
                             onTap: () async {
-                              if (Env.btcIsTestNet) {
-                                launchUrlString("https://mempool.space/testnet4/tx/${transaction.hash}");
-                              } else {
-                                launchUrlString("https://mempool.space/tx/${transaction.hash}");
-                              }
+                              launchUrlString(Env.btcExplorerTxUrl(transaction.hash));
                             },
                             child: const Icon(
                               Icons.open_in_new,
@@ -345,7 +341,7 @@ class BtcTransactionListTileState extends BaseComponentState<BtcTransactionListT
                             height: 12,
                           ),
                           ...transaction.utxos.map((utxo) {
-                            return UtxoListTile(utxo: utxo);
+                            return UtxoListTile(utxo: utxo, showUsage: false);
                           }).toList(),
                         ],
                       ),

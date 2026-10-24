@@ -744,7 +744,7 @@ class WebAccountInfoBtc extends BaseComponent {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "${formatBtcAmount(latestBtcTx.amountBtc())} BTC",
+                            "${formatBtcAmount(latestBtcTx.amountBtcFor(ref.watch(webSessionProvider).btcKeypair?.address))} BTC",
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -887,13 +887,7 @@ class WebAccountInfoVbtc extends BaseComponent {
                 button: true,
                 child: GestureDetector(
                   onTap: () {
-                    if (Env.btcIsTestNet) {
-                      launchUrlString(
-                          "https://mempool.space/testnet4/tx/${latestVbtcBtcTx!.txid}");
-                    } else {
-                      launchUrlString(
-                          "https://mempool.space/tx/${latestVbtcBtcTx!.txid}");
-                    }
+                    launchUrlString(Env.btcExplorerTxUrl(latestVbtcBtcTx!.txid));
 
                     // ref.read(webSessionProvider.notifier).setSelectedWalletType(WalletType.btc);
                     // AutoTabsRouter.of(context).setActiveIndex(WebRouteIndex.transactions);
@@ -905,7 +899,7 @@ class WebAccountInfoVbtc extends BaseComponent {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "${formatBtcAmount(latestVbtcBtcTx.amountBtc())} vBTC",
+                          "${formatBtcAmount(latestVbtcBtcTx.amountBtcFor(ref.watch(webSessionProvider).btcKeypair?.address))} vBTC",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,
@@ -1069,6 +1063,11 @@ class _LatestVfxTx extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isIncoming = latestVfxTx.isIncomingFor(
+      address: ref.watch(webSessionProvider.select((v) => v.keypair?.address)),
+      raAddress: ref.watch(webSessionProvider.select((v) => v.raKeypair?.address)),
+    );
+
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       child: Semantics(
@@ -1098,9 +1097,9 @@ class _LatestVfxTx extends BaseComponent {
                   Text(
                     "${latestVfxTx.amount} VFX",
                     style: TextStyle(
-                      color: latestVfxTx.amount != null && latestVfxTx.amount! < 0
-                          ? Colors.red.shade500
-                          : Theme.of(context).colorScheme.success,
+                      color: isIncoming
+                          ? Theme.of(context).colorScheme.success
+                          : Colors.red.shade500,
                       fontWeight: FontWeight.w600,
                     ),
                   )

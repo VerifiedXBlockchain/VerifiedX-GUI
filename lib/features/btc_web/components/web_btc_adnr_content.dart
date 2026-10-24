@@ -18,7 +18,11 @@ import '../../../core/dialogs.dart';
 import '../../../core/providers/web_session_provider.dart';
 import '../../../core/theme/components.dart';
 import '../../raw/raw_service.dart';
+import '../../web/providers/web_latest_block_provider.dart';
 import '../../web/utils/raw_transaction.dart';
+import '../../btc/components/accept_btc_name_transfer.dart';
+import '../../btc/utils/btc_name_acceptance.dart';
+import '../services/btc_web_service.dart';
 
 class WebBtcAdnrContent extends BaseComponent {
   final BtcWebAccount account;
@@ -96,30 +100,79 @@ class WebBtcAdnrContent extends BaseComponent {
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: const Divider(),
                 ),
-                AppButton(
-                  label: AppLocalizations.of(context).btcCreateDomain,
-                  variant: AppColorVariant.Btc,
-                  onPressed: () async {
-                    if (!ALLOW_FAUCET_FOR_BTC_DOMAINS) {
-                      if (balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION)) {
-                        Toast.error(
-                            "Not enough VFX in your account to create a BTC domain. $ADNR_COST VFX required (plus TX fee).");
-                        return;
-                      }
-                    }
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    if (btcNameAcceptanceAvailable(ref.watch(webLatestBlockProvider)?.height))
+                      AppButton(
+                        label: AppLocalizations.of(context).btcAcceptTransferLabel,
+                        type: AppButtonType.Text,
+                        variant: AppColorVariant.Btc,
+                        onPressed: () async {
+                          final btcKeypair = ref.read(webSessionProvider).btcKeypair;
+                          if (btcKeypair == null) {
+                            Toast.error(AppLocalizations.of(context).adnrNoBtcWif);
+                            return;
+                          }
 
-                    await showDialog(
-                      context: context,
-                      builder: (context) {
-                        return CreateAdnrDialog(
-                          address: address,
-                          adnr: "",
-                          isBtc: true,
+                          await acceptBtcNameTransfer(
+                            context: context,
+                            btcAddress: btcKeypair.address,
+                            initialOwner:
+                                ref.read(webSessionProvider).keypair?.address ?? "",
+                            sign: (name, newOwner) async {
+                              try {
+                                final timestamp =
+                                    (DateTime.now().millisecondsSinceEpoch / 1000)
+                                        .round();
+                                final message = BtcNameAcceptance.boundMessage(
+                                    timestamp, newOwner, name);
+                                final signature = await BtcWebService()
+                                    .signMessage(btcKeypair.wif, message);
+                                if (signature.isEmpty) {
+                                  Toast.error(AppLocalizations.of(context)
+                                      .btcAcceptanceSignFailed);
+                                  return null;
+                                }
+                                return BtcNameAcceptance.build(message, signature);
+                              } catch (e) {
+                                print(e);
+                                Toast.error(AppLocalizations.of(context)
+                                    .btcAcceptanceSignFailed);
+                                return null;
+                              }
+                            },
+                          );
+                        },
+                      ),
+                    AppButton(
+                      label: AppLocalizations.of(context).btcCreateDomain,
+                      variant: AppColorVariant.Btc,
+                      onPressed: () async {
+                        if (!ALLOW_FAUCET_FOR_BTC_DOMAINS) {
+                          if (balance < (ADNR_COST + MIN_RBX_FOR_SC_ACTION)) {
+                            Toast.error(
+                                "Not enough VFX in your account to create a BTC domain. $ADNR_COST VFX required (plus TX fee).");
+                            return;
+                          }
+                        }
+
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CreateAdnrDialog(
+                              address: address,
+                              adnr: "",
+                              isBtc: true,
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                )
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -191,6 +244,52 @@ class WebBtcAdnrContent extends BaseComponent {
                         if (vfxToAddress == null) return;
 
                         ref.read(globalLoadingProvider.notifier).start();
+                        final latestHeight =
+                            await fetchWebLatestBlockHeight(ref);
+                        ref.read(globalLoadingProvider.notifier).complete();
+                        if (latestHeight == null) {
+                          Toast.error(AppLocalizations.of(context)
+                              .btcNameHeightUnknown);
+                          return;
+                        }
+
+                        // Once active, the receiving BTC address must sign
+                        // its acceptance of this domain for the new owner.
+                        BtcNameAcceptance? acceptance;
+                        if (btcNameSignedMessagesActive(latestHeight)) {
+                          final code = await PromptModal.show(
+                            contextOverride: context,
+                            title: AppLocalizations.of(context)
+                                .btcAcceptanceCodeLabel,
+                            body: AppLocalizations.of(context)
+                                .btcAcceptanceCodeHelpWeb(vfxToAddress),
+                            labelText: AppLocalizations.of(context)
+                                .btcAcceptanceCodeLabel,
+                            lines: 4,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return AppLocalizations.of(context)
+                                    .btcAcceptanceCodeRequired;
+                              }
+                              final parsed = BtcNameAcceptance.parse(value);
+                              if (parsed == null) {
+                                return AppLocalizations.of(context)
+                                    .btcAcceptanceCodeInvalid;
+                              }
+                              if (!parsed.matches(
+                                  owner: vfxToAddress, name: adnr)) {
+                                return AppLocalizations.of(context)
+                                    .btcAcceptanceCodeMismatch;
+                              }
+                              return null;
+                            },
+                          );
+                          if (code == null) return;
+                          acceptance = BtcNameAcceptance.parse(code);
+                          if (acceptance == null) return;
+                        }
+
+                        ref.read(globalLoadingProvider.notifier).start();
 
                         final generated = await RawTransaction.generate(
                           keypair: ref.read(webSessionProvider).keypair!,
@@ -201,6 +300,10 @@ class WebBtcAdnrContent extends BaseComponent {
                             "Function": "BTCAdnrTransfer()",
                             "BTCToAddress": btcToAddress,
                             "BTCFromAddress": account.address,
+                            if (acceptance != null) ...{
+                              "BTCToMessage": acceptance.message,
+                              "BTCToSignature": acceptance.signature,
+                            },
                           },
                         );
 

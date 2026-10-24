@@ -22,6 +22,7 @@ _$_WebFungibleToken _$$_WebFungibleTokenFromJson(Map<String, dynamic> json) =>
           .fromJson(json['circulating_supply'] as Object),
       initialSupply: const NumOrStringDoubleConverter()
           .fromJson(json['initial_supply'] as Object),
+      decimalPlaces: json['decimal_places'] as int?,
       bannedAddresses: (json['banned_addresses'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
@@ -44,6 +45,7 @@ Map<String, dynamic> _$$_WebFungibleTokenToJson(_$_WebFungibleToken instance) =>
           const NumOrStringDoubleConverter().toJson(instance.circulatingSupply),
       'initial_supply':
           const NumOrStringDoubleConverter().toJson(instance.initialSupply),
+      'decimal_places': instance.decimalPlaces,
       'banned_addresses': instance.bannedAddresses,
       'created_at': instance.createdAt.toIso8601String(),
     };

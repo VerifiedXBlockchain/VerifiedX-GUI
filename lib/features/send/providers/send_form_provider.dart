@@ -29,6 +29,9 @@ import '../../../utils/validation.dart';
 import '../../bridge/models/log_entry.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../../bridge/services/bridge_service.dart';
+import '../../bridge/services/bridge_service_v2.dart';
+import '../../../core/services/explorer_service.dart';
+import '../../../core/utils/user_error_message.dart';
 import '../../web/providers/web_currency_segmented_button_provider.dart';
 import '../../web/providers/web_selected_account_provider.dart';
 import '../../web/utils/pending_debits.dart';
@@ -218,7 +221,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       if (currentWallet == null) {
         return globalL10n.messageNoAccountSelected;
       }
-      if (currentWallet.balance < parsed) {
+      if (currentWallet.spendableBalance < parsed) {
         return globalL10n.svcNotEnoughBalanceAccount;
       }
     }
@@ -381,13 +384,15 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
   /// False when the destination is one of the user's own addresses and they
   /// decline the warning; such a send only spends the network fee.
-  Future<bool> _confirmSendToOwnAddress(bool isBtc) async {
-    if (!isOwnSendAddress(address, _ownAddresses(isBtc))) {
+  /// [destination] is where the send goes when it is not the field as typed
+  /// (desktop: the address a name resolves to), and [shown] how to name it.
+  Future<bool> _confirmSendToOwnAddress(bool isBtc, {String? destination, String? shown}) async {
+    if (!isOwnSendAddress(destination ?? address, _ownAddresses(isBtc))) {
       return true;
     }
     final confirmed = await ConfirmDialog.show(
       title: globalL10n.sendOwnAddressTitle,
-      body: globalL10n.sendOwnAddressBody(address.trim()),
+      body: globalL10n.sendOwnAddressBody(shown ?? (destination ?? address).trim()),
       confirmText: globalL10n.actionContinue,
       cancelText: globalL10n.actionCancel,
     );
@@ -431,6 +436,12 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
     String senderAddress = "";
     Wallet? currentWallet;
     String? feeNotice;
+    // Where the VFX goes. A name is replaced by the address it resolves to,
+    // since the node refuses a transaction addressed to a name.
+    String recipient = address.trim().replaceAll("\n", "");
+    // What the user typed when the send started, kept with [recipient] so the
+    // confirmation names what is sent even if the field is edited meanwhile.
+    final typedRecipient = recipient;
 
     final isBtc = kIsWeb ? ref.read(webSelectedAccountProvider)?.type == WebCurrencyType.btc : ref.read(sessionProvider).btcSelected;
 
@@ -530,11 +541,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                     variant: AppColorVariant.Btc,
                     type: AppButtonType.Text,
                     onPressed: () {
-                      if (Env.btcIsTestNet) {
-                        launchUrlString("https://mempool.space/testnet4/tx/$txHash");
-                      } else {
-                        launchUrlString("https://mempool.space/tx/$txHash");
-                      }
+                      launchUrlString(Env.btcExplorerTxUrl(txHash));
                     },
                   )
                 ],
@@ -653,11 +660,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
                       variant: AppColorVariant.Btc,
                       type: AppButtonType.Text,
                       onPressed: () {
-                        if (Env.btcIsTestNet) {
-                          launchUrlString("https://mempool.space/testnet4/tx/$txHash");
-                        } else {
-                          launchUrlString("https://mempool.space/tx/$txHash");
-                        }
+                        launchUrlString(Env.btcExplorerTxUrl(txHash));
                       },
                     )
                   ],
@@ -688,7 +691,21 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       if (!guardWalletIsSynced(ref)) return;
       if (!guardWalletIsNotResyncing(ref)) return;
 
-      final addressIsValid = await BridgeService().validateSendToAddress(address.trim().replaceAll("\n", ""));
+      if (looksLikeVfxName(recipient)) {
+        final resolved = await BridgeServiceV2().resolveAdnr(recipient);
+        if (resolved == null) {
+          Toast.error(globalL10n.svcNameNotResolved(recipient));
+          return;
+        }
+        recipient = resolved;
+      }
+
+      if (isOtherNetworksVfxAddress(recipient)) {
+        Toast.error(globalL10n.r3hAddressOtherNetwork);
+        return;
+      }
+
+      final addressIsValid = await BridgeService().validateSendToAddress(recipient);
 
       if (!addressIsValid) {
         Toast.error(globalL10n.nftInvalidAddressToast);
@@ -701,7 +718,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         return;
       }
 
-      if (amountDouble > currentWallet.balance) {
+      if (amountDouble > currentWallet.spendableBalance) {
         Toast.error(globalL10n.svcInsufficientBalanceToSend);
         return;
       }
@@ -713,7 +730,11 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         }
       }
 
-      if (!await _confirmSendToOwnAddress(false)) {
+      if (!await _confirmSendToOwnAddress(
+        false,
+        destination: recipient,
+        shown: recipient == typedRecipient ? recipient : "$typedRecipient ($recipient)",
+      )) {
         return;
       }
 
@@ -721,7 +742,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       // plain-transfer fee quote does not cover; the node checks those.
       if (!currentWallet.isReserved) {
         final fromAddress = currentWallet.address;
-        final toAddress = address.trim().replaceAll("\n", "");
+        final toAddress = recipient;
         final fitted = await _fitVfxAmountWithFee(
           amount: amountDouble,
           spendable: currentWallet.balance,
@@ -761,7 +782,29 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
       senderAddress = selectedAccount.address;
 
-      if (!await _confirmSendToOwnAddress(false)) {
+      // Resolved here rather than left to the node's raw endpoints, which
+      // also normalize a name today: the fee, hash and signature are then all
+      // for the address the confirmation shows.
+      if (looksLikeVfxName(recipient)) {
+        final String? resolved;
+        try {
+          resolved = await ExplorerService().resolveAdnr(recipient);
+        } catch (e) {
+          Toast.error(userErrorMessage(e));
+          return;
+        }
+        if (resolved == null) {
+          Toast.error(globalL10n.svcNameNotResolved(recipient));
+          return;
+        }
+        recipient = resolved;
+      }
+
+      if (!await _confirmSendToOwnAddress(
+        false,
+        destination: recipient,
+        shown: recipient == typedRecipient ? recipient : "$typedRecipient ($recipient)",
+      )) {
         return;
       }
 
@@ -772,7 +815,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         spendable: spendableVfx(balance: selectedAccount.balance, pendingDebit: pendingDebit, isVault: isVault),
         feeFor: (value) => RawTransaction.estimateFee(
           fromAddress: fromAddress,
-          toAddress: address,
+          toAddress: recipient,
           amount: value,
           txType: TxType.rbxTransfer,
           // Only the timelock's presence changes the fee, not its length.
@@ -785,7 +828,9 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       feeNotice = fitted.notice;
     }
 
-    final confirmBody = globalL10n.txpSendingConfirmBody('$amount', address, senderAddress);
+    // The captured [recipient] is what is sent, on both builds.
+    final shownRecipient = recipient == typedRecipient ? recipient : "$typedRecipient ($recipient)";
+    final confirmBody = globalL10n.txpSendingConfirmBody('$amount', shownRecipient, senderAddress);
     final confirmed = await ConfirmDialog.show(
       title: globalL10n.btcPleaseConfirmTitle,
       body: feeNotice != null ? "$feeNotice\n\n$confirmBody" : confirmBody,
@@ -828,7 +873,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         final message = await ReserveAccountService().sendTx(
           fromAddress: currentWallet.address,
-          toAddress: address.trim().replaceAll("\n", ""),
+          toAddress: recipient,
           amount: double.parse(amount),
           password: password,
           unlockDelayHours: hours - 24,
@@ -878,7 +923,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
         // keypair: ref.read(webSessionProvider).usingRa ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         keypair: senderAddress.startsWith("xRBX") ? ref.read(webSessionProvider).raKeypair!.asKeypair : ref.read(webSessionProvider).keypair!,
         amount: amountDouble,
-        toAddress: address,
+        toAddress: recipient,
         unlockHours: unlockHours,
         txType: TxType.rbxTransfer,
       );
@@ -895,7 +940,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
 
         final confirmed = await ConfirmDialog.show(
           title: globalL10n.btcValidTxTitle,
-          body: globalL10n.svcValidTxConfirmBody(address, '$amountDouble') +
+          body: globalL10n.svcValidTxConfirmBody(shownRecipient, '$amountDouble') +
               (txFee != null
                   ? globalL10n.svcValidTxFeeSuffix('$txFee', '${amountDouble + txFee}')
                   : ''),
@@ -926,7 +971,7 @@ class SendFormProvider extends StateNotifier<SendFormModel> {
       try {
         final message = await BridgeService().sendFunds(
           amount: double.parse(amount),
-          to: address.trim().replaceAll("\n", ""),
+          to: recipient,
           from: ref.read(sessionProvider).currentWallet!.address,
         );
         state = state.copyWith(isProcessing: false);

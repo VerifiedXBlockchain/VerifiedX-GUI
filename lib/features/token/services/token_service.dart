@@ -6,6 +6,8 @@ import '../../../core/services/base_service.dart';
 import '../../../l10n/l10n_helper.dart';
 import '../models/new_token_topic.dart';
 import '../models/token_vote.dart';
+import '../token_rules.dart';
+import '../../../core/utils/user_error_message.dart';
 
 class TokenService extends BaseService {
   TokenService() : super(apiBasePathOverride: "/tkapi/TKV2");
@@ -16,7 +18,8 @@ class TokenService extends BaseService {
     required double amount,
   }) async {
     try {
-      final response = await getText("/TokenMint/$scId/$fromAddress/$amount", cleanPath: false, inspect: true);
+      // A plain decimal: the route binds a C# decimal, which refuses "1e-7".
+      final response = await getText("/TokenMint/$scId/$fromAddress/${plainDecimalString(amount)}", cleanPath: false, inspect: true);
       final data = jsonDecode(response);
 
       if (data['Success'] == true) {
@@ -25,7 +28,8 @@ class TokenService extends BaseService {
       Toast.error(data['Message']);
       return false;
     } catch (e) {
-      Toast.error(globalL10n.r3hErrorMinting);
+      // The node's own reason when it gave one, the generic message otherwise.
+      Toast.error(userErrorMessage(e, fallback: globalL10n.r3hErrorMinting));
       print(e);
       return false;
     }

@@ -40,6 +40,7 @@ import '../../web/providers/web_selected_account_provider.dart';
 import '../providers/send_form_provider.dart';
 import '../utils.dart';
 import '../../../utils/formatting.dart';
+import '../../btc/components/btc_fee_estimate_note.dart';
 
 class SendForm extends BaseComponent {
   final Wallet? wallet;
@@ -70,10 +71,11 @@ class SendForm extends BaseComponent {
   Future<void> chooseAddress(BuildContext context, WidgetRef ref, SendFormProvider formProvider) async {
     List<String> addresses = [];
 
-    if (ref.read(currencySegementedButtonProvider) == CurrencyType.btc || ref.read(currencySegementedButtonProvider) == CurrencyType.any) {
+    final currency = ref.read(sendCurrencyProvider);
+    if (currency == CurrencyType.btc || currency == CurrencyType.any) {
       addresses.addAll(ref.read(btcAccountListProvider).map((a) => a.address));
     }
-    if (ref.read(currencySegementedButtonProvider) == CurrencyType.vfx || ref.read(currencySegementedButtonProvider) == CurrencyType.any) {
+    if (currency == CurrencyType.vfx || currency == CurrencyType.any) {
       addresses.addAll(ref.read(walletListProvider).map((a) => a.address));
     }
 
@@ -167,7 +169,7 @@ class SendForm extends BaseComponent {
         balance = btcAccount?.balance ?? 0.0;
         color = AppColors.getBtc();
       }
-      balance = wallet?.balance ?? 0;
+      balance = wallet?.spendableBalance ?? 0;
       totalBalance = wallet?.totalBalance ?? 0.0;
       lockedBalance = wallet?.lockedBalance ?? 0.0;
       color = wallet?.isReserved == true ? Colors.deepPurple.shade200 : Colors.white;
@@ -214,7 +216,7 @@ class SendForm extends BaseComponent {
                                     final allWallets = ref.watch(walletListProvider);
                                     final allBtcAccounts = ref.watch(btcAccountListProvider);
 
-                                    final currencyType = ref.watch(currencySegementedButtonProvider);
+                                    final currencyType = ref.watch(sendCurrencyProvider);
 
                                     final list = <PopupMenuEntry<int>>[];
                                     if (currencyType != CurrencyType.btc) {
@@ -483,6 +485,7 @@ class SendForm extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BtcFeeEstimateNote(recommendedFees),
                       ListTile(
                         leading: SizedBox(width: leadingWidth, child: Text(AppLocalizations.of(context).sendFormLabelFeeRate)),
                         title: Row(

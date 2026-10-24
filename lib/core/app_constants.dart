@@ -3,7 +3,7 @@
 import 'package:rbx_wallet/core/env.dart';
 import 'package:flutter/foundation.dart';
 
-const APP_V = "8.0.4";
+const APP_V = "9.0.0";
 final APP_VERSION =
     "${Env.isDevnet ? 'Devnet' : Env.isTestNet ? 'Testnet' : 'Mainnet'} $APP_V";
 const APP_VERSION_NICKNAME = "Switchblade";
@@ -45,6 +45,28 @@ const ADNR_COST = 5.0;
 const ADNR_TRANSFER_COST = 5.0;
 const ADNR_DELETE_COST = 5.0;
 const BTC_ADNR_MAX_LENGTH = 65;
+// From this block height BTC domains (.btc) are signed for their VFX owner and
+// name: the create message becomes "<unix seconds>:<VFX owner>:<name>.btc",
+// and a transfer carries the receiving BTC address's signed acceptance.
+// Set each value to the node's BtcNameSignerOwnsAddressHeight for that network
+// once it is chosen. 999999999999 means not active yet.
+const BTC_NAME_SIGNED_MESSAGE_HEIGHT_MAINNET = 999999999999;
+const BTC_NAME_SIGNED_MESSAGE_HEIGHT_TESTNET = 999999999999;
+int get BTC_NAME_SIGNED_MESSAGE_HEIGHT =>
+    Env.isTestNet ? BTC_NAME_SIGNED_MESSAGE_HEIGHT_TESTNET : BTC_NAME_SIGNED_MESSAGE_HEIGHT_MAINNET;
+
+/// Whether the next block after [latestBlockHeight] requires signed BTC
+/// domain messages.
+bool btcNameSignedMessagesActive(int latestBlockHeight) {
+  return latestBlockHeight + 1 >= BTC_NAME_SIGNED_MESSAGE_HEIGHT;
+}
+
+/// Whether to offer the signed BTC domain acceptance (Accept Transfer, the
+/// receiver's acceptance code): only once [latestBlockHeight] is known and
+/// the signed messages are active. Before that nothing consumes a code.
+bool btcNameAcceptanceAvailable(int? latestBlockHeight) {
+  return latestBlockHeight != null && btcNameSignedMessagesActive(latestBlockHeight);
+}
 
 const VOTE_TOPIC_COST = 10.0;
 const MAX_COMPILE_QUANTITY = 10;
@@ -116,6 +138,10 @@ class TxType {
   static const int vbtcV2PrivateTransfer = 36;
   static const int vbtcV2BridgeLock = 37;
   static const int vbtcV2BridgeUnlock = 38;
+
+  /// Raises the Bitcoin fee of, or releases, a pinned withdrawal on a vault
+  /// the chain watches.
+  static const int vbtcV2CoinPin = 44;
 }
 
 const DEFAULT_REJECTED_EXTENIONS = [

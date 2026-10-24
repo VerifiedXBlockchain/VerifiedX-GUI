@@ -90,6 +90,7 @@ class _TransferBtcToVbtcStep extends BaseComponent {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      BtcFeeEstimateNote(recommendedFees),
                       ListTile(
                         leading: SizedBox(
                             width: 100, child: Text(l10n.btcFeeRateLabel)),
@@ -257,7 +258,7 @@ class _TokenizeBtcStep extends BaseComponent {
     final state = ref.watch(vBtcOnboardProvider);
 
     return TokenizeBtcForm(
-      onSuccess: () {
+      onSuccess: (_) {
         provider.setProcessingState(VBtcProcessingState.waitingForTokenization);
       },
     );

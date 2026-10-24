@@ -298,7 +298,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 - Tiles show `Hash: <hash>`, `Amount: <n> BTC`, `Type: <type>`, `To:`, `From:`, `Date:` and a `Confirmed` badge whose tooltip is `Block <height>`.
 - Copy shows `Hash copied to clipboard`.
 - Details show `Fee Rate` / `<n> SATS`, `Fee` / `<n> BTC`, `Signature` with a `Copy signature` button, and `UTXOs:` with the UTXO tiles.
-- The explorer link opens `https://mempool.space/testnet4/tx/<hash>` on testnet (`https://mempool.space/tx/<hash>` on mainnet).
+- The explorer link opens `https://signet.verifiedx.io/tx/<hash>` on testnet (`https://mempool.space/tx/<hash>` on mainnet).
 
 **Cleanup:** none.
 
@@ -315,7 +315,7 @@ This area covers Bitcoin accounts and vBTC (tokenized Bitcoin, V2 contracts) on 
 **Expected**
 - Each tile shows `<amount> BTC` (or `vBTC` with the vBTC icon when it touches a vBTC deposit address), `TX ID: <txid>`, and cards for `Status` (`Confirmed` or `Pending`), `Fee` (`<n> SATS | <n> BTC`), `Block Time` and `Block Height`.
 - Details list `Inputs:` and `Outputs:` with an address, a copy button (`Copy address`) and the value in BTC.
-- The link opens the transaction on mempool.space (testnet4 path on testnet).
+- The link opens the transaction on signet.verifiedx.io on testnet (mempool.space on mainnet).
 - With no history the tab reads `No Transactions found for <address>.`
 
 **Cleanup:** none.

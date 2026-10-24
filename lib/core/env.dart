@@ -12,6 +12,13 @@ class Env {
   static const bool _isAutomation =
       String.fromEnvironment('AUTOMATION') == 'true';
 
+  /// Tests only: puts the network flags back to their build-time values.
+  @visibleForTesting
+  static void resetNetworkForTesting() {
+    _isTestnet = const String.fromEnvironment('TESTNET') == 'true';
+    _isDevnet = const String.fromEnvironment('DEVNET') == 'true';
+  }
+
   static void setTestnetFromArgs(List<String> args) {
     // CLI args override dart-define
     if (args.contains('--testnet')) {
@@ -116,6 +123,23 @@ class Env {
 
   static bool get btcIsTestNet {
     return _isTestnet;
+  }
+
+  /// Bitcoin explorer for BTC links, with a trailing '/'. Testnet runs on the
+  /// VerifiedX private signet, which only our own explorer carries.
+  static String get btcExplorerBaseUrl {
+    if (btcIsTestNet) return 'https://signet.verifiedx.io/';
+    return 'https://mempool.space/';
+  }
+
+  /// Esplora REST API for [btcExplorerBaseUrl], without a trailing '/'.
+  static String get btcExplorerApiBaseUrl {
+    return '${btcExplorerBaseUrl}api';
+  }
+
+  /// Explorer page for a Bitcoin transaction.
+  static String btcExplorerTxUrl(String txid) {
+    return '${btcExplorerBaseUrl}tx/$txid';
   }
 
   static bool get isAutomation {

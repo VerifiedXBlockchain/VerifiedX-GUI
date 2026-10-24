@@ -5,6 +5,7 @@ import '../../../core/theme/app_theme.dart';
 import '../../adnr/providers/adnr_pending_provider.dart';
 import '../../bridge/providers/log_provider.dart';
 import '../services/btc_service.dart';
+import '../utils/btc_name_acceptance.dart';
 import '../../global_loader/global_loading_provider.dart';
 import '../../../utils/toast.dart';
 import '../../../utils/validation.dart';
@@ -33,8 +34,11 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
 
   final toBtcAddressController = TextEditingController();
   final toRbxAddressController = TextEditingController();
+  final acceptanceCodeController = TextEditingController();
 
   initWithFromBtcAddress({required String fromBtcAddress, required String? domainName}) {
+    // An acceptance code is for one domain only.
+    acceptanceCodeController.clear();
     state = state.copyWith(
       fromBtcAddress: fromBtcAddress,
       domainName: domainName,
@@ -56,6 +60,27 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
     return formValidatorRbxAddress(value);
   }
 
+  /// The receiver's acceptance code is optional (the node signs itself when it
+  /// holds the receiving key), but when given it must name this domain and
+  /// the VFX address it is going to.
+  String? acceptanceCodeValidator(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return null;
+    }
+
+    final acceptance = BtcNameAcceptance.parse(value);
+    if (acceptance == null) {
+      return globalL10n.btcAcceptanceCodeInvalid;
+    }
+
+    final domainName = state.domainName;
+    if (domainName != null && !acceptance.matches(owner: toRbxAddressController.text, name: domainName)) {
+      return globalL10n.btcAcceptanceCodeMismatch;
+    }
+
+    return null;
+  }
+
   Future<bool?> submit() async {
     if (!formKey.currentState!.validate()) {
       return null;
@@ -68,6 +93,7 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
 
     final toBtcAddress = toBtcAddressController.text.trim();
     final toRbxAddress = toRbxAddressController.text.trim();
+    final acceptance = BtcNameAcceptance.parse(acceptanceCodeController.text);
 
     ref.read(globalLoadingProvider.notifier).start();
 
@@ -75,6 +101,7 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
       fromBtcAddress: state.fromBtcAddress!,
       toBtcAddress: toBtcAddress,
       toRbxAddress: toRbxAddress,
+      acceptance: acceptance,
     );
 
     ref.read(globalLoadingProvider.notifier).complete();
@@ -87,6 +114,7 @@ class BtcAdnrTransferFormProvider extends StateNotifier<BtcAdnrTransferFormState
     ref.read(adnrPendingProvider.notifier).addId(state.fromBtcAddress!, "transfer", state.domainName ?? 'null');
 
     notifyTransactionSubmitted();
+    acceptanceCodeController.clear();
     state = BtcAdnrTransferFormState();
 
     return true;
