@@ -21056,6 +21056,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'The withdrawal the network prepared does not match what you confirmed (vaults, amounts or address). Nothing was signed or sent.'**
   String get btcMultiWdPreparedMismatch;
+
+  /// Transaction history label for one withdrawal request drawn from several vaults (VBTCWithdrawalRequestMultiV2()).
+  ///
+  /// In en, this message translates to:
+  /// **'vBTC Withdrawal Request ({count} vaults)'**
+  String r3cTypeVbtcMultiWithdrawalRequest(int count);
+
+  /// Transaction history: button on a multi-vault withdrawal request that opens its per-part status dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdrawal Status'**
+  String get btcMultiWdStatusButton;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

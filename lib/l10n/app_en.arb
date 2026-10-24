@@ -10685,5 +10685,18 @@
   "btcMultiWdPreparedMismatch": "The withdrawal the network prepared does not match what you confirmed (vaults, amounts or address). Nothing was signed or sent.",
   "@btcMultiWdPreparedMismatch": {
     "description": "Web multi-vault withdrawal: Core's prepared request names other shares or another address than the confirmation showed, so the wallet refused to sign."
+  },
+  "r3cTypeVbtcMultiWithdrawalRequest": "vBTC Withdrawal Request ({count} vaults)",
+  "@r3cTypeVbtcMultiWithdrawalRequest": {
+    "description": "Transaction history label for one withdrawal request drawn from several vaults (VBTCWithdrawalRequestMultiV2()).",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdStatusButton": "Withdrawal Status",
+  "@btcMultiWdStatusButton": {
+    "description": "Transaction history: button on a multi-vault withdrawal request that opens its per-part status dialog."
   }
 }

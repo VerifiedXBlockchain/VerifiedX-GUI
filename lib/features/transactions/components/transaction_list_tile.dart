@@ -21,6 +21,11 @@ import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
 import '../models/transaction.dart';
 import 'nft_data_modal.dart';
+import '../../btc/components/vbtc_multi_withdrawal_dialog.dart';
+import '../../btc/models/vbtc_multi_withdrawal_result.dart';
+import '../../btc/models/vbtc_withdrawal_part.dart';
+import '../../btc/providers/tokenized_bitcoin_list_provider.dart';
+import '../../btc/services/desktop_vbtc_withdrawal_part_actions.dart';
 import "package:collection/collection.dart";
 
 class TransactionListTile extends BaseStatefulComponent {
@@ -43,6 +48,28 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
       ClipboardData(text: value),
     );
     Toast.message(globalL10n.btcLabelCopiedToast(name));
+  }
+
+  /// One row per multi-vault request: its parts come from the transaction's
+  /// own Data, their states from the node.
+  void _openMultiWithdrawal() {
+    final shares = vbtcMultiWithdrawalSharesOf(widget.transaction.nftData) ?? const [];
+    final tokens = ref.read(tokenizedBitcoinListProvider);
+    VbtcMultiWithdrawalDialog.show(
+      requestHash: widget.transaction.hash,
+      parts: shares.map((share) {
+        final token = tokens.firstWhereOrNull((t) => t.smartContractUid == share.scIdentifier);
+        return VbtcWithdrawalPart(
+          scIdentifier: share.scIdentifier,
+          name: token?.tokenName ?? share.scIdentifier,
+          amount: share.amount,
+        );
+      }).toList(),
+      actions: DesktopVbtcWithdrawalPartActions(
+        requestHash: widget.transaction.hash,
+        requestorAddress: widget.transaction.fromAddress,
+      ),
+    );
   }
 
   @override
@@ -290,6 +317,12 @@ class TransactionListTileState extends BaseComponentState<TransactionListTile> {
                                     return NftDataModal(widget.transaction.nftData);
                                   });
                             },
+                          ),
+                        if (fromMe && vbtcMultiWithdrawalSharesOf(widget.transaction.nftData) != null)
+                          AppButton(
+                            key: const Key('vbtc:multi_wd_status'),
+                            label: l10n.btcMultiWdStatusButton,
+                            onPressed: _openMultiWithdrawal,
                           ),
                         if (widget.transaction.type == 5) //NFT Sale
                           Builder(

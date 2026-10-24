@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../../btc_web/utils/vbtc_multi_allocator.dart';
 
 /// Successful `POST /vbtcapi/vbtc/RequestWithdrawalMulti` response.
@@ -68,3 +70,28 @@ List<VbtcAllocationInput> vbtcWithdrawalSharesFromJson(List<dynamic> json) {
           ))
       .toList();
 }
+
+/// The parts a multi-vault withdrawal request names, read from its
+/// transaction `Data` (a JSON string, or the object already decoded, either
+/// possibly wrapped in a list), or null when the transaction is not one
+/// (`VBTCWithdrawalRequestMultiV2()`).
+List<VbtcAllocationInput>? vbtcMultiWithdrawalSharesOf(dynamic data) {
+  dynamic decoded = data;
+  if (data is String) {
+    if (data.isEmpty) return null;
+    try {
+      decoded = jsonDecode(data);
+    } on FormatException {
+      return null;
+    }
+  }
+  if (decoded is List && decoded.isNotEmpty) decoded = decoded.first;
+  if (decoded is! Map || decoded['Function'] != vbtcMultiWithdrawalFunction) return null;
+  final inputs = decoded['Inputs'];
+  if (inputs is! List) return null;
+  final shares = vbtcWithdrawalSharesFromJson(inputs);
+  return shares.isEmpty ? null : shares;
+}
+
+/// Core's `VBTCService.MultiWithdrawalFunction`.
+const vbtcMultiWithdrawalFunction = "VBTCWithdrawalRequestMultiV2()";

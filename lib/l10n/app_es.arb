@@ -10611,5 +10611,18 @@
   "btcMultiWdPreparedMismatch": "El retiro que preparó la red no coincide con lo que confirmaste (bóvedas, montos o dirección). No se firmó ni se envió nada.",
   "@btcMultiWdPreparedMismatch": {
     "description": "Web multi-vault withdrawal: Core's prepared request names other shares or another address than the confirmation showed, so the wallet refused to sign."
+  },
+  "r3cTypeVbtcMultiWithdrawalRequest": "Solicitud de retiro de vBTC ({count} bóvedas)",
+  "@r3cTypeVbtcMultiWithdrawalRequest": {
+    "description": "Transaction history label for one withdrawal request drawn from several vaults (VBTCWithdrawalRequestMultiV2()).",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "btcMultiWdStatusButton": "Estado del retiro",
+  "@btcMultiWdStatusButton": {
+    "description": "Transaction history: button on a multi-vault withdrawal request that opens its per-part status dialog."
   }
 }

@@ -11399,4 +11399,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get btcMultiWdPreparedMismatch => 'El retiro que preparó la red no coincide con lo que confirmaste (bóvedas, montos o dirección). No se firmó ni se envió nada.';
+
+  @override
+  String r3cTypeVbtcMultiWithdrawalRequest(int count) {
+    return 'Solicitud de retiro de vBTC ($count bóvedas)';
+  }
+
+  @override
+  String get btcMultiWdStatusButton => 'Estado del retiro';
 }
