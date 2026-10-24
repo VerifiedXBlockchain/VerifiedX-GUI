@@ -34,13 +34,15 @@ class WebMpcCeremonyDialog extends ConsumerStatefulWidget {
     required this.ticker,
   });
 
-  static Future<bool?> show({
+  /// The created contract's UID once the create is broadcast and Done is
+  /// pressed ('' when the node did not name it); null when closed otherwise.
+  static Future<String?> show({
     required String ownerAddress,
     required String name,
     required String description,
     required String ticker,
   }) {
-    return showDialog<bool>(
+    return showDialog<String>(
       context: rootNavigatorKey.currentContext!,
       barrierDismissible: false,
       builder: (_) => WebMpcCeremonyDialog(
@@ -261,6 +263,8 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         });
         return;
       }
+      // The send answer carries only the hash; prepare names the contract.
+      final preparedScIdentifier = prepared['SmartContractUID'] as String?;
 
       // Step 3: Sign the TX hash
       final signature = await RawTransaction.getSignature(
@@ -304,7 +308,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
         setState(() {
           _step = _CeremonyStep.success;
           _transactionHash = txHash;
-          _scIdentifier = result['SmartContractUID'] as String?;
+          _scIdentifier = result['SmartContractUID'] as String? ?? preparedScIdentifier;
         });
       } else {
         setState(() {
@@ -482,7 +486,7 @@ class _WebMpcCeremonyDialogState extends ConsumerState<WebMpcCeremonyDialog> {
               ref.read(btcWebVbtcTokenListProvider.notifier).reload(
                 widget.ownerAddress,
               );
-              Navigator.of(context).pop(true);
+              Navigator.of(context).pop(_scIdentifier ?? '');
             },
           ),
         ),

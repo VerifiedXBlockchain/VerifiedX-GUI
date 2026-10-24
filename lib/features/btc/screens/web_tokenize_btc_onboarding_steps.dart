@@ -54,7 +54,7 @@ class _WebTransferBtcToVbtcStep extends BaseComponent {
               ),
               Builder(
                 builder: (context) {
-                  final recommendedFees = ref.watch(sessionProvider.select((v) => v.btcRecommendedFees)) ?? BtcRecommendedFees.fallback();
+                  final recommendedFees = ref.watch(btcRecommendedFeesProvider).valueOrNull ?? BtcRecommendedFees.fallback();
 
                   switch (state.btcFeeRatePreset) {
                     case BtcFeeRatePreset.custom:
@@ -234,8 +234,8 @@ class _TokenizeBtcStep extends BaseComponent {
     final state = ref.watch(webVBtcOnboardProvider);
 
     return TokenizeBtcForm(
-      onSuccess: () {
-        provider.setProcessingState(VBtcProcessingState.waitingForTokenization);
+      onSuccess: (createdScIdentifier) {
+        provider.waitForCreatedToken(createdScIdentifier);
       },
     );
   }

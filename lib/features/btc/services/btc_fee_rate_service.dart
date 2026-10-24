@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
 import '../models/btc_recommended_fees.dart';
@@ -35,3 +37,11 @@ class BtcFeeRateService extends BaseService {
     }
   }
 }
+
+/// The live, testnet-floored fee table, fetched when first watched. The web
+/// wallet's session never loads `btcRecommendedFees` (only the desktop session
+/// does), so a web screen that shows rates inline watches this instead of
+/// falling back to the fixed table.
+final btcRecommendedFeesProvider = FutureProvider.autoDispose<BtcRecommendedFees>((ref) {
+  return BtcFeeRateService().recommended();
+});

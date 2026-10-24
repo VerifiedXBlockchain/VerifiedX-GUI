@@ -49,6 +49,7 @@ class VBtcOnboardState {
   final bool completed;
   final BtcFeeRatePreset btcFeeRatePreset;
   final bool transferToTokenManually;
+  final String? createdScIdentifier;
 
   VBtcOnboardState({
     this.step = VBtcOnboardStep.faucetWithdrawl,
@@ -60,6 +61,7 @@ class VBtcOnboardState {
     this.completed = false,
     this.btcFeeRatePreset = BtcFeeRatePreset.economy,
     this.transferToTokenManually = false,
+    this.createdScIdentifier,
   });
 
   VBtcOnboardState copyWith({
@@ -72,6 +74,7 @@ class VBtcOnboardState {
     bool? completed,
     BtcFeeRatePreset? btcFeeRatePreset,
     bool? transferToTokenManually,
+    String? createdScIdentifier,
   }) {
     return VBtcOnboardState(
       step: step ?? this.step,
@@ -85,6 +88,7 @@ class VBtcOnboardState {
       btcFeeRatePreset: btcFeeRatePreset ?? this.btcFeeRatePreset,
       transferToTokenManually:
           transferToTokenManually ?? this.transferToTokenManually,
+      createdScIdentifier: createdScIdentifier ?? this.createdScIdentifier,
     );
   }
 
@@ -172,6 +176,18 @@ class VBtcOnboardState {
   }
 }
 
+/// The contract this web wizard run created, by the UID its create named.
+/// Matching on the owner took the account's first vault, an older one
+/// whenever the account already owned a vault (a legacy vault after 9.0).
+/// Null until the new contract is listed, or when the UID is unknown.
+BtcWebVbtcToken? webWizardCreatedToken(
+  List<BtcWebVbtcToken> tokens, {
+  required String? scIdentifier,
+}) {
+  if (scIdentifier == null || scIdentifier.isEmpty) return null;
+  return tokens.firstWhereOrNull((t) => t.scIdentifier == scIdentifier);
+}
+
 @Riverpod(keepAlive: true)
 class WebVBtcOnboard extends _$WebVBtcOnboard {
   ProviderSubscription<WebSessionModel>? vfxTransferListener;
@@ -241,8 +257,10 @@ class WebVBtcOnboard extends _$WebVBtcOnboard {
         (previous, List<BtcWebVbtcToken> tokens) {
       if (state.step == VBtcOnboardStep.tokenize) {
         print("tokens: $tokens  address:${state.vfxWallet?.address}");
-        final token = tokens.firstWhereOrNull(
-            (t) => t.ownerAddress == state.vfxWallet?.address);
+        final token = webWizardCreatedToken(
+          tokens,
+          scIdentifier: state.createdScIdentifier,
+        );
         if (token != null) {
           Toast.message(globalL10n.bw2TokenDeployed);
           state = state.copyWith(
@@ -296,6 +314,11 @@ class WebVBtcOnboard extends _$WebVBtcOnboard {
     btcTransferListener?.close();
     btcTokenizationListener?.close();
     btcToVbtcListener?.close();
+  }
+
+  void waitForCreatedToken(String? createdScIdentifier) {
+    state = state.copyWith(createdScIdentifier: createdScIdentifier);
+    setProcessingState(VBtcProcessingState.waitingForTokenization);
   }
 
   void setProcessingState(VBtcProcessingState processingState) {

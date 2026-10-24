@@ -136,7 +136,9 @@ class CreateAdnrDialog extends BaseComponent {
                         return;
                       }
 
-                      final domainWithoutSuffix = controller.text;
+                      // Names are lowercase on chain (Core's AdnrNameGrammarHeight
+                      // refuses a capital letter); the desktop API lowercases too.
+                      final domainWithoutSuffix = controller.text.toLowerCase();
                       final domain =
                           "$domainWithoutSuffix.${isBtc ? 'btc' : 'vfx'}";
 

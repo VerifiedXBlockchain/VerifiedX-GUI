@@ -32,7 +32,7 @@ class TokenizeBtcScreen extends BaseScreen {
   Widget body(BuildContext context, WidgetRef ref) {
     return SingleChildScrollView(
       child: TokenizeBtcForm(
-        onSuccess: () {
+        onSuccess: (_) {
           Navigator.of(context).pop();
         },
       ),
@@ -41,7 +41,9 @@ class TokenizeBtcScreen extends BaseScreen {
 }
 
 class TokenizeBtcForm extends BaseComponent {
-  final VoidCallback onSuccess;
+  /// Called with the created contract's UID when the web flow knows it
+  /// (null on desktop, whose wizard follows its ceremony's deposit address).
+  final void Function(String? createdScIdentifier) onSuccess;
   const TokenizeBtcForm({super.key, required this.onSuccess});
 
   @override
@@ -58,7 +60,7 @@ class TokenizeBtcForm extends BaseComponent {
         formProvider.createContractFromCeremony();
       }
       if (next.isContractCreated) {
-        onSuccess();
+        onSuccess(null);
       }
     });
 
@@ -173,18 +175,18 @@ class TokenizeBtcForm extends BaseComponent {
           }
 
           final formProvider = ref.read(tokenizeBtcFormProvider.notifier);
-          final success = await WebMpcCeremonyDialog.show(
+          final createdScIdentifier = await WebMpcCeremonyDialog.show(
             ownerAddress: keypair.address,
             name: formProvider.tokenNameController.text.trim(),
             description: formProvider.tokenDescriptionController.text.trim(),
             ticker: formProvider.tokenTickerController.text.trim(),
           );
 
-          if (success == true) {
+          if (createdScIdentifier != null) {
             formProvider.clear();
             // The standalone screen pops here; the vBTC wizard moves on to
             // waiting for the token and then to its funding step.
-            onSuccess();
+            onSuccess(createdScIdentifier.isEmpty ? null : createdScIdentifier);
           }
         },
       );
