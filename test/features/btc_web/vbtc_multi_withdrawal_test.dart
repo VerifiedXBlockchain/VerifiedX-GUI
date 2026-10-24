@@ -2,11 +2,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/features/btc_web/utils/vbtc_multi_withdrawal.dart';
 
 void main() {
-  group('fee floor', () {
-    test('is the smallest transaction fee plus a relayable payout', () {
+  group('share fee', () {
+    test('is the smallest withdrawal transaction at the fee rate', () {
       expect(vbtcWithdrawalShareFeeSats(3), 462);
-      expect(vbtcWithdrawalShareFloorSats(3), 792);
-      expect(vbtcWithdrawalShareFloorSats(1), 484);
+      expect(vbtcWithdrawalShareFeeSats(1), 154);
     });
   });
 
@@ -50,27 +49,28 @@ void main() {
     });
 
     test('names the part that would fall below the fee floor', () {
-      // big covers 0.00005, the last 0.000004 (400 sats) lands on small: under 792 at 3 sat/vB.
+      // big covers 0.00005, the last 0.000004 (400 sats) lands on small: under 1008 at 3 sat/vB.
       final plan = planVbtcMultiWithdrawal({'small:1': 0.00002, 'big:2': 0.00005}, 0.000054, 3);
 
       expect(plan.failure, VbtcWithdrawalPlanFailure.shareBelowFeeFloor);
       expect(plan.belowFloorPart, 2);
-      expect(plan.floorSats, 792);
+      expect(plan.floorSats, 1008);
     });
 
     test('a share exactly at the floor is accepted', () {
-      final plan = planVbtcMultiWithdrawal({'small:1': 0.00002, 'big:2': 0.00005}, 0.00005792, 3);
+      final plan = planVbtcMultiWithdrawal({'small:1': 0.00002, 'big:2': 0.00005}, 0.00006008, 3);
 
       expect(plan.ok, isTrue);
-      expect(plan.shares.last.amount, 0.00000792);
+      expect(plan.shares.last.amount, 0.00001008);
+      expect(planVbtcMultiWithdrawal({'small:1': 0.00002, 'big:2': 0.00005}, 0.00006007, 3).belowFloorPart, 2);
     });
 
     test('a lower fee rate lowers the floor', () {
-      // The last share is 484 sats: the floor at 1 sat/vB, under it at 3.
+      // The last share is 700 sats: the floor at 1 sat/vB, under it at 3.
       final balances = {'small:1': 0.00002, 'big:2': 0.00005};
 
-      expect(planVbtcMultiWithdrawal(balances, 0.00005484, 1).ok, isTrue);
-      expect(planVbtcMultiWithdrawal(balances, 0.00005484, 3).failure, VbtcWithdrawalPlanFailure.shareBelowFeeFloor);
+      expect(planVbtcMultiWithdrawal(balances, 0.000057, 1).ok, isTrue);
+      expect(planVbtcMultiWithdrawal(balances, 0.000057, 3).failure, VbtcWithdrawalPlanFailure.shareBelowFeeFloor);
     });
 
     test('refuses a total that needs more than 10 vaults', () {

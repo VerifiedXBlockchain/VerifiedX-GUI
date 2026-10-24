@@ -1,4 +1,5 @@
 import '../../../core/app_constants.dart';
+import 'vbtc_amount.dart';
 import 'vbtc_multi_allocator.dart';
 
 const int _satsPerVbtc = 100000000;
@@ -6,21 +7,10 @@ const int _satsPerVbtc = 100000000;
 int _toSats(double amount) => (amount * _satsPerVbtc).round();
 double _fromSats(int sats) => sats / _satsPerVbtc;
 
-/// Size of the smallest Bitcoin withdrawal transaction Core builds: one
-/// Taproot input, destination and change (VBTCService.MinWithdrawalTxVBytes).
-const int vbtcWithdrawalMinTxVBytes = 154;
-
-/// Smallest payout Bitcoin nodes relay (VBTCService.TaprootDustSats).
-const int vbtcWithdrawalDustSats = 330;
-
 /// The Bitcoin fee one share pays at [feeRate] sats/vB, out of its own
 /// amount. A vault whose coins are small may need a bigger transaction, so
 /// this is the least it costs.
-int vbtcWithdrawalShareFeeSats(int feeRate) => feeRate * vbtcWithdrawalMinTxVBytes;
-
-/// The smallest share Core accepts at [feeRate]: its fee plus a relayable
-/// payout (VBTCService.GetWithdrawalFeeFloorError).
-int vbtcWithdrawalShareFloorSats(int feeRate) => vbtcWithdrawalShareFeeSats(feeRate) + vbtcWithdrawalDustSats;
+int vbtcWithdrawalShareFeeSats(int feeRate) => feeRate * kVbtcWithdrawalMinVsize;
 
 /// The most one request can withdraw from [balances]: the sum of the
 /// [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS] largest.
@@ -59,7 +49,7 @@ class VbtcWithdrawalPlan {
 
   int get totalFeeSats => perShareFeeSats * shares.length;
 
-  int get floorSats => vbtcWithdrawalShareFloorSats(feeRate);
+  int get floorSats => vbtcWithdrawalMinimumSats(feeRate);
 
   /// What reaches the Bitcoin address: the total less one fee per share.
   double get netAmount => _fromSats(shares.fold<int>(0, (sum, s) => sum + _toSats(s.amount)) - totalFeeSats);
@@ -68,8 +58,10 @@ class VbtcWithdrawalPlan {
 /// Splits [total] across [balances] (vault id to spendable vBTC) by Core's
 /// rule, largest first and ties by id, then checks what Core checks before it
 /// signs anything: at most [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS] vaults, and
-/// each share able to pay its own fee at [feeRate] and leave a relayable
-/// payout. The last share is the one that runs small.
+/// each share able to pay its own fee at [feeRate] and leave
+/// [kBtcDustSats] to pay out. That is the watched vault's rule
+/// (BtcWithdrawals in Core), stricter than the request builder's 330-sat
+/// floor. The last share is the one that runs small.
 VbtcWithdrawalPlan planVbtcMultiWithdrawal(Map<String, double> balances, double total, int feeRate) {
   final allocation = allocateVbtcInputs(balances, total, maxInputs: VBTC_MULTI_WITHDRAWAL_MAX_VAULTS);
   if (!allocation.ok) {
@@ -83,7 +75,7 @@ VbtcWithdrawalPlan planVbtcMultiWithdrawal(Map<String, double> balances, double 
     );
   }
 
-  final floor = vbtcWithdrawalShareFloorSats(feeRate);
+  final floor = vbtcWithdrawalMinimumSats(feeRate);
   for (var i = 0; i < allocation.inputs.length; i++) {
     if (_toSats(allocation.inputs[i].amount) < floor) {
       return VbtcWithdrawalPlan(
