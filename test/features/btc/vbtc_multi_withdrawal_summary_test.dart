@@ -30,7 +30,7 @@ void main() {
     expect(find.text('Part 2 · Vault B: 0.00002 vBTC'), findsOneWidget);
     expect(find.text('Bitcoin fee per part: at least 462 sats (0.00000462 BTC), taken out of that part'), findsOneWidget);
     expect(find.text('Total Bitcoin fees: at least 924 sats (0.00000924 BTC) for 2 parts'), findsOneWidget);
-    expect(find.text('Arrives at the address: about 0.00006076 BTC'), findsOneWidget);
+    expect(find.text('Arrives at the address: at most 0.00006076 BTC'), findsOneWidget);
   });
 
   group('vbtcWithdrawalPlanError', () {

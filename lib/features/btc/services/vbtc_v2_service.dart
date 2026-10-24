@@ -564,6 +564,53 @@ class VbtcV2Service extends BaseService {
     }
   }
 
+  /// Which vaults Core would draw [amount] from, asked before anything is
+  /// signed: `GetRawRequestWithdrawalMultiTxData` without inputs runs the
+  /// same allocation as [requestWithdrawalMulti] over the node's own vaults
+  /// and builds the transaction without sending it.
+  ///
+  /// Returns null after surfacing Core's message on failure.
+  Future<VbtcMultiWithdrawalPreview?> previewWithdrawalMulti({
+    required String requestorAddress,
+    required String btcAddress,
+    required double amount,
+    required int feeRate,
+  }) async {
+    const method = 'GetRawRequestWithdrawalMultiTxData(preview)';
+    final params = {
+      'RequestorAddress': requestorAddress,
+      'BTCAddress': btcAddress,
+      'TotalAmount': amount,
+      'FeeRate': feeRate,
+    };
+
+    _log(method, 'REQUEST POST /GetRawRequestWithdrawalMultiTxData', params);
+
+    try {
+      final response = await postJson(
+        "/GetRawRequestWithdrawalMultiTxData",
+        params: params,
+        cleanPath: false,
+        inspect: true,
+      );
+
+      final Map<String, dynamic> data = response['data'];
+      _log(method, 'RESPONSE', data);
+
+      if (data['Success'] == true) {
+        return VbtcMultiWithdrawalPreview.fromJson(data);
+      }
+
+      _log(method, 'FAILED: ${data['Message']}');
+      Toast.error(nodeRefusalMessage(data, fallback: globalL10n.r3fFailedRequestWithdrawal));
+      return null;
+    } catch (e, st) {
+      _log(method, 'EXCEPTION: $e\n$st');
+      Toast.error(userErrorMessage(e));
+      return null;
+    }
+  }
+
   /// One withdrawal request of [amount] drawn from several vaults. Core
   /// allocates largest first across every vault [requestorAddress] holds,
   /// checks each share against the fee floor and sends one transaction; each

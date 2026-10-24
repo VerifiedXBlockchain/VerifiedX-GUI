@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rbx_wallet/features/btc_web/utils/vbtc_multi_allocator.dart';
 import 'package:rbx_wallet/features/btc_web/utils/vbtc_multi_withdrawal.dart';
 
 void main() {
@@ -109,20 +110,39 @@ void main() {
     });
   });
 
-  group('vbtcCoreAllocationTouchesUnwatched', () {
-    final balances = {'legacy:1': 0.0003, 'watched:2': 0.0002, 'watched:3': 0.0001};
-    final watched = {'watched:2', 'watched:3'};
-
-    test('is true when the largest vault is not watched', () {
-      expect(vbtcCoreAllocationTouchesUnwatched(balances, watched, 0.0001), isTrue);
+  group('vbtcWithdrawalPlanForShares', () {
+    test("accepts Core's shares when each clears the 546-sat floor", () {
+      final plan = vbtcWithdrawalPlanForShares(
+        const [
+          VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.00005),
+          VbtcAllocationInput(scIdentifier: 'b:2', amount: 0.00001008)
+        ],
+        3,
+        0.0001,
+      );
+      expect(plan.ok, isTrue);
+      expect(plan.minTotalFeeSats, 924);
     });
 
-    test('is false when Core would use watched vaults only', () {
-      expect(vbtcCoreAllocationTouchesUnwatched({'legacy:1': 0.00005, 'watched:2': 0.0002}, watched, 0.0002), isFalse);
+    test("refuses a share Core's 330-sat builder check lets through", () {
+      // 792 sats at 3 sat/vB leaves 330: the builder accepts it, a watched vault refuses it at send.
+      final plan = vbtcWithdrawalPlanForShares(
+        const [
+          VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.00005),
+          VbtcAllocationInput(scIdentifier: 'b:2', amount: 0.00000792)
+        ],
+        3,
+        0.0001,
+      );
+      expect(plan.failure, VbtcWithdrawalPlanFailure.shareBelowFeeFloor);
+      expect(plan.belowFloorPart, 2);
     });
 
-    test('is true when the amount reaches past the watched vaults', () {
-      expect(vbtcCoreAllocationTouchesUnwatched({'legacy:1': 0.00005, 'watched:2': 0.0002}, watched, 0.00021), isTrue);
+    test('refuses more than 10 shares and a fee rate of zero', () {
+      final eleven = [for (var i = 0; i < 11; i++) VbtcAllocationInput(scIdentifier: 'c:$i', amount: 0.0001)];
+      expect(vbtcWithdrawalPlanForShares(eleven, 1, 0.0011).failure, VbtcWithdrawalPlanFailure.tooManyVaults);
+      expect(vbtcWithdrawalPlanForShares(eleven.take(2).toList(), 0, 0.0002).failure,
+          VbtcWithdrawalPlanFailure.invalidFeeRate);
     });
   });
 }
