@@ -298,16 +298,7 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
       // against them before signing.
       plan = planVbtcMultiWithdrawal(_watchedBalances(vaults), amount, feeRate);
     } else {
-      // Core's builder checks only a 330-sat floor and answers with its own
-      // text, so a split that leaves a part under the 546-sat floor is named
-      // here first, by part, before Core is asked (VerifiedX-Issues 370).
-      // Core's allocation is checked again below.
-      final local = planVbtcMultiWithdrawal(_watchedBalances(vaults), amount, feeRate);
-      if (local.failure == VbtcWithdrawalPlanFailure.shareBelowFeeFloor) {
-        Toast.error(vbtcWithdrawalPlanError(l10n, local, amount));
-        return;
-      }
-      final shares = await _desktopCoreShares(l10n, requestorAddress, btcAddress, amount, feeRate);
+      final shares = await _desktopCoreShares(l10n, requestorAddress, btcAddress, amount, feeRate, vaults);
       if (shares == null || !mounted) {
         return;
       }
@@ -352,6 +343,7 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
     String btcAddress,
     double amount,
     int feeRate,
+    List<_Vault> vaults,
   ) async {
     ref.read(globalLoadingProvider.notifier).start();
     final preview = await VbtcV2Service().previewWithdrawalMulti(
@@ -359,6 +351,16 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
       btcAddress: btcAddress,
       amount: amount,
       feeRate: feeRate,
+      onRefusal: (coreMessage) {
+        // Core decides from its current balances. When it refuses and this
+        // screen's own split also leaves a part under the floor, the
+        // wallet's message names the part; Core's builder text speaks of a
+        // 330-sat floor and a contract id (VerifiedX-Issues 370).
+        final local = planVbtcMultiWithdrawal(_watchedBalances(vaults), amount, feeRate);
+        Toast.error(local.failure == VbtcWithdrawalPlanFailure.shareBelowFeeFloor
+            ? vbtcWithdrawalPlanError(l10n, local, amount)
+            : coreMessage);
+      },
     );
     ref.read(globalLoadingProvider.notifier).complete();
     if (preview == null) {
