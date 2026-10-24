@@ -161,7 +161,7 @@ Future<dynamic> initTransferNftProcess(
     labelText: l10n.bw2LabelVfxAddress,
     confirmText: l10n.actionContinue,
     inputFormatters: [
-      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.]')),
+      FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9.-]')),
     ],
     lines: 1,
     sufixIcon: AddressChoosingIconButton(controller: controller),

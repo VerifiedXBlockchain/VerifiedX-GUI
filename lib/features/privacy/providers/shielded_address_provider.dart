@@ -33,12 +33,18 @@ class ShieldedAddressNotifier extends StateNotifier<ShieldedAddress?> {
       state = address;
       singleton<Storage>().setString(_storageKey, address.zfxAddress);
       ref.read(shieldedBalanceProvider.notifier).start(address.zfxAddress);
+      // The node starts the wallet at block 0 without scanning, so notes sent to
+      // this address earlier (a re-activation) stay hidden until a rescan.
+      unawaited(PrivacyService().resyncShieldedWallet(zfxAddress: address.zfxAddress));
     }
     return address;
   }
 
   /// Called on app restart. Loads from local storage — does NOT call the
-  /// create endpoint (which would overwrite scanned data on the node).
+  /// create endpoint (which would overwrite scanned data on the node). When the
+  /// node does not hold that wallet (a new or reset data folder), the stored
+  /// address is dropped so the user is sent to activation instead of a
+  /// dashboard that accepts shields and reads 0.
   Future<void> load(String transparentAddress) async {
     final saved = singleton<Storage>().getString(_storageKey);
     if (saved != null && saved.isNotEmpty) {
@@ -47,6 +53,10 @@ class ShieldedAddressNotifier extends StateNotifier<ShieldedAddress?> {
         transparentSourceAddress: transparentAddress,
       );
       ref.read(shieldedBalanceProvider.notifier).start(saved);
+      final held = await PrivacyService().nodeHoldsShieldedWallet(saved);
+      if (held == false && state?.zfxAddress == saved) {
+        clear();
+      }
     }
   }
 
