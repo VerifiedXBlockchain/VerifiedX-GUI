@@ -26,6 +26,8 @@ const IMPORT_VIEWING_KEY_ENABLED = false;
 const WEB_VBTC_OWNERSHIP_TRANSFER_ENABLED = true;
 // CLI consensus cap on inputs in one multi-contract vBTC transfer.
 const VBTC_MULTI_MAX_INPUTS = 25;
+// Core's cap on vaults in one vBTC withdrawal request (MaxMultiWithdrawalInputs).
+const VBTC_MULTI_WITHDRAWAL_MAX_VAULTS = 10;
 
 const REFRESH_TIMEOUT_SECONDS = 30;
 const REFRESH_TIMEOUT_SECONDS_WEB_BTC = 90;
