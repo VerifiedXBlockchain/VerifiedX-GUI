@@ -578,7 +578,7 @@ class VbtcV2Service extends BaseService {
   }) async {
     const method = 'RequestWithdrawalMulti';
     final params = {
-      // Unused by this route, but 9.0.0 nodes refuse a body without it (#359).
+      // Unused by this route, but 9.0.0 nodes refuse a body without it (VerifiedX-Issues 359).
       'SmartContractUID': '',
       'RequestorAddress': requestorAddress,
       'BTCAddress': btcAddress,
