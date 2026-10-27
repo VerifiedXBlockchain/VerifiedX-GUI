@@ -48,10 +48,15 @@ class VbtcV2Service extends BaseService {
   /// Returns them as [TokenizedBitcoin] with version=2 so the UI
   /// can merge them into the unified token list.
   ///
-  /// When [address] is given, the result is filtered to contracts that
-  /// address owns or holds a spendable balance on.
+  /// Only contracts [address] owns or holds a spendable balance on. With no
+  /// address (a wallet with no accounts) nothing belongs to it, so the list
+  /// is empty.
   Future<List<TokenizedBitcoin>> getContractList({String? address}) async {
     const method = 'GetContractList';
+    if (address == null || address.isEmpty) {
+      return [];
+    }
+
     // Always the unfiltered list: GetContractList/{address} is owner-scoped
     // on the CLI, which hides contracts this wallet received balance on but
     // does not own. Holder filtering happens below via the spendable lookups.
@@ -104,18 +109,15 @@ class VbtcV2Service extends BaseService {
       // Only ever for the address the caller named. Falling back to the
       // contract's OwnerAddress would put the OWNER's spendable figure in
       // `myBalance`, which is the current wallet's field — the same wrong-holder
-      // balance this lookup exists to fix, just sourced differently. With no
-      // address there is nothing correct to show, so it stays 0.
-      final List<double?> spendable = address == null
-          ? List<double?>.filled(parsed.length, null)
-          : await Future.wait(
-              parsed.map(
-                (c) => getSpendableBalance(
-                  address: address,
-                  scUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
-                ),
-              ),
-            );
+      // balance this lookup exists to fix, just sourced differently.
+      final List<double?> spendable = await Future.wait(
+        parsed.map(
+          (c) => getSpendableBalance(
+            address: address,
+            scUid: c['SmartContractUID'] ?? c['SmartContractUid'] ?? '',
+          ),
+        ),
+      );
 
       final List<Nft?> chainMeta = await chainMetaFuture;
 
@@ -152,10 +154,6 @@ class VbtcV2Service extends BaseService {
         } catch (e) {
           _log(method, 'Failed to parse V2 contract: $e');
         }
-      }
-
-      if (address == null) {
-        return tokens;
       }
 
       // The unfiltered endpoint returns every contract the node knows about;
