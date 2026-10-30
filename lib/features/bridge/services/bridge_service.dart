@@ -16,6 +16,7 @@ import '../utils/cli_exit.dart';
 import '../../wallet/models/private_key_export.dart';
 import '../../block/block.dart';
 import '../../genesis/models/genesis_block.dart';
+import '../../keygen/utils/recovery_phrase.dart';
 import '../../node/models/node.dart';
 import '../../node/models/node_info.dart';
 import '../../send/send_amount.dart';
@@ -418,8 +419,14 @@ class BridgeService extends BaseService {
   /// Restores an HD wallet from [mnumonic]. Returns null on success, or the
   /// node's reason (empty when it gave none).
   Future<String?> restoreHd(String mnumonic) async {
+    // Checked here, not only by the node: the node derives the seed from the
+    // text as sent, and a ? or # in the path would cut the phrase short.
+    final phrase = validRecoveryPhrase(mnumonic);
+    if (phrase == null) {
+      return globalL10n.keygenRecoveryMnemonicInvalid;
+    }
     try {
-      final response = await getText("/GetRestoreHDWallet/${mnumonic.trim()}", cleanPath: false);
+      final response = await getText("/GetRestoreHDWallet/$phrase", cleanPath: false);
       return hdRestoreFailure(response);
     } catch (e) {
       print(e);

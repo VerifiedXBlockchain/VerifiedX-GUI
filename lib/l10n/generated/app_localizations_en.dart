@@ -2551,6 +2551,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get keygenPublicKeyCopiedToast => 'Public key copied to clipboard';
 
   @override
+  String get keygenRecoveryMnemonicInvalid => 'That recovery mnemonic isn\'t valid. Check that each word is spelled correctly and in the right order.';
+
+  @override
   String get keygenRecoveryMnemonicLabel => 'Recovery Mnemonic';
 
   @override
