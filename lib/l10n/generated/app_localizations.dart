@@ -4845,6 +4845,12 @@ abstract class AppLocalizations {
   /// **'Public key copied to clipboard'**
   String get keygenPublicKeyCopiedToast;
 
+  /// Error when the entered recovery mnemonic fails the BIP39 check.
+  ///
+  /// In en, this message translates to:
+  /// **'That recovery mnemonic isn\'t valid. Check that each word is spelled correctly and in the right order.'**
+  String get keygenRecoveryMnemonicInvalid;
+
   /// Field label for the recovery mnemonic input.
   ///
   /// In en, this message translates to:
