@@ -59,3 +59,7 @@ Use `.ocr/skills/SKILL.md` to learn:
 Keep this managed block so 'ocr init' can refresh the instructions.
 
 <!-- OCR:END -->
+
+## Release entrypoint
+
+Release and deploy builds use `lib/main.dart` (the default Flutter target: `make build_web*`, `make deploy_web_<network>`, `make release_macos_<network>`). `lib/main_automation.dart` is the instrumentation entrypoint for the automation driver and smoke lanes only (`make run_macos_driver*`); never ship a build made from it. Version bumps go through `/patch-gui` (APP_V and the `main.dart.js` cache-bust together).
