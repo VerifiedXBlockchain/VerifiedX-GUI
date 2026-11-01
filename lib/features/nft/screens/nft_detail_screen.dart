@@ -43,6 +43,7 @@ import '../../smart_contracts/models/feature.dart';
 import '../../smart_contracts/providers/my_smart_contracts_provider.dart';
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
+import '../../web_shop/services/web_shop_service.dart';
 import '../components/media_backup.dart';
 import '../components/nft_qr_code.dart';
 import '../components/web_asset_card.dart';
@@ -880,12 +881,38 @@ class NftDetailScreen extends BaseScreen {
                         variant: AppColorVariant.Primary,
                         onPressed: () async {
                           final l10n = AppLocalizations.of(context);
+                          // The explorer only lets the NFT's owner replace
+                          // media it already holds, so sync as that account.
+                          final ownerWallet = ref
+                              .read(walletListProvider)
+                              .firstWhereOrNull(
+                                  (w) => w.address == nft.currentOwner);
+                          if (ownerWallet == null) {
+                            Toast.error(l10n.nftSyncMediaOwnerAccountMissing);
+                            return;
+                          }
+                          final ownerPrivateKey = ownerWallet.privateKey;
+                          if (ownerPrivateKey == null) {
+                            Toast.error(l10n.r3bNoPrivateKey);
+                            return;
+                          }
                           final assets = [
                             nft.primaryAsset,
                             ...nft.additionalAssets
                           ];
                           ref.read(globalLoadingProvider.notifier).start();
                           try {
+                            final ownerToken = await WebShopService().authorize(
+                              message: generateRandomString(32),
+                              address: ownerWallet.address,
+                              privateKey: ownerPrivateKey,
+                              publicKey: ownerWallet.publicKey,
+                            );
+                            if (ownerToken == null) {
+                              Toast.error(l10n.nftSyncMediaAuthFailed);
+                              return;
+                            }
+
                             final Map<String, String> mediaMap = {};
                             for (final a in assets) {
                               final bytes = await a.file.readAsBytes();
@@ -900,7 +927,8 @@ class NftDetailScreen extends BaseScreen {
                             }
 
                             final associated = await ExplorerService()
-                                .associateMedia(nft.id, mediaMap);
+                                .associateMedia(nft.id, mediaMap,
+                                    authToken: ownerToken.token);
                             if (associated) {
                               Toast.message(l10n.nftSyncMediaSuccess);
                             } else {

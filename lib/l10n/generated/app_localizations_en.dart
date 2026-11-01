@@ -3384,6 +3384,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get nftSyncMediaOwnerAccountMissing => 'The account that owns this NFT isn\'t in this wallet, so its media can\'t be synced.';
+
+  @override
+  String get nftSyncMediaAuthFailed => 'Couldn\'t prove ownership of this NFT to the explorer. Please try again.';
+
+  @override
   String nftSyncMediaUploadFailed(String fileName) {
     return 'Couldn\'t upload $fileName. Media was not synced.';
   }

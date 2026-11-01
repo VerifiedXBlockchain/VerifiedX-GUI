@@ -53,10 +53,11 @@ class BaseService {
     bool json = false,
     int timeout = 30000,
     bool Function(int?)? validateStatus,
+    Map<String, String> extraHeaders = const {},
   }) {
     return BaseOptions(
       baseUrl: _baseUrl,
-      headers: _headers(auth, json),
+      headers: {..._headers(auth, json), ...extraHeaders},
       connectTimeout: Duration(milliseconds: timeout),
       receiveTimeout: Duration(milliseconds: timeout),
       validateStatus: validateStatus,
@@ -193,6 +194,8 @@ class BaseService {
     }
   }
 
+  /// [headers] go on this one request on top of the service's own, for a
+  /// per-request Authorization token for example.
   Future<Map<String, dynamic>> postJson(
     String path, {
     Map<String, dynamic> params = const {},
@@ -203,9 +206,16 @@ class BaseService {
     bool cleanPath = true,
     bool Function(int?)? validateStatus,
     bool unlockIfLocked = true,
+    Map<String, String> headers = const {},
   }) async {
     try {
-      final dio = _dio(_options(auth: auth, json: true, timeout: timeout, validateStatus: validateStatus));
+      final dio = _dio(_options(
+        auth: auth,
+        json: true,
+        timeout: timeout,
+        validateStatus: validateStatus,
+        extraHeaders: headers,
+      ));
       if (inspect) {
         NetworkInspector.attach(dio);
       }

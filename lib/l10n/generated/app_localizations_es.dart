@@ -3384,6 +3384,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get nftSyncMediaOwnerAccountMissing => 'La cuenta propietaria de este NFT no está en esta billetera, así que no se pueden sincronizar sus medios.';
+
+  @override
+  String get nftSyncMediaAuthFailed => 'No se pudo demostrar ante el explorador que esta cuenta es la propietaria del NFT. Inténtalo de nuevo.';
+
+  @override
   String nftSyncMediaUploadFailed(String fileName) {
     return 'No se pudo subir $fileName. Los medios no se sincronizaron.';
   }

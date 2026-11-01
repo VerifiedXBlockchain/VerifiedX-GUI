@@ -656,11 +656,20 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<bool> associateMedia(String scId, Map<String, String> mediaMap) async {
+  /// Sets the explorer's asset URLs for [scId]. Spyglass accepts the first
+  /// set on its own but only replaces URLs it already holds when the request
+  /// carries a token signed by the NFT owner (`POST /api/auth/sign-token/`),
+  /// so the owner's [authToken] is always sent.
+  Future<bool> associateMedia(
+    String scId,
+    Map<String, String> mediaMap, {
+    required String authToken,
+  }) async {
     try {
       final result = await postJson(
         "/media/associate-media/$scId/",
         params: {'media_map': mediaMap},
+        headers: {'Authorization': 'basic $authToken'},
       );
 
       print(result);

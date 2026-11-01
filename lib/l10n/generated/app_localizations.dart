@@ -6423,6 +6423,18 @@ abstract class AppLocalizations {
   /// **'Media sync failed: {error}'**
   String nftSyncMediaError(String error);
 
+  /// Toast when Sync Media is pressed on an NFT whose current owner is not one of the wallet's accounts; the explorer only accepts replacement media signed by the owner.
+  ///
+  /// In en, this message translates to:
+  /// **'The account that owns this NFT isn\'t in this wallet, so its media can\'t be synced.'**
+  String get nftSyncMediaOwnerAccountMissing;
+
+  /// Toast when Sync Media cannot obtain a signed token from the explorer for the NFT owner's account.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t prove ownership of this NFT to the explorer. Please try again.'**
+  String get nftSyncMediaAuthFailed;
+
   /// Toast when one NFT media file fails to upload during Sync Media; nothing is associated.
   ///
   /// In en, this message translates to:
