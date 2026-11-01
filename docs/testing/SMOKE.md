@@ -24,7 +24,14 @@ Everything not listed here (case format, hooks, waits, evidence, result values, 
 
 In scope: areas 01 to 09, 11, 12 and 13 as listed in `README.md`, on the web wallet and the macOS desktop GUI.
 
-Out of scope, in addition to the README's exclusions (P2P shop, Base bridge, MOTHER, Windows):
+Out of scope, in addition to the README's exclusions (P2P shop, Windows). Never test these in a smoke pass:
+
+- **Bfly on testnet:** one Bfly deployment serves both networks and is a separate product; its cases (TC-MISC-017 to 020, 023) are out.
+- **Base bridge (vBTCb):** not exercised on testnet.
+- **MOTHER:** out.
+- **v1 vBTC:** dead; every legacy-vault case is `skipped` for good.
+
+Case-level exclusions:
 
 | Excluded | Why |
 |---|---|
