@@ -271,7 +271,7 @@ class NftService extends BaseService {
 
   Future<bool?> verifyOwnership(String signature) async {
     try {
-      final response = await getText("/VerifyOwnership/$signature", cleanPath: false);
+      final response = await getText(absoluteUrl("/VerifyOwnership/$signature"), cleanPath: false);
       final Map<String, dynamic> data = jsonDecode(response);
       return data["Success"] == true;
     } catch (e) {

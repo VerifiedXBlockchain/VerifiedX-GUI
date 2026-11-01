@@ -36,11 +36,17 @@ class VbtcAllocation {
 
 /// Splits [total] across [balances] (contract id to spendable vBTC) the way
 /// the CLI's own allocator does: largest balance first, ties broken by
-/// ordinal contract id, greedy until covered.
+/// ordinal contract id, greedy until covered. More than [maxInputs] inputs is
+/// a failure: 25 for a transfer, [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS] for a
+/// withdrawal.
 ///
 /// Works in integer satoshis so the input amounts sum to the total exactly;
 /// consensus rejects any drift between `TotalAmount` and the inputs.
-VbtcAllocation allocateVbtcInputs(Map<String, double> balances, double total) {
+VbtcAllocation allocateVbtcInputs(
+  Map<String, double> balances,
+  double total, {
+  int maxInputs = VBTC_MULTI_MAX_INPUTS,
+}) {
   final candidates = balances.entries
       .map((e) => MapEntry(e.key, _toSats(e.value)))
       .where((e) => e.value > 0)
@@ -74,7 +80,7 @@ VbtcAllocation allocateVbtcInputs(Map<String, double> balances, double total) {
       failure: VbtcAllocationFailure.insufficientBalance,
     );
   }
-  if (inputs.length > VBTC_MULTI_MAX_INPUTS) {
+  if (inputs.length > maxInputs) {
     return VbtcAllocation(
       inputs: const [],
       available: available,

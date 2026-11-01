@@ -54,14 +54,8 @@ class BaseService {
     int timeout = 30000,
     bool Function(int?)? validateStatus,
   }) {
-    String host = Env.apiBaseUrl;
-    if (hostOverride != null) {
-      host = hostOverride!;
-    }
-
-    final baseUrl = apiBasePathOverride == null ? host : host.replaceAll("/api/V1", apiBasePathOverride!);
     return BaseOptions(
-      baseUrl: baseUrl,
+      baseUrl: _baseUrl,
       headers: _headers(auth, json),
       connectTimeout: Duration(milliseconds: timeout),
       receiveTimeout: Duration(milliseconds: timeout),
@@ -92,6 +86,16 @@ class BaseService {
     }
     return LockedWalletGate.run(request, enabled: unlockIfLocked);
   }
+
+  String get _baseUrl {
+    final host = hostOverride ?? Env.apiBaseUrl;
+    return apiBasePathOverride == null ? host : host.replaceAll("/api/V1", apiBasePathOverride!);
+  }
+
+  /// [path] as a full URL. Dio rewrites every '//' in a relative path to '/',
+  /// which corrupts a base64 signature carried in the path (one that contains
+  /// '//'); it leaves a full URL as it is (VerifiedX-Issues#367).
+  String absoluteUrl(String path) => "$_baseUrl$path";
 
   String _cleanPath(String path) {
     if (!path.endsWith("/")) {

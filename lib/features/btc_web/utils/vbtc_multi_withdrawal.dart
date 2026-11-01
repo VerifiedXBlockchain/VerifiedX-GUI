@@ -1,0 +1,171 @@
+import '../../../core/app_constants.dart';
+import 'vbtc_amount.dart';
+import 'vbtc_multi_allocator.dart';
+
+const int _satsPerVbtc = 100000000;
+
+int _toSats(double amount) => (amount * _satsPerVbtc).round();
+double _fromSats(int sats) => sats / _satsPerVbtc;
+
+/// The Bitcoin fee one share pays at [feeRate] sats/vB, out of its own
+/// amount. A vault whose coins are small may need a bigger transaction, so
+/// this is the least it costs.
+int vbtcWithdrawalShareFeeSats(int feeRate) => feeRate * kVbtcWithdrawalMinVsize;
+
+/// The most one request can withdraw from [balances]: the sum of the
+/// [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS] largest.
+double vbtcMultiWithdrawalMax(Map<String, double> balances) {
+  final sats = balances.values.map(_toSats).where((s) => s > 0).toList()..sort((a, b) => b.compareTo(a));
+  return _fromSats(sats.take(VBTC_MULTI_WITHDRAWAL_MAX_VAULTS).fold<int>(0, (sum, s) => sum + s));
+}
+
+enum VbtcWithdrawalPlanFailure {
+  /// The total is zero, negative or more precise than a satoshi.
+  invalidAmount,
+
+  /// The fee rate is not a positive number of sats/vB.
+  invalidFeeRate,
+  insufficientBalance,
+  tooManyVaults,
+  shareBelowFeeFloor,
+}
+
+/// How one withdrawal request of a total would be split across vaults, with
+/// what it costs in Bitcoin fees, or why Core would refuse it.
+class VbtcWithdrawalPlan {
+  final List<VbtcAllocationInput> shares;
+  final int feeRate;
+  final VbtcWithdrawalPlanFailure? failure;
+
+  /// 1-based part that falls below the fee floor, for
+  /// [VbtcWithdrawalPlanFailure.shareBelowFeeFloor].
+  final int? belowFloorPart;
+
+  /// Combined balance across every candidate vault.
+  final double available;
+
+  const VbtcWithdrawalPlan({
+    required this.shares,
+    required this.feeRate,
+    required this.available,
+    this.failure,
+    this.belowFloorPart,
+  });
+
+  bool get ok => failure == null;
+
+  /// The least Bitcoin fee one share pays: the smallest withdrawal
+  /// transaction at [feeRate]. A vault whose coins are small may need a
+  /// bigger transaction and pay more.
+  int get minPerShareFeeSats => vbtcWithdrawalShareFeeSats(feeRate);
+
+  /// The least the shares pay in Bitcoin fees together.
+  int get minTotalFeeSats => minPerShareFeeSats * shares.length;
+
+  int get floorSats => vbtcWithdrawalMinimumSats(feeRate);
+
+  /// The most that reaches the Bitcoin address: the total less the least
+  /// fee per share. Less arrives when a share needs a bigger transaction.
+  double get maxNetAmount => _fromSats(shares.fold<int>(0, (sum, s) => sum + _toSats(s.amount)) - minTotalFeeSats);
+}
+
+double _available(Map<String, double> balances) =>
+    _fromSats(balances.values.map(_toSats).where((s) => s > 0).fold<int>(0, (sum, s) => sum + s));
+
+/// Splits [total] across [balances] (vault id to spendable vBTC) by Core's
+/// rule, largest first and ties by id, then checks what Core checks before it
+/// signs anything: at most [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS] vaults, and
+/// each share able to pay its own fee at [feeRate] and leave
+/// [kBtcDustSats] to pay out. That is the watched vault's rule
+/// (BtcWithdrawals in Core), stricter than the request builder's 330-sat
+/// floor. The last share is the one that runs small.
+VbtcWithdrawalPlan planVbtcMultiWithdrawal(Map<String, double> balances, double total, int feeRate) {
+  if (feeRate <= 0) {
+    return VbtcWithdrawalPlan(
+      shares: const [],
+      feeRate: feeRate,
+      available: _available(balances),
+      failure: VbtcWithdrawalPlanFailure.invalidFeeRate,
+    );
+  }
+  if (!(total > 0) || _fromSats(_toSats(total)) != total) {
+    return VbtcWithdrawalPlan(
+      shares: const [],
+      feeRate: feeRate,
+      available: _available(balances),
+      failure: VbtcWithdrawalPlanFailure.invalidAmount,
+    );
+  }
+
+  final allocation = allocateVbtcInputs(balances, total, maxInputs: VBTC_MULTI_WITHDRAWAL_MAX_VAULTS);
+  if (!allocation.ok) {
+    return VbtcWithdrawalPlan(
+      shares: const [],
+      feeRate: feeRate,
+      available: allocation.available,
+      failure: allocation.failure == VbtcAllocationFailure.tooManyInputs
+          ? VbtcWithdrawalPlanFailure.tooManyVaults
+          : VbtcWithdrawalPlanFailure.insufficientBalance,
+    );
+  }
+
+  return vbtcWithdrawalPlanForShares(allocation.inputs, feeRate, allocation.available);
+}
+
+/// Checks shares already chosen (Core's own allocation, on desktop) the way
+/// [planVbtcMultiWithdrawal] checks its own: at most
+/// [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS], and each able to pay its fee at
+/// [feeRate] and leave [kBtcDustSats]. Core's builder checks only 330 sats,
+/// so its allocation can hold a share a watched vault refuses at send.
+VbtcWithdrawalPlan vbtcWithdrawalPlanForShares(List<VbtcAllocationInput> shares, int feeRate, double available) {
+  if (feeRate <= 0) {
+    return VbtcWithdrawalPlan(
+        shares: const [], feeRate: feeRate, available: available, failure: VbtcWithdrawalPlanFailure.invalidFeeRate);
+  }
+  if (shares.length > VBTC_MULTI_WITHDRAWAL_MAX_VAULTS) {
+    return VbtcWithdrawalPlan(
+        shares: const [], feeRate: feeRate, available: available, failure: VbtcWithdrawalPlanFailure.tooManyVaults);
+  }
+  final floor = vbtcWithdrawalMinimumSats(feeRate);
+  for (var i = 0; i < shares.length; i++) {
+    if (_toSats(shares[i].amount) < floor) {
+      return VbtcWithdrawalPlan(
+        shares: shares,
+        feeRate: feeRate,
+        available: available,
+        failure: VbtcWithdrawalPlanFailure.shareBelowFeeFloor,
+        belowFloorPart: i + 1,
+      );
+    }
+  }
+  return VbtcWithdrawalPlan(shares: shares, feeRate: feeRate, available: available);
+}
+
+/// Whether Core's prepared request (Spyglass `withdraw/multi/prepare/`) is
+/// the one the user confirmed: the same vaults with the same amounts, to the
+/// same Bitcoin address. The wallet signs only the hash, so this is its last
+/// look at what that hash commits to.
+bool vbtcPreparedWithdrawalMatches(
+  Map<String, dynamic> prepared, {
+  required List<VbtcAllocationInput> shares,
+  required String btcAddress,
+}) {
+  final destination = prepared['Destination'];
+  if (destination is! String || destination.toLowerCase() != btcAddress.trim().toLowerCase()) {
+    return false;
+  }
+  final allocations = prepared['Allocations'];
+  if (allocations is! List || allocations.length != shares.length) {
+    return false;
+  }
+  for (var i = 0; i < shares.length; i++) {
+    final allocation = allocations[i];
+    if (allocation is! Map ||
+        allocation['SCUID'] != shares[i].scIdentifier ||
+        allocation['Amount'] is! num ||
+        _toSats((allocation['Amount'] as num).toDouble()) != _toSats(shares[i].amount)) {
+      return false;
+    }
+  }
+  return true;
+}

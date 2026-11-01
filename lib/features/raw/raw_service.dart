@@ -93,7 +93,7 @@ class RawService extends BaseService {
   Future<bool> validateSignature(String message, String address, String signature) async {
     try {
       final response = await postJson(
-        '/validate-signature/$message/$address/$signature/',
+        absoluteUrl('/validate-signature/$message/$address/$signature/'),
         cleanPath: false,
       );
       return response['data'] == true;
@@ -305,7 +305,7 @@ class RawService extends BaseService {
 
   Future<String?> beaconUpload(String scId, String toAddress, String signature, [int attempt = 0]) async {
     try {
-      final data = await getJson("/beacon/upload/$scId/$toAddress/$signature", cleanPath: false);
+      final data = await getJson(absoluteUrl("/beacon/upload/$scId/$toAddress/$signature"), cleanPath: false);
       if (data['success'] == true) {
         return data['locator'];
       }
@@ -329,7 +329,7 @@ class RawService extends BaseService {
 
   Future<bool> beaconAssets(String scId, String locators, String address, String signature) async {
     try {
-      final path = "/beacon-assets/$scId/$locators/$address/$signature";
+      final path = absoluteUrl("/beacon-assets/$scId/$locators/$address/$signature");
 
       final assets = await getText(path, cleanPath: false);
       print("Assets: $assets");
