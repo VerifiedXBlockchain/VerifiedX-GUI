@@ -10451,6 +10451,10 @@
       }
     }
   },
+  "btcMultiWdSplitChanged": "Los saldos de tus bóvedas cambiaron después de confirmar, así que este retiro se dividiría de otra forma. No se envió nada. Revisa el retiro de nuevo.",
+  "@btcMultiWdSplitChanged": {
+    "description": "Desktop multi-vault withdrawal: Core's split changed between confirmation and send, so nothing was sent."
+  },
   "btcMultiWdLegacyVault": "Parte de este monto saldría de una bóveda creada antes de la atestación de Bitcoin, y esta pantalla no retira de ella. Retira primero desde la página de esa bóveda, o retira menos.",
   "@btcMultiWdLegacyVault": {
     "description": "Desktop multi-vault withdrawal refused: the node's own allocation would include a legacy (pre-attestation) vault."

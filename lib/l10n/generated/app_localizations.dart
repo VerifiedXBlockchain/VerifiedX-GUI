@@ -20901,6 +20901,12 @@ abstract class AppLocalizations {
   /// **'Part {part} would be {amount} BTC, below the Bitcoin fee floor at {feeRate} sat/vB (each part needs at least {minimum} BTC). Lower the fee rate or the amount.'**
   String btcMultiWdBelowFloor(int part, String amount, int feeRate, String minimum);
 
+  /// Desktop multi-vault withdrawal: Core's split changed between confirmation and send, so nothing was sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Your vault balances changed after you confirmed, so this withdrawal would be split differently. Nothing was sent. Review the withdrawal again.'**
+  String get btcMultiWdSplitChanged;
+
   /// Desktop multi-vault withdrawal refused: the node's own allocation would include a legacy (pre-attestation) vault.
   ///
   /// In en, this message translates to:
