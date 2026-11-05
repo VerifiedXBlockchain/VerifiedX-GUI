@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 FloatingActionButton buildSupportButton() {
   return FloatingActionButton.extended(
     onPressed: () {
-      launchUrl(Uri.parse("https://discord.com/invite/PnS2HRETDh"));
+      launchUrl(Uri.parse("https://discord.gg/7cd5ebDQCj"));
     },
     label: Row(
       mainAxisSize: MainAxisSize.min,
