@@ -658,7 +658,7 @@ Future<dynamic> handleRecoverFromMnemonic(BuildContext context, WidgetRef ref,
     final keypair = await KeygenService.recover(value.trim());
 
     if (keypair == null) {
-      Toast.error();
+      Toast.error(l10n.keygenRecoveryMnemonicInvalid);
       ref.read(globalLoadingProvider.notifier).complete();
 
       return;

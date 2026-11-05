@@ -9,6 +9,7 @@ import 'package:rbx_wallet/core/env.dart';
 import 'package:bip32/bip32.dart' as bip32;
 import 'package:rbx_wallet/features/keygen/models/keypair.dart';
 import 'package:rbx_wallet/features/keygen/models/ra_keypair.dart';
+import 'package:rbx_wallet/features/keygen/utils/recovery_phrase.dart';
 
 class KeygenService {
   static Future<Keypair> importPrivateKey(
@@ -107,6 +108,6 @@ class KeygenService {
   }
 
   static Future<Keypair?> recover(String mnemonic, [int index = 0]) async {
-    return _mneumonicToKeypair(mnemonic, index);
+    return _mneumonicToKeypair(normalizeRecoveryPhrase(mnemonic), index);
   }
 }

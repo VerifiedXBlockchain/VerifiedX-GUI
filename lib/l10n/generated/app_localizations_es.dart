@@ -2551,6 +2551,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get keygenPublicKeyCopiedToast => 'Clave pública copiada al portapapeles';
 
   @override
+  String get keygenRecoveryMnemonicInvalid => 'Ese mnemónico de recuperación no es válido. Revisa que cada palabra esté bien escrita y en el orden correcto.';
+
+  @override
   String get keygenRecoveryMnemonicLabel => 'Mnemónico de recuperación';
 
   @override
