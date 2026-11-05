@@ -40,6 +40,7 @@ import '../models/btc_fee_rate_preset.dart';
 import '../models/btc_recommended_fees.dart';
 import '../../../core/providers/session_provider.dart';
 import './withdrawal_processing_dialog.dart';
+import '../screens/vbtc_multi_withdrawal_screen.dart';
 import '../../price/providers/price_detail_providers.dart';
 import '../../../core/utils/tx_refresh.dart';
 import 'btc_fee_estimate_note.dart';
@@ -528,6 +529,23 @@ class TokenizedBtcActionButtons extends BaseComponent {
                     );
                   },
                 );
+
+                if (result is _MultiWithdrawalOffer) {
+                  final openMulti = await ConfirmDialog.show(
+                    title: l10n.btcMultiWdOfferTitle,
+                    body: l10n.btcMultiWdOfferBody(token.myBalance.toString(), result.amount.toString()),
+                    confirmText: l10n.btcMultiWdOfferConfirm,
+                    cancelText: l10n.actionCancel,
+                  );
+                  if (openMulti == true) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => VbtcMultiWithdrawalScreen(initialAmount: result.amount),
+                      ),
+                    );
+                  }
+                  return;
+                }
 
                 if (result is _TransferShareModalResponse) {
                   final confirmed = await ConfirmDialog.show(
@@ -1187,6 +1205,14 @@ void _showManualSendDialog(BuildContext context, String btcAddress) {
   );
 }
 
+/// The per-vault withdraw form's answer when the amount is above this
+/// vault's balance but the account's vaults together could cover it.
+class _MultiWithdrawalOffer {
+  final double amount;
+
+  const _MultiWithdrawalOffer(this.amount);
+}
+
 class _TransferShareModalResponse {
   final String toAddress;
   final double amount;
@@ -1435,6 +1461,16 @@ class _TransferSharesModal extends BaseComponent {
                       }
 
                       if (amount > token.myBalance) {
+                        // Several vaults together may cover it: offer the
+                        // multi-vault withdrawal instead of refusing.
+                        final heldOnV2 = ref
+                            .read(tokenizedBitcoinListProvider)
+                            .where((t) => t.version >= 2)
+                            .fold<double>(0, (sum, t) => sum + t.myBalance);
+                        if (forWithdrawl && token.version >= 2 && amount <= heldOnV2) {
+                          Navigator.of(context).pop(_MultiWithdrawalOffer(amount));
+                          return;
+                        }
                         Toast.error(l10n.btcNotEnoughBalanceShort);
                         return;
                       }

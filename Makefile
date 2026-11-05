@@ -193,6 +193,17 @@ run_macos_automation:
 run_macos_driver:
 	fvm flutter run -t lib/main_automation.dart -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
 
+# The same driver flavor without the AUTOMATION define: the CLI runs on the
+# real ~/rbxtest folder and preferences are the installed wallet's. Nothing is
+# isolated, so back up ~/rbxtest first and never run it beside the wallet.
+run_macos_driver_real:
+	fvm flutter run -t lib/main_automation.dart -d macos --dart-define TESTNET=true
+
+# Profile build of the same: kDebugMode is false, so BTC pending badges, Replace By Fee and
+# Rebroadcast behave as in a release; the driver extension still works (the VM service is on).
+run_macos_driver_real_profile:
+	fvm flutter run --profile -t lib/main_automation.dart -d macos --dart-define TESTNET=true
+
 test_integration_macos:
 	fvm flutter test integration_test -d macos --dart-define TESTNET=true --dart-define AUTOMATION=true
 

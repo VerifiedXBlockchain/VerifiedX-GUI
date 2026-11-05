@@ -656,11 +656,20 @@ class ExplorerService extends BaseService {
     }
   }
 
-  Future<bool> associateMedia(String scId, Map<String, String> mediaMap) async {
+  /// Sets the explorer's asset URLs for [scId]. Spyglass accepts the first
+  /// set on its own but only replaces URLs it already holds when the request
+  /// carries a token signed by the NFT owner (`POST /api/auth/sign-token/`),
+  /// so the owner's [authToken] is always sent.
+  Future<bool> associateMedia(
+    String scId,
+    Map<String, String> mediaMap, {
+    required String authToken,
+  }) async {
     try {
       final result = await postJson(
         "/media/associate-media/$scId/",
         params: {'media_map': mediaMap},
+        headers: {'Authorization': 'basic $authToken'},
       );
 
       print(result);
@@ -910,6 +919,37 @@ class ExplorerService extends BaseService {
       print(e);
       // Keep Spyglass's reason (e.g. "A withdrawal is already in progress
       // ...") for userErrorMessage instead of a fixed English string.
+      rethrow;
+    }
+  }
+
+  /// One withdrawal request drawn from several vaults (Core's
+  /// `GetRawRequestWithdrawalMultiTxData`). [inputs] are the wallet's shares
+  /// (`sc_identifier`, `amount`); Core checks each against chain state before
+  /// handing out the hash, which goes through [sendV2WithdrawalRequest].
+  Future<Map<String, dynamic>> prepareV2WithdrawalRequestMulti({
+    required String requestorAddress,
+    required String btcAddress,
+    required double totalAmount,
+    required int feeRate,
+    required List<Map<String, dynamic>> inputs,
+  }) async {
+    try {
+      final response = await postJson(
+        '/btc/vbtc-v2/withdraw/multi/prepare/',
+        params: {
+          'requestor_address': requestorAddress,
+          'btc_address': btcAddress,
+          'total_amount': totalAmount,
+          'fee_rate': feeRate,
+          'inputs': inputs,
+        },
+      );
+      return response['data'];
+    } catch (e) {
+      print(e);
+      // Keep Spyglass's reason for userErrorMessage instead of a fixed
+      // English string.
       rethrow;
     }
   }

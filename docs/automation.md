@@ -28,6 +28,16 @@ How Claude drives it when the tree is inside the shadow root, or when it needs v
 
 Chrome pauses `requestAnimationFrame` for a hidden tab (another tab in front, or the window fully covered), and Flutter then renders nothing: a click or tap is accepted, but the screen and the semantics tree only change once frames run again. Keep the automation tab visible. A screenshot through the extension forces a few frames even while the tab stays hidden, which is enough to flush a pending change and is what the verification below relied on.
 
+## Deployed web wallet
+
+The deployed builds (`https://wallet-testnet.verifiedx.io`, and the mainnet wallet) ship the same `web/index.html`, so `?automation=1` puts the engine in light DOM there too (checked on 2026-10-21 against the 8.0.6 testnet deploy: the `flt-glass-pane` wrapper is in the served page). Those builds are made without `AUTOMATION=true`, so nothing clicks the semantics placeholder for them: after the page loads, inject `tool/automation/flt_semantics.js` and call `fltA11y.enable()`, then wait for `fltA11y.status()` to report `mode: "light"` and a node count above zero (a few seconds). Everything in "Web wallet" above then applies, including the hash router dropping the parameter on reload and the `HtmlElementView` limitation.
+
+Two things differ from the local build. The service worker caches `main.dart.js?version=<APP_V>`, so right after a redeploy that kept the same version string the browser can hold the previous bundle: clear site data once and record the version from the landing screen and from `main.dart.js?version=` in the page source. And the deployed build is a release build: no debug prefill in password prompts, and BTC transactions show their real pending state (unlike the debug builds, see `docs/testing/README.md`, "Known limits").
+
+## Built-in browser pane
+
+Claude's built-in browser pane (tools `mcp__Claude_Browser__*`) drives the wallet exactly as the Chrome extension does: `navigate`, `read_page`, `find`, `form_input`, `computer` (clicks, typing, screenshots) and `javascript_tool` have the same names and the case hooks (`button "Send"`, `textbox "Amount"`, `fltA11y.tap(...)`, `await fltA11y.type(...)`) apply unchanged. The pane has no password-manager or other extensions, keeps the origin's site data for the session, and its tab is visible while the pane is open, so frames are not paused. Site access may need a one-time approval from the person at the machine.
+
 ## Desktop (macOS)
 
 `make test_integration_macos` runs `flutter test integration_test -d macos` with `TESTNET=true` and `AUTOMATION=true`. `make run_macos_automation` runs the app itself with the same defines. Both need a build of the macOS runner.
@@ -75,3 +85,7 @@ Each `$HOME/fvm/versions/3.7.12/bin/dart run tool/drive.dart --vm-service-url <u
 - `screenshot <path>` writes a PNG of the current frame to `<path>` (the driver waits two seconds before capturing).
 
 A finder that matches more than one widget fails with "Too many elements"; use a key. Text matches are exact, so `wait-for-text VFX` finds the boot screen's `VFX` label while a string that only appears inside a longer label does not match.
+
+### Driver on the real data folder
+
+`make run_macos_driver_real` runs the same driver flavor without the `AUTOMATION` define. The driver extension and the `ByLabel` finder are compiled in by `lib/main_automation.dart` regardless of the define, so `tool/drive.dart` works the same; what changes is everything the define isolates: the Core CLI runs on the real `~/rbxtest` folder with the installed wallet's config, accounts and keys, preferences use the installed wallet's own keys (no `automation.` prefix), log, config and media paths are the real ones, and the GUI and CLI update dialogs can appear at boot (decline them). Nothing is isolated, so before using it: quit the installed wallet (the CLI holds the databases open), back up `~/rbxtest` and the wallet's preferences (`defaults export io.reserveblock.wallet <file>`), and keep the wallet closed until the driver app has quit. Used by the smoke pass's macOS lane (`docs/testing/SMOKE.md`) at Tyler's request on 2026-10-21.
