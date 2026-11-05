@@ -43,6 +43,7 @@ import '../../smart_contracts/models/feature.dart';
 import '../../smart_contracts/providers/my_smart_contracts_provider.dart';
 import '../../wallet/models/wallet.dart';
 import '../../wallet/providers/wallet_list_provider.dart';
+import '../../wallet/private_key_access.dart';
 import '../../web_shop/services/web_shop_service.dart';
 import '../components/media_backup.dart';
 import '../components/nft_qr_code.dart';
@@ -891,9 +892,11 @@ class NftDetailScreen extends BaseScreen {
                             Toast.error(l10n.nftSyncMediaOwnerAccountMissing);
                             return;
                           }
-                          final ownerPrivateKey = ownerWallet.privateKey;
+                          // Core never lists private keys, so fetch the
+                          // owner's from the node (unlocking it first).
+                          final ownerPrivateKey = await fetchVfxPrivateKey(
+                              context, ref, ownerWallet.address);
                           if (ownerPrivateKey == null) {
-                            Toast.error(l10n.r3bNoPrivateKey);
                             return;
                           }
                           final assets = [

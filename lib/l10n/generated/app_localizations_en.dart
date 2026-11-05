@@ -11305,6 +11305,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get btcMultiWdSplitChanged => 'Your vault balances changed after you confirmed, so this withdrawal would be split differently. Nothing was sent. Review the withdrawal again.';
+
+  @override
   String get btcMultiWdLegacyVault => 'Part of this amount would come from a vault made before Bitcoin attestation, which this screen does not withdraw from. Withdraw that vault from its own page first, or withdraw less.';
 
   @override

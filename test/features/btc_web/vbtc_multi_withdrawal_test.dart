@@ -17,15 +17,71 @@ void main() {
 
     test('sums only the 10 largest', () {
       final balances = {
-        for (var i = 1; i <= 12; i++) 'c:$i': i / 100000000,
+        for (var i = 1; i <= 12; i++) 'c:$i': i * 1000 / 100000000,
       };
-      // 3 + 4 + ... + 12 sats; the 1 and 2 sat vaults are left out.
-      expect(vbtcMultiWithdrawalMax(balances), 75 / 100000000);
+      // 3,000 + 4,000 + ... + 12,000 sats; the 1,000 and 2,000 sat vaults are left out.
+      expect(vbtcMultiWithdrawalMax(balances), 75000 / 100000000);
+    });
+
+    test('leaves out vaults that cannot pay their own fee', () {
+      // 1 sat/vB: 154 sats of fee plus 546 to pay out, 700 sats in all.
+      expect(vbtcMultiWithdrawalMax({'a:1': 0.0001, 'b:2': 0.000005}), 0.0001);
+      expect(vbtcMultiWithdrawalMax({'a:1': 0.0001, 'b:2': 0.000007}), 0.000107);
+      // 3 sat/vB: 462 + 546 = 1,008 sats.
+      expect(vbtcMultiWithdrawalMax({'a:1': 0.0001, 'b:2': 0.00001}, feeRate: 3), 0.0001);
+      expect(vbtcMultiWithdrawalMax({'a:1': 0.0001, 'b:2': 0.00001008}, feeRate: 3), 0.00011008);
+    });
+
+    test('Max is a total the planner accepts', () {
+      final balances = {'a:1': 0.0001, 'b:2': 0.000005};
+      final plan = planVbtcMultiWithdrawal(balances, vbtcMultiWithdrawalMax(balances), 1);
+      expect(plan.ok, isTrue);
+      expect(plan.shares.length, 1);
     });
 
     test('ignores empty vaults', () {
       expect(vbtcMultiWithdrawalMax({'a:1': 0, 'b:2': 0.0001}), 0.0001);
       expect(vbtcMultiWithdrawalMax({}), 0);
+    });
+  });
+
+  group('vbtcWithdrawalSharesMatch', () {
+    const confirmed = [
+      VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.0001),
+      VbtcAllocationInput(scIdentifier: 'b:2', amount: 0.00005),
+    ];
+
+    test('matches the same vaults and amounts in order', () {
+      expect(
+        vbtcWithdrawalSharesMatch(const [
+          VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.0001),
+          VbtcAllocationInput(scIdentifier: 'b:2', amount: 0.00005),
+        ], confirmed),
+        isTrue,
+      );
+    });
+
+    test('refuses a split moved by a deposit', () {
+      // 15,000 sats confirmed as 10,000 + 5,000, then Core splits 14,100 + 900.
+      expect(
+        vbtcWithdrawalSharesMatch(const [
+          VbtcAllocationInput(scIdentifier: 'c:3', amount: 0.000141),
+          VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.000009),
+        ], confirmed),
+        isFalse,
+      );
+      expect(
+        vbtcWithdrawalSharesMatch(const [
+          VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.0001),
+          VbtcAllocationInput(scIdentifier: 'b:2', amount: 0.00004),
+        ], confirmed),
+        isFalse,
+      );
+    });
+
+    test('refuses a different number of vaults', () {
+      expect(vbtcWithdrawalSharesMatch(const [VbtcAllocationInput(scIdentifier: 'a:1', amount: 0.00015)], confirmed),
+          isFalse);
     });
   });
 

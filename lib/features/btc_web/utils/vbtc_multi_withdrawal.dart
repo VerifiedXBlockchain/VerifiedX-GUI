@@ -13,9 +13,13 @@ double _fromSats(int sats) => sats / _satsPerVbtc;
 int vbtcWithdrawalShareFeeSats(int feeRate) => feeRate * kVbtcWithdrawalMinVsize;
 
 /// The most one request can withdraw from [balances]: the sum of the
-/// [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS] largest.
-double vbtcMultiWithdrawalMax(Map<String, double> balances) {
-  final sats = balances.values.map(_toSats).where((s) => s > 0).toList()..sort((a, b) => b.compareTo(a));
+/// [VBTC_MULTI_WITHDRAWAL_MAX_VAULTS] largest balances that can pay their
+/// own fee at [feeRate] and leave [kBtcDustSats] to pay out. A smaller vault
+/// would be a share the planner refuses, so Max leaves it out. The fee rate
+/// is asked for after the amount, so Max prices the lowest one, 1 sat/vB.
+double vbtcMultiWithdrawalMax(Map<String, double> balances, {int feeRate = 1}) {
+  final floor = vbtcWithdrawalMinimumSats(feeRate);
+  final sats = balances.values.map(_toSats).where((s) => s > 0 && s >= floor).toList()..sort((a, b) => b.compareTo(a));
   return _fromSats(sats.take(VBTC_MULTI_WITHDRAWAL_MAX_VAULTS).fold<int>(0, (sum, s) => sum + s));
 }
 
@@ -139,6 +143,23 @@ VbtcWithdrawalPlan vbtcWithdrawalPlanForShares(List<VbtcAllocationInput> shares,
     }
   }
   return VbtcWithdrawalPlan(shares: shares, feeRate: feeRate, available: available);
+}
+
+/// Whether two allocations draw the same amounts from the same vaults, in
+/// the same order. Desktop sends only the total and Core allocates again, so
+/// it asks Core once more just before sending and sends only when Core's
+/// split is still the one the user confirmed and the planner checked.
+bool vbtcWithdrawalSharesMatch(List<VbtcAllocationInput> current, List<VbtcAllocationInput> confirmed) {
+  if (current.length != confirmed.length) {
+    return false;
+  }
+  for (var i = 0; i < current.length; i++) {
+    if (current[i].scIdentifier != confirmed[i].scIdentifier ||
+        _toSats(current[i].amount) != _toSats(confirmed[i].amount)) {
+      return false;
+    }
+  }
+  return true;
 }
 
 /// Whether Core's prepared request (Spyglass `withdraw/multi/prepare/`) is
