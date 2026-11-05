@@ -2568,6 +2568,10 @@
   "@keygenPublicKeyCopiedToast": {
     "description": "Toast confirming the public key was copied."
   },
+  "keygenRecoveryMnemonicInvalid": "Ese mnemónico de recuperación no es válido. Revisa que cada palabra esté bien escrita y en el orden correcto.",
+  "@keygenRecoveryMnemonicInvalid": {
+    "description": "Error when the entered recovery mnemonic fails the BIP39 check."
+  },
   "keygenRecoveryMnemonicLabel": "Mnemónico de recuperación",
   "@keygenRecoveryMnemonicLabel": {
     "description": "Field label for the recovery mnemonic input."
