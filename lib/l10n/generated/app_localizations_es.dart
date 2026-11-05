@@ -11305,6 +11305,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get btcMultiWdSplitChanged => 'Los saldos de tus bóvedas cambiaron después de confirmar, así que este retiro se dividiría de otra forma. No se envió nada. Revisa el retiro de nuevo.';
+
+  @override
   String get btcMultiWdLegacyVault => 'Parte de este monto saldría de una bóveda creada antes de la atestación de Bitcoin, y esta pantalla no retira de ella. Retira primero desde la página de esa bóveda, o retira menos.';
 
   @override

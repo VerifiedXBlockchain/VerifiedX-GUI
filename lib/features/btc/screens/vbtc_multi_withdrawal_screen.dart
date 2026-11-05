@@ -408,6 +408,11 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
   }
 
   /// Desktop: the node allocates, signs and broadcasts in one call.
+  /// RequestWithdrawalMulti takes only the total, so Core splits it again
+  /// from its balances at that moment. A deposit credited while the
+  /// confirmation was open can change that split and put a share under the
+  /// fee floor the planner checked, so Core is asked for its split once more
+  /// and the request is sent only when it is still the confirmed one.
   Future<void> _sendDesktop(
     AppLocalizations l10n,
     String requestorAddress,
@@ -417,6 +422,21 @@ class VbtcMultiWithdrawalScreenState extends BaseScreenState<VbtcMultiWithdrawal
     List<_Vault> vaults,
   ) async {
     ref.read(globalLoadingProvider.notifier).start();
+    final current = await VbtcV2Service().previewWithdrawalMulti(
+      requestorAddress: requestorAddress,
+      btcAddress: btcAddress,
+      amount: amount,
+      feeRate: plan.feeRate,
+    );
+    if (current == null) {
+      ref.read(globalLoadingProvider.notifier).complete();
+      return;
+    }
+    if (!vbtcWithdrawalSharesMatch(current.allocations, plan.shares)) {
+      ref.read(globalLoadingProvider.notifier).complete();
+      Toast.error(l10n.btcMultiWdSplitChanged);
+      return;
+    }
     final result = await VbtcV2Service().requestWithdrawalMulti(
       requestorAddress: requestorAddress,
       btcAddress: btcAddress,

@@ -10525,6 +10525,10 @@
       }
     }
   },
+  "btcMultiWdSplitChanged": "Your vault balances changed after you confirmed, so this withdrawal would be split differently. Nothing was sent. Review the withdrawal again.",
+  "@btcMultiWdSplitChanged": {
+    "description": "Desktop multi-vault withdrawal: Core's split changed between confirmation and send, so nothing was sent."
+  },
   "btcMultiWdLegacyVault": "Part of this amount would come from a vault made before Bitcoin attestation, which this screen does not withdraw from. Withdraw that vault from its own page first, or withdraw less.",
   "@btcMultiWdLegacyVault": {
     "description": "Desktop multi-vault withdrawal refused: the node's own allocation would include a legacy (pre-attestation) vault."
