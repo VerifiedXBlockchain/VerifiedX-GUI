@@ -109,7 +109,7 @@ class WebSmartContractLandingScreen extends BaseScreen {
                         }
                       }
 
-                      launchUrl(Uri.parse("https://trillium.rbx.network/"));
+                      launchUrl(Uri.parse("https://trillium.verifiedx.io/"));
                     },
                   ),
                 ],

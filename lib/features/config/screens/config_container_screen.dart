@@ -61,7 +61,7 @@ class ConfigContainerScreen extends BaseScreen {
         ),
         AppButton(
           onPressed: () {
-            launchUrl(Uri.parse('https://github.com/ReserveBlockIO/ReserveBlock-Core/blob/main/ConfigSetup.md'));
+            launchUrl(Uri.parse('https://github.com/VerifiedXBlockchain/VerifiedX-Core/blob/main/ConfigSetup.md'));
           },
           label: AppLocalizations.of(context).configButtonViewDocs,
           type: AppButtonType.Text,

@@ -163,7 +163,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 ### TC-SEND-009 · Send BTC with a fee-rate preset (macOS)
 **Platforms:** macOS · **Priority:** P0 · **Moves funds:** yes
 
-**Preconditions:** The BTC account from `TEST_BTC_WIF` is imported and holds at least 0.0002 testnet BTC plus fees. A second BTC address to receive: use a fresh BTC account created with `New Account` on Receive (BTC), or any testnet4 address Tyler provides.
+**Preconditions:** The BTC account from `TEST_BTC_WIF` is imported and holds at least 0.0002 testnet BTC plus fees (VerifiedX signet since 2026-10-23). A second BTC address to receive: use a fresh BTC account created with `New Account` on Receive (BTC), or any testnet4 address Tyler provides.
 
 **Steps**
 1. `tap-key nav:send`, then `tap-text BTC` in the currency switch.
@@ -189,7 +189,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 ### TC-SEND-010 · Send BTC from the web wallet
 **Platforms:** Web · **Priority:** P0 · **Moves funds:** yes
 
-**Preconditions:** Web session holds the BTC key from `TEST_BTC_WIF` with at least 0.0002 testnet BTC. A receiving testnet4 address as in TC-SEND-009.
+**Preconditions:** Web session holds the BTC key from `TEST_BTC_WIF` with at least 0.0002 testnet BTC. A receiving testnet BTC address as in TC-SEND-009.
 
 **Steps**
 1. Open Send and click `button "BTC"`.
@@ -265,7 +265,7 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 **Preconditions:** Web session with the BTC key loaded.
 
 **Steps**
-1. Load `http://localhost:42069/?automation=1#dashboard/send/btc/<a testnet4 address>/0.0001`.
+1. Load `http://localhost:42069/?automation=1#dashboard/send/btc/<a testnet BTC address>/0.0001`.
 
 **Expected**
 - The app bar reads `Send BTC`, the currency switch shows BTC selected, and the fields hold the address and `0.0001`.
@@ -313,12 +313,13 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 
 **Steps**
 1. Address `xabc`, amount `1`, submit.
-2. Address: B's address with its first character replaced by `R` (a mainnet-shaped address on testnet), amount `1`, submit.
+2. Address: a real mainnet address (copy any `R…` address from the mainnet explorer; a testnet address with its first character swapped only breaks the checksum and is caught by step 1's rule), amount `1`, submit.
 3. Address: 34 characters starting with `x` that are not a real address (for example `x` followed by 33 `A`), amount `1`, submit. Confirm `Please Confirm` if it appears on web.
 4. Type `xab c!d` into the address field.
 
 **Expected**
-- Steps 1 and 2: `Invalid Address.` under the address field (the client requires 34 characters and, on testnet, a leading `x`; `xRBX` addresses are accepted), no dialog.
+- Step 1: `Invalid Address.` under the address field (the client requires 34 characters and, on testnet, a leading `x`; `xRBX` addresses are accepted), no dialog.
+- Step 2 (9.0): `This address belongs to another network. Anything sent there could never be spent.` under the field, no dialog. The form decodes the Base58Check version byte (0x3C mainnet, 0x89 testnet; GUI PR #44, mirroring Core's admission rule) on both platforms.
 - Step 3, macOS: the form passes, the CLI `ValidateAddress` check fails and a red toast reads `Invalid Address`; no confirmation dialog.
 - Step 3, web: the form passes and `Please Confirm` opens; after confirming, the node refuses the transaction and a red toast shows the node's refusal message, or `A problem occurred.` when there is none. No `Valid Transaction` dialog.
 - Step 4: the field shows `xabcd`; spaces and symbols are filtered as you type (only letters, digits and `.` are accepted).
@@ -440,10 +441,10 @@ This area covers moving VFX and BTC from the Send screen, the prefilled send rou
 2. Copy the domain to the clipboard and use the `here` paste link instead of typing.
 
 **Expected**
-- Step 1: the form accepts the domain (any value containing `.vfx` skips the address check), the confirmation shows the domain as `To:`, and after confirmation B's address receives 1 VFX within 2 minutes.
+- Step 1 (9.0): the form accepts the domain (any value containing `.vfx` skips the address check) and the wallet resolves the name before the fee quote: the desktop through the node's `GET api/V2/ResolveAdnr/{name}` (GUI PR #44), the web through Spyglass `GET /addresses/adnr/<name>` (PR #48). The confirmation shows `To:` as `<domain> (<B's address>)` on both platforms (on web in both `Please Confirm` and `Valid Transaction`), the signed transaction is addressed to B's `x…` address, and B receives 1 VFX within 2 minutes. The name typed in mixed case (`QA-….VFX`) resolves the same way.
 - Step 2: the paste strips every non-alphanumeric character, so the field holds the domain without its dot (for example `qa20261001avfx`) and submitting shows `Invalid Address.`.
 
-**Open question:** does the Core CLI `ValidateAddress` (macOS) and Spyglass raw path (web) resolve `.vfx` domains? If step 1 fails with `Invalid Address` or a node refusal, record it; domain sending may not be supported by this build. Is the paste stripping the dot intended?
+**9.0 note:** Core refuses a transaction whose recipient is a name string from testnet block 1,172,000 (`PathAuditRulesHeight`), so a send that reaches the node with `To: <name>.vfx` unresolved is a bug, not a node quirk. **Open question:** is the paste stripping the dot intended?
 
 **Cleanup:** none.
 

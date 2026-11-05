@@ -114,7 +114,7 @@ class SmartContractsScreen extends BaseScreen {
                   iconData: Icons.code,
                   body: AppLocalizations.of(context).scLaunchIdeBody,
                   onPressed: () {
-                    launchUrl(Uri.parse("https://trillium.rbx.network/"));
+                    launchUrl(Uri.parse("https://trillium.verifiedx.io/"));
                   },
                 ),
                 // BigButton(

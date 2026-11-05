@@ -799,7 +799,7 @@ This area covers the desktop GUI's network-facing tools: the Operations screen (
 
 **Expected**
 - On testnet `VFX Explorer` opens `https://spyglass-testnet.verifiedx.io` and `BTC Explorer` opens `https://signet.verifiedx.io/`.
-- On mainnet they open `https://spyglass.verifiedx.io` and `https://mempool.space/`.
+- On mainnet they open `https://spyglass.verifiedx.io` and `https://mempool.space/`; on testnet the BTC explorer is `https://signet.verifiedx.io/`.
 - Both open in a new tab or the default browser; the wallet stays where it was.
 
 **Cleanup:** Close the opened tabs.

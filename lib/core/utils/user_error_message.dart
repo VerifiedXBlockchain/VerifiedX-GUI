@@ -87,7 +87,7 @@ String? nodeErrorText(dynamic data) {
     return null;
   }
   if (data is Map) {
-    for (final key in const ['Message', 'message', 'detail', 'error', 'title']) {
+    for (final key in const ['Message', 'message', 'detail', 'error']) {
       final value = data[key];
       if (value is String) {
         final cleaned = _clean(value);
@@ -96,7 +96,18 @@ String? nodeErrorText(dynamic data) {
         }
       }
     }
-    return null;
+    // An ASP.NET validation problem: its title alone ("One or more validation
+    // errors occurred.") says nothing, so name what each field lacks.
+    final errors = data['errors'];
+    if (errors is Map) {
+      final messages = errors.values.expand((v) => v is List ? v : [v]).whereType<String>().toList();
+      final cleaned = _clean(messages.join(' '));
+      if (cleaned != null) {
+        return cleaned;
+      }
+    }
+    final title = data['title'];
+    return title is String ? _clean(title) : null;
   }
   if (data is String) {
     final text = data.trim();

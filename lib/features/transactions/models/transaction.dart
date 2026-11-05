@@ -6,6 +6,7 @@ import '../../../l10n/l10n_helper.dart';
 
 import '../../../core/env.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../btc/models/vbtc_multi_withdrawal_result.dart';
 
 part 'transaction.freezed.dart';
 part 'transaction.g.dart';
@@ -260,6 +261,12 @@ class Transaction with _$Transaction {
       case 27:
         final data = parseNftData(this);
         if (data != null) {
+          if (nftDataValue(data, 'Function') == vbtcMultiWithdrawalFunction) {
+            final parts = data['Inputs'] is List ? (data['Inputs'] as List).length : 0;
+            final total = nftDataValue(data, 'TotalAmount');
+            final label = l10n.r3cTypeVbtcMultiWithdrawalRequest(parts);
+            return total != null ? "$label ($total vBTC)" : label;
+          }
           final amount = nftDataValue(data, 'Amount');
           if (amount != null) {
             return "${l10n.r3cTypeVbtcWithdrawalRequest} ($amount vBTC)";

@@ -219,13 +219,13 @@ This area covers VFX domains (`.vfx`, an alias for a VFX address) and BTC domain
 
 **Expected**
 - The recipient field accepts `<D1>.vfx` with no validation error.
-- `Please Confirm` shows "Sending:" 1 VFX, "To:" `<D1>.vfx`, "From:" B's address. Web `Valid Transaction` reads "This transaction is valid and is ready to send." with `To: <D1>.vfx` and `Amount: 1.0 VFX` plus the fee lines.
-- After confirmation A's balance is 1 VFX higher and the transaction's recipient resolves to A's address in the transaction detail.
+- (9.0) `Please Confirm` shows "Sending:" 1 VFX, "To:" `<D1>.vfx (<A's address>)`, "From:" B's address: the wallet resolved the name first (desktop GUI PR #44, web PR #48). Web `Valid Transaction` reads "This transaction is valid and is ready to send." with `To: <D1>.vfx (<A's address>)` and `Amount: 1.0 VFX` plus the fee lines.
+- After confirmation A's balance is 1 VFX higher and the transaction's recipient on the explorer is A's `x…` address, not the name (Core refuses name-string recipients from testnet block 1,172,000).
 
 **Cleanup:** none.
 
 ### TC-ADNR-013 · Send to a domain that does not exist
-**Platforms:** Web, macOS · **Priority:** P2 · **Moves funds:** no (expected to be refused before broadcast)
+**Platforms:** Web, macOS · **Priority:** P1 · **Moves funds:** no (refused before broadcast)
 
 **Preconditions:** As TC-ADNR-012.
 
@@ -233,9 +233,7 @@ This area covers VFX domains (`.vfx`, an alias for a VFX address) and BTC domain
 1. Open Send, enter `<RUN_ALNUM>nodomain.vfx` as recipient and `1` as amount, submit and confirm `Please Confirm`.
 
 **Expected**
-- The field validator accepts it (it only checks for `.vfx`), then the send is refused with an error toast and nothing is broadcast; B's balance is unchanged.
-
-**Open question:** the refusal text comes from Spyglass (web raw path) or the CLI (desktop); neither is in this repo. Record the text on the first run.
+- (9.0) The field validator accepts it (it only checks for `.vfx`). On submit the wallet tries to resolve the name and stops before the fee quote with `<RUN_ALNUM>nodomain.vfx could not be resolved to an address. Check the name, or send to the address itself.` (the wallet's own `svcNameNotResolved`, the same on both platforms); no confirmation dialog opens, nothing is broadcast, B's balance is unchanged.
 
 **Cleanup:** none.
 

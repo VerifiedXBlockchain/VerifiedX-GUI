@@ -43,6 +43,21 @@ void main() {
           'You must type in your encryption password first!');
     });
 
+    test('names the fields of an ASP.NET validation problem instead of its title', () {
+      final body = {
+        'type': 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
+        'title': 'One or more validation errors occurred.',
+        'status': 400,
+        'errors': {
+          'BTCTxHash': ['The BTCTxHash field is required.'],
+          'FailureProof': ['The FailureProof field is required.'],
+        },
+      };
+      expect(userErrorMessage(badResponse(400, body)),
+          'The BTCTxHash field is required. The FailureProof field is required.');
+      expect(userErrorMessage(badResponse(400, {'title': 'Forbidden', 'status': 403})), 'Forbidden');
+    });
+
     test('falls back to a generic message for an unreadable body', () {
       expect(userErrorMessage(badResponse(502, '<html><body>Bad gateway</body></html>')),
           'The request failed. Please try again.');

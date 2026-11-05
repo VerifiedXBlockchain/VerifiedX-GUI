@@ -747,7 +747,7 @@ class AccountUtils {
           break;
 
         case PaymentGateway.testnetFaucet:
-          launchUrlString("https://testnet.rbx.network/faucet");
+          launchUrlString("https://spyglass-testnet.verifiedx.io/faucet");
           break;
       }
     }
