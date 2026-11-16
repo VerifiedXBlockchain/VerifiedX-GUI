@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/env.dart';
@@ -25,6 +27,18 @@ class PartlyDownService extends FakeP2pService {
       throw const P2pError(status: null, code: P2pError.unreachable);
     }
     return super.listedNftIds(owner);
+  }
+}
+
+/// A registry whose listed-NFT reads wait until the test lets them finish.
+class SlowListedService extends FakeP2pService {
+  final List<Completer<Set<String>>> pending = [];
+
+  @override
+  Future<Set<String>> listedNftIds(String owner) {
+    final read = Completer<Set<String>>();
+    pending.add(read);
+    return read.future;
   }
 }
 
@@ -92,6 +106,37 @@ void main() {
     service.listedByOwner['xAlice'] = {'nft:2'};
     await listed.refresh();
     expect(container.read(p2pListedNftsProvider), {'nft:2'});
+  });
+
+  test('a refresh asked for while one is under way joins it: an older answer cannot land after a newer one', () async {
+    Env.setTestnetFromArgs(['--testnet']);
+    final slow = SlowListedService()
+      ..listedByOwner = {
+        'xAlice': {'nft:1'},
+      };
+    final container = ProviderContainer(overrides: [
+      p2pServiceProvider.overrideWithValue(slow),
+      walletListProvider.overrideWith((ref) => StubWalletList(ref, [wallet('xAlice')])),
+    ]);
+    addTearDown(container.dispose);
+    final listed = container.read(p2pListedNftsProvider.notifier);
+
+    final first = listed.refresh();
+    final second = listed.refresh();
+    final third = listed.refresh();
+    // The wallet's loop asked three times; the registry was asked once.
+    expect(slow.pending, hasLength(1));
+
+    slow.pending.removeAt(0).complete({'nft:1'});
+    await Future.wait([first, second, third]);
+    expect(container.read(p2pListedNftsProvider), {'nft:1'});
+
+    // The next round is a new read.
+    final next = listed.refresh();
+    expect(slow.pending, hasLength(1));
+    slow.pending.removeAt(0).complete(<String>{});
+    await next;
+    expect(container.read(p2pListedNftsProvider), isEmpty);
   });
 
   test('where the P2P shop is off (mainnet), nothing is read and nothing is flagged', () async {

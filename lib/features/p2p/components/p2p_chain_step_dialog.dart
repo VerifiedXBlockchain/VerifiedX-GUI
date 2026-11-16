@@ -15,7 +15,6 @@ import '../providers/p2p_listing_providers.dart';
 import '../services/p2p_session.dart';
 import '../services/p2p_signer.dart';
 import '../utils/p2p_error_text.dart';
-import '../utils/p2p_view.dart';
 import 'p2p_parts.dart';
 
 /// A line of the summary at the top of a chain step's confirmation.
@@ -30,7 +29,9 @@ class P2pStepRow {
 }
 
 /// Confirms a shop step that is a transaction on chain: shows what it is
-/// for, then the whole transaction, and carries it out only on Confirm.
+/// for, then the whole transaction with every address in full, and carries
+/// it out only on Confirm. A transaction that was refused is built again
+/// before it can be confirmed again.
 ///
 /// While the shop's chain steps are dry runs the sheet says so: it carries
 /// the "Dry run" badge, shows the transaction the step would send, and
@@ -83,6 +84,12 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
   bool _isSubmitting = false;
   bool _done = false;
 
+  /// Whether the transaction shown was refused when it was carried out. It
+  /// is built again before it can be confirmed again: a description goes
+  /// stale (the registry, like Core, refuses one stamped over an hour ago),
+  /// and sending the same one again would be refused again.
+  bool _refused = false;
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +100,7 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
     setState(() {
       _tx = null;
       _error = null;
+      _refused = false;
     });
     try {
       final tx = await widget.describe();
@@ -121,11 +129,11 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
         setState(() => _done = true);
       }
     } on P2pError catch (e) {
-      _failed(e);
+      _failed(e, refused: true);
     } on P2pSigningError catch (e) {
-      _failed(e);
+      _failed(e, refused: true);
     } on P2pSignInMismatch catch (e) {
-      _failed(e);
+      _failed(e, refused: true);
     } finally {
       if (mounted) {
         setState(() => _isSubmitting = false);
@@ -133,9 +141,12 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
     }
   }
 
-  void _failed(Object error) {
+  void _failed(Object error, {bool refused = false}) {
     if (mounted) {
-      setState(() => _error = error);
+      setState(() {
+        _error = error;
+        _refused = refused;
+      });
     }
   }
 
@@ -224,7 +235,9 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
                 disabled: _isSubmitting,
                 onPressed: () => Navigator.of(context).pop(false),
               ),
-              if (tx == null && _error != null)
+              // Nothing could be built, or what was built was refused:
+              // build the transaction again, with the time and fees of now.
+              if (_error != null && (tx == null || _refused))
                 AppButton(
                   key: const Key('p2p:step_retry'),
                   label: l10n.p2pRetry,
@@ -265,8 +278,8 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
           const SizedBox(height: 6),
           _row(l10n.p2pChainType, "${p2pTxTypeName(tx.type)} (${tx.type})", mono: true),
           _row(l10n.p2pChainFunction, tx.function, mono: true),
-          _row(l10n.p2pChainFrom, shortP2pAddress(tx.fromAddress, 8, 8), mono: true),
-          _row(l10n.p2pChainTo, shortP2pAddress(tx.toAddress, 8, 8), mono: true),
+          _row(l10n.p2pChainFrom, tx.fromAddress, mono: true),
+          _row(l10n.p2pChainTo, tx.toAddress, mono: true),
           _row(l10n.p2pChainAmount, p2pVfxText(l10n, tx.amount), mono: true),
           _row(l10n.p2pChainFee, p2pVfxText(l10n, tx.fee), mono: true),
           for (final payment in payments)
@@ -274,7 +287,7 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
               payment.tag == null ? l10n.p2pChainPayment : l10n.p2pChainPaymentTagged(payment.tag!),
               l10n.p2pChainPaymentTo(
                 p2pVfxText(l10n, payment.amount.toDecimalString()),
-                shortP2pAddress(payment.to),
+                payment.to,
                 p2pVfxText(l10n, payment.fee.toDecimalString()),
               ),
               mono: true,
@@ -300,7 +313,7 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
       if (value == null || value == '') {
         return;
       }
-      rows.add(P2pStepRow(label, value is String && value.length > 28 ? shortP2pAddress(value, 12, 10) : value.toString()));
+      rows.add(P2pStepRow(label, value.toString()));
     }
 
     data.forEach((key, value) {
@@ -341,7 +354,9 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
           Text(label, style: TextStyle(color: strong ? Colors.white : p2pMuted, fontSize: 13, fontWeight: strong ? FontWeight.w700 : FontWeight.w400)),
           const SizedBox(width: 12),
           Expanded(
-            child: Text(
+            // Selectable, and never shortened: every address and id in the
+            // transaction can be read whole and copied to check it.
+            child: SelectableText(
               value,
               key: valueKey,
               textAlign: TextAlign.right,

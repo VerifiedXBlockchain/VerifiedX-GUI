@@ -18,15 +18,29 @@ class P2pListedNfts extends _$P2pListedNfts {
   // What each address has listed, so one failed read does not drop the rest.
   final Map<String, Set<String>> _byAddress = {};
 
+  // The refresh under way, shared by everyone who asks meanwhile.
+  Future<void>? _refreshing;
+
   @override
   Set<String> build() => const {};
 
   /// Reads every local address's listed NFTs again. Does nothing where the
   /// P2P shop is off.
-  Future<void> refresh() async {
+  ///
+  /// One at a time: the wallet's loop asks every 15 seconds without waiting
+  /// for the last answer, and two rounds under way at once could land out of
+  /// order and put a closed listing's badge back. A call made while a round
+  /// is out joins it.
+  Future<void> refresh() {
     if (!Env.p2pEnabled) {
-      return;
+      return Future.value();
     }
+    return _refreshing ??= _readAll().whenComplete(() {
+      _refreshing = null;
+    });
+  }
+
+  Future<void> _readAll() async {
     final service = ref.read(p2pServiceProvider);
     final addresses = ref.read(walletListProvider).where((w) => !w.isReserved).map((w) => w.address).toSet();
     _byAddress.removeWhere((address, _) => !addresses.contains(address));

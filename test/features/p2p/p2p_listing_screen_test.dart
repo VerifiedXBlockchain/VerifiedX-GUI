@@ -268,9 +268,14 @@ void main() {
       expect(find.descendant(of: tx, matching: find.text('Sale_Complete()')), findsOneWidget);
       expect(find.descendant(of: tx, matching: find.text('Payment 1/2')), findsOneWidget);
       expect(find.descendant(of: tx, matching: find.text('Payment 2/2')), findsOneWidget);
-      expect(find.descendant(of: tx, matching: find.textContaining('4.9 VFX to xJwSHB…NJksJ')), findsOneWidget);
+      // Every address is shown whole: who pays, and each one who is paid.
+      expect(find.descendant(of: tx, matching: find.text(winner)), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.text('4.9 VFX to xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ (fee 0.00002 VFX)')), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.text('0.1 VFX to xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ (fee 0.00002 VFX)')), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.text('0b6ea1abd1da425fab80029f8f20944c:1794213169')), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.textContaining('…')), findsNothing);
       // The price and three fees of 0.00002.
-      expect(tester.widget<Text>(find.byKey(const Key('p2p:step_total'))).data, '5.00006 VFX');
+      expect(tester.widget<SelectableText>(find.byKey(const Key('p2p:step_total'))).data, '5.00006 VFX');
       expect(tester.widget<Text>(find.byKey(const Key('p2p:step_nothing_sent'))).data, 'Nothing is signed or sent to the network.');
       // Nothing has gone anywhere yet.
       expect(service.dryRuns, isEmpty);
@@ -307,11 +312,46 @@ void main() {
 
       expect(tester.widget<Text>(find.byKey(const Key('p2p:step_error'))).data, 'This account’s balance does not cover the amount.');
       expect(find.byKey(const Key('p2p:step_recorded')), findsNothing);
+      // What was refused is not offered for sending again as it is.
+      expect(find.byKey(const Key('p2p:step_confirm')), findsNothing);
+      expect(find.byKey(const Key('p2p:step_retry')), findsOneWidget);
 
       await tester.tap(find.byKey(const Key('p2p:step_cancel')));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 300));
       expect(find.byKey(const Key('p2p:state:salePending')), findsOneWidget);
+    });
+
+    testWidgets('a description the registry refuses as stale is built again, not sent again', (tester) async {
+      service.dryRunError = const P2pError(
+        status: 400,
+        code: 'invalid_transaction',
+        message: 'Core refuses a transaction more than an hour old or two minutes ahead.',
+        fields: {'timestamp': 'Must be the current time in Unix seconds.'},
+      );
+      await pump(tester, 3, address: winner);
+      await tester.tap(find.byKey(const Key('p2p:complete_purchase')));
+      await settleBid(tester);
+      final quotesForFirst = fees.quoted.length;
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settleBid(tester);
+
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:step_error'))).data, contains('more than an hour old'));
+      expect(find.byKey(const Key('p2p:step_confirm')), findsNothing);
+
+      // Retry builds the transaction afresh: new quotes, a new time.
+      service.dryRunError = null;
+      service.onSaleComplete = (_, __) => pending().copyWith(state: P2pListingState.sold, soldPrice: '5');
+      await tester.tap(find.byKey(const Key('p2p:step_retry')));
+      await settleBid(tester);
+      expect(fees.quoted.length, quotesForFirst * 2);
+      expect(find.byKey(const Key('p2p:step_error')), findsNothing);
+      expect(find.byKey(const Key('p2p:step_transaction')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settleBid(tester);
+      expect(find.byKey(const Key('p2p:step_recorded')), findsOneWidget);
+      expect(service.dryRuns, hasLength(1));
     });
 
     testWidgets('cannot confirm a transaction whose fee could not be quoted, and can try again', (tester) async {
