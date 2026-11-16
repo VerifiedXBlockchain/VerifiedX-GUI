@@ -20,6 +20,7 @@ import 'package:rbx_wallet/features/p2p/models/p2p_tx_description.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_listing_providers.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_seller_providers.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_session_provider.dart';
+import 'package:rbx_wallet/features/p2p/services/p2p_email_prompt.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_nft_source.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_session.dart';
@@ -152,6 +153,9 @@ class FakeP2pService extends P2pService {
   Map<String, P2pShop> shopsByUrl = {};
   P2pPage<P2pListing> Function(String url, int? collectionId, int page) listings = (_, __, ___) => const P2pPage(count: 0, next: null, results: []);
   Map<int, P2pListing> listingsById = {};
+
+  /// A shop's listings in one state, keyed "url state" (`shop awaiting_sale_start`).
+  Map<String, List<P2pListing>> listingsByState = {};
   List<P2pBidSummary> allBids = [];
   P2pBidResult Function(int listingId, String amount, bool isBuyNow, String signature)? onBid;
 
@@ -184,6 +188,12 @@ class FakeP2pService extends P2pService {
 
   /// What a dry-run DSTR answers; each description is kept in [dryRuns].
   P2pShop Function(P2pTxDescription tx)? onDstr;
+
+  /// The email Spyglass holds for an address: sent back at sign-in.
+  Map<String, String> emails = {};
+
+  /// Thrown by [subscribeEmail] only.
+  Object? emailError;
 
   /// Each shop's collections as its owner sees them. The collection calls
   /// change this list as the registry would.
@@ -321,6 +331,13 @@ class FakeP2pService extends P2pService {
     int page = 1,
     int? limit,
   }) async {
+    if (state != null) {
+      // The seller's notices: a shop's listings in one state.
+      calls.add('listListings($shopUrl, state: ${state.wire})');
+      _fail();
+      final waiting = listingsByState['$shopUrl ${state.wire}'] ?? const <P2pListing>[];
+      return P2pPage(count: waiting.length, next: null, results: waiting);
+    }
     calls.add('listListings($shopUrl, collection: $collectionId, page: $page, limit: $limit)');
     _fail();
     return listings(shopUrl, collectionId, page);
@@ -343,7 +360,21 @@ class FakeP2pService extends P2pService {
   @override
   Future<P2pAuthToken> signToken({required String address, required String message, required String signature}) async {
     calls.add('signToken($address)');
-    return P2pAuthToken(token: 'token-for-$address', address: address, expiresAt: DateTime.now().toUtc().add(const Duration(hours: 1)));
+    return P2pAuthToken(
+      token: 'token-for-$address',
+      address: address,
+      expiresAt: DateTime.now().toUtc().add(const Duration(hours: 1)),
+      email: emails[address],
+    );
+  }
+
+  @override
+  Future<void> subscribeEmail({required String token, required String address, required String email}) async {
+    calls.add('subscribeEmail($address, $email, token: $token)');
+    if (emailError != null) {
+      throw emailError!;
+    }
+    emails[address] = email;
   }
 
   @override
@@ -459,6 +490,21 @@ class FakeP2pNftSource implements P2pNftSource {
   }
 }
 
+/// Which accounts were asked for an email, in memory. With [everyone] set,
+/// every account counts as asked: the prompt never shows.
+class FakeP2pEmailAsked implements P2pEmailAsked {
+  final bool everyone;
+  final Set<String> asked = {};
+
+  FakeP2pEmailAsked({this.everyone = false});
+
+  @override
+  bool wasAsked(String address) => everyone || asked.contains(address);
+
+  @override
+  void markAsked(String address) => asked.add(address);
+}
+
 /// Quotes every fee as [fee], or throws [error] when set. Each request is
 /// kept in [quoted].
 class FakeP2pFeeQuoter implements P2pFeeQuoter {
@@ -497,6 +543,7 @@ Widget p2pTestApp({
   P2pMessageSigner? signer,
   P2pFeeQuoter? fees,
   P2pNftSource? nfts,
+  P2pEmailAsked? emailAsked,
   List<Override> overrides = const [],
 }) {
   // Dialogs open on the root navigator.
@@ -511,6 +558,8 @@ Widget p2pTestApp({
       p2pSessionProvider.overrideWithValue(P2pSession(service: service, signer: messageSigner)),
       p2pFeeQuoterProvider.overrideWithValue(fees ?? FakeP2pFeeQuoter()),
       p2pNftSourceProvider.overrideWithValue(nfts ?? FakeP2pNftSource()),
+      // Unless a test is about the email prompt, nobody is asked.
+      p2pEmailAskedProvider.overrideWithValue(emailAsked ?? FakeP2pEmailAsked(everyone: true)),
       sessionProvider.overrideWith((ref) => StubP2pSession(ref, address: address, balance: balance)),
       if (now != null) p2pClockProvider.overrideWithValue(() => now),
       ...overrides,

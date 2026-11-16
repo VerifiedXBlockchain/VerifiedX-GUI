@@ -73,6 +73,18 @@ class P2pSession {
     return started;
   }
 
+  /// The email Spyglass said it holds for [address] at its last sign-in, or
+  /// was given since; null when it has none, or [address] is not signed in.
+  String? emailOf(String address) => _held[address]?.email;
+
+  /// Notes that Spyglass now holds [email] for [address].
+  void noteEmail(String address, String email) {
+    final held = _held[address];
+    if (held != null) {
+      _held[address] = P2pAuthToken(token: held.token, address: held.address, expiresAt: held.expiresAt, email: email);
+    }
+  }
+
   /// Drops the token for [address] (after a 401).
   void forget(String address) {
     _held.remove(address);
@@ -114,7 +126,7 @@ class P2pSession {
     final latest = signedAt.add(tokenLifetime);
     final expiresAt = answer.expiresAt.isBefore(latest) ? answer.expiresAt : latest;
     if (generation == _generation) {
-      _held[address] = P2pAuthToken(token: answer.token, address: address, expiresAt: expiresAt);
+      _held[address] = P2pAuthToken(token: answer.token, address: address, expiresAt: expiresAt, email: answer.email);
     }
     return answer.token;
   }

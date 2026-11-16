@@ -8067,12 +8067,6 @@ abstract class AppLocalizations {
   /// **'Not minted yet'**
   String get p2pListTagNotMinted;
 
-  /// Tag in the P2P NFT picker on an NFT another account of this wallet owns.
-  ///
-  /// In en, this message translates to:
-  /// **'Another account'**
-  String get p2pListTagNotYours;
-
   /// Tag in the P2P NFT picker on a token or vBTC vault, which cannot be listed.
   ///
   /// In en, this message translates to:

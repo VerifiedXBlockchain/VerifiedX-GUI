@@ -389,6 +389,26 @@ void main() {
       });
     });
 
+    test('subscribeEmail sends the address and email with the token as Authorization: basic', () async {
+      server.always(200, {'successs': true});
+      await service.subscribeEmail(token: 'tok', address: owner, email: 'seller@example.com');
+      final request = server.requests.single;
+      expect([request.method, request.path], ['POST', '/auth/email-subscribe/']);
+      // Outside /api/p2p/: this endpoint reads "basic", not "Bearer".
+      expect(request.authorization, 'basic tok');
+      expect(request.body, {'address': owner, 'email': 'seller@example.com'});
+    });
+
+    test('subscribeEmail with a token Spyglass does not take is a sign-in refusal', () async {
+      server.always(401, {'message': 'Not authenticated'});
+      try {
+        await service.subscribeEmail(token: 'old', address: owner, email: 'seller@example.com');
+        fail('Expected a P2pError');
+      } on P2pError catch (e) {
+        expect(e.isUnauthorized, isTrue);
+      }
+    });
+
     test('cancelListing deletes it and reads it back as cancelled', () async {
       server.always(200, {...p2pFixture('listing_buy_now'), 'state': 'cancelled'});
       final cancelled = await service.cancelListing(token: 'tok', id: 1);

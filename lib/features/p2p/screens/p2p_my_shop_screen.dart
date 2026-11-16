@@ -13,6 +13,7 @@ import '../chain/p2p_tx_builders.dart';
 import '../components/p2p_chain_step_dialog.dart';
 import '../components/p2p_collections_section.dart';
 import '../components/p2p_dry_run_banner.dart';
+import '../components/p2p_email_dialog.dart';
 import '../components/p2p_list_nft_dialog.dart';
 import '../components/p2p_parts.dart';
 import '../components/p2p_selling_section.dart';
@@ -118,7 +119,9 @@ class _RegisterShop extends ConsumerWidget {
 
   Future<void> _review(WidgetRef ref, AppLocalizations l10n, P2pShopValues values) async {
     final steps = ref.read(p2pChainStepsProvider);
-    await P2pChainStepDialog.show(
+    // Read now: once the shop is open this form is gone, and its ref with it.
+    final emailPrompt = ref.read(p2pEmailPromptProvider);
+    final opened = await P2pChainStepDialog.show(
       title: l10n.p2pShopRegisterTitle,
       rows: [
         P2pStepRow(l10n.p2pChainRowShop, values.name.trim()),
@@ -131,6 +134,10 @@ class _RegisterShop extends ConsumerWidget {
       },
       doneBody: values.name.trim(),
     );
+    if (opened) {
+      // A new seller is offered the sale emails, once.
+      await emailPrompt.maybeAsk(owner);
+    }
   }
 
   @override
@@ -336,6 +343,14 @@ class _OwnShopState extends ConsumerState<_OwnShop> {
               type: AppButtonType.Outlined,
               variant: AppColorVariant.Light,
               onPressed: () => _edit(context, l10n),
+            ),
+            AppButton(
+              key: const Key('p2p:email_add'),
+              label: l10n.p2pEmailAdd,
+              icon: Icons.mail_outline,
+              type: AppButtonType.Outlined,
+              variant: AppColorVariant.Light,
+              onPressed: () => P2pEmailDialog.show(address),
             ),
             IconButton(
               key: const Key('p2p:my_shop_delete'),

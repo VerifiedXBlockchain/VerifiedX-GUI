@@ -141,6 +141,22 @@ class P2pService extends BaseService {
     );
   }
 
+  /// `POST /auth/email-subscribe/`: gives Spyglass an email for [address],
+  /// which its sale emails go to. Outside `/api/p2p/`: it reads the token
+  /// as `Authorization: basic`, not `Bearer`, and refuses in DRF's shapes.
+  Future<void> subscribeEmail({required String token, required String address, required String email}) async {
+    try {
+      await postJson(
+        '/auth/email-subscribe/',
+        params: {'address': address, 'email': email},
+        headers: {'Authorization': 'basic $token'},
+        responseIsJson: true,
+      );
+    } on DioException catch (e) {
+      throw errorOf(e);
+    }
+  }
+
   // Shops
 
   /// `GET /p2p/shops/`: live shops, newest first. [search] matches the URL

@@ -3,10 +3,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../models/p2p_collection.dart';
 import '../models/p2p_owned_nft.dart';
+import '../components/p2p_email_dialog.dart';
+import '../services/p2p_email_prompt.dart';
 import '../services/p2p_nft_source.dart';
 import '../services/p2p_seller.dart';
 import 'p2p_browse_providers.dart';
 import 'p2p_listed_nfts_provider.dart';
+import 'p2p_sale_notices_provider.dart';
 import 'p2p_session_provider.dart';
 
 part 'p2p_seller_providers.g.dart';
@@ -39,6 +42,22 @@ Future<List<P2pOwnedNft>> p2pWalletNfts(P2pWalletNftsRef ref) {
   return ref.watch(p2pNftSourceProvider).walletNfts();
 }
 
+/// Which accounts were already asked for an email.
+@Riverpod(keepAlive: true)
+P2pEmailAsked p2pEmailAsked(P2pEmailAskedRef ref) {
+  return P2pStoredEmailAsked();
+}
+
+/// The optional email prompt, shown once per account.
+@Riverpod(keepAlive: true)
+P2pEmailPrompt p2pEmailPrompt(P2pEmailPromptRef ref) {
+  return P2pEmailPrompt(
+    session: ref.watch(p2pSessionProvider),
+    asked: ref.watch(p2pEmailAskedProvider),
+    show: P2pEmailDialog.show,
+  );
+}
+
 /// The NFT whose own page asked for it to be listed, until My shop takes the
 /// request up and opens "List an NFT" for it.
 final p2pListRequestProvider = StateProvider<String?>((ref) => null);
@@ -52,4 +71,6 @@ void refreshP2pSeller(WidgetRef ref, String address) {
   ref.invalidate(p2pShopProvider);
   ref.invalidate(p2pShopListingsProvider);
   ref.read(p2pListedNftsProvider.notifier).refresh();
+  // A shop opened or closed, or a sale started: the badge follows at once.
+  ref.read(p2pSaleNoticesProvider.notifier).shopsChanged();
 }

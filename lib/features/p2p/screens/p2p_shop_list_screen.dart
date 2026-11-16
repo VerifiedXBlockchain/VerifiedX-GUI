@@ -9,12 +9,14 @@ import '../../../core/base_screen.dart';
 import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/theme/colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../components/p2p_dry_run_banner.dart';
 import '../components/p2p_parts.dart';
 import '../components/p2p_shop_card.dart';
 import '../providers/p2p_browse_providers.dart';
+import '../providers/p2p_sale_notices_provider.dart';
 
 /// Shops in the P2P registry: browse and search.
 class P2pShopListScreen extends BaseStatefulScreen {
@@ -69,11 +71,21 @@ class _P2pShopListScreenState extends BaseScreenState<P2pShopListScreen> {
   @override
   AppBar? appBar(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    final toStart = ref.watch(p2pSaleNoticesProvider).length;
     return AppBar(
       title: Text(l10n.p2pShopsTitle),
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: [
+        if (toStart > 0)
+          Center(
+            child: P2pTag(
+              key: const Key('p2p:sales_to_start'),
+              label: l10n.p2pNoticeSalesToStart(toStart),
+              color: AppColors.gold[50]!,
+              icon: Icons.notifications_active_outlined,
+            ),
+          ),
         AppButton(
           key: const Key('p2p:my_shop'),
           label: l10n.p2pMyShopTitle,

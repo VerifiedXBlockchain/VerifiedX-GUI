@@ -16,6 +16,9 @@ class RootContainerSideNavItem extends StatefulWidget {
   final Color? textColorOverrideHover;
   final Widget? customIconWidget;
   final bool isNew;
+
+  /// A count shown beside the title when above zero (things waiting).
+  final int badgeCount;
   const RootContainerSideNavItem({
     super.key,
     required this.title,
@@ -29,6 +32,7 @@ class RootContainerSideNavItem extends StatefulWidget {
     this.textColorOverrideHover,
     this.customIconWidget,
     this.isNew = false,
+    this.badgeCount = 0,
   });
 
   @override
@@ -166,7 +170,29 @@ class _RootContainerSideNavItemState extends State<RootContainerSideNavItem> {
                                       ),
                                     ),
                                   ),
-                                )
+                                ),
+                              if (widget.badgeCount > 0)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 6.0),
+                                  child: Container(
+                                    key: const Key('nav:badge_count'),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.gold[50],
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: Text(
+                                      "${widget.badgeCount}",
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 11,
+                                        height: 1,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
                         ),

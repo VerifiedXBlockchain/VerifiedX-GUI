@@ -4268,9 +4268,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pListTagNotMinted => 'Aún no acuñado';
 
   @override
-  String get p2pListTagNotYours => 'Otra cuenta';
-
-  @override
   String get p2pListTagUnsellable => 'No se puede vender';
 
   @override

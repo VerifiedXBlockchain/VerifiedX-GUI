@@ -4789,10 +4789,6 @@
   "@p2pListTagNotMinted": {
     "description": "Tag in the P2P NFT picker on an NFT whose mint is not on chain yet."
   },
-  "p2pListTagNotYours": "Another account",
-  "@p2pListTagNotYours": {
-    "description": "Tag in the P2P NFT picker on an NFT another account of this wallet owns."
-  },
   "p2pListTagUnsellable": "Cannot be sold",
   "@p2pListTagUnsellable": {
     "description": "Tag in the P2P NFT picker on a token or vBTC vault, which cannot be listed."

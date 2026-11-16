@@ -189,4 +189,38 @@ final p2pWalletNftsProvider =
 );
 
 typedef P2pWalletNftsRef = AutoDisposeFutureProviderRef<List<P2pOwnedNft>>;
+String _$p2pEmailAskedHash() => r'8d29629a48567447e657644e894dd2e5b080d927';
+
+/// Which accounts were already asked for an email.
+///
+/// Copied from [p2pEmailAsked].
+@ProviderFor(p2pEmailAsked)
+final p2pEmailAskedProvider = Provider<P2pEmailAsked>.internal(
+  p2pEmailAsked,
+  name: r'p2pEmailAskedProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$p2pEmailAskedHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef P2pEmailAskedRef = ProviderRef<P2pEmailAsked>;
+String _$p2pEmailPromptHash() => r'0a52508342c6f75a2b455b222174b8333403aa36';
+
+/// The optional email prompt, shown once per account.
+///
+/// Copied from [p2pEmailPrompt].
+@ProviderFor(p2pEmailPrompt)
+final p2pEmailPromptProvider = Provider<P2pEmailPrompt>.internal(
+  p2pEmailPrompt,
+  name: r'p2pEmailPromptProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$p2pEmailPromptHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef P2pEmailPromptRef = ProviderRef<P2pEmailPrompt>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

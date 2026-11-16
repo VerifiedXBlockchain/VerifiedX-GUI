@@ -11,6 +11,7 @@ import '../models/p2p_error.dart';
 import '../models/p2p_listing.dart';
 import '../providers/p2p_browse_providers.dart';
 import '../providers/p2p_listing_providers.dart';
+import '../providers/p2p_seller_providers.dart';
 import '../services/p2p_session.dart';
 import '../services/p2p_signer.dart';
 import '../utils/p2p_amount.dart';
@@ -38,12 +39,18 @@ class P2pBidDialog extends ConsumerStatefulWidget {
     required int listingId,
     required String address,
     required P2pBidMode mode,
-  }) {
-    return showDialog<void>(
-      context: rootNavigatorKey.currentContext!,
+  }) async {
+    final context = rootNavigatorKey.currentContext!;
+    final emailPrompt = ProviderScope.containerOf(context, listen: false).read(p2pEmailPromptProvider);
+    final placed = await showDialog<bool>(
+      context: context,
       barrierDismissible: false,
       builder: (_) => P2pBidDialog(listingId: listingId, address: address, mode: mode),
     );
+    if (placed == true) {
+      // A buyer is offered the sale emails once, after a first bid.
+      await emailPrompt.maybeAsk(address);
+    }
   }
 
   @override
@@ -204,7 +211,8 @@ class _P2pBidDialogState extends ConsumerState<P2pBidDialog> {
               AppButton(
                 key: const Key('p2p:bid_done'),
                 label: l10n.actionDone,
-                onPressed: () => Navigator.of(context).pop(),
+                // True when a bid was placed.
+                onPressed: () => Navigator.of(context).pop(_result != null),
               ),
             ]
           : [

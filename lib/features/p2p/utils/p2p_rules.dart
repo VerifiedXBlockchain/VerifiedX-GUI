@@ -116,3 +116,9 @@ String newP2pShopUniqueId(int nowSeconds, [String Function(int length)? letters]
   final time = nowSeconds.toString();
   return "${(letters ?? p2pRandomLetters)(time.length)}$time";
 }
+
+final RegExp _email = RegExp(r"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
+/// Whether [text] has the shape of an email address. Spyglass decides in the
+/// end; this keeps a slip of the keyboard from being sent.
+bool isP2pEmail(String text) => text.length <= 254 && _email.hasMatch(text);
