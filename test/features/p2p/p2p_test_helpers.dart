@@ -10,13 +10,17 @@ import 'package:rbx_wallet/features/p2p/chain/p2p_fee_quoter.dart';
 import 'package:rbx_wallet/features/p2p/components/p2p_parts.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_auth_token.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_bid_summary.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_collection.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_me.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_owned_nft.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_page.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_tx_description.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_listing_providers.dart';
+import 'package:rbx_wallet/features/p2p/providers/p2p_seller_providers.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_session_provider.dart';
+import 'package:rbx_wallet/features/p2p/services/p2p_nft_source.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_session.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_signer.dart';
@@ -177,7 +181,113 @@ class FakeP2pService extends P2pService {
   /// What a dry-run DSTR answers; each description is kept in [dryRuns].
   P2pShop Function(P2pTxDescription tx)? onDstr;
 
+  /// Each shop's collections as its owner sees them. The collection calls
+  /// change this list as the registry would.
+  Map<String, List<P2pCollection>> collectionsByShop = {};
+
+  /// Thrown by the collection writes only.
+  Object? collectionError;
+
+  /// What listing an NFT, changing a listing and withdrawing one answer.
+  P2pListing Function(int collectionId, P2pListingInput input)? onCreateListing;
+  P2pListing Function(int id, P2pListingInput input)? onUpdateListing;
+  P2pListing Function(int id)? onCancelListing;
+
+  /// Thrown by the listing writes only.
+  Object? listingError;
+
   FakeP2pService() : super(hostOverride: 'http://127.0.0.1:9');
+
+  @override
+  Future<P2pPage<P2pCollection>> listCollections(String shopUrl, {String? token, int page = 1, int? limit}) async {
+    calls.add('listCollections($shopUrl, token: $token)');
+    _fail();
+    final all = collectionsByShop[shopUrl] ?? [];
+    final seen = token == null ? all.where((c) => c.isLive).toList() : List.of(all);
+    return P2pPage(count: seen.length, next: null, results: seen);
+  }
+
+  @override
+  Future<P2pCollection> createCollection({
+    required String token,
+    required String shopUrl,
+    required String name,
+    String description = '',
+    bool isLive = true,
+  }) async {
+    calls.add('createCollection($shopUrl, $name, token: $token)');
+    if (collectionError != null) {
+      throw collectionError!;
+    }
+    final all = collectionsByShop.putIfAbsent(shopUrl, () => []);
+    final created = P2pCollection(id: 100 + all.length, shopUrl: shopUrl, name: name, description: description, isLive: isLive);
+    all.add(created);
+    return created;
+  }
+
+  @override
+  Future<P2pCollection> updateCollection({
+    required String token,
+    required int id,
+    String? name,
+    String? description,
+    bool? isLive,
+  }) async {
+    calls.add('updateCollection($id, name: $name, description: $description, isLive: $isLive, token: $token)');
+    if (collectionError != null) {
+      throw collectionError!;
+    }
+    for (final all in collectionsByShop.values) {
+      final at = all.indexWhere((c) => c.id == id);
+      if (at >= 0) {
+        all[at] = all[at].copyWith(
+          name: name ?? all[at].name,
+          description: description ?? all[at].description,
+          isLive: isLive ?? all[at].isLive,
+        );
+        return all[at];
+      }
+    }
+    throw StateError('No collection $id');
+  }
+
+  @override
+  Future<void> deleteCollection({required String token, required int id}) async {
+    calls.add('deleteCollection($id, token: $token)');
+    if (collectionError != null) {
+      throw collectionError!;
+    }
+    for (final all in collectionsByShop.values) {
+      all.removeWhere((c) => c.id == id);
+    }
+  }
+
+  @override
+  Future<P2pListing> createListing({required String token, required int collectionId, required P2pListingInput input}) async {
+    calls.add('createListing($collectionId, ${input.smartContractUid}, token: $token)');
+    if (listingError != null) {
+      throw listingError!;
+    }
+    return onCreateListing!(collectionId, input);
+  }
+
+  @override
+  Future<P2pListing> updateListing({required String token, required int id, required P2pListingInput input}) async {
+    calls.add('updateListing($id, token: $token)');
+    if (listingError != null) {
+      throw listingError!;
+    }
+    return onUpdateListing!(id, input);
+  }
+
+  @override
+  Future<P2pListing> cancelListing({required String token, required int id}) async {
+    calls.add('cancelListing($id, token: $token)');
+    if (listingError != null) {
+      throw listingError!;
+    }
+    return onCancelListing!(id);
+  }
 
   void _fail() {
     if (error != null) {
@@ -298,6 +408,33 @@ class FakeP2pService extends P2pService {
   }
 }
 
+/// The wallet's NFTs from memory. [withMedia] are the ids Spyglass already
+/// holds media for; each upload is kept in [uploaded], or throws
+/// [uploadError] when set.
+class FakeP2pNftSource implements P2pNftSource {
+  List<P2pOwnedNft> nfts;
+  Set<String> withMedia = {};
+  final List<String> uploaded = [];
+  Object? uploadError;
+
+  FakeP2pNftSource([this.nfts = const []]);
+
+  @override
+  Future<List<P2pOwnedNft>> walletNfts() async => nfts;
+
+  @override
+  Future<bool> hasMedia(String id) async => withMedia.contains(id);
+
+  @override
+  Future<void> uploadMedia(String id, String token) async {
+    if (uploadError != null) {
+      throw uploadError!;
+    }
+    uploaded.add('$id as $token');
+    withMedia.add(id);
+  }
+}
+
 /// Quotes every fee as [fee], or throws [error] when set. Each request is
 /// kept in [quoted].
 class FakeP2pFeeQuoter implements P2pFeeQuoter {
@@ -335,6 +472,7 @@ Widget p2pTestApp({
   DateTime? now,
   P2pMessageSigner? signer,
   P2pFeeQuoter? fees,
+  P2pNftSource? nfts,
   List<Override> overrides = const [],
 }) {
   // Dialogs open on the root navigator.
@@ -348,6 +486,7 @@ Widget p2pTestApp({
       // lock state, whose provider polls the node on a timer.
       p2pSessionProvider.overrideWithValue(P2pSession(service: service, signer: messageSigner)),
       p2pFeeQuoterProvider.overrideWithValue(fees ?? FakeP2pFeeQuoter()),
+      p2pNftSourceProvider.overrideWithValue(nfts ?? FakeP2pNftSource()),
       sessionProvider.overrideWith((ref) => StubP2pSession(ref, address: address, balance: balance)),
       if (now != null) p2pClockProvider.overrideWithValue(() => now),
       ...overrides,

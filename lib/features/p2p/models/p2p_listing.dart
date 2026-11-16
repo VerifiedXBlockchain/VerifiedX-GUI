@@ -169,3 +169,38 @@ class P2pBidResult with _$P2pBidResult {
 
   factory P2pBidResult.fromJson(Map<String, dynamic> json) => _$P2pBidResultFromJson(json);
 }
+
+/// What a seller sets on a listing: `POST /p2p/collections/{id}/listings/`
+/// and `PATCH /p2p/listings/{id}/`. Prices are decimal strings; a price left
+/// null is not offered (no buy-now, or no auction).
+class P2pListingInput {
+  final String smartContractUid;
+  final String? buyNowPrice;
+  final String? floorPrice;
+  final String? reservePrice;
+  final DateTime startsAt;
+  final DateTime endsAt;
+
+  const P2pListingInput({
+    required this.smartContractUid,
+    required this.startsAt,
+    required this.endsAt,
+    this.buyNowPrice,
+    this.floorPrice,
+    this.reservePrice,
+  });
+
+  static String _time(DateTime at) => "${at.toUtc().toIso8601String().split('.').first}Z";
+
+  /// [forUpdate] leaves the NFT out: a listing's NFT cannot change.
+  Map<String, dynamic> toJson({bool forUpdate = false}) {
+    return {
+      if (!forUpdate) 'smart_contract_uid': smartContractUid,
+      'buy_now_price': buyNowPrice,
+      'floor_price': floorPrice,
+      'reserve_price': reservePrice,
+      'starts_at': _time(startsAt),
+      'ends_at': _time(endsAt),
+    };
+  }
+}

@@ -3697,6 +3697,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pChainErrorNoWinner => 'No hay una oferta ganadora para este listado.';
 
   @override
+  String get p2pChainErrorNoWinningBid => 'No se pudo leer la oferta ganadora de este listado. Actualiza e inténtalo de nuevo.';
+
+  @override
   String get p2pChainErrorPriceZero => 'El precio debe ser mayor que cero.';
 
   @override
@@ -3751,6 +3754,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pChainRowAddress => 'Dirección';
 
   @override
+  String get p2pChainRowBuyer => 'Comprador';
+
+  @override
   String get p2pChainRowNft => 'NFT';
 
   @override
@@ -3796,6 +3802,55 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get p2pCollectionCreate => 'Crear';
+
+  @override
+  String get p2pCollectionDefault => 'Predeterminada';
+
+  @override
+  String get p2pCollectionDefaultStays => 'La colección predeterminada se queda con la tienda';
+
+  @override
+  String get p2pCollectionDelete => 'Eliminar colección';
+
+  @override
+  String p2pCollectionDeleteBody(String name) {
+    return '¿Eliminar «$name»? Una colección se puede eliminar cuando no tiene listados activos ni pendientes.';
+  }
+
+  @override
+  String get p2pCollectionDescription => 'Descripción';
+
+  @override
+  String get p2pCollectionEdit => 'Editar colección';
+
+  @override
+  String get p2pCollectionHidden => 'Oculta';
+
+  @override
+  String get p2pCollectionHide => 'Ocultar en la tienda';
+
+  @override
+  String p2pCollectionListings(int count) {
+    return '$count activos';
+  }
+
+  @override
+  String get p2pCollectionName => 'Nombre de la colección';
+
+  @override
+  String get p2pCollectionNew => 'Nueva colección';
+
+  @override
+  String get p2pCollectionSave => 'Guardar';
+
+  @override
+  String get p2pCollectionShow => 'Mostrar en la tienda';
+
+  @override
+  String get p2pCollectionsTitle => 'Colecciones';
+
+  @override
   String get p2pCopied => 'Copiado al portapapeles';
 
   @override
@@ -3837,6 +3892,33 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pDryRunBanner => 'Los pasos de la tienda que serían transacciones quedan registrados en el registro de tiendas de testnet. No se firma ninguna transacción ni se envía nada a la red.';
 
   @override
+  String get p2pEmailAdd => 'Correos de ventas';
+
+  @override
+  String get p2pEmailBody => 'Opcional. El registro de tiendas envía un correo a esta dirección cuando uno de tus listados tiene un ganador o se inicia una venta para ti. Se guarda con la dirección de esta cuenta.';
+
+  @override
+  String get p2pEmailFailed => 'No se pudo guardar el correo. Inténtalo más tarde.';
+
+  @override
+  String get p2pEmailField => 'Correo electrónico';
+
+  @override
+  String get p2pEmailInvalid => 'Escribe un correo electrónico.';
+
+  @override
+  String get p2pEmailSave => 'Guardar correo';
+
+  @override
+  String get p2pEmailSaved => 'Correo guardado.';
+
+  @override
+  String get p2pEmailSkip => 'Ahora no';
+
+  @override
+  String get p2pEmailTitle => 'Recibe un correo cuando una venta te necesite';
+
+  @override
   String get p2pEndReasonNftBurned => 'El NFT se quemó';
 
   @override
@@ -3870,7 +3952,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorBidTooLow => 'Tu oferta está por debajo de la siguiente oferta mínima. Puede que alguien haya ofertado justo antes.';
 
   @override
+  String get p2pErrorCollectionHasListings => 'Cancela o termina primero los listados de esta colección.';
+
+  @override
   String get p2pErrorConflict => 'Eso cambió mientras tanto. Recarga e inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorDefaultCollection => 'La colección predeterminada de una tienda no se puede eliminar.';
 
   @override
   String get p2pErrorDuplicateBid => 'Esta oferta ya se había hecho.';
@@ -3885,7 +3973,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorInvalid => 'El registro de tiendas no pudo aceptarlo. Revisa los datos e inténtalo de nuevo.';
 
   @override
+  String get p2pErrorListingClosed => 'Este listado ya terminó.';
+
+  @override
   String get p2pErrorListingEnded => 'Este listado ha terminado.';
+
+  @override
+  String get p2pErrorListingHasBids => 'Los precios y las fechas quedan fijos cuando hay una oferta.';
+
+  @override
+  String get p2pErrorListingNotAwaitingSaleStart => 'Este listado no está esperando el inicio de su venta.';
 
   @override
   String get p2pErrorListingNotLive => 'Este listado ya no acepta ofertas.';
@@ -3900,7 +3997,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorListingUnavailable => 'Este listado no está disponible en su tienda ahora mismo.';
 
   @override
+  String get p2pErrorNftAlreadyListed => 'Ese NFT ya está en un listado activo.';
+
+  @override
   String get p2pErrorNftMoved => 'El vendedor ya no es dueño de este NFT.';
+
+  @override
+  String get p2pErrorNftNotFound => 'El explorador aún no ha indexado este NFT. Inténtalo de nuevo en un momento.';
+
+  @override
+  String get p2pErrorNftNotListable => 'Este NFT no se puede listar: los tokens, las bóvedas vBTC y los NFT quemados no se venden en tiendas.';
 
   @override
   String get p2pErrorNoBuyNow => 'Este listado no tiene precio de compra inmediata.';
@@ -3915,6 +4021,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorNotFound => 'No encontrado. Puede que se haya eliminado.';
 
   @override
+  String get p2pErrorNotNftOwner => 'Esta cuenta no es dueña de ese NFT.';
+
+  @override
   String get p2pErrorNotSeller => 'Solo el vendedor puede hacer eso.';
 
   @override
@@ -3922,6 +4031,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get p2pErrorNotShopOwner => 'Solo el propietario de la tienda puede hacer eso.';
+
+  @override
+  String get p2pErrorPriceRequired => 'Indica un precio, una oferta inicial para una subasta o ambos.';
 
   @override
   String p2pErrorRefused(String reason) {
@@ -3933,6 +4045,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get p2pErrorSaleOnChain => 'Esta venta está en la cadena, así que una simulación no puede cambiarla.';
+
+  @override
+  String get p2pErrorSalePending => 'La venta ya empezó, así que el listado no se puede retirar. Cancela la venta.';
 
   @override
   String get p2pErrorSellerCannotBid => 'No puedes ofertar en tu propio listado.';
@@ -3968,6 +4083,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorThrottled => 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.';
 
   @override
+  String get p2pErrorTryAgain => 'El NFT no se pudo listar en este momento. Inténtalo de nuevo.';
+
+  @override
   String get p2pErrorUniqueIdTaken => 'Ya existe una tienda con este id. Inténtalo de nuevo.';
 
   @override
@@ -3981,6 +4099,179 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get p2pErrorUseBuyNow => 'Al precio de compra inmediata o más, usa Comprar ahora.';
+
+  @override
+  String get p2pGroupClosed => 'Terminados';
+
+  @override
+  String get p2pGroupLive => 'Activos';
+
+  @override
+  String get p2pGroupNeedsYou => 'Inicia la venta';
+
+  @override
+  String get p2pGroupSold => 'Vendidos';
+
+  @override
+  String get p2pGroupWaitingForBuyer => 'Esperando al comprador';
+
+  @override
+  String get p2pListBuyNow => 'Precio (VFX)';
+
+  @override
+  String get p2pListBuyNowOptional => 'Precio de compra inmediata (VFX, opcional)';
+
+  @override
+  String get p2pListCannotListed => 'Ese NFT ya está listado.';
+
+  @override
+  String get p2pListCannotNotFound => 'Ese NFT no se encontró en esta billetera.';
+
+  @override
+  String get p2pListCannotNotMinted => 'Ese NFT aún no está acuñado.';
+
+  @override
+  String get p2pListCannotNotYours => 'Ese NFT pertenece a otra cuenta. Cambia a ella para listarlo.';
+
+  @override
+  String get p2pListCannotUnsellable => 'Ese tipo de NFT no se puede vender en una tienda.';
+
+  @override
+  String get p2pListChange => 'Cambiar';
+
+  @override
+  String get p2pListCloses => 'Cierra después de';
+
+  @override
+  String get p2pListClosesAt => 'Cierra el';
+
+  @override
+  String p2pListClosesOn(String date) {
+    return 'Cierra el $date';
+  }
+
+  @override
+  String get p2pListCollection => 'Colección';
+
+  @override
+  String get p2pListCustom => 'Elegir fecha';
+
+  @override
+  String get p2pListDayOne => '1 día';
+
+  @override
+  String p2pListDays(int count) {
+    return '$count días';
+  }
+
+  @override
+  String p2pListDone(String name) {
+    return '«$name» está listado.';
+  }
+
+  @override
+  String get p2pListErrorBeforeStart => 'Debe cerrar después de abrir.';
+
+  @override
+  String get p2pListErrorBelowFloor => 'La reserva no puede ser menor que la oferta inicial.';
+
+  @override
+  String get p2pListErrorBelowReserve => 'El precio de compra inmediata no puede ser menor que la reserva.';
+
+  @override
+  String get p2pListErrorBelowStart => 'El precio de compra inmediata no puede ser menor que la oferta inicial.';
+
+  @override
+  String get p2pListErrorDecimals => 'Usa como máximo 8 decimales.';
+
+  @override
+  String get p2pListErrorFormat => 'Escribe un importe, como 12.5.';
+
+  @override
+  String get p2pListErrorPast => 'Elige un momento en el futuro.';
+
+  @override
+  String get p2pListErrorRequired => 'Obligatorio';
+
+  @override
+  String get p2pListFloor => 'Oferta inicial (VFX)';
+
+  @override
+  String get p2pListForSale => 'Poner a la venta';
+
+  @override
+  String get p2pListKind => 'Cómo se vende';
+
+  @override
+  String get p2pListLater => 'Programar';
+
+  @override
+  String get p2pListMediaChecking => 'Comprobando los archivos del NFT…';
+
+  @override
+  String get p2pListMediaFailed => 'No se pudieron subir los archivos del NFT, así que la tienda no mostraría imagen. Puedes intentarlo de nuevo o listarlo sin ella.';
+
+  @override
+  String get p2pListMediaSkip => 'Listar sin imagen';
+
+  @override
+  String get p2pListMediaUploading => 'Subiendo los archivos del NFT para que la tienda pueda mostrarlo…';
+
+  @override
+  String get p2pListNeedsShop => 'Abre primero una tienda; después el NFT que elegiste estará listo para listar.';
+
+  @override
+  String get p2pListNoNfts => 'No hay NFT en esta cuenta';
+
+  @override
+  String get p2pListNoNftsBody => 'Una tienda lista los NFT de su propietario. Acuña uno o transfiere uno a esta cuenta primero.';
+
+  @override
+  String get p2pListNote => 'Listar es gratis y no es una transacción. Puedes cancelar hasta que empiece una venta; los precios y las fechas se bloquean con la primera oferta.';
+
+  @override
+  String get p2pListNow => 'Ahora';
+
+  @override
+  String get p2pListOpen => 'Listar un NFT';
+
+  @override
+  String get p2pListOpens => 'Abre';
+
+  @override
+  String get p2pListOpensAt => 'Abre el';
+
+  @override
+  String get p2pListPick => 'Elige un NFT de esta cuenta.';
+
+  @override
+  String get p2pListPickDateTime => 'Elegir';
+
+  @override
+  String get p2pListReserve => 'Precio de reserva (VFX, opcional)';
+
+  @override
+  String get p2pListReserveHint => 'Las ofertas por debajo no ganan. Los compradores solo ven si se alcanza.';
+
+  @override
+  String p2pListRoyalty(String percent, String to) {
+    return 'Una venta de este NFT paga el $percent % del precio a $to. Sale del precio.';
+  }
+
+  @override
+  String get p2pListRoyaltyUnpayable => 'La regalía de este NFT no se puede pagar mediante una venta, así que su venta no se puede completar.';
+
+  @override
+  String get p2pListTagListed => 'Listado';
+
+  @override
+  String get p2pListTagNotMinted => 'Aún no acuñado';
+
+  @override
+  String get p2pListTagNotYours => 'Otra cuenta';
+
+  @override
+  String get p2pListTagUnsellable => 'No se puede vender';
 
   @override
   String get p2pListingAllBids => 'Ver todas las ofertas';
@@ -4005,6 +4296,14 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get p2pListingCancel => 'Cancelar listado';
+
+  @override
+  String p2pListingCancelBody(String name) {
+    return '¿Retirar «$name» de la venta? Sus ofertas terminan y puedes volver a listarlo más tarde.';
+  }
+
+  @override
   String get p2pListingClosing => 'Las ofertas han cerrado. El resultado aparecerá en un momento.';
 
   @override
@@ -4015,6 +4314,12 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get p2pListingDetails => 'Detalles';
+
+  @override
+  String get p2pListingEdit => 'Editar listado';
+
+  @override
+  String get p2pListingEditSave => 'Guardar cambios';
 
   @override
   String get p2pListingEndReason => 'Por qué terminó';
@@ -4030,6 +4335,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get p2pListingLeadingReserve => 'Tu oferta es la más alta, pero aún no alcanza la reserva.';
+
+  @override
+  String get p2pListingListAgain => 'Listar de nuevo';
 
   @override
   String get p2pListingMinter => 'Acuñado por';
@@ -4141,6 +4449,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pListingYours => 'Tu listado';
 
   @override
+  String get p2pManageLive => 'Tu listado está activo. Cuando haya un ganador, inicia la venta aquí.';
+
+  @override
+  String get p2pManageLiveBids => 'Están llegando ofertas. Los precios y las fechas ya están bloqueados.';
+
+  @override
+  String get p2pManagePendingNote => 'Venta iniciada. Esperando a que el comprador complete la compra.';
+
+  @override
+  String p2pManageSoldNote(String price) {
+    return 'Vendido por $price.';
+  }
+
+  @override
+  String p2pManageStartNote(String buyer, String price) {
+    return '$buyer ganó por $price. Inicia la venta para entregarlo.';
+  }
+
+  @override
+  String get p2pManageUnfulfilledNote => 'La venta no se inició en las 48 horas posteriores a la adjudicación. Puedes listarlo de nuevo.';
+
+  @override
   String get p2pMyBidsMine => 'Tu oferta';
 
   @override
@@ -4177,6 +4507,19 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pNavShops => 'Tiendas';
 
   @override
+  String p2pNoticeSaleToStartBody(String name, String url) {
+    return '«$name» tiene un ganador en vfx://$url. Inicia la venta en un plazo de 48 horas.';
+  }
+
+  @override
+  String get p2pNoticeSaleToStartTitle => 'Una venta te espera';
+
+  @override
+  String p2pNoticeSalesToStart(int count) {
+    return '$count por iniciar';
+  }
+
+  @override
   String p2pPageNumber(int page) {
     return 'Página $page';
   }
@@ -4205,10 +4548,28 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pRetry => 'Reintentar';
 
   @override
+  String get p2pSaleCancel => 'Cancelar la venta';
+
+  @override
+  String get p2pSaleCancelWarning => 'El comprador no ha pagado. Cancelar libera el NFT para que se pueda listar de nuevo.';
+
+  @override
+  String get p2pSaleStart => 'Iniciar la venta';
+
+  @override
   String get p2pSearchHint => 'Buscar por nombre o dirección';
 
   @override
   String get p2pSearchLabel => 'Buscar tiendas';
+
+  @override
+  String get p2pSellingNone => 'Aún no hay nada listado.';
+
+  @override
+  String get p2pSellingNoneBody => 'Lista un NFT de esta cuenta para empezar a vender.';
+
+  @override
+  String get p2pSellingTitle => 'Tus listados';
 
   @override
   String get p2pShopAll => 'Todo';

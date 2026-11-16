@@ -146,6 +146,30 @@ String? _knownCode(AppLocalizations l10n, P2pError error) {
       return l10n.p2pErrorShopDeleted;
     case 'unique_id_taken':
       return l10n.p2pErrorUniqueIdTaken;
+
+    // Collections and listings.
+    case 'default_collection':
+      return l10n.p2pErrorDefaultCollection;
+    case 'collection_has_active_listings':
+      return l10n.p2pErrorCollectionHasListings;
+    case 'price_required':
+      return l10n.p2pErrorPriceRequired;
+    case 'nft_not_found':
+      return l10n.p2pErrorNftNotFound;
+    case 'nft_not_listable':
+      return l10n.p2pErrorNftNotListable;
+    case 'nft_already_listed':
+      return l10n.p2pErrorNftAlreadyListed;
+    case 'not_nft_owner':
+      return l10n.p2pErrorNotNftOwner;
+    case 'try_again':
+      return l10n.p2pErrorTryAgain;
+    case 'listing_has_bids':
+      return l10n.p2pErrorListingHasBids;
+    case 'listing_closed':
+      return l10n.p2pErrorListingClosed;
+    case 'sale_pending':
+      return l10n.p2pErrorSalePending;
   }
   return null;
 }

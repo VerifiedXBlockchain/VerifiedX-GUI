@@ -175,10 +175,15 @@ class P2pService extends BaseService {
 
   // Collections
 
-  /// `GET /p2p/shops/{url}/collections/`.
-  Future<P2pPage<P2pCollection>> listCollections(String shopUrl, {int page = 1, int? limit}) {
+  /// `GET /p2p/shops/{url}/collections/`: the collections a visitor sees.
+  /// With the owner's [token], the hidden ones too.
+  Future<P2pPage<P2pCollection>> listCollections(String shopUrl, {String? token, int page = 1, int? limit}) {
     return _call(
-      () => getJson('/p2p/shops/${_segment(shopUrl)}/collections/', params: _query({'page': page, 'limit': limit})),
+      () => getJson(
+        '/p2p/shops/${_segment(shopUrl)}/collections/',
+        params: _query({'page': page, 'limit': limit}),
+        headers: token == null ? const {} : bearer(token),
+      ),
       (body) => P2pPage.fromJson(body, P2pCollection.fromJson),
     );
   }
@@ -186,6 +191,67 @@ class P2pService extends BaseService {
   /// `GET /p2p/collections/{id}/`, or null when there is none to see.
   Future<P2pCollection?> getCollection(int id) {
     return _find('/p2p/collections/${_segment(id)}/', P2pCollection.fromJson);
+  }
+
+  /// `POST /p2p/shops/{url}/collections/`: a new collection in the shop of
+  /// [token]'s address.
+  Future<P2pCollection> createCollection({
+    required String token,
+    required String shopUrl,
+    required String name,
+    String description = '',
+    bool isLive = true,
+  }) {
+    return _call(
+      () async {
+        final response = await postJson(
+          '/p2p/shops/${_segment(shopUrl)}/collections/',
+          params: {'name': name, 'description': description, 'is_live': isLive},
+          headers: bearer(token),
+          responseIsJson: true,
+        );
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pCollection.fromJson,
+    );
+  }
+
+  /// `PATCH /p2p/collections/{id}/`: any of its name, description and
+  /// whether it shows. Hiding a collection stops bids on its listings.
+  Future<P2pCollection> updateCollection({
+    required String token,
+    required int id,
+    String? name,
+    String? description,
+    bool? isLive,
+  }) {
+    return _call(
+      () async {
+        final response = await patchJson(
+          '/p2p/collections/${_segment(id)}/',
+          params: {
+            if (name != null) 'name': name,
+            if (description != null) 'description': description,
+            if (isLive != null) 'is_live': isLive,
+          },
+          headers: bearer(token),
+          responseIsJson: true,
+        );
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pCollection.fromJson,
+    );
+  }
+
+  /// `DELETE /p2p/collections/{id}/`: refused for the default collection
+  /// (`default_collection`) and while it has active listings
+  /// (`collection_has_active_listings`).
+  Future<void> deleteCollection({required String token, required int id}) async {
+    try {
+      await deleteJson('/p2p/collections/${_segment(id)}/', headers: bearer(token), responseIsJson: true);
+    } on DioException catch (e) {
+      throw errorOf(e);
+    }
   }
 
   // Listings
@@ -212,6 +278,53 @@ class P2pService extends BaseService {
   /// null when there is no such listing.
   Future<P2pListing?> getListing(int id) {
     return _find('/p2p/listings/${_segment(id)}/', P2pListing.fromJson);
+  }
+
+  /// `POST /p2p/collections/{id}/listings/`: lists an NFT that [token]'s
+  /// address owns. Not a transaction: the registry records the listing and
+  /// gives it a purchase key.
+  Future<P2pListing> createListing({required String token, required int collectionId, required P2pListingInput input}) {
+    return _call(
+      () async {
+        final response = await postJson(
+          '/p2p/collections/${_segment(collectionId)}/listings/',
+          params: input.toJson(),
+          headers: bearer(token),
+          responseIsJson: true,
+        );
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pListing.fromJson,
+    );
+  }
+
+  /// `PATCH /p2p/listings/{id}/`: a listing's prices and dates, while it is
+  /// live with no bids (`listing_not_live`, `listing_has_bids`).
+  Future<P2pListing> updateListing({required String token, required int id, required P2pListingInput input}) {
+    return _call(
+      () async {
+        final response = await patchJson(
+          '/p2p/listings/${_segment(id)}/',
+          params: input.toJson(forUpdate: true),
+          headers: bearer(token),
+          responseIsJson: true,
+        );
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pListing.fromJson,
+    );
+  }
+
+  /// `DELETE /p2p/listings/{id}/`: withdraws a listing before its sale
+  /// starts, and returns it as `cancelled`. No transaction.
+  Future<P2pListing> cancelListing({required String token, required int id}) {
+    return _call(
+      () async {
+        final response = await deleteJson('/p2p/listings/${_segment(id)}/', headers: bearer(token), responseIsJson: true);
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pListing.fromJson,
+    );
   }
 
   /// `GET /p2p/listings/{id}/bids/`: every bid, newest first, a page at a time.

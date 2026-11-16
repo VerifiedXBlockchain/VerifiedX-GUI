@@ -74,8 +74,21 @@ void main() {
   });
 
   test('a code this build does not know shows the registry\'s own message', () {
-    expect(text('nft_already_listed', status: 409, message: 'This NFT is already in an active listing.'),
-        'The shop registry refused it: This NFT is already in an active listing.');
+    expect(text('nft_on_loan', status: 409, message: 'This NFT is out on loan.'), 'The shop registry refused it: This NFT is out on loan.');
+  });
+
+  test('a seller\'s refusals for collections and listings are worded', () {
+    expect(text('default_collection', status: 409), en.p2pErrorDefaultCollection);
+    expect(text('collection_has_active_listings', status: 409), en.p2pErrorCollectionHasListings);
+    expect(text('price_required'), en.p2pErrorPriceRequired);
+    expect(text('nft_not_found'), en.p2pErrorNftNotFound);
+    expect(text('nft_not_listable'), en.p2pErrorNftNotListable);
+    expect(text('nft_already_listed', status: 409), en.p2pErrorNftAlreadyListed);
+    expect(text('not_nft_owner', status: 403), en.p2pErrorNotNftOwner);
+    expect(text('try_again', status: 409), en.p2pErrorTryAgain);
+    expect(text('listing_has_bids', status: 409), en.p2pErrorListingHasBids);
+    expect(text('listing_closed', status: 409), en.p2pErrorListingClosed);
+    expect(text('sale_pending', status: 409), en.p2pErrorSalePending);
   });
 
   test('a very long message is cut', () {

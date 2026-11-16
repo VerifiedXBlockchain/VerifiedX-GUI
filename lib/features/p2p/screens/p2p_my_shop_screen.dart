@@ -11,20 +11,26 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../chain/p2p_tx_builders.dart';
 import '../components/p2p_chain_step_dialog.dart';
+import '../components/p2p_collections_section.dart';
 import '../components/p2p_dry_run_banner.dart';
+import '../components/p2p_list_nft_dialog.dart';
 import '../components/p2p_parts.dart';
+import '../components/p2p_selling_section.dart';
 import '../components/p2p_shop_form.dart';
 import '../components/p2p_shop_header.dart';
 import '../models/p2p_shop.dart';
 import '../providers/p2p_browse_providers.dart';
 import '../providers/p2p_listing_providers.dart';
+import '../providers/p2p_seller_providers.dart';
 import '../utils/p2p_amount.dart';
 import '../utils/p2p_rules.dart';
 
 /// The selected account's own shop. Without one: the form that opens it.
-/// With one: its header, with edit and delete. Opening, changing and
-/// deleting a shop are transactions on chain (DSTR), so each goes through the
-/// chain-step confirmation: a dry run while the shop's steps are dry runs.
+/// With one: its header, with edit and delete, then its listings and its
+/// collections. Opening, changing and deleting a shop are transactions on
+/// chain (DSTR), so each goes through the chain-step confirmation: a dry run
+/// while the shop's steps are dry runs. Collections and listings are records
+/// in the registry and no transaction.
 class P2pMyShopScreen extends BaseScreen {
   const P2pMyShopScreen({super.key}) : super(horizontalPadding: 16, verticalPadding: 12);
 
@@ -66,6 +72,8 @@ class P2pMyShopScreen extends BaseScreen {
     }
     final provider = p2pOwnerShopProvider(address);
     final shop = ref.watch(provider);
+    // An NFT whose own page sent the person here to list it.
+    final listNftId = ref.watch(p2pListRequestProvider);
 
     return shop.when(
       loading: () => const CenteredLoader(),
@@ -76,11 +84,19 @@ class P2pMyShopScreen extends BaseScreen {
           children: [
             const P2pDryRunBanner(),
             const SizedBox(height: 12),
-            if (shop == null)
+            if (shop == null) ...[
+              if (listNftId != null) ...[
+                Text(
+                  l10n.p2pListNeedsShop,
+                  key: const Key('p2p:list_needs_shop'),
+                  style: const TextStyle(color: Colors.white70, fontSize: 13.5),
+                ),
+                const SizedBox(height: 12),
+              ],
               // A new form for each account: what was typed for one is not
               // carried to the next.
-              _RegisterShop(key: ValueKey(address), owner: address)
-            else
+              _RegisterShop(key: ValueKey(address), owner: address),
+            ] else
               _OwnShop(key: ValueKey(shop.id), shop: shop, address: address),
           ],
         ),
@@ -91,9 +107,8 @@ class P2pMyShopScreen extends BaseScreen {
 
 /// Reads [address]'s shop again, and everything shown from it.
 void refreshP2pOwner(WidgetRef ref, String address) {
-  ref.invalidate(p2pOwnerShopProvider(address));
   ref.invalidate(p2pShopListProvider);
-  ref.invalidate(p2pShopProvider);
+  refreshP2pSeller(ref, address);
 }
 
 class _RegisterShop extends ConsumerWidget {
@@ -200,13 +215,51 @@ class _RegisterShop extends ConsumerWidget {
   }
 }
 
-class _OwnShop extends ConsumerWidget {
+class _OwnShop extends ConsumerStatefulWidget {
   final P2pShop shop;
   final String address;
 
   const _OwnShop({super.key, required this.shop, required this.address});
 
-  Future<void> _edit(BuildContext context, WidgetRef ref, AppLocalizations l10n) async {
+  @override
+  ConsumerState<_OwnShop> createState() => _OwnShopState();
+}
+
+class _OwnShopState extends ConsumerState<_OwnShop> {
+  P2pShop get shop => widget.shop;
+  String get address => widget.address;
+
+  @override
+  void initState() {
+    super.initState();
+    // A request made before this shop was on screen (from the NFT's page,
+    // or before the shop was opened).
+    WidgetsBinding.instance.addPostFrameCallback((_) => _takeUpListRequest());
+  }
+
+  /// Opens "List an NFT" for the NFT whose page asked for it, once.
+  void _takeUpListRequest() {
+    if (!mounted) {
+      return;
+    }
+    final nftId = ref.read(p2pListRequestProvider);
+    if (nftId != null) {
+      ref.read(p2pListRequestProvider.notifier).state = null;
+      _list(nftId);
+    }
+  }
+
+  /// Opens "List an NFT", for [nftId] when one is given.
+  Future<void> _list([String? nftId]) async {
+    final listing = await P2pListNftDialog.show(context, shop: shop, address: address, nftId: nftId);
+    if (listing != null && mounted) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(content: Text(AppLocalizations.of(context).p2pListDone(listing.title))),
+      );
+    }
+  }
+
+  Future<void> _edit(BuildContext context, AppLocalizations l10n) async {
     final values = await showDialog<P2pShopValues>(
       context: context,
       builder: (_) => _EditShopDialog(shop: shop),
@@ -230,7 +283,7 @@ class _OwnShop extends ConsumerWidget {
     );
   }
 
-  Future<void> _delete(WidgetRef ref, AppLocalizations l10n) async {
+  Future<void> _delete(AppLocalizations l10n) async {
     final steps = ref.read(p2pChainStepsProvider);
     final warning = [
       l10n.p2pShopDeleteWarning(p2pVfxText(l10n, p2pShopDeleteCost)),
@@ -253,8 +306,14 @@ class _OwnShop extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
+    // A request made while this shop is already on screen, behind another tab.
+    ref.listen<String?>(p2pListRequestProvider, (_, next) {
+      if (next != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _takeUpListRequest());
+      }
+    });
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -276,16 +335,20 @@ class _OwnShop extends ConsumerWidget {
               icon: Icons.edit_outlined,
               type: AppButtonType.Outlined,
               variant: AppColorVariant.Light,
-              onPressed: () => _edit(context, ref, l10n),
+              onPressed: () => _edit(context, l10n),
             ),
             IconButton(
               key: const Key('p2p:my_shop_delete'),
               tooltip: l10n.p2pShopDeleteTitle,
               icon: Icon(Icons.delete_outline, color: Theme.of(context).colorScheme.danger),
-              onPressed: () => _delete(ref, l10n),
+              onPressed: () => _delete(l10n),
             ),
           ],
         ),
+        const SizedBox(height: 14),
+        P2pSellingSection(address: address, onList: _list),
+        const SizedBox(height: 14),
+        P2pCollectionsSection(shop: shop, address: address),
       ],
     );
   }
