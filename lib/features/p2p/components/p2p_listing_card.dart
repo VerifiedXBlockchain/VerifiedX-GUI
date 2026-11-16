@@ -10,6 +10,13 @@ import 'p2p_parts.dart';
 /// A listing in a shop's grid: its picture, name, the price it leads with,
 /// its clock and its state. Opens the listing.
 class P2pListingCard extends StatefulWidget {
+  /// The height of the text under the square picture.
+  static const double textHeight = 150;
+
+  /// A card's height at [width]: the square picture, then the text, inside
+  /// the card's 1px border.
+  static double heightFor(double width) => (width - 2) + textHeight + 2;
+
   final P2pListing listing;
 
   const P2pListingCard({super.key, required this.listing});
@@ -60,7 +67,8 @@ class _P2pListingCardState extends State<P2pListingCard> {
                     ],
                   ),
                 ),
-                Expanded(
+                SizedBox(
+                  height: P2pListingCard.textHeight,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
                     child: Column(

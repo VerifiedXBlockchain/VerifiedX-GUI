@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -29,6 +30,27 @@ BoxDecoration p2pCardDecoration({bool hovered = false}) {
     color: hovered ? p2pSurfaceRaised : p2pSurface,
     borderRadius: BorderRadius.circular(12),
     border: Border.all(color: hovered ? Colors.white30 : p2pBorder),
+  );
+}
+
+/// A grid of cards at most [maxCardWidth] wide whose height follows their
+/// width: [cardHeight] gives a card's height for the width it gets. A card
+/// with a picture as wide as itself and text under it needs that, where a
+/// fixed aspect ratio would squeeze the text as the window changes.
+SliverGridDelegate p2pCardGridDelegate(
+  SliverConstraints constraints, {
+  required double maxCardWidth,
+  required double Function(double cardWidth) cardHeight,
+  double spacing = 14,
+}) {
+  final width = constraints.crossAxisExtent;
+  final columns = (width / (maxCardWidth + spacing)).ceil().clamp(1, 24);
+  final cardWidth = (width - spacing * (columns - 1)) / columns;
+  return SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: columns,
+    mainAxisExtent: cardHeight(cardWidth),
+    crossAxisSpacing: spacing,
+    mainAxisSpacing: spacing,
   );
 }
 

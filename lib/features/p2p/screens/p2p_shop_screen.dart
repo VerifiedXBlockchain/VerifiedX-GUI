@@ -150,18 +150,14 @@ class _P2pShopScreenState extends BaseScreenState<P2pShopScreen> {
               ];
             }
             return [
-              SliverGrid(
-                key: const Key('p2p:listing_grid'),
-                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                  maxCrossAxisExtent: 260,
-                  // The square picture, then the name, price and clock.
-                  childAspectRatio: 0.66,
-                  crossAxisSpacing: 14,
-                  mainAxisSpacing: 14,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) => P2pListingCard(listing: page.results[index]),
-                  childCount: page.results.length,
+              SliverLayoutBuilder(
+                builder: (context, constraints) => SliverGrid(
+                  key: const Key('p2p:listing_grid'),
+                  gridDelegate: p2pCardGridDelegate(constraints, maxCardWidth: 260, cardHeight: P2pListingCard.heightFor),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => P2pListingCard(listing: page.results[index]),
+                    childCount: page.results.length,
+                  ),
                 ),
               ),
               SliverToBoxAdapter(

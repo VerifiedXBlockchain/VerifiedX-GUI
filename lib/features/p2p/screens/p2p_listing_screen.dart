@@ -436,7 +436,6 @@ class _Actions extends StatelessWidget {
                     key: const Key('p2p:bid_open'),
                     label: l10n.p2pBidOpen,
                     icon: Icons.gavel,
-                    size: AppSizeVariant.Lg,
                     onPressed: () => P2pBidDialog.show(listingId: listing.id, address: address, mode: P2pBidMode.bid),
                   ),
                 if (listing.hasBuyNow)
@@ -444,7 +443,6 @@ class _Actions extends StatelessWidget {
                     key: const Key('p2p:buy_open'),
                     label: l10n.p2pBuyOpen(p2pVfxText(l10n, listing.buyNowPrice)),
                     icon: Icons.sell_outlined,
-                    size: AppSizeVariant.Lg,
                     type: listing.isAuction ? AppButtonType.Outlined : AppButtonType.Elevated,
                     variant: listing.isAuction ? AppColorVariant.Light : AppColorVariant.Primary,
                     onPressed: () => P2pBidDialog.show(listingId: listing.id, address: address, mode: P2pBidMode.buyNow),

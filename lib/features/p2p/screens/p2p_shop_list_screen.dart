@@ -157,19 +157,16 @@ class _P2pShopListScreenState extends BaseScreenState<P2pShopListScreen> {
         return CustomScrollView(
           key: const Key('p2p:shop_grid'),
           slivers: [
-            SliverGrid(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 420,
-                mainAxisExtent: 268,
-                crossAxisSpacing: 14,
-                mainAxisSpacing: 14,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final shop = page.results[index];
-                  return P2pShopCard(shop: shop, own: shop.isOwnedBy(viewer));
-                },
-                childCount: page.results.length,
+            SliverLayoutBuilder(
+              builder: (context, constraints) => SliverGrid(
+                gridDelegate: p2pCardGridDelegate(constraints, maxCardWidth: 420, cardHeight: P2pShopCard.heightFor),
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final shop = page.results[index];
+                    return P2pShopCard(shop: shop, own: shop.isOwnedBy(viewer));
+                  },
+                  childCount: page.results.length,
+                ),
               ),
             ),
             SliverToBoxAdapter(

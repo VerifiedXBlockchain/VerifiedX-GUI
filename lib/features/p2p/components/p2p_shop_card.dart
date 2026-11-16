@@ -15,6 +15,13 @@ import 'p2p_parts.dart';
 class P2pShopCard extends ConsumerStatefulWidget {
   static const int stripLength = 4;
 
+  /// The height of the text under the strip of pictures.
+  static const double textHeight = 184;
+
+  /// A card's height at [width]: the strip of square pictures, then the
+  /// text, inside the card's 1px border.
+  static double heightFor(double width) => (width - 2) / stripLength + textHeight + 2;
+
   final P2pShop shop;
 
   /// Whether the selected account owns the shop.
@@ -68,7 +75,8 @@ class _P2pShopCardState extends ConsumerState<P2pShopCard> {
                     ],
                   ),
                 ),
-                Expanded(
+                SizedBox(
+                  height: P2pShopCard.textHeight,
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
                     child: Column(
