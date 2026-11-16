@@ -68,14 +68,14 @@ void main() {
     });
 
     testWidgets('an empty registry is an empty state, not an error', (tester) async {
-      service.shops = (_, __) => P2pPage.empty();
+      service.shops = (_, __) => const P2pPage(count: 0, next: null, results: []);
       await pump(tester, const P2pShopListScreen());
       expect(find.text('No shops yet'), findsOneWidget);
       expect(find.byKey(const Key('p2p:error')), findsNothing);
     });
 
     testWidgets('searches once typing pauses, and says when nothing matches', (tester) async {
-      service.shops = (search, _) => search.isEmpty ? P2pPage.fromJson(p2pFixture('shops_page'), P2pShop.fromJson) : P2pPage.empty();
+      service.shops = (search, _) => search.isEmpty ? P2pPage.fromJson(p2pFixture('shops_page'), P2pShop.fromJson) : const P2pPage(count: 0, next: null, results: []);
       await pump(tester, const P2pShopListScreen());
 
       await tester.enterText(find.byKey(const Key('p2p:shop_search')), 'zebra');
@@ -190,7 +190,7 @@ void main() {
     });
 
     testWidgets('a shop with nothing listed says so', (tester) async {
-      service.listings = (_, __, ___) => P2pPage.empty();
+      service.listings = (_, __, ___) => const P2pPage(count: 0, next: null, results: []);
       await pump(tester, const P2pShopScreen(url: 'dryrun-demo'));
       expect(find.text('Nothing listed right now.'), findsOneWidget);
     });

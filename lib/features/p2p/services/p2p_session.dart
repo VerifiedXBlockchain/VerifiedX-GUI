@@ -50,9 +50,6 @@ class P2pSession {
     return held.token;
   }
 
-  /// The email Spyglass holds for [address], known once it has signed in.
-  String? emailOf(String address) => _held[address]?.email;
-
   /// The token for [address], signing in when none is held. One sign-in at a
   /// time per address: concurrent callers share it.
   Future<String> token(String address) {
@@ -117,7 +114,7 @@ class P2pSession {
     final latest = signedAt.add(tokenLifetime);
     final expiresAt = answer.expiresAt.isBefore(latest) ? answer.expiresAt : latest;
     if (generation == _generation) {
-      _held[address] = P2pAuthToken(token: answer.token, address: address, expiresAt: expiresAt, email: answer.email);
+      _held[address] = P2pAuthToken(token: answer.token, address: address, expiresAt: expiresAt);
     }
     return answer.token;
   }

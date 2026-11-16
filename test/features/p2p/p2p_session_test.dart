@@ -11,7 +11,6 @@ import 'package:rbx_wallet/features/p2p/providers/p2p_session_provider.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_session.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_signer.dart';
-import 'package:rbx_wallet/features/p2p/utils/p2p_rules.dart';
 
 import 'p2p_test_helpers.dart';
 
@@ -65,7 +64,7 @@ void main() {
 
     expect(token, 'token-1');
     final signed = signer.signed.single;
-    expect(isP2pSignInMessage(signed[0]), isTrue, reason: signed[0]);
+    expect(RegExp(r'^[A-Za-z]{16}\.\d{10}$').hasMatch(signed[0]), isTrue, reason: signed[0]);
     expect(signed[0], endsWith('.${now.millisecondsSinceEpoch ~/ 1000}'));
     expect(signed[1], alice);
 
@@ -122,21 +121,6 @@ void main() {
     await session.token(alice);
     now = now.add(const Duration(minutes: 59));
     expect(session.cached(alice), isNull);
-  });
-
-  test('remembers the email Spyglass already has for the address', () async {
-    server.respond = (request) {
-      final body = request.body as Map<String, dynamic>;
-      return P2pCannedResponse(201, {
-        'token': 't',
-        'address': body['address'],
-        'expires_at': now.add(const Duration(hours: 1)).toIso8601String(),
-        'email': 'seller@example.com',
-      });
-    };
-    expect(session.emailOf(alice), isNull);
-    await session.token(alice);
-    expect(session.emailOf(alice), 'seller@example.com');
   });
 
   group('withToken', () {

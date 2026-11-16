@@ -15,8 +15,6 @@ class P2pAmount implements Comparable<P2pAmount> {
 
   const P2pAmount._(this.units);
 
-  static final P2pAmount zero = P2pAmount._(BigInt.zero);
-
   factory P2pAmount.fromUnits(BigInt units) => P2pAmount._(units);
 
   /// The amount [text] names, or null when it is not a non-negative decimal

@@ -20,7 +20,7 @@ void main() {
       expect(() => p2pBidMessage('a_b', five, 'xB'), throwsArgumentError);
       expect(() => p2pBidMessage('', five, 'xB'), throwsArgumentError);
       expect(() => p2pBidMessage('Key1', five, ''), throwsArgumentError);
-      expect(() => p2pBidMessage('Key1', P2pAmount.zero, 'xB'), throwsArgumentError);
+      expect(() => p2pBidMessage('Key1', P2pAmount.fromUnits(BigInt.zero), 'xB'), throwsArgumentError);
     });
   });
 
@@ -28,7 +28,6 @@ void main() {
     test('is 16 letters, a dot and the Unix time: the shape Spyglass accepts', () {
       final message = p2pSignInMessage(1794846000);
       expect(RegExp(r'^[A-Za-z]{16}\.1794846000$').hasMatch(message), isTrue, reason: message);
-      expect(isP2pSignInMessage(message), isTrue);
     });
 
     test('is new each time', () {
@@ -39,10 +38,6 @@ void main() {
       expect(p2pSignInMessage(1794846000, (length) => 'a' * length), 'aaaaaaaaaaaaaaaa.1794846000');
     });
 
-    test('the old 32-character message is not a sign-in message', () {
-      expect(isP2pSignInMessage('abcdefghijklmnopqrstuvwxyz012345'), isFalse);
-      expect(isP2pSignInMessage('abcdefghijklmnop.17'), isFalse);
-    });
   });
 
   test('p2pRandomLetters gives letters only, of the length asked', () {
@@ -54,12 +49,6 @@ void main() {
   test('a vault address is told by its prefix', () {
     expect(isP2pReserveAddress('xRBXabc'), isTrue);
     expect(isP2pReserveAddress('xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ'), isFalse);
-  });
-
-  test('a shop URL is normalised as the registry keys it', () {
-    expect(normalizeP2pShopUrl('  vfx://CoolStuff '), 'coolstuff');
-    expect(normalizeP2pShopUrl('rbx://Old-Shop'), 'old-shop');
-    expect(normalizeP2pShopUrl('plain.shop'), 'plain.shop');
   });
 
   test('a signature is recognised by its shape', () {

@@ -2,7 +2,7 @@
 /// page's number or null on the last page. `?page=` picks a page and
 /// `?limit=` its size (30 by default, at most 100).
 class P2pPage<T> {
-  static const int defaultLimit = 30;
+  /// The most a page can hold.
   static const int maxLimit = 100;
 
   final int count;
@@ -14,8 +14,6 @@ class P2pPage<T> {
     required this.next,
     required this.results,
   });
-
-  factory P2pPage.empty() => P2pPage<T>(count: 0, next: null, results: const []);
 
   /// Throws a [FormatException] when [json] has no `results` list.
   factory P2pPage.fromJson(Map<String, dynamic> json, T Function(Map<String, dynamic> json) item) {

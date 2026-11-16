@@ -15,18 +15,12 @@ String p2pRandomLetters(int length, [Random? random]) {
   );
 }
 
-/// Spyglass allows a sign-in message's time this far either side of its clock.
-const int p2pSignInSkewSeconds = 10 * 60;
-
-final RegExp _signInMessage = RegExp(r'^[A-Za-z]{16}\.(\d{9,11})$');
-
 /// A sign-in message: 16 letters, a dot and the Unix time in seconds
-/// (Spyglass `api/auth/serializers.py` TIMED_MESSAGE). Each is accepted once.
+/// (Spyglass `api/auth/serializers.py` TIMED_MESSAGE). Spyglass accepts each
+/// once, within 10 minutes of its time.
 String p2pSignInMessage(int nowSeconds, [String Function(int length)? letters]) {
   return "${(letters ?? p2pRandomLetters)(16)}.$nowSeconds";
 }
-
-bool isP2pSignInMessage(String message) => _signInMessage.hasMatch(message);
 
 /// What a bidder signs, as Core rebuilds it at `Sale_Start()`
 /// (`Models/DST/Bid.cs` VerifyBidSignature):
@@ -54,9 +48,3 @@ bool isP2pReserveAddress(String address) => address.startsWith('xRBX');
 final RegExp _signature = RegExp(r'^ME[A-Za-z0-9+/]{82,106}={0,2}\.[1-9A-HJ-NP-Za-km-z]{80,90}$');
 
 bool isP2pSignatureFormat(String signature) => _signature.hasMatch(signature);
-
-/// A shop URL as the registry keys it: `vfx://` or `rbx://` removed, lower
-/// case, trimmed.
-String normalizeP2pShopUrl(String input) {
-  return input.trim().toLowerCase().replaceAll('rbx://', '').replaceAll('vfx://', '');
-}

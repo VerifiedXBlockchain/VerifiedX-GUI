@@ -31,7 +31,7 @@ void main() {
       expect(P2pAmount.parse('10.00000000').toDecimalString(), '10');
       expect(P2pAmount.parse('0.00000001').toDecimalString(), '0.00000001');
       expect(P2pAmount.fromUnits(BigInt.from(-50000000)).toDecimalString(), '-0.5');
-      expect(P2pAmount.zero.toDecimalString(), '0');
+      expect(P2pAmount.fromUnits(BigInt.zero).toDecimalString(), '0');
     });
 
     test('compares and adds without rounding', () {

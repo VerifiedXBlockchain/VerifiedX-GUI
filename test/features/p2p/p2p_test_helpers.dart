@@ -139,9 +139,9 @@ class FakeP2pService extends P2pService {
   final List<String> calls = [];
   Object? error;
 
-  P2pPage<P2pShop> Function(String search, int page) shops = (_, __) => P2pPage.empty();
+  P2pPage<P2pShop> Function(String search, int page) shops = (_, __) => const P2pPage(count: 0, next: null, results: []);
   Map<String, P2pShop> shopsByUrl = {};
-  P2pPage<P2pListing> Function(String url, int? collectionId, int page) listings = (_, __, ___) => P2pPage.empty();
+  P2pPage<P2pListing> Function(String url, int? collectionId, int page) listings = (_, __, ___) => const P2pPage(count: 0, next: null, results: []);
   Map<int, P2pListing> listingsById = {};
   List<P2pBidSummary> allBids = [];
   P2pBidResult Function(int listingId, String amount, bool isBuyNow, String signature)? onBid;
