@@ -3521,6 +3521,12 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get p2pBidAmountLabel => 'Tu oferta (VFX)';
+
+  @override
+  String get p2pBidAvailable => 'Disponible';
+
+  @override
   String get p2pBidCountNone => 'Sin ofertas';
 
   @override
@@ -3530,6 +3536,96 @@ class AppLocalizationsEs extends AppLocalizations {
   String p2pBidCountOther(int count) {
     return '$count ofertas';
   }
+
+  @override
+  String get p2pBidDone => 'Oferta realizada';
+
+  @override
+  String p2pBidDoneBody(String amount) {
+    return 'Tienes la oferta más alta con $amount.';
+  }
+
+  @override
+  String p2pBidDoneReserve(String amount) {
+    return 'Tu oferta de $amount es la más alta, pero aún no alcanza la reserva.';
+  }
+
+  @override
+  String get p2pBidErrorBalance => 'El saldo de esta cuenta no lo cubre.';
+
+  @override
+  String get p2pBidErrorDecimals => 'Usa como máximo 8 decimales.';
+
+  @override
+  String get p2pBidErrorEmpty => 'Escribe tu oferta.';
+
+  @override
+  String get p2pBidErrorFormat => 'Escribe un importe, como 12.5.';
+
+  @override
+  String p2pBidErrorTooLow(String min) {
+    return 'Oferta al menos $min.';
+  }
+
+  @override
+  String p2pBidErrorUseBuyNow(String buyNow) {
+    return 'Con $buyNow o más, usa Comprar ahora.';
+  }
+
+  @override
+  String p2pBidMin(String min) {
+    return 'Al menos $min';
+  }
+
+  @override
+  String get p2pBidOpen => 'Ofertar';
+
+  @override
+  String get p2pBidSignNote => 'Tu cuenta firma esta oferta. Es un mensaje firmado, no una transacción: no se mueve VFX a menos que ganes y completes la compra.';
+
+  @override
+  String get p2pBidSigning => 'Firmando…';
+
+  @override
+  String get p2pBidStatusAccepted => 'La más alta';
+
+  @override
+  String get p2pBidStatusLost => 'Perdió';
+
+  @override
+  String get p2pBidStatusOutbid => 'Superada';
+
+  @override
+  String get p2pBidStatusWinning => 'Ganando';
+
+  @override
+  String get p2pBidStatusWon => 'Ganó';
+
+  @override
+  String get p2pBidSubmit => 'Firmar y ofertar';
+
+  @override
+  String get p2pBidTitle => 'Hacer una oferta';
+
+  @override
+  String get p2pBuyDone => 'Es tuyo: falta completar';
+
+  @override
+  String get p2pBuyDoneBody => 'Ahora el vendedor inicia la venta. Solo pagas cuando completes la compra.';
+
+  @override
+  String p2pBuyOpen(String price) {
+    return 'Comprar ahora · $price';
+  }
+
+  @override
+  String get p2pBuySignNote => 'Tu cuenta firma una oferta al precio de compra inmediata. Es un mensaje firmado, no una transacción: pagas cuando completas la compra, después de que el vendedor inicie la venta.';
+
+  @override
+  String get p2pBuySubmit => 'Firmar y comprar ahora';
+
+  @override
+  String get p2pBuyTitle => 'Comprar ahora';
 
   @override
   String get p2pClearSearch => 'Borrar búsqueda';
@@ -3556,7 +3652,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pCopied => 'Copiado al portapapeles';
 
   @override
+  String get p2pCopyContract => 'Copiar id del contrato';
+
+  @override
   String get p2pCopyOwnerAddress => 'Copiar dirección del propietario';
+
+  @override
+  String get p2pCopySellerAddress => 'Copiar dirección del vendedor';
 
   @override
   String get p2pCopyShopAddress => 'Copiar dirección de la tienda';
@@ -3586,6 +3688,27 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get p2pDryRunBanner => 'Los pasos de la tienda que serían transacciones quedan registrados en el registro de tiendas de testnet. No se firma ninguna transacción ni se envía nada a la red.';
+
+  @override
+  String get p2pEndReasonNftBurned => 'El NFT se quemó';
+
+  @override
+  String get p2pEndReasonNftMoved => 'El NFT se transfirió';
+
+  @override
+  String get p2pEndReasonSaleCancelled => 'La venta se canceló';
+
+  @override
+  String get p2pEndReasonSaleStartedElsewhere => 'Se inició una venta de este NFT en otro lugar';
+
+  @override
+  String get p2pEndReasonShopDeleted => 'La tienda se eliminó';
+
+  @override
+  String get p2pEndReasonShopOwnerChanged => 'La tienda cambió de propietario';
+
+  @override
+  String get p2pEndReasonShopRegisteredOnChain => 'Otra persona registró la tienda en la cadena';
 
   @override
   String get p2pErrorAmountMismatch => 'El precio cambió. Revisa el listado e inténtalo de nuevo.';
@@ -3680,13 +3803,154 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorUseBuyNow => 'Al precio de compra inmediata o más, usa Comprar ahora.';
 
   @override
+  String get p2pListingAllBids => 'Ver todas las ofertas';
+
+  @override
   String get p2pListingAuction => 'Subasta';
+
+  @override
+  String get p2pListingBids => 'Ofertas';
+
+  @override
+  String p2pListingBidsShown(int shown, int total) {
+    return 'Se muestran las $shown ofertas más recientes de $total.';
+  }
+
+  @override
+  String get p2pListingBuyer => 'Comprador';
+
+  @override
+  String p2pListingBy(String name) {
+    return 'Por $name';
+  }
+
+  @override
+  String get p2pListingClosing => 'Las ofertas han cerrado. El resultado aparecerá en un momento.';
+
+  @override
+  String get p2pListingContract => 'Contrato';
+
+  @override
+  String get p2pListingDetails => 'Detalles';
+
+  @override
+  String get p2pListingEndReason => 'Por qué terminó';
+
+  @override
+  String get p2pListingEnds => 'Termina';
 
   @override
   String get p2pListingFixedPrice => 'Precio fijo';
 
   @override
+  String get p2pListingLeading => 'Tienes la oferta más alta.';
+
+  @override
+  String get p2pListingLeadingReserve => 'Tu oferta es la más alta, pero aún no alcanza la reserva.';
+
+  @override
+  String get p2pListingMinter => 'Acuñado por';
+
+  @override
+  String get p2pListingNextMinBid => 'Siguiente oferta desde';
+
+  @override
+  String get p2pListingNoAccount => 'Elige una cuenta VFX para ofertar o comprar.';
+
+  @override
+  String get p2pListingNoBids => 'Aún no hay ofertas.';
+
+  @override
+  String get p2pListingNoOffers => 'Aún no hay ofertas de compra.';
+
+  @override
+  String get p2pListingNoRoyalty => 'Ninguna';
+
+  @override
+  String get p2pListingNotFound => 'No se encontró este listado.';
+
+  @override
+  String get p2pListingNotFoundBody => 'Puede que se haya eliminado.';
+
+  @override
+  String get p2pListingNotOpenYet => 'Las ofertas aún no han abierto.';
+
+  @override
+  String get p2pListingOffers => 'Ofertas de compra';
+
+  @override
+  String get p2pListingOver => 'Este listado ha terminado.';
+
+  @override
+  String get p2pListingOwn => 'Este es tu listado. No puedes ofertar en él.';
+
+  @override
+  String get p2pListingProgress => 'Progreso';
+
+  @override
+  String p2pListingPurchased(String price) {
+    return 'Compraste esto por $price.';
+  }
+
+  @override
+  String get p2pListingReserveMet => 'Reserva alcanzada';
+
+  @override
+  String get p2pListingReserveNotMet => 'Reserva no alcanzada';
+
+  @override
+  String get p2pListingRoyalty => 'Regalía';
+
+  @override
+  String p2pListingRoyaltyPercent(String percent) {
+    return '$percent % del precio';
+  }
+
+  @override
+  String get p2pListingSaleStartBy => 'La venta empieza antes de';
+
+  @override
+  String get p2pListingSaleStartedNote => 'El vendedor inició la venta. Completar la compra desde esta billetera aún no está disponible.';
+
+  @override
+  String get p2pListingSeller => 'Vendedor';
+
+  @override
+  String get p2pListingShop => 'Tienda';
+
+  @override
+  String p2pListingSoldNote(String price) {
+    return 'Vendido por $price.';
+  }
+
+  @override
+  String get p2pListingStarts => 'Empieza';
+
+  @override
   String get p2pListingTitle => 'Listado';
+
+  @override
+  String get p2pListingVault => 'Una cuenta Vault no puede ofertar ni comprar. Elige otra cuenta.';
+
+  @override
+  String get p2pListingWinner => 'Ganador';
+
+  @override
+  String get p2pListingWonByOther => 'Ya se eligió un ganador. Este listado ya no acepta ofertas.';
+
+  @override
+  String p2pListingWonWaiting(String price) {
+    return 'Ganaste esto por $price. Ahora el vendedor inicia la venta; solo pagas cuando completes la compra.';
+  }
+
+  @override
+  String get p2pListingYou => 'Tú';
+
+  @override
+  String get p2pListingYouWon => 'Ganaste';
+
+  @override
+  String get p2pListingYours => 'Tu listado';
 
   @override
   String get p2pNavShops => 'Tiendas';

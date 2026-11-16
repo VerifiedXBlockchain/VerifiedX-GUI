@@ -3693,6 +3693,14 @@
       }
     }
   },
+  "p2pBidAmountLabel": "Tu oferta (VFX)",
+  "@p2pBidAmountLabel": {
+    "description": "Label of the amount field in the P2P bid dialog."
+  },
+  "p2pBidAvailable": "Disponible",
+  "@p2pBidAvailable": {
+    "description": "Label of the selected account's balance in the P2P bid dialog."
+  },
   "p2pBidCountNone": "Sin ofertas",
   "@p2pBidCountNone": {
     "description": "Bid count on a P2P auction with no bids."
@@ -3709,6 +3717,140 @@
         "type": "int"
       }
     }
+  },
+  "p2pBidDone": "Oferta realizada",
+  "@p2pBidDone": {
+    "description": "Heading shown in the P2P bid dialog after a bid is accepted."
+  },
+  "p2pBidDoneBody": "Tienes la oferta más alta con {amount}.",
+  "@p2pBidDoneBody": {
+    "description": "Body shown after a P2P bid is accepted and leads with the reserve met.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pBidDoneReserve": "Tu oferta de {amount} es la más alta, pero aún no alcanza la reserva.",
+  "@p2pBidDoneReserve": {
+    "description": "Body shown after a P2P bid is accepted but is under the reserve price.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pBidErrorBalance": "El saldo de esta cuenta no lo cubre.",
+  "@p2pBidErrorBalance": {
+    "description": "Error in the P2P bid dialog: the amount is more than the selected account's balance."
+  },
+  "p2pBidErrorDecimals": "Usa como máximo 8 decimales.",
+  "@p2pBidErrorDecimals": {
+    "description": "Field error in the P2P bid dialog: too many decimal places."
+  },
+  "p2pBidErrorEmpty": "Escribe tu oferta.",
+  "@p2pBidErrorEmpty": {
+    "description": "Field error in the P2P bid dialog: nothing typed."
+  },
+  "p2pBidErrorFormat": "Escribe un importe, como 12.5.",
+  "@p2pBidErrorFormat": {
+    "description": "Field error in the P2P bid dialog: not a number."
+  },
+  "p2pBidErrorTooLow": "Oferta al menos {min}.",
+  "@p2pBidErrorTooLow": {
+    "description": "Field error in the P2P bid dialog: below the next minimum bid.",
+    "placeholders": {
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pBidErrorUseBuyNow": "Con {buyNow} o más, usa Comprar ahora.",
+  "@p2pBidErrorUseBuyNow": {
+    "description": "Field error in the P2P bid dialog: at or above the buy-now price.",
+    "placeholders": {
+      "buyNow": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pBidMin": "Al menos {min}",
+  "@p2pBidMin": {
+    "description": "Hint under the amount field in the P2P bid dialog: the least the bid can be.",
+    "placeholders": {
+      "min": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pBidOpen": "Ofertar",
+  "@p2pBidOpen": {
+    "description": "Button on a P2P auction that opens the bid dialog."
+  },
+  "p2pBidSignNote": "Tu cuenta firma esta oferta. Es un mensaje firmado, no una transacción: no se mueve VFX a menos que ganes y completes la compra.",
+  "@p2pBidSignNote": {
+    "description": "Note in the P2P bid dialog explaining what signing a bid does."
+  },
+  "p2pBidSigning": "Firmando…",
+  "@p2pBidSigning": {
+    "description": "Label of the submit button in the P2P bid dialog while the bid is signed and sent."
+  },
+  "p2pBidStatusAccepted": "La más alta",
+  "@p2pBidStatusAccepted": {
+    "description": "P2P bid status: the high bid, but under the reserve."
+  },
+  "p2pBidStatusLost": "Perdió",
+  "@p2pBidStatusLost": {
+    "description": "P2P bid status: the listing went to another bid or closed."
+  },
+  "p2pBidStatusOutbid": "Superada",
+  "@p2pBidStatusOutbid": {
+    "description": "P2P bid status: a higher bid was placed."
+  },
+  "p2pBidStatusWinning": "Ganando",
+  "@p2pBidStatusWinning": {
+    "description": "P2P bid status: the high bid, with the reserve met."
+  },
+  "p2pBidStatusWon": "Ganó",
+  "@p2pBidStatusWon": {
+    "description": "P2P bid status: the bid won the listing."
+  },
+  "p2pBidSubmit": "Firmar y ofertar",
+  "@p2pBidSubmit": {
+    "description": "Submit button of the P2P bid dialog."
+  },
+  "p2pBidTitle": "Hacer una oferta",
+  "@p2pBidTitle": {
+    "description": "Title of the P2P bid dialog."
+  },
+  "p2pBuyDone": "Es tuyo: falta completar",
+  "@p2pBuyDone": {
+    "description": "Heading shown in the P2P buy-now dialog after the offer is accepted."
+  },
+  "p2pBuyDoneBody": "Ahora el vendedor inicia la venta. Solo pagas cuando completes la compra.",
+  "@p2pBuyDoneBody": {
+    "description": "Body shown after a P2P buy-now offer is accepted."
+  },
+  "p2pBuyOpen": "Comprar ahora · {price}",
+  "@p2pBuyOpen": {
+    "description": "Button on a P2P listing that opens the buy-now dialog.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pBuySignNote": "Tu cuenta firma una oferta al precio de compra inmediata. Es un mensaje firmado, no una transacción: pagas cuando completas la compra, después de que el vendedor inicie la venta.",
+  "@p2pBuySignNote": {
+    "description": "Note in the P2P buy-now dialog explaining what signing the offer does."
+  },
+  "p2pBuySubmit": "Firmar y comprar ahora",
+  "@p2pBuySubmit": {
+    "description": "Submit button of the P2P buy-now dialog."
+  },
+  "p2pBuyTitle": "Comprar ahora",
+  "@p2pBuyTitle": {
+    "description": "Title of the P2P buy-now dialog."
   },
   "p2pClearSearch": "Borrar búsqueda",
   "@p2pClearSearch": {
@@ -3749,9 +3891,17 @@
   "@p2pCopied": {
     "description": "Toast after copying a P2P shop address, owner address or contract id."
   },
+  "p2pCopyContract": "Copiar id del contrato",
+  "@p2pCopyContract": {
+    "description": "Tooltip of the icon button that copies the NFT's smart contract id."
+  },
   "p2pCopyOwnerAddress": "Copiar dirección del propietario",
   "@p2pCopyOwnerAddress": {
     "description": "Tooltip of the icon button that copies a P2P shop owner's address."
+  },
+  "p2pCopySellerAddress": "Copiar dirección del vendedor",
+  "@p2pCopySellerAddress": {
+    "description": "Tooltip of the icon button that copies a P2P listing's seller address."
   },
   "p2pCopyShopAddress": "Copiar dirección de la tienda",
   "@p2pCopyShopAddress": {
@@ -3809,6 +3959,34 @@
   "p2pDryRunBanner": "Los pasos de la tienda que serían transacciones quedan registrados en el registro de tiendas de testnet. No se firma ninguna transacción ni se envía nada a la red.",
   "@p2pDryRunBanner": {
     "description": "Banner body on every P2P shop screen while chain steps are dry runs. Follows the bold 'Dry run.' badge."
+  },
+  "p2pEndReasonNftBurned": "El NFT se quemó",
+  "@p2pEndReasonNftBurned": {
+    "description": "P2P listing end reason nft_burned."
+  },
+  "p2pEndReasonNftMoved": "El NFT se transfirió",
+  "@p2pEndReasonNftMoved": {
+    "description": "P2P listing end reason nft_moved."
+  },
+  "p2pEndReasonSaleCancelled": "La venta se canceló",
+  "@p2pEndReasonSaleCancelled": {
+    "description": "P2P listing end reason sale_cancelled."
+  },
+  "p2pEndReasonSaleStartedElsewhere": "Se inició una venta de este NFT en otro lugar",
+  "@p2pEndReasonSaleStartedElsewhere": {
+    "description": "P2P listing end reason sale_started_elsewhere."
+  },
+  "p2pEndReasonShopDeleted": "La tienda se eliminó",
+  "@p2pEndReasonShopDeleted": {
+    "description": "P2P listing end reason shop_deleted."
+  },
+  "p2pEndReasonShopOwnerChanged": "La tienda cambió de propietario",
+  "@p2pEndReasonShopOwnerChanged": {
+    "description": "P2P listing end reason shop_owner_changed."
+  },
+  "p2pEndReasonShopRegisteredOnChain": "Otra persona registró la tienda en la cadena",
+  "@p2pEndReasonShopRegisteredOnChain": {
+    "description": "P2P listing end reason shop_registered_on_chain."
   },
   "p2pErrorAmountMismatch": "El precio cambió. Revisa el listado e inténtalo de nuevo.",
   "@p2pErrorAmountMismatch": {
@@ -3935,17 +4113,222 @@
   "@p2pErrorUseBuyNow": {
     "description": "P2P shop error code use_buy_now."
   },
+  "p2pListingAllBids": "Ver todas las ofertas",
+  "@p2pListingAllBids": {
+    "description": "Button that loads every bid of a P2P listing."
+  },
   "p2pListingAuction": "Subasta",
   "@p2pListingAuction": {
     "description": "Chip on a P2P listing that takes bids."
+  },
+  "p2pListingBids": "Ofertas",
+  "@p2pListingBids": {
+    "description": "Section heading of a P2P auction's bid history."
+  },
+  "p2pListingBidsShown": "Se muestran las {shown} ofertas más recientes de {total}.",
+  "@p2pListingBidsShown": {
+    "description": "Line under a P2P listing's bid history when it has more bids than are shown.",
+    "placeholders": {
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pListingBuyer": "Comprador",
+  "@p2pListingBuyer": {
+    "description": "Details row label: the buyer's address, once sold."
+  },
+  "p2pListingBy": "Por {name}",
+  "@p2pListingBy": {
+    "description": "Line under a P2P listing's title naming the NFT's minter.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListingClosing": "Las ofertas han cerrado. El resultado aparecerá en un momento.",
+  "@p2pListingClosing": {
+    "description": "Note on a live P2P listing that is past its end."
+  },
+  "p2pListingContract": "Contrato",
+  "@p2pListingContract": {
+    "description": "Details row label: the NFT's smart contract id."
+  },
+  "p2pListingDetails": "Detalles",
+  "@p2pListingDetails": {
+    "description": "Section heading of a P2P listing's details table."
+  },
+  "p2pListingEndReason": "Por qué terminó",
+  "@p2pListingEndReason": {
+    "description": "Details row label: the reason a P2P listing closed without a sale."
+  },
+  "p2pListingEnds": "Termina",
+  "@p2pListingEnds": {
+    "description": "Details row label: when the listing closes."
   },
   "p2pListingFixedPrice": "Precio fijo",
   "@p2pListingFixedPrice": {
     "description": "Chip on a P2P listing that sells at its buy-now price only."
   },
+  "p2pListingLeading": "Tienes la oferta más alta.",
+  "@p2pListingLeading": {
+    "description": "Note on a live P2P auction where the selected account holds the high bid."
+  },
+  "p2pListingLeadingReserve": "Tu oferta es la más alta, pero aún no alcanza la reserva.",
+  "@p2pListingLeadingReserve": {
+    "description": "Note on a live P2P auction where the selected account holds the high bid under the reserve."
+  },
+  "p2pListingMinter": "Acuñado por",
+  "@p2pListingMinter": {
+    "description": "Details row label: the NFT's minter name."
+  },
+  "p2pListingNextMinBid": "Siguiente oferta desde",
+  "@p2pListingNextMinBid": {
+    "description": "Label of the least the next bid on a P2P auction can be."
+  },
+  "p2pListingNoAccount": "Elige una cuenta VFX para ofertar o comprar.",
+  "@p2pListingNoAccount": {
+    "description": "Note on a P2P listing when no VFX account is selected."
+  },
+  "p2pListingNoBids": "Aún no hay ofertas.",
+  "@p2pListingNoBids": {
+    "description": "Shown in the bid history of a P2P auction with no bids."
+  },
+  "p2pListingNoOffers": "Aún no hay ofertas de compra.",
+  "@p2pListingNoOffers": {
+    "description": "Shown in the offers of a fixed-price P2P listing with none."
+  },
+  "p2pListingNoRoyalty": "Ninguna",
+  "@p2pListingNoRoyalty": {
+    "description": "Shown when a P2P listing's NFT has no royalty."
+  },
+  "p2pListingNotFound": "No se encontró este listado.",
+  "@p2pListingNotFound": {
+    "description": "Title shown when a P2P listing id has no listing."
+  },
+  "p2pListingNotFoundBody": "Puede que se haya eliminado.",
+  "@p2pListingNotFoundBody": {
+    "description": "Body shown when a P2P listing id has no listing."
+  },
+  "p2pListingNotOpenYet": "Las ofertas aún no han abierto.",
+  "@p2pListingNotOpenYet": {
+    "description": "Note on a live P2P listing before its start."
+  },
+  "p2pListingOffers": "Ofertas de compra",
+  "@p2pListingOffers": {
+    "description": "Section heading of the buy-now offers on a fixed-price P2P listing."
+  },
+  "p2pListingOver": "Este listado ha terminado.",
+  "@p2pListingOver": {
+    "description": "Note on a P2P listing that closed without a sale."
+  },
+  "p2pListingOwn": "Este es tu listado. No puedes ofertar en él.",
+  "@p2pListingOwn": {
+    "description": "Note on a P2P listing the selected account is selling."
+  },
+  "p2pListingProgress": "Progreso",
+  "@p2pListingProgress": {
+    "description": "Section heading of a P2P listing's state timeline."
+  },
+  "p2pListingPurchased": "Compraste esto por {price}.",
+  "@p2pListingPurchased": {
+    "description": "Note to the buyer of a sold P2P listing.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListingReserveMet": "Reserva alcanzada",
+  "@p2pListingReserveMet": {
+    "description": "Chip on a P2P auction whose high bid meets the reserve price."
+  },
+  "p2pListingReserveNotMet": "Reserva no alcanzada",
+  "@p2pListingReserveNotMet": {
+    "description": "Chip on a P2P auction whose high bid is under the reserve price."
+  },
+  "p2pListingRoyalty": "Regalía",
+  "@p2pListingRoyalty": {
+    "description": "Details row label: the NFT's royalty."
+  },
+  "p2pListingRoyaltyPercent": "{percent} % del precio",
+  "@p2pListingRoyaltyPercent": {
+    "description": "A P2P listing's royalty as a percent of the sale price.",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListingSaleStartBy": "La venta empieza antes de",
+  "@p2pListingSaleStartBy": {
+    "description": "Details row label: the seller's deadline to start the sale."
+  },
+  "p2pListingSaleStartedNote": "El vendedor inició la venta. Completar la compra desde esta billetera aún no está disponible.",
+  "@p2pListingSaleStartedNote": {
+    "description": "Note to the winner of a P2P listing once the sale has started; the complete-purchase step is not built in this version."
+  },
+  "p2pListingSeller": "Vendedor",
+  "@p2pListingSeller": {
+    "description": "Details row label: the seller's address."
+  },
+  "p2pListingShop": "Tienda",
+  "@p2pListingShop": {
+    "description": "Details row label: the shop the listing belongs to."
+  },
+  "p2pListingSoldNote": "Vendido por {price}.",
+  "@p2pListingSoldNote": {
+    "description": "Note to a visitor on a sold P2P listing.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListingStarts": "Empieza",
+  "@p2pListingStarts": {
+    "description": "Details row label: when the listing opens."
+  },
   "p2pListingTitle": "Listado",
   "@p2pListingTitle": {
     "description": "App bar title of a P2P shop listing's page while its NFT name is not loaded."
+  },
+  "p2pListingVault": "Una cuenta Vault no puede ofertar ni comprar. Elige otra cuenta.",
+  "@p2pListingVault": {
+    "description": "Note on a P2P listing when the selected account is a Vault account."
+  },
+  "p2pListingWinner": "Ganador",
+  "@p2pListingWinner": {
+    "description": "Details row label: the winning bidder's address, before the sale is complete."
+  },
+  "p2pListingWonByOther": "Ya se eligió un ganador. Este listado ya no acepta ofertas.",
+  "@p2pListingWonByOther": {
+    "description": "Note to a visitor on a P2P listing someone else won."
+  },
+  "p2pListingWonWaiting": "Ganaste esto por {price}. Ahora el vendedor inicia la venta; solo pagas cuando completes la compra.",
+  "@p2pListingWonWaiting": {
+    "description": "Note to the winner of a P2P listing while the seller has not started the sale.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListingYou": "Tú",
+  "@p2pListingYou": {
+    "description": "Tag on the selected account's own bid in a P2P listing's bid history."
+  },
+  "p2pListingYouWon": "Ganaste",
+  "@p2pListingYouWon": {
+    "description": "Tag on a P2P listing the selected account won."
+  },
+  "p2pListingYours": "Tu listado",
+  "@p2pListingYours": {
+    "description": "Tag on a P2P listing the selected account is selling."
   },
   "p2pNavShops": "Tiendas",
   "@p2pNavShops": {

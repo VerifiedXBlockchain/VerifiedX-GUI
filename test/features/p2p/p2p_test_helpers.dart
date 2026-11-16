@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/app.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/features/encrypt/providers/password_required_provider.dart';
 import 'package:rbx_wallet/features/p2p/components/p2p_parts.dart';
@@ -13,6 +14,7 @@ import 'package:rbx_wallet/features/p2p/models/p2p_page.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_session_provider.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
+import 'package:rbx_wallet/features/p2p/services/p2p_session.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_signer.dart';
 import 'package:rbx_wallet/features/wallet/models/wallet.dart';
 import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
@@ -144,6 +146,9 @@ class FakeP2pService extends P2pService {
   List<P2pBidSummary> allBids = [];
   P2pBidResult Function(int listingId, String amount, bool isBuyNow, String signature)? onBid;
 
+  /// Thrown by [placeBid] only.
+  Object? bidError;
+
   FakeP2pService() : super(hostOverride: 'http://127.0.0.1:9');
 
   void _fail() {
@@ -209,6 +214,9 @@ class FakeP2pService extends P2pService {
   }) async {
     calls.add('placeBid($listingId, $amount, buyNow: $isBuyNow, token: $token)');
     _fail();
+    if (bidError != null) {
+      throw bidError!;
+    }
     return onBid!(listingId, amount, isBuyNow, signature);
   }
 }
@@ -225,16 +233,22 @@ Widget p2pTestApp({
   P2pMessageSigner? signer,
   List<Override> overrides = const [],
 }) {
+  // Dialogs open on the root navigator.
+  rootNavigatorKey = GlobalKey<NavigatorState>();
+  final messageSigner = signer ?? FakeP2pSigner();
   return ProviderScope(
     overrides: [
       p2pServiceProvider.overrideWithValue(service),
-      p2pSignerProvider.overrideWithValue(signer ?? FakeP2pSigner()),
-      passwordRequiredProvider.overrideWith((ref) => StubPasswordRequired()),
+      p2pSignerProvider.overrideWithValue(messageSigner),
+      // Built here, not by the app's provider: that one follows the wallet's
+      // lock state, whose provider polls the node on a timer.
+      p2pSessionProvider.overrideWithValue(P2pSession(service: service, signer: messageSigner)),
       sessionProvider.overrideWith((ref) => StubP2pSession(ref, address: address, balance: balance)),
       if (now != null) p2pClockProvider.overrideWithValue(() => now),
       ...overrides,
     ],
     child: MaterialApp(
+      navigatorKey: rootNavigatorKey,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: child,
