@@ -3710,6 +3710,26 @@
   "@operationsWalletStarted": {
     "description": "Status item label: wallet start time."
   },
+  "p2pDryRunBadge": "Dry run",
+  "@p2pDryRunBadge": {
+    "description": "Short badge marking a P2P shop, listing or step as a dry run (not on chain)."
+  },
+  "p2pDryRunBanner": "Shop steps that would be transactions are recorded by the shop registry on testnet. Nothing is signed into a transaction or sent to the network.",
+  "@p2pDryRunBanner": {
+    "description": "Banner body on every P2P shop screen while chain steps are dry runs. Follows the bold 'Dry run.' badge."
+  },
+  "p2pListingTitle": "Listing",
+  "@p2pListingTitle": {
+    "description": "App bar title of a P2P shop listing's page while its NFT name is not loaded."
+  },
+  "p2pNavShops": "Shops",
+  "@p2pNavShops": {
+    "description": "Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry."
+  },
+  "p2pShopsTitle": "Shops",
+  "@p2pShopsTitle": {
+    "description": "App bar title of the P2P shop list screen."
+  },
   "paymentAmountHint": "Enter amount",
   "@paymentAmountHint": {
     "description": "Hint inside the payment amount field."

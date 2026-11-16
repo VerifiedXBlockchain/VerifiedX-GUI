@@ -6663,6 +6663,36 @@ abstract class AppLocalizations {
   /// **'Wallet Started'**
   String get operationsWalletStarted;
 
+  /// Short badge marking a P2P shop, listing or step as a dry run (not on chain).
+  ///
+  /// In en, this message translates to:
+  /// **'Dry run'**
+  String get p2pDryRunBadge;
+
+  /// Banner body on every P2P shop screen while chain steps are dry runs. Follows the bold 'Dry run.' badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop steps that would be transactions are recorded by the shop registry on testnet. Nothing is signed into a transaction or sent to the network.'**
+  String get p2pDryRunBanner;
+
+  /// App bar title of a P2P shop listing's page while its NFT name is not loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing'**
+  String get p2pListingTitle;
+
+  /// Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Shops'**
+  String get p2pNavShops;
+
+  /// App bar title of the P2P shop list screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Shops'**
+  String get p2pShopsTitle;
+
   /// Hint inside the payment amount field.
   ///
   /// In en, this message translates to:

@@ -3516,6 +3516,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get operationsWalletStarted => 'Billetera iniciada';
 
   @override
+  String get p2pDryRunBadge => 'Simulación';
+
+  @override
+  String get p2pDryRunBanner => 'Los pasos de la tienda que serían transacciones quedan registrados en el registro de tiendas de testnet. No se firma ninguna transacción ni se envía nada a la red.';
+
+  @override
+  String get p2pListingTitle => 'Listado';
+
+  @override
+  String get p2pNavShops => 'Tiendas';
+
+  @override
+  String get p2pShopsTitle => 'Tiendas';
+
+  @override
   String get paymentAmountHint => 'Ingresa el monto';
 
   @override

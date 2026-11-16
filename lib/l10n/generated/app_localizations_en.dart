@@ -3516,6 +3516,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get operationsWalletStarted => 'Wallet Started';
 
   @override
+  String get p2pDryRunBadge => 'Dry run';
+
+  @override
+  String get p2pDryRunBanner => 'Shop steps that would be transactions are recorded by the shop registry on testnet. Nothing is signed into a transaction or sent to the network.';
+
+  @override
+  String get p2pListingTitle => 'Listing';
+
+  @override
+  String get p2pNavShops => 'Shops';
+
+  @override
+  String get p2pShopsTitle => 'Shops';
+
+  @override
   String get paymentAmountHint => 'Enter amount';
 
   @override
