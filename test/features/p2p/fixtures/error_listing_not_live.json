@@ -1,0 +1,7 @@
+{
+    "error": {
+        "code": "listing_not_live",
+        "message": "The listing is sold.",
+        "fields": {}
+    }
+}

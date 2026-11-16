@@ -1,0 +1,70 @@
+{
+    "id": 3,
+    "shop_url": "dryrun-demo",
+    "collection_id": 3,
+    "state": "sale_pending",
+    "smart_contract_uid": "0b6ea1abd1da425fab80029f8f20944c:1794213169",
+    "nft": {
+        "name": "E2E Bulk Mint B 08:32",
+        "description": "Bulk lane item B",
+        "minter_name": "Web wallet e2e",
+        "thumbnail_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/LDnNmxZfToc3ItbISxUdKUlr3j4ylWHR/e2e-cube-1794197469269.png",
+        "asset_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/LDnNmxZfToc3ItbISxUdKUlr3j4ylWHR/e2e-cube-1794197469269.png",
+        "royalty": {
+            "amount": "0.02",
+            "pay_to": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ"
+        }
+    },
+    "seller_address": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ",
+    "buy_now_price": "5",
+    "floor_price": null,
+    "reserve_price": null,
+    "reserve_met": true,
+    "starts_at": "2026-11-16T15:26:35Z",
+    "ends_at": "2026-12-16T15:26:35Z",
+    "purchase_key": "KlMnOpQrSt1794843000",
+    "high_bid": {
+        "amount": "5",
+        "address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "at": "2026-11-16T16:20:00Z"
+    },
+    "bid_count": 1,
+    "next_min_bid": null,
+    "winner_address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "sale_start_deadline": "2026-11-18T16:20:00Z",
+    "sold_price": null,
+    "chain_state": "dry_run",
+    "sale": {
+        "start": {
+            "type": 5,
+            "function": "Sale_Start()",
+            "from_address": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ",
+            "to_address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "amount": "0",
+            "fee": "0.000042",
+            "timestamp": 1794846300,
+            "data": {
+                "Function": "Sale_Start()",
+                "ContractUID": "0b6ea1abd1da425fab80029f8f20944c:1794213169",
+                "NextOwner": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "SoldFor": "5",
+                "KeySign": "KlMnOpQrSt1794843000",
+                "BidSignature": null,
+                "Locators": "NA"
+            }
+        },
+        "complete": null
+    },
+    "royalty_enforced": true,
+    "end_reason": null,
+    "bids": [
+        {
+            "id": 14,
+            "address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "amount": "5",
+            "is_buy_now": true,
+            "status": "won",
+            "at": "2026-11-16T16:20:00Z"
+        }
+    ]
+}

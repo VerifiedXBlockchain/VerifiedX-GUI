@@ -1,0 +1,8 @@
+{
+    "error": {
+        "code": "shop_not_found",
+        "message": "No shop has this URL.",
+        "fields": {}
+    }
+}
+

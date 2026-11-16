@@ -3516,6 +3516,567 @@ class AppLocalizationsEs extends AppLocalizations {
   String get operationsWalletStarted => 'Billetera iniciada';
 
   @override
+  String p2pAmountVfx(String amount) {
+    return '$amount VFX';
+  }
+
+  @override
+  String get p2pBidAmountLabel => 'Tu oferta (VFX)';
+
+  @override
+  String get p2pBidAvailable => 'Disponible';
+
+  @override
+  String get p2pBidCountNone => 'Sin ofertas';
+
+  @override
+  String get p2pBidCountOne => '1 oferta';
+
+  @override
+  String p2pBidCountOther(int count) {
+    return '$count ofertas';
+  }
+
+  @override
+  String get p2pBidDone => 'Oferta realizada';
+
+  @override
+  String p2pBidDoneBody(String amount) {
+    return 'Tienes la oferta más alta con $amount.';
+  }
+
+  @override
+  String p2pBidDoneReserve(String amount) {
+    return 'Tu oferta de $amount es la más alta, pero aún no alcanza la reserva.';
+  }
+
+  @override
+  String get p2pBidErrorBalance => 'El saldo de esta cuenta no lo cubre.';
+
+  @override
+  String get p2pBidErrorDecimals => 'Usa como máximo 8 decimales.';
+
+  @override
+  String get p2pBidErrorEmpty => 'Escribe tu oferta.';
+
+  @override
+  String get p2pBidErrorFormat => 'Escribe un importe, como 12.5.';
+
+  @override
+  String p2pBidErrorTooLow(String min) {
+    return 'Oferta al menos $min.';
+  }
+
+  @override
+  String p2pBidErrorUseBuyNow(String buyNow) {
+    return 'Con $buyNow o más, usa Comprar ahora.';
+  }
+
+  @override
+  String p2pBidMin(String min) {
+    return 'Al menos $min';
+  }
+
+  @override
+  String get p2pBidOpen => 'Ofertar';
+
+  @override
+  String get p2pBidSignNote => 'Tu cuenta firma esta oferta. Es un mensaje firmado, no una transacción: no se mueve VFX a menos que ganes y completes la compra.';
+
+  @override
+  String get p2pBidSigning => 'Firmando…';
+
+  @override
+  String get p2pBidStatusAccepted => 'La más alta';
+
+  @override
+  String get p2pBidStatusLost => 'Perdió';
+
+  @override
+  String get p2pBidStatusOutbid => 'Superada';
+
+  @override
+  String get p2pBidStatusWinning => 'Ganando';
+
+  @override
+  String get p2pBidStatusWon => 'Ganó';
+
+  @override
+  String get p2pBidSubmit => 'Firmar y ofertar';
+
+  @override
+  String get p2pBidTitle => 'Hacer una oferta';
+
+  @override
+  String get p2pBuyDone => 'Es tuyo: falta completar';
+
+  @override
+  String get p2pBuyDoneBody => 'Ahora el vendedor inicia la venta. Solo pagas cuando completes la compra.';
+
+  @override
+  String p2pBuyOpen(String price) {
+    return 'Comprar ahora · $price';
+  }
+
+  @override
+  String get p2pBuySignNote => 'Tu cuenta firma una oferta al precio de compra inmediata. Es un mensaje firmado, no una transacción: pagas cuando completas la compra, después de que el vendedor inicie la venta.';
+
+  @override
+  String get p2pBuySubmit => 'Firmar y comprar ahora';
+
+  @override
+  String get p2pBuyTitle => 'Comprar ahora';
+
+  @override
+  String get p2pClearSearch => 'Borrar búsqueda';
+
+  @override
+  String get p2pClockClosing => 'Cerrando…';
+
+  @override
+  String p2pClockEndsIn(String time) {
+    return 'Termina en $time';
+  }
+
+  @override
+  String p2pClockOpensIn(String time) {
+    return 'Abre en $time';
+  }
+
+  @override
+  String p2pClockSellerHas(String time) {
+    return 'La venta empieza en un máximo de $time';
+  }
+
+  @override
+  String get p2pCopied => 'Copiado al portapapeles';
+
+  @override
+  String get p2pCopyContract => 'Copiar id del contrato';
+
+  @override
+  String get p2pCopyOwnerAddress => 'Copiar dirección del propietario';
+
+  @override
+  String get p2pCopySellerAddress => 'Copiar dirección del vendedor';
+
+  @override
+  String get p2pCopyShopAddress => 'Copiar dirección de la tienda';
+
+  @override
+  String p2pCountdownDaysHours(int days, int hours) {
+    return '$days d $hours h';
+  }
+
+  @override
+  String p2pCountdownHoursMinutes(int hours, int minutes) {
+    return '$hours h $minutes min';
+  }
+
+  @override
+  String p2pCountdownMinutesSeconds(int minutes, int seconds) {
+    return '$minutes min $seconds s';
+  }
+
+  @override
+  String p2pCountdownSeconds(int seconds) {
+    return '$seconds s';
+  }
+
+  @override
+  String get p2pDryRunBadge => 'Simulación';
+
+  @override
+  String get p2pDryRunBanner => 'Los pasos de la tienda que serían transacciones quedan registrados en el registro de tiendas de testnet. No se firma ninguna transacción ni se envía nada a la red.';
+
+  @override
+  String get p2pEndReasonNftBurned => 'El NFT se quemó';
+
+  @override
+  String get p2pEndReasonNftMoved => 'El NFT se transfirió';
+
+  @override
+  String get p2pEndReasonSaleCancelled => 'La venta se canceló';
+
+  @override
+  String get p2pEndReasonSaleStartedElsewhere => 'Se inició una venta de este NFT en otro lugar';
+
+  @override
+  String get p2pEndReasonShopDeleted => 'La tienda se eliminó';
+
+  @override
+  String get p2pEndReasonShopOwnerChanged => 'La tienda cambió de propietario';
+
+  @override
+  String get p2pEndReasonShopRegisteredOnChain => 'Otra persona registró la tienda en la cadena';
+
+  @override
+  String get p2pErrorAmountMismatch => 'El precio cambió. Revisa el listado e inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorBadResponse => 'El registro de tiendas envió una respuesta que esta billetera no pudo leer.';
+
+  @override
+  String get p2pErrorBadSignature => 'El registro de tiendas no pudo verificar la firma de esta cuenta. Inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorBidTooLow => 'Tu oferta está por debajo de la siguiente oferta mínima. Puede que alguien haya ofertado justo antes.';
+
+  @override
+  String get p2pErrorConflict => 'Eso cambió mientras tanto. Recarga e inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorDuplicateBid => 'Esta oferta ya se había hecho.';
+
+  @override
+  String get p2pErrorForbidden => 'Esta cuenta no puede hacer eso aquí.';
+
+  @override
+  String get p2pErrorInsufficientBalance => 'El saldo de esta cuenta no cubre el importe.';
+
+  @override
+  String get p2pErrorInvalid => 'El registro de tiendas no pudo aceptarlo. Revisa los datos e inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorListingEnded => 'Este listado ha terminado.';
+
+  @override
+  String get p2pErrorListingNotLive => 'Este listado ya no acepta ofertas.';
+
+  @override
+  String get p2pErrorListingNotStarted => 'Las ofertas aún no han abierto.';
+
+  @override
+  String get p2pErrorListingUnavailable => 'Este listado no está disponible en su tienda ahora mismo.';
+
+  @override
+  String get p2pErrorNoBuyNow => 'Este listado no tiene precio de compra inmediata.';
+
+  @override
+  String get p2pErrorNotAnAuction => 'Este listado no acepta ofertas. Usa Comprar ahora.';
+
+  @override
+  String get p2pErrorNotFound => 'No encontrado. Puede que se haya eliminado.';
+
+  @override
+  String p2pErrorRefused(String reason) {
+    return 'El registro de tiendas lo rechazó: $reason';
+  }
+
+  @override
+  String get p2pErrorReserveAddress => 'Una cuenta Vault no puede ofertar ni comprar. Elige otra cuenta.';
+
+  @override
+  String get p2pErrorSellerCannotBid => 'No puedes ofertar en tu propio listado.';
+
+  @override
+  String get p2pErrorServer => 'El registro de tiendas tuvo un problema. Inténtalo de nuevo en un momento.';
+
+  @override
+  String get p2pErrorShopNotFound => 'Ninguna tienda tiene esta dirección.';
+
+  @override
+  String get p2pErrorSignInExpired => 'El inicio de sesión en la tienda ha caducado. Inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorSignInRefused => 'El registro de tiendas no aceptó el inicio de sesión de esta cuenta. Inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorSignNotInWallet => 'Esta cuenta no está en esta billetera, así que no puede firmar.';
+
+  @override
+  String get p2pErrorSignUnexpected => 'El nodo de la billetera no devolvió una firma. Inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorSignUnreachable => 'No se pudo conectar con el nodo de la billetera para firmar. Inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorThrottled => 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorUnknown => 'Algo salió mal. Inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorUnreachable => 'No se pudo conectar con el registro de tiendas. Revisa tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorUseBuyNow => 'Al precio de compra inmediata o más, usa Comprar ahora.';
+
+  @override
+  String get p2pListingAllBids => 'Ver todas las ofertas';
+
+  @override
+  String get p2pListingAuction => 'Subasta';
+
+  @override
+  String get p2pListingBids => 'Ofertas';
+
+  @override
+  String p2pListingBidsShown(int shown, int total) {
+    return 'Se muestran las $shown ofertas más recientes de $total.';
+  }
+
+  @override
+  String get p2pListingBuyer => 'Comprador';
+
+  @override
+  String p2pListingBy(String name) {
+    return 'Por $name';
+  }
+
+  @override
+  String get p2pListingClosing => 'Las ofertas han cerrado. El resultado aparecerá en un momento.';
+
+  @override
+  String get p2pListingContract => 'Contrato';
+
+  @override
+  String get p2pListingDetails => 'Detalles';
+
+  @override
+  String get p2pListingEndReason => 'Por qué terminó';
+
+  @override
+  String get p2pListingEnds => 'Termina';
+
+  @override
+  String get p2pListingFixedPrice => 'Precio fijo';
+
+  @override
+  String get p2pListingLeading => 'Tienes la oferta más alta.';
+
+  @override
+  String get p2pListingLeadingReserve => 'Tu oferta es la más alta, pero aún no alcanza la reserva.';
+
+  @override
+  String get p2pListingMinter => 'Acuñado por';
+
+  @override
+  String get p2pListingNextMinBid => 'Siguiente oferta desde';
+
+  @override
+  String get p2pListingNoAccount => 'Elige una cuenta VFX para ofertar o comprar.';
+
+  @override
+  String get p2pListingNoBids => 'Aún no hay ofertas.';
+
+  @override
+  String get p2pListingNoOffers => 'Aún no hay ofertas de compra.';
+
+  @override
+  String get p2pListingNoRoyalty => 'Ninguna';
+
+  @override
+  String get p2pListingNotFound => 'No se encontró este listado.';
+
+  @override
+  String get p2pListingNotFoundBody => 'Puede que se haya eliminado.';
+
+  @override
+  String get p2pListingNotOpenYet => 'Las ofertas aún no han abierto.';
+
+  @override
+  String get p2pListingOffers => 'Ofertas de compra';
+
+  @override
+  String get p2pListingOver => 'Este listado ha terminado.';
+
+  @override
+  String get p2pListingOwn => 'Este es tu listado. No puedes ofertar en él.';
+
+  @override
+  String get p2pListingProgress => 'Progreso';
+
+  @override
+  String p2pListingPurchased(String price) {
+    return 'Compraste esto por $price.';
+  }
+
+  @override
+  String get p2pListingReserveMet => 'Reserva alcanzada';
+
+  @override
+  String get p2pListingReserveNotMet => 'Reserva no alcanzada';
+
+  @override
+  String get p2pListingRoyalty => 'Regalía';
+
+  @override
+  String p2pListingRoyaltyAmount(String amount) {
+    return 'Importe del contrato: $amount';
+  }
+
+  @override
+  String p2pListingRoyaltyPercent(String percent) {
+    return 'Una venta paga el $percent % del precio';
+  }
+
+  @override
+  String get p2pListingRoyaltyUnpayable => 'No se puede pagar mediante una venta';
+
+  @override
+  String get p2pListingSaleStartBy => 'La venta empieza antes de';
+
+  @override
+  String get p2pListingSaleStartedNote => 'El vendedor inició la venta. Completar la compra desde esta billetera aún no está disponible.';
+
+  @override
+  String get p2pListingSeller => 'Vendedor';
+
+  @override
+  String get p2pListingShop => 'Tienda';
+
+  @override
+  String p2pListingSoldNote(String price) {
+    return 'Vendido por $price.';
+  }
+
+  @override
+  String get p2pListingStarts => 'Empieza';
+
+  @override
+  String get p2pListingTitle => 'Listado';
+
+  @override
+  String get p2pListingVault => 'Una cuenta Vault no puede ofertar ni comprar. Elige otra cuenta.';
+
+  @override
+  String get p2pListingWinner => 'Ganador';
+
+  @override
+  String get p2pListingWonByOther => 'Ya se eligió un ganador. Este listado ya no acepta ofertas.';
+
+  @override
+  String p2pListingWonWaiting(String price) {
+    return 'Ganaste esto por $price. Ahora el vendedor inicia la venta; solo pagas cuando completes la compra.';
+  }
+
+  @override
+  String get p2pListingYou => 'Tú';
+
+  @override
+  String get p2pListingYouWon => 'Ganaste';
+
+  @override
+  String get p2pListingYours => 'Tu listado';
+
+  @override
+  String get p2pNavShops => 'Tiendas';
+
+  @override
+  String p2pPageNumber(int page) {
+    return 'Página $page';
+  }
+
+  @override
+  String get p2pPriceBuyNow => 'Comprar ahora';
+
+  @override
+  String get p2pPriceCurrentBid => 'Oferta actual';
+
+  @override
+  String get p2pPriceSoldFor => 'Vendido por';
+
+  @override
+  String get p2pPriceStartingBid => 'Oferta inicial';
+
+  @override
+  String get p2pPriceWinningBid => 'Oferta ganadora';
+
+  @override
+  String get p2pRetry => 'Reintentar';
+
+  @override
+  String get p2pSearchHint => 'Buscar por nombre o dirección';
+
+  @override
+  String get p2pSearchLabel => 'Buscar tiendas';
+
+  @override
+  String get p2pShopAll => 'Todo';
+
+  @override
+  String get p2pShopCollections => 'Colecciones';
+
+  @override
+  String p2pShopLiveCount(int count) {
+    return '$count activos';
+  }
+
+  @override
+  String get p2pShopLiveListings => 'Listados activos';
+
+  @override
+  String get p2pShopNoListings => 'No hay nada en venta ahora mismo.';
+
+  @override
+  String get p2pShopNoListingsBody => 'Vuelve pronto.';
+
+  @override
+  String get p2pShopNotFound => 'No hay ninguna tienda en esta dirección.';
+
+  @override
+  String get p2pShopNotFoundBody => 'Puede que haya cerrado o que la dirección esté mal escrita.';
+
+  @override
+  String get p2pShopOwner => 'Propietario';
+
+  @override
+  String get p2pShopRegistered => 'Registrada';
+
+  @override
+  String p2pShopRegisteredOn(String date) {
+    return 'Desde $date';
+  }
+
+  @override
+  String get p2pShopYours => 'Tu tienda';
+
+  @override
+  String get p2pShopsEmpty => 'Aún no hay tiendas';
+
+  @override
+  String get p2pShopsEmptyBody => 'Las tiendas registradas en la red aparecen aquí.';
+
+  @override
+  String p2pShopsEmptySearch(String search) {
+    return 'Ninguna tienda coincide con «$search»';
+  }
+
+  @override
+  String get p2pShopsEmptySearchBody => 'Prueba con un nombre más corto o con la dirección vfx:// de la tienda.';
+
+  @override
+  String get p2pShopsTitle => 'Tiendas';
+
+  @override
+  String get p2pStateAwaitingSaleStart => 'Ganador elegido';
+
+  @override
+  String get p2pStateCancelled => 'Cancelado';
+
+  @override
+  String get p2pStateEnded => 'Venta cancelada';
+
+  @override
+  String get p2pStateExpired => 'Terminó sin venta';
+
+  @override
+  String get p2pStateLive => 'Activo';
+
+  @override
+  String get p2pStateSalePending => 'Venta iniciada';
+
+  @override
+  String get p2pStateSold => 'Vendido';
+
+  @override
+  String get p2pStateUnfulfilled => 'Venta no iniciada';
+
+  @override
+  String get p2pStateUnknown => 'Cerrado';
+
+  @override
   String get paymentAmountHint => 'Ingresa el monto';
 
   @override

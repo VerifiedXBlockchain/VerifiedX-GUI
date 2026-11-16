@@ -1,0 +1,50 @@
+{
+    "id": 2,
+    "shop_url": "dryrun-demo",
+    "collection_id": 3,
+    "state": "live",
+    "smart_contract_uid": "fd6f04f2368b4d06b621e0959dc14b36:1794213174",
+    "nft": {
+        "name": "E2E Good URL 08:32:52",
+        "description": "Media on the bucket",
+        "minter_name": "Web wallet e2e",
+        "thumbnail_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/LDnNmxZfToc3ItbISxUdKUlr3j4ylWHR/e2e-cube-1794197469269.png",
+        "asset_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/LDnNmxZfToc3ItbISxUdKUlr3j4ylWHR/e2e-cube-1794197469269.png",
+        "royalty": null
+    },
+    "seller_address": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ",
+    "buy_now_price": "25",
+    "floor_price": "2",
+    "reserve_price": "4",
+    "reserve_met": false,
+    "starts_at": "2026-11-16T15:33:48Z",
+    "ends_at": "2026-12-16T15:33:48Z",
+    "purchase_key": "KamFWBujBu1794843228",
+    "high_bid": {
+        "amount": "2",
+        "address": "xJDgwgQoKv1PbPQMTsT3uJgCtnEV5vox7g",
+        "at": "2026-11-16T15:33:52Z"
+    },
+    "bid_count": 1,
+    "next_min_bid": "2.5",
+    "winner_address": null,
+    "sale_start_deadline": null,
+    "sold_price": null,
+    "chain_state": "dry_run",
+    "sale": {
+        "start": null,
+        "complete": null
+    },
+    "royalty_enforced": true,
+    "end_reason": null,
+    "bids": [
+        {
+            "id": 1,
+            "address": "xJDgwgQoKv1PbPQMTsT3uJgCtnEV5vox7g",
+            "amount": "2",
+            "is_buy_now": false,
+            "status": "accepted",
+            "at": "2026-11-16T15:33:52Z"
+        }
+    ]
+}

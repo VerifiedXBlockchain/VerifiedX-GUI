@@ -37,4 +37,38 @@ void main() {
       expect(Env.btcExplorerTxUrl('abc123'), 'https://signet.verifiedx.io/tx/abc123');
     });
   });
+
+  group('Env P2P shop flags', () {
+    tearDown(Env.resetNetworkForTesting);
+
+    // Tests run without the TESTNET dart-define: this is a mainnet build.
+    test('the P2P shop is off on mainnet', () {
+      expect(Env.isTestNet, isFalse);
+      expect(Env.p2pEnabled, isFalse);
+    });
+
+    test('the P2P shop is on on testnet', () {
+      Env.setTestnetFromArgs(['--testnet']);
+      expect(Env.p2pEnabled, isTrue);
+    });
+
+    test('the P2P shop is off on devnet, which has no registry', () {
+      Env.setTestnetFromArgs(['--devnet']);
+      expect(Env.isTestNet, isTrue);
+      expect(Env.p2pEnabled, isFalse);
+    });
+
+    test('shop transactions are never broadcast, on any network', () {
+      expect(Env.p2pBroadcast, isFalse);
+      Env.setTestnetFromArgs(['--testnet']);
+      expect(Env.p2pBroadcast, isFalse);
+      Env.setTestnetFromArgs(['--devnet']);
+      expect(Env.p2pBroadcast, isFalse);
+    });
+
+    test('no command-line argument turns broadcasting on', () {
+      Env.setTestnetFromArgs(['--testnet', '--p2p-broadcast', '--p2pBroadcast=true', '--broadcast']);
+      expect(Env.p2pBroadcast, isFalse);
+    });
+  });
 }

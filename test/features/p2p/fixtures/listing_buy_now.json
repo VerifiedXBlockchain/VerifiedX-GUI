@@ -1,0 +1,41 @@
+{
+    "id": 1,
+    "shop_url": "dryrun-demo",
+    "collection_id": 3,
+    "state": "live",
+    "smart_contract_uid": "0b6ea1abd1da425fab80029f8f20944c:1794213169",
+    "nft": {
+        "name": "E2E Bulk Mint B 08:32",
+        "description": "Bulk lane item B",
+        "minter_name": "Web wallet e2e",
+        "thumbnail_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/LDnNmxZfToc3ItbISxUdKUlr3j4ylWHR/e2e-cube-1794197469269.png",
+        "asset_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/LDnNmxZfToc3ItbISxUdKUlr3j4ylWHR/e2e-cube-1794197469269.png",
+        "royalty": {
+            "amount": "0.02",
+            "pay_to": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ"
+        }
+    },
+    "seller_address": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ",
+    "buy_now_price": "5",
+    "floor_price": null,
+    "reserve_price": null,
+    "reserve_met": true,
+    "starts_at": "2026-11-16T15:26:35Z",
+    "ends_at": "2026-12-16T15:26:35Z",
+    "purchase_key": "QLHYeWQCuH1794842796",
+    "high_bid": null,
+    "bid_count": 0,
+    "next_min_bid": null,
+    "winner_address": null,
+    "sale_start_deadline": null,
+    "sold_price": null,
+    "chain_state": "dry_run",
+    "sale": {
+        "start": null,
+        "complete": null
+    },
+    "royalty_enforced": true,
+    "end_reason": null,
+    "bids": []
+}
+

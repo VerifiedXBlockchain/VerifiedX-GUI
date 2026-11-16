@@ -22,6 +22,7 @@ import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../utils/toast.dart';
+import '../constants.dart';
 import 'root_container_side_nav_item.dart';
 
 class RootContainerSideNavList extends BaseComponent {
@@ -320,6 +321,28 @@ class RootContainerSideNavList extends BaseComponent {
                 tabsRouter.activeIndex == (kIsWeb ? WebRouteIndex.shop : 9),
             isExpanded: isExpanded,
           ),
+          if (Env.p2pEnabled)
+            RootContainerSideNavItem(
+              key: const ValueKey('nav:p2p_shops'),
+              title: l10n.p2pNavShops,
+              iconType: PrettyIconType.custom,
+              icon: Icons.storefront,
+              isNew: true,
+              onPressed: () {
+                if (inDrawer) {
+                  rootScaffoldKey.currentState!.closeDrawer();
+                }
+                if (tabsRouter.activeIndex == DESKTOP_P2P_SHOPS_TAB_INDEX) {
+                  tabsRouter
+                      .stackRouterOfIndex(tabsRouter.activeIndex)!
+                      .popUntilRoot();
+                } else {
+                  tabsRouter.setActiveIndex(DESKTOP_P2P_SHOPS_TAB_INDEX);
+                }
+              },
+              isActive: tabsRouter.activeIndex == DESKTOP_P2P_SHOPS_TAB_INDEX,
+              isExpanded: isExpanded,
+            ),
           if (!kIsWeb && VALIDATOR_NAV_ENABLED)
             RootContainerSideNavItem(
               key: const ValueKey('nav:validator'),

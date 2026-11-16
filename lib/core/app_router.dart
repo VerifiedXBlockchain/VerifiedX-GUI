@@ -45,6 +45,9 @@ import '../features/smart_contracts/screens/smart_contract_drafts_screen.dart';
 import '../features/smart_contracts/screens/smart_contracts_screen.dart';
 import '../features/smart_contracts/screens/template_chooser_screen.dart';
 import '../features/token/screens/token_topic_create_screen.dart';
+import '../features/p2p/screens/p2p_listing_screen.dart';
+import '../features/p2p/screens/p2p_shop_list_screen.dart';
+import '../features/p2p/screens/p2p_shop_screen.dart';
 import '../features/privacy/screens/privacy_screen.dart';
 import '../features/transactions/screens/transactions_screen.dart';
 import '../features/validator/screens/validator_screen.dart';
@@ -247,6 +250,18 @@ const List<AutoRoute> appRoutes = [
         page: EmptyRouterPage,
         children: [
           AutoRoute(path: "", page: PrivacyScreen),
+        ],
+      ),
+      // The P2P shops on the Spyglass registry (lib/features/p2p). A shop
+      // is addressed by its URL, a listing by its id.
+      AutoRoute(
+        path: "p2p",
+        name: "P2pTabRouter",
+        page: EmptyRouterPage,
+        children: [
+          AutoRoute(path: "", page: P2pShopListScreen),
+          AutoRoute(path: "shop/:url", page: P2pShopScreen),
+          AutoRoute(path: "listing/:id", page: P2pListingScreen),
         ],
       ),
       // AutoRoute(

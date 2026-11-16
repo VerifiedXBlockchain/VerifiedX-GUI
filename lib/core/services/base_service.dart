@@ -149,6 +149,8 @@ class BaseService {
     }
   }
 
+  /// [headers] go on this one request on top of the service's own, as in
+  /// [postJson].
   Future<Map<String, dynamic>> getJson(
     String path, {
     Map<String, dynamic> params = const {},
@@ -159,9 +161,10 @@ class BaseService {
     bool inspect = false,
     bool Function(int?)? validateStatus,
     bool unlockIfLocked = true,
+    Map<String, String> headers = const {},
   }) async {
     try {
-      final dio = _dio(_options(auth: auth, timeout: timeout, validateStatus: validateStatus));
+      final dio = _dio(_options(auth: auth, timeout: timeout, validateStatus: validateStatus, extraHeaders: headers));
       if (inspect) {
         NetworkInspector.attach(dio);
       }

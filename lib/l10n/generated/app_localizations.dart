@@ -6663,6 +6663,1020 @@ abstract class AppLocalizations {
   /// **'Wallet Started'**
   String get operationsWalletStarted;
 
+  /// A VFX amount with its unit, on P2P shop screens.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} VFX'**
+  String p2pAmountVfx(String amount);
+
+  /// Label of the amount field in the P2P bid dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bid (VFX)'**
+  String get p2pBidAmountLabel;
+
+  /// Label of the selected account's balance in the P2P bid dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Available'**
+  String get p2pBidAvailable;
+
+  /// Bid count on a P2P auction with no bids.
+  ///
+  /// In en, this message translates to:
+  /// **'No bids'**
+  String get p2pBidCountNone;
+
+  /// Bid count on a P2P auction with one bid.
+  ///
+  /// In en, this message translates to:
+  /// **'1 bid'**
+  String get p2pBidCountOne;
+
+  /// Bid count on a P2P auction with several bids.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} bids'**
+  String p2pBidCountOther(int count);
+
+  /// Heading shown in the P2P bid dialog after a bid is accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid placed'**
+  String get p2pBidDone;
+
+  /// Body shown after a P2P bid is accepted and leads with the reserve met.
+  ///
+  /// In en, this message translates to:
+  /// **'You are the high bidder at {amount}.'**
+  String p2pBidDoneBody(String amount);
+
+  /// Body shown after a P2P bid is accepted but is under the reserve price.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {amount} bid is the highest, but the reserve is not met yet.'**
+  String p2pBidDoneReserve(String amount);
+
+  /// Error in the P2P bid dialog: the amount is more than the selected account's balance.
+  ///
+  /// In en, this message translates to:
+  /// **'This account’s balance does not cover that.'**
+  String get p2pBidErrorBalance;
+
+  /// Field error in the P2P bid dialog: too many decimal places.
+  ///
+  /// In en, this message translates to:
+  /// **'Use at most 8 decimal places.'**
+  String get p2pBidErrorDecimals;
+
+  /// Field error in the P2P bid dialog: nothing typed.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your bid.'**
+  String get p2pBidErrorEmpty;
+
+  /// Field error in the P2P bid dialog: not a number.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount, like 12.5.'**
+  String get p2pBidErrorFormat;
+
+  /// Field error in the P2P bid dialog: below the next minimum bid.
+  ///
+  /// In en, this message translates to:
+  /// **'Bid at least {min}.'**
+  String p2pBidErrorTooLow(String min);
+
+  /// Field error in the P2P bid dialog: at or above the buy-now price.
+  ///
+  /// In en, this message translates to:
+  /// **'At {buyNow} or more, use Buy now.'**
+  String p2pBidErrorUseBuyNow(String buyNow);
+
+  /// Hint under the amount field in the P2P bid dialog: the least the bid can be.
+  ///
+  /// In en, this message translates to:
+  /// **'At least {min}'**
+  String p2pBidMin(String min);
+
+  /// Button on a P2P auction that opens the bid dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Place bid'**
+  String get p2pBidOpen;
+
+  /// Note in the P2P bid dialog explaining what signing a bid does.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account signs this bid. It is a signed message, not a transaction: no VFX moves unless you win and complete the purchase.'**
+  String get p2pBidSignNote;
+
+  /// Label of the submit button in the P2P bid dialog while the bid is signed and sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Signing…'**
+  String get p2pBidSigning;
+
+  /// P2P bid status: the high bid, but under the reserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Highest'**
+  String get p2pBidStatusAccepted;
+
+  /// P2P bid status: the listing went to another bid or closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Lost'**
+  String get p2pBidStatusLost;
+
+  /// P2P bid status: a higher bid was placed.
+  ///
+  /// In en, this message translates to:
+  /// **'Outbid'**
+  String get p2pBidStatusOutbid;
+
+  /// P2P bid status: the high bid, with the reserve met.
+  ///
+  /// In en, this message translates to:
+  /// **'Winning'**
+  String get p2pBidStatusWinning;
+
+  /// P2P bid status: the bid won the listing.
+  ///
+  /// In en, this message translates to:
+  /// **'Won'**
+  String get p2pBidStatusWon;
+
+  /// Submit button of the P2P bid dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign and place bid'**
+  String get p2pBidSubmit;
+
+  /// Title of the P2P bid dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Place a bid'**
+  String get p2pBidTitle;
+
+  /// Heading shown in the P2P buy-now dialog after the offer is accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'It’s yours to complete'**
+  String get p2pBuyDone;
+
+  /// Body shown after a P2P buy-now offer is accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'The seller starts the sale next. You pay only when you complete the purchase.'**
+  String get p2pBuyDoneBody;
+
+  /// Button on a P2P listing that opens the buy-now dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy now · {price}'**
+  String p2pBuyOpen(String price);
+
+  /// Note in the P2P buy-now dialog explaining what signing the offer does.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account signs an offer at the buy-now price. It is a signed message, not a transaction: you pay when you complete the purchase, after the seller starts the sale.'**
+  String get p2pBuySignNote;
+
+  /// Submit button of the P2P buy-now dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign and buy now'**
+  String get p2pBuySubmit;
+
+  /// Title of the P2P buy-now dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy now'**
+  String get p2pBuyTitle;
+
+  /// Tooltip of the icon button that clears the P2P shop search field.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get p2pClearSearch;
+
+  /// Shown on a P2P listing that is past its end but not settled by the registry yet.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing…'**
+  String get p2pClockClosing;
+
+  /// Countdown to a P2P listing's end.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends in {time}'**
+  String p2pClockEndsIn(String time);
+
+  /// Countdown to a P2P listing's start.
+  ///
+  /// In en, this message translates to:
+  /// **'Opens in {time}'**
+  String p2pClockOpensIn(String time);
+
+  /// Countdown to the deadline for a P2P seller to start the sale.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale starts within {time}'**
+  String p2pClockSellerHas(String time);
+
+  /// Toast after copying a P2P shop address, owner address or contract id.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get p2pCopied;
+
+  /// Tooltip of the icon button that copies the NFT's smart contract id.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy contract id'**
+  String get p2pCopyContract;
+
+  /// Tooltip of the icon button that copies a P2P shop owner's address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy owner address'**
+  String get p2pCopyOwnerAddress;
+
+  /// Tooltip of the icon button that copies a P2P listing's seller address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy seller address'**
+  String get p2pCopySellerAddress;
+
+  /// Tooltip of the icon button that copies a P2P shop's vfx:// address.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy shop address'**
+  String get p2pCopyShopAddress;
+
+  /// A time left in days and hours.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d {hours}h'**
+  String p2pCountdownDaysHours(int days, int hours);
+
+  /// A time left in hours and minutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String p2pCountdownHoursMinutes(int hours, int minutes);
+
+  /// A time left in minutes and seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m {seconds}s'**
+  String p2pCountdownMinutesSeconds(int minutes, int seconds);
+
+  /// A time left in seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds}s'**
+  String p2pCountdownSeconds(int seconds);
+
+  /// Short badge marking a P2P shop, listing or step as a dry run (not on chain).
+  ///
+  /// In en, this message translates to:
+  /// **'Dry run'**
+  String get p2pDryRunBadge;
+
+  /// Banner body on every P2P shop screen while chain steps are dry runs. Follows the bold 'Dry run.' badge.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop steps that would be transactions are recorded by the shop registry on testnet. Nothing is signed into a transaction or sent to the network.'**
+  String get p2pDryRunBanner;
+
+  /// P2P listing end reason nft_burned.
+  ///
+  /// In en, this message translates to:
+  /// **'The NFT was burned'**
+  String get p2pEndReasonNftBurned;
+
+  /// P2P listing end reason nft_moved.
+  ///
+  /// In en, this message translates to:
+  /// **'The NFT was moved'**
+  String get p2pEndReasonNftMoved;
+
+  /// P2P listing end reason sale_cancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'The sale was cancelled'**
+  String get p2pEndReasonSaleCancelled;
+
+  /// P2P listing end reason sale_started_elsewhere.
+  ///
+  /// In en, this message translates to:
+  /// **'A sale of this NFT started elsewhere'**
+  String get p2pEndReasonSaleStartedElsewhere;
+
+  /// P2P listing end reason shop_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop was deleted'**
+  String get p2pEndReasonShopDeleted;
+
+  /// P2P listing end reason shop_owner_changed.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop changed owner'**
+  String get p2pEndReasonShopOwnerChanged;
+
+  /// P2P listing end reason shop_registered_on_chain.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop was registered on chain by someone else'**
+  String get p2pEndReasonShopRegisteredOnChain;
+
+  /// P2P shop error code amount_mismatch: a buy-now offer was not for the buy-now price exactly.
+  ///
+  /// In en, this message translates to:
+  /// **'The price changed. Check the listing and try again.'**
+  String get p2pErrorAmountMismatch;
+
+  /// P2P shop error: the registry's answer was not in the expected shape.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop registry sent an answer this wallet could not read.'**
+  String get p2pErrorBadResponse;
+
+  /// P2P shop error code bad_signature.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop registry could not verify this account’s signature. Try again.'**
+  String get p2pErrorBadSignature;
+
+  /// P2P shop error code bid_too_low.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bid is below the next minimum bid. Someone may have bid just before you.'**
+  String get p2pErrorBidTooLow;
+
+  /// P2P shop error: a 409 with no message.
+  ///
+  /// In en, this message translates to:
+  /// **'That changed in the meantime. Reload and try again.'**
+  String get p2pErrorConflict;
+
+  /// P2P shop error code duplicate_bid.
+  ///
+  /// In en, this message translates to:
+  /// **'This bid was already placed.'**
+  String get p2pErrorDuplicateBid;
+
+  /// P2P shop error: a 403 with no message.
+  ///
+  /// In en, this message translates to:
+  /// **'This account cannot do that here.'**
+  String get p2pErrorForbidden;
+
+  /// P2P shop error code insufficient_balance.
+  ///
+  /// In en, this message translates to:
+  /// **'This account’s balance does not cover the amount.'**
+  String get p2pErrorInsufficientBalance;
+
+  /// P2P shop error: a 400 with no message.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop registry could not accept that. Check the details and try again.'**
+  String get p2pErrorInvalid;
+
+  /// P2P shop error code listing_ended.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing has ended.'**
+  String get p2pErrorListingEnded;
+
+  /// P2P shop error code listing_not_live.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is not taking bids any more.'**
+  String get p2pErrorListingNotLive;
+
+  /// P2P shop error code listing_not_started.
+  ///
+  /// In en, this message translates to:
+  /// **'Bidding has not opened yet.'**
+  String get p2pErrorListingNotStarted;
+
+  /// P2P shop error code listing_unavailable: the shop or collection is closed or hidden.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is not available in its shop right now.'**
+  String get p2pErrorListingUnavailable;
+
+  /// P2P shop error code no_buy_now.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing has no buy-now price.'**
+  String get p2pErrorNoBuyNow;
+
+  /// P2P shop error code not_an_auction.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing does not take bids. Use Buy now.'**
+  String get p2pErrorNotAnAuction;
+
+  /// P2P shop error code not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'Not found. It may have been removed.'**
+  String get p2pErrorNotFound;
+
+  /// P2P shop error with a code this wallet has no words for: the registry's own message follows.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop registry refused it: {reason}'**
+  String p2pErrorRefused(String reason);
+
+  /// P2P shop error code reserve_address.
+  ///
+  /// In en, this message translates to:
+  /// **'A Vault account cannot bid or buy. Choose another account.'**
+  String get p2pErrorReserveAddress;
+
+  /// P2P shop error code seller_cannot_bid.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot bid on your own listing.'**
+  String get p2pErrorSellerCannotBid;
+
+  /// P2P shop error: the registry answered with a server error.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop registry had a problem. Try again in a moment.'**
+  String get p2pErrorServer;
+
+  /// P2P shop error code shop_not_found.
+  ///
+  /// In en, this message translates to:
+  /// **'No shop has this address.'**
+  String get p2pErrorShopNotFound;
+
+  /// P2P shop error: the sign-in token is missing, unknown or expired (codes not_authenticated, token_invalid, token_expired).
+  ///
+  /// In en, this message translates to:
+  /// **'The shop sign-in has expired. Try again.'**
+  String get p2pErrorSignInExpired;
+
+  /// P2P shop error: the signed sign-in message was refused.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop registry did not accept this account’s sign-in. Try again.'**
+  String get p2pErrorSignInRefused;
+
+  /// P2P shop error: Core has no key for the address asked to sign.
+  ///
+  /// In en, this message translates to:
+  /// **'This account is not in this wallet, so it cannot sign.'**
+  String get p2pErrorSignNotInWallet;
+
+  /// P2P shop error: Core answered a signing request with something that is not a signature.
+  ///
+  /// In en, this message translates to:
+  /// **'The wallet’s node did not return a signature. Try again.'**
+  String get p2pErrorSignUnexpected;
+
+  /// P2P shop error: the local Core node did not answer a signing request.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the wallet’s node to sign. Try again.'**
+  String get p2pErrorSignUnreachable;
+
+  /// P2P shop error: the registry is rate limiting this wallet.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Wait a moment and try again.'**
+  String get p2pErrorThrottled;
+
+  /// P2P shop error of an unexpected kind.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Try again.'**
+  String get p2pErrorUnknown;
+
+  /// P2P shop error: the request to Spyglass got no answer.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the shop registry. Check your connection and try again.'**
+  String get p2pErrorUnreachable;
+
+  /// P2P shop error code use_buy_now.
+  ///
+  /// In en, this message translates to:
+  /// **'At the buy-now price or more, use Buy now.'**
+  String get p2pErrorUseBuyNow;
+
+  /// Button that loads every bid of a P2P listing.
+  ///
+  /// In en, this message translates to:
+  /// **'Show all bids'**
+  String get p2pListingAllBids;
+
+  /// Chip on a P2P listing that takes bids.
+  ///
+  /// In en, this message translates to:
+  /// **'Auction'**
+  String get p2pListingAuction;
+
+  /// Section heading of a P2P auction's bid history.
+  ///
+  /// In en, this message translates to:
+  /// **'Bids'**
+  String get p2pListingBids;
+
+  /// Line under a P2P listing's bid history when it has more bids than are shown.
+  ///
+  /// In en, this message translates to:
+  /// **'Showing the newest {shown} of {total} bids.'**
+  String p2pListingBidsShown(int shown, int total);
+
+  /// Details row label: the buyer's address, once sold.
+  ///
+  /// In en, this message translates to:
+  /// **'Buyer'**
+  String get p2pListingBuyer;
+
+  /// Line under a P2P listing's title naming the NFT's minter.
+  ///
+  /// In en, this message translates to:
+  /// **'By {name}'**
+  String p2pListingBy(String name);
+
+  /// Note on a live P2P listing that is past its end.
+  ///
+  /// In en, this message translates to:
+  /// **'Bidding has closed. The result will show in a moment.'**
+  String get p2pListingClosing;
+
+  /// Details row label: the NFT's smart contract id.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract'**
+  String get p2pListingContract;
+
+  /// Section heading of a P2P listing's details table.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get p2pListingDetails;
+
+  /// Details row label: the reason a P2P listing closed without a sale.
+  ///
+  /// In en, this message translates to:
+  /// **'Why it ended'**
+  String get p2pListingEndReason;
+
+  /// Details row label: when the listing closes.
+  ///
+  /// In en, this message translates to:
+  /// **'Ends'**
+  String get p2pListingEnds;
+
+  /// Chip on a P2P listing that sells at its buy-now price only.
+  ///
+  /// In en, this message translates to:
+  /// **'Fixed price'**
+  String get p2pListingFixedPrice;
+
+  /// Note on a live P2P auction where the selected account holds the high bid.
+  ///
+  /// In en, this message translates to:
+  /// **'You are the high bidder.'**
+  String get p2pListingLeading;
+
+  /// Note on a live P2P auction where the selected account holds the high bid under the reserve.
+  ///
+  /// In en, this message translates to:
+  /// **'Your bid is the highest, but the reserve is not met yet.'**
+  String get p2pListingLeadingReserve;
+
+  /// Details row label: the NFT's minter name.
+  ///
+  /// In en, this message translates to:
+  /// **'Minted by'**
+  String get p2pListingMinter;
+
+  /// Label of the least the next bid on a P2P auction can be.
+  ///
+  /// In en, this message translates to:
+  /// **'Next bid from'**
+  String get p2pListingNextMinBid;
+
+  /// Note on a P2P listing when no VFX account is selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a VFX account to bid or buy.'**
+  String get p2pListingNoAccount;
+
+  /// Shown in the bid history of a P2P auction with no bids.
+  ///
+  /// In en, this message translates to:
+  /// **'No bids yet.'**
+  String get p2pListingNoBids;
+
+  /// Shown in the offers of a fixed-price P2P listing with none.
+  ///
+  /// In en, this message translates to:
+  /// **'No offers yet.'**
+  String get p2pListingNoOffers;
+
+  /// Shown when a P2P listing's NFT has no royalty.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get p2pListingNoRoyalty;
+
+  /// Title shown when a P2P listing id has no listing.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing was not found.'**
+  String get p2pListingNotFound;
+
+  /// Body shown when a P2P listing id has no listing.
+  ///
+  /// In en, this message translates to:
+  /// **'It may have been removed.'**
+  String get p2pListingNotFoundBody;
+
+  /// Note on a live P2P listing before its start.
+  ///
+  /// In en, this message translates to:
+  /// **'Bidding has not opened yet.'**
+  String get p2pListingNotOpenYet;
+
+  /// Section heading of the buy-now offers on a fixed-price P2P listing.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get p2pListingOffers;
+
+  /// Note on a P2P listing that closed without a sale.
+  ///
+  /// In en, this message translates to:
+  /// **'This listing is over.'**
+  String get p2pListingOver;
+
+  /// Note on a P2P listing the selected account is selling.
+  ///
+  /// In en, this message translates to:
+  /// **'This is your listing. You cannot bid on it.'**
+  String get p2pListingOwn;
+
+  /// Section heading of a P2P listing's state timeline.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get p2pListingProgress;
+
+  /// Note to the buyer of a sold P2P listing.
+  ///
+  /// In en, this message translates to:
+  /// **'You bought this for {price}.'**
+  String p2pListingPurchased(String price);
+
+  /// Chip on a P2P auction whose high bid meets the reserve price.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve met'**
+  String get p2pListingReserveMet;
+
+  /// Chip on a P2P auction whose high bid is under the reserve price.
+  ///
+  /// In en, this message translates to:
+  /// **'Reserve not met'**
+  String get p2pListingReserveNotMet;
+
+  /// Details row label: the NFT's royalty.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty'**
+  String get p2pListingRoyalty;
+
+  /// The royalty amount exactly as the NFT's contract states it, shown under what a sale pays. The contract's royalty type (flat or percent) is not known here.
+  ///
+  /// In en, this message translates to:
+  /// **'Contract amount: {amount}'**
+  String p2pListingRoyaltyAmount(String amount);
+
+  /// A P2P listing's royalty as what a sale pays: the network pays the contract's amount as a share of the sale price.
+  ///
+  /// In en, this message translates to:
+  /// **'A sale pays {percent}% of the price'**
+  String p2pListingRoyaltyPercent(String percent);
+
+  /// Shown for a P2P listing's royalty when the contract's amount is 1 or more: the network pays a royalty as a share of the sale price, so a sale cannot pay it.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot be paid through a sale'**
+  String get p2pListingRoyaltyUnpayable;
+
+  /// Details row label: the seller's deadline to start the sale.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale starts by'**
+  String get p2pListingSaleStartBy;
+
+  /// Note to the winner of a P2P listing once the sale has started; the complete-purchase step is not built in this version.
+  ///
+  /// In en, this message translates to:
+  /// **'The seller has started the sale. Completing the purchase from this wallet is not available yet.'**
+  String get p2pListingSaleStartedNote;
+
+  /// Details row label: the seller's address.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller'**
+  String get p2pListingSeller;
+
+  /// Details row label: the shop the listing belongs to.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop'**
+  String get p2pListingShop;
+
+  /// Note to a visitor on a sold P2P listing.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold for {price}.'**
+  String p2pListingSoldNote(String price);
+
+  /// Details row label: when the listing opens.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts'**
+  String get p2pListingStarts;
+
+  /// App bar title of a P2P shop listing's page while its NFT name is not loaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing'**
+  String get p2pListingTitle;
+
+  /// Note on a P2P listing when the selected account is a Vault account.
+  ///
+  /// In en, this message translates to:
+  /// **'A Vault account cannot bid or buy. Choose another account.'**
+  String get p2pListingVault;
+
+  /// Details row label: the winning bidder's address, before the sale is complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Winner'**
+  String get p2pListingWinner;
+
+  /// Note to a visitor on a P2P listing someone else won.
+  ///
+  /// In en, this message translates to:
+  /// **'A winner has been chosen. This listing no longer takes bids.'**
+  String get p2pListingWonByOther;
+
+  /// Note to the winner of a P2P listing while the seller has not started the sale.
+  ///
+  /// In en, this message translates to:
+  /// **'You won this at {price}. The seller starts the sale next; you pay only when you complete the purchase.'**
+  String p2pListingWonWaiting(String price);
+
+  /// Tag on the selected account's own bid in a P2P listing's bid history.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get p2pListingYou;
+
+  /// Tag on a P2P listing the selected account won.
+  ///
+  /// In en, this message translates to:
+  /// **'You won'**
+  String get p2pListingYouWon;
+
+  /// Tag on a P2P listing the selected account is selling.
+  ///
+  /// In en, this message translates to:
+  /// **'Your listing'**
+  String get p2pListingYours;
+
+  /// Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry.
+  ///
+  /// In en, this message translates to:
+  /// **'Shops'**
+  String get p2pNavShops;
+
+  /// Current page indicator between the Previous and Next buttons of a P2P list.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {page}'**
+  String p2pPageNumber(int page);
+
+  /// Label of a P2P listing's buy-now price.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy now'**
+  String get p2pPriceBuyNow;
+
+  /// Label of a P2P auction's current high bid.
+  ///
+  /// In en, this message translates to:
+  /// **'Current bid'**
+  String get p2pPriceCurrentBid;
+
+  /// Label of a P2P listing's sold price.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold for'**
+  String get p2pPriceSoldFor;
+
+  /// Label of a P2P auction's opening price before any bid.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting bid'**
+  String get p2pPriceStartingBid;
+
+  /// Label of a P2P listing's winning bid.
+  ///
+  /// In en, this message translates to:
+  /// **'Winning bid'**
+  String get p2pPriceWinningBid;
+
+  /// Button that reloads a P2P shop screen after it failed to load.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get p2pRetry;
+
+  /// Placeholder of the search field on the P2P shop list.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name or address'**
+  String get p2pSearchHint;
+
+  /// Accessible label of the search field on the P2P shop list.
+  ///
+  /// In en, this message translates to:
+  /// **'Search shops'**
+  String get p2pSearchLabel;
+
+  /// Filter chip on a P2P shop page that shows every collection's listings.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get p2pShopAll;
+
+  /// Accessible label of the collection filter chips on a P2P shop page.
+  ///
+  /// In en, this message translates to:
+  /// **'Collections'**
+  String get p2pShopCollections;
+
+  /// Badge on a P2P shop card: how many live listings the shop has.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} live'**
+  String p2pShopLiveCount(int count);
+
+  /// Label of the live listing count on a P2P shop page header.
+  ///
+  /// In en, this message translates to:
+  /// **'Live listings'**
+  String get p2pShopLiveListings;
+
+  /// Empty-state title of a P2P shop page with no listings.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing listed right now.'**
+  String get p2pShopNoListings;
+
+  /// Empty-state body of a P2P shop page with no listings.
+  ///
+  /// In en, this message translates to:
+  /// **'Check back soon.'**
+  String get p2pShopNoListingsBody;
+
+  /// Title shown when a P2P shop URL has no shop.
+  ///
+  /// In en, this message translates to:
+  /// **'No shop at this address.'**
+  String get p2pShopNotFound;
+
+  /// Body shown when a P2P shop URL has no shop.
+  ///
+  /// In en, this message translates to:
+  /// **'It may have been closed, or the address is mistyped.'**
+  String get p2pShopNotFoundBody;
+
+  /// Label before a P2P shop owner's address.
+  ///
+  /// In en, this message translates to:
+  /// **'Owner'**
+  String get p2pShopOwner;
+
+  /// Badge on a P2P shop whose registration is on chain.
+  ///
+  /// In en, this message translates to:
+  /// **'Registered'**
+  String get p2pShopRegistered;
+
+  /// When a P2P shop was registered, on its page header.
+  ///
+  /// In en, this message translates to:
+  /// **'Since {date}'**
+  String p2pShopRegisteredOn(String date);
+
+  /// Tag on a P2P shop the selected account owns.
+  ///
+  /// In en, this message translates to:
+  /// **'Your shop'**
+  String get p2pShopYours;
+
+  /// Empty-state title of the P2P shop list when the registry has no shops.
+  ///
+  /// In en, this message translates to:
+  /// **'No shops yet'**
+  String get p2pShopsEmpty;
+
+  /// Empty-state body of the P2P shop list when the registry has no shops.
+  ///
+  /// In en, this message translates to:
+  /// **'Shops registered on the network appear here.'**
+  String get p2pShopsEmptyBody;
+
+  /// Empty-state title of the P2P shop list when a search finds nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'No shops match “{search}”'**
+  String p2pShopsEmptySearch(String search);
+
+  /// Empty-state body of the P2P shop list when a search finds nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Try a shorter name or the shop’s vfx:// address.'**
+  String get p2pShopsEmptySearchBody;
+
+  /// App bar title of the P2P shop list screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Shops'**
+  String get p2pShopsTitle;
+
+  /// P2P listing state: a buyer won and the seller has to start the sale.
+  ///
+  /// In en, this message translates to:
+  /// **'Winner chosen'**
+  String get p2pStateAwaitingSaleStart;
+
+  /// P2P listing state: the seller withdrew the listing.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get p2pStateCancelled;
+
+  /// P2P listing state: the sale was cancelled or the NFT moved.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale cancelled'**
+  String get p2pStateEnded;
+
+  /// P2P listing state: it ended with no valid bid.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended without a sale'**
+  String get p2pStateExpired;
+
+  /// P2P listing state: taking bids or offers.
+  ///
+  /// In en, this message translates to:
+  /// **'Live'**
+  String get p2pStateLive;
+
+  /// P2P listing state: the seller started the sale and the buyer has to complete it.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale started'**
+  String get p2pStateSalePending;
+
+  /// P2P listing state: the sale is complete.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold'**
+  String get p2pStateSold;
+
+  /// P2P listing state: the seller did not start the sale in time.
+  ///
+  /// In en, this message translates to:
+  /// **'Sale not started'**
+  String get p2pStateUnfulfilled;
+
+  /// P2P listing state this version of the wallet does not know: shown as closed.
+  ///
+  /// In en, this message translates to:
+  /// **'Closed'**
+  String get p2pStateUnknown;
+
   /// Hint inside the payment amount field.
   ///
   /// In en, this message translates to:

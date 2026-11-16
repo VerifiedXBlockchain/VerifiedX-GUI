@@ -186,6 +186,25 @@ class Env {
     return false;
   }
 
+  /// The P2P shop registry (Spyglass `/api/p2p/`) and the GUI's shop screens
+  /// built on it: testnet only, desktop only. Mainnet Spyglass does not have
+  /// the registry, devnet is not used, and the Flutter web build keeps its
+  /// old shop as it is.
+  static bool get p2pEnabled {
+    return !kIsWeb && _isTestnet && !_isDevnet;
+  }
+
+  /// Whether the P2P shop's chain steps (DSTR, `Sale_Start()`,
+  /// `Sale_Complete()`, `Sale_Cancel()`) are built, signed and sent as real
+  /// transactions. While false every chain step is a dry run: its unsigned
+  /// description is posted to Spyglass `/p2p/dry-run/*` and nothing reaches a
+  /// node.
+  ///
+  /// A compile-time constant on purpose. Testnet is under audit, so no
+  /// dart-define, command-line argument or setting can turn this on: it
+  /// changes only by a reviewed code change once the hold is lifted.
+  static const bool p2pBroadcast = false;
+
   static String get shopBaseUrl {
     return "https://wallet.verifiedx.io";
   }

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../app.dart';
 import '../../core/app_router.gr.dart';
 import '../../core/base_component.dart';
+import '../../core/env.dart';
 import '../../core/components/buttons.dart';
 import '../../core/providers/currency_segmented_button_provider.dart';
 import '../../core/providers/session_provider.dart';
@@ -54,6 +55,7 @@ double sideNavExpandedWidth(BuildContext context) {
     l10n.navMenuSmartContracts,
     l10n.navMenuNfts,
     l10n.navMenuP2PAuctions,
+    if (Env.p2pEnabled) l10n.p2pNavShops,
     l10n.navMenuValidator,
     l10n.navMenuOperations,
     l10n.navMenuSignOut,
@@ -72,31 +74,40 @@ double sideNavExpandedWidth(BuildContext context) {
 }
 const SIDE_NAV_WIDTH_CONTRACTED = 60.0;
 
+/// The desktop app's root tabs, in the order the side nav addresses them by
+/// index. The P2P shops tab is last (`DESKTOP_P2P_SHOPS_TAB_INDEX`) and only
+/// there when [p2pEnabled], so every other tab keeps its index on every
+/// network.
+List<PageRouteInfo> desktopRootTabs({required bool p2pEnabled}) {
+  return [
+    const HomeTabRouter(),
+    const SendTabRouter(),
+    const ReceiveTabRouter(),
+    const TransactionsTabRouter(),
+    const ValidatorTabRouter(),
+    const AdjudicatorTabRouter(),
+    const NodesTabsRouter(),
+    const NftTabRouter(),
+    const SmartContractsTabRouter(),
+    const DstsTabRouter(),
+    const AdnrTabRouter(),
+    const VotingTabRouter(),
+    const BeaconTabRouter(),
+    const TokenTabRouter(),
+    const ReserveAccountsTabRouter(),
+    const TokenizeBtcTabRouter(),
+    const OperationsTabRouter(),
+    const PrivacyTabRouter(),
+    if (p2pEnabled) const P2pTabRouter(),
+  ];
+}
+
 class RootContainer extends BaseComponent {
   const RootContainer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<PageRouteInfo> routes = [
-      const HomeTabRouter(),
-      const SendTabRouter(),
-      const ReceiveTabRouter(),
-      const TransactionsTabRouter(),
-      const ValidatorTabRouter(),
-      const AdjudicatorTabRouter(),
-      const NodesTabsRouter(),
-      const NftTabRouter(),
-      const SmartContractsTabRouter(),
-      const DstsTabRouter(),
-      const AdnrTabRouter(),
-      const VotingTabRouter(),
-      const BeaconTabRouter(),
-      const TokenTabRouter(),
-      const ReserveAccountsTabRouter(),
-      const TokenizeBtcTabRouter(),
-      const OperationsTabRouter(),
-      const PrivacyTabRouter(),
-    ];
+    final routes = desktopRootTabs(p2pEnabled: Env.p2pEnabled);
 
     return AutoTabsScaffold(
       backgroundColor: Color(0xff050505),
