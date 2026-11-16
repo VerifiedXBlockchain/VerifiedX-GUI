@@ -106,7 +106,7 @@ void main() {
       expect(shown.nextMinBid, '3.5');
     });
 
-    test('of two reads under way, the one that set out first is dropped', () async {
+    test('asked again while a read is under way, it reads once more afterwards and never two at once', () async {
       final service = SlowP2pService();
       final container = containerFor(service);
       final subscription = container.listen(p2pListingDetailProvider(2), (_, __) {});
@@ -116,14 +116,45 @@ void main() {
       final notifier = container.read(p2pListingDetailProvider(2).notifier);
 
       final first = notifier.refresh();
-      final second = notifier.refresh();
-      // The newer read answers first; the older one lands after it.
-      service.reads[1].complete(auction().copyWith(bidCount: 5));
-      await second;
-      service.reads[0].complete(auction().copyWith(bidCount: 3));
-      await first;
+      // Three more asks while the first read is still out: no new request.
+      notifier.refresh();
+      notifier.refresh();
+      final last = notifier.refresh();
+      expect(service.reads, hasLength(1));
 
-      expect(container.read(p2pListingDetailProvider(2)).value!.bidCount, 5);
+      // The first read lands and is shown; one follow-up read sets out.
+      service.reads.removeAt(0).complete(auction().copyWith(bidCount: 3));
+      await Future<void>.delayed(Duration.zero);
+      expect(container.read(p2pListingDetailProvider(2)).value!.bidCount, 3);
+      expect(service.reads, hasLength(1));
+
+      service.reads.removeAt(0).complete(auction().copyWith(bidCount: 4));
+      await Future.wait([first, last]);
+      expect(container.read(p2pListingDetailProvider(2)).value!.bidCount, 4);
+      expect(service.reads, isEmpty);
+    });
+
+    test('reads slower than the poll still each update the page', () async {
+      // Every read takes longer than the 15 seconds between polls.
+      final service = SlowP2pService();
+      final container = containerFor(service);
+      final subscription = container.listen(p2pListingDetailProvider(2), (_, __) {});
+      addTearDown(subscription.close);
+      service.reads.removeAt(0).complete(auction());
+      await container.read(p2pListingDetailProvider(2).future);
+      final notifier = container.read(p2pListingDetailProvider(2).notifier);
+
+      for (var round = 1; round <= 3; round++) {
+        notifier.refresh(); // a poll
+        notifier.refresh(); // the next poll, the read still out
+        service.reads.removeAt(0).complete(auction().copyWith(bidCount: round));
+        await Future<void>.delayed(Duration.zero);
+        expect(container.read(p2pListingDetailProvider(2)).value!.bidCount, round, reason: 'read $round was dropped');
+        // The follow-up read the second poll asked for is out now.
+        service.reads.removeAt(0).complete(auction().copyWith(bidCount: round));
+        await Future<void>.delayed(Duration.zero);
+      }
+      expect(service.reads, isEmpty);
     });
 
     test('a refresh that ends after the page has closed is harmless', () async {

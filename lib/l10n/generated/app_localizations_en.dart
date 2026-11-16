@@ -3903,13 +3903,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String p2pListingRoyaltyAmount(String amount) {
-    return '$amount (flat amount set by the NFT’s contract)';
+    return 'Contract amount: $amount';
   }
 
   @override
   String p2pListingRoyaltyPercent(String percent) {
-    return '$percent% of the price';
+    return 'A sale pays $percent% of the price';
   }
+
+  @override
+  String get p2pListingRoyaltyUnpayable => 'Cannot be paid through a sale';
 
   @override
   String get p2pListingSaleStartBy => 'Sale starts by';

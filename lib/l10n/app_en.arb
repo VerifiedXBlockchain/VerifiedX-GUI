@@ -4281,23 +4281,27 @@
   "@p2pListingRoyalty": {
     "description": "Details row label: the NFT's royalty."
   },
-  "p2pListingRoyaltyAmount": "{amount} (flat amount set by the NFT’s contract)",
+  "p2pListingRoyaltyAmount": "Contract amount: {amount}",
   "@p2pListingRoyaltyAmount": {
-    "description": "A P2P listing's royalty when the contract's amount is 1 or more, so it cannot be a share of the price: shown as the contract states it, never as a percent.",
+    "description": "The royalty amount exactly as the NFT's contract states it, shown under what a sale pays. The contract's royalty type (flat or percent) is not known here.",
     "placeholders": {
       "amount": {
         "type": "String"
       }
     }
   },
-  "p2pListingRoyaltyPercent": "{percent}% of the price",
+  "p2pListingRoyaltyPercent": "A sale pays {percent}% of the price",
   "@p2pListingRoyaltyPercent": {
-    "description": "A P2P listing's royalty as a percent of the sale price.",
+    "description": "A P2P listing's royalty as what a sale pays: the network pays the contract's amount as a share of the sale price.",
     "placeholders": {
       "percent": {
         "type": "String"
       }
     }
+  },
+  "p2pListingRoyaltyUnpayable": "Cannot be paid through a sale",
+  "@p2pListingRoyaltyUnpayable": {
+    "description": "Shown for a P2P listing's royalty when the contract's amount is 1 or more: the network pays a royalty as a share of the sale price, so a sale cannot pay it."
   },
   "p2pListingSaleStartBy": "Sale starts by",
   "@p2pListingSaleStartBy": {

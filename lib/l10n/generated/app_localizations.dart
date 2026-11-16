@@ -7359,17 +7359,23 @@ abstract class AppLocalizations {
   /// **'Royalty'**
   String get p2pListingRoyalty;
 
-  /// A P2P listing's royalty when the contract's amount is 1 or more, so it cannot be a share of the price: shown as the contract states it, never as a percent.
+  /// The royalty amount exactly as the NFT's contract states it, shown under what a sale pays. The contract's royalty type (flat or percent) is not known here.
   ///
   /// In en, this message translates to:
-  /// **'{amount} (flat amount set by the NFT’s contract)'**
+  /// **'Contract amount: {amount}'**
   String p2pListingRoyaltyAmount(String amount);
 
-  /// A P2P listing's royalty as a percent of the sale price.
+  /// A P2P listing's royalty as what a sale pays: the network pays the contract's amount as a share of the sale price.
   ///
   /// In en, this message translates to:
-  /// **'{percent}% of the price'**
+  /// **'A sale pays {percent}% of the price'**
   String p2pListingRoyaltyPercent(String percent);
+
+  /// Shown for a P2P listing's royalty when the contract's amount is 1 or more: the network pays a royalty as a share of the sale price, so a sale cannot pay it.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot be paid through a sale'**
+  String get p2pListingRoyaltyUnpayable;
 
   /// Details row label: the seller's deadline to start the sale.
   ///

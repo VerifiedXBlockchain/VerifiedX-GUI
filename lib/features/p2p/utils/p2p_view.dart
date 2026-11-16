@@ -192,16 +192,17 @@ P2pBuyBlock? p2pBuyBlock(P2pListing listing, String? address, DateTime now) {
   return null;
 }
 
-/// A royalty as a percent of the price, or null when its amount cannot be
-/// read as one.
+/// The share of the price a sale pays as royalty, as a percent, or null
+/// when a sale cannot pay this royalty at all.
 ///
 /// Spyglass sends the contract's `RoyaltyAmount` without its type (flat or
-/// percent). In a sale Core pays `price × RoyaltyAmount` to the royalty
-/// address whichever the type is (`SmartContractService
+/// percent), so this does not say what the minter meant by the number: the
+/// screen always shows the contract's own figure beside it. What it does say
+/// is what a sale does with it. Core pays `price × RoyaltyAmount` to the
+/// royalty address whichever the type is (`SmartContractService
 /// .CompleteSaleSmartContractTX`), so an amount below 1 is the share of the
-/// price a sale pays (0.02 → "2"). An amount of 1 or more cannot be a share
-/// of a price: it is a flat royalty, shown as the contract states it and
-/// never as a percent.
+/// sale price that is paid (0.02 → "2"), and an amount of 1 or more leaves
+/// the seller nothing and cannot be paid through a sale.
 String? p2pRoyaltyPercent(P2pRoyalty royalty) {
   final amount = P2pAmount.tryParse(royalty.amount);
   if (amount == null || amount.units >= P2pAmount.unitsPerVfx) {

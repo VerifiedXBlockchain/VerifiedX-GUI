@@ -131,14 +131,15 @@ void main() {
     });
   });
 
-  testWidgets('a flat royalty is shown as the contract states it, not as a percent', (tester) async {
+  testWidgets('a royalty a sale cannot pay is shown as the contract states it, not as a percent', (tester) async {
     final json = p2pFixture('listing_buy_now');
     ((json['nft'] as Map<String, dynamic>)['royalty'] as Map<String, dynamic>)['amount'] = '2';
     service.listingsById[1] = P2pListing.fromJson(json);
     await pump(tester, 1);
     final royalty = tester.widget<Text>(find.byKey(const Key('p2p:royalty'))).data!;
-    expect(royalty, '2 (flat amount set by the NFT’s contract)');
+    expect(royalty, 'Cannot be paid through a sale');
     expect(royalty, isNot(contains('%')));
+    expect(tester.widget<Text>(find.byKey(const Key('p2p:royalty_amount'))).data, 'Contract amount: 2');
   });
 
   group('a fixed-price listing', () {
@@ -151,7 +152,9 @@ void main() {
       expect(find.byKey(const Key('p2p:next_min_bid')), findsNothing);
       expect(find.byKey(const Key('p2p:reserve')), findsNothing);
       expect(find.text('No offers yet.'), findsOneWidget);
-      expect(tester.widget<Text>(find.byKey(const Key('p2p:royalty'))).data, '2% of the price');
+      // What a sale pays, with the contract's own figure beside it.
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:royalty'))).data, 'A sale pays 2% of the price');
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:royalty_amount'))).data, 'Contract amount: 0.02');
     });
   });
 

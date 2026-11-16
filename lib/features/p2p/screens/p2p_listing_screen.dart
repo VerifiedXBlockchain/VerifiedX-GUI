@@ -735,9 +735,16 @@ class _DetailsTable extends StatelessWidget {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
+                  // What a sale pays, where that can be said; the contract's
+                  // own figure is always beside it.
                   Text(
-                    percent == null ? l10n.p2pListingRoyaltyAmount(formatP2pAmount(royalty.amount)) : l10n.p2pListingRoyaltyPercent(percent),
+                    percent == null ? l10n.p2pListingRoyaltyUnpayable : l10n.p2pListingRoyaltyPercent(percent),
                     key: const Key('p2p:royalty'),
+                  ),
+                  Text(
+                    l10n.p2pListingRoyaltyAmount(formatP2pAmount(royalty.amount)),
+                    key: const Key('p2p:royalty_amount'),
+                    style: const TextStyle(color: p2pMuted, fontSize: 12),
                   ),
                   Text(shortP2pAddress(royalty.payTo), style: mono.copyWith(color: p2pMuted, fontSize: 12)),
                 ],
