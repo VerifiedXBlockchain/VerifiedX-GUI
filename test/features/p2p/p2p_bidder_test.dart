@@ -6,6 +6,7 @@ import 'package:rbx_wallet/core/api_token_manager.dart';
 import 'package:rbx_wallet/core/env.dart';
 import 'package:rbx_wallet/core/services/base_service.dart';
 import 'package:rbx_wallet/core/singletons.dart';
+import 'package:rbx_wallet/features/encrypt/providers/password_required_provider.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_chain_steps.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
@@ -334,7 +335,13 @@ void main() {
 
     test('chain steps are dry runs: no build setting turns sending on', () {
       expect(Env.p2pBroadcast, isFalse);
-      final container = ProviderContainer();
+      // The chain steps hold the session, which follows the wallet's lock
+      // state. The real lock-state provider asks the node as soon as it is
+      // built and writes the answer whenever it comes, which can be after
+      // this test has disposed the container: the stub asks nothing.
+      final container = ProviderContainer(overrides: [
+        passwordRequiredProvider.overrideWith((ref) => StubPasswordRequired()),
+      ]);
       addTearDown(container.dispose);
       expect(container.read(p2pChainStepsProvider).isDryRun, isTrue);
       expect(container.read(p2pChainStepsProvider), isA<P2pDryRunChainSteps>());

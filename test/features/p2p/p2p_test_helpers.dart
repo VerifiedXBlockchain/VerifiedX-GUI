@@ -137,10 +137,12 @@ class StubP2pSession extends SessionProvider {
   Future<void> init(bool inLoop) async {}
 }
 
-/// The wallet's lock state without the node: [check] asks nothing.
+/// The wallet's lock state without the node: [check] asks nothing. The
+/// real provider's 10-second timer still runs and may fire after a test has
+/// disposed its container, so [check] reads no state once disposed.
 class StubPasswordRequired extends PasswordRequiredProvider {
   @override
-  Future<bool> check() async => state;
+  Future<bool> check() async => mounted && state;
 }
 
 /// The registry, answered from memory. Each method records its call in
