@@ -173,6 +173,28 @@ void main() {
       expect(listing.state, P2pListingState.sold);
     });
 
+    test('ownerShop asks for one owner\'s shop, and is null when the owner has none', () async {
+      server.always(200, p2pFixture('shops_page'));
+      final shop = await service.ownerShop('xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ');
+      expect(server.requests.single.uri.queryParameters, {'owner': 'xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ', 'page': '1', 'limit': '1'});
+      expect(server.requests.single.authorization, isNull);
+      expect(shop!.url, 'dryrun-demo');
+
+      server.always(200, {'count': 0, 'next': null, 'results': []});
+      expect(await service.ownerShop('xNobody'), isNull);
+    });
+
+    test('dryRunDstr posts the description alone, with the token', () async {
+      server.always(200, (p2pFixture('shops_page')['results'] as List).first);
+      final tx = P2pListing.fromJson(p2pFixture('listing_sale_pending')).sale!.start!;
+      final shop = await service.dryRunDstr(token: 'tok-7', tx: tx);
+      final request = server.requests.single;
+      expect(request.path, '/p2p/dry-run/dstr/');
+      expect(request.authorization, 'Bearer tok-7');
+      expect((request.body as Map).keys, ['tx']);
+      expect(shop.url, 'dryrun-demo');
+    });
+
     test('listedNftIds reads an owner\'s listed NFT ids, with no token', () async {
       server.always(200, {
         'results': ['0b6ea1abd1da425fab80029f8f20944c:1794213169', 'fd6f04f2368b4d06b621e0959dc14b36:1794213174']

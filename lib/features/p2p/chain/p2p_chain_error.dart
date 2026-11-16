@@ -17,6 +17,9 @@ enum P2pChainFailure {
 
   /// Core could not quote the transaction's fee.
   feeUnavailable,
+
+  /// The shop's name, URL or description is outside Core's limits.
+  shopFields,
 }
 
 class P2pChainError implements Exception {

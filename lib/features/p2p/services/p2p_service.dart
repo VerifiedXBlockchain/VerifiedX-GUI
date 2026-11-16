@@ -152,6 +152,13 @@ class P2pService extends BaseService {
     );
   }
 
+  /// The live shop [owner] has, or null: a public read, so it needs no
+  /// sign-in. An address has at most one.
+  Future<P2pShop?> ownerShop(String owner) async {
+    final shops = await listShops(owner: owner, limit: 1);
+    return shops.results.isEmpty ? null : shops.results.first;
+  }
+
   /// `GET /p2p/shops/{url}/`: the shop with its `collections`, or null when
   /// no shop has this URL.
   Future<P2pShop?> getShop(String url) {
@@ -267,6 +274,24 @@ class P2pService extends BaseService {
     required P2pTxDescription tx,
   }) {
     return _dryRunSaleStep('/p2p/dry-run/sale-complete/', token, listingId, tx);
+  }
+
+  /// `POST /p2p/dry-run/dstr/`: records [tx], the unsigned description of a
+  /// `DecShopCreate()`, `DecShopUpdate()` or `DecShopDelete()`, and returns
+  /// the shop as it now stands (`chain_state: dry_run`, or `deleted`).
+  Future<P2pShop> dryRunDstr({required String token, required P2pTxDescription tx}) {
+    return _call(
+      () async {
+        final response = await postJson(
+          '/p2p/dry-run/dstr/',
+          params: {'tx': tx.toDryRunJson()},
+          headers: bearer(token),
+          responseIsJson: true,
+        );
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pShop.fromJson,
+    );
   }
 
   Future<P2pListing> _dryRunSaleStep(String path, String token, int listingId, P2pTxDescription tx) {

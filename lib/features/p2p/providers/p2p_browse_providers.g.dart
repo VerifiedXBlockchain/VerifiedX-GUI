@@ -169,6 +169,100 @@ class P2pMeProvider extends AutoDisposeFutureProvider<P2pMe> {
   }
 }
 
+String _$p2pOwnerShopHash() => r'fe75c49d311b894c455ede2459198f04fc66f8d5';
+typedef P2pOwnerShopRef = AutoDisposeFutureProviderRef<P2pShop?>;
+
+/// The shop [address] owns, or null when it has none.
+///
+/// Copied from [p2pOwnerShop].
+@ProviderFor(p2pOwnerShop)
+const p2pOwnerShopProvider = P2pOwnerShopFamily();
+
+/// The shop [address] owns, or null when it has none.
+///
+/// Copied from [p2pOwnerShop].
+class P2pOwnerShopFamily extends Family<AsyncValue<P2pShop?>> {
+  /// The shop [address] owns, or null when it has none.
+  ///
+  /// Copied from [p2pOwnerShop].
+  const P2pOwnerShopFamily();
+
+  /// The shop [address] owns, or null when it has none.
+  ///
+  /// Copied from [p2pOwnerShop].
+  P2pOwnerShopProvider call(
+    String address,
+  ) {
+    return P2pOwnerShopProvider(
+      address,
+    );
+  }
+
+  @override
+  P2pOwnerShopProvider getProviderOverride(
+    covariant P2pOwnerShopProvider provider,
+  ) {
+    return call(
+      provider.address,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'p2pOwnerShopProvider';
+}
+
+/// The shop [address] owns, or null when it has none.
+///
+/// Copied from [p2pOwnerShop].
+class P2pOwnerShopProvider extends AutoDisposeFutureProvider<P2pShop?> {
+  /// The shop [address] owns, or null when it has none.
+  ///
+  /// Copied from [p2pOwnerShop].
+  P2pOwnerShopProvider(
+    this.address,
+  ) : super.internal(
+          (ref) => p2pOwnerShop(
+            ref,
+            address,
+          ),
+          from: p2pOwnerShopProvider,
+          name: r'p2pOwnerShopProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$p2pOwnerShopHash,
+          dependencies: P2pOwnerShopFamily._dependencies,
+          allTransitiveDependencies:
+              P2pOwnerShopFamily._allTransitiveDependencies,
+        );
+
+  final String address;
+
+  @override
+  bool operator ==(Object other) {
+    return other is P2pOwnerShopProvider && other.address == address;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, address.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
 String _$p2pShopListHash() => r'65f3202fa200f14d1e62877b64cc39c55817c6ba';
 typedef P2pShopListRef = AutoDisposeFutureProviderRef<P2pPage<P2pShop>>;
 

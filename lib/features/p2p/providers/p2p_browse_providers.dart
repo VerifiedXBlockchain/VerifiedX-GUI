@@ -32,6 +32,12 @@ Future<P2pMe> p2pMe(P2pMeRef ref, String address) {
   return ref.watch(p2pSessionProvider).withToken(address, service.me);
 }
 
+/// The shop [address] owns, or null when it has none.
+@riverpod
+Future<P2pShop?> p2pOwnerShop(P2pOwnerShopRef ref, String address) {
+  return ref.watch(p2pServiceProvider).ownerShop(address);
+}
+
 /// A page of the registry's shops, newest first.
 @riverpod
 Future<P2pPage<P2pShop>> p2pShopList(P2pShopListRef ref, {String search = '', int page = 1}) {

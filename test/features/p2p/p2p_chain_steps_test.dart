@@ -9,6 +9,7 @@ import 'package:rbx_wallet/core/singletons.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_chain_error.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_chain_steps.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_fee_quoter.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_tx_builders.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
@@ -139,6 +140,8 @@ void main() {
         service: service,
         session: P2pSession(service: service, signer: signer),
         fees: fees,
+        walletUrl: 'https://wallet-testnet.verifiedx.io',
+        apiUrl: 'https://data-testnet.verifiedx.io/api/p2p/',
         now: () => now,
       );
     });
@@ -186,6 +189,37 @@ void main() {
       expect(signer.signed, hasLength(1));
       expect(signer.signed.single[1], buyer);
       expect(signer.signed.single[0], isNot(contains('Sale_Complete')));
+    });
+
+    test('a shop step is described without asking the registry, then posted as its sender', () async {
+      onDryRun = (_) => P2pCannedResponse(200, p2pFixture('shops_page')['results'][0] as Map<String, dynamic>);
+      const values = P2pShopValues(name: 'Corner Shop', url: 'corner-shop', description: '');
+      final tx = await steps.describeRegisterShop(buyer, values);
+      expect(tx.function, 'DecShopCreate()');
+      expect((tx.data['DecShop'] as Map)['ThirdPartyAPIURL'], 'https://data-testnet.verifiedx.io/api/p2p/');
+      expect(server.requests, isEmpty);
+
+      final shop = await steps.sendShopStep(tx);
+      expect(shop.url, 'dryrun-demo');
+      final post = server.requests.last;
+      expect(post.path, '/p2p/dry-run/dstr/');
+      expect(post.authorization, 'Bearer token-1');
+      expect((post.body as Map<String, dynamic>).keys, ['tx']);
+      expect((post.body as Map<String, dynamic>)['tx'], tx.toDryRunJson());
+      // Only the sign-in was signed, as the shop's owner.
+      expect(signer.signed.single[1], buyer);
+    });
+
+    test('a taken address is refused by the registry with its code', () async {
+      onDryRun = (_) => const P2pCannedResponse(409, {
+            'error': {
+              'code': 'url_taken',
+              'message': 'vfx://corner-shop is taken.',
+              'fields': {'DecShopURL': 'Taken.'}
+            }
+          });
+      final tx = await steps.describeRegisterShop(buyer, const P2pShopValues(name: 'Corner Shop', url: 'corner-shop', description: ''));
+      await expectLater(steps.sendShopStep(tx), throwsA(isA<P2pError>().having((e) => e.code, 'code', 'url_taken')));
     });
 
     test('the registry\'s refusal is passed on with its code', () async {

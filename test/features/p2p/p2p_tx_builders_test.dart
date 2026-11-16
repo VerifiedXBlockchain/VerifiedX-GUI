@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_chain_error.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_tx_builders.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_tx_description.dart';
 import 'package:rbx_wallet/features/p2p/utils/p2p_amount.dart';
 
@@ -207,6 +208,90 @@ void main() {
       expect(p2pTxTypeName(5), 'NFT_SALE');
       expect(p2pTxTypeName(7), 'DSTR');
       expect(p2pTxTypeName(99), '99');
+    });
+  });
+
+  group('a shop\'s registration steps (DSTR)', () {
+    const owner = 'xOwnerAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+    const walletUrl = 'https://wallet-testnet.verifiedx.io';
+    const apiUrl = 'https://data-testnet.verifiedx.io/api/p2p/';
+    const values = P2pShopValues(name: '  Corner Shop ', url: 'vfx://Corner-Shop', description: ' Prints and cubes. ');
+    P2pShop shop({DateTime? updatedAt}) => P2pShop.fromJson(p2pFixture('shop_detail')).copyWith(updatedAt: updatedAt);
+
+    test('DecShopCreate: 10 VFX from the owner to DecShop_Base, with the shop\'s record', () async {
+      final fees = FakeP2pFeeQuoter('0.00003');
+      final tx = await describeShopCreate(fees: fees, now: now, owner: owner, values: values, walletUrl: walletUrl, apiUrl: apiUrl, letters: (n) => 'k' * n);
+
+      expect(tx.type, 7);
+      expect(tx.function, 'DecShopCreate()');
+      expect(tx.fromAddress, owner);
+      expect(tx.toAddress, 'DecShop_Base');
+      expect(tx.amount, '10');
+      expect(tx.fee, '0.00003');
+      expect(tx.timestamp, timestamp);
+
+      final record = tx.data['DecShop'] as Map<String, dynamic>;
+      expect(tx.data['Function'], 'DecShopCreate()');
+      // As many letters as the time has digits, then the time.
+      expect(record['UniqueId'], 'kkkkkkkkkk$timestamp');
+      expect(record['Name'], 'Corner Shop');
+      expect(record['DecShopURL'], 'corner-shop');
+      expect(record['Description'], 'Prints and cubes.');
+      expect(record['OwnerAddress'], owner);
+      // Third-party hosted, pointing at this network's wallet and API.
+      expect(record['HostingType'], 2);
+      expect(record['ThirdPartyBaseURL'], walletUrl);
+      expect(record['ThirdPartyAPIURL'], apiUrl);
+      expect(record['IP'], 'NA');
+      expect(record['Port'], 0);
+      expect(fees.quoted.single['type'], 7);
+      expect(fees.quoted.single['amount'], '10');
+    });
+
+    test('fields outside Core\'s limits are refused before anything is built or quoted', () async {
+      final fees = FakeP2pFeeQuoter();
+      for (final bad in const [
+        P2pShopValues(name: '', url: 'ok', description: ''),
+        P2pShopValues(name: 'Shop', url: '1bad', description: ''),
+      ]) {
+        expect(
+          () => describeShopCreate(fees: fees, now: now, owner: owner, values: bad, walletUrl: walletUrl, apiUrl: apiUrl),
+          throwsA(fails(P2pChainFailure.shopFields)),
+        );
+      }
+      expect(fees.quoted, isEmpty);
+    });
+
+    test('an update within 12 hours of the last change moves 1 VFX, a later one nothing', () {
+      expect(p2pShopUpdateAmount(shop(updatedAt: now.subtract(const Duration(hours: 11, minutes: 59))), now).toDecimalString(), '1');
+      expect(p2pShopUpdateAmount(shop(updatedAt: now.subtract(const Duration(hours: 12))), now).toDecimalString(), '0');
+      expect(p2pShopUpdateAmount(shop(updatedAt: now.subtract(const Duration(days: 3))), now).toDecimalString(), '0');
+    });
+
+    test('DecShopUpdate: the whole record again under the shop\'s own UniqueId, from its owner', () async {
+      final existing = shop(updatedAt: now.subtract(const Duration(hours: 1)));
+      final tx = await describeShopUpdate(fees: FakeP2pFeeQuoter(), now: now, shop: existing, values: values, walletUrl: walletUrl, apiUrl: apiUrl);
+      expect(tx.function, 'DecShopUpdate()');
+      expect(tx.fromAddress, existing.ownerAddress);
+      expect(tx.toAddress, 'DecShop_Base');
+      expect(tx.amount, '1');
+      final record = tx.data['DecShop'] as Map<String, dynamic>;
+      expect(record['UniqueId'], existing.uniqueId);
+      expect(record['OwnerAddress'], existing.ownerAddress);
+      expect(record['Name'], 'Corner Shop');
+      expect(record['DecShopURL'], 'corner-shop');
+      expect(record['HostingType'], 2);
+    });
+
+    test('DecShopDelete: 1 VFX from the owner, naming the shop by its UniqueId only', () async {
+      final existing = shop();
+      final tx = await describeShopDelete(fees: FakeP2pFeeQuoter(), now: now, shop: existing);
+      expect(tx.type, 7);
+      expect(tx.function, 'DecShopDelete()');
+      expect(tx.fromAddress, existing.ownerAddress);
+      expect(tx.toAddress, 'DecShop_Base');
+      expect(tx.amount, '1');
+      expect(tx.data, {'Function': 'DecShopDelete()', 'UniqueId': existing.uniqueId});
     });
   });
 

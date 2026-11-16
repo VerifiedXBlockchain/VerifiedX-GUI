@@ -7011,6 +7011,12 @@ abstract class AppLocalizations {
   /// **'At this price the royalty rounds to nothing, and every sale payment must be above zero.'**
   String get p2pChainErrorRoyaltyZero;
 
+  /// P2P chain step error: the shop's fields do not meet Core's limits.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop’s name, address or description is outside the network’s limits.'**
+  String get p2pChainErrorShopFields;
+
   /// Row label in a P2P chain step dialog: the transaction's own network fee.
   ///
   /// In en, this message translates to:
@@ -7077,6 +7083,12 @@ abstract class AppLocalizations {
   /// **'Recording…'**
   String get p2pChainRecording;
 
+  /// Summary row label in a P2P chain step dialog: the shop's vfx:// address.
+  ///
+  /// In en, this message translates to:
+  /// **'Address'**
+  String get p2pChainRowAddress;
+
   /// Summary row label in a P2P chain step dialog: the NFT's name.
   ///
   /// In en, this message translates to:
@@ -7094,6 +7106,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Seller'**
   String get p2pChainRowSeller;
+
+  /// Summary row label in a P2P chain step dialog: the shop's name.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop'**
+  String get p2pChainRowShop;
 
   /// Row label in a P2P chain step dialog: the receiving address.
   ///
@@ -7383,6 +7401,12 @@ abstract class AppLocalizations {
   /// **'The transaction is not from the signed-in account.'**
   String get p2pErrorNotSender;
 
+  /// P2P shop error code not_shop_owner.
+  ///
+  /// In en, this message translates to:
+  /// **'Only the shop’s owner can do that.'**
+  String get p2pErrorNotShopOwner;
+
   /// P2P shop error with a code this wallet has no words for: the registry's own message follows.
   ///
   /// In en, this message translates to:
@@ -7413,11 +7437,23 @@ abstract class AppLocalizations {
   /// **'The shop registry had a problem. Try again in a moment.'**
   String get p2pErrorServer;
 
+  /// P2P shop error code shop_deleted.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop has been deleted.'**
+  String get p2pErrorShopDeleted;
+
   /// P2P shop error code shop_not_found.
   ///
   /// In en, this message translates to:
   /// **'No shop has this address.'**
   String get p2pErrorShopNotFound;
+
+  /// P2P shop error code shop_on_chain.
+  ///
+  /// In en, this message translates to:
+  /// **'This shop is registered on chain, so a dry run cannot change it.'**
+  String get p2pErrorShopOnChain;
 
   /// P2P shop error: the sign-in token is missing, unknown or expired (codes not_authenticated, token_invalid, token_expired).
   ///
@@ -7455,6 +7491,12 @@ abstract class AppLocalizations {
   /// **'Too many requests. Wait a moment and try again.'**
   String get p2pErrorThrottled;
 
+  /// P2P shop error code unique_id_taken.
+  ///
+  /// In en, this message translates to:
+  /// **'A shop with this id already exists. Try again.'**
+  String get p2pErrorUniqueIdTaken;
+
   /// P2P shop error of an unexpected kind.
   ///
   /// In en, this message translates to:
@@ -7466,6 +7508,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not reach the shop registry. Check your connection and try again.'**
   String get p2pErrorUnreachable;
+
+  /// P2P shop error code url_taken.
+  ///
+  /// In en, this message translates to:
+  /// **'That shop address is taken.'**
+  String get p2pErrorUrlTaken;
 
   /// P2P shop error code use_buy_now.
   ///
@@ -7797,6 +7845,36 @@ abstract class AppLocalizations {
   /// **'A Vault account cannot bid or buy, so it has no bids.'**
   String get p2pMyBidsVault;
 
+  /// Button on the P2P My shop screen that opens the edit-shop dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit'**
+  String get p2pMyShopEdit;
+
+  /// Shown on the P2P My shop screen when no VFX account is selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a VFX account to use the shop.'**
+  String get p2pMyShopNoAccount;
+
+  /// Title of the P2P screen where the selected account opens and runs its shop, and the button that opens it.
+  ///
+  /// In en, this message translates to:
+  /// **'My shop'**
+  String get p2pMyShopTitle;
+
+  /// Shown on the P2P My shop screen when the selected account is a Vault account.
+  ///
+  /// In en, this message translates to:
+  /// **'A Vault account cannot have a shop or buy in one.'**
+  String get p2pMyShopVault;
+
+  /// Button on the P2P My shop screen that opens the shop's public page.
+  ///
+  /// In en, this message translates to:
+  /// **'View shop'**
+  String get p2pMyShopView;
+
   /// Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry.
   ///
   /// In en, this message translates to:
@@ -7875,6 +7953,138 @@ abstract class AppLocalizations {
   /// **'Collections'**
   String get p2pShopCollections;
 
+  /// Cost card line in the P2P shop registration form.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing the shop costs {cost}.'**
+  String p2pShopCostDelete(String cost);
+
+  /// Cost card line in the P2P shop registration form while chain steps are dry runs.
+  ///
+  /// In en, this message translates to:
+  /// **'For now this is a dry run: the shop is recorded by the registry, and no VFX moves.'**
+  String get p2pShopCostDryRun;
+
+  /// Cost card line in the P2P shop registration form.
+  ///
+  /// In en, this message translates to:
+  /// **'Listing NFTs and collections are free.'**
+  String get p2pShopCostListing;
+
+  /// Cost card line in the P2P shop registration form.
+  ///
+  /// In en, this message translates to:
+  /// **'Paid once to the network (DecShop_Base), plus the network fee.'**
+  String get p2pShopCostOnce;
+
+  /// Cost card line in the P2P shop registration form.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes are free once every 12 hours; sooner costs {cost}.'**
+  String p2pShopCostUpdate(String cost);
+
+  /// Extra warning in the confirmation for deleting a P2P shop that has live listings.
+  ///
+  /// In en, this message translates to:
+  /// **'Its live listings end with it.'**
+  String get p2pShopDeleteActive;
+
+  /// Tooltip of the delete button on the P2P My shop screen and title of its confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete the shop'**
+  String get p2pShopDeleteTitle;
+
+  /// Warning in the confirmation for deleting a P2P shop.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop and its address are released. On chain this costs {cost}.'**
+  String p2pShopDeleteWarning(String cost);
+
+  /// Note in the P2P edit-shop dialog when an update costs 1 VFX.
+  ///
+  /// In en, this message translates to:
+  /// **'The shop changed less than 12 hours ago, so on chain this change costs {cost}, plus the network fee.'**
+  String p2pShopEditCost(String cost);
+
+  /// Note in the P2P edit-shop dialog when an update moves nothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing the shop is free right now (more than 12 hours since the last change), plus the network fee.'**
+  String get p2pShopEditFree;
+
+  /// Title of the P2P edit-shop dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit shop'**
+  String get p2pShopEditTitle;
+
+  /// Note in the P2P edit-shop dialog when Review is pressed with no change.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing has changed yet.'**
+  String get p2pShopEditUnchanged;
+
+  /// Field error in the P2P shop and collection forms: nothing typed.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get p2pShopErrorRequired;
+
+  /// Field error in the P2P shop form: over the network's length limit.
+  ///
+  /// In en, this message translates to:
+  /// **'Too long'**
+  String get p2pShopErrorTooLong;
+
+  /// Field error in the P2P shop form: the description has too many words.
+  ///
+  /// In en, this message translates to:
+  /// **'At most {max} words'**
+  String p2pShopErrorTooManyWords(int max);
+
+  /// Field error in the P2P shop form: the address is not one the network accepts.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with a letter; use letters, digits, “-” and “.”, up to 63 characters.'**
+  String get p2pShopErrorUrlInvalid;
+
+  /// Label of the description field in the P2P shop form.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get p2pShopFieldDescription;
+
+  /// Label of the name field in the P2P shop form.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop name'**
+  String get p2pShopFieldName;
+
+  /// Label of the vfx:// address field in the P2P shop form.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop address'**
+  String get p2pShopFieldUrl;
+
+  /// Hint under the address field in the P2P shop form.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts with a letter: letters, digits, “-” and “.”, up to 63 characters. Shown as vfx://address.'**
+  String get p2pShopFieldUrlHint;
+
+  /// Placeholder of the address field in the P2P shop form.
+  ///
+  /// In en, this message translates to:
+  /// **'myshop'**
+  String get p2pShopFieldUrlPlaceholder;
+
+  /// Word count under the description field in the P2P shop form.
+  ///
+  /// In en, this message translates to:
+  /// **'{used} of {max} words'**
+  String p2pShopFieldWords(int used, int max);
+
   /// Badge on a P2P shop card: how many live listings the shop has.
   ///
   /// In en, this message translates to:
@@ -7917,6 +8127,30 @@ abstract class AppLocalizations {
   /// **'Owner'**
   String get p2pShopOwner;
 
+  /// Label of the cost in the P2P shop registration form's cost card.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening a shop'**
+  String get p2pShopRegisterCostLabel;
+
+  /// Intro under the heading of the P2P shop registration form.
+  ///
+  /// In en, this message translates to:
+  /// **'A shop is your storefront on VerifiedX: a name, a vfx:// address and the NFTs you put up for sale.'**
+  String get p2pShopRegisterIntro;
+
+  /// Note in the P2P shop registration form when the account's balance is under the cost.
+  ///
+  /// In en, this message translates to:
+  /// **'This account holds {balance}. Opening a shop takes {cost} plus the network fee.'**
+  String p2pShopRegisterShort(String balance, String cost);
+
+  /// Heading of the form that registers a P2P shop, and the title of its confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a shop'**
+  String get p2pShopRegisterTitle;
+
   /// Badge on a P2P shop whose registration is on chain.
   ///
   /// In en, this message translates to:
@@ -7928,6 +8162,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Since {date}'**
   String p2pShopRegisteredOn(String date);
+
+  /// Submit button of the P2P shop form: opens the confirmation with the transaction.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get p2pShopReview;
+
+  /// Title of the confirmation for a P2P shop update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update the shop'**
+  String get p2pShopUpdateTitle;
+
+  /// Status line in the P2P shop form when the availability check could not be made.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check the address. It is checked again when you review.'**
+  String get p2pShopUrlCheckFailed;
+
+  /// Status line in the P2P shop form while the address is being checked.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking…'**
+  String get p2pShopUrlChecking;
+
+  /// Status line in the P2P shop form: the typed address is available.
+  ///
+  /// In en, this message translates to:
+  /// **'vfx://{url} is free.'**
+  String p2pShopUrlFree(String url);
+
+  /// Field error in the P2P shop form when Review is pressed before the availability check is in.
+  ///
+  /// In en, this message translates to:
+  /// **'Still checking this address. Try again in a moment.'**
+  String get p2pShopUrlStillChecking;
+
+  /// Field error in the P2P shop form: another shop holds the address.
+  ///
+  /// In en, this message translates to:
+  /// **'This address is taken.'**
+  String get p2pShopUrlTaken;
 
   /// Tag on a P2P shop the selected account owns.
   ///

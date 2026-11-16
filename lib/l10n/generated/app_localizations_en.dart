@@ -3706,6 +3706,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pChainErrorRoyaltyZero => 'At this price the royalty rounds to nothing, and every sale payment must be above zero.';
 
   @override
+  String get p2pChainErrorShopFields => 'The shop’s name, address or description is outside the network’s limits.';
+
+  @override
   String get p2pChainFee => 'Network fee';
 
   @override
@@ -3745,6 +3748,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pChainRecording => 'Recording…';
 
   @override
+  String get p2pChainRowAddress => 'Address';
+
+  @override
   String get p2pChainRowNft => 'NFT';
 
   @override
@@ -3752,6 +3758,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get p2pChainRowSeller => 'Seller';
+
+  @override
+  String get p2pChainRowShop => 'Shop';
 
   @override
   String get p2pChainTo => 'To';
@@ -3912,6 +3921,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorNotSender => 'The transaction is not from the signed-in account.';
 
   @override
+  String get p2pErrorNotShopOwner => 'Only the shop’s owner can do that.';
+
+  @override
   String p2pErrorRefused(String reason) {
     return 'The shop registry refused it: $reason';
   }
@@ -3929,7 +3941,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorServer => 'The shop registry had a problem. Try again in a moment.';
 
   @override
+  String get p2pErrorShopDeleted => 'The shop has been deleted.';
+
+  @override
   String get p2pErrorShopNotFound => 'No shop has this address.';
+
+  @override
+  String get p2pErrorShopOnChain => 'This shop is registered on chain, so a dry run cannot change it.';
 
   @override
   String get p2pErrorSignInExpired => 'The shop sign-in has expired. Try again.';
@@ -3950,10 +3968,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorThrottled => 'Too many requests. Wait a moment and try again.';
 
   @override
+  String get p2pErrorUniqueIdTaken => 'A shop with this id already exists. Try again.';
+
+  @override
   String get p2pErrorUnknown => 'Something went wrong. Try again.';
 
   @override
   String get p2pErrorUnreachable => 'Could not reach the shop registry. Check your connection and try again.';
+
+  @override
+  String get p2pErrorUrlTaken => 'That shop address is taken.';
 
   @override
   String get p2pErrorUseBuyNow => 'At the buy-now price or more, use Buy now.';
@@ -4135,6 +4159,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pMyBidsVault => 'A Vault account cannot bid or buy, so it has no bids.';
 
   @override
+  String get p2pMyShopEdit => 'Edit';
+
+  @override
+  String get p2pMyShopNoAccount => 'Choose a VFX account to use the shop.';
+
+  @override
+  String get p2pMyShopTitle => 'My shop';
+
+  @override
+  String get p2pMyShopVault => 'A Vault account cannot have a shop or buy in one.';
+
+  @override
+  String get p2pMyShopView => 'View shop';
+
+  @override
   String get p2pNavShops => 'Shops';
 
   @override
@@ -4178,6 +4217,84 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pShopCollections => 'Collections';
 
   @override
+  String p2pShopCostDelete(String cost) {
+    return 'Closing the shop costs $cost.';
+  }
+
+  @override
+  String get p2pShopCostDryRun => 'For now this is a dry run: the shop is recorded by the registry, and no VFX moves.';
+
+  @override
+  String get p2pShopCostListing => 'Listing NFTs and collections are free.';
+
+  @override
+  String get p2pShopCostOnce => 'Paid once to the network (DecShop_Base), plus the network fee.';
+
+  @override
+  String p2pShopCostUpdate(String cost) {
+    return 'Changes are free once every 12 hours; sooner costs $cost.';
+  }
+
+  @override
+  String get p2pShopDeleteActive => 'Its live listings end with it.';
+
+  @override
+  String get p2pShopDeleteTitle => 'Delete the shop';
+
+  @override
+  String p2pShopDeleteWarning(String cost) {
+    return 'The shop and its address are released. On chain this costs $cost.';
+  }
+
+  @override
+  String p2pShopEditCost(String cost) {
+    return 'The shop changed less than 12 hours ago, so on chain this change costs $cost, plus the network fee.';
+  }
+
+  @override
+  String get p2pShopEditFree => 'Changing the shop is free right now (more than 12 hours since the last change), plus the network fee.';
+
+  @override
+  String get p2pShopEditTitle => 'Edit shop';
+
+  @override
+  String get p2pShopEditUnchanged => 'Nothing has changed yet.';
+
+  @override
+  String get p2pShopErrorRequired => 'Required';
+
+  @override
+  String get p2pShopErrorTooLong => 'Too long';
+
+  @override
+  String p2pShopErrorTooManyWords(int max) {
+    return 'At most $max words';
+  }
+
+  @override
+  String get p2pShopErrorUrlInvalid => 'Start with a letter; use letters, digits, “-” and “.”, up to 63 characters.';
+
+  @override
+  String get p2pShopFieldDescription => 'Description';
+
+  @override
+  String get p2pShopFieldName => 'Shop name';
+
+  @override
+  String get p2pShopFieldUrl => 'Shop address';
+
+  @override
+  String get p2pShopFieldUrlHint => 'Starts with a letter: letters, digits, “-” and “.”, up to 63 characters. Shown as vfx://address.';
+
+  @override
+  String get p2pShopFieldUrlPlaceholder => 'myshop';
+
+  @override
+  String p2pShopFieldWords(int used, int max) {
+    return '$used of $max words';
+  }
+
+  @override
   String p2pShopLiveCount(int count) {
     return '$count live';
   }
@@ -4201,12 +4318,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pShopOwner => 'Owner';
 
   @override
+  String get p2pShopRegisterCostLabel => 'Opening a shop';
+
+  @override
+  String get p2pShopRegisterIntro => 'A shop is your storefront on VerifiedX: a name, a vfx:// address and the NFTs you put up for sale.';
+
+  @override
+  String p2pShopRegisterShort(String balance, String cost) {
+    return 'This account holds $balance. Opening a shop takes $cost plus the network fee.';
+  }
+
+  @override
+  String get p2pShopRegisterTitle => 'Open a shop';
+
+  @override
   String get p2pShopRegistered => 'Registered';
 
   @override
   String p2pShopRegisteredOn(String date) {
     return 'Since $date';
   }
+
+  @override
+  String get p2pShopReview => 'Review';
+
+  @override
+  String get p2pShopUpdateTitle => 'Update the shop';
+
+  @override
+  String get p2pShopUrlCheckFailed => 'Could not check the address. It is checked again when you review.';
+
+  @override
+  String get p2pShopUrlChecking => 'Checking…';
+
+  @override
+  String p2pShopUrlFree(String url) {
+    return 'vfx://$url is free.';
+  }
+
+  @override
+  String get p2pShopUrlStillChecking => 'Still checking this address. Try again in a moment.';
+
+  @override
+  String get p2pShopUrlTaken => 'This address is taken.';
 
   @override
   String get p2pShopYours => 'Your shop';

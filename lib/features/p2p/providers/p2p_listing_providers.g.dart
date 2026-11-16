@@ -145,7 +145,7 @@ final p2pFeeQuoterProvider = Provider<P2pFeeQuoter>.internal(
 );
 
 typedef P2pFeeQuoterRef = ProviderRef<P2pFeeQuoter>;
-String _$p2pChainStepsHash() => r'c2033cbfa5bef338e41c41b6b7c593e255fe2a11';
+String _$p2pChainStepsHash() => r'd3eb8ef15b99b92bb3f8301c0a3ea87077dac177';
 
 /// The shop's chain steps. Dry runs while `Env.p2pBroadcast` is off, which
 /// it is in every build: there is no path that sends a transaction yet.

@@ -47,6 +47,7 @@ import '../features/smart_contracts/screens/template_chooser_screen.dart';
 import '../features/token/screens/token_topic_create_screen.dart';
 import '../features/p2p/screens/p2p_listing_screen.dart';
 import '../features/p2p/screens/p2p_my_bids_screen.dart';
+import '../features/p2p/screens/p2p_my_shop_screen.dart';
 import '../features/p2p/screens/p2p_shop_list_screen.dart';
 import '../features/p2p/screens/p2p_shop_screen.dart';
 import '../features/privacy/screens/privacy_screen.dart';
@@ -262,6 +263,7 @@ const List<AutoRoute> appRoutes = [
         children: [
           AutoRoute(path: "", page: P2pShopListScreen),
           AutoRoute(path: "my-bids", page: P2pMyBidsScreen),
+          AutoRoute(path: "my-shop", page: P2pMyShopScreen),
           AutoRoute(path: "shop/:url", page: P2pShopScreen),
           AutoRoute(path: "listing/:id", page: P2pListingScreen),
         ],

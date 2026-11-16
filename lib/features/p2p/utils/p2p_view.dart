@@ -1,5 +1,6 @@
 import '../models/p2p_listing.dart';
 import '../models/p2p_me.dart';
+import '../models/p2p_shop.dart';
 import 'p2p_amount.dart';
 import 'p2p_rules.dart';
 
@@ -368,4 +369,43 @@ P2pAmount? p2pOwnBid(P2pListing listing, String address) {
 /// a sale at the winning bid's amount.
 bool p2pSaleAsksMoreThanBid(P2pAmount price, P2pAmount? bid) {
   return bid != null && price > bid;
+}
+
+/// Where a shop URL stands as it is typed.
+enum P2pShopUrlStatus {
+  empty,
+
+  /// Core's URL rule refuses it, or the registry does.
+  invalid,
+
+  /// The shop's own URL, when editing.
+  unchanged,
+
+  /// Typing has not settled, or the registry's answer is not in.
+  checking,
+  free,
+  taken,
+}
+
+/// [typed] is what the field holds, [settled] what it held when typing last
+/// paused, [answer] the registry's availability for [settled] (null until it
+/// is in), and [current] the shop's own URL when editing.
+P2pShopUrlStatus p2pShopUrlStatus(String typed, String settled, P2pUrlAvailability? answer, [String? current]) {
+  final url = normalizeP2pShopUrl(typed);
+  if (url.isEmpty) {
+    return P2pShopUrlStatus.empty;
+  }
+  if (!isValidP2pShopUrl(typed)) {
+    return P2pShopUrlStatus.invalid;
+  }
+  if (current != null && url == normalizeP2pShopUrl(current)) {
+    return P2pShopUrlStatus.unchanged;
+  }
+  if (normalizeP2pShopUrl(settled) != url || answer == null || answer.normalized != url) {
+    return P2pShopUrlStatus.checking;
+  }
+  if (answer.reason == 'invalid') {
+    return P2pShopUrlStatus.invalid;
+  }
+  return answer.available ? P2pShopUrlStatus.free : P2pShopUrlStatus.taken;
 }

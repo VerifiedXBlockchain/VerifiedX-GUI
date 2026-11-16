@@ -75,6 +75,14 @@ class _P2pShopListScreenState extends BaseScreenState<P2pShopListScreen> {
       shadowColor: Colors.transparent,
       actions: [
         AppButton(
+          key: const Key('p2p:my_shop'),
+          label: l10n.p2pMyShopTitle,
+          icon: Icons.storefront,
+          type: AppButtonType.Text,
+          variant: AppColorVariant.Light,
+          onPressed: () => AutoRouter.of(context).push(P2pMyShopScreenRoute()),
+        ),
+        AppButton(
           key: const Key('p2p:my_bids'),
           label: l10n.p2pMyBidsTitle,
           icon: Icons.gavel,

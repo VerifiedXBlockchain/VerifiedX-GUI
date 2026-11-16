@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_me.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
 import 'package:rbx_wallet/features/p2p/utils/p2p_amount.dart';
 import 'package:rbx_wallet/features/p2p/utils/p2p_view.dart';
 
@@ -239,6 +240,35 @@ void main() {
       expect(p2pSaleAsksMoreThanBid(five, five), isFalse);
       expect(p2pSaleAsksMoreThanBid(P2pAmount.parse('4'), five), isFalse);
       expect(p2pSaleAsksMoreThanBid(five, null), isFalse);
+    });
+  });
+
+  group('a shop address as it is typed', () {
+    P2pUrlAvailability answer(String url, {bool available = true, String? reason}) {
+      return P2pUrlAvailability(url: url, normalized: url, available: available, reason: reason);
+    }
+
+    test('empty and invalid are told before the registry is asked', () {
+      expect(p2pShopUrlStatus('', '', null), P2pShopUrlStatus.empty);
+      expect(p2pShopUrlStatus('vfx://', '', null), P2pShopUrlStatus.empty);
+      expect(p2pShopUrlStatus('9lives', '9lives', null), P2pShopUrlStatus.invalid);
+    });
+
+    test('is checking until typing has settled and the answer for it is in', () {
+      expect(p2pShopUrlStatus('corner', 'corne', answer('corne')), P2pShopUrlStatus.checking);
+      expect(p2pShopUrlStatus('corner', 'corner', null), P2pShopUrlStatus.checking);
+      // An answer for an earlier spelling is not this one's.
+      expect(p2pShopUrlStatus('corner', 'corner', answer('corne')), P2pShopUrlStatus.checking);
+    });
+
+    test('free, taken, or invalid by the registry\'s own rule', () {
+      expect(p2pShopUrlStatus('Corner', 'Corner', answer('corner')), P2pShopUrlStatus.free);
+      expect(p2pShopUrlStatus('corner', 'corner', answer('corner', available: false, reason: 'taken')), P2pShopUrlStatus.taken);
+      expect(p2pShopUrlStatus('corner', 'corner', answer('corner', available: false, reason: 'invalid')), P2pShopUrlStatus.invalid);
+    });
+
+    test('the shop\'s own address, when editing, is unchanged and not taken', () {
+      expect(p2pShopUrlStatus('vfx://Corner', 'x', null, 'corner'), P2pShopUrlStatus.unchanged);
     });
   });
 }

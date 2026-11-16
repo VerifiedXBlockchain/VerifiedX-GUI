@@ -168,6 +168,15 @@ class FakeP2pService extends P2pService {
   /// The registry's listed NFT ids, by owner.
   Map<String, Set<String>> listedByOwner = {};
 
+  /// The shop each address owns.
+  Map<String, P2pShop> shopsByOwner = {};
+
+  /// URLs another shop holds.
+  Set<String> takenUrls = {};
+
+  /// What a dry-run DSTR answers; each description is kept in [dryRuns].
+  P2pShop Function(P2pTxDescription tx)? onDstr;
+
   FakeP2pService() : super(hostOverride: 'http://127.0.0.1:9');
 
   void _fail() {
@@ -221,6 +230,31 @@ class FakeP2pService extends P2pService {
   Future<P2pAuthToken> signToken({required String address, required String message, required String signature}) async {
     calls.add('signToken($address)');
     return P2pAuthToken(token: 'token-for-$address', address: address, expiresAt: DateTime.now().toUtc().add(const Duration(hours: 1)));
+  }
+
+  @override
+  Future<P2pShop?> ownerShop(String owner) async {
+    calls.add('ownerShop($owner)');
+    _fail();
+    return shopsByOwner[owner];
+  }
+
+  @override
+  Future<P2pUrlAvailability> urlAvailability(String url) async {
+    calls.add('urlAvailability($url)');
+    _fail();
+    final taken = takenUrls.contains(url);
+    return P2pUrlAvailability(url: url, normalized: url, available: !taken, reason: taken ? 'taken' : null);
+  }
+
+  @override
+  Future<P2pShop> dryRunDstr({required String token, required P2pTxDescription tx}) async {
+    calls.add('dryRunDstr(${tx.function}, token: $token)');
+    if (dryRunError != null) {
+      throw dryRunError!;
+    }
+    dryRuns.add(tx);
+    return onDstr!(tx);
   }
 
   @override

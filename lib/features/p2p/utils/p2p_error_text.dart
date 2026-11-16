@@ -35,6 +35,8 @@ String p2pErrorText(AppLocalizations l10n, Object error) {
         return l10n.p2pChainErrorRoyaltyZero;
       case P2pChainFailure.feeUnavailable:
         return l10n.p2pChainErrorFee;
+      case P2pChainFailure.shopFields:
+        return l10n.p2pChainErrorShopFields;
     }
   }
   if (error is! P2pError) {
@@ -132,6 +134,18 @@ String? _knownCode(AppLocalizations l10n, P2pError error) {
       return l10n.p2pErrorListingNotSalePending;
     case 'nft_moved':
       return l10n.p2pErrorNftMoved;
+
+    // The seller's shop.
+    case 'url_taken':
+      return l10n.p2pErrorUrlTaken;
+    case 'not_shop_owner':
+      return l10n.p2pErrorNotShopOwner;
+    case 'shop_on_chain':
+      return l10n.p2pErrorShopOnChain;
+    case 'shop_deleted':
+      return l10n.p2pErrorShopDeleted;
+    case 'unique_id_taken':
+      return l10n.p2pErrorUniqueIdTaken;
   }
   return null;
 }

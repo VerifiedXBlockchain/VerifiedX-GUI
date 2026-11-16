@@ -3706,6 +3706,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pChainErrorRoyaltyZero => 'Con este precio la regalía se redondea a cero, y cada pago de la venta debe ser mayor que cero.';
 
   @override
+  String get p2pChainErrorShopFields => 'El nombre, la dirección o la descripción de la tienda están fuera de los límites de la red.';
+
+  @override
   String get p2pChainFee => 'Comisión de red';
 
   @override
@@ -3745,6 +3748,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pChainRecording => 'Registrando…';
 
   @override
+  String get p2pChainRowAddress => 'Dirección';
+
+  @override
   String get p2pChainRowNft => 'NFT';
 
   @override
@@ -3752,6 +3758,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get p2pChainRowSeller => 'Vendedor';
+
+  @override
+  String get p2pChainRowShop => 'Tienda';
 
   @override
   String get p2pChainTo => 'Para';
@@ -3912,6 +3921,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorNotSender => 'La transacción no es de la cuenta con la sesión iniciada.';
 
   @override
+  String get p2pErrorNotShopOwner => 'Solo el propietario de la tienda puede hacer eso.';
+
+  @override
   String p2pErrorRefused(String reason) {
     return 'El registro de tiendas lo rechazó: $reason';
   }
@@ -3929,7 +3941,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorServer => 'El registro de tiendas tuvo un problema. Inténtalo de nuevo en un momento.';
 
   @override
+  String get p2pErrorShopDeleted => 'La tienda se ha eliminado.';
+
+  @override
   String get p2pErrorShopNotFound => 'Ninguna tienda tiene esta dirección.';
+
+  @override
+  String get p2pErrorShopOnChain => 'Esta tienda está registrada en la cadena, así que una simulación no puede cambiarla.';
 
   @override
   String get p2pErrorSignInExpired => 'El inicio de sesión en la tienda ha caducado. Inténtalo de nuevo.';
@@ -3950,10 +3968,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pErrorThrottled => 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.';
 
   @override
+  String get p2pErrorUniqueIdTaken => 'Ya existe una tienda con este id. Inténtalo de nuevo.';
+
+  @override
   String get p2pErrorUnknown => 'Algo salió mal. Inténtalo de nuevo.';
 
   @override
   String get p2pErrorUnreachable => 'No se pudo conectar con el registro de tiendas. Revisa tu conexión e inténtalo de nuevo.';
+
+  @override
+  String get p2pErrorUrlTaken => 'Esa dirección de tienda ya está en uso.';
 
   @override
   String get p2pErrorUseBuyNow => 'Al precio de compra inmediata o más, usa Comprar ahora.';
@@ -4135,6 +4159,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pMyBidsVault => 'Una cuenta Vault no puede ofertar ni comprar, así que no tiene ofertas.';
 
   @override
+  String get p2pMyShopEdit => 'Editar';
+
+  @override
+  String get p2pMyShopNoAccount => 'Elige una cuenta VFX para usar la tienda.';
+
+  @override
+  String get p2pMyShopTitle => 'Mi tienda';
+
+  @override
+  String get p2pMyShopVault => 'Una cuenta Vault no puede tener una tienda ni comprar en una.';
+
+  @override
+  String get p2pMyShopView => 'Ver tienda';
+
+  @override
   String get p2pNavShops => 'Tiendas';
 
   @override
@@ -4178,6 +4217,84 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pShopCollections => 'Colecciones';
 
   @override
+  String p2pShopCostDelete(String cost) {
+    return 'Cerrar la tienda cuesta $cost.';
+  }
+
+  @override
+  String get p2pShopCostDryRun => 'Por ahora es una simulación: el registro guarda la tienda y no se mueve VFX.';
+
+  @override
+  String get p2pShopCostListing => 'Listar NFT y crear colecciones es gratis.';
+
+  @override
+  String get p2pShopCostOnce => 'Se paga una vez a la red (DecShop_Base), más la comisión de red.';
+
+  @override
+  String p2pShopCostUpdate(String cost) {
+    return 'Los cambios son gratis una vez cada 12 horas; antes cuestan $cost.';
+  }
+
+  @override
+  String get p2pShopDeleteActive => 'Sus listados activos terminan con ella.';
+
+  @override
+  String get p2pShopDeleteTitle => 'Eliminar la tienda';
+
+  @override
+  String p2pShopDeleteWarning(String cost) {
+    return 'La tienda y su dirección quedan libres. En la cadena esto cuesta $cost.';
+  }
+
+  @override
+  String p2pShopEditCost(String cost) {
+    return 'La tienda cambió hace menos de 12 horas, así que en la cadena este cambio cuesta $cost, más la comisión de red.';
+  }
+
+  @override
+  String get p2pShopEditFree => 'Cambiar la tienda es gratis ahora mismo (más de 12 horas desde el último cambio), más la comisión de red.';
+
+  @override
+  String get p2pShopEditTitle => 'Editar tienda';
+
+  @override
+  String get p2pShopEditUnchanged => 'Aún no ha cambiado nada.';
+
+  @override
+  String get p2pShopErrorRequired => 'Obligatorio';
+
+  @override
+  String get p2pShopErrorTooLong => 'Demasiado largo';
+
+  @override
+  String p2pShopErrorTooManyWords(int max) {
+    return 'Como máximo $max palabras';
+  }
+
+  @override
+  String get p2pShopErrorUrlInvalid => 'Empieza con una letra; usa letras, dígitos, “-” y “.”, hasta 63 caracteres.';
+
+  @override
+  String get p2pShopFieldDescription => 'Descripción';
+
+  @override
+  String get p2pShopFieldName => 'Nombre de la tienda';
+
+  @override
+  String get p2pShopFieldUrl => 'Dirección de la tienda';
+
+  @override
+  String get p2pShopFieldUrlHint => 'Empieza con una letra: letras, dígitos, “-” y “.”, hasta 63 caracteres. Se muestra como vfx://dirección.';
+
+  @override
+  String get p2pShopFieldUrlPlaceholder => 'mitienda';
+
+  @override
+  String p2pShopFieldWords(int used, int max) {
+    return '$used de $max palabras';
+  }
+
+  @override
   String p2pShopLiveCount(int count) {
     return '$count activos';
   }
@@ -4201,12 +4318,49 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pShopOwner => 'Propietario';
 
   @override
+  String get p2pShopRegisterCostLabel => 'Abrir una tienda';
+
+  @override
+  String get p2pShopRegisterIntro => 'Una tienda es tu escaparate en VerifiedX: un nombre, una dirección vfx:// y los NFT que pones a la venta.';
+
+  @override
+  String p2pShopRegisterShort(String balance, String cost) {
+    return 'Esta cuenta tiene $balance. Abrir una tienda cuesta $cost más la comisión de red.';
+  }
+
+  @override
+  String get p2pShopRegisterTitle => 'Abrir una tienda';
+
+  @override
   String get p2pShopRegistered => 'Registrada';
 
   @override
   String p2pShopRegisteredOn(String date) {
     return 'Desde $date';
   }
+
+  @override
+  String get p2pShopReview => 'Revisar';
+
+  @override
+  String get p2pShopUpdateTitle => 'Actualizar la tienda';
+
+  @override
+  String get p2pShopUrlCheckFailed => 'No se pudo comprobar la dirección. Se comprueba de nuevo al revisar.';
+
+  @override
+  String get p2pShopUrlChecking => 'Comprobando…';
+
+  @override
+  String p2pShopUrlFree(String url) {
+    return 'vfx://$url está libre.';
+  }
+
+  @override
+  String get p2pShopUrlStillChecking => 'Aún se está comprobando esta dirección. Inténtalo de nuevo en un momento.';
+
+  @override
+  String get p2pShopUrlTaken => 'Esta dirección ya está en uso.';
 
   @override
   String get p2pShopYours => 'Tu tienda';

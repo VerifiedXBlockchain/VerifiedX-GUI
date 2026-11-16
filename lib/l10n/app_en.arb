@@ -3982,6 +3982,10 @@
   "@p2pChainErrorRoyaltyZero": {
     "description": "P2P chain step error: the royalty payment would be zero."
   },
+  "p2pChainErrorShopFields": "The shop’s name, address or description is outside the network’s limits.",
+  "@p2pChainErrorShopFields": {
+    "description": "P2P chain step error: the shop's fields do not meet Core's limits."
+  },
   "p2pChainFee": "Network fee",
   "@p2pChainFee": {
     "description": "Row label in a P2P chain step dialog: the transaction's own network fee."
@@ -4047,6 +4051,10 @@
   "@p2pChainRecording": {
     "description": "Confirm button label of a P2P chain step dialog while the dry run is being recorded."
   },
+  "p2pChainRowAddress": "Address",
+  "@p2pChainRowAddress": {
+    "description": "Summary row label in a P2P chain step dialog: the shop's vfx:// address."
+  },
   "p2pChainRowNft": "NFT",
   "@p2pChainRowNft": {
     "description": "Summary row label in a P2P chain step dialog: the NFT's name."
@@ -4058,6 +4066,10 @@
   "p2pChainRowSeller": "Seller",
   "@p2pChainRowSeller": {
     "description": "Summary row label in a P2P chain step dialog: the seller's address."
+  },
+  "p2pChainRowShop": "Shop",
+  "@p2pChainRowShop": {
+    "description": "Summary row label in a P2P chain step dialog: the shop's name."
   },
   "p2pChainTo": "To",
   "@p2pChainTo": {
@@ -4295,6 +4307,10 @@
   "@p2pErrorNotSender": {
     "description": "P2P shop error code not_sender."
   },
+  "p2pErrorNotShopOwner": "Only the shop’s owner can do that.",
+  "@p2pErrorNotShopOwner": {
+    "description": "P2P shop error code not_shop_owner."
+  },
   "p2pErrorRefused": "The shop registry refused it: {reason}",
   "@p2pErrorRefused": {
     "description": "P2P shop error with a code this wallet has no words for: the registry's own message follows.",
@@ -4320,9 +4336,17 @@
   "@p2pErrorServer": {
     "description": "P2P shop error: the registry answered with a server error."
   },
+  "p2pErrorShopDeleted": "The shop has been deleted.",
+  "@p2pErrorShopDeleted": {
+    "description": "P2P shop error code shop_deleted."
+  },
   "p2pErrorShopNotFound": "No shop has this address.",
   "@p2pErrorShopNotFound": {
     "description": "P2P shop error code shop_not_found."
+  },
+  "p2pErrorShopOnChain": "This shop is registered on chain, so a dry run cannot change it.",
+  "@p2pErrorShopOnChain": {
+    "description": "P2P shop error code shop_on_chain."
   },
   "p2pErrorSignInExpired": "The shop sign-in has expired. Try again.",
   "@p2pErrorSignInExpired": {
@@ -4348,6 +4372,10 @@
   "@p2pErrorThrottled": {
     "description": "P2P shop error: the registry is rate limiting this wallet."
   },
+  "p2pErrorUniqueIdTaken": "A shop with this id already exists. Try again.",
+  "@p2pErrorUniqueIdTaken": {
+    "description": "P2P shop error code unique_id_taken."
+  },
   "p2pErrorUnknown": "Something went wrong. Try again.",
   "@p2pErrorUnknown": {
     "description": "P2P shop error of an unexpected kind."
@@ -4355,6 +4383,10 @@
   "p2pErrorUnreachable": "Could not reach the shop registry. Check your connection and try again.",
   "@p2pErrorUnreachable": {
     "description": "P2P shop error: the request to Spyglass got no answer."
+  },
+  "p2pErrorUrlTaken": "That shop address is taken.",
+  "@p2pErrorUrlTaken": {
+    "description": "P2P shop error code url_taken."
   },
   "p2pErrorUseBuyNow": "At the buy-now price or more, use Buy now.",
   "@p2pErrorUseBuyNow": {
@@ -4614,6 +4646,26 @@
   "@p2pMyBidsVault": {
     "description": "Shown on the P2P My bids screen when the selected account is a Vault account."
   },
+  "p2pMyShopEdit": "Edit",
+  "@p2pMyShopEdit": {
+    "description": "Button on the P2P My shop screen that opens the edit-shop dialog."
+  },
+  "p2pMyShopNoAccount": "Choose a VFX account to use the shop.",
+  "@p2pMyShopNoAccount": {
+    "description": "Shown on the P2P My shop screen when no VFX account is selected."
+  },
+  "p2pMyShopTitle": "My shop",
+  "@p2pMyShopTitle": {
+    "description": "Title of the P2P screen where the selected account opens and runs its shop, and the button that opens it."
+  },
+  "p2pMyShopVault": "A Vault account cannot have a shop or buy in one.",
+  "@p2pMyShopVault": {
+    "description": "Shown on the P2P My shop screen when the selected account is a Vault account."
+  },
+  "p2pMyShopView": "View shop",
+  "@p2pMyShopView": {
+    "description": "Button on the P2P My shop screen that opens the shop's public page."
+  },
   "p2pNavShops": "Shops",
   "@p2pNavShops": {
     "description": "Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry."
@@ -4679,6 +4731,127 @@
   "@p2pShopCollections": {
     "description": "Accessible label of the collection filter chips on a P2P shop page."
   },
+  "p2pShopCostDelete": "Closing the shop costs {cost}.",
+  "@p2pShopCostDelete": {
+    "description": "Cost card line in the P2P shop registration form.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopCostDryRun": "For now this is a dry run: the shop is recorded by the registry, and no VFX moves.",
+  "@p2pShopCostDryRun": {
+    "description": "Cost card line in the P2P shop registration form while chain steps are dry runs."
+  },
+  "p2pShopCostListing": "Listing NFTs and collections are free.",
+  "@p2pShopCostListing": {
+    "description": "Cost card line in the P2P shop registration form."
+  },
+  "p2pShopCostOnce": "Paid once to the network (DecShop_Base), plus the network fee.",
+  "@p2pShopCostOnce": {
+    "description": "Cost card line in the P2P shop registration form."
+  },
+  "p2pShopCostUpdate": "Changes are free once every 12 hours; sooner costs {cost}.",
+  "@p2pShopCostUpdate": {
+    "description": "Cost card line in the P2P shop registration form.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopDeleteActive": "Its live listings end with it.",
+  "@p2pShopDeleteActive": {
+    "description": "Extra warning in the confirmation for deleting a P2P shop that has live listings."
+  },
+  "p2pShopDeleteTitle": "Delete the shop",
+  "@p2pShopDeleteTitle": {
+    "description": "Tooltip of the delete button on the P2P My shop screen and title of its confirmation."
+  },
+  "p2pShopDeleteWarning": "The shop and its address are released. On chain this costs {cost}.",
+  "@p2pShopDeleteWarning": {
+    "description": "Warning in the confirmation for deleting a P2P shop.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopEditCost": "The shop changed less than 12 hours ago, so on chain this change costs {cost}, plus the network fee.",
+  "@p2pShopEditCost": {
+    "description": "Note in the P2P edit-shop dialog when an update costs 1 VFX.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopEditFree": "Changing the shop is free right now (more than 12 hours since the last change), plus the network fee.",
+  "@p2pShopEditFree": {
+    "description": "Note in the P2P edit-shop dialog when an update moves nothing."
+  },
+  "p2pShopEditTitle": "Edit shop",
+  "@p2pShopEditTitle": {
+    "description": "Title of the P2P edit-shop dialog."
+  },
+  "p2pShopEditUnchanged": "Nothing has changed yet.",
+  "@p2pShopEditUnchanged": {
+    "description": "Note in the P2P edit-shop dialog when Review is pressed with no change."
+  },
+  "p2pShopErrorRequired": "Required",
+  "@p2pShopErrorRequired": {
+    "description": "Field error in the P2P shop and collection forms: nothing typed."
+  },
+  "p2pShopErrorTooLong": "Too long",
+  "@p2pShopErrorTooLong": {
+    "description": "Field error in the P2P shop form: over the network's length limit."
+  },
+  "p2pShopErrorTooManyWords": "At most {max} words",
+  "@p2pShopErrorTooManyWords": {
+    "description": "Field error in the P2P shop form: the description has too many words.",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pShopErrorUrlInvalid": "Start with a letter; use letters, digits, “-” and “.”, up to 63 characters.",
+  "@p2pShopErrorUrlInvalid": {
+    "description": "Field error in the P2P shop form: the address is not one the network accepts."
+  },
+  "p2pShopFieldDescription": "Description",
+  "@p2pShopFieldDescription": {
+    "description": "Label of the description field in the P2P shop form."
+  },
+  "p2pShopFieldName": "Shop name",
+  "@p2pShopFieldName": {
+    "description": "Label of the name field in the P2P shop form."
+  },
+  "p2pShopFieldUrl": "Shop address",
+  "@p2pShopFieldUrl": {
+    "description": "Label of the vfx:// address field in the P2P shop form."
+  },
+  "p2pShopFieldUrlHint": "Starts with a letter: letters, digits, “-” and “.”, up to 63 characters. Shown as vfx://address.",
+  "@p2pShopFieldUrlHint": {
+    "description": "Hint under the address field in the P2P shop form."
+  },
+  "p2pShopFieldUrlPlaceholder": "myshop",
+  "@p2pShopFieldUrlPlaceholder": {
+    "description": "Placeholder of the address field in the P2P shop form."
+  },
+  "p2pShopFieldWords": "{used} of {max} words",
+  "@p2pShopFieldWords": {
+    "description": "Word count under the description field in the P2P shop form.",
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
+  },
   "p2pShopLiveCount": "{count} live",
   "@p2pShopLiveCount": {
     "description": "Badge on a P2P shop card: how many live listings the shop has.",
@@ -4712,6 +4885,30 @@
   "@p2pShopOwner": {
     "description": "Label before a P2P shop owner's address."
   },
+  "p2pShopRegisterCostLabel": "Opening a shop",
+  "@p2pShopRegisterCostLabel": {
+    "description": "Label of the cost in the P2P shop registration form's cost card."
+  },
+  "p2pShopRegisterIntro": "A shop is your storefront on VerifiedX: a name, a vfx:// address and the NFTs you put up for sale.",
+  "@p2pShopRegisterIntro": {
+    "description": "Intro under the heading of the P2P shop registration form."
+  },
+  "p2pShopRegisterShort": "This account holds {balance}. Opening a shop takes {cost} plus the network fee.",
+  "@p2pShopRegisterShort": {
+    "description": "Note in the P2P shop registration form when the account's balance is under the cost.",
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopRegisterTitle": "Open a shop",
+  "@p2pShopRegisterTitle": {
+    "description": "Heading of the form that registers a P2P shop, and the title of its confirmation."
+  },
   "p2pShopRegistered": "Registered",
   "@p2pShopRegistered": {
     "description": "Badge on a P2P shop whose registration is on chain."
@@ -4724,6 +4921,39 @@
         "type": "String"
       }
     }
+  },
+  "p2pShopReview": "Review",
+  "@p2pShopReview": {
+    "description": "Submit button of the P2P shop form: opens the confirmation with the transaction."
+  },
+  "p2pShopUpdateTitle": "Update the shop",
+  "@p2pShopUpdateTitle": {
+    "description": "Title of the confirmation for a P2P shop update."
+  },
+  "p2pShopUrlCheckFailed": "Could not check the address. It is checked again when you review.",
+  "@p2pShopUrlCheckFailed": {
+    "description": "Status line in the P2P shop form when the availability check could not be made."
+  },
+  "p2pShopUrlChecking": "Checking…",
+  "@p2pShopUrlChecking": {
+    "description": "Status line in the P2P shop form while the address is being checked."
+  },
+  "p2pShopUrlFree": "vfx://{url} is free.",
+  "@p2pShopUrlFree": {
+    "description": "Status line in the P2P shop form: the typed address is available.",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopUrlStillChecking": "Still checking this address. Try again in a moment.",
+  "@p2pShopUrlStillChecking": {
+    "description": "Field error in the P2P shop form when Review is pressed before the availability check is in."
+  },
+  "p2pShopUrlTaken": "This address is taken.",
+  "@p2pShopUrlTaken": {
+    "description": "Field error in the P2P shop form: another shop holds the address."
   },
   "p2pShopYours": "Your shop",
   "@p2pShopYours": {
