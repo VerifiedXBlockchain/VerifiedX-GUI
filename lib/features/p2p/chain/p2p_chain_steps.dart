@@ -29,6 +29,22 @@ abstract class P2pChainSteps {
   /// `P2pSignInMismatch`.
   Future<P2pListing> completePurchase(P2pListing listing, P2pTxDescription tx);
 
+  /// The `Sale_Start()` that hands [listing] to its winner at the winning
+  /// bid. The bid, with its signature, is read from the seller's own list.
+  /// Throws a [P2pChainError] when there is no winning bid to start from.
+  Future<P2pTxDescription> describeStartSale(P2pListing listing);
+
+  /// Carries out the described `Sale_Start()` and returns the listing as it
+  /// now stands (`salePending`).
+  Future<P2pListing> startSale(P2pListing listing, P2pTxDescription tx);
+
+  /// The `Sale_Cancel()` that calls off [listing]'s started sale.
+  Future<P2pTxDescription> describeCancelSale(P2pListing listing);
+
+  /// Carries out the described `Sale_Cancel()` and returns the listing as it
+  /// now stands (`cancelled`).
+  Future<P2pListing> cancelSale(P2pListing listing, P2pTxDescription tx);
+
   /// The `DecShopCreate()` that registers a shop for [owner].
   Future<P2pTxDescription> describeRegisterShop(String owner, P2pShopValues values);
 
@@ -90,6 +106,39 @@ class P2pDryRunChainSteps implements P2pChainSteps {
     return _session.withToken(
       tx.fromAddress,
       (token) => _service.dryRunSaleComplete(token: token, listingId: listing.id, tx: tx),
+    );
+  }
+
+  @override
+  Future<P2pTxDescription> describeStartSale(P2pListing listing) async {
+    // Only the seller's own list carries the winning bid's signature.
+    final me = await _session.withToken(listing.sellerAddress, _service.me);
+    final mine = me.selling.where((s) => s.listing.id == listing.id);
+    final winner = mine.isEmpty ? null : mine.first.winningBid;
+    if (winner == null) {
+      throw const P2pChainError(P2pChainFailure.noWinningBid);
+    }
+    return describeSaleStart(fees: _fees, now: _now(), listing: listing, winner: winner);
+  }
+
+  @override
+  Future<P2pListing> startSale(P2pListing listing, P2pTxDescription tx) {
+    return _session.withToken(
+      tx.fromAddress,
+      (token) => _service.dryRunSaleStart(token: token, listingId: listing.id, tx: tx),
+    );
+  }
+
+  @override
+  Future<P2pTxDescription> describeCancelSale(P2pListing listing) {
+    return describeSaleCancel(fees: _fees, now: _now(), listing: listing);
+  }
+
+  @override
+  Future<P2pListing> cancelSale(P2pListing listing, P2pTxDescription tx) {
+    return _session.withToken(
+      tx.fromAddress,
+      (token) => _service.dryRunSaleCancel(token: token, listingId: listing.id, tx: tx),
     );
   }
 

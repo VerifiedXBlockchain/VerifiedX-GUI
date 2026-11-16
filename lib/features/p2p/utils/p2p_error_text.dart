@@ -37,6 +37,8 @@ String p2pErrorText(AppLocalizations l10n, Object error) {
         return l10n.p2pChainErrorFee;
       case P2pChainFailure.shopFields:
         return l10n.p2pChainErrorShopFields;
+      case P2pChainFailure.noWinningBid:
+        return l10n.p2pChainErrorNoWinningBid;
     }
   }
   if (error is! P2pError) {
@@ -132,6 +134,8 @@ String? _knownCode(AppLocalizations l10n, P2pError error) {
       return l10n.p2pErrorSaleOnChain;
     case 'listing_not_sale_pending':
       return l10n.p2pErrorListingNotSalePending;
+    case 'listing_not_awaiting_sale_start':
+      return l10n.p2pErrorListingNotAwaitingSaleStart;
     case 'nft_moved':
       return l10n.p2pErrorNftMoved;
 

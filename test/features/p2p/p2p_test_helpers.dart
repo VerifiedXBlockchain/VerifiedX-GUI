@@ -166,6 +166,10 @@ class FakeP2pService extends P2pService {
   P2pListing Function(int listingId, P2pTxDescription tx)? onSaleComplete;
   final List<P2pTxDescription> dryRuns = [];
 
+  /// What a dry-run `Sale_Start()` and `Sale_Cancel()` answer.
+  P2pListing Function(int listingId, P2pTxDescription tx)? onSaleStart;
+  P2pListing Function(int listingId, P2pTxDescription tx)? onSaleCancel;
+
   /// Thrown by the dry-run calls only.
   Object? dryRunError;
 
@@ -382,6 +386,26 @@ class FakeP2pService extends P2pService {
     }
     dryRuns.add(tx);
     return onSaleComplete!(listingId, tx);
+  }
+
+  @override
+  Future<P2pListing> dryRunSaleStart({required String token, required int listingId, required P2pTxDescription tx}) async {
+    calls.add('dryRunSaleStart($listingId, token: $token)');
+    if (dryRunError != null) {
+      throw dryRunError!;
+    }
+    dryRuns.add(tx);
+    return onSaleStart!(listingId, tx);
+  }
+
+  @override
+  Future<P2pListing> dryRunSaleCancel({required String token, required int listingId, required P2pTxDescription tx}) async {
+    calls.add('dryRunSaleCancel($listingId, token: $token)');
+    if (dryRunError != null) {
+      throw dryRunError!;
+    }
+    dryRuns.add(tx);
+    return onSaleCancel!(listingId, tx);
   }
 
   @override

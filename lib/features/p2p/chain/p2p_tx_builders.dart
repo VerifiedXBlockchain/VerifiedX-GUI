@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../models/p2p_listing.dart';
+import '../models/p2p_me.dart';
 import '../models/p2p_shop.dart';
 import '../models/p2p_tx_description.dart';
 import '../utils/p2p_amount.dart';
@@ -174,6 +175,68 @@ Future<P2pTxDescription> describeSaleComplete({
     to: listing.sellerAddress,
     amount: P2pAmount.fromUnits(BigInt.zero),
     data: data,
+  );
+}
+
+/// `Sale_Start()`: from the seller to the winner, moving 0, carrying the
+/// winner's bid (`SoldFor`, `BidSignature`) and the listing's purchase key.
+/// Core checks the bid's signature over `{KeySign}_{SoldFor × 1e8}_{NextOwner}`
+/// and locks the contract to the winner at that price. `Locators` is "NA":
+/// a description asks no beacon to carry the NFT's media. Throws a
+/// [P2pChainError].
+Future<P2pTxDescription> describeSaleStart({
+  required P2pFeeQuoter fees,
+  required DateTime now,
+  required P2pListing listing,
+  required P2pWinningBid winner,
+}) {
+  final soldFor = P2pAmount.tryParse(winner.amount);
+  if (soldFor == null || !soldFor.isPositive) {
+    throw const P2pChainError(P2pChainFailure.priceZero);
+  }
+  return _describe(
+    fees: fees,
+    timestamp: now.millisecondsSinceEpoch ~/ 1000,
+    type: p2pTxNftSale,
+    from: listing.sellerAddress,
+    to: winner.address,
+    amount: P2pAmount.fromUnits(BigInt.zero),
+    data: {
+      'Function': 'Sale_Start()',
+      'ContractUID': listing.smartContractUid,
+      'NextOwner': winner.address,
+      'SoldFor': soldFor.toJsonNumber(),
+      'KeySign': listing.purchaseKey,
+      'BidSignature': winner.signature,
+      'Locators': 'NA',
+    },
+  );
+}
+
+/// `Sale_Cancel()`: from the seller to the buyer the sale was started for,
+/// moving 0. It releases the contract's lock, so the NFT can be listed
+/// again. The shape of Core's `CancelNFTSaleTX`. Throws a [P2pChainError].
+Future<P2pTxDescription> describeSaleCancel({
+  required P2pFeeQuoter fees,
+  required DateTime now,
+  required P2pListing listing,
+}) {
+  final buyer = listing.winnerAddress;
+  if (buyer == null) {
+    throw const P2pChainError(P2pChainFailure.noWinner);
+  }
+  return _describe(
+    fees: fees,
+    timestamp: now.millisecondsSinceEpoch ~/ 1000,
+    type: p2pTxNftSale,
+    from: listing.sellerAddress,
+    to: buyer,
+    amount: P2pAmount.fromUnits(BigInt.zero),
+    data: {
+      'Function': 'Sale_Cancel()',
+      'ContractUID': listing.smartContractUid,
+      'KeySign': listing.purchaseKey,
+    },
   );
 }
 

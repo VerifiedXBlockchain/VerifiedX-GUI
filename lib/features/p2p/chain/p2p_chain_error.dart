@@ -20,6 +20,10 @@ enum P2pChainFailure {
 
   /// The shop's name, URL or description is outside Core's limits.
   shopFields,
+
+  /// The seller's list does not carry the winning bid, whose signature
+  /// `Sale_Start()` must carry.
+  noWinningBid,
 }
 
 class P2pChainError implements Exception {

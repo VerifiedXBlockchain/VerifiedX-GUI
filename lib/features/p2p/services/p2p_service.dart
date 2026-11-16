@@ -389,6 +389,29 @@ class P2pService extends BaseService {
     return _dryRunSaleStep('/p2p/dry-run/sale-complete/', token, listingId, tx);
   }
 
+  /// `POST /p2p/dry-run/sale-start/`: records [tx], the unsigned description
+  /// of the seller's `Sale_Start()` for the winner, and returns the listing
+  /// as `sale_pending`. The registry checks the winning bid's signature as
+  /// Core would.
+  Future<P2pListing> dryRunSaleStart({
+    required String token,
+    required int listingId,
+    required P2pTxDescription tx,
+  }) {
+    return _dryRunSaleStep('/p2p/dry-run/sale-start/', token, listingId, tx);
+  }
+
+  /// `POST /p2p/dry-run/sale-cancel/`: records [tx], the unsigned description
+  /// of the seller's `Sale_Cancel()` of a started sale, and returns the
+  /// listing as `cancelled`.
+  Future<P2pListing> dryRunSaleCancel({
+    required String token,
+    required int listingId,
+    required P2pTxDescription tx,
+  }) {
+    return _dryRunSaleStep('/p2p/dry-run/sale-cancel/', token, listingId, tx);
+  }
+
   /// `POST /p2p/dry-run/dstr/`: records [tx], the unsigned description of a
   /// `DecShopCreate()`, `DecShopUpdate()` or `DecShopDelete()`, and returns
   /// the shop as it now stands (`chain_state: dry_run`, or `deleted`).

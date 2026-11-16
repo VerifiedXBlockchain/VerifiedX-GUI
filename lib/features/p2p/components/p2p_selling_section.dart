@@ -167,63 +167,10 @@ class _SellingRow extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            P2pSellerButtons(selling: selling, address: address, onList: onList, compact: true),
+            P2pSellerButtons(listing: listing, address: address, onListAgain: onList, compact: true),
           ],
         ),
       ),
-    );
-  }
-}
-
-/// What a seller can do with a listing of theirs, as buttons: in a row of My
-/// shop ([compact]) and on the listing's own page.
-class P2pSellerButtons extends ConsumerWidget {
-  final P2pSellingListing selling;
-  final String address;
-  final void Function([String? nftId]) onList;
-  final bool compact;
-
-  const P2pSellerButtons({
-    super.key,
-    required this.selling,
-    required this.address,
-    required this.onList,
-    this.compact = false,
-  });
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = AppLocalizations.of(context);
-    final listing = selling.listing;
-    final actions = P2pSellerActions.of(listing);
-    final size = compact ? AppSizeVariant.Sm : AppSizeVariant.Md;
-
-    return Wrap(
-      spacing: 6,
-      runSpacing: 6,
-      alignment: compact ? WrapAlignment.end : WrapAlignment.start,
-      children: [
-        if (actions.editListing)
-          AppButton(
-            key: Key('p2p:listing_edit:${listing.id}'),
-            label: l10n.p2pListingEdit,
-            icon: Icons.edit_outlined,
-            type: AppButtonType.Outlined,
-            variant: AppColorVariant.Light,
-            size: size,
-            onPressed: () => P2pEditListingDialog.show(context, listing: listing, address: address),
-          ),
-        if (actions.cancelListing)
-          AppButton(
-            key: Key('p2p:listing_cancel:${listing.id}'),
-            label: l10n.p2pListingCancel,
-            icon: Icons.close,
-            type: AppButtonType.Outlined,
-            variant: AppColorVariant.Light,
-            size: size,
-            onPressed: () => P2pCancelListingDialog.show(context, listing: listing, address: address),
-          ),
-      ],
     );
   }
 }

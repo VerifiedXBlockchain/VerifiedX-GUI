@@ -124,6 +124,11 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
       _failed(e);
     } on P2pError catch (e) {
       _failed(e);
+    } on P2pSigningError catch (e) {
+      // A step built from what only the signed-in owner may read.
+      _failed(e);
+    } on P2pSignInMismatch catch (e) {
+      _failed(e);
     }
   }
 

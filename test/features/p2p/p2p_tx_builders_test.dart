@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_chain_error.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_tx_builders.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_me.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_tx_description.dart';
 import 'package:rbx_wallet/features/p2p/utils/p2p_amount.dart';
@@ -185,6 +186,63 @@ void main() {
       await expectLater(
         describeSaleComplete(fees: fees, now: now, listing: pending(), price: P2pAmount.parse('5')),
         throwsA(fails(P2pChainFailure.feeUnavailable)),
+      );
+    });
+  });
+
+  group('the seller\'s sale steps', () {
+    const winner = P2pWinningBid(amount: '5', address: buyer, signature: 'MEUCIQbid.PubKey');
+
+    /// The fixture's listing with its winner chosen, the sale not started.
+    P2pListing won() => pending({'state': 'awaiting_sale_start', 'sale': {'start': null, 'complete': null}});
+
+    test('Sale_Start: from the seller to the winner, moving 0, carrying the winning bid', () async {
+      final fees = FakeP2pFeeQuoter('0.00003');
+      final tx = await describeSaleStart(fees: fees, now: now, listing: won(), winner: winner);
+      expect([tx.type, tx.function], [5, 'Sale_Start()']);
+      expect([tx.fromAddress, tx.toAddress], [seller, buyer]);
+      expect([tx.amount, tx.fee, tx.timestamp], ['0', '0.00003', timestamp]);
+      // The fields the registry requires of a dry-run Sale_Start, and what
+      // each must equal (p2p/dryrun.py apply_sale_start).
+      expect(tx.data, {
+        'Function': 'Sale_Start()',
+        'ContractUID': '0b6ea1abd1da425fab80029f8f20944c:1794213169',
+        'NextOwner': buyer,
+        'SoldFor': 5,
+        'KeySign': 'KlMnOpQrSt1794843000',
+        'BidSignature': 'MEUCIQbid.PubKey',
+        'Locators': 'NA',
+      });
+      // The fee is quoted for this very transaction.
+      expect(fees.quoted.single['data'], tx.data);
+    });
+
+    test('Sale_Start: SoldFor is the winning bid to the unit', () async {
+      const odd = P2pWinningBid(amount: '2.50000001', address: buyer, signature: 's');
+      final tx = await describeSaleStart(fees: FakeP2pFeeQuoter(), now: now, listing: won(), winner: odd);
+      expect(jsonEncode(tx.data['SoldFor']), '2.50000001');
+    });
+
+    test('Sale_Start: a winning bid that is not above zero is refused', () {
+      const none = P2pWinningBid(amount: '0', address: buyer, signature: 's');
+      expect(() => describeSaleStart(fees: FakeP2pFeeQuoter(), now: now, listing: won(), winner: none), throwsA(fails(P2pChainFailure.priceZero)));
+    });
+
+    test('Sale_Cancel: from the seller to the buyer the sale was started for, moving 0', () async {
+      final tx = await describeSaleCancel(fees: FakeP2pFeeQuoter(), now: now, listing: pending());
+      expect([tx.type, tx.function], [5, 'Sale_Cancel()']);
+      expect([tx.fromAddress, tx.toAddress, tx.amount], [seller, buyer, '0']);
+      expect(tx.data, {
+        'Function': 'Sale_Cancel()',
+        'ContractUID': '0b6ea1abd1da425fab80029f8f20944c:1794213169',
+        'KeySign': 'KlMnOpQrSt1794843000',
+      });
+    });
+
+    test('Sale_Cancel: a listing with no buyer has no sale to cancel', () {
+      expect(
+        () => describeSaleCancel(fees: FakeP2pFeeQuoter(), now: now, listing: pending({'winner_address': null})),
+        throwsA(fails(P2pChainFailure.noWinner)),
       );
     });
   });

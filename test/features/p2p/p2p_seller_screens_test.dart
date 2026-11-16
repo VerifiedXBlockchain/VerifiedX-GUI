@@ -502,6 +502,112 @@ void main() {
       expect(text(tester, 'p2p:listing_cancel_error'), 'The sale has started, so the listing cannot be withdrawn. Cancel the sale instead.');
     });
   });
+
+  group('a sale', () {
+    const buyer = 'xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+    late Map<String, dynamic> me;
+
+    setUp(() {
+      me = p2pFixture('me');
+      service.onMe = (_) => P2pMe(
+            shop: demoShop(),
+            selling: [
+              // Listing 4: a winner at 5 VFX, with the winning bid's signature.
+              P2pSellingListing.fromJson((me['selling'] as List).first as Map<String, dynamic>),
+              P2pSellingListing(listing: listing('listing_sale_pending')),
+              P2pSellingListing(listing: listing('listing_auction', {'id': 6, 'state': 'unfulfilled', 'smart_contract_uid': harbor})),
+            ],
+          );
+    });
+
+    testWidgets('a listing with a winner leads the list, with its 48 hours counting down', (tester) async {
+      await pump(tester);
+      expect(text(tester, 'p2p:selling_group:needsYou'), 'Start the sale · 1');
+      expect(text(tester, 'p2p:selling_group:waitingForBuyer'), 'Waiting for the buyer · 1');
+      final row = find.byKey(const Key('p2p:selling_row:4'));
+      // Won 16:20 on the 16th; it is 17:00: 47 hours 20 minutes left.
+      expect(find.descendant(of: row, matching: find.textContaining('1d 23h')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:sale_start:4')), findsOneWidget);
+      // Until the sale starts the listing can still be withdrawn.
+      expect(find.byKey(const Key('p2p:listing_cancel:4')), findsOneWidget);
+    });
+
+    testWidgets('is started: the Sale_Start carries the winning bid, and is recorded as a dry run', (tester) async {
+      service.onSaleStart = (id, tx) => listing('listing_sale_pending', {'id': id});
+      await pump(tester);
+      await tester.tap(find.byKey(const Key('p2p:sale_start:4')));
+      await settle(tester);
+
+      expect(find.byKey(const Key('p2p:step_dry_run')), findsOneWidget);
+      final tx = find.byKey(const Key('p2p:step_transaction'));
+      expect(find.descendant(of: tx, matching: find.text('Sale_Start()')), findsOneWidget);
+      // To the winner, in full.
+      expect(find.descendant(of: tx, matching: find.text(buyer)), findsWidgets);
+      expect(service.dryRuns, isEmpty);
+
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settle(tester);
+      expect(service.calls, contains('dryRunSaleStart(4, token: token-for-$owner)'));
+      final sent = service.dryRuns.single;
+      expect([sent.fromAddress, sent.toAddress, sent.amount], [owner, buyer, '0']);
+      expect(sent.data['SoldFor'], 5);
+      expect(sent.data['KeySign'], 'KlMnOpQrSt1794843000');
+      expect(sent.data['BidSignature'], ((me['selling'] as List).first as Map)['winning_bid']['signature']);
+      expect(find.text('Recorded as a dry run'), findsOneWidget);
+    });
+
+    testWidgets('cannot be started when the winning bid is not in the seller\'s list', (tester) async {
+      await pump(tester);
+      // The registry's list changes between the screen's read and the step's.
+      service.onMe = (_) => P2pMe(shop: demoShop());
+      await tester.tap(find.byKey(const Key('p2p:sale_start:4')));
+      await settle(tester);
+      expect(text(tester, 'p2p:step_error'), 'The winning bid for this listing could not be read. Refresh and try again.');
+      expect(find.byKey(const Key('p2p:step_transaction')), findsNothing);
+    });
+
+    testWidgets('a refusal to start it is shown in words', (tester) async {
+      service.dryRunError = const P2pError(status: 409, code: 'listing_not_awaiting_sale_start', message: 'The listing is unfulfilled.');
+      await pump(tester);
+      await tester.tap(find.byKey(const Key('p2p:sale_start:4')));
+      await settle(tester);
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settle(tester);
+      expect(text(tester, 'p2p:step_error'), 'This listing is not waiting for its sale to start.');
+    });
+
+    testWidgets('once started, is cancelled with a Sale_Cancel after a warning', (tester) async {
+      service.onSaleCancel = (id, tx) => listing('listing_sale_pending', {'state': 'cancelled'});
+      await pump(tester);
+      // A started sale cannot be withdrawn as a listing.
+      expect(find.byKey(const Key('p2p:listing_cancel:3')), findsNothing);
+      await tester.tap(find.byKey(const Key('p2p:sale_cancel:3')));
+      await settle(tester);
+
+      expect(text(tester, 'p2p:step_warning'), 'The buyer has not paid. Cancelling releases the NFT so it can be listed again.');
+      final tx = find.byKey(const Key('p2p:step_transaction'));
+      expect(find.descendant(of: tx, matching: find.text('Sale_Cancel()')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settle(tester);
+      expect(service.calls, contains('dryRunSaleCancel(3, token: token-for-$owner)'));
+      expect(service.dryRuns.single.data, {
+        'Function': 'Sale_Cancel()',
+        'ContractUID': cube,
+        'KeySign': 'KlMnOpQrSt1794843000',
+      });
+    });
+
+    testWidgets('never started in its 48 hours: the NFT can be listed again', (tester) async {
+      await pump(tester);
+      await tester.tap(find.byKey(const Key('p2p:listing_again:6')));
+      await settle(tester);
+      // The listing form, for that NFT.
+      expect(find.byKey(const Key('p2p:list_submit')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:list_change')), findsOneWidget);
+      expect(find.text('Harbor at Dusk'), findsWidgets);
+    });
+  });
 }
 
 /// Lets futures (reads, sign-in, the dialog's route) run to their end.
