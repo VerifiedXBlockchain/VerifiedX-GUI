@@ -1,5 +1,7 @@
 import '../models/p2p_listing.dart';
 import '../models/p2p_me.dart';
+import '../models/p2p_owned_nft.dart';
+import '../models/p2p_shop.dart';
 import 'p2p_amount.dart';
 import 'p2p_rules.dart';
 
@@ -368,4 +370,252 @@ P2pAmount? p2pOwnBid(P2pListing listing, String address) {
 /// a sale at the winning bid's amount.
 bool p2pSaleAsksMoreThanBid(P2pAmount price, P2pAmount? bid) {
   return bid != null && price > bid;
+}
+
+/// Where a shop URL stands as it is typed.
+enum P2pShopUrlStatus {
+  empty,
+
+  /// Core's URL rule refuses it, or the registry does.
+  invalid,
+
+  /// The shop's own URL, when editing.
+  unchanged,
+
+  /// Typing has not settled, or the registry's answer is not in.
+  checking,
+  free,
+  taken,
+}
+
+/// [typed] is what the field holds, [settled] what it held when typing last
+/// paused, [answer] the registry's availability for [settled] (null until it
+/// is in), and [current] the shop's own URL when editing.
+P2pShopUrlStatus p2pShopUrlStatus(String typed, String settled, P2pUrlAvailability? answer, [String? current]) {
+  final url = normalizeP2pShopUrl(typed);
+  if (url.isEmpty) {
+    return P2pShopUrlStatus.empty;
+  }
+  if (!isValidP2pShopUrl(typed)) {
+    return P2pShopUrlStatus.invalid;
+  }
+  if (current != null && url == normalizeP2pShopUrl(current)) {
+    return P2pShopUrlStatus.unchanged;
+  }
+  if (normalizeP2pShopUrl(settled) != url || answer == null || answer.normalized != url) {
+    return P2pShopUrlStatus.checking;
+  }
+  if (answer.reason == 'invalid') {
+    return P2pShopUrlStatus.invalid;
+  }
+  return answer.available ? P2pShopUrlStatus.free : P2pShopUrlStatus.taken;
+}
+
+enum P2pListingFieldError { required, format, decimals, belowFloor, belowReserve, belowStart, past, beforeStart }
+
+/// A new listing's prices and dates as typed, checked by the shop's rules: a
+/// buy-now price or an auction (or both); starting bid ≤ reserve ≤ buy-now;
+/// it closes after it opens and in the future.
+class P2pListingFormCheck {
+  /// By field: `buyNow`, `floor`, `reserve`, `endsAt`.
+  final Map<String, P2pListingFieldError> errors;
+
+  /// No price at all: neither a buy-now price nor an auction.
+  final bool noPrice;
+
+  /// The prices, once nothing is wrong with them.
+  final String? buyNowPrice;
+  final String? floorPrice;
+  final String? reservePrice;
+
+  /// Whether the listing can be posted.
+  final bool ok;
+
+  const P2pListingFormCheck({
+    required this.errors,
+    required this.noPrice,
+    required this.ok,
+    this.buyNowPrice,
+    this.floorPrice,
+    this.reservePrice,
+  });
+
+  factory P2pListingFormCheck.of({
+    required String buyNow,
+    required bool auction,
+    required String floor,
+    required String reserve,
+    required DateTime? startsAt,
+    required DateTime? endsAt,
+    required DateTime now,
+  }) {
+    final errors = <String, P2pListingFieldError>{};
+    P2pAmount? price(String key, String text) {
+      if (text.trim().isEmpty) {
+        return null;
+      }
+      final input = P2pAmountInput.read(text);
+      if (input.amount != null) {
+        return input.amount;
+      }
+      errors[key] = input.error == P2pAmountInputError.decimals ? P2pListingFieldError.decimals : P2pListingFieldError.format;
+      return null;
+    }
+
+    final buyNowAmount = price('buyNow', buyNow);
+    final floorAmount = auction ? price('floor', floor) : null;
+    final reserveAmount = auction ? price('reserve', reserve) : null;
+    if (auction && floorAmount == null && !errors.containsKey('floor')) {
+      errors['floor'] = P2pListingFieldError.required;
+    }
+    final noPrice = !auction && buyNowAmount == null && !errors.containsKey('buyNow');
+
+    if (floorAmount != null && reserveAmount != null && reserveAmount < floorAmount) {
+      errors['reserve'] = P2pListingFieldError.belowFloor;
+    }
+    if (buyNowAmount != null && !errors.containsKey('reserve') && reserveAmount != null && buyNowAmount < reserveAmount) {
+      errors['buyNow'] = P2pListingFieldError.belowReserve;
+    } else if (buyNowAmount != null && floorAmount != null && buyNowAmount < floorAmount) {
+      errors['buyNow'] = P2pListingFieldError.belowStart;
+    }
+
+    final starts = startsAt ?? now;
+    if (endsAt == null) {
+      errors['endsAt'] = P2pListingFieldError.required;
+    } else if (!endsAt.isAfter(starts)) {
+      errors['endsAt'] = P2pListingFieldError.beforeStart;
+    } else if (!endsAt.isAfter(now)) {
+      errors['endsAt'] = P2pListingFieldError.past;
+    }
+
+    final ok = errors.isEmpty && !noPrice;
+    return P2pListingFormCheck(
+      errors: errors,
+      noPrice: noPrice,
+      ok: ok,
+      buyNowPrice: ok ? buyNowAmount?.toDecimalString() : null,
+      floorPrice: ok ? floorAmount?.toDecimalString() : null,
+      reservePrice: ok ? reserveAmount?.toDecimalString() : null,
+    );
+  }
+}
+
+/// What a seller can do with a listing of theirs.
+class P2pSellerActions {
+  /// `Sale_Start()` for the winner.
+  final bool startSale;
+
+  /// Withdraw the listing, before its sale starts.
+  final bool cancelListing;
+
+  /// Change its prices and dates: only while live with no bids.
+  final bool editListing;
+
+  /// `Sale_Cancel()`, once the sale has started.
+  final bool cancelSale;
+
+  /// List the NFT again, after a sale that was never started.
+  final bool listAgain;
+
+  const P2pSellerActions({
+    this.startSale = false,
+    this.cancelListing = false,
+    this.editListing = false,
+    this.cancelSale = false,
+    this.listAgain = false,
+  });
+
+  factory P2pSellerActions.of(P2pListing listing) {
+    switch (listing.state) {
+      case P2pListingState.live:
+        return P2pSellerActions(cancelListing: true, editListing: listing.bidCount == 0);
+      case P2pListingState.awaitingSaleStart:
+        return const P2pSellerActions(startSale: true, cancelListing: true);
+      case P2pListingState.salePending:
+        return const P2pSellerActions(cancelSale: true);
+      case P2pListingState.unfulfilled:
+        return const P2pSellerActions(listAgain: true);
+      default:
+        return const P2pSellerActions();
+    }
+  }
+
+  bool get any => startSale || cancelListing || editListing || cancelSale || listAgain;
+}
+
+/// How a seller's listings are grouped, by what they need.
+enum P2pSellingGroup { needsYou, live, waitingForBuyer, sold, closed }
+
+P2pSellingGroup p2pSellingGroupOf(P2pListingState state) {
+  switch (state) {
+    case P2pListingState.awaitingSaleStart:
+      return P2pSellingGroup.needsYou;
+    case P2pListingState.live:
+      return P2pSellingGroup.live;
+    case P2pListingState.salePending:
+      return P2pSellingGroup.waitingForBuyer;
+    case P2pListingState.sold:
+      return P2pSellingGroup.sold;
+    default:
+      return P2pSellingGroup.closed;
+  }
+}
+
+/// The seller's listings by group, a sale to start first; empty groups are
+/// left out.
+Map<P2pSellingGroup, List<P2pSellingListing>> p2pGroupSelling(List<P2pSellingListing> selling) {
+  final groups = <P2pSellingGroup, List<P2pSellingListing>>{};
+  for (final group in P2pSellingGroup.values) {
+    final items = selling.where((s) => p2pSellingGroupOf(s.listing.state) == group).toList();
+    if (items.isNotEmpty) {
+      groups[group] = items;
+    }
+  }
+  return groups;
+}
+
+/// Why an NFT of this wallet cannot be listed by an address.
+enum P2pNftBlock {
+  /// Another account of the wallet owns it.
+  notYours,
+
+  /// A token or a vBTC vault.
+  unsellable,
+
+  /// Its mint is not on chain yet.
+  notMinted,
+
+  /// It is in an active listing already.
+  listed,
+}
+
+/// Why [address] cannot list [nft], or null when it can. [listed] is the
+/// registry's set of this wallet's NFTs in active listings. The registry
+/// decides in the end (`nft_not_listable`, `nft_already_listed`,
+/// `not_nft_owner`); this keeps what it would refuse from being offered.
+P2pNftBlock? p2pNftBlock(P2pOwnedNft nft, {required String address, required Set<String> listed}) {
+  if (nft.owner != address) {
+    return P2pNftBlock.notYours;
+  }
+  if (!nft.isSellable) {
+    return P2pNftBlock.unsellable;
+  }
+  if (!nft.isMinted) {
+    return P2pNftBlock.notMinted;
+  }
+  if (listed.contains(nft.id)) {
+    return P2pNftBlock.listed;
+  }
+  return null;
+}
+
+/// Where a date-and-time picker opens for [initial], at [now]: on this
+/// computer's clock, and not before today. A picker reads a `DateTime`'s own
+/// date and hour, so a UTC time (a listing's are) must be made local first,
+/// or accepting it unchanged would move it by the zone's offset.
+DateTime p2pPickerStart(DateTime initial, DateTime now) {
+  final localNow = now.toLocal();
+  final today = DateTime(localNow.year, localNow.month, localNow.day);
+  final start = initial.toLocal();
+  return start.isBefore(today) ? today : start;
 }

@@ -32,3 +32,17 @@ class P2pPage<T> {
 
   bool get hasNext => next != null;
 }
+
+/// Every item of a paged list: reads page after page with [read] until the
+/// registry says there is no next one. [maxPages] bounds the reads, far
+/// above what any shop should hold.
+Future<List<T>> p2pReadAllPages<T>(Future<P2pPage<T>> Function(int page) read, {int maxPages = 20}) async {
+  final items = <T>[];
+  int? page = 1;
+  for (var reads = 0; page != null && reads < maxPages; reads++) {
+    final result = await read(page);
+    items.addAll(result.results);
+    page = result.next;
+  }
+  return items;
+}

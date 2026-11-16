@@ -18,6 +18,7 @@ import '../../../core/web_router.gr.dart';
 import '../../root/web_dashboard_container.dart';
 
 import '../../../core/base_component.dart';
+import '../../p2p/providers/p2p_sale_notices_provider.dart';
 import '../../../core/providers/session_provider.dart';
 import '../../../core/theme/pretty_icons.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -328,6 +329,8 @@ class RootContainerSideNavList extends BaseComponent {
               iconType: PrettyIconType.custom,
               icon: Icons.storefront,
               isNew: true,
+              // Sales of this wallet's shops waiting to be started.
+              badgeCount: ref.watch(p2pSaleNoticesProvider).length,
               onPressed: () {
                 if (inDrawer) {
                   rootScaffoldKey.currentState!.closeDrawer();

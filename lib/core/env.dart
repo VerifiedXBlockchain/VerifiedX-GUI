@@ -205,6 +205,18 @@ class Env {
   /// changes only by a reviewed code change once the hold is lifted.
   static const bool p2pBroadcast = false;
 
+  /// What a P2P shop's on-chain record names as its host: the web wallet's
+  /// origin and Spyglass's P2P API, per network (`ThirdPartyBaseURL` and
+  /// `ThirdPartyAPIURL`, the two values the web wallet publishes).
+  static String get p2pShopWalletUrl {
+    if (_isTestnet) return 'https://wallet-testnet.verifiedx.io';
+    return 'https://wallet.verifiedx.io';
+  }
+
+  static String get p2pShopApiUrl {
+    return '$explorerApiBaseUrl/p2p/';
+  }
+
   static String get shopBaseUrl {
     return "https://wallet.verifiedx.io";
   }

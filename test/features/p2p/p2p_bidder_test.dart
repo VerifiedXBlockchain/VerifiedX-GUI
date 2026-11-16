@@ -311,6 +311,8 @@ void main() {
 
     test('all that is asked of Core is a message signature and a fee quote', () {
       // Every class that talks to the node, and the one route each uses.
+      // (The "List an NFT" picker reads the wallet's NFTs through the app's
+      // own NFT service, outside this feature: a read.)
       final nodeServices = <String, String>{};
       for (final file in sources()) {
         final source = file.readAsStringSync();

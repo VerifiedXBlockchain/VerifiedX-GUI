@@ -35,6 +35,7 @@ import '../utils.dart';
 import '../../features/chat/providers/chat_notification_provider.dart';
 import '../../features/dst/providers/listed_nfts_provider.dart';
 import '../../features/p2p/providers/p2p_listed_nfts_provider.dart';
+import '../../features/p2p/providers/p2p_sale_notices_provider.dart';
 import '../../features/dst/services/dst_service.dart';
 import '../../features/remote_info/components/snapshot_downloader.dart';
 import '../../features/remote_info/models/remote_info.dart';
@@ -600,6 +601,7 @@ class SessionProvider extends StateNotifier<SessionModel> {
       ref.read(draftsSmartContractProvider.notifier).load();
       ref.read(listedNftsProvider.notifier).refresh();
       ref.read(p2pListedNftsProvider.notifier).refresh();
+      ref.read(p2pSaleNoticesProvider.notifier).poll();
       ref.read(tokenListProvider.notifier).reloadCurrentPage();
     }
 

@@ -49,6 +49,10 @@ class P2pChainStepDialog extends ConsumerStatefulWidget {
   /// What the step is called once it is done: "your purchase".
   final String doneBody;
 
+  /// What the person should know before agreeing to a step that takes
+  /// something away (deleting a shop, cancelling a sale).
+  final String? warning;
+
   const P2pChainStepDialog({
     super.key,
     required this.title,
@@ -56,6 +60,7 @@ class P2pChainStepDialog extends ConsumerStatefulWidget {
     required this.describe,
     required this.carryOut,
     required this.doneBody,
+    this.warning,
   });
 
   /// Resolves true when the step was carried out.
@@ -65,11 +70,19 @@ class P2pChainStepDialog extends ConsumerStatefulWidget {
     required Future<P2pTxDescription> Function() describe,
     required Future<void> Function(P2pTxDescription tx) carryOut,
     required String doneBody,
+    String? warning,
   }) async {
     final done = await showDialog<bool>(
       context: rootNavigatorKey.currentContext!,
       barrierDismissible: false,
-      builder: (_) => P2pChainStepDialog(title: title, rows: rows, describe: describe, carryOut: carryOut, doneBody: doneBody),
+      builder: (_) => P2pChainStepDialog(
+        title: title,
+        rows: rows,
+        describe: describe,
+        carryOut: carryOut,
+        doneBody: doneBody,
+        warning: warning,
+      ),
     );
     return done == true;
   }
@@ -110,6 +123,11 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
     } on P2pChainError catch (e) {
       _failed(e);
     } on P2pError catch (e) {
+      _failed(e);
+    } on P2pSigningError catch (e) {
+      // A step built from what only the signed-in owner may read.
+      _failed(e);
+    } on P2pSignInMismatch catch (e) {
       _failed(e);
     }
   }
@@ -177,6 +195,14 @@ class _P2pChainStepDialogState extends ConsumerState<P2pChainStepDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           for (final row in widget.rows) _row(row.label, row.value, mono: row.mono),
+          if (widget.warning != null) ...[
+            const SizedBox(height: 10),
+            Text(
+              widget.warning!,
+              key: const Key('p2p:step_warning'),
+              style: TextStyle(color: AppColors.getSanguine(ColorShade.s50), fontSize: 13, height: 1.35),
+            ),
+          ],
           if (tx != null) ...[
             const SizedBox(height: 14),
             _transaction(l10n, tx),

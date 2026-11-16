@@ -105,6 +105,8 @@ P2pChainSteps p2pChainSteps(P2pChainStepsRef ref) {
     service: ref.watch(p2pServiceProvider),
     session: ref.watch(p2pSessionProvider),
     fees: ref.watch(p2pFeeQuoterProvider),
+    walletUrl: Env.p2pShopWalletUrl,
+    apiUrl: Env.p2pShopApiUrl,
   );
 }
 

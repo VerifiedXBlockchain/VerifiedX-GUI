@@ -7,6 +7,7 @@ import 'package:rbx_wallet/features/p2p/chain/p2p_chain_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_bid_summary.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_me.dart';
 import 'package:rbx_wallet/features/p2p/screens/p2p_listing_screen.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_signer.dart';
 
@@ -162,11 +163,68 @@ void main() {
     });
   });
 
+  group('the seller on their own listing', () {
+    testWidgets('live with no bids: can change it or withdraw it', (tester) async {
+      await pump(tester, 1, address: seller);
+      expect(noteText(tester), 'Your listing is live. When there is a winner, start the sale here.');
+      expect(find.byKey(const Key('p2p:listing_edit:1')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:listing_cancel:1')), findsOneWidget);
+    });
+
+    testWidgets('live with a bid: can only withdraw it', (tester) async {
+      await pump(tester, 2, address: seller);
+      expect(find.byKey(const Key('p2p:listing_edit:2')), findsNothing);
+      expect(find.byKey(const Key('p2p:listing_cancel:2')), findsOneWidget);
+    });
+
+    testWidgets('with a winner: is told who won and starts the sale from here', (tester) async {
+      final me = p2pFixture('me');
+      final won = (me['selling'] as List).first as Map<String, dynamic>;
+      service.listingsById[4] = P2pListing.fromJson(won);
+      service.onMe = (_) => P2pMe.fromJson(me);
+      service.onSaleStart = (id, tx) => P2pListing.fromJson({...p2pFixture('listing_sale_pending'), 'id': id});
+      await pump(tester, 4, address: seller);
+
+      expect(noteText(tester), 'xBidde…AAAAA won at 5 VFX. Start the sale to hand it over.');
+      await tester.tap(find.byKey(const Key('p2p:sale_start:4')));
+      await settleBid(tester);
+      expect(find.descendant(of: find.byKey(const Key('p2p:step_transaction')), matching: find.text('Sale_Start()')), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settleBid(tester);
+      expect(service.calls, contains('dryRunSaleStart(4, token: token-for-$seller)'));
+    });
+
+    testWidgets('once the sale is started: waits for the buyer, and can cancel the sale', (tester) async {
+      await pump(tester, 3, address: seller);
+      expect(noteText(tester), 'Sale started. Waiting for the buyer to complete the purchase.');
+      expect(find.byKey(const Key('p2p:sale_cancel:3')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:listing_cancel:3')), findsNothing);
+      // The seller is not offered the buyer's step.
+      expect(find.byKey(const Key('p2p:complete_purchase')), findsNothing);
+    });
+
+    testWidgets('sold: says what it sold for, and offers nothing more', (tester) async {
+      service.listingsById[1] = P2pListing.fromJson({...p2pFixture('listing_buy_now'), 'state': 'sold', 'sold_price': '5'});
+      await pump(tester, 1, address: seller);
+      expect(noteText(tester), 'Sold for 5 VFX.');
+      expect(find.byKey(const Key('p2p:listing_cancel:1')), findsNothing);
+    });
+
+    testWidgets('a sale never started can be listed again', (tester) async {
+      service.listingsById[1] = P2pListing.fromJson({...p2pFixture('listing_buy_now'), 'state': 'unfulfilled'});
+      await pump(tester, 1, address: seller);
+      expect(noteText(tester), 'The sale was not started within 48 hours of the win. You can list it again.');
+      expect(find.byKey(const Key('p2p:listing_again:1')), findsOneWidget);
+    });
+  });
+
   group('who cannot bid or buy is told why', () {
-    testWidgets('the seller', (tester) async {
+    testWidgets('the seller, who sees where the listing stands instead', (tester) async {
       await pump(tester, 2, address: seller);
       expect(find.text('Your listing'), findsOneWidget);
-      expect(noteText(tester), 'This is your listing. You cannot bid on it.');
+      expect(find.byKey(const Key('p2p:seller_panel')), findsOneWidget);
+      expect(noteText(tester), 'Bids are coming in. Prices and dates are locked now.');
       expect(find.byKey(const Key('p2p:bid_open')), findsNothing);
       expect(find.byKey(const Key('p2p:buy_open')), findsNothing);
     });

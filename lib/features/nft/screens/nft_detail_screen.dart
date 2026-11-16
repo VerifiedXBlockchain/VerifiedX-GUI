@@ -21,6 +21,8 @@ import '../../global_loader/global_loading_provider.dart';
 import '../../sc_property/models/sc_property.dart';
 
 import '../../../core/app_constants.dart';
+import '../../../core/app_router.gr.dart';
+import '../../../core/env.dart';
 import '../../../core/base_screen.dart';
 import '../../../core/breakpoints.dart';
 import '../../../core/components/badges.dart';
@@ -36,6 +38,8 @@ import '../../asset/asset_card.dart';
 import '../../asset/asset_thumbnail.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../encrypt/utils.dart';
+import '../../p2p/providers/p2p_browse_providers.dart';
+import '../../p2p/providers/p2p_seller_providers.dart';
 import '../../smart_contracts/components/sc_creator/common/help_button.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
 import '../../smart_contracts/components/sc_creator/modals/code_modal.dart';
@@ -869,6 +873,32 @@ class NftDetailScreen extends BaseScreen {
                               return CodeModal(nft.code!);
                             },
                           );
+                        },
+                      ),
+                    ),
+
+                  // The P2P shop's "List for sale": opens My shop with this
+                  // NFT chosen. The shop's own rules say whether the selected
+                  // account can list it.
+                  if (Env.p2pEnabled && !nft.isToken)
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: AppButton(
+                        key: const Key('nft:p2p_list'),
+                        label: AppLocalizations.of(context).p2pListForSale,
+                        icon: Icons.storefront,
+                        variant: AppColorVariant.Primary,
+                        onPressed: () {
+                          final tabs = AutoTabsRouter.of(context);
+                          ref.read(p2pListRequestProvider.notifier).state =
+                              P2pListRequest(
+                            nftId: nft.id,
+                            address: ref.read(p2pViewerAddressProvider),
+                            at: DateTime.now(),
+                          );
+                          Navigator.of(context).pop();
+                          tabs.navigate(const P2pTabRouter(
+                              children: [P2pMyShopScreenRoute()]));
                         },
                       ),
                     ),

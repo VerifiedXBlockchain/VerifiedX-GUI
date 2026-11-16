@@ -35,6 +35,10 @@ String p2pErrorText(AppLocalizations l10n, Object error) {
         return l10n.p2pChainErrorRoyaltyZero;
       case P2pChainFailure.feeUnavailable:
         return l10n.p2pChainErrorFee;
+      case P2pChainFailure.shopFields:
+        return l10n.p2pChainErrorShopFields;
+      case P2pChainFailure.noWinningBid:
+        return l10n.p2pChainErrorNoWinningBid;
     }
   }
   if (error is! P2pError) {
@@ -130,8 +134,46 @@ String? _knownCode(AppLocalizations l10n, P2pError error) {
       return l10n.p2pErrorSaleOnChain;
     case 'listing_not_sale_pending':
       return l10n.p2pErrorListingNotSalePending;
+    case 'listing_not_awaiting_sale_start':
+      return l10n.p2pErrorListingNotAwaitingSaleStart;
     case 'nft_moved':
       return l10n.p2pErrorNftMoved;
+
+    // The seller's shop.
+    case 'url_taken':
+      return l10n.p2pErrorUrlTaken;
+    case 'not_shop_owner':
+      return l10n.p2pErrorNotShopOwner;
+    case 'shop_on_chain':
+      return l10n.p2pErrorShopOnChain;
+    case 'shop_deleted':
+      return l10n.p2pErrorShopDeleted;
+    case 'unique_id_taken':
+      return l10n.p2pErrorUniqueIdTaken;
+
+    // Collections and listings.
+    case 'default_collection':
+      return l10n.p2pErrorDefaultCollection;
+    case 'collection_has_active_listings':
+      return l10n.p2pErrorCollectionHasListings;
+    case 'price_required':
+      return l10n.p2pErrorPriceRequired;
+    case 'nft_not_found':
+      return l10n.p2pErrorNftNotFound;
+    case 'nft_not_listable':
+      return l10n.p2pErrorNftNotListable;
+    case 'nft_already_listed':
+      return l10n.p2pErrorNftAlreadyListed;
+    case 'not_nft_owner':
+      return l10n.p2pErrorNotNftOwner;
+    case 'try_again':
+      return l10n.p2pErrorTryAgain;
+    case 'listing_has_bids':
+      return l10n.p2pErrorListingHasBids;
+    case 'listing_closed':
+      return l10n.p2pErrorListingClosed;
+    case 'sale_pending':
+      return l10n.p2pErrorSalePending;
   }
   return null;
 }

@@ -1,4 +1,5 @@
 import '../models/p2p_listing.dart';
+import '../models/p2p_shop.dart';
 import '../models/p2p_tx_description.dart';
 import '../services/p2p_service.dart';
 import '../services/p2p_session.dart';
@@ -27,6 +28,35 @@ abstract class P2pChainSteps {
   /// stands. Throws a `P2pError`, a `P2pSigningError` or a
   /// `P2pSignInMismatch`.
   Future<P2pListing> completePurchase(P2pListing listing, P2pTxDescription tx);
+
+  /// The `Sale_Start()` that hands [listing] to its winner at the winning
+  /// bid. The bid, with its signature, is read from the seller's own list.
+  /// Throws a [P2pChainError] when there is no winning bid to start from.
+  Future<P2pTxDescription> describeStartSale(P2pListing listing);
+
+  /// Carries out the described `Sale_Start()` and returns the listing as it
+  /// now stands (`salePending`).
+  Future<P2pListing> startSale(P2pListing listing, P2pTxDescription tx);
+
+  /// The `Sale_Cancel()` that calls off [listing]'s started sale.
+  Future<P2pTxDescription> describeSaleCancellation(P2pListing listing);
+
+  /// Carries out the described `Sale_Cancel()` and returns the listing as it
+  /// now stands (`cancelled`).
+  Future<P2pListing> cancelSale(P2pListing listing, P2pTxDescription tx);
+
+  /// The `DecShopCreate()` that registers a shop for [owner].
+  Future<P2pTxDescription> describeRegisterShop(String owner, P2pShopValues values);
+
+  /// The `DecShopUpdate()` that gives [shop] a new name, URL or description.
+  Future<P2pTxDescription> describeUpdateShop(P2pShop shop, P2pShopValues values);
+
+  /// The `DecShopDelete()` that removes [shop].
+  Future<P2pTxDescription> describeDeleteShop(P2pShop shop);
+
+  /// Carries out a described shop step (create, update or delete) and
+  /// returns the shop as it now stands.
+  Future<P2pShop> sendShopStep(P2pTxDescription tx);
 }
 
 /// Every step as a dry run: the unsigned description goes to the registry's
@@ -40,14 +70,23 @@ class P2pDryRunChainSteps implements P2pChainSteps {
   final P2pFeeQuoter _fees;
   final DateTime Function() _now;
 
+  /// What a shop's record names as its host (`Env.p2pShopWalletUrl`,
+  /// `Env.p2pShopApiUrl`).
+  final String _walletUrl;
+  final String _apiUrl;
+
   P2pDryRunChainSteps({
     required P2pService service,
     required P2pSession session,
     required P2pFeeQuoter fees,
+    required String walletUrl,
+    required String apiUrl,
     DateTime Function()? now,
   })  : _service = service,
         _session = session,
         _fees = fees,
+        _walletUrl = walletUrl,
+        _apiUrl = apiUrl,
         _now = now ?? DateTime.now;
 
   @override
@@ -68,5 +107,58 @@ class P2pDryRunChainSteps implements P2pChainSteps {
       tx.fromAddress,
       (token) => _service.dryRunSaleComplete(token: token, listingId: listing.id, tx: tx),
     );
+  }
+
+  @override
+  Future<P2pTxDescription> describeStartSale(P2pListing listing) async {
+    // Only the seller's own list carries the winning bid's signature.
+    final me = await _session.withToken(listing.sellerAddress, _service.me);
+    final mine = me.selling.where((s) => s.listing.id == listing.id);
+    final winner = mine.isEmpty ? null : mine.first.winningBid;
+    if (winner == null) {
+      throw const P2pChainError(P2pChainFailure.noWinningBid);
+    }
+    return describeSaleStart(fees: _fees, now: _now(), listing: listing, winner: winner);
+  }
+
+  @override
+  Future<P2pListing> startSale(P2pListing listing, P2pTxDescription tx) {
+    return _session.withToken(
+      tx.fromAddress,
+      (token) => _service.dryRunSaleStart(token: token, listingId: listing.id, tx: tx),
+    );
+  }
+
+  @override
+  Future<P2pTxDescription> describeSaleCancellation(P2pListing listing) {
+    return describeSaleCancel(fees: _fees, now: _now(), listing: listing);
+  }
+
+  @override
+  Future<P2pListing> cancelSale(P2pListing listing, P2pTxDescription tx) {
+    return _session.withToken(
+      tx.fromAddress,
+      (token) => _service.dryRunSaleCancel(token: token, listingId: listing.id, tx: tx),
+    );
+  }
+
+  @override
+  Future<P2pTxDescription> describeRegisterShop(String owner, P2pShopValues values) {
+    return describeShopCreate(fees: _fees, now: _now(), owner: owner, values: values, walletUrl: _walletUrl, apiUrl: _apiUrl);
+  }
+
+  @override
+  Future<P2pTxDescription> describeUpdateShop(P2pShop shop, P2pShopValues values) {
+    return describeShopUpdate(fees: _fees, now: _now(), shop: shop, values: values, walletUrl: _walletUrl, apiUrl: _apiUrl);
+  }
+
+  @override
+  Future<P2pTxDescription> describeDeleteShop(P2pShop shop) {
+    return describeShopDelete(fees: _fees, now: _now(), shop: shop);
+  }
+
+  @override
+  Future<P2pShop> sendShopStep(P2pTxDescription tx) {
+    return _session.withToken(tx.fromAddress, (token) => _service.dryRunDstr(token: token, tx: tx));
   }
 }

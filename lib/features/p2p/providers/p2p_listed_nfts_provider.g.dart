@@ -6,7 +6,7 @@ part of 'p2p_listed_nfts_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$p2pListedNftsHash() => r'b31ee23b748e3bb5b0eb4e46c25c06c717a644f4';
+String _$p2pListedNftsHash() => r'b7415732c6753b02aa67fc68a100e9ef5f3b9383';
 
 /// The ids of this wallet's NFTs that are in an active listing of the P2P
 /// registry, for the "Listed" badge. One read of Spyglass per local address

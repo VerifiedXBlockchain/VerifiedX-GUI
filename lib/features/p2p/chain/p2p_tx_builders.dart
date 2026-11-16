@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import '../models/p2p_listing.dart';
+import '../models/p2p_me.dart';
+import '../models/p2p_shop.dart';
 import '../models/p2p_tx_description.dart';
 import '../utils/p2p_amount.dart';
+import '../utils/p2p_rules.dart';
 import 'p2p_chain_error.dart';
 import 'p2p_fee_quoter.dart';
 
@@ -164,17 +167,243 @@ Future<P2pTxDescription> describeSaleComplete({
     'Transactions': payments,
     'KeySign': listing.purchaseKey,
   };
-  final zero = P2pAmount.fromUnits(BigInt.zero);
-  final fee = await fees.quote(from: buyer, to: listing.sellerAddress, amount: zero, type: p2pTxNftSale, data: data, timestamp: timestamp);
-  return P2pTxDescription(
+  return _describe(
+    fees: fees,
+    timestamp: timestamp,
     type: p2pTxNftSale,
-    function: function,
-    fromAddress: buyer,
-    toAddress: listing.sellerAddress,
-    amount: zero.toDecimalString(),
+    from: buyer,
+    to: listing.sellerAddress,
+    amount: P2pAmount.fromUnits(BigInt.zero),
+    data: data,
+  );
+}
+
+/// `Sale_Start()`: from the seller to the winner, moving 0, carrying the
+/// winner's bid (`SoldFor`, `BidSignature`) and the listing's purchase key.
+/// Core checks the bid's signature over `{KeySign}_{SoldFor × 1e8}_{NextOwner}`
+/// and locks the contract to the winner at that price. `Locators` is "NA":
+/// a description asks no beacon to carry the NFT's media. Throws a
+/// [P2pChainError].
+Future<P2pTxDescription> describeSaleStart({
+  required P2pFeeQuoter fees,
+  required DateTime now,
+  required P2pListing listing,
+  required P2pWinningBid winner,
+}) {
+  final soldFor = P2pAmount.tryParse(winner.amount);
+  if (soldFor == null || !soldFor.isPositive) {
+    throw const P2pChainError(P2pChainFailure.priceZero);
+  }
+  return _describe(
+    fees: fees,
+    timestamp: now.millisecondsSinceEpoch ~/ 1000,
+    type: p2pTxNftSale,
+    from: listing.sellerAddress,
+    to: winner.address,
+    amount: P2pAmount.fromUnits(BigInt.zero),
+    data: {
+      'Function': 'Sale_Start()',
+      'ContractUID': listing.smartContractUid,
+      'NextOwner': winner.address,
+      'SoldFor': soldFor.toJsonNumber(),
+      'KeySign': listing.purchaseKey,
+      'BidSignature': winner.signature,
+      'Locators': 'NA',
+    },
+  );
+}
+
+/// `Sale_Cancel()`: from the seller to the buyer the sale was started for,
+/// moving 0. It releases the contract's lock, so the NFT can be listed
+/// again. The shape of Core's `CancelNFTSaleTX`. Throws a [P2pChainError].
+Future<P2pTxDescription> describeSaleCancel({
+  required P2pFeeQuoter fees,
+  required DateTime now,
+  required P2pListing listing,
+}) {
+  final buyer = listing.winnerAddress;
+  if (buyer == null) {
+    throw const P2pChainError(P2pChainFailure.noWinner);
+  }
+  return _describe(
+    fees: fees,
+    timestamp: now.millisecondsSinceEpoch ~/ 1000,
+    type: p2pTxNftSale,
+    from: listing.sellerAddress,
+    to: buyer,
+    amount: P2pAmount.fromUnits(BigInt.zero),
+    data: {
+      'Function': 'Sale_Cancel()',
+      'ContractUID': listing.smartContractUid,
+      'KeySign': listing.purchaseKey,
+    },
+  );
+}
+
+/// The description of a transaction with these fields, its fee quoted.
+Future<P2pTxDescription> _describe({
+  required P2pFeeQuoter fees,
+  required int timestamp,
+  required int type,
+  required String from,
+  required String to,
+  required P2pAmount amount,
+  required Map<String, dynamic> data,
+}) async {
+  final fee = await fees.quote(from: from, to: to, amount: amount, type: type, data: data, timestamp: timestamp);
+  return P2pTxDescription(
+    type: type,
+    function: data['Function'] as String,
+    fromAddress: from,
+    toAddress: to,
+    amount: amount.toDecimalString(),
     fee: fee.toDecimalString(),
     timestamp: timestamp,
     data: data,
+  );
+}
+
+// DSTR: DecShopCreate(), DecShopUpdate(), DecShopDelete()
+
+/// Core's TransactionType for a shop registration step.
+const int p2pTxDstr = 7;
+
+/// A shop's name, URL and description as its owner typed them.
+class P2pShopValues {
+  final String name;
+  final String url;
+  final String description;
+
+  const P2pShopValues({required this.name, required this.url, required this.description});
+}
+
+/// Core's `DecShop` record for a third-party hosted shop, as the web wallet
+/// sends it. Throws a [P2pChainError] when [values] are outside Core's
+/// limits.
+Map<String, dynamic> p2pDecShopRecord({
+  required String uniqueId,
+  required P2pShopValues values,
+  required String owner,
+  required String walletUrl,
+  required String apiUrl,
+}) {
+  final name = values.name.trim();
+  final description = values.description.trim();
+  if (checkP2pShopFields(name: name, url: values.url, description: description).isNotEmpty) {
+    throw const P2pChainError(P2pChainFailure.shopFields);
+  }
+  return {
+    'UniqueId': uniqueId,
+    'Name': name,
+    'DecShopURL': normalizeP2pShopUrl(values.url),
+    'ThirdPartyBaseURL': walletUrl,
+    'ThirdPartyAPIURL': apiUrl,
+    'Description': description,
+    'OwnerAddress': owner,
+    'HostingType': p2pShopHostingType,
+    'IP': 'NA',
+    'Port': 0,
+    'STUNServerGroup': 0,
+    'OriginalBlockHeight': 0,
+    'OriginalTXHash': null,
+    'LatestBlockHeight': 0,
+    'LatestTXHash': null,
+    'UpdateTimestamp': 0,
+    'AutoUpdateNetworkDNS': true,
+    'NeedsPublishToNetwork': true,
+    'IsOffline': false,
+    'IsPublished': true,
+    'CollectionCount': 0,
+    'ListingCount': 0,
+    'AuctionCount': 0,
+  };
+}
+
+/// `DecShopCreate()`: 10 VFX from the owner to `DecShop_Base`, with the new
+/// shop's record.
+Future<P2pTxDescription> describeShopCreate({
+  required P2pFeeQuoter fees,
+  required DateTime now,
+  required String owner,
+  required P2pShopValues values,
+  required String walletUrl,
+  required String apiUrl,
+  String Function(int length)? letters,
+}) {
+  final timestamp = now.millisecondsSinceEpoch ~/ 1000;
+  return _describe(
+    fees: fees,
+    timestamp: timestamp,
+    type: p2pTxDstr,
+    from: owner,
+    to: p2pDecShopBase,
+    amount: P2pAmount.parse(p2pShopCreateCost),
+    data: {
+      'Function': 'DecShopCreate()',
+      'DecShop': p2pDecShopRecord(
+        uniqueId: newP2pShopUniqueId(timestamp, letters),
+        values: values,
+        owner: owner,
+        walletUrl: walletUrl,
+        apiUrl: apiUrl,
+      ),
+    },
+  );
+}
+
+/// What changing [shop] at [now] moves: 1 VFX within 12 hours of its last
+/// change, else nothing.
+P2pAmount p2pShopUpdateAmount(P2pShop shop, DateTime now) {
+  final last = shop.updatedAt;
+  final paid = last != null && now.toUtc().difference(last) < p2pShopFreeUpdateAfter;
+  return paid ? P2pAmount.parse(p2pShopUpdateCost) : P2pAmount.fromUnits(BigInt.zero);
+}
+
+/// `DecShopUpdate()`: the shop's whole record again with its new name, URL
+/// and description, from its owner.
+Future<P2pTxDescription> describeShopUpdate({
+  required P2pFeeQuoter fees,
+  required DateTime now,
+  required P2pShop shop,
+  required P2pShopValues values,
+  required String walletUrl,
+  required String apiUrl,
+}) {
+  return _describe(
+    fees: fees,
+    timestamp: now.millisecondsSinceEpoch ~/ 1000,
+    type: p2pTxDstr,
+    from: shop.ownerAddress,
+    to: p2pDecShopBase,
+    amount: p2pShopUpdateAmount(shop, now),
+    data: {
+      'Function': 'DecShopUpdate()',
+      'DecShop': p2pDecShopRecord(
+        uniqueId: shop.uniqueId,
+        values: values,
+        owner: shop.ownerAddress,
+        walletUrl: walletUrl,
+        apiUrl: apiUrl,
+      ),
+    },
+  );
+}
+
+/// `DecShopDelete()`: 1 VFX from the owner, naming the shop by its
+/// `UniqueId`.
+Future<P2pTxDescription> describeShopDelete({
+  required P2pFeeQuoter fees,
+  required DateTime now,
+  required P2pShop shop,
+}) {
+  return _describe(
+    fees: fees,
+    timestamp: now.millisecondsSinceEpoch ~/ 1000,
+    type: p2pTxDstr,
+    from: shop.ownerAddress,
+    to: p2pDecShopBase,
+    amount: P2pAmount.parse(p2pShopDeleteCost),
+    data: {'Function': 'DecShopDelete()', 'UniqueId': shop.uniqueId},
   );
 }
 

@@ -3944,6 +3944,10 @@
   "@p2pChainErrorNoWinner": {
     "description": "P2P chain step error: the listing has no winner to build the step for."
   },
+  "p2pChainErrorNoWinningBid": "No se pudo leer la oferta ganadora de este listado. Actualiza e inténtalo de nuevo.",
+  "@p2pChainErrorNoWinningBid": {
+    "description": "P2P chain step error: the seller's list did not carry the winning bid needed to start the sale."
+  },
   "p2pChainErrorPriceZero": "El precio debe ser mayor que cero.",
   "@p2pChainErrorPriceZero": {
     "description": "P2P chain step error: the sale price is not above zero."
@@ -3955,6 +3959,10 @@
   "p2pChainErrorRoyaltyZero": "Con este precio la regalía se redondea a cero, y cada pago de la venta debe ser mayor que cero.",
   "@p2pChainErrorRoyaltyZero": {
     "description": "P2P chain step error: the royalty payment would be zero."
+  },
+  "p2pChainErrorShopFields": "El nombre, la dirección o la descripción de la tienda están fuera de los límites de la red.",
+  "@p2pChainErrorShopFields": {
+    "description": "P2P chain step error: the shop's fields do not meet Core's limits."
   },
   "p2pChainFee": "Comisión de red",
   "@p2pChainFee": {
@@ -4021,6 +4029,14 @@
   "@p2pChainRecording": {
     "description": "Confirm button label of a P2P chain step dialog while the dry run is being recorded."
   },
+  "p2pChainRowAddress": "Dirección",
+  "@p2pChainRowAddress": {
+    "description": "Summary row label in a P2P chain step dialog: the shop's vfx:// address."
+  },
+  "p2pChainRowBuyer": "Comprador",
+  "@p2pChainRowBuyer": {
+    "description": "Summary row label in a P2P chain step dialog: the buyer's address."
+  },
   "p2pChainRowNft": "NFT",
   "@p2pChainRowNft": {
     "description": "Summary row label in a P2P chain step dialog: the NFT's name."
@@ -4032,6 +4048,10 @@
   "p2pChainRowSeller": "Vendedor",
   "@p2pChainRowSeller": {
     "description": "Summary row label in a P2P chain step dialog: the seller's address."
+  },
+  "p2pChainRowShop": "Tienda",
+  "@p2pChainRowShop": {
+    "description": "Summary row label in a P2P chain step dialog: the shop's name."
   },
   "p2pChainTo": "Para",
   "@p2pChainTo": {
@@ -4083,6 +4103,76 @@
         "type": "String"
       }
     }
+  },
+  "p2pCollectionCreate": "Crear",
+  "@p2pCollectionCreate": {
+    "description": "Submit button of the P2P new-collection dialog."
+  },
+  "p2pCollectionDefault": "Predeterminada",
+  "@p2pCollectionDefault": {
+    "description": "Tag on a P2P shop's default collection."
+  },
+  "p2pCollectionDefaultStays": "La colección predeterminada se queda con la tienda",
+  "@p2pCollectionDefaultStays": {
+    "description": "Tooltip of the disabled delete button on a P2P shop's default collection."
+  },
+  "p2pCollectionDelete": "Eliminar colección",
+  "@p2pCollectionDelete": {
+    "description": "Tooltip and confirmation title for deleting a P2P shop collection."
+  },
+  "p2pCollectionDeleteBody": "¿Eliminar «{name}»? Una colección se puede eliminar cuando no tiene listados activos ni pendientes.",
+  "@p2pCollectionDeleteBody": {
+    "description": "Confirmation body for deleting a P2P shop collection.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pCollectionDescription": "Descripción",
+  "@p2pCollectionDescription": {
+    "description": "Label of the description field in the P2P collection dialog."
+  },
+  "p2pCollectionEdit": "Editar colección",
+  "@p2pCollectionEdit": {
+    "description": "Tooltip and dialog title for editing a P2P shop collection."
+  },
+  "p2pCollectionHidden": "Oculta",
+  "@p2pCollectionHidden": {
+    "description": "Tag on a P2P shop collection that does not show in the shop."
+  },
+  "p2pCollectionHide": "Ocultar en la tienda",
+  "@p2pCollectionHide": {
+    "description": "Tooltip of the button that hides a P2P shop collection."
+  },
+  "p2pCollectionListings": "{count} activos",
+  "@p2pCollectionListings": {
+    "description": "How many active listings a P2P shop collection has.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pCollectionName": "Nombre de la colección",
+  "@p2pCollectionName": {
+    "description": "Label of the name field in the P2P collection dialog."
+  },
+  "p2pCollectionNew": "Nueva colección",
+  "@p2pCollectionNew": {
+    "description": "Button and dialog title for creating a P2P shop collection."
+  },
+  "p2pCollectionSave": "Guardar",
+  "@p2pCollectionSave": {
+    "description": "Submit button of the P2P edit-collection dialog."
+  },
+  "p2pCollectionShow": "Mostrar en la tienda",
+  "@p2pCollectionShow": {
+    "description": "Tooltip of the button that shows a hidden P2P shop collection."
+  },
+  "p2pCollectionsTitle": "Colecciones",
+  "@p2pCollectionsTitle": {
+    "description": "Section heading of the shop owner's collections on the P2P My shop screen."
   },
   "p2pCopied": "Copiado al portapapeles",
   "@p2pCopied": {
@@ -4157,6 +4247,42 @@
   "@p2pDryRunBanner": {
     "description": "Banner body on every P2P shop screen while chain steps are dry runs. Follows the bold 'Dry run.' badge."
   },
+  "p2pEmailAdd": "Correos de ventas",
+  "@p2pEmailAdd": {
+    "description": "Button on the P2P My shop screen that opens the optional email prompt."
+  },
+  "p2pEmailBody": "Opcional. El registro de tiendas envía un correo a esta dirección cuando uno de tus listados tiene un ganador o se inicia una venta para ti. Se guarda con la dirección de esta cuenta.",
+  "@p2pEmailBody": {
+    "description": "Body of the optional email prompt in the P2P shop."
+  },
+  "p2pEmailFailed": "No se pudo guardar el correo. Inténtalo más tarde.",
+  "@p2pEmailFailed": {
+    "description": "Error in the P2P email prompt when Spyglass did not accept the address."
+  },
+  "p2pEmailField": "Correo electrónico",
+  "@p2pEmailField": {
+    "description": "Label of the field in the P2P email prompt."
+  },
+  "p2pEmailInvalid": "Escribe un correo electrónico.",
+  "@p2pEmailInvalid": {
+    "description": "Field error in the P2P email prompt."
+  },
+  "p2pEmailSave": "Guardar correo",
+  "@p2pEmailSave": {
+    "description": "Submit button of the P2P email prompt."
+  },
+  "p2pEmailSaved": "Correo guardado.",
+  "@p2pEmailSaved": {
+    "description": "Toast after the P2P email prompt saves an address."
+  },
+  "p2pEmailSkip": "Ahora no",
+  "@p2pEmailSkip": {
+    "description": "Button that dismisses the P2P email prompt."
+  },
+  "p2pEmailTitle": "Recibe un correo cuando una venta te necesite",
+  "@p2pEmailTitle": {
+    "description": "Title of the optional email prompt in the P2P shop."
+  },
   "p2pEndReasonNftBurned": "El NFT se quemó",
   "@p2pEndReasonNftBurned": {
     "description": "P2P listing end reason nft_burned."
@@ -4201,9 +4327,17 @@
   "@p2pErrorBidTooLow": {
     "description": "P2P shop error code bid_too_low."
   },
+  "p2pErrorCollectionHasListings": "Cancela o termina primero los listados de esta colección.",
+  "@p2pErrorCollectionHasListings": {
+    "description": "P2P shop error code collection_has_active_listings."
+  },
   "p2pErrorConflict": "Eso cambió mientras tanto. Recarga e inténtalo de nuevo.",
   "@p2pErrorConflict": {
     "description": "P2P shop error: a 409 with no message."
+  },
+  "p2pErrorDefaultCollection": "La colección predeterminada de una tienda no se puede eliminar.",
+  "@p2pErrorDefaultCollection": {
+    "description": "P2P shop error code default_collection."
   },
   "p2pErrorDuplicateBid": "Esta oferta ya se había hecho.",
   "@p2pErrorDuplicateBid": {
@@ -4221,9 +4355,21 @@
   "@p2pErrorInvalid": {
     "description": "P2P shop error: a 400 with no message."
   },
+  "p2pErrorListingClosed": "Este listado ya terminó.",
+  "@p2pErrorListingClosed": {
+    "description": "P2P shop error code listing_closed."
+  },
   "p2pErrorListingEnded": "Este listado ha terminado.",
   "@p2pErrorListingEnded": {
     "description": "P2P shop error code listing_ended."
+  },
+  "p2pErrorListingHasBids": "Los precios y las fechas quedan fijos cuando hay una oferta.",
+  "@p2pErrorListingHasBids": {
+    "description": "P2P shop error code listing_has_bids."
+  },
+  "p2pErrorListingNotAwaitingSaleStart": "Este listado no está esperando el inicio de su venta.",
+  "@p2pErrorListingNotAwaitingSaleStart": {
+    "description": "P2P shop error code listing_not_awaiting_sale_start."
   },
   "p2pErrorListingNotLive": "Este listado ya no acepta ofertas.",
   "@p2pErrorListingNotLive": {
@@ -4241,9 +4387,21 @@
   "@p2pErrorListingUnavailable": {
     "description": "P2P shop error code listing_unavailable: the shop or collection is closed or hidden."
   },
+  "p2pErrorNftAlreadyListed": "Ese NFT ya está en un listado activo.",
+  "@p2pErrorNftAlreadyListed": {
+    "description": "P2P shop error code nft_already_listed."
+  },
   "p2pErrorNftMoved": "El vendedor ya no es dueño de este NFT.",
   "@p2pErrorNftMoved": {
     "description": "P2P shop error code nft_moved."
+  },
+  "p2pErrorNftNotFound": "El explorador aún no ha indexado este NFT. Inténtalo de nuevo en un momento.",
+  "@p2pErrorNftNotFound": {
+    "description": "P2P shop error code nft_not_found."
+  },
+  "p2pErrorNftNotListable": "Este NFT no se puede listar: los tokens, las bóvedas vBTC y los NFT quemados no se venden en tiendas.",
+  "@p2pErrorNftNotListable": {
+    "description": "P2P shop error code nft_not_listable."
   },
   "p2pErrorNoBuyNow": "Este listado no tiene precio de compra inmediata.",
   "@p2pErrorNoBuyNow": {
@@ -4261,6 +4419,10 @@
   "@p2pErrorNotFound": {
     "description": "P2P shop error code not_found."
   },
+  "p2pErrorNotNftOwner": "Esta cuenta no es dueña de ese NFT.",
+  "@p2pErrorNotNftOwner": {
+    "description": "P2P shop error code not_nft_owner."
+  },
   "p2pErrorNotSeller": "Solo el vendedor puede hacer eso.",
   "@p2pErrorNotSeller": {
     "description": "P2P shop error code not_seller."
@@ -4268,6 +4430,14 @@
   "p2pErrorNotSender": "La transacción no es de la cuenta con la sesión iniciada.",
   "@p2pErrorNotSender": {
     "description": "P2P shop error code not_sender."
+  },
+  "p2pErrorNotShopOwner": "Solo el propietario de la tienda puede hacer eso.",
+  "@p2pErrorNotShopOwner": {
+    "description": "P2P shop error code not_shop_owner."
+  },
+  "p2pErrorPriceRequired": "Indica un precio, una oferta inicial para una subasta o ambos.",
+  "@p2pErrorPriceRequired": {
+    "description": "P2P shop error code price_required."
   },
   "p2pErrorRefused": "El registro de tiendas lo rechazó: {reason}",
   "@p2pErrorRefused": {
@@ -4286,6 +4456,10 @@
   "@p2pErrorSaleOnChain": {
     "description": "P2P shop error code sale_on_chain."
   },
+  "p2pErrorSalePending": "La venta ya empezó, así que el listado no se puede retirar. Cancela la venta.",
+  "@p2pErrorSalePending": {
+    "description": "P2P shop error code sale_pending."
+  },
   "p2pErrorSellerCannotBid": "No puedes ofertar en tu propio listado.",
   "@p2pErrorSellerCannotBid": {
     "description": "P2P shop error code seller_cannot_bid."
@@ -4294,9 +4468,17 @@
   "@p2pErrorServer": {
     "description": "P2P shop error: the registry answered with a server error."
   },
+  "p2pErrorShopDeleted": "La tienda se ha eliminado.",
+  "@p2pErrorShopDeleted": {
+    "description": "P2P shop error code shop_deleted."
+  },
   "p2pErrorShopNotFound": "Ninguna tienda tiene esta dirección.",
   "@p2pErrorShopNotFound": {
     "description": "P2P shop error code shop_not_found."
+  },
+  "p2pErrorShopOnChain": "Esta tienda está registrada en la cadena, así que una simulación no puede cambiarla.",
+  "@p2pErrorShopOnChain": {
+    "description": "P2P shop error code shop_on_chain."
   },
   "p2pErrorSignInExpired": "El inicio de sesión en la tienda ha caducado. Inténtalo de nuevo.",
   "@p2pErrorSignInExpired": {
@@ -4322,6 +4504,14 @@
   "@p2pErrorThrottled": {
     "description": "P2P shop error: the registry is rate limiting this wallet."
   },
+  "p2pErrorTryAgain": "El NFT no se pudo listar en este momento. Inténtalo de nuevo.",
+  "@p2pErrorTryAgain": {
+    "description": "P2P shop error code try_again."
+  },
+  "p2pErrorUniqueIdTaken": "Ya existe una tienda con este id. Inténtalo de nuevo.",
+  "@p2pErrorUniqueIdTaken": {
+    "description": "P2P shop error code unique_id_taken."
+  },
   "p2pErrorUnknown": "Algo salió mal. Inténtalo de nuevo.",
   "@p2pErrorUnknown": {
     "description": "P2P shop error of an unexpected kind."
@@ -4330,9 +4520,252 @@
   "@p2pErrorUnreachable": {
     "description": "P2P shop error: the request to Spyglass got no answer."
   },
+  "p2pErrorUrlTaken": "Esa dirección de tienda ya está en uso.",
+  "@p2pErrorUrlTaken": {
+    "description": "P2P shop error code url_taken."
+  },
   "p2pErrorUseBuyNow": "Al precio de compra inmediata o más, usa Comprar ahora.",
   "@p2pErrorUseBuyNow": {
     "description": "P2P shop error code use_buy_now."
+  },
+  "p2pGroupClosed": "Terminados",
+  "@p2pGroupClosed": {
+    "description": "Group heading on the P2P My shop screen: listings that closed without a sale."
+  },
+  "p2pGroupLive": "Activos",
+  "@p2pGroupLive": {
+    "description": "Group heading on the P2P My shop screen: live listings."
+  },
+  "p2pGroupNeedsYou": "Inicia la venta",
+  "@p2pGroupNeedsYou": {
+    "description": "Group heading on the P2P My shop screen: listings with a winner, waiting for the seller."
+  },
+  "p2pGroupSold": "Vendidos",
+  "@p2pGroupSold": {
+    "description": "Group heading on the P2P My shop screen: sold listings."
+  },
+  "p2pGroupWaitingForBuyer": "Esperando al comprador",
+  "@p2pGroupWaitingForBuyer": {
+    "description": "Group heading on the P2P My shop screen: sales started, not completed."
+  },
+  "p2pListBuyNow": "Precio (VFX)",
+  "@p2pListBuyNow": {
+    "description": "Label of the price field of a fixed-price P2P listing."
+  },
+  "p2pListBuyNowOptional": "Precio de compra inmediata (VFX, opcional)",
+  "@p2pListBuyNowOptional": {
+    "description": "Label of the buy-now price field of a P2P auction."
+  },
+  "p2pListCannotListed": "Ese NFT ya está listado.",
+  "@p2pListCannotListed": {
+    "description": "Shown when the preselected NFT is already in an active P2P listing."
+  },
+  "p2pListCannotNotFound": "Ese NFT no se encontró en esta billetera.",
+  "@p2pListCannotNotFound": {
+    "description": "Shown when the preselected NFT is not in this wallet."
+  },
+  "p2pListCannotNotMinted": "Ese NFT aún no está acuñado.",
+  "@p2pListCannotNotMinted": {
+    "description": "Shown when the preselected NFT's mint is not on chain yet."
+  },
+  "p2pListCannotNotYours": "Ese NFT pertenece a otra cuenta. Cambia a ella para listarlo.",
+  "@p2pListCannotNotYours": {
+    "description": "Shown when the preselected NFT is owned by another account."
+  },
+  "p2pListCannotUnsellable": "Ese tipo de NFT no se puede vender en una tienda.",
+  "@p2pListCannotUnsellable": {
+    "description": "Shown when the preselected NFT is a token or a vBTC vault."
+  },
+  "p2pListChange": "Cambiar",
+  "@p2pListChange": {
+    "description": "Button in the P2P listing form that goes back to the NFT picker."
+  },
+  "p2pListCloses": "Cierra después de",
+  "@p2pListCloses": {
+    "description": "Label of the duration choice in the P2P listing form."
+  },
+  "p2pListClosesAt": "Cierra el",
+  "@p2pListClosesAt": {
+    "description": "Label of the chosen closing time in the P2P listing form."
+  },
+  "p2pListClosesOn": "Cierra el {date}",
+  "@p2pListClosesOn": {
+    "description": "Line in the P2P listing form saying when the listing will close.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListCollection": "Colección",
+  "@p2pListCollection": {
+    "description": "Label of the collection choice in the P2P listing form."
+  },
+  "p2pListCustom": "Elegir fecha",
+  "@p2pListCustom": {
+    "description": "Duration choice in the P2P listing form: a chosen closing time."
+  },
+  "p2pListDayOne": "1 día",
+  "@p2pListDayOne": {
+    "description": "Duration choice in the P2P listing form."
+  },
+  "p2pListDays": "{count} días",
+  "@p2pListDays": {
+    "description": "Duration choice in the P2P listing form.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pListDone": "«{name}» está listado.",
+  "@p2pListDone": {
+    "description": "Toast after an NFT is listed in the P2P shop.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListErrorBeforeStart": "Debe cerrar después de abrir.",
+  "@p2pListErrorBeforeStart": {
+    "description": "Field error in the P2P listing form."
+  },
+  "p2pListErrorBelowFloor": "La reserva no puede ser menor que la oferta inicial.",
+  "@p2pListErrorBelowFloor": {
+    "description": "Field error in the P2P listing form."
+  },
+  "p2pListErrorBelowReserve": "El precio de compra inmediata no puede ser menor que la reserva.",
+  "@p2pListErrorBelowReserve": {
+    "description": "Field error in the P2P listing form."
+  },
+  "p2pListErrorBelowStart": "El precio de compra inmediata no puede ser menor que la oferta inicial.",
+  "@p2pListErrorBelowStart": {
+    "description": "Field error in the P2P listing form."
+  },
+  "p2pListErrorDecimals": "Usa como máximo 8 decimales.",
+  "@p2pListErrorDecimals": {
+    "description": "Field error in the P2P listing form: too many decimal places."
+  },
+  "p2pListErrorFormat": "Escribe un importe, como 12.5.",
+  "@p2pListErrorFormat": {
+    "description": "Field error in the P2P listing form: not a number."
+  },
+  "p2pListErrorPast": "Elige un momento en el futuro.",
+  "@p2pListErrorPast": {
+    "description": "Field error in the P2P listing form."
+  },
+  "p2pListErrorRequired": "Obligatorio",
+  "@p2pListErrorRequired": {
+    "description": "Field error in the P2P listing form: nothing typed."
+  },
+  "p2pListFloor": "Oferta inicial (VFX)",
+  "@p2pListFloor": {
+    "description": "Label of the auction's opening price field in the P2P listing form."
+  },
+  "p2pListForSale": "Poner a la venta",
+  "@p2pListForSale": {
+    "description": "Button on an NFT's page that opens the P2P listing flow, and the submit button of the listing form."
+  },
+  "p2pListKind": "Cómo se vende",
+  "@p2pListKind": {
+    "description": "Label of the fixed-price or auction choice in the P2P listing form."
+  },
+  "p2pListLater": "Programar",
+  "@p2pListLater": {
+    "description": "Choice in the P2P listing form: the listing opens at a chosen time."
+  },
+  "p2pListMediaChecking": "Comprobando los archivos del NFT…",
+  "@p2pListMediaChecking": {
+    "description": "Shown in the P2P listing form while the registry is asked whether it holds the NFT's media."
+  },
+  "p2pListMediaFailed": "No se pudieron subir los archivos del NFT, así que la tienda no mostraría imagen. Puedes intentarlo de nuevo o listarlo sin ella.",
+  "@p2pListMediaFailed": {
+    "description": "Shown in the P2P listing form when uploading the NFT's media to Spyglass failed."
+  },
+  "p2pListMediaSkip": "Listar sin imagen",
+  "@p2pListMediaSkip": {
+    "description": "Button in the P2P listing form that lists the NFT although its media could not be uploaded."
+  },
+  "p2pListMediaUploading": "Subiendo los archivos del NFT para que la tienda pueda mostrarlo…",
+  "@p2pListMediaUploading": {
+    "description": "Shown in the P2P listing form while the NFT's media is uploaded to Spyglass before listing."
+  },
+  "p2pListNeedsShop": "Abre primero una tienda; después el NFT que elegiste estará listo para listar.",
+  "@p2pListNeedsShop": {
+    "description": "Note on the P2P My shop screen when an NFT was chosen to list but the account has no shop."
+  },
+  "p2pListNoNfts": "No hay NFT en esta cuenta",
+  "@p2pListNoNfts": {
+    "description": "Empty-state title of the NFT picker in the P2P list-an-NFT dialog."
+  },
+  "p2pListNoNftsBody": "Una tienda lista los NFT de su propietario. Acuña uno o transfiere uno a esta cuenta primero.",
+  "@p2pListNoNftsBody": {
+    "description": "Empty-state body of the NFT picker in the P2P list-an-NFT dialog."
+  },
+  "p2pListNote": "Listar es gratis y no es una transacción. Puedes cancelar hasta que empiece una venta; los precios y las fechas se bloquean con la primera oferta.",
+  "@p2pListNote": {
+    "description": "Note at the bottom of the P2P listing form."
+  },
+  "p2pListNow": "Ahora",
+  "@p2pListNow": {
+    "description": "Choice in the P2P listing form: the listing opens at once."
+  },
+  "p2pListOpen": "Listar un NFT",
+  "@p2pListOpen": {
+    "description": "Button and dialog title for listing an NFT in the P2P shop."
+  },
+  "p2pListOpens": "Abre",
+  "@p2pListOpens": {
+    "description": "Label of the now-or-later choice in the P2P listing form."
+  },
+  "p2pListOpensAt": "Abre el",
+  "@p2pListOpensAt": {
+    "description": "Label of the chosen opening time in the P2P listing form."
+  },
+  "p2pListPick": "Elige un NFT de esta cuenta.",
+  "@p2pListPick": {
+    "description": "Instruction above the NFT picker in the P2P list-an-NFT dialog."
+  },
+  "p2pListPickDateTime": "Elegir",
+  "@p2pListPickDateTime": {
+    "description": "Button in the P2P listing form that opens the date and time pickers."
+  },
+  "p2pListReserve": "Precio de reserva (VFX, opcional)",
+  "@p2pListReserve": {
+    "description": "Label of the reserve price field in the P2P listing form."
+  },
+  "p2pListReserveHint": "Las ofertas por debajo no ganan. Los compradores solo ven si se alcanza.",
+  "@p2pListReserveHint": {
+    "description": "Hint under the reserve price field in the P2P listing form."
+  },
+  "p2pListRoyalty": "Una venta de este NFT paga el {percent} % del precio a {to}. Sale del precio.",
+  "@p2pListRoyalty": {
+    "description": "Note in the P2P listing form on an NFT with a royalty.",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pListRoyaltyUnpayable": "La regalía de este NFT no se puede pagar mediante una venta, así que su venta no se puede completar.",
+  "@p2pListRoyaltyUnpayable": {
+    "description": "Warning in the P2P listing form on an NFT whose royalty amount is 1 or more."
+  },
+  "p2pListTagListed": "Listado",
+  "@p2pListTagListed": {
+    "description": "Tag in the P2P NFT picker on an NFT that is already in an active listing."
+  },
+  "p2pListTagNotMinted": "Aún no acuñado",
+  "@p2pListTagNotMinted": {
+    "description": "Tag in the P2P NFT picker on an NFT whose mint is not on chain yet."
+  },
+  "p2pListTagUnsellable": "No se puede vender",
+  "@p2pListTagUnsellable": {
+    "description": "Tag in the P2P NFT picker on a token or vBTC vault, which cannot be listed."
   },
   "p2pListingAllBids": "Ver todas las ofertas",
   "@p2pListingAllBids": {
@@ -4371,6 +4804,19 @@
       }
     }
   },
+  "p2pListingCancel": "Cancelar listado",
+  "@p2pListingCancel": {
+    "description": "Button and confirmation title for withdrawing a P2P listing."
+  },
+  "p2pListingCancelBody": "¿Retirar «{name}» de la venta? Sus ofertas terminan y puedes volver a listarlo más tarde.",
+  "@p2pListingCancelBody": {
+    "description": "Confirmation body for withdrawing a P2P listing.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "p2pListingClosing": "Las ofertas han cerrado. El resultado aparecerá en un momento.",
   "@p2pListingClosing": {
     "description": "Note on a live P2P listing that is past its end."
@@ -4386,6 +4832,14 @@
   "p2pListingDetails": "Detalles",
   "@p2pListingDetails": {
     "description": "Section heading of a P2P listing's details table."
+  },
+  "p2pListingEdit": "Editar listado",
+  "@p2pListingEdit": {
+    "description": "Button and dialog title for changing a P2P listing's prices and dates."
+  },
+  "p2pListingEditSave": "Guardar cambios",
+  "@p2pListingEditSave": {
+    "description": "Submit button of the P2P edit-listing dialog."
   },
   "p2pListingEndReason": "Por qué terminó",
   "@p2pListingEndReason": {
@@ -4406,6 +4860,10 @@
   "p2pListingLeadingReserve": "Tu oferta es la más alta, pero aún no alcanza la reserva.",
   "@p2pListingLeadingReserve": {
     "description": "Note on a live P2P auction where the selected account holds the high bid under the reserve."
+  },
+  "p2pListingListAgain": "Listar de nuevo",
+  "@p2pListingListAgain": {
+    "description": "Button on a P2P listing whose sale was never started: opens the listing form for the same NFT."
   },
   "p2pListingMinter": "Acuñado por",
   "@p2pListingMinter": {
@@ -4564,6 +5022,43 @@
   "@p2pListingYours": {
     "description": "Tag on a P2P listing the selected account is selling."
   },
+  "p2pManageLive": "Tu listado está activo. Cuando haya un ganador, inicia la venta aquí.",
+  "@p2pManageLive": {
+    "description": "Note to the seller on their live P2P listing with no bids."
+  },
+  "p2pManageLiveBids": "Están llegando ofertas. Los precios y las fechas ya están bloqueados.",
+  "@p2pManageLiveBids": {
+    "description": "Note to the seller on their live P2P listing that has bids."
+  },
+  "p2pManagePendingNote": "Venta iniciada. Esperando a que el comprador complete la compra.",
+  "@p2pManagePendingNote": {
+    "description": "Note to the seller on their P2P listing whose sale has started."
+  },
+  "p2pManageSoldNote": "Vendido por {price}.",
+  "@p2pManageSoldNote": {
+    "description": "Note to the seller on their sold P2P listing.",
+    "placeholders": {
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pManageStartNote": "{buyer} ganó por {price}. Inicia la venta para entregarlo.",
+  "@p2pManageStartNote": {
+    "description": "Note to the seller on their P2P listing that has a winner.",
+    "placeholders": {
+      "buyer": {
+        "type": "String"
+      },
+      "price": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pManageUnfulfilledNote": "La venta no se inició en las 48 horas posteriores a la adjudicación. Puedes listarlo de nuevo.",
+  "@p2pManageUnfulfilledNote": {
+    "description": "Note to the seller on their P2P listing whose sale was never started."
+  },
   "p2pMyBidsMine": "Tu oferta",
   "@p2pMyBidsMine": {
     "description": "Label of the selected account's highest bid on a P2P listing."
@@ -4588,9 +5083,54 @@
   "@p2pMyBidsVault": {
     "description": "Shown on the P2P My bids screen when the selected account is a Vault account."
   },
+  "p2pMyShopEdit": "Editar",
+  "@p2pMyShopEdit": {
+    "description": "Button on the P2P My shop screen that opens the edit-shop dialog."
+  },
+  "p2pMyShopNoAccount": "Elige una cuenta VFX para usar la tienda.",
+  "@p2pMyShopNoAccount": {
+    "description": "Shown on the P2P My shop screen when no VFX account is selected."
+  },
+  "p2pMyShopTitle": "Mi tienda",
+  "@p2pMyShopTitle": {
+    "description": "Title of the P2P screen where the selected account opens and runs its shop, and the button that opens it."
+  },
+  "p2pMyShopVault": "Una cuenta Vault no puede tener una tienda ni comprar en una.",
+  "@p2pMyShopVault": {
+    "description": "Shown on the P2P My shop screen when the selected account is a Vault account."
+  },
+  "p2pMyShopView": "Ver tienda",
+  "@p2pMyShopView": {
+    "description": "Button on the P2P My shop screen that opens the shop's public page."
+  },
   "p2pNavShops": "Tiendas",
   "@p2pNavShops": {
     "description": "Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry."
+  },
+  "p2pNoticeSaleToStartBody": "«{name}» tiene un ganador en vfx://{url}. Inicia la venta en un plazo de 48 horas.",
+  "@p2pNoticeSaleToStartBody": {
+    "description": "Body of the in-app notification to a P2P seller whose listing has a winner.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pNoticeSaleToStartTitle": "Una venta te espera",
+  "@p2pNoticeSaleToStartTitle": {
+    "description": "Title of the in-app notification to a P2P seller whose listing has a winner."
+  },
+  "p2pNoticeSalesToStart": "{count} por iniciar",
+  "@p2pNoticeSalesToStart": {
+    "description": "Badge on the P2P My shop button: how many sales are waiting for the seller.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "p2pPageNumber": "Página {page}",
   "@p2pPageNumber": {
@@ -4637,6 +5177,18 @@
   "@p2pRetry": {
     "description": "Button that reloads a P2P shop screen after it failed to load."
   },
+  "p2pSaleCancel": "Cancelar la venta",
+  "@p2pSaleCancel": {
+    "description": "Button and confirmation title for the seller's Sale_Cancel step."
+  },
+  "p2pSaleCancelWarning": "El comprador no ha pagado. Cancelar libera el NFT para que se pueda listar de nuevo.",
+  "@p2pSaleCancelWarning": {
+    "description": "Warning in the confirmation for cancelling a started P2P sale."
+  },
+  "p2pSaleStart": "Iniciar la venta",
+  "@p2pSaleStart": {
+    "description": "Button and confirmation title for the seller's Sale_Start step."
+  },
   "p2pSearchHint": "Buscar por nombre o dirección",
   "@p2pSearchHint": {
     "description": "Placeholder of the search field on the P2P shop list."
@@ -4645,6 +5197,18 @@
   "@p2pSearchLabel": {
     "description": "Accessible label of the search field on the P2P shop list."
   },
+  "p2pSellingNone": "Aún no hay nada listado.",
+  "@p2pSellingNone": {
+    "description": "Empty-state title of the seller's listings on the P2P My shop screen."
+  },
+  "p2pSellingNoneBody": "Lista un NFT de esta cuenta para empezar a vender.",
+  "@p2pSellingNoneBody": {
+    "description": "Empty-state body of the seller's listings on the P2P My shop screen."
+  },
+  "p2pSellingTitle": "Tus listados",
+  "@p2pSellingTitle": {
+    "description": "Section heading of the seller's listings on the P2P My shop screen."
+  },
   "p2pShopAll": "Todo",
   "@p2pShopAll": {
     "description": "Filter chip on a P2P shop page that shows every collection's listings."
@@ -4652,6 +5216,127 @@
   "p2pShopCollections": "Colecciones",
   "@p2pShopCollections": {
     "description": "Accessible label of the collection filter chips on a P2P shop page."
+  },
+  "p2pShopCostDelete": "Cerrar la tienda cuesta {cost}.",
+  "@p2pShopCostDelete": {
+    "description": "Cost card line in the P2P shop registration form.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopCostDryRun": "Por ahora es una simulación: el registro guarda la tienda y no se mueve VFX.",
+  "@p2pShopCostDryRun": {
+    "description": "Cost card line in the P2P shop registration form while chain steps are dry runs."
+  },
+  "p2pShopCostListing": "Listar NFT y crear colecciones es gratis.",
+  "@p2pShopCostListing": {
+    "description": "Cost card line in the P2P shop registration form."
+  },
+  "p2pShopCostOnce": "Se paga una vez a la red (DecShop_Base), más la comisión de red.",
+  "@p2pShopCostOnce": {
+    "description": "Cost card line in the P2P shop registration form."
+  },
+  "p2pShopCostUpdate": "Los cambios son gratis una vez cada 12 horas; antes cuestan {cost}.",
+  "@p2pShopCostUpdate": {
+    "description": "Cost card line in the P2P shop registration form.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopDeleteActive": "Sus listados activos terminan con ella.",
+  "@p2pShopDeleteActive": {
+    "description": "Extra warning in the confirmation for deleting a P2P shop that has live listings."
+  },
+  "p2pShopDeleteTitle": "Eliminar la tienda",
+  "@p2pShopDeleteTitle": {
+    "description": "Tooltip of the delete button on the P2P My shop screen and title of its confirmation."
+  },
+  "p2pShopDeleteWarning": "La tienda y su dirección quedan libres. En la cadena esto cuesta {cost}.",
+  "@p2pShopDeleteWarning": {
+    "description": "Warning in the confirmation for deleting a P2P shop.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopEditCost": "La tienda cambió hace menos de 12 horas, así que en la cadena este cambio cuesta {cost}, más la comisión de red.",
+  "@p2pShopEditCost": {
+    "description": "Note in the P2P edit-shop dialog when an update costs 1 VFX.",
+    "placeholders": {
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopEditFree": "Cambiar la tienda es gratis ahora mismo (más de 12 horas desde el último cambio), más la comisión de red.",
+  "@p2pShopEditFree": {
+    "description": "Note in the P2P edit-shop dialog when an update moves nothing."
+  },
+  "p2pShopEditTitle": "Editar tienda",
+  "@p2pShopEditTitle": {
+    "description": "Title of the P2P edit-shop dialog."
+  },
+  "p2pShopEditUnchanged": "Aún no ha cambiado nada.",
+  "@p2pShopEditUnchanged": {
+    "description": "Note in the P2P edit-shop dialog when Review is pressed with no change."
+  },
+  "p2pShopErrorRequired": "Obligatorio",
+  "@p2pShopErrorRequired": {
+    "description": "Field error in the P2P shop and collection forms: nothing typed."
+  },
+  "p2pShopErrorTooLong": "Demasiado largo",
+  "@p2pShopErrorTooLong": {
+    "description": "Field error in the P2P shop form: over the network's length limit."
+  },
+  "p2pShopErrorTooManyWords": "Como máximo {max} palabras",
+  "@p2pShopErrorTooManyWords": {
+    "description": "Field error in the P2P shop form: the description has too many words.",
+    "placeholders": {
+      "max": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pShopErrorUrlInvalid": "Empieza con una letra; usa letras, dígitos, “-” y “.”, hasta 63 caracteres.",
+  "@p2pShopErrorUrlInvalid": {
+    "description": "Field error in the P2P shop form: the address is not one the network accepts."
+  },
+  "p2pShopFieldDescription": "Descripción",
+  "@p2pShopFieldDescription": {
+    "description": "Label of the description field in the P2P shop form."
+  },
+  "p2pShopFieldName": "Nombre de la tienda",
+  "@p2pShopFieldName": {
+    "description": "Label of the name field in the P2P shop form."
+  },
+  "p2pShopFieldUrl": "Dirección de la tienda",
+  "@p2pShopFieldUrl": {
+    "description": "Label of the vfx:// address field in the P2P shop form."
+  },
+  "p2pShopFieldUrlHint": "Empieza con una letra: letras, dígitos, “-” y “.”, hasta 63 caracteres. Se muestra como vfx://dirección.",
+  "@p2pShopFieldUrlHint": {
+    "description": "Hint under the address field in the P2P shop form."
+  },
+  "p2pShopFieldUrlPlaceholder": "mitienda",
+  "@p2pShopFieldUrlPlaceholder": {
+    "description": "Placeholder of the address field in the P2P shop form."
+  },
+  "p2pShopFieldWords": "{used} de {max} palabras",
+  "@p2pShopFieldWords": {
+    "description": "Word count under the description field in the P2P shop form.",
+    "placeholders": {
+      "used": {
+        "type": "int"
+      },
+      "max": {
+        "type": "int"
+      }
+    }
   },
   "p2pShopLiveCount": "{count} activos",
   "@p2pShopLiveCount": {
@@ -4686,6 +5371,30 @@
   "@p2pShopOwner": {
     "description": "Label before a P2P shop owner's address."
   },
+  "p2pShopRegisterCostLabel": "Abrir una tienda",
+  "@p2pShopRegisterCostLabel": {
+    "description": "Label of the cost in the P2P shop registration form's cost card."
+  },
+  "p2pShopRegisterIntro": "Una tienda es tu escaparate en VerifiedX: un nombre, una dirección vfx:// y los NFT que pones a la venta.",
+  "@p2pShopRegisterIntro": {
+    "description": "Intro under the heading of the P2P shop registration form."
+  },
+  "p2pShopRegisterShort": "Esta cuenta tiene {balance}. Abrir una tienda cuesta {cost} más la comisión de red.",
+  "@p2pShopRegisterShort": {
+    "description": "Note in the P2P shop registration form when the account's balance is under the cost.",
+    "placeholders": {
+      "balance": {
+        "type": "String"
+      },
+      "cost": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopRegisterTitle": "Abrir una tienda",
+  "@p2pShopRegisterTitle": {
+    "description": "Heading of the form that registers a P2P shop, and the title of its confirmation."
+  },
   "p2pShopRegistered": "Registrada",
   "@p2pShopRegistered": {
     "description": "Badge on a P2P shop whose registration is on chain."
@@ -4698,6 +5407,39 @@
         "type": "String"
       }
     }
+  },
+  "p2pShopReview": "Revisar",
+  "@p2pShopReview": {
+    "description": "Submit button of the P2P shop form: opens the confirmation with the transaction."
+  },
+  "p2pShopUpdateTitle": "Actualizar la tienda",
+  "@p2pShopUpdateTitle": {
+    "description": "Title of the confirmation for a P2P shop update."
+  },
+  "p2pShopUrlCheckFailed": "No se pudo comprobar la dirección. Se comprueba de nuevo al revisar.",
+  "@p2pShopUrlCheckFailed": {
+    "description": "Status line in the P2P shop form when the availability check could not be made."
+  },
+  "p2pShopUrlChecking": "Comprobando…",
+  "@p2pShopUrlChecking": {
+    "description": "Status line in the P2P shop form while the address is being checked."
+  },
+  "p2pShopUrlFree": "vfx://{url} está libre.",
+  "@p2pShopUrlFree": {
+    "description": "Status line in the P2P shop form: the typed address is available.",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopUrlStillChecking": "Aún se está comprobando esta dirección. Inténtalo de nuevo en un momento.",
+  "@p2pShopUrlStillChecking": {
+    "description": "Field error in the P2P shop form when Review is pressed before the availability check is in."
+  },
+  "p2pShopUrlTaken": "Esta dirección ya está en uso.",
+  "@p2pShopUrlTaken": {
+    "description": "Field error in the P2P shop form: another shop holds the address."
   },
   "p2pShopYours": "Tu tienda",
   "@p2pShopYours": {

@@ -5,10 +5,15 @@ class P2pAuthToken {
   final String address;
   final DateTime expiresAt;
 
+  /// The email Spyglass holds for the address, or null: it is asked for
+  /// only when there is none.
+  final String? email;
+
   const P2pAuthToken({
     required this.token,
     required this.address,
     required this.expiresAt,
+    this.email,
   });
 
   /// Throws a [FormatException] when the body carries no token or no expiry.
@@ -19,10 +24,12 @@ class P2pAuthToken {
       throw const FormatException('A sign-in answer has no token or no expiry');
     }
     final address = json['address'];
+    final email = json['email'];
     return P2pAuthToken(
       token: token,
       address: address is String ? address : '',
       expiresAt: expiresAt.toUtc(),
+      email: email is String && email.trim().isNotEmpty ? email.trim() : null,
     );
   }
 

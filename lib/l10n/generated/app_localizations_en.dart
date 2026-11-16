@@ -3697,6 +3697,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pChainErrorNoWinner => 'There is no winning bid for this listing.';
 
   @override
+  String get p2pChainErrorNoWinningBid => 'The winning bid for this listing could not be read. Refresh and try again.';
+
+  @override
   String get p2pChainErrorPriceZero => 'The price must be above zero.';
 
   @override
@@ -3704,6 +3707,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get p2pChainErrorRoyaltyZero => 'At this price the royalty rounds to nothing, and every sale payment must be above zero.';
+
+  @override
+  String get p2pChainErrorShopFields => 'The shop’s name, address or description is outside the network’s limits.';
 
   @override
   String get p2pChainFee => 'Network fee';
@@ -3745,6 +3751,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pChainRecording => 'Recording…';
 
   @override
+  String get p2pChainRowAddress => 'Address';
+
+  @override
+  String get p2pChainRowBuyer => 'Buyer';
+
+  @override
   String get p2pChainRowNft => 'NFT';
 
   @override
@@ -3752,6 +3764,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get p2pChainRowSeller => 'Seller';
+
+  @override
+  String get p2pChainRowShop => 'Shop';
 
   @override
   String get p2pChainTo => 'To';
@@ -3785,6 +3800,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String p2pClockSellerHas(String time) {
     return 'Sale starts within $time';
   }
+
+  @override
+  String get p2pCollectionCreate => 'Create';
+
+  @override
+  String get p2pCollectionDefault => 'Default';
+
+  @override
+  String get p2pCollectionDefaultStays => 'The default collection stays with the shop';
+
+  @override
+  String get p2pCollectionDelete => 'Delete collection';
+
+  @override
+  String p2pCollectionDeleteBody(String name) {
+    return 'Delete “$name”? A collection can be deleted once it has no live or pending listings.';
+  }
+
+  @override
+  String get p2pCollectionDescription => 'Description';
+
+  @override
+  String get p2pCollectionEdit => 'Edit collection';
+
+  @override
+  String get p2pCollectionHidden => 'Hidden';
+
+  @override
+  String get p2pCollectionHide => 'Hide from the shop';
+
+  @override
+  String p2pCollectionListings(int count) {
+    return '$count active';
+  }
+
+  @override
+  String get p2pCollectionName => 'Collection name';
+
+  @override
+  String get p2pCollectionNew => 'New collection';
+
+  @override
+  String get p2pCollectionSave => 'Save';
+
+  @override
+  String get p2pCollectionShow => 'Show in the shop';
+
+  @override
+  String get p2pCollectionsTitle => 'Collections';
 
   @override
   String get p2pCopied => 'Copied to clipboard';
@@ -3828,6 +3892,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pDryRunBanner => 'Shop steps that would be transactions are recorded by the shop registry on testnet. Nothing is signed into a transaction or sent to the network.';
 
   @override
+  String get p2pEmailAdd => 'Sale emails';
+
+  @override
+  String get p2pEmailBody => 'Optional. The shop registry emails this address when one of your listings has a winner or a sale is started for you. It is stored with this account’s address.';
+
+  @override
+  String get p2pEmailFailed => 'The email could not be saved. Try again later.';
+
+  @override
+  String get p2pEmailField => 'Email address';
+
+  @override
+  String get p2pEmailInvalid => 'Enter an email address.';
+
+  @override
+  String get p2pEmailSave => 'Save email';
+
+  @override
+  String get p2pEmailSaved => 'Email saved.';
+
+  @override
+  String get p2pEmailSkip => 'Not now';
+
+  @override
+  String get p2pEmailTitle => 'Get an email when a sale needs you';
+
+  @override
   String get p2pEndReasonNftBurned => 'The NFT was burned';
 
   @override
@@ -3861,7 +3952,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorBidTooLow => 'Your bid is below the next minimum bid. Someone may have bid just before you.';
 
   @override
+  String get p2pErrorCollectionHasListings => 'Cancel or finish this collection’s listings first.';
+
+  @override
   String get p2pErrorConflict => 'That changed in the meantime. Reload and try again.';
+
+  @override
+  String get p2pErrorDefaultCollection => 'A shop’s default collection cannot be deleted.';
 
   @override
   String get p2pErrorDuplicateBid => 'This bid was already placed.';
@@ -3876,7 +3973,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorInvalid => 'The shop registry could not accept that. Check the details and try again.';
 
   @override
+  String get p2pErrorListingClosed => 'This listing is already over.';
+
+  @override
   String get p2pErrorListingEnded => 'This listing has ended.';
+
+  @override
+  String get p2pErrorListingHasBids => 'Prices and dates are fixed once a bid exists.';
+
+  @override
+  String get p2pErrorListingNotAwaitingSaleStart => 'This listing is not waiting for its sale to start.';
 
   @override
   String get p2pErrorListingNotLive => 'This listing is not taking bids any more.';
@@ -3891,7 +3997,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorListingUnavailable => 'This listing is not available in its shop right now.';
 
   @override
+  String get p2pErrorNftAlreadyListed => 'That NFT is already in an active listing.';
+
+  @override
   String get p2pErrorNftMoved => 'The seller no longer owns this NFT.';
+
+  @override
+  String get p2pErrorNftNotFound => 'The explorer has not indexed this NFT yet. Try again in a moment.';
+
+  @override
+  String get p2pErrorNftNotListable => 'This NFT cannot be listed: tokens, vBTC vaults and burned NFTs are not sold in shops.';
 
   @override
   String get p2pErrorNoBuyNow => 'This listing has no buy-now price.';
@@ -3906,10 +4021,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorNotFound => 'Not found. It may have been removed.';
 
   @override
+  String get p2pErrorNotNftOwner => 'This account does not own that NFT.';
+
+  @override
   String get p2pErrorNotSeller => 'Only the seller can do that.';
 
   @override
   String get p2pErrorNotSender => 'The transaction is not from the signed-in account.';
+
+  @override
+  String get p2pErrorNotShopOwner => 'Only the shop’s owner can do that.';
+
+  @override
+  String get p2pErrorPriceRequired => 'Set a price, a starting bid for an auction, or both.';
 
   @override
   String p2pErrorRefused(String reason) {
@@ -3923,13 +4047,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorSaleOnChain => 'This sale is on chain, so a dry run cannot change it.';
 
   @override
+  String get p2pErrorSalePending => 'The sale has started, so the listing cannot be withdrawn. Cancel the sale instead.';
+
+  @override
   String get p2pErrorSellerCannotBid => 'You cannot bid on your own listing.';
 
   @override
   String get p2pErrorServer => 'The shop registry had a problem. Try again in a moment.';
 
   @override
+  String get p2pErrorShopDeleted => 'The shop has been deleted.';
+
+  @override
   String get p2pErrorShopNotFound => 'No shop has this address.';
+
+  @override
+  String get p2pErrorShopOnChain => 'This shop is registered on chain, so a dry run cannot change it.';
 
   @override
   String get p2pErrorSignInExpired => 'The shop sign-in has expired. Try again.';
@@ -3950,13 +4083,192 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pErrorThrottled => 'Too many requests. Wait a moment and try again.';
 
   @override
+  String get p2pErrorTryAgain => 'The NFT could not be listed just now. Try again.';
+
+  @override
+  String get p2pErrorUniqueIdTaken => 'A shop with this id already exists. Try again.';
+
+  @override
   String get p2pErrorUnknown => 'Something went wrong. Try again.';
 
   @override
   String get p2pErrorUnreachable => 'Could not reach the shop registry. Check your connection and try again.';
 
   @override
+  String get p2pErrorUrlTaken => 'That shop address is taken.';
+
+  @override
   String get p2pErrorUseBuyNow => 'At the buy-now price or more, use Buy now.';
+
+  @override
+  String get p2pGroupClosed => 'Ended';
+
+  @override
+  String get p2pGroupLive => 'Live';
+
+  @override
+  String get p2pGroupNeedsYou => 'Start the sale';
+
+  @override
+  String get p2pGroupSold => 'Sold';
+
+  @override
+  String get p2pGroupWaitingForBuyer => 'Waiting for the buyer';
+
+  @override
+  String get p2pListBuyNow => 'Price (VFX)';
+
+  @override
+  String get p2pListBuyNowOptional => 'Buy-now price (VFX, optional)';
+
+  @override
+  String get p2pListCannotListed => 'That NFT is already listed.';
+
+  @override
+  String get p2pListCannotNotFound => 'That NFT was not found in this wallet.';
+
+  @override
+  String get p2pListCannotNotMinted => 'That NFT is not minted yet.';
+
+  @override
+  String get p2pListCannotNotYours => 'That NFT belongs to another account. Switch to it to list it.';
+
+  @override
+  String get p2pListCannotUnsellable => 'That kind of NFT cannot be sold in a shop.';
+
+  @override
+  String get p2pListChange => 'Change';
+
+  @override
+  String get p2pListCloses => 'Closes after';
+
+  @override
+  String get p2pListClosesAt => 'Closes at';
+
+  @override
+  String p2pListClosesOn(String date) {
+    return 'Closes $date';
+  }
+
+  @override
+  String get p2pListCollection => 'Collection';
+
+  @override
+  String get p2pListCustom => 'Pick a date';
+
+  @override
+  String get p2pListDayOne => '1 day';
+
+  @override
+  String p2pListDays(int count) {
+    return '$count days';
+  }
+
+  @override
+  String p2pListDone(String name) {
+    return '“$name” is listed.';
+  }
+
+  @override
+  String get p2pListErrorBeforeStart => 'It must close after it opens.';
+
+  @override
+  String get p2pListErrorBelowFloor => 'The reserve cannot be below the starting bid.';
+
+  @override
+  String get p2pListErrorBelowReserve => 'The buy-now price cannot be below the reserve.';
+
+  @override
+  String get p2pListErrorBelowStart => 'The buy-now price cannot be below the starting bid.';
+
+  @override
+  String get p2pListErrorDecimals => 'Use at most 8 decimal places.';
+
+  @override
+  String get p2pListErrorFormat => 'Enter an amount, like 12.5.';
+
+  @override
+  String get p2pListErrorPast => 'Choose a time in the future.';
+
+  @override
+  String get p2pListErrorRequired => 'Required';
+
+  @override
+  String get p2pListFloor => 'Starting bid (VFX)';
+
+  @override
+  String get p2pListForSale => 'List for sale';
+
+  @override
+  String get p2pListKind => 'How it sells';
+
+  @override
+  String get p2pListLater => 'Schedule';
+
+  @override
+  String get p2pListMediaChecking => 'Checking the NFT’s media…';
+
+  @override
+  String get p2pListMediaFailed => 'The NFT’s media could not be uploaded, so the shop would show no picture. You can try again or list it without one.';
+
+  @override
+  String get p2pListMediaSkip => 'List without a picture';
+
+  @override
+  String get p2pListMediaUploading => 'Uploading the NFT’s media so the shop can show it…';
+
+  @override
+  String get p2pListNeedsShop => 'Open a shop first; then the NFT you chose is ready to list.';
+
+  @override
+  String get p2pListNoNfts => 'No NFTs in this account';
+
+  @override
+  String get p2pListNoNftsBody => 'A shop lists its owner’s NFTs. Mint one, or transfer one to this account first.';
+
+  @override
+  String get p2pListNote => 'Listing is free and is not a transaction. You can cancel until a sale starts; prices and dates lock at the first bid.';
+
+  @override
+  String get p2pListNow => 'Now';
+
+  @override
+  String get p2pListOpen => 'List an NFT';
+
+  @override
+  String get p2pListOpens => 'Opens';
+
+  @override
+  String get p2pListOpensAt => 'Opens at';
+
+  @override
+  String get p2pListPick => 'Choose an NFT from this account.';
+
+  @override
+  String get p2pListPickDateTime => 'Choose';
+
+  @override
+  String get p2pListReserve => 'Reserve price (VFX, optional)';
+
+  @override
+  String get p2pListReserveHint => 'Bids below it do not win. Buyers see only whether it is met.';
+
+  @override
+  String p2pListRoyalty(String percent, String to) {
+    return 'A sale of this NFT pays $percent% of the price to $to. It comes out of the price.';
+  }
+
+  @override
+  String get p2pListRoyaltyUnpayable => 'This NFT’s royalty cannot be paid through a sale, so a sale of it cannot be completed.';
+
+  @override
+  String get p2pListTagListed => 'Listed';
+
+  @override
+  String get p2pListTagNotMinted => 'Not minted yet';
+
+  @override
+  String get p2pListTagUnsellable => 'Cannot be sold';
 
   @override
   String get p2pListingAllBids => 'Show all bids';
@@ -3981,6 +4293,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get p2pListingCancel => 'Cancel listing';
+
+  @override
+  String p2pListingCancelBody(String name) {
+    return 'Take “$name” off sale? Bids on it end, and you can list it again later.';
+  }
+
+  @override
   String get p2pListingClosing => 'Bidding has closed. The result will show in a moment.';
 
   @override
@@ -3991,6 +4311,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get p2pListingDetails => 'Details';
+
+  @override
+  String get p2pListingEdit => 'Edit listing';
+
+  @override
+  String get p2pListingEditSave => 'Save changes';
 
   @override
   String get p2pListingEndReason => 'Why it ended';
@@ -4006,6 +4332,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get p2pListingLeadingReserve => 'Your bid is the highest, but the reserve is not met yet.';
+
+  @override
+  String get p2pListingListAgain => 'List again';
 
   @override
   String get p2pListingMinter => 'Minted by';
@@ -4117,6 +4446,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pListingYours => 'Your listing';
 
   @override
+  String get p2pManageLive => 'Your listing is live. When there is a winner, start the sale here.';
+
+  @override
+  String get p2pManageLiveBids => 'Bids are coming in. Prices and dates are locked now.';
+
+  @override
+  String get p2pManagePendingNote => 'Sale started. Waiting for the buyer to complete the purchase.';
+
+  @override
+  String p2pManageSoldNote(String price) {
+    return 'Sold for $price.';
+  }
+
+  @override
+  String p2pManageStartNote(String buyer, String price) {
+    return '$buyer won at $price. Start the sale to hand it over.';
+  }
+
+  @override
+  String get p2pManageUnfulfilledNote => 'The sale was not started within 48 hours of the win. You can list it again.';
+
+  @override
   String get p2pMyBidsMine => 'Your bid';
 
   @override
@@ -4135,7 +4486,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pMyBidsVault => 'A Vault account cannot bid or buy, so it has no bids.';
 
   @override
+  String get p2pMyShopEdit => 'Edit';
+
+  @override
+  String get p2pMyShopNoAccount => 'Choose a VFX account to use the shop.';
+
+  @override
+  String get p2pMyShopTitle => 'My shop';
+
+  @override
+  String get p2pMyShopVault => 'A Vault account cannot have a shop or buy in one.';
+
+  @override
+  String get p2pMyShopView => 'View shop';
+
+  @override
   String get p2pNavShops => 'Shops';
+
+  @override
+  String p2pNoticeSaleToStartBody(String name, String url) {
+    return '“$name” has a winner in vfx://$url. Start the sale within 48 hours.';
+  }
+
+  @override
+  String get p2pNoticeSaleToStartTitle => 'A sale is waiting for you';
+
+  @override
+  String p2pNoticeSalesToStart(int count) {
+    return '$count to start';
+  }
 
   @override
   String p2pPageNumber(int page) {
@@ -4166,16 +4545,112 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pRetry => 'Retry';
 
   @override
+  String get p2pSaleCancel => 'Cancel the sale';
+
+  @override
+  String get p2pSaleCancelWarning => 'The buyer has not paid. Cancelling releases the NFT so it can be listed again.';
+
+  @override
+  String get p2pSaleStart => 'Start the sale';
+
+  @override
   String get p2pSearchHint => 'Search by name or address';
 
   @override
   String get p2pSearchLabel => 'Search shops';
 
   @override
+  String get p2pSellingNone => 'Nothing listed yet.';
+
+  @override
+  String get p2pSellingNoneBody => 'List an NFT from this account to start selling.';
+
+  @override
+  String get p2pSellingTitle => 'Your listings';
+
+  @override
   String get p2pShopAll => 'All';
 
   @override
   String get p2pShopCollections => 'Collections';
+
+  @override
+  String p2pShopCostDelete(String cost) {
+    return 'Closing the shop costs $cost.';
+  }
+
+  @override
+  String get p2pShopCostDryRun => 'For now this is a dry run: the shop is recorded by the registry, and no VFX moves.';
+
+  @override
+  String get p2pShopCostListing => 'Listing NFTs and collections are free.';
+
+  @override
+  String get p2pShopCostOnce => 'Paid once to the network (DecShop_Base), plus the network fee.';
+
+  @override
+  String p2pShopCostUpdate(String cost) {
+    return 'Changes are free once every 12 hours; sooner costs $cost.';
+  }
+
+  @override
+  String get p2pShopDeleteActive => 'Its live listings end with it.';
+
+  @override
+  String get p2pShopDeleteTitle => 'Delete the shop';
+
+  @override
+  String p2pShopDeleteWarning(String cost) {
+    return 'The shop and its address are released. On chain this costs $cost.';
+  }
+
+  @override
+  String p2pShopEditCost(String cost) {
+    return 'The shop changed less than 12 hours ago, so on chain this change costs $cost, plus the network fee.';
+  }
+
+  @override
+  String get p2pShopEditFree => 'Changing the shop is free right now (more than 12 hours since the last change), plus the network fee.';
+
+  @override
+  String get p2pShopEditTitle => 'Edit shop';
+
+  @override
+  String get p2pShopEditUnchanged => 'Nothing has changed yet.';
+
+  @override
+  String get p2pShopErrorRequired => 'Required';
+
+  @override
+  String get p2pShopErrorTooLong => 'Too long';
+
+  @override
+  String p2pShopErrorTooManyWords(int max) {
+    return 'At most $max words';
+  }
+
+  @override
+  String get p2pShopErrorUrlInvalid => 'Start with a letter; use letters, digits, “-” and “.”, up to 63 characters.';
+
+  @override
+  String get p2pShopFieldDescription => 'Description';
+
+  @override
+  String get p2pShopFieldName => 'Shop name';
+
+  @override
+  String get p2pShopFieldUrl => 'Shop address';
+
+  @override
+  String get p2pShopFieldUrlHint => 'Starts with a letter: letters, digits, “-” and “.”, up to 63 characters. Shown as vfx://address.';
+
+  @override
+  String get p2pShopFieldUrlPlaceholder => 'myshop';
+
+  @override
+  String p2pShopFieldWords(int used, int max) {
+    return '$used of $max words';
+  }
 
   @override
   String p2pShopLiveCount(int count) {
@@ -4201,12 +4676,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pShopOwner => 'Owner';
 
   @override
+  String get p2pShopRegisterCostLabel => 'Opening a shop';
+
+  @override
+  String get p2pShopRegisterIntro => 'A shop is your storefront on VerifiedX: a name, a vfx:// address and the NFTs you put up for sale.';
+
+  @override
+  String p2pShopRegisterShort(String balance, String cost) {
+    return 'This account holds $balance. Opening a shop takes $cost plus the network fee.';
+  }
+
+  @override
+  String get p2pShopRegisterTitle => 'Open a shop';
+
+  @override
   String get p2pShopRegistered => 'Registered';
 
   @override
   String p2pShopRegisteredOn(String date) {
     return 'Since $date';
   }
+
+  @override
+  String get p2pShopReview => 'Review';
+
+  @override
+  String get p2pShopUpdateTitle => 'Update the shop';
+
+  @override
+  String get p2pShopUrlCheckFailed => 'Could not check the address. It is checked again when you review.';
+
+  @override
+  String get p2pShopUrlChecking => 'Checking…';
+
+  @override
+  String p2pShopUrlFree(String url) {
+    return 'vfx://$url is free.';
+  }
+
+  @override
+  String get p2pShopUrlStillChecking => 'Still checking this address. Try again in a moment.';
+
+  @override
+  String get p2pShopUrlTaken => 'This address is taken.';
 
   @override
   String get p2pShopYours => 'Your shop';

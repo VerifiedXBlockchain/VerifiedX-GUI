@@ -9,6 +9,7 @@ import 'package:rbx_wallet/core/singletons.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_chain_error.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_chain_steps.dart';
 import 'package:rbx_wallet/features/p2p/chain/p2p_fee_quoter.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_tx_builders.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
@@ -139,6 +140,8 @@ void main() {
         service: service,
         session: P2pSession(service: service, signer: signer),
         fees: fees,
+        walletUrl: 'https://wallet-testnet.verifiedx.io',
+        apiUrl: 'https://data-testnet.verifiedx.io/api/p2p/',
         now: () => now,
       );
     });
@@ -186,6 +189,92 @@ void main() {
       expect(signer.signed, hasLength(1));
       expect(signer.signed.single[1], buyer);
       expect(signer.signed.single[0], isNot(contains('Sale_Complete')));
+    });
+
+    test('starting a sale reads the winning bid from the seller\'s own list, then posts the Sale_Start as the seller', () async {
+      const seller = 'xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ';
+      final me = p2pFixture('me');
+      final won = P2pListing.fromJson((me['selling'] as List).first as Map<String, dynamic>);
+      onDryRun = (request) {
+        if (request.path == '/p2p/me/') {
+          return P2pCannedResponse(200, me);
+        }
+        return P2pCannedResponse(200, p2pFixture('listing_sale_pending'));
+      };
+
+      final tx = await steps.describeStartSale(won);
+      // The description was built from GET /p2p/me/, read with the seller's token.
+      final read = server.requests.last;
+      expect([read.method, read.path, read.authorization], ['GET', '/p2p/me/', 'Bearer token-1']);
+      expect(signer.signed.single[1], seller);
+      expect(tx.function, 'Sale_Start()');
+      expect([tx.fromAddress, tx.toAddress], [seller, buyer]);
+      expect(tx.data['SoldFor'], 5);
+      expect(tx.data['BidSignature'], ((me['selling'] as List).first as Map)['winning_bid']['signature']);
+
+      final started = await steps.startSale(won, tx);
+      expect(started.state, P2pListingState.salePending);
+      final post = server.requests.last;
+      expect([post.method, post.path, post.authorization], ['POST', '/p2p/dry-run/sale-start/', 'Bearer token-1']);
+      expect((post.body as Map<String, dynamic>)['listing_id'], 4);
+      expect((post.body as Map<String, dynamic>)['tx'], tx.toDryRunJson());
+      // Still the one signature: the seller's sign-in message.
+      expect(signer.signed, hasLength(1));
+    });
+
+    test('a sale cannot be started when the seller\'s list has no winning bid for it', () async {
+      onDryRun = (_) => P2pCannedResponse(200, {'shop': null, 'selling': [], 'buying': []});
+      final live = P2pListing.fromJson(p2pFixture('listing_buy_now'));
+      await expectLater(
+        steps.describeStartSale(live),
+        throwsA(isA<P2pChainError>().having((e) => e.failure, 'failure', P2pChainFailure.noWinningBid)),
+      );
+    });
+
+    test('cancelling a started sale posts the Sale_Cancel as the seller', () async {
+      onDryRun = (_) => P2pCannedResponse(200, {...p2pFixture('listing_sale_pending'), 'state': 'cancelled'});
+      final listing = pending();
+      final tx = await steps.describeSaleCancellation(listing);
+      expect(server.requests, isEmpty);
+      expect([tx.function, tx.toAddress], ['Sale_Cancel()', buyer]);
+
+      final cancelled = await steps.cancelSale(listing, tx);
+      expect(cancelled.state, P2pListingState.cancelled);
+      final post = server.requests.last;
+      expect([post.method, post.path], ['POST', '/p2p/dry-run/sale-cancel/']);
+      expect((post.body as Map<String, dynamic>)['listing_id'], 3);
+      expect(signer.signed.single[1], listing.sellerAddress);
+    });
+
+    test('a shop step is described without asking the registry, then posted as its sender', () async {
+      onDryRun = (_) => P2pCannedResponse(200, p2pFixture('shops_page')['results'][0] as Map<String, dynamic>);
+      const values = P2pShopValues(name: 'Corner Shop', url: 'corner-shop', description: '');
+      final tx = await steps.describeRegisterShop(buyer, values);
+      expect(tx.function, 'DecShopCreate()');
+      expect((tx.data['DecShop'] as Map)['ThirdPartyAPIURL'], 'https://data-testnet.verifiedx.io/api/p2p/');
+      expect(server.requests, isEmpty);
+
+      final shop = await steps.sendShopStep(tx);
+      expect(shop.url, 'dryrun-demo');
+      final post = server.requests.last;
+      expect(post.path, '/p2p/dry-run/dstr/');
+      expect(post.authorization, 'Bearer token-1');
+      expect((post.body as Map<String, dynamic>).keys, ['tx']);
+      expect((post.body as Map<String, dynamic>)['tx'], tx.toDryRunJson());
+      // Only the sign-in was signed, as the shop's owner.
+      expect(signer.signed.single[1], buyer);
+    });
+
+    test('a taken address is refused by the registry with its code', () async {
+      onDryRun = (_) => const P2pCannedResponse(409, {
+            'error': {
+              'code': 'url_taken',
+              'message': 'vfx://corner-shop is taken.',
+              'fields': {'DecShopURL': 'Taken.'}
+            }
+          });
+      final tx = await steps.describeRegisterShop(buyer, const P2pShopValues(name: 'Corner Shop', url: 'corner-shop', description: ''));
+      await expectLater(steps.sendShopStep(tx), throwsA(isA<P2pError>().having((e) => e.code, 'code', 'url_taken')));
     });
 
     test('the registry\'s refusal is passed on with its code', () async {

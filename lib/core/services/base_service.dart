@@ -251,6 +251,8 @@ class BaseService {
     }
   }
 
+  /// [headers] go on this one request on top of the service's own, as in
+  /// [postJson].
   Future<Map<String, dynamic>> patchJson(
     String path, {
     Map<String, dynamic> params = const {},
@@ -260,9 +262,10 @@ class BaseService {
     bool inspect = false,
     bool cleanPath = true,
     bool unlockIfLocked = true,
+    Map<String, String> headers = const {},
   }) async {
     try {
-      final dio = _dio(_options(auth: auth, json: true, timeout: timeout));
+      final dio = _dio(_options(auth: auth, json: true, timeout: timeout, extraHeaders: headers));
       if (inspect) {
         NetworkInspector.attach(dio);
       }
@@ -282,6 +285,8 @@ class BaseService {
     }
   }
 
+  /// [headers] go on this one request on top of the service's own, as in
+  /// [postJson].
   Future<Map<String, dynamic>> deleteJson(
     String path, {
     bool auth = true,
@@ -290,9 +295,10 @@ class BaseService {
     bool inspect = false,
     bool cleanPath = true,
     bool unlockIfLocked = true,
+    Map<String, String> headers = const {},
   }) async {
     try {
-      final dio = _dio(_options(auth: auth, json: true, timeout: timeout));
+      final dio = _dio(_options(auth: auth, json: true, timeout: timeout, extraHeaders: headers));
       if (inspect) {
         NetworkInspector.attach(dio);
       }

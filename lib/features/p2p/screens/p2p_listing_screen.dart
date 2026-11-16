@@ -15,6 +15,7 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../components/p2p_bid_dialog.dart';
 import '../components/p2p_dry_run_banner.dart';
+import '../components/p2p_listing_manage.dart';
 import '../components/p2p_page_visibility.dart';
 import '../components/p2p_parts.dart';
 import '../components/p2p_purchase.dart';
@@ -415,7 +416,8 @@ class _PricePanel extends StatelessWidget {
   }
 }
 
-/// Bid and Buy now for someone who can, or why not for someone who cannot.
+/// Bid and Buy now for someone who can, or why not for someone who cannot;
+/// for the seller, where the listing stands and what they can do with it.
 class _Actions extends ConsumerWidget {
   final P2pListing listing;
   final String? viewer;
@@ -426,6 +428,19 @@ class _Actions extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final role = p2pViewerRole(listing, viewer);
+    if (role == P2pViewerRole.seller) {
+      return Column(
+        key: const Key('p2p:seller_panel'),
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _note(_sellerNote(l10n), success: listing.state == P2pListingState.sold),
+          if (P2pSellerActions.of(listing).any) ...[
+            const SizedBox(height: 12),
+            P2pSellerButtons(listing: listing, address: viewer!),
+          ],
+        ],
+      );
+    }
     if (role == P2pViewerRole.winner) {
       if (listing.state == P2pListingState.salePending) {
         return _completePurchase(context, ref, l10n);
@@ -523,6 +538,25 @@ class _Actions extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  /// Where the seller's own listing stands.
+  String _sellerNote(AppLocalizations l10n) {
+    final high = listing.highBid;
+    switch (listing.state) {
+      case P2pListingState.live:
+        return listing.bidCount > 0 ? l10n.p2pManageLiveBids : l10n.p2pManageLive;
+      case P2pListingState.awaitingSaleStart:
+        return l10n.p2pManageStartNote(shortP2pAddress(listing.winnerAddress ?? high?.address ?? ''), p2pVfxText(l10n, high?.amount));
+      case P2pListingState.salePending:
+        return l10n.p2pManagePendingNote;
+      case P2pListingState.sold:
+        return l10n.p2pManageSoldNote(p2pVfxText(l10n, P2pHeadline.of(listing)?.amount));
+      case P2pListingState.unfulfilled:
+        return l10n.p2pManageUnfulfilledNote;
+      default:
+        return l10n.p2pListingOver;
+    }
   }
 
   String _winnerNote(AppLocalizations l10n) {
