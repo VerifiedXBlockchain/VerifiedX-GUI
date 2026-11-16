@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import '../../../core/services/explorer_service.dart';
+import '../../asset/asset.dart';
 import '../../nft/models/nft.dart';
 import '../../nft/services/nft_service.dart';
 import '../../smart_contracts/features/royalty/royalty.dart';
@@ -83,10 +86,13 @@ class P2pWalletNftSource implements P2pNftSource {
       throw const P2pMediaUploadError();
     }
     final urls = <String, String>{};
-    for (final asset in [nft.primaryAsset, ...nft.additionalAssets]) {
+    // The additional assets with the paths Core resolved for them, when the
+    // NFT was read with them.
+    final extras = nft.additionalLocalAssets.isNotEmpty ? nft.additionalLocalAssets : nft.additionalAssets;
+    for (final asset in [nft.primaryAsset, ...extras]) {
       final String? url;
       try {
-        url = await _explorer.uploadAsset(await asset.file.readAsBytes(), asset.fileName, asset.extension);
+        url = await _explorer.uploadAsset(await File(p2pAssetPath(asset)).readAsBytes(), asset.fileName, asset.extension);
       } catch (_) {
         // A file that is not on this disk, or an upload Spyglass refused.
         throw P2pMediaUploadError(asset.fileName);
@@ -100,6 +106,14 @@ class P2pWalletNftSource implements P2pNftSource {
       throw const P2pMediaUploadError();
     }
   }
+}
+
+/// Where [asset]'s file is on this computer: the path Core resolved for it
+/// (its own assets folder, which is where the media of an NFT received from
+/// elsewhere lands), else the location it was minted from.
+String p2pAssetPath(Asset asset) {
+  final resolved = asset.localPath;
+  return resolved != null && resolved.isNotEmpty ? resolved : asset.fixedLocation;
 }
 
 /// Core's feature numbers for a fungible token and a vBTC vault.
@@ -126,7 +140,7 @@ P2pOwnedNft p2pOwnedNftOf(Nft nft) {
     }
   }
   final asset = nft.primaryAsset;
-  final path = asset.isImage ? asset.fixedLocation : '';
+  final path = asset.isImage ? p2pAssetPath(asset) : '';
   return P2pOwnedNft(
     id: nft.id,
     name: nft.name,

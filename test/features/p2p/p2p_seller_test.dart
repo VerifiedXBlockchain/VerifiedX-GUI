@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/api_token_manager.dart';
 import 'package:rbx_wallet/core/models/paginated_response.dart';
 import 'package:rbx_wallet/core/services/base_service.dart';
+import 'package:rbx_wallet/core/services/explorer_service.dart';
 import 'package:rbx_wallet/core/singletons.dart';
 import 'package:rbx_wallet/features/nft/models/nft.dart';
 import 'package:rbx_wallet/features/nft/services/nft_service.dart';
@@ -42,6 +46,25 @@ class _FakeNftService extends NftService {
       return null;
     }
     return pages.expand((p) => p).firstWhere((n) => n.id == id).copyWith(currentOwner: owner);
+  }
+}
+
+/// Spyglass's media calls from memory: what was uploaded, and what was
+/// attached to which NFT with which token.
+class _FakeExplorer extends ExplorerService {
+  final Map<String, List<int>> uploaded = {};
+  final List<String> attached = [];
+
+  @override
+  Future<String?> uploadAsset(Uint8List bytes, String filename, String? ext) async {
+    uploaded[filename] = bytes;
+    return 'https://media.example/$filename';
+  }
+
+  @override
+  Future<bool> associateMedia(String scId, Map<String, String> mediaMap, {required String authToken}) async {
+    attached.add('$scId ${mediaMap.keys.join(",")} as $authToken');
+    return true;
   }
 }
 
@@ -320,6 +343,65 @@ void main() {
       expect(nfts.map((n) => "${n.id} ${n.owner}"), ['a:1 $owner', 'b:2 xOther', 'c:3 ']);
       // One whose owner could not be read is nobody's here: it is not offered.
       expect(p2pNftBlock(nfts.last, address: owner, listed: const {}), P2pNftBlock.notYours);
+    });
+
+    test('its picture is the file Core resolved on this computer, not where it was minted', () {
+      final nft = Nft.fromJson(core());
+      final resolved = nft.copyWith(primaryAsset: nft.primaryAsset.copyWith(localPath: '/core/assets/abc/harbor.png'));
+      expect(p2pOwnedNftOf(resolved).imagePath, '/core/assets/abc/harbor.png');
+      // With nothing resolved, the minting location is all there is.
+      expect(p2pOwnedNftOf(nft).imagePath, '/tmp/assets/harbor.png');
+    });
+
+    test('its media is uploaded from the resolved files, the additional ones too', () async {
+      if (!singleton.isRegistered<ApiTokenManager>()) {
+        singleton.registerSingleton<ApiTokenManager>(ApiTokenManagerImplementation());
+      }
+      final folder = Directory.systemTemp.createTempSync('p2p_media_test');
+      addTearDown(() => folder.deleteSync(recursive: true));
+      final primary = File('${folder.path}/harbor.png')..writeAsBytesSync([1, 2, 3]);
+      final extra = File('${folder.path}/notes.pdf')..writeAsBytesSync([4, 5]);
+
+      // Minted elsewhere: the locations in the contract are not on this disk.
+      final listed = Nft.fromJson(core());
+      final extraAsset = listed.primaryAsset.copyWith(name: 'notes.pdf', location: '/somewhere/else/notes.pdf', extension: 'pdf', localPath: extra.path);
+      final nft = listed.copyWith(
+        primaryAsset: listed.primaryAsset.copyWith(localPath: primary.path),
+        additionalLocalAssets: [extraAsset],
+      );
+      final core2 = _FakeNftService(
+        [
+          [nft]
+        ],
+        {'abc:1': owner},
+      );
+      final explorer = _FakeExplorer();
+
+      await P2pWalletNftSource(nfts: core2, explorer: explorer).uploadMedia('abc:1', 'tok');
+
+      expect(explorer.uploaded, {
+        'harbor.png': [1, 2, 3],
+        'notes.pdf': [4, 5],
+      });
+      expect(explorer.attached, ['abc:1 harbor.png,notes.pdf as tok']);
+    });
+
+    test('media that is not on this disk is a failed upload, naming the file', () async {
+      if (!singleton.isRegistered<ApiTokenManager>()) {
+        singleton.registerSingleton<ApiTokenManager>(ApiTokenManagerImplementation());
+      }
+      final core2 = _FakeNftService(
+        [
+          [Nft.fromJson(core())]
+        ],
+        {'abc:1': owner},
+      );
+      final explorer = _FakeExplorer();
+      await expectLater(
+        P2pWalletNftSource(nfts: core2, explorer: explorer).uploadMedia('abc:1', 'tok'),
+        throwsA(isA<P2pMediaUploadError>().having((e) => e.fileName, 'fileName', 'harbor.png')),
+      );
+      expect(explorer.attached, isEmpty);
     });
 
     test('a token or a vBTC vault is not sellable; an unminted one says so; a video has no picture', () {
