@@ -3684,6 +3684,124 @@
   "@operationsWalletStarted": {
     "description": "Status item label: wallet start time."
   },
+  "p2pAmountVfx": "{amount} VFX",
+  "@p2pAmountVfx": {
+    "description": "A VFX amount with its unit, on P2P shop screens.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pBidCountNone": "Sin ofertas",
+  "@p2pBidCountNone": {
+    "description": "Bid count on a P2P auction with no bids."
+  },
+  "p2pBidCountOne": "1 oferta",
+  "@p2pBidCountOne": {
+    "description": "Bid count on a P2P auction with one bid."
+  },
+  "p2pBidCountOther": "{count} ofertas",
+  "@p2pBidCountOther": {
+    "description": "Bid count on a P2P auction with several bids.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pClearSearch": "Borrar búsqueda",
+  "@p2pClearSearch": {
+    "description": "Tooltip of the icon button that clears the P2P shop search field."
+  },
+  "p2pClockClosing": "Cerrando…",
+  "@p2pClockClosing": {
+    "description": "Shown on a P2P listing that is past its end but not settled by the registry yet."
+  },
+  "p2pClockEndsIn": "Termina en {time}",
+  "@p2pClockEndsIn": {
+    "description": "Countdown to a P2P listing's end.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pClockOpensIn": "Abre en {time}",
+  "@p2pClockOpensIn": {
+    "description": "Countdown to a P2P listing's start.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pClockSellerHas": "La venta empieza en un máximo de {time}",
+  "@p2pClockSellerHas": {
+    "description": "Countdown to the deadline for a P2P seller to start the sale.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pCopied": "Copiado al portapapeles",
+  "@p2pCopied": {
+    "description": "Toast after copying a P2P shop address, owner address or contract id."
+  },
+  "p2pCopyOwnerAddress": "Copiar dirección del propietario",
+  "@p2pCopyOwnerAddress": {
+    "description": "Tooltip of the icon button that copies a P2P shop owner's address."
+  },
+  "p2pCopyShopAddress": "Copiar dirección de la tienda",
+  "@p2pCopyShopAddress": {
+    "description": "Tooltip of the icon button that copies a P2P shop's vfx:// address."
+  },
+  "p2pCountdownDaysHours": "{days} d {hours} h",
+  "@p2pCountdownDaysHours": {
+    "description": "A time left in days and hours.",
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pCountdownHoursMinutes": "{hours} h {minutes} min",
+  "@p2pCountdownHoursMinutes": {
+    "description": "A time left in hours and minutes.",
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pCountdownMinutesSeconds": "{minutes} min {seconds} s",
+  "@p2pCountdownMinutesSeconds": {
+    "description": "A time left in minutes and seconds.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pCountdownSeconds": "{seconds} s",
+  "@p2pCountdownSeconds": {
+    "description": "A time left in seconds.",
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
   "p2pDryRunBadge": "Simulación",
   "@p2pDryRunBadge": {
     "description": "Short badge marking a P2P shop, listing or step as a dry run (not on chain)."
@@ -3691,6 +3809,139 @@
   "p2pDryRunBanner": "Los pasos de la tienda que serían transacciones quedan registrados en el registro de tiendas de testnet. No se firma ninguna transacción ni se envía nada a la red.",
   "@p2pDryRunBanner": {
     "description": "Banner body on every P2P shop screen while chain steps are dry runs. Follows the bold 'Dry run.' badge."
+  },
+  "p2pErrorAmountMismatch": "El precio cambió. Revisa el listado e inténtalo de nuevo.",
+  "@p2pErrorAmountMismatch": {
+    "description": "P2P shop error code amount_mismatch: a buy-now offer was not for the buy-now price exactly."
+  },
+  "p2pErrorBadResponse": "El registro de tiendas envió una respuesta que esta billetera no pudo leer.",
+  "@p2pErrorBadResponse": {
+    "description": "P2P shop error: the registry's answer was not in the expected shape."
+  },
+  "p2pErrorBadSignature": "El registro de tiendas no pudo verificar la firma de esta cuenta. Inténtalo de nuevo.",
+  "@p2pErrorBadSignature": {
+    "description": "P2P shop error code bad_signature."
+  },
+  "p2pErrorBidTooLow": "Tu oferta está por debajo de la siguiente oferta mínima. Puede que alguien haya ofertado justo antes.",
+  "@p2pErrorBidTooLow": {
+    "description": "P2P shop error code bid_too_low."
+  },
+  "p2pErrorConflict": "Eso cambió mientras tanto. Recarga e inténtalo de nuevo.",
+  "@p2pErrorConflict": {
+    "description": "P2P shop error: a 409 with no message."
+  },
+  "p2pErrorDuplicateBid": "Esta oferta ya se había hecho.",
+  "@p2pErrorDuplicateBid": {
+    "description": "P2P shop error code duplicate_bid."
+  },
+  "p2pErrorForbidden": "Esta cuenta no puede hacer eso aquí.",
+  "@p2pErrorForbidden": {
+    "description": "P2P shop error: a 403 with no message."
+  },
+  "p2pErrorInsufficientBalance": "El saldo de esta cuenta no cubre el importe.",
+  "@p2pErrorInsufficientBalance": {
+    "description": "P2P shop error code insufficient_balance."
+  },
+  "p2pErrorInvalid": "El registro de tiendas no pudo aceptarlo. Revisa los datos e inténtalo de nuevo.",
+  "@p2pErrorInvalid": {
+    "description": "P2P shop error: a 400 with no message."
+  },
+  "p2pErrorListingEnded": "Este listado ha terminado.",
+  "@p2pErrorListingEnded": {
+    "description": "P2P shop error code listing_ended."
+  },
+  "p2pErrorListingNotLive": "Este listado ya no acepta ofertas.",
+  "@p2pErrorListingNotLive": {
+    "description": "P2P shop error code listing_not_live."
+  },
+  "p2pErrorListingNotStarted": "Las ofertas aún no han abierto.",
+  "@p2pErrorListingNotStarted": {
+    "description": "P2P shop error code listing_not_started."
+  },
+  "p2pErrorListingUnavailable": "Este listado no está disponible en su tienda ahora mismo.",
+  "@p2pErrorListingUnavailable": {
+    "description": "P2P shop error code listing_unavailable: the shop or collection is closed or hidden."
+  },
+  "p2pErrorNoBuyNow": "Este listado no tiene precio de compra inmediata.",
+  "@p2pErrorNoBuyNow": {
+    "description": "P2P shop error code no_buy_now."
+  },
+  "p2pErrorNotAnAuction": "Este listado no acepta ofertas. Usa Comprar ahora.",
+  "@p2pErrorNotAnAuction": {
+    "description": "P2P shop error code not_an_auction."
+  },
+  "p2pErrorNotFound": "No encontrado. Puede que se haya eliminado.",
+  "@p2pErrorNotFound": {
+    "description": "P2P shop error code not_found."
+  },
+  "p2pErrorRefused": "El registro de tiendas lo rechazó: {reason}",
+  "@p2pErrorRefused": {
+    "description": "P2P shop error with a code this wallet has no words for: the registry's own message follows.",
+    "placeholders": {
+      "reason": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pErrorReserveAddress": "Una cuenta Vault no puede ofertar ni comprar. Elige otra cuenta.",
+  "@p2pErrorReserveAddress": {
+    "description": "P2P shop error code reserve_address."
+  },
+  "p2pErrorSellerCannotBid": "No puedes ofertar en tu propio listado.",
+  "@p2pErrorSellerCannotBid": {
+    "description": "P2P shop error code seller_cannot_bid."
+  },
+  "p2pErrorServer": "El registro de tiendas tuvo un problema. Inténtalo de nuevo en un momento.",
+  "@p2pErrorServer": {
+    "description": "P2P shop error: the registry answered with a server error."
+  },
+  "p2pErrorShopNotFound": "Ninguna tienda tiene esta dirección.",
+  "@p2pErrorShopNotFound": {
+    "description": "P2P shop error code shop_not_found."
+  },
+  "p2pErrorSignInExpired": "El inicio de sesión en la tienda ha caducado. Inténtalo de nuevo.",
+  "@p2pErrorSignInExpired": {
+    "description": "P2P shop error: the sign-in token is missing, unknown or expired (codes not_authenticated, token_invalid, token_expired)."
+  },
+  "p2pErrorSignInRefused": "El registro de tiendas no aceptó el inicio de sesión de esta cuenta. Inténtalo de nuevo.",
+  "@p2pErrorSignInRefused": {
+    "description": "P2P shop error: the signed sign-in message was refused."
+  },
+  "p2pErrorSignNotInWallet": "Esta cuenta no está en esta billetera, así que no puede firmar.",
+  "@p2pErrorSignNotInWallet": {
+    "description": "P2P shop error: Core has no key for the address asked to sign."
+  },
+  "p2pErrorSignUnexpected": "El nodo de la billetera no devolvió una firma. Inténtalo de nuevo.",
+  "@p2pErrorSignUnexpected": {
+    "description": "P2P shop error: Core answered a signing request with something that is not a signature."
+  },
+  "p2pErrorSignUnreachable": "No se pudo conectar con el nodo de la billetera para firmar. Inténtalo de nuevo.",
+  "@p2pErrorSignUnreachable": {
+    "description": "P2P shop error: the local Core node did not answer a signing request."
+  },
+  "p2pErrorThrottled": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
+  "@p2pErrorThrottled": {
+    "description": "P2P shop error: the registry is rate limiting this wallet."
+  },
+  "p2pErrorUnknown": "Algo salió mal. Inténtalo de nuevo.",
+  "@p2pErrorUnknown": {
+    "description": "P2P shop error of an unexpected kind."
+  },
+  "p2pErrorUnreachable": "No se pudo conectar con el registro de tiendas. Revisa tu conexión e inténtalo de nuevo.",
+  "@p2pErrorUnreachable": {
+    "description": "P2P shop error: the request to Spyglass got no answer."
+  },
+  "p2pErrorUseBuyNow": "Al precio de compra inmediata o más, usa Comprar ahora.",
+  "@p2pErrorUseBuyNow": {
+    "description": "P2P shop error code use_buy_now."
+  },
+  "p2pListingAuction": "Subasta",
+  "@p2pListingAuction": {
+    "description": "Chip on a P2P listing that takes bids."
+  },
+  "p2pListingFixedPrice": "Precio fijo",
+  "@p2pListingFixedPrice": {
+    "description": "Chip on a P2P listing that sells at its buy-now price only."
   },
   "p2pListingTitle": "Listado",
   "@p2pListingTitle": {
@@ -3700,9 +3951,165 @@
   "@p2pNavShops": {
     "description": "Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry."
   },
+  "p2pPageNumber": "Página {page}",
+  "@p2pPageNumber": {
+    "description": "Current page indicator between the Previous and Next buttons of a P2P list.",
+    "placeholders": {
+      "page": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pPriceBuyNow": "Comprar ahora",
+  "@p2pPriceBuyNow": {
+    "description": "Label of a P2P listing's buy-now price."
+  },
+  "p2pPriceCurrentBid": "Oferta actual",
+  "@p2pPriceCurrentBid": {
+    "description": "Label of a P2P auction's current high bid."
+  },
+  "p2pPriceSoldFor": "Vendido por",
+  "@p2pPriceSoldFor": {
+    "description": "Label of a P2P listing's sold price."
+  },
+  "p2pPriceStartingBid": "Oferta inicial",
+  "@p2pPriceStartingBid": {
+    "description": "Label of a P2P auction's opening price before any bid."
+  },
+  "p2pPriceWinningBid": "Oferta ganadora",
+  "@p2pPriceWinningBid": {
+    "description": "Label of a P2P listing's winning bid."
+  },
+  "p2pRetry": "Reintentar",
+  "@p2pRetry": {
+    "description": "Button that reloads a P2P shop screen after it failed to load."
+  },
+  "p2pSearchHint": "Buscar por nombre o dirección",
+  "@p2pSearchHint": {
+    "description": "Placeholder of the search field on the P2P shop list."
+  },
+  "p2pSearchLabel": "Buscar tiendas",
+  "@p2pSearchLabel": {
+    "description": "Accessible label of the search field on the P2P shop list."
+  },
+  "p2pShopAll": "Todo",
+  "@p2pShopAll": {
+    "description": "Filter chip on a P2P shop page that shows every collection's listings."
+  },
+  "p2pShopCollections": "Colecciones",
+  "@p2pShopCollections": {
+    "description": "Accessible label of the collection filter chips on a P2P shop page."
+  },
+  "p2pShopLiveCount": "{count} activos",
+  "@p2pShopLiveCount": {
+    "description": "Badge on a P2P shop card: how many live listings the shop has.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "p2pShopLiveListings": "Listados activos",
+  "@p2pShopLiveListings": {
+    "description": "Label of the live listing count on a P2P shop page header."
+  },
+  "p2pShopNoListings": "No hay nada en venta ahora mismo.",
+  "@p2pShopNoListings": {
+    "description": "Empty-state title of a P2P shop page with no listings."
+  },
+  "p2pShopNoListingsBody": "Vuelve pronto.",
+  "@p2pShopNoListingsBody": {
+    "description": "Empty-state body of a P2P shop page with no listings."
+  },
+  "p2pShopNotFound": "No hay ninguna tienda en esta dirección.",
+  "@p2pShopNotFound": {
+    "description": "Title shown when a P2P shop URL has no shop."
+  },
+  "p2pShopNotFoundBody": "Puede que haya cerrado o que la dirección esté mal escrita.",
+  "@p2pShopNotFoundBody": {
+    "description": "Body shown when a P2P shop URL has no shop."
+  },
+  "p2pShopOwner": "Propietario",
+  "@p2pShopOwner": {
+    "description": "Label before a P2P shop owner's address."
+  },
+  "p2pShopRegistered": "Registrada",
+  "@p2pShopRegistered": {
+    "description": "Badge on a P2P shop whose registration is on chain."
+  },
+  "p2pShopRegisteredOn": "Desde {date}",
+  "@p2pShopRegisteredOn": {
+    "description": "When a P2P shop was registered, on its page header.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopYours": "Tu tienda",
+  "@p2pShopYours": {
+    "description": "Tag on a P2P shop the selected account owns."
+  },
+  "p2pShopsEmpty": "Aún no hay tiendas",
+  "@p2pShopsEmpty": {
+    "description": "Empty-state title of the P2P shop list when the registry has no shops."
+  },
+  "p2pShopsEmptyBody": "Las tiendas registradas en la red aparecen aquí.",
+  "@p2pShopsEmptyBody": {
+    "description": "Empty-state body of the P2P shop list when the registry has no shops."
+  },
+  "p2pShopsEmptySearch": "Ninguna tienda coincide con «{search}»",
+  "@p2pShopsEmptySearch": {
+    "description": "Empty-state title of the P2P shop list when a search finds nothing.",
+    "placeholders": {
+      "search": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pShopsEmptySearchBody": "Prueba con un nombre más corto o con la dirección vfx:// de la tienda.",
+  "@p2pShopsEmptySearchBody": {
+    "description": "Empty-state body of the P2P shop list when a search finds nothing."
+  },
   "p2pShopsTitle": "Tiendas",
   "@p2pShopsTitle": {
     "description": "App bar title of the P2P shop list screen."
+  },
+  "p2pStateAwaitingSaleStart": "Ganador elegido",
+  "@p2pStateAwaitingSaleStart": {
+    "description": "P2P listing state: a buyer won and the seller has to start the sale."
+  },
+  "p2pStateCancelled": "Cancelado",
+  "@p2pStateCancelled": {
+    "description": "P2P listing state: the seller withdrew the listing."
+  },
+  "p2pStateEnded": "Venta cancelada",
+  "@p2pStateEnded": {
+    "description": "P2P listing state: the sale was cancelled or the NFT moved."
+  },
+  "p2pStateExpired": "Terminó sin venta",
+  "@p2pStateExpired": {
+    "description": "P2P listing state: it ended with no valid bid."
+  },
+  "p2pStateLive": "Activo",
+  "@p2pStateLive": {
+    "description": "P2P listing state: taking bids or offers."
+  },
+  "p2pStateSalePending": "Venta iniciada",
+  "@p2pStateSalePending": {
+    "description": "P2P listing state: the seller started the sale and the buyer has to complete it."
+  },
+  "p2pStateSold": "Vendido",
+  "@p2pStateSold": {
+    "description": "P2P listing state: the sale is complete."
+  },
+  "p2pStateUnfulfilled": "Venta no iniciada",
+  "@p2pStateUnfulfilled": {
+    "description": "P2P listing state: the seller did not start the sale in time."
+  },
+  "p2pStateUnknown": "Cerrado",
+  "@p2pStateUnknown": {
+    "description": "P2P listing state this version of the wallet does not know: shown as closed."
   },
   "paymentAmountHint": "Ingresa el monto",
   "@paymentAmountHint": {

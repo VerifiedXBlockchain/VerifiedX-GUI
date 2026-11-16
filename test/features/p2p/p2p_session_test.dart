@@ -15,12 +15,6 @@ import 'package:rbx_wallet/features/p2p/utils/p2p_rules.dart';
 
 import 'p2p_test_helpers.dart';
 
-/// The wallet's lock state without the node: [check] asks nothing.
-class FakePasswordRequired extends PasswordRequiredProvider {
-  @override
-  Future<bool> check() async => state;
-}
-
 void main() {
   const alice = 'xAliceAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
   const bob = 'xBobBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB';
@@ -293,7 +287,7 @@ void main() {
     final container = ProviderContainer(overrides: [
       p2pServiceProvider.overrideWithValue(P2pService(hostOverride: server.host)),
       p2pSignerProvider.overrideWithValue(signer),
-      passwordRequiredProvider.overrideWith((ref) => FakePasswordRequired()),
+      passwordRequiredProvider.overrideWith((ref) => StubPasswordRequired()),
     ]);
     addTearDown(container.dispose);
 

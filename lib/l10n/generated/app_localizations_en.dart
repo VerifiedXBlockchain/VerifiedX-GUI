@@ -3516,10 +3516,174 @@ class AppLocalizationsEn extends AppLocalizations {
   String get operationsWalletStarted => 'Wallet Started';
 
   @override
+  String p2pAmountVfx(String amount) {
+    return '$amount VFX';
+  }
+
+  @override
+  String get p2pBidCountNone => 'No bids';
+
+  @override
+  String get p2pBidCountOne => '1 bid';
+
+  @override
+  String p2pBidCountOther(int count) {
+    return '$count bids';
+  }
+
+  @override
+  String get p2pClearSearch => 'Clear search';
+
+  @override
+  String get p2pClockClosing => 'Closing…';
+
+  @override
+  String p2pClockEndsIn(String time) {
+    return 'Ends in $time';
+  }
+
+  @override
+  String p2pClockOpensIn(String time) {
+    return 'Opens in $time';
+  }
+
+  @override
+  String p2pClockSellerHas(String time) {
+    return 'Sale starts within $time';
+  }
+
+  @override
+  String get p2pCopied => 'Copied to clipboard';
+
+  @override
+  String get p2pCopyOwnerAddress => 'Copy owner address';
+
+  @override
+  String get p2pCopyShopAddress => 'Copy shop address';
+
+  @override
+  String p2pCountdownDaysHours(int days, int hours) {
+    return '${days}d ${hours}h';
+  }
+
+  @override
+  String p2pCountdownHoursMinutes(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
+  String p2pCountdownMinutesSeconds(int minutes, int seconds) {
+    return '${minutes}m ${seconds}s';
+  }
+
+  @override
+  String p2pCountdownSeconds(int seconds) {
+    return '${seconds}s';
+  }
+
+  @override
   String get p2pDryRunBadge => 'Dry run';
 
   @override
   String get p2pDryRunBanner => 'Shop steps that would be transactions are recorded by the shop registry on testnet. Nothing is signed into a transaction or sent to the network.';
+
+  @override
+  String get p2pErrorAmountMismatch => 'The price changed. Check the listing and try again.';
+
+  @override
+  String get p2pErrorBadResponse => 'The shop registry sent an answer this wallet could not read.';
+
+  @override
+  String get p2pErrorBadSignature => 'The shop registry could not verify this account’s signature. Try again.';
+
+  @override
+  String get p2pErrorBidTooLow => 'Your bid is below the next minimum bid. Someone may have bid just before you.';
+
+  @override
+  String get p2pErrorConflict => 'That changed in the meantime. Reload and try again.';
+
+  @override
+  String get p2pErrorDuplicateBid => 'This bid was already placed.';
+
+  @override
+  String get p2pErrorForbidden => 'This account cannot do that here.';
+
+  @override
+  String get p2pErrorInsufficientBalance => 'This account’s balance does not cover the amount.';
+
+  @override
+  String get p2pErrorInvalid => 'The shop registry could not accept that. Check the details and try again.';
+
+  @override
+  String get p2pErrorListingEnded => 'This listing has ended.';
+
+  @override
+  String get p2pErrorListingNotLive => 'This listing is not taking bids any more.';
+
+  @override
+  String get p2pErrorListingNotStarted => 'Bidding has not opened yet.';
+
+  @override
+  String get p2pErrorListingUnavailable => 'This listing is not available in its shop right now.';
+
+  @override
+  String get p2pErrorNoBuyNow => 'This listing has no buy-now price.';
+
+  @override
+  String get p2pErrorNotAnAuction => 'This listing does not take bids. Use Buy now.';
+
+  @override
+  String get p2pErrorNotFound => 'Not found. It may have been removed.';
+
+  @override
+  String p2pErrorRefused(String reason) {
+    return 'The shop registry refused it: $reason';
+  }
+
+  @override
+  String get p2pErrorReserveAddress => 'A Vault account cannot bid or buy. Choose another account.';
+
+  @override
+  String get p2pErrorSellerCannotBid => 'You cannot bid on your own listing.';
+
+  @override
+  String get p2pErrorServer => 'The shop registry had a problem. Try again in a moment.';
+
+  @override
+  String get p2pErrorShopNotFound => 'No shop has this address.';
+
+  @override
+  String get p2pErrorSignInExpired => 'The shop sign-in has expired. Try again.';
+
+  @override
+  String get p2pErrorSignInRefused => 'The shop registry did not accept this account’s sign-in. Try again.';
+
+  @override
+  String get p2pErrorSignNotInWallet => 'This account is not in this wallet, so it cannot sign.';
+
+  @override
+  String get p2pErrorSignUnexpected => 'The wallet’s node did not return a signature. Try again.';
+
+  @override
+  String get p2pErrorSignUnreachable => 'Could not reach the wallet’s node to sign. Try again.';
+
+  @override
+  String get p2pErrorThrottled => 'Too many requests. Wait a moment and try again.';
+
+  @override
+  String get p2pErrorUnknown => 'Something went wrong. Try again.';
+
+  @override
+  String get p2pErrorUnreachable => 'Could not reach the shop registry. Check your connection and try again.';
+
+  @override
+  String get p2pErrorUseBuyNow => 'At the buy-now price or more, use Buy now.';
+
+  @override
+  String get p2pListingAuction => 'Auction';
+
+  @override
+  String get p2pListingFixedPrice => 'Fixed price';
 
   @override
   String get p2pListingTitle => 'Listing';
@@ -3528,7 +3692,117 @@ class AppLocalizationsEn extends AppLocalizations {
   String get p2pNavShops => 'Shops';
 
   @override
+  String p2pPageNumber(int page) {
+    return 'Page $page';
+  }
+
+  @override
+  String get p2pPriceBuyNow => 'Buy now';
+
+  @override
+  String get p2pPriceCurrentBid => 'Current bid';
+
+  @override
+  String get p2pPriceSoldFor => 'Sold for';
+
+  @override
+  String get p2pPriceStartingBid => 'Starting bid';
+
+  @override
+  String get p2pPriceWinningBid => 'Winning bid';
+
+  @override
+  String get p2pRetry => 'Retry';
+
+  @override
+  String get p2pSearchHint => 'Search by name or address';
+
+  @override
+  String get p2pSearchLabel => 'Search shops';
+
+  @override
+  String get p2pShopAll => 'All';
+
+  @override
+  String get p2pShopCollections => 'Collections';
+
+  @override
+  String p2pShopLiveCount(int count) {
+    return '$count live';
+  }
+
+  @override
+  String get p2pShopLiveListings => 'Live listings';
+
+  @override
+  String get p2pShopNoListings => 'Nothing listed right now.';
+
+  @override
+  String get p2pShopNoListingsBody => 'Check back soon.';
+
+  @override
+  String get p2pShopNotFound => 'No shop at this address.';
+
+  @override
+  String get p2pShopNotFoundBody => 'It may have been closed, or the address is mistyped.';
+
+  @override
+  String get p2pShopOwner => 'Owner';
+
+  @override
+  String get p2pShopRegistered => 'Registered';
+
+  @override
+  String p2pShopRegisteredOn(String date) {
+    return 'Since $date';
+  }
+
+  @override
+  String get p2pShopYours => 'Your shop';
+
+  @override
+  String get p2pShopsEmpty => 'No shops yet';
+
+  @override
+  String get p2pShopsEmptyBody => 'Shops registered on the network appear here.';
+
+  @override
+  String p2pShopsEmptySearch(String search) {
+    return 'No shops match “$search”';
+  }
+
+  @override
+  String get p2pShopsEmptySearchBody => 'Try a shorter name or the shop’s vfx:// address.';
+
+  @override
   String get p2pShopsTitle => 'Shops';
+
+  @override
+  String get p2pStateAwaitingSaleStart => 'Winner chosen';
+
+  @override
+  String get p2pStateCancelled => 'Cancelled';
+
+  @override
+  String get p2pStateEnded => 'Sale cancelled';
+
+  @override
+  String get p2pStateExpired => 'Ended without a sale';
+
+  @override
+  String get p2pStateLive => 'Live';
+
+  @override
+  String get p2pStateSalePending => 'Sale started';
+
+  @override
+  String get p2pStateSold => 'Sold';
+
+  @override
+  String get p2pStateUnfulfilled => 'Sale not started';
+
+  @override
+  String get p2pStateUnknown => 'Closed';
 
   @override
   String get paymentAmountHint => 'Enter amount';

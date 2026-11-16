@@ -1,7 +1,21 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:rbx_wallet/core/providers/session_provider.dart';
+import 'package:rbx_wallet/features/encrypt/providers/password_required_provider.dart';
+import 'package:rbx_wallet/features/p2p/components/p2p_parts.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_auth_token.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_bid_summary.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_page.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
+import 'package:rbx_wallet/features/p2p/providers/p2p_session_provider.dart';
+import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_signer.dart';
+import 'package:rbx_wallet/features/wallet/models/wallet.dart';
+import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
 
 /// The decoded body of `test/features/p2p/fixtures/[name].json`.
 Map<String, dynamic> p2pFixture(String name) {
@@ -94,4 +108,136 @@ class FakeP2pSigner implements P2pMessageSigner {
     }
     return signature;
   }
+}
+
+/// A wallet session with [address] selected that never launches the CLI.
+class StubP2pSession extends SessionProvider {
+  StubP2pSession(Ref ref, {String? address, double balance = 100})
+      : super(
+          ref,
+          SessionModel(
+            cliStarted: true,
+            currentWallet: address == null ? null : Wallet(id: 1, publicKey: 'pub', address: address, balance: balance, isValidating: false),
+          ),
+        );
+
+  @override
+  Future<void> init(bool inLoop) async {}
+}
+
+/// The wallet's lock state without the node: [check] asks nothing.
+class StubPasswordRequired extends PasswordRequiredProvider {
+  @override
+  Future<bool> check() async => state;
+}
+
+/// The registry, answered from memory. Each method records its call in
+/// [calls] and answers from the matching field, or throws [error] when set.
+class FakeP2pService extends P2pService {
+  final List<String> calls = [];
+  Object? error;
+
+  P2pPage<P2pShop> Function(String search, int page) shops = (_, __) => P2pPage.empty();
+  Map<String, P2pShop> shopsByUrl = {};
+  P2pPage<P2pListing> Function(String url, int? collectionId, int page) listings = (_, __, ___) => P2pPage.empty();
+  Map<int, P2pListing> listingsById = {};
+  List<P2pBidSummary> allBids = [];
+  P2pBidResult Function(int listingId, String amount, bool isBuyNow, String signature)? onBid;
+
+  FakeP2pService() : super(hostOverride: 'http://127.0.0.1:9');
+
+  void _fail() {
+    if (error != null) {
+      throw error!;
+    }
+  }
+
+  @override
+  Future<P2pPage<P2pShop>> listShops({String? search, String? owner, int page = 1, int? limit}) async {
+    calls.add('listShops(search: ${search ?? ''}, page: $page)');
+    _fail();
+    return shops(search ?? '', page);
+  }
+
+  @override
+  Future<P2pShop?> getShop(String url) async {
+    calls.add('getShop($url)');
+    _fail();
+    return shopsByUrl[url];
+  }
+
+  @override
+  Future<P2pPage<P2pListing>> listListings(
+    String shopUrl, {
+    int? collectionId,
+    P2pListingState? state,
+    int page = 1,
+    int? limit,
+  }) async {
+    calls.add('listListings($shopUrl, collection: $collectionId, page: $page, limit: $limit)');
+    _fail();
+    return listings(shopUrl, collectionId, page);
+  }
+
+  @override
+  Future<P2pListing?> getListing(int id) async {
+    calls.add('getListing($id)');
+    _fail();
+    return listingsById[id];
+  }
+
+  @override
+  Future<P2pPage<P2pBidSummary>> listBids(int listingId, {int page = 1, int? limit}) async {
+    calls.add('listBids($listingId, page: $page)');
+    _fail();
+    return P2pPage(count: allBids.length, next: null, results: allBids);
+  }
+
+  @override
+  Future<P2pAuthToken> signToken({required String address, required String message, required String signature}) async {
+    calls.add('signToken($address)');
+    return P2pAuthToken(token: 'token-for-$address', address: address, expiresAt: DateTime.now().toUtc().add(const Duration(hours: 1)));
+  }
+
+  @override
+  Future<P2pBidResult> placeBid({
+    required String token,
+    required int listingId,
+    required String amount,
+    required bool isBuyNow,
+    required String signature,
+  }) async {
+    calls.add('placeBid($listingId, $amount, buyNow: $isBuyNow, token: $token)');
+    _fail();
+    return onBid!(listingId, amount, isBuyNow, signature);
+  }
+}
+
+/// [child] inside the app's localizations and a provider scope whose
+/// registry is [service], with [address] as the selected account and the
+/// clock held at [now].
+Widget p2pTestApp({
+  required Widget child,
+  required FakeP2pService service,
+  String? address = 'xViewerAAAAAAAAAAAAAAAAAAAAAAAAAAA',
+  double balance = 100,
+  DateTime? now,
+  P2pMessageSigner? signer,
+  List<Override> overrides = const [],
+}) {
+  return ProviderScope(
+    overrides: [
+      p2pServiceProvider.overrideWithValue(service),
+      p2pSignerProvider.overrideWithValue(signer ?? FakeP2pSigner()),
+      passwordRequiredProvider.overrideWith((ref) => StubPasswordRequired()),
+      sessionProvider.overrideWith((ref) => StubP2pSession(ref, address: address, balance: balance)),
+      if (now != null) p2pClockProvider.overrideWithValue(() => now),
+      ...overrides,
+    ],
+    child: MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: child,
+    ),
+  );
 }
