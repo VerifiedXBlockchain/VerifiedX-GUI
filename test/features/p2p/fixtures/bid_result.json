@@ -1,0 +1,76 @@
+{
+    "bid": {
+        "id": 13,
+        "address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "amount": "4",
+        "is_buy_now": false,
+        "status": "accepted",
+        "at": "2026-11-16T16:10:00Z"
+    },
+    "listing": {
+        "id": 2,
+        "shop_url": "dryrun-demo",
+        "collection_id": 3,
+        "state": "live",
+        "smart_contract_uid": "aa11bb22cc33dd44ee55ff6677889900:1794213200",
+        "nft": {
+            "name": "Harbor at Dusk",
+            "description": "Oil on canvas, scanned.",
+            "minter_name": "Fixture Studio",
+            "thumbnail_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/fixture/harbor.png",
+            "asset_url": "https://rbx-nft-web-assets-testnet.s3.amazonaws.com/fixture/harbor.png",
+            "royalty": null
+        },
+        "seller_address": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ",
+        "buy_now_price": "40",
+        "floor_price": "2.5",
+        "reserve_price": "10",
+        "reserve_met": false,
+        "starts_at": "2026-11-16T15:30:00Z",
+        "ends_at": "2026-11-23T15:30:00Z",
+        "purchase_key": "AbCdEfGhIj1794842900",
+        "high_bid": {
+            "amount": "4",
+            "address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+            "at": "2026-11-16T16:10:00Z"
+        },
+        "bid_count": 3,
+        "next_min_bid": "4.5",
+        "winner_address": null,
+        "sale_start_deadline": null,
+        "sold_price": null,
+        "chain_state": "dry_run",
+        "sale": {
+            "start": null,
+            "complete": null
+        },
+        "royalty_enforced": true,
+        "end_reason": null,
+        "bids": [
+            {
+                "id": 13,
+                "address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "amount": "4",
+                "is_buy_now": false,
+                "status": "accepted",
+                "at": "2026-11-16T16:10:00Z"
+            },
+            {
+                "id": 12,
+                "address": "xBidderBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+                "amount": "3.5",
+                "is_buy_now": false,
+                "status": "outbid",
+                "at": "2026-11-16T16:05:10Z"
+            },
+            {
+                "id": 11,
+                "address": "xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                "amount": "2.5",
+                "is_buy_now": false,
+                "status": "outbid",
+                "at": "2026-11-16T16:01:00Z"
+            }
+        ]
+    }
+}

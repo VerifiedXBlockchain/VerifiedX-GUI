@@ -1,0 +1,26 @@
+{
+    "id": 2,
+    "unique_id": "XrfHqDCQVJ1794842795",
+    "url": "dryrun-demo",
+    "display_url": "vfx://dryrun-demo",
+    "name": "Dry Run Demo",
+    "description": "A test shop on testnet for trying the P2P shop. Its listings are dry runs: nothing here is on chain.",
+    "owner_address": "xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ",
+    "chain_state": "dry_run",
+    "registered_at": "2026-11-16T15:26:35Z",
+    "updated_at": "2026-11-16T15:26:35Z",
+    "collection_count": 1,
+    "live_listing_count": 1,
+    "collections": [
+        {
+            "id": 3,
+            "shop_url": "dryrun-demo",
+            "name": "Main",
+            "description": "",
+            "is_live": true,
+            "is_default": true,
+            "listing_count": 1
+        }
+    ]
+}
+

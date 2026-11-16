@@ -1,0 +1,8 @@
+{
+    "error": {
+        "code": "not_authenticated",
+        "message": "Sign in: this needs a sign-in token.",
+        "fields": {}
+    }
+}
+

@@ -1,0 +1,7 @@
+{
+    "error": {
+        "code": "token_expired",
+        "message": "The sign-in token has expired. Sign in again.",
+        "fields": {}
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "error": {
+        "code": "invalid",
+        "message": "Some fields are not valid.",
+        "fields": {
+            "amount": "A decimal amount above 0 with up to 8 places.",
+            "signature": "This field is required."
+        }
+    }
+}

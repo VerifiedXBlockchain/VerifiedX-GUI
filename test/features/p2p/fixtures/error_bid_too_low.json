@@ -1,0 +1,9 @@
+{
+    "error": {
+        "code": "bid_too_low",
+        "message": "The bid is below the next minimum bid.",
+        "fields": {
+            "amount": "At least 4."
+        }
+    }
+}
