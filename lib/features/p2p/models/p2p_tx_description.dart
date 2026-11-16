@@ -30,4 +30,19 @@ class P2pTxDescription with _$P2pTxDescription {
   factory P2pTxDescription.fromJson(Map<String, dynamic> json) => _$P2pTxDescriptionFromJson(json);
 
   DateTime? get at => timestamp == null ? null : DateTime.fromMillisecondsSinceEpoch(timestamp! * 1000, isUtc: true);
+
+  /// The description as a dry run posts it: the eight fields the registry
+  /// reads, and nothing an indexed transaction would add.
+  Map<String, dynamic> toDryRunJson() {
+    return {
+      'type': type,
+      'function': function,
+      'from_address': fromAddress,
+      'to_address': toAddress,
+      'amount': amount,
+      'fee': fee,
+      'timestamp': timestamp,
+      'data': data,
+    };
+  }
 }

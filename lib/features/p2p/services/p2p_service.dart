@@ -12,6 +12,7 @@ import '../models/p2p_listing.dart';
 import '../models/p2p_me.dart';
 import '../models/p2p_page.dart';
 import '../models/p2p_shop.dart';
+import '../models/p2p_tx_description.dart';
 
 /// The P2P shop registry in Spyglass, `/api/p2p/` (contract: `docs/p2p.md`
 /// in VerifiedX-SpyglassService). Reads are public; a write and
@@ -236,6 +237,50 @@ class P2pService extends BaseService {
         return response['data'] as Map<String, dynamic>;
       },
       P2pBidResult.fromJson,
+    );
+  }
+
+  /// `GET /nft/listed/{owner}/`: the ids of [owner]'s NFTs that are in an
+  /// active listing of the P2P registry.
+  Future<Set<String>> listedNftIds(String owner) {
+    return _call(
+      () => getJson('/nft/listed/${_segment(owner)}/'),
+      (body) {
+        final results = body['results'];
+        if (results is! List) {
+          throw const FormatException('A listed-NFT answer has no results');
+        }
+        return results.map((id) => id.toString()).toSet();
+      },
+    );
+  }
+
+  // Dry runs of chain steps
+
+  /// `POST /p2p/dry-run/sale-complete/`: records [tx], the unsigned
+  /// description of the buyer's `Sale_Complete()`, and returns the listing
+  /// as `sold`. The registry checks it as Core would; nothing is signed or
+  /// sent, and the NFT's owner on chain does not change.
+  Future<P2pListing> dryRunSaleComplete({
+    required String token,
+    required int listingId,
+    required P2pTxDescription tx,
+  }) {
+    return _dryRunSaleStep('/p2p/dry-run/sale-complete/', token, listingId, tx);
+  }
+
+  Future<P2pListing> _dryRunSaleStep(String path, String token, int listingId, P2pTxDescription tx) {
+    return _call(
+      () async {
+        final response = await postJson(
+          path,
+          params: {'listing_id': listingId, 'tx': tx.toDryRunJson()},
+          headers: bearer(token),
+          responseIsJson: true,
+        );
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pListing.fromJson,
     );
   }
 

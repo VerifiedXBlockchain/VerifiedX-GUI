@@ -2,6 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/providers/session_provider.dart';
 import '../models/p2p_listing.dart';
+import '../models/p2p_me.dart';
 import '../models/p2p_page.dart';
 import '../models/p2p_shop.dart';
 import 'p2p_session_provider.dart';
@@ -20,6 +21,15 @@ String? p2pViewerAddress(P2pViewerAddressRef ref) {
 @riverpod
 double? p2pViewerBalance(P2pViewerBalanceRef ref) {
   return ref.watch(sessionProvider.select((s) => s.btcSelected ? null : s.currentWallet?.spendableBalance));
+}
+
+/// What [address] sells and has bid on (`GET /p2p/me/`). Reading it signs
+/// [address] in to the registry: a message signed by Core, never a
+/// transaction.
+@riverpod
+Future<P2pMe> p2pMe(P2pMeRef ref, String address) {
+  final service = ref.watch(p2pServiceProvider);
+  return ref.watch(p2pSessionProvider).withToken(address, service.me);
 }
 
 /// A page of the registry's shops, newest first.

@@ -17,6 +17,8 @@ import '../components/p2p_bid_dialog.dart';
 import '../components/p2p_dry_run_banner.dart';
 import '../components/p2p_page_visibility.dart';
 import '../components/p2p_parts.dart';
+import '../components/p2p_purchase.dart';
+import '../chain/p2p_tx_builders.dart';
 import '../models/p2p_bid_summary.dart';
 import '../models/p2p_listing.dart';
 import '../providers/p2p_browse_providers.dart';
@@ -414,18 +416,21 @@ class _PricePanel extends StatelessWidget {
 }
 
 /// Bid and Buy now for someone who can, or why not for someone who cannot.
-class _Actions extends StatelessWidget {
+class _Actions extends ConsumerWidget {
   final P2pListing listing;
   final String? viewer;
 
   const _Actions({required this.listing, required this.viewer});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
     final role = p2pViewerRole(listing, viewer);
     if (role == P2pViewerRole.winner) {
-      return _note(_winnerNote(l10n), success: listing.state != P2pListingState.salePending);
+      if (listing.state == P2pListingState.salePending) {
+        return _completePurchase(context, ref, l10n);
+      }
+      return _note(_winnerNote(l10n), success: true);
     }
     return P2pNowBuilder(
       builder: (context, now) {
@@ -483,13 +488,48 @@ class _Actions extends StatelessWidget {
     );
   }
 
+  /// The winner of a started sale: what it pays and to whom, and the
+  /// button that completes it. Withheld when the sale asks more than they
+  /// bid.
+  Widget _completePurchase(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+    final price = p2pSalePrice(listing);
+    if (price == null) {
+      return _note(l10n.p2pChainErrorNoWinner);
+    }
+    final ownBid = p2pOwnBid(listing, viewer!);
+    if (p2pSaleAsksMoreThanBid(price, ownBid)) {
+      return Text(
+        l10n.p2pPurchaseOverBid(p2pVfxText(l10n, price.toDecimalString()), p2pVfxText(l10n, ownBid!.toDecimalString())),
+        key: const Key('p2p:purchase_over_bid'),
+        style: TextStyle(color: AppColors.getSanguine(ColorShade.s50), fontSize: 13.5, height: 1.35),
+      );
+    }
+    return Column(
+      key: const Key('p2p:complete_panel'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _note(l10n.p2pListingCompleteNote),
+        const SizedBox(height: 10),
+        P2pSaleSplitSummary(listing: listing, price: price),
+        const SizedBox(height: 12),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: AppButton(
+            key: const Key('p2p:complete_purchase'),
+            label: l10n.p2pChainCompleteTitle,
+            icon: Icons.check,
+            onPressed: () => completeP2pPurchase(ref, l10n, listing),
+          ),
+        ),
+      ],
+    );
+  }
+
   String _winnerNote(AppLocalizations l10n) {
     final price = listing.highBid?.amount;
     switch (listing.state) {
       case P2pListingState.awaitingSaleStart:
         return l10n.p2pListingWonWaiting(p2pVfxText(l10n, price));
-      case P2pListingState.salePending:
-        return l10n.p2pListingSaleStartedNote;
       case P2pListingState.sold:
         return l10n.p2pListingPurchased(p2pVfxText(l10n, listing.soldPrice ?? price));
       default:

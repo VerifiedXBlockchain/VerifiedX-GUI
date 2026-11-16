@@ -42,7 +42,7 @@ final p2pViewerBalanceProvider = AutoDisposeProvider<double?>.internal(
 );
 
 typedef P2pViewerBalanceRef = AutoDisposeProviderRef<double?>;
-String _$p2pShopListHash() => r'65f3202fa200f14d1e62877b64cc39c55817c6ba';
+String _$p2pMeHash() => r'82b00251d30c449cf808127909916b714ab72bf7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -65,6 +65,111 @@ class _SystemHash {
   }
 }
 
+typedef P2pMeRef = AutoDisposeFutureProviderRef<P2pMe>;
+
+/// What [address] sells and has bid on (`GET /p2p/me/`). Reading it signs
+/// [address] in to the registry: a message signed by Core, never a
+/// transaction.
+///
+/// Copied from [p2pMe].
+@ProviderFor(p2pMe)
+const p2pMeProvider = P2pMeFamily();
+
+/// What [address] sells and has bid on (`GET /p2p/me/`). Reading it signs
+/// [address] in to the registry: a message signed by Core, never a
+/// transaction.
+///
+/// Copied from [p2pMe].
+class P2pMeFamily extends Family<AsyncValue<P2pMe>> {
+  /// What [address] sells and has bid on (`GET /p2p/me/`). Reading it signs
+  /// [address] in to the registry: a message signed by Core, never a
+  /// transaction.
+  ///
+  /// Copied from [p2pMe].
+  const P2pMeFamily();
+
+  /// What [address] sells and has bid on (`GET /p2p/me/`). Reading it signs
+  /// [address] in to the registry: a message signed by Core, never a
+  /// transaction.
+  ///
+  /// Copied from [p2pMe].
+  P2pMeProvider call(
+    String address,
+  ) {
+    return P2pMeProvider(
+      address,
+    );
+  }
+
+  @override
+  P2pMeProvider getProviderOverride(
+    covariant P2pMeProvider provider,
+  ) {
+    return call(
+      provider.address,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'p2pMeProvider';
+}
+
+/// What [address] sells and has bid on (`GET /p2p/me/`). Reading it signs
+/// [address] in to the registry: a message signed by Core, never a
+/// transaction.
+///
+/// Copied from [p2pMe].
+class P2pMeProvider extends AutoDisposeFutureProvider<P2pMe> {
+  /// What [address] sells and has bid on (`GET /p2p/me/`). Reading it signs
+  /// [address] in to the registry: a message signed by Core, never a
+  /// transaction.
+  ///
+  /// Copied from [p2pMe].
+  P2pMeProvider(
+    this.address,
+  ) : super.internal(
+          (ref) => p2pMe(
+            ref,
+            address,
+          ),
+          from: p2pMeProvider,
+          name: r'p2pMeProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$p2pMeHash,
+          dependencies: P2pMeFamily._dependencies,
+          allTransitiveDependencies: P2pMeFamily._allTransitiveDependencies,
+        );
+
+  final String address;
+
+  @override
+  bool operator ==(Object other) {
+    return other is P2pMeProvider && other.address == address;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, address.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+String _$p2pShopListHash() => r'65f3202fa200f14d1e62877b64cc39c55817c6ba';
 typedef P2pShopListRef = AutoDisposeFutureProviderRef<P2pPage<P2pShop>>;
 
 /// A page of the registry's shops, newest first.

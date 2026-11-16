@@ -6,16 +6,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:rbx_wallet/app.dart';
 import 'package:rbx_wallet/core/providers/session_provider.dart';
 import 'package:rbx_wallet/features/encrypt/providers/password_required_provider.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_fee_quoter.dart';
 import 'package:rbx_wallet/features/p2p/components/p2p_parts.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_auth_token.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_bid_summary.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_me.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_page.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_tx_description.dart';
+import 'package:rbx_wallet/features/p2p/providers/p2p_listing_providers.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_session_provider.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_session.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_signer.dart';
+import 'package:rbx_wallet/features/p2p/utils/p2p_amount.dart';
 import 'package:rbx_wallet/features/wallet/models/wallet.dart';
 import 'package:rbx_wallet/l10n/generated/app_localizations.dart';
 
@@ -149,6 +154,20 @@ class FakeP2pService extends P2pService {
   /// Thrown by [placeBid] only.
   Object? bidError;
 
+  /// What `GET /p2p/me/` answers for an address.
+  P2pMe Function(String token) onMe = (_) => const P2pMe();
+
+  /// What a dry-run `Sale_Complete()` answers; each description is kept in
+  /// [dryRuns].
+  P2pListing Function(int listingId, P2pTxDescription tx)? onSaleComplete;
+  final List<P2pTxDescription> dryRuns = [];
+
+  /// Thrown by the dry-run calls only.
+  Object? dryRunError;
+
+  /// The registry's listed NFT ids, by owner.
+  Map<String, Set<String>> listedByOwner = {};
+
   FakeP2pService() : super(hostOverride: 'http://127.0.0.1:9');
 
   void _fail() {
@@ -205,6 +224,30 @@ class FakeP2pService extends P2pService {
   }
 
   @override
+  Future<P2pMe> me(String token) async {
+    calls.add('me($token)');
+    _fail();
+    return onMe(token);
+  }
+
+  @override
+  Future<P2pListing> dryRunSaleComplete({required String token, required int listingId, required P2pTxDescription tx}) async {
+    calls.add('dryRunSaleComplete($listingId, token: $token)');
+    if (dryRunError != null) {
+      throw dryRunError!;
+    }
+    dryRuns.add(tx);
+    return onSaleComplete!(listingId, tx);
+  }
+
+  @override
+  Future<Set<String>> listedNftIds(String owner) async {
+    calls.add('listedNftIds($owner)');
+    _fail();
+    return listedByOwner[owner] ?? {};
+  }
+
+  @override
   Future<P2pBidResult> placeBid({
     required String token,
     required int listingId,
@@ -221,6 +264,32 @@ class FakeP2pService extends P2pService {
   }
 }
 
+/// Quotes every fee as [fee], or throws [error] when set. Each request is
+/// kept in [quoted].
+class FakeP2pFeeQuoter implements P2pFeeQuoter {
+  String fee;
+  Object? error;
+  final List<Map<String, dynamic>> quoted = [];
+
+  FakeP2pFeeQuoter([this.fee = '0.00002']);
+
+  @override
+  Future<P2pAmount> quote({
+    required String from,
+    required String to,
+    required P2pAmount amount,
+    required int type,
+    required Map<String, dynamic> data,
+    required int timestamp,
+  }) async {
+    quoted.add({'from': from, 'to': to, 'amount': amount.toDecimalString(), 'type': type, 'data': data, 'timestamp': timestamp});
+    if (error != null) {
+      throw error!;
+    }
+    return P2pAmount.parse(fee);
+  }
+}
+
 /// [child] inside the app's localizations and a provider scope whose
 /// registry is [service], with [address] as the selected account and the
 /// clock held at [now].
@@ -231,6 +300,7 @@ Widget p2pTestApp({
   double balance = 100,
   DateTime? now,
   P2pMessageSigner? signer,
+  P2pFeeQuoter? fees,
   List<Override> overrides = const [],
 }) {
   // Dialogs open on the root navigator.
@@ -243,6 +313,7 @@ Widget p2pTestApp({
       // Built here, not by the app's provider: that one follows the wallet's
       // lock state, whose provider polls the node on a timer.
       p2pSessionProvider.overrideWithValue(P2pSession(service: service, signer: messageSigner)),
+      p2pFeeQuoterProvider.overrideWithValue(fees ?? FakeP2pFeeQuoter()),
       sessionProvider.overrideWith((ref) => StubP2pSession(ref, address: address, balance: balance)),
       if (now != null) p2pClockProvider.overrideWithValue(() => now),
       ...overrides,

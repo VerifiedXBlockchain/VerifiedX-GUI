@@ -1,0 +1,222 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:rbx_wallet/core/api_token_manager.dart';
+import 'package:rbx_wallet/core/services/base_service.dart';
+import 'package:rbx_wallet/core/singletons.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_chain_error.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_chain_steps.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_fee_quoter.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
+import 'package:rbx_wallet/features/p2p/services/p2p_session.dart';
+import 'package:rbx_wallet/features/p2p/utils/p2p_amount.dart';
+
+import 'p2p_test_helpers.dart';
+
+/// Stands in for the local node's TXV1 API.
+class NodeAdapter implements HttpClientAdapter {
+  final List<RequestOptions> requests = [];
+  final List<dynamic> bodies = [];
+  int status = 200;
+  String body = '{"Result":"Success","Message":"TX Fee Calculated","Fee":0.000042}';
+  bool refuseConnection = false;
+
+  @override
+  Future<ResponseBody> fetch(RequestOptions options, Stream<Uint8List>? requestStream, Future<void>? cancelFuture) async {
+    requests.add(options);
+    bodies.add(options.data);
+    if (refuseConnection) {
+      throw DioException.connectionError(requestOptions: options, reason: 'Connection refused');
+    }
+    return ResponseBody.fromString(body, status, headers: {
+      Headers.contentTypeHeader: ['text/plain; charset=utf-8'],
+    });
+  }
+
+  @override
+  void close({bool force = false}) {}
+}
+
+void main() {
+  const buyer = 'xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+
+  setUpAll(() {
+    // No widget binding here: it would answer the loopback registry's
+    // requests itself.
+    if (!singleton.isRegistered<ApiTokenManager>()) {
+      singleton.registerSingleton<ApiTokenManager>(ApiTokenManagerImplementation());
+    }
+    BaseService.suppressErrors = true;
+  });
+
+  group('P2pCoreFeeQuoter', () {
+    late NodeAdapter node;
+
+    setUp(() {
+      node = NodeAdapter();
+      BaseService.httpClientAdapterOverride = node;
+    });
+
+    tearDown(() => BaseService.httpClientAdapterOverride = null);
+
+    Future<P2pAmount> quote() {
+      return P2pCoreFeeQuoter().quote(
+        from: buyer,
+        to: 'xSeller',
+        amount: P2pAmount.parse('4.9'),
+        type: 5,
+        data: {'Function': 'Sale_Complete()', 'ContractUID': 'abc:1'},
+        timestamp: 1794848400,
+      );
+    }
+
+    test('asks Core\'s GetRawTxFee for a transaction with these fields, and reads the fee', () async {
+      final fee = await quote();
+      expect(fee.toDecimalString(), '0.000042');
+
+      final request = node.requests.single;
+      expect(request.method, 'POST');
+      expect(request.uri.path, '/txapi/TXV1/GetRawTxFee/');
+      final sent = node.bodies.single is String ? jsonDecode(node.bodies.single as String) : node.bodies.single;
+      expect(sent, {
+        'Timestamp': 1794848400,
+        'FromAddress': buyer,
+        'ToAddress': 'xSeller',
+        'Amount': 4.9,
+        'Fee': 0,
+        'Nonce': 0,
+        'TransactionType': 5,
+        'Data': {'Function': 'Sale_Complete()', 'ContractUID': 'abc:1'},
+      });
+    });
+
+    test('a quote Core could not make is no fee, not a zero fee', () async {
+      node.body = '{"Result":"Fail","Message":"Failed to calcuate Fee."}';
+      await expectLater(quote(), throwsA(isA<P2pChainError>().having((e) => e.failure, 'failure', P2pChainFailure.feeUnavailable)));
+
+      node.body = '{"Result":"Success","Fee":0}';
+      await expectLater(quote(), throwsA(isA<P2pChainError>()));
+    });
+
+    test('a node that does not answer is no fee', () async {
+      node.refuseConnection = true;
+      await expectLater(quote(), throwsA(isA<P2pChainError>().having((e) => e.failure, 'failure', P2pChainFailure.feeUnavailable)));
+    });
+  });
+
+  group('P2pDryRunChainSteps', () {
+    late P2pTestServer server;
+    late FakeP2pSigner signer;
+    late FakeP2pFeeQuoter fees;
+    late P2pChainSteps steps;
+    late P2pCannedResponse Function(P2pRecordedRequest request) onDryRun;
+    final now = DateTime.utc(2026, 11, 16, 17);
+
+    P2pListing pending() => P2pListing.fromJson(p2pFixture('listing_sale_pending'));
+
+    setUp(() async {
+      onDryRun = (_) => P2pCannedResponse(200, {...p2pFixture('listing_sale_pending'), 'state': 'sold', 'sold_price': '5'});
+      var tokens = 0;
+      server = await P2pTestServer.start((request) {
+        if (request.path == '/auth/sign-token/') {
+          tokens++;
+          return P2pCannedResponse(201, {
+            'token': 'token-$tokens',
+            'address': (request.body as Map<String, dynamic>)['address'],
+            'expires_at': DateTime.now().toUtc().add(const Duration(hours: 1)).toIso8601String(),
+          });
+        }
+        return onDryRun(request);
+      });
+      final service = P2pService(hostOverride: server.host);
+      signer = FakeP2pSigner();
+      fees = FakeP2pFeeQuoter('0.00002');
+      steps = P2pDryRunChainSteps(
+        service: service,
+        session: P2pSession(service: service, signer: signer),
+        fees: fees,
+        now: () => now,
+      );
+    });
+
+    tearDown(() => server.close());
+
+    test('is a dry run', () {
+      expect(steps.isDryRun, isTrue);
+    });
+
+    test('describing a purchase asks the registry nothing and signs nothing', () async {
+      final tx = await steps.describeCompletePurchase(pending());
+      expect(tx.function, 'Sale_Complete()');
+      expect(tx.timestamp, now.millisecondsSinceEpoch ~/ 1000);
+      expect(server.requests, isEmpty);
+      expect(signer.signed, isEmpty);
+    });
+
+    test('a listing with no price to pay cannot be described', () async {
+      final live = P2pListing.fromJson(p2pFixture('listing_auction_live'));
+      expect(
+        () => steps.describeCompletePurchase(live),
+        throwsA(isA<P2pChainError>().having((e) => e.failure, 'failure', P2pChainFailure.noWinner)),
+      );
+    });
+
+    test('completing posts the description as the buyer and returns the listing as the registry has it', () async {
+      final listing = pending();
+      final tx = await steps.describeCompletePurchase(listing);
+      final sold = await steps.completePurchase(listing, tx);
+
+      expect(sold.state, P2pListingState.sold);
+      expect(sold.soldPrice, '5');
+
+      final post = server.requests.last;
+      expect(post.method, 'POST');
+      expect(post.path, '/p2p/dry-run/sale-complete/');
+      expect(post.authorization, 'Bearer token-1');
+      final body = post.body as Map<String, dynamic>;
+      expect(body['listing_id'], 3);
+      expect(body['tx'], tx.toDryRunJson());
+
+      // The only signature is the buyer's sign-in message: the description
+      // itself is not signed.
+      expect(signer.signed, hasLength(1));
+      expect(signer.signed.single[1], buyer);
+      expect(signer.signed.single[0], isNot(contains('Sale_Complete')));
+    });
+
+    test('the registry\'s refusal is passed on with its code', () async {
+      onDryRun = (_) => const P2pCannedResponse(403, {
+            'error': {'code': 'not_buyer', 'message': 'Only the buyer the sale was started for completes it.', 'fields': {}}
+          });
+      final listing = pending();
+      final tx = await steps.describeCompletePurchase(listing);
+      await expectLater(
+        steps.completePurchase(listing, tx),
+        throwsA(isA<P2pError>().having((e) => e.code, 'code', 'not_buyer')),
+      );
+    });
+
+    test('an invalid description comes back with the fields the registry named', () async {
+      onDryRun = (_) => const P2pCannedResponse(400, {
+            'error': {
+              'code': 'invalid_transaction',
+              'message': 'The payments do not cover the price.',
+              'fields': {'data.Transactions': 'At least 5 in all.'}
+            }
+          });
+      final listing = pending();
+      final tx = await steps.describeCompletePurchase(listing);
+      try {
+        await steps.completePurchase(listing, tx);
+        fail('Expected a refusal');
+      } on P2pError catch (e) {
+        expect(e.code, 'invalid_transaction');
+        expect(e.fields, {'data.Transactions': 'At least 5 in all.'});
+      }
+    });
+  });
+}

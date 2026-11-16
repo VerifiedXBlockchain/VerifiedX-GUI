@@ -1,5 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_me.dart';
+import 'package:rbx_wallet/features/p2p/utils/p2p_amount.dart';
 import 'package:rbx_wallet/features/p2p/utils/p2p_view.dart';
 
 import 'p2p_test_helpers.dart';
@@ -186,6 +188,57 @@ void main() {
 
     test('a state this build does not know is a stopped step, never a live one', () {
       expect(shape(listing('listing_buy_now', {'state': 'paused'})), ['live:done', 'unknown:stopped']);
+    });
+  });
+
+  group('p2pBuyingStatus', () {
+    const me = 'xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA';
+
+    P2pBuyingEntry entry(String fixture, [Map<String, dynamic> changes = const {}, String? action]) {
+      return P2pBuyingEntry(listing: listing(fixture, changes), action: action);
+    }
+
+    test('a started sale for this buyer is to be paid', () {
+      expect(p2pBuyingStatus(entry('listing_sale_pending', {}, 'complete_purchase'), me), P2pBuyingStatus.pay);
+      // Even if the action is missing, the state and the winner say so.
+      expect(p2pBuyingStatus(entry('listing_sale_pending'), me), P2pBuyingStatus.pay);
+    });
+
+    test('won, sold, and lost to someone else', () {
+      expect(p2pBuyingStatus(entry('listing_sale_pending', {'state': 'awaiting_sale_start'}), me), P2pBuyingStatus.wonWaiting);
+      expect(p2pBuyingStatus(entry('listing_sale_pending', {'state': 'sold'}), me), P2pBuyingStatus.purchased);
+      expect(p2pBuyingStatus(entry('listing_sale_pending', {'state': 'sold'}), 'xOther'), P2pBuyingStatus.lost);
+      expect(p2pBuyingStatus(entry('listing_sale_pending'), 'xOther'), P2pBuyingStatus.lost);
+    });
+
+    test('on a live auction: the high bidder, with or without the reserve, or outbid', () {
+      const high = 'xBidderBBBBBBBBBBBBBBBBBBBBBBBBBBB';
+      expect(p2pBuyingStatus(entry('listing_auction'), high), P2pBuyingStatus.reserveNotMet);
+      expect(p2pBuyingStatus(entry('listing_auction', {'reserve_met': true}), high), P2pBuyingStatus.winning);
+      expect(p2pBuyingStatus(entry('listing_auction'), me), P2pBuyingStatus.outbid);
+    });
+
+    test('a listing that closed without a sale, or in a state unknown here, has ended', () {
+      for (final state in ['cancelled', 'expired', 'unfulfilled', 'ended', 'paused']) {
+        expect(p2pBuyingStatus(entry('listing_auction', {'state': state}), me), P2pBuyingStatus.closed, reason: state);
+      }
+    });
+  });
+
+  group('a sale started for more than the buyer bid', () {
+    test('the buyer\'s own bid is the high bid when it is theirs, else the largest of theirs shown', () {
+      final auction = listing('listing_auction');
+      expect(p2pOwnBid(auction, 'xBidderBBBBBBBBBBBBBBBBBBBBBBBBBBB')!.toDecimalString(), '3.5');
+      expect(p2pOwnBid(auction, 'xBidderAAAAAAAAAAAAAAAAAAAAAAAAAAA')!.toDecimalString(), '2.5');
+      expect(p2pOwnBid(auction, 'xNobody'), isNull);
+    });
+
+    test('is told from one at or under the bid; an unknown bid does not block', () {
+      final five = P2pAmount.parse('5');
+      expect(p2pSaleAsksMoreThanBid(P2pAmount.parse('5.00000001'), five), isTrue);
+      expect(p2pSaleAsksMoreThanBid(five, five), isFalse);
+      expect(p2pSaleAsksMoreThanBid(P2pAmount.parse('4'), five), isFalse);
+      expect(p2pSaleAsksMoreThanBid(five, null), isFalse);
     });
   });
 }

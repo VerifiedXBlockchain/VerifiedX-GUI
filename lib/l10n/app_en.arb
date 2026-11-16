@@ -3878,6 +3878,203 @@
   "@p2pBuyTitle": {
     "description": "Title of the P2P buy-now dialog."
   },
+  "p2pBuyingClosed": "Ended",
+  "@p2pBuyingClosed": {
+    "description": "P2P bidder standing: the listing ended without a sale."
+  },
+  "p2pBuyingLost": "Lost",
+  "@p2pBuyingLost": {
+    "description": "P2P bidder standing: it went to another bidder."
+  },
+  "p2pBuyingNoteClosed": "It ended without a sale.",
+  "@p2pBuyingNoteClosed": {
+    "description": "Note for the P2P bidder standing 'Ended'."
+  },
+  "p2pBuyingNoteLost": "It went to another bidder.",
+  "@p2pBuyingNoteLost": {
+    "description": "Note for the P2P bidder standing 'Lost'."
+  },
+  "p2pBuyingNoteOutbid": "Someone bid higher.",
+  "@p2pBuyingNoteOutbid": {
+    "description": "Note for the P2P bidder standing 'Outbid'."
+  },
+  "p2pBuyingNotePay": "The seller has started the sale. Pay to take ownership.",
+  "@p2pBuyingNotePay": {
+    "description": "Note for the P2P bidder standing 'Complete your purchase'."
+  },
+  "p2pBuyingNotePurchased": "The sale is complete.",
+  "@p2pBuyingNotePurchased": {
+    "description": "Note for the P2P bidder standing 'Purchased'."
+  },
+  "p2pBuyingNoteReserveNotMet": "Yours is the high bid, but under the reserve.",
+  "@p2pBuyingNoteReserveNotMet": {
+    "description": "Note for the P2P bidder standing 'Reserve not met'."
+  },
+  "p2pBuyingNoteWinning": "Yours is the high bid.",
+  "@p2pBuyingNoteWinning": {
+    "description": "Note for the P2P bidder standing 'Winning'."
+  },
+  "p2pBuyingNoteWonWaiting": "Waiting for the seller to start the sale. You pay after that.",
+  "@p2pBuyingNoteWonWaiting": {
+    "description": "Note for the P2P bidder standing 'You won'."
+  },
+  "p2pBuyingOutbid": "Outbid",
+  "@p2pBuyingOutbid": {
+    "description": "P2P bidder standing: someone bid higher."
+  },
+  "p2pBuyingPay": "Complete your purchase",
+  "@p2pBuyingPay": {
+    "description": "P2P bidder standing: the sale has started and is waiting for this buyer to pay."
+  },
+  "p2pBuyingPurchased": "Purchased",
+  "@p2pBuyingPurchased": {
+    "description": "P2P bidder standing: bought it."
+  },
+  "p2pBuyingReserveNotMet": "Reserve not met",
+  "@p2pBuyingReserveNotMet": {
+    "description": "P2P bidder standing: holds the high bid under the reserve."
+  },
+  "p2pBuyingWinning": "Winning",
+  "@p2pBuyingWinning": {
+    "description": "P2P bidder standing: holds the high bid with the reserve met."
+  },
+  "p2pBuyingWonWaiting": "You won",
+  "@p2pBuyingWonWaiting": {
+    "description": "P2P bidder standing: won, waiting for the seller to start the sale."
+  },
+  "p2pChainAmount": "Amount",
+  "@p2pChainAmount": {
+    "description": "Row label in a P2P chain step dialog: the VFX the transaction itself moves."
+  },
+  "p2pChainCompleteTitle": "Complete purchase",
+  "@p2pChainCompleteTitle": {
+    "description": "Title of the P2P confirmation dialog for the buyer's Sale_Complete step, and the button that opens it."
+  },
+  "p2pChainConfirmDryRun": "Record dry run",
+  "@p2pChainConfirmDryRun": {
+    "description": "Confirm button of a P2P chain step dialog in dry-run mode."
+  },
+  "p2pChainData": "Data",
+  "@p2pChainData": {
+    "description": "Heading above the transaction's data fields in a P2P chain step dialog."
+  },
+  "p2pChainDescribing": "Working out the transaction…",
+  "@p2pChainDescribing": {
+    "description": "Shown in a P2P chain step dialog while the transaction and its fee are being worked out."
+  },
+  "p2pChainErrorFee": "The wallet’s node could not quote the network fee. Check that it is running and try again.",
+  "@p2pChainErrorFee": {
+    "description": "P2P chain step error: Core's GetRawTxFee gave no fee."
+  },
+  "p2pChainErrorNoWinner": "There is no winning bid for this listing.",
+  "@p2pChainErrorNoWinner": {
+    "description": "P2P chain step error: the listing has no winner to build the step for."
+  },
+  "p2pChainErrorPriceZero": "The price must be above zero.",
+  "@p2pChainErrorPriceZero": {
+    "description": "P2P chain step error: the sale price is not above zero."
+  },
+  "p2pChainErrorRoyaltyTooHigh": "This NFT’s royalty cannot be paid through a sale: the network allows less than 100% of the price.",
+  "@p2pChainErrorRoyaltyTooHigh": {
+    "description": "P2P chain step error: the contract's royalty amount is 1 or more."
+  },
+  "p2pChainErrorRoyaltyZero": "At this price the royalty rounds to nothing, and every sale payment must be above zero.",
+  "@p2pChainErrorRoyaltyZero": {
+    "description": "P2P chain step error: the royalty payment would be zero."
+  },
+  "p2pChainFee": "Network fee",
+  "@p2pChainFee": {
+    "description": "Row label in a P2P chain step dialog: the transaction's own network fee."
+  },
+  "p2pChainFrom": "From",
+  "@p2pChainFrom": {
+    "description": "Row label in a P2P chain step dialog: the sending address."
+  },
+  "p2pChainFunction": "Function",
+  "@p2pChainFunction": {
+    "description": "Row label in a P2P chain step dialog: the contract function the transaction calls."
+  },
+  "p2pChainHeadingDryRun": "The transaction it would send",
+  "@p2pChainHeadingDryRun": {
+    "description": "Heading above the transaction details in a P2P chain step dialog, in dry-run mode."
+  },
+  "p2pChainNothingSent": "Nothing is signed or sent to the network.",
+  "@p2pChainNothingSent": {
+    "description": "Note under a P2P chain step in dry-run mode."
+  },
+  "p2pChainPayment": "Payment",
+  "@p2pChainPayment": {
+    "description": "Row label in a P2P chain step dialog: a payment inside the transaction."
+  },
+  "p2pChainPaymentTagged": "Payment {tag}",
+  "@p2pChainPaymentTagged": {
+    "description": "Row label in a P2P chain step dialog: one of a royalty sale's two payments, tagged 1/2 or 2/2.",
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pChainPaymentTo": "{amount} to {to} (fee {fee})",
+  "@p2pChainPaymentTo": {
+    "description": "A payment inside a P2P chain step: how much, to whom, and its network fee.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      },
+      "fee": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pChainRecorded": "Recorded as a dry run",
+  "@p2pChainRecorded": {
+    "description": "Heading shown in a P2P chain step dialog after the dry run is recorded."
+  },
+  "p2pChainRecordedBody": "The shop shows {name} as if it had landed. Nothing was signed or sent.",
+  "@p2pChainRecordedBody": {
+    "description": "Body shown in a P2P chain step dialog after the dry run is recorded.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pChainRecording": "Recording…",
+  "@p2pChainRecording": {
+    "description": "Confirm button label of a P2P chain step dialog while the dry run is being recorded."
+  },
+  "p2pChainRowNft": "NFT",
+  "@p2pChainRowNft": {
+    "description": "Summary row label in a P2P chain step dialog: the NFT's name."
+  },
+  "p2pChainRowPrice": "Price",
+  "@p2pChainRowPrice": {
+    "description": "Summary row label in a P2P chain step dialog: the sale price."
+  },
+  "p2pChainRowSeller": "Seller",
+  "@p2pChainRowSeller": {
+    "description": "Summary row label in a P2P chain step dialog: the seller's address."
+  },
+  "p2pChainTo": "To",
+  "@p2pChainTo": {
+    "description": "Row label in a P2P chain step dialog: the receiving address."
+  },
+  "p2pChainTotal": "It would take from your account",
+  "@p2pChainTotal": {
+    "description": "Row label in a P2P chain step dialog: everything the step would move plus every fee."
+  },
+  "p2pChainTotalFees": "Fees in all",
+  "@p2pChainTotalFees": {
+    "description": "Row label in a P2P chain step dialog: every network fee the step would pay."
+  },
+  "p2pChainType": "Type",
+  "@p2pChainType": {
+    "description": "Row label in a P2P chain step dialog: Core's transaction type."
+  },
   "p2pClearSearch": "Clear search",
   "@p2pClearSearch": {
     "description": "Tooltip of the icon button that clears the P2P shop search field."
@@ -4058,6 +4255,10 @@
   "@p2pErrorListingNotLive": {
     "description": "P2P shop error code listing_not_live."
   },
+  "p2pErrorListingNotSalePending": "This sale has not started, or is already over.",
+  "@p2pErrorListingNotSalePending": {
+    "description": "P2P shop error code listing_not_sale_pending."
+  },
   "p2pErrorListingNotStarted": "Bidding has not opened yet.",
   "@p2pErrorListingNotStarted": {
     "description": "P2P shop error code listing_not_started."
@@ -4065,6 +4266,10 @@
   "p2pErrorListingUnavailable": "This listing is not available in its shop right now.",
   "@p2pErrorListingUnavailable": {
     "description": "P2P shop error code listing_unavailable: the shop or collection is closed or hidden."
+  },
+  "p2pErrorNftMoved": "The seller no longer owns this NFT.",
+  "@p2pErrorNftMoved": {
+    "description": "P2P shop error code nft_moved."
   },
   "p2pErrorNoBuyNow": "This listing has no buy-now price.",
   "@p2pErrorNoBuyNow": {
@@ -4074,9 +4279,21 @@
   "@p2pErrorNotAnAuction": {
     "description": "P2P shop error code not_an_auction."
   },
+  "p2pErrorNotBuyer": "Only the buyer the sale was started for can complete it.",
+  "@p2pErrorNotBuyer": {
+    "description": "P2P shop error code not_buyer."
+  },
   "p2pErrorNotFound": "Not found. It may have been removed.",
   "@p2pErrorNotFound": {
     "description": "P2P shop error code not_found."
+  },
+  "p2pErrorNotSeller": "Only the seller can do that.",
+  "@p2pErrorNotSeller": {
+    "description": "P2P shop error code not_seller."
+  },
+  "p2pErrorNotSender": "The transaction is not from the signed-in account.",
+  "@p2pErrorNotSender": {
+    "description": "P2P shop error code not_sender."
   },
   "p2pErrorRefused": "The shop registry refused it: {reason}",
   "@p2pErrorRefused": {
@@ -4090,6 +4307,10 @@
   "p2pErrorReserveAddress": "A Vault account cannot bid or buy. Choose another account.",
   "@p2pErrorReserveAddress": {
     "description": "P2P shop error code reserve_address."
+  },
+  "p2pErrorSaleOnChain": "This sale is on chain, so a dry run cannot change it.",
+  "@p2pErrorSaleOnChain": {
+    "description": "P2P shop error code sale_on_chain."
   },
   "p2pErrorSellerCannotBid": "You cannot bid on your own listing.",
   "@p2pErrorSellerCannotBid": {
@@ -4179,6 +4400,10 @@
   "p2pListingClosing": "Bidding has closed. The result will show in a moment.",
   "@p2pListingClosing": {
     "description": "Note on a live P2P listing that is past its end."
+  },
+  "p2pListingCompleteNote": "The seller has started the sale. Complete your purchase to pay and take ownership.",
+  "@p2pListingCompleteNote": {
+    "description": "Note to the winner of a P2P listing once the sale has started."
   },
   "p2pListingContract": "Contract",
   "@p2pListingContract": {
@@ -4307,10 +4532,6 @@
   "@p2pListingSaleStartBy": {
     "description": "Details row label: the seller's deadline to start the sale."
   },
-  "p2pListingSaleStartedNote": "The seller has started the sale. Completing the purchase from this wallet is not available yet.",
-  "@p2pListingSaleStartedNote": {
-    "description": "Note to the winner of a P2P listing once the sale has started; the complete-purchase step is not built in this version."
-  },
   "p2pListingSeller": "Seller",
   "@p2pListingSeller": {
     "description": "Details row label: the seller's address."
@@ -4369,6 +4590,30 @@
   "@p2pListingYours": {
     "description": "Tag on a P2P listing the selected account is selling."
   },
+  "p2pMyBidsMine": "Your bid",
+  "@p2pMyBidsMine": {
+    "description": "Label of the selected account's highest bid on a P2P listing."
+  },
+  "p2pMyBidsNoAccount": "Choose a VFX account to see its bids.",
+  "@p2pMyBidsNoAccount": {
+    "description": "Shown on the P2P My bids screen when no VFX account is selected."
+  },
+  "p2pMyBidsNone": "No bids from this account yet.",
+  "@p2pMyBidsNone": {
+    "description": "Empty-state title of the P2P My bids screen."
+  },
+  "p2pMyBidsNoneBody": "Bid on an auction or buy something to see it here.",
+  "@p2pMyBidsNoneBody": {
+    "description": "Empty-state body of the P2P My bids screen."
+  },
+  "p2pMyBidsTitle": "My bids",
+  "@p2pMyBidsTitle": {
+    "description": "Title of the P2P screen listing the selected account's bids and purchases, and the button that opens it."
+  },
+  "p2pMyBidsVault": "A Vault account cannot bid or buy, so it has no bids.",
+  "@p2pMyBidsVault": {
+    "description": "Shown on the P2P My bids screen when the selected account is a Vault account."
+  },
   "p2pNavShops": "Shops",
   "@p2pNavShops": {
     "description": "Side-nav label for the P2P shops section (the shops on the central registry), shown beside the older P2P Auctions entry."
@@ -4401,6 +4646,18 @@
   "p2pPriceWinningBid": "Winning bid",
   "@p2pPriceWinningBid": {
     "description": "Label of a P2P listing's winning bid."
+  },
+  "p2pPurchaseOverBid": "The sale was started at {soldFor}, more than your bid of {bid}. Do not complete it: ask the seller to cancel the sale.",
+  "@p2pPurchaseOverBid": {
+    "description": "Warning to the winner of a P2P listing whose sale was started for more than they bid; the Complete purchase action is withheld.",
+    "placeholders": {
+      "soldFor": {
+        "type": "String"
+      },
+      "bid": {
+        "type": "String"
+      }
+    }
   },
   "p2pRetry": "Retry",
   "@p2pRetry": {
@@ -4496,6 +4753,23 @@
   "p2pShopsTitle": "Shops",
   "@p2pShopsTitle": {
     "description": "App bar title of the P2P shop list screen."
+  },
+  "p2pSplitRoyalty": "Royalty ({percent}%)",
+  "@p2pSplitRoyalty": {
+    "description": "Row label in the payment split of a P2P purchase: what the royalty address gets.",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "p2pSplitSeller": "To the seller",
+  "@p2pSplitSeller": {
+    "description": "Row label in the payment split of a P2P purchase: what the seller gets."
+  },
+  "p2pSplitTotal": "You pay",
+  "@p2pSplitTotal": {
+    "description": "Row label in the payment split of a P2P purchase: the whole price."
   },
   "p2pStateAwaitingSaleStart": "Winner chosen",
   "@p2pStateAwaitingSaleStart": {

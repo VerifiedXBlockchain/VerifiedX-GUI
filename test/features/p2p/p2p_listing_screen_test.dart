@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/app.dart';
 import 'package:rbx_wallet/core/api_token_manager.dart';
 import 'package:rbx_wallet/core/singletons.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_chain_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_bid_summary.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
@@ -19,6 +20,7 @@ void main() {
 
   late FakeP2pService service;
   late FakeP2pSigner signer;
+  late FakeP2pFeeQuoter fees;
 
   P2pListing auction() => P2pListing.fromJson(p2pFixture('listing_auction_live'));
   P2pListing buyNow() => P2pListing.fromJson(p2pFixture('listing_buy_now'));
@@ -32,6 +34,7 @@ void main() {
 
   setUp(() {
     signer = FakeP2pSigner('BIDSIG.KEY');
+    fees = FakeP2pFeeQuoter('0.00002');
     service = FakeP2pService()..listingsById = {2: auction(), 1: buyNow(), 3: pending()};
   });
 
@@ -44,6 +47,7 @@ void main() {
       child: P2pListingScreen(id: id),
       service: service,
       signer: signer,
+      fees: fees,
       address: address,
       balance: balance,
       now: now,
@@ -235,9 +239,115 @@ void main() {
       expect(noteText(tester), startsWith('You won this at 5 VFX.'));
     });
 
-    testWidgets('is told the purchase cannot be completed from this wallet yet', (tester) async {
+    testWidgets('sees what the purchase pays and to whom once the sale has started', (tester) async {
       await pump(tester, 3, address: winner);
-      expect(noteText(tester), 'The seller has started the sale. Completing the purchase from this wallet is not available yet.');
+      expect(noteText(tester), 'The seller has started the sale. Complete your purchase to pay and take ownership.');
+      final split = find.byKey(const Key('p2p:sale_split'));
+      // 5 VFX at a 2% royalty: 4.9 to the seller, 0.1 to the royalty address.
+      expect(find.descendant(of: split, matching: find.text('4.9 VFX')), findsOneWidget);
+      expect(find.descendant(of: split, matching: find.text('0.1 VFX')), findsOneWidget);
+      expect(find.descendant(of: split, matching: find.textContaining('Royalty (2%)')), findsOneWidget);
+      expect(find.descendant(of: split, matching: find.text('5 VFX')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:complete_purchase')), findsOneWidget);
+    });
+
+    testWidgets('completes the purchase as a dry run: the whole transaction is shown, and nothing is signed or sent', (tester) async {
+      service.onSaleComplete = (_, tx) => pending().copyWith(
+            state: P2pListingState.sold,
+            soldPrice: '5',
+            sale: P2pSale(start: pending().sale!.start, complete: tx),
+          );
+      await pump(tester, 3, address: winner);
+      await tester.tap(find.byKey(const Key('p2p:complete_purchase')));
+      await settleBid(tester);
+
+      // The confirmation: marked as a dry run, with the transaction it would send.
+      expect(find.byKey(const Key('p2p:step_dry_run')), findsOneWidget);
+      final tx = find.byKey(const Key('p2p:step_transaction'));
+      expect(find.descendant(of: tx, matching: find.text('NFT_SALE (5)')), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.text('Sale_Complete()')), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.text('Payment 1/2')), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.text('Payment 2/2')), findsOneWidget);
+      expect(find.descendant(of: tx, matching: find.textContaining('4.9 VFX to xJwSHB…NJksJ')), findsOneWidget);
+      // The price and three fees of 0.00002.
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:step_total'))).data, '5.00006 VFX');
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:step_nothing_sent'))).data, 'Nothing is signed or sent to the network.');
+      // Nothing has gone anywhere yet.
+      expect(service.dryRuns, isEmpty);
+
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settleBid(tester);
+
+      // Recorded with the registry, as the buyer; the description was not signed.
+      expect(service.calls, contains('dryRunSaleComplete(3, token: token-for-$winner)'));
+      final sent = service.dryRuns.single;
+      expect(sent.function, 'Sale_Complete()');
+      expect(sent.fromAddress, winner);
+      expect(signer.signed.map((s) => s[0]).where((m) => m.contains('Sale_Complete')), isEmpty);
+      expect(find.byKey(const Key('p2p:step_recorded')), findsOneWidget);
+      expect(find.text('Recorded as a dry run'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('p2p:step_done')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      // The page shows the listing as the registry answered it.
+      expect(find.byKey(const Key('p2p:state:sold')), findsOneWidget);
+      expect(noteText(tester), 'You bought this for 5 VFX.');
+      expect(find.byKey(const Key('p2p:complete_purchase')), findsNothing);
+    });
+
+    testWidgets('is shown the registry\'s refusal in words and can cancel', (tester) async {
+      service.dryRunError = const P2pError(status: 400, code: 'insufficient_balance', message: 'The buyer\'s balance does not cover the payments and fees.');
+      await pump(tester, 3, address: winner);
+      await tester.tap(find.byKey(const Key('p2p:complete_purchase')));
+      await settleBid(tester);
+      await tester.tap(find.byKey(const Key('p2p:step_confirm')));
+      await settleBid(tester);
+
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:step_error'))).data, 'This account’s balance does not cover the amount.');
+      expect(find.byKey(const Key('p2p:step_recorded')), findsNothing);
+
+      await tester.tap(find.byKey(const Key('p2p:step_cancel')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+      expect(find.byKey(const Key('p2p:state:salePending')), findsOneWidget);
+    });
+
+    testWidgets('cannot confirm a transaction whose fee could not be quoted, and can try again', (tester) async {
+      fees.error = const P2pChainError(P2pChainFailure.feeUnavailable);
+      await pump(tester, 3, address: winner);
+      await tester.tap(find.byKey(const Key('p2p:complete_purchase')));
+      await settleBid(tester);
+
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:step_error'))).data, contains('could not quote the network fee'));
+      expect(find.byKey(const Key('p2p:step_confirm')), findsNothing);
+      expect(find.byKey(const Key('p2p:step_transaction')), findsNothing);
+
+      fees.error = null;
+      await tester.tap(find.byKey(const Key('p2p:step_retry')));
+      await settleBid(tester);
+      expect(find.byKey(const Key('p2p:step_transaction')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:step_confirm')), findsOneWidget);
+    });
+
+    testWidgets('is not offered a sale that was started for more than they bid', (tester) async {
+      final json = p2pFixture('listing_sale_pending');
+      (((json['sale'] as Map)['start'] as Map)['data'] as Map)['SoldFor'] = '9';
+      service.listingsById[3] = P2pListing.fromJson(json);
+      await pump(tester, 3, address: winner);
+
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:purchase_over_bid'))).data,
+          'The sale was started at 9 VFX, more than your bid of 5 VFX. Do not complete it: ask the seller to cancel the sale.');
+      expect(find.byKey(const Key('p2p:complete_purchase')), findsNothing);
+    });
+
+    testWidgets('is told when the NFT\'s royalty cannot be paid through a sale', (tester) async {
+      final json = p2pFixture('listing_sale_pending');
+      ((json['nft'] as Map)['royalty'] as Map)['amount'] = '2';
+      service.listingsById[3] = P2pListing.fromJson(json);
+      await pump(tester, 3, address: winner);
+      expect(tester.widget<Text>(find.byKey(const Key('p2p:split_error'))).data, contains('cannot be paid through a sale'));
     });
   });
 

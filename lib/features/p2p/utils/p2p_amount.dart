@@ -50,6 +50,24 @@ class P2pAmount implements Comparable<P2pAmount> {
     return P2pAmount._(BigInt.from((value * 1e8).round()));
   }
 
+  /// A fee Core quotes as a JSON number, rounded up to the next unit so the
+  /// fee shown is never below the fee charged. A double a hair above an
+  /// exact unit (0.1 + 0.2) does not round up a whole unit.
+  factory P2pAmount.fromDoubleRoundedUp(double value) {
+    if (!value.isFinite || value < 0) {
+      throw ArgumentError.value(value, 'value', 'Not a non-negative finite amount');
+    }
+    return P2pAmount._(BigInt.from((value * 1e8 - 1e-6).ceil()));
+  }
+
+  /// The amount as a JSON number, the way Core writes a decimal in a
+  /// transaction's data: a whole amount as an integer, any other as the
+  /// double its decimal string reads as.
+  num toJsonNumber() {
+    final text = toDecimalString();
+    return text.contains('.') ? double.parse(text) : int.parse(text);
+  }
+
   /// The shortest decimal string, as the API writes one: 150000000 → "1.5".
   String toDecimalString() {
     final negative = units.isNegative;
