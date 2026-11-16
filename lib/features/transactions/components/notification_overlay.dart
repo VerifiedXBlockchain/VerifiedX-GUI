@@ -62,41 +62,50 @@ class NotificationOverlay extends BaseComponent {
                                 constraints: const BoxConstraints(maxWidth: 400, minWidth: 200),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        if (n.icon != null)
-                                          Padding(
-                                            padding: const EdgeInsets.only(right: 6.0),
-                                            child: Icon(
-                                              n.icon,
-                                              color: AppTheme.appVariantToColor(context, n.color),
+                                    // The text takes the width the card has
+                                    // and wraps: a long title or body no
+                                    // longer runs out of the card.
+                                    Expanded(
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          if (n.icon != null)
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 6.0),
+                                              child: Icon(
+                                                n.icon,
+                                                color: AppTheme.appVariantToColor(context, n.color),
+                                              ),
+                                            ),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  n.title,
+                                                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(height: 1),
+                                                ),
+                                                if (n.body != null)
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 8.0),
+                                                    child: Text(
+                                                      n.body!,
+                                                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                                            fontSize: 12,
+                                                            height: 1.2,
+                                                          ),
+                                                    ),
+                                                  )
+                                              ],
                                             ),
                                           ),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text(
-                                              n.title,
-                                              style: Theme.of(context).textTheme.bodyMedium!.copyWith(height: 1),
-                                            ),
-                                            if (n.body != null)
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 8.0),
-                                                child: Text(
-                                                  n.body!,
-                                                  style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                                        fontSize: 12,
-                                                        height: 1,
-                                                      ),
-                                                ),
-                                              )
-                                          ],
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
+                                    const SizedBox(width: 6),
                                     Material(
                                       color: Colors.transparent,
                                       child: Semantics(

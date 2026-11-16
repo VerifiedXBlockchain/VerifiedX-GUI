@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/api_token_manager.dart';
 import 'package:rbx_wallet/core/singletons.dart';
+import 'package:rbx_wallet/features/p2p/components/p2p_parts.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_collection.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
@@ -493,6 +494,18 @@ void main() {
       expect(find.byKey(const Key('p2p:listing_edit:2')), findsNothing);
       expect(find.byKey(const Key('p2p:listing_cancel:2')), findsOneWidget);
       expect(find.byKey(const Key('p2p:listing_cancel:5')), findsNothing);
+    });
+
+    testWidgets('rows line up whatever buttons each has', (tester) async {
+      await pump(tester);
+      double badgeLeft(int id) {
+        final row = find.byKey(Key('p2p:selling_row:$id'));
+        return tester.getTopLeft(find.descendant(of: row, matching: find.byType(P2pStateBadge))).dx;
+      }
+
+      // Two buttons, one button, none.
+      expect(badgeLeft(1), badgeLeft(2));
+      expect(badgeLeft(2), badgeLeft(5));
     });
 
     testWidgets('with nothing listed, says how to start', (tester) async {

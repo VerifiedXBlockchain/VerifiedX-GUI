@@ -112,6 +112,9 @@ class P2pSellingSection extends ConsumerWidget {
 }
 
 class _SellingRow extends ConsumerWidget {
+  /// Room for a row's two buttons side by side; longer labels wrap.
+  static const double actionsWidth = 300;
+
   final P2pSellingListing selling;
   final String address;
   final void Function([String? nftId]) onList;
@@ -167,7 +170,15 @@ class _SellingRow extends ConsumerWidget {
               ),
             ),
             const SizedBox(width: 8),
-            P2pSellerButtons(listing: listing, address: address, onListAgain: onList, compact: true),
+            // A fixed width whatever a row offers (nothing, one button or
+            // two), so the columns before it line up from row to row.
+            SizedBox(
+              width: _SellingRow.actionsWidth,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: P2pSellerButtons(listing: listing, address: address, onListAgain: onList, compact: true),
+              ),
+            ),
           ],
         ),
       ),
