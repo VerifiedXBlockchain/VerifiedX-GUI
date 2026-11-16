@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:rbx_wallet/features/p2p/services/p2p_signer.dart';
+
 /// The decoded body of `test/features/p2p/fixtures/[name].json`.
 Map<String, dynamic> p2pFixture(String name) {
   return jsonDecode(File('test/features/p2p/fixtures/$name.json').readAsStringSync()) as Map<String, dynamic>;
@@ -67,4 +69,29 @@ class P2pTestServer {
   String get host => 'http://${_server.address.host}:${_server.port}';
 
   Future<void> close() => _server.close(force: true);
+}
+
+/// A signer that records what it was asked to sign and answers [signature],
+/// or throws [error] when one is set.
+class FakeP2pSigner implements P2pMessageSigner {
+  final List<List<String>> signed = [];
+  String signature;
+  Object? error;
+
+  /// Completes before each signature is returned, to hold a sign-in open.
+  Future<void>? gate;
+
+  FakeP2pSigner([this.signature = 'SIG.KEY']);
+
+  @override
+  Future<String> sign(String message, String address) async {
+    signed.add([message, address]);
+    if (gate != null) {
+      await gate;
+    }
+    if (error != null) {
+      throw error!;
+    }
+    return signature;
+  }
 }

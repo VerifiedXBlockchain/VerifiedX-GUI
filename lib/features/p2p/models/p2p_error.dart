@@ -1,10 +1,15 @@
 /// A refusal from the P2P API, `{"error": {"code", "message", "fields"}}`
 /// with status 400, 401, 403, 404 or 409, or a request that got no usable
 /// answer ([status] null, [code] one of [unreachable] or [badResponse]).
+/// A refused sign-in is [signInRefused].
 class P2pError implements Exception {
   // Client-side codes: the API never sends these.
   static const String unreachable = 'unreachable';
   static const String badResponse = 'bad_response';
+
+  /// `/api/auth/sign-token/` refused the sign-in (a stale or reused message,
+  /// or a signature that is not the address's).
+  static const String signInRefused = 'sign_in_refused';
 
   // 401.
   static const String notAuthenticated = 'not_authenticated';

@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 
 import '../../../core/env.dart';
 import '../../../core/services/base_service.dart';
+import '../models/p2p_auth_token.dart';
 import '../models/p2p_bid_summary.dart';
 import '../models/p2p_collection.dart';
 import '../models/p2p_error.dart';
@@ -32,7 +33,11 @@ class P2pService extends BaseService {
   /// Runs [request] and reads its body with [read]. A 4xx or 5xx becomes the
   /// [P2pError] its body carries, no answer becomes [P2pError.unreachable],
   /// and a body out of shape becomes [P2pError.badResponse].
-  Future<T> _call<T>(Future<Map<String, dynamic>> Function() request, T Function(Map<String, dynamic> body) read) async {
+  Future<T> _call<T>(
+    Future<Map<String, dynamic>> Function() request,
+    T Function(Map<String, dynamic> body) read, {
+    P2pError Function(DioException e) errorOf = P2pService.errorOf,
+  }) async {
     final Map<String, dynamic> body;
     try {
       body = await request();
@@ -70,6 +75,25 @@ class P2pService extends BaseService {
     return P2pError.fromResponse(response.statusCode, body);
   }
 
+  /// The [P2pError] a failed sign-in stands for. `/auth/sign-token/` is
+  /// outside `/api/p2p/` and refuses in DRF's own shapes, `{"message":
+  /// ["..."]}` or `["..."]`, which become [P2pError.signInRefused] with the
+  /// server's words.
+  static P2pError signInErrorOf(DioException e) {
+    final response = e.response;
+    if (response == null || response.statusCode != 400) {
+      return errorOf(e);
+    }
+    dynamic body = response.data;
+    if (body is Map && body.isNotEmpty) {
+      body = body.values.first;
+    }
+    if (body is List && body.isNotEmpty) {
+      body = body.first;
+    }
+    return P2pError(status: 400, code: P2pError.signInRefused, message: body is String ? body : '');
+  }
+
   /// A read that is null when the API answers 404.
   Future<T?> _find<T>(String path, T Function(Map<String, dynamic> body) read) async {
     try {
@@ -90,6 +114,30 @@ class P2pService extends BaseService {
       }
     });
     return query;
+  }
+
+  // Sign-in
+
+  /// `POST /auth/sign-token/`: a one-hour token for [address], in exchange
+  /// for its [signature] over a timed [message] (`p2pSignInMessage`).
+  /// Spyglass accepts each message once, within 10 minutes of its time.
+  Future<P2pAuthToken> signToken({
+    required String address,
+    required String message,
+    required String signature,
+  }) {
+    return _call(
+      () async {
+        final response = await postJson(
+          '/auth/sign-token/',
+          params: {'address': address, 'message': message, 'signature': signature},
+          responseIsJson: true,
+        );
+        return response['data'] as Map<String, dynamic>;
+      },
+      P2pAuthToken.fromJson,
+      errorOf: signInErrorOf,
+    );
   }
 
   // Shops
