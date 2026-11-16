@@ -20,9 +20,13 @@ import 'p2p_parts.dart';
 
 /// Shows everyone the listing as it stands after its seller changed it.
 void _listingChanged(WidgetRef ref, String address, P2pListing listing) {
-  refreshP2pSeller(ref, address);
-  ref.invalidate(p2pListingDetailProvider(listing.id));
-  ref.invalidate(p2pAllBidsProvider(listing.id));
+  _listingChangedIn(ProviderScope.containerOf(ref.context, listen: false), address, listing);
+}
+
+void _listingChangedIn(ProviderContainer container, String address, P2pListing listing) {
+  refreshP2pSellerIn(container, address);
+  container.invalidate(p2pListingDetailProvider(listing.id));
+  container.invalidate(p2pAllBidsProvider(listing.id));
 }
 
 /// Changes a listing's prices and dates, which the registry allows while it
@@ -227,7 +231,10 @@ class _P2pCancelListingDialogState extends ConsumerState<P2pCancelListingDialog>
 /// `Sale_Complete()`. While chain steps are dry runs it is recorded with the
 /// registry; nothing is signed or sent.
 Future<void> startP2pSale(WidgetRef ref, AppLocalizations l10n, P2pListing listing) async {
-  final steps = ref.read(p2pChainStepsProvider);
+  // The row this was pressed in can be gone by the time the step is done
+  // (its list is read again meanwhile): the app's own container is used.
+  final container = ProviderScope.containerOf(ref.context, listen: false);
+  final steps = container.read(p2pChainStepsProvider);
   final buyer = listing.winnerAddress;
   final price = listing.highBid?.amount;
   await P2pChainStepDialog.show(
@@ -238,7 +245,7 @@ Future<void> startP2pSale(WidgetRef ref, AppLocalizations l10n, P2pListing listi
       if (price != null) P2pStepRow(l10n.p2pChainRowPrice, p2pVfxText(l10n, price), mono: true),
     ],
     describe: () => steps.describeStartSale(listing),
-    carryOut: (tx) async => _listingChanged(ref, listing.sellerAddress, await steps.startSale(listing, tx)),
+    carryOut: (tx) async => _listingChangedIn(container, listing.sellerAddress, await steps.startSale(listing, tx)),
     doneBody: listing.title,
   );
 }
@@ -247,7 +254,8 @@ Future<void> startP2pSale(WidgetRef ref, AppLocalizations l10n, P2pListing listi
 /// started sale, and carries it out on Confirm. A started sale has no time
 /// limit: if the buyer never completes it, only this frees the NFT.
 Future<void> cancelP2pSale(WidgetRef ref, AppLocalizations l10n, P2pListing listing) async {
-  final steps = ref.read(p2pChainStepsProvider);
+  final container = ProviderScope.containerOf(ref.context, listen: false);
+  final steps = container.read(p2pChainStepsProvider);
   final buyer = listing.winnerAddress;
   await P2pChainStepDialog.show(
     title: l10n.p2pSaleCancel,
@@ -257,7 +265,7 @@ Future<void> cancelP2pSale(WidgetRef ref, AppLocalizations l10n, P2pListing list
     ],
     warning: l10n.p2pSaleCancelWarning,
     describe: () => steps.describeSaleCancellation(listing),
-    carryOut: (tx) async => _listingChanged(ref, listing.sellerAddress, await steps.cancelSale(listing, tx)),
+    carryOut: (tx) async => _listingChangedIn(container, listing.sellerAddress, await steps.cancelSale(listing, tx)),
     doneBody: listing.title,
   );
 }
@@ -289,7 +297,7 @@ class P2pSellerButtons extends ConsumerWidget {
       again(listing.smartContractUid);
       return;
     }
-    ref.read(p2pListRequestProvider.notifier).state = listing.smartContractUid;
+    ref.read(p2pListRequestProvider.notifier).state = P2pListRequest(nftId: listing.smartContractUid, address: address, at: ref.read(p2pClockProvider)());
     AutoRouter.of(context).push(const P2pMyShopScreenRoute());
   }
 

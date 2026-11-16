@@ -64,8 +64,10 @@ class P2pSaleNotices extends _$P2pSaleNotices {
   // The listings already announced.
   final Set<int> _told = {};
 
-  // The poll under way, shared by everyone who asks meanwhile.
+  // The poll under way, shared by everyone who asks meanwhile, and whether
+  // one more was asked for by something that changed while it ran.
   Future<void>? _polling;
+  bool _pollAgain = false;
 
   @override
   List<P2pListing> build() => const [];
@@ -78,14 +80,28 @@ class P2pSaleNotices extends _$P2pSaleNotices {
       return Future.value();
     }
     final at = now ?? DateTime.now();
+    final running = _polling;
+    if (running != null) {
+      // A read under way may have been made before what [force] is about
+      // (a sale just started): it reads once more when it is in.
+      _pollAgain = _pollAgain || force;
+      return running;
+    }
     final last = _polledAt;
     if (!force && last != null && at.difference(last) < pollEvery) {
-      return _polling ?? Future.value();
+      return Future.value();
     }
     _polledAt = at;
-    return _polling ??= _read(at).whenComplete(() {
+    return _polling = _readUntilSettled(at).whenComplete(() {
       _polling = null;
     });
+  }
+
+  Future<void> _readUntilSettled(DateTime at) async {
+    do {
+      _pollAgain = false;
+      await _read(at);
+    } while (_pollAgain);
   }
 
   /// Forgets which accounts have a shop (one was opened or closed), and

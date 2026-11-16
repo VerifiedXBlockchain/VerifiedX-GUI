@@ -38,6 +38,7 @@ import '../../asset/asset_card.dart';
 import '../../asset/asset_thumbnail.dart';
 import '../../bridge/services/bridge_service.dart';
 import '../../encrypt/utils.dart';
+import '../../p2p/providers/p2p_browse_providers.dart';
 import '../../p2p/providers/p2p_seller_providers.dart';
 import '../../smart_contracts/components/sc_creator/common/help_button.dart';
 import '../../smart_contracts/components/sc_creator/common/modal_container.dart';
@@ -890,7 +891,11 @@ class NftDetailScreen extends BaseScreen {
                         onPressed: () {
                           final tabs = AutoTabsRouter.of(context);
                           ref.read(p2pListRequestProvider.notifier).state =
-                              nft.id;
+                              P2pListRequest(
+                            nftId: nft.id,
+                            address: ref.read(p2pViewerAddressProvider),
+                            at: DateTime.now(),
+                          );
                           Navigator.of(context).pop();
                           tabs.navigate(const P2pTabRouter(
                               children: [P2pMyShopScreenRoute()]));

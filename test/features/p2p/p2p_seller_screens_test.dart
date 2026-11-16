@@ -71,7 +71,7 @@ void main() {
       };
   });
 
-  Future<void> pump(WidgetTester tester, {String? listNftId}) async {
+  Future<void> pump(WidgetTester tester, {String? listNftId, String? askedAs, DateTime? askedAt}) async {
     tester.binding.window.physicalSizeTestValue = const Size(1400, 1400);
     tester.binding.window.devicePixelRatioTestValue = 1;
     addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
@@ -86,7 +86,8 @@ void main() {
       overrides: [
         p2pListedNftsProvider.overrideWith(() => _Listed(listed)),
         // As the NFT's own page leaves it when "List for sale" is pressed.
-        if (listNftId != null) p2pListRequestProvider.overrideWith((ref) => listNftId),
+        if (listNftId != null)
+          p2pListRequestProvider.overrideWith((ref) => P2pListRequest(nftId: listNftId, address: askedAs ?? owner, at: askedAt ?? now)),
       ],
     ));
     await settle(tester);
@@ -393,6 +394,17 @@ void main() {
       await pump(tester, listNftId: harbor);
       expect(find.byKey(const Key('p2p:list_needs_shop')), findsOneWidget);
       expect(find.byKey(const Key('p2p:register_shop')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:list_submit')), findsNothing);
+    });
+
+    testWidgets('a request left by another account, or from long ago, opens nothing', (tester) async {
+      await pump(tester, listNftId: harbor, askedAs: other);
+      expect(find.byKey(const Key('p2p:list_submit')), findsNothing);
+      expect(find.byKey(const Key('p2p:list_picker')), findsNothing);
+    });
+
+    testWidgets('a request from long ago opens nothing either', (tester) async {
+      await pump(tester, listNftId: harbor, askedAt: now.subtract(const Duration(minutes: 16)));
       expect(find.byKey(const Key('p2p:list_submit')), findsNothing);
     });
 

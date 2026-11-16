@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/env.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_page.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_shop.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_sale_notices_provider.dart';
 import 'package:rbx_wallet/features/p2p/providers/p2p_session_provider.dart';
@@ -14,6 +17,21 @@ import 'p2p_test_helpers.dart';
 /// The wallet's accounts, fixed: nothing is asked of the node.
 class StubWalletList extends WalletListProvider {
   StubWalletList(Ref ref, List<Wallet> wallets) : super(ref, wallets);
+}
+
+/// A registry whose first read of a shop's listings waits until let go.
+class SlowListingsService extends FakeP2pService {
+  final Completer<void> gate = Completer<void>();
+  final Completer<void> reached = Completer<void>();
+
+  @override
+  Future<P2pPage<P2pListing>> listListings(String shopUrl, {int? collectionId, P2pListingState? state, int page = 1, int? limit}) async {
+    if (!reached.isCompleted) {
+      reached.complete();
+      await gate.future;
+    }
+    return super.listListings(shopUrl, collectionId: collectionId, state: state, page: page, limit: limit);
+  }
 }
 
 Wallet wallet(String address, {bool vault = false}) {
@@ -128,6 +146,27 @@ void main() {
     service.calls.clear();
     await notices.shopsChanged();
     expect(service.calls, ['ownerShop($alice)']);
+  });
+
+  test('something that changes while a read is under way is read for once that read is in', () async {
+    Env.setTestnetFromArgs(['--testnet']);
+    final slow = SlowListingsService()
+      ..shopsByOwner = {alice: demoShop()}
+      ..listingsByState[waitingKey] = [won(4)];
+    service = slow;
+    final container = containerWith([wallet(alice)]);
+    final notices = container.read(p2pSaleNoticesProvider.notifier);
+
+    final first = notices.poll(now: start);
+    await slow.reached.future;
+    // The sale is started while the first read is still out.
+    slow.listingsByState[waitingKey] = [];
+    final forced = notices.poll(force: true, now: start);
+    slow.gate.complete();
+    await Future.wait([first, forced]);
+
+    expect(slow.calls.where((c) => c.startsWith('listListings')), hasLength(2));
+    expect(container.read(p2pSaleNoticesProvider), isEmpty);
   });
 
   test('a registry that cannot be reached keeps what was waiting', () async {

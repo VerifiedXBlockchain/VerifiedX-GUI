@@ -58,19 +58,44 @@ P2pEmailPrompt p2pEmailPrompt(P2pEmailPromptRef ref) {
   );
 }
 
-/// The NFT whose own page asked for it to be listed, until My shop takes the
-/// request up and opens "List an NFT" for it.
-final p2pListRequestProvider = StateProvider<String?>((ref) => null);
+/// An NFT whose own page asked for it to be listed.
+class P2pListRequest {
+  /// How long a request waits to be taken up (while a shop is opened, say).
+  static const Duration goodFor = Duration(minutes: 15);
+
+  final String nftId;
+
+  /// The account that was selected when it was asked.
+  final String? address;
+  final DateTime at;
+
+  const P2pListRequest({required this.nftId, required this.address, required this.at});
+
+  /// Whether My shop, showing [address] at [now], should act on it: asked
+  /// for this account, not long ago. A request left behind does not open a
+  /// dialog for another account or hours later.
+  bool isFor(String address, DateTime now) => this.address == address && now.difference(at) < goodFor;
+}
+
+/// The latest such request, until My shop takes it up and opens "List an
+/// NFT" for it.
+final p2pListRequestProvider = StateProvider<P2pListRequest?>((ref) => null);
 
 /// Reads again everything [address]'s shop screens show: after a collection
 /// or a listing of its changed.
 void refreshP2pSeller(WidgetRef ref, String address) {
-  ref.invalidate(p2pOwnerCollectionsProvider);
-  ref.invalidate(p2pMeProvider(address));
-  ref.invalidate(p2pOwnerShopProvider(address));
-  ref.invalidate(p2pShopProvider);
-  ref.invalidate(p2pShopListingsProvider);
-  ref.read(p2pListedNftsProvider.notifier).refresh();
-  // A shop opened or closed, or a sale started: the badge follows at once.
-  ref.read(p2pSaleNoticesProvider.notifier).shopsChanged();
+  refreshP2pSellerIn(ProviderScope.containerOf(ref.context, listen: false), address);
+}
+
+/// [refreshP2pSeller] for a caller that may outlive its widget: a step
+/// confirmed in a dialog, whose row can be gone by the time it is done.
+void refreshP2pSellerIn(ProviderContainer container, String address) {
+  container.invalidate(p2pOwnerCollectionsProvider);
+  container.invalidate(p2pMeProvider(address));
+  container.invalidate(p2pOwnerShopProvider(address));
+  container.invalidate(p2pShopProvider);
+  container.invalidate(p2pShopListingsProvider);
+  container.read(p2pListedNftsProvider.notifier).refresh();
+  // A sale started or a listing withdrawn: the badge follows at once.
+  container.read(p2pSaleNoticesProvider.notifier).poll(force: true);
 }

@@ -394,7 +394,8 @@ class _P2pListingFormState extends ConsumerState<P2pListingForm> {
           const SizedBox(height: 14),
           DropdownButtonFormField<int>(
             key: const Key('p2p:list_collection'),
-            value: _collectionId,
+            // A collection deleted since the form opened is no longer a choice.
+            value: widget.collections.any((c) => c.id == _collectionId) ? _collectionId : null,
             decoration: InputDecoration(labelText: l10n.p2pListCollection),
             dropdownColor: const Color(0xFF191b1d),
             items: [

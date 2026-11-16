@@ -22,6 +22,7 @@ import '../components/p2p_shop_header.dart';
 import '../models/p2p_shop.dart';
 import '../providers/p2p_browse_providers.dart';
 import '../providers/p2p_listing_providers.dart';
+import '../providers/p2p_sale_notices_provider.dart';
 import '../providers/p2p_seller_providers.dart';
 import '../utils/p2p_amount.dart';
 import '../utils/p2p_rules.dart';
@@ -73,8 +74,9 @@ class P2pMyShopScreen extends BaseScreen {
     }
     final provider = p2pOwnerShopProvider(address);
     final shop = ref.watch(provider);
-    // An NFT whose own page sent the person here to list it.
-    final listNftId = ref.watch(p2pListRequestProvider);
+    // An NFT whose own page sent the person here, as this account, to list it.
+    final request = ref.watch(p2pListRequestProvider);
+    final listNftId = request != null && request.isFor(address, ref.watch(p2pClockProvider)()) ? request.nftId : null;
 
     return shop.when(
       loading: () => const CenteredLoader(),
@@ -110,6 +112,8 @@ class P2pMyShopScreen extends BaseScreen {
 void refreshP2pOwner(WidgetRef ref, String address) {
   ref.invalidate(p2pShopListProvider);
   refreshP2pSeller(ref, address);
+  // A shop opened or closed: which accounts have one is read again.
+  ref.read(p2pSaleNoticesProvider.notifier).shopsChanged();
 }
 
 class _RegisterShop extends ConsumerWidget {
@@ -249,10 +253,15 @@ class _OwnShopState extends ConsumerState<_OwnShop> {
     if (!mounted) {
       return;
     }
-    final nftId = ref.read(p2pListRequestProvider);
-    if (nftId != null) {
-      ref.read(p2pListRequestProvider.notifier).state = null;
-      _list(nftId);
+    final request = ref.read(p2pListRequestProvider);
+    if (request == null) {
+      return;
+    }
+    // Taken up or not, it is spent: one left for another account, or from
+    // long ago, opens nothing later.
+    ref.read(p2pListRequestProvider.notifier).state = null;
+    if (request.isFor(address, ref.read(p2pClockProvider)())) {
+      _list(request.nftId);
     }
   }
 
@@ -316,7 +325,7 @@ class _OwnShopState extends ConsumerState<_OwnShop> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     // A request made while this shop is already on screen, behind another tab.
-    ref.listen<String?>(p2pListRequestProvider, (_, next) {
+    ref.listen<P2pListRequest?>(p2pListRequestProvider, (_, next) {
       if (next != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) => _takeUpListRequest());
       }
