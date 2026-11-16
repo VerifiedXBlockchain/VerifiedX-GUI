@@ -154,6 +154,7 @@ class _P2pBidDialogState extends ConsumerState<P2pBidDialog> {
       // A page showing every bid reads them again: this one is new, and
       // the others' standing changed.
       ref.invalidate(p2pAllBidsProvider(widget.listingId));
+      ref.invalidate(p2pMeProvider(widget.address));
       if (mounted) {
         setState(() => _result = result);
       }

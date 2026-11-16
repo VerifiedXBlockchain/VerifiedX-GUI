@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app_router.gr.dart';
 import '../../../core/base_screen.dart';
+import '../../../core/components/buttons.dart';
 import '../../../core/components/centered_loader.dart';
+import '../../../core/theme/app_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../components/p2p_dry_run_banner.dart';
@@ -70,6 +74,14 @@ class _P2pShopListScreenState extends BaseScreenState<P2pShopListScreen> {
       backgroundColor: Colors.black12,
       shadowColor: Colors.transparent,
       actions: [
+        AppButton(
+          key: const Key('p2p:my_bids'),
+          label: l10n.p2pMyBidsTitle,
+          icon: Icons.gavel,
+          type: AppButtonType.Text,
+          variant: AppColorVariant.Light,
+          onPressed: () => AutoRouter.of(context).push(const P2pMyBidsScreenRoute()),
+        ),
         IconButton(
           key: const Key('p2p:shops_refresh'),
           tooltip: l10n.actionRefresh,

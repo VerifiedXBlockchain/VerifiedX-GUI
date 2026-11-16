@@ -158,6 +158,39 @@ void main() {
     });
   });
 
+  group('dry runs and the listed flag', () {
+    test('dryRunSaleComplete posts the listing id and the description with the token', () async {
+      server.always(200, {...p2pFixture('listing_sale_pending'), 'state': 'sold'});
+      final tx = P2pListing.fromJson(p2pFixture('listing_sale_pending')).sale!.start!;
+      final listing = await service.dryRunSaleComplete(token: 'tok-9', listingId: 3, tx: tx);
+
+      final request = server.requests.single;
+      expect(request.method, 'POST');
+      expect(request.path, '/p2p/dry-run/sale-complete/');
+      expect(request.authorization, 'Bearer tok-9');
+      expect((request.body as Map)['listing_id'], 3);
+      expect(((request.body as Map)['tx'] as Map).keys, ['type', 'function', 'from_address', 'to_address', 'amount', 'fee', 'timestamp', 'data']);
+      expect(listing.state, P2pListingState.sold);
+    });
+
+    test('listedNftIds reads an owner\'s listed NFT ids, with no token', () async {
+      server.always(200, {
+        'results': ['0b6ea1abd1da425fab80029f8f20944c:1794213169', 'fd6f04f2368b4d06b621e0959dc14b36:1794213174']
+      });
+      final ids = await service.listedNftIds('xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ');
+      final request = server.requests.single;
+      expect(request.path, '/nft/listed/xJwSHB75g85bfhPLBFJ7JS1QzkDRhNJksJ/');
+      expect(request.authorization, isNull);
+      expect(ids, {'0b6ea1abd1da425fab80029f8f20944c:1794213169', 'fd6f04f2368b4d06b621e0959dc14b36:1794213174'});
+    });
+
+    test('a listed answer out of shape is a bad response, not an empty set', () async {
+      server.always(200, {'detail': 'nope'});
+      final error = await refusal(() => service.listedNftIds('xOwner'));
+      expect(error.code, P2pError.badResponse);
+    });
+  });
+
   group('refusals', () {
     test('a 400 carries the contract\'s code, message and fields', () async {
       server.always(400, p2pFixture('error_bid_too_low'));

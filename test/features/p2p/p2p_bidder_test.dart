@@ -1,11 +1,16 @@
 import 'dart:io';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:rbx_wallet/core/api_token_manager.dart';
+import 'package:rbx_wallet/core/env.dart';
 import 'package:rbx_wallet/core/services/base_service.dart';
 import 'package:rbx_wallet/core/singletons.dart';
+import 'package:rbx_wallet/features/encrypt/providers/password_required_provider.dart';
+import 'package:rbx_wallet/features/p2p/chain/p2p_chain_steps.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
+import 'package:rbx_wallet/features/p2p/providers/p2p_listing_providers.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_bidder.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_session.dart';
@@ -272,12 +277,11 @@ void main() {
   group('no transaction is ever built', () {
     // Constraint of the audit hold: the shop builds, signs and sends no
     // transaction. Nothing under lib/features/p2p may name a Core route that
-    // builds, sends or completes one, or that records a bid in Core.
+    // signs, sends or completes one, or that records a bid in Core.
     const forbidden = [
       'SendRawTransaction',
       'VerifyRawTransaction',
       'GetTxHash',
-      'GetRawTxFee',
       'SendTransaction',
       'CreateBeaconUploadRequest',
       'CompleteNFTPurchase',
@@ -287,15 +291,17 @@ void main() {
       'GetPublishDecShop',
       'CancelSale',
       '/dstapi/',
-      '/txapi/',
       'RawService',
       'RawTransaction',
     ];
 
-    test('the P2P feature names none of Core\'s transaction or shop routes', () {
-      final files = Directory('lib/features/p2p').listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.dart'));
-      expect(files, isNotEmpty);
-      for (final file in files) {
+    Iterable<File> sources() {
+      return Directory('lib/features/p2p').listSync(recursive: true).whereType<File>().where((f) => f.path.endsWith('.dart'));
+    }
+
+    test('the P2P feature names none of Core\'s signing, sending or shop routes', () {
+      expect(sources(), isNotEmpty);
+      for (final file in sources()) {
         final source = file.readAsStringSync();
         for (final name in forbidden) {
           expect(source.contains(name), isFalse, reason: '${file.path} mentions $name');
@@ -303,20 +309,40 @@ void main() {
       }
     });
 
-    test('the only thing asked of Core is a message signature', () {
-      final signerSource = File('lib/features/p2p/services/p2p_signer.dart').readAsStringSync();
-      final coreCalls = RegExp(r"absoluteUrl\('([^']*)").allMatches(signerSource).map((m) => m.group(1)).toList();
-      expect(coreCalls, [r'/CreateSignature/${Uri.encodeComponent(message)}/${Uri.encodeComponent(address)}']);
-
-      // No other file in the feature talks to the node: each service either
-      // is the signer or points at Spyglass.
-      final services = Directory('lib/features/p2p/services').listSync().whereType<File>().where((f) => f.path.endsWith('.dart'));
-      for (final file in services) {
+    test('all that is asked of Core is a message signature and a fee quote', () {
+      // Every class that talks to the node, and the one route each uses.
+      final nodeServices = <String, String>{};
+      for (final file in sources()) {
         final source = file.readAsStringSync();
-        if (source.contains('extends BaseService') && !file.path.endsWith('p2p_signer.dart')) {
-          expect(source, contains('Env.explorerApiBaseUrl'), reason: file.path);
+        if (!source.contains('extends BaseService')) {
+          continue;
         }
+        if (source.contains('Env.explorerApiBaseUrl')) {
+          continue; // Spyglass, not the node.
+        }
+        final routes = RegExp(r"'/([A-Za-z]+)[/']").allMatches(source).map((m) => m.group(1)!).toSet();
+        nodeServices[file.path.split('/').last] = routes.join(',');
       }
+      expect(nodeServices, {
+        // A plain message: the sign-in and a bid.
+        'p2p_signer.dart': 'CreateSignature',
+        // A calculation: Core builds nothing it keeps, signs and sends nothing.
+        'p2p_fee_quoter.dart': 'GetRawTxFee',
+      });
+    });
+
+    test('chain steps are dry runs: no build setting turns sending on', () {
+      expect(Env.p2pBroadcast, isFalse);
+      // The chain steps hold the session, which follows the wallet's lock
+      // state. The real lock-state provider asks the node as soon as it is
+      // built and writes the answer whenever it comes, which can be after
+      // this test has disposed the container: the stub asks nothing.
+      final container = ProviderContainer(overrides: [
+        passwordRequiredProvider.overrideWith((ref) => StubPasswordRequired()),
+      ]);
+      addTearDown(container.dispose);
+      expect(container.read(p2pChainStepsProvider).isDryRun, isTrue);
+      expect(container.read(p2pChainStepsProvider), isA<P2pDryRunChainSteps>());
     });
   });
 }

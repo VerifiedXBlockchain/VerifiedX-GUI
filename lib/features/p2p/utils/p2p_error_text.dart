@@ -1,4 +1,5 @@
 import '../../../l10n/generated/app_localizations.dart';
+import '../chain/p2p_chain_error.dart';
 import '../models/p2p_error.dart';
 import '../services/p2p_session.dart';
 import '../services/p2p_signer.dart';
@@ -21,6 +22,20 @@ String p2pErrorText(AppLocalizations l10n, Object error) {
   }
   if (error is P2pSignInMismatch) {
     return l10n.p2pErrorSignInRefused;
+  }
+  if (error is P2pChainError) {
+    switch (error.failure) {
+      case P2pChainFailure.priceZero:
+        return l10n.p2pChainErrorPriceZero;
+      case P2pChainFailure.noWinner:
+        return l10n.p2pChainErrorNoWinner;
+      case P2pChainFailure.royaltyTooHigh:
+        return l10n.p2pChainErrorRoyaltyTooHigh;
+      case P2pChainFailure.royaltyZero:
+        return l10n.p2pChainErrorRoyaltyZero;
+      case P2pChainFailure.feeUnavailable:
+        return l10n.p2pChainErrorFee;
+    }
   }
   if (error is! P2pError) {
     return l10n.p2pErrorUnknown;
@@ -103,6 +118,20 @@ String? _knownCode(AppLocalizations l10n, P2pError error) {
       return l10n.p2pErrorInsufficientBalance;
     case 'duplicate_bid':
       return l10n.p2pErrorDuplicateBid;
+
+    // Chain steps recorded as dry runs.
+    case 'not_buyer':
+      return l10n.p2pErrorNotBuyer;
+    case 'not_seller':
+      return l10n.p2pErrorNotSeller;
+    case 'not_sender':
+      return l10n.p2pErrorNotSender;
+    case 'sale_on_chain':
+      return l10n.p2pErrorSaleOnChain;
+    case 'listing_not_sale_pending':
+      return l10n.p2pErrorListingNotSalePending;
+    case 'nft_moved':
+      return l10n.p2pErrorNftMoved;
   }
   return null;
 }

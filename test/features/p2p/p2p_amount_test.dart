@@ -53,6 +53,24 @@ void main() {
     });
   });
 
+  group('amounts to and from Core\'s JSON numbers', () {
+    test('a fee Core quotes is rounded up to the next unit, never down', () {
+      expect(P2pAmount.fromDoubleRoundedUp(0.000042).toDecimalString(), '0.000042');
+      expect(P2pAmount.fromDoubleRoundedUp(0.0000421234).toDecimalString(), '0.00004213');
+      // A double a hair above an exact unit is that unit.
+      expect(P2pAmount.fromDoubleRoundedUp(0.1 + 0.2).toDecimalString(), '0.3');
+      expect(() => P2pAmount.fromDoubleRoundedUp(double.infinity), throwsArgumentError);
+    });
+
+    test('an amount is written as Core writes a decimal', () {
+      expect(P2pAmount.parse('5').toJsonNumber(), 5);
+      expect(P2pAmount.parse('5').toJsonNumber(), isA<int>());
+      expect(P2pAmount.parse('4.9').toJsonNumber(), 4.9);
+      expect(P2pAmount.parse('0.02').toJsonNumber(), 0.02);
+      expect(P2pAmount.parse('0').toJsonNumber(), 0);
+    });
+  });
+
   group('P2pAmountInput', () {
     test('reads what people type', () {
       expect(P2pAmountInput.read('12').amount, P2pAmount.parse('12'));

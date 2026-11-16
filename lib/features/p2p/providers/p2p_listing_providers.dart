@@ -1,5 +1,8 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import '../../../core/env.dart';
+import '../chain/p2p_chain_steps.dart';
+import '../chain/p2p_fee_quoter.dart';
 import '../models/p2p_bid_summary.dart';
 import '../models/p2p_listing.dart';
 import '../models/p2p_page.dart';
@@ -83,6 +86,26 @@ Future<List<P2pBidSummary>> p2pAllBids(P2pAllBidsRef ref, int listingId) async {
     page = result.next;
   }
   return bids;
+}
+
+/// Quotes a chain step's fee through Core.
+@Riverpod(keepAlive: true)
+P2pFeeQuoter p2pFeeQuoter(P2pFeeQuoterRef ref) {
+  return P2pCoreFeeQuoter();
+}
+
+/// The shop's chain steps. Dry runs while `Env.p2pBroadcast` is off, which
+/// it is in every build: there is no path that sends a transaction yet.
+@Riverpod(keepAlive: true)
+P2pChainSteps p2pChainSteps(P2pChainStepsRef ref) {
+  if (Env.p2pBroadcast) {
+    throw UnsupportedError('The P2P shop sends no transactions in this build: its chain steps are dry runs only.');
+  }
+  return P2pDryRunChainSteps(
+    service: ref.watch(p2pServiceProvider),
+    session: ref.watch(p2pSessionProvider),
+    fees: ref.watch(p2pFeeQuoterProvider),
+  );
 }
 
 @Riverpod(keepAlive: true)

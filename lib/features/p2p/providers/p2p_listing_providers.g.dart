@@ -129,6 +129,40 @@ class P2pAllBidsProvider
   }
 }
 
+String _$p2pFeeQuoterHash() => r'93d2b8815c3d1665fdad8eb229a46023178f7a58';
+
+/// Quotes a chain step's fee through Core.
+///
+/// Copied from [p2pFeeQuoter].
+@ProviderFor(p2pFeeQuoter)
+final p2pFeeQuoterProvider = Provider<P2pFeeQuoter>.internal(
+  p2pFeeQuoter,
+  name: r'p2pFeeQuoterProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$p2pFeeQuoterHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef P2pFeeQuoterRef = ProviderRef<P2pFeeQuoter>;
+String _$p2pChainStepsHash() => r'c2033cbfa5bef338e41c41b6b7c593e255fe2a11';
+
+/// The shop's chain steps. Dry runs while `Env.p2pBroadcast` is off, which
+/// it is in every build: there is no path that sends a transaction yet.
+///
+/// Copied from [p2pChainSteps].
+@ProviderFor(p2pChainSteps)
+final p2pChainStepsProvider = Provider<P2pChainSteps>.internal(
+  p2pChainSteps,
+  name: r'p2pChainStepsProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$p2pChainStepsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef P2pChainStepsRef = ProviderRef<P2pChainSteps>;
 String _$p2pBidderHash() => r'60eb7b9c0cf980a53c358584981ae2cd01d87aaf';
 
 /// See also [p2pBidder].
@@ -143,7 +177,7 @@ final p2pBidderProvider = Provider<P2pBidder>.internal(
 );
 
 typedef P2pBidderRef = ProviderRef<P2pBidder>;
-String _$p2pListingDetailHash() => r'6ae123be8e4a84a999b866677b30382daa9b9544';
+String _$p2pListingDetailHash() => r'93a3ec684583948be2ed1f8cc21530290add7a96';
 
 abstract class _$P2pListingDetail
     extends BuildlessAutoDisposeAsyncNotifier<P2pListing?> {

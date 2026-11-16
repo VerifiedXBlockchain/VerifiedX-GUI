@@ -1,4 +1,5 @@
 import '../models/p2p_listing.dart';
+import '../models/p2p_me.dart';
 import 'p2p_amount.dart';
 import 'p2p_rules.dart';
 
@@ -287,4 +288,84 @@ List<P2pTimelineStep> p2pListingTimeline(P2pListing listing) {
     for (var i = 0; i < reached; i++) P2pTimelineStep(state: _happyPath[i], done: true, at: times[_happyPath[i]]),
     P2pTimelineStep(state: listing.state, current: true, stopped: true),
   ];
+}
+
+/// Where a bidder stands on a listing they bid on.
+enum P2pBuyingStatus {
+  /// The sale has started for them: complete the purchase.
+  pay,
+
+  /// Won; the seller starts the sale next.
+  wonWaiting,
+
+  /// Holds the high bid, with the reserve met.
+  winning,
+
+  /// Holds the high bid, under the reserve.
+  reserveNotMet,
+
+  /// Someone bid higher.
+  outbid,
+
+  /// Bought it.
+  purchased,
+
+  /// It went to someone else.
+  lost,
+
+  /// It ended without a sale.
+  closed,
+}
+
+P2pBuyingStatus p2pBuyingStatus(P2pBuyingEntry entry, String address) {
+  final listing = entry.listing;
+  final mine = listing.winnerAddress == address;
+  if (entry.canCompletePurchase || (listing.state == P2pListingState.salePending && mine)) {
+    return P2pBuyingStatus.pay;
+  }
+  switch (listing.state) {
+    case P2pListingState.sold:
+      return mine ? P2pBuyingStatus.purchased : P2pBuyingStatus.lost;
+    case P2pListingState.awaitingSaleStart:
+    case P2pListingState.salePending:
+      return mine ? P2pBuyingStatus.wonWaiting : P2pBuyingStatus.lost;
+    case P2pListingState.live:
+      if (listing.highBid?.address != address) {
+        return P2pBuyingStatus.outbid;
+      }
+      return listing.reserveMet ? P2pBuyingStatus.winning : P2pBuyingStatus.reserveNotMet;
+    default:
+      return P2pBuyingStatus.closed;
+  }
+}
+
+/// The most [address] has bid on [listing], as far as the listing shows:
+/// its high bid when that is theirs, else the largest of their bids among
+/// the ones it carries. Null when it shows none of theirs.
+P2pAmount? p2pOwnBid(P2pListing listing, String address) {
+  P2pAmount? most;
+  void consider(String? amount) {
+    final parsed = P2pAmount.tryParse(amount);
+    if (parsed != null && (most == null || parsed > most!)) {
+      most = parsed;
+    }
+  }
+
+  if (listing.highBid?.address == address) {
+    consider(listing.highBid!.amount);
+  }
+  for (final bid in listing.bids ?? const []) {
+    if (bid.address == address) {
+      consider(bid.amount);
+    }
+  }
+  return most;
+}
+
+/// Whether a sale was started for more than the buyer bid: [price] is what
+/// the started sale asks, [bid] the most the buyer offered. The purchase is
+/// not offered then. An unknown bid does not block: the registry only starts
+/// a sale at the winning bid's amount.
+bool p2pSaleAsksMoreThanBid(P2pAmount price, P2pAmount? bid) {
+  return bid != null && price > bid;
 }
