@@ -175,7 +175,7 @@ class NftDetailScreen extends BaseScreen {
                     progressAnimation: !nft.isPublished,
                   ),
                 ),
-                if (nft.isListed(ref))
+                if (nft.isListed(ref) || nft.isP2pListed(ref))
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: AppBadge(

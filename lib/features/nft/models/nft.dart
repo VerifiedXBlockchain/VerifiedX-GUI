@@ -10,6 +10,7 @@ import '../../token/models/token_sc_feature.dart';
 import '../../../core/utils.dart';
 import '../../asset/web_asset.dart';
 import '../../dst/providers/listed_nfts_provider.dart';
+import '../../p2p/providers/p2p_listed_nfts_provider.dart';
 import '../../sc_property/models/sc_property.dart';
 import '../../smart_contracts/features/royalty/royalty.dart';
 
@@ -387,6 +388,14 @@ abstract class Nft with _$Nft {
       }
     }
     return false;
+  }
+
+  /// Whether the NFT is in an active listing of the P2P shop registry. For
+  /// the "Listed" badge only: unlike [isListed], which is the old shop's
+  /// flag, it does not hold a transfer or a burn back (moving a listed NFT
+  /// ends its listing). Always false where the P2P shop is off.
+  bool isP2pListed(WidgetRef ref) {
+    return !kIsWeb && ref.watch(p2pListedNftsProvider).contains(id);
   }
 
   int get timestamp {

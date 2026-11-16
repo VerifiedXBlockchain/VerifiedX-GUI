@@ -180,7 +180,7 @@ class NftCard extends BaseComponent {
                       // const SizedBox(
                       //   width: 4,
                       // ),
-                      if (nft.isListed(ref))
+                      if (nft.isListed(ref) || nft.isP2pListed(ref))
                         Padding(
                           padding: const EdgeInsets.only(left: 4.0),
                           child: AppBadge(
