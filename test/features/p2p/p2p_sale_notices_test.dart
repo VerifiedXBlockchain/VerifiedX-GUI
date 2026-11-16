@@ -34,6 +34,15 @@ class SlowListingsService extends FakeP2pService {
   }
 }
 
+/// A registry that hands a shop's waiting sales out one to a page.
+class PagedListingsService extends FakeP2pService {
+  @override
+  Future<P2pPage<P2pListing>> listListings(String shopUrl, {int? collectionId, P2pListingState? state, int page = 1, int? limit}) async {
+    final all = (await super.listListings(shopUrl, collectionId: collectionId, state: state, page: page, limit: limit)).results;
+    return P2pPage(count: all.length, next: page < all.length ? page + 1 : null, results: all.isEmpty ? [] : [all[page - 1]]);
+  }
+}
+
 Wallet wallet(String address, {bool vault = false}) {
   return Wallet(id: 1, publicKey: 'pub', address: address, balance: 10, isValidating: false, recoveryAddress: vault ? 'xRecovery' : null);
 }
@@ -167,6 +176,33 @@ void main() {
 
     expect(slow.calls.where((c) => c.startsWith('listListings')), hasLength(2));
     expect(container.read(p2pSaleNoticesProvider), isEmpty);
+  });
+
+  test('a shop with more waiting sales than a page holds has them all counted', () async {
+    Env.setTestnetFromArgs(['--testnet']);
+    service = PagedListingsService()
+      ..shopsByOwner = {alice: demoShop()}
+      ..listingsByState[waitingKey] = [won(4), won(7), won(9)];
+    final container = containerWith([wallet(alice)]);
+    await container.read(p2pSaleNoticesProvider.notifier).poll(now: start);
+    expect(container.read(p2pSaleNoticesProvider).map((l) => l.id), [4, 7, 9]);
+    expect(announced.map((l) => l.id), [4, 7, 9]);
+  });
+
+  test('an account removed from the wallet stops counting at the next read', () async {
+    Env.setTestnetFromArgs(['--testnet']);
+    service.listingsByState[waitingKey] = [won(4)];
+    final container = containerWith([wallet(alice), wallet(bob)]);
+    final notices = container.read(p2pSaleNoticesProvider.notifier);
+    await notices.poll(now: start);
+    expect(container.read(p2pSaleNoticesProvider), hasLength(1));
+
+    // Alice's account is removed; her shop was read two minutes ago.
+    container.read(walletListProvider.notifier).set([wallet(bob)]);
+    service.calls.clear();
+    await notices.poll(now: start.add(const Duration(minutes: 2)));
+    expect(container.read(p2pSaleNoticesProvider), isEmpty);
+    expect(service.calls.where((c) => c.startsWith('listListings')), isEmpty);
   });
 
   test('a registry that cannot be reached keeps what was waiting', () async {

@@ -23,13 +23,13 @@ class P2pSeller {
         _session = session,
         _nfts = nfts;
 
-  /// The shop's collections as its owner sees them: the hidden ones too.
-  Future<List<P2pCollection>> collections(String address, String shopUrl) async {
-    final page = await _session.withToken(
+  /// The shop's collections as its owner sees them: the hidden ones too,
+  /// every page of them.
+  Future<List<P2pCollection>> collections(String address, String shopUrl) {
+    return _session.withToken(
       address,
-      (token) => _service.listCollections(shopUrl, token: token, limit: P2pPage.maxLimit),
+      (token) => p2pReadAllPages((page) => _service.listCollections(shopUrl, token: token, page: page, limit: P2pPage.maxLimit)),
     );
-    return page.results;
   }
 
   Future<P2pCollection> createCollection(String address, String shopUrl, {required String name, String description = ''}) {

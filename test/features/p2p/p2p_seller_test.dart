@@ -9,6 +9,7 @@ import 'package:rbx_wallet/features/p2p/models/p2p_error.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_listing.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_me.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_owned_nft.dart';
+import 'package:rbx_wallet/features/p2p/models/p2p_page.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_nft_source.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_seller.dart';
 import 'package:rbx_wallet/features/p2p/services/p2p_service.dart';
@@ -145,6 +146,47 @@ void main() {
       });
       // A change cannot move the listing to another NFT.
       expect(input.toJson(forUpdate: true).containsKey('smart_contract_uid'), isFalse);
+    });
+  });
+
+  group('a date and time picker', () {
+    test('opens on this computer\'s clock for a listing\'s UTC time, at the same moment', () {
+      final closes = DateTime.utc(2026, 12, 16, 15, 26, 35);
+      final start = p2pPickerStart(closes, now);
+      // Read as local numbers, so the time picked is not moved by the zone.
+      expect(start.isUtc, isFalse);
+      expect(start.isAtSameMomentAs(closes), isTrue);
+      expect([start.hour, start.minute], [closes.toLocal().hour, closes.toLocal().minute]);
+    });
+
+    test('does not open before today', () {
+      final start = p2pPickerStart(now.subtract(const Duration(days: 3)), now);
+      final localNow = now.toLocal();
+      expect(start, DateTime(localNow.year, localNow.month, localNow.day));
+    });
+  });
+
+  group('a list in pages', () {
+    P2pPage<int> page(List<int> items, int? next) => P2pPage(count: 5, next: next, results: items);
+
+    test('is read to its last page', () async {
+      final asked = <int>[];
+      final all = await p2pReadAllPages((n) async {
+        asked.add(n);
+        return n == 1 ? page([1, 2], 2) : (n == 2 ? page([3, 4], 3) : page([5], null));
+      });
+      expect(all, [1, 2, 3, 4, 5]);
+      expect(asked, [1, 2, 3]);
+    });
+
+    test('stops at its bound even if the registry always names a next page', () async {
+      var reads = 0;
+      final all = await p2pReadAllPages((n) async {
+        reads++;
+        return page([n], n + 1);
+      }, maxPages: 4);
+      expect(reads, 4);
+      expect(all, [1, 2, 3, 4]);
     });
   });
 
@@ -321,6 +363,32 @@ void main() {
       // A visitor sends none.
       await service.listCollections('dryrun-demo');
       expect(server.requests.last.authorization, isNull);
+    });
+
+    test('the owner\'s collections are read past the first hundred', () async {
+      server.respond = (request) {
+        if (request.path == '/auth/sign-token/') {
+          return P2pCannedResponse(201, {
+            'token': 'tok',
+            'address': owner,
+            'expires_at': DateTime.now().toUtc().add(const Duration(hours: 1)).toIso8601String(),
+          });
+        }
+        final second = request.uri.queryParameters['page'] == '2';
+        return P2pCannedResponse(200, {
+          'count': 2,
+          'next': second ? null : 2,
+          'results': [
+            {...collection, 'id': second ? 8 : 7},
+          ],
+        });
+      };
+      final seller = P2pSeller(service: service, session: P2pSession(service: service, signer: FakeP2pSigner()), nfts: FakeP2pNftSource());
+      final all = await seller.collections(owner, 'dryrun-demo');
+      expect(all.map((c) => c.id), [7, 8]);
+      final reads = server.requests.where((r) => r.path == '/p2p/shops/dryrun-demo/collections/').toList();
+      expect(reads.map((r) => r.uri.queryParameters['page']), ['1', '2']);
+      expect(reads.every((r) => r.authorization == 'Bearer tok'), isTrue);
     });
 
     test('createCollection posts the name and description to the shop', () async {

@@ -608,3 +608,14 @@ P2pNftBlock? p2pNftBlock(P2pOwnedNft nft, {required String address, required Set
   }
   return null;
 }
+
+/// Where a date-and-time picker opens for [initial], at [now]: on this
+/// computer's clock, and not before today. A picker reads a `DateTime`'s own
+/// date and hour, so a UTC time (a listing's are) must be made local first,
+/// or accepting it unchanged would move it by the zone's offset.
+DateTime p2pPickerStart(DateTime initial, DateTime now) {
+  final localNow = now.toLocal();
+  final today = DateTime(localNow.year, localNow.month, localNow.day);
+  final start = initial.toLocal();
+  return start.isBefore(today) ? today : start;
+}

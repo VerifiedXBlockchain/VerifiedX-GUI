@@ -63,9 +63,17 @@ class _P2pListNftDialogState extends ConsumerState<P2pListNftDialog> {
   _Stage _stage = _Stage.idle;
   Object? _error;
 
-  /// The listing whose media could not be uploaded, kept to try again or to
-  /// post without a picture.
-  P2pListingDraft? _mediaFailedFor;
+  /// Whether the last try stopped because the NFT's media could not be
+  /// uploaded: the listing can then be posted without a picture.
+  bool _mediaFailed = false;
+
+  /// The form, to submit it from the "without a picture" button: what is
+  /// posted is what its fields say then, not what they said at the try that
+  /// failed. A new one for each NFT chosen.
+  GlobalKey<P2pListingFormState> _formKey = GlobalKey<P2pListingFormState>();
+
+  /// Set while the form is being submitted from "List without a picture".
+  bool _withoutPicture = false;
 
   @override
   void initState() {
@@ -88,7 +96,7 @@ class _P2pListNftDialogState extends ConsumerState<P2pListNftDialog> {
     setState(() {
       _stage = skipMedia ? _Stage.posting : _Stage.checkingMedia;
       _error = null;
-      _mediaFailedFor = null;
+      _mediaFailed = false;
     });
     try {
       if (!skipMedia && !await seller.hasMedia(nft.id)) {
@@ -102,7 +110,7 @@ class _P2pListNftDialogState extends ConsumerState<P2pListNftDialog> {
           if (mounted) {
             setState(() {
               _stage = _Stage.idle;
-              _mediaFailedFor = draft;
+              _mediaFailed = true;
             });
           }
           return;
@@ -249,7 +257,8 @@ class _P2pListNftDialogState extends ConsumerState<P2pListNftDialog> {
                             _pickedId = nft.id;
                             _choosing = false;
                             _error = null;
-                            _mediaFailedFor = null;
+                            _mediaFailed = false;
+                            _formKey = GlobalKey<P2pListingFormState>();
                           }),
                 );
               },
@@ -295,7 +304,7 @@ class _P2pListNftDialogState extends ConsumerState<P2pListNftDialog> {
         const SizedBox(height: 14),
         Flexible(
           child: P2pListingForm(
-            key: ValueKey(nft.id),
+            key: _formKey,
             smartContractUid: nft.id,
             royalty: nft.royalty,
             collections: collections,
@@ -303,17 +312,27 @@ class _P2pListNftDialogState extends ConsumerState<P2pListNftDialog> {
             busy: busy,
             status: _status(l10n, nft),
             onCancel: () => Navigator.of(context).pop(),
-            onSubmit: (draft) => _submit(nft, draft),
+            onSubmit: (draft) => _submit(nft, draft, skipMedia: _withoutPicture),
           ),
         ),
       ],
     );
   }
 
+  /// Posts the listing without its picture: the form is submitted again, so
+  /// its fields are checked and read as they are now.
+  void _listWithoutPicture() {
+    _withoutPicture = true;
+    try {
+      _formKey.currentState?.submit();
+    } finally {
+      _withoutPicture = false;
+    }
+  }
+
   /// What the last submit is doing, or why it stopped.
   Widget? _status(AppLocalizations l10n, P2pOwnedNft nft) {
-    final failed = _mediaFailedFor;
-    if (failed != null) {
+    if (_mediaFailed) {
       return Column(
         key: const Key('p2p:list_media_failed'),
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -326,7 +345,7 @@ class _P2pListNftDialogState extends ConsumerState<P2pListNftDialog> {
             type: AppButtonType.Outlined,
             variant: AppColorVariant.Light,
             size: AppSizeVariant.Sm,
-            onPressed: () => _submit(nft, failed, skipMedia: true),
+            onPressed: _listWithoutPicture,
           ),
         ],
       );

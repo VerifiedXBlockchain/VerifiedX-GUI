@@ -115,6 +115,10 @@ class P2pSaleNotices extends _$P2pSaleNotices {
     final service = ref.read(p2pServiceProvider);
     final addresses = ref.read(walletListProvider).where((w) => !w.isReserved).map((w) => w.address).toSet();
 
+    // An account removed from the wallet stops counting at once, not when
+    // the shops are next read.
+    _shopByAddress.removeWhere((address, _) => !addresses.contains(address));
+
     final shopsReadAt = _shopsReadAt;
     final shopsStale = shopsReadAt == null || at.difference(shopsReadAt) >= shopsGoodFor || !_shopByAddress.keys.toSet().containsAll(addresses);
     if (shopsStale) {
@@ -127,7 +131,6 @@ class P2pSaleNotices extends _$P2pSaleNotices {
           allRead = false;
         }
       }));
-      _shopByAddress.removeWhere((address, _) => !addresses.contains(address));
       _shopsReadAt = allRead ? at : null;
     }
 
@@ -135,8 +138,9 @@ class P2pSaleNotices extends _$P2pSaleNotices {
     _waitingByShop.removeWhere((url, _) => !shops.contains(url));
     await Future.wait(shops.map((url) async {
       try {
-        final page = await service.listListings(url, state: P2pListingState.awaitingSaleStart, limit: P2pPage.maxLimit);
-        _waitingByShop[url] = page.results;
+        _waitingByShop[url] = await p2pReadAllPages(
+          (page) => service.listListings(url, state: P2pListingState.awaitingSaleStart, page: page, limit: P2pPage.maxLimit),
+        );
       } on P2pError {
         // Keep what this shop had waiting.
       }

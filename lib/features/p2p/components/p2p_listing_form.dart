@@ -60,10 +60,13 @@ class P2pListingForm extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<P2pListingForm> createState() => _P2pListingFormState();
+  ConsumerState<P2pListingForm> createState() => P2pListingFormState();
 }
 
-class _P2pListingFormState extends ConsumerState<P2pListingForm> {
+/// Public so the form's owner can ask it to [submit] from a button of its
+/// own (through a `GlobalKey`): what is posted is always what the fields
+/// say now, never a draft kept from an earlier try.
+class P2pListingFormState extends ConsumerState<P2pListingForm> {
   late bool _auction;
   late final TextEditingController _price;
   late final TextEditingController _floor;
@@ -149,7 +152,9 @@ class _P2pListingFormState extends ConsumerState<P2pListingForm> {
     );
   }
 
-  void _submit() {
+  /// Checks the fields as they stand and, when nothing is wrong with them,
+  /// hands the draft to the owner's `onSubmit`.
+  void submit() {
     final now = _now;
     final check = _check(now);
     final closes = _closes(now);
@@ -171,10 +176,13 @@ class _P2pListingFormState extends ConsumerState<P2pListingForm> {
     ));
   }
 
+  /// A date and a time of day, picked on this computer's clock. [initial]
+  /// may be in UTC (a listing's own times are): the pickers open on its
+  /// local date and hour, so a time accepted unchanged stays the same moment.
   Future<DateTime?> _pickDateTime(DateTime initial) async {
-    final now = _now;
+    final now = _now.toLocal();
     final first = DateTime(now.year, now.month, now.day);
-    final start = initial.isBefore(first) ? first : initial;
+    final start = p2pPickerStart(initial, now);
     final date = await showDatePicker(
       context: context,
       initialDate: start,
@@ -449,7 +457,7 @@ class _P2pListingFormState extends ConsumerState<P2pListingForm> {
               key: const Key('p2p:list_submit'),
               label: widget.submitLabel,
               processing: widget.busy,
-              onPressed: _submit,
+              onPressed: submit,
             ),
           ],
         ),

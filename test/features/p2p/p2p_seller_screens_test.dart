@@ -336,6 +336,57 @@ void main() {
       expect(service.calls, contains('createListing(3, $harbor, token: token-for-$owner)'));
     });
 
+    testWidgets('listing without a picture posts what the fields say then, not what they said when the upload failed', (tester) async {
+      nfts.uploadError = const P2pMediaUploadError('harbor.png');
+      P2pListingInput? sent;
+      service.onCreateListing = (collectionId, input) {
+        sent = input;
+        return posted(collectionId, input);
+      };
+      await pump(tester);
+      await tester.tap(find.byKey(const Key('p2p:list_open')));
+      await settle(tester);
+      await tester.tap(find.byKey(const Key('p2p:list_pick:$harbor')));
+      await settle(tester);
+      await tester.enterText(find.byKey(const Key('p2p:list_price')), '5');
+      await tester.tap(find.byKey(const Key('p2p:list_submit')));
+      await settle(tester);
+      expect(find.byKey(const Key('p2p:list_media_failed')), findsOneWidget);
+
+      // The form is open again: the price is raised before going on.
+      await tester.enterText(find.byKey(const Key('p2p:list_price')), '50');
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('p2p:list_skip_media')));
+      await settle(tester);
+      expect(sent!.buyNowPrice, '50');
+    });
+
+    testWidgets('listing without a picture checks the fields again first', (tester) async {
+      nfts.uploadError = const P2pMediaUploadError('harbor.png');
+      service.onCreateListing = posted;
+      await pump(tester);
+      await tester.tap(find.byKey(const Key('p2p:list_open')));
+      await settle(tester);
+      await tester.tap(find.byKey(const Key('p2p:list_pick:$harbor')));
+      await settle(tester);
+      await tester.enterText(find.byKey(const Key('p2p:list_price')), '5');
+      await tester.tap(find.byKey(const Key('p2p:list_submit')));
+      await settle(tester);
+
+      await tester.enterText(find.byKey(const Key('p2p:list_price')), 'five');
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('p2p:list_skip_media')));
+      await settle(tester);
+      expect(find.text('Enter an amount, like 12.5.'), findsOneWidget);
+      expect(service.calls.where((c) => c.startsWith('createListing')), isEmpty);
+      // And the next plain submit tries the upload again: nothing was left set.
+      nfts.uploadError = null;
+      await tester.enterText(find.byKey(const Key('p2p:list_price')), '6');
+      await tester.tap(find.byKey(const Key('p2p:list_submit')));
+      await settle(tester);
+      expect(nfts.uploaded, ['$harbor as token-for-$owner']);
+    });
+
     testWidgets('a refusal from the registry is shown in words, and the form stays', (tester) async {
       nfts.withMedia = {harbor};
       service.listingError = const P2pError(status: 400, code: 'nft_not_found', message: 'This NFT is not indexed.');
