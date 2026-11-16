@@ -268,6 +268,9 @@ void main() {
   });
 
   test('the app\'s session drops its tokens when the wallet locks', () async {
+    // The app's own session reads the real clock, so the registry's answer
+    // has to expire an hour from the real now, not from this file's fixed one.
+    now = DateTime.now().toUtc();
     final container = ProviderContainer(overrides: [
       p2pServiceProvider.overrideWithValue(P2pService(hostOverride: server.host)),
       p2pSignerProvider.overrideWithValue(signer),
