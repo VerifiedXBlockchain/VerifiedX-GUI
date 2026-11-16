@@ -15,11 +15,13 @@ import '../../../l10n/generated/app_localizations.dart';
 import '../../wallet/components/wallet_selector.dart';
 import '../components/p2p_bid_dialog.dart';
 import '../components/p2p_dry_run_banner.dart';
+import '../components/p2p_page_visibility.dart';
 import '../components/p2p_parts.dart';
 import '../models/p2p_bid_summary.dart';
 import '../models/p2p_listing.dart';
 import '../providers/p2p_browse_providers.dart';
 import '../providers/p2p_listing_providers.dart';
+import '../utils/p2p_amount.dart';
 import '../utils/p2p_view.dart';
 
 /// One listing, addressed by its id: the NFT's picture, its prices, clock
@@ -42,10 +44,36 @@ class _P2pListingScreenState extends BaseScreenState<P2pListingScreen> {
   Timer? _poll;
   bool _showAllBids = false;
 
+  /// Whether the page was in view when last looked at: it reads again when
+  /// it comes back into view, and not while it is out of it.
+  bool _inView = true;
+
   @override
   void initState() {
     super.initState();
-    _poll = Timer.periodic(_pollEvery, (_) => _refresh());
+    _poll = Timer.periodic(_pollEvery, (_) {
+      // A page under another one, or in a tab the person has left, stays
+      // built: it does not keep asking the registry.
+      if (mounted && p2pPageIsVisible(context)) {
+        _refresh();
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final inView = p2pPageIsVisible(context, watch: true);
+    if (inView && !_inView) {
+      // Back in view after a while under another page: read now, after
+      // this build, not up to a whole interval later.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          _refresh();
+        }
+      });
+    }
+    _inView = inView;
   }
 
   @override
@@ -707,7 +735,10 @@ class _DetailsTable extends StatelessWidget {
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(percent == null ? royalty.amount : l10n.p2pListingRoyaltyPercent(percent), key: const Key('p2p:royalty')),
+                  Text(
+                    percent == null ? l10n.p2pListingRoyaltyAmount(formatP2pAmount(royalty.amount)) : l10n.p2pListingRoyaltyPercent(percent),
+                    key: const Key('p2p:royalty'),
+                  ),
                   Text(shortP2pAddress(royalty.payTo), style: mono.copyWith(color: p2pMuted, fontSize: 12)),
                 ],
               ),

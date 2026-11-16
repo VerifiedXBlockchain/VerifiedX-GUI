@@ -143,9 +143,16 @@ void main() {
     });
   });
 
-  test('a royalty is read as a percent of the price', () {
+  test('a royalty below 1 is the share of the price a sale pays', () {
     expect(p2pRoyaltyPercent(P2pRoyalty(amount: '0.02', payTo: 'xArtist')), '2');
     expect(p2pRoyaltyPercent(P2pRoyalty(amount: '0.075', payTo: 'xArtist')), '7.5');
+    expect(p2pRoyaltyPercent(P2pRoyalty(amount: '0.99999999', payTo: 'xArtist')), '99.999999');
+  });
+
+  test('a royalty of 1 or more is a flat amount, never a percent', () {
+    // 2 is not "200% of the price".
+    expect(p2pRoyaltyPercent(P2pRoyalty(amount: '2', payTo: 'xArtist')), isNull);
+    expect(p2pRoyaltyPercent(P2pRoyalty(amount: '1', payTo: 'xArtist')), isNull);
     expect(p2pRoyaltyPercent(P2pRoyalty(amount: 'lots', payTo: 'xArtist')), isNull);
   });
 

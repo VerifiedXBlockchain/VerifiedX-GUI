@@ -11,6 +11,7 @@ import '../../wallet/components/wallet_selector.dart';
 import '../components/p2p_dry_run_banner.dart';
 import '../components/p2p_listing_card.dart';
 import '../components/p2p_parts.dart';
+import '../models/p2p_collection.dart';
 import '../models/p2p_shop.dart';
 import '../providers/p2p_browse_providers.dart';
 import '../utils/p2p_view.dart';
@@ -27,9 +28,17 @@ class P2pShopScreen extends BaseStatefulScreen {
 }
 
 class _P2pShopScreenState extends BaseScreenState<P2pShopScreen> {
-  /// The collection the grid is filtered to; null for all of them.
+  /// The collection the person picked to filter the grid by; null for all
+  /// of them. Read through [_selectedIn]: the shop may hide it meanwhile.
   int? _collectionId;
   int _page = 1;
+
+  /// The picked collection, while it is still one of the shop's [live]
+  /// ones. Once the seller hides or deletes it the filter is off, so the
+  /// grid never asks for a collection the visitor has no chip to leave.
+  int? _selectedIn(List<P2pCollection> live) {
+    return live.any((c) => c.id == _collectionId) ? _collectionId : null;
+  }
 
   void _reload() {
     ref.invalidate(p2pShopProvider(widget.url));
@@ -82,7 +91,8 @@ class _P2pShopScreenState extends BaseScreenState<P2pShopScreen> {
     final l10n = AppLocalizations.of(context);
     final viewer = ref.watch(p2pViewerAddressProvider);
     final collections = shop.liveCollections;
-    final listingsProvider = p2pShopListingsProvider(shop.url, collectionId: _collectionId, page: _page);
+    final selected = _selectedIn(collections);
+    final listingsProvider = p2pShopListingsProvider(shop.url, collectionId: selected, page: _page);
     final listings = ref.watch(listingsProvider);
 
     return CustomScrollView(
@@ -94,7 +104,8 @@ class _P2pShopScreenState extends BaseScreenState<P2pShopScreen> {
               _ShopHeader(shop: shop, own: shop.isOwnedBy(viewer)),
               const SizedBox(height: 12),
               const P2pDryRunBanner(),
-              if (collections.length > 1) ...[
+              // The chips stay while a filter is on, so it can be cleared.
+              if (collections.length > 1 || selected != null) ...[
                 const SizedBox(height: 12),
                 Semantics(
                   label: l10n.p2pShopCollections,
@@ -107,7 +118,7 @@ class _P2pShopScreenState extends BaseScreenState<P2pShopScreen> {
                         key: const Key('p2p:collection:all'),
                         label: l10n.p2pShopAll,
                         count: collections.fold<int>(0, (sum, c) => sum + c.listingCount),
-                        selected: _collectionId == null,
+                        selected: selected == null,
                         onSelected: () => setState(() {
                           _collectionId = null;
                           _page = 1;
@@ -118,7 +129,7 @@ class _P2pShopScreenState extends BaseScreenState<P2pShopScreen> {
                           key: Key('p2p:collection:${collection.id}'),
                           label: collection.name,
                           count: collection.listingCount,
-                          selected: _collectionId == collection.id,
+                          selected: selected == collection.id,
                           onSelected: () => setState(() {
                             _collectionId = collection.id;
                             _page = 1;

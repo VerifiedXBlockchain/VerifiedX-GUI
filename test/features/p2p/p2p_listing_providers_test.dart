@@ -85,6 +85,47 @@ void main() {
       expect(container.read(p2pListingDetailProvider(2)).value!.bidCount, 4);
     });
 
+    test('a read that left before a bid was accepted does not put the old listing back', () async {
+      final service = SlowP2pService();
+      final container = containerFor(service);
+      final subscription = container.listen(p2pListingDetailProvider(2), (_, __) {});
+      addTearDown(subscription.close);
+      service.reads.removeAt(0).complete(auction());
+      await container.read(p2pListingDetailProvider(2).future);
+      final notifier = container.read(p2pListingDetailProvider(2).notifier);
+
+      // A poll sets out, then the bid's answer arrives, then the poll lands
+      // with the listing as it was before the bid.
+      final poll = notifier.refresh();
+      notifier.replace(auction().copyWith(bidCount: 2, nextMinBid: '3.5'));
+      service.reads.removeAt(0).complete(auction());
+      await poll;
+
+      final shown = container.read(p2pListingDetailProvider(2)).value!;
+      expect(shown.bidCount, 2);
+      expect(shown.nextMinBid, '3.5');
+    });
+
+    test('of two reads under way, the one that set out first is dropped', () async {
+      final service = SlowP2pService();
+      final container = containerFor(service);
+      final subscription = container.listen(p2pListingDetailProvider(2), (_, __) {});
+      addTearDown(subscription.close);
+      service.reads.removeAt(0).complete(auction());
+      await container.read(p2pListingDetailProvider(2).future);
+      final notifier = container.read(p2pListingDetailProvider(2).notifier);
+
+      final first = notifier.refresh();
+      final second = notifier.refresh();
+      // The newer read answers first; the older one lands after it.
+      service.reads[1].complete(auction().copyWith(bidCount: 5));
+      await second;
+      service.reads[0].complete(auction().copyWith(bidCount: 3));
+      await first;
+
+      expect(container.read(p2pListingDetailProvider(2)).value!.bidCount, 5);
+    });
+
     test('a refresh that ends after the page has closed is harmless', () async {
       final service = SlowP2pService();
       final container = containerFor(service);

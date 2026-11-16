@@ -7359,6 +7359,12 @@ abstract class AppLocalizations {
   /// **'Royalty'**
   String get p2pListingRoyalty;
 
+  /// A P2P listing's royalty when the contract's amount is 1 or more, so it cannot be a share of the price: shown as the contract states it, never as a percent.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} (flat amount set by the NFT’s contract)'**
+  String p2pListingRoyaltyAmount(String amount);
+
   /// A P2P listing's royalty as a percent of the sale price.
   ///
   /// In en, this message translates to:

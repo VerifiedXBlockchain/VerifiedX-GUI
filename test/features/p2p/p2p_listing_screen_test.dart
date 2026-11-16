@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:rbx_wallet/app.dart';
 import 'package:rbx_wallet/core/api_token_manager.dart';
 import 'package:rbx_wallet/core/singletons.dart';
 import 'package:rbx_wallet/features/p2p/models/p2p_bid_summary.dart';
@@ -128,6 +129,16 @@ void main() {
       expect(find.byKey(const Key('p2p:bid:20')), findsOneWidget);
       expect(find.byKey(const Key('p2p:all_bids')), findsNothing);
     });
+  });
+
+  testWidgets('a flat royalty is shown as the contract states it, not as a percent', (tester) async {
+    final json = p2pFixture('listing_buy_now');
+    ((json['nft'] as Map<String, dynamic>)['royalty'] as Map<String, dynamic>)['amount'] = '2';
+    service.listingsById[1] = P2pListing.fromJson(json);
+    await pump(tester, 1);
+    final royalty = tester.widget<Text>(find.byKey(const Key('p2p:royalty'))).data!;
+    expect(royalty, '2 (flat amount set by the NFT’s contract)');
+    expect(royalty, isNot(contains('%')));
   });
 
   group('a fixed-price listing', () {
@@ -300,6 +311,39 @@ void main() {
       expect(find.byKey(const Key('p2p:leading_note')), findsOneWidget);
     });
 
+    testWidgets('a page showing every bid reads them again after a bid', (tester) async {
+      final listing = auction();
+      final older = listing.bids!.single;
+      service.listingsById[2] = listing.copyWith(bidCount: 2);
+      service.allBids = [older, older.copyWith(id: 20, amount: '1.5', status: P2pBidStatus.outbid)];
+      service.onBid = (_, amount, __, ___) {
+        final placed = accepted(amount);
+        // The registry has the new bid from here on.
+        service.allBids = [placed.bid, older.copyWith(status: P2pBidStatus.outbid), service.allBids.last];
+        return P2pBidResult(bid: placed.bid, listing: placed.listing.copyWith(bidCount: 3, bids: [placed.bid]));
+      };
+      await pump(tester, 2);
+      await tester.tap(find.byKey(const Key('p2p:all_bids')));
+      await tester.pump();
+      await tester.pump();
+      expect(find.byKey(const Key('p2p:bid:20')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:bid:77')), findsNothing);
+      final readsBefore = service.calls.where((c) => c.startsWith('listBids')).length;
+
+      await tester.tap(find.byKey(const Key('p2p:bid_open')));
+      await tester.pump();
+      await tester.enterText(find.byKey(const Key('p2p:bid_amount')), '3');
+      await tester.tap(find.byKey(const Key('p2p:bid_submit')));
+      await settleBid(tester);
+      await tester.tap(find.byKey(const Key('p2p:bid_done')));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(service.calls.where((c) => c.startsWith('listBids')).length, readsBefore + 1);
+      expect(find.byKey(const Key('p2p:bid:77')), findsOneWidget);
+      expect(find.byKey(const Key('p2p:bid:20')), findsOneWidget);
+    });
+
     testWidgets('a bid that meets the reserve says the bidder is winning', (tester) async {
       service.onBid = (_, amount, __, ___) => accepted(amount, status: P2pBidStatus.winning);
       await pump(tester, 2);
@@ -462,6 +506,33 @@ void main() {
       expect(tester.widget<Text>(find.byKey(const Key('p2p:bid_error'))).data, 'The price changed. Check the listing and try again.');
       expect(signer.signed, isEmpty);
     });
+  });
+
+  testWidgets('a listing page under another page does not keep reading, and reads again when it is back in view', (tester) async {
+    // No picture: a covered page's image load is not what this is about.
+    service.listingsById[2] = auction().copyWith(nft: auction().nft!.copyWith(thumbnailUrl: null));
+    await pump(tester, 2);
+    int reads() => service.calls.where((c) => c == 'getListing(2)').length;
+
+    rootNavigatorKey.currentState!.push(MaterialPageRoute<void>(builder: (_) => const Scaffold(body: Text('Another page'))));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('Another page'), findsOneWidget);
+    final covered = reads();
+
+    await tester.pump(const Duration(seconds: 46));
+    await tester.pump();
+    expect(reads(), covered, reason: 'a covered page polled');
+
+    rootNavigatorKey.currentState!.pop();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump();
+    expect(reads(), covered + 1, reason: 'the page did not read when it came back into view');
+
+    await tester.pump(const Duration(seconds: 16));
+    await tester.pump();
+    expect(reads(), greaterThan(covered + 1));
   });
 
   testWidgets('an open listing page reads its listing again every 15 seconds', (tester) async {

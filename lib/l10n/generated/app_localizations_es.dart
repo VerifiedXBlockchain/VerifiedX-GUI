@@ -3902,6 +3902,11 @@ class AppLocalizationsEs extends AppLocalizations {
   String get p2pListingRoyalty => 'Regalía';
 
   @override
+  String p2pListingRoyaltyAmount(String amount) {
+    return '$amount (importe fijo definido por el contrato del NFT)';
+  }
+
+  @override
   String p2pListingRoyaltyPercent(String percent) {
     return '$percent % del precio';
   }

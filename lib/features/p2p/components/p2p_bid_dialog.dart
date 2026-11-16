@@ -151,6 +151,9 @@ class _P2pBidDialogState extends ConsumerState<P2pBidDialog> {
             balance: _balance,
           );
       detail.replace(result.listing);
+      // A page showing every bid reads them again: this one is new, and
+      // the others' standing changed.
+      ref.invalidate(p2pAllBidsProvider(widget.listingId));
       if (mounted) {
         setState(() => _result = result);
       }
@@ -171,6 +174,7 @@ class _P2pBidDialogState extends ConsumerState<P2pBidDialog> {
   /// refusal usually means it changed (a higher bid, a sale).
   void _refused(Object error, P2pListingDetail detail) {
     detail.refresh();
+    ref.invalidate(p2pAllBidsProvider(widget.listingId));
     if (mounted) {
       setState(() => _error = error);
     }

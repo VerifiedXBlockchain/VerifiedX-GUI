@@ -181,6 +181,44 @@ void main() {
       expect(service.calls, contains('listListings(dryrun-demo, collection: 9, page: 1, limit: null)'));
     });
 
+    testWidgets('a picked collection the seller then hides stops filtering the grid', (tester) async {
+      Map<String, dynamic> shopWith(List<Map<String, dynamic>> extra) {
+        final json = p2pFixture('shop_detail');
+        (json['collections'] as List).addAll(extra);
+        return json;
+      }
+
+      const prints = {'id': 9, 'shop_url': 'dryrun-demo', 'name': 'Prints', 'description': '', 'is_live': true, 'is_default': false, 'listing_count': 4};
+      service.shopsByUrl = {'dryrun-demo': P2pShop.fromJson(shopWith([prints]))};
+      await pump(tester, const P2pShopScreen(url: 'dryrun-demo'));
+      await tester.tap(find.byKey(const Key('p2p:collection:9')));
+      await tester.pump();
+      await tester.pump();
+      expect(service.calls.last, 'listListings(dryrun-demo, collection: 9, page: 1, limit: null)');
+
+      // The seller hides Prints: one live collection is left, so the chips go.
+      service.shopsByUrl = {'dryrun-demo': demoShop()};
+      service.calls.clear();
+      await tester.tap(find.byKey(const Key('p2p:shop_refresh')));
+      // The shop reloads, then the grid for the filter that is left.
+      for (var i = 0; i < 4; i++) {
+        await tester.pump();
+      }
+
+      // Once the shop has reloaded, the grid is read for every collection.
+      expect(find.byKey(const Key('p2p:collection:9')), findsNothing);
+      expect(find.byKey(const Key('p2p:collection:all')), findsNothing);
+      expect(service.calls.where((c) => c.startsWith('listListings')).last, 'listListings(dryrun-demo, collection: null, page: 1, limit: null)');
+      expect(find.byKey(const Key('p2p:listing_card:2')), findsOneWidget);
+
+      // And it stays so on the next reload.
+      service.calls.clear();
+      await tester.tap(find.byKey(const Key('p2p:shop_refresh')));
+      await tester.pump();
+      await tester.pump();
+      expect(service.calls.where((c) => c.contains('collection: 9')), isEmpty);
+    });
+
     testWidgets('a listing in a state this build does not know is shown closed, with no clock', (tester) async {
       service.listings = (_, __, ___) => P2pPage(count: 1, next: null, results: [buyNow().copyWith(state: P2pListingState.unknown)]);
       await pump(tester, const P2pShopScreen(url: 'dryrun-demo'));
