@@ -234,7 +234,7 @@ void main() {
     test('cancelling a started sale posts the Sale_Cancel as the seller', () async {
       onDryRun = (_) => P2pCannedResponse(200, {...p2pFixture('listing_sale_pending'), 'state': 'cancelled'});
       final listing = pending();
-      final tx = await steps.describeCancelSale(listing);
+      final tx = await steps.describeSaleCancellation(listing);
       expect(server.requests, isEmpty);
       expect([tx.function, tx.toAddress], ['Sale_Cancel()', buyer]);
 

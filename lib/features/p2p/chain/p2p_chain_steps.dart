@@ -39,7 +39,7 @@ abstract class P2pChainSteps {
   Future<P2pListing> startSale(P2pListing listing, P2pTxDescription tx);
 
   /// The `Sale_Cancel()` that calls off [listing]'s started sale.
-  Future<P2pTxDescription> describeCancelSale(P2pListing listing);
+  Future<P2pTxDescription> describeSaleCancellation(P2pListing listing);
 
   /// Carries out the described `Sale_Cancel()` and returns the listing as it
   /// now stands (`cancelled`).
@@ -130,7 +130,7 @@ class P2pDryRunChainSteps implements P2pChainSteps {
   }
 
   @override
-  Future<P2pTxDescription> describeCancelSale(P2pListing listing) {
+  Future<P2pTxDescription> describeSaleCancellation(P2pListing listing) {
     return describeSaleCancel(fees: _fees, now: _now(), listing: listing);
   }
 

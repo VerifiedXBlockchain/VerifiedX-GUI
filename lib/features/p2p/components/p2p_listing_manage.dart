@@ -256,7 +256,7 @@ Future<void> cancelP2pSale(WidgetRef ref, AppLocalizations l10n, P2pListing list
       if (buyer != null) P2pStepRow(l10n.p2pChainRowBuyer, shortP2pAddress(buyer), mono: true),
     ],
     warning: l10n.p2pSaleCancelWarning,
-    describe: () => steps.describeCancelSale(listing),
+    describe: () => steps.describeSaleCancellation(listing),
     carryOut: (tx) async => _listingChanged(ref, listing.sellerAddress, await steps.cancelSale(listing, tx)),
     doneBody: listing.title,
   );
