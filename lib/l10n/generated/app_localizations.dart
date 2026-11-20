@@ -18867,6 +18867,12 @@ abstract class AppLocalizations {
   /// **'Problem downloading {url}. Skipping.'**
   String svcProblemDownloadingSkipping(String url);
 
+  /// Error shown in the bulk NFT wizard when a row's royalty amount is not written as a percentage; that row is skipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Royalty \"{amount}\" must be a percentage, for example 5%. Skipping.'**
+  String svcRoyaltyNotPercentSkipping(String amount);
+
   /// No description provided for @svcSendingConfirmBtcFee.
   ///
   /// In en, this message translates to:
