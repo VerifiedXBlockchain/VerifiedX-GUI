@@ -10120,6 +10120,11 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String svcRoyaltyNotPercentSkipping(String amount) {
+    return 'La regalía \"$amount\" debe ser un porcentaje, por ejemplo 5%. Se omite.';
+  }
+
+  @override
   String svcSendingConfirmBtcFee(String amount, String toAddress, String fromAddress, String fee) {
     return 'Enviando:\n$amount BTC\n\nPara:\n$toAddress\n\nDe:\n$fromAddress\n\nComisión:\n$fee BTC';
   }

@@ -558,10 +558,10 @@ class ScWizardProvider extends StateNotifier<List<ScWizardItem>> {
             royalty = Royalty(amount: parsed / 100, address: royaltyAddress, type: RoyaltyType.percent);
           }
         } else {
-          final parsed = double.tryParse(royaltyAmount);
-          if (parsed != null) {
-            royalty = Royalty(amount: parsed, address: royaltyAddress, type: RoyaltyType.fixed);
-          }
+          // Royalties are a percentage of the sale price; the network no longer takes a fixed amount.
+          Toast.error(globalL10n.svcRoyaltyNotPercentSkipping(royaltyAmount));
+          logProvider.append("Royalty \"$royaltyAmount\" is not a percentage (for example 5%). Skipping.");
+          return null;
         }
       }
     }

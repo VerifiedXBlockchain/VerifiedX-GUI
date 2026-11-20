@@ -9293,6 +9293,15 @@
       }
     }
   },
+  "svcRoyaltyNotPercentSkipping": "La regalía \"{amount}\" debe ser un porcentaje, por ejemplo 5%. Se omite.",
+  "@svcRoyaltyNotPercentSkipping": {
+    "description": "Error shown in the bulk NFT wizard when a row's royalty amount is not written as a percentage; that row is skipped.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "svcSendingConfirmBtcFee": "Enviando:\n{amount} BTC\n\nPara:\n{toAddress}\n\nDe:\n{fromAddress}\n\nComisión:\n{fee} BTC",
   "@svcSendingConfirmBtcFee": {
     "placeholders": {
