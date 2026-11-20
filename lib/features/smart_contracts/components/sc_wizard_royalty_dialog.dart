@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../core/base_component.dart';
-import '../../../core/components/dropdowns.dart';
 import '../../../core/providers/web_session_provider.dart';
 import 'sc_creator/common/help_button.dart';
 import '../features/royalty/royalty.dart';
@@ -66,10 +65,9 @@ class ScWizardRoyaltyDialog extends BaseComponent {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    RoyaltyType type = RoyaltyType.percent;
     final l10n = AppLocalizations.of(context);
 
-    return StatefulBuilder(builder: (context, setState) {
+    return Builder(builder: (context) {
       return Form(
         key: formKey,
         child: AlertDialog(
@@ -81,51 +79,20 @@ class ScWizardRoyaltyDialog extends BaseComponent {
               children: [
                 Row(
                   children: [
-                    AppDropdown<RoyaltyType>(
-                      label: l10n.scwRoyaltyType,
-                      selectedValue: type,
-                      selectedLabel:
-                          type == RoyaltyType.percent ? l10n.scwRoyaltyTypePercent : l10n.scwRoyaltyTypeFixed,
-                      onChange: (val) {
-                        setState(() {
-                          type = val;
-                        });
-                        print(type);
-                      },
-                      options: Royalty.allTypes()
-                          .map(
-                            (type) => AppDropdownOption<RoyaltyType>(
-                              value: type,
-                              label: Royalty.typeToString(type),
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    const SizedBox(
-                      width: 6,
-                    ),
                     Expanded(
                       child: TextFormField(
                           controller: amountController,
                           decoration: InputDecoration(
                               label: Text(l10n.labelAmount),
                               labelStyle: const TextStyle(color: Colors.white),
-                              suffix: Text(
-                                  type == RoyaltyType.percent ? "%" : "VFX"),
-                              prefixIcon: HelpButton(
-                                  type == RoyaltyType.percent
-                                      ? HelpType.royaltyPercent
-                                      : HelpType.royaltyFlat,
+                              suffix: const Text("%"),
+                              prefixIcon: const HelpButton(
+                                  HelpType.royaltyPercent,
                                   subtle: true)),
                           inputFormatters: [
                             FilteringTextInputFormatter.allow(RegExp("[0-9.]"))
                           ],
-                          validator: (String? val) {
-                            if (type == RoyaltyType.percent) {
-                              return formPercentValidator(val);
-                            }
-                            return formValidatorNotEmpty(val, "Amount");
-                          }),
+                          validator: formPercentValidator),
                     ),
                   ],
                 ),
@@ -189,14 +156,9 @@ class ScWizardRoyaltyDialog extends BaseComponent {
                   return;
                 }
 
-                double amount = double.parse(amountController.text);
-                if (type == RoyaltyType.percent) {
-                  amount = amount / 100;
-                }
-
                 final r = Royalty(
-                  type: type,
-                  amount: amount,
+                  type: RoyaltyType.percent,
+                  amount: double.parse(amountController.text) / 100,
                   address: addressController.text,
                 );
 
