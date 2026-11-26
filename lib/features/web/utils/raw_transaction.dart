@@ -7,9 +7,14 @@ import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dart_bip66/dart_bip66.dart';
 import 'package:hex/hex.dart';
+import 'package:pointycastle/api.dart' show PrivateKeyParameter;
+import 'package:pointycastle/digests/sha256.dart';
+import 'package:pointycastle/ecc/api.dart';
+import 'package:pointycastle/ecc/curves/secp256k1.dart';
+import 'package:pointycastle/macs/hmac.dart';
+import 'package:pointycastle/signers/ecdsa_signer.dart';
 import 'package:rbx_wallet/features/keygen/models/keypair.dart';
 import 'package:rbx_wallet/features/raw/raw_service.dart';
-import 'package:secp256k1/secp256k1.dart' as secp256k1;
 
 class RawTxValue {
   final String hash;
@@ -244,13 +249,10 @@ class RawTransaction {
     final hashMessageString = hashMessage.toString();
     print("HASH MESSAGE $hashMessageString");
 
-    var pk = secp256k1.PrivateKey.fromHex(privateKey);
-    final signature = pk.signature(hashMessageString);
+    final signature = signDigest(Uint8List.fromList(hashMessage.bytes), privateKey);
 
-    print("SIGNATURE $signature");
-
-    final r = signature.R;
-    final s = signature.S;
+    final r = signature.r;
+    final s = signature.s;
     final der = toDer(r, s);
     if (der == null) {
       print("Der failed");
@@ -280,6 +282,21 @@ class RawTransaction {
     print("full sig: $fullSignature");
 
     return fullSignature;
+  }
+
+  /// ECDSA over secp256k1 of a 32-byte digest, with the RFC 6979 deterministic
+  /// nonce and s in the lower half of the curve order: the same signature the
+  /// SDK gives for the same key and digest.
+  static ECSignature signDigest(Uint8List digest, String privateKeyHex) {
+    final curve = ECCurve_secp256k1();
+    final signer = ECDSASigner(null, HMac(SHA256Digest(), 64))
+      ..init(true, PrivateKeyParameter<ECPrivateKey>(ECPrivateKey(BigInt.parse(privateKeyHex, radix: 16), curve)));
+    final signature = signer.generateSignature(digest) as ECSignature;
+    final halfOrder = curve.n >> 1;
+    if (signature.s > halfOrder) {
+      return ECSignature(signature.r, curve.n - signature.s);
+    }
+    return signature;
   }
 
   static bool _responseIsValid(Map<String, dynamic>? data) {
